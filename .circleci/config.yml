@@ -1,0 +1,144 @@
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: circleci/node:8.10.0-browsers
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
+      - run:
+          name: Install Dependencies
+          command: yarn --frozen-lockfile
+      - save_cache:
+          key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Run eslint
+          command: yarn lint
+      - run:
+          name: Run Tests
+          command: |
+             set -e
+             yarn test
+      - run: NODE_ENV=production yarn build
+      - run: |
+             DATE=$(date '+%Y-%m-%d')
+             export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
+             export GIT_REF=${CIRCLE_SHA1}
+             export GIT_DATE=${DATE}
+             yarn record-build-info
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - build
+            - build-info.json
+
+  integration_tests:
+    working_directory: ~/app
+    docker:
+      - image: circleci/openjdk:8u162-jdk-node-browsers
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Run the node app.
+          command: yarn start
+          background: true
+      - restore_cache:
+          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: gradle-cache-{{ checksum "keyworker-specs/build.gradle" }}
+      - save_cache:
+          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+              - /home/circleci/.gradle/wrapper
+      - save_cache:
+          key: gradle-cache-{{ checksum "keyworker-specs/build.gradle" }}
+          paths:
+              - /home/circleci/.gradle/caches
+      - store_artifacts:
+          path: keyworker-specs/build/reports
+          destination: integration/spock
+      - store_test_results:
+          path: keyworker-specs/build/test-results
+
+  build_docker:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - setup_remote_docker:
+          exclusive: true
+      - run:
+          name: Build container and publish to docker hub (master only)
+          command: |
+             VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
+             GIT_REF=$(egrep gitRef build-info.json  | awk -F"\"" '{print $4}')
+             GIT_DATE=$(egrep gitDate build-info.json  | awk -F"\"" '{print $4}')
+             BUILD_VERSION=WHEREABOUTS_${VERSION}
+
+             docker build --rm=false . \
+                 --build-arg CLIENT=hmpps \
+                 --build-arg BUILD_NUMBER=$VERSION \
+                 --build-arg GIT_REF=$GIT_REF \
+                 --build-arg GIT_DATE=$GIT_DATE \
+                 --tag "mojdigitalstudio/whereabouts:$BUILD_VERSION" \
+                 --label "maintainer=michael.willis@digital.justice.gov.uk" \
+                 --label "build.number=$CIRCLE_BUILD_NUM" \
+                 --label "build.url=$CIRCLE_BUILD_URL" \
+                 --label "build.gitref=$GIT_REF"
+
+             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
+               docker login -u $DOCKER_USER -p $DOCKER_PASS
+               docker tag mojdigitalstudio/whereabouts:$BUILD_VERSION mojdigitalstudio/whereabouts:latest
+               docker push mojdigitalstudio/whereabouts:$BUILD_VERSION
+               docker push mojdigitalstudio/whereabouts:latest
+             fi
+
+  deploy_release_eb:
+      <<: *defaults
+      steps:
+        - checkout
+        - attach_workspace:
+            at: ~/app
+        - deploy:
+            name: Install elastic beanstalk CLI
+            command: |
+              sudo apt-get install python-pip python-dev
+              pip install --user 'six>-1.9.0' awsebcli --ignore-installed
+        - deploy:
+            name: Deploy to Elastic Beanstalk Dev
+            command: |
+              VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
+              yarn run plant-beanstalk WHEREABOUTS_${VERSION}
+              ~/.local/bin/eb deploy --process --verbose
+
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                  - deploy-to-dev
+      - build_docker:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+              
+      - deploy_release_eb:
+          requires:
+            - build_docker

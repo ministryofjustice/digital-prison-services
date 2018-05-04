@@ -1,0 +1,8 @@
+branch-defaults:
+  master:
+    environment: omic-dev
+deploy:
+  artifact: Dockerrun.aws.json
+global:
+  application_name: omic-ui
+  default_region: eu-west-2

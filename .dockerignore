@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.env*
+README.md
+*.iml
+.idea/
+.gitignore
+.git
+.circleci
+tests
+scss-report.txt
+eslint-report.html
+test-report.html
