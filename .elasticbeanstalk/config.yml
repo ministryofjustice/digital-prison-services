@@ -1,8 +1,8 @@
 branch-defaults:
   master:
-    environment: omic-dev
+    environment: prisonstaffhub-dev
 deploy:
   artifact: Dockerrun.aws.json
 global:
-  application_name: omic-ui
+  application_name: prisonstaffhub
   default_region: eu-west-2
