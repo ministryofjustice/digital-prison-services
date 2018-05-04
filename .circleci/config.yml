@@ -19,9 +19,6 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: Run eslint
-          command: yarn lint
-      - run:
           name: Run Tests
           command: |
              set -e
