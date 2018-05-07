@@ -18,12 +18,6 @@ jobs:
           key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run:
-          name: Run Tests
-          command: |
-             set -e
-             yarn test
-      - run: NODE_ENV=production yarn build
       - run: |
              DATE=$(date '+%Y-%m-%d')
              export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
