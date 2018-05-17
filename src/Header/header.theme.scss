@@ -1,4 +1,4 @@
-//@import '../colours';
+@import 'colours/_palette';
 
 .page-header {
   font-family: "nta", Arial, sans-serif;
@@ -6,8 +6,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: start;
- // color: $headerTextColour;
- // background-color: $headerColour;
+  background-color: $text-colour;
   z-index: 999;
   height: 60px;
   width: 100%;

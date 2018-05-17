@@ -5,6 +5,8 @@ import Error from './Error/index';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import links from "./links";
+import './App.scss';
+
 import {
   BrowserRouter as Router,
   Route
@@ -105,7 +107,10 @@ class App extends React.Component {
 
     return (
       <Router>
-        <div className="content">
+        <div className="content App">
+
+        <h1 className="heading-large"> </h1>
+    
           <Route render={(props) => {
             if (this.props.config && this.props.config.googleAnalyticsId) {
               ReactGA.pageview(props.location.pathname);

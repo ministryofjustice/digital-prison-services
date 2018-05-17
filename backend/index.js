@@ -23,14 +23,16 @@ const getConfig = require('./controllers/getConfig');
 const health = require('./controllers/health');
 const clientVersionValidator = require('./validate-client-version');
 const applicationVersion = require('./application-version');
-const frontendMiddleware = require('./middleware/frontend-middleware');
+const webpack = require('webpack');
+const middleware = require('webpack-dev-middleware');
+const hrm = require('webpack-hot-middleware');
+const compiler = webpack(require('../webpack.config.js'));
 
 const log = require('./log');
 const config = require('./config');
 const session = require('./session');
 
 const app = express();
-
 const sixtyDaysInSeconds = 5184000;
 const sessionExpiryMinutes = config.session.expiryMinutes * 60 * 1000;
 
@@ -76,6 +78,14 @@ app.use(helmet.noCache());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(middleware(compiler, {
+}));
+
+app.use(hrm(compiler, {
+    
+}));
+
+
 // Update a value in the cookie so that the set-cookie will be sent.
 // Only changes every minute so that it's not sent with every request.
 app.use((req, res, next) => {
@@ -83,8 +93,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, '../public'), { index: 'dummy-file-which-doesnt-exist' })); // TODO: setting the index to false doesn't seem to work
-app.use(express.static(path.join(__dirname, '../build'), { index: 'dummy-file-which-doesnt-exist' }));
+//app.use(express.static(path.join(__dirname, '../public'), { index: 'dummy-file-which-doesnt-exist' })); // TODO: setting the index to false doesn't seem to work
+//app.use(express.static(path.join(__dirname, '../build'), { index: 'dummy-file-which-doesnt-exist' }));
+app.use(express.static(path.join(__dirname, '../build')));
 
 app.use('/auth', session.loginMiddleware, authentication);
 
@@ -105,11 +116,6 @@ app.use('/api/setactivecaseload', setActiveCaseLoad);
 app.use('/api/userLocations', userLocations);
 app.use('/api/config', getConfig);
 
-// In production we need to pass these values in instead of relying on webpack
-frontendMiddleware(app, {
-  outputPath: path.resolve(process.cwd(), 'build'),
-  publicPath: '/',
-});
 
 const port = process.env.PORT || 3001;
 
