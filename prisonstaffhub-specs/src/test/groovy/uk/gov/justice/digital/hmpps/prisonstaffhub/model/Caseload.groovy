@@ -1,9 +1,9 @@
-package uk.gov.justice.digital.hmpps.keyworker.model
+package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 
 import groovy.transform.TupleConstructor
 
-import static uk.gov.justice.digital.hmpps.keyworker.model.AgencyLocation.*
-import static uk.gov.justice.digital.hmpps.keyworker.model.CaseloadType.*
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.AgencyLocation.*
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.CaseloadType.*
 
 enum Caseload {
     CADM_I('CADM_I', 'Central Administration Caseload for HMPS', INST, []),

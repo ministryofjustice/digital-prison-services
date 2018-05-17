@@ -5,7 +5,7 @@ class Dashboard extends Component {
     return (
       <div>
 
-      <h1>Prison Staff Hub</h1>
+      <h1>Prison staff hub</h1>
       <p>You will find access to all services and help from this page</p>
 
 

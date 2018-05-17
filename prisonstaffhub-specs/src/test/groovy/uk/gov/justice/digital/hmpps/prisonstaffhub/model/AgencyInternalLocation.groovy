@@ -1,8 +1,8 @@
-package uk.gov.justice.digital.hmpps.keyworker.model
+package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 
 import groovy.transform.TupleConstructor
 
-import static uk.gov.justice.digital.hmpps.keyworker.model.AgencyLocation.*
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.AgencyLocation.*
 
 @TupleConstructor
 enum AgencyInternalLocation {

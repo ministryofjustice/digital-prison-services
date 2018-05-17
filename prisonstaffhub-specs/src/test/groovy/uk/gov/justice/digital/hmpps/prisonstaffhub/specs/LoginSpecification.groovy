@@ -1,22 +1,22 @@
-package uk.gov.justice.digital.hmpps.keyworker.specs
+package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import spock.lang.Ignore
-import uk.gov.justice.digital.hmpps.keyworker.mockapis.Elite2Api
-import uk.gov.justice.digital.hmpps.keyworker.model.TestFixture
-import uk.gov.justice.digital.hmpps.keyworker.pages.KeyworkerManagementPage
-import uk.gov.justice.digital.hmpps.keyworker.pages.LoginPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 
-import static uk.gov.justice.digital.hmpps.keyworker.model.UserAccount.ITAG_USER
-import static uk.gov.justice.digital.hmpps.keyworker.model.UserAccount.NOT_KNOWN
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.NOT_KNOWN
 
 class LoginSpecification extends GebReportingSpec {
 
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, null)
+    TestFixture fixture = new TestFixture(browser, elite2api)
 
     def "The login page is present"() {
         when: 'I go to the login page'
@@ -46,7 +46,7 @@ class LoginSpecification extends GebReportingSpec {
         loginAs ITAG_USER, 'password'
 
         then: 'My credentials are accepted and I am shown the Key worker management page'
-        at KeyworkerManagementPage
+        at DashboardPage
     }
 
     @Ignore
@@ -64,7 +64,7 @@ class LoginSpecification extends GebReportingSpec {
         loginAs ITAG_USER, 'password'
 
         then: 'My credentials are accepted and I am shown the Key worker management page'
-        at KeyworkerManagementPage
+        at DashboardPage
     }
 
     def "Unknown user is rejected"() {
@@ -101,11 +101,15 @@ class LoginSpecification extends GebReportingSpec {
     def "Log out"() {
         given: "I have logged in"
         fixture.loginAs(ITAG_USER)
+        at DashboardPage
 
         when: "I log out"
         header.logout()
 
         then: "I am returned to the Login page."
         at LoginPage
+
+       /* then: "I am on the dashboard."
+        at DashboardPage*/
     }
 }

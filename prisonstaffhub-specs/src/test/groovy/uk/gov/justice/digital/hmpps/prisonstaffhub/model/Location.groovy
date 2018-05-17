@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.keyworker.model
+package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 
 import groovy.transform.Canonical
 import groovy.transform.Immutable

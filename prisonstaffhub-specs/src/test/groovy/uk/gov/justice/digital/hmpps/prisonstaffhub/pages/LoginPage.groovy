@@ -1,15 +1,15 @@
-package uk.gov.justice.digital.hmpps.keyworker.pages
+package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
 import geb.Page
-import uk.gov.justice.digital.hmpps.keyworker.model.UserAccount
-import uk.gov.justice.digital.hmpps.keyworker.modules.ErrorsModule
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
+import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.ErrorsModule
 
 class LoginPage extends Page {
 
     static url = 'auth/login'
 
     static at = {
-        title == 'Key worker mgt'
+        title == 'Prison Staff Hub'
         headingText == 'Login'
     }
 

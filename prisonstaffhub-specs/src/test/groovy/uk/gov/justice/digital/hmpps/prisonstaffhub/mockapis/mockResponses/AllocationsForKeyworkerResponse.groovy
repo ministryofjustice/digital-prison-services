@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.keyworker.mockapis.mockResponses
+package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses
 
 
 class AllocationsForKeyworkerResponse {

@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.keyworker.modules
+package uk.gov.justice.digital.hmpps.prisonstaffhub.modules
 
 import geb.Module
 
