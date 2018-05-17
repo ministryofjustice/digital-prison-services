@@ -26,7 +26,6 @@ const applicationVersion = require('./application-version');
 const webpack = require('webpack');
 const middleware = require('webpack-dev-middleware');
 const hrm = require('webpack-hot-middleware');
-const compiler = webpack(require('../webpack.config.js'));
 
 const log = require('./log');
 const config = require('./config');
@@ -78,12 +77,12 @@ app.use(helmet.noCache());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(middleware(compiler, {
-}));
 
-app.use(hrm(compiler, {
-    
-}));
+if (config.app.production === false) {
+  const compiler = webpack(require('../webpack.config.js'));
+  app.use(middleware(compiler, {}));
+  app.use(hrm(compiler, {}));
+}
 
 
 // Update a value in the cookie so that the set-cookie will be sent.
