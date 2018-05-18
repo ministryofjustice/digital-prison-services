@@ -14,7 +14,7 @@ class Dashboard extends Component {
         <li><a href="https://notm-dev.hmpps.dsd.io">New Nomis</a></li>
         <li><a href="">Old P-Nomis</a></li>
         <li><a href="https://licences-stage.hmpps.dsd.io">Licence Management</a></li>
-        <li><a href="https://omic-dev.hmpps.dsd.io">Key worker Managementgdfgdfgdfgfdg</a></li>
+        <li><a href="https://omic-dev.hmpps.dsd.io">Key worker Management</a></li>
         <li><a href="/whereabouts">Whereabouts</a></li>
 
       </ul>

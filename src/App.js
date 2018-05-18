@@ -6,6 +6,7 @@ import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import links from "./links";
 import './App.scss';
+import axiosWrapper from "./backendWrapper";
 
 import {
   BrowserRouter as Router,
@@ -46,12 +47,11 @@ class App extends React.Component {
     }, (error) => Promise.reject(error));
 
     try {
-      const user = await axios.get('/api/me');
+      const user = await axiosWrapper.get('/api/me');
       const caseloads = await axios.get('/api/usercaseloads');
       this.props.userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
 
       const config = await axios.get('/api/config');
-      links.notmEndpointUrl = config.data.notmEndpointUrl;
 
       if (config.data.googleAnalyticsId) {
         ReactGA.initialize(config.data.googleAnalyticsId);
@@ -107,10 +107,7 @@ class App extends React.Component {
 
     return (
       <Router>
-        <div className="content App">
-
-        <h1 className="heading-large"> </h1>
-    
+        <div className="content">
           <Route render={(props) => {
             if (this.props.config && this.props.config.googleAnalyticsId) {
               ReactGA.pageview(props.location.pathname);
