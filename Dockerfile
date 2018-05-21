@@ -9,6 +9,7 @@ WORKDIR /app
 ADD . .
 
 RUN yarn --frozen-lockfile && \
+    yarn build && \
     export BUILD_NUMBER=${BUILD_NUMBER} && \
     export GIT_REF=${GIT_REF} && \
     export GIT_DATE=${GIT_DATE} && \
