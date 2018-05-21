@@ -49,7 +49,6 @@ class LoginSpecification extends GebReportingSpec {
         at DashboardPage
     }
 
-    @Ignore
     def "Log in attempt with long delay on oauth server"() {
 
         given: 'I am on the Login page'
