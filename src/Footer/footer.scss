@@ -1,0 +1,67 @@
+.FooterContainer {
+  //display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #dee0e2;
+  vertical-align: baseline;
+  height: 100px;
+  bottom: 0;
+}
+
+.footer-content {
+    max-width: 1200px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container {
+  max-width: 640px;
+  margin-top: 15px;
+  justify-content: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.FooterLinksContainer{
+  padding-top: 15px;
+  font-size: 16px;
+}
+
+.FooterLink{
+  float: left;
+  padding: 0 19px;
+  border-right: 1px solid #0B0C0C;
+  height: 19px;
+  cursor: pointer;
+
+  &:last-child {
+    border-right: 0;
+  }
+  &:first-child {
+    padding-left: 0px;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.FooterLink a.link{
+  font-size: 16px;
+}
+
+.FooterSignature{
+  clear: left;
+  margin-top: 37px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0.6;
+}

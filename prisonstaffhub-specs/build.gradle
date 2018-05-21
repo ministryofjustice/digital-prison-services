@@ -1,0 +1,58 @@
+plugins {
+    id "groovy"
+}
+
+ext {
+
+    ext {
+        drivers = [
+//                'chrome'
+//                ,
+                'chromeHeadless'
+        ]
+
+        groovyVersion = '2.4.14'
+        gebVersion = '2.1'
+        seleniumVersion = '3.11.0'
+        chromeDriverVersion = '2.37'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude group: "org.codehaus.groovy"
+    }
+
+    testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    testCompile "org.gebish:geb-core:$gebVersion"
+    testCompile "org.gebish:geb-spock:$gebVersion"
+    testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
+    testCompile 'io.github.http-builder-ng:http-builder-ng-apache:1.0.3'
+
+    testCompile 'com.github.tomakehurst:wiremock-standalone:2.15.0'
+    testCompile 'com.github.tomjankes:wiremock-groovy:0.2.0'
+    testCompile 'org.slf4j:slf4j-api:1.7.25'
+    testCompile 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+drivers.each { driver ->
+    task "${driver}Test"(type: Test) {
+        group JavaBasePlugin.VERIFICATION_GROUP
+
+        outputs.upToDateWhen { false } // Always run tests
+
+        systemProperty 'geb.build.reportsDir', reporting.file("geb/${name}")
+        systemProperty 'geb.env', driver
+    }
+}
+
+test {
+    dependsOn drivers.collect { tasks["${it}Test"] }
+    enabled = false
+}
+
