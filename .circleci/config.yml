@@ -58,7 +58,7 @@ jobs:
              VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
              GIT_REF=$(egrep gitRef build-info.json  | awk -F"\"" '{print $4}')
              GIT_DATE=$(egrep gitDate build-info.json  | awk -F"\"" '{print $4}')
-             BUILD_VERSION=PRISONSTAFFHUB_${VERSION}
+             BUILD_VERSION=${VERSION}
 
              docker build --rm=false . \
                  --build-arg CLIENT=hmpps \
@@ -93,8 +93,8 @@ jobs:
             name: Deploy to Elastic Beanstalk Dev
             command: |
               VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
-              yarn run plant-beanstalk PRISONSTAFFHUB_${VERSION}
-              ~/.local/bin/eb deploy --process --verbose
+              yarn run plant-beanstalk ${VERSION}
+              ~/.local/bin/eb deploy --process --verbose --label ${VERSION}
 
 
 workflows:
