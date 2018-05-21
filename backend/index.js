@@ -77,6 +77,12 @@ app.use(helmet.noCache());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname, '../build/static')));
+
+app.use('/auth', session.loginMiddleware, authentication);
+app.use(session.hmppsSessionMiddleWare);
+app.use(session.extendHmppsCookieMiddleWare);
+
 
 if (config.app.production === false) {
   const compiler = webpack(require('../webpack.config.js'));
@@ -92,11 +98,12 @@ app.use((req, res, next) => {
   next();
 });
 
-//app.use(express.static(path.join(__dirname, '../public'), { index: 'dummy-file-which-doesnt-exist' })); // TODO: setting the index to false doesn't seem to work
-//app.use(express.static(path.join(__dirname, '../build'), { index: 'dummy-file-which-doesnt-exist' }));
 app.use(express.static(path.join(__dirname, '../build')));
 
-app.use('/auth', session.loginMiddleware, authentication);
+//app.use(express.static(path.join(__dirname, '../public'), { index: 'dummy-file-which-doesnt-exist' })); // TODO: setting the index to false doesn't seem to work
+//app.use(express.static(path.join(__dirname, '../build'), { index: 'dummy-file-which-doesnt-exist' }));
+
+
 
 app.use(clientVersionValidator);
 
@@ -106,8 +113,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(session.hmppsSessionMiddleWare);
-app.use(session.extendHmppsCookieMiddleWare);
 
 app.use('/api/me', userMe);
 app.use('/api/usercaseloads', userCaseLoads);
