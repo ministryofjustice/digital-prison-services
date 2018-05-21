@@ -4,9 +4,7 @@ import Footer from './Footer/index';
 import Error from './Error/index';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
-import links from "./links";
 import './App.scss';
-import axiosWrapper from "./backendWrapper";
 
 import {
   BrowserRouter as Router,
@@ -47,7 +45,7 @@ class App extends React.Component {
     }, (error) => Promise.reject(error));
 
     try {
-      const user = await axiosWrapper.get('/api/me');
+      const user = await axios.get('/api/me');
       const caseloads = await axios.get('/api/usercaseloads');
       this.props.userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
 
