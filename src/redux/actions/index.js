@@ -68,3 +68,45 @@ export const resetValidationErrors = (fieldName, message) => {
   };
 };
 
+export const setSearchLocations = (locations) => {
+  return {
+    type: ActionTypes.SET_SEARCH_LOCATIONS,
+    locations
+  };
+};
+
+export const setSearchActivities = (activities) => {
+  return {
+    type: ActionTypes.SET_SEARCH_ACTIVITIES,
+    activities
+  };
+};
+
+export const setSearchLocation = (location) => {
+  return {
+    type: ActionTypes.SET_SEARCH_LOCATION,
+    location
+  };
+};
+
+export const setSearchActivity = (activity) => {
+  return {
+    type: ActionTypes.SET_SEARCH_ACTIVITY,
+    activity
+  };
+};
+
+export const setSearchDate = (date) => {
+  return {
+    type: ActionTypes.SET_SEARCH_DATE,
+    date
+  };
+};
+
+export const setSearchPeriod = (period) => {
+  return {
+    type: ActionTypes.SET_SEARCH_PERIOD,
+    period
+  };
+};
+

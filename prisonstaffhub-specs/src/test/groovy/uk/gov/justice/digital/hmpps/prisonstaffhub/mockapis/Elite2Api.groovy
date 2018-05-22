@@ -3,9 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.OffenderAssessmentsResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.OffenderSearchResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.OffenderSentencesResponse
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.LocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.AgencyLocation
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Location
@@ -124,68 +122,18 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(json.toString())
-        ))
+                ))
     }
 
-
-    void stubOffenderSentenceResponse(AgencyLocation agencyLocation) {
-        stubFor(
-                post(urlPathEqualTo("/api/offender-sentences"))
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
-                        .willReturn(aResponse()
-                        .withBody(OffenderSentencesResponse.response)
-                        .withStatus(200))
-        )
-    }
-
-    void stubOffenderAssessmentResponse(AgencyLocation agencyLocation) {
-        stubFor(
-                post(urlPathEqualTo("/api/offender-assessments/CSR"))
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
-                        .willReturn(aResponse()
-                        .withBody(OffenderAssessmentsResponse.response)
-                        .withStatus(200))
-        )
-    }
-
-    void stubOffenderSearchResponse(AgencyLocation agencyLocation) {
-        stubFor(
-                get(urlPathEqualTo("/api/locations/description/${agencyLocation.id}/inmates"))
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
-                        .willReturn(aResponse()
-                        .withBody(OffenderSearchResponse.response_5_results)
-                        .withStatus(200))
-        )
-    }
-
-    void stubOffenderSearchLargeResponse(AgencyLocation agencyLocation) {
-        stubFor(
-                get(urlPathEqualTo("/api/locations/description/${agencyLocation.id}/inmates"))
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
-                        .willReturn(aResponse()
-                        .withBody(OffenderSearchResponse.response_55_results)
-                        .withStatus(200))
-        )
-    }
-
-    void stubEmptyOffenderSearchResponse(AgencyLocation agencyLocation) {
-        stubFor(
-                get(urlPathEqualTo("/api/locations/description/${agencyLocation.id}/inmates"))
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
-                        .willReturn(aResponse()
-                        .withBody("[]")
-                        .withStatus(200))
-        )
-    }
 
     void stubHealth() {
         stubFor(
-            get('/health')
-                .willReturn(
-                aResponse()
-                    .withStatus(200)
-                    .withHeader('Content-Type', 'application/json')
-                    .withBody('''
+                get('/health')
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody('''
                 {
                     "status": "UP",
                     "healthInfo": {
@@ -204,6 +152,19 @@ class Elite2Api extends WireMockRule {
                         "hello": 1
                     }
                 }'''.stripIndent())
-        ))
+                ))
+    }
+
+    void stubLocations(AgencyLocation agencyLocation) {
+
+        this.stubFor(
+                get("/api/agencies/${agencyLocation.id}/locations")
+                        .willReturn(
+                        aResponse()
+                                .withBody(LocationsResponse.response)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
     }
 }

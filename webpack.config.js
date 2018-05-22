@@ -3,7 +3,6 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
 
 module.exports = {
 
@@ -13,7 +12,7 @@ module.exports = {
     // Add the client which connects to our middleware
     // You can use full urls like 'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr'
     // useful if you run your app from another point like django
-    'webpack-hot-middleware/client?path=/hot-reload/__webpack_hmr&timeout=20000',
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     './src/index.js'
 
   ],
@@ -103,7 +102,8 @@ module.exports = {
     ]),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: 'html-template/index.html'
+      template: 'html-template/index.html',
+      publicUrl: process.env.PUBLIC_URL,
     })
   ]
 };

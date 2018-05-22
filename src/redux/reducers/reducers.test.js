@@ -1,5 +1,6 @@
-import { app } from './index';
+import { app, search } from './index';
 import * as types from '../actions/actionTypes';
+import moment from 'moment';
 
 const appInitialState = {
   error: null,
@@ -11,6 +12,15 @@ const appWithErrorState = {
   error: 'There was a problem',
   message: null,
   loaded: false
+};
+
+const searchInitialState = {
+  locations: [],
+  activities: [],
+  location: '',
+  activity: '',
+  date: moment().format('DD/MM/YYYY'),
+  period: ''
 };
 
 const appWithValidationErrorState = {
@@ -196,6 +206,114 @@ describe('app (global) reducer', () => {
     ).toEqual(
       {
         validationErrors: null
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_LOCATIONS', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_LOCATIONS,
+        locations: ['a', 'b']
+      })
+    ).toEqual(
+      {
+        locations: ['a', 'b'],
+        activities: [],
+        location: '',
+        activity: '',
+        date: moment().format('DD/MM/YYYY'),
+        period: ''
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_LOCATION', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_LOCATION,
+        location: 'lol'
+      })
+    ).toEqual(
+      {
+        locations: [],
+        activities: [],
+        location: 'lol',
+        activity: '',
+        date: moment().format('DD/MM/YYYY'),
+        period: ''
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_ACTIVITIES', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_ACTIVITIES,
+        activities: ['a', 'b']
+      })
+    ).toEqual(
+      {
+        locations: [],
+        activities: ['a', 'b'],
+        location: '',
+        activity: '',
+        date: moment().format('DD/MM/YYYY'),
+        period: ''
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_ACTIVITY', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_ACTIVITY,
+        activity: 'lol'
+      })
+    ).toEqual(
+      {
+        locations: [],
+        activities: [],
+        location: '',
+        activity: 'lol',
+        date: moment().format('DD/MM/YYYY'),
+        period: ''
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_DATE', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_DATE,
+        date: '12/12/1999'
+      })
+    ).toEqual(
+      {
+        locations: [],
+        activities: [],
+        location: '',
+        activity: '',
+        date: '12/12/1999',
+        period: ''
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_PERIOD', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_PERIOD,
+        period: 'teatime'
+      })
+    ).toEqual(
+      {
+        locations: [],
+        activities: [],
+        location: '',
+        activity: '',
+        date: moment().format('DD/MM/YYYY'),
+        period: 'teatime'
       }
     );
   });

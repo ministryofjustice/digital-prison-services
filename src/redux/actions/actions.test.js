@@ -85,5 +85,53 @@ describe('actions', () => {
     };
     expect(actions.resetValidationErrors()).toEqual(expectedAction);
   });
+
+  it('should create an action to save search locations', () => {
+    const expectedAction = {
+      type: types.SET_SEARCH_LOCATIONS,
+      locations: ['loc1', 'loc2']
+    };
+    expect(actions.setSearchLocations(['loc1', 'loc2'])).toEqual(expectedAction);
+  });
+
+  it('should create an action to save search activities', () => {
+    const expectedAction = {
+      type: types.SET_SEARCH_ACTIVITIES,
+      activities: ['loc1', 'loc2']
+    };
+    expect(actions.setSearchActivities(['loc1', 'loc2'])).toEqual(expectedAction);
+  });
+
+  it('should create an action to save a search location', () => {
+    const expectedAction = {
+      type: types.SET_SEARCH_LOCATION,
+      location: 'home'
+    };
+    expect(actions.setSearchLocation('home')).toEqual(expectedAction);
+  });
+
+  it('should create an action to save a search activity', () => {
+    const expectedAction = {
+      type: types.SET_SEARCH_ACTIVITY,
+      activity: 'chillin'
+    };
+    expect(actions.setSearchActivity('chillin')).toEqual(expectedAction);
+  });
+
+  it('should create an action to save a search date', () => {
+    const expectedAction = {
+      type: types.SET_SEARCH_DATE,
+      date: '25/11/1976'
+    };
+    expect(actions.setSearchDate('25/11/1976')).toEqual(expectedAction);
+  });
+
+  it('should create an action to save the search period', () => {
+    const expectedAction = {
+      type: types.SET_SEARCH_PERIOD,
+      period: 'brunch'
+    };
+    expect(actions.setSearchPeriod('brunch')).toEqual(expectedAction);
+  });
 });
 

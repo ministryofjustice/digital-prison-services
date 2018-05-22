@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const config = require('./config');
 
 const sessionExpiryMinutes = config.hmppsCookie.expiryMinutes * 60 * 1000;

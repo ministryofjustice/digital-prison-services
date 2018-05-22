@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const gateway = require('./gateway-api');
 
 const eliteApiUrl = process.env.API_ENDPOINT_URL || 'http://localhost:8080/';
@@ -32,13 +33,22 @@ const setActiveCaseLoad = (req, res) => gateway.putRequest({
   url: `${eliteApiUrl}api/users/me/activeCaseLoad`
 });
 
+const searchLocations = (req, res) => gateway.getRequest({
+  req,
+  res,
+  method: 'get',
+  url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/locations`
+});
+
+
 const service = {
   login,
   currentUser,
   userCaseLoads,
   userLocations,
   setActiveCaseLoad,
-  eliteApiUrl
+  eliteApiUrl,
+  searchLocations
 };
 
 function encodeQueryString (input) {

@@ -2,6 +2,7 @@ import React from 'react';
 import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
 import Error from './Error/index';
+import SearchContainer from './Search/\SearchContainer';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
@@ -20,7 +21,7 @@ import {
   setUserDetails,
   switchAgency
 } from './redux/actions/index';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 
 const axios = require('axios');
@@ -35,7 +36,6 @@ class App extends React.Component {
     this.displayError = this.displayError.bind(this);
   }
   async componentDidMount () {
-
     axios.interceptors.response.use((config) => {
       if (config.status === 205) {
         alert("There is a newer version of this website available, click ok to ensure you're using the latest version."); // eslint-disable-line no-alert
@@ -94,6 +94,7 @@ class App extends React.Component {
     let innerContent;
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
+      <Route exact path="/whereaboutssearch" render={() => <SearchContainer displayError={this.displayError} {...this.props} />}/>
     </div></div>);
 
     if (this.shouldDisplayInnerContent()) {
