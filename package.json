@@ -59,6 +59,7 @@
   },
   "scripts": {
     "start": "node backend/index.js",
+    "start-prod": "NODE_ENV=production node backend/index.js",
     "build": "webpack --mode=production",
     "test": "jest --env=jsdom",
     "test-watch": "node scripts/test.js --env=jsdom --watch",
