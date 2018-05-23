@@ -145,12 +145,10 @@ workflows:
             - build
       - build_docker:
           requires:
-            - build
+            - integration_tests
           filters:
             branches:
               only: master
-              
       - deploy_release_eb:
           requires:
-            - integration_tests
             - build_docker
