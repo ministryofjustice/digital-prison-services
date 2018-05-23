@@ -58,7 +58,7 @@ jobs:
       - restore_cache:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - restore_cache:
-          key: gradle-cache-{{ checksum "prisonstaffhubs-specs/build.gradle" }}
+          key: gradle-cache-{{ checksum "prisonstaffhub-specs/build.gradle" }}
       - run:
           name: Run Integration Tests
           command: ./gradlew build
@@ -67,17 +67,17 @@ jobs:
           paths:
               - /home/circleci/.gradle/wrapper
       - save_cache:
-          key: gradle-cache-{{ checksum "prisonstaffhubs-specs/build.gradle" }}
+          key: gradle-cache-{{ checksum "prisonstaffhub-specs/build.gradle" }}
           paths:
               - /home/circleci/.gradle/caches
       - store_artifacts:
-          path: prisonstaffhubs-specs/build/reports
+          path: prisonstaffhub-specs/build/reports
           destination: integration/spock
       - store_artifacts:
-          path: prisonstaffhubs-specs/build/geb-reports
+          path: prisonstaffhub-specs/build/geb-reports
           destination: integration/geb
       - store_test_results:
-          path: prisonstaffhubs-specs/build/test-results
+          path: prisonstaffhub-specs/build/test-results
 
   build_docker:
     <<: *defaults
