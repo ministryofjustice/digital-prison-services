@@ -18,6 +18,7 @@ const authentication = require('./controllers/authentication');
 const userCaseLoads = require('./controllers/usercaseloads');
 const setActiveCaseLoad = require('./controllers/setactivecaseload');
 const userLocations = require('./controllers/userLocations');
+const locations = require('./controllers/locations');
 const userMe = require('./controllers/userMe');
 const getConfig = require('./controllers/getConfig');
 const health = require('./controllers/health');
@@ -103,8 +104,6 @@ app.use(express.static(path.join(__dirname, '../build')));
 //app.use(express.static(path.join(__dirname, '../public'), { index: 'dummy-file-which-doesnt-exist' })); // TODO: setting the index to false doesn't seem to work
 //app.use(express.static(path.join(__dirname, '../build'), { index: 'dummy-file-which-doesnt-exist' }));
 
-
-
 app.use(clientVersionValidator);
 
 app.use((req, res, next) => {
@@ -119,6 +118,12 @@ app.use('/api/usercaseloads', userCaseLoads);
 app.use('/api/setactivecaseload', setActiveCaseLoad);
 app.use('/api/userLocations', userLocations);
 app.use('/api/config', getConfig);
+
+app.use('/api/locations', locations);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 
 const port = process.env.PORT || 3001;

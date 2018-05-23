@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import * as ActionTypes from '../actions/actionTypes';
+import moment from 'moment';
 
 const appInitialState = {
   config: { mailTo: '' },
@@ -8,6 +9,15 @@ const appInitialState = {
   error: null,
   message: null,
   loaded: false
+};
+
+const searchInitialState = {
+  locations: [],
+  activities: [],
+  location: '',
+  activity: '',
+  date: moment().format('DD/MM/YYYY'),
+  period: ''
 };
 
 export function app (state = appInitialState, action) {
@@ -62,13 +72,48 @@ export function app (state = appInitialState, action) {
   }
 }
 
+export function search (state = searchInitialState, action) {
+  switch (action.type) {
+    case ActionTypes.SET_OFFENDER_SEARCH_ALLOCATION_STATUS:
+      return { ...state,
+        allocationStatus: action.allocationStatus
+      };
+    case ActionTypes.SET_SEARCH_LOCATION:
+      return { ...state,
+        location: action.location
+      };
+    case ActionTypes.SET_SEARCH_ACTIVITY:
+      return { ...state,
+        activity: action.activity
+      };
+    case ActionTypes.SET_SEARCH_LOCATIONS:
+      return { ...state,
+        locations: action.locations
+      };
+    case ActionTypes.SET_SEARCH_ACTIVITIES:
+      return { ...state,
+        activities: action.activities
+      };
+    case ActionTypes.SET_SEARCH_DATE:
+      return { ...state,
+        date: action.date
+      };
+    case ActionTypes.SET_SEARCH_PERIOD:
+      return { ...state,
+        period: action.period
+      };
+    default:
+      return state;
+  }
+}
+
 function updateObject (oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
 }
 
 
 const prisonStaffHubApp = combineReducers({
-  app
+  app, search
 });
 
 export default prisonStaffHubApp;

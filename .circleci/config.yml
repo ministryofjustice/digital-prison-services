@@ -18,6 +18,15 @@ jobs:
           key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
+      - run:
+          name: Run eslint
+          command: yarn lint
+      - run:
+          name: Run Tests
+          command: |
+             set -e
+             yarn test
+      - run: NODE_ENV=production yarn build
       - run: |
              DATE=$(date '+%Y-%m-%d')
              export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
@@ -43,6 +52,32 @@ jobs:
           name: Run the node app.
           command: yarn start
           background: true
+#      - run:
+#          name: Wait for node app to start
+#          command: sleep 5
+      - restore_cache:
+          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: gradle-cache-{{ checksum "prisonstaffhubs-specs/build.gradle" }}
+      - run:
+          name: Run Integration Tests
+          command: ./gradlew build
+      - save_cache:
+          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+              - /home/circleci/.gradle/wrapper
+      - save_cache:
+          key: gradle-cache-{{ checksum "prisonstaffhubs-specs/build.gradle" }}
+          paths:
+              - /home/circleci/.gradle/caches
+      - store_artifacts:
+          path: prisonstaffhubs-specs/build/reports
+          destination: integration/spock
+      - store_artifacts:
+          path: prisonstaffhubs-specs/build/geb-reports
+          destination: integration/geb
+      - store_test_results:
+          path: prisonstaffhubs-specs/build/test-results
 
   build_docker:
     <<: *defaults
@@ -58,7 +93,11 @@ jobs:
              VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
              GIT_REF=$(egrep gitRef build-info.json  | awk -F"\"" '{print $4}')
              GIT_DATE=$(egrep gitDate build-info.json  | awk -F"\"" '{print $4}')
-             BUILD_VERSION=${VERSION}
+             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
+               BUILD_VERSION=${VERSION}
+             else
+               BUILD_VERSION=${VERSION}.${CIRCLE_BRANCH}
+             fi
 
              docker build --rm=false . \
                  --build-arg CLIENT=hmpps \
@@ -96,23 +135,20 @@ jobs:
               yarn run plant-beanstalk ${VERSION}
               ~/.local/bin/eb deploy --process --verbose --label ${VERSION}
 
-
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                  - deploy-to-dev
-      - build_docker:
+      - build
+      - integration_tests:
           requires:
             - build
+      - build_docker:
+          requires:
+            - integration_tests
           filters:
             branches:
               only: master
-              
       - deploy_release_eb:
           requires:
             - build_docker

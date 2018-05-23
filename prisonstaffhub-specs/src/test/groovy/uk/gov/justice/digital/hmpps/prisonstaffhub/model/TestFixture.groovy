@@ -4,7 +4,9 @@ import geb.Browser
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.API_TEST_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class TestFixture {
@@ -38,6 +40,18 @@ class TestFixture {
         browser.page.manualAssignLink.click()
         assert browser.page instanceof SearchForOffenderPage
     }*/
+
+    def toSearch() {
+        loginAs ITAG_USER
+        elite2Api.stubLocations(AgencyLocation.LEI)
+        browser.page.whereaboutsLink.click()
+        assert browser.page instanceof SearchPage
+    }
+
+    def clickWhereaboutsLink() {
+        browser.at DashboardPage
+        browser.page.whereaboutsLink.click()
+    }
 
 
     static List<Location> locationsForCaseload(Caseload caseload) {

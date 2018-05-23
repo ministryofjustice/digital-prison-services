@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const axios = require('axios');
 const session = require('./session');
 const useEliteApiAuth = (process.env.USE_API_GATEWAY_AUTH || 'no') === 'yes';
