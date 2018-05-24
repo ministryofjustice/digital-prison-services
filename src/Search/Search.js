@@ -27,9 +27,9 @@ class Search extends Component {
         <select id="period-select" name="period-select" className="form-control"
           value={this.props.period}
           onChange={this.props.handlePeriodChange}>
-          <option key="MORNING" value="AM">Morning (AM)</option>
-          <option key="AFTERNOON" value="PM">Afternoon (PM)</option>
-          <option key="EVENING" value="ED">Evening (ED)</option>
+          <option key="AM" value="AM">Morning (AM)</option>
+          <option key="PM" value="PM">Afternoon (PM)</option>
+          <option key="ED" value="ED">Evening (ED)</option>
         </select></div>);
 
     return (<div className="pure-u-md-9-12">
@@ -57,6 +57,8 @@ Search.propTypes = {
   history: PropTypes.object,
   handleSearch: PropTypes.func.isRequired,
   handleLocationChange: PropTypes.func.isRequired,
+  handlePeriodChange: PropTypes.func.isRequired,
+  handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string,
   period: PropTypes.string,
   activity: PropTypes.string,

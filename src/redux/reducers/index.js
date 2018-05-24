@@ -2,6 +2,23 @@ import { combineReducers } from 'redux';
 import * as ActionTypes from '../actions/actionTypes';
 import moment from 'moment';
 
+export function defaultPeriod (time) {
+  const midnight = moment('12:00a', "HH:mm a");
+  const midday = moment('12:00p', "HH:mm a");
+  const evening = moment('17:00p', "HH:mm a");
+
+  const isMorning = time.isBetween(midnight, midday, null, '[)');
+  const isAfternoon = time.isBetween(midday, evening, null, '[)');
+
+  if (isMorning) {
+    return 'AM';
+  } else if (isAfternoon) {
+    return 'PM';
+  }
+  return 'ED';
+}
+
+
 const appInitialState = {
   config: { mailTo: '' },
   user: { activeCaseLoadId: null },
@@ -13,11 +30,11 @@ const appInitialState = {
 
 const searchInitialState = {
   locations: [],
-  activities: [],
+  activities: [''],
   location: '',
   activity: '',
-  date: moment().format('DD/MM/YYYY'),
-  period: ''
+  date: 'Today',
+  period: defaultPeriod(moment())
 };
 
 export function app (state = appInitialState, action) {

@@ -65,9 +65,11 @@ SearchContainer.propTypes = {
   error: PropTypes.string,
   agencyId: PropTypes.string.isRequired,
   locationDispatch: PropTypes.func,
+  locationsDispatch: PropTypes.func,
   activityDispatch: PropTypes.func,
   dateDispatch: PropTypes.func,
-  periodDispatch: PropTypes.func
+  periodDispatch: PropTypes.func,
+  displayError: PropTypes.func
 };
 
 const mapStateToProps = state => {

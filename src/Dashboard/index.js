@@ -17,8 +17,7 @@ class Dashboard extends Component {
           <li><a href="">Old P-Nomis</a></li>
           <li><a href="https://licences-stage.hmpps.dsd.io">Licence Management</a></li>
           <li><a href="https://omic-dev.hmpps.dsd.io">Key worker Management</a></li>
-          <li><a id="" href="/whereaboutssearch">Whereabouts</a></li>
-          <li><Link id="whereabouts_link" title="Whereabouts link" className="link" to="/whereaboutssearch" >whereabouts</Link></li>
+          <li><Link id="whereabouts_link" title="Whereabouts link" className="link" to="/whereaboutssearch" >Whereabouts</Link></li>
 
 
         </ul>

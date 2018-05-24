@@ -1,4 +1,4 @@
-import { app, search } from './index';
+import { app, search, defaultPeriod } from './index';
 import * as types from '../actions/actionTypes';
 import moment from 'moment';
 
@@ -315,6 +315,38 @@ describe('app (global) reducer', () => {
         date: moment().format('DD/MM/YYYY'),
         period: 'teatime'
       }
+    );
+  });
+
+
+  it('should calculate current time period', () => {
+    expect(
+      defaultPeriod(moment('12:00 am', "HH:mm a"))
+    ).toEqual('AM'
+    );
+    expect(
+      defaultPeriod(moment('12:01 am', "HH:mm a"))
+    ).toEqual('AM'
+    );
+    expect(
+      defaultPeriod(moment('11:59:59 am', "HH:mm:ss a"))
+    ).toEqual('AM'
+    );
+    expect(
+      defaultPeriod(moment('12:00:00 pm', "HH:mm:ss a"))
+    ).toEqual('PM'
+    );
+    expect(
+      defaultPeriod(moment('16:59:59 pm', "HH:mm:ss a"))
+    ).toEqual('PM'
+    );
+    expect(
+      defaultPeriod(moment('17:00:00 pm', "HH:mm:ss a"))
+    ).toEqual('ED'
+    );
+    expect(
+      defaultPeriod(moment('11:59:59 pm', "HH:mm:ss a"))
+    ).toEqual('ED'
     );
   });
 });
