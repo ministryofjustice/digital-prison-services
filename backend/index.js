@@ -21,6 +21,7 @@ const userLocations = require('./controllers/userLocations');
 const locations = require('./controllers/locations');
 const userMe = require('./controllers/userMe');
 const getConfig = require('./controllers/getConfig');
+const houseblockList = require('./controllers/houseblockList');
 const health = require('./controllers/health');
 const clientVersionValidator = require('./validate-client-version');
 const applicationVersion = require('./application-version');
@@ -117,6 +118,7 @@ app.use('/api/me', userMe);
 app.use('/api/usercaseloads', userCaseLoads);
 app.use('/api/setactivecaseload', setActiveCaseLoad);
 app.use('/api/userLocations', userLocations);
+app.use('/api/houseblocklist', houseblockList.router);
 app.use('/api/config', getConfig);
 
 app.use('/api/locations', locations);
