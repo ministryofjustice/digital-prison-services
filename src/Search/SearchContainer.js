@@ -45,7 +45,7 @@ class SearchContainer extends Component {
   }
 
   handleSearch (history) {
-    history.push('/whereabouts/list');
+    history.push('/whereabouts/resultshouseblock');
   }
 
   render () {

@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
 import Error from './Error/index';
-import SearchContainer from './Search/\SearchContainer';
+import SearchContainer from './Search/SearchContainer';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
@@ -23,6 +23,7 @@ import {
 } from './redux/actions/index';
 import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
+import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 
 const axios = require('axios');
 
@@ -95,6 +96,7 @@ class App extends React.Component {
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
       <Route exact path="/whereaboutssearch" render={() => <SearchContainer displayError={this.displayError} {...this.props} />}/>
+      <Route exact path="/whereabouts/resultshouseblock" render={() => <ResultsHouseblockContainer displayError={this.displayError} {...this.props} />}/>
     </div></div>);
 
     if (this.shouldDisplayInnerContent()) {

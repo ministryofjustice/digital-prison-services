@@ -33,6 +33,15 @@ const setActiveCaseLoad = (req, res) => gateway.putRequest({
   url: `${eliteApiUrl}api/users/me/activeCaseLoad`
 });
 
+const getHouseblockList = (req, res) => gateway.getRequest({
+  req,
+  res,
+  method: 'get',
+  url: req.query.date ?
+    `${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}?date=${req.query.date}&timeSlot=${req.query.timeSlot}` :
+    `${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}?timeSlot=${req.query.timeSlot}`
+});
+
 const searchLocations = (req, res) => gateway.getRequest({
   req,
   res,
@@ -48,6 +57,7 @@ const service = {
   userLocations,
   setActiveCaseLoad,
   eliteApiUrl,
+  getHouseblockList,
   searchLocations
 };
 
