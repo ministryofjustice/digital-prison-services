@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
+    "applicationinsights": "^1.0.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "bunyan": "^1.8.12",
