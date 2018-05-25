@@ -29,6 +29,8 @@ class TestFixture {
         elite2Api.stubValidOAuthTokenRequest currentUser
         elite2Api.stubGetMyDetails currentUser
         elite2Api.stubGetMyCaseloads currentUser.caseloads
+        elite2Api.stubLocations currentUser.workingCaseload
+        elite2Api.stubGroups currentUser.workingCaseload
         browser.page.loginAs currentUser, 'password'
 
         browser.at DashboardPage
@@ -43,7 +45,6 @@ class TestFixture {
 
     def toSearch() {
         loginAs ITAG_USER
-        elite2Api.stubLocations(AgencyLocation.LEI)
         browser.page.whereaboutsLink.click()
         assert browser.page instanceof SearchPage
     }
