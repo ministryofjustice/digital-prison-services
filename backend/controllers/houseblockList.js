@@ -9,22 +9,18 @@ router.get('/', asyncMiddleware(async (req, res) => {
 }));
 
 const getHouseblockList = (async (req, res) => {
-  req.query.usage = 'PROD';
-  const activities = await elite2Api.getHouseblockList(req, res).data;
-  req.query.usage = 'VISIT';
-  const visits = await elite2Api.getHouseblockList(req, res).data;
-  req.query.usage = 'APP';
-  const appointments = await elite2Api.getHouseblockList(req, res).data;
+  const events = await elite2Api.getHouseblockList(req, res);
+  // Returns array ordered by inmate/cell (group order), then get act, visit, app
 
-  for (const row of activities) {
-    row.visits = visits.filter(details => details.offenderNo === row.offenderNo);
-    row.appointments = appointments.filter(details => details.offenderNo === row.offenderNo);
+  const rows = [];
+  const data = events.data;
+  for (const item of data) {
+    if (!rows[item.offenderNo]) {
+      rows[item.offenderNo] = [];
+    }
+    rows[item.offenderNo].push(item);
   }
-  /*
-  ${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}?date=${req.query.date}&timeSlot=${req.query.timeSlot}`
-   */
-
-  return activities;
+  return rows;
 });
 
 module.exports = { router, getHouseblockList };

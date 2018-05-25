@@ -155,16 +155,25 @@ class Elite2Api extends WireMockRule {
                 ))
     }
 
-    void stubLocations(AgencyLocation agencyLocation) {
-
+    void stubLocations(Caseload caseload) {
         this.stubFor(
-                get("/api/agencies/${agencyLocation.id}/locations")
+                get("/api/agencies/${caseload.id}/locations")
                         .willReturn(
                         aResponse()
                                 .withBody(LocationsResponse.response)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+    }
 
+    void stubGroups(Caseload caseload) {
+        this.stubFor(
+                get("/api/agencies/${caseload.id}/locations/groups")
+                        .willReturn(
+                        aResponse()
+                                .withBody('["AWing","BWing","CWing"]')
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 }

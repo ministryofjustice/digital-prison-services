@@ -21,6 +21,8 @@ const userLocations = require('./controllers/userLocations');
 const locations = require('./controllers/locations');
 const userMe = require('./controllers/userMe');
 const getConfig = require('./controllers/getConfig');
+const houseblockLocations = require('./controllers/houseblockLocations');
+const activityList = require('./controllers/activityList');
 const houseblockList = require('./controllers/houseblockList');
 const health = require('./controllers/health');
 const clientVersionValidator = require('./validate-client-version');
@@ -118,10 +120,12 @@ app.use('/api/me', userMe);
 app.use('/api/usercaseloads', userCaseLoads);
 app.use('/api/setactivecaseload', setActiveCaseLoad);
 app.use('/api/userLocations', userLocations);
+app.use('/api/houseblockLocations', houseblockLocations);
 app.use('/api/houseblocklist', houseblockList.router);
-app.use('/api/config', getConfig);
-
 app.use('/api/locations', locations);
+app.use('/api/activityList', activityList.router);
+
+app.use('/api/config', getConfig);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));

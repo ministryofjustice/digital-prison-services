@@ -24,6 +24,14 @@ import {
 import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
+import {
+  setHouseblockData,
+  setSearchActivities, setSearchActivity,
+  setSearchDate,
+  setSearchLocation,
+  setSearchLocations,
+  setSearchPeriod
+} from "./redux/actions";
 
 const axios = require('axios');
 
@@ -35,8 +43,11 @@ class App extends React.Component {
     this.hideTermsAndConditions = this.hideTermsAndConditions.bind(this);
     this.clearMessage = this.clearMessage.bind(this);
     this.displayError = this.displayError.bind(this);
+    this.getHouseblockLocations = this.getHouseblockLocations.bind(this);
+    this.getHouseblockList = this.getHouseblockList.bind(this);
   }
-  async componentDidMount () {
+
+  async componentWillMount () {
     axios.interceptors.response.use((config) => {
       if (config.status === 205) {
         alert("There is a newer version of this website available, click ok to ensure you're using the latest version."); // eslint-disable-line no-alert
@@ -57,6 +68,8 @@ class App extends React.Component {
       }
 
       this.props.configDispatch(config.data);
+
+      this.getHouseblockLocations(user.data.activeCaseLoadId);
     } catch (error) {
       this.props.setErrorDispatch(error.message);
     }
@@ -91,20 +104,104 @@ class App extends React.Component {
     return !this.props.shouldShowTerms && (this.props.user && this.props.user.activeCaseLoadId);
   }
 
+  async getHouseblockLocations (agencyId) {
+    // try {
+    const response = await axios.get('/api/houseblockLocations', {
+      params: {
+        agencyId: agencyId
+      } });
+    this.props.locationsDispatch(response.data);
+    // Use the first location by default
+    if (response.data && response.data[0]) {
+      this.props.locationDispatch(response.data[0]);
+    }
+  //  } catch (error) {
+  //    this.displayError(error);
+  //  }
+  }
+
+  async getActivityLocations () {
+    try {
+      const response = await axios.get('/api/locations', {
+        params: {
+          agencyId: this.props.agencyId
+        } });
+      this.props.locationsDispatch(response.data);
+      // Use the first location by default
+      if (response.data && response.data[0]) {
+        this.props.locationDispatch(response.data[0].locationPrefix);
+      }
+    } catch (error) {
+      this.displayError(error);
+    }
+  }
+
+  handleLocationChange (event) {
+    this.props.locationDispatch(event.target.value);
+  }
+
+  handleActivityChange (event) {
+    this.props.activityDispatch(event.target.value);
+  }
+
+  handleDateChange (event) {
+    this.props.dateDispatch(event.target.value);
+  }
+
+  handlePeriodChange (event) {
+    this.props.periodDispatch(event.target.value);
+  }
+
+  handleSearch (history) {
+    if (history.location.pathname === '/whereabouts/resultshouseblock') {
+      this.getHouseblockList();
+    } else {
+      history.push('/whereabouts/resultshouseblock');
+    }
+  }
+
+  async getHouseblockList () {
+    try {
+      const response = await axios.get('/api/houseblocklist', {
+        headers: {
+          'Sort-Fields': 'cellLocation',
+          'Sort-Order': 'ASC'
+        },
+        params: {
+          agencyId: this.props.agencyId,
+          groupName: this.props.currentLocation,
+          //date: this.props.date, // later; today only for now
+          timeSlot: this.props.period
+        } });
+      this.props.houseblockDataDispatch(response.data);
+    } catch (error) {
+      this.displayError(error);
+    }
+  }
   render () {
-    let innerContent;
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
-      <Route exact path="/whereaboutssearch" render={() => <SearchContainer displayError={this.displayError} {...this.props} />}/>
-      <Route exact path="/whereabouts/resultshouseblock" render={() => <ResultsHouseblockContainer displayError={this.displayError} {...this.props} />}/>
+      <Route exact path="/whereaboutssearch" render={() => (<SearchContainer displayError={this.displayError}
+      //  getHouseblockLocations = {this.getHouseblockLocations}
+        handleLocationChange={(event) => this.handleLocationChange(event)}
+        handleActivityChange={(event) => this.handleActivityChange(event)}
+        handleDateChange={(event) => this.handleDateChange(event)}
+        handlePeriodChange={(event) => this.handlePeriodChange(event)}
+        handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
+      <Route exact path="/whereabouts/resultshouseblock" render={() => (<ResultsHouseblockContainer displayError={this.displayError}
+        getHouseblockList = {this.getHouseblockList}
+        handleLocationChange={(event) => this.handleLocationChange(event)}
+        handleDateChange={(event) => this.handleDateChange(event)}
+        handlePeriodChange={(event) => this.handlePeriodChange(event)}
+        handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
     </div></div>);
 
+    let innerContent;
     if (this.shouldDisplayInnerContent()) {
       innerContent = routes;
     } else {
       innerContent = (<div className="inner-content"><div className="pure-g"><Error {...this.props} /></div></div>);
     }
-
 
     return (
       <Router>
@@ -139,7 +236,16 @@ App.propTypes = {
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func,
-  setMessageDispatch: PropTypes.func.isRequired
+  setMessageDispatch: PropTypes.func.isRequired,
+  locationsDispatch: PropTypes.func.isRequired,
+  locationDispatch: PropTypes.func.isRequired,
+  activityDispatch: PropTypes.func.isRequired,
+  dateDispatch: PropTypes.func.isRequired,
+  periodDispatch: PropTypes.func.isRequired,
+  agencyId: PropTypes.string,
+  currentLocation: PropTypes.string,
+  period: PropTypes.string,
+  houseblockDataDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -149,7 +255,14 @@ const mapStateToProps = state => {
     page: state.app.page,
     config: state.app.config,
     user: state.app.user,
-    shouldShowTerms: state.app.shouldShowTerms
+    shouldShowTerms: state.app.shouldShowTerms,
+    locations: state.search.locations,
+    currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
+    activities: state.search.activities,
+    activity: state.search.activity,
+    date: state.search.date,
+    period: state.search.period,
+    agencyId: state.app.user.activeCaseLoadId
   };
 };
 
@@ -161,7 +274,14 @@ const mapDispatchToProps = dispatch => {
     setTermsVisibilityDispatch: (shouldShowTerms) => dispatch(setTermsVisibility(shouldShowTerms)),
     setErrorDispatch: (error) => dispatch(setError(error)),
     resetErrorDispatch: () => dispatch(resetError()),
-    setMessageDispatch: (message) => dispatch(setMessage(message))
+    setMessageDispatch: (message) => dispatch(setMessage(message)),
+    locationDispatch: text => dispatch(setSearchLocation(text)),
+    locationsDispatch: text => dispatch(setSearchLocations(text)),
+    activityDispatch: text => dispatch(setSearchActivity(text)),
+    activitiesDispatch: text => dispatch(setSearchActivities(text)),
+    dateDispatch: text => dispatch(setSearchDate(text)),
+    periodDispatch: text => dispatch(setSearchPeriod(text)),
+    houseblockDataDispatch: data => dispatch(setHouseblockData(data))
   };
 };
 

@@ -37,6 +37,10 @@ const searchInitialState = {
   period: defaultPeriod(moment())
 };
 
+const houseblockInitialState = {
+  data: []
+};
+
 export function app (state = appInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_CONFIG:
@@ -124,13 +128,24 @@ export function search (state = searchInitialState, action) {
   }
 }
 
+export function houseblock (state = houseblockInitialState, action) {
+  switch (action.type) {
+    case ActionTypes.SET_HOUSEBLOCK_DATA:
+      return { ...state,
+        data: action.data
+      };
+    default:
+      return state;
+  }
+}
+
 function updateObject (oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
 }
 
 
 const prisonStaffHubApp = combineReducers({
-  app, search
+  houseblock, app, search
 });
 
 export default prisonStaffHubApp;

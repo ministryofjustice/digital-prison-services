@@ -1,4 +1,4 @@
-import { app, search, defaultPeriod } from './index';
+import { app, search, defaultPeriod, houseblock } from './index';
 import * as types from '../actions/actionTypes';
 import moment from 'moment';
 
@@ -318,6 +318,18 @@ describe('app (global) reducer', () => {
     );
   });
 
+  it('should handle SET_HOUSEBLOCK_DATA', () => {
+    expect(
+      houseblock(undefined, {
+        type: types.SET_HOUSEBLOCK_DATA,
+        data: [{ stuff: 'stuff' }]
+      })
+    ).toEqual(
+      {
+        data: [{ stuff: 'stuff' }]
+      }
+    );
+  });
 
   it('should calculate current time period', () => {
     expect(
@@ -350,4 +362,3 @@ describe('app (global) reducer', () => {
     );
   });
 });
-

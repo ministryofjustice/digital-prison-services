@@ -110,3 +110,10 @@ export const setSearchPeriod = (period) => {
   };
 };
 
+export const setHouseblockData = (data) => {
+  return {
+    type: ActionTypes.SET_HOUSEBLOCK_DATA,
+    data
+  };
+};
+

@@ -38,6 +38,15 @@ const getHouseblockList = (req, res) => gateway.getRequest({
   res,
   method: 'get',
   url: req.query.date ?
+    `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}?date=${req.query.date}&timeSlot=${req.query.timeSlot}` :
+    `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}?timeSlot=${req.query.timeSlot}`
+});
+
+const getActivityList = (req, res) => gateway.getRequest({
+  req,
+  res,
+  method: 'get',
+  url: req.query.date ?
     `${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}?date=${req.query.date}&timeSlot=${req.query.timeSlot}` :
     `${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}?timeSlot=${req.query.timeSlot}`
 });
@@ -49,6 +58,12 @@ const searchLocations = (req, res) => gateway.getRequest({
   url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/locations`
 });
 
+const searchGroups = (req, res) => gateway.getRequest({
+  req,
+  res,
+  method: 'get',
+  url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/locations/groups`
+});
 
 const service = {
   login,
@@ -58,7 +73,8 @@ const service = {
   setActiveCaseLoad,
   eliteApiUrl,
   getHouseblockList,
-  searchLocations
+  searchLocations,
+  searchGroups
 };
 
 function encodeQueryString (input) {

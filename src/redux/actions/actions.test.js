@@ -133,5 +133,12 @@ describe('actions', () => {
     };
     expect(actions.setSearchPeriod('brunch')).toEqual(expectedAction);
   });
-});
 
+  it('should create an action to save the houseblock list data', () => {
+    const expectedAction = {
+      type: types.SET_HOUSEBLOCK_DATA,
+      data: { stuff: 'stuff' }
+    };
+    expect(actions.setHouseblockData({ stuff: 'stuff' })).toEqual(expectedAction);
+  });
+});
