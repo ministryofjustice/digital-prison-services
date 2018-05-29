@@ -4,17 +4,28 @@ import './index.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
+import { getHoursMinutes, properCaseName } from "../stringUtils";
 
 class ResultsHouseblock extends Component {
   buildTableForRender () {
-    const offenders = this.props.houseblockData && this.props.houseblockData.map((a, index) => {
+    const offenders = this.props.houseblockData && Object.keys(this.props.houseblockData).map((offenderEvents, index) => {
+      const row = this.props.houseblockData[offenderEvents];
+      const mainActivity = row[0];
+
       return (
-        <tr key={a.offenderNo} className="row-gutters">
-          <td className="row-gutters">{properCaseName(a.lastName)}, {properCaseName(a.firstName)}</td>
-          <td className="row-gutters">{a.cellLocation}</td>
-          <td className="row-gutters">{a.offenderNo}</td>
-          <td className="row-gutters">{a.eventDescription}</td>
-          <td className="row-gutters">{a.crsaClassification || '--'}</td>
+        <tr key={mainActivity.offenderNo} className="row-gutters">
+          <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
+          <td className="row-gutters">{mainActivity.cellLocation}</td>
+          <td className="row-gutters">{mainActivity.offenderNo}</td>
+          <td className="row-gutters">{mainActivity.eventDescription}</td>
+          <td className="row-gutters"><ul>{row.map((e, index) => {
+            if (index === 0) { return '';}
+            return <li key={mainActivity.offenderNo + '_' + index}>{e.eventDescription} - {getHoursMinutes(e.startTime)}</li>;
+          })}</ul></td>
+          <td><input type="checkbox" /></td>
+          <td><input type="checkbox" /></td>
+          <td>TODO</td>
+          <td><input type="checkbox" /></td>
           <td><input type="checkbox" /></td>
         </tr>
       );
@@ -54,7 +65,7 @@ class ResultsHouseblock extends Component {
 
     return (<div className="pure-u-md-10-12">
       <h1 className="heading-large">{this.props.currentLocation}</h1>
-      <div className="pure-u-md-12-12 searchForm">
+      <form className="pure-u-md-12-12 searchForm">
         <div className="pure-u-md-4-12 padding-bottom"> {locationSelect} </div>
 
         <div className="pure-u-md-4-12 padding-right">
@@ -64,13 +75,13 @@ class ResultsHouseblock extends Component {
         {periodSelect}
         <hr />
         <div className="pure-u-md-3-12 padding-bottom">
-          <button className="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Save changes</button>
+          <button id="saveButton" className="button" type="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Save changes</button>
         </div>
         <div className="pure-u-md-3-12 padding-bottom">
-          <button className="button greyButton" style={{ float: 'right' }}>Print list</button>
+          <button id="printButton" className="button greyButton" type="button" style={{ float: 'right' }}>Print list</button>
         </div>
         <hr style={{ clear: 'right' }}/>
-      </div>
+      </form>
       <div className="padding-bottom-40">
         <table className="row-gutters">
           <thead>
@@ -112,7 +123,7 @@ ResultsHouseblock.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string,
   period: PropTypes.string,
-  houseblockData: PropTypes.array,
+  houseblockData: PropTypes.object,
   currentLocation: PropTypes.string,
   locations: PropTypes.array
 };

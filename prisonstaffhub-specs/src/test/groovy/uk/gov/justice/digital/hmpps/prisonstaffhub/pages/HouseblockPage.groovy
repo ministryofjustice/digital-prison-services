@@ -3,13 +3,13 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
-class SearchPage extends Page {
+class HouseblockPage extends Page {
 
-    static url = "/whereaboutssearch"
+    static url = "/whereabouts/resultshouseblock"
 
     static at = {
-        headingText == 'Manage offender whereabouts'
-        continueButton.displayed
+        saveButton.displayed
+        printButton.displayed
     }
 
     static content = {
@@ -18,7 +18,8 @@ class SearchPage extends Page {
         location { $('#housing-location-select') }
         date { $('#search-date') }
         period { $('#period-select') }
-        continueButton { $('button.button') }
-        form { $('form')}
+        saveButton { $('#saveButton') }
+        printButton { $('#printButton') }
+        tableRows { $('tr') }
     }
 }

@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.LocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.AgencyLocation
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
@@ -172,6 +173,16 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withBody('["AWing","BWing","CWing"]')
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+    }
+    void stubGetHouseblockList(Caseload caseload, String groupName, String timeSlot) {
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/groups/${groupName}?timeSlot=${timeSlot}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.response)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

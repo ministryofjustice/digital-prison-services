@@ -38,7 +38,7 @@ const searchInitialState = {
 };
 
 const houseblockInitialState = {
-  data: []
+  data: {}
 };
 
 export function app (state = appInitialState, action) {

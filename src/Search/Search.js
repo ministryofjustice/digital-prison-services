@@ -34,7 +34,7 @@ class Search extends Component {
 
     return (<div className="pure-u-md-9-12">
       <h1 className="heading-large">Manage offender whereabouts</h1>
-      <div className="pure-u-md-12-12 searchForm">
+      <form className="pure-u-md-12-12 searchForm">
         <div className="pure-u-md-10-12 padding-bottom"> {locationSelect} </div>
 
         <div className="pure-u-md-10-12 padding-top padding-bottom">
@@ -47,9 +47,9 @@ class Search extends Component {
         </div>
 
         <div className="padding-top-large padding-bottom-large">
-          <button className="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Continue</button>
+          <button className="button" type="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Continue</button>
         </div>
-      </div>
+      </form>
     </div>);
   }
 }

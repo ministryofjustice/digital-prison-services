@@ -24,7 +24,7 @@ const isHmppsCookieValid = (cookie) => {
 
 const hmppsSessionMiddleWare = (req, res, next) => {
   const hmppsCookie = req.cookies[config.hmppsCookie.name];
-  const isXHRRequest = req.xhr || req.headers.accept.indexOf('json') > -1;
+  const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
 
   if (!isHmppsCookieValid(hmppsCookie)) {
     req.session = null;
