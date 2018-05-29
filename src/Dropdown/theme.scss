@@ -1,14 +1,13 @@
-// @import '../colours';
 @import "colours/palette";
 
 .menu-wrapper {
   align-items: center;
-  //background: $govukBlue;
+  background: $govuk-blue;
   display: flex;
   height: 100%;
   min-width: 269px;
   position: relative;
-}/*`;*/
+}
 
 .info-wrapper {
   padding-left: 26px;
@@ -47,7 +46,7 @@
   cursor: pointer;
   display: block;
   padding: 16px 10px;
- // background: $govukBlue;
+  background: $govuk-blue;
   color: white;
   font-size: 19px;
   align-items: center;
@@ -56,7 +55,7 @@
   height: 60px;
   text-decoration: none;
   &:hover{
- //   background: $userMenu-hover;
+    background: $light-blue;
   }
 }
 
@@ -66,7 +65,7 @@
   cursor: pointer;
   display: block;
   padding: 16px 10px;
- // background: $userMenu-bg;
+  background: $govuk-blue;
   color: white;
   font-size: 19px;
   align-items: center;
@@ -75,7 +74,7 @@
   height: 60px;
   text-decoration: none;
   &:hover{
-  //  background: $govukLighterBluer;
+    background: $light-blue;
   }
 }
 
@@ -86,8 +85,8 @@
   text-align: center;
   line-height: 22px;
   border-radius: 10px;
-//  background-color: $govukYellow;
- // color: $baseFont;
+  background-color: $yellow;
+  color: $black;
   font-size: 12px;
 }
 
