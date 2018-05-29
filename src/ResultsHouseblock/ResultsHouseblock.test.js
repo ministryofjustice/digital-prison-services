@@ -16,75 +16,81 @@ const GONE_COLUMN = 6;
 const ATTEND_COLUMN = 8;
 const DONT_ATTEND_COLUMN = 9;
 
-const response = {
-  A1234AA: [{
-    offenderNo: "A1234AA",
-    firstName: "ARTHUR",
-    lastName: "ANDERSON",
-    cellLocation: "LEI-A-1-1",
-    event: "CHAP",
-    eventDescription: "Chapel",
-    comment: "comment11",
-    startTime: "2017-10-15T18:00:00",
-    endTime: "2017-10-15T18:30:00"
+const response = [
+  {
+    activity: {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "CHAP",
+      eventDescription: "Chapel",
+      comment: "comment11",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    others: [{
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "VISIT",
+      eventDescription: "Official Visit",
+      comment: "comment18",
+      startTime: "2017-10-15T11:00:00",
+      endTime: "2017-10-15T11:30:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "GYM",
+      eventDescription: "The gym, appointment",
+      comment: "comment14",
+      startTime: "2017-10-15T17:00:00",
+      endTime: "2017-10-15T17:30:00"
+    }]
   },
   {
-    offenderNo: "A1234AA",
-    firstName: "ARTHUR",
-    lastName: "ANDERSON",
-    cellLocation: "LEI-A-1-1",
-    event: "VISIT",
-    eventDescription: "Official Visit",
-    comment: "comment18",
-    startTime: "2017-10-15T11:00:00",
-    endTime: "2017-10-15T11:30:00"
+    activity: {
+      offenderNo: "A1234AB",
+      firstName: "MICHAEL",
+      lastName: "SMITH",
+      cellLocation: "LEI-A-1-2",
+      event: "CHAP",
+      eventDescription: "Chapel Act",
+      comment: "comment12",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }
   },
   {
-    offenderNo: "A1234AA",
-    firstName: "ARTHUR",
-    lastName: "ANDERSON",
-    cellLocation: "LEI-A-1-1",
-    event: "GYM",
-    eventDescription: "The gym, appointment",
-    comment: "comment14",
-    startTime: "2017-10-15T17:00:00",
-    endTime: "2017-10-15T17:30:00"
-  }],
-  A1234AB: [{
-    offenderNo: "A1234AB",
-    firstName: "MICHAEL",
-    lastName: "SMITH",
-    cellLocation: "LEI-A-1-2",
-    event: "CHAP",
-    eventDescription: "Chapel Act",
-    comment: "comment12",
-    startTime: "2017-10-15T18:00:00",
-    endTime: "2017-10-15T18:30:00"
-  }],
-  A1234AC: [{
-    offenderNo: "A1234AC",
-    firstName: "FRED",
-    lastName: "QUIMBY",
-    cellLocation: "LEI-A-1-3",
-    event: "CHAP",
-    eventDescription: "Chapel Activity",
-    comment: "comment13",
-    startTime: "2017-10-15T18:00:00",
-    endTime: "2017-10-15T18:30:00"
-  },
-  {
-    offenderNo: "A1234AC",
-    firstName: "FRED",
-    lastName: "QUIMBY",
-    cellLocation: "LEI-A-1-3",
-    event: "VISIT",
-    eventDescription: "Family Visit",
-    comment: "comment19",
-    startTime: "2017-10-15T11:00:00",
-    endTime: "2017-10-15T18:30:00"
-  }
-  ]
-};
+    activity: {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "CHAP",
+      eventDescription: "Chapel Activity",
+      comment: "comment13",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    others: [
+      {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "QUIMBY",
+        cellLocation: "LEI-A-1-3",
+        event: "VISIT",
+        eventDescription: "Family Visit",
+        comment: "comment19",
+        startTime: "2017-10-15T11:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }
+    ] }
+];
 
 const locations = ['AWing', 'BWing'];
 

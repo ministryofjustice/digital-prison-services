@@ -8,20 +8,19 @@ import { getHoursMinutes, properCaseName } from "../stringUtils";
 
 class ResultsHouseblock extends Component {
   buildTableForRender () {
-    const offenders = this.props.houseblockData && Object.keys(this.props.houseblockData).map((offenderEvents, index) => {
-      const row = this.props.houseblockData[offenderEvents];
-      const mainActivity = row[0];
-
+    const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
+      const mainActivity = row.activity;
       return (
         <tr key={mainActivity.offenderNo} className="row-gutters">
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
           <td className="row-gutters">{mainActivity.cellLocation}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
           <td className="row-gutters">{mainActivity.eventDescription}</td>
-          <td className="row-gutters"><ul>{row.map((e, index) => {
-            if (index === 0) { return '';}
-            return <li key={mainActivity.offenderNo + '_' + index}>{e.eventDescription} - {getHoursMinutes(e.startTime)}</li>;
-          })}</ul></td>
+          <td className="row-gutters">{row.others &&
+            <ul>{row.others.map((e, index) => {
+              return <li key={mainActivity.offenderNo + '_' + index}>{e.eventDescription} - {getHoursMinutes(e.startTime)}</li>;
+            })}</ul>
+          }</td>
           <td><input type="checkbox" /></td>
           <td><input type="checkbox" /></td>
           <td>TODO</td>
@@ -123,7 +122,7 @@ ResultsHouseblock.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string,
   period: PropTypes.string,
-  houseblockData: PropTypes.object,
+  houseblockData: PropTypes.array,
   currentLocation: PropTypes.string,
   locations: PropTypes.array
 };

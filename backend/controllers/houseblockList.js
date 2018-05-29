@@ -14,13 +14,20 @@ const getHouseblockList = (async (req, res) => {
   // Returns array ordered by inmate/cell (group order), then get act, visit, app
 
   log.info(events.data, 'getHouseblockList data received');
-  const rows = {};
+  const rows = [];
   const data = events.data;
-  for (const item of data) {
-    if (!rows[item.offenderNo]) {
-      rows[item.offenderNo] = [];
+  let i = -1;
+  let lastOffenderNo = '';
+  for (const event of data) {
+    if (event.offenderNo !== lastOffenderNo) {
+      i++;
+      rows[i] = { activity: event };
+    } else if (!rows[i].others) {
+      rows[i].others = [event];
+    } else {
+      rows[i].others.push(event);
     }
-    rows[item.offenderNo].push(item);
+    lastOffenderNo = event.offenderNo;
   }
   return rows;
 });

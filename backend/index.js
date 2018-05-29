@@ -18,7 +18,7 @@ const authentication = require('./controllers/authentication');
 const userCaseLoads = require('./controllers/usercaseloads');
 const setActiveCaseLoad = require('./controllers/setactivecaseload');
 const userLocations = require('./controllers/userLocations');
-const locations = require('./controllers/locations');
+const activityLocations = require('./controllers/activityLocations');
 const userMe = require('./controllers/userMe');
 const getConfig = require('./controllers/getConfig');
 const houseblockLocations = require('./controllers/houseblockLocations');
@@ -122,7 +122,7 @@ app.use('/api/setactivecaseload', setActiveCaseLoad);
 app.use('/api/userLocations', userLocations);
 app.use('/api/houseblockLocations', houseblockLocations);
 app.use('/api/houseblocklist', houseblockList.router);
-app.use('/api/locations', locations);
+app.use('/api/locations', activityLocations);
 app.use('/api/activityList', activityList.router);
 
 app.use('/api/config', getConfig);

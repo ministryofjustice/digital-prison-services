@@ -322,11 +322,11 @@ describe('app (global) reducer', () => {
     expect(
       houseblock(undefined, {
         type: types.SET_HOUSEBLOCK_DATA,
-        data: [{ stuff: 'stuff' }]
+        data: ['data0', 'data1']
       })
     ).toEqual(
       {
-        data: [{ stuff: 'stuff' }]
+        data: ['data0', 'data1']
       }
     );
   });
