@@ -4,8 +4,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.LocationsResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.model.AgencyLocation
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Location
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
@@ -156,12 +155,12 @@ class Elite2Api extends WireMockRule {
                 ))
     }
 
-    void stubLocations(Caseload caseload) {
+    void stubActivityLocations(Caseload caseload) {
         this.stubFor(
                 get("/api/agencies/${caseload.id}/locations")
                         .willReturn(
                         aResponse()
-                                .withBody(LocationsResponse.response)
+                                .withBody(ActivityLocationsResponse.response)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
@@ -177,9 +176,9 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
     }
-    void stubGetHouseblockList(Caseload caseload, String groupName, String timeSlot) {
+    void stubGetHouseblockList(Caseload caseload, String groupName, String timeSlot, String date) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/groups/${groupName}?timeSlot=${timeSlot}")
+                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                         aResponse()
                                 .withBody(HouseblockResponse.response)

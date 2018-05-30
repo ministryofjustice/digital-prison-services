@@ -4,9 +4,7 @@ import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.HouseblockPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -19,13 +17,10 @@ class HouseblockSpecification extends GebReportingSpec {
 
     def "The houseblock list is displayed"() {
         given: 'I am on the whereabouts search page'
-        fixture.loginAs(ITAG_USER)
-        at DashboardPage
-        fixture.clickWhereaboutsLink()
-        at SearchPage
+        fixture.toSearch()
 
         when: "I select and display a location"
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'AM')
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'AM', new Date().format('YYYY-MM-dd'))
         form['housing-location-select'] = 'BWing'
         form['period-select'] = 'AM'
         continueButton.click()

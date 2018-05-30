@@ -1,7 +1,7 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses
 
 
-class LocationsResponse {
+class ActivityLocationsResponse {
 
     static response = '''
 [

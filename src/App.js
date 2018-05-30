@@ -6,6 +6,7 @@ import SearchContainer from './Search/SearchContainer';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
+import moment from 'moment';
 
 import {
   BrowserRouter as Router,
@@ -29,7 +30,6 @@ import {
   setSearchActivities, setSearchActivity,
   setSearchDate,
   setSearchLocation,
-  setSearchLocations,
   setSearchPeriod
 } from "./redux/actions";
 
@@ -43,7 +43,6 @@ class App extends React.Component {
     this.hideTermsAndConditions = this.hideTermsAndConditions.bind(this);
     this.clearMessage = this.clearMessage.bind(this);
     this.displayError = this.displayError.bind(this);
-    this.getHouseblockLocations = this.getHouseblockLocations.bind(this);
     this.getHouseblockList = this.getHouseblockList.bind(this);
   }
 
@@ -68,8 +67,6 @@ class App extends React.Component {
       }
 
       this.props.configDispatch(config.data);
-
-      this.getHouseblockLocations(user.data.activeCaseLoadId);
     } catch (error) {
       this.props.setErrorDispatch(error.message);
     }
@@ -104,32 +101,16 @@ class App extends React.Component {
     return !this.props.shouldShowTerms && (this.props.user && this.props.user.activeCaseLoadId);
   }
 
-  async getHouseblockLocations (agencyId) {
-    // try {
-    const response = await axios.get('/api/houseblockLocations', {
-      params: {
-        agencyId: agencyId
-      } });
-    this.props.locationsDispatch(response.data);
-    // Use the first location by default
-    if (response.data && response.data[0]) {
-      this.props.locationDispatch(response.data[0]);
-    }
-  //  } catch (error) {
-  //    this.displayError(error);
-  //  }
-  }
-
   async getActivityLocations () {
     try {
-      const response = await axios.get('/api/locations', {
+      const response = await axios.get('/api/activities', {
         params: {
           agencyId: this.props.agencyId
         } });
-      this.props.locationsDispatch(response.data);
+      this.props.activitiesDispatch(response.data);
       // Use the first location by default
       if (response.data && response.data[0]) {
-        this.props.locationDispatch(response.data[0].locationPrefix);
+        this.props.activityDispatch(response.data[0].locationPrefix);
       }
     } catch (error) {
       this.displayError(error);
@@ -144,8 +125,10 @@ class App extends React.Component {
     this.props.activityDispatch(event.target.value);
   }
 
-  handleDateChange (event) {
-    this.props.dateDispatch(event.target.value);
+  handleDateChange (date) {
+    if (date) {
+      this.props.dateDispatch(moment(date).format('DD/MM/YYYY'));
+    }
   }
 
   handlePeriodChange (event) {
@@ -161,6 +144,10 @@ class App extends React.Component {
   }
 
   async getHouseblockList () {
+    let date = this.props.date;
+    if (date === 'Today') { // replace placeholder text
+      date = moment().format('DD/MM/YYYY');
+    }
     try {
       const response = await axios.get('/api/houseblocklist', {
         headers: {
@@ -170,7 +157,7 @@ class App extends React.Component {
         params: {
           agencyId: this.props.agencyId,
           groupName: this.props.currentLocation,
-          //date: this.props.date, // later; today only for now
+          date: date,
           timeSlot: this.props.period
         } });
       this.props.houseblockDataDispatch(response.data);
@@ -182,7 +169,6 @@ class App extends React.Component {
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
       <Route exact path="/whereaboutssearch" render={() => (<SearchContainer displayError={this.displayError}
-      //  getHouseblockLocations = {this.getHouseblockLocations}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleActivityChange={(event) => this.handleActivityChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
@@ -237,13 +223,14 @@ App.propTypes = {
   setErrorDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func,
   setMessageDispatch: PropTypes.func.isRequired,
-  locationsDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
+  activitiesDispatch: PropTypes.func.isRequired,
   activityDispatch: PropTypes.func.isRequired,
   dateDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   agencyId: PropTypes.string,
   currentLocation: PropTypes.string,
+  date: PropTypes.string,
   period: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired
 };
@@ -256,7 +243,6 @@ const mapStateToProps = state => {
     config: state.app.config,
     user: state.app.user,
     shouldShowTerms: state.app.shouldShowTerms,
-    locations: state.search.locations,
     currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
     activities: state.search.activities,
     activity: state.search.activity,
@@ -276,7 +262,6 @@ const mapDispatchToProps = dispatch => {
     resetErrorDispatch: () => dispatch(resetError()),
     setMessageDispatch: (message) => dispatch(setMessage(message)),
     locationDispatch: text => dispatch(setSearchLocation(text)),
-    locationsDispatch: text => dispatch(setSearchLocations(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
     activitiesDispatch: text => dispatch(setSearchActivities(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
