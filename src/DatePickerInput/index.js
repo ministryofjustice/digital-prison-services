@@ -8,7 +8,7 @@ class DatePickerInput extends Component {
     return (<DatePicker
       inputProps={{ placeholder: 'Today', className: `datePickerInput form-control ${this.props.additionalClassName}` }}
       name="date"
-      shouldShowDay={(date) => !date.isBefore(moment().startOf('day'))}
+      shouldShowDay={(date) => !date.isAfter(moment().startOf('day'))}
       title="Date" {...this.props}
       handleDateChange={this.props.handleDateChange}
     />);
