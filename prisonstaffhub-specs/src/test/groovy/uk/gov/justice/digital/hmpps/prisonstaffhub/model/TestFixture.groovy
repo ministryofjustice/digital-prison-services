@@ -6,7 +6,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
-import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.API_TEST_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class TestFixture {
@@ -29,24 +28,17 @@ class TestFixture {
         elite2Api.stubValidOAuthTokenRequest currentUser
         elite2Api.stubGetMyDetails currentUser
         elite2Api.stubGetMyCaseloads currentUser.caseloads
-        elite2Api.stubLocations currentUser.workingCaseload
-        elite2Api.stubGroups currentUser.workingCaseload
+        elite2Api.stubActivityLocations currentUser.workingCaseload
         browser.page.loginAs currentUser, 'password'
 
         browser.at DashboardPage
     }
 
-  /*  def toManuallyAssignAndTransferPage() {
-        locations = locationsForCaseload(currentUser.workingCaseload)
-        elite2Api.stubGetMyLocations(locations)
-        browser.page.manualAssignLink.click()
-        assert browser.page instanceof SearchForOffenderPage
-    }*/
-
     def toSearch() {
         loginAs ITAG_USER
+        elite2Api.stubGroups currentUser.workingCaseload
         browser.page.whereaboutsLink.click()
-        assert browser.page instanceof SearchPage
+        browser.at SearchPage
     }
 
     def clickWhereaboutsLink() {

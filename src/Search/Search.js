@@ -3,6 +3,7 @@ import '../index.scss';
 import './search.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
+import DatePickerInput from "../DatePickerInput";
 
 class Search extends Component {
   render () {
@@ -40,14 +41,14 @@ class Search extends Component {
         <div className="pure-u-md-10-12 padding-top padding-bottom">
           <div className="pure-u-md-4-12 padding-right">
             <label className="form-label" htmlFor="search-date">Date</label>
-            <input type="text" className="form-control dateInput" id="search-date" name="date" value={this.props.date} onChange={this.props.handleDateChange}/>
+            <DatePickerInput handleDateChange={this.props.handleDateChange} additionalClassName="dateInput" inputId="search-date"/>
           </div>
 
           {periodSelect}
         </div>
 
         <div className="padding-top-large padding-bottom-large">
-          <button className="button" type="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Continue</button>
+          <button id="continue-button" className="button" type="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Continue</button>
         </div>
       </form>
     </div>);

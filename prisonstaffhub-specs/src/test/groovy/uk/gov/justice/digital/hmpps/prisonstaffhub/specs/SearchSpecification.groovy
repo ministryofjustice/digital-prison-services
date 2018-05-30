@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.AgencyLocation
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -22,6 +23,7 @@ class SearchSpecification extends GebReportingSpec {
         at DashboardPage
 
         when: "I select the whereabouts link"
+        elite2api.stubGroups ITAG_USER.workingCaseload
         fixture.clickWhereaboutsLink()
 
         then: 'The search page is displayed'

@@ -35,20 +35,36 @@ module.exports = {
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
+              name: 'static/media/[name].[hash:8].[ext]'
+            }
           },
           // Process JS with Babel.
           {
             test: /\.(js|jsx|mjs)$/,
             loader: require.resolve('babel-loader'),
             options: {
-              
+
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
-              cacheDirectory: true,
-            },
+              cacheDirectory: true
+            }
+          },
+          {
+            test: /\.css$/,
+            use: [
+              {
+                loader: "style-loader"
+              },
+              {
+                loader: "css-loader",
+                options: {
+                  includePaths: [
+                    'node_modules/react-datetime/css'
+                  ]
+                }
+              }
+            ]
           },
           {
             test: /\.scss$/,
@@ -67,10 +83,10 @@ module.exports = {
                     'node_modules/govuk-elements-sass/public/sass'
                   ]
                 }
-              },
+              }
             ]
           },
-  
+
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.
@@ -84,26 +100,26 @@ module.exports = {
             exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
             loader: require.resolve('file-loader'),
             options: {
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
-          },
-        ],
-      },
+              name: 'static/media/[name].[hash:8].[ext]'
+            }
+          }
+        ]
+      }
       // ** STOP ** Are you adding a new loader?
       // Make sure to add the new loader(s) before the "file" loader.
-    ],
+    ]
   },
   plugins: [
     new CopyWebpackPlugin([
       {
         from: 'static',
         to: 'static'
-      },
+      }
     ]),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: 'html-template/index.html',
-      publicUrl: process.env.PUBLIC_URL,
+      publicUrl: process.env.PUBLIC_URL
     })
   ]
 };

@@ -18,7 +18,8 @@
     "govuk_frontend_toolkit": "^7.5.0",
     "helmet": "^3.12.1",
     "hsts": "^2.1.0",
-    "jsonwebtoken": "^8.2.1"
+    "jsonwebtoken": "^8.2.1",
+    "react-datetime": "^2.14.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
