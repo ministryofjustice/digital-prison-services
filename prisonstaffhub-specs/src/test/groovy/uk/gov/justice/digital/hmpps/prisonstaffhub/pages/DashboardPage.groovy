@@ -11,15 +11,12 @@ class DashboardPage extends Page {
 
     static at = {
         headingText == 'Prison staff hub'
+        whereaboutsLink.displayed
     }
 
     static content = {
         headingText { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         whereaboutsLink(to: SearchPage) { $('#whereabouts_link') }
-        /*autoAllocateLink(to: UnallocatedPage) { $('#auto_allocate_link') }
-        manualAssignLink(to: SearchForOffenderPage) { $('#assign_transfer_link') }
-        keyworkerProfileLink(to: SearchForKeyworkerPage) { $('#keyworker_profile_link') }*/
     }
-
 }

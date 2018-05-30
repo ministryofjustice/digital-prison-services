@@ -24,10 +24,8 @@ class LoginPage extends Page {
         $('form').username = userAccount.username
         $('form').password = password
 
-//        def signInButton = $("button", type: 'submit')
         assert signInButton.text() == 'Sign in'
 
         signInButton.click()
     }
-
 }

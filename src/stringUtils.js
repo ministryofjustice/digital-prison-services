@@ -21,7 +21,14 @@ const toFullName = ({ firstName, lastName, name }) =>
   !isBlank(name) ? name.split(' ').map(properCaseName).join(', ') :
     (!isBlank(lastName) ? `${properCaseName(lastName)}, ` : '') + (!isBlank(firstName) ? properCaseName(firstName) : '');
 
+const getHoursMinutes = (timestamp) => {
+  const indexOfT = timestamp.indexOf('T');
+  if (indexOfT < 0) {
+    return '';
+  }
+  return timestamp.substr(indexOfT + 1, 5);
+};
 
 module.exports = {
-  properCase, properCaseName, toFullName
+  properCase, properCaseName, toFullName, getHoursMinutes
 };
