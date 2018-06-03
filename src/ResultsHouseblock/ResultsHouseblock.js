@@ -6,11 +6,23 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { getHoursMinutes, properCaseName } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
+import moment from 'moment';
 
 class ResultsHouseblock extends Component {
+  isToday () {
+    const searchDate = moment(this.props.date, 'DD/MM/YYYY');
+    return searchDate.isSame(moment(), "day");
+  }
+
+  olderThan7Days () {
+    const searchDate = moment(this.props.date, 'DD/MM/YYYY');
+    const days = moment().diff(searchDate, "day");
+    return days > 7;
+  }
+
   render () {
     const housingLocations = this.props.locations ? this.props.locations.map((loc, optionIndex) => {
-      return <option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>;
+      return <option key={`housinglocation_option_${loc}`}>{loc}</option>;
     }) : [];
 
     const locationSelect = (
@@ -26,7 +38,11 @@ class ResultsHouseblock extends Component {
     const dateSelect = (
       <div className="pure-u-md-3-12 padding-left padding-right" style={{ display: 'inline-block' }}>
         <label className="form-label" htmlFor="search-date">Date</label>
-        <DatePickerInput handleDateChange={this.props.handleDateChange} additionalClassName="dateInput" inputId="search-date"/>
+        <DatePickerInput
+          handleDateChange={this.props.handleDateChange}
+          additionalClassName="dateInput"
+          value={this.props.date}
+          inputId="search-date"/>
       </div>);
 
     const periodSelect = (
@@ -55,6 +71,8 @@ class ResultsHouseblock extends Component {
       <th className="rotate"><div><span>Don't  attend</span></div></th>
     </tr>);
 
+    const readOnly = this.olderThan7Days();
+
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
       const mainActivity = row.activity;
       return (
@@ -69,17 +87,17 @@ class ResultsHouseblock extends Component {
           })}</ul>
           }</td>
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col1_' + index} type="checkbox" name="ch1"/>
+            <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
             <label htmlFor={'col1_' + index} /></div></td>
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col2_' + index} type="checkbox" name="ch2"/>
+            <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
             <label htmlFor={'col2_' + index} /></div></td>
-          <td className="no-padding">image icon</td>
+          <td className="no-padding"><img src="/static/images/GreenTick.png" height="35" width="35"/></td>
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col3_' + index} type="checkbox" name="ch3"/>
+            <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly}/>
             <label htmlFor={'col3_' + index} /></div></td>
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col4_' + index} type="checkbox" name="ch4"/>
+            <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly}/>
             <label htmlFor={'col4_' + index} /></div></td>
         </tr>
       );
@@ -92,12 +110,22 @@ class ResultsHouseblock extends Component {
           {locationSelect}
           {dateSelect}
           {periodSelect}
-          <button id="updateButton" className="button greyButton margin-left margin-top" type="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Update</button>
+          <button id="updateButton" className="button greyButton margin-left margin-top" type="button" onClick={() => {
+            this.props.handleSearch(this.props.history);
+          }}>Update
+          </button>
         </div>
-        <hr />
+        <hr/>
         <div id="buttons" className="pure-u-md-4-12 padding-bottom">
-          <button id="saveButton" className="button" type="button" onClick={() => { this.props.handleSave(this.props.history);}}>Save changes</button>
-          <button id="printButton" className="button greyButton" style={{ float: 'right' }} type="button" onClick={() => { this.props.handlePrint();}}>Print list</button>
+          <button id="saveButton" className="button" type="button" onClick={() => {
+            this.props.handleSave(this.props.history);
+          }}>Save changes
+          </button>
+          {this.isToday() &&
+            <button id="printButton" className="button greyButton" style={{ float: 'right' }} type="button" onClick={() => {
+              this.props.handlePrint();
+            }}>Print list</button>
+          }
         </div>
       </form>
       <div className="padding-bottom-40">
@@ -105,7 +133,8 @@ class ResultsHouseblock extends Component {
           <thead>{headings}</thead>
           <tbody>{offenders}</tbody>
         </table>
-        {offenders.length === 0 && <div className="font-small padding-top-large padding-bottom padding-left">No cells found</div>}
+        {offenders.length === 0 &&
+        <div className="font-small padding-top-large padding-bottom padding-left">No cells found</div>}
       </div>
     </div>);
   }
@@ -114,6 +143,7 @@ ResultsHouseblock.propTypes = {
   history: PropTypes.object,
   handleSearch: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
   handleLocationChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,

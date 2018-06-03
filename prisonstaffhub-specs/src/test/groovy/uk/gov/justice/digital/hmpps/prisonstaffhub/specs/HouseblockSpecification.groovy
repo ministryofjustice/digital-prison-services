@@ -20,16 +20,18 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: "I select and display a location"
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'AM', new Date().format('YYYY-MM-dd'))
+        def today = new Date().format('YYYY-MM-dd')
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
         form['housing-location-select'] = 'BWing'
+      //  form['date'] = today TODO cannot set input, have to click calendar!
         form['period-select'] = 'AM'
         continueButton.click()
 
         then: 'The houseblock list is displayed'
         at HouseblockPage
 
-        tableRows*.text()[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
-        tableRows*.text()[1].contains("Friends - 18:00")
-        tableRows*.text()[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+        tableRows*.text()[9].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
+        tableRows*.text()[9].contains("Friends 18:00")
+        tableRows*.text()[10].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
     }
 }

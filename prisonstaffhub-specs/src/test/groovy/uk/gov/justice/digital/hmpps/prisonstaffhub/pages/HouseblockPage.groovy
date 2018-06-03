@@ -9,7 +9,7 @@ class HouseblockPage extends Page {
 
     static at = {
         saveButton.displayed
-        printButton.displayed
+        // TODO set date ! printButton.displayed
     }
 
     static content = {
