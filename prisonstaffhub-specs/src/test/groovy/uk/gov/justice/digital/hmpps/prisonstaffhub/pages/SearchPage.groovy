@@ -17,6 +17,8 @@ class SearchPage extends Page {
         header(required: false) { module(HeaderModule) }
         location { $('#housing-location-select') }
         date { $('#search-date') }
+        datePicker { $('div.date-picker-component') } // click this to get picker
+        days { $('td.rdtDay') } // days on picker, click to set date
         period { $('#period-select') }
         continueButton { $('button.button') }
         form { $('form')}

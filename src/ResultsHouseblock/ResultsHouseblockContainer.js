@@ -51,7 +51,10 @@ class ResultsHouseblockContainer extends Component {
 ResultsHouseblockContainer.propTypes = {
   error: PropTypes.string,
   agencyId: PropTypes.string.isRequired,
+  locations: PropTypes.array,
   currentLocation: PropTypes.string.isRequired,
+  locationsDispatch: PropTypes.func.isRequired,
+  locationDispatch: PropTypes.func.isRequired,
   getHouseblockList: PropTypes.func,
   houseblockDataDispatch: PropTypes.func
 };
