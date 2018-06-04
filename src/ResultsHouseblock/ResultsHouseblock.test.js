@@ -2,6 +2,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { ResultsHouseblock } from "./ResultsHouseblock";
+import moment from 'moment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -94,29 +95,41 @@ const response = [
 
 const locations = ['AWing', 'BWing'];
 
-describe('Offender results component', () => {
+describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
+    const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
       locations={locations}
       houseblockData={response}
       handleSearch={jest.fn()}
+      handleSave={jest.fn()}
+      handlePrint={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
-      date={'27/02/2018'}
+      date={today}
       period={'ED'}
       currentLocation={'BWing'}/>
     );
+    const housingLocationSelect = component.find('#housing-location-select');
+    expect(housingLocationSelect.some('[value="BWing"]')).toEqual(true);
+    // Dig into the DatePicker component
+    const searchDate = component.find('[additionalClassName="dateInput"]').shallow().shallow().shallow().find('input');
+    expect(searchDate.some(`[value='${today}']`)).toEqual(true);
+    const periodSelect = component.find('#period-select');
+    expect(periodSelect.some('[value="ED"]')).toEqual(true);
+
     const tr = component.find('tr');
     expect(tr.length).toEqual(4); // 3 plus table header tr
     expect(tr.at(1).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur');
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('LEI-A-1-1');
     expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Official Visit - 11:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('The gym, appointment - 17:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Official Visit 11:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('The gym, appointment 17:00');
     expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
+    //TODO expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[disabled]')).toEqual(false); *** is true. not the right test expr?
     expect(tr.at(1).find('td').at(GONE_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // expect(tr.at(1).find('td').at(RECIEVED_COLUMN)...
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
@@ -130,24 +143,86 @@ describe('Offender results component', () => {
     expect(tr.at(3).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('LEI-A-1-3');
     expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Family Visit - 11:00');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Family Visit 11:00');
   });
 
-  it('should handle save button correctly', async () => {
+  it('should handle buttons correctly', async () => {
     const handleSearch = jest.fn();
+    const handleSave = jest.fn();
+    const handlePrint = jest.fn();
+    const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
+      handleSave={handleSave}
+      handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
-      date={'27/02/2018'}
+      date={today}
       period={'ED'}
       currentLocation={'BWing'}/>);
 
-    component.find('#saveButton').simulate('click');
+    expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
+
+    component.find('#updateButton').simulate('click');
     expect(handleSearch).toHaveBeenCalled();
+    expect(handleSave).not.toHaveBeenCalled();
+    expect(handlePrint).not.toHaveBeenCalled();
+    component.find('#saveButton').simulate('click');
+    expect(handleSave).toHaveBeenCalled();
+    expect(handlePrint).not.toHaveBeenCalled();
+    component.find('#printButton').simulate('click');
+    expect(handlePrint).toHaveBeenCalled();
+  });
+
+  it('should not display print button when date is not today', async () => {
+    const handleSearch = jest.fn();
+    const handleSave = jest.fn();
+    const handlePrint = jest.fn();
+    const oldDate = '25/05/2018';
+    const component = shallow(<ResultsHouseblock
+      history ={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={response}
+      handleSearch={handleSearch}
+      handleSave={handleSave}
+      handlePrint={handlePrint}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      date={oldDate}
+      period={'ED'}
+      currentLocation={'BWing'}/>);
+
+    expect(component.find('#buttons > button').some('#printButton')).toEqual(false);
+  });
+
+  it('checkboxes should be read-only when date is over a week ago', async () => {
+    const handleSearch = jest.fn();
+    const handleSave = jest.fn();
+    const handlePrint = jest.fn();
+    const oldDate = '23/05/2018';
+    const component = shallow(<ResultsHouseblock
+      history ={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={response}
+      handleSearch={handleSearch}
+      handleSave={handleSave}
+      handlePrint={handlePrint}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      date={oldDate}
+      period={'ED'}
+      currentLocation={'BWing'}/>);
+
+    const tr = component.find('tr');
+    expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[disabled]')).toEqual(true);
+    expect(tr.at(1).find('td').at(GONE_COLUMN).find('input').some('[disabled]')).toEqual(true);
+    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
+    expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
   });
 });
