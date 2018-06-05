@@ -23,7 +23,7 @@ class Dropdown extends Component {
   }
   render () {
     const { user, switchCaseLoad, history } = this.props;
-    const caseLoadDesc = user.activeCaseLoad && user.activeCaseLoad.description ? user.activeCaseLoad.description : user.activeCaseLoadId;
+    const caseLoadDesc = user.caseLoadOptions ? user.caseLoadOptions.find((option) => option.caseLoadId === user.activeCaseLoadId).description : "";
 
     /*innerRef={(wrapper) => { this.wrapper = wrapper; }} onMouseDown={this.handleMouseDown} onTouchStart={this.handleMouseDown}*/
 
