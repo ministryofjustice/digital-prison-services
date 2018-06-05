@@ -33,7 +33,6 @@ class DatePicker extends Component {
         strictParsing
         {...this.props}
         renderInput={this.renderInput}
-        value={this.props.value}
       />);
   }
 }

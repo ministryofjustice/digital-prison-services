@@ -10,6 +10,9 @@ import moment from 'moment';
 
 class ResultsHouseblock extends Component {
   isToday () {
+    if (this.props.date === 'Today') {
+      return true;
+    }
     const searchDate = moment(this.props.date, 'DD/MM/YYYY');
     return searchDate.isSame(moment(), "day");
   }
@@ -26,7 +29,7 @@ class ResultsHouseblock extends Component {
     }) : [];
 
     const locationSelect = (
-      <div className="pure-u-md-4-12" style={{ width: '30%', display: 'inline-block' }}>
+      <div className="pure-u-md-4-12">
         <label className="form-label" htmlFor="housing-location-select">Select Location</label>
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
@@ -36,17 +39,17 @@ class ResultsHouseblock extends Component {
         </select></div>);
 
     const dateSelect = (
-      <div className="pure-u-md-3-12 padding-left padding-right" style={{ display: 'inline-block' }}>
+      <div className="pure-u-md-2-12 padding-left padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
           handleDateChange={this.props.handleDateChange}
-          additionalClassName="dateInput"
+          additionalClassName="dateInputResults"
           value={this.props.date}
           inputId="search-date"/>
       </div>);
 
     const periodSelect = (
-      <div className="pure-u-md-3-12" style={{ width: '20%', display: 'inline-block' }}>
+      <div className="pure-u-md-2-12">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
         <select id="period-select" name="period-select" className="form-control"
@@ -58,6 +61,17 @@ class ResultsHouseblock extends Component {
         </select>
       </div>);
 
+    const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
+      <button id="saveButton" className="button" type="button" onClick={() => {
+        this.props.handleSave(this.props.history);
+      }}>Save changes</button>
+      {this.isToday() &&
+      <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
+        this.props.handlePrint();
+      }}><img src="/images/ICON_ManagePrisonerWhereabouts.png" height="20" width="20"/> Print list</button>
+      }
+    </div>);
+
     const headings = (<tr>
       <th className="straight">Name</th>
       <th className="straight">Location</th>
@@ -68,7 +82,7 @@ class ResultsHouseblock extends Component {
       <th className="rotate"><div><span>Gone</span></div></th>
       <th className="rotate"><div><span>Received</span></div></th>
       <th className="rotate"><div><span>Attend</span></div></th>
-      <th className="rotate"><div><span>Don't  attend</span></div></th>
+      <th className="rotate"><div><span>Don't attend</span></div></th>
     </tr>);
 
     const readOnly = this.olderThan7Days();
@@ -92,7 +106,7 @@ class ResultsHouseblock extends Component {
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
             <label htmlFor={'col2_' + index} /></div></td>
-          <td className="no-padding"><img src="/static/images/GreenTick.png" height="35" width="35"/></td>
+          <td className="no-padding"><img src="/images/GreenTick.png" height="35" width="35"/></td>
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly}/>
             <label htmlFor={'col3_' + index} /></div></td>
@@ -116,25 +130,17 @@ class ResultsHouseblock extends Component {
           </button>
         </div>
         <hr/>
-        <div id="buttons" className="pure-u-md-4-12 padding-bottom">
-          <button id="saveButton" className="button" type="button" onClick={() => {
-            this.props.handleSave(this.props.history);
-          }}>Save changes
-          </button>
-          {this.isToday() &&
-            <button id="printButton" className="button greyButton" style={{ float: 'right' }} type="button" onClick={() => {
-              this.props.handlePrint();
-            }}>Print list</button>
-          }
-        </div>
+        {buttons}
       </form>
-      <div className="padding-bottom-40">
+      <div>
         <table className="row-gutters">
           <thead>{headings}</thead>
           <tbody>{offenders}</tbody>
         </table>
-        {offenders.length === 0 &&
-        <div className="font-small padding-top-large padding-bottom padding-left">No cells found</div>}
+        {offenders.length === 0 ?
+          <div className="font-small padding-top-large padding-bottom padding-left">No cells found</div> :
+          <div className="padding-top"> { buttons } </div>
+        }
       </div>
     </div>);
   }

@@ -8,8 +8,9 @@ class HouseblockPage extends Page {
     static url = "/whereabouts/resultshouseblock"
 
     static at = {
-        saveButton.displayed
-        // TODO set date ! printButton.displayed
+        updateButton.displayed
+        saveButton[0].displayed
+        printButton[0].displayed
     }
 
     static content = {
@@ -17,9 +18,13 @@ class HouseblockPage extends Page {
         header(required: false) { module(HeaderModule) }
         location { $('#housing-location-select') }
         date { $('#search-date') }
+        datePicker { $('div.date-picker-component') } // click this to get picker
+        days { $('td.rdtDay') } // days on picker, click to set date
         period { $('#period-select') }
+        form { $('form')}
+        updateButton { $('#updateButton') }
         saveButton { $('#saveButton') }
         printButton { $('#printButton') }
-        tableRows { $('tr') }
+        tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
     }
 }

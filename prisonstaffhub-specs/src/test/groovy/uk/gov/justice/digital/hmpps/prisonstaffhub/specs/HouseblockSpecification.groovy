@@ -23,15 +23,47 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
         form['housing-location-select'] = 'BWing'
-      //  form['date'] = today TODO cannot set input, have to click calendar!
+      //  form['date'] = ??? TODO cannot set input, have to click calendar!
+//        datePicker.click()
+//        days[0].click() // select 1st of this month for now
+
         form['period-select'] = 'AM'
         continueButton.click()
 
         then: 'The houseblock list is displayed'
         at HouseblockPage
+        form['housing-location-select'] == 'BWing'
+        form['date'] == 'Today'
+        form['period-select'] == 'AM'
 
-        tableRows*.text()[9].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
-        tableRows*.text()[9].contains("Friends 18:00")
-        tableRows*.text()[10].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+        def texts = tableRows*.text()
+        texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
+        texts[1].contains("Friends 18:00")
+        texts[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+    }
+
+    def "The updated houseblock list is displayed"() {
+        given: 'I am on the houseblock list page'
+        fixture.toSearch()
+        def today = new Date().format('YYYY-MM-dd')
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
+        form['period-select'] = 'PM'
+        continueButton.click()
+        at HouseblockPage
+        form['housing-location-select'] == 'AWing'
+
+        when: "I change selections and update"
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'PM', today)
+        form['housing-location-select'] = 'BWing'
+        updateButton.click()
+
+        then: 'The new houseblock list results are displayed'
+        at HouseblockPage
+        form['housing-location-select'] == 'BWing'
+        form['date'] == 'Today'
+        form['period-select'] == 'PM'
+        def texts = tableRows*.text()
+        texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
+        texts[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
     }
 }

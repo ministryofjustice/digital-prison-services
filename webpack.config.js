@@ -1,5 +1,5 @@
 
-
+const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -18,7 +18,7 @@ module.exports = {
   ],
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/build'
+    path: path.join(__dirname, 'build')
   },
   module: {
     rules: [

@@ -115,7 +115,7 @@ describe('Offender results component Jira NN-843', () => {
     const housingLocationSelect = component.find('#housing-location-select');
     expect(housingLocationSelect.some('[value="BWing"]')).toEqual(true);
     // Dig into the DatePicker component
-    const searchDate = component.find('[additionalClassName="dateInput"]').shallow().shallow().shallow().find('input');
+    const searchDate = component.find('[additionalClassName="dateInputResults"]').shallow().shallow().shallow().find('input');
     expect(searchDate.some(`[value='${today}']`)).toEqual(true);
     const periodSelect = component.find('#period-select');
     expect(periodSelect.some('[value="ED"]')).toEqual(true);
@@ -129,7 +129,8 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Official Visit 11:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('The gym, appointment 17:00');
     expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
-    //TODO expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[disabled]')).toEqual(false); *** is true. not the right test expr?
+    // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
+    expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={false}'));
     expect(tr.at(1).find('td').at(GONE_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // expect(tr.at(1).find('td').at(RECIEVED_COLUMN)...
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
@@ -171,10 +172,10 @@ describe('Offender results component Jira NN-843', () => {
     expect(handleSearch).toHaveBeenCalled();
     expect(handleSave).not.toHaveBeenCalled();
     expect(handlePrint).not.toHaveBeenCalled();
-    component.find('#saveButton').simulate('click');
+    component.find('#saveButton').at(0).simulate('click');
     expect(handleSave).toHaveBeenCalled();
     expect(handlePrint).not.toHaveBeenCalled();
-    component.find('#printButton').simulate('click');
+    component.find('#printButton').at(0).simulate('click');
     expect(handlePrint).toHaveBeenCalled();
   });
 
