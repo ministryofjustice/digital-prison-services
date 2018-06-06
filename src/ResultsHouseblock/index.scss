@@ -70,6 +70,12 @@ td.small-font {
   padding-right: 1px;
 }
 
+.print-icon {
+  position: relative;
+  top: 4px;
+  left: -2px;
+}
+
 @media print {
   .FooterContainer, .page-header, #buttons, #updateButton {
     display: none;

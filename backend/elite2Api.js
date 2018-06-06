@@ -33,13 +33,22 @@ const setActiveCaseLoad = (req, res) => gateway.putRequest({
   url: `${eliteApiUrl}api/users/me/activeCaseLoad`
 });
 
+function getSortHeaders (req) {
+  const fields = req.headers['sort-fields'];
+  const order = req.headers['sort-order'];
+  if (fields) {
+    return { 'Sort-Fields': fields, 'Sort-Order': order };
+  }
+  return undefined;
+}
+
 const getHouseblockList = (req, res) => gateway.getRequest({
   req,
   res,
+  headers: getSortHeaders(req),
+  params: { date: req.query.date, timeSlot: req.query.timeSlot },
   method: 'get',
-  url: req.query.date ?
-    `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}?date=${req.query.date}&timeSlot=${req.query.timeSlot}` :
-    `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}?timeSlot=${req.query.timeSlot}`
+  url: `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}`
 });
 
 const getActivityList = (req, res) => gateway.getRequest({

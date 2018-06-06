@@ -331,6 +331,20 @@ describe('app (global) reducer', () => {
     );
   });
 
+  it('should handle SET_HOUSEBLOCK_ORDER', () => {
+    expect(
+      houseblock(undefined, {
+        type: types.SET_HOUSEBLOCK_ORDER,
+        orderField: 'field1'
+      })
+    ).toEqual(
+      {
+        data: [],
+        orderField: 'field1'
+      }
+    );
+  });
+
   it('should calculate current time period', () => {
     expect(
       defaultPeriod(moment('12:00 am', "HH:mm a"))

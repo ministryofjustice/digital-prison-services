@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
-import { setSearchLocations } from "../redux/actions";
+import { setHouseblockOrder, setSearchLocations } from "../redux/actions";
 import axios from "axios/index";
 
 class ResultsHouseblockContainer extends Component {
   componentWillMount () {
     if (!this.props.locations) {
-      debugger;
       this.getLocations();
     }
-    this.props.getHouseblockList();
+    this.props.getHouseblockList(this.props.orderField);
     this.handlePrint = this.handlePrint.bind(this);
     this.handleSave = this.handleSave.bind(this);
   }
@@ -56,7 +55,8 @@ ResultsHouseblockContainer.propTypes = {
   locationsDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
   getHouseblockList: PropTypes.func,
-  houseblockDataDispatch: PropTypes.func
+  houseblockDataDispatch: PropTypes.func,
+  orderField: PropTypes.string
 };
 
 const mapStateToProps = state => {
@@ -68,7 +68,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    locationsDispatch: text => dispatch(setSearchLocations(text))
+    locationsDispatch: text => dispatch(setSearchLocations(text)),
+    orderDispatch: field => dispatch(setHouseblockOrder(field))
   };
 };
 

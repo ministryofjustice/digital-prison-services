@@ -15,7 +15,7 @@ class HouseblockSpecification extends GebReportingSpec {
 
     TestFixture fixture = new TestFixture(browser, elite2api)
 
-    def "The houseblock list is displayed"() {
+    def "The houseblock list is displayed and reordered"() {
         given: 'I am on the whereabouts search page'
         fixture.toSearch()
 
@@ -32,14 +32,29 @@ class HouseblockSpecification extends GebReportingSpec {
 
         then: 'The houseblock list is displayed'
         at HouseblockPage
+        orderLink.text() == 'Name'
+        // Check order is by cell
+        def texts = tableRows*.text()
+        texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
+        texts[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+        texts[3].contains("Baa, Fred LEI-A-1-3 A1234AC Chapel")
+
+        when: "I order by name"
+        orderLink.click()
+        waitFor { orderLink.text() == 'Location' }
+
+        then: 'The houseblock list is displayed in the new order'
+        at HouseblockPage
         form['housing-location-select'] == 'BWing'
         form['date'] == 'Today'
         form['period-select'] == 'AM'
 
-        def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
-        texts[1].contains("Friends 18:00")
-        texts[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+        def texts2 = tableRows*.text()
+        // Check order is by name
+        texts2[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
+        texts2[1].contains("Friends 18:00")
+        texts2[2].contains("Baa, Fred LEI-A-1-3 A1234AC Chapel")
+        texts2[3].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
     }
 
     def "The updated houseblock list is displayed"() {

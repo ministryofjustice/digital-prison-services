@@ -137,29 +137,32 @@ class App extends React.Component {
 
   handleSearch (history) {
     if (history.location.pathname === '/whereabouts/resultshouseblock') {
-      this.getHouseblockList();
+      this.getHouseblockList(this.props.orderField);
     } else {
       history.push('/whereabouts/resultshouseblock');
     }
   }
 
-  async getHouseblockList () {
+  async getHouseblockList (orderField) {
     let date = this.props.date;
     if (date === 'Today') { // replace placeholder text
       date = moment().format('DD/MM/YYYY');
     }
     try {
-      const response = await axios.get('/api/houseblocklist', {
-        headers: {
-          'Sort-Fields': 'cellLocation',
-          'Sort-Order': 'ASC'
-        },
+      let config = {
         params: {
           agencyId: this.props.agencyId,
           groupName: this.props.currentLocation,
           date: date,
           timeSlot: this.props.period
-        } });
+        } };
+      if (orderField) {
+        config.headers = {
+          'Sort-Fields': orderField,
+          'Sort-Order': 'ASC'
+        };
+      }
+      const response = await axios.get('/api/houseblocklist', config);
       this.props.houseblockDataDispatch(response.data);
     } catch (error) {
       this.displayError(error);
@@ -232,6 +235,7 @@ App.propTypes = {
   currentLocation: PropTypes.string,
   date: PropTypes.string,
   period: PropTypes.string,
+  orderField: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired
 };
 
@@ -248,7 +252,8 @@ const mapStateToProps = state => {
     activity: state.search.activity,
     date: state.search.date,
     period: state.search.period,
-    agencyId: state.app.user.activeCaseLoadId
+    agencyId: state.app.user.activeCaseLoadId,
+    orderField: state.houseblock.orderField
   };
 };
 

@@ -141,4 +141,12 @@ describe('actions', () => {
     };
     expect(actions.setHouseblockData({ stuff: 'stuff' })).toEqual(expectedAction);
   });
+
+  it('should create an action to set the houseblock list order', () => {
+    const expectedAction = {
+      type: types.SET_HOUSEBLOCK_ORDER,
+      orderField: 'name'
+    };
+    expect(actions.setHouseblockOrder('name')).toEqual(expectedAction);
+  });
 });
