@@ -75,14 +75,12 @@ class ResultsHouseblock extends Component {
     const headings = (<tr>
       <th className="straight">{!this.props.orderField || this.props.orderField === 'cellLocation' ?
         <a href="#" onClick={() => {
-          this.props.orderDispatch('lastName');
           this.props.getHouseblockList('lastName');
         }}>Name</a> :
         <div>Name <img src="/images/Triangle.png" height="8" width="15" /></div>
       } </th>
       <th className="straight">{this.props.orderField === 'lastName' ?
         <a href="#" onClick={() => {
-          this.props.orderDispatch('cellLocation');
           this.props.getHouseblockList('cellLocation');
         }}>Location</a> :
         <div>Location <img src="/images/Triangle.png" height="8" width="15" /></div>
@@ -165,7 +163,6 @@ ResultsHouseblock.propTypes = {
   handleLocationChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
-  orderDispatch: PropTypes.func.isRequired,
   date: PropTypes.string,
   period: PropTypes.string,
   houseblockData: PropTypes.array,

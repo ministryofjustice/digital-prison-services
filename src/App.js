@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
-  setHouseblockData,
+  setHouseblockData, setHouseblockOrder, setLoaded,
   setSearchActivities, setSearchActivity,
   setSearchDate,
   setSearchLocation,
@@ -144,11 +144,16 @@ class App extends React.Component {
   }
 
   async getHouseblockList (orderField) {
-    let date = this.props.date;
-    if (date === 'Today') { // replace placeholder text
-      date = moment().format('DD/MM/YYYY');
-    }
     try {
+      this.props.resetErrorDispatch();
+      this.props.setLoadedDispatch(false);
+      if (orderField) {
+        this.props.orderDispatch(orderField);
+      }
+      let date = this.props.date;
+      if (date === 'Today') { // replace placeholder text
+        date = moment().format('DD/MM/YYYY');
+      }
       let config = {
         params: {
           agencyId: this.props.agencyId,
@@ -167,6 +172,7 @@ class App extends React.Component {
     } catch (error) {
       this.displayError(error);
     }
+    this.props.setLoadedDispatch(true);
   }
   render () {
     const routes = (<div className="inner-content"><div className="pure-g">
@@ -215,7 +221,6 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  error: PropTypes.string,
   config: PropTypes.object,
   user: PropTypes.object,
   shouldShowTerms: PropTypes.bool,
@@ -236,7 +241,9 @@ App.propTypes = {
   date: PropTypes.string,
   period: PropTypes.string,
   orderField: PropTypes.string,
-  houseblockDataDispatch: PropTypes.func.isRequired
+  houseblockDataDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  orderDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -271,7 +278,9 @@ const mapDispatchToProps = dispatch => {
     activitiesDispatch: text => dispatch(setSearchActivities(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
     periodDispatch: text => dispatch(setSearchPeriod(text)),
-    houseblockDataDispatch: data => dispatch(setHouseblockData(data))
+    houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
+    setLoadedDispatch: (status) => dispatch(setLoaded(status)),
+    orderDispatch: field => dispatch(setHouseblockOrder(field))
   };
 };
 
