@@ -176,12 +176,22 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
     }
+
     void stubGetHouseblockList(Caseload caseload, String groupName, String timeSlot, String date) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                         aResponse()
-                                .withBody(HouseblockResponse.response)
+                                .withBody(HouseblockResponse.responseCellOrder)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                        .withHeader('Sort-Fields', equalTo('lastName'))
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.responseNameOrder)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

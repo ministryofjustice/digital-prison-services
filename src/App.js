@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
-  setHouseblockData,
+  setHouseblockData, setHouseblockOrder, setLoaded,
   setSearchActivities, setSearchActivity,
   setSearchDate,
   setSearchLocation,
@@ -137,33 +137,42 @@ class App extends React.Component {
 
   handleSearch (history) {
     if (history.location.pathname === '/whereabouts/resultshouseblock') {
-      this.getHouseblockList();
+      this.getHouseblockList(this.props.orderField);
     } else {
       history.push('/whereabouts/resultshouseblock');
     }
   }
 
-  async getHouseblockList () {
-    let date = this.props.date;
-    if (date === 'Today') { // replace placeholder text
-      date = moment().format('DD/MM/YYYY');
-    }
+  async getHouseblockList (orderField) {
     try {
-      const response = await axios.get('/api/houseblocklist', {
-        headers: {
-          'Sort-Fields': 'cellLocation',
-          'Sort-Order': 'ASC'
-        },
+      this.props.resetErrorDispatch();
+      this.props.setLoadedDispatch(false);
+      if (orderField) {
+        this.props.orderDispatch(orderField);
+      }
+      let date = this.props.date;
+      if (date === 'Today') { // replace placeholder text
+        date = moment().format('DD/MM/YYYY');
+      }
+      let config = {
         params: {
           agencyId: this.props.agencyId,
           groupName: this.props.currentLocation,
           date: date,
           timeSlot: this.props.period
-        } });
+        } };
+      if (orderField) {
+        config.headers = {
+          'Sort-Fields': orderField,
+          'Sort-Order': 'ASC'
+        };
+      }
+      const response = await axios.get('/api/houseblocklist', config);
       this.props.houseblockDataDispatch(response.data);
     } catch (error) {
       this.displayError(error);
     }
+    this.props.setLoadedDispatch(true);
   }
   render () {
     const routes = (<div className="inner-content"><div className="pure-g">
@@ -212,7 +221,6 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  error: PropTypes.string,
   config: PropTypes.object,
   user: PropTypes.object,
   shouldShowTerms: PropTypes.bool,
@@ -232,7 +240,10 @@ App.propTypes = {
   currentLocation: PropTypes.string,
   date: PropTypes.string,
   period: PropTypes.string,
-  houseblockDataDispatch: PropTypes.func.isRequired
+  orderField: PropTypes.string,
+  houseblockDataDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  orderDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -248,7 +259,8 @@ const mapStateToProps = state => {
     activity: state.search.activity,
     date: state.search.date,
     period: state.search.period,
-    agencyId: state.app.user.activeCaseLoadId
+    agencyId: state.app.user.activeCaseLoadId,
+    orderField: state.houseblock.orderField
   };
 };
 
@@ -266,7 +278,9 @@ const mapDispatchToProps = dispatch => {
     activitiesDispatch: text => dispatch(setSearchActivities(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
     periodDispatch: text => dispatch(setSearchPeriod(text)),
-    houseblockDataDispatch: data => dispatch(setHouseblockData(data))
+    houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
+    setLoadedDispatch: (status) => dispatch(setLoaded(status)),
+    orderDispatch: field => dispatch(setHouseblockOrder(field))
   };
 };
 

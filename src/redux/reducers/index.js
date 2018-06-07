@@ -134,6 +134,10 @@ export function houseblock (state = houseblockInitialState, action) {
       return { ...state,
         data: action.data
       };
+    case ActionTypes.SET_HOUSEBLOCK_ORDER:
+      return { ...state,
+        orderField: action.orderField
+      };
     default:
       return state;
   }

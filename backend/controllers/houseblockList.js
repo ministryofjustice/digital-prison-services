@@ -15,7 +15,7 @@ const getHouseblockList = (async (reqIn, res) => {
   const req = switchDateFormat(reqIn);
 
   const events = await elite2Api.getHouseblockList(req, res);
-  // Returns array ordered by inmate/cell (group order), then get act, visit, app
+  // Returns array ordered by inmate/cell or name, then start time
 
   log.info(events.data, 'getHouseblockList data received');
   const rows = [];

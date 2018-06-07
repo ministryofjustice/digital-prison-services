@@ -5,31 +5,31 @@ import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
 import { setSearchLocations } from "../redux/actions";
 import axios from "axios/index";
+import Spinner from "../Spinner";
 
 class ResultsHouseblockContainer extends Component {
-  componentWillMount () {
-    if (!this.props.locations) {
-      debugger;
-      this.getLocations();
+  async componentWillMount () {
+    try {
+      this.handlePrint = this.handlePrint.bind(this);
+      this.handleSave = this.handleSave.bind(this);
+      if (!this.props.locations) {
+        await this.getLocations();
+      }
+      this.props.getHouseblockList(this.props.orderField);
+    } catch (error) {
+      this.displayError(error);
     }
-    this.props.getHouseblockList();
-    this.handlePrint = this.handlePrint.bind(this);
-    this.handleSave = this.handleSave.bind(this);
   }
 
   async getLocations () {
-    try {
-      const response = await axios.get('/api/houseblockLocations', {
-        params: {
-          agencyId: this.props.agencyId
-        } });
-      this.props.locationsDispatch(response.data);
-      // Use the first location by default if not already set
-      if (!this.props.currentLocation && response.data && response.data[0]) {
-        this.props.locationDispatch(response.data[0]);
-      }
-    } catch (error) {
-      this.displayError(error);
+    const response = await axios.get('/api/houseblockLocations', {
+      params: {
+        agencyId: this.props.agencyId
+      } });
+    this.props.locationsDispatch(response.data);
+    // Use the first location by default if not already set
+    if (!this.props.currentLocation && response.data && response.data[0]) {
+      this.props.locationDispatch(response.data[0]);
     }
   }
 
@@ -42,6 +42,9 @@ class ResultsHouseblockContainer extends Component {
   }
 
   render () {
+    if (!this.props.loaded) {
+      return <Spinner/>;
+    }
     return (<div><Error {...this.props} />
       <ResultsHouseblock handlePrint={this.handlePrint} handleSave={this.handleSave} {...this.props}/>
     </div>);
@@ -56,13 +59,16 @@ ResultsHouseblockContainer.propTypes = {
   locationsDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
   getHouseblockList: PropTypes.func,
-  houseblockDataDispatch: PropTypes.func
+  houseblockDataDispatch: PropTypes.func,
+  orderField: PropTypes.string,
+  loaded: PropTypes.bool
 };
 
 const mapStateToProps = state => {
   return {
     locations: state.search.locations,
-    houseblockData: state.houseblock.data
+    houseblockData: state.houseblock.data,
+    loaded: state.app.loaded
   };
 };
 

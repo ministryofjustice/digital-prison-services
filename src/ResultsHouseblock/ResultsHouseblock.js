@@ -68,13 +68,23 @@ class ResultsHouseblock extends Component {
       {this.isToday() &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         this.props.handlePrint();
-      }}><img src="/images/ICON_ManagePrisonerWhereabouts.png" height="20" width="20"/> Print list</button>
+      }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
       }
     </div>);
 
     const headings = (<tr>
-      <th className="straight">Name</th>
-      <th className="straight">Location</th>
+      <th className="straight">{!this.props.orderField || this.props.orderField === 'cellLocation' ?
+        <a href="#" onClick={() => {
+          this.props.getHouseblockList('lastName');
+        }}>Name</a> :
+        <div>Name <img src="/images/Triangle.png" height="8" width="15" /></div>
+      } </th>
+      <th className="straight">{this.props.orderField === 'lastName' ?
+        <a href="#" onClick={() => {
+          this.props.getHouseblockList('cellLocation');
+        }}>Location</a> :
+        <div>Location <img src="/images/Triangle.png" height="8" width="15" /></div>
+      } </th>
       <th className="straight">NOMS ID</th>
       <th className="straight">Main activity</th>
       <th className="straight">Other activities</th>
@@ -157,7 +167,9 @@ ResultsHouseblock.propTypes = {
   period: PropTypes.string,
   houseblockData: PropTypes.array,
   currentLocation: PropTypes.string,
-  locations: PropTypes.array
+  locations: PropTypes.array,
+  getHouseblockList: PropTypes.func.isRequired,
+  orderField: PropTypes.string
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);
