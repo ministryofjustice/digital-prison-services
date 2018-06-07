@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
-import { setHouseblockOrder, setSearchLocations } from "../redux/actions";
+import { setSearchLocations } from "../redux/actions";
 import axios from "axios/index";
 import Spinner from "../Spinner";
 
