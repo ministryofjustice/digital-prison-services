@@ -4,7 +4,6 @@ import Dropdown from '../Dropdown';
 import { Link } from "react-router-dom";
 
 import './header.theme.scss';
-import './index.scss';
 
 class Header extends Component {
   render () {
@@ -12,10 +11,10 @@ class Header extends Component {
       <header className="page-header">
         <div className="header-content">
           <div className="left-content">
-            <Link id="header_logo_keyworker_management_link" title="Key worker management link" className="link" to="/" >
-              <div className="logo header-image" />
+            <Link title="Key worker management link" className="link" to="/" >
+              <div className="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"/></div>
             </Link>
-            <Link id="header_logo_text_keyworker_management_link" title="Key worker management link" className="unstyled-link" to="/" >
+            <Link title="Key worker management link" className="unstyled-link" to="/" >
               <span className="logo-text">HMPPS</span>
               <span className="title">Prison Staff Hub</span>
             </Link>

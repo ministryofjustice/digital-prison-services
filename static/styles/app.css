@@ -70,14 +70,6 @@
   color: white;
 }
 
-.header-image {
-  -webkit-mask-image: url("/images/hmpps_crest.svg");
-          mask-image: url("/images/hmpps_crest.svg");
-  background-color: white;
-  width: 42px;
-  height: 35px;
-}
-
 .FooterContainer {
   flex-direction: row;
   align-items: center;
