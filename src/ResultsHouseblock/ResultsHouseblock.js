@@ -30,7 +30,7 @@ class ResultsHouseblock extends Component {
 
     const locationSelect = (
       <div className="pure-u-md-4-12">
-        <label className="form-label" htmlFor="housing-location-select">Select Location</label>
+        <label className="form-label" htmlFor="housing-location-select">Select sub-location</label>
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
           value={this.props.currentLocation}
@@ -104,10 +104,10 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
           <td className="row-gutters">{mainActivity.cellLocation}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
-          <td className="row-gutters">{mainActivity.eventDescription}</td>
+          <td className="row-gutters">{mainActivity.comment}</td>
           <td className="row-gutters small-font">{row.others &&
           <ul>{row.others.map((e, index) => {
-            return <li key={mainActivity.offenderNo + '_' + index}>{e.eventDescription} {getHoursMinutes(e.startTime)}</li>;
+            return <li key={mainActivity.offenderNo + '_' + index}>{e.comment} {getHoursMinutes(e.startTime)}</li>;
           })}</ul>
           }</td>
           <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
