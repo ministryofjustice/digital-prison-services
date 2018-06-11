@@ -30,7 +30,7 @@ class ResultsHouseblock extends Component {
 
     const locationSelect = (
       <div className="pure-u-md-4-12">
-        <label className="form-label" htmlFor="housing-location-select">Select Location</label>
+        <label className="form-label" htmlFor="housing-location-select">Select sub-location</label>
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
           value={this.props.currentLocation}
