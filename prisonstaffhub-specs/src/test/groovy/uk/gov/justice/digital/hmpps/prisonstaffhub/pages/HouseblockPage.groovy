@@ -26,6 +26,7 @@ class HouseblockPage extends Page {
         saveButton { $('#saveButton') }
         printButton { $('#printButton') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
-        orderLink { $('th a') }
+        nameOrderLink { $('th a#Name-sortable-column') }
+        locationOrderLink { $('th a#Location-sortable-column') }
     }
 }

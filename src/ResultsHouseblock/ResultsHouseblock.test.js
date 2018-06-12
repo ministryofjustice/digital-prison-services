@@ -230,4 +230,90 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
   });
+
+  it('should display the correct sorting headings for Location', async () => {
+    const handleSearch = jest.fn();
+    const handleSave = jest.fn();
+    const handlePrint = jest.fn();
+    const today = moment().format('DD/MM/YYYY');
+    const component = shallow(<ResultsHouseblock
+      history ={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={response}
+      handleSearch={handleSearch}
+      handleSave={handleSave}
+      handlePrint={handlePrint}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      getHouseblockList={jest.fn()}
+      date={today}
+      period={'ED'}
+      orderField={'cellLocation'}
+      sortOrder={'ASC'}
+      currentLocation={'BWing'}/>);
+
+    expect(component.find('#Location-sort-asc').length).toEqual(1);
+    expect(component.find('#Location-sort-desc').length).toEqual(0);
+    expect(component.find('#Name-sort-desc').length).toEqual(0);
+    expect(component.find('#Name-sort-asc').length).toEqual(0);
+  });
+
+  it('should display the correct sorting headings for Name', async () => {
+    const handleSearch = jest.fn();
+    const handleSave = jest.fn();
+    const handlePrint = jest.fn();
+    const today = moment().format('DD/MM/YYYY');
+    const component = shallow(<ResultsHouseblock
+      history ={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={response}
+      handleSearch={handleSearch}
+      handleSave={handleSave}
+      handlePrint={handlePrint}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      getHouseblockList={jest.fn()}
+      date={today}
+      period={'ED'}
+      orderField={'lastName'}
+      sortOrder={'DESC'}
+      currentLocation={'BWing'}/>);
+
+    expect(component.find('#Location-sort-asc').length).toEqual(0);
+    expect(component.find('#Location-sort-desc').length).toEqual(0);
+    expect(component.find('#Name-sort-desc').length).toEqual(1);
+    expect(component.find('#Name-sort-asc').length).toEqual(0);
+  });
+
+  it('should handle change of sort order', async () => {
+    const handleSearch = jest.fn();
+    const handleSave = jest.fn();
+    const getHouseblockList = jest.fn();
+    const handlePrint = jest.fn();
+    const today = moment().format('DD/MM/YYYY');
+    const component = shallow(<ResultsHouseblock
+      history ={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={response}
+      handleSearch={handleSearch}
+      handleSave={handleSave}
+      handlePrint={handlePrint}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      getHouseblockList={getHouseblockList}
+      date={today}
+      period={'ED'}
+      orderField={'cellLocation'}
+      sortOrder={'ASC'}
+      currentLocation={'BWing'}/>);
+
+    component.find('#Location-sort-asc').simulate('click');
+    expect(getHouseblockList).toHaveBeenCalledWith('cellLocation', 'DESC');
+
+    component.find('#Name-sortable-column').simulate('click');
+    expect(getHouseblockList).toHaveBeenCalledWith('lastName', 'ASC');
+  });
 });

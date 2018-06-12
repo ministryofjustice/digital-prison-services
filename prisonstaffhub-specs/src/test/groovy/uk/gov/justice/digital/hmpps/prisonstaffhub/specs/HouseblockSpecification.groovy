@@ -32,7 +32,7 @@ class HouseblockSpecification extends GebReportingSpec {
 
         then: 'The houseblock list is displayed'
         at HouseblockPage
-        orderLink.text() == 'Name'
+        nameOrderLink.text() == 'Name'
         // Check order is by cell
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
@@ -40,8 +40,7 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[3].contains("Baa, Fred LEI-A-1-3 A1234AC Chapel")
 
         when: "I order by name"
-        orderLink.click()
-        waitFor { orderLink.text() == 'Location' }
+        nameOrderLink.click()
 
         then: 'The houseblock list is displayed in the new order'
         at HouseblockPage

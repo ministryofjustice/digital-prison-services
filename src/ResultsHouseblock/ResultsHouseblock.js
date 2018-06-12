@@ -23,6 +23,26 @@ class ResultsHouseblock extends Component {
     return days > 7;
   }
 
+
+  sortableColumn (heading, orderField) {
+    let triangleImage = '';
+    if (this.props.sortOrder === 'ASC') {
+      triangleImage = (<a className="sortableLink" id={heading + '-sort-asc'} href="#" onClick={() => {
+        this.props.getHouseblockList(orderField, 'DESC');
+      }}><img src="/images/Triangle_asc.png" height="8" width="15"/></a>);
+    } else if (this.props.sortOrder === 'DESC') {
+      triangleImage = (<a className="sortableLink" id={heading + '-sort-desc'} href="#" onClick={() => {
+        this.props.getHouseblockList(orderField, 'ASC');
+      }}><img src="/images/Triangle_desc.png" height="8" width="15"/></a>);
+    }
+
+    return this.props.orderField !== orderField ?
+      <a className="sortableLink" id={heading + '-sortable-column'} href="#" onClick={() => {
+        this.props.getHouseblockList(orderField, 'ASC');
+      }}>{heading}</a> :
+      <div>{heading} {triangleImage}</div>;
+  }
+
   render () {
     const housingLocations = this.props.locations ? this.props.locations.map((loc, optionIndex) => {
       return <option key={`housinglocation_option_${loc}`}>{loc}</option>;
@@ -72,19 +92,10 @@ class ResultsHouseblock extends Component {
       }
     </div>);
 
+
     const headings = (<tr>
-      <th className="straight">{!this.props.orderField || this.props.orderField === 'cellLocation' ?
-        <a href="#" onClick={() => {
-          this.props.getHouseblockList('lastName');
-        }}>Name</a> :
-        <div>Name <img src="/images/Triangle.png" height="8" width="15" /></div>
-      } </th>
-      <th className="straight">{this.props.orderField === 'lastName' ?
-        <a href="#" onClick={() => {
-          this.props.getHouseblockList('cellLocation');
-        }}>Location</a> :
-        <div>Location <img src="/images/Triangle.png" height="8" width="15" /></div>
-      } </th>
+      <th className="straight">{this.sortableColumn('Name', 'lastName')}</th>
+      <th className="straight">{this.sortableColumn('Location', 'cellLocation')}</th>
       <th className="straight">NOMS ID</th>
       <th className="straight">Main activity</th>
       <th className="straight">Other activities</th>
@@ -169,7 +180,8 @@ ResultsHouseblock.propTypes = {
   currentLocation: PropTypes.string,
   locations: PropTypes.array,
   getHouseblockList: PropTypes.func.isRequired,
-  orderField: PropTypes.string
+  orderField: PropTypes.string,
+  sortOrder: PropTypes.string
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);

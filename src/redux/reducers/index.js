@@ -38,7 +38,9 @@ const searchInitialState = {
 };
 
 const houseblockInitialState = {
-  data: []
+  data: [],
+  orderField: 'cellLocation',
+  sortOrder: 'ASC'
 };
 
 export function app (state = appInitialState, action) {
@@ -134,9 +136,13 @@ export function houseblock (state = houseblockInitialState, action) {
       return { ...state,
         data: action.data
       };
-    case ActionTypes.SET_HOUSEBLOCK_ORDER:
+    case ActionTypes.SET_HOUSEBLOCK_ORDER_FIELD:
       return { ...state,
         orderField: action.orderField
+      };
+    case ActionTypes.SET_HOUSEBLOCK_SORT_ORDER:
+      return { ...state,
+        sortOrder: action.sortOrder
       };
     default:
       return state;

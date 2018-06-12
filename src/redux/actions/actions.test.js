@@ -142,11 +142,19 @@ describe('actions', () => {
     expect(actions.setHouseblockData({ stuff: 'stuff' })).toEqual(expectedAction);
   });
 
-  it('should create an action to set the houseblock list order', () => {
+  it('should create an action to set the houseblock list order field', () => {
     const expectedAction = {
-      type: types.SET_HOUSEBLOCK_ORDER,
+      type: types.SET_HOUSEBLOCK_ORDER_FIELD,
       orderField: 'name'
     };
-    expect(actions.setHouseblockOrder('name')).toEqual(expectedAction);
+    expect(actions.setHouseblockOrderField('name')).toEqual(expectedAction);
+  });
+
+  it('should create an action to set the houseblock list sort order', () => {
+    const expectedAction = {
+      type: types.SET_HOUSEBLOCK_SORT_ORDER,
+      sortOrder: 'ASC'
+    };
+    expect(actions.setHouseblockSortOrder('ASC')).toEqual(expectedAction);
   });
 });

@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
-  setHouseblockData, setHouseblockOrder, setLoaded,
+  setHouseblockData, setHouseblockSortOrder, setHouseblockOrderField, setLoaded,
   setSearchActivities, setSearchActivity,
   setSearchDate,
   setSearchLocation,
@@ -143,12 +143,13 @@ class App extends React.Component {
     }
   }
 
-  async getHouseblockList (orderField) {
+  async getHouseblockList (orderField, sortOrder) {
     try {
       this.props.resetErrorDispatch();
       this.props.setLoadedDispatch(false);
       if (orderField) {
         this.props.orderDispatch(orderField);
+        this.props.sortOrderDispatch(sortOrder);
       }
       let date = this.props.date;
       if (date === 'Today') { // replace placeholder text
@@ -164,7 +165,7 @@ class App extends React.Component {
       if (orderField) {
         config.headers = {
           'Sort-Fields': orderField,
-          'Sort-Order': 'ASC'
+          'Sort-Order': sortOrder
         };
       }
       const response = await axios.get('/api/houseblocklist', config);
@@ -241,6 +242,7 @@ App.propTypes = {
   date: PropTypes.string,
   period: PropTypes.string,
   orderField: PropTypes.string,
+  sortOrder: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired
@@ -260,7 +262,8 @@ const mapStateToProps = state => {
     date: state.search.date,
     period: state.search.period,
     agencyId: state.app.user.activeCaseLoadId,
-    orderField: state.houseblock.orderField
+    orderField: state.houseblock.orderField,
+    sortOrder: state.houseblock.sortOrder
   };
 };
 
@@ -280,7 +283,8 @@ const mapDispatchToProps = dispatch => {
     periodDispatch: text => dispatch(setSearchPeriod(text)),
     houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
-    orderDispatch: field => dispatch(setHouseblockOrder(field))
+    orderDispatch: field => dispatch(setHouseblockOrderField(field)),
+    sortOrderDispatch: field => dispatch(setHouseblockSortOrder(field))
   };
 };
 
