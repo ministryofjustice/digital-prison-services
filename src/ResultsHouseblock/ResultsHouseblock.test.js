@@ -25,8 +25,8 @@ const response = [
       lastName: "ANDERSON",
       cellLocation: "LEI-A-1-1",
       event: "CHAP",
-      eventDescription: "Chapel",
-      comment: "comment11",
+      comment: "Chapel",
+      eventDescription: "comment11",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     },
@@ -36,8 +36,8 @@ const response = [
       lastName: "ANDERSON",
       cellLocation: "LEI-A-1-1",
       event: "VISIT",
-      eventDescription: "Official Visit",
-      comment: "comment18",
+      comment: "Official Visit",
+      eventDescription: "comment18",
       startTime: "2017-10-15T11:00:00",
       endTime: "2017-10-15T11:30:00"
     },
@@ -47,8 +47,8 @@ const response = [
       lastName: "ANDERSON",
       cellLocation: "LEI-A-1-1",
       event: "GYM",
-      eventDescription: "The gym, appointment",
-      comment: "comment14",
+      comment: "The gym, appointment",
+      eventDescription: "comment14",
       startTime: "2017-10-15T17:00:00",
       endTime: "2017-10-15T17:30:00"
     }]
@@ -60,8 +60,8 @@ const response = [
       lastName: "SMITH",
       cellLocation: "LEI-A-1-2",
       event: "CHAP",
-      eventDescription: "Chapel Act",
-      comment: "comment12",
+      comment: "Chapel Act",
+      eventDescription: "comment12",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     }
@@ -73,8 +73,8 @@ const response = [
       lastName: "QUIMBY",
       cellLocation: "LEI-A-1-3",
       event: "CHAP",
-      eventDescription: "Chapel Activity",
-      comment: "comment13",
+      comment: "Chapel Activity",
+      eventDescription: "comment13",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     },
@@ -85,8 +85,8 @@ const response = [
         lastName: "QUIMBY",
         cellLocation: "LEI-A-1-3",
         event: "VISIT",
-        eventDescription: "Family Visit",
-        comment: "comment19",
+        comment: "Family Visit",
+        eventDescription: "comment19",
         startTime: "2017-10-15T11:00:00",
         endTime: "2017-10-15T18:30:00"
       }
