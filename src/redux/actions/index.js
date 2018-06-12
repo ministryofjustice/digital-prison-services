@@ -117,9 +117,16 @@ export const setHouseblockData = (data) => {
   };
 };
 
-export const setHouseblockOrder = (orderField) => {
+export const setHouseblockOrderField = (orderField) => {
   return {
-    type: ActionTypes.SET_HOUSEBLOCK_ORDER,
+    type: ActionTypes.SET_HOUSEBLOCK_ORDER_FIELD,
     orderField
+  };
+};
+
+export const setHouseblockSortOrder = (sortOrder) => {
+  return {
+    type: ActionTypes.SET_HOUSEBLOCK_SORT_ORDER,
+    sortOrder
   };
 };

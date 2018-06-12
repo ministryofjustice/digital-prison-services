@@ -15,7 +15,7 @@ class ResultsHouseblockContainer extends Component {
       if (!this.props.locations) {
         await this.getLocations();
       }
-      this.props.getHouseblockList(this.props.orderField);
+      this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
     } catch (error) {
       this.displayError(error);
     }
@@ -61,6 +61,7 @@ ResultsHouseblockContainer.propTypes = {
   getHouseblockList: PropTypes.func,
   houseblockDataDispatch: PropTypes.func,
   orderField: PropTypes.string,
+  sortOrder: PropTypes.string,
   loaded: PropTypes.bool
 };
 
@@ -68,7 +69,9 @@ const mapStateToProps = state => {
   return {
     locations: state.search.locations,
     houseblockData: state.houseblock.data,
-    loaded: state.app.loaded
+    loaded: state.app.loaded,
+    orderField: state.houseblock.orderField,
+    sortOrder: state.houseblock.sortOrder
   };
 };
 

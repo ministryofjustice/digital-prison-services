@@ -327,21 +327,38 @@ describe('app (global) reducer', () => {
     ).toEqual(
       {
         data: ['data0', 'data1'],
-        orderField: "cellLocation"
+        orderField: "cellLocation",
+        sortOrder: "ASC"
       }
     );
   });
 
-  it('should handle SET_HOUSEBLOCK_ORDER', () => {
+  it('should handle SET_HOUSEBLOCK_ORDER_FIELD', () => {
     expect(
       houseblock(undefined, {
-        type: types.SET_HOUSEBLOCK_ORDER,
+        type: types.SET_HOUSEBLOCK_ORDER_FIELD,
         orderField: 'field1'
       })
     ).toEqual(
       {
         data: [],
-        orderField: 'field1'
+        orderField: 'field1',
+        sortOrder: "ASC"
+      }
+    );
+  });
+
+  it('should handle SET_HOUSEBLOCK_SORT_ORDER', () => {
+    expect(
+      houseblock(undefined, {
+        type: types.SET_HOUSEBLOCK_SORT_ORDER,
+        sortOrder: 'DESC'
+      })
+    ).toEqual(
+      {
+        data: [],
+        orderField: 'cellLocation',
+        sortOrder: "DESC"
       }
     );
   });
