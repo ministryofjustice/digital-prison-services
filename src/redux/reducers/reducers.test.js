@@ -326,7 +326,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        data: ['data0', 'data1']
+        data: ['data0', 'data1'],
+        orderField: "cellLocation"
       }
     );
   });
