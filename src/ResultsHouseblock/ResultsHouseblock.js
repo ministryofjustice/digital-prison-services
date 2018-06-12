@@ -74,13 +74,13 @@ class ResultsHouseblock extends Component {
 
     const headings = (<tr>
       <th className="straight">{!this.props.orderField || this.props.orderField === 'cellLocation' ?
-        <a href="#" onClick={() => {
+        <a className="sortableLink" href="#" onClick={() => {
           this.props.getHouseblockList('lastName');
         }}>Name</a> :
         <div>Name <img src="/images/Triangle.png" height="8" width="15" /></div>
       } </th>
       <th className="straight">{this.props.orderField === 'lastName' ?
-        <a href="#" onClick={() => {
+        <a className="sortableLink" href="#" onClick={() => {
           this.props.getHouseblockList('cellLocation');
         }}>Location</a> :
         <div>Location <img src="/images/Triangle.png" height="8" width="15" /></div>

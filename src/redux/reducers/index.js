@@ -38,7 +38,8 @@ const searchInitialState = {
 };
 
 const houseblockInitialState = {
-  data: []
+  data: [],
+  orderField: 'cellLocation'
 };
 
 export function app (state = appInitialState, action) {

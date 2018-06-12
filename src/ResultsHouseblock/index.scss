@@ -6,6 +6,11 @@
   float: right
 }
 
+.sortableLink, .sortableLink:hover {
+  text-decoration: none;
+  color: black;
+}
+
 .no-padding {
   padding: 0;
 }
