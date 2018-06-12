@@ -316,5 +316,4 @@ describe('Offender results component Jira NN-843', () => {
     component.find('#Name-sortable-column').simulate('click');
     expect(getHouseblockList).toHaveBeenCalledWith('lastName', 'ASC');
   });
-
 });
