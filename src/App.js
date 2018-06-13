@@ -259,7 +259,8 @@ App.propTypes = {
   sortOrder: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
-  orderDispatch: PropTypes.func.isRequired
+  orderDispatch: PropTypes.func.isRequired,
+  sortOrderDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
