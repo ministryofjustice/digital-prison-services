@@ -17,7 +17,7 @@ class ResultsHouseblockContainer extends Component {
       }
       this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
     } catch (error) {
-      this.displayError(error);
+      this.handleError(error);
     }
   }
 
