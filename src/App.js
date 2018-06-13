@@ -43,6 +43,7 @@ class App extends React.Component {
     this.hideTermsAndConditions = this.hideTermsAndConditions.bind(this);
     this.clearMessage = this.clearMessage.bind(this);
     this.displayError = this.displayError.bind(this);
+    this.handleError = this.handleError.bind(this);
     this.getHouseblockList = this.getHouseblockList.bind(this);
   }
 
@@ -95,6 +96,19 @@ class App extends React.Component {
 
   displayError (error) {
     this.props.setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
+  }
+
+  handleError (error) {
+    if ((error.response && error.response.status === 401) && (error.response.data && error.response.data.message === 'Session expired')) {
+      this.displayAlertAndLogout("Your session has expired, please click OK to be redirected back to the login page");
+    } else {
+      this.props.setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
+    }
+  }
+
+  displayAlertAndLogout (message) {
+    alert(message); // eslint-disable-line no-alert
+    window.location = '/auth/logout';
   }
 
   shouldDisplayInnerContent () {
@@ -171,20 +185,20 @@ class App extends React.Component {
       const response = await axios.get('/api/houseblocklist', config);
       this.props.houseblockDataDispatch(response.data);
     } catch (error) {
-      this.displayError(error);
+      this.handleError(error);
     }
     this.props.setLoadedDispatch(true);
   }
   render () {
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
-      <Route exact path="/whereaboutssearch" render={() => (<SearchContainer displayError={this.displayError}
+      <Route exact path="/whereaboutssearch" render={() => (<SearchContainer handleError={this.handleError}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleActivityChange={(event) => this.handleActivityChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
-      <Route exact path="/whereabouts/resultshouseblock" render={() => (<ResultsHouseblockContainer displayError={this.displayError}
+      <Route exact path="/whereabouts/resultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
         getHouseblockList = {this.getHouseblockList}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
@@ -245,7 +259,8 @@ App.propTypes = {
   sortOrder: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
-  orderDispatch: PropTypes.func.isRequired
+  orderDispatch: PropTypes.func.isRequired,
+  sortOrderDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {

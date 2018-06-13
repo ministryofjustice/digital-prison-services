@@ -23,7 +23,7 @@ class SearchContainer extends Component {
         this.props.locationDispatch(response.data[0]);
       }
     } catch (error) {
-      this.displayError(error);
+      this.handleError(error);
     }
   }
 
@@ -43,7 +43,7 @@ SearchContainer.propTypes = {
   activityDispatch: PropTypes.func,
   dateDispatch: PropTypes.func,
   periodDispatch: PropTypes.func,
-  displayError: PropTypes.func
+  handleError: PropTypes.func
 };
 
 const mapStateToProps = state => {
