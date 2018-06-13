@@ -137,7 +137,7 @@ class App extends React.Component {
 
   handleSearch (history) {
     if (history.location.pathname === '/whereabouts/resultshouseblock') {
-      this.getHouseblockList(this.props.orderField);
+      this.getHouseblockList(this.props.orderField, this.props.sortOrder);
     } else {
       history.push('/whereabouts/resultshouseblock');
     }
@@ -147,10 +147,8 @@ class App extends React.Component {
     try {
       this.props.resetErrorDispatch();
       this.props.setLoadedDispatch(false);
-      if (orderField) {
-        this.props.orderDispatch(orderField);
-        this.props.sortOrderDispatch(sortOrder);
-      }
+      if (orderField) this.props.orderDispatch(orderField);
+      if (sortOrder) this.props.sortOrderDispatch(sortOrder);
       let date = this.props.date;
       if (date === 'Today') { // replace placeholder text
         date = moment().format('DD/MM/YYYY');
@@ -164,9 +162,11 @@ class App extends React.Component {
         } };
       if (orderField) {
         config.headers = {
-          'Sort-Fields': orderField,
-          'Sort-Order': sortOrder
+          'Sort-Fields': orderField
         };
+        if (sortOrder) {
+          config.headers['Sort-Order'] = sortOrder;
+        }
       }
       const response = await axios.get('/api/houseblocklist', config);
       this.props.houseblockDataDispatch(response.data);
