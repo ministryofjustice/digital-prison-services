@@ -6,19 +6,25 @@ import { Search } from "./Search";
 Enzyme.configure({ adapter: new Adapter() });
 
 const locations = ['AWing', 'BWing'];
+const activities = [{ locationId: '123456', userDescription: 'little room' }];
 
 describe('Search component', () => {
   it('should render initial search page correctly', async () => {
     const component = shallow(<Search
       history ={{ push: jest.fn() }}
       locations={locations}
+      activities={activities}
       handleSearch={jest.fn()}
+      handleActivityChange={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}/>
     );
-    expect(component.find('#housing-location-select option').get(0).props.value).toEqual('AWing');
-    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('BWing');
+    expect(component.find('#housing-location-select option').get(0).props.value).toEqual('--');
+    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('AWing');
+
+    expect(component.find('#activity-select option').get(0).props.value).toEqual('--');
+    expect(component.find('#activity-select option').get(1).props.value).toEqual('123456');
   });
 
   it('should handle search button correctly', async () => {
@@ -27,6 +33,7 @@ describe('Search component', () => {
       history ={{ push: jest.fn() }}
       locations={locations}
       handleSearch={handleSearch}
+      handleActivityChange={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
