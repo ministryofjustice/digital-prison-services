@@ -20,10 +20,6 @@ class SearchContainer extends Component {
           agencyId: this.props.agencyId
         } });
       this.props.locationsDispatch(response.data);
-      // Use the first location by default
-      if (response.data && response.data[0]) {
-        this.props.locationDispatch(response.data[0]);
-      }
     } catch (error) {
       this.props.handleError(error);
     }
