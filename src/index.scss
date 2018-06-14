@@ -40,6 +40,10 @@ body {
 
 @media screen {
 
+  .print-only {
+    display: none;
+  }
+
   .content {
     min-height: 100vh;
     display: flex;

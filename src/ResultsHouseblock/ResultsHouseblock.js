@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { getHoursMinutes, properCaseName } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
+import { getPrisonDescription } from '../stringUtils';
 import moment from 'moment';
 
 class ResultsHouseblock extends Component {
@@ -92,18 +93,27 @@ class ResultsHouseblock extends Component {
       }
     </div>);
 
-
+    let activityTitle;
+    switch (this.props.period) {
+      case 'AM': activityTitle = 'AM';
+        break;
+      case 'PM': activityTitle = 'PM';
+        break;
+      case 'ED': activityTitle = 'ED';
+        break;
+    }
     const headings = (<tr>
       <th className="straight">{this.sortableColumn('Name', 'lastName')}</th>
       <th className="straight">{this.sortableColumn('Location', 'cellLocation')}</th>
-      <th className="straight">NOMS ID</th>
-      <th className="straight">Main activity</th>
-      <th className="straight">Other activities</th>
+      <th className="straight">NOMS&nbsp;ID</th>
+      <th className="straight no-print">Main activity</th>
+      <th className="straight print-only">{activityTitle}</th>
+      <th className="straight">Other&nbsp;activities</th>
       <th className="rotate"><div><span>Unlocked</span></div></th>
       <th className="rotate"><div><span>Gone</span></div></th>
-      <th className="rotate"><div><span>Received</span></div></th>
-      <th className="rotate"><div><span>Attend</span></div></th>
-      <th className="rotate"><div><span>Don't attend</span></div></th>
+      <th className="rotate checkbox-column no-print"><div><span>Received</span></div></th>
+      <th className="rotate checkbox-column no-print"><div><span>Attend</span></div></th>
+      <th className="rotate checkbox-column no-print"><div><span>Don't attend</span></div></th>
     </tr>);
 
     const readOnly = this.olderThan7Days();
@@ -121,26 +131,33 @@ class ResultsHouseblock extends Component {
             return <li key={mainActivity.offenderNo + '_' + index}>{e.comment} {getHoursMinutes(e.startTime)}</li>;
           })}</ul>
           }</td>
-          <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
+          <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
             <label htmlFor={'col1_' + index} /></div></td>
-          <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
+          <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
             <label htmlFor={'col2_' + index} /></div></td>
-          <td className="no-padding"><img src="/images/GreenTick.png" height="35" width="35"/></td>
-          <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
+          <td className="no-padding checkbox-column no-print"><img src="/images/GreenTick.png" height="35" width="35"/></td>
+          <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly}/>
             <label htmlFor={'col3_' + index} /></div></td>
-          <td className="no-padding"><div className="multiple-choice whereaboutsCheckbox">
+          <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly}/>
             <label htmlFor={'col4_' + index} /></div></td>
         </tr>
       );
     });
 
+    const date = this.props.date === 'Today' ?
+      moment().format('dddd Do MMMM') :
+      moment(this.props.date, "DD/MM/YYYY").format('dddd Do MMMM');
+
     return (<div className="pure-u-md-11-12">
-      <h1 className="heading-large">{this.props.currentLocation}</h1>
-      <form>
+      <h1 className="heading-large whereabouts-title">{this.props.currentLocation}</h1>
+      <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
+      <div className="whereabouts-date print-only">{date}</div>
+      <hr className="print-only" />
+      <form className="no-print">
         <div>
           {locationSelect}
           {dateSelect}
@@ -168,6 +185,7 @@ class ResultsHouseblock extends Component {
 }
 ResultsHouseblock.propTypes = {
   history: PropTypes.object,
+  user: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,

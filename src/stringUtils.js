@@ -29,6 +29,11 @@ const getHoursMinutes = (timestamp) => {
   return timestamp.substr(indexOfT + 1, 5);
 };
 
+const getPrisonDescription = user => {
+  const caseLoadOption = user.caseLoadOptions ? user.caseLoadOptions.find((option) => option.caseLoadId === user.activeCaseLoadId) : undefined;
+  return caseLoadOption ? caseLoadOption.description : user.activeCaseLoadId;
+};
+
 module.exports = {
-  properCase, properCaseName, toFullName, getHoursMinutes
+  properCase, properCaseName, toFullName, getHoursMinutes, getPrisonDescription
 };
