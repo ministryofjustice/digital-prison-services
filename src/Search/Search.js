@@ -4,6 +4,7 @@ import './search.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import DatePickerInput from "../DatePickerInput";
+import ValidationErrors from "../ValidationError";
 
 class Search extends Component {
   constructor () {
@@ -71,7 +72,8 @@ class Search extends Component {
 
     return (<div className="pure-u-md-9-12">
       <h1 className="heading-large">Manage offender whereabouts</h1>
-      <form className="pure-u-md-12-12 searchForm">
+      <ValidationErrors validationErrors={this.props.validationErrors} fieldName={'searchForm'} />
+      <form id="searchForm" name="searchForm" className="pure-u-md-12-12 searchForm">
         <div className="pure-u-md-5-12 padding-bottom"> {locationSelect} </div>
         <div className="pure-u-md-1-12 orDiv ">or</div>
         <div className="pure-u-md-5-12 padding-bottom"> {activitySelect} </div>
@@ -86,7 +88,7 @@ class Search extends Component {
         </div>
 
         <div className="padding-top-large padding-bottom-large">
-          <button id="continue-button" className="button" type="button" onClick={() => { this.props.handleSearch(this.props.history);}}>Continue</button>
+          <button id="continue-button" className="button" type="button" onClick={() => { this.props.onSearch(this.props.history);}}>Continue</button>
         </div>
       </form>
     </div>);
@@ -94,7 +96,8 @@ class Search extends Component {
 }
 Search.propTypes = {
   history: PropTypes.object,
-  handleSearch: PropTypes.func.isRequired,
+  validationErrors: PropTypes.object,
+  onSearch: PropTypes.func.isRequired,
   handleLocationChange: PropTypes.func.isRequired,
   handleActivityChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,

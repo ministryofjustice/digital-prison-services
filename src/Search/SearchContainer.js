@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Error from '../Error';
 import Search from "./Search";
 import axios from "axios/index";
-import { setSearchActivities, setSearchActivity } from "../redux/actions";
+import { setSearchActivities, setSearchActivity, resetValidationErrors, setValidationError } from "../redux/actions";
 
 class SearchContainer extends Component {
   componentWillMount () {
@@ -36,13 +36,27 @@ class SearchContainer extends Component {
           agencyId: this.props.agencyId
         } });
       this.props.activitiesDispatch(response.data);
-      // Use the first location by default
-      if (response.data && response.data[0]) {
-        this.props.activityDispatch(response.data[0].locationPrefix);
-      }
+      // set to unselected
+      this.props.activityDispatch('--');
     } catch (error) {
       this.props.handleError(error);
     }
+  }
+
+  onSearch (history) {
+    if (!this.validate()) {
+      return;
+    }
+    this.props.handleSearch(history);
+  }
+
+  validate () {
+    if (this.props.activity === "--" && this.props.location === "--") {
+      this.props.setValidationErrorDispatch("searchForm", "Please select location or activity");
+      return false;
+    }
+    this.props.resetValidationErrorsDispatch();
+    return true;
   }
 
 
@@ -54,7 +68,7 @@ class SearchContainer extends Component {
     if (this.props.error) {
       return <Error {...this.props} />;
     }
-    return (<Search handleActivityChange={(event) => this.handleActivityChange(event)} {...this.props}/>);
+    return (<Search handleActivityChange={(event) => this.handleActivityChange(event)} onSearch={(history) => this.onSearch(history)} {...this.props}/>);
   }
 }
 
@@ -68,16 +82,23 @@ SearchContainer.propTypes = {
   dateDispatch: PropTypes.func,
   periodDispatch: PropTypes.func,
   handleError: PropTypes.func,
+  handleSearch: PropTypes.func,
   activities: PropTypes.array,
   locations: PropTypes.array,
-  activity: PropTypes.string
+  activity: PropTypes.string,
+  location: PropTypes.string,
+  setValidationErrorDispatch: PropTypes.func,
+  resetValidationErrorsDispatch: PropTypes.func,
+  validationErrors: PropTypes.object
 };
 
 const mapStateToProps = state => {
   return {
     locations: state.search.locations,
     activities: state.search.activities,
-    activity: state.search.activity
+    activity: state.search.activity,
+    location: state.search.location,
+    validationErrors: state.app.validationErrors
   };
 };
 
@@ -85,7 +106,9 @@ const mapDispatchToProps = dispatch => {
   return {
     locationsDispatch: text => dispatch(setSearchLocations(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
-    activitiesDispatch: text => dispatch(setSearchActivities(text))
+    activitiesDispatch: text => dispatch(setSearchActivities(text)),
+    setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
+    resetValidationErrorsDispatch: message => dispatch(resetValidationErrors())
   };
 };
 

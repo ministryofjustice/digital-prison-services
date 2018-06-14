@@ -14,7 +14,7 @@ describe('Search component', () => {
       history ={{ push: jest.fn() }}
       locations={locations}
       activities={activities}
-      handleSearch={jest.fn()}
+      onSearch={jest.fn()}
       handleActivityChange={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -27,12 +27,27 @@ describe('Search component', () => {
     expect(component.find('#activity-select option').get(1).props.value).toEqual('123456');
   });
 
+  it('should render validation error correctly', async () => {
+    const component = shallow(<Search
+      history ={{ push: jest.fn() }}
+      locations={locations}
+      activities={activities}
+      onSearch={jest.fn()}
+      handleActivityChange={jest.fn()}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      validationErrors={{ text: "test" }}
+      handleDateChange={jest.fn()}/>
+    );
+    expect(component.find('ValidationErrors')).toHaveLength(1);
+  });
+
   it('should handle search button correctly', async () => {
     const handleSearch = jest.fn();
     const component = shallow(<Search
       history ={{ push: jest.fn() }}
       locations={locations}
-      handleSearch={handleSearch}
+      onSearch={handleSearch}
       handleActivityChange={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}

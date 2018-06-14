@@ -29,4 +29,26 @@ class SearchSpecification extends GebReportingSpec {
         then: 'The search page is displayed'
         at SearchPage
     }
+
+    def "Validation error if neither activity and location are selected"() {
+        given: 'I am on the dashboard'
+        atSearchPage()
+
+        when: "I deselect both activity and location"
+        activity = '--'
+        location = '--'
+        continueButton.click()
+
+        then: 'an error is displayed'
+        at SearchPage
+        validationMessage.text() == "Please select location or activity"
+    }
+
+    def atSearchPage(){
+        fixture.loginAs(ITAG_USER)
+        at DashboardPage
+        elite2api.stubGroups ITAG_USER.workingCaseload
+        fixture.clickWhereaboutsLink()
+        at SearchPage
+    }
 }

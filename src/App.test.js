@@ -86,6 +86,7 @@ describe('App component', () => {
       houseblockDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
+      sortOrderDispatch={fn}
     />);
     const appInstance = component.instance();
     appInstance.displayAlertAndLogout = jest.fn();
