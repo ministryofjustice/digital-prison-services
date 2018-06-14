@@ -31,7 +31,7 @@ class SearchSpecification extends GebReportingSpec {
     }
 
     def "Validation error if neither activity and location are selected"() {
-        given: 'I am on the dashboard'
+        given: 'I am on the search page'
         atSearchPage()
 
         when: "I deselect both activity and location"

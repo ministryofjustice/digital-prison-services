@@ -64,7 +64,7 @@ const searchActivityLocations = (req, res) => gateway.getRequest({
   req,
   res,
   method: 'get',
-  url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/eventLocations`
+  url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/locations?eventType=PROG`
 });
 
 const searchGroups = (req, res) => gateway.getRequest({
