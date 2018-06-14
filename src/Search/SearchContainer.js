@@ -36,7 +36,7 @@ class SearchContainer extends Component {
           agencyId: this.props.agencyId
         } });
       this.props.activitiesDispatch(response.data);
-      // Use the first location by default
+      // set to unselected
       this.props.activityDispatch('--');
     } catch (error) {
       this.props.handleError(error);
