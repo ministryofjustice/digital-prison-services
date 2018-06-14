@@ -4,7 +4,7 @@ const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 
 router.get('/', asyncMiddleware(async (req, res) => {
-  const response = await elite2Api.searchLocations(req, res);
+  const response = await elite2Api.searchActivityLocations(req, res);
   res.json(response.data);
 }));
 

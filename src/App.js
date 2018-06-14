@@ -27,7 +27,6 @@ import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
   setHouseblockData, setHouseblockSortOrder, setHouseblockOrderField, setLoaded,
-  setSearchActivities, setSearchActivity,
   setSearchDate,
   setSearchLocation,
   setSearchPeriod
@@ -115,28 +114,8 @@ class App extends React.Component {
     return !this.props.shouldShowTerms && (this.props.user && this.props.user.activeCaseLoadId);
   }
 
-  async getActivityLocations () {
-    try {
-      const response = await axios.get('/api/activities', {
-        params: {
-          agencyId: this.props.agencyId
-        } });
-      this.props.activitiesDispatch(response.data);
-      // Use the first location by default
-      if (response.data && response.data[0]) {
-        this.props.activityDispatch(response.data[0].locationPrefix);
-      }
-    } catch (error) {
-      this.displayError(error);
-    }
-  }
-
   handleLocationChange (event) {
     this.props.locationDispatch(event.target.value);
-  }
-
-  handleActivityChange (event) {
-    this.props.activityDispatch(event.target.value);
   }
 
   handleDateChange (date) {
@@ -194,7 +173,6 @@ class App extends React.Component {
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
       <Route exact path="/whereaboutssearch" render={() => (<SearchContainer handleError={this.handleError}
         handleLocationChange={(event) => this.handleLocationChange(event)}
-        handleActivityChange={(event) => this.handleActivityChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
@@ -247,8 +225,6 @@ App.propTypes = {
   resetErrorDispatch: PropTypes.func,
   setMessageDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
-  activitiesDispatch: PropTypes.func.isRequired,
-  activityDispatch: PropTypes.func.isRequired,
   dateDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   agencyId: PropTypes.string,
@@ -272,8 +248,6 @@ const mapStateToProps = state => {
     user: state.app.user,
     shouldShowTerms: state.app.shouldShowTerms,
     currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
-    activities: state.search.activities,
-    activity: state.search.activity,
     date: state.search.date,
     period: state.search.period,
     agencyId: state.app.user.activeCaseLoadId,
@@ -292,8 +266,6 @@ const mapDispatchToProps = dispatch => {
     resetErrorDispatch: () => dispatch(resetError()),
     setMessageDispatch: (message) => dispatch(setMessage(message)),
     locationDispatch: text => dispatch(setSearchLocation(text)),
-    activityDispatch: text => dispatch(setSearchActivity(text)),
-    activitiesDispatch: text => dispatch(setSearchActivities(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
     periodDispatch: text => dispatch(setSearchPeriod(text)),
     houseblockDataDispatch: data => dispatch(setHouseblockData(data)),

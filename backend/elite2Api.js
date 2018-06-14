@@ -60,11 +60,11 @@ const getActivityList = (req, res) => gateway.getRequest({
     `${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}?timeSlot=${req.query.timeSlot}`
 });
 
-const searchLocations = (req, res) => gateway.getRequest({
+const searchActivityLocations = (req, res) => gateway.getRequest({
   req,
   res,
   method: 'get',
-  url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/locations`
+  url: `${eliteApiUrl}api/agencies/${req.query.agencyId}/eventLocations`
 });
 
 const searchGroups = (req, res) => gateway.getRequest({
@@ -82,7 +82,7 @@ const service = {
   setActiveCaseLoad,
   eliteApiUrl,
   getHouseblockList,
-  searchLocations,
+  searchActivityLocations,
   searchGroups
 };
 
