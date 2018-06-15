@@ -5,7 +5,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class HouseblockPage extends Page {
 
-    static url = "/whereabouts/resultshouseblock"
+    static url = "/whereaboutsresultshouseblock"
 
     static at = {
         updateButton.displayed

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { toFullName } from '../stringUtils';
+import { getPrisonDescription, toFullName } from '../stringUtils';
 
 import './theme.scss';
 
@@ -23,8 +23,7 @@ class Dropdown extends Component {
   }
   render () {
     const { user, switchCaseLoad, history } = this.props;
-    const caseLoadOption = user.caseLoadOptions ? user.caseLoadOptions.find((option) => option.caseLoadId === user.activeCaseLoadId) : undefined;
-    const caseLoadDesc = caseLoadOption ? caseLoadOption.description : user.activeCaseLoadId;
+    const caseLoadDesc = getPrisonDescription(user);
 
     return (
       <div className="menu-wrapper" >

@@ -14,12 +14,12 @@ module.exports = {
     // useful if you run your app from another point like django
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     './src/index.js'
-
   ],
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, 'build')
   },
+  devtool: "source-map",
   module: {
     rules: [
       {

@@ -129,10 +129,10 @@ class App extends React.Component {
   }
 
   handleSearch (history) {
-    if (history.location.pathname === '/whereabouts/resultshouseblock') {
+    if (history.location.pathname === '/whereaboutsresultshouseblock') {
       this.getHouseblockList(this.props.orderField, this.props.sortOrder);
     } else {
-      history.push('/whereabouts/resultshouseblock');
+      history.push('/whereaboutsresultshouseblock');
     }
   }
 
@@ -176,7 +176,7 @@ class App extends React.Component {
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
-      <Route exact path="/whereabouts/resultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
+      <Route exact path="/whereaboutsresultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
         getHouseblockList = {this.getHouseblockList}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}

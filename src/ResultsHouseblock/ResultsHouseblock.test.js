@@ -95,9 +95,11 @@ const response = [
 
 const locations = ['AWing', 'BWing'];
 
+const user = { activeCaseLoadId: 'SYI', caseLoadOptions: [{ caseLoadId: 'XXX', description: 'Some Prison' }, { caseLoadId: 'SYI', description: 'Shrewsbury' }] };
+
 describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
-    const today = moment().format('DD/MM/YYYY');
+    const date = moment('2018-06-12').format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
       locations={locations}
@@ -109,15 +111,20 @@ describe('Offender results component Jira NN-843', () => {
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
       getHouseblockList={jest.fn()}
-      date={today}
+      date={date}
       period={'ED'}
-      currentLocation={'BWing'}/>
+      currentLocation={'BWing'}
+      user={user}/>
     );
+    expect(component.find('.whereabouts-title').text()).toEqual('BWing');
+    expect(component.find('.prison-title').text()).toEqual('Shrewsbury');
+    expect(component.find('.whereabouts-date').text()).toEqual('Tuesday 12th June');
+
     const housingLocationSelect = component.find('#housing-location-select');
     expect(housingLocationSelect.some('[value="BWing"]')).toEqual(true);
     // Dig into the DatePicker component
     const searchDate = component.find('[additionalClassName="dateInputResults"]').shallow().shallow().shallow().find('input');
-    expect(searchDate.some(`[value='${today}']`)).toEqual(true);
+    expect(searchDate.some(`[value='${date}']`)).toEqual(true);
     const periodSelect = component.find('#period-select');
     expect(periodSelect.some('[value="ED"]')).toEqual(true);
 
@@ -166,7 +173,8 @@ describe('Offender results component Jira NN-843', () => {
       getHouseblockList={jest.fn()}
       date={today}
       period={'ED'}
-      currentLocation={'BWing'}/>);
+      currentLocation={'BWing'}
+      user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
 
@@ -199,7 +207,8 @@ describe('Offender results component Jira NN-843', () => {
       getHouseblockList={jest.fn()}
       date={oldDate}
       period={'ED'}
-      currentLocation={'BWing'}/>);
+      currentLocation={'BWing'}
+      user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false);
   });
@@ -222,7 +231,8 @@ describe('Offender results component Jira NN-843', () => {
       getHouseblockList={jest.fn()}
       date={oldDate}
       period={'ED'}
-      currentLocation={'BWing'}/>);
+      currentLocation={'BWing'}
+      user={user}/>);
 
     const tr = component.find('tr');
     expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[disabled]')).toEqual(true);
@@ -251,7 +261,8 @@ describe('Offender results component Jira NN-843', () => {
       period={'ED'}
       orderField={'cellLocation'}
       sortOrder={'ASC'}
-      currentLocation={'BWing'}/>);
+      currentLocation={'BWing'}
+      user={user}/>);
 
     expect(component.find('#Location-sort-asc').length).toEqual(1);
     expect(component.find('#Location-sort-desc').length).toEqual(0);
@@ -279,7 +290,8 @@ describe('Offender results component Jira NN-843', () => {
       period={'ED'}
       orderField={'lastName'}
       sortOrder={'DESC'}
-      currentLocation={'BWing'}/>);
+      currentLocation={'BWing'}
+      user={user}/>);
 
     expect(component.find('#Location-sort-asc').length).toEqual(0);
     expect(component.find('#Location-sort-desc').length).toEqual(0);
@@ -308,7 +320,8 @@ describe('Offender results component Jira NN-843', () => {
       period={'ED'}
       orderField={'cellLocation'}
       sortOrder={'ASC'}
-      currentLocation={'BWing'}/>);
+      currentLocation={'BWing'}
+      user={user}/>);
 
     component.find('#Location-sort-asc').simulate('click');
     expect(getHouseblockList).toHaveBeenCalledWith('cellLocation', 'DESC');
