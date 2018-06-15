@@ -58,6 +58,15 @@ class Search extends Component {
           {activityLocations}
         </select></div>);
 
+    const dateSelect = (<div className="pure-u-md-5-12">
+      <label className="form-label" htmlFor="search-date">Date</label>
+      <DatePickerInput
+        handleDateChange={this.props.handleDateChange}
+        additionalClassName="dateInput"
+        value={this.props.date}
+        inputId="search-date"/>
+    </div>);
+
     const periodSelect = (
       <div className="pure-u-md-5-12 ">
         <label className="form-label" htmlFor="period-select">Choose period</label>
@@ -72,23 +81,22 @@ class Search extends Component {
 
     return (<div className="pure-u-md-9-12">
       <h1 className="heading-large">Manage offender whereabouts</h1>
-      <ValidationErrors validationErrors={this.props.validationErrors} fieldName={'searchForm'} />
+      <ValidationErrors validationErrors={this.props.validationErrors} fieldName={'searchForm'}/>
       <form id="searchForm" name="searchForm" className="pure-u-md-12-12 searchForm">
         <div className="pure-u-md-5-12 padding-bottom"> {locationSelect} </div>
         <div className="pure-u-md-1-12 orDiv ">or</div>
         <div className="pure-u-md-5-12 padding-bottom"> {activitySelect} </div>
 
         <div className="pure-u-md-6-12 padding-top padding-bottom">
-          <div className="pure-u-md-5-12">
-            <label className="form-label" htmlFor="search-date">Date</label>
-            <DatePickerInput handleDateChange={this.props.handleDateChange} additionalClassName="dateInput" inputId="search-date"/>
-          </div>
-          <div className="pure-u-md-2-12" />
+          {dateSelect}
+          <div className="pure-u-md-2-12"/>
           {periodSelect}
         </div>
 
         <div className="padding-top-large padding-bottom-large">
-          <button id="continue-button" className="button" type="button" onClick={() => { this.props.onSearch(this.props.history);}}>Continue</button>
+          <button id="continue-button" className="button" type="button" onClick={() => {
+            this.props.onSearch(this.props.history);
+          }}>Continue</button>
         </div>
       </form>
     </div>);
