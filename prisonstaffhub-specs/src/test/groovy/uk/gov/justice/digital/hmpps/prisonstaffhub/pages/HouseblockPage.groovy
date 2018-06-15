@@ -10,16 +10,16 @@ class HouseblockPage extends Page {
     static at = {
         updateButton.displayed
         saveButton[0].displayed
-        printButton[0].displayed
+        saveButton[1].displayed
     }
 
     static content = {
         headingText { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         location { $('#housing-location-select') }
-        date { $('#search-date') }
-        datePicker { $('div.date-picker-component') } // click this to get picker
+        date { $('#search-date') }// click this to get picker
         days { $('td.rdtDay') } // days on picker, click to set date
+        firstDay { $('td.rdtDay[data-value="1"]')[0] } // 1st of month
         period { $('#period-select') }
         form { $('form')}
         updateButton { $('#updateButton') }

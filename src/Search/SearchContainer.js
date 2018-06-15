@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { setSearchLocations } from '../redux/actions/index';
 import { connect } from 'react-redux';
 import Error from '../Error';
 import Search from "./Search";
 import axios from "axios/index";
 import { setSearchActivities, setSearchActivity, resetValidationErrors, setValidationError } from "../redux/actions";
+import { defaultPeriod } from "../redux/reducers";
 
 class SearchContainer extends Component {
   componentWillMount () {
     this.getLocations();
     this.getActivityLocations();
+    this.props.dateDispatch('Today');
+    this.props.periodDispatch(defaultPeriod(moment()));
   }
 
   async getLocations () {

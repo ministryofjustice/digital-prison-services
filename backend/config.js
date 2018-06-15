@@ -2,7 +2,7 @@ module.exports = {
   app: {
     production: process.env.NODE_ENV === 'production',
     notmEndpointUrl: process.env.NN_ENDPOINT_URL || 'http://localhost:3000/',
-    mailTo: process.env.MAIL_TO || 'enquiries@digital.justice.gov.uk'
+    mailTo: process.env.MAIL_TO || 'feedback@digital.justice.gov.uk'
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID
@@ -13,7 +13,7 @@ module.exports = {
     expiryMinutes: process.env.WEB_SESSION_TIMEOUT_IN_MINUTES || 20
   },
   session: {
-    name: 'omic-session',
+    name: 'omic-session', // TODO: is this ok?
     secret: process.env.SESSION_COOKIE_SECRET || 'keyboard cat',
     expiryMinutes: process.env.WEB_SESSION_TIMEOUT_IN_MINUTES || 20
   }

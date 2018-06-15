@@ -23,6 +23,7 @@ class TestFixture {
 
     def loginAs(UserAccount user) {
         currentUser = user
+        elite2Api.stubHealth()
 
         browser.to LoginPage
         elite2Api.stubValidOAuthTokenRequest currentUser
