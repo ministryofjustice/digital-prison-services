@@ -24,7 +24,9 @@ const reflect = (promise) => promise.then(
   }
 );
 
-router.get('/', asyncMiddleware(async (req, res, next) => {
+const healthResult = async () => {
+  let status;
+
   const appInfo = {
     name: packageData.name,
     version: buildVersion,
@@ -39,13 +41,21 @@ router.get('/', asyncMiddleware(async (req, res, next) => {
       elite2Api: results[0].data
     };
 
-    const status = results.reduce((status, health) => Math.max(status, health.status), 200);
-    res.status(status);
+    status = results.reduce((status, health) => Math.max(status, health.status), 200);
   } catch (error) {
     appInfo.api = error.message;
-    res.status((error.response && error.response.status) || 500);
+    status = (error.response && error.response.status) || 500;
   }
-  res.json(appInfo);
+  return { appInfo, status };
+};
+
+router.get('/', asyncMiddleware(async (req, res, next) => {
+  const response = await healthResult();
+  res.status(response.status);
+  res.json(response.appInfo);
 }));
 
-module.exports = router;
+module.exports = {
+  router,
+  healthResult
+};

@@ -20,6 +20,7 @@ class LoginSpecification extends GebReportingSpec {
 
     def "The login page is present"() {
         when: 'I go to the login page'
+        elite2api.stubHealth()
         to LoginPage
 
         then: 'The Login page is displayed'
@@ -28,6 +29,7 @@ class LoginSpecification extends GebReportingSpec {
 
     def "Default URI redirects to Login page"() {
         when: "I go to the website URL using an empty path"
+        elite2api.stubHealth()
         go '/'
 
         then: 'The Login page is displayed'
@@ -36,6 +38,7 @@ class LoginSpecification extends GebReportingSpec {
 
     def "Log in with valid credentials"() {
         given: 'I am on the Login page'
+        elite2api.stubHealth()
         to LoginPage
 
         elite2api.stubValidOAuthTokenRequest(ITAG_USER)
@@ -45,13 +48,14 @@ class LoginSpecification extends GebReportingSpec {
         when: "I login using valid credentials"
         loginAs ITAG_USER, 'password'
 
-        then: 'My credentials are accepted and I am shown the Key worker management page'
+        then: 'My credentials are accepted and I am shown the Home page'
         at DashboardPage
     }
 
     def "Log in attempt with long delay on oauth server"() {
 
         given: 'I am on the Login page'
+        elite2api.stubHealth()
         to LoginPage
 
         and: 'The OAuth server responds with a long delay'
@@ -62,13 +66,14 @@ class LoginSpecification extends GebReportingSpec {
         when: "I attempt to log in using valid credentials"
         loginAs ITAG_USER, 'password'
 
-        then: 'My credentials are accepted and I am shown the Key worker management page'
+        then: 'My credentials are accepted and I am shown the Home page'
         at DashboardPage
     }
 
     def "Unknown user is rejected"() {
 
         given: 'I am on the Login page'
+        elite2api.stubHealth()
         elite2api.stubInvalidOAuthTokenRequest(NOT_KNOWN)
         to LoginPage
 
@@ -84,6 +89,7 @@ class LoginSpecification extends GebReportingSpec {
 
     def "Unknown password is rejected"() {
         given: 'I am on the Login page'
+        elite2api.stubHealth()
         elite2api.stubInvalidOAuthTokenRequest(ITAG_USER, true)
         to LoginPage
 

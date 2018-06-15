@@ -26,10 +26,10 @@
         <header class="page-header">
             <div class="header-content">
                 <div class="left-content">
-                    <a class="link" href="/" title="Key worker management link">
+                    <a class="link" href="/" title="Home link">
                         <div class="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"/></div>
                     </a>
-                    <a class="unstyled-link" href="/" title="Key worker management link">
+                    <a class="unstyled-link" href="/" title="Home link">
                         <span class="logo-text">HMPPS</span>
                         <span class="title">Prison-NOMIS</span>
                     </a>
@@ -41,10 +41,13 @@
                 <div>
                     <h1 class="heading-large">Login</h1>
                     <div class="pure-u-md-8-12">
-                        <% if (authError) { %>
-                        <div class="row">
-                            <div class="error-summary col-sm-6">The username or password you have entered is invalid.
-                            </div>
+                    <% if (!apiUp || authError) { %>
+                            <div class="row">
+                        <% if (apiUp) { %>
+                          <div class="error-summary col-sm-6">The username or password you have entered is invalid.</div>
+                        <% } else { %>
+                          <div class="error-summary col-sm-6">Service unavailable. Please try again later.</div>
+                        <% } %>
                         </div>
                         <% } %>
                         <form method="POST" action="/auth/login">
@@ -67,8 +70,8 @@
         <footer class="FooterContainer">
             <div class="footer-content">
                 <div class="FooterLinksContainer">
-                    <div class="FooterLink">Terms and conditions</div>
-                    <div class="FooterLink">Email <a class="link" href="mailto:<%= mailTo %>"><%= mailTo %></a></div>
+                    <div class="FooterLink"><a href="/terms">Terms and conditions</a></div>
+                    <div class="FooterLink"><a href="mailto:<%= mailTo %>">Email <%= mailTo %></a></div>
                 </div>
             </div>
         </footer>
