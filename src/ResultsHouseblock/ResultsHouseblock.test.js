@@ -155,6 +155,26 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Family Visit 11:00');
   });
 
+  it('should render empty results list correctly', async () => {
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={[]}
+      handleSearch={jest.fn()}
+      handleSave={jest.fn()}
+      handlePrint={jest.fn()}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      getHouseblockList={jest.fn()}
+      period={'ED'}
+      currentLocation={'BWing'}
+      user={user}/>);
+    const tr = component.find('tr');
+    expect(tr.length).toEqual(1); // table header tr only
+    expect(component.find('div.font-small').text()).toEqual('No prisoners found');
+  });
+
   it('should handle buttons correctly', async () => {
     const handleSearch = jest.fn();
     const handleSave = jest.fn();

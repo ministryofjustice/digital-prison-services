@@ -176,7 +176,7 @@ class ResultsHouseblock extends Component {
           <tbody>{offenders}</tbody>
         </table>
         {offenders.length === 0 ?
-          <div className="font-small padding-top-large padding-bottom padding-left">No cells found</div> :
+          <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div> :
           <div className="padding-top"> { buttons } </div>
         }
       </div>
