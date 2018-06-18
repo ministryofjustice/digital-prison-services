@@ -24,7 +24,6 @@ class ResultsHouseblock extends Component {
     return days > 7;
   }
 
-
   sortableColumn (heading, orderField) {
     let triangleImage = '';
     if (this.props.sortOrder === 'ASC') {
@@ -42,6 +41,16 @@ class ResultsHouseblock extends Component {
         this.props.getHouseblockList(orderField, 'ASC');
       }}>{heading}</a> :
       <div>{heading} {triangleImage}</div>;
+  }
+
+  getDescription (event) {
+    if (event.event === 'PA') {
+      return event.comment;
+    }
+    if (event.comment) {
+      return event.eventDescription + ' - ' + event.comment;
+    }
+    return event.eventDescription;
   }
 
   render () {
@@ -125,10 +134,10 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
           <td className="row-gutters">{mainActivity.cellLocation}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
-          <td className="row-gutters">{mainActivity.comment}</td>
+          <td className="row-gutters">{this.getDescription(mainActivity)}</td>
           <td className="row-gutters small-font">{row.others &&
           <ul>{row.others.map((e, index) => {
-            return <li key={mainActivity.offenderNo + '_' + index}>{e.comment} {getHoursMinutes(e.startTime)}</li>;
+            return <li key={mainActivity.offenderNo + '_' + index}>{this.getDescription(e)} {getHoursMinutes(e.startTime)}</li>;
           })}</ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">

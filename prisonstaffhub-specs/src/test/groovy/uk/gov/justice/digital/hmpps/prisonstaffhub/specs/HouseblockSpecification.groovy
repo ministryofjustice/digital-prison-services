@@ -55,7 +55,7 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts2 = tableRows*.text()
         // Check order is by name
         texts2[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
-        texts2[1].contains("Friends 18:00")
+        texts2[1].contains("Visits - Friends 18:00")
         texts2[2].contains("Baa, Fred LEI-A-1-3 A1234AC Chapel")
         texts2[3].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
     }
