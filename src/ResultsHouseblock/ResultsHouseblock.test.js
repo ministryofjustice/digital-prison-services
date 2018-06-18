@@ -24,9 +24,9 @@ const response = [
       firstName: "ARTHUR",
       lastName: "ANDERSON",
       cellLocation: "LEI-A-1-1",
-      event: "CHAP",
+      event: "PA",
+      eventDescription: "Prison Activities",
       comment: "Chapel",
-      eventDescription: "comment11",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     },
@@ -36,8 +36,8 @@ const response = [
       lastName: "ANDERSON",
       cellLocation: "LEI-A-1-1",
       event: "VISIT",
+      eventDescription: "Visits",
       comment: "Official Visit",
-      eventDescription: "comment18",
       startTime: "2017-10-15T11:00:00",
       endTime: "2017-10-15T11:30:00"
     },
@@ -46,11 +46,21 @@ const response = [
       firstName: "ARTHUR",
       lastName: "ANDERSON",
       cellLocation: "LEI-A-1-1",
-      event: "GYM",
+      event: "PA",
+      eventDescription: "Prison Activities",
       comment: "The gym, appointment",
-      eventDescription: "comment14",
       startTime: "2017-10-15T17:00:00",
       endTime: "2017-10-15T17:30:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      comment: "Appt details",
+      event: "MEDE",
+      eventDescription: "Medical - Dentist",
+      startTime: "2018-06-18T11:40:00"
     }]
   },
   {
@@ -59,9 +69,9 @@ const response = [
       firstName: "MICHAEL",
       lastName: "SMITH",
       cellLocation: "LEI-A-1-2",
-      event: "CHAP",
+      event: "PA",
+      eventDescription: "Prison Activities",
       comment: "Chapel Act",
-      eventDescription: "comment12",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     }
@@ -72,9 +82,9 @@ const response = [
       firstName: "FRED",
       lastName: "QUIMBY",
       cellLocation: "LEI-A-1-3",
-      event: "CHAP",
+      event: "PA",
+      eventDescription: "Prison Activities",
       comment: "Chapel Activity",
-      eventDescription: "comment13",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     },
@@ -85,9 +95,9 @@ const response = [
         lastName: "QUIMBY",
         cellLocation: "LEI-A-1-3",
         event: "VISIT",
+        eventDescription: "Visits",
         comment: "Family Visit",
-        eventDescription: "comment19",
-        startTime: "2017-10-15T11:00:00",
+        startTime: "2017-10-15T11:11:00",
         endTime: "2017-10-15T18:30:00"
       }
     ] }
@@ -134,8 +144,9 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('LEI-A-1-1');
     expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Official Visit 11:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Official Visit 11:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('The gym, appointment 17:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('Medical - Dentist - Appt details 11:40');
     expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={false}'));
@@ -152,7 +163,27 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(3).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('LEI-A-1-3');
     expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Family Visit 11:00');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11');
+  });
+
+  it('should render empty results list correctly', async () => {
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={[]}
+      handleSearch={jest.fn()}
+      handleSave={jest.fn()}
+      handlePrint={jest.fn()}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      getHouseblockList={jest.fn()}
+      period={'ED'}
+      currentLocation={'BWing'}
+      user={user}/>);
+    const tr = component.find('tr');
+    expect(tr.length).toEqual(1); // table header tr only
+    expect(component.find('div.font-small').text()).toEqual('No prisoners found');
   });
 
   it('should handle buttons correctly', async () => {

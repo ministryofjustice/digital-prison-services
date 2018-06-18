@@ -9,9 +9,9 @@ class HouseblockResponse {
             firstName       : "ARTHUR",
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
-            event           : "PROG",
+            event           : "PA",
+            eventDescription: "Prison Activities",
             comment         : "Woodwork",
-            eventDescription: "comment12",
             startTime       : "2017-10-15T17:00:00",
             endTime         : "2017-10-15T18:30:00"
     ];
@@ -21,8 +21,8 @@ class HouseblockResponse {
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
             event           : "VISIT",
+            eventDescription: "Visits",
             comment         : "Friends",
-            eventDescription: "comment14",
             startTime       : "2017-10-15T18:00:00",
             endTime         : "2017-10-15T18:30:00"
     ];
@@ -31,9 +31,9 @@ class HouseblockResponse {
             firstName       : "EUGENE",
             lastName        : "BALOG",
             cellLocation    : "LEI-A-1-2",
-            event           : "PROG",
-            comment: "TV Repairs",
-            eventDescription         : "comment17",
+            event           : "PA",
+            eventDescription: "Prison Activities",
+            comment         : "TV Repairs",
             startTime       : "2017-10-15T17:45:00",
             endTime         : "2017-10-15T18:30:00"
     ];
@@ -42,9 +42,9 @@ class HouseblockResponse {
             firstName       : "FRED",
             lastName        : "BAA",
             cellLocation    : "LEI-A-1-3",
-            event           : "CHAP",
-            comment: "Chapel",
-            eventDescription         : "comment18",
+            event           : "PA",
+            eventDescription: "Prison Activities",
+            comment         : "Chapel",
             startTime       : "2017-10-15T11:45:00",
             endTime         : "2017-10-15T13:30:00"
     ];
