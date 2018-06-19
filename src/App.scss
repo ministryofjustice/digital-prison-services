@@ -1,6 +1,10 @@
 @import "colours/palette";
 @import "design-patterns/buttons";
 
+body {
+  //enable background colours on print by default
+  -webkit-print-color-adjust: exact !important;
+}
 
 .App {
   text-align: center;
@@ -68,6 +72,9 @@ select[id^='keyworker-select']{
 /*  Define the background color for all the ODD background rows  */
 table tr:nth-child(even){
   background: #f6f6f6;
+  @media print {
+    background: darken(#f6f6f6,5%);
+  }
 }
 
 .dateFilterInput {

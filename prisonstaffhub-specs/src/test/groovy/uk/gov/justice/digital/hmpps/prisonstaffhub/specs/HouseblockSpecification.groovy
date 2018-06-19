@@ -39,9 +39,9 @@ class HouseblockSpecification extends GebReportingSpec {
         nameOrderLink.text() == 'Name'
         // Check order is by cell
         def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
-        texts[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
-        texts[3].contains("Baa, Fred LEI-A-1-3 A1234AC Chapel")
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
+        texts[2].contains("Balog, Eugene A-1-2 A1234AB TV Repairs")
+        texts[3].contains("Baa, Fred A-1-3 A1234AC Chapel")
 
         when: "I order by name"
         nameOrderLink.click()
@@ -54,10 +54,10 @@ class HouseblockSpecification extends GebReportingSpec {
 
         def texts2 = tableRows*.text()
         // Check order is by name
-        texts2[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
+        texts2[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
         texts2[1].contains("Visits - Friends 18:00")
-        texts2[2].contains("Baa, Fred LEI-A-1-3 A1234AC Chapel")
-        texts2[3].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+        texts2[2].contains("Baa, Fred A-1-3 A1234AC Chapel")
+        texts2[3].contains("Balog, Eugene A-1-2 A1234AB TV Repairs")
     }
 
     def "The updated houseblock list is displayed"() {
@@ -86,8 +86,8 @@ class HouseblockSpecification extends GebReportingSpec {
         form['date'] == firstOfMonthDisplayFormat
         form['period-select'] == 'PM'
         def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur LEI-A-1-1 A1234AA Woodwork")
-        texts[2].contains("Balog, Eugene LEI-A-1-2 A1234AB TV Repairs")
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
+        texts[2].contains("Balog, Eugene A-1-2 A1234AB TV Repairs")
 
         when: "I go to the search page afresh"
         browser.to SearchPage

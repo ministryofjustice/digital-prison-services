@@ -84,6 +84,11 @@ td.small-font {
 }
 
 @media print {
+
+  tbody > tr > td:nth-of-type(7) {
+    padding-right: .7em !important;
+  }
+
   .FooterContainer, .page-header, img, #buttons, #updateButton, .no-print {
     display: none;
   }
@@ -117,20 +122,12 @@ td.small-font {
     margin-left: 15px;
     margin-right: 15px;
   }
-  // Re-introduce these normally screen-only classes for the printed select boxes
-  .pure-u-md-2-12 {
-    display: inline-block;
-    width: 16.7%;
-  }
-  .pure-u-md-4-12 {
-    display: inline-block;
-    width: 33.3%;
-  }
 
   th.rotate {
     height: 5em;
     padding: 0 !important;
   }
+
   th.rotate > div {
     transform:
             /* Magic Numbers */
@@ -138,6 +135,7 @@ td.small-font {
             rotate(270deg);
     width: 15px;
   }
+
   th.rotate > div > span {
     padding: 0 !important;
   }
@@ -145,6 +143,7 @@ td.small-font {
   .checkbox-column {
     width: 30px;
   }
+
   div.multiple-choice {
     padding: 0;
   }
