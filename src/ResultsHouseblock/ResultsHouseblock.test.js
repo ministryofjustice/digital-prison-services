@@ -124,6 +124,7 @@ describe('Offender results component Jira NN-843', () => {
       date={date}
       period={'ED'}
       currentLocation={'BWing'}
+      currentAgency={'LEI'}
       user={user}/>
     );
     expect(component.find('.whereabouts-title').text()).toEqual('BWing');
