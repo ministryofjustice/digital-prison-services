@@ -130,3 +130,10 @@ export const setHouseblockSortOrder = (sortOrder) => {
     sortOrder
   };
 };
+
+export const setActivityData = (data) => {
+  return {
+    type: ActionTypes.SET_ACTIVITY_DATA,
+    data
+  };
+};

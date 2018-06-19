@@ -1,18 +1,19 @@
+
 const express = require('express');
 const router = express.Router();
 const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 const log = require('../log');
-const moment = require('moment');
+const switchDateFormat = require('../utils');
 
 router.get('/', asyncMiddleware(async (req, res) => {
   const viewModel = await getHouseblockList(req, res);
   res.json(viewModel);
 }));
 
-const getHouseblockList = (async (reqIn, res) => {
+const getHouseblockList = (async (req, res) => {
   // once request is not used passed to downstream services we wont have to manipulate it in this dodgy way
-  const req = switchDateFormat(reqIn);
+  switchDateFormat(req);
 
   const events = await elite2Api.getHouseblockList(req, res);
   // Returns array ordered by inmate/cell or name, then start time
@@ -35,11 +36,5 @@ const getHouseblockList = (async (reqIn, res) => {
   }
   return rows;
 });
-
-function switchDateFormat (req) {
-  const displayDate = req.query.date;
-  if (displayDate) req.query.date = moment(displayDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
-  return req;
-}
 
 module.exports = { router, getHouseblockList };

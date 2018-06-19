@@ -157,4 +157,12 @@ describe('actions', () => {
     };
     expect(actions.setHouseblockSortOrder('ASC')).toEqual(expectedAction);
   });
+
+  it('should create an action to save the activity list data', () => {
+    const expectedAction = {
+      type: types.SET_ACTIVITY_DATA,
+      data: [{ stuff: 'stuff' }]
+    };
+    expect(actions.setActivityData([{ stuff: 'stuff' }])).toEqual(expectedAction);
+  });
 });
