@@ -86,7 +86,7 @@ td.small-font {
 @media print {
 
   tbody > tr > td:nth-of-type(7) {
-    padding-right: .7em !important;
+    padding-right: .7em;
   }
 
   .FooterContainer, .page-header, img, #buttons, #updateButton, .no-print {
