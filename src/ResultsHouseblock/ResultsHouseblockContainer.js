@@ -71,7 +71,8 @@ const mapStateToProps = state => {
     houseblockData: state.houseblock.data,
     loaded: state.app.loaded,
     orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder
+    sortOrder: state.houseblock.sortOrder,
+    currentAgency: state.app.user.activeCaseLoadId,
   };
 };
 

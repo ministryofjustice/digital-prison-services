@@ -127,10 +127,13 @@ class ResultsHouseblock extends Component {
 
     const readOnly = this.olderThan7Days();
 
-    const stripAgencyPrefix = (location) => {
+    const stripAgencyPrefix = (location, agency) => {
       const parts = location && location.split('-');
-      if (parts.length > 0) {
-        return location.substring(parts[0].length + 1, location.length);
+      if (parts && parts.length > 0) {
+        const index = parts.findIndex(p => p === agency);
+        if (index >= 0) {
+          return location.substring(parts[index].length + 1, location.length);
+        }
       }
       return location;
     };
@@ -140,7 +143,7 @@ class ResultsHouseblock extends Component {
       return (
         <tr key={mainActivity.offenderNo} className="row-gutters">
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
-          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation)}</td>
+          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.currentAgency)}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
           <td className="row-gutters">{this.getDescription(mainActivity)}</td>
           <td className="row-gutters small-font">{row.others &&
