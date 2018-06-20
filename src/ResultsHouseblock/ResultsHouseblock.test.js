@@ -109,7 +109,9 @@ const user = { activeCaseLoadId: 'SYI', caseLoadOptions: [{ caseLoadId: 'XXX', d
 
 describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
-    const date = moment('2018-06-12').format('DD/MM/YYYY');
+    const date = moment().days(7).format('DD/MM/YYYY');
+    const longDateFormat = moment().days(7).format('dddd Do MMMM');
+
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
       locations={locations}
@@ -129,7 +131,7 @@ describe('Offender results component Jira NN-843', () => {
     );
     expect(component.find('.whereabouts-title').text()).toEqual('BWing');
     expect(component.find('.prison-title').text()).toEqual('Shrewsbury');
-    expect(component.find('.whereabouts-date').text()).toEqual('Tuesday 12th June');
+    expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat); //'Tuesday 12th June'
 
     const housingLocationSelect = component.find('#housing-location-select');
     expect(housingLocationSelect.some('[value="BWing"]')).toEqual(true);
@@ -337,6 +339,7 @@ describe('Offender results component Jira NN-843', () => {
     const getHouseblockList = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
+
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
       locations={locations}

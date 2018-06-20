@@ -219,7 +219,8 @@ ResultsHouseblock.propTypes = {
   locations: PropTypes.array,
   getHouseblockList: PropTypes.func.isRequired,
   orderField: PropTypes.string,
-  sortOrder: PropTypes.string
+  sortOrder: PropTypes.string,
+  currentAgency: PropTypes.string.isRequired
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);
