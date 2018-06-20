@@ -17,9 +17,9 @@ class ResultsHouseblockContainer extends Component {
         await this.getLocations();
       }
       if (this.props.currentLocation) {
-          this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
-      }else {
-          this.props.history.push('/whereaboutssearch');
+        this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
+      } else {
+        this.props.history.push('/whereaboutssearch');
       }
     } catch (error) {
       this.handleError(error);
