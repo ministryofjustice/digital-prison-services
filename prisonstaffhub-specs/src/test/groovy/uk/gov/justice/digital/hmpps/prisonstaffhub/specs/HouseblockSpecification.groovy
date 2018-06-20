@@ -98,4 +98,21 @@ class HouseblockSpecification extends GebReportingSpec {
         date.value() == 'Today'
         period.value() == this.initialPeriod
     }
+
+    def "should navigate to the whereabouts search on a page refresh"() {
+        given: 'I am on the houseblock list page'
+        fixture.toSearch()
+        this.initialPeriod = period.value()
+        def today = new Date().format('YYYY-MM-dd')
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
+        form['period-select'] = 'PM'
+        continueButton.click()
+        at HouseblockPage
+
+        when: "I refresh the page"
+        driver.navigate().refresh();
+
+        then: "I should be redirected to the search page"
+        at SearchPage
+    }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
 import { setSearchLocations } from "../redux/actions";
@@ -15,7 +16,11 @@ class ResultsHouseblockContainer extends Component {
       if (!this.props.locations) {
         await this.getLocations();
       }
-      this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
+      if (this.props.currentLocation) {
+          this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
+      }else {
+          this.props.history.push('/whereaboutssearch');
+      }
     } catch (error) {
       this.handleError(error);
     }
@@ -52,6 +57,7 @@ class ResultsHouseblockContainer extends Component {
 }
 
 ResultsHouseblockContainer.propTypes = {
+  history: PropTypes.object,
   error: PropTypes.string,
   agencyId: PropTypes.string.isRequired,
   locations: PropTypes.array,
@@ -71,6 +77,7 @@ const mapStateToProps = state => {
     houseblockData: state.houseblock.data,
     loaded: state.app.loaded,
     orderField: state.houseblock.orderField,
+    currentLocation: state.search.location,
     sortOrder: state.houseblock.sortOrder,
     currentAgency: state.app.user.activeCaseLoadId,
   };
@@ -82,4 +89,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResultsHouseblockContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsHouseblockContainer));
