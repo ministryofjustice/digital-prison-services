@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const elite2Api = require('../elite2Api');
@@ -11,32 +10,24 @@ router.get('/', asyncMiddleware(async (req, res) => {
 }));
 
 const getActivityList = async (req, res) => {
-  // once request is not used passed to downstream services we wont have to manipulate it in this dodgy way
-  switchDateFormat(req);
-  // if (!req.query) {
-  //   req.query = {};
-  // }
-  req.query.usage = 'PROG';
-  const resp1 = await elite2Api.getActivityList(req, res);
-  const activities = resp1.data;
-  req.query.usage = 'VISIT';
-  const resp2 = await elite2Api.getActivityList(req, res);
-  const visits = resp2.data;
-  req.query.usage = 'APP';
-  const resp3 = await elite2Api.getActivityList(req, res);
-  const appointments = resp3.data;
+  let { agencyId, locationId, date, timeSlot } = req.query;
+  date = switchDateFormat(date);
 
-  if (activities) {
-    for (const row of activities) {
-      if (visits) {
-        row.visits = visits.filter(details => details.offenderNo === row.offenderNo);
+  const activities = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'PROG', date, timeSlot }, res);
+  const visits = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'VISIT', date, timeSlot }, res);
+  const appointments = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'APP', date, timeSlot }, res);
+
+  if (activities.data) {
+    for (const row of activities.data) {
+      if (visits.data) {
+        row.visits = visits.data.filter(details => details.offenderNo === row.offenderNo);
       }
-      if (appointments) {
-        row.appointments = appointments.filter(details => details.offenderNo === row.offenderNo);
+      if (appointments.data) {
+        row.appointments = appointments.data.filter(details => details.offenderNo === row.offenderNo);
       }
     }
   }
-  return activities;
+  return activities.data;
 };
 
 module.exports = { router, getActivityList };

@@ -143,7 +143,7 @@ class ResultsHouseblock extends Component {
       return (
         <tr key={mainActivity.offenderNo} className="row-gutters">
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
-          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.currentAgency)}</td>
+          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
           <td className="row-gutters">{this.getDescription(mainActivity)}</td>
           <td className="row-gutters small-font">{row.others &&
@@ -184,8 +184,7 @@ class ResultsHouseblock extends Component {
           {periodSelect}
           <button id="updateButton" className="button greyButton margin-left margin-top" type="button" onClick={() => {
             this.props.handleSearch(this.props.history);
-          }}>Update
-          </button>
+          }}>Update</button>
         </div>
         <hr/>
         {buttons}
@@ -195,7 +194,7 @@ class ResultsHouseblock extends Component {
           <thead>{headings}</thead>
           <tbody>{offenders}</tbody>
         </table>
-        {offenders.length === 0 ?
+        {!offenders || offenders.length === 0 ?
           <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div> :
           <div className="padding-top"> { buttons } </div>
         }
@@ -218,10 +217,9 @@ ResultsHouseblock.propTypes = {
   currentLocation: PropTypes.string,
   locations: PropTypes.array,
   getHouseblockList: PropTypes.func.isRequired,
-  currentAgency: PropTypes.string,
+  agencyId: PropTypes.string,
   orderField: PropTypes.string,
-  sortOrder: PropTypes.string,
-  currentAgency: PropTypes.string.isRequired
+  sortOrder: PropTypes.string
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);

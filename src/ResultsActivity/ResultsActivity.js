@@ -17,7 +17,7 @@ class ResultsActivity extends Component {
   }
 
   getActivityName () {
-    const filter = this.props.activities.filter(a => a.locationId + "" === this.props.activity);
+    const filter = this.props.activities.filter(a => a.locationId === Number(this.props.activity));
     return filter && filter.length > 0 && filter[0].userDescription;
   }
 
@@ -100,12 +100,23 @@ class ResultsActivity extends Component {
 
     const readOnly = this.olderThan7Days(this.props.date);
 
+    const stripAgencyPrefix = (location, agency) => {
+      const parts = location && location.split('-');
+      if (parts && parts.length > 0) {
+        const index = parts.findIndex(p => p === agency);
+        if (index >= 0) {
+          return location.substring(parts[index].length + 1, location.length);
+        }
+      }
+      return location;
+    };
+
     const offenders = this.props.activityData && this.props.activityData.map((row, index) => {
       const mainActivity = row;
       return (
         <tr key={mainActivity.offenderNo} className="row-gutters">
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
-          <td className="row-gutters">{mainActivity.cellLocation}</td>
+          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
           <td className="row-gutters small-font">{(row.visits || row.appointments) &&
           <ul>{row.visits && row.visits.map((e, index) => {
@@ -170,11 +181,10 @@ ResultsActivity.propTypes = {
   date: PropTypes.string,
   period: PropTypes.string,
   activityData: PropTypes.array,
+  agencyId: PropTypes.string,
   activity: PropTypes.string,
   activities: PropTypes.array,
-  getActivityList: PropTypes.func.isRequired,
-  orderField: PropTypes.string,
-  sortOrder: PropTypes.string
+  getActivityList: PropTypes.func.isRequired
 };
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity);

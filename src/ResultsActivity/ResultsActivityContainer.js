@@ -11,7 +11,7 @@ class ResultsActivityContainer extends Component {
     try {
       this.handlePrint = this.handlePrint.bind(this);
       this.handleSave = this.handleSave.bind(this);
-      this.props.getActivityList(this.props.orderField, this.props.sortOrder);
+      this.props.getActivityList();
     } catch (error) {
       this.handleError(error);
     }
@@ -43,8 +43,6 @@ ResultsActivityContainer.propTypes = {
   activitiesDispatch: PropTypes.func.isRequired,
   getActivityList: PropTypes.func,
   activityDataDispatch: PropTypes.func,
-  orderField: PropTypes.string,
-  sortOrder: PropTypes.string,
   loaded: PropTypes.bool
 };
 
@@ -52,9 +50,7 @@ const mapStateToProps = state => {
   return {
     activities: state.search.activities,
     activityData: state.houseblock.data,
-    loaded: state.app.loaded,
-    orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder
+    loaded: state.app.loaded
   };
 };
 

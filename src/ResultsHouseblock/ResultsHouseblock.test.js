@@ -109,8 +109,9 @@ const user = { activeCaseLoadId: 'SYI', caseLoadOptions: [{ caseLoadId: 'XXX', d
 
 describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
-    const date = moment().days(7).format('DD/MM/YYYY');
-    const longDateFormat = moment().days(7).format('dddd Do MMMM');
+    const aFewDaysAgo = moment().subtract(3, 'days');
+    const date = aFewDaysAgo.format('DD/MM/YYYY');
+    const longDateFormat = aFewDaysAgo.format('dddd Do MMMM');
 
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
@@ -126,7 +127,7 @@ describe('Offender results component Jira NN-843', () => {
       date={date}
       period={'ED'}
       currentLocation={'BWing'}
-      currentAgency={'LEI'}
+      agencyId={'LEI'}
       user={user}/>
     );
     expect(component.find('.whereabouts-title').text()).toEqual('BWing');
@@ -183,6 +184,7 @@ describe('Offender results component Jira NN-843', () => {
       getHouseblockList={jest.fn()}
       period={'ED'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
     const tr = component.find('tr');
     expect(tr.length).toEqual(1); // table header tr only
@@ -208,6 +210,7 @@ describe('Offender results component Jira NN-843', () => {
       date={today}
       period={'ED'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
@@ -242,6 +245,7 @@ describe('Offender results component Jira NN-843', () => {
       date={oldDate}
       period={'ED'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false);
@@ -266,6 +270,7 @@ describe('Offender results component Jira NN-843', () => {
       date={oldDate}
       period={'ED'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
 
     const tr = component.find('tr');
@@ -296,6 +301,7 @@ describe('Offender results component Jira NN-843', () => {
       orderField={'cellLocation'}
       sortOrder={'ASC'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
 
     expect(component.find('#Location-sort-asc').length).toEqual(1);
@@ -325,6 +331,7 @@ describe('Offender results component Jira NN-843', () => {
       orderField={'lastName'}
       sortOrder={'DESC'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
 
     expect(component.find('#Location-sort-asc').length).toEqual(0);
@@ -356,6 +363,7 @@ describe('Offender results component Jira NN-843', () => {
       orderField={'cellLocation'}
       sortOrder={'ASC'}
       currentLocation={'BWing'}
+      agencyId={'LEI'}
       user={user}/>);
 
     component.find('#Location-sort-asc').simulate('click');

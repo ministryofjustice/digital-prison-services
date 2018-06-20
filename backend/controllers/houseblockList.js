@@ -13,7 +13,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
 
 const getHouseblockList = (async (req, res) => {
   // once request is not used passed to downstream services we wont have to manipulate it in this dodgy way
-  switchDateFormat(req);
+  req.query.date = switchDateFormat(req.query.date);
 
   const events = await elite2Api.getHouseblockList(req, res);
   // Returns array ordered by inmate/cell or name, then start time

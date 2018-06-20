@@ -51,12 +51,12 @@ const getHouseblockList = (req, res) => gateway.getRequest({
   url: `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}`
 });
 
-const getActivityList = (req, res) => gateway.getRequest({
+const getActivityList = (req, { agencyId, locationId, usage, date, timeSlot }, res) => gateway.getRequest({
   req,
   res,
-  params: { date: req.query.date, timeSlot: req.query.timeSlot },
+  params: { date, timeSlot },
   method: 'get',
-  url: `${eliteApiUrl}api/schedules/${req.query.agencyId}/locations/${req.query.locationId}/usage/${req.query.usage}`
+  url: `${eliteApiUrl}api/schedules/${agencyId}/locations/${locationId}/usage/${usage}`
 });
 
 const searchActivityLocations = (req, res) => gateway.getRequest({

@@ -1,11 +1,10 @@
-
 const moment = require('moment');
 
-const switchDateFormat = req => {
-  const displayDate = req.query.date;
+const switchDateFormat = displayDate => {
   if (displayDate) {
-    req.query.date = moment(displayDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    return moment(displayDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
   }
+  return displayDate;
 };
 
 module.exports = switchDateFormat;

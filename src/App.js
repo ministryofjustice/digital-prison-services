@@ -183,31 +183,22 @@ class App extends React.Component {
     this.props.setLoadedDispatch(true);
   }
 
-  async getActivityList (orderField, sortOrder) {
+  async getActivityList () {
     try {
       this.props.resetErrorDispatch();
       this.props.setLoadedDispatch(false);
-      if (orderField) this.props.orderDispatch(orderField);
-      if (sortOrder) this.props.sortOrderDispatch(sortOrder);
       let date = this.props.date;
       if (date === 'Today') { // replace placeholder text
         date = moment().format('DD/MM/YYYY');
       }
-      let config = {
+      const config = {
         params: {
           agencyId: this.props.agencyId,
           locationId: this.props.activity,
           date: date,
           timeSlot: this.props.period
-        } };
-      if (orderField) {
-        config.headers = {
-          'Sort-Fields': orderField
-        };
-        if (sortOrder) {
-          config.headers['Sort-Order'] = sortOrder;
         }
-      }
+      };
       const response = await axios.get('/api/activitylist', config);
       this.props.activityDataDispatch(response.data);
     } catch (error) {
@@ -279,15 +270,18 @@ App.propTypes = {
   resetErrorDispatch: PropTypes.func,
   setMessageDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
+  activityDispatch: PropTypes.func.isRequired,
   dateDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   agencyId: PropTypes.string,
   currentLocation: PropTypes.string,
+  activity: PropTypes.string,
   date: PropTypes.string,
   period: PropTypes.string,
   orderField: PropTypes.string,
   sortOrder: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired,
+  activityDataDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired
