@@ -63,16 +63,11 @@ class SearchContainer extends Component {
     return true;
   }
 
-
-  handleActivityChange (event) {
-    this.props.activityDispatch(event.target.value);
-  }
-
   render () {
     if (this.props.error) {
       return <Error {...this.props} />;
     }
-    return (<Search handleActivityChange={(event) => this.handleActivityChange(event)} onSearch={(history) => this.onSearch(history)} {...this.props}/>);
+    return (<Search onSearch={(history) => this.onSearch(history)} {...this.props}/>);
   }
 }
 

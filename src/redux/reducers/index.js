@@ -144,6 +144,10 @@ export function houseblock (state = houseblockInitialState, action) {
       return { ...state,
         sortOrder: action.sortOrder
       };
+    case ActionTypes.SET_ACTIVITY_DATA:
+      return { ...state,
+        data: action.data
+      };
     default:
       return state;
   }

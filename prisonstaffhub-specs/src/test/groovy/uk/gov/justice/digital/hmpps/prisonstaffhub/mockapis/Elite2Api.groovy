@@ -157,7 +157,7 @@ class Elite2Api extends WireMockRule {
 
     void stubActivityLocations(Caseload caseload) {
         this.stubFor(
-                get("/api/agencies/${caseload.id}/locations?eventType=PROG")
+                get("/api/agencies/${caseload.id}/locations?eventType=APP")
                         .willReturn(
                         aResponse()
                                 .withBody(ActivityLocationsResponse.response)

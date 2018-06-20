@@ -2,25 +2,32 @@ const express = require('express');
 const router = express.Router();
 const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
+const switchDateFormat = require('../utils');
 
 router.get('/', asyncMiddleware(async (req, res) => {
   const viewModel = await getActivityList(req, res);
   res.json(viewModel);
 }));
 
-const getActivityList = (async (req, res) => {
-  req.query.usage = 'PROD';
-  const activities = await elite2Api.getActivityList(req, res).data;
-  req.query.usage = 'VISIT';
-  const visits = await elite2Api.getActivityList(req, res).data;
-  req.query.usage = 'APP';
-  const appointments = await elite2Api.getActivityList(req, res).data;
+const getActivityList = async (req, res) => {
+  let { agencyId, locationId, date, timeSlot } = req.query;
+  date = switchDateFormat(date);
 
-  for (const row of activities) {
-    row.visits = visits.filter(details => details.offenderNo === row.offenderNo);
-    row.appointments = appointments.filter(details => details.offenderNo === row.offenderNo);
+  const activities = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'PROG', date, timeSlot }, res);
+  const visits = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'VISIT', date, timeSlot }, res);
+  const appointments = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'APP', date, timeSlot }, res);
+
+  if (activities.data) {
+    for (const row of activities.data) {
+      if (visits.data) {
+        row.visits = visits.data.filter(details => details.offenderNo === row.offenderNo);
+      }
+      if (appointments.data) {
+        row.appointments = appointments.data.filter(details => details.offenderNo === row.offenderNo);
+      }
+    }
   }
-  return activities;
-});
+  return activities.data;
+};
 
 module.exports = { router, getActivityList };

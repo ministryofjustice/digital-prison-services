@@ -29,8 +29,9 @@ import {
   setHouseblockData, setHouseblockSortOrder, setHouseblockOrderField, setLoaded,
   setSearchDate,
   setSearchLocation,
-  setSearchPeriod
+  setSearchPeriod, setActivityData, setSearchActivity
 } from "./redux/actions";
+import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
 const axios = require('axios');
 
@@ -44,6 +45,7 @@ class App extends React.Component {
     this.displayError = this.displayError.bind(this);
     this.handleError = this.handleError.bind(this);
     this.getHouseblockList = this.getHouseblockList.bind(this);
+    this.getActivityList = this.getActivityList.bind(this);
   }
 
   async componentWillMount () {
@@ -118,6 +120,10 @@ class App extends React.Component {
     this.props.locationDispatch(event.target.value);
   }
 
+  handleActivityChange (event) {
+    this.props.activityDispatch(event.target.value);
+  }
+
   handleDateChange (date) {
     if (date) {
       this.props.dateDispatch(moment(date).format('DD/MM/YYYY'));
@@ -129,10 +135,18 @@ class App extends React.Component {
   }
 
   handleSearch (history) {
-    if (history.location.pathname === '/whereaboutsresultshouseblock') {
-      this.getHouseblockList(this.props.orderField, this.props.sortOrder);
-    } else {
-      history.push('/whereaboutsresultshouseblock');
+    if (this.props.currentLocation && this.props.currentLocation !== '--') {
+      if (history.location.pathname === '/whereaboutsresultshouseblock') {
+        this.getHouseblockList(this.props.orderField, this.props.sortOrder);
+      } else {
+        history.push('/whereaboutsresultshouseblock');
+      }
+    } else if (this.props.activity) {
+      if (history.location.pathname === '/whereaboutsresultsactivity') {
+        this.getActivityList(this.props.orderField, this.props.sortOrder);
+      } else {
+        history.push('/whereaboutsresultsactivity');
+      }
     }
   }
 
@@ -168,17 +182,48 @@ class App extends React.Component {
     }
     this.props.setLoadedDispatch(true);
   }
+
+  async getActivityList () {
+    try {
+      this.props.resetErrorDispatch();
+      this.props.setLoadedDispatch(false);
+      let date = this.props.date;
+      if (date === 'Today') { // replace placeholder text
+        date = moment().format('DD/MM/YYYY');
+      }
+      const config = {
+        params: {
+          agencyId: this.props.agencyId,
+          locationId: this.props.activity,
+          date: date,
+          timeSlot: this.props.period
+        }
+      };
+      const response = await axios.get('/api/activitylist', config);
+      this.props.activityDataDispatch(response.data);
+    } catch (error) {
+      this.handleError(error);
+    }
+    this.props.setLoadedDispatch(true);
+  }
+
   render () {
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
       <Route exact path="/whereaboutssearch" render={() => (<SearchContainer handleError={this.handleError}
         handleLocationChange={(event) => this.handleLocationChange(event)}
+        handleActivityChange={(event) => this.handleActivityChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
       <Route exact path="/whereaboutsresultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
         getHouseblockList = {this.getHouseblockList}
         handleLocationChange={(event) => this.handleLocationChange(event)}
+        handleDateChange={(event) => this.handleDateChange(event)}
+        handlePeriodChange={(event) => this.handlePeriodChange(event)}
+        handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
+      <Route exact path="/whereaboutsresultsactivity" render={() => (<ResultsActivityContainer handleError={this.handleError}
+        getActivityList = {this.getActivityList}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
@@ -225,15 +270,18 @@ App.propTypes = {
   resetErrorDispatch: PropTypes.func,
   setMessageDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
+  activityDispatch: PropTypes.func.isRequired,
   dateDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   agencyId: PropTypes.string,
   currentLocation: PropTypes.string,
+  activity: PropTypes.string,
   date: PropTypes.string,
   period: PropTypes.string,
   orderField: PropTypes.string,
   sortOrder: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired,
+  activityDataDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired
@@ -248,6 +296,7 @@ const mapStateToProps = state => {
     user: state.app.user,
     shouldShowTerms: state.app.shouldShowTerms,
     currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
+    activity: state.search.activity,
     date: state.search.date,
     period: state.search.period,
     agencyId: state.app.user.activeCaseLoadId,
@@ -266,9 +315,11 @@ const mapDispatchToProps = dispatch => {
     resetErrorDispatch: () => dispatch(resetError()),
     setMessageDispatch: (message) => dispatch(setMessage(message)),
     locationDispatch: text => dispatch(setSearchLocation(text)),
+    activityDispatch: text => dispatch(setSearchActivity(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
     periodDispatch: text => dispatch(setSearchPeriod(text)),
     houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
+    activityDataDispatch: data => dispatch(setActivityData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
     orderDispatch: field => dispatch(setHouseblockOrderField(field)),
     sortOrderDispatch: field => dispatch(setHouseblockSortOrder(field))

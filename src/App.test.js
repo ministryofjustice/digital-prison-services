@@ -26,13 +26,13 @@ describe('App component', () => {
       dateDispatch={fn}
       periodDispatch={fn}
       houseblockDataDispatch={fn}
+      activityDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
       sortOrderDispatch={fn}
     />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
-
 
   it('should handle session timeout error response and display alert', async () => {
     const fn = jest.fn();
@@ -49,6 +49,7 @@ describe('App component', () => {
       dateDispatch={fn}
       periodDispatch={fn}
       houseblockDataDispatch={fn}
+      activityDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
       sortOrderDispatch={fn}
@@ -86,6 +87,7 @@ describe('App component', () => {
       dateDispatch={fn}
       periodDispatch={fn}
       houseblockDataDispatch={fn}
+      activityDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
       sortOrderDispatch={fn}
