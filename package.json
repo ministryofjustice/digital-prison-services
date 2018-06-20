@@ -19,6 +19,7 @@
     "helmet": "^3.12.1",
     "hsts": "^2.1.0",
     "jsonwebtoken": "^8.2.1",
+    "pre-commit": "^1.2.2",
     "react-datetime": "^2.14.0",
     "spin.js": "^4.0.0"
   },
@@ -74,6 +75,9 @@
     "plant-beanstalk": "node scripts/plant-beanstalk.js",
     "lint": "node node_modules/eslint/bin/eslint.js src backend"
   },
+  "pre-commit": [
+    "verify"
+  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"
