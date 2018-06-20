@@ -3,7 +3,8 @@
 
 body {
   //enable background colours on print by default
-  -webkit-print-color-adjust: exact !important;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
 }
 
 .App {
