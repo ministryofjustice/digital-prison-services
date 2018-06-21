@@ -83,10 +83,19 @@ td.small-font {
   left: -2px;
 }
 
+tbody > tr + td {
+  padding-left: .7em;
+  color: red;
+}
+
 @media print {
 
   tbody > tr > td:nth-of-type(7) {
-    padding-right: .7em;
+    padding-right: .4em;
+  }
+
+  .sortableLink {
+    color: black;
   }
 
   .FooterContainer, .page-header, img, #buttons, #updateButton, .no-print {
