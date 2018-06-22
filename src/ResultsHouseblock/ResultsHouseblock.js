@@ -102,22 +102,12 @@ class ResultsHouseblock extends Component {
       }
     </div>);
 
-    let activityTitle;
-    switch (this.props.period) {
-      case 'AM': activityTitle = 'AM';
-        break;
-      case 'PM': activityTitle = 'PM';
-        break;
-      case 'ED': activityTitle = 'ED';
-        break;
-    }
     const headings = (<tr>
       <th className="straight">{this.sortableColumn('Name', 'lastName')}</th>
       <th className="straight">{this.sortableColumn('Location', 'cellLocation')}</th>
       <th className="straight">NOMS&nbsp;ID</th>
-      <th className="straight no-print">Main activity</th>
-      <th className="straight print-only">{activityTitle}</th>
-      <th className="straight">Other&nbsp;activities</th>
+      <th className="straight">Activity</th>
+      <th className="straight">Other</th>
       <th className="rotate"><div><span>Unlocked</span></div></th>
       <th className="rotate"><div><span>Gone</span></div></th>
       <th className="rotate checkbox-column no-print"><div><span>Received</span></div></th>
