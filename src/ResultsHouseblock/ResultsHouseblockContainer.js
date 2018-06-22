@@ -77,7 +77,6 @@ const mapStateToProps = state => {
     houseblockData: state.houseblock.data,
     loaded: state.app.loaded,
     orderField: state.houseblock.orderField,
-    currentLocation: state.search.location,
     sortOrder: state.houseblock.sortOrder
   };
 };

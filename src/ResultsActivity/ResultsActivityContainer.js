@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Error from '../Error';
+import ResultsActivity from "./ResultsActivity";
 import { setSearchActivities } from "../redux/actions";
 import Spinner from "../Spinner";
-import ResultsActivity from "./ResultsActivity";
 
 class ResultsActivityContainer extends Component {
   async componentWillMount () {
     try {
       this.handlePrint = this.handlePrint.bind(this);
       this.handleSave = this.handleSave.bind(this);
-      this.props.getActivityList();
+      if (this.props.activity) {
+        this.props.getActivityList();
+      } else {
+        this.props.history.push('/whereaboutssearch');
+      }
     } catch (error) {
       this.handleError(error);
     }
@@ -36,6 +41,7 @@ class ResultsActivityContainer extends Component {
 }
 
 ResultsActivityContainer.propTypes = {
+  history: PropTypes.object,
   error: PropTypes.string,
   agencyId: PropTypes.string.isRequired,
   activities: PropTypes.array,
@@ -60,4 +66,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResultsActivityContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsActivityContainer));

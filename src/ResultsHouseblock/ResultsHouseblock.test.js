@@ -6,6 +6,8 @@ import moment from 'moment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const PRISON = 'LEI';
+
 const OFFENDER_NAME_COLUMN = 0;
 const LOCATION_COLUMN = 1;
 const NOMS_ID_COLUMN = 2;
@@ -23,7 +25,7 @@ const response = [
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
-      cellLocation: "LEI-A-1-1",
+      cellLocation: `${PRISON}-A-1-1`,
       event: "PA",
       eventDescription: "Prison Activities",
       comment: "Chapel",
@@ -34,7 +36,7 @@ const response = [
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
-      cellLocation: "LEI-A-1-1",
+      cellLocation: `${PRISON}-A-1-1`,
       event: "VISIT",
       eventDescription: "Visits",
       comment: "Official Visit",
@@ -45,7 +47,7 @@ const response = [
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
-      cellLocation: "LEI-A-1-1",
+      cellLocation: `${PRISON}-A-1-1`,
       event: "PA",
       eventDescription: "Prison Activities",
       comment: "The gym, appointment",
@@ -56,7 +58,7 @@ const response = [
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
-      cellLocation: "LEI-A-1-1",
+      cellLocation: `${PRISON}-A-1-1`,
       comment: "Appt details",
       event: "MEDE",
       eventDescription: "Medical - Dentist",
@@ -68,7 +70,7 @@ const response = [
       offenderNo: "A1234AB",
       firstName: "MICHAEL",
       lastName: "SMITH",
-      cellLocation: "LEI-A-1-2",
+      cellLocation: `${PRISON}-A-1-2`,
       event: "PA",
       eventDescription: "Prison Activities",
       comment: "Chapel Act",
@@ -81,7 +83,7 @@ const response = [
       offenderNo: "A1234AC",
       firstName: "FRED",
       lastName: "QUIMBY",
-      cellLocation: "LEI-A-1-3",
+      cellLocation: `${PRISON}-A-1-3`,
       event: "PA",
       eventDescription: "Prison Activities",
       comment: "Chapel Activity",
@@ -93,7 +95,7 @@ const response = [
         offenderNo: "A1234AC",
         firstName: "FRED",
         lastName: "QUIMBY",
-        cellLocation: "LEI-A-1-3",
+        cellLocation: `${PRISON}-A-1-3`,
         event: "VISIT",
         eventDescription: "Visits",
         comment: "Family Visit",
@@ -114,7 +116,7 @@ describe('Offender results component Jira NN-843', () => {
     const longDateFormat = aFewDaysAgo.format('dddd Do MMMM');
 
     const component = shallow(<ResultsHouseblock
-      history ={{ push: jest.fn() }}
+      history={{ push: jest.fn() }}
       locations={locations}
       houseblockData={response}
       handleSearch={jest.fn()}
@@ -127,7 +129,7 @@ describe('Offender results component Jira NN-843', () => {
       date={date}
       period={'ED'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>
     );
     expect(component.find('.whereabouts-title').text()).toEqual('BWing');
@@ -182,9 +184,9 @@ describe('Offender results component Jira NN-843', () => {
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
       getHouseblockList={jest.fn()}
-      period={'ED'}
+      period={'AM'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
     const tr = component.find('tr');
     expect(tr.length).toEqual(1); // table header tr only
@@ -208,9 +210,9 @@ describe('Offender results component Jira NN-843', () => {
       handleDateChange={jest.fn()}
       getHouseblockList={jest.fn()}
       date={today}
-      period={'ED'}
+      period={'PM'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
@@ -245,7 +247,7 @@ describe('Offender results component Jira NN-843', () => {
       date={oldDate}
       period={'ED'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false);
@@ -270,7 +272,7 @@ describe('Offender results component Jira NN-843', () => {
       date={oldDate}
       period={'ED'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
 
     const tr = component.find('tr');
@@ -301,7 +303,7 @@ describe('Offender results component Jira NN-843', () => {
       orderField={'cellLocation'}
       sortOrder={'ASC'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
 
     expect(component.find('#Location-sort-asc').length).toEqual(1);
@@ -331,7 +333,7 @@ describe('Offender results component Jira NN-843', () => {
       orderField={'lastName'}
       sortOrder={'DESC'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
 
     expect(component.find('#Location-sort-asc').length).toEqual(0);
@@ -363,7 +365,7 @@ describe('Offender results component Jira NN-843', () => {
       orderField={'cellLocation'}
       sortOrder={'ASC'}
       currentLocation={'BWing'}
-      agencyId={'LEI'}
+      agencyId={PRISON}
       user={user}/>);
 
     component.find('#Location-sort-asc').simulate('click');

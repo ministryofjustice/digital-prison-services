@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
@@ -192,6 +193,33 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withBody(HouseblockResponse.responseNameOrder)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+    }
+
+    void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/PROG?date=${date}&timeSlot=${timeSlot}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(ActivityResponse.activities)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?date=${date}&timeSlot=${timeSlot}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(ActivityResponse.visits)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/APP?date=${date}&timeSlot=${timeSlot}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(ActivityResponse.appointments)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
