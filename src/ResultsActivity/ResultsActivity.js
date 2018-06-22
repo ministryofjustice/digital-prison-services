@@ -80,20 +80,11 @@ class ResultsActivity extends Component {
       }
     </div>);
 
-    let activityTitle;
-    switch (this.props.period) {
-      case 'AM': activityTitle = 'Other AM';
-        break;
-      case 'PM': activityTitle = 'Other PM';
-        break;
-      case 'ED': activityTitle = 'Other ED';
-        break;
-    }
     const headings = (<tr>
       <th className="straight">Name</th>
       <th className="straight">Location</th>
       <th className="straight">NOMS&nbsp;ID</th>
-      <th className="straight">{activityTitle}</th>
+      <th className="straight">Other</th>
       <th className="rotate checkbox-column"><div><span>Attend</span></div></th>
       <th className="rotate checkbox-column"><div><span>Don't attend</span></div></th>
     </tr>);
@@ -144,7 +135,7 @@ class ResultsActivity extends Component {
       {this.displayBack()}
       <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
       <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
-      <div className="whereabouts-date print-only">{date}</div>
+      <div className="whereabouts-date print-only">{date} ({this.props.period}) </div>
       <hr className="print-only" />
       <form className="no-print">
         <div>
