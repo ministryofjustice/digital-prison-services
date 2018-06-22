@@ -132,7 +132,7 @@ describe('Offender results component Jira NN-843', () => {
     );
     expect(component.find('.whereabouts-title').text()).toEqual('BWing');
     expect(component.find('.prison-title').text()).toEqual('Shrewsbury');
-    expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat); //'Tuesday 12th June'
+    expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat + ' (ED) '); //'Tuesday 12th June'
 
     const housingLocationSelect = component.find('#housing-location-select');
     expect(housingLocationSelect.some('[value="BWing"]')).toEqual(true);

@@ -175,7 +175,7 @@ class ResultsHouseblock extends Component {
     return (<div className="pure-u-md-11-12">
       <h1 className="heading-large whereabouts-title">{this.props.currentLocation}</h1>
       <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
-      <div className="whereabouts-date print-only">{date}</div>
+      <div className="whereabouts-date print-only">{date} ({this.props.period}) </div>
       <hr className="print-only" />
       <form className="no-print">
         <div>
