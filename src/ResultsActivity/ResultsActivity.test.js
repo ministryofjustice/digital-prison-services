@@ -117,7 +117,7 @@ describe('Offender results component Jira NN-843', () => {
     );
     expect(component.find('.whereabouts-title').text()).toEqual('Chapel Activity');
     expect(component.find('.prison-title').text()).toEqual('Shrewsbury');
-    expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat); //'Tuesday 12th June'
+    expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat + ' (ED)');
 
     // Dig into the DatePicker component
     const searchDate = component.find('[additionalClassName="dateInputResults"]').shallow().shallow().shallow().find('input');
