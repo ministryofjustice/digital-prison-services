@@ -135,7 +135,7 @@ class ResultsActivity extends Component {
       {this.displayBack()}
       <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
       <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
-      <div className="whereabouts-date print-only">{date} ({this.props.period}) </div>
+      <div className="whereabouts-date print-only">{date} ({this.props.period})</div>
       <hr className="print-only" />
       <form className="no-print">
         <div>
@@ -173,7 +173,7 @@ ResultsActivity.propTypes = {
   period: PropTypes.string,
   activityData: PropTypes.array,
   agencyId: PropTypes.string,
-  activity: PropTypes.string,
+  activity: PropTypes.number,
   activities: PropTypes.array,
   getActivityList: PropTypes.func.isRequired
 };

@@ -38,6 +38,7 @@ class TestFixture {
     def toSearch() {
         loginAs ITAG_USER
         elite2Api.stubGroups currentUser.workingCaseload
+        elite2Api.stubActivityLocations currentUser.workingCaseload
         browser.page.whereaboutsLink.click()
         browser.at SearchPage
     }
