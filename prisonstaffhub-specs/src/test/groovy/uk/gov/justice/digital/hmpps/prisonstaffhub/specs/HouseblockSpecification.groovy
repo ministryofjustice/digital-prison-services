@@ -115,4 +115,27 @@ class HouseblockSpecification extends GebReportingSpec {
         then: "I should be redirected to the search page"
         at SearchPage
     }
+
+    def "A prisoner with 2 activities in the same time period should only have the earliest displayed"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: "I select and display a location"
+        def today = new Date().format('YYYY-MM-dd')
+        elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+        form['housing-location-select'] = 'BWing'
+
+        form['period-select'] = 'AM'
+        continueButton.click()
+
+        then: 'Only one activity is displayed'
+        at HouseblockPage
+        printButton[0].displayed
+        printButton[1].displayed
+        nameOrderLink.text() == 'Name'
+        // Check order is by cell
+        def texts = tableRows*.text()
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
+        !texts[1].contains("conflict activity")
+    }
 }
