@@ -126,8 +126,10 @@ jobs:
         - deploy:
             name: Install elastic beanstalk CLI
             command: |
-              sudo apt-get install python-pip python-dev
-              pip install --user 'six>-1.9.0' awsebcli --ignore-installed
+              sudo apt-get install python-pip python-dev build-essential
+              sudo pip install --upgrade pip
+              pip install --user awsebcli --ignore-installed
+              pip install --user pyYAML==4.1 awsebcli --upgrade
         - deploy:
             name: Deploy to Elastic Beanstalk Dev
             command: |
