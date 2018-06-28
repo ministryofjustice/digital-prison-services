@@ -64,6 +64,30 @@ class HouseblockResponse {
             startTime       : "2017-10-15T17:10:00",
             endTime         : "2017-10-15T18:30:00"
     ];
+    static response6 = [
+            offenderNo      : "A1234AH",
+            firstName       : "JOHN",
+            lastName        : "JAMES",
+            cellLocation    : "LEI-A-1-12",
+            event           : "D",
+            eventType       : "APP",
+            eventDescription: "docs",
+            comment         : "non paid act 1",
+            startTime       : "2017-10-15T17:10:00",
+            endTime         : "2017-10-15T18:30:00"
+    ];
+    static response7 = [
+            offenderNo      : "A1234AH",
+            firstName       : "JOHN",
+            lastName        : "JAMES",
+            cellLocation    : "LEI-A-1-12",
+            event           : "HC",
+            eventType       : "APP",
+            eventDescription: "hair cut",
+            comment         : "non paid act 2",
+            startTime       : "2017-10-15T19:10:00",
+            endTime         : "2017-10-15T20:30:00"
+    ];
 
     static responseCellOrder = JsonOutput.toJson([
             response1,
@@ -81,5 +105,13 @@ class HouseblockResponse {
             response1,
             response5
 
+    ])
+    static responseNoActivities = JsonOutput.toJson([
+            response6,
+            response7,
+            response1,
+            response2,
+            response3,
+            response4
     ])
 }

@@ -133,9 +133,29 @@ class HouseblockSpecification extends GebReportingSpec {
         printButton[0].displayed
         printButton[1].displayed
         nameOrderLink.text() == 'Name'
-        // Check order is by cell
+
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
         !texts[1].contains("conflict activity")
+    }
+
+    def "A prisoner with 0 paid activities should be displayed correctly"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: "I select and display a location"
+        def today = new Date().format('YYYY-MM-dd')
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+        form['housing-location-select'] = 'BWing'
+
+        form['period-select'] = 'AM'
+        continueButton.click()
+
+        then: 'Only one activity is displayed'
+        at HouseblockPage
+        def texts = tableRows*.text()
+        texts[1].contains("James, John A-1-12 A1234AH")
+        texts[1].contains("non paid act 1 17:10")
+        texts[1].contains("hair cut - non paid act 2 19:10")
     }
 }
