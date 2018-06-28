@@ -1,10 +1,11 @@
-
+/* eslint-disable no-lonely-if */
 const express = require('express');
 const router = express.Router();
 const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 const log = require('../log');
 const switchDateFormat = require('../utils');
+const moment = require('moment');
 
 router.get('/', asyncMiddleware(async (req, res) => {
   const viewModel = await getHouseblockList(req, res);
@@ -26,15 +27,32 @@ const getHouseblockList = (async (req, res) => {
   for (const event of data) {
     if (event.offenderNo !== lastOffenderNo) {
       i++;
-      rows[i] = { activity: event };
-    } else if (!rows[i].others) {
-      rows[i].others = [event];
-    } else {
-      rows[i].others.push(event);
+      lastOffenderNo = event.offenderNo;
+      rows[i] = {};
     }
-    lastOffenderNo = event.offenderNo;
+
+    let currentRow = rows[i];
+    if (event.eventType === 'PRISON_ACT') {
+      if (!currentRow.activity) {
+        currentRow.activity = event;
+      } else if (moment(event.startTime).isBefore(currentRow.activity.startTime)) {
+        //we discard any duplicate activities and only display the earliest in the time period
+        currentRow.activity = event;
+      } else {
+        log.info(`Multiple paid activities in same time period. \nOffender: ${event.offenderNo}, Cell location: ${event.cellLocation}, Event desc: ${event.eventDescription}, Starttime: ${event.startTime}`);
+      }
+    } else {
+      // set array of non-paid appointments or visits
+      if (!currentRow.others) {
+        currentRow.others = [event];
+      } else {
+        currentRow.others.push(event);
+      }
+    }
   }
   return rows;
-});
+}
+);
+
 
 module.exports = { router, getHouseblockList };

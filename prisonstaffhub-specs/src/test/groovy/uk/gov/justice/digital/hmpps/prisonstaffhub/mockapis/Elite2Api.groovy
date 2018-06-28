@@ -198,6 +198,17 @@ class Elite2Api extends WireMockRule {
         )
     }
 
+    void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.responseMultipleActivities)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+    }
+
     void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/PROG?date=${date}&timeSlot=${timeSlot}")

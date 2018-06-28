@@ -10,6 +10,7 @@ class HouseblockResponse {
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
             event           : "PA",
+            eventType       : "PRISON_ACT",
             eventDescription: "Prison Activities",
             comment         : "Woodwork",
             startTime       : "2017-10-15T17:00:00",
@@ -21,6 +22,7 @@ class HouseblockResponse {
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
             event           : "VISIT",
+            eventType       : "VISIT",
             eventDescription: "Visits",
             comment         : "Friends",
             startTime       : "2017-10-15T18:00:00",
@@ -33,6 +35,7 @@ class HouseblockResponse {
             cellLocation    : "LEI-A-1-2",
             event           : "PA",
             eventDescription: "Prison Activities",
+            eventType       : "PRISON_ACT",
             comment         : "TV Repairs",
             startTime       : "2017-10-15T17:45:00",
             endTime         : "2017-10-15T18:30:00"
@@ -44,10 +47,24 @@ class HouseblockResponse {
             cellLocation    : "LEI-A-1-3",
             event           : "PA",
             eventDescription: "Prison Activities",
+            eventType       : "PRISON_ACT",
             comment         : "Chapel",
             startTime       : "2017-10-15T11:45:00",
             endTime         : "2017-10-15T13:30:00"
     ];
+    static response5 = [
+            offenderNo      : "A1234AA",
+            firstName       : "ARTHUR",
+            lastName        : "ANDERSON",
+            cellLocation    : "LEI-A-1-1",
+            event           : "PA",
+            eventType       : "PRISON_ACT",
+            eventDescription: "reading",
+            comment         : "conflict activity",
+            startTime       : "2017-10-15T17:10:00",
+            endTime         : "2017-10-15T18:30:00"
+    ];
+
     static responseCellOrder = JsonOutput.toJson([
             response1,
             response2,
@@ -59,5 +76,10 @@ class HouseblockResponse {
             response2,
             response4,
             response3
+    ])
+    static responseMultipleActivities = JsonOutput.toJson([
+            response1,
+            response5
+
     ])
 }
