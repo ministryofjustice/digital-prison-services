@@ -130,15 +130,16 @@ class ResultsHouseblock extends Component {
 
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
       const mainActivity = row.activity;
+      const anyActivity = row.activity ? row.activity : row.others[0];
       return (
-        <tr key={mainActivity.offenderNo} className="row-gutters">
-          <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
-          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.agencyId)}</td>
-          <td className="row-gutters">{mainActivity.offenderNo}</td>
-          <td className="row-gutters">{this.getDescription(mainActivity)}</td>
+        <tr key={anyActivity.offenderNo} className="row-gutters">
+          <td className="row-gutters">{`${properCaseName(anyActivity.lastName)}, ${properCaseName(anyActivity.firstName)}`}</td>
+          <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
+          <td className="row-gutters">{anyActivity.offenderNo}</td>
+          <td className="row-gutters">{mainActivity && this.getDescription(mainActivity)}</td>
           <td className="row-gutters small-font">{row.others &&
-          <ul>{row.others.map((e, index) => {
-            return <li key={mainActivity.offenderNo + '_' + index}>{this.getDescription(e)} {getHoursMinutes(e.startTime)}</li>;
+          <ul>{row.others.map((event, index) => {
+            return <li key={event.offenderNo + '_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
           })}</ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
