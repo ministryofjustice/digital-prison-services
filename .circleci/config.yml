@@ -118,18 +118,13 @@ jobs:
              fi
 
   deploy_release_eb:
-      <<: *defaults
+      working_directory: ~/app
+      docker:
+        - image: mojdigitalstudio/circleci-node-awsebcli
       steps:
         - checkout
         - attach_workspace:
             at: ~/app
-        - deploy:
-            name: Install elastic beanstalk CLI
-            command: |
-              sudo apt-get install python-pip python-dev build-essential
-              sudo pip install --upgrade pip
-              pip install --user awsebcli --ignore-installed
-              pip install --user pyYAML==4.1 awsebcli --upgrade
         - deploy:
             name: Deploy to Elastic Beanstalk Dev
             command: |
