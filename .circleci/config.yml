@@ -129,7 +129,7 @@ jobs:
               sudo apt-get install python-pip python-dev build-essential
               sudo pip install --upgrade pip
               pip install --user awsebcli --ignore-installed
-              pip install --user pyYAML==4.1 awsebcli --upgrade
+              pip install --user "pyYAML>=3.12" awsebcli --upgrade
         - deploy:
             name: Deploy to Elastic Beanstalk Dev
             command: |
