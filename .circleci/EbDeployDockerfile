@@ -1,0 +1,9 @@
+FROM circleci/node:8.10.0
+
+RUN sudo apt-get install python-pip python-dev build-essential && \
+    sudo pip install --upgrade pip && \
+    pip install --user awsebcli --ignore-installed && \
+    pip install --user "pyYAML>=3.12" awsebcli --upgrade
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/bin/sh"]
