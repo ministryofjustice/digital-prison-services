@@ -16,8 +16,8 @@
 .no-padding {
   padding: 0;
 }
-/* box */
-.whereaboutsCheckbox [type=checkbox] + label::before {
+
+@mixin checkboxMixin {
   content: "";
   border: 2px solid;
   background: transparent;
@@ -27,8 +27,8 @@
   top: -3px;
   left: 14px;
 }
-/* tick */
-.whereaboutsCheckbox [type=checkbox] + label::after {
+
+@mixin tickMixin {
   content: "";
   border: solid;
   border-width: 0 0 3px 3px;
@@ -49,32 +49,19 @@
   opacity: 0;
 }
 
+
+/* box */
+.whereaboutsCheckbox [type=checkbox] + label::before {
+  @include checkboxMixin;
+}
+/* tick */
+.whereaboutsCheckbox [type=checkbox] + label::after {
+  @include tickMixin;
+}
+
 th.straight {
   padding-bottom: 10px;
   vertical-align: bottom;
-}
-/* from https://css-tricks.com/rotated-table-column-headers */
-th.rotate {
-  /* Something you can count on */
-  height: 6em;
-  padding: 0 0 10px 0;
-  vertical-align: bottom;
-}
-th.rotate > div {
-  transform:
-          /* Magic Numbers */
-          translate(15px, 0px)
-            /* 45 is really 360 - 45 */
-          rotate(315deg);
-  width: 30px;
-}
-th.rotate > div > span {
-  padding: 5px 10px;
-}
-
-td.small-font {
-  font-size: 14px;
-  padding-right: 1px;
 }
 
 .print-icon {
@@ -87,6 +74,36 @@ tbody > tr + td {
   padding-left: .7em;
   color: red;
 }
+
+
+@media screen {
+
+  /* from https://css-tricks.com/rotated-table-column-headers */
+  th.rotate {
+    /* Something you can count on */
+    height: 6em;
+    padding: 0 0 10px 0;
+    vertical-align: bottom;
+  }
+  th.rotate > div {
+    transform:
+            /* Magic Numbers */
+            translate(15px, 0px)
+              /* 45 is really 360 - 45 */
+            rotate(315deg);
+    width: 30px;
+  }
+  th.rotate > div > span {
+    padding: 5px 10px;
+  }
+
+  td.small-font {
+    font-size: 14px;
+    padding-right: 1px;
+  }
+
+}
+
 
 @media print {
 
@@ -132,23 +149,6 @@ tbody > tr + td {
     margin-right: 15px;
   }
 
-  th.rotate {
-    height: 5em;
-    padding: 0 !important;
-  }
-
-  th.rotate > div {
-    transform:
-            /* Magic Numbers */
-            translate(15px, 0px)
-            rotate(270deg);
-    width: 15px;
-  }
-
-  th.rotate > div > span {
-    padding: 0 !important;
-  }
-
   .checkbox-column {
     width: 30px;
   }
@@ -158,10 +158,31 @@ tbody > tr + td {
   }
 
   .row-gutters {
-    padding: 5px 10px 5px 0;
+    padding: 2px 10px 2px 0;
   }
 
   th, td {
     border-bottom-width: 0 !important;
   }
+
+  th.straightPrint {
+    padding-bottom: 10px;
+    vertical-align: bottom;
+  }
+
+  /* box */
+  .whereaboutsCheckbox [type=checkbox] + label::before {
+    @include checkboxMixin;
+    top: 1px;
+    left: 1px;
+    width: 10px;
+    height: 10px;
+    border: 1.3px solid;
+  }
+  /* tick */
+  .whereaboutsCheckbox [type=checkbox] + label::after {
+    @include tickMixin;
+    left: 1px;
+  }
+
 }
