@@ -44,7 +44,7 @@ class ResultsHouseblock extends Component {
   }
 
   getDescription (event) {
-    if (event.event === 'PA') {
+    if (event.eventType === 'PRISON_ACT') {
       return event.comment;
     }
     if (event.comment) {
@@ -108,8 +108,8 @@ class ResultsHouseblock extends Component {
       <th className="straight">NOMS&nbsp;ID</th>
       <th className="straight">Activity</th>
       <th className="straight">Other</th>
-      <th className="rotate"><div><span>Unlocked</span></div></th>
-      <th className="rotate"><div><span>Gone</span></div></th>
+      <th className="rotate straightPrint"><div><span>Unlocked</span></div></th>
+      <th className="rotate straightPrint"><div><span>Gone</span></div></th>
       <th className="rotate checkbox-column no-print"><div><span>Received</span></div></th>
       <th className="rotate checkbox-column no-print"><div><span>Attend</span></div></th>
       <th className="rotate checkbox-column no-print"><div><span>Don't attend</span></div></th>
