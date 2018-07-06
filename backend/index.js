@@ -38,7 +38,6 @@ const sixtyDaysInSeconds = 5184000;
 
 app.set('trust proxy', 1); // trust first proxy
 
-// set the view engine to ejs
 app.set('view engine', 'ejs');
 
 app.use(helmet());
