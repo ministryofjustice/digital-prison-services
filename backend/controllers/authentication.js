@@ -38,16 +38,29 @@ router.post('/login', async (req, res) => {
     res.redirect('/');
   } catch (error) {
     logError(req.url, error, 'Login failure');
+    data = {
+      authError: true,
+      apiUp: isApiUp,
+      authErrorType: getAuthErrorType(error),
+      mailTo: mailTo,
+      homeLink: homeLink
+    };
+
     res.render(
       'login',
-      {
-        authError: true,
-        apiUp: isApiUp,
-        mailTo: mailTo,
-        homeLink: homeLink
-      });
+      data);
   }
 });
+
+function getAuthErrorType (error) {
+  let type = 'BAD_CREDENTIALS';
+  if (error.response && error.response.data && error.response.data.error_description) {
+    if (error.response.data.error_description.includes('account is locked')) {
+      type = 'LOCKED_ACCOUNT';
+    }
+  }
+  return type;
+}
 
 router.get('/logout', (req, res) => {
   req.session = null;
