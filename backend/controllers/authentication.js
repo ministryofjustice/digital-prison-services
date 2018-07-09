@@ -31,8 +31,6 @@ router.post('/login', async (req, res) => {
   try {
     const response = await elite2Api.login(req);
 
-    req.session.isAuthenticated = true;
-
     session.setHmppsCookie(res, response.data);
 
     res.redirect('/');
@@ -50,7 +48,6 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.session = null;
   session.deleteHmppsCookie(res);
   res.redirect('/auth/login');
 });

@@ -7,7 +7,6 @@ require('./azure-appinsights');
 const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const bunyanMiddleware = require('bunyan-middleware');
 const hsts = require('hsts');
@@ -26,8 +25,6 @@ const activityLocations = require('./controllers/activityLocations');
 const activityList = require('./controllers/activityList');
 const houseblockList = require('./controllers/houseblockList');
 const health = require('./controllers/health');
-const clientVersionValidator = require('./validate-client-version');
-const applicationVersion = require('./application-version');
 const webpack = require('webpack');
 const middleware = require('webpack-dev-middleware');
 const hrm = require('webpack-hot-middleware');
@@ -38,19 +35,9 @@ const session = require('./session');
 
 const app = express();
 const sixtyDaysInSeconds = 5184000;
-const sessionExpiryMinutes = config.session.expiryMinutes * 60 * 1000;
-
-const sessionConfig = {
-  name: config.session.name,
-  secret: config.session.secret,
-  sameSite: true,
-  expires: new Date(Date.now() + sessionExpiryMinutes),
-  maxAge: sessionExpiryMinutes
-};
 
 app.set('trust proxy', 1); // trust first proxy
 
-// set the view engine to ejs
 app.set('view engine', 'ejs');
 
 app.use(helmet());
@@ -74,7 +61,6 @@ if (config.app.production) {
 }
 
 app.use(cookieParser());
-app.use(cookieSession(sessionConfig));
 
 // Don't cache dynamic resources
 app.use(helmet.noCache());
@@ -96,24 +82,7 @@ if (config.app.production === false) {
   app.use(hrm(compiler, {}));
 }
 
-
-// Update a value in the cookie so that the set-cookie will be sent.
-// Only changes every minute so that it's not sent with every request.
-app.use((req, res, next) => {
-  req.session.nowInMinutes = session.getNowInMinutes();
-  next();
-});
-
 app.use(express.static(path.join(__dirname, '../build')));
-
-app.use(clientVersionValidator);
-
-app.use((req, res, next) => {
-  // Keep track of when a server update occurs. Changes rarely.
-  req.session.applicationVersion = applicationVersion.buildNumber;
-  next();
-});
-
 
 app.use('/api/me', userMe);
 app.use('/api/usercaseloads', userCaseLoads);
