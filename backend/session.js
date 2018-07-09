@@ -5,9 +5,7 @@ const sessionExpiryMinutes = config.hmppsCookie.expiryMinutes * 60 * 1000;
 
 const encodeToBase64 = (string) => Buffer.from(string).toString('base64');
 const decodedFromBase64 = (string) => Buffer.from(string, 'base64').toString('ascii');
-const getNowInMinutes = () => Math.floor(Date.now() / 60e3);
 
-const isAuthenticated = (req) => req.session && req.session.isAuthenticated;
 const isHmppsCookieValid = (cookie) => {
   if (!cookie) {
     return false;
@@ -15,11 +13,12 @@ const isHmppsCookieValid = (cookie) => {
 
   const cookieData = getHmppsCookieData(cookie);
 
-  if (!cookieData.access_token || !cookieData.refresh_token) {
-    return false;
-  }
+  return !(!cookieData.access_token || !cookieData.refresh_token);
+};
 
-  return true;
+const isAuthenticated = (req) => {
+  const hmppsCookie = req.cookies[config.hmppsCookie.name];
+  return isHmppsCookieValid(hmppsCookie);
 };
 
 const hmppsSessionMiddleWare = (req, res, next) => {
@@ -27,8 +26,6 @@ const hmppsSessionMiddleWare = (req, res, next) => {
   const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
 
   if (!isHmppsCookieValid(hmppsCookie)) {
-    req.session = null;
-
     if (isXHRRequest) {
       res.status(401);
       res.json({ message: 'Session expired' });
@@ -45,16 +42,11 @@ const hmppsSessionMiddleWare = (req, res, next) => {
   req.access_token = cookie.access_token;
   req.refresh_token = cookie.refresh_token;
 
-
-  if (!isAuthenticated(req)) {
-    req.session.isAuthenticated = true;
-  }
-
   next();
 };
 
 const setHmppsCookie = (res, { access_token, refresh_token }) => {
-  const tokens = encodeToBase64(JSON.stringify({ access_token, refresh_token, nowInMinutes: getNowInMinutes() }));
+  const tokens = encodeToBase64(JSON.stringify({ access_token, refresh_token }));
 
   const cookieConfig = {
     domain: config.hmppsCookie.domain,
@@ -79,12 +71,7 @@ const extendHmppsCookieMiddleWare = (req, res, next) => {
     return;
   }
 
-  const { nowInMinutes, access_token, refresh_token } = getHmppsCookieData(hmppsCookie);
-
-  if (nowInMinutes === getNowInMinutes()) {
-    next();
-    return;
-  }
+  const { access_token, refresh_token } = getHmppsCookieData(hmppsCookie);
 
   setHmppsCookie(res, { access_token, refresh_token });
   next();
@@ -115,8 +102,6 @@ const service = {
   setHmppsCookie,
   updateHmppsCookie,
   deleteHmppsCookie,
-  isAuthenticated,
-  getNowInMinutes,
   hmppsSessionMiddleWare,
   extendHmppsCookieMiddleWare,
   loginMiddleware
