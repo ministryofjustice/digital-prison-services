@@ -44,11 +44,7 @@
                     <% if (!apiUp || authError) { %>
                             <div class="row">
                         <% if (apiUp) { %>
-                                <% if (apiUp && authErrorType == 'LOCKED_ACCOUNT') { %>
-                                <div class="error-summary col-sm-6">Your user account is locked.</div>
-                                <% } else { %>
-                                <div class="error-summary col-sm-6">The username or password you have entered is invalid.</div>
-                                <% } %>
+                                <div class="error-summary col-sm-6"><%=  authErrorText %></div>
                         <% } else { %>
                           <div class="error-summary col-sm-6">Service unavailable. Please try again later.</div>
                         <% } %>

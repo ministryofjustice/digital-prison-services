@@ -71,7 +71,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../build/static')));
 
 app.get('/terms', async (req, res) => { res.render('terms', { mailTo: config.app.mailTo, homeLink: '/' }); }); // TODO config.app.notmEndpointUrl?
-app.use('/auth', session.loginMiddleware, authentication);
+app.use('/auth', session.loginMiddleware, authentication.router);
 app.use(session.hmppsSessionMiddleWare);
 app.use(session.extendHmppsCookieMiddleWare);
 
