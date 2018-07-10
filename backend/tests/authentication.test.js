@@ -87,14 +87,18 @@ describe('Authentication', async () => {
     session.setHmppsCookie = jest.fn();
     health.healthResult = jest.fn();
 
+    elite2Api.login.mockImplementation(() => {
+      let error = new Error('error object');
+      error.response = createLoginFailureExpiredResponse();
+      throw error;
+    });
+
     health.healthResult.mockImplementationOnce(() => createUnHealthyResponse());
 
     await authentication.postLogin(req, res);
 
     expect(res.render).toBeCalledWith("login", expect.objectContaining({
-      apiUp: false,
-      authError: true,
-      authErrorText: "Your user account is locked."
+      apiUp: false
     }));
   });
 
