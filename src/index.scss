@@ -65,3 +65,10 @@ body {
     margin-right: auto;
   }
 }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* This is seen by IE ONLY */
+  .content {
+    display: block; /* Disable flex */
+  }
+}
