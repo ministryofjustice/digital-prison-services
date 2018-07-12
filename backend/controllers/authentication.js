@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
 
     session.setHmppsCookie(res, response.data);
 
-    res.redirect('/');
+    res.redirect('/whereaboutssearch');
   } catch (error) {
     logError(req.url, error, 'Login failure');
     res.render(

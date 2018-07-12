@@ -2,11 +2,10 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import geb.spock.GebReportingSpec
 import org.junit.Rule
-import spock.lang.Ignore
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.NOT_KNOWN
@@ -44,12 +43,14 @@ class LoginSpecification extends GebReportingSpec {
         elite2api.stubValidOAuthTokenRequest(ITAG_USER)
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
+        elite2api.stubGroups ITAG_USER.workingCaseload
+        elite2api.stubActivityLocations ITAG_USER.workingCaseload
 
         when: "I login using valid credentials"
         loginAs ITAG_USER, 'password'
 
-        then: 'My credentials are accepted and I am shown the Home page'
-        at DashboardPage
+        then: 'My credentials are accepted and I am shown the Search page'
+        at SearchPage
     }
 
     def "Log in attempt with long delay on oauth server"() {
@@ -62,12 +63,14 @@ class LoginSpecification extends GebReportingSpec {
         elite2api.stubValidOAuthTokenRequest(ITAG_USER, true)
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
+        elite2api.stubGroups ITAG_USER.workingCaseload
+        elite2api.stubActivityLocations ITAG_USER.workingCaseload
 
         when: "I attempt to log in using valid credentials"
         loginAs ITAG_USER, 'password'
 
-        then: 'My credentials are accepted and I am shown the Home page'
-        at DashboardPage
+        then: 'My credentials are accepted and I am shown the Search page'
+        at SearchPage
     }
 
     def "Unknown user is rejected"() {
@@ -106,7 +109,7 @@ class LoginSpecification extends GebReportingSpec {
     def "Log out"() {
         given: "I have logged in"
         fixture.loginAs(ITAG_USER)
-        at DashboardPage
+        at SearchPage
 
         when: "I log out"
         header.logout()
