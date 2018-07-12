@@ -21,16 +21,16 @@ describe('Houseblock list controller', async () => {
     expect(response.length).toBe(4);
 
     expect(response[0].others.length).toBe(2);
-    expect(response[0].activity.offenderNo).toBe('A1234AA');
-    expect(response[0].activity.firstName).toBe('ARTHUR');
-    expect(response[0].activity.lastName).toBe('ANDERSON');
-    expect(response[0].activity.cellLocation).toBe("LEI-A-1-1");
-    expect(response[0].activity.event).toBe("CHAP");
-    expect(response[0].activity.eventType).toBe("PRISON_ACT");
-    expect(response[0].activity.eventDescription).toBe('Earliest paid activity');
-    expect(response[0].activity.comment).toBe("commentEarliest");
-    expect(response[0].activity.startTime).toBe('2017-10-15T17:30:00');
-    expect(response[0].activity.endTime).toBe('2017-10-15T18:30:00');
+    expect(response[0].activity[0].offenderNo).toBe('A1234AA');
+    expect(response[0].activity[0].firstName).toBe('ARTHUR');
+    expect(response[0].activity[0].lastName).toBe('ANDERSON');
+    expect(response[0].activity[0].cellLocation).toBe("LEI-A-1-1");
+    expect(response[0].activity[0].event).toBe("CHAP");
+    expect(response[0].activity[0].eventType).toBe("PRISON_ACT");
+    expect(response[0].activity[0].eventDescription).toBe('Earliest paid activity');
+    expect(response[0].activity[0].comment).toBe("commentEarliest");
+    expect(response[0].activity[0].startTime).toBe('2017-10-15T17:30:00');
+    expect(response[0].activity[0].endTime).toBe('2017-10-15T18:30:00');
 
 
     expect(response[0].others[0].offenderNo).toBe('A1234AA');
@@ -54,12 +54,12 @@ describe('Houseblock list controller', async () => {
 
     expect(response[0].others[2]).not.toBeDefined();
 
-    expect(response[1].activity.offenderNo).toBe('A1234AB');
+    expect(response[1].activity[0].offenderNo).toBe('A1234AB');
     expect(response[1].others).not.toBeDefined(); //no non paid activities
 
     expect(response[2].others.length).toBe(1);
-    expect(response[2].activity.offenderNo).toBe('A1234AC');
-    expect(response[2].activity.event).toBe('CHAP');
+    expect(response[2].activity[0].offenderNo).toBe('A1234AC');
+    expect(response[2].activity[0].event).toBe('CHAP');
     expect(response[2].others[0].offenderNo).toBe('A1234AC');
     expect(response[2].others[0].event).toBe('VISIT');
 
@@ -78,6 +78,9 @@ describe('Houseblock list controller', async () => {
   });
 });
 
+
+// There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
+// the activities are sorted by time in the controller
 function createResponse () {
   return {
     data: [
@@ -90,7 +93,6 @@ function createResponse () {
         eventType: "PRISON_ACT",
         eventDescription: "Chapel",
         comment: "comment11",
-        startTime: "2017-10-15T18:00:00",
         endTime: "2017-10-15T18:30:00"
       },
       {
@@ -133,7 +135,7 @@ function createResponse () {
         offenderNo: "A1234AB",
         firstName: "MICHAEL",
         lastName: "SMITH",
-        cellLocation: "LEI-A-1-2",
+        cellLocation: "LEI-A-1-1",
         event: "CHAP",
         eventType: "PRISON_ACT",
         eventDescription: "Chapel",

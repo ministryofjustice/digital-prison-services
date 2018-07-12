@@ -39,9 +39,20 @@ class HouseblockSpecification extends GebReportingSpec {
         nameOrderLink.text() == 'Name'
         // Check order is by cell
         def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
-        texts[2].contains("Balog, Eugene A-1-2 A1234AB TV Repairs")
-        texts[3].contains("Baa, Fred A-1-3 A1234AC Chapel")
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
+        def row1 = tableRows[1].find('td');
+        row1[3].text() == 'Woodwork 17:00'
+        row1[4].text() == 'Visits - Friends 18:00'
+
+        texts[2].contains("Balog, Eugene A-1-2 A1234AB")
+        def row2 = tableRows[2].find('td');
+        row2[3].text() == 'TV Repairs 17:45'
+        row2[4].text() == ''
+
+        texts[3].contains("Baa, Fred A-1-3 A1234AC")
+        def row3 = tableRows[3].find('td');
+        row3[3].text() == 'Chapel 11:45'
+        row3[4].text() == ''
 
         when: "I order by name"
         nameOrderLink.click()
@@ -53,11 +64,20 @@ class HouseblockSpecification extends GebReportingSpec {
         form['period-select'] == 'AM'
 
         def texts2 = tableRows*.text()
+
+        texts2[1].contains("Anderson, Arthur A-1-1 A1234AA")
+        def reorderedRow1 = tableRows[1].find('td');
+        reorderedRow1[3].text() == 'Woodwork 17:00'
+        reorderedRow1[4].text() == 'Visits - Friends 18:00'
+
         // Check order is by name
-        texts2[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
-        texts2[1].contains("Visits - Friends 18:00")
-        texts2[2].contains("Baa, Fred A-1-3 A1234AC Chapel")
-        texts2[3].contains("Balog, Eugene A-1-2 A1234AB TV Repairs")
+        texts2[2].contains("Baa, Fred A-1-3 A1234AC")
+        def reorderedRow2 = tableRows[2].find('td');
+        reorderedRow2[3].text() == 'Chapel 11:45'
+
+        texts2[3].contains("Balog, Eugene A-1-2 A1234AB")
+        def reorderedRow3 = tableRows[3].find('td');
+        reorderedRow3[3].text() == 'TV Repairs 17:45'
     }
 
     def "The updated houseblock list is displayed"() {
@@ -86,8 +106,14 @@ class HouseblockSpecification extends GebReportingSpec {
         form['date'] == firstOfMonthDisplayFormat
         form['period-select'] == 'PM'
         def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
-        texts[2].contains("Balog, Eugene A-1-2 A1234AB TV Repairs")
+        def row1 = tableRows[1].find('td');
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
+        row1[3].text() == 'Woodwork 17:00'
+        row1[4].text() == 'Visits - Friends 18:00'
+
+        def row2 = tableRows[2].find('td');
+        texts[2].contains("Balog, Eugene A-1-2 A1234AB")
+        row2[3].text() == 'TV Repairs 17:45'
 
         when: "I go to the search page afresh"
         browser.to SearchPage
@@ -135,8 +161,9 @@ class HouseblockSpecification extends GebReportingSpec {
         nameOrderLink.text() == 'Name'
 
         def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA Woodwork")
-        !texts[1].contains("conflict activity")
+        def row1 = tableRows[1].find('td');
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
+        row1[3].text().contains('conflict activity')
     }
 
     def "A prisoner with 0 paid activities should be displayed correctly"() {

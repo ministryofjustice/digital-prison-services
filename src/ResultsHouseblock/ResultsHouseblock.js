@@ -44,6 +44,7 @@ class ResultsHouseblock extends Component {
   }
 
   getDescription (event) {
+    console.log('getting description for ' + event);
     if (event.eventType === 'PRISON_ACT') {
       return event.comment;
     }
@@ -108,9 +109,8 @@ class ResultsHouseblock extends Component {
       <th className="straight">NOMS&nbsp;ID</th>
       <th className="straight">Activity</th>
       <th className="straight">Other</th>
-      <th className="rotate straightPrint"><div><span>Unlocked</span></div></th>
-      <th className="rotate straightPrint"><div><span>Gone</span></div></th>
-      <th className="rotate checkbox-column no-print"><div><span>Received</span></div></th>
+      <th className="rotate straightPrint no-display"><div><span>Unlocked</span></div></th>
+      <th className="rotate straightPrint no-display"><div><span>Gone</span></div></th>
       <th className="rotate checkbox-column no-print"><div><span>Attend</span></div></th>
       <th className="rotate checkbox-column no-print"><div><span>Don't attend</span></div></th>
     </tr>);
@@ -129,26 +129,29 @@ class ResultsHouseblock extends Component {
     };
 
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
-      const mainActivity = row.activity;
-      const anyActivity = row.activity ? row.activity : row.others[0];
+      // const mainActivity = row.activity;
+      const anyActivity = row.activity ? row.activity[0] : row.others[0];
       return (
         <tr key={anyActivity.offenderNo} className="row-gutters">
           <td className="row-gutters">{`${properCaseName(anyActivity.lastName)}, ${properCaseName(anyActivity.firstName)}`}</td>
           <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{anyActivity.offenderNo}</td>
-          <td className="row-gutters">{mainActivity && this.getDescription(mainActivity)}</td>
-          <td className="row-gutters small-font">{row.others &&
-          <ul>{row.others.map((event, index) => {
+          <td className="row-gutters small-font">{row.activity &&
+          <ul>{row.activity.map((event, index) => {
             return <li key={event.offenderNo + '_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
           })}</ul>
           }</td>
-          <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
+          <td className="row-gutters small-font">{row.others &&
+          <ul>{row.others.map((event, index) => {
+            return <li key={event.offenderNo_ + 'others_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
+          })}</ul>
+          }</td>
+          <td className="no-padding checkbox-column no-display"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
             <label htmlFor={'col1_' + index} /></div></td>
-          <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
+          <td className="no-padding checkbox-column no-display"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
             <label htmlFor={'col2_' + index} /></div></td>
-          <td className="no-padding checkbox-column no-print"><img src="/images/GreenTick.png" height="35" width="35"/></td>
           <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly}/>
             <label htmlFor={'col3_' + index} /></div></td>

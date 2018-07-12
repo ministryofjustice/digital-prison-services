@@ -34,12 +34,12 @@ const getHouseblockList = (async (req, res) => {
     let currentRow = rows[i];
     if (event.eventType === 'PRISON_ACT') {
       if (!currentRow.activity) {
-        currentRow.activity = event;
-      } else if (moment(event.startTime).isBefore(currentRow.activity.startTime)) {
-        //we discard any duplicate activities and only display the earliest in the time period
-        currentRow.activity = event;
+        currentRow.activity = [event];
       } else {
-        log.info(`Multiple paid activities in same time period. \nOffender: ${event.offenderNo}, Cell location: ${event.cellLocation}, Event desc: ${event.eventDescription}, Starttime: ${event.startTime}`);
+        currentRow.activity.push(event);
+        currentRow.activity.sort(function (a, b) {
+          return safeTimeCompare(a, b);
+        });
       }
     } else {
       // set array of non-paid appointments or visits
@@ -53,6 +53,14 @@ const getHouseblockList = (async (req, res) => {
   return rows;
 }
 );
+
+function safeTimeCompare (a, b) {
+  if (a.startTime && b.startTime) {
+    return moment(b.startTime).isBefore(a.startTime);
+  } else {
+    return !a.startTime;
+  }
+}
 
 
 module.exports = { router, getHouseblockList };
