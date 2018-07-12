@@ -44,7 +44,6 @@ class ResultsHouseblock extends Component {
   }
 
   getDescription (event) {
-    console.log('getting description for ' + event);
     if (event.eventType === 'PRISON_ACT') {
       return event.comment;
     }
