@@ -92,7 +92,7 @@ const loginMiddleware = (req, res, next) => {
   }
 
   if (isAuthenticated(req)) {
-    res.redirect('/');
+    res.redirect('/whereaboutssearch');
     return;
   }
   next();

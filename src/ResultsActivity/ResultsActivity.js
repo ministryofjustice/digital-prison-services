@@ -85,8 +85,8 @@ class ResultsActivity extends Component {
       <th className="straight">Location</th>
       <th className="straight">NOMS&nbsp;ID</th>
       <th className="straight">Other</th>
-      <th className="rotate straightPrint"><div><span>Attend</span></div></th>
-      <th className="rotate straightPrint"><div><span>Don't attend</span></div></th>
+      <th className="rotate straightPrint"><div><span>Pay</span></div></th>
+      <th className="rotate straightPrint"><div><span>Other</span></div></th>
     </tr>);
 
     const readOnly = this.olderThan7Days(this.props.date);

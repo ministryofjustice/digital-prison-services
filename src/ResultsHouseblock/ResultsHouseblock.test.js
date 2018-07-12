@@ -13,15 +13,12 @@ const LOCATION_COLUMN = 1;
 const NOMS_ID_COLUMN = 2;
 const MAIN_COLUMN = 3;
 const OTHER_COLUMN = 4;
-const UNLOCK_COLUMN = 5;
-const GONE_COLUMN = 6;
-//const RECIEVED_COLUMN = 7;
-const ATTEND_COLUMN = 8;
-const DONT_ATTEND_COLUMN = 9;
+const ATTEND_COLUMN = 5;
+const DONT_ATTEND_COLUMN = 6;
 
 const response = [
   {
-    activity: {
+    activity: [{
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
@@ -32,7 +29,7 @@ const response = [
       comment: "Chapel",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
-    },
+    }],
     others: [{
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
@@ -67,7 +64,7 @@ const response = [
     }]
   },
   {
-    activity: {
+    activity: [{
       offenderNo: "A1234AB",
       firstName: "MICHAEL",
       lastName: "SMITH",
@@ -78,10 +75,10 @@ const response = [
       comment: "Chapel Act",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
-    }
+    }]
   },
   {
-    activity: {
+    activity: [{
       offenderNo: "A1234AC",
       firstName: "FRED",
       lastName: "QUIMBY",
@@ -92,7 +89,7 @@ const response = [
       comment: "Chapel Activity",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
-    },
+    }],
     others: [
       {
         offenderNo: "A1234AC",
@@ -152,26 +149,22 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur');
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
-    expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel');
+    expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel 18:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Official Visit 11:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('The gym, appointment 17:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('Medical - Dentist - Appt details 11:40');
-    expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
-    expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={false}'));
-    expect(tr.at(1).find('td').at(GONE_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
-    // expect(tr.at(1).find('td').at(RECIEVED_COLUMN)...
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
 
     expect(tr.at(2).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael');
     expect(tr.at(2).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-2');
-    expect(tr.at(2).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Act');
+    expect(tr.at(2).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Act 18:00');
     expect(tr.at(2).find('td').at(OTHER_COLUMN).find('li').length).toEqual(0);
 
     expect(tr.at(3).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
-    expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity');
+    expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00');
     expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11');
   });
 
@@ -279,8 +272,6 @@ describe('Offender results component Jira NN-843', () => {
       user={user}/>);
 
     const tr = component.find('tr');
-    expect(tr.at(1).find('td').at(UNLOCK_COLUMN).find('input').some('[disabled]')).toEqual(true);
-    expect(tr.at(1).find('td').at(GONE_COLUMN).find('input').some('[disabled]')).toEqual(true);
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
   });
