@@ -11,10 +11,10 @@ class Header extends Component {
       <header className="page-header">
         <div className="header-content">
           <div className="left-content">
-            <Link title="Home link" className="link" to="/" >
+            <Link title="Home link" className="link" to="/whereaboutssearch" >
               <div className="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"/></div>
             </Link>
-            <Link title="Home link" className="unstyled-link" to="/" >
+            <Link title="Home link" className="unstyled-link" to="/whereaboutssearch" >
               <span className="logo-text">HMPPS</span>
               <span className="title">Prison Staff Hub</span>
             </Link>

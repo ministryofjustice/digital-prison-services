@@ -36,7 +36,7 @@ const postLogin = async (req, res) => {
     const response = await elite2Api.login(req);
     session.setHmppsCookie(res, response.data);
 
-    res.redirect('/');
+    res.redirect('/whereaboutssearch');
   } catch (error) {
     logError(req.url, error, 'Login failure');
     let data = {
