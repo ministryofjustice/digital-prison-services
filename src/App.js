@@ -10,7 +10,8 @@ import moment from 'moment';
 
 import {
   BrowserRouter as Router,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -209,8 +210,10 @@ class App extends React.Component {
 
   render () {
     const routes = (<div className="inner-content"><div className="pure-g">
-      <Route exact path="/" render={() => <Dashboard {...this.props} />}/>
-      <Route exact path="/whereaboutssearch" render={() => (<SearchContainer handleError={this.handleError}
+      <Route path="(/)" render={() => (<Route exact path="/" render={() => (
+        <Redirect to="/whereaboutssearch"/>
+      )}/>)}/>
+      <Route path="(/whereaboutssearch)" render={() => (<SearchContainer handleError={this.handleError}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleActivityChange={(event) => this.handleActivityChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
@@ -227,6 +230,7 @@ class App extends React.Component {
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
+      <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
     </div></div>);
 
     let innerContent;
