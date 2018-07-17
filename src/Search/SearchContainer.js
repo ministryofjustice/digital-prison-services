@@ -24,6 +24,7 @@ class SearchContainer extends Component {
           agencyId: this.props.agencyId
         } });
       this.props.locationsDispatch(response.data);
+      this.props.locationDispatch('--');
     } catch (error) {
       this.props.handleError(error);
     }
