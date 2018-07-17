@@ -87,9 +87,9 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
         form['period-select'] = 'PM'
+        form['housing-location-select'] = 'AWing'
         continueButton.click()
         at HouseblockPage
-        form['housing-location-select'] == 'AWing'
 
         when: "I change selections and update"
         def firstOfMonthDisplayFormat = '01/'+ new Date().format('MM/yyyy')
@@ -120,7 +120,7 @@ class HouseblockSpecification extends GebReportingSpec {
 
         then: 'The selections are reinitialised'
         at SearchPage
-        location.value() == 'AWing'
+        location.value() == '--'
         date.value() == 'Today'
         period.value() == this.initialPeriod
     }
@@ -131,6 +131,7 @@ class HouseblockSpecification extends GebReportingSpec {
         this.initialPeriod = period.value()
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
+        form['housing-location-select'] = 'AWing'
         form['period-select'] = 'PM'
         continueButton.click()
         at HouseblockPage
