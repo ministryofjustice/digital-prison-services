@@ -377,6 +377,25 @@ describe('Offender results component Jira NN-843', () => {
     expect(getHouseblockList).toHaveBeenCalledWith('lastName', 'ASC');
   });
 
+  it('should render back link', async () => {
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={[]}
+      handleSearch={jest.fn()}
+      handleSave={jest.fn()}
+      handlePrint={jest.fn()}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      getHouseblockList={jest.fn()}
+      period={'AM'}
+      currentLocation={'BWing'}
+      agencyId={PRISON}
+      user={user}/>);
+    expect(component.find('#back_to_selection_link').length).toEqual(1);
+  });
+
   it('should call showNoneAttendanceModal with event and offender information', () => {
     const showNoneAttendanceModal = jest.fn();
 
