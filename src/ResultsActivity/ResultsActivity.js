@@ -120,9 +120,12 @@ class ResultsActivity extends Component {
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
             <label htmlFor={'col1_' + index} /></div></td>
-          <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
-            <label htmlFor={'col2_' + index} /></div></td>
+          <td className="no-padding checkbox-column">
+            <div className="multiple-choice whereaboutsCheckbox">
+              <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly} onClick={() => this.props.showNoneAttendanceModal(mainActivity)}/>
+              <label htmlFor={'col2_' + index} />
+            </div>
+          </td>
         </tr>
       );
     });
@@ -175,7 +178,8 @@ ResultsActivity.propTypes = {
   agencyId: PropTypes.string,
   activity: PropTypes.number,
   activities: PropTypes.array,
-  getActivityList: PropTypes.func.isRequired
+  getActivityList: PropTypes.func.isRequired,
+  showNoneAttendanceModal: PropTypes.func.isRequired
 };
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity);

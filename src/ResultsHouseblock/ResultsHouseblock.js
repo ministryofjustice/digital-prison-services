@@ -154,9 +154,12 @@ class ResultsHouseblock extends Component {
           <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
             <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly}/>
             <label htmlFor={'col3_' + index} /></div></td>
-          <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly}/>
-            <label htmlFor={'col4_' + index} /></div></td>
+          <td className="no-padding checkbox-column no-print">
+            <div className="multiple-choice whereaboutsCheckbox" onClick={() => this.props.showNoneAttendanceModal(anyActivity)}>
+              <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly}/>
+              <label htmlFor={'col4_' + index} />
+            </div>
+          </td>
         </tr>
       );
     });
@@ -212,7 +215,8 @@ ResultsHouseblock.propTypes = {
   getHouseblockList: PropTypes.func.isRequired,
   agencyId: PropTypes.string,
   orderField: PropTypes.string,
-  sortOrder: PropTypes.string
+  sortOrder: PropTypes.string,
+  showNoneAttendanceModal: PropTypes.func.isRequired
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);
