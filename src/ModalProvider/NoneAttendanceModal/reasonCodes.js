@@ -2,10 +2,10 @@
 
 export const getHouseBlockReasons = () => [
   'Left In Cell',
-  'Refunded'
+  'Refused'
 ];
 
 export const getActivityListReasons = () => [
   'Other',
-  'Refunded'
+  'Refused'
 ];
