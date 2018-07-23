@@ -8,8 +8,14 @@ import { getHoursMinutes, properCaseName } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
 import { getPrisonDescription } from '../stringUtils';
 import moment from 'moment';
+import { Link } from "react-router-dom";
 
 class ResultsHouseblock extends Component {
+  displayBack () {
+    return (<div className="padding-top no-print"><Link id={`back_to_selection_link`} title="Back to selection screen link" className="link backlink" to="/whereaboutssearch" >
+      <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
+  }
+
   isToday () {
     if (this.props.date === 'Today') {
       return true;
@@ -166,6 +172,7 @@ class ResultsHouseblock extends Component {
       moment(this.props.date, "DD/MM/YYYY").format('dddd Do MMMM');
 
     return (<div className="pure-u-md-11-12">
+      {this.displayBack()}
       <h1 className="heading-large whereabouts-title">{this.props.currentLocation}</h1>
       <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
       <div className="whereabouts-date print-only">{date} ({this.props.period}) </div>
