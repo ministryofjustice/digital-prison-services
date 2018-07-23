@@ -326,7 +326,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        data: ['data0', 'data1'],
+        activityData: [],
+        houseBlockData: ['data0', 'data1'],
         orderField: "cellLocation",
         sortOrder: "ASC"
       }
@@ -341,7 +342,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        data: [],
+        activityData: [],
+        houseBlockData: [],
         orderField: 'field1',
         sortOrder: "ASC"
       }
@@ -356,7 +358,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        data: [],
+        houseBlockData: [],
+        activityData: [],
         orderField: 'cellLocation',
         sortOrder: "DESC"
       }
