@@ -137,3 +137,19 @@ export const setActivityData = (data) => {
     data
   };
 };
+
+export const showNoneAttendanceModal = (data) => {
+  return {
+    type: ActionTypes.SET_SHOW_MODAL,
+    payload: {
+      identifier: 'none-attendance-modal',
+      data
+    }
+  };
+};
+
+export const hideModal = () => {
+  return {
+    type: ActionTypes.SET_SHOW_MODAL
+  };
+};

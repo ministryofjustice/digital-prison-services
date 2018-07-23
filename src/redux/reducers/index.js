@@ -90,6 +90,11 @@ export function app (state = appInitialState, action) {
         ...state,
         validationErrors: null
       };
+    case ActionTypes.SET_SHOW_MODAL:
+      return {
+        ...state,
+        showModal: action.payload
+      };
     default:
       return state;
   }

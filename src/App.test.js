@@ -8,6 +8,12 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const store = {
+  getState: () => {},
+  subscribe: () => {},
+  dispatch: () => {}
+};
+
 describe('App component', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
@@ -30,6 +36,8 @@ describe('App component', () => {
       setLoadedDispatch={fn}
       orderDispatch={fn}
       sortOrderDispatch={fn}
+      showModal={{}}
+      store={store}
     />, div);
     ReactDOM.unmountComponentAtNode(div);
   });

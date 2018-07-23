@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
-import { setSearchLocations } from "../redux/actions";
+import { setSearchLocations, showNoneAttendanceModal } from "../redux/actions";
 import axios from "axios/index";
 import Spinner from "../Spinner";
+import { getHouseBlockReasons } from "../ModalProvider/NoneAttendanceModal/reasonCodes";
 
 class ResultsHouseblockContainer extends Component {
   async componentWillMount () {
@@ -51,7 +52,11 @@ class ResultsHouseblockContainer extends Component {
       return <Spinner/>;
     }
     return (<div><Error {...this.props} />
-      <ResultsHouseblock handlePrint={this.handlePrint} handleSave={this.handleSave} {...this.props}/>
+      <ResultsHouseblock
+        handlePrint={this.handlePrint}
+        handleSave={this.handleSave}
+        {...this.props}
+      />
     </div>);
   }
 }
@@ -77,13 +82,15 @@ const mapStateToProps = state => {
     houseblockData: state.houseblock.data,
     loaded: state.app.loaded,
     orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder
+    sortOrder: state.houseblock.sortOrder,
+    noneAttendanceReasons: state.houseblock.noneAttendanceReasons
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, props) => {
   return {
-    locationsDispatch: text => dispatch(setSearchLocations(text))
+    locationsDispatch: text => dispatch(setSearchLocations(text)),
+    showNoneAttendanceModal: event => dispatch(showNoneAttendanceModal({ event, reasons: getHouseBlockReasons() }))
   };
 };
 

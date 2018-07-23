@@ -51,6 +51,9 @@ body {
 .tooltipImage {
   vertical-align: bottom;
 }
+.no-top-margin {
+  margin-top: 0;
+}
 
 .tooltipSpan {
   padding-left: 15px;
@@ -143,6 +146,14 @@ table tr:nth-child(even){
 
 .margin-top {
   margin-top: 25px;
+}
+
+.margin-top-30 {
+  margin-top: 30px;
+}
+
+.margin-right-15 {
+  margin-right: 15px;
 }
 
 .margin-bottom {

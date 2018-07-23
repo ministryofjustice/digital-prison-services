@@ -34,6 +34,9 @@ import {
 } from "./redux/actions";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
+import ModalProvider from './ModalProvider/index';
+import NoneAttendanceModal from './ModalProvider/NoneAttendanceModal/NoneAttendanceContainer';
+
 const axios = require('axios');
 
 class App extends React.Component {
@@ -255,6 +258,11 @@ class App extends React.Component {
           }}
           />
           {this.props.shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
+
+          <ModalProvider {...this.props} showModal={this.props.showModal}>
+            <NoneAttendanceModal key="none-attendance-modal" />
+          </ModalProvider>
+
           {innerContent}
           <Footer showTermsAndConditions={this.showTermsAndConditions} mailTo={this.props.config && this.props.config.mailTo}/>
         </div>
@@ -288,7 +296,8 @@ App.propTypes = {
   activityDataDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
-  sortOrderDispatch: PropTypes.func.isRequired
+  sortOrderDispatch: PropTypes.func.isRequired,
+  showModal: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
@@ -305,7 +314,8 @@ const mapStateToProps = state => {
     period: state.search.period,
     agencyId: state.app.user.activeCaseLoadId,
     orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder
+    sortOrder: state.houseblock.sortOrder,
+    showModal: state.app.showModal
   };
 };
 
