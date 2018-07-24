@@ -37,7 +37,7 @@ const searchInitialState = {
   period: defaultPeriod(moment())
 };
 
-const houseblockInitialState = {
+const eventsInitialState = {
   houseBlockData: [],
   activityData: [],
   orderField: 'cellLocation',
@@ -136,17 +136,17 @@ export function search (state = searchInitialState, action) {
   }
 }
 
-export function houseblock (state = houseblockInitialState, action) {
+export function events (state = eventsInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_HOUSEBLOCK_DATA:
       return { ...state,
         houseBlockData: action.data
       };
-    case ActionTypes.SET_HOUSEBLOCK_ORDER_FIELD:
+    case ActionTypes.SET_ORDER_FIELD:
       return { ...state,
         orderField: action.orderField
       };
-    case ActionTypes.SET_HOUSEBLOCK_SORT_ORDER:
+    case ActionTypes.SET_ORDER:
       return { ...state,
         sortOrder: action.sortOrder
       };
@@ -165,7 +165,7 @@ function updateObject (oldObject, newValues) {
 
 
 const prisonStaffHubApp = combineReducers({
-  houseblock, app, search
+  events, app, search
 });
 
 export default prisonStaffHubApp;
