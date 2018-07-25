@@ -1,4 +1,4 @@
-import { app, search, defaultPeriod, houseblock } from './index';
+import { app, search, defaultPeriod, events } from './index';
 import * as types from '../actions/actionTypes';
 import moment from 'moment';
 
@@ -320,43 +320,46 @@ describe('app (global) reducer', () => {
 
   it('should handle SET_HOUSEBLOCK_DATA', () => {
     expect(
-      houseblock(undefined, {
+      events(undefined, {
         type: types.SET_HOUSEBLOCK_DATA,
         data: ['data0', 'data1']
       })
     ).toEqual(
       {
-        data: ['data0', 'data1'],
+        activityData: [],
+        houseBlockData: ['data0', 'data1'],
         orderField: "cellLocation",
         sortOrder: "ASC"
       }
     );
   });
 
-  it('should handle SET_HOUSEBLOCK_ORDER_FIELD', () => {
+  it('should handle SET_ORDER_FIELD', () => {
     expect(
-      houseblock(undefined, {
-        type: types.SET_HOUSEBLOCK_ORDER_FIELD,
+      events(undefined, {
+        type: types.SET_ORDER_FIELD,
         orderField: 'field1'
       })
     ).toEqual(
       {
-        data: [],
+        activityData: [],
+        houseBlockData: [],
         orderField: 'field1',
         sortOrder: "ASC"
       }
     );
   });
 
-  it('should handle SET_HOUSEBLOCK_SORT_ORDER', () => {
+  it('should handle SET_ORDER', () => {
     expect(
-      houseblock(undefined, {
-        type: types.SET_HOUSEBLOCK_SORT_ORDER,
+      events(undefined, {
+        type: types.SET_ORDER,
         sortOrder: 'DESC'
       })
     ).toEqual(
       {
-        data: [],
+        houseBlockData: [],
+        activityData: [],
         orderField: 'cellLocation',
         sortOrder: "DESC"
       }

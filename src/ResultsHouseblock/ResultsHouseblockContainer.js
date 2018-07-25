@@ -79,11 +79,10 @@ ResultsHouseblockContainer.propTypes = {
 const mapStateToProps = state => {
   return {
     locations: state.search.locations,
-    houseblockData: state.houseblock.data,
+    houseblockData: state.events.houseBlockData,
     loaded: state.app.loaded,
-    orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder,
-    noneAttendanceReasons: state.houseblock.noneAttendanceReasons
+    orderField: state.events.orderField,
+    sortOrder: state.events.sortOrder,
   };
 };
 

@@ -134,7 +134,7 @@ describe('actions', () => {
     expect(actions.setSearchPeriod('brunch')).toEqual(expectedAction);
   });
 
-  it('should create an action to save the houseblock list data', () => {
+  it('should create an action to save the events list data', () => {
     const expectedAction = {
       type: types.SET_HOUSEBLOCK_DATA,
       data: { stuff: 'stuff' }
@@ -142,20 +142,20 @@ describe('actions', () => {
     expect(actions.setHouseblockData({ stuff: 'stuff' })).toEqual(expectedAction);
   });
 
-  it('should create an action to set the houseblock list order field', () => {
+  it('should create an action to set the events list order field', () => {
     const expectedAction = {
-      type: types.SET_HOUSEBLOCK_ORDER_FIELD,
+      type: types.SET_ORDER_FIELD,
       orderField: 'name'
     };
-    expect(actions.setHouseblockOrderField('name')).toEqual(expectedAction);
+    expect(actions.setOrderField('name')).toEqual(expectedAction);
   });
 
-  it('should create an action to set the houseblock list sort order', () => {
+  it('should create an action to set the events list sort order', () => {
     const expectedAction = {
-      type: types.SET_HOUSEBLOCK_SORT_ORDER,
+      type: types.SET_ORDER,
       sortOrder: 'ASC'
     };
-    expect(actions.setHouseblockSortOrder('ASC')).toEqual(expectedAction);
+    expect(actions.setSortOrder('ASC')).toEqual(expectedAction);
   });
 
   it('should create an action to save the activity list data', () => {
