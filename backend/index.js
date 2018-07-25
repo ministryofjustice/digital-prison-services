@@ -25,6 +25,8 @@ const activityLocations = require('./controllers/activityLocations');
 const activityList = require('./controllers/activityList');
 const houseblockList = require('./controllers/houseblockList');
 const health = require('./controllers/health');
+const updateAttendance = require('./controllers/updateAttendance');
+
 const webpack = require('webpack');
 const middleware = require('webpack-dev-middleware');
 const hrm = require('webpack-hot-middleware');
@@ -93,6 +95,7 @@ app.use('/api/activityLocations', activityLocations);
 app.use('/api/houseblocklist', houseblockList.router);
 app.use('/api/locations', locations);
 app.use('/api/activityList', activityList.router);
+app.use('/api/updateAttendance', updateAttendance.router);
 
 app.use('/api/config', getConfig);
 
