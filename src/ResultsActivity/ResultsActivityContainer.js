@@ -57,7 +57,7 @@ ResultsActivityContainer.propTypes = {
 const mapStateToProps = state => {
   return {
     activities: state.search.activities,
-    activityData: state.houseblock.data,
+    activityData: state.events.activityData,
     loaded: state.app.loaded
   };
 };

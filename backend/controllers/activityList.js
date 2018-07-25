@@ -3,6 +3,7 @@ const router = express.Router();
 const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 const switchDateFormat = require('../utils');
+const log = require('../log');
 
 router.get('/', asyncMiddleware(async (req, res) => {
   const viewModel = await getActivityList(req, res);
@@ -14,6 +15,7 @@ const getActivityList = async (req, res) => {
   date = switchDateFormat(date);
 
   const activities = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'PROG', date, timeSlot }, res);
+  log.info(activities.data, 'getActivityList data received');
   const visits = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'VISIT', date, timeSlot }, res);
   const appointments = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'APP', date, timeSlot }, res);
 

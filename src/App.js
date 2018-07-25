@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
-  setHouseblockData, setHouseblockSortOrder, setHouseblockOrderField, setLoaded,
+  setHouseblockData, setSortOrder, setOrderField, setLoaded,
   setSearchDate,
   setSearchLocation,
   setSearchPeriod, setActivityData, setSearchActivity
@@ -313,8 +313,8 @@ const mapStateToProps = state => {
     date: state.search.date,
     period: state.search.period,
     agencyId: state.app.user.activeCaseLoadId,
-    orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder,
+    orderField: state.events.orderField,
+    sortOrder: state.events.sortOrder,
     showModal: state.app.showModal
   };
 };
@@ -335,8 +335,8 @@ const mapDispatchToProps = dispatch => {
     houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
     activityDataDispatch: data => dispatch(setActivityData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
-    orderDispatch: field => dispatch(setHouseblockOrderField(field)),
-    sortOrderDispatch: field => dispatch(setHouseblockSortOrder(field))
+    orderDispatch: field => dispatch(setOrderField(field)),
+    sortOrderDispatch: field => dispatch(setSortOrder(field))
   };
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const axios = require('axios');
 const session = require('./session');
 const useEliteApiAuth = (process.env.USE_API_GATEWAY_AUTH || 'no') === 'yes';
@@ -62,7 +61,9 @@ const getHeaders = ({ headers, reqHeaders, token }) => {
 };
 
 const callApi = ({ method, url, headers, reqHeaders, params, paramsSerializer, onTokenRefresh, responseType, data }) => {
-  const { access_token, refresh_token } = reqHeaders.jwt;
+  const {
+    /* eslint-disable camelcase */
+    access_token, refresh_token } = reqHeaders.jwt;
 
   if (!access_token || !refresh_token) { // eslint-disable-line camelcase
     const message = "Null session or missing jwt";
