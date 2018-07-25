@@ -2,11 +2,11 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import NonAttendanceModal from './index';
+import PaymentReasonModal from './index';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('NoneAttendanceModal', () => {
+describe('PaymentReasonModal', () => {
   it('should call onClose when the cancel button has been clicked', () => {
     const props = {
       onClose: jest.fn(),
@@ -16,7 +16,7 @@ describe('NoneAttendanceModal', () => {
         lastName: 'balog'
       }
     };
-    const modal = shallow(<NonAttendanceModal {...props} />);
+    const modal = shallow(<PaymentReasonModal {...props} />);
 
     modal.find('.greyButton').simulate('click');
 
@@ -33,14 +33,14 @@ describe('NoneAttendanceModal', () => {
         lastName: 'balog'
       }
     };
-    const modal = shallow(<NonAttendanceModal {...props} />);
+    const modal = shallow(<PaymentReasonModal {...props} />);
 
-    modal.find('#none-attendance-reason').first().simulate('change', {
+    modal.find('#payment-reason-reason').first().simulate('change', {
       target: {
         value: 'Refused'
       } });
 
-    modal.find('#none-attendance-comment').first().simulate('change', {
+    modal.find('#payment-reason-comment').first().simulate('change', {
       target: {
         value: 'comment1'
       } });
@@ -59,7 +59,7 @@ describe('NoneAttendanceModal', () => {
         lastName: 'balog'
       }
     };
-    const modal = shallow(<NonAttendanceModal {...props} />);
+    const modal = shallow(<PaymentReasonModal {...props} />);
 
     modal.find('.button').simulate('click');
 
@@ -80,16 +80,16 @@ describe('NoneAttendanceModal', () => {
         lastName: 'balog'
       }
     };
-    const modal = shallow(<NonAttendanceModal {...props} />);
+    const modal = shallow(<PaymentReasonModal {...props} />);
 
     modal.find('.button').simulate('click');
 
-    modal.find('#none-attendance-reason').first().simulate('change', {
+    modal.find('#payment-reason-reason').first().simulate('change', {
       target: {
         value: 'Refused'
       } });
 
-    modal.find('#none-attendance-comment').first().simulate('change', {
+    modal.find('#payment-reason-comment').first().simulate('change', {
       target: {
         value: 'comment1'
       } });

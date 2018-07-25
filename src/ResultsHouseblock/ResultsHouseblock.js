@@ -161,7 +161,7 @@ class ResultsHouseblock extends Component {
             <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly}/>
             <label htmlFor={'col3_' + index} /></div></td>
           <td className="no-padding checkbox-column no-print">
-            <div className="multiple-choice whereaboutsCheckbox" onClick={() => this.props.showNoneAttendanceModal(anyActivity)}>
+            <div className="multiple-choice whereaboutsCheckbox" onClick={() => this.props.showPaymentReasonModal(anyActivity)}>
               <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly}/>
               <label htmlFor={'col4_' + index} />
             </div>
@@ -223,7 +223,7 @@ ResultsHouseblock.propTypes = {
   agencyId: PropTypes.string,
   orderField: PropTypes.string,
   sortOrder: PropTypes.string,
-  showNoneAttendanceModal: PropTypes.func.isRequired
+  showPaymentReasonModal: PropTypes.func.isRequired
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);

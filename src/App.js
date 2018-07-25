@@ -35,7 +35,7 @@ import {
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
 import ModalProvider from './ModalProvider/index';
-import NoneAttendanceModal from './ModalProvider/NoneAttendanceModal/NoneAttendanceContainer';
+import PaymentReasonModal from './ModalProvider/PaymentReasonModal/PaymentReasonContainer';
 
 const axios = require('axios');
 
@@ -260,7 +260,7 @@ class App extends React.Component {
           {this.props.shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
 
           <ModalProvider {...this.props} showModal={this.props.showModal}>
-            <NoneAttendanceModal key="none-attendance-modal" />
+            <PaymentReasonModal key="payment-reason-modal" />
           </ModalProvider>
 
           {innerContent}

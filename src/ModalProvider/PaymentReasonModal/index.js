@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import './index.scss';
 import { properCaseName } from "../../stringUtils";
 
-class NoneAttendanceModal extends Component {
-  onReasonChange (event) {
+class PaymentReasonModal extends Component {
+  onReasonChange (event, reasons) {
     this.setState({
       ...this.state,
-      reason: event.target.value
+      reason: { key: event.target.selectedIndex - 1, value: event.target.value },
+      reasons
     });
   }
 
@@ -52,7 +53,7 @@ class NoneAttendanceModal extends Component {
       return;
     }
 
-    const { reason, comment } = this.state;
+    const { reason, comment, reasons } = this.state;
 
     this.setState({
       error: {},
@@ -60,7 +61,8 @@ class NoneAttendanceModal extends Component {
       comment
     });
 
-    this.props.onConfirm({ reason, comment, event: this.props.event });
+    this.props.onConfirm({ reason, comment, reasons, event: this.props.event });
+    this.props.onClose();
   }
 
   render () {
@@ -86,9 +88,9 @@ class NoneAttendanceModal extends Component {
           <label className="form-label" htmlFor="reasons">
                       Select an option:
           </label>
-          <select id="none-attendance-reason" name="reasons" className={reasonSelectClass} onChange={event => this.onReasonChange(event)} defaultValue={'default'}>
+          <select id="payment-reason-reason" name="reasons" className={reasonSelectClass} onChange={event => this.onReasonChange(event, reasons)} defaultValue={'default'}>
             <option value="default" disabled hidden>Select option</option>
-            {reasons.map(reason => <option key={reason}>{reason}</option>)}
+            {reasons.map((reason) => <option key={reason.value}>{reason.value}</option>)}
           </select>
         </div>
 
@@ -97,7 +99,7 @@ class NoneAttendanceModal extends Component {
           <label className="form-label" htmlFor="comments">
                Comments:
           </label>
-          <textarea id="none-attendance-comment" className={commentClass} name="comments" rows="5" onChange={event => this.onCommentChange(event)} />
+          <textarea id="payment-reason-comment" className={commentClass} name="comments" rows="5" onChange={event => this.onCommentChange(event)} />
         </div>
 
         <div>
@@ -109,11 +111,11 @@ class NoneAttendanceModal extends Component {
   }
 }
 
-NoneAttendanceModal.propTypes = {
+PaymentReasonModal.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   event: PropTypes.object.isRequired,
   reasons: PropTypes.array.isRequired
 };
 
-export default NoneAttendanceModal;
+export default PaymentReasonModal;

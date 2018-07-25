@@ -138,11 +138,11 @@ export const setActivityData = (data) => {
   };
 };
 
-export const showNoneAttendanceModal = (data) => {
+export const showPaymentReasonModal = (data) => {
   return {
     type: ActionTypes.SET_SHOW_MODAL,
     payload: {
-      identifier: 'none-attendance-modal',
+      identifier: 'payment-reason-modal',
       data
     }
   };

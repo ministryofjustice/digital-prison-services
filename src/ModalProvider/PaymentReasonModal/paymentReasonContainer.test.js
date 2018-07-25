@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-import NoneAttendanceContainer from './NoneAttendanceContainer';
+import PaymentReasonContainer from './PaymentReasonContainer';
 
 const store = {
   getState: () => {},
@@ -12,8 +12,8 @@ const store = {
   dispatch: () => {}
 };
 
-describe('NoneAttendanceContainer', () => {
-  it('should pass the correct props down to NoneAttendanceModal', () => {
+describe('PaymentReasonContainer', () => {
+  it('should pass the correct props down to PaymentReasonModal', () => {
     const props = {
       onClose: () => {},
       onConfirm: () => {},
@@ -23,8 +23,8 @@ describe('NoneAttendanceContainer', () => {
       },
       store
     };
-    const container = mount(<NoneAttendanceContainer {...props} />);
-    const modal = container.find('NoneAttendanceModal');
+    const container = mount(<PaymentReasonContainer {...props} />);
+    const modal = container.find('PaymentReasonModal');
 
     expect(JSON.stringify(modal.props())).toEqual(JSON.stringify({
       onConfirm: props.onConfirm,
