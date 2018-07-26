@@ -158,11 +158,12 @@ class ResultsHouseblock extends Component {
             <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
             <label htmlFor={'col2_' + index} /></div></td>
           <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly} onChange={(event) => this.props.handlePay(anyActivity, event)}/>
+            {/*Disable pay/other for Part 1*/}
+            <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly} /> {/*onChange={(event) => this.props.handlePay(anyActivity, event)}*/}
             <label htmlFor={'col3_' + index} /></div></td>
           <td className="no-padding checkbox-column no-print">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly} onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)}/>
+              <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly} /> {/*onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)}*/}
               <label htmlFor={'col4_' + index} />
             </div>
           </td>

@@ -396,8 +396,8 @@ describe('Offender results component Jira NN-843', () => {
       user={user}/>);
     expect(component.find('#back_to_selection_link').length).toEqual(1);
   });
-
-  it('should call showPaymentReasonModal with event and offender information', () => {
+  //TODO Skipped for Part 1
+  it.skip('should call showPaymentReasonModal with event and offender information', () => {
     const showPaymentReasonModal = jest.fn();
 
     const component = shallow(<ResultsHouseblock
