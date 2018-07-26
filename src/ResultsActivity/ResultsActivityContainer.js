@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Error from '../Error';
 import ResultsActivity from "./ResultsActivity";
-import { setSearchActivities, showNoneAttendanceModal } from "../redux/actions";
+import { setSearchActivities, showPaymentReasonModal } from "../redux/actions";
 import Spinner from "../Spinner";
 
-import { getActivityListReasons } from "../ModalProvider/NoneAttendanceModal/reasonCodes";
+import { getActivityListReasons } from "../ModalProvider/PaymentReasonModal/reasonCodes";
 
 class ResultsActivityContainer extends Component {
   async componentWillMount () {
@@ -65,7 +65,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     activitiesDispatch: text => dispatch(setSearchActivities(text)),
-    showNoneAttendanceModal: event => dispatch(showNoneAttendanceModal({ event, reasons: getActivityListReasons() }))
+    showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() }))
   };
 };
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const moment = require('moment');
+const momentTimeZone = require('moment-timezone');
 const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 const log = require('../log');
@@ -18,10 +18,13 @@ const updateAttendance = (async (req, res) => {
   await elite2Api.updateAttendance(req, { offenderNo, activityId }, res);
   log.info(res.status, 'updateAttendance success');
   if (req.body.eventOutcome === 'UNACAB' && req.body.performance === 'UNACCEPT') {
-    req.body = {
+    const zone = 'Europe/London';
+    const now = momentTimeZone.tz(zone);
+    req.body = {};
+    req.data = {
       type: 'Negative Behaviour',
       subType: 'IEP Warning',
-      occurrenceDateTime: moment().format('YYYY-MM-DDThh:mm'),
+      occurrenceDateTime: now.format('YYYY-MM-DDThh:mm'),
       text: 'Refused to attend activity / education.'
     };
     await elite2Api.createCaseNote(req, res);

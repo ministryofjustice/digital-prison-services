@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
-import { setSearchLocations, showNoneAttendanceModal } from "../redux/actions";
+import { setSearchLocations, showPaymentReasonModal } from "../redux/actions";
 import axios from "axios/index";
 import Spinner from "../Spinner";
-import { getHouseBlockReasons } from "../ModalProvider/NoneAttendanceModal/reasonCodes";
+import { getHouseBlockReasons } from "../ModalProvider/PaymentReasonModal/reasonCodes";
 
 class ResultsHouseblockContainer extends Component {
   async componentWillMount () {
@@ -83,13 +83,14 @@ const mapStateToProps = state => {
     loaded: state.app.loaded,
     orderField: state.events.orderField,
     sortOrder: state.events.sortOrder,
+    paymentReasonReasons: state.events.paymentReasonReasons
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     locationsDispatch: text => dispatch(setSearchLocations(text)),
-    showNoneAttendanceModal: event => dispatch(showNoneAttendanceModal({ event, reasons: getHouseBlockReasons() }))
+    showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getHouseBlockReasons() }))
   };
 };
 
