@@ -81,16 +81,16 @@ const mapStateToProps = state => {
     locations: state.search.locations,
     houseblockData: state.events.houseBlockData,
     loaded: state.app.loaded,
-    orderField: state.houseblock.orderField,
-    sortOrder: state.houseblock.sortOrder,
-    paymentReasonReasons: state.houseblock.paymentReasonReasons
+    orderField: state.events.orderField,
+    sortOrder: state.events.sortOrder,
+    paymentReasonReasons: state.events.paymentReasonReasons
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     locationsDispatch: text => dispatch(setSearchLocations(text)),
-    showPaymentReasonModal: event => dispatch(showPaymentReasonModal({ event, reasons: getHouseBlockReasons() }))
+    showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getHouseBlockReasons() }))
   };
 };
 

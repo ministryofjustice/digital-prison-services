@@ -1,7 +1,7 @@
 import React from 'react';
 import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
-import Error from './Error/index';
+import ErrorComponent from './Error/index';
 import SearchContainer from './Search/SearchContainer';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
@@ -35,7 +35,7 @@ import {
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
 import ModalProvider from './ModalProvider/index';
-import PaymentReasonModal from './ModalProvider/PaymentReasonModal/PaymentReasonContainer';
+import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer';
 
 const axios = require('axios');
 
@@ -211,6 +211,23 @@ class App extends React.Component {
     this.props.setLoadedDispatch(true);
   }
 
+  async handlePay (activity, browserEvent) {
+    try {
+      if (!activity.eventId) {
+        throw new Error('No event id found for this row');
+      }
+      // TODO use this to detect whether we are checking or unchecking ?
+      // if (browserEvent.???) ...
+      const data = {
+        eventOutcome: 'ATT',
+        performance: 'STANDARD'
+      };
+      await axios.put(`/api/updateAttendance?offenderNo=${activity.offenderNo}&activityId=${activity.eventId}`, data);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
   render () {
     const routes = (<div className="inner-content"><div className="pure-g">
       <Route path="(/)" render={() => (<Route exact path="/" render={() => (
@@ -221,18 +238,22 @@ class App extends React.Component {
         handleActivityChange={(event) => this.handleActivityChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
-        handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
+        handleSearch={(history) => this.handleSearch(history)} {...this.props} />)}/>
       <Route exact path="/whereaboutsresultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
         getHouseblockList = {this.getHouseblockList}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
-        handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
+        handleSearch={(history) => this.handleSearch(history)}
+        handlePay={this.handlePay}
+        {...this.props} />)}/>
       <Route exact path="/whereaboutsresultsactivity" render={() => (<ResultsActivityContainer handleError={this.handleError}
         getActivityList = {this.getActivityList}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
-        handleSearch={(history) => this.handleSearch(history)}{...this.props} />)}/>
+        handleSearch={(history) => this.handleSearch(history)}
+        handlePay={this.handlePay}
+        {...this.props} />)}/>
       <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
     </div></div>);
 
@@ -240,7 +261,7 @@ class App extends React.Component {
     if (this.shouldDisplayInnerContent()) {
       innerContent = routes;
     } else {
-      innerContent = (<div className="inner-content"><div className="pure-g"><Error {...this.props} /></div></div>);
+      innerContent = (<div className="inner-content"><div className="pure-g"><ErrorComponent {...this.props} /></div></div>);
     }
 
     return (
@@ -260,7 +281,7 @@ class App extends React.Component {
           {this.props.shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
 
           <ModalProvider {...this.props} showModal={this.props.showModal}>
-            <PaymentReasonModal key="payment-reason-modal" />
+            <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
           </ModalProvider>
 
           {innerContent}

@@ -21,7 +21,7 @@ class PaymentReasonModal extends Component {
   }
 
   validationErrors () {
-    const { reason, comment } = this.state || {};
+    const { reason, comment, reasons } = this.state || {};
     let error;
 
     if (!reason) {
@@ -29,9 +29,10 @@ class PaymentReasonModal extends Component {
         ...error || {},
         reason: 'Please select a reason.'
       };
+      return error;
     }
 
-    if (!comment) {
+    if (!comment && reasons[reason.key].commentRequired) {
       error = {
         ...error || {},
         comment: 'Please select a comment.'
@@ -40,7 +41,6 @@ class PaymentReasonModal extends Component {
 
     return error;
   }
-
 
   onSubmit () {
     const error = this.validationErrors();
@@ -61,7 +61,7 @@ class PaymentReasonModal extends Component {
       comment
     });
 
-    this.props.onConfirm({ reason, comment, reasons, event: this.props.event });
+    this.props.onConfirm({ reason, comment, reasons, event: this.props.event, handleError: this.props.handleError });
     this.props.onClose();
   }
 
@@ -115,6 +115,7 @@ PaymentReasonModal.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   event: PropTypes.object.isRequired,
+  handleError: PropTypes.func.isRequired,
   reasons: PropTypes.array.isRequired
 };
 

@@ -65,7 +65,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     activitiesDispatch: text => dispatch(setSearchActivities(text)),
-    showPaymentReasonModal: event => dispatch(showPaymentReasonModal({ event, reasons: getActivityListReasons() }))
+    showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() }))
   };
 };
 

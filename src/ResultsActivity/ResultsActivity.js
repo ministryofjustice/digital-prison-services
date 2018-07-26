@@ -118,11 +118,11 @@ class ResultsActivity extends Component {
           })}</ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
+            <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly} onChange={(event) => this.props.handlePay(mainActivity, event)}/>
             <label htmlFor={'col1_' + index} /></div></td>
           <td className="no-padding checkbox-column">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly} onClick={() => this.props.showPaymentReasonModal(mainActivity)}/>
+              <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly} onChange={(event) => this.props.showPaymentReasonModal(mainActivity, event)}/>
               <label htmlFor={'col2_' + index} />
             </div>
           </td>
@@ -179,6 +179,7 @@ ResultsActivity.propTypes = {
   activity: PropTypes.number,
   activities: PropTypes.array,
   getActivityList: PropTypes.func.isRequired,
+  handlePay: PropTypes.func.isRequired,
   showPaymentReasonModal: PropTypes.func.isRequired
 };
 

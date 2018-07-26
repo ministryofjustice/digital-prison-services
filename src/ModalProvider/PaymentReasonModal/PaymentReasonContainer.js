@@ -8,6 +8,9 @@ const axios = require('axios');
 
 const onConfirm = async (props) => {
   try {
+    if (!props.event.eventId) {
+      throw new Error('No event id found for this row');
+    }
     const data = {
       eventOutcome: props.reasons[props.reason.key].mapping.eventOutcome,
       performance: props.reasons[props.reason.key].mapping.performance,
@@ -15,21 +18,22 @@ const onConfirm = async (props) => {
     };
     await axios.put(`/api/updateAttendance?offenderNo=${props.event.offenderNo}&activityId=${props.event.eventId}`, data);
   } catch (error) {
-    props.setErrorDispatch(error.message);
+    props.handleError(error);
   }
 };
 
-const PaymentReasonContainer = ({ onClose, data }) => (<PaymentReasonModal
+const PaymentReasonContainer = ({ onClose, data, handleError }) => (<PaymentReasonModal
   onConfirm={onConfirm}
   onClose={onClose}
   reasons={data.reasons}
   event={data.event}
+  handleError={handleError}
 />);
 
 
 PaymentReasonContainer.propTypes = {
   onClose: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired
 };
 

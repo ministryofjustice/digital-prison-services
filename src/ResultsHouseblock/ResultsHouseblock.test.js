@@ -24,6 +24,7 @@ const response = [
       lastName: "ANDERSON",
       cellLocation: `${PRISON}-A-1-1`,
       event: "PA",
+      eventId: 56,
       eventType: "PRISON_ACT",
       eventDescription: "Prison Activities",
       comment: "Chapel",
@@ -412,8 +413,15 @@ describe('Offender results component Jira NN-843', () => {
       showPaymentReasonModal={showPaymentReasonModal}
     />);
 
-    component.find('.whereaboutsCheckbox').last().simulate('click');
+    const browserEvent = {
+      target: {
+        value: 'dummy'
+      }
+    };
+    component.find('#col4_0').last().simulate('change',
+      browserEvent
+    );
 
-    expect(showPaymentReasonModal).toHaveBeenCalledWith(response[0].activity[0]);
+    expect(showPaymentReasonModal).toHaveBeenCalledWith(response[0].activity[0], browserEvent);
   });
 });

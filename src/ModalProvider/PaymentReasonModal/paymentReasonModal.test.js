@@ -9,6 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('PaymentReasonModal', () => {
   it('should call onClose when the cancel button has been clicked', () => {
     const props = {
+      onConfirm: jest.fn(),
       onClose: jest.fn(),
       reasons: [],
       event: {
@@ -24,10 +25,11 @@ describe('PaymentReasonModal', () => {
   });
 
 
-  it('should call onConfirm with the selected reason and comment', () => {
+  it('should call onConfirm with the selected reason and comment, and onClose', () => {
     const props = {
       onConfirm: jest.fn(),
-      reasons: ['Refused', 'Left in Cell'],
+      onClose: jest.fn(),
+      reasons: [{ value: 'Refused', commentRequired: true }, { value: 'Left in Cell', commentRequired: true }],
       event: {
         firstName: 'igor',
         lastName: 'balog'
@@ -37,7 +39,8 @@ describe('PaymentReasonModal', () => {
 
     modal.find('#payment-reason-reason').first().simulate('change', {
       target: {
-        value: 'Refused'
+        value: 'Refused',
+        selectedIndex: 44
       } });
 
     modal.find('#payment-reason-comment').first().simulate('change', {
@@ -47,12 +50,16 @@ describe('PaymentReasonModal', () => {
 
     modal.find('.button').simulate('click');
 
-    expect(props.onConfirm).toHaveBeenCalledWith({ reason: 'Refused', comment: 'comment1', event: props.event });
+    expect(props.onConfirm).toHaveBeenCalledWith({ reason: { key: 43, value: 'Refused' },
+      reasons: [{ value: 'Refused', commentRequired: true }, { value: 'Left in Cell', commentRequired: true }],
+      comment: 'comment1', event: props.event });
+    expect(props.onClose).toHaveBeenCalled();
   });
 
   it('should not allow the user to confirm when reason and comment is missing', () => {
     const props = {
       onConfirm: jest.fn(),
+      onClose: jest.fn(),
       reasons: [],
       event: {
         firstName: 'igor',
@@ -64,16 +71,44 @@ describe('PaymentReasonModal', () => {
     modal.find('.button').simulate('click');
 
     expect(modal.find('.error-message').get(0).props.children).toBe('Please select a reason.');
-    expect(modal.find('.error-message').get(1).props.children).toBe('Please select a comment.');
-    expect(modal.find('.form-group-error').length).toBe(2);
-    expect(modal.find('.form-control-error').length).toBe(2);
+    expect(modal.find('.form-group-error').length).toBe(1);
+    expect(modal.find('.form-control-error').length).toBe(1);
 
     expect(props.onConfirm.mock.calls.length).toBe(0);
+  });
+
+  it('should allow the user to confirm when comment is missing and reason implies comment is optional', () => {
+    const props = {
+      onConfirm: jest.fn(),
+      onClose: jest.fn(),
+      reasons: [{ value: 'Cancelled', commentRequired: false }, { value: 'Left in Cell', commentRequired: true }],
+      event: {
+        firstName: 'igor',
+        lastName: 'balog'
+      }
+    };
+    const modal = shallow(<PaymentReasonModal {...props} />);
+
+    modal.find('#payment-reason-reason').first().simulate('change', {
+      target: {
+        value: 'Cancelled',
+        selectedIndex: 1
+      } });
+
+    modal.find('.button').simulate('click');
+
+    expect(props.onConfirm).toHaveBeenCalledWith({ reason: { key: 0, value: 'Cancelled' }, reasons: props.reasons, event: props.event });
+    expect(props.onClose).toHaveBeenCalled();
+    expect(modal.find('.form-group-error').length).toBe(0);
+    expect(modal.find('.form-control-error').length).toBe(0);
+
+    expect(props.onConfirm.mock.calls.length).toBe(1);
   });
 
   it('should not remove validation errors when the missing fields have been inputted', () => {
     const props = {
       onConfirm: jest.fn(),
+      onClose: jest.fn(),
       reasons: [],
       event: {
         firstName: 'igor',
