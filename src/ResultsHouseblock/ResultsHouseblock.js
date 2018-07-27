@@ -4,9 +4,8 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, properCaseName } from "../stringUtils";
+import { getHoursMinutes, properCaseName, getPrisonDescription } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
-import { getPrisonDescription } from '../stringUtils';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 
@@ -114,10 +113,10 @@ class ResultsHouseblock extends Component {
       <th className="straight">NOMS&nbsp;ID</th>
       <th className="straight">Activity</th>
       <th className="straight">Other</th>
-      <th className="rotate straightPrint no-display"><div><span>Unlocked</span></div></th>
-      <th className="rotate straightPrint no-display"><div><span>Gone</span></div></th>
-      <th className="rotate checkbox-column no-print"><div><span>Attend</span></div></th>
-      <th className="rotate checkbox-column no-print"><div><span>Don't attend</span></div></th>
+      <th className="straightPrint no-display"><div><span>Unlocked</span></div></th>
+      <th className="straightPrint no-display"><div><span>Gone</span></div></th>
+      <th className="checkbox-column no-print"><div><span>Pay</span></div></th>
+      <th className="checkbox-column no-print"><div><span>Other</span></div></th>
     </tr>);
 
     const readOnly = this.olderThan7Days();
@@ -147,20 +146,30 @@ class ResultsHouseblock extends Component {
           })}</ul>
           }</td>
           <td className="row-gutters small-font">{row.others &&
-          <ul>{row.others.map((event, index) => {
-            return <li key={event.offenderNo_ + 'others_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
-          })}</ul>
+            <ul>{row.others.map((event, index) => {
+              return <li key={event.offenderNo_ + 'others_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
+            })}
+            </ul>
           }</td>
-          <td className="no-padding checkbox-column no-display"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
-            <label htmlFor={'col1_' + index} /></div></td>
-          <td className="no-padding checkbox-column no-display"><div className="multiple-choice whereaboutsCheckbox">
-            <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
-            <label htmlFor={'col2_' + index} /></div></td>
-          <td className="no-padding checkbox-column no-print"><div className="multiple-choice whereaboutsCheckbox">
-            {/*Disable pay/other for Part 1*/}
-            <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly} /> {/*onChange={(event) => this.props.handlePay(anyActivity, event)}*/}
-            <label htmlFor={'col3_' + index} /></div></td>
+          <td className="no-padding checkbox-column no-display">
+            <div className="multiple-choice whereaboutsCheckbox">
+              <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
+              <label htmlFor={'col1_' + index} />
+            </div>
+          </td>
+          <td className="no-padding checkbox-column no-display">
+            <div className="multiple-choice whereaboutsCheckbox">
+              <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
+              <label htmlFor={'col2_' + index} />
+            </div>
+          </td>
+          <td className="no-padding checkbox-column no-print">
+            <div className="multiple-choice whereaboutsCheckbox">
+              {/*Disable pay/other for Part 1*/}
+              <input id={'col3_' + index} type="checkbox" name="ch3" disabled={readOnly} /> {/*onChange={(event) => this.props.handlePay(anyActivity, event)}*/}
+              <label htmlFor={'col3_' + index} />
+            </div>
+          </td>
           <td className="no-padding checkbox-column no-print">
             <div className="multiple-choice whereaboutsCheckbox">
               <input id={'col4_' + index} type="checkbox" name="ch4" disabled={readOnly} /> {/*onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)}*/}
