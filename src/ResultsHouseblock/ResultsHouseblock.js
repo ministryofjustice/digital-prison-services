@@ -112,7 +112,7 @@ class ResultsHouseblock extends Component {
       <th className="straight">{this.sortableColumn('Location', 'cellLocation')}</th>
       <th className="straight">NOMS&nbsp;ID</th>
       <th className="straight">Activity</th>
-      <th className="straight">Other</th>
+      <th className="straight">Other activities</th>
       <th className="straightPrint no-display"><div><span>Unlocked</span></div></th>
       <th className="straightPrint no-display"><div><span>Gone</span></div></th>
       <th className="checkbox-column no-print"><div><span>Pay</span></div></th>
