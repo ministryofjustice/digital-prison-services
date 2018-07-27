@@ -108,15 +108,15 @@ class ResultsHouseblock extends Component {
     </div>);
 
     const headings = (<tr>
-      <th className="straight">{this.sortableColumn('Name', 'lastName')}</th>
-      <th className="straight">{this.sortableColumn('Location', 'cellLocation')}</th>
-      <th className="straight">NOMS&nbsp;ID</th>
-      <th className="straight">Activity</th>
+      <th className="straight width15">{this.sortableColumn('Name', 'lastName')}</th>
+      <th className="straight width10">{this.sortableColumn('Location', 'cellLocation')}</th>
+      <th className="straight width10">NOMS&nbsp;ID</th>
+      <th className="straight width15">Activity</th>
       <th className="straight">Other activities</th>
       <th className="straightPrint no-display"><div><span>Unlocked</span></div></th>
       <th className="straightPrint no-display"><div><span>Gone</span></div></th>
-      <th className="checkbox-column no-print"><div><span>Pay</span></div></th>
-      <th className="checkbox-column no-print"><div><span>Other</span></div></th>
+      <th className="checkbox-column checkbox-header no-print"><div><span>Pay</span></div></th>
+      <th className="checkbox-column checkbox-header no-print"><div><span>Other</span></div></th>
     </tr>);
 
     const readOnly = this.olderThan7Days();
