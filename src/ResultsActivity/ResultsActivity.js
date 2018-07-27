@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './index.scss';
 import '../index.scss';
 import '../lists.scss';
 import '../App.scss';
@@ -47,7 +48,7 @@ class ResultsActivity extends Component {
 
   render () {
     const dateSelect = (
-      <div className="pure-u-md-2-12 padding-left padding-right">
+      <div className="pure-u-md-2-12 padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
           handleDateChange={this.props.handleDateChange}
@@ -81,12 +82,12 @@ class ResultsActivity extends Component {
     </div>);
 
     const headings = (<tr>
-      <th className="straight">Name</th>
-      <th className="straight">Location</th>
-      <th className="straight">NOMS&nbsp;ID</th>
-      <th className="straight">Other</th>
-      <th className="rotate straightPrint"><div><span>Pay</span></div></th>
-      <th className="rotate straightPrint"><div><span>Other</span></div></th>
+      <th className="straight width15">Name</th>
+      <th className="straight width10">Location</th>
+      <th className="straight width10">NOMS&nbsp;ID</th>
+      <th className="straight">Other activities </th>
+      <th className="straightPrint checkbox-header"><div><span>Pay</span></div></th>
+      <th className="straightPrint checkbox-header"><div><span>Other</span></div></th>
     </tr>);
 
     const readOnly = this.olderThan7Days(this.props.date);
@@ -115,7 +116,8 @@ class ResultsActivity extends Component {
           })}
           {row.appointments && row.appointments.map((e, index) => {
             return <li key={mainActivity.offenderNo + '_' + index}>{this.getDescription(e)} {getHoursMinutes(e.startTime)}</li>;
-          })}</ul>
+          })}
+          </ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             {/*Disable pay/other for Part 1*/}
@@ -135,7 +137,7 @@ class ResultsActivity extends Component {
       moment().format('dddd Do MMMM') :
       moment(this.props.date, "DD/MM/YYYY").format('dddd Do MMMM');
 
-    return (<div className="pure-u-md-11-12">
+    return (<div className="pure-u-md-11-12 results-activity">
       {this.displayBack()}
       <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
       <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
