@@ -25,10 +25,6 @@ class ActivitySpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
         form['activity-select'] = 'loc2'
-      //  form['date'] = ??? TODO cannot set input, have to click calendar!
-//        datePicker.click()
-//        days[0].click() // select 1st of this month for now
-
         form['period-select'] = 'AM'
         continueButton.click()
 
@@ -44,6 +40,18 @@ class ActivitySpecification extends GebReportingSpec {
         texts[1].contains("Medical - Dentist - Appt details 11:40")
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
         texts[3].contains("Baa, Fred A-1-3 A1234AC")
+
+        when: 'I order by name'
+        waitFor { markNameAsOrderByColumn.displayed }
+        markNameAsOrderByColumn.click()
+
+        then: 'the activity list should be displayed in the new order'
+        at ActivityPage
+        def data = tableRows*.text()
+        data[1].contains("Fred")
+        data[2].contains("Eugene")
+        data[3].contains("Arthur")
+
     }
 
     def "The updated activity list is displayed"() {

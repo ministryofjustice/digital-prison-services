@@ -49,6 +49,7 @@ const getHouseblockList = (req, res) => gateway.getRequest({
 const getActivityList = (req, { agencyId, locationId, usage, date, timeSlot }, res) => gateway.getRequest({
   req,
   res,
+  headers: getSortHeaders(req),
   params: { date, timeSlot },
   url: `${eliteApiUrl}api/schedules/${agencyId}/locations/${locationId}/usage/${usage}`
 });

@@ -95,7 +95,7 @@ class HouseblockResponse {
             response3,
             response4
     ])
-    static responseNameOrder = JsonOutput.toJson([
+    static  responseNameOrder = JsonOutput.toJson([
             response1,
             response2,
             response4,
