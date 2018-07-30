@@ -187,10 +187,13 @@ class App extends React.Component {
     this.props.setLoadedDispatch(true);
   }
 
-  async getActivityList () {
+  async getActivityList (orderField, sortOrder) {
     try {
       this.props.resetErrorDispatch();
       this.props.setLoadedDispatch(false);
+      if (orderField) this.props.orderDispatch(orderField);
+      if (sortOrder) this.props.sortOrderDispatch(sortOrder);
+
       let date = this.props.date;
       if (date === 'Today') { // replace placeholder text
         date = moment().format('DD/MM/YYYY');
@@ -203,6 +206,14 @@ class App extends React.Component {
           timeSlot: this.props.period
         }
       };
+      if (orderField) {
+        config.headers = {
+          'Sort-Fields': orderField
+        };
+        if (sortOrder) {
+          config.headers['Sort-Order'] = sortOrder;
+        }
+      }
       const response = await axios.get('/api/activitylist', config);
       this.props.activityDataDispatch(response.data);
     } catch (error) {

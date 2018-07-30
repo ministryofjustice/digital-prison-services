@@ -46,6 +46,25 @@ class ResultsActivity extends Component {
     return event.eventDescription;
   }
 
+  sortableColumn (heading, orderField) {
+    let triangleImage = '';
+    if (this.props.sortOrder === 'ASC') {
+      triangleImage = (<a className="sortableLink" id={heading + '-sort-asc'} href="#" onClick={() => {
+        this.props.getActivityList(orderField, 'DESC');
+      }}><img src="/images/Triangle_asc.png" height="8" width="15"/></a>);
+    } else if (this.props.sortOrder === 'DESC') {
+      triangleImage = (<a className="sortableLink" id={heading + '-sort-desc'} href="#" onClick={() => {
+        this.props.getActivityList(orderField, 'ASC');
+      }}><img src="/images/Triangle_desc.png" height="8" width="15"/></a>);
+    }
+
+    return this.props.orderField !== orderField ?
+      <a className="sortableLink" id={heading + '-sortable-column'} href="#" onClick={() => {
+        this.props.getActivityList(orderField, 'ASC');
+      }}>{heading}</a> :
+      <div>{heading} {triangleImage}</div>;
+  }
+
   render () {
     const dateSelect = (
       <div className="pure-u-md-2-12 padding-right">
@@ -82,8 +101,9 @@ class ResultsActivity extends Component {
     </div>);
 
     const headings = (<tr>
-      <th className="straight width15">Name</th>
-      <th className="straight width10">Location</th>
+      <th className="straight width10">{this.sortableColumn('Name', 'lastName')}</th>
+      <th className="straight width10">{this.sortableColumn('Location', 'cellLocation')}</th>
+
       <th className="straight width10">NOMS&nbsp;ID</th>
       <th className="straight">Other activities </th>
       <th className="straightPrint checkbox-header"><div><span>Pay</span></div></th>
@@ -183,7 +203,9 @@ ResultsActivity.propTypes = {
   activities: PropTypes.array,
   getActivityList: PropTypes.func.isRequired,
   handlePay: PropTypes.func.isRequired,
-  showPaymentReasonModal: PropTypes.func.isRequired
+  showPaymentReasonModal: PropTypes.func.isRequired,
+  orderField: PropTypes.string,
+  sortOrder: PropTypes.string
 };
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity);

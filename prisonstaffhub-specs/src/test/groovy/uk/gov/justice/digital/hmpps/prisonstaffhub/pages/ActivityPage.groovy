@@ -24,6 +24,7 @@ class ActivityPage extends Page {
         updateButton { $('#updateButton') }
         saveButton { $('#saveButton') }
         printButton { $('#printButton') }
+        markNameAsOrderByColumn { $('#Name-sortable-column') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
     }
 }

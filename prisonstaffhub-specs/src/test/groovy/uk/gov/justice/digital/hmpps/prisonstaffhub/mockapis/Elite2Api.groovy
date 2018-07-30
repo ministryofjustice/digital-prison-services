@@ -243,7 +243,18 @@ class Elite2Api extends WireMockRule {
                         aResponse()
                                 .withBody(ActivityResponse.appointments)
                                 .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
+                                .withStatus(200)))
+
+
+        this.stubFor(
+                        get("/api/schedules/${caseload.id}/locations/${locationId}/usage/PROG?date=${date}&timeSlot=${timeSlot}")
+                                .withHeader('Sort-Fields', equalTo('lastName'))
+                                .willReturn(
+                                aResponse()
+                                        .withBody(ActivityResponse.acrtivitiesByNameOrderDesc)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
+
         )
     }
 }

@@ -69,4 +69,10 @@ class ActivityResponse {
     static appointments = JsonOutput.toJson([
             appointment1
     ])
+
+    static acrtivitiesByNameOrderDesc = JsonOutput.toJson([
+        activity3,
+        activity2,
+        activity1
+    ])
 }

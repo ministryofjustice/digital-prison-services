@@ -58,7 +58,9 @@ const mapStateToProps = state => {
   return {
     activities: state.search.activities,
     activityData: state.events.activityData,
-    loaded: state.app.loaded
+    loaded: state.app.loaded,
+    orderField: state.events.orderField,
+    sortOrder: state.events.sortOrder
   };
 };
 
