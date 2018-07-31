@@ -11,9 +11,10 @@ const PRISON = 'SYI';
 const OFFENDER_NAME_COLUMN = 0;
 const LOCATION_COLUMN = 1;
 const NOMS_ID_COLUMN = 2;
-const OTHER_COLUMN = 3;
-const ATTEND_COLUMN = 4;
-const DONT_ATTEND_COLUMN = 5;
+const ACTIVITY_COLUMN = 3;
+const OTHER_COLUMN = 4;
+const ATTEND_COLUMN = 5;
+const DONT_ATTEND_COLUMN = 6;
 
 const response = [
   {
@@ -130,6 +131,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur');
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
+    expect(tr.at(1).find('td').at(ACTIVITY_COLUMN).text()).toEqual('Chapel');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Official Visit 11:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Medical - Dentist - Appt details 11:40');
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);

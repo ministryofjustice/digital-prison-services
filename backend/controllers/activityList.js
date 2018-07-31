@@ -14,7 +14,8 @@ const getActivityList = async (req, res) => {
   let { agencyId, locationId, date, timeSlot } = req.query;
   date = switchDateFormat(date);
 
-  const activities = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'PROG', date, timeSlot }, res);
+  const sortFields = ['event_description', 'lastName'];
+  const activities = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'PROG', date, timeSlot, sortFields }, res);
   log.info(activities.data, 'getActivityList data received');
   const visits = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'VISIT', date, timeSlot }, res);
   const appointments = await elite2Api.getActivityList(req, { agencyId, locationId, usage: 'APP', date, timeSlot }, res);
