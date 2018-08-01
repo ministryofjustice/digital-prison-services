@@ -5,7 +5,8 @@ const getActivityListFactory = (elite2Api) => {
   const getActivityList = async (context, agencyId, locationId, frontEndDate, timeSlot) => {
     const date = switchDateFormat(frontEndDate);
 
-    const activities = await elite2Api.getActivityList(context, { agencyId, locationId, usage: 'PROG', date, timeSlot });
+  const sortFields = ['eventDescription', 'lastName'];
+  const activities = await elite2Api.getActivityList(context, { agencyId, locationId, usage: 'PROG', date, timeSlot, sortFields });
     log.info(activities, 'getActivityList data received');
     const visits = await elite2Api.getActivityList(context, { agencyId, locationId, usage: 'VISIT', date, timeSlot });
     const appointments = await elite2Api.getActivityList(context, { agencyId, locationId, usage: 'APP', date, timeSlot });
