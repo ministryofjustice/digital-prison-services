@@ -1,11 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 
-router.get('/', asyncMiddleware(async (req, res) => {
-  const response = await elite2Api.userCaseLoads(req, res);
-  res.json(response.data);
-}));
+const userCaseloadsFactory = (elite2Api) => {
+  const userCaseloads = asyncMiddleware(async (req, res) => {
+    const data = await elite2Api.userCaseLoads(res.locals);
+    res.json(data);
+  });
 
-module.exports = router;
+  return {
+    userCaseloads
+  };
+};
+
+module.exports = {
+  userCaseloadsFactory
+};
+

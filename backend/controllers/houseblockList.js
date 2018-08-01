@@ -1,58 +1,50 @@
 /* eslint-disable no-lonely-if */
-const express = require('express');
-const router = express.Router();
-const elite2Api = require('../elite2Api');
-const asyncMiddleware = require('../middleware/asyncHandler');
 const log = require('../log');
 const switchDateFormat = require('../utils');
 const moment = require('moment');
 
-router.get('/', asyncMiddleware(async (req, res) => {
-  const viewModel = await getHouseblockList(req, res);
-  res.json(viewModel);
-}));
+const getHouseblockListFactory = (elite2Api) => {
+  const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
+    const data = await elite2Api.getHouseblockList(context, agencyId, groupName, switchDateFormat(date), timeSlot);
+    // Returns array ordered by inmate/cell or name, then start time
 
-const getHouseblockList = (async (req, res) => {
-  // once request is not used passed to downstream services we wont have to manipulate it in this dodgy way
-  req.query.date = switchDateFormat(req.query.date);
-
-  const events = await elite2Api.getHouseblockList(req, res);
-  // Returns array ordered by inmate/cell or name, then start time
-
-  log.info(events.data, 'getHouseblockList data received');
-  const rows = [];
-  const data = events.data;
-  let i = -1;
-  let lastOffenderNo = '';
-  for (const event of data) {
-    if (event.offenderNo !== lastOffenderNo) {
-      i++;
-      lastOffenderNo = event.offenderNo;
-      rows[i] = {};
-    }
-
-    let currentRow = rows[i];
-    if (event.eventType === 'PRISON_ACT') {
-      if (!currentRow.activity) {
-        currentRow.activity = [event];
-      } else {
-        currentRow.activity.push(event);
-        currentRow.activity.sort(function (a, b) {
-          return safeTimeCompare(a, b);
-        });
+    log.info(data, 'getHouseblockList data received');
+    const rows = [];
+    let i = -1;
+    let lastOffenderNo = '';
+    for (const event of data) {
+      if (event.offenderNo !== lastOffenderNo) {
+        i++;
+        lastOffenderNo = event.offenderNo;
+        rows[i] = {};
       }
-    } else {
-      // set array of non-paid appointments or visits
-      if (!currentRow.others) {
-        currentRow.others = [event];
+
+      let currentRow = rows[i];
+      if (event.eventType === 'PRISON_ACT') {
+        if (!currentRow.activity) {
+          currentRow.activity = [event];
+        } else {
+          currentRow.activity.push(event);
+          currentRow.activity.sort(function (a, b) {
+            return safeTimeCompare(a, b);
+          });
+        }
       } else {
-        currentRow.others.push(event);
+        // set array of non-paid appointments or visits
+        if (!currentRow.others) {
+          currentRow.others = [event];
+        } else {
+          currentRow.others.push(event);
+        }
       }
     }
-  }
-  return rows;
-}
-);
+    return rows;
+  };
+
+  return {
+    getHouseblockList
+  };
+};
 
 function safeTimeCompare (a, b) {
   if (a.startTime && b.startTime) {
@@ -62,5 +54,4 @@ function safeTimeCompare (a, b) {
   }
 }
 
-
-module.exports = { router, getHouseblockList };
+module.exports = { getHouseblockListFactory };
