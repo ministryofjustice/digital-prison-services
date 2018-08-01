@@ -56,7 +56,7 @@ const getActivityList = (req, { agencyId, locationId, usage, date, timeSlot, sor
 
   if (sortFields) {
     options.headers = {
-      'Sort-Fields': sortFields
+      'Sort-Fields': sortFields.join(',')
     };
   }
 
