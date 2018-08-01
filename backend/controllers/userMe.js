@@ -1,11 +1,16 @@
-const express = require('express');
-const router = express.Router();
-const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 
-router.get('/', asyncMiddleware(async (req, res) => {
-  const response = await elite2Api.currentUser(req, res);
-  res.json(response.data);
-}));
+const userMeFactory = (elite2Api) => {
+  const userMe = asyncMiddleware(async (req, res) => {
+    const data = await elite2Api.currentUser(res.locals);
+    res.json(data);
+  });
 
-module.exports = router;
+  return {
+    userMe
+  };
+};
+
+module.exports = {
+  userMeFactory
+};

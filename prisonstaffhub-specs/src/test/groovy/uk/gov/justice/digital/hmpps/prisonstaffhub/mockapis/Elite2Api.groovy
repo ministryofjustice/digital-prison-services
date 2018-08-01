@@ -19,13 +19,16 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubValidOAuthTokenRequest(UserAccount user, Boolean delayOAuthResponse = false) {
+
+        final accessToken = JwtFactory.token()
+
         final response = aResponse()
                 .withStatus(200)
                 .withHeader('Content-Type', 'application/json;charset=UTF-8')
                 .withBody(JsonOutput.toJson([
-                access_token : 'RW_TOKEN',
+                access_token : accessToken,
                 token_type   : 'bearer',
-                refresh_token: 'refreshToken',
+                refresh_token: JwtFactory.token(),
                 expires_in   : 599,
                 scope        : 'read write',
                 internalUser : true
@@ -37,19 +40,18 @@ class Elite2Api extends WireMockRule {
 
         stubFor(
                 post('/oauth/token')
-                        .withHeader('authorization', equalTo('Basic b21pYzpjbGllbnRzZWNyZXQ='))
+                        .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
-                        .withRequestBody(equalTo("username=${user.username}&password=password&grant_type=password&client_id=omic"))
+                        .withRequestBody(equalTo("username=${user.username}&password=password&grant_type=password"))
                         .willReturn(response))
-
     }
 
     void stubInvalidOAuthTokenRequest(UserAccount user, boolean badPassword = false) {
         stubFor(
                 post('/oauth/token')
-                        .withHeader('authorization', equalTo('Basic b21pYzpjbGllbnRzZWNyZXQ='))
+                        .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
-                        .withRequestBody(matching("username=${user.username}&password=.*&grant_type=password&client_id=omic"))
+                        .withRequestBody(matching("username=${user.username}&password=.*&grant_type=password"))
                         .willReturn(
                         aResponse()
                                 .withStatus(400)
@@ -67,7 +69,6 @@ class Elite2Api extends WireMockRule {
     void stubGetMyDetails(UserAccount user) {
         stubFor(
                 get('/api/users/me')
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
                         .willReturn(
                         aResponse()
                                 .withStatus(200)
@@ -93,7 +94,6 @@ class Elite2Api extends WireMockRule {
 
         stubFor(
                 get('/api/users/me/caseLoads')
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
                         .willReturn(
                         aResponse()
                                 .withStatus(200)
@@ -117,7 +117,6 @@ class Elite2Api extends WireMockRule {
 
         stubFor(
                 get('/api/users/me/locations')
-                        .withHeader('authorization', equalTo('Bearer RW_TOKEN'))
                         .willReturn(
                         aResponse()
                                 .withStatus(200)

@@ -1,20 +1,14 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
-const houseblockList = require('../controllers/houseblockList').getHouseblockList;
-const elite2Api = require('../elite2Api');
-
-const req = {
-  headers: {
-  },
-  query: {
-  }
-};
+const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+const elite2Api = elite2ApiFactory(null);
+const houseblockList = require('../controllers/houseblockList').getHouseblockListFactory(elite2Api).getHouseblockList;
 
 describe('Houseblock list controller', async () => {
   it('Should add visit and appointment details to activity array', async () => {
     elite2Api.getHouseblockList = jest.fn();
     elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse());
 
-    const response = await houseblockList(req);
+    const response = await houseblockList({});
 
     expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1);
 
@@ -69,9 +63,9 @@ describe('Houseblock list controller', async () => {
 
   it('Should handle no response data', async () => {
     elite2Api.getHouseblockList = jest.fn();
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createEmptyDataResponse());
+    elite2Api.getHouseblockList.mockImplementationOnce(() => []);
 
-    const response = await houseblockList(req);
+    const response = await houseblockList({});
 
     expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1);
     expect(response.length).toBe(0);
@@ -82,109 +76,102 @@ describe('Houseblock list controller', async () => {
 // There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
 // the activities are sorted by time in the controller
 function createResponse () {
-  return {
-    data: [
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "CHAP",
-        eventType: "PRISON_ACT",
-        eventDescription: "Chapel",
-        comment: "comment11",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "VISIT",
-        eventType: "VISIT",
-        eventDescription: "Official Visit",
-        comment: "comment18",
-        startTime: "2017-10-15T19:00:00",
-        endTime: "2017-10-15T20:30:00"
-      },
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "CHAP",
-        eventType: "PRISON_ACT",
-        eventDescription: "Earliest paid activity",
-        comment: "commentEarliest",
-        startTime: "2017-10-15T17:30:00",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "GYM",
-        eventType: "APP",
-        eventDescription: "The gym, appointment",
-        comment: "comment14",
-        startTime: "2017-10-15T17:00:00",
-        endTime: "2017-10-15T17:30:00"
-      },
-      {
-        offenderNo: "A1234AB",
-        firstName: "MICHAEL",
-        lastName: "SMITH",
-        cellLocation: "LEI-A-1-1",
-        event: "CHAP",
-        eventType: "PRISON_ACT",
-        eventDescription: "Chapel",
-        comment: "comment12",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AC",
-        firstName: "FRED",
-        lastName: "QUIMBY",
-        cellLocation: "LEI-A-1-3",
-        event: "CHAP",
-        eventType: "PRISON_ACT",
-        eventDescription: "Chapel Activity",
-        comment: "comment13",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AC",
-        firstName: "FRED",
-        lastName: "QUIMBY",
-        cellLocation: "LEI-A-1-3",
-        event: "VISIT",
-        eventType: "VISIT",
-        eventDescription: "Family Visit",
-        comment: "comment19",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AD",
-        firstName: "ONLY",
-        lastName: "UNPAID",
-        cellLocation: "LEI-A-1-7",
-        event: "VISIT",
-        eventType: "VISIT",
-        eventDescription: "Family Visit",
-        comment: "only unpaid visit",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      }
+  return [
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "CHAP",
+      eventType: "PRISON_ACT",
+      eventDescription: "Chapel",
+      comment: "comment11",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "VISIT",
+      eventType: "VISIT",
+      eventDescription: "Official Visit",
+      comment: "comment18",
+      startTime: "2017-10-15T19:00:00",
+      endTime: "2017-10-15T20:30:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "CHAP",
+      eventType: "PRISON_ACT",
+      eventDescription: "Earliest paid activity",
+      comment: "commentEarliest",
+      startTime: "2017-10-15T17:30:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "GYM",
+      eventType: "APP",
+      eventDescription: "The gym, appointment",
+      comment: "comment14",
+      startTime: "2017-10-15T17:00:00",
+      endTime: "2017-10-15T17:30:00"
+    },
+    {
+      offenderNo: "A1234AB",
+      firstName: "MICHAEL",
+      lastName: "SMITH",
+      cellLocation: "LEI-A-1-1",
+      event: "CHAP",
+      eventType: "PRISON_ACT",
+      eventDescription: "Chapel",
+      comment: "comment12",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "CHAP",
+      eventType: "PRISON_ACT",
+      eventDescription: "Chapel Activity",
+      comment: "comment13",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "VISIT",
+      eventType: "VISIT",
+      eventDescription: "Family Visit",
+      comment: "comment19",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AD",
+      firstName: "ONLY",
+      lastName: "UNPAID",
+      cellLocation: "LEI-A-1-7",
+      event: "VISIT",
+      eventType: "VISIT",
+      eventDescription: "Family Visit",
+      comment: "only unpaid visit",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }
 
-    ]
-  };
-}
-function createEmptyDataResponse () {
-  return {
-    data: []
-  };
+  ];
 }

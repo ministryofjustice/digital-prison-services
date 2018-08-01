@@ -1,11 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 
-router.get('/', asyncMiddleware(async (req, res) => {
-  const response = await elite2Api.searchActivityLocations(req, res);
-  res.json(response.data);
-}));
+const getActivityLocationsFactory = (elite2Api) => {
+  const getActivityLocations = asyncMiddleware(async (req, res) => {
+    const response = await elite2Api.searchActivityLocations(res.locals, req.query.agencyId);
+    res.json(response);
+  });
 
-module.exports = router;
+  return {
+    getActivityLocations
+  };
+};
+
+module.exports = { getActivityLocationsFactory };

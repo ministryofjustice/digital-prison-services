@@ -1,11 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const elite2Api = require('../elite2Api');
 const asyncMiddleware = require('../middleware/asyncHandler');
 
-router.put('/', asyncMiddleware(async (req, res) => {
-  await elite2Api.setActiveCaseLoad(req, res);
-  res.json({});
-}));
+const activeCaseloadFactory = (elite2Api) => {
+  const setActiveCaseload = asyncMiddleware(async (req, res) => {
+    await elite2Api.setActiveCaseload(res.locals, req.body);
+    res.json({});
+  });
 
-module.exports = router;
+  return {
+    setActiveCaseload
+  };
+};
+
+module.exports = {
+  activeCaseloadFactory
+};
+

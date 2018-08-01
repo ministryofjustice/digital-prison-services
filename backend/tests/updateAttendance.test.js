@@ -1,50 +1,27 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
 const momentTimeZone = require('moment-timezone');
-const updateAttendance = require('../controllers/updateAttendance').updateAttendance;
-const elite2Api = require('../elite2Api');
-
-const res = {
-  render: jest.fn(),
-  redirect: jest.fn()
-};
+const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+const elite2Api = elite2ApiFactory(null);
+const updateAttendance = require('../controllers/updateAttendance').updateAttendanceFactory(elite2Api).updateAttendance;
 
 describe('Attendence / pay controller', async () => {
   it('should update activity', async () => {
-    const req = {
-      query: {
-        offenderNo: 'ABC123',
-        activityId: 45
-      },
-      body: {
-        eventOutcome: 'EVENTOUTCOME',
-        performance: 'PERFORMANCE',
-        outcomeComment: 'my comment'
-      }
-    };
-
     elite2Api.updateAttendance = jest.fn();
     elite2Api.createCaseNote = jest.fn();
 
-    await updateAttendance(req, res);
+    await updateAttendance({}, 'ABC123', 45, {
+      eventOutcome: 'EVENTOUTCOME',
+      performance: 'PERFORMANCE',
+      outcomeComment: 'my comment'
+    });
 
     expect(elite2Api.updateAttendance.mock.calls.length).toBe(1);
-    expect(elite2Api.updateAttendance.mock.calls[0][0]).toBe(req);
+    expect(elite2Api.updateAttendance.mock.calls[0][1]).toBe('ABC123');
+    expect(elite2Api.updateAttendance.mock.calls[0][2]).toBe(45);
     expect(elite2Api.createCaseNote).not.toHaveBeenCalled();
   });
 
   it('should create a case note for IEP', async () => {
-    const req = {
-      query: {
-        offenderNo: 'ABC123',
-        activityId: 45
-      },
-      body: {
-        eventOutcome: 'UNACAB',
-        performance: 'UNACCEPT',
-        outcomeComment: 'my comment'
-      }
-    };
-
     const zone = 'Europe/London';
     const now = momentTimeZone.tz(zone);
     const dateString = now.format('YYYY-MM-DDThh:mm');
@@ -55,13 +32,18 @@ describe('Attendence / pay controller', async () => {
     elite2Api.updateAttendance = jest.fn();
     elite2Api.createCaseNote = jest.fn();
 
-    await updateAttendance(req, res);
+    await updateAttendance({}, 'ABC123', 45, {
+      eventOutcome: 'UNACAB',
+      performance: 'UNACCEPT',
+      outcomeComment: 'my comment'
+    });
 
     expect(elite2Api.updateAttendance.mock.calls.length).toBe(1);
-    expect(elite2Api.updateAttendance.mock.calls[0][0]).toBe(req);
+    expect(elite2Api.updateAttendance.mock.calls[0][1]).toBe('ABC123');
 
     expect(elite2Api.createCaseNote.mock.calls.length).toBe(1);
-    const data = elite2Api.createCaseNote.mock.calls[0][0].data;
+    expect(elite2Api.createCaseNote.mock.calls[0][1]).toBe('ABC123');
+    const data = elite2Api.createCaseNote.mock.calls[0][2];
     expect(data.type).toBe('Negative Behaviour');
     expect(data.subType).toBe('IEP Warning');
     expect(data.occurrenceDateTime).toBe(dateString);
@@ -73,19 +55,12 @@ describe('Attendence / pay controller', async () => {
   });
 
   it('should throw an error for missing ids', async (done) => {
-    const req = {
-      query: {
-        // intentionally missing
-      },
-      body: {
+    try {
+      await updateAttendance({}, undefined, undefined, {
         eventOutcome: 'UNACAB',
         performance: 'UNACCEPT',
         outcomeComment: 'my comment'
-      }
-    };
-
-    try {
-      await updateAttendance(req, res);
+      });
       fail();
     } catch (e) {
       expect(e.message).toEqual('Offender or activity id missing');
@@ -94,18 +69,6 @@ describe('Attendence / pay controller', async () => {
   });
 
   it('Server error should be handled correctly', async (done) => {
-    const req = {
-      query: {
-        offenderNo: 'ABC123',
-        activityId: 45
-      },
-      body: {
-        eventOutcome: 'EVENTOUTCOME',
-        performance: 'PERFORMANCE',
-        outcomeComment: 'my comment'
-      }
-    };
-
     elite2Api.updateAttendance = jest.fn();
     const error = new Error('Request failed with status code 400');
     error.response = {
@@ -119,7 +82,11 @@ describe('Attendence / pay controller', async () => {
     elite2Api.updateAttendance.mockRejectedValue(error);
 
     try {
-      await updateAttendance(req, res);
+      await updateAttendance({}, 'ABC123', 45, {
+        eventOutcome: 'EVENTOUTCOME',
+        performance: 'PERFORMANCE',
+        outcomeComment: 'my comment'
+      });
       fail();
     } catch (e) {
       expect(e).toEqual(error);
