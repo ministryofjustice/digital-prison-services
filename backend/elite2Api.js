@@ -46,12 +46,22 @@ const getHouseblockList = (req, res) => gateway.getRequest({
   url: `${eliteApiUrl}api/schedules/${req.query.agencyId}/groups/${req.query.groupName}`
 });
 
-const getActivityList = (req, { agencyId, locationId, usage, date, timeSlot }, res) => gateway.getRequest({
-  req,
-  res,
-  params: { date, timeSlot },
-  url: `${eliteApiUrl}api/schedules/${agencyId}/locations/${locationId}/usage/${usage}`
-});
+const getActivityList = (req, { agencyId, locationId, usage, date, timeSlot, sortFields }, res) => {
+  const options = {
+    req,
+    res,
+    params: { date, timeSlot },
+    url: `${eliteApiUrl}api/schedules/${agencyId}/locations/${locationId}/usage/${usage}`
+  };
+
+  if (sortFields) {
+    options.headers = {
+      'Sort-Fields': sortFields
+    };
+  }
+
+  return gateway.getRequest(options);
+};
 
 const searchActivityLocations = (req, res) => gateway.getRequest({
   req,

@@ -85,6 +85,7 @@ class ResultsActivity extends Component {
       <th className="straight width15">Name</th>
       <th className="straight width10">Location</th>
       <th className="straight width10">NOMS&nbsp;ID</th>
+      <th className="straight"> Activity </th>
       <th className="straight">Other activities </th>
       <th className="straightPrint checkbox-header"><div><span>Pay</span></div></th>
       <th className="straightPrint checkbox-header"><div><span>Other</span></div></th>
@@ -110,6 +111,9 @@ class ResultsActivity extends Component {
           <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
           <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
+          <td className="row-gutters">
+            {this.getDescription(mainActivity)}
+          </td>
           <td className="row-gutters small-font">{(row.visits || row.appointments) &&
           <ul>{row.visits && row.visits.map((e, index) => {
             return <li key={mainActivity.offenderNo + '_' + index}>{this.getDescription(e)} {getHoursMinutes(e.startTime)}</li>;
