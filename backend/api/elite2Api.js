@@ -30,7 +30,14 @@ const elite2ApiFactory = (client) => {
   const setActiveCaseload = (context, caseload) => put(context, 'api/users/me/activeCaseLoad', caseload);
 
   const getHouseblockList = (context, agencyId, groupName, date, timeSlot) => get(context, `api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}`);
-  const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) => get(context, `api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`);
+  const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot, sortFields }) => {
+    if (sortFields) {
+      context.requestHeaders = {
+        'Sort-Fields': sortFields.join(',')
+      };
+    }
+    return get(context, `api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`);
+  };
 
   const searchActivityLocations = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations?eventType=APP`);
   const searchGroups = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations/groups`);
