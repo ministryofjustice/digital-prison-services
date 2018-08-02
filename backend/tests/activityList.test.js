@@ -16,50 +16,112 @@ describe('Activity list controller', async () => {
     expect(elite2Api.getActivityList.mock.calls[0][1].agencyId).toBe('LEI');
     expect(elite2Api.getActivityList.mock.calls[0][1].date).toBe('2018-11-23');
 
-    expect(response[2].offenderNo).toBe('A1234AA');
-    expect(response[2].firstName).toBe('ARTHUR');
-    expect(response[2].lastName).toBe('ANDERSON');
-    expect(response[2].cellLocation).toBe("LEI-A-1-1");
-    expect(response[2].event).toBe("CHAP");
-    expect(response[2].eventDescription).toBe('Chapel');
-    expect(response[2].comment).toBe("comment11");
-    expect(response[2].startTime).toBe('2017-10-15T18:00:00');
-    expect(response[2].endTime).toBe('2017-10-15T18:30:00');
-    expect(response[2].visits.length).toBe(1);
-    expect(response[2].visits[0].offenderNo).toBe('A1234AA');
-    expect(response[2].visits[0].firstName).toBe('ARTHUR');
-    expect(response[2].visits[0].lastName).toBe('ANDERSON');
-    expect(response[2].visits[0].cellLocation).toBe('LEI-A-1-1');
-    expect(response[2].visits[0].event).toBe('VISIT');
-    expect(response[2].visits[0].eventDescription).toBe('Official');
-    expect(response[2].visits[0].comment).toBe('comment18');
-    expect(response[2].visits[0].startTime).toBe('2017-10-15T11:00:00');
-    expect(response[2].visits[0].endTime).toBe('2017-10-15T11:30:00');
-    expect(response[2].appointments.length).toBe(1);
-    expect(response[2].appointments[0].offenderNo).toBe('A1234AA');
-    expect(response[2].appointments[0].firstName).toBe('ARTHUR');
-    expect(response[2].appointments[0].lastName).toBe('ANDERSON');
-    expect(response[2].appointments[0].cellLocation).toBe('LEI-A-1-1');
-    expect(response[2].appointments[0].event).toBe('GYM');
-    expect(response[2].appointments[0].eventDescription).toBe('The gym');
-    expect(response[2].appointments[0].comment).toBe('comment14');
-    expect(response[2].appointments[0].startTime).toBe('2017-10-15T17:00:00');
-    expect(response[2].appointments[0].endTime).toBe('2017-10-15T17:30:00');
+    expect(response[0].offenderNo).toBe('A1234AA');
+    expect(response[0].firstName).toBe('ARTHUR');
+    expect(response[0].lastName).toBe('ANDERSON');
+    expect(response[0].cellLocation).toBe("LEI-A-1-1");
+    expect(response[0].event).toBe("CHAP");
+    expect(response[0].eventDescription).toBe('Chapel');
+    expect(response[0].comment).toBe("comment11");
+    expect(response[0].startTime).toBe('2017-10-15T18:00:00');
+    expect(response[0].endTime).toBe('2017-10-15T18:30:00');
+    expect(response[0].visits.length).toBe(1);
+    expect(response[0].visits[0].offenderNo).toBe('A1234AA');
+    expect(response[0].visits[0].firstName).toBe('ARTHUR');
+    expect(response[0].visits[0].lastName).toBe('ANDERSON');
+    expect(response[0].visits[0].cellLocation).toBe('LEI-A-1-1');
+    expect(response[0].visits[0].event).toBe('VISIT');
+    expect(response[0].visits[0].eventDescription).toBe('Official');
+    expect(response[0].visits[0].comment).toBe('comment18');
+    expect(response[0].visits[0].startTime).toBe('2017-10-15T11:00:00');
+    expect(response[0].visits[0].endTime).toBe('2017-10-15T11:30:00');
+    expect(response[0].appointments.length).toBe(1);
+    expect(response[0].appointments[0].offenderNo).toBe('A1234AA');
+    expect(response[0].appointments[0].firstName).toBe('ARTHUR');
+    expect(response[0].appointments[0].lastName).toBe('ANDERSON');
+    expect(response[0].appointments[0].cellLocation).toBe('LEI-A-1-1');
+    expect(response[0].appointments[0].event).toBe('GYM');
+    expect(response[0].appointments[0].eventDescription).toBe('The gym');
+    expect(response[0].appointments[0].comment).toBe('comment14');
+    expect(response[0].appointments[0].startTime).toBe('2017-10-15T17:00:00');
+    expect(response[0].appointments[0].endTime).toBe('2017-10-15T17:30:00');
 
     expect(response[1].offenderNo).toBe('A1234AB');
     expect(response[1].visits.length).toBe(0);
     expect(response[1].appointments.length).toBe(0);
 
-    expect(response[0].offenderNo).toBe('A1234AC');
-    expect(response[0].visits.length).toBe(1);
-    expect(response[0].visits[0].offenderNo).toBe('A1234AC');
-    expect(response[0].appointments.length).toBe(0);
+    expect(response[2].offenderNo).toBe('A1234AC');
+    expect(response[2].visits.length).toBe(1);
+    expect(response[2].visits[0].offenderNo).toBe('A1234AC');
+    expect(response[2].appointments.length).toBe(0);
+  });
+
+  it('should order activities by comment then by last name', async () => {
+    const results = [
+      {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "Z",
+        cellLocation: "LEI-A-1-3",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        comment: "Z",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }, {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "Y",
+        cellLocation: "LEI-A-1-3",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        comment: "Z",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }, {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "X",
+        cellLocation: "LEI-A-1-3",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        comment: "X",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }
+    ];
+
+    elite2Api.getActivityList = jest.fn();
+    elite2Api.getActivityList.mockImplementationOnce(() => results);
+    elite2Api.getActivityList.mockImplementationOnce(() => createVisitsResponse());
+    elite2Api.getActivityList.mockImplementationOnce(() => createAppointmentsResponse());
+
+    const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
+
+    expect(response[0].comment).toBe('X');
+    expect(response[0].lastName).toBe('X');
+
+    expect(response[1].comment).toBe('Z');
+    expect(response[1].lastName).toBe('Y');
+
+    expect(response[2].comment).toBe('Z');
+    expect(response[2].lastName).toBe('Z');
   });
 });
 
 function createActivitiesResponse () {
   return [
     {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "CHAP",
+      eventDescription: "Chapel",
+      comment: "comment13",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }, {
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
@@ -78,17 +140,6 @@ function createActivitiesResponse () {
       event: "CHAP",
       eventDescription: "Chapel",
       comment: "comment12",
-      startTime: "2017-10-15T18:00:00",
-      endTime: "2017-10-15T18:30:00"
-    },
-    {
-      offenderNo: "A1234AC",
-      firstName: "FRED",
-      lastName: "QUIMBY",
-      cellLocation: "LEI-A-1-3",
-      event: "CHAP",
-      eventDescription: "Chapel",
-      comment: "comment13",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     }
