@@ -55,11 +55,73 @@ describe('Activity list controller', async () => {
     expect(response[2].visits[0].offenderNo).toBe('A1234AC');
     expect(response[2].appointments.length).toBe(0);
   });
+
+  it('should order activities by comment then by last name', async () => {
+    const results = [
+      {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "Z",
+        cellLocation: "LEI-A-1-3",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        comment: "Z",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }, {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "Y",
+        cellLocation: "LEI-A-1-3",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        comment: "Z",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }, {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "X",
+        cellLocation: "LEI-A-1-3",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        comment: "X",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }
+    ];
+
+    elite2Api.getActivityList = jest.fn();
+    elite2Api.getActivityList.mockImplementationOnce(() => results);
+    elite2Api.getActivityList.mockImplementationOnce(() => createVisitsResponse());
+    elite2Api.getActivityList.mockImplementationOnce(() => createAppointmentsResponse());
+
+    const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
+
+    expect(response[0].comment).toBe('X');
+    expect(response[0].lastName).toBe('X');
+
+    expect(response[1].comment).toBe('Z');
+    expect(response[1].lastName).toBe('Y');
+
+    expect(response[2].comment).toBe('Z');
+    expect(response[2].lastName).toBe('Z');
+  });
 });
 
 function createActivitiesResponse () {
   return [
     {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "CHAP",
+      eventDescription: "Chapel",
+      comment: "comment13",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }, {
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
@@ -78,17 +140,6 @@ function createActivitiesResponse () {
       event: "CHAP",
       eventDescription: "Chapel",
       comment: "comment12",
-      startTime: "2017-10-15T18:00:00",
-      endTime: "2017-10-15T18:30:00"
-    },
-    {
-      offenderNo: "A1234AC",
-      firstName: "FRED",
-      lastName: "QUIMBY",
-      cellLocation: "LEI-A-1-3",
-      event: "CHAP",
-      eventDescription: "Chapel",
-      comment: "comment13",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
     }

@@ -42,8 +42,8 @@ class ActivitySpecification extends GebReportingSpec {
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         texts[1].contains("Visits - Friends 18:00")
         texts[1].contains("Medical - Dentist - Appt details 11:40")
-        texts[2].contains("Balog, Eugene A-1-2 A1234AB")
-        texts[3].contains("Baa, Fred A-1-3 A1234AC")
+        texts[3].contains("Balog, Eugene A-1-2 A1234AB")
+        texts[2].contains("Baa, Fred A-1-3 A1234AC")
     }
 
     def "The updated activity list is displayed"() {
@@ -72,7 +72,7 @@ class ActivitySpecification extends GebReportingSpec {
         form['period-select'] == 'PM'
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[2].contains("Balog, Eugene A-1-2 A1234AB")
+        texts[3].contains("Balog, Eugene A-1-2 A1234AB")
 
         when: "I go to the search page afresh"
         browser.to SearchPage
