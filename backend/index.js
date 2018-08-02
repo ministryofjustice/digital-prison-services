@@ -13,19 +13,29 @@ const hsts = require('hsts');
 const helmet = require('helmet');
 const ensureHttps = require('./middleware/ensureHttps');
 
-const authentication = require('./controllers/authentication');
-const userCaseLoads = require('./controllers/usercaseloads');
-const setActiveCaseLoad = require('./controllers/setactivecaseload');
-const userLocations = require('./controllers/userLocations');
-const locations = require('./controllers/activityLocations');
-const userMe = require('./controllers/userMe');
-const getConfig = require('./controllers/getConfig');
-const houseblockLocations = require('./controllers/houseblockLocations');
-const activityLocations = require('./controllers/activityLocations');
-const activityList = require('./controllers/activityList');
-const houseblockList = require('./controllers/houseblockList');
-const health = require('./controllers/health');
-const updateAttendance = require('./controllers/updateAttendance');
+const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory;
+const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory;
+const userLocationsFactory = require('./controllers/userLocations').userLocationsFactory;
+const userMeFactory = require('./controllers/userMe').userMeFactory;
+const getConfiguration = require('./controllers/getConfig').getConfiguration;
+const houseblockLocationsFactory = require('./controllers/houseblockLocations').getHouseblockLocationsFactory;
+const activityLocationsFactory = require('./controllers/activityLocations').getActivityLocationsFactory;
+const activityListFactory = require('./controllers/activityList').getActivityListFactory;
+const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory;
+const healthFactory = require('./controllers/health').healthFactory;
+const updateAttendanceFactory = require('./controllers/updateAttendance').updateAttendanceFactory;
+
+const sessionManagementRoutes = require('./sessionManagementRoutes');
+const contextProperties = require('./contextProperties');
+
+const cookieOperationsFactory = require('./hmppsCookie').cookieOperationsFactory;
+const tokenRefresherFactory = require('./tokenRefresher').factory;
+const controllerFactory = require('./controllers/controller').factory;
+
+const clientFactory = require('./api/oauthEnabledClient');
+const healthApiFactory = require('./api/healthApi').healthApiFactory;
+const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory;
+const oauthApiFactory = require('./api/oauthApi');
 
 const webpack = require('webpack');
 const middleware = require('webpack-dev-middleware');
@@ -33,7 +43,6 @@ const hrm = require('webpack-hot-middleware');
 
 const log = require('./log');
 const config = require('./config');
-const session = require('./session');
 
 const app = express();
 const sixtyDaysInSeconds = 5184000;
@@ -55,8 +64,9 @@ app.use(bunyanMiddleware({
   obscureHeaders: ['Authorization']
 }));
 
-app.use('/health', health.router);
-app.use('/info', health.router);
+const health = healthFactory(config.apis.elite2.url).health;
+app.use('/health', health);
+app.use('/info', health);
 
 if (config.app.production) {
   app.use(ensureHttps);
@@ -73,10 +83,48 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../build/static')));
 
 app.get('/terms', async (req, res) => { res.render('terms', { mailTo: config.app.mailTo, homeLink: '/' }); }); // TODO config.app.notmEndpointUrl?
-app.use('/auth', session.loginMiddleware, authentication.router);
-app.use(session.hmppsSessionMiddleWare);
-app.use(session.extendHmppsCookieMiddleWare);
 
+const healthApi = healthApiFactory(
+  clientFactory({
+    baseUrl: config.apis.elite2.url,
+    timeout: 2000
+  })
+);
+
+const elite2Api = eliteApiFactory(
+  clientFactory({
+    baseUrl: config.apis.elite2.url,
+    timeout: 10000
+  }));
+
+const controller = controllerFactory(
+  activityListFactory(elite2Api),
+  houseblockListFactory(elite2Api),
+  updateAttendanceFactory(elite2Api)
+);
+
+const oauthApi = oauthApiFactory({ ...config.apis.elite2 });
+const tokenRefresher = tokenRefresherFactory(oauthApi.refresh, config.app.tokenRefreshThresholdSeconds);
+
+const hmppsCookieOperations = cookieOperationsFactory(
+  {
+    name: config.hmppsCookie.name,
+    domain: config.hmppsCookie.domain,
+    cookieLifetimeInMinutes: config.hmppsCookie.expiryMinutes,
+    secure: config.app.production
+  },
+);
+
+/* login, logout, hmppsCookie management, token refresh etc */
+sessionManagementRoutes.configureRoutes({
+  app,
+  healthApi,
+  oauthApi,
+  hmppsCookieOperations,
+  tokenRefresher,
+  mailTo: config.app.mailTo,
+  homeLink: config.app.notmEndpointUrl
+});
 
 if (config.app.production === false) {
   const compiler = webpack(require('../webpack.config.js'));
@@ -86,18 +134,22 @@ if (config.app.production === false) {
 
 app.use(express.static(path.join(__dirname, '../build')));
 
-app.use('/api/me', userMe);
-app.use('/api/usercaseloads', userCaseLoads);
-app.use('/api/setactivecaseload', setActiveCaseLoad);
-app.use('/api/userLocations', userLocations);
-app.use('/api/houseblockLocations', houseblockLocations);
-app.use('/api/activityLocations', activityLocations);
-app.use('/api/houseblocklist', houseblockList.router);
-app.use('/api/locations', locations);
-app.use('/api/activityList', activityList.router);
-app.use('/api/updateAttendance', updateAttendance.router);
+// Extract pagination header information from requests and set on the 'context'
+app.use('/api', (req, res, next) => {
+  contextProperties.setRequestPagination(res.locals, req.headers);
+  next();
+});
 
-app.use('/api/config', getConfig);
+app.use('/api/config', getConfiguration);
+app.use('/api/me', userMeFactory(elite2Api).userMe);
+app.use('/api/usercaseloads', userCaseLoadsFactory(elite2Api).userCaseloads);
+app.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations);
+app.use('/api/setactivecaseload', setActiveCaseLoadFactory(elite2Api).setActiveCaseload);
+app.use('/api/houseblockLocations', houseblockLocationsFactory(elite2Api).getHouseblockLocations);
+app.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations);
+app.use('/api/houseblocklist', controller.getHouseblockList);
+app.use('/api/activityList', controller.getActivityList);
+app.use('/api/updateAttendance', controller.updateAttendance);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));

@@ -1,13 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
-const activityList = require('../controllers/activityList').getActivityList;
-const elite2Api = require('../elite2Api');
-
-const req = {
-  headers: {
-  },
-  query: {
-  }
-};
+const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+const elite2Api = elite2ApiFactory(null);
+const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api).getActivityList;
 
 describe('Activity list controller', async () => {
   it('Should add visit and appointment details to activity array', async () => {
@@ -16,9 +10,11 @@ describe('Activity list controller', async () => {
     elite2Api.getActivityList.mockImplementationOnce(() => createVisitsResponse());
     elite2Api.getActivityList.mockImplementationOnce(() => createAppointmentsResponse());
 
-    const response = await activityList(req);
+    const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
 
     expect(elite2Api.getActivityList.mock.calls.length).toBe(3);
+    expect(elite2Api.getActivityList.mock.calls[0][1].agencyId).toBe('LEI');
+    expect(elite2Api.getActivityList.mock.calls[0][1].date).toBe('2018-11-23');
 
     expect(response[2].offenderNo).toBe('A1234AA');
     expect(response[2].firstName).toBe('ARTHUR');
@@ -62,97 +58,91 @@ describe('Activity list controller', async () => {
 });
 
 function createActivitiesResponse () {
-  return {
-    data: [
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "CHAP",
-        eventDescription: "Chapel",
-        comment: "comment11",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AB",
-        firstName: "MICHAEL",
-        lastName: "SMITH",
-        cellLocation: "LEI-A-1-2",
-        event: "CHAP",
-        eventDescription: "Chapel",
-        comment: "comment12",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      },
-      {
-        offenderNo: "A1234AC",
-        firstName: "FRED",
-        lastName: "QUIMBY",
-        cellLocation: "LEI-A-1-3",
-        event: "CHAP",
-        eventDescription: "Chapel",
-        comment: "comment13",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      }
-    ]
-  };
+  return [
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "CHAP",
+      eventDescription: "Chapel",
+      comment: "comment11",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AB",
+      firstName: "MICHAEL",
+      lastName: "SMITH",
+      cellLocation: "LEI-A-1-2",
+      event: "CHAP",
+      eventDescription: "Chapel",
+      comment: "comment12",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    },
+    {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "CHAP",
+      eventDescription: "Chapel",
+      comment: "comment13",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }
+  ];
 }
 
 function createAppointmentsResponse () {
-  return {
-    data: [
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "GYM",
-        eventDescription: "The gym",
-        comment: "comment14",
-        startTime: "2017-10-15T17:00:00",
-        endTime: "2017-10-15T17:30:00"
-      },
-      {
-        offenderNo: "A1234ZZ",
-        firstName: "IRRELEVANT",
-        lastName: "PERSON",
-        cellLocation: "LEI-Z-1-1",
-        event: "GYM",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00"
-      }
-    ]
-  };
+  return [
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "GYM",
+      eventDescription: "The gym",
+      comment: "comment14",
+      startTime: "2017-10-15T17:00:00",
+      endTime: "2017-10-15T17:30:00"
+    },
+    {
+      offenderNo: "A1234ZZ",
+      firstName: "IRRELEVANT",
+      lastName: "PERSON",
+      cellLocation: "LEI-Z-1-1",
+      event: "GYM",
+      startTime: "2017-10-15T18:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }
+  ];
 }
 
 function createVisitsResponse () {
-  return {
-    data: [
-      {
-        offenderNo: "A1234AA",
-        firstName: "ARTHUR",
-        lastName: "ANDERSON",
-        cellLocation: "LEI-A-1-1",
-        event: "VISIT",
-        eventDescription: "Official",
-        comment: "comment18",
-        startTime: "2017-10-15T11:00:00",
-        endTime: "2017-10-15T11:30:00"
-      },
-      {
-        offenderNo: "A1234AC",
-        firstName: "FRED",
-        lastName: "QUIMBY",
-        cellLocation: "LEI-A-1-3",
-        event: "VISIT",
-        eventDescription: "Family",
-        comment: "comment19",
-        startTime: "2017-10-15T11:00:00",
-        endTime: "2017-10-15T18:30:00"
-      }
-    ]
-  };
+  return [
+    {
+      offenderNo: "A1234AA",
+      firstName: "ARTHUR",
+      lastName: "ANDERSON",
+      cellLocation: "LEI-A-1-1",
+      event: "VISIT",
+      eventDescription: "Official",
+      comment: "comment18",
+      startTime: "2017-10-15T11:00:00",
+      endTime: "2017-10-15T11:30:00"
+    },
+    {
+      offenderNo: "A1234AC",
+      firstName: "FRED",
+      lastName: "QUIMBY",
+      cellLocation: "LEI-A-1-3",
+      event: "VISIT",
+      eventDescription: "Family",
+      comment: "comment19",
+      startTime: "2017-10-15T11:00:00",
+      endTime: "2017-10-15T18:30:00"
+    }
+  ];
 }
