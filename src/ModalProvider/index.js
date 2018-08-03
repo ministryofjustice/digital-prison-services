@@ -56,7 +56,6 @@ class ModalProvider extends Component {
 
 ModalProvider.propTypes = {
   showModal: PropTypes.object.isRequired,
-  children: PropTypes.array,
   onClose: PropTypes.func.isRequired
 };
 

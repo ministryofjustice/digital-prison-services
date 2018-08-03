@@ -183,7 +183,7 @@ ResultsActivity.propTypes = {
   period: PropTypes.string,
   activityData: PropTypes.array,
   agencyId: PropTypes.string,
-  activity: PropTypes.number,
+  activity: PropTypes.string.isRequired,
   activities: PropTypes.array,
   getActivityList: PropTypes.func.isRequired,
   handlePay: PropTypes.func.isRequired,

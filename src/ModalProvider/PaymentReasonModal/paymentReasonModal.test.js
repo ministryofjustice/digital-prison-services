@@ -15,7 +15,8 @@ describe('PaymentReasonModal', () => {
       event: {
         firstName: 'igor',
         lastName: 'balog'
-      }
+      },
+      handleError: jest.fn()
     };
     const modal = shallow(<PaymentReasonModal {...props} />);
 
@@ -33,7 +34,8 @@ describe('PaymentReasonModal', () => {
       event: {
         firstName: 'igor',
         lastName: 'balog'
-      }
+      },
+      handleError: jest.fn()
     };
     const modal = shallow(<PaymentReasonModal {...props} />);
 
@@ -50,9 +52,11 @@ describe('PaymentReasonModal', () => {
 
     modal.find('.button').simulate('click');
 
-    expect(props.onConfirm).toHaveBeenCalledWith({ reason: { key: 43, value: 'Refused' },
-      reasons: [{ value: 'Refused', commentRequired: true }, { value: 'Left in Cell', commentRequired: true }],
-      comment: 'comment1', event: props.event });
+    expect(props.onConfirm).toHaveBeenCalled();
+    expect(props.onConfirm.mock.calls[0][0].reason).toEqual({ key: 43, value: 'Refused' });
+    expect(props.onConfirm.mock.calls[0][0].reasons).toEqual([{ value: 'Refused', commentRequired: true }, { value: 'Left in Cell', commentRequired: true }]);
+    expect(props.onConfirm.mock.calls[0][0].event).toBe(props.event);
+    expect(props.onConfirm.mock.calls[0][0].comment).toEqual('comment1');
     expect(props.onClose).toHaveBeenCalled();
   });
 
@@ -64,7 +68,8 @@ describe('PaymentReasonModal', () => {
       event: {
         firstName: 'igor',
         lastName: 'balog'
-      }
+      },
+      handleError: jest.fn()
     };
     const modal = shallow(<PaymentReasonModal {...props} />);
 
@@ -85,7 +90,8 @@ describe('PaymentReasonModal', () => {
       event: {
         firstName: 'igor',
         lastName: 'balog'
-      }
+      },
+      handleError: jest.fn()
     };
     const modal = shallow(<PaymentReasonModal {...props} />);
 
@@ -97,7 +103,10 @@ describe('PaymentReasonModal', () => {
 
     modal.find('.button').simulate('click');
 
-    expect(props.onConfirm).toHaveBeenCalledWith({ reason: { key: 0, value: 'Cancelled' }, reasons: props.reasons, event: props.event });
+    expect(props.onConfirm).toHaveBeenCalled();
+    expect(props.onConfirm.mock.calls[0][0].reason).toEqual({ key: 0, value: 'Cancelled' });
+    expect(props.onConfirm.mock.calls[0][0].reasons).toBe(props.reasons);
+    expect(props.onConfirm.mock.calls[0][0].event).toBe(props.event);
     expect(props.onClose).toHaveBeenCalled();
     expect(modal.find('.form-group-error').length).toBe(0);
     expect(modal.find('.form-control-error').length).toBe(0);
@@ -113,7 +122,8 @@ describe('PaymentReasonModal', () => {
       event: {
         firstName: 'igor',
         lastName: 'balog'
-      }
+      },
+      handleError: jest.fn()
     };
     const modal = shallow(<PaymentReasonModal {...props} />);
 
