@@ -18,7 +18,7 @@ const DONT_ATTEND_COLUMN = 6;
 
 const response = [
   {
-    activity: [{
+    activity: {
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
@@ -30,7 +30,7 @@ const response = [
       comment: "Chapel",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
-    }],
+    },
     others: [{
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
@@ -65,7 +65,7 @@ const response = [
     }]
   },
   {
-    activity: [{
+    activity: {
       offenderNo: "A1234AB",
       firstName: "MICHAEL",
       lastName: "SMITH",
@@ -76,10 +76,10 @@ const response = [
       comment: "Chapel Act",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
-    }]
+    }
   },
   {
-    activity: [{
+    activity: {
       offenderNo: "A1234AC",
       firstName: "FRED",
       lastName: "QUIMBY",
@@ -90,7 +90,7 @@ const response = [
       comment: "Chapel Activity",
       startTime: "2017-10-15T18:00:00",
       endTime: "2017-10-15T18:30:00"
-    }],
+    },
     others: [
       {
         offenderNo: "A1234AC",
@@ -126,6 +126,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       date={date}
       period={'ED'}
@@ -181,6 +182,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       period={'AM'}
       currentLocation={'BWing'}
@@ -207,6 +209,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       date={today}
       period={'PM'}
@@ -243,6 +246,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       date={oldDate}
       period={'ED'}
@@ -269,6 +273,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       date={oldDate}
       period={'ED'}
@@ -297,6 +302,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       date={today}
       period={'ED'}
@@ -328,6 +334,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       date={today}
       period={'ED'}
@@ -361,6 +368,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={getHouseblockList}
       date={today}
       period={'ED'}
@@ -389,10 +397,12 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       period={'AM'}
       currentLocation={'BWing'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>);
     expect(component.find('#back_to_selection_link').length).toEqual(1);
   });
@@ -409,6 +419,7 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       showPaymentReasonModal={showPaymentReasonModal}
     />);
