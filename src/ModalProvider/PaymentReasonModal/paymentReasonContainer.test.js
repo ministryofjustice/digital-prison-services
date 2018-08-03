@@ -18,10 +18,11 @@ describe('PaymentReasonContainer', () => {
       onClose: () => {},
       onConfirm: () => {},
       data: {
-        reasons: ['one', 'two'],
+        reasons: [{ value: 'one' }, { value: 'two' }],
         event: { firstName: 'igor', lastName: 'balog' }
       },
-      store
+      store,
+      handleError: jest.fn()
     };
     const container = mount(<PaymentReasonContainer {...props} />);
     const modal = container.find('PaymentReasonModal');

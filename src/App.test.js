@@ -61,6 +61,7 @@ describe('App component', () => {
       setLoadedDispatch={fn}
       orderDispatch={fn}
       sortOrderDispatch={fn}
+      showModal={{}}
     />);
     const appInstance = component.instance();
     appInstance.displayAlertAndLogout = jest.fn();
@@ -99,6 +100,7 @@ describe('App component', () => {
       setLoadedDispatch={fn}
       orderDispatch={fn}
       sortOrderDispatch={fn}
+      showModal={{}}
     />);
     const appInstance = component.instance();
     appInstance.displayAlertAndLogout = jest.fn();

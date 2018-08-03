@@ -17,7 +17,7 @@ describe('ModalProvider', () => {
   const Com2 = () => <div>Com2</div>;
 
   it('should not render the modal when the modal identifier is undefined', () => {
-    const provider = mount(<ModalProvider store={store}/>);
+    const provider = mount(<ModalProvider store={store} showModal={{}}/>);
 
     expect(provider.contains(<div/>)).toBe(true);
   });

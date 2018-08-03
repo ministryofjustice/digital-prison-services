@@ -133,17 +133,14 @@ class ResultsHouseblock extends Component {
     };
 
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
-      // const mainActivity = row.activity;
-      const anyActivity = row.activity ? row.activity[0] : row.others[0];
+      const anyActivity = row.activity || row.others[0];
       return (
         <tr key={anyActivity.offenderNo} className="row-gutters">
           <td className="row-gutters">{`${properCaseName(anyActivity.lastName)}, ${properCaseName(anyActivity.firstName)}`}</td>
           <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{anyActivity.offenderNo}</td>
           <td className="row-gutters small-font">{row.activity &&
-          <ul>{row.activity.map((event, index) => {
-            return <li key={event.offenderNo + '_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
-          })}</ul>
+         `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
           <td className="row-gutters small-font">{row.others &&
             <ul>{row.others.map((event, index) => {

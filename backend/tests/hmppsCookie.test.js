@@ -87,7 +87,7 @@ describe('Tests for managing the hmpps cookie.  This controls session lifetime a
 
           const now = Date.now();
 
-          expect(expires.getTime()).to.be.closeTo(now + (cookieLifetimeInMinutes * 60 * 1000), 1000, 'Expires');
+          expect(expires.getTime()).to.be.closeTo(now + (cookieLifetimeInMinutes * 60 * 1000), 1500, 'Expires');
         })
         .end(done);
     });

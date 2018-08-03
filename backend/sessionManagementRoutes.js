@@ -114,7 +114,7 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
 
     if (isXHRRequest) {
       res.status(401);
-      res.json({ message: 'Session expired.' });
+      res.json({ message: 'Session expired, please logout.', reason: 'session-expired' });
       return;
     }
 

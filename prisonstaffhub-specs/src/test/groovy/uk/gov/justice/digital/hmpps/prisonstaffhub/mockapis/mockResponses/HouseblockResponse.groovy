@@ -14,8 +14,9 @@ class HouseblockResponse {
             eventDescription: "Prison Activities",
             comment         : "Woodwork",
             startTime       : "2017-10-15T17:00:00",
+            payRate         : 1.30,
             endTime         : "2017-10-15T18:30:00"
-    ];
+    ]
     static response2 = [
             offenderNo      : "A1234AA",
             firstName       : "ARTHUR",
@@ -27,7 +28,7 @@ class HouseblockResponse {
             comment         : "Friends",
             startTime       : "2017-10-15T18:00:00",
             endTime         : "2017-10-15T18:30:00"
-    ];
+    ]
     static response3 = [
             offenderNo      : "A1234AB",
             firstName       : "EUGENE",
@@ -39,7 +40,7 @@ class HouseblockResponse {
             comment         : "TV Repairs",
             startTime       : "2017-10-15T17:45:00",
             endTime         : "2017-10-15T18:30:00"
-    ];
+    ]
     static response4 = [
             offenderNo      : "A1234AC",
             firstName       : "FRED",
@@ -51,7 +52,7 @@ class HouseblockResponse {
             comment         : "Chapel",
             startTime       : "2017-10-15T11:45:00",
             endTime         : "2017-10-15T13:30:00"
-    ];
+    ]
     static response5 = [
             offenderNo      : "A1234AA",
             firstName       : "ARTHUR",
@@ -61,9 +62,9 @@ class HouseblockResponse {
             eventType       : "PRISON_ACT",
             eventDescription: "reading",
             comment         : "conflict activity",
-            startTime       : "2017-10-15T17:10:00",
+            startTime       : "2017-10-15T16:50:00",
             endTime         : "2017-10-15T18:30:00"
-    ];
+    ]
     static response6 = [
             offenderNo      : "A1234AH",
             firstName       : "JOHN",
@@ -75,7 +76,7 @@ class HouseblockResponse {
             comment         : "non paid act 1",
             startTime       : "2017-10-15T17:10:00",
             endTime         : "2017-10-15T18:30:00"
-    ];
+    ]
     static response7 = [
             offenderNo      : "A1234AH",
             firstName       : "JOHN",
@@ -87,7 +88,7 @@ class HouseblockResponse {
             comment         : "non paid act 2",
             startTime       : "2017-10-15T19:10:00",
             endTime         : "2017-10-15T20:30:00"
-    ];
+    ]
 
     static responseCellOrder = JsonOutput.toJson([
             response1,
@@ -104,7 +105,6 @@ class HouseblockResponse {
     static responseMultipleActivities = JsonOutput.toJson([
             response1,
             response5
-
     ])
     static responseNoActivities = JsonOutput.toJson([
             response6,

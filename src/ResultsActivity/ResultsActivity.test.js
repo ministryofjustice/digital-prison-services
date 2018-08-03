@@ -92,7 +92,7 @@ const user = { activeCaseLoadId: PRISON, caseLoadOptions: [
 
 const activities = [{ locationId: 4, userDescription: "Some other activity" },
   { locationId: 5, userDescription: "Chapel Activity" }];
-const activity = 5;
+const activity = "5";
 
 describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
@@ -110,10 +110,12 @@ describe('Offender results component Jira NN-843', () => {
       handlePrint={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getActivityList={jest.fn()}
       date={date}
       period={'ED'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>
     );
     expect(component.find('.whereabouts-title').text()).toEqual('Chapel Activity');
@@ -160,9 +162,11 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getActivityList={jest.fn()}
       period={'PM'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>);
     const tr = component.find('tr');
     expect(tr.length).toEqual(1); // table header tr only
@@ -185,10 +189,12 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getActivityList={jest.fn()}
       date={today}
       period={'AM'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
@@ -220,10 +226,12 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getActivityList={jest.fn()}
       date={today}
       period={'AM'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>);
     // If today, print button is present
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
@@ -245,10 +253,12 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getActivityList={jest.fn()}
       date={oldDate}
       period={'ED'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false);
@@ -270,10 +280,12 @@ describe('Offender results component Jira NN-843', () => {
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       getActivityList={jest.fn()}
       date={oldDate}
       period={'ED'}
       agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
       user={user}/>);
 
     const tr = component.find('tr');
