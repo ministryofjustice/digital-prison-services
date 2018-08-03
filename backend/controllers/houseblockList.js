@@ -12,6 +12,25 @@ function addToOthers (currentRow, event) {
   }
 }
 
+function handleMultipleActivities (currentRow, currentActivity) {
+  if (!currentRow.activity.payRate && currentActivity.payRate) {
+    // Make current activity the main activity
+    addToOthers(currentRow, currentRow.activity);
+    currentRow.activity = currentActivity;
+  } else if (currentRow.activity.payRate && !currentActivity.payRate) {
+    // current activity is an 'other'
+    addToOthers(currentRow, currentActivity);
+  } else
+  // Multiple paid activities, or neither paid - make the earliest starting one the main one
+  if (safeTimeCompare(currentRow.activity.startTime, currentActivity.startTime)) {
+    addToOthers(currentRow, currentRow.activity);
+    currentRow.activity = currentActivity;
+  } else {
+    // current activity starts later so 'other'
+    addToOthers(currentRow, currentActivity);
+  }
+}
+
 const getHouseblockListFactory = (elite2Api) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
     const data = await elite2Api.getHouseblockList(context, agencyId, groupName, switchDateFormat(date), timeSlot);
@@ -34,23 +53,7 @@ const getHouseblockListFactory = (elite2Api) => {
           // 1st activity found for this offender
           currentRow.activity = event;
         } else {
-          // Multiple activities - make paid the main one
-          if (!currentRow.activity.payRate && event.payRate) {
-            addToOthers(currentRow, currentRow.activity);
-            currentRow.activity = event;
-          } else if ((currentRow.activity.payRate && event.payRate) ||
-                     (!currentRow.activity.payRate && !event.payRate)) {
-            // Multiple paid activities, or neither paid - make earliest the main one
-            if (safeTimeCompare(currentRow.activity.startTime, event.startTime)) {
-              addToOthers(currentRow, currentRow.activity);
-              currentRow.activity = event;
-            } else {
-              // event later
-              addToOthers(currentRow, event);
-            }
-          } else if (currentRow.activity.payRate && !event.payRate) {
-            addToOthers(currentRow, event);
-          }
+          handleMultipleActivities(currentRow, event);
         }
       } else {
         addToOthers(currentRow, event);
