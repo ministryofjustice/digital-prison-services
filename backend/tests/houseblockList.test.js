@@ -65,7 +65,7 @@ describe('Houseblock list controller', async () => {
     expect(response[2].others[0].offenderNo).toBe('A1234AC');
     expect(response[2].others[0].event).toBe('VISIT');
 
-    expect(response[3].activity).toBeUndefined(); //no paid activities
+    expect(response[3].activity).toBeUndefined(); //no activities
     expect(response[3].others[0].offenderNo).toBe('A1234AD');
   });
 
@@ -81,10 +81,28 @@ describe('Houseblock list controller', async () => {
     expect(response[0].activity.startTime).toBe('2017-10-15T08:30:00');
 
     expect(response[0].others.length).toBe(2);
-    expect(response[0].others[1].eventDescription).toBe('paid later');
-    expect(response[0].others[1].startTime).toBe('2017-10-15T09:00:00');
     expect(response[0].others[0].eventDescription).toBe('unpaid early');
     expect(response[0].others[0].startTime).toBe('2017-10-15T08:00:00');
+    expect(response[0].others[1].eventDescription).toBe('paid later');
+    expect(response[0].others[1].startTime).toBe('2017-10-15T09:00:00');
+  });
+
+  it('Should correctly choose between multiple unpaid', async () => {
+    elite2Api.getHouseblockList = jest.fn();
+    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid());
+
+    const response = await houseblockList({});
+
+    expect(response.length).toBe(1);
+
+    expect(response[0].activity.eventDescription).toBe('unpaid early');
+    expect(response[0].activity.startTime).toBe('2017-10-15T08:00:00');
+
+    expect(response[0].others.length).toBe(2);
+    expect(response[0].others[0].eventDescription).toBe('unpaid later');
+    expect(response[0].others[0].startTime).toBe('2017-10-15T09:00:00');
+    expect(response[0].others[1].eventDescription).toBe('unpaid middle');
+    expect(response[0].others[1].startTime).toBe('2017-10-15T08:30:00');
   });
 
   it('Should handle no response data', async () => {
@@ -222,6 +240,29 @@ function createMultipleActivities () {
       eventDescription: "paid early",
       startTime: "2017-10-15T08:30:00",
       payRate: 0.5
+    }
+  ];
+}
+
+function createMultipleUnpaid () {
+  return [
+    {
+      offenderNo: "A1234AA",
+      eventType: "PRISON_ACT",
+      eventDescription: "unpaid later",
+      startTime: "2017-10-15T09:00:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      eventType: "PRISON_ACT",
+      eventDescription: "unpaid early",
+      startTime: "2017-10-15T08:00:00"
+    },
+    {
+      offenderNo: "A1234AA",
+      eventType: "PRISON_ACT",
+      eventDescription: "unpaid middle",
+      startTime: "2017-10-15T08:30:00"
     }
   ];
 }
