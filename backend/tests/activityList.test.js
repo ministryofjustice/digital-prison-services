@@ -123,6 +123,19 @@ describe('Activity list controller', async () => {
     expect(response[2].comment).toBe('Z');
     expect(response[2].lastName).toBe('Z');
   });
+
+  it('should not make a call to getVisits and getAppointments when there is no activity data', async () => {
+    elite2Api.getActivityList = jest.fn();
+    elite2Api.getVisits = jest.fn();
+    elite2Api.getAppointments = jest.fn();
+
+    elite2Api.getActivityList.mockImplementationOnce(() => []);
+
+    await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
+
+    expect(elite2Api.getVisits.mock.calls.length).toBe(0);
+    expect(elite2Api.getAppointments.mock.calls.length).toBe(0);
+  });
 });
 
 function createActivitiesResponse () {
