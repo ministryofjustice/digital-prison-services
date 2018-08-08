@@ -68,10 +68,10 @@ const getHouseblockListFactory = (elite2Api) => {
 };
 
 function safeTimeCompare (a, b) {
-  if (a.startTime && b.startTime) {
-    return moment(b.startTime).isBefore(a.startTime);
+  if (a && b) {
+    return moment(b).isBefore(a);
   } else {
-    return !a.startTime;
+    return !a;
   }
 }
 
