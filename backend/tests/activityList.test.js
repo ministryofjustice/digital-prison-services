@@ -6,15 +6,28 @@ const activityList = require('../controllers/activityList').getActivityListFacto
 describe('Activity list controller', async () => {
   it('Should add visit and appointment details to activity array', async () => {
     elite2Api.getActivityList = jest.fn();
+    elite2Api.getVisits = jest.fn();
+    elite2Api.getAppointments = jest.fn();
+
     elite2Api.getActivityList.mockImplementationOnce(() => createActivitiesResponse());
-    elite2Api.getActivityList.mockImplementationOnce(() => createVisitsResponse());
-    elite2Api.getActivityList.mockImplementationOnce(() => createAppointmentsResponse());
+    elite2Api.getVisits.mockImplementationOnce(() => createVisitsResponse());
+    elite2Api.getAppointments.mockImplementationOnce(() => createAppointmentsResponse());
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
 
-    expect(elite2Api.getActivityList.mock.calls.length).toBe(3);
+    expect(elite2Api.getActivityList).toHaveBeenCalled();
     expect(elite2Api.getActivityList.mock.calls[0][1].agencyId).toBe('LEI');
     expect(elite2Api.getActivityList.mock.calls[0][1].date).toBe('2018-11-23');
+
+    expect(elite2Api.getVisits.mock.calls[0][1].agencyId).toBe('LEI');
+    expect(elite2Api.getVisits.mock.calls[0][1].date).toBe("2018-11-23");
+    expect(elite2Api.getVisits.mock.calls[0][1].timeSlot).toBe("PM");
+    expect(elite2Api.getVisits.mock.calls[0][1].offenderNumbers).toEqual(["A1234AC", "A1234AA", "A1234AB"]);
+
+    expect(elite2Api.getAppointments.mock.calls[0][1].agencyId).toBe('LEI');
+    expect(elite2Api.getAppointments.mock.calls[0][1].date).toBe("2018-11-23");
+    expect(elite2Api.getAppointments.mock.calls[0][1].timeSlot).toBe("PM");
+    expect(elite2Api.getAppointments.mock.calls[0][1].offenderNumbers).toEqual(["A1234AC", "A1234AA", "A1234AB"]);
 
     expect(response[0].offenderNo).toBe('A1234AA');
     expect(response[0].firstName).toBe('ARTHUR');
@@ -92,9 +105,12 @@ describe('Activity list controller', async () => {
     ];
 
     elite2Api.getActivityList = jest.fn();
+    elite2Api.getVisits = jest.fn();
+    elite2Api.getAppointments = jest.fn();
+
     elite2Api.getActivityList.mockImplementationOnce(() => results);
-    elite2Api.getActivityList.mockImplementationOnce(() => createVisitsResponse());
-    elite2Api.getActivityList.mockImplementationOnce(() => createAppointmentsResponse());
+    elite2Api.getVisits.mockImplementationOnce(() => createVisitsResponse());
+    elite2Api.getAppointments.mockImplementationOnce(() => createAppointmentsResponse());
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
 

@@ -195,6 +195,7 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
     }
 
     void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -241,6 +242,32 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withBody(ActivityResponse.appointments)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
+        def offenderNumbers = [
+            ActivityResponse.activity1.offenderNo,
+            ActivityResponse.activity2.offenderNo,
+            ActivityResponse.activity3.offenderNo
+        ]
+
+        this.stubFor(
+                post("/api/schedules/${caseload.id}/visits?timeSlot=${timeSlot}&date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                        aResponse()
+                                .withBody(ActivityResponse.appointments)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
+        this.stubFor(
+                post("/api/schedules/${caseload.id}/appointments?timeSlot=${timeSlot}&date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                        aResponse()
+                                .withBody(ActivityResponse.visits)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

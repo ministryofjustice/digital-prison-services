@@ -31,7 +31,8 @@ const elite2ApiFactory = (client) => {
 
   const getHouseblockList = (context, agencyId, groupName, date, timeSlot) => get(context, `api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}`);
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) => get(context, `api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`);
-
+  const getVisits = (context, { agencyId, locationId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/visits?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
+  const getAppointments = (context, { agencyId, locationId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
 
   const searchActivityLocations = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations?eventType=APP`);
   const searchGroups = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations/groups`);
@@ -48,7 +49,9 @@ const elite2ApiFactory = (client) => {
     searchActivityLocations,
     searchGroups,
     updateAttendance,
-    createCaseNote
+    createCaseNote,
+    getVisits,
+    getAppointments
   };
 };
 
