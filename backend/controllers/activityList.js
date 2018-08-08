@@ -21,10 +21,14 @@ const getActivityListFactory = (elite2Api) => {
 
     const activityData = await elite2Api.getActivityList(context, { agencyId, locationId, usage: 'PROG', date, timeSlot });
     log.info(activityData, 'getActivityList data received');
+
     const offenderNumbers = activityData && activityData.map(activity => activity.offenderNo);
 
-    const visits = offenderNumbers.length && await elite2Api.getVisits(context, { agencyId, date, timeSlot, offenderNumbers });
-    const appointments = offenderNumbers.length && await elite2Api.getAppointments(context, { agencyId, date, timeSlot, offenderNumbers });
+    const visits = activityData && await elite2Api.getVisits(context, { agencyId, date, timeSlot, offenderNumbers });
+    log.info(visits, 'getVisits data received');
+
+    const appointments = activityData && await elite2Api.getAppointments(context, { agencyId, date, timeSlot, offenderNumbers });
+    log.info(appointments, 'getAppointments data received');
 
     const activities = sortActivitiesByEventThenByLastName(activityData);
 
