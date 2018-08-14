@@ -71,9 +71,6 @@ class ResultsActivity extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      <button id="saveButton" className="button" type="button" onClick={() => {
-        this.props.handleSave(this.props.history);
-      }}>Save changes</button>
       {this.isToday(this.props.date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         this.props.handlePrint();
@@ -176,7 +173,6 @@ ResultsActivity.propTypes = {
   user: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
-  handleSave: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string,

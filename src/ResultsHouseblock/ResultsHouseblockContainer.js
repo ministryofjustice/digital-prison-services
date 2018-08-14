@@ -13,7 +13,6 @@ class ResultsHouseblockContainer extends Component {
   async componentWillMount () {
     try {
       this.handlePrint = this.handlePrint.bind(this);
-      this.handleSave = this.handleSave.bind(this);
       if (!this.props.locations) {
         await this.getLocations();
       }
@@ -43,10 +42,6 @@ class ResultsHouseblockContainer extends Component {
     window.print();
   }
 
-  handleSave () {
-    // TODO
-  }
-
   render () {
     if (!this.props.loaded) {
       return <Spinner/>;
@@ -54,7 +49,6 @@ class ResultsHouseblockContainer extends Component {
     return (<div><Error {...this.props} />
       <ResultsHouseblock
         handlePrint={this.handlePrint}
-        handleSave={this.handleSave}
         {...this.props}
       />
     </div>);

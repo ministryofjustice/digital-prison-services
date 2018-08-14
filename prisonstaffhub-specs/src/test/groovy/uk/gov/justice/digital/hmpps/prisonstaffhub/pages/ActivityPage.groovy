@@ -9,8 +9,6 @@ class ActivityPage extends Page {
 
     static at = {
         updateButton.displayed
-        saveButton[0].displayed
-        saveButton[1].displayed
     }
 
     static content = {
@@ -22,7 +20,6 @@ class ActivityPage extends Page {
         period { $('#period-select') }
         form { $('form')}
         updateButton { $('#updateButton') }
-        saveButton { $('#saveButton') }
         printButton { $('#printButton') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
     }
