@@ -13,7 +13,6 @@ class ResultsActivityContainer extends Component {
   async componentWillMount () {
     try {
       this.handlePrint = this.handlePrint.bind(this);
-      this.handleSave = this.handleSave.bind(this);
       if (this.props.activity) {
         this.props.getActivityList();
       } else {
@@ -28,16 +27,12 @@ class ResultsActivityContainer extends Component {
     window.print();
   }
 
-  handleSave () {
-    // TODO
-  }
-
   render () {
     if (!this.props.loaded) {
       return <Spinner/>;
     }
     return (<div><Error {...this.props} />
-      <ResultsActivity handlePrint={this.handlePrint} handleSave={this.handleSave} {...this.props}/>
+      <ResultsActivity handlePrint={this.handlePrint} {...this.props}/>
     </div>);
   }
 }

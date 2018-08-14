@@ -9,8 +9,6 @@ class HouseblockPage extends Page {
 
     static at = {
         updateButton.displayed
-        saveButton[0].displayed
-        saveButton[1].displayed
     }
 
     static content = {
@@ -23,7 +21,6 @@ class HouseblockPage extends Page {
         period { $('#period-select') }
         form { $('form')}
         updateButton { $('#updateButton') }
-        saveButton { $('#saveButton') }
         printButton { $('#printButton') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
         nameOrderLink { $('th a#Name-sortable-column') }

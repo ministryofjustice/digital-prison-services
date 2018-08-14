@@ -121,7 +121,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={jest.fn()}
-      handleSave={jest.fn()}
       handlePrint={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -177,7 +176,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={[]}
       handleSearch={jest.fn()}
-      handleSave={jest.fn()}
       handlePrint={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -196,7 +194,6 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should handle buttons correctly', async () => {
     const handleSearch = jest.fn();
-    const handleSave = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
@@ -204,7 +201,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
-      handleSave={handleSave}
       handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -222,10 +218,7 @@ describe('Offender results component Jira NN-843', () => {
 
     component.find('#updateButton').simulate('click');
     expect(handleSearch).toHaveBeenCalled();
-    expect(handleSave).not.toHaveBeenCalled();
     expect(handlePrint).not.toHaveBeenCalled();
-    component.find('#saveButton').at(0).simulate('click');
-    expect(handleSave).toHaveBeenCalled();
     expect(handlePrint).not.toHaveBeenCalled();
     component.find('#printButton').at(0).simulate('click');
     expect(handlePrint).toHaveBeenCalled();
@@ -233,7 +226,6 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should not display print button when date is not today', async () => {
     const handleSearch = jest.fn();
-    const handleSave = jest.fn();
     const handlePrint = jest.fn();
     const oldDate = '25/05/2018';
     const component = shallow(<ResultsHouseblock
@@ -241,7 +233,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
-      handleSave={handleSave}
       handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -260,7 +251,6 @@ describe('Offender results component Jira NN-843', () => {
 
   it('checkboxes should be read-only when date is over a week ago', async () => {
     const handleSearch = jest.fn();
-    const handleSave = jest.fn();
     const handlePrint = jest.fn();
     const oldDate = '23/05/2018';
     const component = shallow(<ResultsHouseblock
@@ -268,7 +258,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
-      handleSave={handleSave}
       handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -289,7 +278,6 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should display the correct sorting headings for Location', async () => {
     const handleSearch = jest.fn();
-    const handleSave = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
@@ -297,7 +285,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
-      handleSave={handleSave}
       handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -321,7 +308,6 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should display the correct sorting headings for Name', async () => {
     const handleSearch = jest.fn();
-    const handleSave = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
@@ -329,7 +315,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
-      handleSave={handleSave}
       handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -353,7 +338,6 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should handle change of sort order', async () => {
     const handleSearch = jest.fn();
-    const handleSave = jest.fn();
     const getHouseblockList = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
@@ -363,7 +347,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={response}
       handleSearch={handleSearch}
-      handleSave={handleSave}
       handlePrint={handlePrint}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -392,7 +375,6 @@ describe('Offender results component Jira NN-843', () => {
       locations={locations}
       houseblockData={[]}
       handleSearch={jest.fn()}
-      handleSave={jest.fn()}
       handlePrint={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -415,7 +397,6 @@ describe('Offender results component Jira NN-843', () => {
       houseblockData={[response[0]]}
       handleSearch={jest.fn()}
       handlePrint={jest.fn()}
-      handleSave={jest.fn()}
       handleLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
