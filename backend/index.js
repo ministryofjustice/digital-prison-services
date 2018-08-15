@@ -94,7 +94,7 @@ const healthApi = healthApiFactory(
 const elite2Api = eliteApiFactory(
   clientFactory({
     baseUrl: config.apis.elite2.url,
-    timeout: 10000
+    timeout: config.apis.elite2.timeoutSeconds * 1000
   }));
 
 const controller = controllerFactory(
