@@ -88,7 +88,8 @@ class ResultsActivity extends Component {
       <th className="straightPrint checkbox-header"><div><span>Other</span></div></th>
     </tr>);
 
-    const readOnly = this.olderThan7Days(this.props.date);
+    //Disabled until whereabouts v2
+    //const readOnly = this.olderThan7Days(this.props.date);
 
     const stripAgencyPrefix = (location, agency) => {
       const parts = location && location.split('-');
@@ -122,11 +123,11 @@ class ResultsActivity extends Component {
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             {/*Disable pay/other for Part 1*/}
-            <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly} /> {/*onChange={(event) => this.props.handlePay(mainActivity, event)}*/}
+            <input id={'col1_' + index} type="checkbox" name="ch1" disabled /> {/*onChange={(event) => this.props.handlePay(mainActivity, event)}*/}
             <label htmlFor={'col1_' + index} /></div></td>
           <td className="no-padding checkbox-column">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly} /> {/*onChange={(event) => this.props.showPaymentReasonModal(mainActivity, event)}*/}
+              <input id={'col2_' + index} type="checkbox" name="ch2" disabled /> {/*onChange={(event) => this.props.showPaymentReasonModal(mainActivity, event)}*/}
               <label htmlFor={'col2_' + index} />
             </div>
           </td>
