@@ -30,7 +30,7 @@ import {
   setHouseblockData, setSortOrder, setOrderField, setLoaded,
   setSearchDate,
   setSearchLocation,
-  setSearchPeriod, setActivityData, setSearchActivity
+  setSearchPeriod, setActivityData, setSearchActivity, setSearchActivities
 } from "./redux/actions";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
@@ -50,6 +50,7 @@ class App extends React.Component {
     this.handleError = this.handleError.bind(this);
     this.getHouseblockList = this.getHouseblockList.bind(this);
     this.getActivityList = this.getActivityList.bind(this);
+    this.getActivityLocations = this.getActivityLocations.bind(this);
   }
 
   async componentWillMount () {
@@ -134,8 +135,21 @@ class App extends React.Component {
     }
   }
 
+  handleDateChangeWithLocationsUpdate (date) {
+    if (date) {
+      const formattedDate = moment(date).format('DD/MM/YYYY');
+      this.props.dateDispatch(formattedDate);
+      this.getActivityLocations(formattedDate, null);
+    }
+  }
+
   handlePeriodChange (event) {
     this.props.periodDispatch(event.target.value);
+  }
+
+  handlePeriodChangeWithLocationsUpdate (event) {
+    this.props.periodDispatch(event.target.value);
+    this.getActivityLocations(null, event.target.value);
   }
 
   handleSearch (history) {
@@ -211,6 +225,33 @@ class App extends React.Component {
     this.props.setLoadedDispatch(true);
   }
 
+  async getActivityLocations (date, period) {
+    this.props.setLoadedDispatch(false);
+    try {
+      if (!date) {
+        date = this.props.date;
+      }
+      if (date === 'Today') { // replace placeholder text
+        date = moment().format('DD/MM/YYYY');
+      }
+      if (!period) {
+        period = this.props.period;
+      }
+      const response = await axios.get('/api/activityLocations', {
+        params: {
+          agencyId: this.props.agencyId,
+          bookedOnDay: date,
+          timeSlot: period
+        } });
+      this.props.activitiesDispatch(response.data);
+      // set to unselected
+      this.props.activityDispatch('--');
+    } catch (error) {
+      this.handleError(error);
+    }
+    this.props.setLoadedDispatch(true);
+  }
+
   async handlePay (activity, browserEvent) {
     try {
       if (!activity.eventId) {
@@ -234,10 +275,11 @@ class App extends React.Component {
         <Redirect to="/whereaboutssearch"/>
       )}/>)}/>
       <Route path="(/whereaboutssearch)" render={() => (<SearchContainer handleError={this.handleError}
+        getActivityLocations={this.getActivityLocations}
         handleLocationChange={(event) => this.handleLocationChange(event)}
         handleActivityChange={(event) => this.handleActivityChange(event)}
-        handleDateChange={(event) => this.handleDateChange(event)}
-        handlePeriodChange={(event) => this.handlePeriodChange(event)}
+        handleDateChange={(event) => this.handleDateChangeWithLocationsUpdate(event)}
+        handlePeriodChange={(event) => this.handlePeriodChangeWithLocationsUpdate(event)}
         handleSearch={(history) => this.handleSearch(history)} {...this.props} />)}/>
       <Route exact path="/whereaboutsresultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
         getHouseblockList = {this.getHouseblockList}
@@ -249,6 +291,7 @@ class App extends React.Component {
         {...this.props} />)}/>
       <Route exact path="/whereaboutsresultsactivity" render={() => (<ResultsActivityContainer handleError={this.handleError}
         getActivityList = {this.getActivityList}
+        getActivityLocations={this.getActivityLocations}
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}
@@ -350,6 +393,7 @@ const mapDispatchToProps = dispatch => {
     resetErrorDispatch: () => dispatch(resetError()),
     setMessageDispatch: (message) => dispatch(setMessage(message)),
     locationDispatch: text => dispatch(setSearchLocation(text)),
+    activitiesDispatch: text => dispatch(setSearchActivities(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
     periodDispatch: text => dispatch(setSearchPeriod(text)),

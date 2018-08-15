@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
+import geb.module.FormElement
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
@@ -24,12 +25,10 @@ class ActivitySpecification extends GebReportingSpec {
         when: "I select and display a location"
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
-        form['activity-select'] = 'loc2'
-      //  form['date'] = ??? TODO cannot set input, have to click calendar!
-//        datePicker.click()
-//        days[0].click() // select 1st of this month for now
-
         form['period-select'] = 'AM'
+        waitFor { !activity.module(FormElement).disabled }
+        form['activity-select'] = 'loc2'
+
         continueButton.click()
 
         then: 'The activity list is displayed'
@@ -52,8 +51,9 @@ class ActivitySpecification extends GebReportingSpec {
         this.initialPeriod = period.value()
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
-        form['activity-select'] = 'loc1'
         form['period-select'] = 'PM'
+        waitFor { !activity.module(FormElement).disabled }
+        form['activity-select'] = 'loc1'
         continueButton.click()
         at ActivityPage
         activityTitle == 'loc1'
@@ -89,8 +89,10 @@ class ActivitySpecification extends GebReportingSpec {
         this.initialPeriod = period.value()
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
-        form['activity-select'] = 'loc1'
         form['period-select'] = 'PM'
+        waitFor { !activity.module(FormElement).disabled }
+        form['activity-select'] = 'loc1'
+
         continueButton.click()
         at ActivityPage
 

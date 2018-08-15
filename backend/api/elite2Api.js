@@ -34,7 +34,7 @@ const elite2ApiFactory = (client) => {
   const getVisits = (context, { agencyId, locationId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/visits?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
   const getAppointments = (context, { agencyId, locationId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
 
-  const searchActivityLocations = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations?eventType=APP`);
+  const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) => get(context, `api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`);
   const searchGroups = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations/groups`);
   const updateAttendance = (context, offenderNo, activityId, body) => put(context, `api/bookings/offenderNo/${offenderNo}/activities/${activityId}/attendance`, body);
   const createCaseNote = (context, offenderNo, body) => post(context, `api/bookings/offenderNo/${offenderNo}/caseNotes`, body);
