@@ -17,7 +17,7 @@ const errorLogger = (error) => {
 
 /**
  * Build a client for the supplied configuration. The client wraps axios get, post, put etc while ensuring that
- * the remote calls carry valid oauth and gateway headers.
+ * the remote calls carry valid oauth headers.
  *
  * @param baseUrl The base url to be used with the client's get and post
  * @param timeout The timeout to apply to get and post.
