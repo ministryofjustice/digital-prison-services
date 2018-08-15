@@ -47,12 +47,13 @@ class Search extends Component {
           {housingLocations}
         </select></div>);
 
-    const activitySelect = (
+    const activitySelect = loaded => (
       <div className="pure-u-md-12-12">
         <label className="form-label" htmlFor="activity-select">Select Activity location</label>
 
         <select id="activity-select" name="activity-select" className="form-control"
           value={this.props.activity}
+          disabled={!loaded}
           onChange={this.onActivityChange}>
           <option key="choose" value="--">-- Select --</option>
           {activityLocations}
@@ -85,7 +86,7 @@ class Search extends Component {
       <form id="searchForm" name="searchForm" className="pure-u-md-12-12 searchForm">
         <div className="pure-u-md-5-12 padding-bottom"> {locationSelect} </div>
         <div className="pure-u-md-1-12 orDiv ">or</div>
-        <div className="pure-u-md-5-12 padding-bottom"> {activitySelect} </div>
+        <div className="pure-u-md-5-12 padding-bottom"> {activitySelect(this.props.loaded)} </div>
 
         <div className="pure-u-md-6-12 padding-top padding-bottom">
           {dateSelect}
@@ -115,7 +116,8 @@ Search.propTypes = {
   activity: PropTypes.string,
   currentLocation: PropTypes.string,
   locations: PropTypes.array,
-  activities: PropTypes.array
+  activities: PropTypes.array,
+  loaded: PropTypes.bool
 };
 
 const SearchWithRouter = withRouter(Search);

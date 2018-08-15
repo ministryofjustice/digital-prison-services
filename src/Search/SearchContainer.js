@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 import Error from '../Error';
 import Search from "./Search";
 import axios from "axios/index";
-import { setSearchActivities, setSearchActivity, resetValidationErrors, setValidationError } from "../redux/actions";
+import { setSearchActivity, resetValidationErrors, setValidationError } from "../redux/actions";
 import { defaultPeriod } from "../redux/reducers";
 
 class SearchContainer extends Component {
   componentWillMount () {
     this.getLocations();
-    this.getActivityLocations();
     this.props.dateDispatch('Today');
     this.props.periodDispatch(defaultPeriod(moment()));
+    this.props.getActivityLocations();
   }
 
   async getLocations () {
@@ -25,20 +25,6 @@ class SearchContainer extends Component {
         } });
       this.props.locationsDispatch(response.data);
       this.props.locationDispatch('--');
-    } catch (error) {
-      this.props.handleError(error);
-    }
-  }
-
-  async getActivityLocations () {
-    try {
-      const response = await axios.get('/api/activityLocations', {
-        params: {
-          agencyId: this.props.agencyId
-        } });
-      this.props.activitiesDispatch(response.data);
-      // set to unselected
-      this.props.activityDispatch('--');
     } catch (error) {
       this.props.handleError(error);
     }
@@ -85,6 +71,7 @@ SearchContainer.propTypes = {
   location: PropTypes.string,
   setValidationErrorDispatch: PropTypes.func,
   resetValidationErrorsDispatch: PropTypes.func,
+  getActivityLocations: PropTypes.func,
   validationErrors: PropTypes.object
 };
 
@@ -94,6 +81,7 @@ const mapStateToProps = state => {
     activities: state.search.activities,
     activity: state.search.activity,
     location: state.search.location,
+    loaded: state.app.loaded,
     validationErrors: state.app.validationErrors
   };
 };
@@ -102,7 +90,6 @@ const mapDispatchToProps = dispatch => {
   return {
     locationsDispatch: text => dispatch(setSearchLocations(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
-    activitiesDispatch: text => dispatch(setSearchActivities(text)),
     setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
     resetValidationErrorsDispatch: message => dispatch(resetValidationErrors())
   };
