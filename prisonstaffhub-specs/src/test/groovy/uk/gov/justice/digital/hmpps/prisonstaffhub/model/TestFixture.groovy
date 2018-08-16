@@ -30,7 +30,7 @@ class TestFixture {
         elite2Api.stubGetMyDetails currentUser
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
-        elite2Api.stubActivityLocations currentUser.workingCaseload
+        elite2Api.stubActivityLocations()
         browser.page.loginAs currentUser, 'password'
         browser.at SearchPage
     }

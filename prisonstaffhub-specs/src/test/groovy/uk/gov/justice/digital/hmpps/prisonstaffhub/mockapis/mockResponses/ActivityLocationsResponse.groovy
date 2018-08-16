@@ -19,4 +19,17 @@ class ActivityLocationsResponse {
   }
 ]
 '''
+
+    static response2 = '''
+[
+  {
+    "locationId": 4,
+    "userDescription": "loc4"
+  },
+  {
+    "locationId": 5,
+    "userDescription": "loc5"
+  }
+]
+'''
 }

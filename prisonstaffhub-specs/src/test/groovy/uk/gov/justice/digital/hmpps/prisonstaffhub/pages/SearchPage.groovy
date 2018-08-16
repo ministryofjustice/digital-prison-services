@@ -1,9 +1,8 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
-import geb.Page
 import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
-class SearchPage extends Page {
+class SearchPage extends DatePickerPage {
 
     static url = "/whereaboutssearch"
 
@@ -18,9 +17,6 @@ class SearchPage extends Page {
         validationMessage(required: false) { $('#validation-message') }
         location { $('#housing-location-select') }
         activity { $('#activity-select') }
-        date { $('#search-date') }
-        datePicker { $('div.date-picker-component') } // click this to get picker
-        days { $('td.rdtDay') } // days on picker, click to set date
         period { $('#period-select') }
         continueButton { $('button.button') }
         form { $('form')}
