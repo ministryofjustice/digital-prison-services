@@ -3,7 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
-class HouseblockPage extends Page {
+class HouseblockPage extends DatePickerPage {
 
     static url = "/whereaboutsresultshouseblock"
 
@@ -15,9 +15,6 @@ class HouseblockPage extends Page {
         headingText { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         location { $('#housing-location-select') }
-        date { $('#search-date') }// click this to get picker
-        days { $('td.rdtDay') } // days on picker, click to set date
-        firstDay { $('td.rdtDay[data-value="1"]')[0] } // 1st of month
         period { $('#period-select') }
         form { $('form')}
         updateButton { $('#updateButton') }

@@ -92,12 +92,11 @@ class HouseblockSpecification extends GebReportingSpec {
         at HouseblockPage
 
         when: "I change selections and update"
-        def firstOfMonthDisplayFormat = '01/'+ new Date().format('MM/yyyy')
-        def firstOfMonthApiFormat = new Date().format('yyyy-MM') + '-01'
+        def firstOfMonthDisplayFormat = '01/08/2018'
+        def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'PM', firstOfMonthApiFormat)
         form['housing-location-select'] = 'BWing'
-        date.click() // get calendar
-        firstDay.click() // select 1st of this month
+        setDatePicker('2018', 'Aug', '1')
         updateButton.click()
 
         then: 'The new houseblock list results are displayed'

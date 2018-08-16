@@ -44,7 +44,7 @@ class LoginSpecification extends GebReportingSpec {
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
-        elite2api.stubActivityLocations ITAG_USER.workingCaseload
+        elite2api.stubActivityLocations()
 
         when: "I login using valid credentials"
         loginAs ITAG_USER, 'password'
@@ -64,7 +64,7 @@ class LoginSpecification extends GebReportingSpec {
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
-        elite2api.stubActivityLocations ITAG_USER.workingCaseload
+        elite2api.stubActivityLocations()
 
         when: "I attempt to log in using valid credentials"
         loginAs ITAG_USER, 'password'

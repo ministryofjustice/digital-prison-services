@@ -59,11 +59,10 @@ class ActivitySpecification extends GebReportingSpec {
         activityTitle == 'loc1'
 
         when: "I change selections and update"
-        def firstOfMonthDisplayFormat = '01/'+ new Date().format('MM/yyyy')
-        def firstOfMonthApiFormat = new Date().format('yyyy-MM') + '-01'
+        def firstOfMonthDisplayFormat = '01/08/2018'
+        def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
-        date.click() // get calendar
-        firstDay.click() // select 1st of this month
+        setDatePicker('2018', 'Aug', '1')
         updateButton.click()
 
         then: 'The new activity list results are displayed'

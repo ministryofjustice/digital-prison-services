@@ -12,9 +12,11 @@ import { defaultPeriod } from "../redux/reducers";
 class SearchContainer extends Component {
   componentWillMount () {
     this.getLocations();
-    this.props.dateDispatch('Today');
-    this.props.periodDispatch(defaultPeriod(moment()));
-    this.props.getActivityLocations();
+    const today = 'Today';
+    this.props.dateDispatch(today);
+    const currentPeriod = defaultPeriod(moment());
+    this.props.periodDispatch(currentPeriod);
+    this.props.getActivityLocations(today, currentPeriod);
   }
 
   async getLocations () {
