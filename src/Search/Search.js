@@ -28,6 +28,8 @@ class Search extends Component {
   }
 
   render () {
+    const loaded = this.props.loaded;
+
     const housingLocations = this.props.locations ? this.props.locations.map((loc, optionIndex) => {
       return <option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>;
     }) : [];
@@ -47,7 +49,7 @@ class Search extends Component {
           {housingLocations}
         </select></div>);
 
-    const activitySelect = loaded => (
+    const activitySelect = (
       <div className="pure-u-md-12-12">
         <label className="form-label" htmlFor="activity-select">Select Activity location</label>
 
@@ -86,7 +88,7 @@ class Search extends Component {
       <form id="searchForm" name="searchForm" className="pure-u-md-12-12 searchForm">
         <div className="pure-u-md-5-12 padding-bottom"> {locationSelect} </div>
         <div className="pure-u-md-1-12 orDiv ">or</div>
-        <div className="pure-u-md-5-12 padding-bottom"> {activitySelect(this.props.loaded)} </div>
+        <div className="pure-u-md-5-12 padding-bottom"> {activitySelect} </div>
 
         <div className="pure-u-md-6-12 padding-top padding-bottom">
           {dateSelect}
@@ -95,9 +97,11 @@ class Search extends Component {
         </div>
 
         <div className="padding-top-large padding-bottom-large">
-          <button id="continue-button" className="button" type="button" onClick={() => {
-            this.props.onSearch(this.props.history);
-          }}>Continue</button>
+          <button id="continue-button" className="button" type="button"
+            disabled = {!loaded}
+            onClick={() => {
+              this.props.onSearch(this.props.history);
+            }}>Continue</button>
         </div>
       </form>
     </div>);
