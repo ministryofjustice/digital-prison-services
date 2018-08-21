@@ -10,6 +10,7 @@ import DatePickerInput from "../DatePickerInput";
 import { getPrisonDescription } from '../stringUtils';
 import moment from 'moment';
 import { Link } from "react-router-dom";
+import { getOffenderLink } from "../links";
 
 class ResultsActivity extends Component {
   displayBack () {
@@ -106,7 +107,9 @@ class ResultsActivity extends Component {
       const mainActivity = row;
       return (
         <tr key={mainActivity.offenderNo} className="row-gutters">
-          <td className="row-gutters">{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</td>
+          <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(mainActivity.offenderNo)}
+          >{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</a>
+          </td>
           <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainActivity.offenderNo}</td>
           <td className="row-gutters">

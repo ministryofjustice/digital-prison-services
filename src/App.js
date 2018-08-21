@@ -36,6 +36,7 @@ import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer
 
 import ModalProvider from './ModalProvider/index';
 import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer';
+import links from "./links";
 
 const axios = require('axios');
 
@@ -68,7 +69,7 @@ class App extends React.Component {
       this.props.userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
 
       const config = await axios.get('/api/config');
-
+      links.notmEndpointUrl = config.data.notmEndpointUrl;
       if (config.data.googleAnalyticsId) {
         ReactGA.initialize(config.data.googleAnalyticsId);
       }

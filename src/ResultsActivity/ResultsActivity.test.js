@@ -95,7 +95,7 @@ const activities = [{ locationId: 4, userDescription: "Some other activity" },
 const activity = "5";
 
 describe('Offender results component Jira NN-843', () => {
-  xit('should render initial offender results form correctly', async () => {
+  it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days');
     const date = aFewDaysAgo.format('DD/MM/YYYY');
     const longDateFormat = aFewDaysAgo.format('dddd Do MMMM');
@@ -129,7 +129,7 @@ describe('Offender results component Jira NN-843', () => {
 
     const tr = component.find('tr');
     expect(tr.length).toEqual(4); // 3 plus table header tr
-    expect(tr.at(1).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur');
+    expect(tr.at(1).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur');
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
     expect(tr.at(1).find('td').at(ACTIVITY_COLUMN).text()).toEqual('Chapel');
@@ -137,14 +137,14 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Medical - Dentist - Appt details 11:40');
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
-    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={false}'));
+    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={true}')); //TODO should be false in V2 (currently disabled for V1)
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
 
-    expect(tr.at(2).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael');
+    expect(tr.at(2).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael');
     expect(tr.at(2).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-2');
     expect(tr.at(2).find('td').at(OTHER_COLUMN).find('li').length).toEqual(0);
 
-    expect(tr.at(3).find('td').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
+    expect(tr.at(3).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
     expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11');
   });
