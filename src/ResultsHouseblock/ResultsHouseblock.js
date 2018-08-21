@@ -8,6 +8,7 @@ import { getHoursMinutes, properCaseName, getPrisonDescription } from "../string
 import DatePickerInput from "../DatePickerInput";
 import moment from 'moment';
 import { Link } from "react-router-dom";
+import { getOffenderLink } from "../links";
 
 class ResultsHouseblock extends Component {
   displayBack () {
@@ -133,7 +134,9 @@ class ResultsHouseblock extends Component {
       const anyActivity = row.activity || row.others[0];
       return (
         <tr key={anyActivity.offenderNo} className="row-gutters">
-          <td className="row-gutters">{`${properCaseName(anyActivity.lastName)}, ${properCaseName(anyActivity.firstName)}`}</td>
+          <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(anyActivity.offenderNo)}
+          >{properCaseName(anyActivity.lastName)}, {properCaseName(anyActivity.firstName)}</a>
+          </td>
           <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{anyActivity.offenderNo}</td>
           <td className="row-gutters small-font">{row.activity &&
