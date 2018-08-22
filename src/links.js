@@ -1,5 +1,5 @@
 const getOffenderLink = (offenderNo) => {
-  return `${links.notmEndpointUrl}offenders/${offenderNo}/personal`;
+  return `${links.notmEndpointUrl}offenders/${offenderNo}/quick-look`;
 };
 
 const links = {

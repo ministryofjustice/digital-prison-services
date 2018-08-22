@@ -163,6 +163,7 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         row1[3].text().contains('Woodwork 17:00')
         row1[4].text().contains('conflict activity 16:50')
+        row1[0].find("a", href: endsWith('/offenders/A1234AA/quick-look')).size() == 1
     }
 
     def "A prisoner with 0 activities should be displayed correctly"() {
