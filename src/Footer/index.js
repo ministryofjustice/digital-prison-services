@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import './footer.scss';
 
-const Footer = ({ showTermsAndConditions, mailTo }) =>
-  (<footer className="FooterContainer">
+const Footer = ({ showTermsAndConditions, mailTo, setMenuOpen }) =>
+  (<footer className="FooterContainer" onClick={() => setMenuOpen(false)}>
     <div className="footer-content">
       <div className="FooterLinksContainer">
         <div className="FooterLink"><a onClick={showTermsAndConditions}>Terms and conditions</a></div>
@@ -15,7 +15,8 @@ const Footer = ({ showTermsAndConditions, mailTo }) =>
 
 Footer.propTypes = {
   showTermsAndConditions: PropTypes.func.isRequired,
-  mailTo: PropTypes.string
+  mailTo: PropTypes.string,
+  setMenuOpen: PropTypes.func.isRequired
 };
 
 Footer.defaultProps = {

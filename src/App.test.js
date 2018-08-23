@@ -115,4 +115,34 @@ describe('App component', () => {
     appInstance.handleError({});
     expect(component.instance().displayAlertAndLogout).not.toBeCalled();
   });
+
+  it('should close the menu when the content is clicked', () => {
+    const setMenuOpen = jest.fn();
+    const fn = jest.fn();
+
+    const component = shallow(<App
+      configDispatch={fn}
+      userDetailsDispatch={fn}
+      switchAgencyDispatch={fn}
+      setTermsVisibilityDispatch={fn}
+      setErrorDispatch={fn}
+      setMessageDispatch={fn}
+      locationDispatch={fn}
+      activitiesDispatch={fn}
+      activityDispatch={fn}
+      dateDispatch={fn}
+      periodDispatch={fn}
+      houseblockDataDispatch={fn}
+      activityDataDispatch={fn}
+      setLoadedDispatch={fn}
+      orderDispatch={fn}
+      sortOrderDispatch={fn}
+      setMenuOpen={setMenuOpen}
+      showModal={{}}
+    />);
+
+    component.find('.inner-content').simulate('click');
+
+    expect(setMenuOpen).toHaveBeenCalledWith(false);
+  });
 });

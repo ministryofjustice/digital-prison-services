@@ -9,7 +9,7 @@ class Header extends Component {
   render () {
     return (
       <header className="page-header">
-        <div className="header-content">
+        <div className="header-content clickable">
           <div className="left-content">
             <Link title="Home link" className="link" to="/whereaboutssearch" >
               <div className="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"/></div>
@@ -33,7 +33,7 @@ class Header extends Component {
 Header.propTypes = {
   user: PropTypes.object,
   history: PropTypes.object.isRequired,
-  switchCaseLoad: PropTypes.func.isRequired
+  switchCaseLoad: PropTypes.func.isRequired,
 };
 
 export default Header;
