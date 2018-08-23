@@ -25,7 +25,8 @@ const appInitialState = {
   shouldShowTerms: false,
   error: null,
   message: null,
-  loaded: false
+  loaded: false,
+  menuOpen: false
 };
 
 const searchInitialState = {
@@ -95,6 +96,11 @@ export function app (state = appInitialState, action) {
       return {
         ...state,
         showModal: action.payload
+      };
+    case ActionTypes.SET_MENU_OPEN:
+      return {
+        ...state,
+        menuOpen: action.payload
       };
     default:
       return state;

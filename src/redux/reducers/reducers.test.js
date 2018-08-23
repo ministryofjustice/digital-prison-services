@@ -1,5 +1,8 @@
 import { app, search, defaultPeriod, events } from './index';
 import * as types from '../actions/actionTypes';
+
+import { setMenuOpen } from "../actions";
+
 import moment from 'moment';
 
 const appInitialState = {
@@ -36,7 +39,8 @@ describe('app (global) reducer', () => {
         shouldShowTerms: false,
         error: null,
         message: null,
-        loaded: false
+        loaded: false,
+        menuOpen: false
       }
     );
   });
@@ -395,5 +399,14 @@ describe('app (global) reducer', () => {
       defaultPeriod(moment('11:59:59 pm', "HH:mm:ss a"))
     ).toEqual('ED'
     );
+  });
+  it('should handle SET_MENU_OPEN', () => {
+    let state = app(appInitialState, setMenuOpen(true));
+
+    expect(state.menuOpen).toBe(true);
+
+    state = app(appInitialState, setMenuOpen(false));
+
+    expect(state.menuOpen).toBe(false);
   });
 });

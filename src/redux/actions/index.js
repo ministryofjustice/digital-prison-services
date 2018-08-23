@@ -153,3 +153,10 @@ export const hideModal = () => {
     type: ActionTypes.SET_SHOW_MODAL
   };
 };
+
+export const setMenuOpen = (payload) => {
+  return {
+    type: ActionTypes.SET_MENU_OPEN,
+    payload
+  };
+};

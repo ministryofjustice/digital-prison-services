@@ -20,6 +20,8 @@ describe('Dropdown component', () => {
     const component = shallow(<Dropdown
       switchCaseLoad ={jest.fn()}
       user={user}
+      setMenuOpen={jest.fn()}
+      menuOpen
       history={{ push: jest.fn() }}/>
     );
     component.find('#info-wrapper').at(0).simulate('click');
@@ -30,10 +32,37 @@ describe('Dropdown component', () => {
     const component = shallow(<Dropdown
       switchCaseLoad ={jest.fn()}
       user={userWithoutCaseLoadOptions}
+      setMenuOpen={jest.fn()}
+      menuOpen
       history={{ push: jest.fn() }}/>
     );
     component.find('#info-wrapper').at(0).simulate('click');
     expect(component.find('a.dropdown-menu-option')).toHaveLength(0);
     expect(component.find('a.dropdown-menu-link').get(0).props.children).toEqual('Log out');
+  });
+
+  it('should not be visible', () => {
+    const component = shallow(<Dropdown
+      switchCaseLoad ={jest.fn()}
+      user={user}
+      setMenuOpen={jest.fn()}
+      history={{ push: jest.fn() }}/>
+    );
+    expect(component.find('a.dropdown-menu-option').length).toBe(0);
+  });
+
+  it('should open the menu on click', () => {
+    const setMenuOpen = jest.fn();
+
+    const component = shallow(<Dropdown
+      switchCaseLoad ={jest.fn()}
+      user={user}
+      setMenuOpen={setMenuOpen}
+      history={{ push: jest.fn() }}
+    />);
+
+    component.find('#info-wrapper').at(0).simulate('click');
+
+    expect(setMenuOpen).toHaveBeenCalledWith(true);
   });
 });

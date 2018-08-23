@@ -30,7 +30,11 @@ import {
   setHouseblockData, setSortOrder, setOrderField, setLoaded,
   setSearchDate,
   setSearchLocation,
-  setSearchPeriod, setActivityData, setSearchActivity, setSearchActivities
+  setSearchPeriod,
+  setActivityData,
+  setSearchActivity,
+  setSearchActivities,
+  setMenuOpen
 } from "./redux/actions";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
@@ -271,7 +275,7 @@ class App extends React.Component {
   }
 
   render () {
-    const routes = (<div className="inner-content"><div className="pure-g">
+    const routes = (<div className="inner-content" onClick={() => this.props.setMenuOpen(false)}><div className="pure-g">
       <Route path="(/)" render={() => (<Route exact path="/" render={() => (
         <Redirect to="/whereaboutssearch"/>
       )}/>)}/>
@@ -305,7 +309,7 @@ class App extends React.Component {
     if (this.shouldDisplayInnerContent()) {
       innerContent = routes;
     } else {
-      innerContent = (<div className="inner-content"><div className="pure-g"><ErrorComponent {...this.props} /></div></div>);
+      innerContent = (<div className="inner-content" onClick={() => this.props.setMenuOpen(false)}><div className="pure-g"><ErrorComponent {...this.props} /></div></div>);
     }
 
     return (
@@ -329,7 +333,11 @@ class App extends React.Component {
           </ModalProvider>
 
           {innerContent}
-          <Footer showTermsAndConditions={this.showTermsAndConditions} mailTo={this.props.config && this.props.config.mailTo}/>
+          <Footer
+            setMenuOpen={this.props.setMenuOpen}
+            showTermsAndConditions={this.showTermsAndConditions}
+            mailTo={this.props.config && this.props.config.mailTo}
+          />
         </div>
       </Router>);
   }
@@ -362,7 +370,8 @@ App.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
-  showModal: PropTypes.object.isRequired
+  showModal: PropTypes.object.isRequired,
+  setMenuOpen: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -380,7 +389,8 @@ const mapStateToProps = state => {
     agencyId: state.app.user.activeCaseLoadId,
     orderField: state.events.orderField,
     sortOrder: state.events.sortOrder,
-    showModal: state.app.showModal
+    showModal: state.app.showModal,
+    menuOpen: state.app.menuOpen
   };
 };
 
@@ -402,7 +412,8 @@ const mapDispatchToProps = dispatch => {
     activityDataDispatch: data => dispatch(setActivityData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
     orderDispatch: field => dispatch(setOrderField(field)),
-    sortOrderDispatch: field => dispatch(setSortOrder(field))
+    sortOrderDispatch: field => dispatch(setSortOrder(field)),
+    setMenuOpen: (flag) => dispatch(setMenuOpen(flag))
   };
 };
 
