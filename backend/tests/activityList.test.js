@@ -88,6 +88,124 @@ describe('Activity list controller', async () => {
     ]);
   });
 
+  it('Should exclude visits, appointments and activities at the location from eventsElsewhere', async () => {
+    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+      switch (usage) {
+        case 'PROG': return [{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }];
+        default: return [];
+      }
+    });
+
+    elite2Api.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'B', locationId: 1 }]);
+    elite2Api.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 2 }, { offenderNo: 'C', locationId: 1 }]);
+    elite2Api.getActivities.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'C', locationId: 3 }]);
+
+    const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
+
+    expect(result).toEqual([
+      {
+        offenderNo: 'A',
+        eventsElsewhere: []
+      },
+      {
+        offenderNo: 'B',
+        eventsElsewhere: [{ offenderNo: 'B', locationId: 2 }]
+      },
+      {
+        offenderNo: 'C',
+        eventsElsewhere: [{ offenderNo: 'C', locationId: 3 }]
+      }
+    ]);
+  });
+  it('Should add visit and appointment details to activity array', async () => {
+    elite2Api.getActivityList.mockImplementation((context, { usage }) => usage === 'PROG' ? createActivitiesResponse() : []);
+
+    elite2Api.getVisits.mockReturnValue(createVisitsResponse());
+    elite2Api.getAppointments.mockReturnValue(createAppointmentsResponse());
+    elite2Api.getActivities.mockReturnValue([]);
+
+    const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
+
+    const criteria = { agencyId: 'LEI', date: '2018-11-23', timeSlot: 'PM', offenderNumbers: ["A1234AC", "A1234AA", "A1234AB"] };
+
+    expect(elite2Api.getVisits.mock.calls[0][1]).toEqual(criteria);
+    expect(elite2Api.getAppointments.mock.calls[0][1]).toEqual(criteria);
+    expect(elite2Api.getActivities.mock.calls[0][1]).toEqual(criteria);
+
+    expect(response).toEqual([
+      {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: 'LEI-A-1-1',
+        event: 'CHAP',
+        eventDescription: 'Chapel',
+        comment: 'comment11',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [
+          {
+            offenderNo: 'A1234AA',
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            cellLocation: 'LEI-A-1-1',
+            event: 'VISIT',
+            eventDescription: 'Official',
+            comment: 'comment18',
+            startTime: '2017-10-15T11:00:00',
+            endTime: '2017-10-15T11:30:00'
+          },
+          {
+            offenderNo: 'A1234AA',
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            cellLocation: 'LEI-A-1-1',
+            event: 'GYM',
+            eventDescription: 'The gym',
+            comment: 'comment14',
+            startTime: '2017-10-15T17:00:00',
+            endTime: '2017-10-15T17:30:00'
+          }]
+      },
+      {
+        offenderNo: 'A1234AB',
+        firstName: 'MICHAEL',
+        lastName: 'SMITH',
+        cellLocation: 'LEI-A-1-2',
+        comment: 'comment12',
+        event: 'CHAP',
+        eventDescription: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: []
+      },
+      {
+        offenderNo: "A1234AC",
+        firstName: "FRED",
+        lastName: "QUIMBY",
+        cellLocation: "LEI-A-1-3",
+        comment: "comment13",
+        event: "CHAP",
+        eventDescription: "Chapel",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00",
+        eventsElsewhere: [
+          {
+            offenderNo: "A1234AC",
+            firstName: "FRED",
+            lastName: "QUIMBY",
+            cellLocation: "LEI-A-1-3",
+            comment: "comment19",
+            event: "VISIT",
+            eventDescription: "Family",
+            startTime: "2017-10-15T11:00:00",
+            endTime: "2017-10-15T18:30:00"
+          }
+        ]
+      }
+    ]);
+  });
+
   it('Should add visit and appointment details to activity array', async () => {
     elite2Api.getActivityList.mockImplementation((context, { usage }) => usage === 'PROG' ? createActivitiesResponse() : []);
 

@@ -282,5 +282,15 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
+        this.stubFor(
+                post("/api/schedules/${caseload.id}/activities?timeSlot=${timeSlot}&date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                        aResponse()
+                                .withBody('[]')
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 }
