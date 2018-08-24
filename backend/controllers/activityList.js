@@ -11,38 +11,51 @@ const sortActivitiesByEventThenByLastName = (data) => {
 
     return 0;
   });
-
-  return data;
 };
 
+const offenderNumberMultimap = (offenderNumbers) => offenderNumbers.reduce(
+  (map, offenderNumber) => map.set(offenderNumber, []),
+  new Map()
+);
+
 const getActivityListFactory = (elite2Api) => {
-  const getActivityList = async (context, agencyId, locationId, frontEndDate, timeSlot) => {
+  const getActivityList = async (context, agencyId, locationIdString, frontEndDate, timeSlot) => {
+    const locationId = Number.parseInt(locationIdString, 10);
     const date = switchDateFormat(frontEndDate);
 
-    const activityData = await elite2Api.getActivityList(context, { agencyId, locationId, usage: 'PROG', date, timeSlot });
-    log.info(activityData, 'getActivityList data received');
+    const getEventsForOffenderNumbers = async (offenderNumbers) => {
+      const searchCriteria = { agencyId, date, timeSlot, offenderNumbers };
+      const eventsByKind = await Promise.all([
+        elite2Api.getVisits(context, searchCriteria),
+        elite2Api.getAppointments(context, searchCriteria),
+        elite2Api.getActivities(context, searchCriteria)
+      ]);
+      return [...(eventsByKind[0]), ...(eventsByKind[1]), ...(eventsByKind[2])]; // Meh. No flatMap or flat.
+    };
 
-    const offenderNumbers = (activityData && activityData.map(activity => activity.offenderNo)) || [];
+    const getEventsAtLocation = (usage) => elite2Api.getActivityList(context, { agencyId, locationId, usage, date, timeSlot });
 
-    const visits = offenderNumbers.length && await elite2Api.getVisits(context, { agencyId, date, timeSlot, offenderNumbers });
-    log.info(visits, 'getVisits data received');
+    const eventsAtLocationByUsage = (await Promise.all([
+      getEventsAtLocation('PROG'),
+      getEventsAtLocation('VISIT'),
+      getEventsAtLocation('APP')
+    ]));
+    const eventsAtLocation = [...(eventsAtLocationByUsage[0]), ...(eventsAtLocationByUsage[1]), ...(eventsAtLocationByUsage[2])]; // Meh. No flatMap or flat.
+    log.info(eventsAtLocation, 'events at location');
 
-    const appointments = offenderNumbers.length && await elite2Api.getAppointments(context, { agencyId, date, timeSlot, offenderNumbers });
-    log.info(appointments, 'getAppointments data received');
+    const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo);
+    const offenderNumbers = [...(new Set(offenderNumbersWithDuplicates))];
+    const eventsForOffenderNumbers = await getEventsForOffenderNumbers(offenderNumbers);
+    const eventsElsewhere = eventsForOffenderNumbers.filter(event => event.locationId !== locationId);
+    const eventsElsewhereByOffenderNumber = offenderNumberMultimap(offenderNumbers);
+    eventsElsewhere.forEach(event => {
+      const events = eventsElsewhereByOffenderNumber.get(event.offenderNo);
+      if (events) events.push(event);
+    });
+    eventsAtLocation.forEach(event => { event.eventsElsewhere = eventsElsewhereByOffenderNumber.get(event.offenderNo); });
+    sortActivitiesByEventThenByLastName(eventsAtLocation);
 
-    const activities = sortActivitiesByEventThenByLastName(activityData);
-
-    if (activities) {
-      for (const row of activities) {
-        if (visits) {
-          row.visits = visits.filter(details => details.offenderNo === row.offenderNo);
-        }
-        if (appointments) {
-          row.appointments = appointments.filter(details => details.offenderNo === row.offenderNo);
-        }
-      }
-    }
-    return activities;
+    return eventsAtLocation;
   };
 
   return {

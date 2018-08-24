@@ -37,12 +37,39 @@ class ActivitySpecification extends GebReportingSpec {
         printButton[0].displayed
         printButton[1].displayed
 
-        def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[1].contains("Visits - Friends 18:00")
-        texts[1].contains("Medical - Dentist - Appt details 11:40")
-        texts[3].contains("Balog, Eugene A-1-2 A1234AB")
-        texts[2].contains("Baa, Fred A-1-3 A1234AC")
+        tableRows.size() == 6
+
+        locations == [
+                'A-1-1',
+                'A-1-1',
+                'A-1-1',
+                'A-1-3',
+                'A-1-2'
+        ]
+
+        nomsIds == [
+                'A1234AA',
+                'A1234AA',
+                'A1234AA',
+                'A1234AC',
+                'A1234AB'
+        ]
+
+        events == [
+                'Medical - Dentist - Appt details',
+                'Visits - Friends',
+                'The current activity',
+                'The current activity',
+                'The current activity'
+        ]
+
+        eventsElsewhere == [
+                ['Medical - Dentist - Appt details 11:40', 'Visits - Friends 18:00'],
+                ['Medical - Dentist - Appt details 11:40', 'Visits - Friends 18:00'],
+                ['Medical - Dentist - Appt details 11:40', 'Visits - Friends 18:00'],
+                [],
+                []
+        ]
     }
 
     def "The updated activity list is displayed"() {
@@ -69,9 +96,14 @@ class ActivitySpecification extends GebReportingSpec {
         at ActivityPage
         form['date'] == firstOfMonthDisplayFormat
         form['period-select'] == 'PM'
-        def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[3].contains("Balog, Eugene A-1-2 A1234AB")
+
+        events == [
+                'Medical - Dentist - Appt details',
+                'Visits - Friends',
+                'The current activity',
+                'The current activity',
+                'The current activity'
+        ]
 
         when: "I go to the search page afresh"
         browser.to SearchPage
