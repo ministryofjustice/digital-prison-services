@@ -27,7 +27,7 @@ const response = [
     comment: "Chapel",
     startTime: "2017-10-15T18:00:00",
     endTime: "2017-10-15T18:30:00",
-    visits: [{
+    eventsElsewhere: [{
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
@@ -37,8 +37,8 @@ const response = [
       comment: "Official Visit",
       startTime: "2017-10-15T11:00:00",
       endTime: "2017-10-15T11:30:00"
-    }],
-    appointments: [{
+    },
+    {
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
       lastName: "ANDERSON",
@@ -70,7 +70,7 @@ const response = [
     comment: "Chapel",
     startTime: "2017-10-15T18:00:00",
     endTime: "2017-10-15T18:30:00",
-    visits: [
+    eventsElsewhere: [
       {
         offenderNo: "A1234AC",
         firstName: "FRED",

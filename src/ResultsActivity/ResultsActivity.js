@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { getOffenderLink } from "../links";
 
 class ResultsActivity extends Component {
-  displayBack () {
+  static displayBack () {
     return (<div className="padding-top no-print"><Link id={`back_to_menu_link`} title="Back" className="link backlink" to="/whereaboutssearch" >
       <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
   }
@@ -23,7 +23,7 @@ class ResultsActivity extends Component {
     return filter && filter.length > 0 && filter[0].userDescription;
   }
 
-  isToday (date) {
+  static isToday (date) {
     if (date === 'Today') {
       return true;
     }
@@ -31,13 +31,13 @@ class ResultsActivity extends Component {
     return searchDate.isSame(moment(), "day");
   }
 
-  olderThan7Days (date) {
+  static olderThan7Days (date) {
     const searchDate = moment(date, 'DD/MM/YYYY');
     const days = moment().diff(searchDate, "day");
     return days > 7;
   }
 
-  getDescription (event) {
+  static getDescription (event) {
     if (event.event === 'PA') {
       return event.comment;
     }
@@ -72,7 +72,7 @@ class ResultsActivity extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      {this.isToday(this.props.date) &&
+      {ResultsActivity.isToday(this.props.date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         this.props.handlePrint();
       }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
@@ -103,24 +103,20 @@ class ResultsActivity extends Component {
       return location;
     };
 
-    const offenders = this.props.activityData && this.props.activityData.map((row, index) => {
-      const mainActivity = row;
+    const offenders = this.props.activityData && this.props.activityData.map((mainEvent, index) => {
       return (
-        <tr key={mainActivity.offenderNo} className="row-gutters">
-          <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(mainActivity.offenderNo)}
-          >{properCaseName(mainActivity.lastName)}, {properCaseName(mainActivity.firstName)}</a>
+        <tr key={mainEvent.offenderNo} className="row-gutters">
+          <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(mainEvent.offenderNo)}
+          >{properCaseName(mainEvent.lastName)}, {properCaseName(mainEvent.firstName)}</a>
           </td>
-          <td className="row-gutters">{stripAgencyPrefix(mainActivity.cellLocation, this.props.agencyId)}</td>
-          <td className="row-gutters">{mainActivity.offenderNo}</td>
+          <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, this.props.agencyId)}</td>
+          <td className="row-gutters">{mainEvent.offenderNo}</td>
           <td className="row-gutters">
-            {this.getDescription(mainActivity)}
+            {ResultsActivity.getDescription(mainEvent)}
           </td>
-          <td className="row-gutters small-font">{(row.visits || row.appointments) &&
-          <ul>{row.visits && row.visits.map((e, index) => {
-            return <li key={mainActivity.offenderNo + '_' + index}>{this.getDescription(e)} {getHoursMinutes(e.startTime)}</li>;
-          })}
-          {row.appointments && row.appointments.map((e, index) => {
-            return <li key={mainActivity.offenderNo + '_' + index}>{this.getDescription(e)} {getHoursMinutes(e.startTime)}</li>;
+          <td className="row-gutters small-font">{(mainEvent.eventsElsewhere) &&
+          <ul>{mainEvent.eventsElsewhere.map((event, index) => {
+            return <li key={mainEvent.offenderNo + '_' + index}>{ResultsActivity.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
           })}
           </ul>
           }</td>
@@ -143,7 +139,7 @@ class ResultsActivity extends Component {
       moment(this.props.date, "DD/MM/YYYY").format('dddd Do MMMM');
 
     return (<div className="pure-u-md-11-12 results-activity">
-      {this.displayBack()}
+      {ResultsActivity.displayBack()}
       <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
       <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
       <div className="whereabouts-date print-only">{date} ({this.props.period})</div>

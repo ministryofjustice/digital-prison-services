@@ -31,8 +31,9 @@ const elite2ApiFactory = (client) => {
 
   const getHouseblockList = (context, agencyId, groupName, date, timeSlot) => get(context, `api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}`);
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) => get(context, `api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`);
-  const getVisits = (context, { agencyId, locationId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/visits?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
-  const getAppointments = (context, { agencyId, locationId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
+  const getVisits = (context, { agencyId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/visits?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
+  const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
+  const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) => get(context, `api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`);
   const searchGroups = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations/groups`);
@@ -51,7 +52,8 @@ const elite2ApiFactory = (client) => {
     updateAttendance,
     createCaseNote,
     getVisits,
-    getAppointments
+    getAppointments,
+    getActivities
   };
 };
 
