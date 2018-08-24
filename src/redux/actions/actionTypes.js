@@ -24,3 +24,5 @@ export const SET_ORDER = 'SET_ORDER';
 export const SET_ACTIVITY_DATA = 'SET_ACTIVITY_DATA';
 
 export const SET_SHOW_MODAL = 'SET_SHOW_MODAL';
+
+export const SET_MENU_OPEN = "SET_MENU_OPEN";
