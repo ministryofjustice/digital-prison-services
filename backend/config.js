@@ -22,7 +22,7 @@ module.exports = {
     },
     elite2: {
       url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
-      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 10,
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     }
   }
 };
