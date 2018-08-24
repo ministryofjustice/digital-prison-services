@@ -6,7 +6,6 @@ import Error from '../Error';
 import ResultsActivity from "./ResultsActivity";
 import { setSearchActivities, showPaymentReasonModal } from "../redux/actions";
 import Spinner from "../Spinner";
-
 import { getActivityListReasons } from "../ModalProvider/PaymentReasonModal/reasonCodes";
 
 class ResultsActivityContainer extends Component {
@@ -24,6 +23,10 @@ class ResultsActivityContainer extends Component {
   }
 
   handlePrint () {
+    this.props.raiseAnalyticsEvent({
+      category: 'Activity list',
+      action: 'Print list'
+    });
     window.print();
   }
 
@@ -46,7 +49,8 @@ ResultsActivityContainer.propTypes = {
   activitiesDispatch: PropTypes.func.isRequired,
   getActivityList: PropTypes.func,
   activityDataDispatch: PropTypes.func,
-  loaded: PropTypes.bool
+  loaded: PropTypes.bool,
+  raiseAnalyticsEvent: PropTypes.func
 };
 
 const mapStateToProps = state => {

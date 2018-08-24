@@ -9,6 +9,7 @@ import axios from "axios/index";
 import Spinner from "../Spinner";
 import { getHouseBlockReasons } from "../ModalProvider/PaymentReasonModal/reasonCodes";
 
+
 class ResultsHouseblockContainer extends Component {
   async componentWillMount () {
     try {
@@ -39,6 +40,10 @@ class ResultsHouseblockContainer extends Component {
   }
 
   handlePrint () {
+    this.props.raiseAnalyticsEvent({
+      category: 'House block list',
+      action: 'Print list'
+    });
     window.print();
   }
 
@@ -67,7 +72,8 @@ ResultsHouseblockContainer.propTypes = {
   houseblockDataDispatch: PropTypes.func,
   orderField: PropTypes.string,
   sortOrder: PropTypes.string,
-  loaded: PropTypes.bool
+  loaded: PropTypes.bool,
+  raiseAnalyticsEvent: PropTypes.func
 };
 
 const mapStateToProps = state => {

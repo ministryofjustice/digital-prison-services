@@ -56,6 +56,7 @@ class App extends React.Component {
     this.getHouseblockList = this.getHouseblockList.bind(this);
     this.getActivityList = this.getActivityList.bind(this);
     this.getActivityLocations = this.getActivityLocations.bind(this);
+    this.raiseAnalyticsEvent = this.raiseAnalyticsEvent.bind(this);
   }
 
   async componentWillMount () {
@@ -170,6 +171,12 @@ class App extends React.Component {
       } else {
         history.push('/whereaboutsresultsactivity');
       }
+    }
+  }
+
+  raiseAnalyticsEvent (event) {
+    if (this.props.config.googleAnalyticsId) {
+      ReactGA.event(event);
     }
   }
 
@@ -292,6 +299,7 @@ class App extends React.Component {
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}
+        raiseAnalyticsEvent={this.raiseAnalyticsEvent}
         handlePay={this.handlePay}
         {...this.props} />)}/>
       <Route exact path="/whereaboutsresultsactivity" render={() => (<ResultsActivityContainer handleError={this.handleError}
@@ -300,6 +308,7 @@ class App extends React.Component {
         handleDateChange={(event) => this.handleDateChange(event)}
         handlePeriodChange={(event) => this.handlePeriodChange(event)}
         handleSearch={(history) => this.handleSearch(history)}
+        raiseAnalyticsEvent={this.raiseAnalyticsEvent}
         handlePay={this.handlePay}
         {...this.props} />)}/>
       <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
