@@ -204,6 +204,12 @@ a.link:hover {
 
 tr a.link{
   font-size: 16px;
+  @media print {
+    font-size: 10px;
+    font-weight: normal;
+    color: black;
+    text-decoration: none;
+  }
 }
 
 
