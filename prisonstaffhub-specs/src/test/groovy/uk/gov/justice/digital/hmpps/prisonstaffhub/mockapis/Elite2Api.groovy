@@ -244,7 +244,7 @@ class Elite2Api extends WireMockRule {
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                         aResponse()
-                                .withBody(ActivityResponse.visits)
+                                .withBody('[]')
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
@@ -252,13 +252,13 @@ class Elite2Api extends WireMockRule {
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/APP?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                         aResponse()
-                                .withBody(ActivityResponse.appointments)
+                                .withBody('[]')
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
 
         def offenderNumbers = [
-            ActivityResponse.activity1.offenderNo,
+            ActivityResponse.activity1_1.offenderNo,
             ActivityResponse.activity2.offenderNo,
             ActivityResponse.activity3.offenderNo
         ]
@@ -288,7 +288,7 @@ class Elite2Api extends WireMockRule {
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                         aResponse()
-                                .withBody('[]')
+                                .withBody(ActivityResponse.activities)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

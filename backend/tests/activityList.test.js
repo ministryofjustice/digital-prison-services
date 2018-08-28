@@ -117,94 +117,6 @@ describe('Activity list controller', async () => {
       }
     ]);
   });
-  it('Should add visit and appointment details to activity array', async () => {
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => usage === 'PROG' ? createActivitiesResponse() : []);
-
-    elite2Api.getVisits.mockReturnValue(createVisitsResponse());
-    elite2Api.getAppointments.mockReturnValue(createAppointmentsResponse());
-    elite2Api.getActivities.mockReturnValue([]);
-
-    const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
-
-    const criteria = { agencyId: 'LEI', date: '2018-11-23', timeSlot: 'PM', offenderNumbers: ["A1234AC", "A1234AA", "A1234AB"] };
-
-    expect(elite2Api.getVisits.mock.calls[0][1]).toEqual(criteria);
-    expect(elite2Api.getAppointments.mock.calls[0][1]).toEqual(criteria);
-    expect(elite2Api.getActivities.mock.calls[0][1]).toEqual(criteria);
-
-    expect(response).toEqual([
-      {
-        offenderNo: 'A1234AA',
-        firstName: 'ARTHUR',
-        lastName: 'ANDERSON',
-        cellLocation: 'LEI-A-1-1',
-        event: 'CHAP',
-        eventDescription: 'Chapel',
-        comment: 'comment11',
-        startTime: '2017-10-15T18:00:00',
-        endTime: '2017-10-15T18:30:00',
-        eventsElsewhere: [
-          {
-            offenderNo: 'A1234AA',
-            firstName: 'ARTHUR',
-            lastName: 'ANDERSON',
-            cellLocation: 'LEI-A-1-1',
-            event: 'VISIT',
-            eventDescription: 'Official',
-            comment: 'comment18',
-            startTime: '2017-10-15T11:00:00',
-            endTime: '2017-10-15T11:30:00'
-          },
-          {
-            offenderNo: 'A1234AA',
-            firstName: 'ARTHUR',
-            lastName: 'ANDERSON',
-            cellLocation: 'LEI-A-1-1',
-            event: 'GYM',
-            eventDescription: 'The gym',
-            comment: 'comment14',
-            startTime: '2017-10-15T17:00:00',
-            endTime: '2017-10-15T17:30:00'
-          }]
-      },
-      {
-        offenderNo: 'A1234AB',
-        firstName: 'MICHAEL',
-        lastName: 'SMITH',
-        cellLocation: 'LEI-A-1-2',
-        comment: 'comment12',
-        event: 'CHAP',
-        eventDescription: 'Chapel',
-        startTime: '2017-10-15T18:00:00',
-        endTime: '2017-10-15T18:30:00',
-        eventsElsewhere: []
-      },
-      {
-        offenderNo: "A1234AC",
-        firstName: "FRED",
-        lastName: "QUIMBY",
-        cellLocation: "LEI-A-1-3",
-        comment: "comment13",
-        event: "CHAP",
-        eventDescription: "Chapel",
-        startTime: "2017-10-15T18:00:00",
-        endTime: "2017-10-15T18:30:00",
-        eventsElsewhere: [
-          {
-            offenderNo: "A1234AC",
-            firstName: "FRED",
-            lastName: "QUIMBY",
-            cellLocation: "LEI-A-1-3",
-            comment: "comment19",
-            event: "VISIT",
-            eventDescription: "Family",
-            startTime: "2017-10-15T11:00:00",
-            endTime: "2017-10-15T18:30:00"
-          }
-        ]
-      }
-    ]);
-  });
 
   it('Should add visit and appointment details to activity array', async () => {
     elite2Api.getActivityList.mockImplementation((context, { usage }) => usage === 'PROG' ? createActivitiesResponse() : []);
@@ -317,6 +229,44 @@ describe('Activity list controller', async () => {
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
 
     expect(result.map(event => event.offenderNo)).toEqual(['C', 'F', 'B', 'D', 'A', 'E']);
+  });
+
+  it('should order eventsElsewhere by startTime', async () => {
+    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+      switch (usage) {
+        case 'PROG': return [
+          { offenderNo: 'A', comment: 'aa', lastName: 'b' }
+        ];
+        default: return [];
+      }
+    });
+
+    elite2Api.getVisits.mockReturnValue([
+      { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T00:00:00' },
+      { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T13:00:00' }
+    ]);
+    elite2Api.getAppointments.mockReturnValue([
+      { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T11:00:00' },
+      { offenderNo: 'A', locationId: 2 }
+    ]);
+    elite2Api.getActivities.mockReturnValue([
+      { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T14:00:01' },
+      { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T14:00:00' },
+      { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T13:59:59' }
+    ]);
+
+    const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
+
+    expect(result.map(event => event.offenderNo)).toEqual(['A']);
+    expect(result[0].eventsElsewhere.map(event => event.startTime)).toEqual([
+      '2017-10-15T00:00:00',
+      '2017-10-15T11:00:00',
+      '2017-10-15T13:00:00',
+      '2017-10-15T13:59:59',
+      '2017-10-15T14:00:00',
+      '2017-10-15T14:00:01',
+      undefined
+    ]);
   });
 });
 

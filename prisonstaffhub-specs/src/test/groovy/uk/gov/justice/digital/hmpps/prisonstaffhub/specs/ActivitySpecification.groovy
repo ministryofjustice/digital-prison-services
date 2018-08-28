@@ -41,34 +41,34 @@ class ActivitySpecification extends GebReportingSpec {
 
         locations == [
                 'A-1-1',
-                'A-1-1',
-                'A-1-1',
                 'A-1-3',
-                'A-1-2'
+                'A-1-2',
+                'A-1-1',
+                'A-1-1'
         ]
 
         nomsIds == [
                 'A1234AA',
-                'A1234AA',
-                'A1234AA',
                 'A1234AC',
-                'A1234AB'
+                'A1234AB',
+                'A1234AA',
+                'A1234AA'
         ]
 
         events == [
-                'Medical - Dentist - Appt details',
-                'Visits - Friends',
-                'The current activity',
-                'The current activity',
-                'The current activity'
+                'Activity 1',
+                'Activity 1',
+                'Activity 1',
+                'Activity 2',
+                'Activity 3'
         ]
 
         eventsElsewhere == [
-                ['Medical - Dentist - Appt details 11:40', 'Visits - Friends 18:00'],
-                ['Medical - Dentist - Appt details 11:40', 'Visits - Friends 18:00'],
-                ['Medical - Dentist - Appt details 11:40', 'Visits - Friends 18:00'],
+                ['Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00'],
                 [],
-                []
+                [],
+                ['Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00'],
+                ['Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00']
         ]
     }
 
@@ -98,12 +98,13 @@ class ActivitySpecification extends GebReportingSpec {
         form['period-select'] == 'PM'
 
         events == [
-                'Medical - Dentist - Appt details',
-                'Visits - Friends',
-                'The current activity',
-                'The current activity',
-                'The current activity'
+                'Activity 1',
+                'Activity 1',
+                'Activity 1',
+                'Activity 2',
+                'Activity 3'
         ]
+
 
         when: "I go to the search page afresh"
         browser.to SearchPage

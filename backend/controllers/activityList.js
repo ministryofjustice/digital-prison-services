@@ -1,5 +1,6 @@
 const switchDateFormat = require('../utils');
 const log = require('../log');
+const moment = require('moment');
 
 const sortActivitiesByEventThenByLastName = (data) => {
   data.sort((a, b) => {
@@ -9,6 +10,22 @@ const sortActivitiesByEventThenByLastName = (data) => {
     if (a.lastName < b.lastName) return -1;
     if (a.lastName > b.lastName) return 1;
 
+    return 0;
+  });
+};
+
+const sortEventsByStartTime = (events) => {
+  events.sort((event1, event2) => {
+    const t1 = event1.startTime;
+    const t2 = event2.startTime;
+
+    if (t1 && t2) {
+      return moment(t1).valueOf() - moment(t2).valueOf();
+    } else if (t1) {
+      return -1;
+    } else if (t2) {
+      return 1;
+    }
     return 0;
   });
 };
@@ -54,6 +71,8 @@ const getActivityListFactory = (elite2Api) => {
     });
     eventsAtLocation.forEach(event => { event.eventsElsewhere = eventsElsewhereByOffenderNumber.get(event.offenderNo); });
     sortActivitiesByEventThenByLastName(eventsAtLocation);
+
+    eventsAtLocation.forEach(event => sortEventsByStartTime(event.eventsElsewhere));
 
     return eventsAtLocation;
   };
