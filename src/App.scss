@@ -202,14 +202,27 @@ a.link:hover {
   color: $link-hover-colour;
 }
 
-tr a.link{
+tr a.link {
   font-size: 16px;
+  @media print {
+    font-size: 10px;
+    font-weight: normal;
+    color: black;
+    text-decoration: none;
+  }
+}
+
+tr a.link:visited {
+  @media print {
+    color: black;
+  }
 }
 
 .bold-font16 {
   font-size: 16px;
   font-weight: bold;
 }
+
 
 
 
