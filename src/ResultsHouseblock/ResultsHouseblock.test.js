@@ -391,6 +391,48 @@ describe('Offender results component Jira NN-843', () => {
       user={user}/>);
     expect(component.find('#back_to_selection_link').length).toEqual(1);
   });
+
+  it('should show released today when there are no other activity', () => {
+    const data = [{ releasedToday: true,
+      activity: {
+        offenderNo: "A1234AA",
+        firstName: "ARTHUR",
+        lastName: "ANDERSON",
+        cellLocation: `${PRISON}-A-1-1`,
+        event: "PA",
+        eventId: 56,
+        eventType: "PRISON_ACT",
+        eventDescription: "Prison Activities",
+        comment: "Chapel",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }
+    }];
+    const aFewDaysAgo = moment().subtract(3, 'days');
+    const date = aFewDaysAgo.format('DD/MM/YYYY');
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      locations={locations}
+      houseblockData={data}
+      handleSearch={jest.fn()}
+      handlePrint={jest.fn()}
+      handleLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
+      getHouseblockList={jest.fn()}
+      date={date}
+      period={'ED'}
+      currentLocation={'BWing'}
+      agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
+      user={user}/>
+    );
+
+    const tr = component.find('tr');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Released today **');
+  });
+
   //TODO Skipped for Part 1
   it.skip('should call showPaymentReasonModal with event and offender information', () => {
     const showPaymentReasonModal = jest.fn();

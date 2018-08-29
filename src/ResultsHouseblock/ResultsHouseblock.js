@@ -142,10 +142,10 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters small-font">{row.activity &&
          `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
-          <td className="row-gutters small-font">{row.others &&
+          <td className="row-gutters small-font">{ (row.others || row.releasedToday) &&
             <ul className="other-activities">
               {row.releasedToday && <li><span className="bold-font16">** Released today **</span></li>}
-              {row.others.map((event, index) => {
+              {row.others && row.others.map((event, index) => {
                 return <li key={event.offenderNo_ + 'others_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
               })}
             </ul>
