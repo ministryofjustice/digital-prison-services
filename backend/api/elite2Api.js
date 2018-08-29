@@ -40,6 +40,8 @@ const elite2ApiFactory = (client) => {
   const updateAttendance = (context, offenderNo, activityId, body) => put(context, `api/bookings/offenderNo/${offenderNo}/activities/${activityId}/attendance`, body);
   const createCaseNote = (context, offenderNo, body) => post(context, `api/bookings/offenderNo/${offenderNo}/caseNotes`, body);
 
+  const getSentenceData = (context, offenderNumbers) => post(context, `api/offender-sentences`, offenderNumbers);
+
   return {
     userLocations,
     currentUser,
@@ -53,7 +55,8 @@ const elite2ApiFactory = (client) => {
     createCaseNote,
     getVisits,
     getAppointments,
-    getActivities
+    getActivities,
+    getSentenceData
   };
 };
 

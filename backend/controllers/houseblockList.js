@@ -1,6 +1,6 @@
 /* eslint-disable no-lonely-if */
 const log = require('../log');
-const switchDateFormat = require('../utils');
+const { switchDateFormat, distinct } = require('../utils');
 const moment = require('moment');
 
 function addToOthers (currentRow, event) {
@@ -33,8 +33,16 @@ function handleMultipleActivities (currentRow, currentActivity) {
 
 const getHouseblockListFactory = (elite2Api) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
-    const data = await elite2Api.getHouseblockList(context, agencyId, groupName, switchDateFormat(date), timeSlot);
+    const formattedDate = switchDateFormat(date);
+
+    const data = await elite2Api.getHouseblockList(context, agencyId, groupName, formattedDate, timeSlot);
     // Returns array ordered by inmate/cell or name, then start time
+    let sentenceData;
+
+    if (data && data.length > 0) {
+      const offenderNumbers = distinct(data.map(offender => offender.offenderNo));
+      sentenceData = await elite2Api.getSentenceData(context, offenderNumbers);
+    }
 
     log.info(data, 'getHouseblockList data received');
     const rows = [];
@@ -58,6 +66,10 @@ const getHouseblockListFactory = (elite2Api) => {
       } else {
         addToOthers(currentRow, event);
       }
+
+      currentRow.releasedToday = Boolean(sentenceData && sentenceData.length && sentenceData
+        .filter(sentence => sentence.offenderNo === event.offenderNo &&
+                sentence.sentenceDetail.releaseDate === formattedDate)[0]);
     }
     return rows;
   };

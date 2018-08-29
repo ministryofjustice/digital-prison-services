@@ -7,4 +7,10 @@ const switchDateFormat = displayDate => {
   return displayDate;
 };
 
-module.exports = switchDateFormat;
+const distinct = (data) => data.reduce((accumulator, current) =>
+  accumulator.includes(current) ? accumulator : [...accumulator, current], []);
+
+module.exports = {
+  switchDateFormat,
+  distinct
+};

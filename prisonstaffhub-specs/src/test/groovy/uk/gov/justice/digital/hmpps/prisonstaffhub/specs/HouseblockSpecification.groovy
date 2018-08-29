@@ -130,6 +130,7 @@ class HouseblockSpecification extends GebReportingSpec {
         this.initialPeriod = period.value()
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
+
         form['housing-location-select'] = 'AWing'
         form['period-select'] = 'PM'
         continueButton.click()
@@ -149,6 +150,7 @@ class HouseblockSpecification extends GebReportingSpec {
         when: "I select and display a location"
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+
         form['housing-location-select'] = 'BWing'
 
         form['period-select'] = 'AM'
@@ -173,6 +175,7 @@ class HouseblockSpecification extends GebReportingSpec {
         when: "I select and display a location"
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+
         form['housing-location-select'] = 'BWing'
 
         form['period-select'] = 'AM'
@@ -184,5 +187,27 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("James, John A-1-12 A1234AH")
         texts[1].contains("non paid act 1 17:10")
         texts[1].contains("hair cut - non paid act 2 19:10")
+    }
+
+    def "Should indicate that an offender is going to be released today"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: "I select and display a location"
+        def today = new Date().format('YYYY-MM-dd')
+
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+
+        form['housing-location-select'] = 'BWing'
+
+        form['period-select'] = 'AM'
+        continueButton.click()
+
+        then: 'Only one activity is displayed'
+        at HouseblockPage
+        def texts = tableRows*.text()
+        texts[1].contains("James, John A-1-12 A1234AH")
+        texts[1].contains("non paid act 1 17:10")
+        texts[1].contains("** Released today **")
     }
 }

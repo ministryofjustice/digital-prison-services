@@ -18,6 +18,7 @@ const DONT_ATTEND_COLUMN = 6;
 
 const response = [
   {
+    releasedToday: true,
     activity: {
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
@@ -152,9 +153,11 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
     expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel 18:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Official Visit 11:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('The gym, appointment 17:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('Medical - Dentist - Appt details 11:40');
+
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Released today **');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Visits - Official Visit 11:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('The gym, appointment 17:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(3).text()).toEqual('Medical - Dentist - Appt details 11:40');
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);

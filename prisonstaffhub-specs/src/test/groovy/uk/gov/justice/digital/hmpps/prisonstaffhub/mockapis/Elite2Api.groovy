@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
@@ -207,6 +208,8 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
 
+        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseCellOrder), date, true)
+        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseNameOrder), date, true)
     }
 
     void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -218,6 +221,8 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
+        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseMultipleActivities), date)
     }
 
     void stubGetHouseblockListWithNoActivityOffender(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -229,6 +234,8 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
+        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseNoActivities), date)
     }
 
     void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
@@ -292,5 +299,33 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+    }
+
+    def stubSentenceData(ArrayList offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false ) {
+        def index = 0
+
+        def response = emptyResponse ? [] : offenderNumbers.collect({no -> [
+                "offenderNo": no,
+                "firstName": "firstName-${index++}",
+                "lastName": "lastName-${index++}",
+                "sentenceDetail": ["releaseDate": formattedReleaseDate]
+        ]})
+        
+        this.stubFor(
+                post("/api/offender-sentences")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(response))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+    }
+
+    static def extractOffenderNumbers(String json) {
+        return (new JsonSlurper().parseText(json) as ArrayList)
+                .collect({a -> a.offenderNo})
+                .unique()
+                .toList()
     }
 }
