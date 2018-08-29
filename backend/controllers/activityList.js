@@ -1,4 +1,4 @@
-const switchDateFormat = require('../utils');
+const { switchDateFormat } = require('../utils');
 const log = require('../log');
 const moment = require('moment');
 
