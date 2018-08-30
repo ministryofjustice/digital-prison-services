@@ -154,7 +154,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
     expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel 18:00');
 
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Released today **');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Released scheduled **');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Visits - Official Visit 11:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('The gym, appointment 17:00');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(3).text()).toEqual('Medical - Dentist - Appt details 11:40');
@@ -430,7 +430,7 @@ describe('Offender results component Jira NN-843', () => {
     );
 
     const tr = component.find('tr');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Released today **');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Released scheduled **');
   });
 
   //TODO Skipped for Part 1

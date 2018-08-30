@@ -144,7 +144,7 @@ class ResultsHouseblock extends Component {
           }</td>
           <td className="row-gutters small-font">{ (row.others || row.releasedToday) &&
             <ul className="other-activities">
-              {row.releasedToday && <li><span className="bold-font16">** Released today **</span></li>}
+              {row.releasedToday && <li><span className="bold-font16">** Released scheduled **</span></li>}
               {row.others && row.others.map((event, index) => {
                 return <li key={event.offenderNo_ + 'others_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
               })}
