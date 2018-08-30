@@ -290,7 +290,9 @@ describe('Activity list controller', async () => {
     elite2Api.getActivityList.mockImplementation((context, { usage }) => {
       switch (usage) {
         case 'PROG': return [
-          { offenderNo: 'A', comment: 'aa', lastName: 'b' }
+          { offenderNo: 'A', comment: 'aa', lastName: 'b' },
+          { offenderNo: 'B', comment: 'ava', lastName: 'bv' }
+
         ];
         default: return [];
       }
@@ -311,6 +313,7 @@ describe('Activity list controller', async () => {
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
     expect(result[0].releaseScheduled).toBe(true);
+    expect(result[1].releaseScheduled).toBe(false);
   });
 });
 
