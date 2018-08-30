@@ -209,6 +209,6 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         texts[1].contains("James, John A-1-12 A1234AH")
         texts[1].contains("non paid act 1 17:10")
-        texts[1].contains("** Released scheduled **")
+        texts[1].contains("** Release scheduled **")
     }
 }
