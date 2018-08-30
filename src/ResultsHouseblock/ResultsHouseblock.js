@@ -132,7 +132,7 @@ class ResultsHouseblock extends Component {
 
     const otherEvent = (event, index) => {
       const text = `${this.getDescription(event)} ${getHoursMinutes(event.startTime)}`;
-      const key = `${event.offenderNo_}others_${index}`;
+      const key = `${event.offenderNo}_others_${index}`;
       const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC';
 
       if (cancelled) {
