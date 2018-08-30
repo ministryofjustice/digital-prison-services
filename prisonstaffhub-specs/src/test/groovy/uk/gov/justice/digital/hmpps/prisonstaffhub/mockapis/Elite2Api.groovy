@@ -299,6 +299,8 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
+        stubSentenceData(offenderNumbers, date)
     }
 
     def stubSentenceData(ArrayList offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false ) {
