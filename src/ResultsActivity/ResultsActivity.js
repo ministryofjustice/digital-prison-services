@@ -47,6 +47,22 @@ class ResultsActivity extends Component {
     return event.eventDescription;
   }
 
+  static eventCancelled (event) {
+    return event.event === 'VISIT' && event.eventStatus === 'CANC';
+  }
+
+  static otherEvent (event, index) {
+    const text = `${ResultsActivity.getDescription(event)} ${getHoursMinutes(event.startTime)}`;
+    const key = `${event.offenderNo}_${index}`;
+
+    if (ResultsActivity.eventCancelled(event)) {
+      return <li key={key}>{text} <span className="cancelled">(cancelled)</span></li>;
+    } else {
+      return <li key={key}>{text}</li>;
+    }
+  }
+
+
   render () {
     const dateSelect = (
       <div className="pure-u-md-2-12 padding-right">
@@ -62,9 +78,7 @@ class ResultsActivity extends Component {
       <div className="pure-u-md-2-12">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
-        <select id="period-select" name="period-select" className="form-control"
-          value={this.props.period}
-          onChange={this.props.handlePeriodChange}>
+        <select id="period-select" name="period-select" className="form-control" value={this.props.period} onChange={this.props.handlePeriodChange}>
           <option key="MORNING" value="AM">Morning (AM)</option>
           <option key="AFTERNOON" value="PM">Afternoon (PM)</option>
           <option key="EVENING" value="ED">Evening (ED)</option>
@@ -83,10 +97,14 @@ class ResultsActivity extends Component {
       <th className="straight width15">Name</th>
       <th className="straight width10">Location</th>
       <th className="straight width10">NOMS&nbsp;ID</th>
-      <th className="straight"> Activity </th>
-      <th className="straight">Other activities </th>
-      <th className="straightPrint checkbox-header"><div><span>Pay</span></div></th>
-      <th className="straightPrint checkbox-header"><div><span>Other</span></div></th>
+      <th className="straight"> Activity</th>
+      <th className="straight">Other activities</th>
+      <th className="straightPrint checkbox-header">
+        <div><span>Pay</span></div>
+      </th>
+      <th className="straightPrint checkbox-header">
+        <div><span>Other</span></div>
+      </th>
     </tr>);
 
     //Disabled until whereabouts v2
@@ -103,6 +121,14 @@ class ResultsActivity extends Component {
       return location;
     };
 
+    const renderMainEvent = event => {
+      if (ResultsActivity.eventCancelled(event)) {
+        return (<td className="row-gutters">{ResultsActivity.getDescription(event)}<span className="cancelled"> (cancelled)</span></td>);
+      } else {
+        return (<td className="row-gutters">{ResultsActivity.getDescription(event)}</td>);
+      }
+    };
+
     const offenders = this.props.activityData && this.props.activityData.map((mainEvent, index) => {
       return (
         <tr key={mainEvent.offenderNo} className="row-gutters">
@@ -111,14 +137,9 @@ class ResultsActivity extends Component {
           </td>
           <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
-          <td className="row-gutters">
-            {ResultsActivity.getDescription(mainEvent)}
-          </td>
+          {renderMainEvent(mainEvent)}
           <td className="row-gutters small-font">{(mainEvent.eventsElsewhere) &&
-          <ul>{mainEvent.eventsElsewhere.map((event, index) => {
-            return <li key={mainEvent.offenderNo + '_' + index}>{ResultsActivity.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
-          })}
-          </ul>
+          <ul>{mainEvent.eventsElsewhere.map((event, index) => ResultsActivity.otherEvent(event, index))}</ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             {/*Disable pay/other for Part 1*/}
@@ -168,6 +189,7 @@ class ResultsActivity extends Component {
     </div>);
   }
 }
+
 ResultsActivity.propTypes = {
   history: PropTypes.object,
   user: PropTypes.object.isRequired,

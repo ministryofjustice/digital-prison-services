@@ -99,6 +99,7 @@ const response = [
         lastName: "QUIMBY",
         cellLocation: `${PRISON}-A-1-3`,
         event: "VISIT",
+        eventStatus: 'CANC',
         eventDescription: "Visits",
         comment: "Family Visit",
         startTime: "2017-10-15T11:11:00",
@@ -170,7 +171,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(3).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
     expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
   });
 
   it('should render empty results list correctly', async () => {

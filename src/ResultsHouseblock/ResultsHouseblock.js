@@ -130,6 +130,18 @@ class ResultsHouseblock extends Component {
       return location;
     };
 
+    const otherEvent = (event, index) => {
+      const text = `${this.getDescription(event)} ${getHoursMinutes(event.startTime)}`;
+      const key = `${event.offenderNo}_others_${index}`;
+      const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC';
+
+      if (cancelled) {
+        return <li key={key}>{text} <span className="cancelled">(cancelled)</span></li>;
+      } else {
+        return <li key={key}>{text}</li>;
+      }
+    };
+
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
       const anyActivity = row.activity || row.others[0];
       return (
@@ -145,9 +157,7 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters small-font">{ (row.others || row.releasedToday) &&
             <ul className="other-activities">
               {row.releasedToday && <li><span className="bold-font16">** Released scheduled **</span></li>}
-              {row.others && row.others.map((event, index) => {
-                return <li key={event.offenderNo_ + 'others_' + index}>{this.getDescription(event)} {getHoursMinutes(event.startTime)}</li>;
-              })}
+              {row.others && row.others.map((event, index) => otherEvent(event, index))}
             </ul>
           }</td>
           <td className="no-padding checkbox-column no-display">
