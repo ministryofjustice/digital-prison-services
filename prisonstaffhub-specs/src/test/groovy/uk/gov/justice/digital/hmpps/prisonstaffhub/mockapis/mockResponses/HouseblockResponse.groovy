@@ -29,6 +29,19 @@ class HouseblockResponse {
             startTime       : "2017-10-15T18:00:00",
             endTime         : "2017-10-15T18:30:00"
     ]
+    static response2_2 = [
+            offenderNo      : "A1234AA",
+            firstName       : "ARTHUR",
+            lastName        : "ANDERSON",
+            cellLocation    : "LEI-A-1-1",
+            event           : "VISIT",
+            eventType       : "VISIT",
+            eventStatus     : "CANC",
+            eventDescription: "Visits",
+            comment         : "Friends",
+            startTime       : "2017-10-15T18:30:00",
+            endTime         : "2017-10-15T18:45:00"
+    ]
     static response3 = [
             offenderNo      : "A1234AB",
             firstName       : "EUGENE",
@@ -93,12 +106,14 @@ class HouseblockResponse {
     static responseCellOrder = JsonOutput.toJson([
             response1,
             response2,
+            response2_2,
             response3,
             response4
     ])
     static responseNameOrder = JsonOutput.toJson([
             response1,
             response2,
+            response2_2,
             response4,
             response3
     ])
@@ -111,6 +126,7 @@ class HouseblockResponse {
             response7,
             response1,
             response2,
+            response2_2,
             response3,
             response4
     ])
