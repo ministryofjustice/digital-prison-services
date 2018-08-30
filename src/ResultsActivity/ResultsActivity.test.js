@@ -27,6 +27,7 @@ const response = [
     comment: "Chapel",
     startTime: "2017-10-15T18:00:00",
     endTime: "2017-10-15T18:30:00",
+    releaseScheduled: true,
     eventsElsewhere: [{
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
@@ -141,8 +142,9 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
     expect(tr.at(1).find('td').at(ACTIVITY_COLUMN).text()).toEqual('Chapel');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Official Visit 11:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Medical - Dentist - Appt details 11:40');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Release scheduled **');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Visits - Official Visit 11:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('Medical - Dentist - Appt details 11:40');
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={true}')); //TODO should be false in V2 (currently disabled for V1)

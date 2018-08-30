@@ -90,7 +90,7 @@ class ActivityResponse {
             startTime       : "2017-10-15T15:30:00",
             locationId      : 4
     ]
-    static activities = JsonOutput.toJson([
+    static  activities = JsonOutput.toJson([
             activity1_1,
             activity1_2,
             activity1_3,

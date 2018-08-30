@@ -1,6 +1,6 @@
 const { switchDateFormat } = require('../utils');
-const log = require('../log');
 const moment = require('moment');
+const log = require('../log');
 
 const sortActivitiesByEventThenByLastName = (data) => {
   data.sort((a, b) => {
@@ -62,6 +62,7 @@ const getActivityListFactory = (elite2Api) => {
 
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo);
     const offenderNumbers = [...(new Set(offenderNumbersWithDuplicates))];
+    const sentenceDataForOffenderNumbers = offenderNumbers && offenderNumbers.length && await elite2Api.getSentenceData(context, offenderNumbers);
     const eventsForOffenderNumbers = await getEventsForOffenderNumbers(offenderNumbers);
     const eventsElsewhere = eventsForOffenderNumbers.filter(event => event.locationId !== locationId);
     const eventsElsewhereByOffenderNumber = offenderNumberMultimap(offenderNumbers);
@@ -69,7 +70,14 @@ const getActivityListFactory = (elite2Api) => {
       const events = eventsElsewhereByOffenderNumber.get(event.offenderNo);
       if (events) events.push(event);
     });
-    eventsAtLocation.forEach(event => { event.eventsElsewhere = eventsElsewhereByOffenderNumber.get(event.offenderNo); });
+    eventsAtLocation.forEach(event => {
+      event.eventsElsewhere = eventsElsewhereByOffenderNumber.get(event.offenderNo);
+      event.releaseScheduled = Boolean(
+        sentenceDataForOffenderNumbers &&
+          sentenceDataForOffenderNumbers.length &&
+          sentenceDataForOffenderNumbers
+            .filter(sentence => sentence.offenderNo === event.offenderNo && sentence.sentenceDetail.releaseDate === date));
+    });
     sortActivitiesByEventThenByLastName(eventsAtLocation);
 
     eventsAtLocation.forEach(event => sortEventsByStartTime(event.eventsElsewhere));

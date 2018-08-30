@@ -1,12 +1,14 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
 const elite2Api = {};
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api).getActivityList;
+const { switchDateFormat } = require('../utils');
 
 beforeEach(() => {
   elite2Api.getActivityList = jest.fn();
   elite2Api.getVisits = jest.fn();
   elite2Api.getAppointments = jest.fn();
   elite2Api.getActivities = jest.fn();
+  elite2Api.getSentenceData = jest.fn();
 });
 
 describe('Activity list controller', async () => {
@@ -34,6 +36,8 @@ describe('Activity list controller', async () => {
     expect(elite2Api.getVisits.mock.calls[0][1]).toEqual(criteria);
     expect(elite2Api.getAppointments.mock.calls[0][1]).toEqual(criteria);
     expect(elite2Api.getActivities.mock.calls[0][1]).toEqual(criteria);
+
+    expect(elite2Api.getSentenceData.mock.calls.length).toBe(0);
   });
 
   it("Should use the offender numbers returned from activity lists in visit, appointment and activity searches ", async () => {
@@ -69,19 +73,23 @@ describe('Activity list controller', async () => {
     elite2Api.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'B', locationId: 3 }]);
     elite2Api.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 4 }, { offenderNo: 'C', locationId: 5 }]);
     elite2Api.getActivities.mockReturnValue([{ offenderNo: 'A', locationId: 6 }, { offenderNo: 'C', locationId: 7 }]);
+    elite2Api.getSentenceData.mockReturnValue([]);
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
 
     expect(result).toEqual([
       {
         offenderNo: 'A',
+        releaseScheduled: false,
         eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }]
       },
       {
+        releaseScheduled: false,
         offenderNo: 'B',
         eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }]
       },
       {
+        releaseScheduled: false,
         offenderNo: 'C',
         eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }]
       }
@@ -99,21 +107,26 @@ describe('Activity list controller', async () => {
     elite2Api.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'B', locationId: 1 }]);
     elite2Api.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 2 }, { offenderNo: 'C', locationId: 1 }]);
     elite2Api.getActivities.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'C', locationId: 3 }]);
+    elite2Api.getSentenceData.mockReturnValue([]);
+
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
 
     expect(result).toEqual([
       {
         offenderNo: 'A',
-        eventsElsewhere: []
+        eventsElsewhere: [],
+        releaseScheduled: false
       },
       {
         offenderNo: 'B',
-        eventsElsewhere: [{ offenderNo: 'B', locationId: 2 }]
+        eventsElsewhere: [{ offenderNo: 'B', locationId: 2 }],
+        releaseScheduled: false
       },
       {
         offenderNo: 'C',
-        eventsElsewhere: [{ offenderNo: 'C', locationId: 3 }]
+        eventsElsewhere: [{ offenderNo: 'C', locationId: 3 }],
+        releaseScheduled: false
       }
     ]);
   });
@@ -124,6 +137,7 @@ describe('Activity list controller', async () => {
     elite2Api.getVisits.mockReturnValue(createVisitsResponse());
     elite2Api.getAppointments.mockReturnValue(createAppointmentsResponse());
     elite2Api.getActivities.mockReturnValue([]);
+    elite2Api.getSentenceData.mockReturnValue([]);
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
 
@@ -144,6 +158,7 @@ describe('Activity list controller', async () => {
         comment: 'comment11',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
+        releaseScheduled: false,
         eventsElsewhere: [
           {
             offenderNo: 'A1234AA',
@@ -178,7 +193,8 @@ describe('Activity list controller', async () => {
         eventDescription: 'Chapel',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
-        eventsElsewhere: []
+        eventsElsewhere: [],
+        releaseScheduled: false
       },
       {
         offenderNo: "A1234AC",
@@ -190,6 +206,7 @@ describe('Activity list controller', async () => {
         eventDescription: "Chapel",
         startTime: "2017-10-15T18:00:00",
         endTime: "2017-10-15T18:30:00",
+        releaseScheduled: false,
         eventsElsewhere: [
           {
             offenderNo: "A1234AC",
@@ -267,6 +284,33 @@ describe('Activity list controller', async () => {
       '2017-10-15T14:00:01',
       undefined
     ]);
+  });
+
+  it('should extend the offender data with a released scheduled flag', async () => {
+    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+      switch (usage) {
+        case 'PROG': return [
+          { offenderNo: 'A', comment: 'aa', lastName: 'b' }
+        ];
+        default: return [];
+      }
+    });
+
+    elite2Api.getVisits.mockReturnValue([]);
+    elite2Api.getAppointments.mockReturnValue([]);
+    elite2Api.getActivities.mockReturnValue([]);
+
+    elite2Api.getSentenceData.mockImplementationOnce(() => ([
+      {
+        offenderNo: 'A',
+        sentenceDetail: {
+          releaseDate: switchDateFormat('23/11/2018')
+        }
+      }
+    ]));
+
+    const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM');
+    expect(result[0].releaseScheduled).toBe(true);
   });
 });
 
