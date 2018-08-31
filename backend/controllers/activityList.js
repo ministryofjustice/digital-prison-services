@@ -76,7 +76,7 @@ const getActivityListFactory = (elite2Api) => {
         sentenceDataForOffenderNumbers &&
           sentenceDataForOffenderNumbers.length &&
           sentenceDataForOffenderNumbers
-            .filter(sentence => sentence.offenderNo === event.offenderNo && sentence.sentenceDetail.releaseDate === date));
+            .filter(sentence => sentence.offenderNo === event.offenderNo && date === sentence.sentenceDetail.releaseDate).length > 0);
     });
     sortActivitiesByEventThenByLastName(eventsAtLocation);
 

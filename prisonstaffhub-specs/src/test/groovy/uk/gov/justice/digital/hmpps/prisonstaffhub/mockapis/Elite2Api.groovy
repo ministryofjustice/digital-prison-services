@@ -300,10 +300,21 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
 
-        stubSentenceData(offenderNumbers, date)
+       this.stubFor(
+                post("/api/offender-sentences")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson([[
+                                    "offenderNo":   ActivityResponse.activity3.offenderNo,
+                                    "sentenceDetail": ["releaseDate": date]
+                                ]]))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 
-    def stubSentenceData(ArrayList offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false ) {
+    def stubSentenceData(ArrayList offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
         def index = 0
 
         def response = emptyResponse ? [] : offenderNumbers.collect({no -> [

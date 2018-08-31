@@ -64,11 +64,11 @@ class ActivitySpecification extends GebReportingSpec {
         ]
 
         eventsElsewhere == [
-                ['** Release scheduled **', 'Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00'],
+                ['Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00'],
                 ['** Release scheduled **'],
-                ['** Release scheduled **'],
-                ['** Release scheduled **', 'Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00'],
-                ['** Release scheduled **', 'Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00']
+                [],
+                ['Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00'],
+                ['Medical - Dentist - Appt details 15:30', 'Visits - Friends 18:00']
         ]
     }
 
