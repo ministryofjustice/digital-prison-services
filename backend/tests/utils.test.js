@@ -4,8 +4,8 @@ describe('sortAlphaNum', () => {
   it('should sort list correctly', () => {
     const data = [
       'WORKSHOP 11',
-      'WORKSHOP 10',
       'WORKSHOP 55',
+      'WORKSHOP 10',
     ];
 
     const result = data.sort(sortAlphaNum);
