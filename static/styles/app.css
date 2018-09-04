@@ -123,6 +123,19 @@
   text-decoration: underline;
 }
 
+.FooterLink a {
+  /*text-decoration: underline;*/
+  color: #454A4C;
+}
+
+.FooterLink a:visited {
+  color: #454A4C;
+}
+
+.FooterLink a:hover {
+  color: #323334;
+}
+
 .FooterSignature {
   clear: left;
   margin-top: 37px;
