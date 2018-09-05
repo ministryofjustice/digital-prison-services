@@ -16,7 +16,7 @@ class Header extends Component {
             </Link>
             <Link title="Home link" className="unstyled-link" to="/whereaboutssearch" >
               <span className="logo-text">HMPPS</span>
-              <span className="title">Prison Staff Hub</span>
+              <span className="title">Activity Lists</span>
             </Link>
           </div>
           <div className="right-content">
