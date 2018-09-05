@@ -40,7 +40,7 @@ class Search extends Component {
 
     const locationSelect = (
       <div className="pure-u-md-12-12">
-        <label className="form-label" htmlFor="housing-location-select">Select Housing block location</label>
+        <label className="form-label" htmlFor="housing-location-select">Select Residential location</label>
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
           value={this.props.currentLocation}
