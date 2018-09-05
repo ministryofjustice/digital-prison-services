@@ -179,11 +179,23 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubGroups(Caseload caseload) {
+
+        def json = JsonOutput.toJson([
+                [ name: '1', children: [
+                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                ]],
+                [ name: '2', children: [
+                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                ]],
+                [ name: '3', children: [
+                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                ]]]);
+
         this.stubFor(
                 get("/api/agencies/${caseload.id}/locations/groups")
                         .willReturn(
                         aResponse()
-                                .withBody('["AWing","BWing","CWing"]')
+                                .withBody(json)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

@@ -127,14 +127,6 @@ class App extends React.Component {
     return !this.props.shouldShowTerms && (this.props.user && this.props.user.activeCaseLoadId);
   }
 
-  handleLocationChange (event) {
-    this.props.locationDispatch(event.target.value);
-  }
-
-  handleActivityChange (event) {
-    this.props.activityDispatch(event.target.value);
-  }
-
   handleDateChange (date) {
     if (date) {
       this.props.dateDispatch(moment(date).format('DD/MM/YYYY'));
@@ -190,10 +182,13 @@ class App extends React.Component {
       if (date === 'Today') { // replace placeholder text
         date = moment().format('DD/MM/YYYY');
       }
-      let config = {
+
+      const compoundGroupName = (location, subLocation) => (subLocation && subLocation !== '--') ? `${location}_${subLocation}` : location;
+
+      const config = {
         params: {
           agencyId: this.props.agencyId,
-          groupName: this.props.currentLocation,
+          groupName: compoundGroupName(this.props.currentLocation, this.props.currentSubLocation),
           date: date,
           timeSlot: this.props.period
         } };
@@ -282,37 +277,48 @@ class App extends React.Component {
   }
 
   render () {
-    const routes = (<div className="inner-content" onClick={() => this.props.setMenuOpen(false)}><div className="pure-g">
-      <Route path="(/)" render={() => (<Route exact path="/" render={() => (
-        <Redirect to="/whereaboutssearch"/>
-      )}/>)}/>
-      <Route path="(/whereaboutssearch)" render={() => (<SearchContainer handleError={this.handleError}
-        getActivityLocations={this.getActivityLocations}
-        handleLocationChange={(event) => this.handleLocationChange(event)}
-        handleActivityChange={(event) => this.handleActivityChange(event)}
-        handleDateChange={(event) => this.handleDateChangeWithLocationsUpdate(event)}
-        handlePeriodChange={(event) => this.handlePeriodChangeWithLocationsUpdate(event)}
-        handleSearch={(history) => this.handleSearch(history)} {...this.props} />)}/>
-      <Route exact path="/whereaboutsresultshouseblock" render={() => (<ResultsHouseblockContainer handleError={this.handleError}
-        getHouseblockList = {this.getHouseblockList}
-        handleLocationChange={(event) => this.handleLocationChange(event)}
-        handleDateChange={(event) => this.handleDateChange(event)}
-        handlePeriodChange={(event) => this.handlePeriodChange(event)}
-        handleSearch={(history) => this.handleSearch(history)}
-        raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-        handlePay={this.handlePay}
-        {...this.props} />)}/>
-      <Route exact path="/whereaboutsresultsactivity" render={() => (<ResultsActivityContainer handleError={this.handleError}
-        getActivityList = {this.getActivityList}
-        getActivityLocations={this.getActivityLocations}
-        handleDateChange={(event) => this.handleDateChange(event)}
-        handlePeriodChange={(event) => this.handlePeriodChange(event)}
-        handleSearch={(history) => this.handleSearch(history)}
-        raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-        handlePay={this.handlePay}
-        {...this.props} />)}/>
-      <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
-    </div></div>);
+    const routes = (<div className="inner-content" onClick={() => {
+      if (this.props.menuOpen) {
+        this.props.setMenuOpen(false);
+      }
+    }}><div className="pure-g">
+        <Route path="(/)" render={() => (<Route exact path="/" render={() => (
+          <Redirect to="/whereaboutssearch"/>
+        )}/>)}/>
+        <Route path="(/whereaboutssearch)" render={() => (
+          <SearchContainer
+            handleError={this.handleError}
+            getActivityLocations={this.getActivityLocations}
+            handleDateChange={(event) => this.handleDateChangeWithLocationsUpdate(event)}
+            handlePeriodChange={(event) => this.handlePeriodChangeWithLocationsUpdate(event)}
+            handleSearch={(history) => this.handleSearch(history)}
+            {...this.props} />
+        )}/>
+        <Route exact path="/whereaboutsresultshouseblock" render={() => (
+          <ResultsHouseblockContainer
+            handleError={this.handleError}
+            getHouseblockList = {this.getHouseblockList}
+            handleDateChange={(event) => this.handleDateChange(event)}
+            handlePeriodChange={(event) => this.handlePeriodChange(event)}
+            handleSearch={(history) => this.handleSearch(history)}
+            raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+            handlePay={this.handlePay}
+            {...this.props} />
+        )}/>
+        <Route exact path="/whereaboutsresultsactivity" render={() => (
+          <ResultsActivityContainer
+            handleError={this.handleError}
+            getActivityList = {this.getActivityList}
+            getActivityLocations={this.getActivityLocations}
+            handleDateChange={(event) => this.handleDateChange(event)}
+            handlePeriodChange={(event) => this.handlePeriodChange(event)}
+            handleSearch={(history) => this.handleSearch(history)}
+            raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+            handlePay={this.handlePay}
+            {...this.props} />
+        )}/>
+        <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
+      </div></div>);
 
     let innerContent;
     if (this.shouldDisplayInnerContent()) {
@@ -353,34 +359,35 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  config: PropTypes.object,
-  user: PropTypes.object,
-  shouldShowTerms: PropTypes.bool,
-  configDispatch: PropTypes.func.isRequired,
-  userDetailsDispatch: PropTypes.func.isRequired,
-  switchAgencyDispatch: PropTypes.func.isRequired,
-  setTermsVisibilityDispatch: PropTypes.func.isRequired,
-  setErrorDispatch: PropTypes.func.isRequired,
-  resetErrorDispatch: PropTypes.func,
-  setMessageDispatch: PropTypes.func.isRequired,
-  locationDispatch: PropTypes.func.isRequired,
-  activityDispatch: PropTypes.func.isRequired,
-  dateDispatch: PropTypes.func.isRequired,
-  periodDispatch: PropTypes.func.isRequired,
-  agencyId: PropTypes.string,
-  currentLocation: PropTypes.string,
   activity: PropTypes.string,
-  date: PropTypes.string,
-  period: PropTypes.string,
-  orderField: PropTypes.string,
-  sortOrder: PropTypes.string,
-  houseblockDataDispatch: PropTypes.func.isRequired,
   activityDataDispatch: PropTypes.func.isRequired,
-  setLoadedDispatch: PropTypes.func.isRequired,
+  activityDispatch: PropTypes.func.isRequired,
+  agencyId: PropTypes.string,
+  config: PropTypes.object,
+  configDispatch: PropTypes.func.isRequired,
+  currentLocation: PropTypes.string,
+  currentSubLocation: PropTypes.string,
+  date: PropTypes.string,
+  dateDispatch: PropTypes.func.isRequired,
+  houseblockDataDispatch: PropTypes.func.isRequired,
+  locationDispatch: PropTypes.func.isRequired,
+  orderField: PropTypes.string,
   orderDispatch: PropTypes.func.isRequired,
-  sortOrderDispatch: PropTypes.func.isRequired,
+  periodDispatch: PropTypes.func.isRequired,
+  period: PropTypes.string,
+  shouldShowTerms: PropTypes.bool,
+  resetErrorDispatch: PropTypes.func,
+  setErrorDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  setMenuOpen: PropTypes.func.isRequired,
+  setMessageDispatch: PropTypes.func.isRequired,
+  setTermsVisibilityDispatch: PropTypes.func.isRequired,
   showModal: PropTypes.object.isRequired,
-  setMenuOpen: PropTypes.func.isRequired
+  sortOrder: PropTypes.string,
+  sortOrderDispatch: PropTypes.func.isRequired,
+  switchAgencyDispatch: PropTypes.func.isRequired,
+  user: PropTypes.object,
+  userDetailsDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -392,6 +399,7 @@ const mapStateToProps = state => {
     user: state.app.user,
     shouldShowTerms: state.app.shouldShowTerms,
     currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
+    currentSubLocation: state.search.subLocation,
     activity: state.search.activity,
     date: state.search.date,
     period: state.search.period,

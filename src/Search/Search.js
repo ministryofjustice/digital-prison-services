@@ -7,34 +7,14 @@ import DatePickerInput from "../DatePickerInput";
 import ValidationErrors from "../ValidationError";
 
 class Search extends Component {
-  constructor () {
-    super();
-    this.onActivityChange = this.onActivityChange.bind(this);
-    this.onLocationChange = this.onLocationChange.bind(this);
-  }
-
-  onActivityChange (event) {
-    if (event.target.value !== '--') {
-      this.props.handleLocationChange({ target: { value: '--' } });
-    }
-    this.props.handleActivityChange(event);
-  }
-
-  onLocationChange (event) {
-    if (event.target.value !== '--') {
-      this.props.handleActivityChange({ target: { value: '--' } });
-    }
-    this.props.handleLocationChange(event);
-  }
-
   render () {
     const loaded = this.props.loaded;
 
-    const housingLocations = this.props.locations ? this.props.locations.map((loc, optionIndex) => {
+    const housingLocations = this.props.locations ? this.props.locations.map(loc => {
       return <option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>;
     }) : [];
 
-    const activityLocations = this.props.activities ? this.props.activities.map((loc, optionIndex) => {
+    const activityLocations = this.props.activities ? this.props.activities.map(loc => {
       return <option key={`activity_option_${loc.locationId}`} value={loc.locationId}>{loc.userDescription}</option>;
     }) : [];
 
@@ -44,7 +24,7 @@ class Search extends Component {
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
           value={this.props.currentLocation}
-          onChange={this.onLocationChange}>
+          onChange={this.props.onLocationChange}>
           <option key="choose" value="--">-- Select --</option>
           {housingLocations}
         </select></div>);
@@ -56,7 +36,7 @@ class Search extends Component {
         <select id="activity-select" name="activity-select" className="form-control"
           value={this.props.activity}
           disabled={!loaded}
-          onChange={this.onActivityChange}>
+          onChange={this.props.onActivityChange}>
           <option key="choose" value="--">-- Select --</option>
           {activityLocations}
         </select></div>);
@@ -111,8 +91,8 @@ Search.propTypes = {
   history: PropTypes.object,
   validationErrors: PropTypes.object,
   onSearch: PropTypes.func.isRequired,
-  handleLocationChange: PropTypes.func.isRequired,
-  handleActivityChange: PropTypes.func.isRequired,
+  onLocationChange: PropTypes.func.isRequired,
+  onActivityChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string,

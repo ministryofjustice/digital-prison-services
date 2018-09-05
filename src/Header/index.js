@@ -33,7 +33,7 @@ class Header extends Component {
 Header.propTypes = {
   user: PropTypes.object,
   history: PropTypes.object.isRequired,
-  switchCaseLoad: PropTypes.func.isRequired,
+  switchCaseLoad: PropTypes.func.isRequired
 };
 
 export default Header;

@@ -5,7 +5,7 @@ import { Search } from "./Search";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const locations = ['AWing', 'BWing'];
+const locations = ['1', '2'];
 const activities = [{ locationId: '123456', userDescription: 'little room' }];
 
 describe('Search component', () => {
@@ -15,13 +15,13 @@ describe('Search component', () => {
       locations={locations}
       activities={activities}
       onSearch={jest.fn()}
-      handleActivityChange={jest.fn()}
-      handleLocationChange={jest.fn()}
+      onActivityChange={jest.fn()}
+      onLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}/>
     );
     expect(component.find('#housing-location-select option').get(0).props.value).toEqual('--');
-    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('AWing');
+    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('1');
 
     expect(component.find('#activity-select option').get(0).props.value).toEqual('--');
     expect(component.find('#activity-select option').get(1).props.value).toEqual('123456');
@@ -33,8 +33,8 @@ describe('Search component', () => {
       locations={locations}
       activities={activities}
       onSearch={jest.fn()}
-      handleActivityChange={jest.fn()}
-      handleLocationChange={jest.fn()}
+      onActivityChange={jest.fn()}
+      onLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       validationErrors={{ text: "test" }}
       handleDateChange={jest.fn()}/>
@@ -48,8 +48,8 @@ describe('Search component', () => {
       history ={{ push: jest.fn() }}
       locations={locations}
       onSearch={handleSearch}
-      handleActivityChange={jest.fn()}
-      handleLocationChange={jest.fn()}
+      onActivityChange={jest.fn()}
+      onLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
       date={'27/02/2018'}

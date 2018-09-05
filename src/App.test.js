@@ -35,6 +35,7 @@ describe('App component', () => {
       activityDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
+      setMenuOpen={fn}
       sortOrderDispatch={fn}
       showModal={{}}
       store={store}
@@ -60,6 +61,7 @@ describe('App component', () => {
       activityDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
+      setMenuOpen={fn}
       sortOrderDispatch={fn}
       showModal={{}}
     />);
@@ -99,6 +101,7 @@ describe('App component', () => {
       activityDataDispatch={fn}
       setLoadedDispatch={fn}
       orderDispatch={fn}
+      setMenuOpen={fn}
       sortOrderDispatch={fn}
       showModal={{}}
     />);
