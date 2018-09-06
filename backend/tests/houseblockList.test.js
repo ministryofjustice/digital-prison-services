@@ -136,7 +136,7 @@ describe('Houseblock list controller', async () => {
     expect(elite2Api.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers));
   });
 
-  it('should extend the offender data with a released today flag', async () => {
+  it('should extend the offender data with released and court flags', async () => {
     const today = moment();
 
     elite2Api.getHouseblockList = jest.fn();
@@ -150,9 +150,14 @@ describe('Houseblock list controller', async () => {
         }
       }
     ]));
+    elite2Api.getCourtEvents = jest.fn();
+    elite2Api.getCourtEvents.mockImplementationOnce(courtEventResponse);
 
     const response = await houseblockList({}, 'LEI', 'GROUP1', today, 'AM');
+
     expect(response[0].releasedToday).toBe(true);
+    expect(response[0].atCourt).toBe(true);
+    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1);
   });
 });
 
@@ -305,4 +310,18 @@ function createMultipleUnpaid () {
       startTime: "2017-10-15T08:30:00"
     }
   ];
+}
+
+function courtEventResponse () {
+  return [{
+    event: "19",
+    eventDescription: "Court Appearance - Police Product Order",
+    eventId: 349360018,
+    eventStatus: "SCH",
+    eventType: "COURT",
+    firstName: "BYSJANHKUMAR",
+    lastName: "HENRINEE",
+    offenderNo: "A1234AA",
+    startTime: "2018-09-05T15:00:00"
+  }];
 }

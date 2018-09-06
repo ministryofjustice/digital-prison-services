@@ -376,10 +376,11 @@ App.propTypes = {
   sortOrder: PropTypes.string,
   houseblockDataDispatch: PropTypes.func.isRequired,
   activityDataDispatch: PropTypes.func.isRequired,
+  activitiesDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
-  showModal: PropTypes.object.isRequired,
+  showModal: PropTypes.object,
   setMenuOpen: PropTypes.func.isRequired
 };
 

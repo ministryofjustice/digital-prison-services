@@ -80,6 +80,7 @@ const response = [
     }
   },
   {
+    atCourt: true,
     activity: {
       offenderNo: "A1234AC",
       firstName: "FRED",
@@ -171,7 +172,8 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(3).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
     expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Court visit scheduled **');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
   });
 
   it('should render empty results list correctly', async () => {

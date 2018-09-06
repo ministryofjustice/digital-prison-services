@@ -8,7 +8,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.Activi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
-import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Location
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
@@ -103,30 +102,6 @@ class Elite2Api extends WireMockRule {
                 ))
     }
 
-    void stubGetMyLocations(List<Location> locations) {
-
-        JsonBuilder json = new JsonBuilder()
-        json locations, {
-            locationId it.locationId
-            locationType it.locationType
-            description it.description
-            agencyId it.agencyId
-            if (it.currentOccupancy != null) currentOccupancy it.currentOccupancy
-            locationPrefix it.locationPrefix
-            if (it.userDescription) userDescription it.userDescription
-        }
-
-        stubFor(
-                get('/api/users/me/locations')
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(json.toString())
-                ))
-    }
-
-
     void stubHealth() {
         stubFor(
                 get('/health')
@@ -208,8 +183,11 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
 
-        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseCellOrder), date, true)
-        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseNameOrder), date, true)
+        def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseCellOrder)
+        //order does not matter here
+        stubSentenceData(offenderNumbers, date, true)
+        stubSentenceData(offenderNumbers, date, true)
+        stubCourtEvents(offenderNumbers, date)
     }
 
     void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -222,7 +200,9 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
 
-        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseMultipleActivities), date)
+        def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseMultipleActivities)
+        stubSentenceData(offenderNumbers, date)
+        stubCourtEvents(offenderNumbers, date)
     }
 
     void stubGetHouseblockListWithNoActivityOffender(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -235,7 +215,9 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
 
-        stubSentenceData(extractOffenderNumbers(HouseblockResponse.responseNoActivities), date)
+        def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseNoActivities)
+        stubSentenceData(offenderNumbers, date)
+        stubCourtEvents(offenderNumbers, date)
     }
 
     void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
@@ -314,7 +296,7 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    def stubSentenceData(ArrayList offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
+    def stubSentenceData(List offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
         def index = 0
 
         def response = emptyResponse ? [] : offenderNumbers.collect({no -> [
@@ -323,16 +305,27 @@ class Elite2Api extends WireMockRule {
                 "lastName": "lastName-${index++}",
                 "sentenceDetail": ["releaseDate": formattedReleaseDate]
         ]})
-        
+
         this.stubFor(
                 post("/api/offender-sentences")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
                         .willReturn(
                         aResponse()
                                 .withBody(JsonOutput.toJson(response))
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+    }
+
+    def stubCourtEvents(List offenderNumbers, String date) {
+        this.stubFor(
+                post("/api/schedules/LEI/courtEvents?date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.courtEventsResponse)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
     }
 
     static def extractOffenderNumbers(String json) {
