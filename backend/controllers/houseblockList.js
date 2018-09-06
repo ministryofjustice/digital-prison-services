@@ -1,6 +1,6 @@
 /* eslint-disable no-lonely-if */
 const log = require('../log');
-const { switchDateFormat, distinct } = require('../utils');
+const { switchDateFormat, distinct, isToday } = require('../utils');
 const moment = require('moment');
 
 function addToOthers (currentRow, event) {
@@ -10,10 +10,6 @@ function addToOthers (currentRow, event) {
   } else {
     currentRow.others.push(event);
   }
-}
-
-function isToday (formattedDate) {
-  return moment().format('YYYY-MM-DD') === formattedDate;
 }
 
 function handleMultipleActivities (currentRow, currentActivity) {

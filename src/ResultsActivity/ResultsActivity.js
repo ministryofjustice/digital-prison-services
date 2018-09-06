@@ -5,7 +5,7 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, properCaseName } from "../stringUtils";
+import { getHoursMinutes, isToday, properCaseName } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
 import { getPrisonDescription } from '../stringUtils';
 import moment from 'moment';
@@ -21,14 +21,6 @@ class ResultsActivity extends Component {
   getActivityName () {
     const filter = this.props.activities.filter(a => a.locationId === Number(this.props.activity));
     return filter && filter.length > 0 && filter[0].userDescription;
-  }
-
-  static isToday (date) {
-    if (date === 'Today') {
-      return true;
-    }
-    const searchDate = moment(date, 'DD/MM/YYYY');
-    return searchDate.isSame(moment(), "day");
   }
 
   static olderThan7Days (date) {
@@ -86,7 +78,7 @@ class ResultsActivity extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      {ResultsActivity.isToday(this.props.date) &&
+      {isToday(this.props.date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         this.props.handlePrint();
       }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
@@ -141,6 +133,7 @@ class ResultsActivity extends Component {
           <td className="row-gutters small-font">{(mainEvent.eventsElsewhere || mainEvent.releaseScheduled) &&
           <ul>
             {mainEvent.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
+            {mainEvent.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
             {mainEvent.eventsElsewhere.map((event, index) => ResultsActivity.otherEvent(event, index))}</ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">

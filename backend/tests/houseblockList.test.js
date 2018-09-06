@@ -151,7 +151,7 @@ describe('Houseblock list controller', async () => {
       }
     ]));
     elite2Api.getCourtEvents = jest.fn();
-    elite2Api.getCourtEvents.mockImplementationOnce(courtEventResponse);
+    elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse);
 
     const response = await houseblockList({}, 'LEI', 'GROUP1', today, 'AM');
 
@@ -312,7 +312,7 @@ function createMultipleUnpaid () {
   ];
 }
 
-function courtEventResponse () {
+function createCourtEventResponse () {
   return [{
     event: "19",
     eventDescription: "Court Appearance - Police Product Order",

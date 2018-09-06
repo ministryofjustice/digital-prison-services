@@ -1,3 +1,4 @@
+const moment = require('moment');
 
 const properCase = (word) => {
   return ((typeof word === 'string') && (word.length >= 1)) ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word;
@@ -29,11 +30,19 @@ const getHoursMinutes = (timestamp) => {
   return timestamp.substr(indexOfT + 1, 5);
 };
 
+const isToday = (date) => {
+  if (date === 'Today') {
+    return true;
+  }
+  const searchDate = moment(date, 'DD/MM/YYYY');
+  return searchDate.isSame(moment(), "day");
+};
+
 const getPrisonDescription = user => {
   const caseLoadOption = user.caseLoadOptions ? user.caseLoadOptions.find((option) => option.caseLoadId === user.activeCaseLoadId) : undefined;
   return caseLoadOption ? caseLoadOption.description : user.activeCaseLoadId;
 };
 
 module.exports = {
-  properCase, properCaseName, toFullName, getHoursMinutes, getPrisonDescription
+  properCase, properCaseName, toFullName, getHoursMinutes, isToday, getPrisonDescription
 };
