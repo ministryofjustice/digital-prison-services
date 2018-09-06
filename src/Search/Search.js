@@ -10,13 +10,21 @@ class Search extends Component {
   render () {
     const loaded = this.props.loaded;
 
-    const housingLocations = this.props.locations ? this.props.locations.map(loc => {
-      return <option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>;
-    }) : [];
+    const locationOptions = (locations) => locations ? locations.reduce(
+      (options, loc) => {
+        options.push(<option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>);
+        return options;
+      },
+      [(<option key="choose" value="--">-- Select --</option>)]
+    ) : [];
 
-    const activityLocations = this.props.activities ? this.props.activities.map(loc => {
-      return <option key={`activity_option_${loc.locationId}`} value={loc.locationId}>{loc.userDescription}</option>;
-    }) : [];
+    const activityOptions = (activities) => activities ? activities.reduce(
+      (options, loc) => {
+        options.push(<option key={`activity_option_${loc.locationId}`} value={loc.locationId}>{loc.userDescription}</option>);
+        return options;
+      },
+      [(<option key="choose" value="--">-- Select --</option>)]
+    ) : [];
 
     const locationSelect = (
       <div className="pure-u-md-12-12">
@@ -25,8 +33,7 @@ class Search extends Component {
         <select id="housing-location-select" name="housing-location-select" className="form-control"
           value={this.props.currentLocation}
           onChange={this.props.onLocationChange}>
-          <option key="choose" value="--">-- Select --</option>
-          {housingLocations}
+          {locationOptions(this.props.locations)}
         </select></div>);
 
     const activitySelect = (
@@ -37,8 +44,7 @@ class Search extends Component {
           value={this.props.activity}
           disabled={!loaded}
           onChange={this.props.onActivityChange}>
-          <option key="choose" value="--">-- Select --</option>
-          {activityLocations}
+          {activityOptions(this.props.activities)}
         </select></div>);
 
     const dateSelect = (<div className="pure-u-md-5-12">
