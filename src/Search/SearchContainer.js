@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { setSearchLocations } from '../redux/actions/index';
+import { setSearchLocation, setSearchLocations } from '../redux/actions/index';
 import { connect } from 'react-redux';
 import Error from '../Error';
 import Search from "./Search";
@@ -10,6 +10,14 @@ import { setSearchActivity, resetValidationErrors, setValidationError } from "..
 import { defaultPeriod } from "../redux/reducers";
 
 class SearchContainer extends Component {
+  constructor () {
+    super();
+    this.onActivityChange = this.onActivityChange.bind(this);
+    this.onLocationChange = this.onLocationChange.bind(this);
+    this.validate = this.validate.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+  }
+
   componentWillMount () {
     this.getLocations();
     const today = 'Today';
@@ -26,10 +34,25 @@ class SearchContainer extends Component {
           agencyId: this.props.agencyId
         } });
       this.props.locationsDispatch(response.data);
-      this.props.locationDispatch('--');
     } catch (error) {
       this.props.handleError(error);
     }
+  }
+
+  onActivityChange (event) {
+    const value = event.target.value;
+    if (value !== '--') {
+      this.props.locationDispatch('--');
+    }
+    this.props.activityDispatch(value);
+  }
+
+  onLocationChange (event) {
+    const value = event.target.value;
+    if (value !== '--') {
+      this.props.activityDispatch('--');
+    }
+    this.props.locationDispatch(value);
   }
 
   onSearch (history) {
@@ -52,7 +75,11 @@ class SearchContainer extends Component {
     if (this.props.error) {
       return <Error {...this.props} />;
     }
-    return (<Search onSearch={(history) => this.onSearch(history)} {...this.props}/>);
+    return (<Search
+      onSearch={this.onSearch}
+      onLocationChange={this.onLocationChange}
+      onActivityChange={this.onActivityChange}
+      {...this.props}/>);
   }
 }
 
@@ -79,7 +106,7 @@ SearchContainer.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    locations: state.search.locations,
+    locations: state.search.locations.map(l => l.name),
     activities: state.search.activities,
     activity: state.search.activity,
     location: state.search.location,
@@ -90,7 +117,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    locationsDispatch: text => dispatch(setSearchLocations(text)),
+    locationsDispatch: locations => dispatch(setSearchLocations(locations)),
+    locationDispatch: text => dispatch(setSearchLocation(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
     setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
     resetValidationErrorsDispatch: message => dispatch(resetValidationErrors())

@@ -7,36 +7,24 @@ import DatePickerInput from "../DatePickerInput";
 import ValidationErrors from "../ValidationError";
 
 class Search extends Component {
-  constructor () {
-    super();
-    this.onActivityChange = this.onActivityChange.bind(this);
-    this.onLocationChange = this.onLocationChange.bind(this);
-  }
-
-  onActivityChange (event) {
-    if (event.target.value !== '--') {
-      this.props.handleLocationChange({ target: { value: '--' } });
-    }
-    this.props.handleActivityChange(event);
-  }
-
-  onLocationChange (event) {
-    if (event.target.value !== '--') {
-      this.props.handleActivityChange({ target: { value: '--' } });
-    }
-    this.props.handleLocationChange(event);
-  }
-
   render () {
     const loaded = this.props.loaded;
 
-    const housingLocations = this.props.locations ? this.props.locations.map((loc, optionIndex) => {
-      return <option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>;
-    }) : [];
+    const locationOptions = (locations) => locations ? locations.reduce(
+      (options, loc) => {
+        options.push(<option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>);
+        return options;
+      },
+      [(<option key="choose" value="--">-- Select --</option>)]
+    ) : [];
 
-    const activityLocations = this.props.activities ? this.props.activities.map((loc, optionIndex) => {
-      return <option key={`activity_option_${loc.locationId}`} value={loc.locationId}>{loc.userDescription}</option>;
-    }) : [];
+    const activityOptions = (activities) => activities ? activities.reduce(
+      (options, loc) => {
+        options.push(<option key={`activity_option_${loc.locationId}`} value={loc.locationId}>{loc.userDescription}</option>);
+        return options;
+      },
+      [(<option key="choose" value="--">-- Select --</option>)]
+    ) : [];
 
     const locationSelect = (
       <div className="pure-u-md-12-12">
@@ -44,9 +32,8 @@ class Search extends Component {
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
           value={this.props.currentLocation}
-          onChange={this.onLocationChange}>
-          <option key="choose" value="--">-- Select --</option>
-          {housingLocations}
+          onChange={this.props.onLocationChange}>
+          {locationOptions(this.props.locations)}
         </select></div>);
 
     const activitySelect = (
@@ -56,9 +43,8 @@ class Search extends Component {
         <select id="activity-select" name="activity-select" className="form-control"
           value={this.props.activity}
           disabled={!loaded}
-          onChange={this.onActivityChange}>
-          <option key="choose" value="--">-- Select --</option>
-          {activityLocations}
+          onChange={this.props.onActivityChange}>
+          {activityOptions(this.props.activities)}
         </select></div>);
 
     const dateSelect = (<div className="pure-u-md-5-12">
@@ -111,8 +97,8 @@ Search.propTypes = {
   history: PropTypes.object,
   validationErrors: PropTypes.object,
   onSearch: PropTypes.func.isRequired,
-  handleLocationChange: PropTypes.func.isRequired,
-  handleActivityChange: PropTypes.func.isRequired,
+  onLocationChange: PropTypes.func.isRequired,
+  onActivityChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string,

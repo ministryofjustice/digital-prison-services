@@ -33,6 +33,7 @@ const searchInitialState = {
   locations: [],
   activities: [''],
   location: '',
+  subLocation: '--',
   activity: '',
   date: 'Today',
   period: defaultPeriod(moment())
@@ -110,31 +111,45 @@ export function app (state = appInitialState, action) {
 export function search (state = searchInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_OFFENDER_SEARCH_ALLOCATION_STATUS:
-      return { ...state,
+      return {
+        ...state,
         allocationStatus: action.allocationStatus
       };
+    case ActionTypes.SET_SEARCH_LOCATIONS:
+      return {
+        ...state,
+        locations: action.locations,
+        location: '--',
+        subLocation: '--'
+      };
     case ActionTypes.SET_SEARCH_LOCATION:
-      return { ...state,
-        location: action.location
+      return {
+        ...state,
+        location: action.location,
+        subLocation: '--'
+      };
+    case ActionTypes.SET_SEARCH_SUB_LOCATION:
+      return {
+        ...state,
+        subLocation: action.subLocation
       };
     case ActionTypes.SET_SEARCH_ACTIVITY:
       return { ...state,
         activity: action.activity
       };
-    case ActionTypes.SET_SEARCH_LOCATIONS:
-      return { ...state,
-        locations: action.locations
-      };
     case ActionTypes.SET_SEARCH_ACTIVITIES:
-      return { ...state,
+      return {
+        ...state,
         activities: action.activities
       };
     case ActionTypes.SET_SEARCH_DATE:
-      return { ...state,
+      return {
+        ...state,
         date: action.date
       };
     case ActionTypes.SET_SEARCH_PERIOD:
-      return { ...state,
+      return {
+        ...state,
         period: action.period
       };
     default:

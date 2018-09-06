@@ -224,7 +224,8 @@ describe('app (global) reducer', () => {
       {
         locations: ['a', 'b'],
         activities: [],
-        location: '',
+        location: '--',
+        subLocation: '--',
         activity: '',
         date: moment().format('DD/MM/YYYY'),
         period: ''
@@ -243,6 +244,26 @@ describe('app (global) reducer', () => {
         locations: [],
         activities: [],
         location: 'lol',
+        subLocation: '--',
+        activity: '',
+        date: moment().format('DD/MM/YYYY'),
+        period: ''
+      }
+    );
+  });
+
+  it('should handle SET_SEARCH_SUB_LOCATION', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_SUB_LOCATION,
+        subLocation: 'lollol'
+      })
+    ).toEqual(
+      {
+        locations: [],
+        activities: [],
+        location: '',
+        subLocation: 'lollol',
         activity: '',
         date: moment().format('DD/MM/YYYY'),
         period: ''

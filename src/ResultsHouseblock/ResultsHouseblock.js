@@ -60,18 +60,29 @@ class ResultsHouseblock extends Component {
   }
 
   render () {
-    const housingLocations = this.props.locations ? this.props.locations.map((loc, optionIndex) => {
-      return <option key={`housinglocation_option_${loc}`}>{loc}</option>;
-    }) : [];
+    const subLocationOptions = (locations, currentLocation) => {
+      if (!locations) {
+        return [];
+      }
+      const subLocations = locations[currentLocation] && locations[currentLocation].children;
+      if (!subLocations) {
+        return <option key="housinglocation_option_All" value="--">All</option>;
+      }
+
+      return [
+        <option key="housinglocation_option_All" value="--">All</option>,
+        ...(subLocations.map((loc) => (<option key={`housinglocation_option_${loc.name}`}>{loc.name}</option>)))
+      ];
+    };
 
     const locationSelect = (
       <div className="pure-u-md-4-12">
         <label className="form-label" htmlFor="housing-location-select">Select sub-location</label>
 
         <select id="housing-location-select" name="housing-location-select" className="form-control"
-          value={this.props.currentLocation}
-          onChange={this.props.handleLocationChange}>
-          {housingLocations}
+          value={this.props.currentSubLocation}
+          onChange={this.props.handleSubLocationChange}>
+          {subLocationOptions(this.props.locations, this.props.currentLocation)}
         </select></div>);
 
     const dateSelect = (
@@ -226,24 +237,25 @@ class ResultsHouseblock extends Component {
   }
 }
 ResultsHouseblock.propTypes = {
-  history: PropTypes.object,
-  user: PropTypes.object.isRequired,
-  handleSearch: PropTypes.func.isRequired,
-  handlePrint: PropTypes.func.isRequired,
-  handleLocationChange: PropTypes.func.isRequired,
-  handlePeriodChange: PropTypes.func.isRequired,
-  handleDateChange: PropTypes.func.isRequired,
-  handlePay: PropTypes.func.isRequired,
-  date: PropTypes.string,
-  period: PropTypes.string,
-  houseblockData: PropTypes.array,
-  currentLocation: PropTypes.string,
-  locations: PropTypes.array,
-  getHouseblockList: PropTypes.func.isRequired,
   agencyId: PropTypes.string,
+  currentLocation: PropTypes.string,
+  currentSubLocation: PropTypes.string,
+  date: PropTypes.string,
+  getHouseblockList: PropTypes.func.isRequired,
+  history: PropTypes.object,
+  handleDateChange: PropTypes.func.isRequired,
+  handlePeriodChange: PropTypes.func.isRequired,
+  handlePrint: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  handleSubLocationChange: PropTypes.func.isRequired,
+  handlePay: PropTypes.func.isRequired,
+  houseblockData: PropTypes.array,
+  locations: PropTypes.array,
   orderField: PropTypes.string,
+  period: PropTypes.string,
+  showPaymentReasonModal: PropTypes.func.isRequired,
   sortOrder: PropTypes.string,
-  showPaymentReasonModal: PropTypes.func.isRequired
+  user: PropTypes.object.isRequired
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);

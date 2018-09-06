@@ -89,6 +89,13 @@ export const setSearchLocation = (location) => {
   };
 };
 
+export const setSearchSubLocation = (subLocation) => {
+  return {
+    type: ActionTypes.SET_SEARCH_SUB_LOCATION,
+    subLocation
+  };
+};
+
 export const setSearchActivity = (activity) => {
   return {
     type: ActionTypes.SET_SEARCH_ACTIVITY,

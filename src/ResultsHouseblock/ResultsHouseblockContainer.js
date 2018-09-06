@@ -4,19 +4,22 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
-import { setSearchLocations, showPaymentReasonModal } from "../redux/actions";
-import axios from "axios/index";
+import { setSearchSubLocation, showPaymentReasonModal } from "../redux/actions";
 import Spinner from "../Spinner";
 import { getHouseBlockReasons } from "../ModalProvider/PaymentReasonModal/reasonCodes";
 
 
 class ResultsHouseblockContainer extends Component {
+  constructor () {
+    super();
+    this.handleSubLocationChange = this.handleSubLocationChange.bind(this);
+  }
+
   async componentWillMount () {
     try {
       this.handlePrint = this.handlePrint.bind(this);
-      if (!this.props.locations) {
-        await this.getLocations();
-      }
+      // await this.getSubLocations();
+
       if (this.props.currentLocation) {
         this.props.getHouseblockList(this.props.orderField, this.props.sortOrder);
       } else {
@@ -27,16 +30,8 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  async getLocations () {
-    const response = await axios.get('/api/houseblockLocations', {
-      params: {
-        agencyId: this.props.agencyId
-      } });
-    this.props.locationsDispatch(response.data);
-    // Use the first location by default if not already set
-    if (!this.props.currentLocation && response.data && response.data[0]) {
-      this.props.locationDispatch(response.data[0]);
-    }
+  handleSubLocationChange (event) {
+    this.props.subLocationDispatch(event.target.value);
   }
 
   handlePrint () {
@@ -54,6 +49,7 @@ class ResultsHouseblockContainer extends Component {
     return (<div><Error {...this.props} />
       <ResultsHouseblock
         handlePrint={this.handlePrint}
+        handleSubLocationChange={this.handleSubLocationChange}
         {...this.props}
       />
     </div>);
@@ -66,8 +62,8 @@ ResultsHouseblockContainer.propTypes = {
   agencyId: PropTypes.string.isRequired,
   locations: PropTypes.array,
   currentLocation: PropTypes.string.isRequired,
-  locationsDispatch: PropTypes.func.isRequired,
-  locationDispatch: PropTypes.func.isRequired,
+  currentSubLocation: PropTypes.string.isRequired,
+  subLocationDispatch: PropTypes.func.isRequired,
   getHouseblockList: PropTypes.func,
   houseblockDataDispatch: PropTypes.func,
   orderField: PropTypes.string,
@@ -79,6 +75,8 @@ ResultsHouseblockContainer.propTypes = {
 const mapStateToProps = state => {
   return {
     locations: state.search.locations,
+    currentLocation: state.search.location,
+    currentSubLocation: state.search.subLocation,
     houseblockData: state.events.houseBlockData,
     loaded: state.app.loaded,
     orderField: state.events.orderField,
@@ -89,7 +87,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    locationsDispatch: text => dispatch(setSearchLocations(text)),
+    subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
     showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getHouseBlockReasons() }))
   };
 };
