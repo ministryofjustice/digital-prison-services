@@ -359,6 +359,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+  activitiesDispatch: PropTypes.func.isRequired,
   activity: PropTypes.string,
   activityDataDispatch: PropTypes.func.isRequired,
   activityDispatch: PropTypes.func.isRequired,

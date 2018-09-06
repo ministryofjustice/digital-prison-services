@@ -12,6 +12,10 @@ function addToOthers (currentRow, event) {
   }
 }
 
+function isToday (formattedDate) {
+  return moment().format('YYYY-MM-DD') === formattedDate;
+}
+
 function handleMultipleActivities (currentRow, currentActivity) {
   if (!currentRow.activity.payRate && currentActivity.payRate) {
     // Make current activity the main activity
@@ -37,11 +41,14 @@ const getHouseblockListFactory = (elite2Api) => {
 
     const data = await elite2Api.getHouseblockList(context, agencyId, groupName, formattedDate, timeSlot);
     // Returns array ordered by inmate/cell or name, then start time
-    let sentenceData;
+    let sentenceData, courtEvents;
 
     if (data && data.length > 0) {
       const offenderNumbers = distinct(data.map(offender => offender.offenderNo));
       sentenceData = await elite2Api.getSentenceData(context, offenderNumbers);
+      if (isToday(formattedDate)) {
+        courtEvents = await elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers });
+      }
     }
 
     log.info(data, 'getHouseblockList data received');
@@ -70,6 +77,9 @@ const getHouseblockListFactory = (elite2Api) => {
       currentRow.releasedToday = Boolean(sentenceData && sentenceData.length && sentenceData
         .filter(sentence => sentence.offenderNo === event.offenderNo &&
                 sentence.sentenceDetail.releaseDate === formattedDate)[0]);
+
+      currentRow.atCourt = Boolean(courtEvents && courtEvents.length && courtEvents
+        .filter(courtEvent => courtEvent.offenderNo === event.offenderNo)[0]);
     }
     return rows;
   };
