@@ -157,7 +157,7 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters small-font">{row.activity &&
          `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
-          <td className="row-gutters small-font">{(row.others || row.releasedToday || row.atCourt) &&
+          <td className="row-gutters small-font last-text-column-padding">{(row.others || row.releasedToday || row.atCourt) &&
             <ul>
               {row.releasedToday && <li><span className="bold-font16">** Release scheduled **</span></li>}
               {row.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
