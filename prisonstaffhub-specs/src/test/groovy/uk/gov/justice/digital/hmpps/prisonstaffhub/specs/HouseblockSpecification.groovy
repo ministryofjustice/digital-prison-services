@@ -35,7 +35,7 @@ class HouseblockSpecification extends GebReportingSpec {
         then: 'The houseblock list is displayed, orderded by last name'
 
         at HouseblockPage
-        form['housing-location-select'] == 'BWing'
+        form['housing-location-select'] == '--'
         form['date'] == 'Today'
         form['period-select'] == 'AM'
 
@@ -46,7 +46,7 @@ class HouseblockSpecification extends GebReportingSpec {
         texts2[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def reorderedRow1 = tableRows[1].find('td')
         reorderedRow1[3].text() == 'Woodwork 17:00'
-        reorderedRow1[4].find('li')*.text() == [ 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
+        reorderedRow1[4].find('li')*.text() == [ '** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
 
 
         // Check order is by name
@@ -92,23 +92,23 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = new Date().format('YYYY-MM-dd')
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
         form['period-select'] = 'PM'
-        form['housing-location-select'] = 'AWing'
+        form['housing-location-select'] = '1'
         continueButton.click()
         at HouseblockPage
 
         when: "I change selections and update"
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'BWing', 'PM', firstOfMonthApiFormat)
-        form['housing-location-select'] = 'BWing'
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1_B', 'PM', firstOfMonthApiFormat)
+        form['housing-location-select'] = 'B'
         setDatePicker('2018', 'Aug', '1')
         updateButton.click()
 
         then: 'The new houseblock list results are displayed'
         at HouseblockPage
-        form['housing-location-select'] == 'BWing'
+        form['housing-location-select'] == 'B'
         form['date'] == firstOfMonthDisplayFormat
         form['period-select'] == 'PM'
         def texts = tableRows*.text()
@@ -136,9 +136,9 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = new Date().format('YYYY-MM-dd')
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AWing', 'PM', today)
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
 
-        form['housing-location-select'] = 'AWing'
+        form['housing-location-select'] = '1'
         form['period-select'] = 'PM'
         continueButton.click()
         at HouseblockPage
@@ -156,9 +156,9 @@ class HouseblockSpecification extends GebReportingSpec {
 
         when: "I select and display a location"
         def today = new Date().format('YYYY-MM-dd')
-        elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+        elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
 
-        form['housing-location-select'] = 'BWing'
+        form['housing-location-select'] = '1'
 
         form['period-select'] = 'AM'
         continueButton.click()
@@ -181,9 +181,9 @@ class HouseblockSpecification extends GebReportingSpec {
 
         when: "I select and display a location"
         def today = new Date().format('YYYY-MM-dd')
-        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
 
-        form['housing-location-select'] = 'BWing'
+        form['housing-location-select'] = '1'
 
         form['period-select'] = 'AM'
         continueButton.click()
@@ -203,9 +203,9 @@ class HouseblockSpecification extends GebReportingSpec {
         when: "I select and display a location"
         def today = new Date().format('YYYY-MM-dd')
 
-        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'BWing', 'AM', today)
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
 
-        form['housing-location-select'] = 'BWing'
+        form['housing-location-select'] = '1'
 
         form['period-select'] = 'AM'
         continueButton.click()

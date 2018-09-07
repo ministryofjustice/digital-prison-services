@@ -4,7 +4,7 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, properCaseName, getPrisonDescription } from "../stringUtils";
+import { getHoursMinutes, properCaseName, getPrisonDescription, isToday } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
 import moment from 'moment';
 import { Link } from "react-router-dom";
@@ -19,14 +19,6 @@ class ResultsHouseblock extends Component {
   displayBack () {
     return (<div className="padding-top no-print"><Link id={`back_to_selection_link`} title="Back to selection screen link" className="link backlink" to="/whereaboutssearch" >
       <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
-  }
-
-  isToday () {
-    if (this.props.date === 'Today') {
-      return true;
-    }
-    const searchDate = moment(this.props.date, 'DD/MM/YYYY');
-    return searchDate.isSame(moment(), "day");
   }
 
   olderThan7Days () {
@@ -115,7 +107,7 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      {this.isToday() &&
+      {isToday(this.props.date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         this.props.handlePrint();
       }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
@@ -171,11 +163,12 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters small-font">{row.activity &&
           `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
-          <td className="row-gutters small-font">{ (row.others || row.releasedToday) &&
-          <ul className="other-activities">
-            {row.releasedToday && <li><span className="bold-font16">** Release scheduled **</span></li>}
-            {row.others && row.others.map((event, index) => otherEvent(event, index))}
-          </ul>
+          <td className="row-gutters small-font">{(row.others || row.releasedToday || row.atCourt) &&
+            <ul>
+              {row.releasedToday && <li><span className="bold-font16">** Release scheduled **</span></li>}
+              {row.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
+              {row.others && row.others.map((event, index) => otherEvent(event, index))}
+            </ul>
           }</td>
           <td className="no-padding checkbox-column no-display">
             <div className="multiple-choice whereaboutsCheckbox">
