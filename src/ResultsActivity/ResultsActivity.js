@@ -130,11 +130,12 @@ class ResultsActivity extends Component {
           <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
           {renderMainEvent(mainEvent)}
-          <td className="row-gutters small-font">{(mainEvent.eventsElsewhere || mainEvent.releaseScheduled) &&
-          <ul>
-            {mainEvent.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
-            {mainEvent.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
-            {mainEvent.eventsElsewhere.map((event, index) => ResultsActivity.otherEvent(event, index))}</ul>
+          <td className="row-gutters small-font">{(mainEvent.eventsElsewhere || mainEvent.releaseScheduled || mainEvent.atCourt) &&
+            <ul>
+              {mainEvent.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
+              {mainEvent.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
+              {mainEvent.eventsElsewhere && mainEvent.eventsElsewhere.map((event, index) => ResultsActivity.otherEvent(event, index))}
+            </ul>
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             {/*Disable pay/other for Part 1*/}
