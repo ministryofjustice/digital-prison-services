@@ -4,16 +4,29 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, properCaseName, getPrisonDescription, isToday } from "../stringUtils";
+import { getHoursMinutes, properCaseName, getPrisonDescription } from "../stringUtils";
 import DatePickerInput from "../DatePickerInput";
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { getOffenderLink } from "../links";
 
 class ResultsHouseblock extends Component {
+  constructor (props) {
+    super(props);
+    this.state = { previousSubLocation: '' };
+  }
+
   displayBack () {
     return (<div className="padding-top no-print"><Link id={`back_to_selection_link`} title="Back to selection screen link" className="link backlink" to="/whereaboutssearch" >
       <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
+  }
+
+  isToday () {
+    if (this.props.date === 'Today') {
+      return true;
+    }
+    const searchDate = moment(this.props.date, 'DD/MM/YYYY');
+    return searchDate.isSame(moment(), "day");
   }
 
   olderThan7Days () {
@@ -52,18 +65,14 @@ class ResultsHouseblock extends Component {
   }
 
   render () {
-    const subLocationOptions = (locations, currentLocation) => {
-      if (!locations) {
-        return [];
-      }
-      const subLocations = locations[currentLocation] && locations[currentLocation].children;
+    const subLocationOptions = (subLocations) => {
       if (!subLocations) {
         return <option key="housinglocation_option_All" value="--">All</option>;
       }
 
       return [
         <option key="housinglocation_option_All" value="--">All</option>,
-        ...(subLocations.map((loc) => (<option key={`housinglocation_option_${loc.name}`}>{loc.name}</option>)))
+        ...(subLocations.map((loc) => (<option key={`housinglocation_option_${loc}`} value={loc}>{loc}</option>)))
       ];
     };
 
@@ -71,11 +80,13 @@ class ResultsHouseblock extends Component {
       <div className="pure-u-md-4-12">
         <label className="form-label" htmlFor="housing-location-select">Select sub-location</label>
 
-        <select id="housing-location-select" name="housing-location-select" className="form-control"
+        <select
+          id="housing-location-select"
+          name="housing-location-select"
+          className="form-control"
           value={this.props.currentSubLocation}
-          onChange={this.props.handleSubLocationChange}>
-          {subLocationOptions(this.props.locations, this.props.currentLocation)}
-        </select></div>);
+          onChange={this.props.handleSubLocationChange}>{subLocationOptions(this.props.subLocations)}</select>
+      </div>);
 
     const dateSelect = (
       <div className="pure-u-md-2-12 padding-left padding-right">
@@ -91,7 +102,10 @@ class ResultsHouseblock extends Component {
       <div className="pure-u-md-2-12">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
-        <select id="period-select" name="period-select" className="form-control"
+        <select
+          id="period-select"
+          name="period-select"
+          className="form-control"
           value={this.props.period}
           onChange={this.props.handlePeriodChange}>
           <option key="MORNING" value="AM">Morning (AM)</option>
@@ -101,7 +115,7 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      {isToday(this.props.date) &&
+      {this.isToday() &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         this.props.handlePrint();
       }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
@@ -155,14 +169,13 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{anyActivity.offenderNo}</td>
           <td className="row-gutters small-font">{row.activity &&
-         `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
+          `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
-          <td className="row-gutters small-font last-text-column-padding">{(row.others || row.releasedToday || row.atCourt) &&
-            <ul>
-              {row.releasedToday && <li><span className="bold-font16">** Release scheduled **</span></li>}
-              {row.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
-              {row.others && row.others.map((event, index) => otherEvent(event, index))}
-            </ul>
+          <td className="row-gutters small-font">{ (row.others || row.releasedToday) &&
+          <ul className="other-activities">
+            {row.releasedToday && <li><span className="bold-font16">** Release scheduled **</span></li>}
+            {row.others && row.others.map((event, index) => otherEvent(event, index))}
+          </ul>
           }</td>
           <td className="no-padding checkbox-column no-display">
             <div className="multiple-choice whereaboutsCheckbox">
@@ -209,7 +222,7 @@ class ResultsHouseblock extends Component {
           {dateSelect}
           {periodSelect}
           <button id="updateButton" className="button greyButton margin-left margin-top" type="button" onClick={() => {
-            this.props.handleSearch(this.props.history);
+            this.props.update();
           }}>Update</button>
         </div>
         <hr/>
@@ -232,21 +245,20 @@ ResultsHouseblock.propTypes = {
   agencyId: PropTypes.string,
   currentLocation: PropTypes.string,
   currentSubLocation: PropTypes.string,
-  date: PropTypes.string,
   getHouseblockList: PropTypes.func.isRequired,
   history: PropTypes.object,
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
   handlePay: PropTypes.func.isRequired,
-  houseblockData: PropTypes.array,
-  locations: PropTypes.array,
-  orderField: PropTypes.string,
+  date: PropTypes.string,
   period: PropTypes.string,
-  showPaymentReasonModal: PropTypes.func.isRequired,
+  houseblockData: PropTypes.array,
+  subLocations: PropTypes.array,
+  orderField: PropTypes.string,
   sortOrder: PropTypes.string,
+  update: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 };
 
