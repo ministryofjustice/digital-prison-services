@@ -86,6 +86,19 @@ const response = [
         endTime: "2017-10-15T18:30:00"
       }
     ]
+  },
+  {
+    atCourt: true,
+    offenderNo: "A1234AD",
+    firstName: "BUGS",
+    lastName: "BUNNY",
+    cellLocation: `${PRISON}-A-1-4`,
+    event: "PA",
+    eventType: "PRISON_ACT",
+    eventDescription: "Prison Activities",
+    comment: "Carrot Sculpture",
+    startTime: "2017-10-15T14:00:00",
+    endTime: "2017-10-15T15:15:00"
   }
 ];
 
@@ -103,7 +116,7 @@ const activities = [
 ];
 const activity = "5";
 
-describe('Offender results component Jira NN-843', () => {
+describe('Offender activity list results component', () => {
   it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days');
     const date = aFewDaysAgo.format('DD/MM/YYYY');
@@ -137,7 +150,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(periodSelect.some('[value="ED"]')).toEqual(true);
 
     const tr = component.find('tr');
-    expect(tr.length).toEqual(4); // 3 plus table header tr
+    expect(tr.length).toEqual(5); // 4 plus table header tr
     expect(tr.at(1).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur');
     expect(tr.at(1).find('td').at(NOMS_ID_COLUMN).text()).toEqual('A1234AA');
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
@@ -159,6 +172,10 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
     expect(tr.at(3).find('td').at(ACTIVITY_COLUMN).text()).toEqual('Chapel');
     expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
+
+    expect(tr.at(4).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Bunny, Bugs');
+    expect(tr.at(4).find('td').at(ACTIVITY_COLUMN).text()).toEqual('Carrot Sculpture');
+    expect(tr.at(4).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Court visit scheduled **');
   });
 
   it('should render empty results list correctly', async () => {
