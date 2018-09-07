@@ -99,13 +99,19 @@ tbody > tr + td {
 
   td.small-font {
     font-size: 14px;
-    padding-right: 1px;
+  }
+
+  td.last-text-column-padding {
+    padding-right: 0;
   }
 
   .no-display {
     display: none;
   }
 
+  .checkbox-header {
+    padding-left: .8em;
+  }
 }
 
 
@@ -194,10 +200,4 @@ tbody > tr + td {
   }
 
 
-}
-
-@media screen {
-  .checkbox-header {
-    padding-left: .8em;
-  }
 }
