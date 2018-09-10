@@ -80,7 +80,6 @@ const response = [
     }
   },
   {
-    atCourt: true,
     activity: {
       offenderNo: "A1234AC",
       firstName: "FRED",
@@ -109,7 +108,7 @@ const response = [
     ] }
 ];
 
-const locations = ['AWing', 'BWing'];
+const subLocations = ['1', '2'];
 
 const user = { activeCaseLoadId: 'SYI', caseLoadOptions: [{ caseLoadId: 'XXX', description: 'Some Prison' }, { caseLoadId: 'SYI', description: 'Shrewsbury' }] };
 
@@ -125,20 +124,20 @@ describe('Offender results component Jira NN-843', () => {
       currentSubLocation={'--'}
       date={date}
       getHouseblockList={jest.fn()}
-      locations={locations}
+      subLocations={subLocations}
       history={{ push: jest.fn() }}
-      handleDateChange={jest.fn()}
-      handleLocationChange={jest.fn()}
-      handlePrint={jest.fn()}
-      handleSearch={jest.fn()}
-      handleSubLocationChange={jest.fn()}
-      handlePay={jest.fn()}
-      handlePeriodChange={jest.fn()}
       houseblockData={response}
+      handleSearch={jest.fn()}
+      handlePrint={jest.fn()}
+      handleSubLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
       period={'ED'}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>
-    );
+      user={user}
+      update={jest.fn()}
+    />);
     expect(component.find('.whereabouts-title').text()).toEqual('1');
     expect(component.find('.prison-title').text()).toEqual('Shrewsbury');
     expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat + ' (ED) '); //'Tuesday 12th June'
@@ -174,14 +173,13 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(3).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
     expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Court visit scheduled **');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
   });
 
   it('should render empty results list correctly', async () => {
     const component = shallow(<ResultsHouseblock
       history={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={[]}
       handleSearch={jest.fn()}
       handlePrint={jest.fn()}
@@ -194,21 +192,22 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={jest.fn()}
+    />);
     const tr = component.find('tr');
     expect(tr.length).toEqual(1); // table header tr only
     expect(component.find('div.font-small').text()).toEqual('No prisoners found');
   });
 
   it('should handle buttons correctly', async () => {
-    const handleSearch = jest.fn();
+    const update = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={response}
-      handleSearch={handleSearch}
       handlePrint={handlePrint}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -220,27 +219,28 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={update}
+    />);
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true);
 
     component.find('#updateButton').simulate('click');
-    expect(handleSearch).toHaveBeenCalled();
+    expect(update).toHaveBeenCalled();
     expect(handlePrint).not.toHaveBeenCalled();
     expect(handlePrint).not.toHaveBeenCalled();
+
     component.find('#printButton').at(0).simulate('click');
     expect(handlePrint).toHaveBeenCalled();
   });
 
   it('should not display print button when date is not today', async () => {
-    const handleSearch = jest.fn();
     const handlePrint = jest.fn();
     const oldDate = '25/05/2018';
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={response}
-      handleSearch={handleSearch}
       handlePrint={handlePrint}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -252,20 +252,19 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
-
+      user={user}
+      update={jest.fn()}
+    />);
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false);
   });
 
   it('checkboxes should be read-only when date is over a week ago', async () => {
-    const handleSearch = jest.fn();
     const handlePrint = jest.fn();
     const oldDate = '23/05/2018';
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={response}
-      handleSearch={handleSearch}
       handlePrint={handlePrint}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -277,7 +276,9 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={jest.fn()}
+    />);
 
     const tr = component.find('tr');
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true);
@@ -285,14 +286,12 @@ describe('Offender results component Jira NN-843', () => {
   });
 
   it('should display the correct sorting headings for Location', async () => {
-    const handleSearch = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={response}
-      handleSearch={handleSearch}
       handlePrint={handlePrint}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -306,7 +305,9 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={jest.fn()}
+    />);
 
     expect(component.find('#Location-sort-asc').length).toEqual(1);
     expect(component.find('#Location-sort-desc').length).toEqual(0);
@@ -315,14 +316,12 @@ describe('Offender results component Jira NN-843', () => {
   });
 
   it('should display the correct sorting headings for Name', async () => {
-    const handleSearch = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={response}
-      handleSearch={handleSearch}
       handlePrint={handlePrint}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -336,7 +335,9 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={jest.fn()}
+    />);
 
     expect(component.find('#Location-sort-asc').length).toEqual(0);
     expect(component.find('#Location-sort-desc').length).toEqual(0);
@@ -345,16 +346,14 @@ describe('Offender results component Jira NN-843', () => {
   });
 
   it('should handle change of sort order', async () => {
-    const handleSearch = jest.fn();
     const getHouseblockList = jest.fn();
     const handlePrint = jest.fn();
     const today = moment().format('DD/MM/YYYY');
 
     const component = shallow(<ResultsHouseblock
       history ={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={response}
-      handleSearch={handleSearch}
       handlePrint={handlePrint}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -368,7 +367,9 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={jest.fn()}
+    />);
 
     component.find('#Location-sort-asc').simulate('click');
     expect(getHouseblockList).toHaveBeenCalledWith('cellLocation', 'DESC');
@@ -380,9 +381,8 @@ describe('Offender results component Jira NN-843', () => {
   it('should render back link', async () => {
     const component = shallow(<ResultsHouseblock
       history={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={[]}
-      handleSearch={jest.fn()}
       handlePrint={jest.fn()}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -393,7 +393,9 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>);
+      user={user}
+      update={jest.fn()}
+    />);
     expect(component.find('#back_to_selection_link').length).toEqual(1);
   });
 
@@ -417,9 +419,8 @@ describe('Offender results component Jira NN-843', () => {
     const date = aFewDaysAgo.format('DD/MM/YYYY');
     const component = shallow(<ResultsHouseblock
       history={{ push: jest.fn() }}
-      locations={locations}
+      subLocations={subLocations}
       houseblockData={data}
-      handleSearch={jest.fn()}
       handlePrint={jest.fn()}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -431,11 +432,39 @@ describe('Offender results component Jira NN-843', () => {
       currentLocation={'BWing'}
       agencyId={PRISON}
       showPaymentReasonModal={jest.fn()}
-      user={user}/>
-    );
+      user={user}
+      update={jest.fn()}
+    />);
 
     const tr = component.find('tr');
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Release scheduled **');
+  });
+
+  it('Should render sub-locations in drop-down', () => {
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      subLocations={subLocations}
+      houseblockData={[]}
+      handlePrint={jest.fn()}
+      handleSubLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
+      getHouseblockList={jest.fn()}
+      date={moment().format('DD/MM/YYYY')}
+      period={'ED'}
+      currentLocation={'BWing'}
+      agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
+      user={user}
+      update={jest.fn()}
+    />);
+
+    const options = component.find('#housing-location-select option');
+    expect(options.length).toEqual(3);
+    expect(options.contains(<option value="--">All</option>)).toEqual(true);
+    expect(options.contains(<option value="1">1</option>)).toEqual(true);
+    expect(options.contains(<option value="2">2</option>)).toEqual(true);
   });
 
   //TODO Skipped for Part 1
@@ -445,7 +474,6 @@ describe('Offender results component Jira NN-843', () => {
     const component = shallow(<ResultsHouseblock
       user={{}}
       houseblockData={[response[0]]}
-      handleSearch={jest.fn()}
       handlePrint={jest.fn()}
       handleSubLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
@@ -453,6 +481,7 @@ describe('Offender results component Jira NN-843', () => {
       handlePay={jest.fn()}
       getHouseblockList={jest.fn()}
       showPaymentReasonModal={showPaymentReasonModal}
+      update={jest.fn()}
     />);
 
     const browserEvent = {

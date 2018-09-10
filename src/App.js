@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
-  setHouseblockData, setSortOrder, setOrderField, setLoaded,
+  setLoaded,
   setSearchDate,
   setSearchLocation,
   setSearchPeriod,
@@ -53,7 +53,6 @@ class App extends React.Component {
     this.clearMessage = this.clearMessage.bind(this);
     this.displayError = this.displayError.bind(this);
     this.handleError = this.handleError.bind(this);
-    this.getHouseblockList = this.getHouseblockList.bind(this);
     this.getActivityList = this.getActivityList.bind(this);
     this.getActivityLocations = this.getActivityLocations.bind(this);
     this.raiseAnalyticsEvent = this.raiseAnalyticsEvent.bind(this);
@@ -127,6 +126,14 @@ class App extends React.Component {
     return !this.props.shouldShowTerms && (this.props.user && this.props.user.activeCaseLoadId);
   }
 
+  handleLocationChange (event) {
+    this.props.locationDispatch(event.target.value);
+  }
+
+  handleActivityChange (event) {
+    this.props.activityDispatch(event.target.value);
+  }
+
   handleDateChange (date) {
     if (date) {
       this.props.dateDispatch(moment(date).format('DD/MM/YYYY'));
@@ -152,11 +159,7 @@ class App extends React.Component {
 
   handleSearch (history) {
     if (this.props.currentLocation && this.props.currentLocation !== '--') {
-      if (history.location.pathname === '/whereaboutsresultshouseblock') {
-        this.getHouseblockList(this.props.orderField, this.props.sortOrder);
-      } else {
-        history.push('/whereaboutsresultshouseblock');
-      }
+      history.push('/whereaboutsresultshouseblock');
     } else if (this.props.activity) {
       if (history.location.pathname === '/whereaboutsresultsactivity') {
         this.getActivityList(this.props.orderField, this.props.sortOrder);
@@ -170,42 +173,6 @@ class App extends React.Component {
     if (this.props.config.googleAnalyticsId) {
       ReactGA.event(event);
     }
-  }
-
-  async getHouseblockList (orderField, sortOrder) {
-    try {
-      this.props.resetErrorDispatch();
-      this.props.setLoadedDispatch(false);
-      if (orderField) this.props.orderDispatch(orderField);
-      if (sortOrder) this.props.sortOrderDispatch(sortOrder);
-      let date = this.props.date;
-      if (date === 'Today') { // replace placeholder text
-        date = moment().format('DD/MM/YYYY');
-      }
-
-      const compoundGroupName = (location, subLocation) => (subLocation && subLocation !== '--') ? `${location}_${subLocation}` : location;
-
-      const config = {
-        params: {
-          agencyId: this.props.agencyId,
-          groupName: compoundGroupName(this.props.currentLocation, this.props.currentSubLocation),
-          date: date,
-          timeSlot: this.props.period
-        } };
-      if (orderField) {
-        config.headers = {
-          'Sort-Fields': orderField
-        };
-        if (sortOrder) {
-          config.headers['Sort-Order'] = sortOrder;
-        }
-      }
-      const response = await axios.get('/api/houseblocklist', config);
-      this.props.houseblockDataDispatch(response.data);
-    } catch (error) {
-      this.handleError(error);
-    }
-    this.props.setLoadedDispatch(true);
   }
 
   async getActivityList () {
@@ -297,13 +264,12 @@ class App extends React.Component {
         <Route exact path="/whereaboutsresultshouseblock" render={() => (
           <ResultsHouseblockContainer
             handleError={this.handleError}
-            getHouseblockList = {this.getHouseblockList}
             handleDateChange={(event) => this.handleDateChange(event)}
             handlePeriodChange={(event) => this.handlePeriodChange(event)}
-            handleSearch={(history) => this.handleSearch(history)}
             raiseAnalyticsEvent={this.raiseAnalyticsEvent}
             handlePay={this.handlePay}
-            {...this.props} />
+            {...this.props}
+          />
         )}/>
         <Route exact path="/whereaboutsresultsactivity" render={() => (
           <ResultsActivityContainer
@@ -370,10 +336,8 @@ App.propTypes = {
   currentSubLocation: PropTypes.string,
   date: PropTypes.string,
   dateDispatch: PropTypes.func.isRequired,
-  houseblockDataDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
   orderField: PropTypes.string,
-  orderDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   period: PropTypes.string,
   shouldShowTerms: PropTypes.bool,
@@ -385,7 +349,6 @@ App.propTypes = {
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   showModal: PropTypes.object.isRequired,
   sortOrder: PropTypes.string,
-  sortOrderDispatch: PropTypes.func.isRequired,
   switchAgencyDispatch: PropTypes.func.isRequired,
   user: PropTypes.object,
   userDetailsDispatch: PropTypes.func.isRequired
@@ -400,7 +363,6 @@ const mapStateToProps = state => {
     user: state.app.user,
     shouldShowTerms: state.app.shouldShowTerms,
     currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
-    currentSubLocation: state.search.subLocation,
     activity: state.search.activity,
     date: state.search.date,
     period: state.search.period,
@@ -426,11 +388,8 @@ const mapDispatchToProps = dispatch => {
     activityDispatch: text => dispatch(setSearchActivity(text)),
     dateDispatch: text => dispatch(setSearchDate(text)),
     periodDispatch: text => dispatch(setSearchPeriod(text)),
-    houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
     activityDataDispatch: data => dispatch(setActivityData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
-    orderDispatch: field => dispatch(setOrderField(field)),
-    sortOrderDispatch: field => dispatch(setSortOrder(field)),
     setMenuOpen: (flag) => dispatch(setMenuOpen(flag))
   };
 };
