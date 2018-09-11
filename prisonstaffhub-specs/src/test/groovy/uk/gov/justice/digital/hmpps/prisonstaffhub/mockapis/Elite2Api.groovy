@@ -65,8 +65,20 @@ class Elite2Api extends WireMockRule {
                         ]))))
     }
 
+    void stubUpdateActiveCaseload() {
+        stubFor(
+                put('/api/users/me/activeCaseLoad')
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+              ))
+    }
 
     void stubGetMyDetails(UserAccount user) {
+        stubGetMyDetails(user, Caseload.LEI.id)
+    }
+
+    void stubGetMyDetails(UserAccount user, String caseloadId ) {
         stubFor(
                 get('/api/users/me')
                         .willReturn(
@@ -79,7 +91,7 @@ class Elite2Api extends WireMockRule {
                                 firstName       : user.staffMember.firstName,
                                 lastName        : user.staffMember.lastName,
                                 email           : 'itaguser@syscon.net',
-                                activeCaseLoadId: 'LEI'
+                                activeCaseLoadId: caseloadId
                         ]))))
     }
 
@@ -165,12 +177,19 @@ class Elite2Api extends WireMockRule {
                 [ name: '3', children: [
                         [ name: 'A'],[ name: 'B'],[ name: 'C']
                 ]]]);
+        def jsonSYI = JsonOutput.toJson([
+                [ name: 'block1', children: [
+                        [ name: 'A'],[ name: 'B']
+                ]],
+                [ name: 'block2', children: [
+                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                ]]]);
 
         this.stubFor(
                 get("/api/agencies/${caseload.id}/locations/groups")
                         .willReturn(
                         aResponse()
-                                .withBody(json)
+                                .withBody(caseload.id.equals('SYI') ? jsonSYI : json)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

@@ -4,6 +4,7 @@ import geb.module.FormElement
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
@@ -68,5 +69,25 @@ class SearchSpecification extends GebReportingSpec {
 
         then: 'a new activity location list is displayed'
         activity.find('option', value: '4').text() == 'loc4'
+    }
+
+    def "Then the caseload is changed the search page is updated with the new locations"() {
+
+        given: 'I am on the search page'
+        fixture.toSearch()
+        at SearchPage
+
+        when: 'The active caseload is changed'
+        elite2api.stubHealth()
+        elite2api.stubUpdateActiveCaseload()
+        elite2api.stubGroups Caseload.SYI
+        elite2api.stubGetMyDetails(ITAG_USER, Caseload.SYI.id)
+        elite2api.stubGetMyCaseloads ITAG_USER.caseloads
+        elite2api.stubActivityLocations()
+        header.switchCaseload(Caseload.SYI.id);
+
+        then: 'the locations LOV is updated'
+        waitFor { $("div", text: contains("SHREWSBURY (HMP)")) }
+        location.find('option', value: 'block1').text() == 'block1'
     }
 }

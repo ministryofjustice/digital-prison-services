@@ -19,7 +19,7 @@ class Dropdown extends Component {
           { menuOpen &&
           <div>
             {user.caseLoadOptions.map((option) =>
-              (<a className="dropdown-menu-option" key={option.caseLoadId} onClick={() => {
+              (<a className="dropdown-menu-option" id={`menu-option-${option.caseLoadId}`} key={option.caseLoadId} onClick={() => {
                 setMenuOpen(false);
                 switchCaseLoad(option.caseLoadId);
                 history.push("/");

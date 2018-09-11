@@ -68,9 +68,7 @@ class App extends React.Component {
     }, (error) => Promise.reject(error));
 
     try {
-      const user = await axios.get('/api/me');
-      const caseloads = await axios.get('/api/usercaseloads');
-      this.props.userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
+      this.loadUserAndCaseload();
 
       const config = await axios.get('/api/config');
       links.notmEndpointUrl = config.data.notmEndpointUrl;
@@ -84,10 +82,17 @@ class App extends React.Component {
     }
   }
 
+  async loadUserAndCaseload () {
+    const user = await axios.get('/api/me');
+    const caseloads = await axios.get('/api/usercaseloads');
+    this.props.userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
+  }
+
   async switchCaseLoad (newCaseload) {
     try {
-      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload });
       this.props.switchAgencyDispatch(newCaseload);
+      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload });
+      await this.loadUserAndCaseload();
     } catch (error) {
       this.props.setErrorDispatch(error.message);
     }
@@ -341,6 +346,7 @@ App.propTypes = {
   periodDispatch: PropTypes.func.isRequired,
   period: PropTypes.string,
   shouldShowTerms: PropTypes.bool,
+  menuOpen: PropTypes.bool,
   resetErrorDispatch: PropTypes.func,
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
