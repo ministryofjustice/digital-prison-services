@@ -8,6 +8,7 @@ class HeaderModule extends Module {
         dropDown   { $('.info-wrapper') }
         username   { $('.info-wrapper .user-name').text() }
         caseload   { $('.info-wrapper .case-load').text() }
+        caseloadSYI   (required: false) { $('#menu-option-SYI') }
         logoutLink { $('a', text: 'Log out' ) }
     }
 
@@ -15,6 +16,12 @@ class HeaderModule extends Module {
         dropDown.click()
         waitFor { logoutLink.displayed }
         logoutLink.click()
+    }
+
+    def switchCaseload(caseloadId) {
+        dropDown.click()
+        waitFor { logoutLink.displayed }
+        caseloadSYI.click()
     }
 
 }
