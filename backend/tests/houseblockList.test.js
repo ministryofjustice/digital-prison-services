@@ -7,10 +7,15 @@ const houseblockList = require('../controllers/houseblockList').getHouseblockLis
 const { distinct, switchDateFormat } = require('../utils');
 
 describe('Houseblock list controller', async () => {
-  it('Should add visit and appointment details to array', async () => {
+  beforeEach(() => {
     elite2Api.getHouseblockList = jest.fn();
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse());
     elite2Api.getSentenceData = jest.fn();
+    elite2Api.getExternalTransfers = jest.fn();
+    elite2Api.getCourtEvents = jest.fn();
+  });
+
+  it('Should add visit and appointment details to array', async () => {
+    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse());
 
     const response = await houseblockList({});
 
@@ -74,9 +79,7 @@ describe('Houseblock list controller', async () => {
   });
 
   it('Should correctly choose main activity', async () => {
-    elite2Api.getHouseblockList = jest.fn();
     elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleActivities());
-    elite2Api.getSentenceData = jest.fn();
 
     const response = await houseblockList({});
 
@@ -93,9 +96,7 @@ describe('Houseblock list controller', async () => {
   });
 
   it('Should correctly choose between multiple unpaid', async () => {
-    elite2Api.getHouseblockList = jest.fn();
     elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid());
-    elite2Api.getSentenceData = jest.fn();
 
     const response = await houseblockList({});
 
@@ -112,9 +113,7 @@ describe('Houseblock list controller', async () => {
   });
 
   it('Should handle no response data', async () => {
-    elite2Api.getHouseblockList = jest.fn();
     elite2Api.getHouseblockList.mockImplementationOnce(() => []);
-    elite2Api.getSentenceData = jest.fn();
 
     const response = await houseblockList({});
 
@@ -122,12 +121,12 @@ describe('Houseblock list controller', async () => {
     expect(response.length).toBe(0);
 
     expect(elite2Api.getSentenceData.mock.calls.length).toBe(0);
+    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(0);
+    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(0);
   });
 
   it('should fetch sentence data for all offenders in a house block', async () => {
-    elite2Api.getHouseblockList = jest.fn();
     elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid());
-    elite2Api.getSentenceData = jest.fn();
 
     await houseblockList({});
 
@@ -136,12 +135,10 @@ describe('Houseblock list controller', async () => {
     expect(elite2Api.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers));
   });
 
-  it('should extend the offender data with released and court flags', async () => {
+  it('should extend the offender data with released, court flags and transfers', async () => {
     const today = moment();
 
-    elite2Api.getHouseblockList = jest.fn();
     elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid());
-    elite2Api.getSentenceData = jest.fn();
     elite2Api.getSentenceData.mockImplementationOnce(() => ([
       {
         offenderNo: 'A1234AA',
@@ -150,14 +147,77 @@ describe('Houseblock list controller', async () => {
         }
       }
     ]));
-    elite2Api.getCourtEvents = jest.fn();
+
     elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse);
+    elite2Api.getExternalTransfers.mockImplementationOnce(createTransfersResponse);
 
     const response = await houseblockList({}, 'LEI', 'GROUP1', today, 'AM');
 
-    expect(response[0].releasedToday).toBe(true);
+    expect(response[0].releaseScheduled).toBe(true);
     expect(response[0].atCourt).toBe(true);
+    expect(response[0].scheduledTransfers.length).toBe(1);
+
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1);
+    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1);
+    expect(elite2Api.getSentenceData.mock.calls.length).toBe(1);
+  });
+
+  it('should return multiple scheduled transfers along with status descriptions', async () => {
+    const today = moment();
+
+    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid());
+
+    elite2Api.getExternalTransfers.mockImplementationOnce(() => [
+      {
+        firstName: "BYSJANHKUMAR",
+        lastName: "HENRINEE",
+        offenderNo: "A1234AA",
+        startTime: switchDateFormat(moment()),
+        eventStatus: 'SCH'
+      },
+      {
+        firstName: "BYSJANHKUMAR",
+        lastName: "HENRINEE",
+        offenderNo: "A1234AA",
+        startTime: switchDateFormat(moment()),
+        eventStatus: 'EXP'
+      },
+      {
+        firstName: "BYSJANHKUMAR",
+        lastName: "HENRINEE",
+        offenderNo: "A1234AA",
+        startTime: switchDateFormat(moment()),
+        eventStatus: 'CAN'
+      },
+      {
+        firstName: "BYSJANHKUMAR",
+        lastName: "HENRINEE",
+        offenderNo: "A1234AA",
+        startTime: switchDateFormat(moment()),
+        eventStatus: 'COMP'
+      }
+    ]);
+
+    const response = await houseblockList({}, 'LEI', 'GROUP1', today, 'AM');
+
+    expect(response[0].scheduledTransfers).toEqual([
+      {
+        eventDescription: 'Transfer scheduled',
+        scheduled: true
+      },
+      {
+        eventDescription: 'Transfer scheduled',
+        expired: true
+      },
+      {
+        eventDescription: 'Transfer scheduled',
+        cancelled: true
+      },
+      {
+        eventDescription: 'Transfer scheduled',
+        complete: true
+      }
+    ]);
   });
 });
 
@@ -323,5 +383,14 @@ function createCourtEventResponse () {
     lastName: "HENRINEE",
     offenderNo: "A1234AA",
     startTime: "2018-09-05T15:00:00"
+  }];
+}
+
+function createTransfersResponse () {
+  return [{
+    firstName: "BYSJANHKUMAR",
+    lastName: "HENRINEE",
+    offenderNo: "A1234AA",
+    startTime: switchDateFormat(moment())
   }];
 }

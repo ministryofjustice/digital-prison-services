@@ -103,6 +103,28 @@ class HouseblockResponse {
             endTime         : "2017-10-15T20:30:00"
     ]
 
+    static externalTransfer1 = [
+            eventDescription: "Transfer to high security prison",
+            eventStatus     : "SCH",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : new Date().format('YYYY-MM-dd')
+    ]
+
+    static courtEvent1 = [
+            event           : "19",
+            eventDescription: "Court Appearance - Police Product Order",
+            eventId         : 349360018,
+            eventStatus     : "SCH",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : "2018-09-05T15:00:00"
+   ]
+
     static responseCellOrder = JsonOutput.toJson([
             response1,
             response2,
@@ -131,15 +153,10 @@ class HouseblockResponse {
             response4
     ])
     static courtEventsResponse = JsonOutput.toJson([
-            [
-                    event           : "19",
-                    eventDescription: "Court Appearance - Police Product Order",
-                    eventId         : 349360018,
-                    eventStatus     : "SCH",
-                    eventType       : "COURT",
-                    firstName       : "EAMONN",
-                    lastName        : "ANDREWS",
-                    offenderNo      : "A1234AA",
-                    startTime       : "2018-09-05T15:00:00"
-            ]]);
+         courtEvent1,
+    ])
+
+    static externalTransfersResponse = JsonOutput.toJson([
+            externalTransfer1
+    ])
 }

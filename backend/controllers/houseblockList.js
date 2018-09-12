@@ -34,18 +34,11 @@ function handleMultipleActivities (currentRow, currentActivity) {
 const getHouseblockListFactory = (elite2Api) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
     const formattedDate = switchDateFormat(date);
-
-    const data = await elite2Api.getHouseblockList(context, agencyId, groupName, formattedDate, timeSlot);
     // Returns array ordered by inmate/cell or name, then start time
-    let sentenceData, courtEvents;
+    const data = await elite2Api.getHouseblockList(context, agencyId, groupName, formattedDate, timeSlot);
 
-    if (data && data.length > 0) {
-      const offenderNumbers = distinct(data.map(offender => offender.offenderNo));
-      sentenceData = await elite2Api.getSentenceData(context, offenderNumbers);
-      if (isToday(formattedDate)) {
-        courtEvents = await elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers });
-      }
-    }
+    const offenderNumbers = distinct(data.map(offender => offender.offenderNo));
+    const [releaseSchedule, courtEvents, transfers] = await getExternalEvents(context, { offenderNumbers, agencyId, formattedDate });
 
     log.info(data, 'getHouseblockList data received');
     const rows = [];
@@ -70,20 +63,49 @@ const getHouseblockListFactory = (elite2Api) => {
         addToOthers(currentRow, event);
       }
 
-      currentRow.releasedToday = Boolean(sentenceData && sentenceData.length && sentenceData
+      currentRow.releaseScheduled = Boolean(releaseSchedule && releaseSchedule.length && releaseSchedule
         .filter(sentence => sentence.offenderNo === event.offenderNo &&
                 sentence.sentenceDetail.releaseDate === formattedDate)[0]);
 
       currentRow.atCourt = Boolean(courtEvents && courtEvents.length && courtEvents
         .filter(courtEvent => courtEvent.offenderNo === event.offenderNo)[0]);
+
+      currentRow.scheduledTransfers = (transfers && transfers.length && transfers
+        .filter(transfer => transfer.offenderNo === event.offenderNo)
+        .map(event => ({
+          eventId: event.eventId,
+          eventDescription: 'Transfer scheduled',
+          ...transferStatus(event.eventStatus)
+        }))) || [];
     }
     return rows;
   };
+
+  const getExternalEvents = (context, { offenderNumbers, agencyId, formattedDate }) => {
+    if (!offenderNumbers || offenderNumbers.length === 0) return [];
+
+    return Promise.all([
+      elite2Api.getSentenceData(context, offenderNumbers),
+      isToday(formattedDate) ? elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }) : [],
+      elite2Api.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers })
+    ]);
+  };
+
 
   return {
     getHouseblockList
   };
 };
+
+function transferStatus (eventStatus) {
+  switch (eventStatus) {
+    case 'SCH': return { scheduled: true };
+    case 'CAN': return { cancelled: true };
+    case 'EXP': return { expired: true };
+    case 'COMP': return { complete: true };
+    default: return { unCheckedStatus: eventStatus };
+  }
+}
 
 function safeTimeCompare (a, b) {
   if (a && b) {

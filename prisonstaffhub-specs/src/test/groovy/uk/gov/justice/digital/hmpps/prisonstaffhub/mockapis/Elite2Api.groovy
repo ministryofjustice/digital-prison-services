@@ -200,6 +200,7 @@ class Elite2Api extends WireMockRule {
         stubSentenceData(offenderNumbers, date, true)
         stubSentenceData(offenderNumbers, date, true)
         stubCourtEvents(offenderNumbers, date)
+        stubExternalTransfers(offenderNumbers, date, true)
     }
 
     void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -215,6 +216,7 @@ class Elite2Api extends WireMockRule {
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseMultipleActivities)
         stubSentenceData(offenderNumbers, date)
         stubCourtEvents(offenderNumbers, date)
+        stubExternalTransfers(offenderNumbers, date, true)
     }
 
     void stubGetHouseblockListWithNoActivityOffender(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -230,6 +232,7 @@ class Elite2Api extends WireMockRule {
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseNoActivities)
         stubSentenceData(offenderNumbers, date)
         stubCourtEvents(offenderNumbers, date)
+        stubExternalTransfers(offenderNumbers, date)
     }
 
     void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
@@ -337,6 +340,19 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withBody(HouseblockResponse.courtEventsResponse)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
+    def stubExternalTransfers(List offenderNumbers, String date, Boolean emptyResponse = false) {
+        def json = emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.externalTransfersResponse
+
+        this.stubFor(
+                post("/api/schedules/LEI/externalTransfers?date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(json)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
     }

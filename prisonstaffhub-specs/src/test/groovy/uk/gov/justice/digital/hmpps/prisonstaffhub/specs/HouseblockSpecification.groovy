@@ -73,7 +73,7 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def row1 = tableRows[1].find('td')
         row1[3].text() == 'Woodwork 17:00'
-        row1[4].find('li')*.text() == [ '** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
+        row1[4].find('li')*.text() == [ '** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
 
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
         def row2 = tableRows[2].find('td')
@@ -115,7 +115,7 @@ class HouseblockSpecification extends GebReportingSpec {
         def row1 = tableRows[1].find('td')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         row1[3].text() == 'Woodwork 17:00'
-        row1[4].find('li')*.text() == [ 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
+        row1[4].find('li')*.text() == [ 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
 
         def row2 = tableRows[2].find('td')
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
@@ -204,9 +204,7 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
-
         form['housing-location-select'] = '1'
-
         form['period-select'] = 'AM'
         continueButton.click()
 
@@ -216,5 +214,24 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("James, John A-1-12 A1234AH")
         texts[1].contains("non paid act 1 17:10")
         texts[1].contains("** Release scheduled **")
+    }
+
+    def "Should indicate that an offender is going to be transferred"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: 'I select and display a location'
+        def today = new Date().format('YYYY-MM-dd')
+
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        form['housing-location-select'] = '1'
+        form['period-select'] = 'AM'
+        continueButton.click()
+
+        then: '*** Transfer scheduled *** should be visible in the other activities column'
+        at HouseblockPage
+        def texts = tableRows*.text()
+        texts[2].contains("Anderson, Arthur A-1-1 A1234AA")
+        texts[2].contains("** Transfer scheduled **")
     }
 }
