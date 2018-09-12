@@ -187,7 +187,7 @@ describe('Houseblock list controller', async () => {
         lastName: "HENRINEE",
         offenderNo: "A1234AA",
         startTime: switchDateFormat(moment()),
-        eventStatus: 'CAN'
+        eventStatus: 'CANC'
       },
       {
         firstName: "BYSJANHKUMAR",

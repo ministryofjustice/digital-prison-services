@@ -100,7 +100,7 @@ const getHouseblockListFactory = (elite2Api) => {
 function transferStatus (eventStatus) {
   switch (eventStatus) {
     case 'SCH': return { scheduled: true };
-    case 'CAN': return { cancelled: true };
+    case 'CANC': return { cancelled: true };
     case 'EXP': return { expired: true };
     case 'COMP': return { complete: true };
     default: return { unCheckedStatus: eventStatus };
