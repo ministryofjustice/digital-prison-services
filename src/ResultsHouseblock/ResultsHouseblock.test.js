@@ -18,7 +18,7 @@ const DONT_ATTEND_COLUMN = 6;
 
 const response = [
   {
-    releasedToday: true,
+    releaseScheduled: true,
     activity: {
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
@@ -400,7 +400,7 @@ describe('Offender results component Jira NN-843', () => {
   });
 
   it('should show released today when there are no other activity', () => {
-    const data = [{ releasedToday: true,
+    const data = [{ releaseScheduled: true,
       activity: {
         offenderNo: "A1234AA",
         firstName: "ARTHUR",
@@ -465,6 +465,111 @@ describe('Offender results component Jira NN-843', () => {
     expect(options.contains(<option value="--">All</option>)).toEqual(true);
     expect(options.contains(<option value="1">1</option>)).toEqual(true);
     expect(options.contains(<option value="2">2</option>)).toEqual(true);
+  });
+
+  it('should show transfer scheduled in the other activities column', () => {
+    const data = [{
+      releasedToday: false,
+      scheduledTransfers: [
+        { eventId: 100, eventDescription: 'Transfer scheduled', scheduled: true }
+      ],
+      activity: {
+        offenderNo: "A1234AA",
+        firstName: "ARTHUR",
+        lastName: "ANDERSON",
+        cellLocation: `${PRISON}-A-1-1`,
+        event: "PA",
+        eventId: 56,
+        eventType: "PRISON_ACT",
+        eventDescription: "Prison Activities",
+        comment: "Chapel",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }
+    }];
+    const aFewDaysAgo = moment().subtract(3, 'days');
+    const date = aFewDaysAgo.format('DD/MM/YYYY');
+
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      subLocations={subLocations}
+      houseblockData={data}
+      handlePrint={jest.fn()}
+      handleSubLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
+      getHouseblockList={jest.fn()}
+      date={date}
+      period={'ED'}
+      currentLocation={'BWing'}
+      agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
+      user={user}
+      update={jest.fn()}
+    />);
+
+    const tr = component.find('tr');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Transfer scheduled ** ');
+  });
+
+  it('should show multiple scheduled transfers along with status description', () => {
+    const data = [{
+      releasedToday: false,
+      scheduledTransfers: [
+        { eventId: 100, eventDescription: 'Transfer scheduled', scheduled: true },
+        { eventId: 101, eventDescription: 'Transfer scheduled', cancelled: true },
+        { eventId: 102, eventDescription: 'Transfer scheduled', complete: true },
+        { eventId: 103, eventDescription: 'Transfer scheduled', expired: true }
+      ],
+      activity: {
+        offenderNo: "A1234AA",
+        firstName: "ARTHUR",
+        lastName: "ANDERSON",
+        cellLocation: `${PRISON}-A-1-1`,
+        event: "PA",
+        eventId: 56,
+        eventType: "PRISON_ACT",
+        eventDescription: "Prison Activities",
+        comment: "Chapel",
+        startTime: "2017-10-15T18:00:00",
+        endTime: "2017-10-15T18:30:00"
+      }
+    }];
+    const aFewDaysAgo = moment().subtract(3, 'days');
+    const date = aFewDaysAgo.format('DD/MM/YYYY');
+
+    const component = shallow(<ResultsHouseblock
+      history={{ push: jest.fn() }}
+      subLocations={subLocations}
+      houseblockData={data}
+      handlePrint={jest.fn()}
+      handleSubLocationChange={jest.fn()}
+      handlePeriodChange={jest.fn()}
+      handleDateChange={jest.fn()}
+      handlePay={jest.fn()}
+      getHouseblockList={jest.fn()}
+      date={date}
+      period={'ED'}
+      currentLocation={'BWing'}
+      agencyId={PRISON}
+      showPaymentReasonModal={jest.fn()}
+      user={user}
+      update={jest.fn()}
+    />);
+
+    const transfers = component.find('.transfer');
+
+    expect(transfers.at(0).text()).toBe('** Transfer scheduled ** ');
+
+    expect(transfers.at(1).text()).toBe('** Transfer scheduled ** (cancelled)');
+    expect(transfers.at(1).find('span').last().getElement().props.className).toBe('cancelled');
+
+    expect(transfers.at(2).text()).toBe('** Transfer scheduled ** (complete)');
+    expect(transfers.at(2).find('span').last().getElement().props.className).toBe('complete');
+
+    expect(transfers.at(3).text()).toBe('** Transfer scheduled ** (expired)');
+    expect(transfers.at(3).find('span').last().getElement().props.className).toBe('cancelled');
   });
 
   //TODO Skipped for Part 1

@@ -146,6 +146,19 @@ class ResultsHouseblock extends Component {
       }
     };
 
+    const transfer = (event) => {
+      const expired = <span className="cancelled">(expired)</span>;
+      const cancelled = <span className="cancelled">(cancelled)</span>;
+      const complete = <span className="complete">(complete)</span>;
+
+      return (<li className="transfer" key={event.eventId}>
+        <span className="bold-font16">** {event.eventDescription} ** </span>
+        {event.expired && expired}
+        {event.complete && complete}
+        {event.cancelled && cancelled}
+      </li>);
+    };
+
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
       const anyActivity = row.activity || row.others[0];
       return (
@@ -158,10 +171,11 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters small-font">{row.activity &&
           `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
-          <td className="row-gutters small-font">{(row.others || row.releasedToday || row.atCourt) &&
+          <td className="row-gutters small-font">{(row.others || row.releaseScheduled || row.atCourt || row.scheduledTransfers) &&
             <ul>
-              {row.releasedToday && <li><span className="bold-font16">** Release scheduled **</span></li>}
+              {row.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
               {row.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
+              {row.scheduledTransfers && row.scheduledTransfers.map(transfer)}
               {row.others && row.others.map((event, index) => otherEvent(event, index))}
             </ul>
           }</td>
