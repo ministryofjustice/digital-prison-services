@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropdown from '../Dropdown';
-import { Link } from "react-router-dom";
+import { getHomeLink } from "../links";
 
 import './header.theme.scss';
 
@@ -11,13 +11,13 @@ class Header extends Component {
       <header className="page-header">
         <div className="header-content clickable">
           <div className="left-content">
-            <Link title="Home link" className="link" to="/whereaboutssearch" >
+            <a title="Home link" className="link" href={getHomeLink()}>
               <div className="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"/></div>
-            </Link>
-            <Link title="Home link" className="unstyled-link" to="/whereaboutssearch" >
+            </a>
+            <a title="Home link" className="unstyled-link" href={getHomeLink()}>
               <span className="logo-text">HMPPS</span>
               <span className="title">Activity Lists</span>
-            </Link>
+            </a>
           </div>
           <div className="right-content">
             <div className="right-menu">
