@@ -82,7 +82,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../build/static')));
 
-app.get('/terms', async (req, res) => { res.render('terms', { mailTo: config.app.mailTo, homeLink: '/' }); }); // TODO config.app.notmEndpointUrl?
+app.get('/terms', async (req, res) => { res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl }); });
 
 const healthApi = healthApiFactory(
   clientFactory({
