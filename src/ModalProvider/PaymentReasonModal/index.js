@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './index.scss';
-import { properCaseName } from "../../stringUtils";
+import { properCaseName } from "../../utils";
 
 class PaymentReasonModal extends Component {
   onReasonChange (event, reasons) {

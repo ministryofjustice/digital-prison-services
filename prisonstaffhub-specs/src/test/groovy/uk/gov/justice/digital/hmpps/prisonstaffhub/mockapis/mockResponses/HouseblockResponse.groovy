@@ -113,6 +113,40 @@ class HouseblockResponse {
             startTime       : new Date().format('YYYY-MM-dd')
     ]
 
+    static externalTransfer2 = [
+            eventDescription: "Transfer to high security prison",
+            eventStatus     : "COMP",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : new Date().format('YYYY-MM-dd')
+    ]
+
+    static externalTransfer3 = [
+            eventDescription: "Transfer to high security prison",
+            eventStatus     : "CANC",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : new Date().format('YYYY-MM-dd')
+    ]
+
+    static externalTransfer4 = [
+            eventDescription: "Transfer to high security prison",
+            eventStatus     : "EXP",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : new Date().format('YYYY-MM-dd')
+    ]
+
+
+
+
+
     static courtEvent1 = [
             event           : "19",
             eventDescription: "Court Appearance - Police Product Order",
@@ -157,6 +191,9 @@ class HouseblockResponse {
     ])
 
     static externalTransfersResponse = JsonOutput.toJson([
-            externalTransfer1
+            externalTransfer1,
+            externalTransfer2,
+            externalTransfer3,
+            externalTransfer4
     ])
 }

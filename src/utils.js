@@ -43,6 +43,28 @@ const getPrisonDescription = user => {
   return caseLoadOption ? caseLoadOption.description : user.activeCaseLoadId;
 };
 
+const stripAgencyPrefix = (location, agency) => {
+  const parts = location && location.split('-');
+  if (parts && parts.length > 0) {
+    const index = parts.findIndex(p => p === agency);
+    if (index >= 0) {
+      return location.substring(parts[index].length + 1, location.length);
+    }
+  }
+  return location;
+};
+
+const getEventDescription = (event) => {
+  if (event.eventType === 'PRISON_ACT' || event.event === 'PA') {
+    return event.comment;
+  }
+  if (event.comment) {
+    return event.eventDescription + ' - ' + event.comment;
+  }
+  return event.eventDescription;
+};
+
+
 module.exports = {
-  properCase, properCaseName, toFullName, getHoursMinutes, isToday, getPrisonDescription
+  properCase, properCaseName, toFullName, getHoursMinutes, isToday, getPrisonDescription, getEventDescription, stripAgencyPrefix
 };

@@ -1,0 +1,134 @@
+const moment = require('moment');
+const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+const elite2Api = elite2ApiFactory(null);
+const externalEvents = require('../shared/getExternalEventsMap');
+const { switchDateFormat } = require('../utils');
+
+
+describe('External events', () => {
+  const offenderWithData = 'A1234AA';
+  const offenderWithNoData = 'ABCDEEE';
+
+  beforeEach(() => {
+    elite2Api.getSentenceData = jest.fn();
+    elite2Api.getCourtEvents = jest.fn();
+    elite2Api.getExternalTransfers = jest.fn();
+  });
+
+  it('should extend the offender data with released, court flags and transfers', async () => {
+    const today = moment();
+
+    elite2Api.getSentenceData.mockImplementationOnce(() => createSentenceDataResponse());
+    elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse);
+    elite2Api.getExternalTransfers.mockImplementationOnce(createTransfersResponse);
+
+    const response = await externalEvents(elite2Api, {},
+      { agencyId: 'LEI', offenderNumbers: [offenderWithData, offenderWithNoData], formattedDate: switchDateFormat(today) });
+
+    expect(response.get(offenderWithData).releaseScheduled).toBe(true);
+    expect(response.get(offenderWithData).atCourt).toBe(true);
+    expect(response.get(offenderWithData).scheduledTransfers.length).toBe(1);
+
+    expect(response.get(offenderWithNoData).releaseScheduled).toBe(false);
+    expect(response.get(offenderWithNoData).atCourt).toBe(false);
+    expect(response.get(offenderWithNoData).scheduledTransfers.length).toBe(0);
+
+    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1);
+    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1);
+    expect(elite2Api.getSentenceData.mock.calls.length).toBe(1);
+  });
+
+  it('should return multiple scheduled transfers along with status descriptions', async () => {
+    const today = moment();
+
+    elite2Api.getExternalTransfers.mockImplementationOnce(() => createAllTransferTypes());
+
+    const response = await externalEvents(elite2Api, {},
+      { agencyId: 'LEI', offenderNumbers: [offenderWithData, offenderWithNoData], formattedDate: switchDateFormat(today) });
+
+    expect(response.get(offenderWithData).scheduledTransfers).toEqual([
+      {
+        eventDescription: 'Transfer scheduled',
+        scheduled: true
+      },
+      {
+        eventDescription: 'Transfer scheduled',
+        expired: true
+      },
+      {
+        eventDescription: 'Transfer scheduled',
+        cancelled: true
+      },
+      {
+        eventDescription: 'Transfer scheduled',
+        complete: true
+      }
+    ]);
+  });
+});
+
+function createSentenceDataResponse () {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      sentenceDetail: {
+        releaseDate: switchDateFormat(moment())
+      }
+    }
+  ];
+}
+function createCourtEventResponse () {
+  return [{
+    event: "19",
+    eventDescription: "Court Appearance - Police Product Order",
+    eventId: 349360018,
+    eventStatus: "SCH",
+    eventType: "COURT",
+    firstName: "BYSJANHKUMAR",
+    lastName: "HENRINEE",
+    offenderNo: "A1234AA",
+    startTime: "2018-09-05T15:00:00"
+  }];
+}
+
+function createTransfersResponse () {
+  return [{
+    firstName: "BYSJANHKUMAR",
+    lastName: "HENRINEE",
+    offenderNo: "A1234AA",
+    startTime: switchDateFormat(moment())
+  }];
+}
+
+function createAllTransferTypes () {
+  return [
+    {
+      firstName: "BYSJANHKUMAR",
+      lastName: "HENRINEE",
+      offenderNo: "A1234AA",
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'SCH'
+    },
+    {
+      firstName: "BYSJANHKUMAR",
+      lastName: "HENRINEE",
+      offenderNo: "A1234AA",
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'EXP'
+    },
+    {
+      firstName: "BYSJANHKUMAR",
+      lastName: "HENRINEE",
+      offenderNo: "A1234AA",
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'CANC'
+    },
+    {
+      firstName: "BYSJANHKUMAR",
+      lastName: "HENRINEE",
+      offenderNo: "A1234AA",
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'COMP'
+    }
+  ];
+}

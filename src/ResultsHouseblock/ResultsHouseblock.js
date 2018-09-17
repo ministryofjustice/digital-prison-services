@@ -4,11 +4,13 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, properCaseName, getPrisonDescription, isToday } from "../stringUtils";
+import { getHoursMinutes, properCaseName, getPrisonDescription, isToday, stripAgencyPrefix, getEventDescription } from "../utils";
 import DatePickerInput from "../DatePickerInput";
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { getOffenderLink } from "../links";
+import OtherActivitiesView from "../OtherActivityListView";
+
 
 class ResultsHouseblock extends Component {
   displayBack () {
@@ -39,16 +41,6 @@ class ResultsHouseblock extends Component {
         this.props.getHouseblockList(orderField, 'ASC');
       }}>{heading}</a> :
       <div>{heading} {triangleImage}</div>;
-  }
-
-  getDescription (event) {
-    if (event.eventType === 'PRISON_ACT') {
-      return event.comment;
-    }
-    if (event.comment) {
-      return event.eventDescription + ' - ' + event.comment;
-    }
-    return event.eventDescription;
   }
 
   render () {
@@ -123,44 +115,9 @@ class ResultsHouseblock extends Component {
 
     const readOnly = this.olderThan7Days();
 
-    const stripAgencyPrefix = (location, agency) => {
-      const parts = location && location.split('-');
-      if (parts && parts.length > 0) {
-        const index = parts.findIndex(p => p === agency);
-        if (index >= 0) {
-          return location.substring(parts[index].length + 1, location.length);
-        }
-      }
-      return location;
-    };
-
-    const otherEvent = (event, index) => {
-      const text = `${this.getDescription(event)} ${getHoursMinutes(event.startTime)}`;
-      const key = `${event.offenderNo}_others_${index}`;
-      const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC';
-
-      if (cancelled) {
-        return <li key={key}>{text} <span className="cancelled">(cancelled)</span></li>;
-      } else {
-        return <li key={key}>{text}</li>;
-      }
-    };
-
-    const transfer = (event) => {
-      const expired = <span className="cancelled">(expired)</span>;
-      const cancelled = <span className="cancelled">(cancelled)</span>;
-      const complete = <span className="complete">(complete)</span>;
-
-      return (<li className="transfer" key={event.eventId}>
-        <span className="bold-font16">** {event.eventDescription} ** </span>
-        {event.expired && expired}
-        {event.complete && complete}
-        {event.cancelled && cancelled}
-      </li>);
-    };
-
     const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
       const anyActivity = row.activity || row.others[0];
+
       return (
         <tr key={anyActivity.offenderNo} className="row-gutters">
           <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(anyActivity.offenderNo)}
@@ -169,16 +126,11 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{anyActivity.offenderNo}</td>
           <td className="row-gutters small-font">{row.activity &&
-          `${this.getDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
+          `${getEventDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
           }</td>
-          <td className="row-gutters small-font">{(row.others || row.releaseScheduled || row.atCourt || row.scheduledTransfers) &&
-            <ul>
-              {row.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
-              {row.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
-              {row.scheduledTransfers && row.scheduledTransfers.map(transfer)}
-              {row.others && row.others.map((event, index) => otherEvent(event, index))}
-            </ul>
-          }</td>
+          <td className="row-gutters small-font">
+            <OtherActivitiesView offenderMainEvent={row} />
+          </td>
           <td className="no-padding checkbox-column no-display">
             <div className="multiple-choice whereaboutsCheckbox">
               <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
