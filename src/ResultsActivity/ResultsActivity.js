@@ -5,12 +5,13 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, isToday, properCaseName } from "../stringUtils";
+import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from "../utils";
 import DatePickerInput from "../DatePickerInput";
-import { getPrisonDescription } from '../stringUtils';
+import { getPrisonDescription } from '../utils';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { getOffenderLink } from "../links";
+import OtherActivitiesView from "../OtherActivityListView";
 
 class ResultsActivity extends Component {
   static displayBack () {
@@ -29,31 +30,9 @@ class ResultsActivity extends Component {
     return days > 7;
   }
 
-  static getDescription (event) {
-    if (event.event === 'PA') {
-      return event.comment;
-    }
-    if (event.comment) {
-      return event.eventDescription + ' - ' + event.comment;
-    }
-    return event.eventDescription;
-  }
-
   static eventCancelled (event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC';
   }
-
-  static otherEvent (event, index) {
-    const text = `${ResultsActivity.getDescription(event)} ${getHoursMinutes(event.startTime)}`;
-    const key = `${event.offenderNo}_${index}`;
-
-    if (ResultsActivity.eventCancelled(event)) {
-      return <li key={key}>{text} <span className="cancelled">(cancelled)</span></li>;
-    } else {
-      return <li key={key}>{text}</li>;
-    }
-  }
-
 
   render () {
     const dateSelect = (
@@ -101,23 +80,11 @@ class ResultsActivity extends Component {
 
     //Disabled until whereabouts v2
     //const readOnly = this.olderThan7Days(this.props.date);
-
-    const stripAgencyPrefix = (location, agency) => {
-      const parts = location && location.split('-');
-      if (parts && parts.length > 0) {
-        const index = parts.findIndex(p => p === agency);
-        if (index >= 0) {
-          return location.substring(parts[index].length + 1, location.length);
-        }
-      }
-      return location;
-    };
-
     const renderMainEvent = event => {
       if (ResultsActivity.eventCancelled(event)) {
-        return (<td className="row-gutters">{ResultsActivity.getDescription(event)}<span className="cancelled"> (cancelled)</span></td>);
+        return (<td className="row-gutters">{getEventDescription(event)}<span className="cancelled"> (cancelled)</span></td>);
       } else {
-        return (<td className="row-gutters">{ResultsActivity.getDescription(event)}</td>);
+        return (<td className="row-gutters">{getEventDescription(event)}</td>);
       }
     };
 
@@ -130,12 +97,11 @@ class ResultsActivity extends Component {
           <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, this.props.agencyId)}</td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
           {renderMainEvent(mainEvent)}
-          <td className="row-gutters small-font last-text-column-padding">{(mainEvent.eventsElsewhere || mainEvent.releaseScheduled || mainEvent.atCourt) &&
-            <ul>
-              {mainEvent.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
-              {mainEvent.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
-              {mainEvent.eventsElsewhere && mainEvent.eventsElsewhere.map((event, index) => ResultsActivity.otherEvent(event, index))}
-            </ul>
+          <td className="row-gutters small-font last-text-column-padding">{
+            <OtherActivitiesView offenderMainEvent={{
+              ...mainEvent,
+              others: mainEvent.eventsElsewhere
+            }} />
           }</td>
           <td className="no-padding checkbox-column"><div className="multiple-choice whereaboutsCheckbox">
             {/*Disable pay/other for Part 1*/}

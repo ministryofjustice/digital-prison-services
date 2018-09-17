@@ -3,6 +3,7 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { ResultsHouseblock } from "./ResultsHouseblock";
 import moment from 'moment';
+import OtherActivitiesView from "../OtherActivityListView";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -157,10 +158,10 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(1).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-1');
     expect(tr.at(1).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel 18:00');
 
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Release scheduled **');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(1).text()).toEqual('Visits - Official Visit 11:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(2).text()).toEqual('The gym, appointment 17:00');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(3).text()).toEqual('Medical - Dentist - Appt details 11:40');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual('** Release scheduled **');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(1).text()).toEqual('Visits - Official Visit 11:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(2).text()).toEqual('The gym, appointment 17:00');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(3).text()).toEqual('Medical - Dentist - Appt details 11:40');
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
@@ -168,12 +169,12 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(2).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael');
     expect(tr.at(2).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-2');
     expect(tr.at(2).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Act 18:00');
-    expect(tr.at(2).find('td').at(OTHER_COLUMN).find('li').length).toEqual(0);
+    expect(tr.at(2).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').length).toEqual(0);
 
     expect(tr.at(3).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred');
     expect(tr.at(3).find('td').at(LOCATION_COLUMN).text()).toEqual('A-1-3');
     expect(tr.at(3).find('td').at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00');
-    expect(tr.at(3).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
+    expect(tr.at(3).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual('Visits - Family Visit 11:11 (cancelled)');
   });
 
   it('should render empty results list correctly', async () => {
@@ -437,7 +438,7 @@ describe('Offender results component Jira NN-843', () => {
     />);
 
     const tr = component.find('tr');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Release scheduled **');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual('** Release scheduled **');
   });
 
   it('Should render sub-locations in drop-down', () => {
@@ -510,7 +511,7 @@ describe('Offender results component Jira NN-843', () => {
     />);
 
     const tr = component.find('tr');
-    expect(tr.at(1).find('td').at(OTHER_COLUMN).find('li').at(0).text()).toEqual('** Transfer scheduled ** ');
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual('** Transfer scheduled ** ');
   });
 
   it('should show multiple scheduled transfers along with status description', () => {
@@ -558,7 +559,7 @@ describe('Offender results component Jira NN-843', () => {
       update={jest.fn()}
     />);
 
-    const transfers = component.find('.transfer');
+    const transfers = component.find(OtherActivitiesView).dive().find('.transfer');
 
     expect(transfers.at(0).text()).toBe('** Transfer scheduled ** ');
 

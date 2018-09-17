@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getPrisonDescription, toFullName } from '../stringUtils';
+import { getPrisonDescription, toFullName } from '../utils';
 
 import './theme.scss';
 

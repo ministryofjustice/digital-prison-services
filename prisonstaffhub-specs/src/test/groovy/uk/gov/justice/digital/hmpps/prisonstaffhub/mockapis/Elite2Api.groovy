@@ -329,6 +329,7 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
         stubCourtEvents(offenderNumbers, date)
+        stubExternalTransfers(offenderNumbers, date)
     }
 
     def stubSentenceData(List offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
