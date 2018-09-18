@@ -8,6 +8,7 @@ class Dropdown extends Component {
   render () {
     const { user, switchCaseLoad, history, menuOpen, setMenuOpen } = this.props;
     const caseLoadDesc = getPrisonDescription(user);
+    const options = user.caseLoadOptions.filter(x => x.caseLoadId !== user.activeCaseLoadId);
 
     return (
       <div className="menu-wrapper" >
@@ -18,7 +19,7 @@ class Dropdown extends Component {
         <div className="dropdown-menu">
           { menuOpen &&
           <div>
-            {user.caseLoadOptions.map((option) =>
+            {options.map((option) =>
               (<a className="dropdown-menu-option" id={`menu-option-${option.caseLoadId}`} key={option.caseLoadId} onClick={() => {
                 setMenuOpen(false);
                 switchCaseLoad(option.caseLoadId);
@@ -39,10 +40,10 @@ class Dropdown extends Component {
 
 Dropdown.propTypes = {
   user: PropTypes.object,
-  switchCaseLoad: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
   menuOpen: PropTypes.bool,
-  setMenuOpen: PropTypes.func.isRequired
+  setMenuOpen: PropTypes.func.isRequired,
+  switchCaseLoad: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 Dropdown.defaultProps = {
