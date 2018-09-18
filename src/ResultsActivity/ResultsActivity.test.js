@@ -30,6 +30,7 @@ const response = [
     endTime: "2017-10-15T18:30:00",
     releaseScheduled: true,
     scheduledTransfers: [],
+    courtEvents: [],
     eventsElsewhere: [{
       offenderNo: "A1234AA",
       firstName: "ARTHUR",
@@ -90,7 +91,11 @@ const response = [
     ]
   },
   {
-    atCourt: true,
+    courtEvents: [
+      {
+        eventDescription: 'Court visit scheduled'
+      }
+    ],
     offenderNo: "A1234AD",
     firstName: "BUGS",
     lastName: "BUNNY",
@@ -177,7 +182,7 @@ describe('Offender activity list results component', () => {
 
     expect(tr.at(4).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Bunny, Bugs');
     expect(tr.at(4).find('td').at(ACTIVITY_COLUMN).text()).toEqual('Carrot Sculpture');
-    expect(tr.at(4).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual('** Court visit scheduled **');
+    expect(tr.at(4).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual('** Court visit scheduled ** ');
   });
 
   it('should render empty results list correctly', async () => {

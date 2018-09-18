@@ -135,33 +135,6 @@ describe('Houseblock list controller', async () => {
     expect(elite2Api.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers));
   });
 
-  it('should extend the offender data with released, court flags and transfers', async () => {
-    const today = moment();
-
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid());
-    elite2Api.getSentenceData.mockImplementationOnce(() => ([
-      {
-        offenderNo: 'A1234AA',
-        sentenceDetail: {
-          releaseDate: switchDateFormat(today)
-        }
-      }
-    ]));
-
-    elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse);
-    elite2Api.getExternalTransfers.mockImplementationOnce(createTransfersResponse);
-
-    const response = await houseblockList({}, 'LEI', 'GROUP1', today, 'AM');
-
-    expect(response[0].releaseScheduled).toBe(true);
-    expect(response[0].atCourt).toBe(true);
-    expect(response[0].scheduledTransfers.length).toBe(1);
-
-    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1);
-    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1);
-    expect(elite2Api.getSentenceData.mock.calls.length).toBe(1);
-  });
-
   it('should return multiple scheduled transfers along with status descriptions', async () => {
     const today = moment();
 
@@ -370,27 +343,4 @@ function createMultipleUnpaid () {
       startTime: "2017-10-15T08:30:00"
     }
   ];
-}
-
-function createCourtEventResponse () {
-  return [{
-    event: "19",
-    eventDescription: "Court Appearance - Police Product Order",
-    eventId: 349360018,
-    eventStatus: "SCH",
-    eventType: "COURT",
-    firstName: "BYSJANHKUMAR",
-    lastName: "HENRINEE",
-    offenderNo: "A1234AA",
-    startTime: "2018-09-05T15:00:00"
-  }];
-}
-
-function createTransfersResponse () {
-  return [{
-    firstName: "BYSJANHKUMAR",
-    lastName: "HENRINEE",
-    offenderNo: "A1234AA",
-    startTime: switchDateFormat(moment())
-  }];
 }

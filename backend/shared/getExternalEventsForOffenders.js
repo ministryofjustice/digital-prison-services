@@ -1,5 +1,3 @@
-const { isToday } = require('../utils');
-
 module.exports = async (elite2Api, context, { offenderNumbers, formattedDate, agencyId }) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return [];
 
@@ -21,7 +19,7 @@ module.exports = async (elite2Api, context, { offenderNumbers, formattedDate, ag
 const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, formattedDate }) => {
   return Promise.all([
     elite2Api.getSentenceData(context, offenderNumbers),
-    isToday(formattedDate) ? elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }) : [],
+    elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }),
     elite2Api.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers })
   ]);
 };
@@ -30,7 +28,7 @@ const reduceToMap = (offenderNumbers, formattedDate, releaseScheduleData, courtE
   offenderNumbers.reduce((map, offenderNumber) => {
     const offenderData = {
       releaseScheduled: releaseScheduled(releaseScheduleData, offenderNumber, formattedDate),
-      atCourt: atCourt(courtEventData, offenderNumber),
+      courtEvents: courtEvents(courtEventData, offenderNumber),
       scheduledTransfers: scheduledTransfers(transferData, offenderNumber)
     };
     return map.set(offenderNumber, offenderData);
@@ -42,9 +40,14 @@ const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) => {
         release.sentenceDetail.releaseDate === formattedDate)[0]);
 };
 
-const atCourt = (courtEvents, offenderNo) => {
-  return Boolean(courtEvents && courtEvents.length && courtEvents
-    .filter(courtEvent => courtEvent.offenderNo === offenderNo)[0]);
+const courtEvents = (courtEvents, offenderNo) => {
+  return courtEvents && courtEvents.length && courtEvents
+    .filter(courtEvent => courtEvent.offenderNo === offenderNo)
+    .map(event => ({
+      eventId: event.eventId,
+      eventDescription: 'Court visit scheduled',
+      ...courtEventStatus(event.eventStatus)
+    })) || [];
 };
 
 const scheduledTransfers = (transfers, offenderNo) => {
@@ -64,6 +67,19 @@ const transferStatus = (eventStatus) => {
     case 'EXP': return { expired: true };
     case 'COMP': return { complete: true };
     default: return { unCheckedStatus: eventStatus };
+  }
+};
+
+const courtEventStatus = (eventStatus) => {
+  switch (eventStatus) {
+    case 'SCH':
+      return { scheduled: true };
+    case 'EXP':
+      return { expired: true };
+    case 'COMP':
+      return { complete: true };
+    default:
+      return { unCheckedStatus: eventStatus };
   }
 };
 

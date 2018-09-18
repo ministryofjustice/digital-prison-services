@@ -159,6 +159,30 @@ class HouseblockResponse {
             startTime       : "2018-09-05T15:00:00"
    ]
 
+    static courtEvent2 = [
+            event           : "19",
+            eventDescription: "Court Appearance - Police Product Order",
+            eventId         : 349360018,
+            eventStatus     : "COMP",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : "2018-09-05T15:00:00"
+    ]
+
+    static courtEvent3 = [
+            event           : "19",
+            eventDescription: "Court Appearance - Police Product Order",
+            eventId         : 349360018,
+            eventStatus     : "EXP",
+            eventType       : "COURT",
+            firstName       : "EAMONN",
+            lastName        : "ANDREWS",
+            offenderNo      : "A1234AA",
+            startTime       : "2018-09-05T15:00:00"
+    ]
+
     static responseCellOrder = JsonOutput.toJson([
             response1,
             response2,
@@ -188,6 +212,12 @@ class HouseblockResponse {
     ])
     static courtEventsResponse = JsonOutput.toJson([
          courtEvent1,
+    ])
+
+    static courtEventsWithDifferentStatuesResponse = JsonOutput.toJson([
+            courtEvent1,
+            courtEvent2,
+            courtEvent3
     ])
 
     static externalTransfersResponse = JsonOutput.toJson([
