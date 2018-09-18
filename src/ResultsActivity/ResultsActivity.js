@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from "../utils";
 import DatePickerInput from "../DatePickerInput";
-import { getPrisonDescription } from '../utils';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { getOffenderLink } from "../links";
@@ -117,16 +116,9 @@ class ResultsActivity extends Component {
       );
     });
 
-    const date = this.props.date === 'Today' ?
-      moment().format('dddd Do MMMM') :
-      moment(this.props.date, "DD/MM/YYYY").format('dddd Do MMMM');
-
-    return (<div className="pure-u-md-11-12 results-activity">
+    return (<div className="results-activity pure-u-md-11-12">
       {ResultsActivity.displayBack()}
-      <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
-      <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
-      <div className="whereabouts-date print-only">{date} ({this.props.period})</div>
-      <hr className="print-only" />
+      <h1 className="heading-large whereabouts-title no-print">{this.getActivityName()}</h1>
       <form className="no-print">
         <div>
           {dateSelect}
