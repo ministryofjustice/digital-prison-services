@@ -4,8 +4,8 @@ import { getHoursMinutes, getEventDescription } from "../utils";
 export default ({ offenderMainEvent }) => shouldShowOtherActivities(offenderMainEvent) && (
   <ul>
     {offenderMainEvent.releaseScheduled && <li><span className="bold-font16">** Release scheduled **</span></li>}
-    {offenderMainEvent.atCourt && <li><span className="bold-font16">** Court visit scheduled **</span></li>}
-    {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(transfer)}
+    {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(event)}
+    {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(event)}
     {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => otherEvent(event, index))}
   </ul>
 );
@@ -14,7 +14,7 @@ const shouldShowOtherActivities = (offenderMainEvent) =>
   Boolean(offenderMainEvent &&
         (offenderMainEvent.others ||
             offenderMainEvent.releaseScheduled ||
-            offenderMainEvent.atCourt ||
+            offenderMainEvent.courtEvents ||
             offenderMainEvent.scheduledTransfers));
 
 const otherEvent = (event, index) => {
@@ -28,7 +28,7 @@ const otherEvent = (event, index) => {
     return <li key={key}>{text}</li>;
   }
 };
-const transfer = (event) => {
+const event = (event) => {
   const expired = <span className="cancelled">(expired)</span>;
   const cancelled = <span className="cancelled">(cancelled)</span>;
   const complete = <span className="complete">(complete)</span>;

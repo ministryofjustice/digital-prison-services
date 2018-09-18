@@ -33,7 +33,7 @@ describe('External events', () => {
       { agencyId: 'LEI', offenderNumbers: [offenderWithData, offenderWithNoData], formattedDate: switchDateFormat(today) });
 
     expect(response.get(offenderWithData).releaseScheduled).toBe(false);
-    expect(response.get(offenderWithData).atCourt).toBe(false);
+    expect(response.get(offenderWithData).courtEvents.length).toBe(0);
     expect(response.get(offenderWithData).scheduledTransfers.length).toBe(0);
 
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1);
@@ -86,11 +86,11 @@ describe('External events', () => {
       { agencyId: 'LEI', offenderNumbers: [offenderWithData, offenderWithNoData], formattedDate: switchDateFormat(today) });
 
     expect(response.get(offenderWithData).releaseScheduled).toBe(true);
-    expect(response.get(offenderWithData).atCourt).toBe(true);
+    expect(response.get(offenderWithData).courtEvents.length).toBe(1);
     expect(response.get(offenderWithData).scheduledTransfers.length).toBe(1);
 
     expect(response.get(offenderWithNoData).releaseScheduled).toBe(false);
-    expect(response.get(offenderWithNoData).atCourt).toBe(false);
+    expect(response.get(offenderWithNoData).courtEvents.length).toBe(0);
     expect(response.get(offenderWithNoData).scheduledTransfers.length).toBe(0);
 
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1);

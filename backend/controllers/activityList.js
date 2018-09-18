@@ -44,12 +44,12 @@ const getActivityListFactory = (elite2Api) => {
 
       const {
         releaseScheduled,
-        atCourt,
+        courtEvents,
         scheduledTransfers
       } = externalEventsForOffenders.get(event.offenderNo);
 
       event.releaseScheduled = releaseScheduled;
-      event.atCourt = atCourt;
+      event.courtEvents = courtEvents;
       event.scheduledTransfers = scheduledTransfers;
     });
 

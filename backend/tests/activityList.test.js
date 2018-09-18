@@ -1,8 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
-const moment = require('moment');
 const elite2Api = {};
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api).getActivityList;
-const { switchDateFormat } = require('../utils');
 
 beforeEach(() => {
   elite2Api.getActivityList = jest.fn();
@@ -85,20 +83,20 @@ describe('Activity list controller', async () => {
       {
         offenderNo: 'A',
         releaseScheduled: false,
-        atCourt: false,
+        courtEvents: [],
         scheduledTransfers: [],
         eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }]
       },
       {
         releaseScheduled: false,
-        atCourt: false,
+        courtEvents: [],
         scheduledTransfers: [],
         offenderNo: 'B',
         eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }]
       },
       {
         releaseScheduled: false,
-        atCourt: false,
+        courtEvents: [],
         scheduledTransfers: [],
         offenderNo: 'C',
         eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }]
@@ -109,8 +107,10 @@ describe('Activity list controller', async () => {
   it('Should exclude visits, appointments and activities at the location from eventsElsewhere', async () => {
     elite2Api.getActivityList.mockImplementation((context, { usage }) => {
       switch (usage) {
-        case 'PROG': return [{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }];
-        default: return [];
+        case 'PROG':
+          return [{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }];
+        default:
+          return [];
       }
     });
 
@@ -126,14 +126,14 @@ describe('Activity list controller', async () => {
       {
         offenderNo: 'A',
         eventsElsewhere: [],
-        atCourt: false,
+        courtEvents: [],
         releaseScheduled: false,
         scheduledTransfers: []
       },
       {
         offenderNo: 'B',
         eventsElsewhere: [{ offenderNo: 'B', locationId: 2 }],
-        atCourt: false,
+        courtEvents: [],
         releaseScheduled: false,
         scheduledTransfers: []
 
@@ -141,7 +141,7 @@ describe('Activity list controller', async () => {
       {
         offenderNo: 'C',
         eventsElsewhere: [{ offenderNo: 'C', locationId: 3 }],
-        atCourt: false,
+        courtEvents: [],
         releaseScheduled: false,
         scheduledTransfers: []
       }
@@ -158,7 +158,12 @@ describe('Activity list controller', async () => {
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM');
 
-    const criteria = { agencyId: 'LEI', date: '2018-11-23', timeSlot: 'PM', offenderNumbers: ["A1234AC", "A1234AA", "A1234AB"] };
+    const criteria = {
+      agencyId: 'LEI',
+      date: '2018-11-23',
+      timeSlot: 'PM',
+      offenderNumbers: ["A1234AC", "A1234AA", "A1234AB"]
+    };
 
     expect(elite2Api.getVisits.mock.calls[0][1]).toEqual(criteria);
     expect(elite2Api.getAppointments.mock.calls[0][1]).toEqual(criteria);
@@ -175,7 +180,8 @@ describe('Activity list controller', async () => {
         comment: 'comment11',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
-        atCourt: false,
+        courtEvents: [],
+
         releaseScheduled: false,
         scheduledTransfers: [],
 
@@ -214,7 +220,8 @@ describe('Activity list controller', async () => {
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
         eventsElsewhere: [],
-        atCourt: false,
+        courtEvents: [],
+
         releaseScheduled: false,
         scheduledTransfers: []
       },
@@ -228,7 +235,8 @@ describe('Activity list controller', async () => {
         eventDescription: "Chapel",
         startTime: "2017-10-15T18:00:00",
         endTime: "2017-10-15T18:30:00",
-        atCourt: false,
+        courtEvents: [],
+
         releaseScheduled: false,
         scheduledTransfers: [],
         eventsElsewhere: [
@@ -308,44 +316,6 @@ describe('Activity list controller', async () => {
       '2017-10-15T14:00:01',
       undefined
     ]);
-  });
-
-  it('should extend the offender data with released and court flags', async () => {
-    const today = moment();
-
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-      switch (usage) {
-        case 'PROG': return [
-          { offenderNo: 'A', comment: 'aa', lastName: 'b' },
-          { offenderNo: 'B', comment: 'ava', lastName: 'bv' }
-        ];
-        default: return [];
-      }
-    });
-
-    elite2Api.getVisits.mockReturnValue([]);
-    elite2Api.getAppointments.mockReturnValue([]);
-    elite2Api.getActivities.mockReturnValue([]);
-
-    elite2Api.getSentenceData.mockImplementationOnce(() => ([
-      {
-        offenderNo: 'A',
-        sentenceDetail: {
-          releaseDate: switchDateFormat(today)
-        }
-      }
-    ]));
-
-    elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse);
-
-    const result = await activityList({}, 'LEI', 1, today, 'PM');
-
-    expect(result[0].releaseScheduled).toBe(true);
-    expect(result[1].releaseScheduled).toBe(false);
-
-    expect(result[0].atCourt).toBe(true);
-    expect(result[1].atCourt).toBe(false);
-    expect(elite2Api.getCourtEvents).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -436,18 +406,4 @@ function createVisitsResponse () {
       endTime: "2017-10-15T18:30:00"
     }
   ];
-}
-
-function createCourtEventResponse () {
-  return [{
-    event: "19",
-    eventDescription: "Court Appearance - Police Product Order",
-    eventId: 349360018,
-    eventStatus: "SCH",
-    eventType: "COURT",
-    firstName: "BYSJANHKUMAR",
-    lastName: "HENRINEE",
-    offenderNo: "A",
-    startTime: "2018-09-05T15:00:00"
-  }];
 }

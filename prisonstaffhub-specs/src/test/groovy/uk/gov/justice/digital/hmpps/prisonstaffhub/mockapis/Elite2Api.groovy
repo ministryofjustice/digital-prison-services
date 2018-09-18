@@ -254,6 +254,31 @@ class Elite2Api extends WireMockRule {
         stubExternalTransfers(offenderNumbers, date)
     }
 
+    void stubGetHouseBlockListWithAllCourtEvents(Caseload caseload, String groupName, String timeSlot, String date) {
+        this.stubFor(
+                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.responseNoActivities)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
+        def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseNoActivities)
+        stubSentenceData(offenderNumbers, date, true)
+        stubExternalTransfers(offenderNumbers, date, true)
+
+        this.stubFor(
+                post("/api/schedules/LEI/courtEvents?date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.courtEventsWithDifferentStatuesResponse)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+
+    }
+
     void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/PROG?date=${date}&timeSlot=${timeSlot}")
@@ -328,7 +353,14 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
-        stubCourtEvents(offenderNumbers, date)
+        this.stubFor(
+                post("/api/schedules/LEI/courtEvents?date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(HouseblockResponse.courtEventsWithDifferentStatuesResponse)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
         stubExternalTransfers(offenderNumbers, date)
     }
 

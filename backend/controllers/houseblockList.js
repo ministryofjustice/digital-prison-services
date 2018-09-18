@@ -66,12 +66,12 @@ const getHouseblockListFactory = (elite2Api) => {
       }
       const {
         releaseScheduled,
-        atCourt,
+        courtEvents,
         scheduledTransfers
       } = externalEventsForOffenders.get(event.offenderNo);
 
       currentRow.releaseScheduled = releaseScheduled;
-      currentRow.atCourt = atCourt;
+      currentRow.courtEvents = courtEvents;
       currentRow.scheduledTransfers = scheduledTransfers;
     }
     return rows;

@@ -115,7 +115,7 @@ class HouseblockSpecification extends GebReportingSpec {
         def row1 = tableRows[1].find('td')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         row1[3].text() == 'Woodwork 17:00'
-        row1[4].find('li')*.text() == [ 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
+        row1[4].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
 
         def row2 = tableRows[2].find('td')
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
@@ -196,7 +196,7 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("hair cut - non paid act 2 19:10")
     }
 
-    def "Should indicate that an offender is going to be released today"() {
+    def "should indicate that an offender is going to be released today"() {
         given: 'I am on the whereabouts search page'
         fixture.toSearch()
 
@@ -216,7 +216,7 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("** Release scheduled **")
     }
 
-    def "Should indicate that an offender is going to be transferred"() {
+    def "should indicate that an offender is going to be transferred"() {
         given: 'I am on the whereabouts search page'
         fixture.toSearch()
 
@@ -233,5 +233,27 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         texts[2].contains("Anderson, Arthur A-1-1 A1234AA")
         texts[2].contains("** Transfer scheduled **")
+    }
+
+    def "should show all court events with the relevant status descriptions"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: 'I select and display a location'
+        def today = new Date().format('YYYY-MM-dd')
+
+        elite2api.stubGetHouseBlockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        form['housing-location-select'] = '1'
+        form['period-select'] = 'AM'
+        continueButton.click()
+
+        then: 'I should see three court events in the other activities column'
+        at HouseblockPage
+        def texts = tableRows*.text()
+        texts[2].contains("Anderson, Arthur A-1-1 A1234AA")
+        texts[2].contains("** Court visit scheduled **")
+        texts[2].contains("** Court visit scheduled ** (complete)")
+        texts[2].contains("** Court visit scheduled ** (expired)")
+
     }
 }
