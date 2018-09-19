@@ -67,7 +67,7 @@ describe('App component', () => {
     />);
     const appInstance = component.instance();
     appInstance.displayAlertAndLogout = jest.fn();
-    appInstance.handleError({ response: { status: 401, data: { message: "Session expired" } } });
+    appInstance.handleError({ response: { status: 401, data: { message: "Session expired", reason: "session-expired" } } });
     expect(component.instance().displayAlertAndLogout).toBeCalledWith('Your session has expired, please click OK to be redirected back to the login page');
 
     appInstance.displayAlertAndLogout = jest.fn();
