@@ -97,6 +97,10 @@ table tr:nth-child(even){
   width: 70%;
 }
 
+.width50 {
+  width: 50%;
+}
+
 .width5 {
   width: 5%;
 }
@@ -175,6 +179,11 @@ table tr:nth-child(even){
 
 .bold {
   font-weight: bold;
+}
+
+fieldset {
+  //Not a gov.uk colour
+  background: #EEEFF0;
 }
 
 .blueButton {

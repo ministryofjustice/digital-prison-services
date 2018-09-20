@@ -56,7 +56,7 @@ class ResultsHouseblock extends Component {
     };
 
     const locationSelect = (
-      <div className="pure-u-md-4-12">
+      <div className="pure-u-md-1-3">
         <label className="form-label" htmlFor="housing-location-select">Select sub-location</label>
 
         <select
@@ -68,7 +68,7 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const dateSelect = (
-      <div className="pure-u-md-2-12 padding-left padding-right">
+      <div className="pure-u-md-1-6 padding-left padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
           handleDateChange={this.props.handleDateChange}
@@ -78,7 +78,7 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const periodSelect = (
-      <div className="pure-u-md-2-12">
+      <div className="pure-u-md-1-6">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
         <select

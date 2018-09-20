@@ -35,7 +35,7 @@ class ResultsActivity extends Component {
 
   render () {
     const dateSelect = (
-      <div className="pure-u-md-2-12 padding-right">
+      <div className="pure-u-md-1-6 padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
           handleDateChange={this.props.handleDateChange}
@@ -45,7 +45,7 @@ class ResultsActivity extends Component {
       </div>);
 
     const periodSelect = (
-      <div className="pure-u-md-2-12">
+      <div className="pure-u-md-1-6">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
         <select id="period-select" name="period-select" className="form-control" value={this.props.period} onChange={this.props.handlePeriodChange}>
