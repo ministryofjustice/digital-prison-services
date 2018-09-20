@@ -4,7 +4,7 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { getHoursMinutes, properCaseName, getPrisonDescription, isToday, stripAgencyPrefix, getEventDescription } from "../utils";
+import { getHoursMinutes, properCaseName, isToday, stripAgencyPrefix, getEventDescription } from "../utils";
 import DatePickerInput from "../DatePickerInput";
 import moment from 'moment';
 import { Link } from "react-router-dom";
@@ -56,7 +56,7 @@ class ResultsHouseblock extends Component {
     };
 
     const locationSelect = (
-      <div className="pure-u-md-4-12">
+      <div className="pure-u-md-1-3">
         <label className="form-label" htmlFor="housing-location-select">Select sub-location</label>
 
         <select
@@ -68,7 +68,7 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const dateSelect = (
-      <div className="pure-u-md-2-12 padding-left padding-right">
+      <div className="pure-u-md-1-6 padding-left padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
           handleDateChange={this.props.handleDateChange}
@@ -78,7 +78,7 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const periodSelect = (
-      <div className="pure-u-md-2-12">
+      <div className="pure-u-md-1-6">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
         <select
@@ -160,16 +160,9 @@ class ResultsHouseblock extends Component {
       );
     });
 
-    const date = this.props.date === 'Today' ?
-      moment().format('dddd Do MMMM') :
-      moment(this.props.date, "DD/MM/YYYY").format('dddd Do MMMM');
-
-    return (<div className="pure-u-md-11-12">
+    return (<div className="results-houseblock pure-u-md-11-12">
       {this.displayBack()}
-      <h1 className="heading-large whereabouts-title">{this.props.currentLocation}</h1>
-      <div className="prison-title print-only">{getPrisonDescription(this.props.user)}</div>
-      <div className="whereabouts-date print-only">{date} ({this.props.period}) </div>
-      <hr className="print-only" />
+      <h1 className="heading-large whereabouts-title no-print">{this.props.currentLocation}</h1>
       <form className="no-print">
         <div>
           {locationSelect}

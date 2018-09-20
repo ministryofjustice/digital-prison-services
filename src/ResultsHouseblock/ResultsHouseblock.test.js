@@ -117,7 +117,6 @@ describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days');
     const date = aFewDaysAgo.format('DD/MM/YYYY');
-    const longDateFormat = aFewDaysAgo.format('dddd Do MMMM');
 
     const component = shallow(<ResultsHouseblock
       agencyId={PRISON}
@@ -140,8 +139,6 @@ describe('Offender results component Jira NN-843', () => {
       update={jest.fn()}
     />);
     expect(component.find('.whereabouts-title').text()).toEqual('1');
-    expect(component.find('.prison-title').text()).toEqual('Shrewsbury');
-    expect(component.find('.whereabouts-date').text()).toEqual(longDateFormat + ' (ED) '); //'Tuesday 12th June'
 
     const housingLocationSelect = component.find('#housing-location-select');
     expect(housingLocationSelect.some('[value="--"]')).toEqual(true);

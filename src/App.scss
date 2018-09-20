@@ -64,7 +64,7 @@ body {
 table th, table td, table .form-control {
   font-size: 16px;
   @media print {
-    font-size: 10px;
+    font-size: 8px;
   }
 }
 
@@ -95,6 +95,10 @@ table tr:nth-child(even){
 
 .width70 {
   width: 70%;
+}
+
+.width50 {
+  width: 50%;
 }
 
 .width5 {
@@ -177,6 +181,11 @@ table tr:nth-child(even){
   font-weight: bold;
 }
 
+fieldset {
+  //Not a gov.uk colour
+  background: #EEEFF0;
+}
+
 .blueButton {
   @include button($govuk-blue);
   min-width: 7em;
@@ -205,7 +214,7 @@ a.link:hover {
 tr a.link {
   font-size: 16px;
   @media print {
-    font-size: 10px;
+    font-size: 8px;
     font-weight: normal;
     color: black;
     text-decoration: none;
@@ -232,6 +241,13 @@ tr a.link:visited {
   font-weight: 700;
 }
 
+/* Removes headers and footers for printing purposes */
+@media print {
+  @page {
+    margin: 0;
+  }
 
-
-
+  body {
+    margin: 10px 0;
+  }
+}
