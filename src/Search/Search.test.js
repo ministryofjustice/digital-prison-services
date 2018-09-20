@@ -56,7 +56,8 @@ describe('Search component', () => {
       period={'ED'}
       currentLocation={'BWing'}/>);
 
-    component.find('#continue-button').simulate('click');
-    expect(handleSearch).toHaveBeenCalled();
+    component.find('#continue-housing').simulate('click');
+    component.find('#continue-activity').simulate('click');
+    expect(handleSearch.mock.calls.length).toBe(2);
   });
 });
