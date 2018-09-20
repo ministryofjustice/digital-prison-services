@@ -1,5 +1,4 @@
-const moment = require('moment');
-const { switchDateFormat } = require('../utils');
+const { switchDateFormat, sortByDateTime } = require('../utils');
 const log = require('../log');
 const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders');
 
@@ -55,7 +54,9 @@ const getActivityListFactory = (elite2Api) => {
 
     sortActivitiesByEventThenByLastName(eventsAtLocation);
 
-    eventsAtLocation.forEach(event => sortEventsByStartTime(event.eventsElsewhere));
+    eventsAtLocation.forEach(event => {
+      event.eventsElsewhere.sort((left, right) => sortByDateTime(left.startTime, right.startTime));
+    });
 
     return eventsAtLocation;
   };
@@ -91,22 +92,5 @@ const sortActivitiesByEventThenByLastName = (data) => {
     return 0;
   });
 };
-
-const sortEventsByStartTime = (events) => {
-  events.sort((event1, event2) => {
-    const t1 = event1.startTime;
-    const t2 = event2.startTime;
-
-    if (t1 && t2) {
-      return moment(t1).valueOf() - moment(t2).valueOf();
-    } else if (t1) {
-      return -1;
-    } else if (t2) {
-      return 1;
-    }
-    return 0;
-  });
-};
-
 
 module.exports = { getActivityListFactory };

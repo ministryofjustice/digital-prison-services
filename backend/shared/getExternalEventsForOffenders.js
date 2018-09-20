@@ -1,3 +1,5 @@
+const { sortByDateTime } = require('../utils');
+
 module.exports = async (elite2Api, context, { offenderNumbers, formattedDate, agencyId }) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return [];
 
@@ -41,14 +43,40 @@ const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) => {
 };
 
 const courtEvents = (courtEvents, offenderNo) => {
-  return courtEvents && courtEvents.length && courtEvents
-    .filter(courtEvent => courtEvent.offenderNo === offenderNo)
-    .map(event => ({
-      eventId: event.eventId,
-      eventDescription: 'Court visit scheduled',
-      ...courtEventStatus(event.eventStatus)
-    })) || [];
+  const events = courtEvents && courtEvents.length && courtEvents
+    .filter(courtEvent => courtEvent.offenderNo === offenderNo) || [];
+
+  const scheduledAndExpiredCourtEvent = events
+    .filter(event => event.eventStatus !== 'COMP')
+    .map(event => toCourtEvent(event)) || [];
+
+  const completedEvent = latestCompletedCourtEvent(events);
+
+  if (completedEvent) {
+    return [
+      ...scheduledAndExpiredCourtEvent,
+      completedEvent
+    ];
+  }
+
+  return scheduledAndExpiredCourtEvent;
 };
+
+const latestCompletedCourtEvent = (events) => {
+  const courtEvents = events
+    .filter(event => event.eventStatus === 'COMP')
+    .sort((left, right) => sortByDateTime(left.startTime, right.startTime));
+
+  const event = courtEvents[courtEvents.length - 1];
+
+  return event && toCourtEvent(event);
+};
+
+const toCourtEvent = (event) => ({
+  eventId: event.eventId,
+  eventDescription: 'Court visit scheduled',
+  ...courtEventStatus(event.eventStatus)
+});
 
 const scheduledTransfers = (transfers, offenderNo) => {
   return (transfers && transfers.length && transfers

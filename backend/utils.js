@@ -13,9 +13,21 @@ const distinct = (data) => data.reduce((accumulator, current) =>
 const isToday = (formattedDate) => {
   return moment().format('YYYY-MM-DD') === formattedDate;
 };
+const sortByDateTime = (t1, t2) => {
+  if (t1 && t2) {
+    return moment(t1).valueOf() - moment(t2).valueOf();
+  } else if (t1) {
+    return -1;
+  } else if (t2) {
+    return 1;
+  }
+  return 0;
+};
+
 
 module.exports = {
   switchDateFormat,
   distinct,
-  isToday
+  isToday,
+  sortByDateTime
 };

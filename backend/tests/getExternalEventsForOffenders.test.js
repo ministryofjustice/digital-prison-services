@@ -125,6 +125,50 @@ describe('External events', () => {
       }
     ]);
   });
+
+  it('should show the latest completed court event when there are more than one', async () => {
+    const today = moment();
+
+    elite2Api.getCourtEvents.mockImplementationOnce(() => [
+      {
+        eventId: 1,
+        eventStatus: "COMP",
+        eventType: "COURT",
+        offenderNo: offenderWithData,
+        startTime: "2018-09-05T17:00:00"
+      },
+      {
+        eventId: 2,
+        eventStatus: "COMP",
+        eventType: "COURT",
+        offenderNo: offenderWithData,
+        startTime: "2018-09-05T17:00:00"
+      },
+      {
+        eventId: 3,
+        eventStatus: "SCH",
+        eventType: "COURT",
+        offenderNo: offenderWithData,
+        startTime: "2018-09-05T17:00:00"
+      },
+      {
+        eventId: 4,
+        eventStatus: "EXP",
+        eventType: "COURT",
+        offenderNo: offenderWithData,
+        startTime: "2018-09-05T15:00:00"
+      }
+    ]);
+
+    const response = await externalEvents(elite2Api, {},
+      { agencyId: 'LEI', offenderNumbers: [offenderWithData], formattedDate: switchDateFormat(today) });
+
+    expect(response.get(offenderWithData).courtEvents).toEqual([
+      { eventDescription: "Court visit scheduled", eventId: 3, scheduled: true },
+      { eventDescription: "Court visit scheduled", eventId: 4, expired: true },
+      { eventDescription: "Court visit scheduled", eventId: 2, complete: true, }
+    ]);
+  });
 });
 
 function createSentenceDataResponse () {

@@ -66,8 +66,8 @@ class ActivitySpecification extends GebReportingSpec {
         eventsElsewhere == [
                 [
                         '** Court visit scheduled **',
-                        '** Court visit scheduled ** (complete)',
                         '** Court visit scheduled ** (expired)',
+                        '** Court visit scheduled ** (complete)',
                         '** Transfer scheduled **',
                         '** Transfer scheduled ** (complete)',
                         '** Transfer scheduled ** (cancelled)',
@@ -79,8 +79,8 @@ class ActivitySpecification extends GebReportingSpec {
                 [],
                 [
                         '** Court visit scheduled **',
-                        '** Court visit scheduled ** (complete)',
                         '** Court visit scheduled ** (expired)',
+                        '** Court visit scheduled ** (complete)',
                         '** Transfer scheduled **',
                         '** Transfer scheduled ** (complete)',
                         '** Transfer scheduled ** (cancelled)',
@@ -90,8 +90,8 @@ class ActivitySpecification extends GebReportingSpec {
                 ],
                 [
                         '** Court visit scheduled **',
-                        '** Court visit scheduled ** (complete)',
                         '** Court visit scheduled ** (expired)',
+                        '** Court visit scheduled ** (complete)',
                         '** Transfer scheduled **',
                         '** Transfer scheduled ** (complete)',
                         '** Transfer scheduled ** (cancelled)',
