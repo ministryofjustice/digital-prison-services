@@ -142,7 +142,7 @@ describe('External events', () => {
         eventStatus: "COMP",
         eventType: "COURT",
         offenderNo: offenderWithData,
-        startTime: "2018-09-05T17:00:00"
+        startTime: "2018-09-05T15:00:00"
       },
       {
         eventId: 3,
@@ -166,7 +166,7 @@ describe('External events', () => {
     expect(response.get(offenderWithData).courtEvents).toEqual([
       { eventDescription: "Court visit scheduled", eventId: 3, scheduled: true },
       { eventDescription: "Court visit scheduled", eventId: 4, expired: true },
-      { eventDescription: "Court visit scheduled", eventId: 2, complete: true, }
+      { eventDescription: "Court visit scheduled", eventId: 1, complete: true, }
     ]);
   });
 });

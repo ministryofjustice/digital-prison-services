@@ -48,7 +48,7 @@ const courtEvents = (courtEvents, offenderNo) => {
 
   const scheduledAndExpiredCourtEvents = events
     .filter(event => event.eventStatus !== 'COMP')
-    .map(event => toCourtEvent(event)) || [];
+    .map(event => toCourtEvent(event));
 
   const completedEvent = latestCompletedCourtEvent(events);
 
