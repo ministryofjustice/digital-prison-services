@@ -7,7 +7,7 @@ class SearchPage extends DatePickerPage {
     static url = "/whereaboutssearch"
 
     static at = {
-        headingText == 'Manage offender whereabouts'
+        headingText == 'Search prisoner whereabouts'
         continueButton.displayed
     }
 
@@ -18,7 +18,7 @@ class SearchPage extends DatePickerPage {
         location { $('#housing-location-select') }
         activity { $('#activity-select') }
         period { $('#period-select') }
-        continueButton { $('button.button') }
+        continueButton { $('#continue-housing') }
         form { $('form')}
     }
 }
