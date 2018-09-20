@@ -46,7 +46,7 @@ const courtEvents = (courtEvents, offenderNo) => {
   const events = courtEvents && courtEvents.length && courtEvents
     .filter(courtEvent => courtEvent.offenderNo === offenderNo) || [];
 
-  const scheduledAndExpiredCourtEvent = events
+  const scheduledAndExpiredCourtEvents = events
     .filter(event => event.eventStatus !== 'COMP')
     .map(event => toCourtEvent(event)) || [];
 
@@ -54,12 +54,11 @@ const courtEvents = (courtEvents, offenderNo) => {
 
   if (completedEvent) {
     return [
-      ...scheduledAndExpiredCourtEvent,
+      ...scheduledAndExpiredCourtEvents,
       completedEvent
     ];
   }
-
-  return scheduledAndExpiredCourtEvent;
+  return scheduledAndExpiredCourtEvents;
 };
 
 const latestCompletedCourtEvent = (events) => {
