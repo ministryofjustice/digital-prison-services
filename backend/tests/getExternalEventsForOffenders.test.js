@@ -166,7 +166,7 @@ describe('External events', () => {
     expect(response.get(offenderWithData).courtEvents).toEqual([
       { eventDescription: "Court visit scheduled", eventId: 3, scheduled: true },
       { eventDescription: "Court visit scheduled", eventId: 4, expired: true },
-      { eventDescription: "Court visit scheduled", eventId: 1, complete: true, }
+      { eventDescription: "Court visit scheduled", eventId: 1, complete: true }
     ]);
   });
 });

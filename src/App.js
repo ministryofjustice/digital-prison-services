@@ -3,6 +3,7 @@ import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
 import ErrorComponent from './Error/index';
 import SearchContainer from './Search/SearchContainer';
+import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer';
 import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
@@ -289,6 +290,7 @@ class App extends React.Component {
             {...this.props} />
         )}/>
         <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
+        <Route exact path="/establishmentroll" render={() => <EstablishmentRollContainer />} />
       </div></div>);
 
     let innerContent;
