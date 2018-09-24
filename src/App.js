@@ -3,7 +3,6 @@ import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
 import ErrorComponent from './Error/index';
 import SearchContainer from './Search/SearchContainer';
-import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
 import moment from 'moment';
@@ -43,6 +42,7 @@ import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentRe
 import links from "./links";
 
 const axios = require('axios');
+import { Header } from 'new-nomis-shared-components';
 
 class App extends React.Component {
   constructor () {
@@ -306,6 +306,9 @@ class App extends React.Component {
               ReactGA.pageview(props.location.pathname);
             }
             return (<Header
+              logoText={'HMPPS'}
+              title={'Activity Lists'}
+              homeLink={() => links.getHomeLink()}
               switchCaseLoad={this.switchCaseLoad}
               history={props.history}
               {...this.props}
