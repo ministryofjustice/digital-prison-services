@@ -8,11 +8,11 @@ class EstablishmentRollBlock extends Component {
     super(props);
   }
 
-  renderBlockNumbersItem (label, value) {
+  renderBlockFigure (label, value) {
     return (
-      <div className="item">
-        <label className="item__label">{label}</label>
-        <span className="item__value">{value}</span>
+      <div className="block-figure">
+        <label className="block-figure__label">{label}</label>
+        <span className="block-figure__value">{value}</span>
       </div>
     );
   }
@@ -28,11 +28,11 @@ class EstablishmentRollBlock extends Component {
     return (
       <div className={blockClasses}>
         <h2 className="establishment-roll-block__title">{name}</h2>
-        <div className="establishment-roll-block__numbers block-numbers">
+        <div className="establishment-roll-block__figures block-figures">
           {numbers.map((number, i) => {
             return (
-              <div className="block-numbers__item" key={i}>
-                {this.renderBlockNumbersItem(number.name, number.value)}
+              <div className="block-figures__figure" key={i}>
+                {this.renderBlockFigure(number.name, number.value)}
               </div>
             );
           })}

@@ -12,7 +12,7 @@
     font-weight: 700;
   }
 
-  &__numbers {
+  &__figures {
     margin-left: -18px;
   }
 
@@ -28,17 +28,17 @@
   }
 }
 
-.block-numbers {
+.block-figures {
   display: flex;
   flex-wrap: wrap;
 
-  &__item {
+  &__figure {
     width: 50%;
     margin-bottom: 15px;
-    padding-left: 15px;
+    padding: 0 15px;
     border-left: 3px solid #979797;
 
-    @media (min-width: 641px) {
+    @media (min-width: 640px) {
       width: 33.3334%;
     }
 
@@ -48,15 +48,20 @@
   }
 }
 
-.item {
+.block-figure {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
 
+  &__label {
+    margin-bottom: 15px;
+  }
+
   &__value {
     display: block;
     font-size: 36px;
     font-weight: 700;
+    line-height: 1;
   }
 }

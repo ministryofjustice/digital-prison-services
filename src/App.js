@@ -45,6 +45,9 @@ import links from "./links";
 
 const axios = require('axios');
 
+// Dev only - Establishment roll data will come from API
+import { movements, blocks } from './EstablishmentRoll/establishmentRollDummyData';
+
 class App extends React.Component {
   constructor () {
     super();
@@ -290,7 +293,7 @@ class App extends React.Component {
             {...this.props} />
         )}/>
         <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
-        <Route exact path="/establishmentroll" render={() => <EstablishmentRollContainer />} />
+        <Route exact path="/establishmentroll" render={() => <EstablishmentRollContainer movements={movements} blocks={blocks} />} />
       </div></div>);
 
     let innerContent;
