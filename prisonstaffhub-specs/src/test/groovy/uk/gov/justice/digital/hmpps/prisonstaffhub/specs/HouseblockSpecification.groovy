@@ -16,9 +16,9 @@ class HouseblockSpecification extends GebReportingSpec {
     Elite2Api elite2api = new Elite2Api()
 
     @Rule
-    OauthApi oauthapi = new OauthApi()
+    OauthApi oauthApi = new OauthApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthapi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
     def initialPeriod
 
     def "The houseblock list is displayed and reordered"() {

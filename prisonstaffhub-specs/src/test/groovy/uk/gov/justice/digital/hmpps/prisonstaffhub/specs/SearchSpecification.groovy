@@ -17,9 +17,9 @@ class SearchSpecification extends GebReportingSpec {
     Elite2Api elite2api = new Elite2Api()
 
     @Rule
-    OauthApi oauthapi = new OauthApi()
+    OauthApi oauthApi = new OauthApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthapi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
     def "The search page is displayed"() {
 

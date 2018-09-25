@@ -64,7 +64,7 @@ class LoginSpecification extends GebReportingSpec {
         to LoginPage
 
         and: 'The OAuth server responds with a long delay'
-        oauthapi.stubValidOAuthTokenRequest(ITAG_USER, true)
+        oauthApi.stubValidOAuthTokenRequest(ITAG_USER, true)
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
@@ -81,7 +81,7 @@ class LoginSpecification extends GebReportingSpec {
 
         given: 'I am on the Login page'
         elite2api.stubHealth()
-        oauthapi.stubInvalidOAuthTokenRequest(NOT_KNOWN)
+        oauthApi.stubInvalidOAuthTokenRequest(NOT_KNOWN)
         to LoginPage
 
         when: 'I login using an unknown username'
@@ -97,7 +97,7 @@ class LoginSpecification extends GebReportingSpec {
     def "Unknown password is rejected"() {
         given: 'I am on the Login page'
         elite2api.stubHealth()
-        oauthapi.stubInvalidOAuthTokenRequest(ITAG_USER, true)
+        oauthApi.stubInvalidOAuthTokenRequest(ITAG_USER, true)
         to LoginPage
 
         when: 'I login using an unknown username'
