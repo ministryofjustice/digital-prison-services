@@ -8,6 +8,7 @@
     "body-parser": "^1.18.3",
     "bunyan": "^1.8.12",
     "bunyan-middleware": "^0.8.0",
+    "classnames": "^2.2.6",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.6.9",
@@ -95,6 +96,7 @@
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
     ],
+    "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setupTests.js",
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/(src|backend)/**/?(*.)(spec|test).{js,jsx,mjs}"
