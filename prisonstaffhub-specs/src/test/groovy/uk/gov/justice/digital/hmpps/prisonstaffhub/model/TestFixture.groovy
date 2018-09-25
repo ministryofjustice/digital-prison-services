@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 
 import geb.Browser
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -12,13 +13,15 @@ class TestFixture {
 
     Browser browser
     Elite2Api elite2Api
+    OauthApi oauthApi
 
     UserAccount currentUser
     List<Location> locations
 
-    TestFixture(Browser browser, Elite2Api elite2Api) {
+    TestFixture(Browser browser, Elite2Api elite2Api, OauthApi oauthApi) {
         this.browser = browser
         this.elite2Api = elite2Api
+        this.oauthApi = oauthApi
     }
 
     def loginAs(UserAccount user) {
@@ -26,7 +29,7 @@ class TestFixture {
         elite2Api.stubHealth()
 
         browser.to LoginPage
-        elite2Api.stubValidOAuthTokenRequest currentUser
+        oauthApi.stubValidOAuthTokenRequest currentUser
         elite2Api.stubGetMyDetails currentUser
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
