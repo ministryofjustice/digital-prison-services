@@ -1,6 +1,3 @@
-* {
-  box-sizing: border-box;
-}
 .establishment-roll-block {
   margin-bottom: 15px;
   border-bottom: 2px solid #979797;
@@ -25,6 +22,10 @@
 
   &--last {
     border-bottom: 0;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 }
 

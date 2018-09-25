@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import PropTypes from 'prop-types';
 
-// For dev only.  Will be mapped to props from state
+// For dev only. Will be calculated in a method
 import { totals } from './establishmentRollDummyData';
 
 class EstablishmentRollContainer extends Component {

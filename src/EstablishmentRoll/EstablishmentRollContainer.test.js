@@ -23,7 +23,7 @@ describe('<EstablishmentRollContainer />', () => {
     expect(wrapper.find('EstablishmentRollBlock').length).toEqual(6);
   });
 
-  it('should render the Movements EstablishmentRollBlock first', () => {
+  it('should render the Movements EstablishmentRollBlock first and with the highlighted prop', () => {
     const firstBlock = wrapper.find('EstablishmentRollBlock').first();
     expect(firstBlock.dive().find('h2').text()).toEqual('Movements');
     expect(firstBlock.props().highlight).toBe(true);
@@ -36,7 +36,7 @@ describe('<EstablishmentRollContainer />', () => {
     expect(blocks.length).toEqual(4);
   });
 
-  it('should render the Totals EstablishmentRollBlock last with the highlighted prop', () => {
+  it('should render the Totals EstablishmentRollBlock last and with the highlighted prop', () => {
     const lastBlock = wrapper.find('EstablishmentRollBlock').last();
     expect(lastBlock.dive().find('h2').text()).toEqual('Totals');
     expect(lastBlock.props().highlight).toBe(true);
