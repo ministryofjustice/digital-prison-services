@@ -32,7 +32,7 @@ class OauthApi extends WireMockRule {
             response.withFixedDelay(5000)
         }
 
-        stubFor(
+        this.stubFor(
                 post('/auth/oauth/token')
                         .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
@@ -41,7 +41,7 @@ class OauthApi extends WireMockRule {
     }
 
     void stubInvalidOAuthTokenRequest(UserAccount user, boolean badPassword = false) {
-        stubFor(
+        this.stubFor(
                 post('/auth/oauth/token')
                         .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))

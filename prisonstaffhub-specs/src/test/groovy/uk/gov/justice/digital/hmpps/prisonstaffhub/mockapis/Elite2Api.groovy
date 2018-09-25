@@ -19,7 +19,7 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubUpdateActiveCaseload() {
-        stubFor(
+        this.stubFor(
                 put('/api/users/me/activeCaseLoad')
                         .willReturn(
                         aResponse()
@@ -32,7 +32,7 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubGetMyDetails(UserAccount user, String caseloadId ) {
-        stubFor(
+        this.stubFor(
                 get('/api/users/me')
                         .willReturn(
                         aResponse()
@@ -57,7 +57,7 @@ class Elite2Api extends WireMockRule {
             caseloadFunction 'DUMMY'
         }
 
-        stubFor(
+        this.stubFor(
                 get('/api/users/me/caseLoads')
                         .willReturn(
                         aResponse()
@@ -68,7 +68,7 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubHealth() {
-        stubFor(
+        this.stubFor(
                 get('/health')
                         .willReturn(
                         aResponse()

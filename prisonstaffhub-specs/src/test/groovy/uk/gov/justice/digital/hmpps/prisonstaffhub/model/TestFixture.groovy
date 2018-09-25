@@ -16,7 +16,6 @@ class TestFixture {
     OauthApi oauthApi
 
     UserAccount currentUser
-    List<Location> locations
 
     TestFixture(Browser browser, Elite2Api elite2Api, OauthApi oauthApi) {
         this.browser = browser
