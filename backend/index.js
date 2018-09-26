@@ -128,17 +128,18 @@ sessionManagementRoutes.configureRoutes({
 
 if (config.app.production === false) {
   const compiler = webpack(require('../webpack.config.js'));
-  app.use(middleware(compiler, {}));
+  app.use(middleware(compiler, { writeToDisk: true }));
   app.use(hrm(compiler, {}));
 }
-
-app.use(express.static(path.join(__dirname, '../build')));
 
 // Extract pagination header information from requests and set on the 'context'
 app.use('/api', (req, res, next) => {
   contextProperties.setRequestPagination(res.locals, req.headers);
   next();
 });
+
+app.use(express.static(path.join(__dirname, '../build')));
+
 
 app.use('/api/config', getConfiguration);
 app.use('/api/me', userMeFactory(elite2Api).userMe);
