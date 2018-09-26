@@ -1,27 +1,45 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { setEstablishmentRollBlockData } from '../redux/actions/index';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
-// For dev only. Will be calculated in a method
-import { totals } from './establishmentRollDummyData';
-
-class EstablishmentRollContainer extends Component {
+export class EstablishmentRollContainer extends Component {
   constructor (props) {
     super(props);
   }
 
+  componentDidMount () {
+    const { agencyId, establishmentRollBlockDataDispatch } = this.props;
+    this.getEstablishmentRollBlocks(agencyId, establishmentRollBlockDataDispatch);
+  }
+
+  async getEstablishmentRollBlocks (agencyId, establishmentRollBlockDataDispatch) {
+    try {
+      const response = await axios.get('/api/establishmentRollCount', {
+        params: {
+          agencyId
+        }
+      });
+      establishmentRollBlockDataDispatch(response.data);
+    } catch (error) {
+      this.props.handleError(error);
+    }
+  }
+
   render () {
-    const { movements, blocks } = this.props;
+    const { movements, blocks, totals } = this.props;
 
     return (
       <div className="establishment-roll-container">
-        <h1 className="heading-large">Establishment roll</h1>
+        <h1 className="heading-large establishment-roll-container__title">Establishment roll</h1>
         <EstablishmentRollBlock block={movements} highlight />
         {blocks.map((block, i, array) => {
           const isLastBlock = array.length - 1 === i;
           return <EstablishmentRollBlock block={block} key={i} isLastBlock={isLastBlock} />;
         })}
-        <EstablishmentRollBlock block={totals} highlight />
+        {totals && <EstablishmentRollBlock block={totals} highlight />}
       </div>
     );
   }
@@ -29,7 +47,25 @@ class EstablishmentRollContainer extends Component {
 
 EstablishmentRollContainer.propTypes = {
   movements: PropTypes.object,
-  blocks: PropTypes.array
+  blocks: PropTypes.array,
+  totals: PropTypes.object,
+  agencyId: PropTypes.string,
+  establishmentRollBlockDataDispatch: PropTypes.func,
+  handleError: PropTypes.func
 };
 
-export default EstablishmentRollContainer;
+const mapStateToProps = (state) => {
+  return {
+    blocks: state.establishmentRoll.blocks,
+    totals: state.establishmentRoll.totals,
+    agencyId: state.app.user.activeCaseLoadId
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    establishmentRollBlockDataDispatch: (data) => dispatch(setEstablishmentRollBlockData(data))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EstablishmentRollContainer);

@@ -165,4 +165,16 @@ describe('actions', () => {
     };
     expect(actions.setActivityData([{ stuff: 'stuff' }])).toEqual(expectedAction);
   });
+
+  it('should create an action to set establishment roll block data', () => {
+    const data = {
+      blocks: [],
+      totals: null
+    };
+    const expectedAction = {
+      type: types.SET_ESTABLISHMENT_ROLL_BLOCK_DATA,
+      data
+    };
+    expect(actions.setEstablishmentRollBlockData(data)).toEqual(expectedAction);
+  });
 });

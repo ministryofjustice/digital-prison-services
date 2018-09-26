@@ -1,13 +1,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import EstablishmentRollContainer from './EstablishmentRollContainer';
-import { movements, blocks } from './establishmentRollDummyData';
+import { EstablishmentRollContainer } from './EstablishmentRollContainer';
+import { movements, blocks, totals } from './establishmentRollDummyData';
 
 describe('<EstablishmentRollContainer />', () => {
   const props = {
     movements,
-    blocks
+    blocks,
+    totals,
+    agencyId: 'LEI',
+    establishmentRollBlockDataDispatch: jest.fn(),
+    handleError: jest.fn()
   };
+
   const wrapper = shallow(<EstablishmentRollContainer {...props} />);
 
   it('should render without error', () => {

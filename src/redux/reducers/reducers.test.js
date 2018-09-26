@@ -1,4 +1,4 @@
-import { app, search, defaultPeriod, events } from './index';
+import { app, search, defaultPeriod, events, establishmentRoll } from './index';
 import * as types from '../actions/actionTypes';
 
 import { setMenuOpen } from "../actions";
@@ -24,6 +24,12 @@ const searchInitialState = {
   activity: '',
   date: moment().format('DD/MM/YYYY'),
   period: ''
+};
+
+const establishmentRollInitialState = {
+  movements: [],
+  blocks: [],
+  totals: null
 };
 
 const appWithValidationErrorState = {
@@ -429,5 +435,23 @@ describe('app (global) reducer', () => {
     state = app(appInitialState, setMenuOpen(false));
 
     expect(state.menuOpen).toBe(false);
+  });
+
+  it('should handle SET_ESTABLISHMENT_ROLL_BLOCK_DATA', () => {
+    expect(
+      establishmentRoll(establishmentRollInitialState, {
+        type: types.SET_ESTABLISHMENT_ROLL_BLOCK_DATA,
+        data: {
+          blocks: [],
+          totals: null
+        }
+      })
+    ).toEqual(
+      {
+        movements: [],
+        blocks: [],
+        totals: null
+      }
+    );
   });
 });

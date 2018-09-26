@@ -45,6 +45,8 @@ const elite2ApiFactory = (client) => {
 
   const getSentenceData = (context, offenderNumbers) => post(context, `api/offender-sentences`, offenderNumbers);
 
+  const getEstablishmentRollCount = (context, agencyId) => get(context, `api/movements/rollcount/${agencyId}`);
+
   return {
     userLocations,
     currentUser,
@@ -61,7 +63,8 @@ const elite2ApiFactory = (client) => {
     getActivities,
     getCourtEvents,
     getSentenceData,
-    getExternalTransfers
+    getExternalTransfers,
+    getEstablishmentRollCount
   };
 };
 

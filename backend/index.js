@@ -24,6 +24,7 @@ const activityListFactory = require('./controllers/activityList').getActivityLis
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory;
 const healthFactory = require('./controllers/health').healthFactory;
 const updateAttendanceFactory = require('./controllers/updateAttendance').updateAttendanceFactory;
+const establishmentRollCountFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory;
 
 const sessionManagementRoutes = require('./sessionManagementRoutes');
 const contextProperties = require('./contextProperties');
@@ -100,7 +101,8 @@ const elite2Api = eliteApiFactory(
 const controller = controllerFactory(
   activityListFactory(elite2Api),
   houseblockListFactory(elite2Api),
-  updateAttendanceFactory(elite2Api)
+  updateAttendanceFactory(elite2Api),
+  establishmentRollCountFactory(elite2Api),
 );
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 });
@@ -151,6 +153,7 @@ app.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivit
 app.use('/api/houseblocklist', controller.getHouseblockList);
 app.use('/api/activityList', controller.getActivityList);
 app.use('/api/updateAttendance', controller.updateAttendance);
+app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));
