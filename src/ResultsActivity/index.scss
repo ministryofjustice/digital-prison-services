@@ -1,5 +1,3 @@
-
-
 .results-activity {
   @media print {
     .width10 {
@@ -7,6 +5,10 @@
     }
     .width15 {
       width: auto;
+    }
+    tr a.link,
+    table td {
+      font-size: 10px;
     }
   }
 }

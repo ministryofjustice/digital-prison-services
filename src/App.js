@@ -3,6 +3,8 @@ import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
 import ErrorComponent from './Error/index';
 import SearchContainer from './Search/SearchContainer';
+import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer';
+import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
 import moment from 'moment';
@@ -43,6 +45,9 @@ import links from "./links";
 
 const axios = require('axios');
 import { Header } from 'new-nomis-shared-components';
+
+// Dev only - Establishment roll data will come from API
+import { movements, blocks } from './EstablishmentRoll/establishmentRollDummyData';
 
 class App extends React.Component {
   constructor () {
@@ -289,6 +294,7 @@ class App extends React.Component {
             {...this.props} />
         )}/>
         <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
+        <Route exact path="/establishmentroll" render={() => <EstablishmentRollContainer movements={movements} blocks={blocks} />} />
       </div></div>);
 
     let innerContent;

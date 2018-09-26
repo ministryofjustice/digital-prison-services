@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -15,7 +16,10 @@ class LoginSpecification extends GebReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
-    TestFixture fixture = new TestFixture(browser, elite2api)
+    @Rule
+    OauthApi oauthApi = new OauthApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
     def "The login page is present"() {
         when: 'I go to the login page'
@@ -40,7 +44,7 @@ class LoginSpecification extends GebReportingSpec {
         elite2api.stubHealth()
         to LoginPage
 
-        elite2api.stubValidOAuthTokenRequest(ITAG_USER)
+        oauthApi.stubValidOAuthTokenRequest(ITAG_USER)
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
@@ -60,7 +64,7 @@ class LoginSpecification extends GebReportingSpec {
         to LoginPage
 
         and: 'The OAuth server responds with a long delay'
-        elite2api.stubValidOAuthTokenRequest(ITAG_USER, true)
+        oauthApi.stubValidOAuthTokenRequest(ITAG_USER, true)
         elite2api.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
@@ -77,7 +81,7 @@ class LoginSpecification extends GebReportingSpec {
 
         given: 'I am on the Login page'
         elite2api.stubHealth()
-        elite2api.stubInvalidOAuthTokenRequest(NOT_KNOWN)
+        oauthApi.stubInvalidOAuthTokenRequest(NOT_KNOWN)
         to LoginPage
 
         when: 'I login using an unknown username'
@@ -93,7 +97,7 @@ class LoginSpecification extends GebReportingSpec {
     def "Unknown password is rejected"() {
         given: 'I am on the Login page'
         elite2api.stubHealth()
-        elite2api.stubInvalidOAuthTokenRequest(ITAG_USER, true)
+        oauthApi.stubInvalidOAuthTokenRequest(ITAG_USER, true)
         to LoginPage
 
         when: 'I login using an unknown username'
