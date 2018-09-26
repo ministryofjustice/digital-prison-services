@@ -4,7 +4,6 @@ import Footer from './Footer/index';
 import ErrorComponent from './Error/index';
 import SearchContainer from './Search/SearchContainer';
 import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer';
-import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
 import moment from 'moment';
