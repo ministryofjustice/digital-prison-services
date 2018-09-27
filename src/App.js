@@ -46,7 +46,7 @@ const axios = require('axios');
 import { Header } from 'new-nomis-shared-components';
 
 // Dev only - Establishment roll data will come from API
-import { movements, blocks } from './EstablishmentRoll/establishmentRollDummyData';
+import { movements } from './EstablishmentRoll/establishmentRollDummyData';
 
 class App extends React.Component {
   constructor () {
@@ -293,7 +293,11 @@ class App extends React.Component {
             {...this.props} />
         )}/>
         <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
-        <Route exact path="/establishmentroll" render={() => <EstablishmentRollContainer movements={movements} blocks={blocks} />} />
+        <Route exact path="/establishmentroll" render={() => (
+          <EstablishmentRollContainer
+            movements={movements}
+            handleError={this.handleError} />
+        )} />
       </div></div>);
 
     let innerContent;

@@ -167,3 +167,10 @@ export const setMenuOpen = (payload) => {
     payload
   };
 };
+
+export const setEstablishmentRollBlockData = (data) => {
+  return {
+    type: ActionTypes.SET_ESTABLISHMENT_ROLL_BLOCK_DATA,
+    data
+  };
+};
