@@ -5,6 +5,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.BlockCountResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
@@ -358,6 +359,16 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withBody(json)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
+    def stubEstablishmentRollCount(String agencyId) {
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(BlockCountResponse.response))
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
     }

@@ -46,6 +46,12 @@ const eventsInitialState = {
   sortOrder: 'ASC'
 };
 
+const establishmentRollInitialState = {
+  movements: [],
+  blocks: [],
+  totals: null
+};
+
 export function app (state = appInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_CONFIG:
@@ -180,13 +186,25 @@ export function events (state = eventsInitialState, action) {
   }
 }
 
+export function establishmentRoll (state = establishmentRollInitialState, action) {
+  switch (action.type) {
+    case ActionTypes.SET_ESTABLISHMENT_ROLL_BLOCK_DATA:
+      const { blocks, totals } = action.data;
+      return { ...state,
+        blocks,
+        totals
+      };
+    default:
+      return state;
+  }
+}
+
 function updateObject (oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
 }
 
-
 const prisonStaffHubApp = combineReducers({
-  events, app, search
+  events, app, search, establishmentRoll
 });
 
 export default prisonStaffHubApp;
