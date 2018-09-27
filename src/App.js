@@ -317,7 +317,7 @@ class App extends React.Component {
             return (<Header
               logoText={'HMPPS'}
               title={'Activity Lists'}
-              homeLink={() => links.getHomeLink()}
+              homeLink={links.getHomeLink()}
               switchCaseLoad={this.switchCaseLoad}
               history={props.history}
               {...this.props}
