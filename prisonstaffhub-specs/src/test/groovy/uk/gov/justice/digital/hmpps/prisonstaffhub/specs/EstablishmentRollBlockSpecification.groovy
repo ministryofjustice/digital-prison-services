@@ -4,15 +4,19 @@ import geb.module.FormElement
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
-import  uk.gov.justice.digital.hmpps.prisonstaffhub.pages.EstablishmentRollPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.EstablishmentRollPage
 
 class EstablishmentRollBlockSpecification  extends GebReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
-    TestFixture fixture = new TestFixture(browser, elite2api)
+    @Rule
+    OauthApi oauthApi = new OauthApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
     def "should present house block roll counts"() {
         elite2api.stubEstablishmentRollCount(ITAG_USER.workingCaseload.id)
