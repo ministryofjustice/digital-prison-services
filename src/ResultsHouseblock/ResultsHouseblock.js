@@ -160,7 +160,7 @@ class ResultsHouseblock extends Component {
       );
     });
 
-    return (<div className="results-houseblock pure-u-md-11-12">
+    return (<div className="results-houseblock">
       {this.displayBack()}
       <h1 className="heading-large whereabouts-title no-print">{this.props.currentLocation}</h1>
       <form className="no-print">

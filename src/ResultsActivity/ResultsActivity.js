@@ -116,7 +116,7 @@ class ResultsActivity extends Component {
       );
     });
 
-    return (<div className="results-activity pure-u-md-11-12">
+    return (<div className="results-activity">
       {ResultsActivity.displayBack()}
       <h1 className="heading-large whereabouts-title no-print">{this.getActivityName()}</h1>
       <form className="no-print">
