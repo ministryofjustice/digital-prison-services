@@ -1,6 +1,10 @@
 @import "colours/palette";
 @import "design-patterns/buttons";
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   //enable background colours on print by default
   -webkit-print-color-adjust: exact;
