@@ -93,6 +93,7 @@ const response = [
   {
     courtEvents: [
       {
+        eventId: 100,
         eventDescription: 'Court visit scheduled'
       }
     ],
