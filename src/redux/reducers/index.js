@@ -26,7 +26,8 @@ const appInitialState = {
   error: null,
   message: null,
   loaded: false,
-  menuOpen: false
+  menuOpen: false,
+  showModal: {}
 };
 
 const searchInitialState = {

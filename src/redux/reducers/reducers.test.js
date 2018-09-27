@@ -40,7 +40,8 @@ describe('app (global) reducer', () => {
         error: null,
         message: null,
         loaded: false,
-        menuOpen: false
+        menuOpen: false,
+        showModal: {}
       }
     );
   });
