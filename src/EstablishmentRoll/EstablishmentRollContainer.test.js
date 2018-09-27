@@ -10,6 +10,7 @@ describe('<EstablishmentRollContainer />', () => {
     totals,
     agencyId: 'LEI',
     establishmentRollBlockDataDispatch: jest.fn(),
+    setLoadedDispatch: jest.fn(),
     handleError: jest.fn(),
     loaded: false
   };
@@ -18,7 +19,6 @@ describe('<EstablishmentRollContainer />', () => {
 
   describe('when loading the data', () => {
     it('should display the loading <Spinner /> component', () => {
-      console.log(wrapper.debug());
       expect(wrapper.find('Spinner').exists()).toBe(true);
     });
   });

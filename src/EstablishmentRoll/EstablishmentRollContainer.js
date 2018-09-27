@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { setEstablishmentRollBlockData, setLoaded } from '../redux/actions';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import Spinner from '../Spinner';
-import axios from 'axios';
+import getEstablishmentRollBlocks from './services/getEstablishmentRollBlocks';
 
 export class EstablishmentRollContainer extends Component {
   constructor (props) {
@@ -17,18 +17,17 @@ export class EstablishmentRollContainer extends Component {
   }
 
   async getEstablishmentRollBlocks (agencyId, establishmentRollBlockDataDispatch) {
+    const { setLoadedDispatch, handleError } = this.props;
+
     try {
-      this.props.setLoadedDispatch(false);
-      const response = await axios.get('/api/establishmentRollCount', {
-        params: {
-          agencyId
-        }
-      });
-      establishmentRollBlockDataDispatch(response.data);
+      setLoadedDispatch(false);
+      const blockData = await getEstablishmentRollBlocks(agencyId);
+      establishmentRollBlockDataDispatch(blockData);
     } catch (error) {
-      this.props.handleError(error);
+      handleError(error);
     }
-    this.props.setLoadedDispatch(true);
+
+    setLoadedDispatch(true);
   }
 
   render () {
