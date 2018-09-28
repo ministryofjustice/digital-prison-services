@@ -11,7 +11,8 @@ import allocationApp from './redux/reducers';
 import logger from 'redux-logger';
 const store = createStore(
   allocationApp,
-  applyMiddleware(logger)
+  applyMiddleware(logger),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 ReactDOM.render(
