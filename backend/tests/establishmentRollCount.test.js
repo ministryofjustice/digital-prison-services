@@ -41,7 +41,7 @@ describe('Establishment Roll', () => {
     elite2Api.getEstablishmentRollCount.mockImplementation(() => testApiData);
     await getEstablishmentRollCount(context, agencyId);
 
-    expect(elite2Api.getEstablishmentRollCount).toHaveBeenCalledWith(context, agencyId);
+    expect(elite2Api.getEstablishmentRollCount).toHaveBeenCalledWith(context, agencyId, undefined);
   });
 
   it('should return response with block counts', async () => {

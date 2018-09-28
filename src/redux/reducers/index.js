@@ -48,7 +48,7 @@ const eventsInitialState = {
 };
 
 const establishmentRollInitialState = {
-  movements: [],
+  movements: null,
   blocks: [],
   totals: null
 };
@@ -190,8 +190,11 @@ export function events (state = eventsInitialState, action) {
 export function establishmentRoll (state = establishmentRollInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_ESTABLISHMENT_ROLL_BLOCK_DATA:
-      const { blocks, totals } = action.data;
-      return { ...state,
+      console.log(action.data);
+      const { movements, blocks, totals } = action.data;
+      return {
+        ...state,
+        movements,
         blocks,
         totals
       };

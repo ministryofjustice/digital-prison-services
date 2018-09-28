@@ -443,13 +443,14 @@ describe('app (global) reducer', () => {
       establishmentRoll(establishmentRollInitialState, {
         type: types.SET_ESTABLISHMENT_ROLL_BLOCK_DATA,
         data: {
+          movements: null,
           blocks: [],
           totals: null
         }
       })
     ).toEqual(
       {
-        movements: [],
+        movements: null,
         blocks: [],
         totals: null
       }

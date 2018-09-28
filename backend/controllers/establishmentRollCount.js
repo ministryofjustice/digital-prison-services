@@ -1,19 +1,19 @@
 const getEstablishmentRollCountFactory = (elite2Api) => {
-  const getEstablishmentRollCount = async (context, agencyId) => {
-    const response = await elite2Api.getEstablishmentRollCount(context, agencyId);
+  const getEstablishmentRollCount = async (context, agencyId, unassigned) => {
+    const response = await elite2Api.getEstablishmentRollCount(context, agencyId, unassigned);
     const getTotals = (array, figure) => {
-      return array.reduce((accumulator, block) => accumulator + (block[figure] || 0), 0);
+      return array.reduce((accumulator, block) => accumulator + (block[figure]), 0);
     };
 
     const blocks = response.map((block) => ({
       name: block.livingUnitDesc,
       numbers: [
-        { name: 'Beds in use', value: block.bedsInUse || 0 },
-        { name: 'Currently in cell', value: block.currentlyInCell || 0 },
-        { name: 'Currently out', value: block.currentlyOut || 0 },
-        { name: 'Operational cap.', value: block.operationalCapacity || 0 },
-        { name: 'Net vacancies', value: block.netVacancies || 0 },
-        { name: 'Out of order', value: block.outOfOrder || 0 }
+        { name: 'Beds in use', value: block.bedsInUse },
+        { name: 'Currently in cell', value: block.currentlyInCell },
+        { name: 'Currently out', value: block.currentlyOut },
+        { name: 'Operational cap.', value: block.operationalCapacity },
+        { name: 'Net vacancies', value: block.netVacancies },
+        { name: 'Out of order', value: block.outOfOrder }
       ]
     }));
 
@@ -32,8 +32,14 @@ const getEstablishmentRollCountFactory = (elite2Api) => {
     return { blocks, totals };
   };
 
+  const getEstablishmentRollMovementsCount = async (context, agencyId) => {
+    const response = await elite2Api.getEstablishmentRollMovementsCount(context, agencyId);
+    return response;
+  };
+
   return {
-    getEstablishmentRollCount
+    getEstablishmentRollCount,
+    getEstablishmentRollMovementsCount
   };
 };
 

@@ -154,6 +154,7 @@ app.use('/api/houseblocklist', controller.getHouseblockList);
 app.use('/api/activityList', controller.getActivityList);
 app.use('/api/updateAttendance', controller.updateAttendance);
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount);
+app.use('/api/establishmentRollMovementsCount', controller.getEstablishmentRollMovementsCount);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));
