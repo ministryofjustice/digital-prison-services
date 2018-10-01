@@ -168,13 +168,14 @@ describe('actions', () => {
 
   it('should create an action to set establishment roll block data', () => {
     const data = {
+      movements: null,
       blocks: [],
       totals: null
     };
     const expectedAction = {
-      type: types.SET_ESTABLISHMENT_ROLL_BLOCK_DATA,
+      type: types.SET_ESTABLISHMENT_ROLL_DATA,
       data
     };
-    expect(actions.setEstablishmentRollBlockData(data)).toEqual(expectedAction);
+    expect(actions.setEstablishmentRollData(data)).toEqual(expectedAction);
   });
 });

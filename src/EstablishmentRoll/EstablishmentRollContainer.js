@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setEstablishmentRollBlockData, setLoaded } from '../redux/actions';
+import { setEstablishmentRollData, setLoaded } from '../redux/actions';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import Spinner from '../Spinner';
-import getEstablishmentRollBlocks from './services/getEstablishmentRollBlocks';
+import Error from '../Error';
+import axios from 'axios';
 
 export class EstablishmentRollContainer extends Component {
   constructor (props) {
@@ -12,30 +13,34 @@ export class EstablishmentRollContainer extends Component {
   }
 
   componentDidMount () {
-    const { agencyId, establishmentRollBlockDataDispatch } = this.props;
-    this.getEstablishmentRollBlocks(agencyId, establishmentRollBlockDataDispatch);
+    this.getEstablishmentRollBlocks(this.props.agencyId);
   }
 
-  async getEstablishmentRollBlocks (agencyId, establishmentRollBlockDataDispatch) {
-    const { setLoadedDispatch, handleError } = this.props;
+  async getEstablishmentRollBlocks (agencyId) {
+    const { setLoadedDispatch, establishmentRollDataDispatch, handleError } = this.props;
 
+    setLoadedDispatch(false);
     try {
-      setLoadedDispatch(false);
-      const blockData = await getEstablishmentRollBlocks(agencyId);
-      establishmentRollBlockDataDispatch(blockData);
+      const establishmentRollResponse = await axios.get('/api/establishmentRollCount', {
+        params: {
+          agencyId
+        }
+      });
+
+      establishmentRollDataDispatch({
+        ...establishmentRollResponse.data
+      });
     } catch (error) {
       handleError(error);
     }
-
     setLoadedDispatch(true);
   }
 
   render () {
-    const { movements, blocks, totals, loaded } = this.props;
+    const { movements, blocks, totals, loaded, error } = this.props;
+    if (!loaded) return <Spinner />;
 
-    if (!loaded) {
-      return <Spinner />;
-    }
+    if (error) return <Error {...this.props} />;
 
     return (
       <div className="establishment-roll-container">
@@ -56,16 +61,18 @@ EstablishmentRollContainer.propTypes = {
   blocks: PropTypes.array,
   totals: PropTypes.object,
   agencyId: PropTypes.string,
-  establishmentRollBlockDataDispatch: PropTypes.func,
+  establishmentRollDataDispatch: PropTypes.func,
   setLoadedDispatch: PropTypes.func,
   handleError: PropTypes.func,
-  loaded: PropTypes.bool
+  loaded: PropTypes.bool,
+  error: PropTypes.string
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     blocks: state.establishmentRoll.blocks,
     totals: state.establishmentRoll.totals,
+    movements: state.establishmentRoll.movements,
     agencyId: state.app.user.activeCaseLoadId,
     loaded: state.app.loaded
   };
@@ -73,8 +80,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    establishmentRollBlockDataDispatch: (data) => dispatch(setEstablishmentRollBlockData(data)),
-    setLoadedDispatch: (status) => dispatch(setLoaded(status))
+    establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data)),
+    setLoadedDispatch: status => dispatch(setLoaded(status))
   };
 };
 

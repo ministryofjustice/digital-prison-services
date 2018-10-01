@@ -24,7 +24,7 @@ const activityListFactory = require('./controllers/activityList').getActivityLis
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory;
 const healthFactory = require('./controllers/health').healthFactory;
 const updateAttendanceFactory = require('./controllers/updateAttendance').updateAttendanceFactory;
-const establishmentRollCountFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory;
+const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory;
 
 const sessionManagementRoutes = require('./sessionManagementRoutes');
 const contextProperties = require('./contextProperties');
@@ -102,7 +102,7 @@ const controller = controllerFactory(
   activityListFactory(elite2Api),
   houseblockListFactory(elite2Api),
   updateAttendanceFactory(elite2Api),
-  establishmentRollCountFactory(elite2Api),
+  establishmentRollFactory(elite2Api),
 );
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 });

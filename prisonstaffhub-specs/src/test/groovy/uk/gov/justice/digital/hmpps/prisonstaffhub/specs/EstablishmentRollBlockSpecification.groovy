@@ -30,18 +30,38 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         then: "I should be presented with roll counts for each house block"
         at EstablishmentRollPage
 
+        def movementsBlock = getReadableColumns(blocks[0])
         def firstBlock = getReadableColumns(blocks[1])
+        def totalsBlock = getReadableColumns(blocks[3])
 
-        firstBlock ==
-            [
-                'Housing Block 1',
-                'Beds in use', '156',
-                'Currently in cell', '154',
-                'Currently out', '2',
-                'Operational cap.', '170',
-                'Net vacancies', '14',
-                'Out of order', '0'
-            ]
+        movementsBlock == [
+            'Movements',
+            'Unlock roll', '329',
+            'In today', '1',
+            'Out today', '2',
+            'Current roll', '328',
+            'Unassigned', '2'
+        ]
+
+        firstBlock == [
+            'Housing Block 1',
+            'Beds in use', '156',
+            'Currently in cell', '154',
+            'Currently out', '2',
+            'Operational cap.', '170',
+            'Net vacancies', '14',
+            'Out of order', '0'
+        ]
+
+        totalsBlock == [
+            'Totals',
+            'Total roll', '328',
+            'Total in cell', '326',
+            'Total out', '2',
+            'Total op. cap.', '350',
+            'Total vacancies', '22',
+            'Total out of order', '1'
+        ]
     }
 
     def getReadableColumns(def columns) {

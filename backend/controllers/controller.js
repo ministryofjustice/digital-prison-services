@@ -1,6 +1,6 @@
 const asyncMiddleware = require('../middleware/asyncHandler');
 
-const factory = (activityListService, houseblockListService, updateAttendanceService, establishmentRollCount) => {
+const factory = (activityListService, houseblockListService, updateAttendanceService, establishmentRollService) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query;
     const viewModel = await activityListService.getActivityList(res.locals, agencyId, locationId, date, timeSlot);
@@ -20,8 +20,8 @@ const factory = (activityListService, houseblockListService, updateAttendanceSer
   });
 
   const getEstablishmentRollCount = asyncMiddleware(async (req, res) => {
-    const { agencyId } = req.query;
-    const viewModel = await establishmentRollCount.getEstablishmentRollCount(res.locals, agencyId);
+    const { agencyId, unassigned } = req.query;
+    const viewModel = await establishmentRollService.getEstablishmentRollCount(res.locals, agencyId, unassigned);
     res.json(viewModel);
   });
 

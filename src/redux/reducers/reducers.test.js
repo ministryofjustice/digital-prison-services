@@ -438,18 +438,19 @@ describe('app (global) reducer', () => {
     expect(state.menuOpen).toBe(false);
   });
 
-  it('should handle SET_ESTABLISHMENT_ROLL_BLOCK_DATA', () => {
+  it('should handle SET_ESTABLISHMENT_ROLL_DATA', () => {
     expect(
       establishmentRoll(establishmentRollInitialState, {
-        type: types.SET_ESTABLISHMENT_ROLL_BLOCK_DATA,
+        type: types.SET_ESTABLISHMENT_ROLL_DATA,
         data: {
+          movements: null,
           blocks: [],
           totals: null
         }
       })
     ).toEqual(
       {
-        movements: [],
+        movements: null,
         blocks: [],
         totals: null
       }
