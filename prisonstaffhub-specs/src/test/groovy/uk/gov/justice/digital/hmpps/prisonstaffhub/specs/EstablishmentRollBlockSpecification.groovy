@@ -54,13 +54,13 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         ]
 
         totalsBlock == [
-                'Totals',
-                'Total roll', '328',
-                'Total in cell', '326',
-                'Total out', '2',
-                'Total op. cap.', '350',
-                'Total vacancies', '22',
-                'Total out of order', '1'
+            'Totals',
+            'Total roll', '328',
+            'Total in cell', '326',
+            'Total out', '2',
+            'Total op. cap.', '350',
+            'Total vacancies', '22',
+            'Total out of order', '1'
         ]
     }
 
