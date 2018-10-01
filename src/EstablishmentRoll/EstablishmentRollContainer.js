@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setEstablishmentRollBlockData, setLoaded } from '../redux/actions';
+import { setEstablishmentRollData, setLoaded } from '../redux/actions';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import Spinner from '../Spinner';
 import Error from '../Error';
-import {
-  getEstablishmentRollBlocksCount,
-  getEstablishmentRollMovementsCount
-} from './services/getEstablishmentRollBlocks';
-import buildMovementsBlock from './buildMovementsBlock';
+import axios from 'axios';
 
 export class EstablishmentRollContainer extends Component {
   constructor (props) {
@@ -17,30 +13,22 @@ export class EstablishmentRollContainer extends Component {
   }
 
   componentDidMount () {
-    const { agencyId } = this.props;
-    this.getEstablishmentRollBlocks(agencyId);
+    this.getEstablishmentRollBlocks(this.props.agencyId);
   }
 
   async getEstablishmentRollBlocks (agencyId) {
-    const { setLoadedDispatch, establishmentRollBlockDataDispatch, handleError } = this.props;
+    const { setLoadedDispatch, establishmentRollDataDispatch, handleError } = this.props;
 
     setLoadedDispatch(false);
     try {
-      const [assignedBlockData, unassignedBlockData, movementsBlockData] = await Promise.all([
-        getEstablishmentRollBlocksCount(agencyId),
-        getEstablishmentRollBlocksCount(agencyId, true),
-        getEstablishmentRollMovementsCount(agencyId)
-      ]);
+      const establishmentRollResponse = await axios.get('/api/establishmentRollCount', {
+        params: {
+          agencyId
+        }
+      });
 
-      const movements = buildMovementsBlock(
-        assignedBlockData,
-        unassignedBlockData,
-        movementsBlockData
-      );
-
-      establishmentRollBlockDataDispatch({
-        ...assignedBlockData.data,
-        movements
+      establishmentRollDataDispatch({
+        ...establishmentRollResponse.data
       });
     } catch (error) {
       handleError(error);
@@ -73,7 +61,7 @@ EstablishmentRollContainer.propTypes = {
   blocks: PropTypes.array,
   totals: PropTypes.object,
   agencyId: PropTypes.string,
-  establishmentRollBlockDataDispatch: PropTypes.func,
+  establishmentRollDataDispatch: PropTypes.func,
   setLoadedDispatch: PropTypes.func,
   handleError: PropTypes.func,
   loaded: PropTypes.bool,
@@ -92,7 +80,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    establishmentRollBlockDataDispatch: data => dispatch(setEstablishmentRollBlockData(data)),
+    establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data)),
     setLoadedDispatch: status => dispatch(setLoaded(status))
   };
 };

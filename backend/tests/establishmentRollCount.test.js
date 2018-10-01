@@ -1,15 +1,15 @@
 const elite2Api = {};
-const getEstablishmentRollBlocksCount = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
+const getEstablishmentRollCount = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
   elite2Api,
-).getEstablishmentRollBlocksCount;
+).getEstablishmentRollCount;
 
 describe('Establishment Roll', () => {
   const context = {};
   const agencyId = 'LEI';
-  const testApiData = [
+  const assignedBlockData = [
     {
       livingUnitId: 0,
-      livingUnitDesc: 'desc1',
+      livingUnitDesc: 'Housing block 1',
       bedsInUse: 10,
       currentlyInCell: 20,
       currentlyOut: 30,
@@ -21,7 +21,7 @@ describe('Establishment Roll', () => {
     },
     {
       livingUnitId: 0,
-      livingUnitDesc: 'desc2',
+      livingUnitDesc: 'Housing block 2',
       bedsInUse: 0,
       currentlyInCell: 0,
       currentlyOut: 0,
@@ -33,24 +33,42 @@ describe('Establishment Roll', () => {
     }
   ];
 
+  const movements = {
+    in: 1,
+    out: 3
+  };
+
   beforeEach(() => {
     elite2Api.getEstablishmentRollBlocksCount = jest.fn();
+    elite2Api.getEstablishmentRollMovementsCount = jest.fn();
+    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => assignedBlockData);
+    elite2Api.getEstablishmentRollMovementsCount.mockImplementation(() => movements);
   });
 
   it('should call the rollcount endpoint', async () => {
-    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => testApiData);
-    await getEstablishmentRollBlocksCount(context, agencyId);
+    await getEstablishmentRollCount(context, agencyId);
 
-    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, undefined);
+    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, false);
+    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, true);
+    expect(elite2Api.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(context, agencyId);
   });
 
   it('should return response with block counts', async () => {
-    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => testApiData);
-    const response = await getEstablishmentRollBlocksCount(context, agencyId);
+    const response = await getEstablishmentRollCount(context, agencyId);
     const returnedData = {
+      movements: {
+        name: 'Movements',
+        numbers: [
+          { name: 'Unlock roll', value: 12 },
+          { name: 'In today', value: 1 },
+          { name: 'Out today', value: 3 },
+          { name: 'Current roll', value: 10 },
+          { name: 'Unassigned', value: 20 }
+        ]
+      },
       blocks: [
         {
-          name: 'desc1',
+          name: 'Housing block 1',
           numbers: [
             { name: 'Beds in use', value: 10 },
             { name: 'Currently in cell', value: 20 },
@@ -61,7 +79,7 @@ describe('Establishment Roll', () => {
           ]
         },
         {
-          name: 'desc2',
+          name: 'Housing block 2',
           numbers: [
             { name: 'Beds in use', value: 0 },
             { name: 'Currently in cell', value: 0 },

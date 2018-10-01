@@ -19,15 +19,9 @@ const factory = (activityListService, houseblockListService, updateAttendanceSer
     res.json({});
   });
 
-  const getEstablishmentRollBlocksCount = asyncMiddleware(async (req, res) => {
+  const getEstablishmentRollCount = asyncMiddleware(async (req, res) => {
     const { agencyId, unassigned } = req.query;
-    const viewModel = await establishmentRollService.getEstablishmentRollBlocksCount(res.locals, agencyId, unassigned);
-    res.json(viewModel);
-  });
-
-  const getEstablishmentRollMovementsCount = asyncMiddleware(async (req, res) => {
-    const { agencyId } = req.query;
-    const viewModel = await establishmentRollService.getEstablishmentRollMovementsCount(res.locals, agencyId);
+    const viewModel = await establishmentRollService.getEstablishmentRollCount(res.locals, agencyId, unassigned);
     res.json(viewModel);
   });
 
@@ -35,8 +29,7 @@ const factory = (activityListService, houseblockListService, updateAttendanceSer
     getActivityList,
     getHouseblockList,
     updateAttendance,
-    getEstablishmentRollBlocksCount,
-    getEstablishmentRollMovementsCount
+    getEstablishmentRollCount
   };
 };
 

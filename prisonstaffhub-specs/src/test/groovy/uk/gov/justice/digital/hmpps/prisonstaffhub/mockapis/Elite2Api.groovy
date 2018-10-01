@@ -5,7 +5,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.BlockCountResponse
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.EstablishmentRollResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
@@ -365,12 +365,31 @@ class Elite2Api extends WireMockRule {
 
     def stubEstablishmentRollCount(String agencyId) {
         this.stubFor(
-                get("/api/movements/rollcount/${agencyId}")
+                get("/api/movements/rollcount/${agencyId}?unassigned=false")
                         .willReturn(
                         aResponse()
-                                .withBody(JsonOutput.toJson(BlockCountResponse.response))
+                                .withBody(JsonOutput.toJson(EstablishmentRollResponses.assignedResponse))
                                 .withHeader('Content-Type', 'application/json')
-                                .withStatus(200)))
+                                .withStatus(200))
+        )
+
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}?unassigned=true")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(EstablishmentRollResponses.unassignedResponse))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}/movements")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(EstablishmentRollResponses.movementBlockResponse))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 
     static def extractOffenderNumbers(String json) {

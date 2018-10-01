@@ -189,8 +189,7 @@ export function events (state = eventsInitialState, action) {
 
 export function establishmentRoll (state = establishmentRollInitialState, action) {
   switch (action.type) {
-    case ActionTypes.SET_ESTABLISHMENT_ROLL_BLOCK_DATA:
-      console.log(action.data);
+    case ActionTypes.SET_ESTABLISHMENT_ROLL_DATA:
       const { movements, blocks, totals } = action.data;
       return {
         ...state,

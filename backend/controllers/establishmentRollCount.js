@@ -1,11 +1,32 @@
-const getEstablishmentRollCountFactory = (elite2Api) => {
-  const getEstablishmentRollBlocksCount = async (context, agencyId, unassigned) => {
-    const response = await elite2Api.getEstablishmentRollBlocksCount(context, agencyId, unassigned);
-    const getTotals = (array, figure) => {
-      return array.reduce((accumulator, block) => accumulator + (block[figure]), 0);
+const getTotals = (array, figure) => {
+  return array.reduce((accumulator, block) => accumulator + block[figure], 0);
+};
+
+const getEstablishmentRollCountFactory = elite2Api => {
+  const getEstablishmentRollCount = async (context, agencyId, unassigned) => {
+    const [assignedResponse, unassignedResponse, movementsResponse] = await Promise.all([
+      elite2Api.getEstablishmentRollBlocksCount(context, agencyId, false),
+      elite2Api.getEstablishmentRollBlocksCount(context, agencyId, true),
+      elite2Api.getEstablishmentRollMovementsCount(context, agencyId)
+    ]);
+
+    const totalRoll = getTotals(assignedResponse, 'bedsInUse');
+
+    const movements = {
+      name: 'Movements',
+      numbers: [
+        { name: 'Unlock roll', value: totalRoll - movementsResponse.in + movementsResponse.out },
+        { name: 'In today', value: movementsResponse.in },
+        { name: 'Out today', value: movementsResponse.out },
+        { name: 'Current roll', value: totalRoll },
+        {
+          name: 'Unassigned',
+          value: getTotals(unassignedResponse, 'currentlyInCell')
+        }
+      ]
     };
 
-    const blocks = response.map((block) => ({
+    const blocks = assignedResponse.map(block => ({
       name: block.livingUnitDesc,
       numbers: [
         { name: 'Beds in use', value: block.bedsInUse },
@@ -20,26 +41,20 @@ const getEstablishmentRollCountFactory = (elite2Api) => {
     const totals = {
       name: 'Totals',
       numbers: [
-        { name: 'Total roll', value: getTotals(response, 'bedsInUse') },
-        { name: 'Total in cell', value: getTotals(response, 'currentlyInCell') },
-        { name: 'Total out', value: getTotals(response, 'currentlyOut') },
-        { name: 'Total op. cap.', value: getTotals(response, 'operationalCapacity') },
-        { name: 'Total vacancies', value: getTotals(response, 'netVacancies') },
-        { name: 'Total out of order', value: getTotals(response, 'outOfOrder') }
+        { name: 'Total roll', value: totalRoll },
+        { name: 'Total in cell', value: getTotals(assignedResponse, 'currentlyInCell') },
+        { name: 'Total out', value: getTotals(assignedResponse, 'currentlyOut') },
+        { name: 'Total op. cap.', value: getTotals(assignedResponse, 'operationalCapacity') },
+        { name: 'Total vacancies', value: getTotals(assignedResponse, 'netVacancies') },
+        { name: 'Total out of order', value: getTotals(assignedResponse, 'outOfOrder') }
       ]
     };
 
-    return { blocks, totals };
-  };
-
-  const getEstablishmentRollMovementsCount = async (context, agencyId) => {
-    const response = await elite2Api.getEstablishmentRollMovementsCount(context, agencyId);
-    return response;
+    return { movements, blocks, totals };
   };
 
   return {
-    getEstablishmentRollBlocksCount,
-    getEstablishmentRollMovementsCount
+    getEstablishmentRollCount
   };
 };
 
