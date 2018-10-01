@@ -45,7 +45,7 @@ const elite2ApiFactory = (client) => {
 
   const getSentenceData = (context, offenderNumbers) => post(context, `api/offender-sentences`, offenderNumbers);
 
-  const getEstablishmentRollCount = (context, agencyId, unassigned) => get(context, `api/movements/rollcount/${agencyId}?unassigned=${unassigned}`);
+  const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) => get(context, `api/movements/rollcount/${agencyId}?unassigned=${unassigned}`);
   const getEstablishmentRollMovementsCount = (context, agencyId) => get(context, `api/movements/rollcount/${agencyId}/movements`);
 
   return {
@@ -65,7 +65,7 @@ const elite2ApiFactory = (client) => {
     getCourtEvents,
     getSentenceData,
     getExternalTransfers,
-    getEstablishmentRollCount,
+    getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount
   };
 };

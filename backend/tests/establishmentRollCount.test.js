@@ -1,7 +1,7 @@
 const elite2Api = {};
-const getEstablishmentRollCount = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
+const getEstablishmentRollBlocksCount = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
   elite2Api,
-).getEstablishmentRollCount;
+).getEstablishmentRollBlocksCount;
 
 describe('Establishment Roll', () => {
   const context = {};
@@ -34,19 +34,19 @@ describe('Establishment Roll', () => {
   ];
 
   beforeEach(() => {
-    elite2Api.getEstablishmentRollCount = jest.fn();
+    elite2Api.getEstablishmentRollBlocksCount = jest.fn();
   });
 
   it('should call the rollcount endpoint', async () => {
-    elite2Api.getEstablishmentRollCount.mockImplementation(() => testApiData);
-    await getEstablishmentRollCount(context, agencyId);
+    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => testApiData);
+    await getEstablishmentRollBlocksCount(context, agencyId);
 
-    expect(elite2Api.getEstablishmentRollCount).toHaveBeenCalledWith(context, agencyId, undefined);
+    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, undefined);
   });
 
   it('should return response with block counts', async () => {
-    elite2Api.getEstablishmentRollCount.mockImplementation(() => testApiData);
-    const response = await getEstablishmentRollCount(context, agencyId);
+    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => testApiData);
+    const response = await getEstablishmentRollBlocksCount(context, agencyId);
     const returnedData = {
       blocks: [
         {

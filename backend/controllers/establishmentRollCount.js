@@ -1,6 +1,6 @@
 const getEstablishmentRollCountFactory = (elite2Api) => {
-  const getEstablishmentRollCount = async (context, agencyId, unassigned) => {
-    const response = await elite2Api.getEstablishmentRollCount(context, agencyId, unassigned);
+  const getEstablishmentRollBlocksCount = async (context, agencyId, unassigned) => {
+    const response = await elite2Api.getEstablishmentRollBlocksCount(context, agencyId, unassigned);
     const getTotals = (array, figure) => {
       return array.reduce((accumulator, block) => accumulator + (block[figure]), 0);
     };
@@ -38,7 +38,7 @@ const getEstablishmentRollCountFactory = (elite2Api) => {
   };
 
   return {
-    getEstablishmentRollCount,
+    getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount
   };
 };

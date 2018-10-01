@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const getEstablishmentRollCount = (agencyId, unassigned) =>
-  axios.get('/api/establishmentRollCount', {
+export const getEstablishmentRollBlocksCount = (agencyId, unassigned) =>
+  axios.get('/api/establishmentRollBlocksCount', {
     params: {
       agencyId,
       unassigned

@@ -6,7 +6,7 @@ import EstablishmentRollBlock from './EstablishmentRollBlock';
 import Spinner from '../Spinner';
 import Error from '../Error';
 import {
-  getEstablishmentRollCount,
+  getEstablishmentRollBlocksCount,
   getEstablishmentRollMovementsCount
 } from './services/getEstablishmentRollBlocks';
 import buildMovementsBlock from './buildMovementsBlock';
@@ -27,8 +27,8 @@ export class EstablishmentRollContainer extends Component {
     setLoadedDispatch(false);
     try {
       const [assignedBlockData, unassignedBlockData, movementsBlockData] = await Promise.all([
-        getEstablishmentRollCount(agencyId),
-        getEstablishmentRollCount(agencyId, true),
+        getEstablishmentRollBlocksCount(agencyId),
+        getEstablishmentRollBlocksCount(agencyId, true),
         getEstablishmentRollMovementsCount(agencyId)
       ]);
 
