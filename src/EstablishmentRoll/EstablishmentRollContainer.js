@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setEstablishmentRollData, setLoaded } from '../redux/actions';
+import { setEstablishmentRollData } from '../redux/actions';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import Spinner from '../Spinner';
 import Error from '../Error';
@@ -13,12 +13,24 @@ export class EstablishmentRollContainer extends Component {
   }
 
   componentDidMount () {
+    this.props.setCaseChangeRedirectStatusDispatch(false);
     this.getEstablishmentRollBlocks(this.props.agencyId);
   }
 
-  async getEstablishmentRollBlocks (agencyId) {
-    const { setLoadedDispatch, establishmentRollDataDispatch, handleError } = this.props;
+  componentDidUpdate (prevProps) {
+    if (this.props.agencyId !== prevProps.agencyId) {
+      this.getEstablishmentRollBlocks(this.props.agencyId);
+    }
+  }
 
+  async getEstablishmentRollBlocks (agencyId) {
+    const {
+      setLoadedDispatch,
+      resetErrorDispatch,
+      establishmentRollDataDispatch,
+      handleError
+    } = this.props;
+    resetErrorDispatch();
     setLoadedDispatch(false);
     try {
       const establishmentRollResponse = await axios.get('/api/establishmentRollCount', {
@@ -62,10 +74,10 @@ EstablishmentRollContainer.propTypes = {
   totals: PropTypes.object,
   agencyId: PropTypes.string,
   establishmentRollDataDispatch: PropTypes.func,
-  setLoadedDispatch: PropTypes.func,
   handleError: PropTypes.func,
   loaded: PropTypes.bool,
-  error: PropTypes.string
+  error: PropTypes.string,
+  setCaseChangeRedirectStatusDispatch: PropTypes.func
 };
 
 const mapStateToProps = state => {
@@ -80,8 +92,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data)),
-    setLoadedDispatch: status => dispatch(setLoaded(status))
+    establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data))
   };
 };
 

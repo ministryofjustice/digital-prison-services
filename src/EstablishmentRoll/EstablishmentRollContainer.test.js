@@ -9,6 +9,7 @@ describe('<EstablishmentRollContainer />', () => {
     blocks,
     totals,
     agencyId: 'LEI',
+    setCaseChangeRedirectStatusDispatch: jest.fn(),
     establishmentRollBlockDataDispatch: jest.fn(),
     setLoadedDispatch: jest.fn(),
     handleError: jest.fn(),
@@ -50,8 +51,7 @@ describe('<EstablishmentRollContainer />', () => {
     it('should render a EstablishmentRollBlock for each housing block', () => {
       /* eslint-disable max-nested-callbacks */
       const blocks = wrapper.findWhere(
-        (block) =>
-          block.name() === 'EstablishmentRollBlock' && block.prop('highlight') === undefined,
+        block => block.name() === 'EstablishmentRollBlock' && block.prop('highlight') === undefined
       );
       /* eslint-enable */
       expect(blocks.length).toEqual(4);
@@ -61,6 +61,20 @@ describe('<EstablishmentRollContainer />', () => {
       const lastBlock = wrapper.find('EstablishmentRollBlock').last();
       expect(lastBlock.dive().find('h2').text()).toEqual('Totals');
       expect(lastBlock.props().highlight).toBe(true);
+    });
+  });
+
+  describe('when changing the case load/agency', () => {
+    it('should stay on the establishment roll page get the establishment roll blocks for the new case load', () => {
+      const newAgencyID = 'MID';
+      const getEstablishmentRollBlocksSpy = jest.spyOn(
+        wrapper.instance(),
+        'getEstablishmentRollBlocks'
+      );
+      wrapper.setProps({ agencyId: newAgencyID });
+
+      expect(props.setCaseChangeRedirectStatusDispatch).toHaveBeenCalledWith(false);
+      expect(getEstablishmentRollBlocksSpy).toHaveBeenCalledWith(newAgencyID);
     });
   });
 });

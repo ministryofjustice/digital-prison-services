@@ -27,7 +27,8 @@ const appInitialState = {
   message: null,
   loaded: false,
   menuOpen: false,
-  showModal: {}
+  showModal: {},
+  caseChangeRedirect: true
 };
 
 const searchInitialState = {
@@ -109,6 +110,11 @@ export function app (state = appInitialState, action) {
       return {
         ...state,
         menuOpen: action.payload
+      };
+    case ActionTypes.SET_CASE_CHANGE_REDIRECT:
+      return {
+        ...state,
+        caseChangeRedirect: action.bool
       };
     default:
       return state;

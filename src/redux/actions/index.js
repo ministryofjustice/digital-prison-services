@@ -168,7 +168,14 @@ export const setMenuOpen = (payload) => {
   };
 };
 
-export const setEstablishmentRollData = (data) => {
+export const setCaseChangeRedirectStatus = bool => {
+  return {
+    type: ActionTypes.SET_CASE_CHANGE_REDIRECT,
+    bool
+  };
+};
+
+export const setEstablishmentRollData = data => {
   return {
     type: ActionTypes.SET_ESTABLISHMENT_ROLL_DATA,
     data
