@@ -65,7 +65,7 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
 
   const logout = (req, res) => {
     hmppsCookieOperations.clearCookie(res);
-    res.redirect(LOGIN_PATH);
+    res.redirect(`${process.env.NN_ENDPOINT_URL}${LOGIN_PATH}`);
   };
 
   /**
