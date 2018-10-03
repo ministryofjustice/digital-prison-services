@@ -34,7 +34,8 @@ import {
   setActivityData,
   setSearchActivity,
   setSearchActivities,
-  setMenuOpen
+  setMenuOpen,
+  setCaseChangeRedirectStatus
 } from "./redux/actions";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
@@ -364,7 +365,8 @@ App.propTypes = {
   sortOrder: PropTypes.string,
   switchAgencyDispatch: PropTypes.func.isRequired,
   user: PropTypes.object,
-  userDetailsDispatch: PropTypes.func.isRequired
+  userDetailsDispatch: PropTypes.func.isRequired,
+  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -383,7 +385,8 @@ const mapStateToProps = state => {
     orderField: state.events.orderField,
     sortOrder: state.events.sortOrder,
     showModal: state.app.showModal,
-    menuOpen: state.app.menuOpen
+    menuOpen: state.app.menuOpen,
+    caseChangeRedirect: state.app.caseChangeRedirect
   };
 };
 
@@ -403,7 +406,8 @@ const mapDispatchToProps = dispatch => {
     periodDispatch: text => dispatch(setSearchPeriod(text)),
     activityDataDispatch: data => dispatch(setActivityData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
-    setMenuOpen: (flag) => dispatch(setMenuOpen(flag))
+    setMenuOpen: (flag) => dispatch(setMenuOpen(flag)),
+    setCaseChangeRedirectStatusDispatch: (flag) => dispatch(setCaseChangeRedirectStatus(flag))
   };
 };
 
