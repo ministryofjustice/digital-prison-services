@@ -1,8 +1,6 @@
 import { app, search, defaultPeriod, events, establishmentRoll } from './index';
 import * as types from '../actions/actionTypes';
-
-import { setMenuOpen } from "../actions";
-
+import { setMenuOpen } from '../actions';
 import moment from 'moment';
 
 const appInitialState = {
@@ -39,19 +37,17 @@ const appWithValidationErrorState = {
 
 describe('app (global) reducer', () => {
   it('should return the initial state', () => {
-    expect(app(undefined, {})).toEqual(
-      {
-        caseChangeRedirect: true,
-        config: { mailTo: '' },
-        user: { activeCaseLoadId: null },
-        shouldShowTerms: false,
-        error: null,
-        message: null,
-        loaded: false,
-        menuOpen: false,
-        showModal: {}
-      }
-    );
+    expect(app(undefined, {})).toEqual({
+      caseChangeRedirect: true,
+      config: { mailTo: '' },
+      user: { activeCaseLoadId: null },
+      shouldShowTerms: false,
+      error: null,
+      message: null,
+      loaded: false,
+      menuOpen: false,
+      showModal: {}
+    });
   });
 
   it('should handle SET_CONFIG', () => {
@@ -60,11 +56,10 @@ describe('app (global) reducer', () => {
         type: types.SET_CONFIG,
         config: { mailTo: 'a@b.com' }
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        config: { mailTo: 'a@b.com' },
-      });
+    ).toEqual({
+      ...appInitialState,
+      config: { mailTo: 'a@b.com' }
+    });
   });
 
   it('should handle SET_USER_DETAILS', () => {
@@ -73,12 +68,10 @@ describe('app (global) reducer', () => {
         type: types.SET_USER_DETAILS,
         user: { field: 'value' }
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        user: { field: 'value' }
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      user: { field: 'value' }
+    });
   });
 
   it('should handle SWITCH_AGENCY', () => {
@@ -87,12 +80,10 @@ describe('app (global) reducer', () => {
         type: types.SWITCH_AGENCY,
         activeCaseLoadId: 'BXI'
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        user: { activeCaseLoadId: 'BXI' }
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      user: { activeCaseLoadId: 'BXI' }
+    });
   });
 
   it('should handle SET_TERMS_VISIBILITY', () => {
@@ -101,14 +92,11 @@ describe('app (global) reducer', () => {
         type: types.SET_TERMS_VISIBILITY,
         shouldShowTerms: true
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        shouldShowTerms: true
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      shouldShowTerms: true
+    });
   });
-
 
   it('should handle SET_ERROR', () => {
     expect(
@@ -116,12 +104,10 @@ describe('app (global) reducer', () => {
         type: types.SET_ERROR,
         error: 'HELP!'
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        error: 'HELP!'
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      error: 'HELP!'
+    });
   });
 
   it('should handle RESET_ERROR', () => {
@@ -129,13 +115,10 @@ describe('app (global) reducer', () => {
       app(appWithErrorState, {
         type: types.RESET_ERROR
       })
-    ).toEqual(
-      {
-        error: null,
-        message: null,
-        loaded: false
-      }
-    );
+    ).toEqual({
+      ...appWithErrorState,
+      error: null
+    });
   });
 
   it('should handle SET_MESSAGE', () => {
@@ -144,12 +127,10 @@ describe('app (global) reducer', () => {
         type: types.SET_MESSAGE,
         message: 'An important message!'
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        message: 'An important message!'
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      message: 'An important message!'
+    });
   });
 
   it('should handle SET_LOADED', () => {
@@ -158,12 +139,10 @@ describe('app (global) reducer', () => {
         type: types.SET_LOADED,
         loaded: true
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        loaded: true
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      loaded: true
+    });
   });
 
   it('should handle SET_VALIDATION_ERROR (first error)', () => {
@@ -173,12 +152,10 @@ describe('app (global) reducer', () => {
         fieldName: 'myField',
         message: 'An error!'
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        validationErrors: { myField: 'An error!' }
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      validationErrors: { myField: 'An error!' }
+    });
   });
 
   it('should handle SET_VALIDATION_ERROR (second error)', () => {
@@ -188,14 +165,12 @@ describe('app (global) reducer', () => {
         fieldName: 'myField2',
         message: 'Another error!'
       })
-    ).toEqual(
-      {
-        validationErrors: {
-          myField: 'An error!',
-          myField2: 'Another error!'
-        }
+    ).toEqual({
+      validationErrors: {
+        myField: 'An error!',
+        myField2: 'Another error!'
       }
-    );
+    });
   });
 
   it('should handle RESET_VALIDATION_ERRORS', () => {
@@ -203,11 +178,9 @@ describe('app (global) reducer', () => {
       app(appWithValidationErrorState, {
         type: types.RESET_VALIDATION_ERRORS
       })
-    ).toEqual(
-      {
-        validationErrors: null
-      }
-    );
+    ).toEqual({
+      validationErrors: null
+    });
   });
 
   it('should handle SET_SEARCH_LOCATIONS', () => {
@@ -216,17 +189,12 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_LOCATIONS,
         locations: ['a', 'b']
       })
-    ).toEqual(
-      {
-        locations: ['a', 'b'],
-        activities: [],
-        location: '--',
-        subLocation: '--',
-        activity: '',
-        date: moment().format('DD/MM/YYYY'),
-        period: ''
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      locations: ['a', 'b'],
+      location: '--',
+      subLocation: '--'
+    });
   });
 
   it('should handle SET_SEARCH_LOCATION', () => {
@@ -235,17 +203,11 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_LOCATION,
         location: 'lol'
       })
-    ).toEqual(
-      {
-        locations: [],
-        activities: [],
-        location: 'lol',
-        subLocation: '--',
-        activity: '',
-        date: moment().format('DD/MM/YYYY'),
-        period: ''
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      location: 'lol',
+      subLocation: '--'
+    });
   });
 
   it('should handle SET_SEARCH_SUB_LOCATION', () => {
@@ -254,17 +216,10 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_SUB_LOCATION,
         subLocation: 'lollol'
       })
-    ).toEqual(
-      {
-        locations: [],
-        activities: [],
-        location: '',
-        subLocation: 'lollol',
-        activity: '',
-        date: moment().format('DD/MM/YYYY'),
-        period: ''
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      subLocation: 'lollol'
+    });
   });
 
   it('should handle SET_SEARCH_ACTIVITIES', () => {
@@ -273,16 +228,10 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_ACTIVITIES,
         activities: ['a', 'b']
       })
-    ).toEqual(
-      {
-        locations: [],
-        activities: ['a', 'b'],
-        location: '',
-        activity: '',
-        date: moment().format('DD/MM/YYYY'),
-        period: ''
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      activities: ['a', 'b']
+    });
   });
 
   it('should handle SET_SEARCH_ACTIVITY', () => {
@@ -291,16 +240,10 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_ACTIVITY,
         activity: 'lol'
       })
-    ).toEqual(
-      {
-        locations: [],
-        activities: [],
-        location: '',
-        activity: 'lol',
-        date: moment().format('DD/MM/YYYY'),
-        period: ''
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      activity: 'lol'
+    });
   });
 
   it('should handle SET_SEARCH_DATE', () => {
@@ -309,16 +252,10 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_DATE,
         date: '12/12/1999'
       })
-    ).toEqual(
-      {
-        locations: [],
-        activities: [],
-        location: '',
-        activity: '',
-        date: '12/12/1999',
-        period: ''
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      date: '12/12/1999'
+    });
   });
 
   it('should handle SET_SEARCH_PERIOD', () => {
@@ -327,16 +264,10 @@ describe('app (global) reducer', () => {
         type: types.SET_SEARCH_PERIOD,
         period: 'teatime'
       })
-    ).toEqual(
-      {
-        locations: [],
-        activities: [],
-        location: '',
-        activity: '',
-        date: moment().format('DD/MM/YYYY'),
-        period: 'teatime'
-      }
-    );
+    ).toEqual({
+      ...searchInitialState,
+      period: 'teatime'
+    });
   });
 
   it('should handle SET_HOUSEBLOCK_DATA', () => {
@@ -345,14 +276,12 @@ describe('app (global) reducer', () => {
         type: types.SET_HOUSEBLOCK_DATA,
         data: ['data0', 'data1']
       })
-    ).toEqual(
-      {
-        activityData: [],
-        houseBlockData: ['data0', 'data1'],
-        orderField: "cellLocation",
-        sortOrder: "ASC"
-      }
-    );
+    ).toEqual({
+      activityData: [],
+      houseBlockData: ['data0', 'data1'],
+      orderField: 'cellLocation',
+      sortOrder: 'ASC'
+    });
   });
 
   it('should handle SET_ORDER_FIELD', () => {
@@ -361,14 +290,12 @@ describe('app (global) reducer', () => {
         type: types.SET_ORDER_FIELD,
         orderField: 'field1'
       })
-    ).toEqual(
-      {
-        activityData: [],
-        houseBlockData: [],
-        orderField: 'field1',
-        sortOrder: "ASC"
-      }
-    );
+    ).toEqual({
+      activityData: [],
+      houseBlockData: [],
+      orderField: 'field1',
+      sortOrder: 'ASC'
+    });
   });
 
   it('should handle SET_ORDER', () => {
@@ -377,45 +304,22 @@ describe('app (global) reducer', () => {
         type: types.SET_ORDER,
         sortOrder: 'DESC'
       })
-    ).toEqual(
-      {
-        houseBlockData: [],
-        activityData: [],
-        orderField: 'cellLocation',
-        sortOrder: "DESC"
-      }
-    );
+    ).toEqual({
+      houseBlockData: [],
+      activityData: [],
+      orderField: 'cellLocation',
+      sortOrder: 'DESC'
+    });
   });
 
   it('should calculate current time period', () => {
-    expect(
-      defaultPeriod(moment('12:00 am', "HH:mm a"))
-    ).toEqual('AM'
-    );
-    expect(
-      defaultPeriod(moment('12:01 am', "HH:mm a"))
-    ).toEqual('AM'
-    );
-    expect(
-      defaultPeriod(moment('11:59:59 am', "HH:mm:ss a"))
-    ).toEqual('AM'
-    );
-    expect(
-      defaultPeriod(moment('12:00:00 pm', "HH:mm:ss a"))
-    ).toEqual('PM'
-    );
-    expect(
-      defaultPeriod(moment('16:59:59 pm', "HH:mm:ss a"))
-    ).toEqual('PM'
-    );
-    expect(
-      defaultPeriod(moment('17:00:00 pm', "HH:mm:ss a"))
-    ).toEqual('ED'
-    );
-    expect(
-      defaultPeriod(moment('11:59:59 pm', "HH:mm:ss a"))
-    ).toEqual('ED'
-    );
+    expect(defaultPeriod(moment('12:00 am', 'HH:mm a'))).toEqual('AM');
+    expect(defaultPeriod(moment('12:01 am', 'HH:mm a'))).toEqual('AM');
+    expect(defaultPeriod(moment('11:59:59 am', 'HH:mm:ss a'))).toEqual('AM');
+    expect(defaultPeriod(moment('12:00:00 pm', 'HH:mm:ss a'))).toEqual('PM');
+    expect(defaultPeriod(moment('16:59:59 pm', 'HH:mm:ss a'))).toEqual('PM');
+    expect(defaultPeriod(moment('17:00:00 pm', 'HH:mm:ss a'))).toEqual('ED');
+    expect(defaultPeriod(moment('11:59:59 pm', 'HH:mm:ss a'))).toEqual('ED');
   });
 
   it('should handle SET_MENU_OPEN', () => {
@@ -434,12 +338,10 @@ describe('app (global) reducer', () => {
         type: types.SET_CASE_CHANGE_REDIRECT,
         bool: false
       })
-    ).toEqual(
-      {
-        ...appInitialState,
-        caseChangeRedirect: false
-      }
-    );
+    ).toEqual({
+      ...appInitialState,
+      caseChangeRedirect: false
+    });
   });
 
   it('should handle SET_ESTABLISHMENT_ROLL_DATA', () => {
@@ -452,12 +354,10 @@ describe('app (global) reducer', () => {
           totals: null
         }
       })
-    ).toEqual(
-      {
-        movements: null,
-        blocks: [],
-        totals: null
-      }
-    );
+    ).toEqual({
+      movements: null,
+      blocks: [],
+      totals: null
+    });
   });
 });
