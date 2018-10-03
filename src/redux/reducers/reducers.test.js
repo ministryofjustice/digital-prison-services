@@ -6,6 +6,7 @@ import { setMenuOpen } from "../actions";
 import moment from 'moment';
 
 const appInitialState = {
+  caseChangeRedirect: true,
   error: null,
   message: null,
   loaded: false
@@ -61,10 +62,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: null,
+        ...appInitialState,
         config: { mailTo: 'a@b.com' },
-        loaded: false
       });
   });
 
@@ -76,10 +75,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: null,
-        user: { field: 'value' },
-        loaded: false
+        ...appInitialState,
+        user: { field: 'value' }
       }
     );
   });
@@ -92,10 +89,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: null,
-        user: { activeCaseLoadId: 'BXI' },
-        loaded: false
+        ...appInitialState,
+        user: { activeCaseLoadId: 'BXI' }
       }
     );
   });
@@ -108,10 +103,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: null,
-        shouldShowTerms: true,
-        loaded: false
+        ...appInitialState,
+        shouldShowTerms: true
       }
     );
   });
@@ -125,9 +118,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: 'HELP!',
-        message: null,
-        loaded: false
+        ...appInitialState,
+        error: 'HELP!'
       }
     );
   });
@@ -154,9 +146,8 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: 'An important message!',
-        loaded: false
+        ...appInitialState,
+        message: 'An important message!'
       }
     );
   });
@@ -169,8 +160,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: null,
+        ...appInitialState,
         loaded: true
       }
     );
@@ -185,9 +175,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual(
       {
-        error: null,
-        message: null,
-        loaded: false,
+        ...appInitialState,
         validationErrors: { myField: 'An error!' }
       }
     );
@@ -429,6 +417,7 @@ describe('app (global) reducer', () => {
     ).toEqual('ED'
     );
   });
+
   it('should handle SET_MENU_OPEN', () => {
     let state = app(appInitialState, setMenuOpen(true));
 
@@ -437,6 +426,20 @@ describe('app (global) reducer', () => {
     state = app(appInitialState, setMenuOpen(false));
 
     expect(state.menuOpen).toBe(false);
+  });
+
+  it('should handle SET_CASE_CHANGE_REDIRECT', () => {
+    expect(
+      app(appInitialState, {
+        type: types.SET_CASE_CHANGE_REDIRECT,
+        bool: false
+      })
+    ).toEqual(
+      {
+        ...appInitialState,
+        caseChangeRedirect: false
+      }
+    );
   });
 
   it('should handle SET_ESTABLISHMENT_ROLL_DATA', () => {
