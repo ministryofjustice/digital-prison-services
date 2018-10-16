@@ -4,7 +4,6 @@ import Footer from './Footer/index';
 import ErrorComponent from './Error/index';
 import SearchContainer from './Search/SearchContainer';
 import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer';
-import Header from './Header/index';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
 import moment from 'moment';
@@ -35,7 +34,8 @@ import {
   setActivityData,
   setSearchActivity,
   setSearchActivities,
-  setMenuOpen
+  setMenuOpen,
+  setCaseChangeRedirectStatus
 } from "./redux/actions";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 
@@ -44,9 +44,7 @@ import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentRe
 import links from "./links";
 
 const axios = require('axios');
-
-// Dev only - Establishment roll data will come from API
-import { movements, blocks } from './EstablishmentRoll/establishmentRollDummyData';
+import { Header } from 'new-nomis-shared-components';
 
 class App extends React.Component {
   constructor () {
@@ -293,7 +291,9 @@ class App extends React.Component {
             {...this.props} />
         )}/>
         <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
-        <Route exact path="/establishmentroll" render={() => <EstablishmentRollContainer movements={movements} blocks={blocks} />} />
+        <Route exact path="/establishmentroll" render={() => (
+          <EstablishmentRollContainer handleError={this.handleError} {...this.props} />
+        )} />
       </div></div>);
 
     let innerContent;
@@ -311,6 +311,9 @@ class App extends React.Component {
               ReactGA.pageview(props.location.pathname);
             }
             return (<Header
+              logoText={'HMPPS'}
+              title={'Activity Lists'}
+              homeLink={links.getHomeLink()}
               switchCaseLoad={this.switchCaseLoad}
               history={props.history}
               {...this.props}
@@ -362,7 +365,8 @@ App.propTypes = {
   sortOrder: PropTypes.string,
   switchAgencyDispatch: PropTypes.func.isRequired,
   user: PropTypes.object,
-  userDetailsDispatch: PropTypes.func.isRequired
+  userDetailsDispatch: PropTypes.func.isRequired,
+  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -381,7 +385,8 @@ const mapStateToProps = state => {
     orderField: state.events.orderField,
     sortOrder: state.events.sortOrder,
     showModal: state.app.showModal,
-    menuOpen: state.app.menuOpen
+    menuOpen: state.app.menuOpen,
+    caseChangeRedirect: state.app.caseChangeRedirect
   };
 };
 
@@ -401,7 +406,8 @@ const mapDispatchToProps = dispatch => {
     periodDispatch: text => dispatch(setSearchPeriod(text)),
     activityDataDispatch: data => dispatch(setActivityData(data)),
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
-    setMenuOpen: (flag) => dispatch(setMenuOpen(flag))
+    setMenuOpen: (flag) => dispatch(setMenuOpen(flag)),
+    setCaseChangeRedirectStatusDispatch: (flag) => dispatch(setCaseChangeRedirectStatus(flag))
   };
 };
 

@@ -24,6 +24,7 @@ const activityListFactory = require('./controllers/activityList').getActivityLis
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory;
 const healthFactory = require('./controllers/health').healthFactory;
 const updateAttendanceFactory = require('./controllers/updateAttendance').updateAttendanceFactory;
+const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory;
 
 const sessionManagementRoutes = require('./sessionManagementRoutes');
 const contextProperties = require('./contextProperties');
@@ -100,7 +101,8 @@ const elite2Api = eliteApiFactory(
 const controller = controllerFactory(
   activityListFactory(elite2Api),
   houseblockListFactory(elite2Api),
-  updateAttendanceFactory(elite2Api)
+  updateAttendanceFactory(elite2Api),
+  establishmentRollFactory(elite2Api),
 );
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 });
@@ -128,17 +130,18 @@ sessionManagementRoutes.configureRoutes({
 
 if (config.app.production === false) {
   const compiler = webpack(require('../webpack.config.js'));
-  app.use(middleware(compiler, {}));
+  app.use(middleware(compiler, { writeToDisk: true }));
   app.use(hrm(compiler, {}));
 }
-
-app.use(express.static(path.join(__dirname, '../build')));
 
 // Extract pagination header information from requests and set on the 'context'
 app.use('/api', (req, res, next) => {
   contextProperties.setRequestPagination(res.locals, req.headers);
   next();
 });
+
+app.use(express.static(path.join(__dirname, '../build')));
+
 
 app.use('/api/config', getConfiguration);
 app.use('/api/me', userMeFactory(elite2Api).userMe);
@@ -150,6 +153,7 @@ app.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivit
 app.use('/api/houseblocklist', controller.getHouseblockList);
 app.use('/api/activityList', controller.getActivityList);
 app.use('/api/updateAttendance', controller.updateAttendance);
+app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));

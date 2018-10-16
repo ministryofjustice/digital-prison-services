@@ -4,6 +4,7 @@ import geb.module.FormElement
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ActivityPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -15,7 +16,10 @@ class ActivitySpecification extends GebReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
-    TestFixture fixture = new TestFixture(browser, elite2api)
+    @Rule
+    OauthApi oauthApi = new OauthApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
     def initialPeriod;
 
     def "The activity list is displayed"() {

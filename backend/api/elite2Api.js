@@ -36,7 +36,8 @@ const elite2ApiFactory = (client) => {
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) => post(context, `api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers);
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) => post(context, `api/schedules/${agencyId}/courtEvents?date=${date}`, offenderNumbers);
   const getExternalTransfers = (context, { agencyId, date, offenderNumbers }) => post(context, `api/schedules/${agencyId}/externalTransfers?date=${date}`, offenderNumbers);
-
+  const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) => get(context, `api/movements/rollcount/${agencyId}?unassigned=${unassigned}`);
+  const getEstablishmentRollMovementsCount = (context, agencyId) => get(context, `api/movements/rollcount/${agencyId}/movements`);
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) => get(context, `api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`);
   const searchGroups = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations/groups`);
@@ -61,7 +62,9 @@ const elite2ApiFactory = (client) => {
     getActivities,
     getCourtEvents,
     getSentenceData,
-    getExternalTransfers
+    getExternalTransfers,
+    getEstablishmentRollBlocksCount,
+    getEstablishmentRollMovementsCount
   };
 };
 

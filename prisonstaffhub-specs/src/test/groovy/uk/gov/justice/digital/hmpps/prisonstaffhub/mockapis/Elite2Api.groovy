@@ -5,6 +5,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.EstablishmentRollResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
@@ -18,55 +19,8 @@ class Elite2Api extends WireMockRule {
         super(8080)
     }
 
-    void stubValidOAuthTokenRequest(UserAccount user, Boolean delayOAuthResponse = false) {
-
-        final accessToken = JwtFactory.token()
-
-        final response = aResponse()
-                .withStatus(200)
-                .withHeader('Content-Type', 'application/json;charset=UTF-8')
-                .withBody(JsonOutput.toJson([
-                access_token : accessToken,
-                token_type   : 'bearer',
-                refresh_token: JwtFactory.token(),
-                expires_in   : 599,
-                scope        : 'read write',
-                internalUser : true
-        ]))
-
-        if (delayOAuthResponse) {
-            response.withFixedDelay(5000)
-        }
-
-        stubFor(
-                post('/oauth/token')
-                        .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
-                        .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
-                        .withRequestBody(equalTo("username=${user.username}&password=password&grant_type=password"))
-                        .willReturn(response))
-    }
-
-    void stubInvalidOAuthTokenRequest(UserAccount user, boolean badPassword = false) {
-        stubFor(
-                post('/oauth/token')
-                        .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
-                        .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
-                        .withRequestBody(matching("username=${user.username}&password=.*&grant_type=password"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(400)
-                                .withBody(JsonOutput.toJson([
-                                error            : 'invalid_grant',
-                                error_description:
-                                        badPassword ?
-                                                "invalid authorization specification - not found: ${user.username}"
-                                                :
-                                                "invalid authorization specification"
-                        ]))))
-    }
-
     void stubUpdateActiveCaseload() {
-        stubFor(
+        this.stubFor(
                 put('/api/users/me/activeCaseLoad')
                         .willReturn(
                         aResponse()
@@ -79,7 +33,7 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubGetMyDetails(UserAccount user, String caseloadId ) {
-        stubFor(
+        this.stubFor(
                 get('/api/users/me')
                         .willReturn(
                         aResponse()
@@ -104,7 +58,7 @@ class Elite2Api extends WireMockRule {
             caseloadFunction 'DUMMY'
         }
 
-        stubFor(
+        this.stubFor(
                 get('/api/users/me/caseLoads')
                         .willReturn(
                         aResponse()
@@ -115,7 +69,7 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubHealth() {
-        stubFor(
+        this.stubFor(
                 get('/health')
                         .willReturn(
                         aResponse()
@@ -407,6 +361,35 @@ class Elite2Api extends WireMockRule {
                                 .withBody(json)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
+    }
+
+    def stubEstablishmentRollCount(String agencyId) {
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}?unassigned=false")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(EstablishmentRollResponses.assignedResponse))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}?unassigned=true")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(EstablishmentRollResponses.unassignedResponse))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
+
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}/movements")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(EstablishmentRollResponses.movementBlockResponse))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 
     static def extractOffenderNumbers(String json) {

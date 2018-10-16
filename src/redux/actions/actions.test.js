@@ -165,4 +165,26 @@ describe('actions', () => {
     };
     expect(actions.setActivityData([{ stuff: 'stuff' }])).toEqual(expectedAction);
   });
+
+  it('should create an action to set case change redirect status', () => {
+    const bool = true;
+    const expectedAction = {
+      type: types.SET_CASE_CHANGE_REDIRECT,
+      bool
+    };
+    expect(actions.setCaseChangeRedirectStatus(bool)).toEqual(expectedAction);
+  });
+
+  it('should create an action to set establishment roll block data', () => {
+    const data = {
+      movements: null,
+      blocks: [],
+      totals: null
+    };
+    const expectedAction = {
+      type: types.SET_ESTABLISHMENT_ROLL_DATA,
+      data
+    };
+    expect(actions.setEstablishmentRollData(data)).toEqual(expectedAction);
+  });
 });

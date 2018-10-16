@@ -1,14 +1,10 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { shallow } from 'enzyme';
 import moment from 'moment';
 import { ResultsActivity } from "./ResultsActivity";
 import OtherActivitiesView from "../OtherActivityListView";
 
-Enzyme.configure({ adapter: new Adapter() });
-
 const PRISON = 'SYI';
-
 const OFFENDER_NAME_COLUMN = 0;
 const LOCATION_COLUMN = 1;
 const NOMS_ID_COLUMN = 2;
@@ -93,6 +89,7 @@ const response = [
   {
     courtEvents: [
       {
+        eventId: 100,
         eventDescription: 'Court visit scheduled'
       }
     ],

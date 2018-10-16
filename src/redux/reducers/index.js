@@ -26,7 +26,9 @@ const appInitialState = {
   error: null,
   message: null,
   loaded: false,
-  menuOpen: false
+  menuOpen: false,
+  showModal: {},
+  caseChangeRedirect: true
 };
 
 const searchInitialState = {
@@ -44,6 +46,12 @@ const eventsInitialState = {
   activityData: [],
   orderField: 'cellLocation',
   sortOrder: 'ASC'
+};
+
+const establishmentRollInitialState = {
+  movements: null,
+  blocks: [],
+  totals: null
 };
 
 export function app (state = appInitialState, action) {
@@ -102,6 +110,11 @@ export function app (state = appInitialState, action) {
       return {
         ...state,
         menuOpen: action.payload
+      };
+    case ActionTypes.SET_CASE_CHANGE_REDIRECT:
+      return {
+        ...state,
+        caseChangeRedirect: action.bool
       };
     default:
       return state;
@@ -180,13 +193,27 @@ export function events (state = eventsInitialState, action) {
   }
 }
 
+export function establishmentRoll (state = establishmentRollInitialState, action) {
+  switch (action.type) {
+    case ActionTypes.SET_ESTABLISHMENT_ROLL_DATA:
+      const { movements, blocks, totals } = action.data;
+      return {
+        ...state,
+        movements,
+        blocks,
+        totals
+      };
+    default:
+      return state;
+  }
+}
+
 function updateObject (oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
 }
 
-
 const prisonStaffHubApp = combineReducers({
-  events, app, search
+  events, app, search, establishmentRoll
 });
 
 export default prisonStaffHubApp;

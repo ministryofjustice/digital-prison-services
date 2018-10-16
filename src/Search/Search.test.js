@@ -1,9 +1,6 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { shallow } from 'enzyme';
 import { Search } from "./Search";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const locations = ['1', '2'];
 const activities = [{ locationId: '123456', userDescription: 'little room' }];

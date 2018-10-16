@@ -125,7 +125,7 @@ tbody > tr + td {
   }
 
   .FooterContainer, .page-header, img, #buttons, #updateButton, .no-print {
-    display: none;
+    display: none !important;
   }
 
   .content {

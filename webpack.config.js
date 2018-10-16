@@ -5,10 +5,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const developmentEntries = process.env.NODE_ENV === 'development' ? [
-   // Add the client which connects to our middleware
+  // Add the client which connects to our middleware
   // You can use full urls like 'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr'
   // useful if you run your app from another point like django
-  'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+  'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000'
 ] : [];
 
 module.exports = {
@@ -16,12 +16,13 @@ module.exports = {
   mode: 'development',
   context: __dirname,
   entry: [
-     ...developmentEntries,
+    ...developmentEntries,
     './src/index.js'
   ],
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, 'build')
+    path: path.join(__dirname, 'build'),
+    publicPath: process.env.PUBLIC_URL || '/'
   },
   devtool: "source-map",
   module: {
