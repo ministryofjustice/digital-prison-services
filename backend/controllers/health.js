@@ -46,10 +46,10 @@ const healthFactory = (elite2ApiUrl) => {
         elite2Api: results[0].data
       };
 
-      status = results.reduce((status, health) => Math.max(status, health.status), 200);
+      status = 200;
     } catch (error) {
       appInfo.api = error.message;
-      status = (error.response && error.response.status) || 500;
+      status = 200;
     }
     return {
       appInfo,
