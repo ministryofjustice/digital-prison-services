@@ -187,4 +187,36 @@ describe('actions', () => {
     };
     expect(actions.setEstablishmentRollData(data)).toEqual(expectedAction);
   });
+
+  it('should create an action to save the global search data', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_RESULTS_DATA,
+      data: [{ stuff: 'stuff' }]
+    };
+    expect(actions.setGlobalSearchResults([{ stuff: 'stuff' }])).toEqual(expectedAction);
+  });
+
+  it('should create an action to save user search page size', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE,
+      pageSize: 4
+    };
+    expect(actions.setGlobalSearchPageSize(4)).toEqual(expectedAction);
+  });
+
+  it('should create an action to save user search page number', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER,
+      pageNumber: 6
+    };
+    expect(actions.setGlobalSearchPageNumber(6)).toEqual(expectedAction);
+  });
+
+  it('should create an action to save user search total records', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS,
+      totalRecords: 6
+    };
+    expect(actions.setGlobalSearchTotalRecords(6)).toEqual(expectedAction);
+  });
 });

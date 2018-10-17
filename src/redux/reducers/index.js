@@ -54,6 +54,14 @@ const establishmentRollInitialState = {
   totals: null
 };
 
+const globalSearchInitialState = {
+  data: [],
+  pageNumber: 0,
+  pageSize: 10,
+  totalRecords: 0,
+  contextUser: {}
+};
+
 export function app (state = appInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_CONFIG:
@@ -208,12 +216,35 @@ export function establishmentRoll (state = establishmentRollInitialState, action
   }
 }
 
+export function globalSearch (state = globalSearchInitialState, action) {
+  switch (action.type) {
+    case ActionTypes.SET_GLOBAL_SEARCH_RESULTS_DATA:
+      return { ...state,
+        data: action.data
+      };
+    case ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE:
+      return { ...state,
+        pageSize: action.pageSize
+      };
+    case ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER:
+      return { ...state,
+        pageNumber: action.pageNumber
+      };
+    case ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS:
+      return { ...state,
+        totalRecords: action.totalRecords
+      };
+    default:
+      return state;
+  }
+}
+
 function updateObject (oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
 }
 
 const prisonStaffHubApp = combineReducers({
-  events, app, search, establishmentRoll
+  events, app, search, establishmentRoll, globalSearch
 });
 
 export default prisonStaffHubApp;

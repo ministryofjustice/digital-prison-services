@@ -205,6 +205,7 @@ ResultsHouseblock.propTypes = {
   subLocations: PropTypes.array,
   orderField: PropTypes.string,
   sortOrder: PropTypes.string,
+  showPaymentReasonModal: PropTypes.func,
   update: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 };

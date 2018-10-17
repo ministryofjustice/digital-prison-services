@@ -1,6 +1,8 @@
+const contextProperties = require('../contextProperties');
 
 const elite2ApiFactory = (client) => {
   const processResponse = (context) => (response) => {
+    contextProperties.setResponsePagination(context, response.headers);
     return response.data;
   };
 
@@ -45,6 +47,7 @@ const elite2ApiFactory = (client) => {
   const createCaseNote = (context, offenderNo, body) => post(context, `api/bookings/offenderNo/${offenderNo}/caseNotes`, body);
 
   const getSentenceData = (context, offenderNumbers) => post(context, `api/offender-sentences`, offenderNumbers);
+  const globalSearch = (context, offenderNo, lastName, firstName) => get(context, `api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false`);
 
   return {
     userLocations,
@@ -62,6 +65,7 @@ const elite2ApiFactory = (client) => {
     getActivities,
     getCourtEvents,
     getSentenceData,
+    globalSearch,
     getExternalTransfers,
     getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount

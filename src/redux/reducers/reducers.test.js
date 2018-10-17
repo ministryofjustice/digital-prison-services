@@ -1,4 +1,4 @@
-import { app, search, defaultPeriod, events, establishmentRoll } from './index';
+import { app, search, defaultPeriod, events, establishmentRoll, globalSearch } from './index';
 import * as types from '../actions/actionTypes';
 import { setMenuOpen } from '../actions';
 import moment from 'moment';
@@ -33,6 +33,12 @@ const establishmentRollInitialState = {
 
 const appWithValidationErrorState = {
   validationErrors: { myField: 'An error!' }
+};
+
+const pagingInitialState = {
+  pageNumber: 0,
+  pageSize: 10,
+  totalRecords: 0
 };
 
 describe('app (global) reducer', () => {
@@ -359,5 +365,56 @@ describe('app (global) reducer', () => {
       blocks: [],
       totals: null
     });
+  });
+
+  it('should handle SET_GLOBAL_SEARCH_RESULTS_DATA', () => {
+    expect(
+      globalSearch(undefined, {
+        type: types.SET_GLOBAL_SEARCH_RESULTS_DATA,
+        data: ['data0', 'data1']
+      })
+    ).toEqual({ ...pagingInitialState,
+      contextUser: {},
+      data: ['data0', 'data1']
+    });
+  });
+
+  it('should handle SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE', () => {
+    let expectedState = pagingInitialState;
+    expectedState.pageSize = 5;
+    expect(
+      globalSearch(pagingInitialState, {
+        type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE,
+        pageSize: 5
+      })
+    ).toEqual(
+      expectedState
+    );
+  });
+
+  it('should handle SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER', () => {
+    let expectedState = pagingInitialState;
+    expectedState.pageNumber = 5;
+    expect(
+      globalSearch(pagingInitialState, {
+        type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER,
+        pageNumber: 5
+      })
+    ).toEqual(
+      expectedState
+    );
+  });
+
+  it('should handle SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS', () => {
+    let expectedState = pagingInitialState;
+    expectedState.totalRecords = 5;
+    expect(
+      globalSearch(pagingInitialState, {
+        type: types.SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS,
+        totalRecords: 5
+      })
+    ).toEqual(
+      expectedState
+    );
   });
 });
