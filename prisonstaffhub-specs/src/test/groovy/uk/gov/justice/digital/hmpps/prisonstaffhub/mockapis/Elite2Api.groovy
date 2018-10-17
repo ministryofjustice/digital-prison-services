@@ -6,6 +6,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.EstablishmentRollResponses
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.GlobalSearchResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
@@ -361,6 +362,37 @@ class Elite2Api extends WireMockRule {
                                 .withBody(json)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
+    }
+
+    def stubGlobalSearch(offenderNo, lastName, firstName, response) {
+        final totalRecords = String.valueOf(response.size())
+
+        this.stubFor(
+                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false")
+                        .withHeader('page-offset', equalTo('0'))
+                        .withHeader('page-limit', equalTo('10'))
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(response[0..Math.min(9, response.size() - 1)]))
+                                .withHeader('Content-Type', 'application/json')
+                                .withHeader('total-records', totalRecords)
+                                .withHeader('page-limit', '10')
+                                .withHeader('page-offset', '0')
+                                .withStatus(200)))
+        if (response.size() > 10) {
+            this.stubFor(
+                    get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false")
+                            .withHeader('page-offset', equalTo('10'))
+                            .withHeader('page-limit', equalTo('10'))
+                            .willReturn(
+                            aResponse()
+                                    .withBody(JsonOutput.toJson(response[10..11]))
+                                    .withHeader('Content-Type', 'application/json')
+                                    .withHeader('total-records', totalRecords)
+                                    .withHeader('page-limit', '10')
+                                    .withHeader('page-offset', '10')
+                                    .withStatus(200)))
+        }
     }
 
     def stubEstablishmentRollCount(String agencyId) {

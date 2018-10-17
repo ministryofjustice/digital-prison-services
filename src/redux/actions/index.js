@@ -181,3 +181,31 @@ export const setEstablishmentRollData = data => {
     data
   };
 };
+
+export const setGlobalSearchResults = data => {
+  return {
+    type: ActionTypes.SET_GLOBAL_SEARCH_RESULTS_DATA,
+    data
+  };
+};
+
+export const setGlobalSearchPageNumber = (pageNumber) => {
+  return {
+    type: ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER,
+    pageNumber
+  };
+};
+
+export const setGlobalSearchPageSize = (pageSize) => {
+  return {
+    type: ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE,
+    pageSize
+  };
+};
+
+export const setGlobalSearchTotalRecords = (totalRecords) => {
+  return {
+    type: ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS,
+    totalRecords
+  };
+};

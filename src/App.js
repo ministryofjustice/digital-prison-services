@@ -38,6 +38,7 @@ import {
   setCaseChangeRedirectStatus
 } from "./redux/actions";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
+import GlobalSearchContainer from "./GlobalSearch/GlobalSearchContainer";
 
 import ModalProvider from './ModalProvider/index';
 import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer';
@@ -266,6 +267,12 @@ class App extends React.Component {
             handleDateChange={(event) => this.handleDateChangeWithLocationsUpdate(event)}
             handlePeriodChange={(event) => this.handlePeriodChangeWithLocationsUpdate(event)}
             handleSearch={(history) => this.handleSearch(history)}
+            {...this.props} />
+        )}/>
+        <Route path="(/globalsearch)" render={() => (
+          <GlobalSearchContainer
+            handleError={this.handleError}
+            raiseAnalyticsEvent={this.raiseAnalyticsEvent}
             {...this.props} />
         )}/>
         <Route exact path="/whereaboutsresultshouseblock" render={() => (
