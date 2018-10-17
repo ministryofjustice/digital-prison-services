@@ -36,7 +36,8 @@ const healthFactory = (elite2ApiUrl) => {
       name: packageData.name,
       version: buildVersion,
       description: packageData.description,
-      uptime: process.uptime()
+      uptime: process.uptime(),
+      status: "UP"
     };
 
     try {
