@@ -5,6 +5,7 @@
   "dependencies": {
     "applicationinsights": "^1.0.1",
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.3",
     "bunyan": "^1.8.12",
     "bunyan-middleware": "^0.8.0",
@@ -23,6 +24,7 @@
     "immutable": "^3.8.2",
     "jsonwebtoken": "^8.2.1",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "new-nomis-shared-components": "^1.6.0",
     "pre-commit": "^1.2.2",
@@ -38,7 +40,6 @@
     "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
@@ -48,9 +49,13 @@
     "dotenv-expand": "^4.2.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "^4.19.1",
-    "eslint-config-react": "^1.1.7",
-    "eslint-plugin-react": "^7.8.2",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-react": "^7.11.0",
     "file-loader": "^1.1.11",
     "fs": "^0.0.1-security",
     "html-webpack-plugin": "^3.2.0",
@@ -58,6 +63,7 @@
     "mkdirp": "^0.5.1",
     "node-sass": "^4.9.0",
     "path": "^0.12.7",
+    "prettier": "1.14.3",
     "raf": "^3.4.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.3",
@@ -132,8 +138,5 @@
       "node_modules/react/",
       "node_modules/enzyme/"
     ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   }
 }
