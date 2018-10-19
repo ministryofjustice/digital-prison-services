@@ -4,10 +4,6 @@ import classNames from 'classnames';
 import './EstablishmentRollBlock.scss';
 
 class EstablishmentRollBlock extends Component {
-  constructor (props) {
-    super(props);
-  }
-
   renderBlockFigure (label, value) {
     return (
       <div className="block-figure">
