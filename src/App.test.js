@@ -1,9 +1,9 @@
 import 'babel-jest';
 import React from 'react';
 import ReactDOM from 'react-dom';
-jest.mock('./Spinner/index', () => '');
 import { shallow } from 'enzyme';
 import App from './App';
+jest.mock('./Spinner/index', () => '');
 
 const store = {
   getState: () => {},
