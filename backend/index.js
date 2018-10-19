@@ -129,8 +129,9 @@ sessionManagementRoutes.configureRoutes({
   homeLink: config.app.notmEndpointUrl
 });
 
+const compiler = webpack(require('../webpack.config.js'));
+
 if (config.app.production === false) {
-  const compiler = webpack(require('../webpack.config.js'));
   app.use(middleware(compiler, { writeToDisk: true }));
   app.use(hrm(compiler, {}));
 }
