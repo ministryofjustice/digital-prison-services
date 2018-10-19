@@ -62,6 +62,8 @@ class App extends React.Component {
   }
 
   async componentWillMount () {
+    const { configDispatch, setErrorDispatch } = this.props;
+
     axios.interceptors.response.use((config) => {
       if (config.status === 205) {
         alert("There is a newer version of this website available, click ok to ensure you're using the latest version."); // eslint-disable-line no-alert
@@ -79,49 +81,63 @@ class App extends React.Component {
         ReactGA.initialize(config.data.googleAnalyticsId);
       }
 
-      this.props.configDispatch(config.data);
+      configDispatch(config.data);
     } catch (error) {
-      this.props.setErrorDispatch(error.message);
+      setErrorDispatch(error.message);
     }
   }
 
   async loadUserAndCaseload () {
+    const { userDetailsDispatch } = this.props;
     const user = await axios.get('/api/me');
     const caseloads = await axios.get('/api/usercaseloads');
-    this.props.userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
+
+    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
   }
 
   async switchCaseLoad (newCaseload) {
+    const { switchAgencyDispatch, setErrorDispatch } = this.props;
+
     try {
-      this.props.switchAgencyDispatch(newCaseload);
+      switchAgencyDispatch(newCaseload);
       await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload });
       await this.loadUserAndCaseload();
     } catch (error) {
-      this.props.setErrorDispatch(error.message);
+      setErrorDispatch(error.message);
     }
   }
 
   showTermsAndConditions () {
-    this.props.setTermsVisibilityDispatch(true);
+    const { setTermsVisibilityDispatch } = this.props;
+
+    setTermsVisibilityDispatch(true);
   }
 
   hideTermsAndConditions () {
-    this.props.setTermsVisibilityDispatch(false);
+    const { setTermsVisibilityDispatch } = this.props;
+
+    setTermsVisibilityDispatch(false);
   }
 
   clearMessage () {
-    this.props.setMessageDispatch(null);
+    const { setMessageDispatch } = this.props;
+
+    setMessageDispatch(null);
   }
 
   displayError (error) {
-    this.props.setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
+    const { setErrorDispatch } = this.props;
+    
+    setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
   }
 
   handleError (error) {
+    const { setErrorDispatch } = this.props;
+
     if ((error.response && error.response.status === 401) && (error.response.data && error.response.data.reason === 'session-expired')) {
       this.displayAlertAndLogout("Your session has expired, please click OK to be redirected back to the login page");
     } else {
-      this.props.setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
+      setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
     }
   }
 
@@ -131,46 +147,62 @@ class App extends React.Component {
   }
 
   shouldDisplayInnerContent () {
-    return !this.props.shouldShowTerms && (this.props.user && this.props.user.activeCaseLoadId);
+    const { shouldShowTerms, user } = this.props;
+
+    return !shouldShowTerms && (user && user.activeCaseLoadId);
   }
 
   handleLocationChange (event) {
-    this.props.locationDispatch(event.target.value);
+    const { locationDispatch } = this.props;
+
+    locationDispatch(event.target.value);
   }
 
   handleActivityChange (event) {
-    this.props.activityDispatch(event.target.value);
+    const { activityDispatch } = this.props;
+
+    activityDispatch(event.target.value);
   }
 
   handleDateChange (date) {
+    const { dateDispatch } = this.props;
+
     if (date) {
-      this.props.dateDispatch(moment(date).format('DD/MM/YYYY'));
+      dateDispatch(moment(date).format('DD/MM/YYYY'));
     }
   }
 
   handleDateChangeWithLocationsUpdate (date) {
+    const { dateDispatch } = this.props;
+
     if (date) {
       const formattedDate = moment(date).format('DD/MM/YYYY');
-      this.props.dateDispatch(formattedDate);
+      dateDispatch(formattedDate);
       this.getActivityLocations(formattedDate, null);
     }
   }
 
   handlePeriodChange (event) {
-    this.props.periodDispatch(event.target.value);
+    const { periodDispatch } = this.props;
+
+    periodDispatch(event.target.value);
   }
 
   handlePeriodChangeWithLocationsUpdate (event) {
-    this.props.periodDispatch(event.target.value);
+    const { periodDispatch } = this.props;
+
+    periodDispatch(event.target.value);
     this.getActivityLocations(null, event.target.value);
   }
 
   handleSearch (history) {
-    if (this.props.currentLocation && this.props.currentLocation !== '--') {
+    const { activity, currentLocation, orderField, sortOrder } = this.props;
+
+    if (currentLocation && currentLocation !== '--') {
       history.push('/whereaboutsresultshouseblock');
-    } else if (this.props.activity) {
+    } else if (activity) {
       if (history.location.pathname === '/whereaboutsresultsactivity') {
-        this.getActivityList(this.props.orderField, this.props.sortOrder);
+        this.getActivityList(orderField, sortOrder);
       } else {
         history.push('/whereaboutsresultsactivity');
       }
@@ -178,60 +210,80 @@ class App extends React.Component {
   }
 
   raiseAnalyticsEvent (event) {
-    if (this.props.config.googleAnalyticsId) {
+    const { config } = this.props;
+
+    if (config.googleAnalyticsId) {
       ReactGA.event(event);
     }
   }
 
   async getActivityList () {
+    let { date } = this.props;
+    const {
+      agencyId,
+      activity,
+      period,
+      resetErrorDispatch,
+      setLoadedDispatch,
+      activityDataDispatch
+    } = this.props;
+
     try {
-      this.props.resetErrorDispatch();
-      this.props.setLoadedDispatch(false);
-      let date = this.props.date;
+      resetErrorDispatch();
+      setLoadedDispatch(false);
       if (date === 'Today') { // replace placeholder text
         date = moment().format('DD/MM/YYYY');
       }
       const config = {
         params: {
-          agencyId: this.props.agencyId,
-          locationId: this.props.activity,
-          date: date,
-          timeSlot: this.props.period
+          agencyId,
+          locationId: activity,
+          date,
+          timeSlot: period
         }
       };
       const response = await axios.get('/api/activitylist', config);
-      this.props.activityDataDispatch(response.data);
+      activityDataDispatch(response.data);
     } catch (error) {
       this.handleError(error);
     }
-    this.props.setLoadedDispatch(true);
+    setLoadedDispatch(true);
   }
 
-  async getActivityLocations (date, period) {
-    this.props.setLoadedDispatch(false);
+  async getActivityLocations (bookedOnDay, timeSlot) {
+    const {
+      agencyId,
+      date,
+      period,
+      setLoadedDispatch,
+      activitiesDispatch,
+      activityDispatch
+    } = this.props;
+
+    setLoadedDispatch(false);
     try {
-      if (!date) {
-        date = this.props.date;
+      if (!bookedOnDay) {
+        bookedOnDay = date;
       }
-      if (date === 'Today') { // replace placeholder text
-        date = moment().format('DD/MM/YYYY');
+      if (bookedOnDay === 'Today') { // replace placeholder text
+        bookedOnDay = moment().format('DD/MM/YYYY');
       }
-      if (!period) {
-        period = this.props.period;
+      if (!timeSlot) {
+        timeSlot = period;
       }
       const response = await axios.get('/api/activityLocations', {
         params: {
-          agencyId: this.props.agencyId,
-          bookedOnDay: date,
-          timeSlot: period
+          agencyId,
+          bookedOnDay,
+          timeSlot
         } });
-      this.props.activitiesDispatch(response.data);
+      activitiesDispatch(response.data);
       // set to unselected
-      this.props.activityDispatch('--');
+      activityDispatch('--');
     } catch (error) {
       this.handleError(error);
     }
-    this.props.setLoadedDispatch(true);
+    setLoadedDispatch(true);
   }
 
   async handlePay (activity, browserEvent) {
@@ -252,9 +304,16 @@ class App extends React.Component {
   }
 
   render () {
+    const {
+      config,
+      menuOpen,
+      setMenuOpen,
+      shouldShowTerms,
+      showModal
+    } = this.props;
     const routes = (<div className="inner-content" onClick={() => {
-      if (this.props.menuOpen) {
-        this.props.setMenuOpen(false);
+      if (menuOpen) {
+        setMenuOpen(false);
       }
     }}><div className="pure-g">
         <Route path="(/)" render={() => (<Route exact path="/" render={() => (
@@ -307,14 +366,14 @@ class App extends React.Component {
     if (this.shouldDisplayInnerContent()) {
       innerContent = routes;
     } else {
-      innerContent = (<div className="inner-content" onClick={() => this.props.setMenuOpen(false)}><div className="pure-g"><ErrorComponent {...this.props} /></div></div>);
+      innerContent = (<div className="inner-content" onClick={() => setMenuOpen(false)}><div className="pure-g"><ErrorComponent {...this.props} /></div></div>);
     }
 
     return (
       <Router>
         <div className="content">
           <Route render={(props) => {
-            if (this.props.config && this.props.config.googleAnalyticsId) {
+            if (config && config.googleAnalyticsId) {
               ReactGA.pageview(props.location.pathname);
             }
             return (<Header
@@ -327,17 +386,17 @@ class App extends React.Component {
             />);
           }}
           />
-          {this.props.shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
+          {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
 
-          <ModalProvider {...this.props} showModal={this.props.showModal}>
+          <ModalProvider {...this.props} showModal={showModal}>
             <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
           </ModalProvider>
 
           {innerContent}
           <Footer
-            setMenuOpen={this.props.setMenuOpen}
+            setMenuOpen={setMenuOpen}
             showTermsAndConditions={this.showTermsAndConditions}
-            mailTo={this.props.config && this.props.config.mailTo}
+            mailTo={config && config.mailTo}
           />
         </div>
       </Router>);

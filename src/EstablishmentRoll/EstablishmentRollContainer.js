@@ -8,18 +8,18 @@ import Error from '../Error';
 import axios from 'axios';
 
 export class EstablishmentRollContainer extends Component {
-  constructor (props) {
-    super(props);
-  }
-
   componentDidMount () {
-    this.props.setCaseChangeRedirectStatusDispatch(false);
-    this.getEstablishmentRollBlocks(this.props.agencyId);
+    const { setCaseChangeRedirectStatusDispatch, agencyId } = this.props;
+
+    setCaseChangeRedirectStatusDispatch(false);
+    this.getEstablishmentRollBlocks(agencyId);
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.agencyId !== prevProps.agencyId) {
-      this.getEstablishmentRollBlocks(this.props.agencyId);
+    const { agencyId } = this.props;
+
+    if (agencyId !== prevProps.agencyId) {
+      this.getEstablishmentRollBlocks(agencyId);
     }
   }
 

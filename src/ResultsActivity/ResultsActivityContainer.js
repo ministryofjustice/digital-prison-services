@@ -10,12 +10,14 @@ import { getActivityListReasons } from "../ModalProvider/PaymentReasonModal/reas
 
 class ResultsActivityContainer extends Component {
   async componentWillMount () {
+    const { activity, getActivityList, history } = this.props;
+
     try {
       this.handlePrint = this.handlePrint.bind(this);
-      if (this.props.activity) {
-        this.props.getActivityList();
+      if (activity) {
+        getActivityList();
       } else {
-        this.props.history.push('/whereaboutssearch');
+        history.push('/whereaboutssearch');
       }
     } catch (error) {
       this.handleError(error);
@@ -23,7 +25,9 @@ class ResultsActivityContainer extends Component {
   }
 
   handlePrint () {
-    this.props.raiseAnalyticsEvent({
+    const { raiseAnalyticsEvent } = this.props;
+
+    raiseAnalyticsEvent({
       category: 'Activity list',
       action: 'Print list'
     });
@@ -31,7 +35,9 @@ class ResultsActivityContainer extends Component {
   }
 
   render () {
-    if (!this.props.loaded) {
+    const { loaded } = this.props;
+
+    if (!loaded) {
       return <Spinner/>;
     }
     return (<div><Error {...this.props} />

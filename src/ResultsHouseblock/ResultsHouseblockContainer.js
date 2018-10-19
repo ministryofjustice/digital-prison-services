@@ -32,11 +32,13 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentWillMount () {
+    const { currentLocation, history } = this.props;
+
     try {
-      if (this.props.currentLocation) {
+      if (currentLocation) {
         this.getHouseblockList('lastName', 'ASC');
       } else {
-        this.props.history.push('/whereaboutssearch');
+        history.push('/whereaboutssearch');
       }
     } catch (error) {
       this.handleError(error);
@@ -44,11 +46,14 @@ class ResultsHouseblockContainer extends Component {
   }
 
   handleSubLocationChange (event) {
-    this.props.subLocationDispatch(event.target.value);
+    const { subLocationDispatch } = this.props;
+
+    subLocationDispatch(event.target.value);
   }
 
   handlePrint () {
-    this.props.raiseAnalyticsEvent({
+    const { raiseAnalyticsEvent } = this.props;
+    raiseAnalyticsEvent({
       category: 'House block list',
       action: 'Print list'
     });
@@ -56,34 +61,50 @@ class ResultsHouseblockContainer extends Component {
   }
 
   update () {
-    if (this.props.currentSubLocation === '--') {
-      if (this.state.previousSubLocation !== '--') {
+    const { currentSubLocation, orderField, sortOrder } = this.props
+    const { previousSubLocation } = this.state;
+
+    if (currentSubLocation === '--') {
+      if (previousSubLocation !== '--') {
         this.getHouseblockList('lastName', 'ASC');
       } else {
-        this.getHouseblockList(this.props.orderField, this.props.sortOrder);
+        this.getHouseblockList(orderField, sortOrder);
       }
-    } else if (this.state.previousSubLocation === '--') {
+    } else if (previousSubLocation === '--') {
       this.getHouseblockList('cellLocation', 'ASC');
     } else {
-      this.getHouseblockList(this.props.orderField, this.props.sortOrder);
+      this.getHouseblockList(orderField, sortOrder);
     }
   }
 
   async getHouseblockList (orderField, sortOrder) {
+    let { date } = this.props;
+    const {
+      agencyId,
+      currentLocation,
+      currentSubLocation,
+      period,
+      resetErrorDispatch,
+      setLoadedDispatch,
+      orderDispatch,
+      sortOrderDispatch,
+      houseblockDataDispatch,
+      handleError
+    } = this.props;
+
     try {
       this.setState(state => (
         {
           ...state,
-          previousSubLocation: this.props.currentSubLocation
+          previousSubLocation: currentSubLocation
         }
       ));
-      this.props.resetErrorDispatch();
-      this.props.setLoadedDispatch(false);
+      resetErrorDispatch();
+      setLoadedDispatch(false);
 
-      this.props.orderDispatch(orderField);
-      this.props.sortOrderDispatch(sortOrder);
+      orderDispatch(orderField);
+      sortOrderDispatch(sortOrder);
 
-      let date = this.props.date;
       if (date === 'Today') { // replace placeholder text
         date = moment().format('DD/MM/YYYY');
       }
@@ -92,10 +113,10 @@ class ResultsHouseblockContainer extends Component {
 
       const config = {
         params: {
-          agencyId: this.props.agencyId,
-          groupName: compoundGroupName(this.props.currentLocation, this.props.currentSubLocation),
-          date: date,
-          timeSlot: this.props.period
+          agencyId,
+          groupName: compoundGroupName(currentLocation, currentSubLocation),
+          date,
+          timeSlot: period
         },
         headers: {
           'Sort-Fields': orderField,
@@ -104,17 +125,20 @@ class ResultsHouseblockContainer extends Component {
       };
 
       const response = await axios.get('/api/houseblocklist', config);
-      this.props.houseblockDataDispatch(response.data);
+      houseblockDataDispatch(response.data);
     } catch (error) {
-      this.props.handleError(error);
+      handleError(error);
     }
-    this.props.setLoadedDispatch(true);
+    setLoadedDispatch(true);
   }
 
   render () {
-    if (!this.props.loaded) {
+    const { loaded } = this.props;
+
+    if (!loaded) {
       return <Spinner/>;
     }
+
     return (<div><Error {...this.props} />
       <ResultsHouseblock
         handlePrint={this.handlePrint}

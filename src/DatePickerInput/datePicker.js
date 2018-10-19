@@ -10,21 +10,22 @@ class DatePicker extends Component {
   }
 
   renderInput (props) {
+    const { inputId, className, name } = this.props;
     return (
       <div>
-        <input id={this.props.inputId} className={this.props.className} name={this.props.name} {...props} readOnly/>
+        <input id={inputId} className={className} name={name} {...props} readOnly/>
       </div>
     );
   }
 
   render () {
-    const { shouldShowDay } = this.props;
+    const { shouldShowDay, handleDateChange } = this.props;
 
     return (
 
       <Datetime
         className=""
-        onChange={this.props.handleDateChange}
+        onChange={handleDateChange}
         timeFormat={false}
         isValidDate={shouldShowDay}
         locale="en-GB"

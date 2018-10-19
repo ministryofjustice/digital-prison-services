@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 
 class Error extends Component {
   render () {
-    if (this.props.error) {
+    const { error } = this.props;
+    if (error) {
       return (<div className="error-summary">
         <div className="error-message">
-          <div> {this.props.error.message || this.props.error} </div>
+          <div> {error.message || error} </div>
         </div>
       </div>);
     }

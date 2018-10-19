@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import '../index.scss';
 import './search.scss';
 import PropTypes from 'prop-types';
@@ -8,7 +8,22 @@ import ValidationErrors from "../ValidationError";
 
 class Search extends Component {
   render () {
-    const loaded = this.props.loaded;
+    const {
+      loaded,
+      handleDateChange,
+      date,
+      period,
+      handlePeriodChange,
+      currentLocation,
+      onLocationChange,
+      locations,
+      onSearch,
+      history,
+      activity,
+      activities,
+      onActivityChange,
+      validationErrors
+    } = this.props;
 
     const locationOptions = (locations) => locations ? locations.reduce(
       (options, loc) => {
@@ -27,30 +42,30 @@ class Search extends Component {
     ) : [];
 
     const dateSelect = (
-      <React.Fragment>
+      <Fragment>
         <label className="form-label bold" htmlFor="search-date">Date</label>
         <DatePickerInput
-          handleDateChange={this.props.handleDateChange}
-          value={this.props.date}
+          handleDateChange={handleDateChange}
+          value={date}
           inputId="search-date"/>
-      </React.Fragment>
+      </Fragment>
     );
 
     const periodSelect = (
-      <React.Fragment>
+      <Fragment>
         <label className="form-label bold" htmlFor="period-select">Period</label>
 
         <select
           id="period-select"
           name="period-select"
           className="form-control"
-          value={this.props.period}
-          onChange={this.props.handlePeriodChange}>
+          value={period}
+          onChange={handlePeriodChange}>
           <option key="MORNING" value="AM">Morning (AM)</option>
           <option key="AFTERNOON" value="PM">Afternoon (PM)</option>
           <option key="EVENING" value="ED">Evening (ED)</option>
         </select>
-      </React.Fragment>
+      </Fragment>
     );
 
 
@@ -64,9 +79,9 @@ class Search extends Component {
               id="housing-location-select"
               name="housing-location-select"
               className="form-control"
-              value={this.props.currentLocation}
-              onChange={this.props.onLocationChange}>
-              {locationOptions(this.props.locations)}
+              value={currentLocation}
+              onChange={onLocationChange}>
+              {locationOptions(locations)}
             </select>
             <div className="padding-top-large padding-bottom-40">
               <button
@@ -75,7 +90,7 @@ class Search extends Component {
                 type="button"
                 disabled={!loaded}
                 onClick={() => {
-                  this.props.onSearch(this.props.history);
+                  onSearch(history);
                 }}>Continue
               </button>
             </div>
@@ -94,10 +109,10 @@ class Search extends Component {
               id="activity-select"
               name="activity-select"
               className="form-control"
-              value={this.props.activity}
+              value={activity}
               disabled={!loaded}
-              onChange={this.props.onActivityChange}>
-              {activityOptions(this.props.activities)}
+              onChange={onActivityChange}>
+              {activityOptions(activities)}
             </select>
             <div className="padding-top-large padding-bottom-40">
               <button
@@ -106,7 +121,7 @@ class Search extends Component {
                 type="button"
                 disabled={!loaded}
                 onClick={() => {
-                  this.props.onSearch(this.props.history);
+                  onSearch(history);
                 }}>Continue
               </button>
             </div>
@@ -116,10 +131,10 @@ class Search extends Component {
     );
 
     return (
-      <React.Fragment>
+      <Fragment>
         <h1 className="heading-large">Search prisoner whereabouts</h1>
         <hr/>
-        <ValidationErrors validationErrors={this.props.validationErrors} fieldName={'searchForm'}/>
+        <ValidationErrors validationErrors={validationErrors} fieldName={'searchForm'}/>
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">
             <div className="pure-u-md-1-6">
@@ -142,7 +157,7 @@ class Search extends Component {
             </fieldset>
           </div>
         </form>
-      </React.Fragment>);
+      </Fragment>);
   }
 }
 

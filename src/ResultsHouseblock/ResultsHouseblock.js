@@ -19,31 +19,50 @@ class ResultsHouseblock extends Component {
   }
 
   olderThan7Days () {
-    const searchDate = moment(this.props.date, 'DD/MM/YYYY');
+    const { date } = this.props;
+    const searchDate = moment(date, 'DD/MM/YYYY');
     const days = moment().diff(searchDate, "day");
+
     return days > 7;
   }
 
-  sortableColumn (heading, orderField) {
+  sortableColumn (heading, field) {
+    const { sortOrder, getHouseblockList, orderField } = this.props;
     let triangleImage = '';
-    if (this.props.sortOrder === 'ASC') {
+
+    if (sortOrder === 'ASC') {
       triangleImage = (<a className="sortableLink" id={heading + '-sort-asc'} href="#" onClick={() => {
-        this.props.getHouseblockList(orderField, 'DESC');
+        getHouseblockList(field, 'DESC');
       }}><img src="/images/Triangle_asc.png" height="8" width="15"/></a>);
-    } else if (this.props.sortOrder === 'DESC') {
+    } else if (sortOrder === 'DESC') {
       triangleImage = (<a className="sortableLink" id={heading + '-sort-desc'} href="#" onClick={() => {
-        this.props.getHouseblockList(orderField, 'ASC');
+        getHouseblockList(field, 'ASC');
       }}><img src="/images/Triangle_desc.png" height="8" width="15"/></a>);
     }
 
-    return this.props.orderField !== orderField ?
+    return orderField !== field ?
       <a className="sortableLink" id={heading + '-sortable-column'} href="#" onClick={() => {
-        this.props.getHouseblockList(orderField, 'ASC');
+        getHouseblockList(field, 'ASC');
       }}>{heading}</a> :
       <div>{heading} {triangleImage}</div>;
   }
 
   render () {
+    const {
+      agencyId,
+      date,
+      currentSubLocation,
+      handleSubLocationChange,
+      subLocations,
+      handleDateChange,
+      period,
+      handlePeriodChange,
+      handlePrint,
+      houseblockData,
+      currentLocation,
+      update
+    } = this.props;
+
     const subLocationOptions = (subLocations) => {
       if (!subLocations) {
         return <option key="housinglocation_option_All" value="--">All</option>;
@@ -63,17 +82,17 @@ class ResultsHouseblock extends Component {
           id="housing-location-select"
           name="housing-location-select"
           className="form-control"
-          value={this.props.currentSubLocation}
-          onChange={this.props.handleSubLocationChange}>{subLocationOptions(this.props.subLocations)}</select>
+          value={currentSubLocation}
+          onChange={handleSubLocationChange}>{subLocationOptions(subLocations)}</select>
       </div>);
 
     const dateSelect = (
       <div className="pure-u-md-1-6 padding-left padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
-          handleDateChange={this.props.handleDateChange}
+          handleDateChange={handleDateChange}
           additionalClassName="dateInputResults"
-          value={this.props.date}
+          value={date}
           inputId="search-date"/>
       </div>);
 
@@ -85,8 +104,8 @@ class ResultsHouseblock extends Component {
           id="period-select"
           name="period-select"
           className="form-control"
-          value={this.props.period}
-          onChange={this.props.handlePeriodChange}>
+          value={period}
+          onChange={handlePeriodChange}>
           <option key="MORNING" value="AM">Morning (AM)</option>
           <option key="AFTERNOON" value="PM">Afternoon (PM)</option>
           <option key="EVENING" value="ED">Evening (ED)</option>
@@ -94,9 +113,9 @@ class ResultsHouseblock extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      {isToday(this.props.date) &&
+      {isToday(date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
-        this.props.handlePrint();
+        handlePrint();
       }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
       }
     </div>);
@@ -115,7 +134,7 @@ class ResultsHouseblock extends Component {
 
     const readOnly = this.olderThan7Days();
 
-    const offenders = this.props.houseblockData && this.props.houseblockData.map((row, index) => {
+    const offenders = houseblockData && houseblockData.map((row, index) => {
       const anyActivity = row.activity || row.others[0];
 
       return (
@@ -123,7 +142,7 @@ class ResultsHouseblock extends Component {
           <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(anyActivity.offenderNo)}
           >{properCaseName(anyActivity.lastName)}, {properCaseName(anyActivity.firstName)}</a>
           </td>
-          <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, this.props.agencyId)}</td>
+          <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, agencyId)}</td>
           <td className="row-gutters">{anyActivity.offenderNo}</td>
           <td className="row-gutters small-font">{row.activity &&
           `${getEventDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`
@@ -162,14 +181,14 @@ class ResultsHouseblock extends Component {
 
     return (<div className="results-houseblock">
       {this.displayBack()}
-      <h1 className="heading-large whereabouts-title no-print">{this.props.currentLocation}</h1>
+      <h1 className="heading-large whereabouts-title no-print">{currentLocation}</h1>
       <form className="no-print">
         <div>
           {locationSelect}
           {dateSelect}
           {periodSelect}
           <button id="updateButton" className="button greyButton margin-left margin-top" type="button" onClick={() => {
-            this.props.update();
+            update();
           }}>Update</button>
         </div>
         <hr/>

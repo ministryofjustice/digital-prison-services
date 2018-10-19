@@ -7,19 +7,25 @@ import { hideModal } from "../redux/actions";
 
 class ModalProvider extends Component {
   componentDidMount () {
-    if (this.props.onClose) {
+    const { onClose } = this.props;
+
+    if (onClose) {
       window.addEventListener('keydown', this.listenKeyboard.bind(this), true);
     }
   }
 
   listenKeyboard (event) {
+    const { onClose } = this.props;
+
     if (event.key === 'Escape' || event.keyCode === 27) {
-      this.props.onClose();
+      onClose();
     }
   }
 
   onOverlayClick () {
-    this.props.onClose();
+    const { onClose } = this.props;
+
+    onClose();
   }
 
   onDialogClick (event) {

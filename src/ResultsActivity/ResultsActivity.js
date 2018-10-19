@@ -19,7 +19,8 @@ class ResultsActivity extends Component {
   }
 
   getActivityName () {
-    const filter = this.props.activities.filter(a => a.locationId === Number(this.props.activity));
+    const { activities, activity } = this.props;
+    const filter = activities.filter(a => a.locationId === Number(activity));
     return filter && filter.length > 0 && filter[0].userDescription;
   }
 
@@ -34,13 +35,25 @@ class ResultsActivity extends Component {
   }
 
   render () {
+    const {
+      agencyId,
+      handleDateChange,
+      date,
+      period,
+      handlePeriodChange,
+      handlePrint,
+      activityData,
+      handleSearch,
+      history
+    } = this.props;
+
     const dateSelect = (
       <div className="pure-u-md-1-6 padding-right">
         <label className="form-label" htmlFor="search-date">Date</label>
         <DatePickerInput
-          handleDateChange={this.props.handleDateChange}
+          handleDateChange={handleDateChange}
           additionalClassName="dateInputResults"
-          value={this.props.date}
+          value={date}
           inputId="search-date"/>
       </div>);
 
@@ -48,7 +61,7 @@ class ResultsActivity extends Component {
       <div className="pure-u-md-1-6">
         <label className="form-label" htmlFor="period-select">Choose period</label>
 
-        <select id="period-select" name="period-select" className="form-control" value={this.props.period} onChange={this.props.handlePeriodChange}>
+        <select id="period-select" name="period-select" className="form-control" value={period} onChange={handlePeriodChange}>
           <option key="MORNING" value="AM">Morning (AM)</option>
           <option key="AFTERNOON" value="PM">Afternoon (PM)</option>
           <option key="EVENING" value="ED">Evening (ED)</option>
@@ -56,9 +69,9 @@ class ResultsActivity extends Component {
       </div>);
 
     const buttons = (<div id="buttons" className="pure-u-md-12-12 padding-bottom">
-      {isToday(this.props.date) &&
+      {isToday(date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
-        this.props.handlePrint();
+        handlePrint();
       }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
       }
     </div>);
@@ -87,13 +100,13 @@ class ResultsActivity extends Component {
       }
     };
 
-    const offenders = this.props.activityData && this.props.activityData.map((mainEvent, index) => {
+    const offenders = activityData && activityData.map((mainEvent, index) => {
       return (
         <tr key={mainEvent.offenderNo} className="row-gutters">
           <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(mainEvent.offenderNo)}
           >{properCaseName(mainEvent.lastName)}, {properCaseName(mainEvent.firstName)}</a>
           </td>
-          <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, this.props.agencyId)}</td>
+          <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, agencyId)}</td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
           {renderMainEvent(mainEvent)}
           <td className="row-gutters small-font last-text-column-padding">{
@@ -124,7 +137,7 @@ class ResultsActivity extends Component {
           {dateSelect}
           {periodSelect}
           <button id="updateButton" className="button greyButton margin-left margin-top" type="button" onClick={() => {
-            this.props.handleSearch(this.props.history);
+            handleSearch(history);
           }}>Update</button>
         </div>
         <hr/>

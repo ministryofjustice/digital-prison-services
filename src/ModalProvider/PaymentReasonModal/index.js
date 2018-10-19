@@ -44,6 +44,7 @@ class PaymentReasonModal extends Component {
 
   onSubmit () {
     const error = this.validationErrors();
+    const { onConfirm, onClose, event, handleError } = this.props;
 
     if (error) {
       this.setState({
@@ -61,8 +62,8 @@ class PaymentReasonModal extends Component {
       comment
     });
 
-    this.props.onConfirm({ reason, comment, reasons, event: this.props.event, handleError: this.props.handleError });
-    this.props.onClose();
+    onConfirm({ reason, comment, reasons, event: event, handleError: handleError });
+    onClose();
   }
 
   render () {

@@ -19,60 +19,73 @@ class SearchContainer extends Component {
   }
 
   componentWillMount () {
+    const { dateDispatch, periodDispatch, getActivityLocations } = this.props;
     this.getLocations();
     const today = 'Today';
-    this.props.dateDispatch(today);
+    dateDispatch(today);
     const currentPeriod = defaultPeriod(moment());
-    this.props.periodDispatch(currentPeriod);
-    this.props.getActivityLocations(today, currentPeriod);
+    periodDispatch(currentPeriod);
+    getActivityLocations(today, currentPeriod);
   }
 
   async getLocations () {
+    const { agencyId, locationsDispatch, handleError } = this.props;
+
     try {
       const response = await axios.get('/api/houseblockLocations', {
         params: {
-          agencyId: this.props.agencyId
+          agencyId
         } });
-      this.props.locationsDispatch(response.data);
+      locationsDispatch(response.data);
     } catch (error) {
-      this.props.handleError(error);
+      handleError(error);
     }
   }
 
   onActivityChange (event) {
     const value = event.target.value;
+    const { locationDispatch, activityDispatch } = this.props;
+
     if (value !== '--') {
-      this.props.locationDispatch('--');
+      locationDispatch('--');
     }
-    this.props.activityDispatch(value);
+    activityDispatch(value);
   }
 
   onLocationChange (event) {
     const value = event.target.value;
+    const { locationDispatch, activityDispatch } = this.props;
+
     if (value !== '--') {
-      this.props.activityDispatch('--');
+      activityDispatch('--');
     }
-    this.props.locationDispatch(value);
+    locationDispatch(value);
   }
 
   onSearch (history) {
+    const { handleSearch } = this.props;
+
     if (!this.validate()) {
       return;
     }
-    this.props.handleSearch(history);
+    handleSearch(history);
   }
 
   validate () {
-    if (this.props.activity === "--" && this.props.location === "--") {
-      this.props.setValidationErrorDispatch("searchForm", "Please select location or activity");
+    const { activity, location, setValidationErrorDispatch, resetValidationErrorsDispatch } = this.props;
+
+    if (activity === "--" && location === "--") {
+      setValidationErrorDispatch("searchForm", "Please select location or activity");
       return false;
     }
-    this.props.resetValidationErrorsDispatch();
+    resetValidationErrorsDispatch();
     return true;
   }
 
   render () {
-    if (this.props.error) {
+    const { error } = this.props;
+
+    if (error) {
       return <Error {...this.props} />;
     }
     return (<Search
