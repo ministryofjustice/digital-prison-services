@@ -9,6 +9,8 @@ import { properCaseName } from "../utils";
 
 class GlobalSearchResultList extends Component {
   render () {
+    const { agencyId, data, pageSize, pageNumber, totalRecords, handlePageAction } = this.props;
+
     const headings = (<tr>
       <th className="straight">Name</th>
       <th className="straight">NOMS&nbsp;ID</th>
@@ -16,10 +18,10 @@ class GlobalSearchResultList extends Component {
       <th className="straight">Location</th>
     </tr>);
 
-    const offenders = this.props.data && this.props.data.map((prisoner, index) => {
+    const offenders = data && data.map((prisoner, index) => {
       return (
         <tr key={prisoner.offenderNo} className="row-gutters">
-          {prisoner.agencyId === this.props.agencyId ? <td className="row-gutters">
+          {prisoner.agencyId === agencyId ? <td className="row-gutters">
             <a target="_blank" className="link" href={getOffenderLink(prisoner.offenderNo)}
             >{properCaseName(prisoner.lastName)}, {properCaseName(prisoner.firstName)}</a>
           </td> :
@@ -31,8 +33,7 @@ class GlobalSearchResultList extends Component {
       );
     });
 
-    const pagination = { perPage: this.props.pageSize, pageNumber: this.props.pageNumber };
-    const totalRecords = this.props.totalRecords;
+    const pagination = { perPage: pageSize, pageNumber };
 
     return (<div>
       <table className="row-gutters">
@@ -43,7 +44,7 @@ class GlobalSearchResultList extends Component {
           <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
       }
       <div className="pure-u-md-7-12">
-        <PreviousNextNavigation pagination={pagination} totalRecords={totalRecords} pageAction={id => { this.props.handlePageAction(id); }} />
+        <PreviousNextNavigation pagination={pagination} totalRecords={totalRecords} pageAction={id => { handlePageAction(id); }} />
       </div>
     </div>);
   }

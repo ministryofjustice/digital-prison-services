@@ -22,47 +22,53 @@ class GlobalSearchContainer extends Component {
   }
 
   async componentWillMount () {
-    this.props.setLoadedDispatch(false);
+    const { setLoadedDispatch, handleError } = this.props;
+
+    setLoadedDispatch(false);
     try {
       await this.doGlobalSearch(0);
     } catch (error) {
-      this.props.handleError(error);
+      handleError(error);
     }
-    this.props.setLoadedDispatch(true);
+    setLoadedDispatch(true);
   }
 
   async doGlobalSearch (pageNumber) {
-    const values = queryString.parse(this.props.location.search);
+    const { location,pageSize, totalRecordsDispatch, dataDispatch, pageNumberDispatch, raiseAnalyticsEvent } = this.props;
+    const values = queryString.parse(location.search);
     const response = await axios.get('/api/globalSearch', {
       params: {
         searchText: values.searchText
       },
       headers: {
-        'Page-Offset': this.props.pageSize * pageNumber,
-        'Page-Limit': this.props.pageSize
+        'Page-Offset': pageSize * pageNumber,
+        'Page-Limit': pageSize
       }
     });
-    this.props.totalRecordsDispatch(parseInt(response.headers['total-records'], 10));
-    this.props.dataDispatch(response.data);
-    this.props.pageNumberDispatch(pageNumber);
-    this.props.raiseAnalyticsEvent({
+    totalRecordsDispatch(parseInt(response.headers['total-records'], 10));
+    dataDispatch(response.data);
+    pageNumberDispatch(pageNumber);
+    raiseAnalyticsEvent({
       category: 'Global search',
-      action: "search page ${pageNumber} shown"
+      action: `search page ${pageNumber} shown`
     });
   }
 
   async handlePageAction (pageNumber) {
+    const { handleError } = this.props;
+  
     try {
       await this.doGlobalSearch(pageNumber);
     } catch (error) {
-      this.props.handleError(error);
+      handleError(error);
     }
   }
 
   render () {
-    if (!this.props.loaded) {
-      return <Spinner/>;
-    }
+    const { loaded } = this.props;
+
+    if (!loaded) return <Spinner/>;
+
     return (<div><Error {...this.props} />
       <GlobalSearch handlePageAction={this.handlePageAction} {...this.props}/>
     </div>);

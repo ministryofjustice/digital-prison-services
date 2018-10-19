@@ -5,7 +5,7 @@ const offenderIdPattern = /^[A-Z][0-9]{4}[A-Z]{2}$/;
 
 const globalSearchFactory = (elite2Api) => {
   const globalSearch = async (context, searchText) => {
-    log.info("In globalSearch, searchText=${searchText}");
+    log.info(`In globalSearch, searchText=${searchText}`);
     let offenderNo = '';
     let firstName = '';
     let lastName = '';
