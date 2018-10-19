@@ -76,7 +76,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   const callback = done => function (err, res) {
     if (err) {
       if (done.fail) {
-        //jest
+        // jest
         done.fail(err);
       } else {
         // mocha

@@ -567,7 +567,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(transfers.at(3).find('span').last().getElement().props.className).toBe('cancelled');
   });
 
-  //TODO Skipped for Part 1
+  // TODO Skipped for Part 1
   it.skip('should call showPaymentReasonModal with event and offender information', () => {
     const showPaymentReasonModal = jest.fn();
 

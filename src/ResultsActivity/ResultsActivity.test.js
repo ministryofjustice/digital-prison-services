@@ -161,7 +161,7 @@ describe('Offender activity list results component', () => {
     expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(2).text()).toEqual('Medical - Dentist - Appt details 11:40');
     expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
-    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={true}')); //TODO should be false in V2 (currently disabled for V1)
+    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').debug()).toEqual(expect.stringContaining('disabled={true}')); // TODO should be false in V2 (currently disabled for V1)
     expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true);
 
     expect(tr.at(2).find('td a').at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael');

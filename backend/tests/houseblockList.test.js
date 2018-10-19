@@ -66,7 +66,7 @@ describe('Houseblock list controller', async () => {
     expect(response[0].others[2].endTime).toBe('2017-10-15T17:30:00');
 
     expect(response[1].activity.offenderNo).toBe('A1234AB');
-    expect(response[1].others).toBeUndefined(); //no non paid activities
+    expect(response[1].others).toBeUndefined(); // no non paid activities
 
     expect(response[2].others.length).toBe(1);
     expect(response[2].activity.offenderNo).toBe('A1234AC');
@@ -74,7 +74,7 @@ describe('Houseblock list controller', async () => {
     expect(response[2].others[0].offenderNo).toBe('A1234AC');
     expect(response[2].others[0].event).toBe('VISIT');
 
-    expect(response[3].activity).toBeUndefined(); //no activities
+    expect(response[3].activity).toBeUndefined(); // no activities
     expect(response[3].others[0].offenderNo).toBe('A1234AD');
   });
 
