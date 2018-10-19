@@ -30,7 +30,7 @@ const termsAndConditions = ({ close }) => (<div className="container">
     Unauthorised access or attempts to alter, destroy, damage, disclose or otherwise interfere with the data in Prison-NOMIS could result in disciplinary proceedings and / or criminal prosecution.
     </p>
   </div>
-  <button className="button" onClick={close}>OK, continue</button>
+  <button type="button" className="button" onClick={close}>OK, continue</button>
 </div>);
 
 termsAndConditions.propTypes = {

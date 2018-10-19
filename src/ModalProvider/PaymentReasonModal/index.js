@@ -104,8 +104,8 @@ class PaymentReasonModal extends Component {
         </div>
 
         <div>
-          <button className="button margin-top-30 margin-right-15" onClick={this.onSubmit.bind(this)}>Confirm</button>
-          <button className="greyButton margin-top-30" onClick={() => onClose()}>Cancel</button>
+          <button type="button" className="button margin-top-30 margin-right-15" onClick={this.onSubmit.bind(this)}>Confirm</button>
+          <button type="button" className="greyButton margin-top-30" onClick={() => onClose()}>Cancel</button>
         </div>
       </div>
     </div>);
