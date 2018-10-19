@@ -61,7 +61,6 @@ describe('Attendence / pay controller', async () => {
         performance: 'UNACCEPT',
         outcomeComment: 'my comment'
       });
-      fail();
     } catch (e) {
       expect(e.message).toEqual('Offender or activity id missing');
       done();
@@ -87,7 +86,6 @@ describe('Attendence / pay controller', async () => {
         performance: 'PERFORMANCE',
         outcomeComment: 'my comment'
       });
-      fail();
     } catch (e) {
       expect(e).toEqual(error);
       done();
