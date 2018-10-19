@@ -212,21 +212,17 @@ ResultsHouseblock.propTypes = {
   currentLocation: PropTypes.string,
   currentSubLocation: PropTypes.string,
   getHouseblockList: PropTypes.func.isRequired,
-  history: PropTypes.object,
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
-  handlePay: PropTypes.func.isRequired,
   date: PropTypes.string,
   period: PropTypes.string,
   houseblockData: PropTypes.array,
   subLocations: PropTypes.array,
   orderField: PropTypes.string,
   sortOrder: PropTypes.string,
-  showPaymentReasonModal: PropTypes.func,
   update: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
 };
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock);

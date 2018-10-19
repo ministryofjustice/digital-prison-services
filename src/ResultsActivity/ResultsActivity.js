@@ -159,7 +159,6 @@ class ResultsActivity extends Component {
 
 ResultsActivity.propTypes = {
   history: PropTypes.object,
-  user: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
@@ -170,9 +169,6 @@ ResultsActivity.propTypes = {
   agencyId: PropTypes.string,
   activity: PropTypes.string.isRequired,
   activities: PropTypes.array,
-  getActivityList: PropTypes.func.isRequired,
-  handlePay: PropTypes.func.isRequired,
-  showPaymentReasonModal: PropTypes.func.isRequired
 };
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity);
