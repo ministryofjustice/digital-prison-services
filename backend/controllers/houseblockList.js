@@ -48,7 +48,7 @@ const getHouseblockListFactory = (elite2Api) => {
     let lastOffenderNo = '';
     for (const event of data) {
       if (event.offenderNo !== lastOffenderNo) {
-        i++;
+        i += 1;
         lastOffenderNo = event.offenderNo;
         rows[i] = {};
       }
