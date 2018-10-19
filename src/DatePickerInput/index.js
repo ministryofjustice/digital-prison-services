@@ -1,20 +1,24 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import DatePicker from './datePicker';
+import React from "react";
+import moment from "moment";
+import PropTypes from "prop-types";
+import DatePicker from "./datePicker";
 
-class DatePickerInput extends Component {
-  render () {
-    const { additionalClassName, handleDateChange } = this.props;
-    return (<DatePicker
-      inputProps={{ placeholder: 'Today', className: `datePickerInput form-control ${additionalClassName}` }}
+const DatePickerInput = (props) => {
+  const { additionalClassName, handleDateChange } = props;
+  return (
+    <DatePicker
+      inputProps={{
+        placeholder: "Today",
+        className: `datePickerInput form-control ${additionalClassName}`
+      }}
       name="date"
-      shouldShowDay={(date) => !date.isAfter(moment().startOf('day'))}
-      title="Date" {...this.props}
+      shouldShowDay={date => !date.isAfter(moment().startOf("day"))}
+      title="Date"
       handleDateChange={handleDateChange}
-    />);
-  }
-}
+      {...props}
+    />
+  );
+};
 
 DatePickerInput.propTypes = {
   history: PropTypes.object,
@@ -23,4 +27,5 @@ DatePickerInput.propTypes = {
   additionalClassName: PropTypes.string,
   handleDateChange: PropTypes.func.isRequired
 };
+
 export default DatePickerInput;
