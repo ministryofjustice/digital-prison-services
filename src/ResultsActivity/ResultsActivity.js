@@ -18,12 +18,6 @@ class ResultsActivity extends Component {
       <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
   }
 
-  getActivityName () {
-    const { activities, activity } = this.props;
-    const filter = activities.filter(a => a.locationId === Number(activity));
-    return filter && filter.length > 0 && filter[0].userDescription;
-  }
-
   static olderThan7Days (date) {
     const searchDate = moment(date, 'DD/MM/YYYY');
     const days = moment().diff(searchDate, "day");
@@ -32,6 +26,12 @@ class ResultsActivity extends Component {
 
   static eventCancelled (event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC';
+  }
+
+  getActivityName () {
+    const { activities, activity } = this.props;
+    const filter = activities.filter(a => a.locationId === Number(activity));
+    return filter && filter.length > 0 && filter[0].userDescription;
   }
 
   render () {

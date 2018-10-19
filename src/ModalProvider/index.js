@@ -14,14 +14,6 @@ class ModalProvider extends Component {
     }
   }
 
-  listenKeyboard (event) {
-    const { onClose } = this.props;
-
-    if (event.key === 'Escape' || event.keyCode === 27) {
-      onClose();
-    }
-  }
-
   onOverlayClick () {
     const { onClose } = this.props;
 
@@ -30,6 +22,14 @@ class ModalProvider extends Component {
 
   onDialogClick (event) {
     event.stopPropagation();
+  }
+
+  listenKeyboard (event) {
+    const { onClose } = this.props;
+
+    if (event.key === 'Escape' || event.keyCode === 27) {
+      onClose();
+    }
   }
 
   render () {

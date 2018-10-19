@@ -28,20 +28,6 @@ class SearchContainer extends Component {
     getActivityLocations(today, currentPeriod);
   }
 
-  async getLocations () {
-    const { agencyId, locationsDispatch, handleError } = this.props;
-
-    try {
-      const response = await axios.get('/api/houseblockLocations', {
-        params: {
-          agencyId
-        } });
-      locationsDispatch(response.data);
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
   onActivityChange (event) {
     const value = event.target.value;
     const { locationDispatch, activityDispatch } = this.props;
@@ -69,6 +55,20 @@ class SearchContainer extends Component {
       return;
     }
     handleSearch(history);
+  }
+
+  async getLocations () {
+    const { agencyId, locationsDispatch, handleError } = this.props;
+
+    try {
+      const response = await axios.get('/api/houseblockLocations', {
+        params: {
+          agencyId
+        } });
+      locationsDispatch(response.data);
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   validate () {

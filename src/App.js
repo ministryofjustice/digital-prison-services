@@ -88,136 +88,6 @@ class App extends React.Component {
     }
   }
 
-  async loadUserAndCaseload () {
-    const { userDetailsDispatch } = this.props;
-    const user = await axios.get('/api/me');
-    const caseloads = await axios.get('/api/usercaseloads');
-
-    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
-  }
-
-  async switchCaseLoad (newCaseload) {
-    const { switchAgencyDispatch, setErrorDispatch } = this.props;
-
-    try {
-      switchAgencyDispatch(newCaseload);
-      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload });
-      await this.loadUserAndCaseload();
-    } catch (error) {
-      setErrorDispatch(error.message);
-    }
-  }
-
-  showTermsAndConditions () {
-    const { setTermsVisibilityDispatch } = this.props;
-
-    setTermsVisibilityDispatch(true);
-  }
-
-  hideTermsAndConditions () {
-    const { setTermsVisibilityDispatch } = this.props;
-
-    setTermsVisibilityDispatch(false);
-  }
-
-  clearMessage () {
-    const { setMessageDispatch } = this.props;
-
-    setMessageDispatch(null);
-  }
-
-  displayError (error) {
-    const { setErrorDispatch } = this.props;
-    
-    setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
-  }
-
-  handleError (error) {
-    const { setErrorDispatch } = this.props;
-
-    if ((error.response && error.response.status === 401) && (error.response.data && error.response.data.reason === 'session-expired')) {
-      this.displayAlertAndLogout("Your session has expired, please click OK to be redirected back to the login page");
-    } else {
-      setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
-    }
-  }
-
-  displayAlertAndLogout (message) {
-    alert(message); // eslint-disable-line no-alert
-    window.location = '/auth/logout';
-  }
-
-  shouldDisplayInnerContent () {
-    const { shouldShowTerms, user } = this.props;
-
-    return !shouldShowTerms && (user && user.activeCaseLoadId);
-  }
-
-  handleLocationChange (event) {
-    const { locationDispatch } = this.props;
-
-    locationDispatch(event.target.value);
-  }
-
-  handleActivityChange (event) {
-    const { activityDispatch } = this.props;
-
-    activityDispatch(event.target.value);
-  }
-
-  handleDateChange (date) {
-    const { dateDispatch } = this.props;
-
-    if (date) {
-      dateDispatch(moment(date).format('DD/MM/YYYY'));
-    }
-  }
-
-  handleDateChangeWithLocationsUpdate (date) {
-    const { dateDispatch } = this.props;
-
-    if (date) {
-      const formattedDate = moment(date).format('DD/MM/YYYY');
-      dateDispatch(formattedDate);
-      this.getActivityLocations(formattedDate, null);
-    }
-  }
-
-  handlePeriodChange (event) {
-    const { periodDispatch } = this.props;
-
-    periodDispatch(event.target.value);
-  }
-
-  handlePeriodChangeWithLocationsUpdate (event) {
-    const { periodDispatch } = this.props;
-
-    periodDispatch(event.target.value);
-    this.getActivityLocations(null, event.target.value);
-  }
-
-  handleSearch (history) {
-    const { activity, currentLocation, orderField, sortOrder } = this.props;
-
-    if (currentLocation && currentLocation !== '--') {
-      history.push('/whereaboutsresultshouseblock');
-    } else if (activity) {
-      if (history.location.pathname === '/whereaboutsresultsactivity') {
-        this.getActivityList(orderField, sortOrder);
-      } else {
-        history.push('/whereaboutsresultsactivity');
-      }
-    }
-  }
-
-  raiseAnalyticsEvent (event) {
-    const { config } = this.props;
-
-    if (config.googleAnalyticsId) {
-      ReactGA.event(event);
-    }
-  }
-
   async getActivityList () {
     let { date } = this.props;
     const {
@@ -285,6 +155,136 @@ class App extends React.Component {
       this.handleError(error);
     }
     setLoadedDispatch(true);
+  }
+
+  handlePeriodChange (event) {
+    const { periodDispatch } = this.props;
+
+    periodDispatch(event.target.value);
+  }
+
+  handlePeriodChangeWithLocationsUpdate (event) {
+    const { periodDispatch } = this.props;
+
+    periodDispatch(event.target.value);
+    this.getActivityLocations(null, event.target.value);
+  }
+
+  handleSearch (history) {
+    const { activity, currentLocation, orderField, sortOrder } = this.props;
+
+    if (currentLocation && currentLocation !== '--') {
+      history.push('/whereaboutsresultshouseblock');
+    } else if (activity) {
+      if (history.location.pathname === '/whereaboutsresultsactivity') {
+        this.getActivityList(orderField, sortOrder);
+      } else {
+        history.push('/whereaboutsresultsactivity');
+      }
+    }
+  }
+
+  raiseAnalyticsEvent (event) {
+    const { config } = this.props;
+
+    if (config.googleAnalyticsId) {
+      ReactGA.event(event);
+    }
+  }
+
+  displayAlertAndLogout (message) {
+    alert(message); // eslint-disable-line no-alert
+    window.location = '/auth/logout';
+  }
+
+  shouldDisplayInnerContent () {
+    const { shouldShowTerms, user } = this.props;
+
+    return !shouldShowTerms && (user && user.activeCaseLoadId);
+  }
+
+  handleLocationChange (event) {
+    const { locationDispatch } = this.props;
+
+    locationDispatch(event.target.value);
+  }
+
+  handleActivityChange (event) {
+    const { activityDispatch } = this.props;
+
+    activityDispatch(event.target.value);
+  }
+
+  handleDateChange (date) {
+    const { dateDispatch } = this.props;
+
+    if (date) {
+      dateDispatch(moment(date).format('DD/MM/YYYY'));
+    }
+  }
+
+  handleDateChangeWithLocationsUpdate (date) {
+    const { dateDispatch } = this.props;
+
+    if (date) {
+      const formattedDate = moment(date).format('DD/MM/YYYY');
+      dateDispatch(formattedDate);
+      this.getActivityLocations(formattedDate, null);
+    }
+  }
+
+  handleError (error) {
+    const { setErrorDispatch } = this.props;
+
+    if ((error.response && error.response.status === 401) && (error.response.data && error.response.data.reason === 'session-expired')) {
+      this.displayAlertAndLogout("Your session has expired, please click OK to be redirected back to the login page");
+    } else {
+      setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
+    }
+  }
+
+  displayError (error) {
+    const { setErrorDispatch } = this.props;
+    
+    setErrorDispatch((error.response && error.response.data) || 'Something went wrong: ' + error);
+  }
+
+  clearMessage () {
+    const { setMessageDispatch } = this.props;
+
+    setMessageDispatch(null);
+  }
+
+  hideTermsAndConditions () {
+    const { setTermsVisibilityDispatch } = this.props;
+
+    setTermsVisibilityDispatch(false);
+  }
+
+  showTermsAndConditions () {
+    const { setTermsVisibilityDispatch } = this.props;
+
+    setTermsVisibilityDispatch(true);
+  }
+
+  async switchCaseLoad (newCaseload) {
+    const { switchAgencyDispatch, setErrorDispatch } = this.props;
+
+    try {
+      switchAgencyDispatch(newCaseload);
+      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload });
+      await this.loadUserAndCaseload();
+    } catch (error) {
+      setErrorDispatch(error.message);
+    }
+  }
+
+  async loadUserAndCaseload () {
+    const { userDetailsDispatch } = this.props;
+    const user = await axios.get('/api/me');
+    const caseloads = await axios.get('/api/usercaseloads');
+
+    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
   }
 
   async handlePay (activity, browserEvent) {

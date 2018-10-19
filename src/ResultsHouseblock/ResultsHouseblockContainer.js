@@ -45,38 +45,6 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  handleSubLocationChange (event) {
-    const { subLocationDispatch } = this.props;
-
-    subLocationDispatch(event.target.value);
-  }
-
-  handlePrint () {
-    const { raiseAnalyticsEvent } = this.props;
-    raiseAnalyticsEvent({
-      category: 'House block list',
-      action: 'Print list'
-    });
-    window.print();
-  }
-
-  update () {
-    const { currentSubLocation, orderField, sortOrder } = this.props
-    const { previousSubLocation } = this.state;
-
-    if (currentSubLocation === '--') {
-      if (previousSubLocation !== '--') {
-        this.getHouseblockList('lastName', 'ASC');
-      } else {
-        this.getHouseblockList(orderField, sortOrder);
-      }
-    } else if (previousSubLocation === '--') {
-      this.getHouseblockList('cellLocation', 'ASC');
-    } else {
-      this.getHouseblockList(orderField, sortOrder);
-    }
-  }
-
   async getHouseblockList (orderField, sortOrder) {
     let { date } = this.props;
     const {
@@ -130,6 +98,38 @@ class ResultsHouseblockContainer extends Component {
       handleError(error);
     }
     setLoadedDispatch(true);
+  }
+
+  update () {
+    const { currentSubLocation, orderField, sortOrder } = this.props
+    const { previousSubLocation } = this.state;
+
+    if (currentSubLocation === '--') {
+      if (previousSubLocation !== '--') {
+        this.getHouseblockList('lastName', 'ASC');
+      } else {
+        this.getHouseblockList(orderField, sortOrder);
+      }
+    } else if (previousSubLocation === '--') {
+      this.getHouseblockList('cellLocation', 'ASC');
+    } else {
+      this.getHouseblockList(orderField, sortOrder);
+    }
+  }
+
+  handlePrint () {
+    const { raiseAnalyticsEvent } = this.props;
+    raiseAnalyticsEvent({
+      category: 'House block list',
+      action: 'Print list'
+    });
+    window.print();
+  }
+
+  handleSubLocationChange (event) {
+    const { subLocationDispatch } = this.props;
+
+    subLocationDispatch(event.target.value);
   }
 
   render () {

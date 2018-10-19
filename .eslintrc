@@ -54,7 +54,6 @@
     "react/no-array-index-key": 0,
     "no-underscore-dangle": 0,
     "prefer-promise-reject-errors": 0,
-    "react/sort-comp": 0,
     "prefer-arrow-callback": 0,
     "no-unused-vars": 0,
     "no-case-declarations": 0,

@@ -20,28 +20,6 @@ class PaymentReasonModal extends Component {
     });
   }
 
-  validationErrors () {
-    const { reason, comment, reasons } = this.state || {};
-    let error;
-
-    if (!reason) {
-      error = {
-        ...error || {},
-        reason: 'Please select a reason.'
-      };
-      return error;
-    }
-
-    if (!comment && reasons[reason.key].commentRequired) {
-      error = {
-        ...error || {},
-        comment: 'Please select a comment.'
-      };
-    }
-
-    return error;
-  }
-
   onSubmit () {
     const error = this.validationErrors();
     const { onConfirm, onClose, event, handleError } = this.props;
@@ -64,6 +42,28 @@ class PaymentReasonModal extends Component {
 
     onConfirm({ reason, comment, reasons, event: event, handleError: handleError });
     onClose();
+  }
+
+  validationErrors () {
+    const { reason, comment, reasons } = this.state || {};
+    let error;
+
+    if (!reason) {
+      error = {
+        ...error || {},
+        reason: 'Please select a reason.'
+      };
+      return error;
+    }
+
+    if (!comment && reasons[reason.key].commentRequired) {
+      error = {
+        ...error || {},
+        comment: 'Please select a comment.'
+      };
+    }
+
+    return error;
   }
 
   render () {
