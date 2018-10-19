@@ -1,5 +1,5 @@
-const asyncMiddleware = require('../middleware/asyncHandler');
 const axios = require('axios');
+const asyncMiddleware = require('../middleware/asyncHandler');
 const applicationVersion = require('../application-version');
 
 const packageData = applicationVersion.packageData;

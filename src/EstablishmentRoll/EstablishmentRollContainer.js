@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { setEstablishmentRollData } from '../redux/actions';
 import EstablishmentRollBlock from './EstablishmentRollBlock';
 import Spinner from '../Spinner';
 import Error from '../Error';
-import axios from 'axios';
 
 export class EstablishmentRollContainer extends Component {
   componentDidMount () {

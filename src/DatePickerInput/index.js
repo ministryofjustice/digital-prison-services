@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import DatePicker from './datePicker';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import DatePicker from './datePicker';
 
 class DatePickerInput extends Component {
   render () {

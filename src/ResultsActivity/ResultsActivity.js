@@ -5,10 +5,10 @@ import '../lists.scss';
 import '../App.scss';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from "../utils";
-import DatePickerInput from "../DatePickerInput";
 import moment from 'moment';
 import { Link } from "react-router-dom";
+import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from "../utils";
+import DatePickerInput from "../DatePickerInput";
 import { getOffenderLink } from "../links";
 import OtherActivitiesView from "../OtherActivityListView";
 

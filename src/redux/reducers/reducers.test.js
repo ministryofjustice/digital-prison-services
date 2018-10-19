@@ -1,7 +1,7 @@
+import moment from 'moment';
 import { app, search, defaultPeriod, events, establishmentRoll, globalSearch } from './index';
 import * as types from '../actions/actionTypes';
 import { setMenuOpen } from '../actions';
-import moment from 'moment';
 
 const appInitialState = {
   caseChangeRedirect: true,

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { setSearchLocation, setSearchLocations } from '../redux/actions/index';
 import { connect } from 'react-redux';
+import axios from "axios/index";
+import { setSearchLocation, setSearchLocations } from '../redux/actions/index';
 import Error from '../Error';
 import Search from "./Search";
-import axios from "axios/index";
 import { setSearchActivity, resetValidationErrors, setValidationError } from "../redux/actions";
 import { defaultPeriod } from "../redux/reducers";
 

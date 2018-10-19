@@ -1,4 +1,14 @@
 import React from 'react';
+import moment from 'moment';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import ReactGA from 'react-ga';
+import { Header } from 'new-nomis-shared-components';
 import Dashboard from './Dashboard/index';
 import Footer from './Footer/index';
 import ErrorComponent from './Error/index';
@@ -6,14 +16,8 @@ import SearchContainer from './Search/SearchContainer';
 import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer';
 import Terms from './Footer/terms-and-conditions';
 import './App.scss';
-import moment from 'moment';
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect
-} from 'react-router-dom';
-import PropTypes from 'prop-types';
+
 import {
   resetError,
   setConfig,
@@ -23,8 +27,6 @@ import {
   setUserDetails,
   switchAgency
 } from './redux/actions/index';
-import { connect } from 'react-redux';
-import ReactGA from 'react-ga';
 import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import {
   setLoaded,
@@ -45,7 +47,6 @@ import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentRe
 import links from "./links";
 
 const axios = require('axios');
-import { Header } from 'new-nomis-shared-components';
 
 class App extends React.Component {
   constructor () {

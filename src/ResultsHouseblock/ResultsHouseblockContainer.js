@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
-const axios = require('axios');
 import Error from '../Error';
 import ResultsHouseblock from "./ResultsHouseblock";
 import {
@@ -17,6 +16,7 @@ import {
 } from "../redux/actions";
 import Spinner from "../Spinner";
 import { getHouseBlockReasons } from "../ModalProvider/PaymentReasonModal/reasonCodes";
+const axios = require('axios');
 
 
 class ResultsHouseblockContainer extends Component {

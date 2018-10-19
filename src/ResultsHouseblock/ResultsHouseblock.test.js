@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ResultsHouseblock } from "./ResultsHouseblock";
 import moment from 'moment';
+import { ResultsHouseblock } from "./ResultsHouseblock";
 import OtherActivitiesView from "../OtherActivityListView";
 
 const PRISON = 'LEI';

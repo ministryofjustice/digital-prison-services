@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import * as ActionTypes from '../actions/actionTypes';
 import moment from 'moment';
+import * as ActionTypes from '../actions/actionTypes';
 
 export function defaultPeriod (time) {
   const midnight = moment('12:00a', "HH:mm a");

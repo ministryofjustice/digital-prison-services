@@ -11,6 +11,9 @@ const bodyParser = require('body-parser');
 const bunyanMiddleware = require('bunyan-middleware');
 const hsts = require('hsts');
 const helmet = require('helmet');
+const webpack = require('webpack');
+const middleware = require('webpack-dev-middleware');
+const hrm = require('webpack-hot-middleware');
 const ensureHttps = require('./middleware/ensureHttps');
 
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory;
@@ -38,10 +41,6 @@ const clientFactory = require('./api/oauthEnabledClient');
 const healthApiFactory = require('./api/healthApi').healthApiFactory;
 const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory;
 const oauthApiFactory = require('./api/oauthApi');
-
-const webpack = require('webpack');
-const middleware = require('webpack-dev-middleware');
-const hrm = require('webpack-hot-middleware');
 
 const log = require('./log');
 const config = require('./config');
