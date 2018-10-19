@@ -53,7 +53,7 @@ const getHouseblockListFactory = (elite2Api) => {
         rows[i] = {};
       }
 
-      let currentRow = rows[i];
+      const currentRow = rows[i];
       if (event.eventType === 'PRISON_ACT') {
         if (!currentRow.activity) {
           // 1st activity found for this offender

@@ -47,7 +47,6 @@
     "no-buffer-constructor": 0,
     "no-plusplus": 0,
     "no-else-return": 0,
-    "prefer-const": 0,
     "no-shadow": 0,
     "consistent-return": 0,
     "func-names": 0,

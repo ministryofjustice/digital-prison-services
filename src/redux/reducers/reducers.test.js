@@ -380,7 +380,7 @@ describe('app (global) reducer', () => {
   });
 
   it('should handle SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE', () => {
-    let expectedState = pagingInitialState;
+    const expectedState = pagingInitialState;
     expectedState.pageSize = 5;
     expect(
       globalSearch(pagingInitialState, {
@@ -393,7 +393,7 @@ describe('app (global) reducer', () => {
   });
 
   it('should handle SET_GLOBAL_SEARCH_PAGINATION_PAGE_NUMBER', () => {
-    let expectedState = pagingInitialState;
+    const expectedState = pagingInitialState;
     expectedState.pageNumber = 5;
     expect(
       globalSearch(pagingInitialState, {
@@ -406,7 +406,7 @@ describe('app (global) reducer', () => {
   });
 
   it('should handle SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS', () => {
-    let expectedState = pagingInitialState;
+    const expectedState = pagingInitialState;
     expectedState.totalRecords = 5;
     expect(
       globalSearch(pagingInitialState, {
