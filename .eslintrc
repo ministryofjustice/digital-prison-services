@@ -47,7 +47,6 @@
     "class-methods-use-this": 0,
     "react/no-array-index-key": 0,
     "prefer-promise-reject-errors": 0,
-    "no-case-declarations": 0,
     "no-restricted-syntax": 0
   },
   "plugins": [
