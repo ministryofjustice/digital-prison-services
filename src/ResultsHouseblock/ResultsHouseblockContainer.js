@@ -181,8 +181,7 @@ const extractSubLocations = (locations, currentLocation) => {
   return subLocations ? subLocations[0].map(l => l.name) : [];
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     currentLocation: state.search.location,
     currentSubLocation: state.search.subLocation,
     date: state.search.date,
@@ -192,11 +191,9 @@ const mapStateToProps = state => {
     paymentReasonReasons: state.events.paymentReasonReasons,
     sortOrder: state.events.sortOrder,
     subLocations: extractSubLocations(state.search.locations, state.search.location)
-  };
-};
+  });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = (dispatch) => ({
     houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
     orderDispatch: field => dispatch(setOrderField(field)),
     resetErrorDispatch: () => dispatch(resetError()),
@@ -204,7 +201,6 @@ const mapDispatchToProps = (dispatch) => {
     showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getHouseBlockReasons() })),
     sortOrderDispatch: field => dispatch(setSortOrder(field)),
     subLocationDispatch: text => dispatch(setSearchSubLocation(text))
-  };
-};
+  });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsHouseblockContainer));

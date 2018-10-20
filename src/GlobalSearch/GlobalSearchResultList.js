@@ -26,8 +26,7 @@ const GlobalSearchResultList = ({
 
   const offenders =
     data &&
-    data.map((prisoner) => {
-      return (
+    data.map((prisoner) => (
         <tr key={prisoner.offenderNo} className="row-gutters">
           {prisoner.agencyId === agencyId ? (
             <td className="row-gutters">
@@ -44,8 +43,7 @@ const GlobalSearchResultList = ({
           <td className="row-gutters">{prisoner.dateOfBirth}</td>
           <td className="row-gutters">{prisoner.latestLocation}</td>
         </tr>
-      );
-    });
+      ));
 
   const pagination = { perPage: pageSize, pageNumber };
 

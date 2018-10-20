@@ -117,25 +117,21 @@ SearchContainer.propTypes = {
   validationErrors: PropTypes.object
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     locations: state.search.locations.map(l => l.name),
     activities: state.search.activities,
     activity: state.search.activity,
     location: state.search.location,
     loaded: state.app.loaded,
     validationErrors: state.app.validationErrors
-  };
-};
+  });
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     locationsDispatch: locations => dispatch(setSearchLocations(locations)),
     locationDispatch: text => dispatch(setSearchLocation(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
     setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
     resetValidationErrorsDispatch: () => dispatch(resetValidationErrors())
-  };
-};
+  });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer);

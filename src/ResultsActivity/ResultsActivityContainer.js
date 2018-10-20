@@ -59,19 +59,15 @@ ResultsActivityContainer.propTypes = {
   raiseAnalyticsEvent: PropTypes.func
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     activities: state.search.activities,
     activityData: state.events.activityData,
     loaded: state.app.loaded
-  };
-};
+  });
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     activitiesDispatch: text => dispatch(setSearchActivities(text)),
     showPaymentReasonModal: (event, browserEvent) => dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() }))
-  };
-};
+  });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsActivityContainer));

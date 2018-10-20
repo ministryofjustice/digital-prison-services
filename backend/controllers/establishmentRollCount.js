@@ -1,6 +1,4 @@
-const getTotals = (array, figure) => {
-  return array.reduce((accumulator, block) => accumulator + block[figure], 0);
-};
+const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + block[figure], 0);
 
 const getEstablishmentRollCountFactory = elite2Api => {
   const getEstablishmentRollCount = async (context, agencyId) => {

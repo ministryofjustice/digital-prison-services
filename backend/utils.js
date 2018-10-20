@@ -10,9 +10,7 @@ const switchDateFormat = displayDate => {
 const distinct = (data) => data.reduce((accumulator, current) =>
   accumulator.includes(current) ? accumulator : [...accumulator, current], []);
 
-const isToday = (formattedDate) => {
-  return moment().format('YYYY-MM-DD') === formattedDate;
-};
+const isToday = (formattedDate) => moment().format('YYYY-MM-DD') === formattedDate;
 const sortByDateTime = (t1, t2) => {
   if (t1 && t2) {
     return moment(t1).valueOf() - moment(t2).valueOf();

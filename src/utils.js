@@ -1,8 +1,6 @@
 const moment = require('moment');
 
-const properCase = (word) => {
-  return ((typeof word === 'string') && (word.length >= 1)) ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word;
-};
+const properCase = (word) => ((typeof word === 'string') && (word.length >= 1)) ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word;
 
 /**
  * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
@@ -10,9 +8,7 @@ const properCase = (word) => {
  * @param name name to be converted.
  * @returns name converted to proper case.
  */
-const properCaseName = (name) => {
-  return isBlank(name) ? '' : name.split('-').map(properCase).join('-');
-};
+const properCaseName = (name) => isBlank(name) ? '' : name.split('-').map(properCase).join('-');
 
 function isBlank (str) {
   return (!str || /^\s*$/.test(str));

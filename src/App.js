@@ -436,8 +436,7 @@ App.propTypes = {
   setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     error: state.app.error,
     message: state.app.message,
     page: state.app.page,
@@ -454,11 +453,9 @@ const mapStateToProps = state => {
     showModal: state.app.showModal,
     menuOpen: state.app.menuOpen,
     caseChangeRedirect: state.app.caseChangeRedirect
-  };
-};
+  });
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     configDispatch: (config) => dispatch(setConfig(config)),
     userDetailsDispatch: (user) => dispatch(setUserDetails(user)),
     switchAgencyDispatch: (agencyId) => dispatch(switchAgency(agencyId)),
@@ -475,8 +472,7 @@ const mapDispatchToProps = dispatch => {
     setLoadedDispatch: (status) => dispatch(setLoaded(status)),
     setMenuOpen: (flag) => dispatch(setMenuOpen(flag)),
     setCaseChangeRedirectStatusDispatch: (flag) => dispatch(setCaseChangeRedirectStatus(flag))
-  };
-};
+  });
 
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);

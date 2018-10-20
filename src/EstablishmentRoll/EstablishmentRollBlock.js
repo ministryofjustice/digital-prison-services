@@ -25,13 +25,11 @@ class EstablishmentRollBlock extends Component {
       <div className={blockClasses}>
         <h2 className="establishment-roll-block__title">{name}</h2>
         <div className="establishment-roll-block__figures block-figures">
-          {numbers.map((number, i) => {
-            return (
+          {numbers.map((number, i) => (
               <div className="block-figures__figure" key={i}>
                 {this.renderBlockFigure(number.name, number.value)}
               </div>
-            );
-          })}
+            ))}
         </div>
       </div>
     );

@@ -80,20 +80,16 @@ EstablishmentRollContainer.propTypes = {
   setCaseChangeRedirectStatusDispatch: PropTypes.func
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     blocks: state.establishmentRoll.blocks,
     totals: state.establishmentRoll.totals,
     movements: state.establishmentRoll.movements,
     agencyId: state.app.user.activeCaseLoadId,
     loaded: state.app.loaded
-  };
-};
+  });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = (dispatch) => ({
     establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data))
-  };
-};
+  });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EstablishmentRollContainer);

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
-  return (
+const Dashboard = () => (
     <div>
 
       <h1 className="heading-large">Prison staff hub</h1>
@@ -18,6 +17,5 @@ const Dashboard = () => {
       </ul>
     </div>
   );
-};
 
 export default Dashboard;

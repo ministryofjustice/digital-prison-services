@@ -18,13 +18,11 @@ module.exports = async (elite2Api, context, { offenderNumbers, formattedDate, ag
   );
 };
 
-const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, formattedDate }) => {
-  return Promise.all([
+const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, formattedDate }) => Promise.all([
     elite2Api.getSentenceData(context, offenderNumbers),
     elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }),
     elite2Api.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers })
   ]);
-};
 
 const reduceToMap = (offenderNumbers, formattedDate, releaseScheduleData, courtEventData, transferData) =>
   offenderNumbers.reduce((map, offenderNumber) => {
@@ -36,11 +34,9 @@ const reduceToMap = (offenderNumbers, formattedDate, releaseScheduleData, courtE
     return map.set(offenderNumber, offenderData);
   }, new Map());
 
-const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) => {
-  return Boolean(releaseScheduledData && releaseScheduledData.length && releaseScheduledData
+const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) => Boolean(releaseScheduledData && releaseScheduledData.length && releaseScheduledData
     .filter(release => release.offenderNo === offenderNo &&
         release.sentenceDetail.releaseDate === formattedDate)[0]);
-};
 
 const courtEvents = (courtEvents, offenderNo) => {
   const events = courtEvents && courtEvents.length && courtEvents
@@ -77,15 +73,13 @@ const toCourtEvent = (event) => ({
   ...courtEventStatus(event.eventStatus)
 });
 
-const scheduledTransfers = (transfers, offenderNo) => {
-  return (transfers && transfers.length && transfers
+const scheduledTransfers = (transfers, offenderNo) => (transfers && transfers.length && transfers
     .filter(transfer => transfer.offenderNo === offenderNo)
     .map(event => ({
       eventId: event.eventId,
       eventDescription: 'Transfer scheduled',
       ...transferStatus(event.eventStatus)
     }))) || [];
-};
 
 const transferStatus = (eventStatus) => {
   switch (eventStatus) {

@@ -89,22 +89,18 @@ GlobalSearchContainer.propTypes = {
   loaded: PropTypes.bool
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     loaded: state.app.loaded,
     data: state.globalSearch.data,
     pageNumber: state.globalSearch.pageNumber,
     pageSize: state.globalSearch.pageSize,
     totalRecords: state.globalSearch.totalRecords
-  };
-};
+  });
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     dataDispatch: data => dispatch(setGlobalSearchResults(data)),
     pageNumberDispatch: no => dispatch(setGlobalSearchPageNumber(no)),
     totalRecordsDispatch: no => dispatch(setGlobalSearchTotalRecords(no))
-  };
-};
+  });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GlobalSearchContainer));

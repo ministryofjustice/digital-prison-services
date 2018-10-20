@@ -99,8 +99,7 @@ class ResultsActivity extends Component {
         return (<td className="row-gutters">{getEventDescription(event)}</td>);
     };
 
-    const offenders = activityData && activityData.map((mainEvent, index) => {
-      return (
+    const offenders = activityData && activityData.map((mainEvent, index) => (
         <tr key={mainEvent.offenderNo} className="row-gutters">
           <td className="row-gutters"><a target="_blank" className="link" href={getOffenderLink(mainEvent.offenderNo)}
           >{properCaseName(mainEvent.lastName)}, {properCaseName(mainEvent.firstName)}</a>
@@ -125,8 +124,7 @@ class ResultsActivity extends Component {
             </div>
           </td>
         </tr>
-      );
-    });
+      ));
 
     return (<div className="results-activity">
       {ResultsActivity.displayBack()}
