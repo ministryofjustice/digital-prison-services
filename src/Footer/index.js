@@ -8,7 +8,7 @@ const Footer = ({ showTermsAndConditions, mailTo, setMenuOpen }) =>
     <div className="footer-content">
       <div className="FooterLinksContainer">
         <div className="FooterLink"><a onClick={showTermsAndConditions}>Terms and conditions</a></div>
-        <div className="FooterLink"><a href={"mailto:" + mailTo}>Contact us:&nbsp;&nbsp;{mailTo}</a></div>
+        <div className="FooterLink"><a href={`mailto:${  mailTo}`}>Contact us:&nbsp;&nbsp;{mailTo}</a></div>
       </div>
     </div>
   </footer>);

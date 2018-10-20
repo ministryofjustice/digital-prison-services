@@ -31,17 +31,17 @@ class ResultsHouseblock extends Component {
     let triangleImage = '';
 
     if (sortOrder === 'ASC') {
-      triangleImage = (<a className="sortableLink" id={heading + '-sort-asc'} href="#" onClick={() => {
+      triangleImage = (<a className="sortableLink" id={`${heading  }-sort-asc`} href="#" onClick={() => {
         getHouseblockList(field, 'DESC');
       }}><img src="/images/Triangle_asc.png" height="8" width="15"/></a>);
     } else if (sortOrder === 'DESC') {
-      triangleImage = (<a className="sortableLink" id={heading + '-sort-desc'} href="#" onClick={() => {
+      triangleImage = (<a className="sortableLink" id={`${heading  }-sort-desc`} href="#" onClick={() => {
         getHouseblockList(field, 'ASC');
       }}><img src="/images/Triangle_desc.png" height="8" width="15"/></a>);
     }
 
     return orderField !== field ?
-      <a className="sortableLink" id={heading + '-sortable-column'} href="#" onClick={() => {
+      <a className="sortableLink" id={`${heading  }-sortable-column`} href="#" onClick={() => {
         getHouseblockList(field, 'ASC');
       }}>{heading}</a> :
       <div>{heading} {triangleImage}</div>;
@@ -152,27 +152,27 @@ class ResultsHouseblock extends Component {
           </td>
           <td className="no-padding checkbox-column no-display">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={'col1_' + index} type="checkbox" name="ch1" disabled={readOnly}/>
-              <label htmlFor={'col1_' + index} />
+              <input id={`col1_${  index}`} type="checkbox" name="ch1" disabled={readOnly}/>
+              <label htmlFor={`col1_${  index}`} />
             </div>
           </td>
           <td className="no-padding checkbox-column no-display">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={'col2_' + index} type="checkbox" name="ch2" disabled={readOnly}/>
-              <label htmlFor={'col2_' + index} />
+              <input id={`col2_${  index}`} type="checkbox" name="ch2" disabled={readOnly}/>
+              <label htmlFor={`col2_${  index}`} />
             </div>
           </td>
           <td className="no-padding checkbox-column no-print">
             <div className="multiple-choice whereaboutsCheckbox">
               {/* Disable pay/other for Part 1 */}
-              <input id={'col3_' + index} type="checkbox" name="ch3" disabled /> {/* onChange={(event) => this.props.handlePay(anyActivity, event)} */}
-              <label htmlFor={'col3_' + index} />
+              <input id={`col3_${  index}`} type="checkbox" name="ch3" disabled /> {/* onChange={(event) => this.props.handlePay(anyActivity, event)} */}
+              <label htmlFor={`col3_${  index}`} />
             </div>
           </td>
           <td className="no-padding checkbox-column no-print">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={'col4_' + index} type="checkbox" name="ch4" disabled /> {/* onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)} */}
-              <label htmlFor={'col4_' + index} />
+              <input id={`col4_${  index}`} type="checkbox" name="ch4" disabled /> {/* onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)} */}
+              <label htmlFor={`col4_${  index}`} />
             </div>
           </td>
         </tr>

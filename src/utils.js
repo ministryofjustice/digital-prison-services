@@ -55,7 +55,7 @@ const getEventDescription = (event) => {
     return event.comment;
   }
   if (event.comment) {
-    return event.eventDescription + ' - ' + event.comment;
+    return `${event.eventDescription  } - ${  event.comment}`;
   }
   return event.eventDescription;
 };
