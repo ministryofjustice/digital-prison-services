@@ -72,7 +72,7 @@ class ResultsActivity extends Component {
       {isToday(date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         handlePrint();
-      }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
+      }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20" alt="Print icon" /> Print list</button>
       }
     </div>);
 

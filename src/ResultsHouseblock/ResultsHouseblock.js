@@ -15,7 +15,7 @@ import OtherActivitiesView from "../OtherActivityListView";
 class ResultsHouseblock extends Component {
   displayBack () {
     return (<div className="padding-top no-print"><Link id="back_to_selection_link" title="Back to selection screen link" className="link backlink" to="/whereaboutssearch" >
-      <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
+      <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10"/> Back</Link></div>);
   }
 
   olderThan7Days () {
@@ -33,11 +33,11 @@ class ResultsHouseblock extends Component {
     if (sortOrder === 'ASC') {
       triangleImage = (<a className="sortableLink" id={`${heading  }-sort-asc`} href="#" onClick={() => {
         getHouseblockList(field, 'DESC');
-      }}><img src="/images/Triangle_asc.png" height="8" width="15"/></a>);
+      }}><img src="/images/Triangle_asc.png" height="8" width="15" alt="Up arrow" /></a>);
     } else if (sortOrder === 'DESC') {
       triangleImage = (<a className="sortableLink" id={`${heading  }-sort-desc`} href="#" onClick={() => {
         getHouseblockList(field, 'ASC');
-      }}><img src="/images/Triangle_desc.png" height="8" width="15"/></a>);
+      }}><img src="/images/Triangle_desc.png" height="8" width="15" alt="Down arrow" /></a>);
     }
 
     return orderField !== field ?
@@ -116,7 +116,7 @@ class ResultsHouseblock extends Component {
       {isToday(date) &&
       <button id="printButton" className="button greyButton rightHandSide" type="button" onClick={() => {
         handlePrint();
-      }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20"/> Print list</button>
+      }}><img className="print-icon" src="/images/Printer_icon.png" height="23" width="20" alt="Print icon" /> Print list</button>
       }
     </div>);
 
