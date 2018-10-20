@@ -378,8 +378,8 @@ class App extends React.Component {
               ReactGA.pageview(props.location.pathname);
             }
             return (<Header
-              logoText={'HMPPS'}
-              title={'Activity Lists'}
+              logoText="HMPPS"
+              title="Activity Lists"
               homeLink={links.getHomeLink()}
               switchCaseLoad={this.switchCaseLoad}
               history={props.history}

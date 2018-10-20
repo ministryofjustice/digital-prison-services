@@ -89,7 +89,7 @@ class PaymentReasonModal extends Component {
           <label className="form-label" htmlFor="reasons">
                       Select an option:
           </label>
-          <select id="payment-reason-reason" name="reasons" className={reasonSelectClass} onChange={event => this.onReasonChange(event, reasons)} defaultValue={'default'}>
+          <select id="payment-reason-reason" name="reasons" className={reasonSelectClass} onChange={event => this.onReasonChange(event, reasons)} defaultValue="default">
             <option value="default" disabled hidden>Select option</option>
             {reasons.map((reason) => <option key={reason.value}>{reason.value}</option>)}
           </select>

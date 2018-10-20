@@ -14,7 +14,7 @@ import OtherActivitiesView from "../OtherActivityListView";
 
 class ResultsActivity extends Component {
   static displayBack () {
-    return (<div className="padding-top no-print"><Link id={`back_to_menu_link`} title="Back" className="link backlink" to="/whereaboutssearch" >
+    return (<div className="padding-top no-print"><Link id="back_to_menu_link" title="Back" className="link backlink" to="/whereaboutssearch" >
       <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10"/> Back</Link></div>);
   }
 

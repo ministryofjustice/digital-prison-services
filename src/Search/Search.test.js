@@ -49,9 +49,9 @@ describe('Search component', () => {
       onLocationChange={jest.fn()}
       handlePeriodChange={jest.fn()}
       handleDateChange={jest.fn()}
-      date={'27/02/2018'}
-      period={'ED'}
-      currentLocation={'BWing'}/>);
+      date="27/02/2018"
+      period="ED"
+      currentLocation="BWing"/>);
 
     component.find('#continue-housing').simulate('click');
     component.find('#continue-activity').simulate('click');

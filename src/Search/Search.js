@@ -134,7 +134,7 @@ class Search extends Component {
       <Fragment>
         <h1 className="heading-large">Search prisoner whereabouts</h1>
         <hr/>
-        <ValidationErrors validationErrors={validationErrors} fieldName={'searchForm'}/>
+        <ValidationErrors validationErrors={validationErrors} fieldName="searchForm"/>
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">
             <div className="pure-u-md-1-6">
