@@ -5,19 +5,19 @@ import './index.scss';
 import { properCaseName } from "../../utils";
 
 class PaymentReasonModal extends Component {
-  onReasonChange (event, reasons) {
-    this.setState({
-      ...this.state,
+  onReasonChange(event, reasons) {
+    this.setState(prevState => ({
+      ...prevState,
       reason: { key: event.target.selectedIndex - 1, value: event.target.value },
       reasons
-    });
+    }));
   }
 
   onCommentChange (event) {
-    this.setState({
-      ...this.state,
+    this.setState(prevState => ({
+      ...prevState,
       comment: event.target.value
-    });
+    }));
   }
 
   onSubmit () {
@@ -25,10 +25,10 @@ class PaymentReasonModal extends Component {
     const { onConfirm, onClose, event, handleError } = this.props;
 
     if (error) {
-      this.setState({
-        ...this.state,
+      this.setState(prevState => ({
+        ...prevState,
         error
-      });
+      }));
       return;
     }
 
