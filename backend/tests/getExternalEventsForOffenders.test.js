@@ -1,5 +1,6 @@
 const moment = require('moment');
 const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+
 const elite2Api = elite2ApiFactory(null);
 const externalEvents = require('../shared/getExternalEventsForOffenders');
 const { switchDateFormat } = require('../utils');

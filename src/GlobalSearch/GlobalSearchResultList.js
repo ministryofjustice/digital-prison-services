@@ -26,7 +26,7 @@ const GlobalSearchResultList = ({
 
   const offenders =
     data &&
-    data.map((prisoner, index) => {
+    data.map((prisoner) => {
       return (
         <tr key={prisoner.offenderNo} className="row-gutters">
           {prisoner.agencyId === agencyId ? (

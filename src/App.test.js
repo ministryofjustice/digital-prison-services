@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import App from './App';
+
 jest.mock('./Spinner/index', () => '');
 
 const store = {

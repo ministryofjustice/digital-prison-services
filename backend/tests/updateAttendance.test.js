@@ -1,6 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
 const momentTimeZone = require('moment-timezone');
 const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+
 const elite2Api = elite2ApiFactory(null);
 const updateAttendance = require('../controllers/updateAttendance').updateAttendanceFactory(elite2Api).updateAttendance;
 

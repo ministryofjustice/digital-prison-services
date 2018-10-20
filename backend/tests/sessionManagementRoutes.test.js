@@ -4,9 +4,11 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const setCookie = require('set-cookie-parser');
 const chai = require('chai');
+
 const expect = chai.expect;
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
+
 chai.use(sinonChai);
 
 const sessionManagementRoutes = require('../sessionManagementRoutes');

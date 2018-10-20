@@ -9,6 +9,7 @@ import allocationApp from './redux/reducers';
 
 // Logger with default options
 import { AppContainer } from './App';
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(allocationApp, composeEnhancers(applyMiddleware(logger)));
 

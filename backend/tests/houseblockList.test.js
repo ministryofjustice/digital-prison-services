@@ -1,6 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
 const moment = require('moment');
 const elite2ApiFactory = require('../api/elite2Api').elite2ApiFactory;
+
 const elite2Api = elite2ApiFactory(null);
 const houseblockList = require('../controllers/houseblockList').getHouseblockListFactory(elite2Api).getHouseblockList;
 
