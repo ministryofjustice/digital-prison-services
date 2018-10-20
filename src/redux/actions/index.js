@@ -62,7 +62,7 @@ export const setValidationError = (fieldName, message) => {
   };
 };
 
-export const resetValidationErrors = (fieldName, message) => {
+export const resetValidationErrors = () => {
   return {
     type: ActionTypes.RESET_VALIDATION_ERRORS
   };

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "../index.scss";
 import "../lists.scss";
 import "../App.scss";

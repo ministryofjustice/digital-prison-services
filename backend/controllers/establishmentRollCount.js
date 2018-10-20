@@ -3,7 +3,7 @@ const getTotals = (array, figure) => {
 };
 
 const getEstablishmentRollCountFactory = elite2Api => {
-  const getEstablishmentRollCount = async (context, agencyId, unassigned) => {
+  const getEstablishmentRollCount = async (context, agencyId) => {
     const [assignedResponse, unassignedResponse, movementsResponse] = await Promise.all([
       elite2Api.getEstablishmentRollBlocksCount(context, agencyId, false),
       elite2Api.getEstablishmentRollBlocksCount(context, agencyId, true),

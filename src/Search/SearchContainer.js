@@ -134,7 +134,7 @@ const mapDispatchToProps = dispatch => {
     locationDispatch: text => dispatch(setSearchLocation(text)),
     activityDispatch: text => dispatch(setSearchActivity(text)),
     setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
-    resetValidationErrorsDispatch: message => dispatch(resetValidationErrors())
+    resetValidationErrorsDispatch: () => dispatch(resetValidationErrors())
   };
 };
 

@@ -287,7 +287,7 @@ class App extends React.Component {
     userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
   }
 
-  async handlePay (activity, browserEvent) {
+  async handlePay (activity) {
     try {
       if (!activity.eventId) {
         throw new Error('No event id found for this row');

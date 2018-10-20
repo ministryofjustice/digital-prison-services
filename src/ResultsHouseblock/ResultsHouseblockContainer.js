@@ -194,7 +194,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
     orderDispatch: field => dispatch(setOrderField(field)),
