@@ -10,11 +10,8 @@ export function defaultPeriod (time) {
   const isMorning = time.isBetween(midnight, midday, null, '[)');
   const isAfternoon = time.isBetween(midday, evening, null, '[)');
 
-  if (isMorning) {
-    return 'AM';
-  } else if (isAfternoon) {
-    return 'PM';
-  }
+  if (isMorning) return 'AM';
+  if (isAfternoon) return 'PM';
   return 'ED';
 }
 

@@ -24,9 +24,8 @@ const otherEvent = (event, index) => {
 
   if (cancelled) {
     return <li key={key}>{text} <span className="cancelled">(cancelled)</span></li>;
-  } else {
+  } 
     return <li key={key}>{text}</li>;
-  }
 };
 const event = (event) => {
   const expired = <span className="cancelled">(expired)</span>;

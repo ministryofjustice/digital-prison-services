@@ -95,9 +95,8 @@ class ResultsActivity extends Component {
     const renderMainEvent = event => {
       if (ResultsActivity.eventCancelled(event)) {
         return (<td className="row-gutters">{getEventDescription(event)}<span className="cancelled"> (cancelled)</span></td>);
-      } else {
+      } 
         return (<td className="row-gutters">{getEventDescription(event)}</td>);
-      }
     };
 
     const offenders = activityData && activityData.map((mainEvent, index) => {

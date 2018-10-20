@@ -83,11 +83,8 @@ const getHouseblockListFactory = (elite2Api) => {
 };
 
 function safeTimeCompare (a, b) {
-  if (a && b) {
-    return moment(b).isBefore(a);
-  } else {
-    return !a;
-  }
+  if (a && b) return moment(b).isBefore(a);
+  return !a;
 }
 
 module.exports = { getHouseblockListFactory };
