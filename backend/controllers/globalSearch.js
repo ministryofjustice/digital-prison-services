@@ -17,9 +17,9 @@ const globalSearchFactory = (elite2Api) => {
       offenderNo = text;
     } else {
       const strings = text.split(' ');
-      lastName = strings[0];
+      [lastName] = strings;
       if (strings.length > 1) {
-        firstName = strings[1];
+        [, firstName] = strings;
       }
     }
     const data = await elite2Api.globalSearch(context, offenderNo, lastName, firstName);

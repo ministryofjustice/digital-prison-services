@@ -1,7 +1,7 @@
 const elite2Api = {};
-const getEstablishmentRollCount = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
+const { getEstablishmentRollCount} = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
   elite2Api,
-).getEstablishmentRollCount;
+);
 
 describe('Establishment Roll', () => {
   const context = {};

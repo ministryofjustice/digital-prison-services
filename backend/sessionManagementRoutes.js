@@ -25,8 +25,7 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
   };
 
   const login = async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+    const { username, password } = req.body;
 
     try {
       await oauthApi.authenticate(res.locals, username, password);

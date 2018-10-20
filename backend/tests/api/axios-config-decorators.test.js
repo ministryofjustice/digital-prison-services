@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+const { expect} = require('chai');
 const decorators = require('../../api/axios-config-decorators');
 const contextProperties = require('../../contextProperties');
 

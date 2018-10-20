@@ -1,7 +1,7 @@
 const MockAdapter = require('axios-mock-adapter');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const clientFactory = require('../../api/oauthEnabledClient');
-const healthApiFactory = require('../../api/healthApi').healthApiFactory;
+const { healthApiFactory} = require('../../api/healthApi');
 
 describe('healthApi', () => {
   const client1 = clientFactory({});

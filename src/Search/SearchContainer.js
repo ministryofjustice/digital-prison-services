@@ -29,23 +29,21 @@ class SearchContainer extends Component {
   }
 
   onActivityChange (event) {
-    const value = event.target.value;
+    const { target: { value } } = event
     const { locationDispatch, activityDispatch } = this.props;
 
-    if (value !== '--') {
-      locationDispatch('--');
-    }
-    activityDispatch(value);
+    if (value !== '--') locationDispatch('--');
+
+    activityDispatch(event.target.value);
   }
 
   onLocationChange (event) {
-    const value = event.target.value;
+    const { target: { value } } = event
     const { locationDispatch, activityDispatch } = this.props;
 
-    if (value !== '--') {
-      activityDispatch('--');
-    }
-    locationDispatch(value);
+    if (value !== '--') activityDispatch('--');
+
+    locationDispatch(event.target.value);
   }
 
   onSearch (history) {

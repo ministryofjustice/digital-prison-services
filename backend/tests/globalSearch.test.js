@@ -1,6 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY');
 const elite2Api = {};
-const globalSearch = require('../controllers/globalSearch').globalSearchFactory(elite2Api).globalSearch;
+const { globalSearch} = require('../controllers/globalSearch').globalSearchFactory(elite2Api);
 
 beforeEach(() => {
   elite2Api.globalSearch = jest.fn();

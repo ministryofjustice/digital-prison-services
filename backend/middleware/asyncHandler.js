@@ -1,4 +1,4 @@
-const logError = require('../logError').logError;
+const { logError} = require('../logError');
 
 const asyncMiddleware = fn =>
   (req, res, next) => {

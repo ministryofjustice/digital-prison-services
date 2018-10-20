@@ -1,5 +1,5 @@
 const MockAdapter = require('axios-mock-adapter');
-const expect = require('chai').expect;
+const { expect} = require('chai');
 const clientFactory = require('../../api/oauthEnabledClient');
 const contextProperties = require('../../contextProperties');
 

@@ -2,8 +2,7 @@ const axios = require('axios');
 const asyncMiddleware = require('../middleware/asyncHandler');
 const applicationVersion = require('../application-version');
 
-const packageData = applicationVersion.packageData;
-const buildVersion = applicationVersion.buildNumber;
+const { packageData, buildNumber } = applicationVersion
 
 const healthFactory = (elite2ApiUrl) => {
   const serviceUris = [elite2ApiUrl];
@@ -34,7 +33,7 @@ const healthFactory = (elite2ApiUrl) => {
 
     const appInfo = {
       name: packageData.name,
-      version: buildVersion,
+      version: buildNumber,
       description: packageData.description,
       uptime: process.uptime(),
       status: "UP"

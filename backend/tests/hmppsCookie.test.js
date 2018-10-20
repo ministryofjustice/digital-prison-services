@@ -2,7 +2,7 @@ const request = require('supertest');
 const express = require('express');
 const setCookie = require('set-cookie-parser');
 const cookieParser = require('cookie-parser');
-const expect = require('chai').expect;
+const { expect} = require('chai');
 
 const hmppsCookie = require('../hmppsCookie');
 const contextProperties = require('../contextProperties');
@@ -81,7 +81,7 @@ describe('Tests for managing the hmpps cookie.  This controls session lifetime a
           // eslint-disable-next-line
           expect(cookie.httpOnly).to.be.true;
 
-          const expires = cookie.expires;
+          const { expires } = cookie;
           // eslint-disable-next-line
           expect(expires).to.exist;
 
@@ -120,7 +120,7 @@ describe('Tests for managing the hmpps cookie.  This controls session lifetime a
           // eslint-disable-next-line
           expect(cookie.httpOnly).to.be.true;
 
-          const expires = cookie.expires;
+          const { expires } = cookie;
 
           // eslint-disable-next-line
           expect(expires).to.exist;

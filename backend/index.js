@@ -18,27 +18,27 @@ const ensureHttps = require('./middleware/ensureHttps');
 
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory;
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory;
-const userLocationsFactory = require('./controllers/userLocations').userLocationsFactory;
-const userMeFactory = require('./controllers/userMe').userMeFactory;
-const getConfiguration = require('./controllers/getConfig').getConfiguration;
+const { userLocationsFactory } = require('./controllers/userLocations');
+const { userMeFactory } = require('./controllers/userMe');
+const { getConfiguration } = require('./controllers/getConfig');
 const houseblockLocationsFactory = require('./controllers/houseblockLocations').getHouseblockLocationsFactory;
 const activityLocationsFactory = require('./controllers/activityLocations').getActivityLocationsFactory;
 const activityListFactory = require('./controllers/activityList').getActivityListFactory;
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory;
-const healthFactory = require('./controllers/health').healthFactory;
-const updateAttendanceFactory = require('./controllers/updateAttendance').updateAttendanceFactory;
+const { healthFactory } = require('./controllers/health');
+const { updateAttendanceFactory } = require('./controllers/updateAttendance');
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory;
-const globalSearchFactory = require('./controllers/globalSearch').globalSearchFactory;
+const { globalSearchFactory } = require('./controllers/globalSearch');
 
 const sessionManagementRoutes = require('./sessionManagementRoutes');
 const contextProperties = require('./contextProperties');
 
-const cookieOperationsFactory = require('./hmppsCookie').cookieOperationsFactory;
+const { cookieOperationsFactory } = require('./hmppsCookie');
 const tokenRefresherFactory = require('./tokenRefresher').factory;
 const controllerFactory = require('./controllers/controller').factory;
 
 const clientFactory = require('./api/oauthEnabledClient');
-const healthApiFactory = require('./api/healthApi').healthApiFactory;
+const { healthApiFactory} = require('./api/healthApi');
 const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory;
 const oauthApiFactory = require('./api/oauthApi');
 
@@ -65,7 +65,7 @@ app.use(bunyanMiddleware({
   obscureHeaders: ['Authorization']
 }));
 
-const health = healthFactory(config.apis.elite2.url).health;
+const { health } = healthFactory(config.apis.elite2.url);
 app.use('/health', health);
 app.use('/info', health);
 
