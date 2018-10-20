@@ -40,7 +40,7 @@ class PaymentReasonModal extends Component {
       comment
     });
 
-    onConfirm({ reason, comment, reasons, event: event, handleError: handleError });
+    onConfirm({ reason, comment, reasons, event, handleError });
     onClose();
   }
 
