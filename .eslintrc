@@ -36,7 +36,6 @@
     "react/forbid-prop-types": 0,
     "react/prop-types": 0,
     "no-param-reassign": 0,
-    "no-unused-expressions": 0,
     "import/no-named-as-default": 0,
     "no-buffer-constructor": 0,
     "no-shadow": 0,
