@@ -25,10 +25,7 @@ import {
   setMessage,
   setTermsVisibility,
   setUserDetails,
-  switchAgency
-} from './redux/actions/index';
-import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
-import {
+  switchAgency,
   setLoaded,
   setSearchDate,
   setSearchLocation,
@@ -38,7 +35,8 @@ import {
   setSearchActivities,
   setMenuOpen,
   setCaseChangeRedirectStatus
-} from "./redux/actions";
+} from './redux/actions/index';
+import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
 import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
 import GlobalSearchContainer from "./GlobalSearch/GlobalSearchContainer";
 

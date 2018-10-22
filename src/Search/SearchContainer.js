@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import axios from "axios/index";
-import { setSearchLocation, setSearchLocations } from '../redux/actions/index';
+import {
+  setSearchLocation,
+  setSearchLocations,
+  setSearchActivity,
+  resetValidationErrors,
+  setValidationError
+} from "../redux/actions";
 import Error from '../Error';
 import Search from "./Search";
-import { setSearchActivity, resetValidationErrors, setValidationError } from "../redux/actions";
 import { defaultPeriod } from "../redux/reducers";
 
 class SearchContainer extends Component {
