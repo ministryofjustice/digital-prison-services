@@ -1,114 +1,135 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import './index.scss';
-import { properCaseName } from "../../utils";
+import './index.scss'
+import { properCaseName } from '../../utils'
 
 class PaymentReasonModal extends Component {
   onReasonChange(event, reasons) {
     this.setState(prevState => ({
       ...prevState,
       reason: { key: event.target.selectedIndex - 1, value: event.target.value },
-      reasons
-    }));
+      reasons,
+    }))
   }
 
-  onCommentChange (event) {
+  onCommentChange(event) {
     this.setState(prevState => ({
       ...prevState,
-      comment: event.target.value
-    }));
+      comment: event.target.value,
+    }))
   }
 
-  onSubmit () {
-    const error = this.validationErrors();
-    const { onConfirm, onClose, event, handleError } = this.props;
+  onSubmit() {
+    const error = this.validationErrors()
+    const { onConfirm, onClose, event, handleError } = this.props
 
     if (error) {
       this.setState(prevState => ({
         ...prevState,
-        error
-      }));
-      return;
+        error,
+      }))
+      return
     }
 
-    const { reason, comment, reasons } = this.state;
+    const { reason, comment, reasons } = this.state
 
     this.setState({
       error: {},
       reason,
-      comment
-    });
+      comment,
+    })
 
-    onConfirm({ reason, comment, reasons, event, handleError });
-    onClose();
+    onConfirm({ reason, comment, reasons, event, handleError })
+    onClose()
   }
 
-  validationErrors () {
-    const { reason, comment, reasons } = this.state || {};
-    let error;
+  validationErrors() {
+    const { reason, comment, reasons } = this.state || {}
+    let error
 
     if (!reason) {
       error = {
-        ...error || {},
-        reason: 'Please select a reason.'
-      };
-      return error;
+        ...(error || {}),
+        reason: 'Please select a reason.',
+      }
+      return error
     }
 
     if (!comment && reasons[reason.key].commentRequired) {
       error = {
-        ...error || {},
-        comment: 'Please select a comment.'
-      };
+        ...(error || {}),
+        comment: 'Please select a comment.',
+      }
     }
 
-    return error;
+    return error
   }
 
-  render () {
-    const { reasons, onClose = [], event } = this.props;
-    const { error } = this.state || {};
+  render() {
+    const { reasons, onClose = [], event } = this.props
+    const { error } = this.state || {}
 
-    const reasonFormGroupClass = error && error.reason && 'form-group form-group-error' || 'form-group';
-    const commentFormGroupClass = (error && error.comment && 'form-group form-group-error') || 'form-group';
+    const reasonFormGroupClass = (error && error.reason && 'form-group form-group-error') || 'form-group'
+    const commentFormGroupClass = (error && error.comment && 'form-group form-group-error') || 'form-group'
 
-    const reasonSelectClass = (error && error.reason && 'form-control form-control-error') || 'form-control';
-    const commentClass = (error && error.comment && 'form-control form-control-error') || 'form-control';
+    const reasonSelectClass = (error && error.reason && 'form-control form-control-error') || 'form-control'
+    const commentClass = (error && error.comment && 'form-control form-control-error') || 'form-control'
 
-    return (<div key="attendance-modal">
-      <div className="attendance-modal">
+    return (
+      <div key="attendance-modal">
+        <div className="attendance-modal">
+          <div className={reasonFormGroupClass}>
+            <h2 className="heading-medium no-top-margin">
+              {`${properCaseName(event.lastName)}, ${properCaseName(event.firstName)}`}
+            </h2>
 
-        <div className={reasonFormGroupClass}>
-          <h2 className="heading-medium no-top-margin">
-            {`${properCaseName(event.lastName)}, ${properCaseName(event.firstName)}`}
-          </h2>
+            {error && error.reason && <span className="error-message">{error.reason}</span>}
 
-          {error && error.reason && <span className="error-message">{error.reason}</span> }
+            <label className="form-label" htmlFor="reasons">
+              Select an option:
+            </label>
+            <select
+              id="payment-reason-reason"
+              name="reasons"
+              className={reasonSelectClass}
+              onChange={event => this.onReasonChange(event, reasons)}
+              defaultValue="default"
+            >
+              <option value="default" disabled hidden>
+                Select option
+              </option>
+              {reasons.map(reason => (
+                <option key={reason.value}>{reason.value}</option>
+              ))}
+            </select>
+          </div>
 
-          <label className="form-label" htmlFor="reasons">
-                      Select an option:
-          </label>
-          <select id="payment-reason-reason" name="reasons" className={reasonSelectClass} onChange={event => this.onReasonChange(event, reasons)} defaultValue="default">
-            <option value="default" disabled hidden>Select option</option>
-            {reasons.map((reason) => <option key={reason.value}>{reason.value}</option>)}
-          </select>
-        </div>
+          <div className={commentFormGroupClass}>
+            {error && error.reason && <span className="error-message">{error.comment}</span>}
+            <label className="form-label" htmlFor="comments">
+              Comments:
+            </label>
+            <textarea
+              id="payment-reason-comment"
+              className={commentClass}
+              name="comments"
+              rows="5"
+              onChange={event => this.onCommentChange(event)}
+            />
+          </div>
 
-        <div className={commentFormGroupClass}>
-          {error && error.reason && <span className="error-message">{error.comment}</span> }
-          <label className="form-label" htmlFor="comments">
-               Comments:
-          </label>
-          <textarea id="payment-reason-comment" className={commentClass} name="comments" rows="5" onChange={event => this.onCommentChange(event)} />
-        </div>
-
-        <div>
-          <button type="button" className="button margin-top-30 margin-right-15" onClick={this.onSubmit.bind(this)}>Confirm</button>
-          <button type="button" className="greyButton margin-top-30" onClick={() => onClose()}>Cancel</button>
+          <div>
+            <button type="button" className="button margin-top-30 margin-right-15" onClick={this.onSubmit.bind(this)}>
+              Confirm
+            </button>
+            <button type="button" className="greyButton margin-top-30" onClick={() => onClose()}>
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
-    </div>);
+    )
   }
 }
 
@@ -117,7 +138,7 @@ PaymentReasonModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   event: PropTypes.object.isRequired,
   handleError: PropTypes.func.isRequired,
-  reasons: PropTypes.array.isRequired
-};
+  reasons: PropTypes.array.isRequired,
+}
 
-export default PaymentReasonModal;
+export default PaymentReasonModal

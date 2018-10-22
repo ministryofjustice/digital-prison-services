@@ -1,101 +1,109 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import { connect } from 'react-redux';
-import axios from "axios/index";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import moment from 'moment'
+import { connect } from 'react-redux'
+import axios from 'axios/index'
 import {
   setSearchLocation,
   setSearchLocations,
   setSearchActivity,
   resetValidationErrors,
-  setValidationError
-} from "../redux/actions";
-import Error from '../Error';
-import Search from "./Search";
-import { defaultPeriod } from "../redux/reducers";
+  setValidationError,
+} from '../redux/actions'
+import Error from '../Error'
+import Search from './Search'
+import { defaultPeriod } from '../redux/reducers'
 
 class SearchContainer extends Component {
-  constructor () {
-    super();
-    this.onActivityChange = this.onActivityChange.bind(this);
-    this.onLocationChange = this.onLocationChange.bind(this);
-    this.validate = this.validate.bind(this);
-    this.onSearch = this.onSearch.bind(this);
+  constructor() {
+    super()
+    this.onActivityChange = this.onActivityChange.bind(this)
+    this.onLocationChange = this.onLocationChange.bind(this)
+    this.validate = this.validate.bind(this)
+    this.onSearch = this.onSearch.bind(this)
   }
 
-  componentWillMount () {
-    const { dateDispatch, periodDispatch, getActivityLocations } = this.props;
-    this.getLocations();
-    const today = 'Today';
-    dateDispatch(today);
-    const currentPeriod = defaultPeriod(moment());
-    periodDispatch(currentPeriod);
-    getActivityLocations(today, currentPeriod);
+  componentWillMount() {
+    const { dateDispatch, periodDispatch, getActivityLocations } = this.props
+    this.getLocations()
+    const today = 'Today'
+    dateDispatch(today)
+    const currentPeriod = defaultPeriod(moment())
+    periodDispatch(currentPeriod)
+    getActivityLocations(today, currentPeriod)
   }
 
-  onActivityChange (event) {
-    const { target: { value } } = event
-    const { locationDispatch, activityDispatch } = this.props;
+  onActivityChange(event) {
+    const {
+      target: { value },
+    } = event
+    const { locationDispatch, activityDispatch } = this.props
 
-    if (value !== '--') locationDispatch('--');
+    if (value !== '--') locationDispatch('--')
 
-    activityDispatch(event.target.value);
+    activityDispatch(event.target.value)
   }
 
-  onLocationChange (event) {
-    const { target: { value } } = event
-    const { locationDispatch, activityDispatch } = this.props;
+  onLocationChange(event) {
+    const {
+      target: { value },
+    } = event
+    const { locationDispatch, activityDispatch } = this.props
 
-    if (value !== '--') activityDispatch('--');
+    if (value !== '--') activityDispatch('--')
 
-    locationDispatch(event.target.value);
+    locationDispatch(event.target.value)
   }
 
-  onSearch (history) {
-    const { handleSearch } = this.props;
+  onSearch(history) {
+    const { handleSearch } = this.props
 
     if (!this.validate()) {
-      return;
+      return
     }
-    handleSearch(history);
+    handleSearch(history)
   }
 
-  async getLocations () {
-    const { agencyId, locationsDispatch, handleError } = this.props;
+  async getLocations() {
+    const { agencyId, locationsDispatch, handleError } = this.props
 
     try {
       const response = await axios.get('/api/houseblockLocations', {
         params: {
-          agencyId
-        } });
-      locationsDispatch(response.data);
+          agencyId,
+        },
+      })
+      locationsDispatch(response.data)
     } catch (error) {
-      handleError(error);
+      handleError(error)
     }
   }
 
-  validate () {
-    const { activity, location, setValidationErrorDispatch, resetValidationErrorsDispatch } = this.props;
+  validate() {
+    const { activity, location, setValidationErrorDispatch, resetValidationErrorsDispatch } = this.props
 
-    if (activity === "--" && location === "--") {
-      setValidationErrorDispatch("searchForm", "Please select location or activity");
-      return false;
+    if (activity === '--' && location === '--') {
+      setValidationErrorDispatch('searchForm', 'Please select location or activity')
+      return false
     }
-    resetValidationErrorsDispatch();
-    return true;
+    resetValidationErrorsDispatch()
+    return true
   }
 
-  render () {
-    const { error } = this.props;
+  render() {
+    const { error } = this.props
 
     if (error) {
-      return <Error {...this.props} />;
+      return <Error {...this.props} />
     }
-    return (<Search
-      onSearch={this.onSearch}
-      onLocationChange={this.onLocationChange}
-      onActivityChange={this.onActivityChange}
-      {...this.props}/>);
+    return (
+      <Search
+        onSearch={this.onSearch}
+        onLocationChange={this.onLocationChange}
+        onActivityChange={this.onActivityChange}
+        {...this.props}
+      />
+    )
   }
 }
 
@@ -117,24 +125,27 @@ SearchContainer.propTypes = {
   setValidationErrorDispatch: PropTypes.func,
   resetValidationErrorsDispatch: PropTypes.func,
   getActivityLocations: PropTypes.func,
-  validationErrors: PropTypes.object
-};
+  validationErrors: PropTypes.object,
+}
 
 const mapStateToProps = state => ({
-    locations: state.search.locations.map(l => l.name),
-    activities: state.search.activities,
-    activity: state.search.activity,
-    location: state.search.location,
-    loaded: state.app.loaded,
-    validationErrors: state.app.validationErrors
-  });
+  locations: state.search.locations.map(l => l.name),
+  activities: state.search.activities,
+  activity: state.search.activity,
+  location: state.search.location,
+  loaded: state.app.loaded,
+  validationErrors: state.app.validationErrors,
+})
 
 const mapDispatchToProps = dispatch => ({
-    locationsDispatch: locations => dispatch(setSearchLocations(locations)),
-    locationDispatch: text => dispatch(setSearchLocation(text)),
-    activityDispatch: text => dispatch(setSearchActivity(text)),
-    setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
-    resetValidationErrorsDispatch: () => dispatch(resetValidationErrors())
-  });
+  locationsDispatch: locations => dispatch(setSearchLocations(locations)),
+  locationDispatch: text => dispatch(setSearchLocation(text)),
+  activityDispatch: text => dispatch(setSearchActivity(text)),
+  setValidationErrorDispatch: (fieldName, message) => dispatch(setValidationError(fieldName, message)),
+  resetValidationErrorsDispatch: () => dispatch(resetValidationErrors()),
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchContainer)

@@ -1,22 +1,17 @@
-import React from 'react';
-import moment from 'moment';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect
-} from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import ReactGA from 'react-ga';
-import { Header } from 'new-nomis-shared-components';
-import Dashboard from './Dashboard/index';
-import Footer from './Footer/index';
-import ErrorComponent from './Error/index';
-import SearchContainer from './Search/SearchContainer';
-import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer';
-import Terms from './Footer/terms-and-conditions';
-import './App.scss';
-
+import React from 'react'
+import moment from 'moment'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import ReactGA from 'react-ga'
+import { Header } from 'new-nomis-shared-components'
+import Dashboard from './Dashboard/index'
+import Footer from './Footer/index'
+import ErrorComponent from './Error/index'
+import SearchContainer from './Search/SearchContainer'
+import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
+import Terms from './Footer/terms-and-conditions'
+import './App.scss'
 
 import {
   resetError,
@@ -34,356 +29,385 @@ import {
   setSearchActivity,
   setSearchActivities,
   setMenuOpen,
-  setCaseChangeRedirectStatus
-} from './redux/actions/index';
-import ResultsHouseblockContainer from "./ResultsHouseblock/ResultsHouseblockContainer";
-import ResultsActivityContainer from "./ResultsActivity/ResultsActivityContainer";
-import GlobalSearchContainer from "./GlobalSearch/GlobalSearchContainer";
+  setCaseChangeRedirectStatus,
+} from './redux/actions/index'
+import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
+import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
+import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 
-import ModalProvider from './ModalProvider/index';
-import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer';
-import links from "./links";
+import ModalProvider from './ModalProvider/index'
+import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer'
+import links from './links'
 
-const axios = require('axios');
+const axios = require('axios')
 
 class App extends React.Component {
-  constructor () {
-    super();
-    this.switchCaseLoad = this.switchCaseLoad.bind(this);
-    this.showTermsAndConditions = this.showTermsAndConditions.bind(this);
-    this.hideTermsAndConditions = this.hideTermsAndConditions.bind(this);
-    this.clearMessage = this.clearMessage.bind(this);
-    this.displayError = this.displayError.bind(this);
-    this.handleError = this.handleError.bind(this);
-    this.getActivityList = this.getActivityList.bind(this);
-    this.getActivityLocations = this.getActivityLocations.bind(this);
-    this.raiseAnalyticsEvent = this.raiseAnalyticsEvent.bind(this);
+  constructor() {
+    super()
+    this.switchCaseLoad = this.switchCaseLoad.bind(this)
+    this.showTermsAndConditions = this.showTermsAndConditions.bind(this)
+    this.hideTermsAndConditions = this.hideTermsAndConditions.bind(this)
+    this.clearMessage = this.clearMessage.bind(this)
+    this.displayError = this.displayError.bind(this)
+    this.handleError = this.handleError.bind(this)
+    this.getActivityList = this.getActivityList.bind(this)
+    this.getActivityLocations = this.getActivityLocations.bind(this)
+    this.raiseAnalyticsEvent = this.raiseAnalyticsEvent.bind(this)
   }
 
-  async componentWillMount () {
-    const { configDispatch, setErrorDispatch } = this.props;
+  async componentWillMount() {
+    const { configDispatch, setErrorDispatch } = this.props
 
-    axios.interceptors.response.use((config) => {
-      if (config.status === 205) {
-        alert("There is a newer version of this website available, click ok to ensure you're using the latest version."); // eslint-disable-line no-alert
-        window.location = '/auth/logout';
-      }
-      return config;
-    }, (error) => Promise.reject(error));
+    axios.interceptors.response.use(
+      config => {
+        if (config.status === 205) {
+          // eslint-disable-next-line no-alert
+          alert(
+            "There is a newer version of this website available, click ok to ensure you're using the latest version."
+          )
+          window.location = '/auth/logout'
+        }
+        return config
+      },
+      error => Promise.reject(error)
+    )
 
     try {
-      this.loadUserAndCaseload();
+      this.loadUserAndCaseload()
 
-      const config = await axios.get('/api/config');
-      links.notmEndpointUrl = config.data.notmEndpointUrl;
+      const config = await axios.get('/api/config')
+      links.notmEndpointUrl = config.data.notmEndpointUrl
       if (config.data.googleAnalyticsId) {
-        ReactGA.initialize(config.data.googleAnalyticsId);
+        ReactGA.initialize(config.data.googleAnalyticsId)
       }
 
-      configDispatch(config.data);
+      configDispatch(config.data)
     } catch (error) {
-      setErrorDispatch(error.message);
+      setErrorDispatch(error.message)
     }
   }
 
-  async getActivityList () {
-    let { date } = this.props;
-    const {
-      agencyId,
-      activity,
-      period,
-      resetErrorDispatch,
-      setLoadedDispatch,
-      activityDataDispatch
-    } = this.props;
+  async getActivityList() {
+    let { date } = this.props
+    const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch } = this.props
 
     try {
-      resetErrorDispatch();
-      setLoadedDispatch(false);
-      if (date === 'Today') { // replace placeholder text
-        date = moment().format('DD/MM/YYYY');
+      resetErrorDispatch()
+      setLoadedDispatch(false)
+      if (date === 'Today') {
+        // replace placeholder text
+        date = moment().format('DD/MM/YYYY')
       }
       const config = {
         params: {
           agencyId,
           locationId: activity,
           date,
-          timeSlot: period
-        }
-      };
-      const response = await axios.get('/api/activitylist', config);
-      activityDataDispatch(response.data);
+          timeSlot: period,
+        },
+      }
+      const response = await axios.get('/api/activitylist', config)
+      activityDataDispatch(response.data)
     } catch (error) {
-      this.handleError(error);
+      this.handleError(error)
     }
-    setLoadedDispatch(true);
+    setLoadedDispatch(true)
   }
 
-  async getActivityLocations (bookedOnDay, timeSlot) {
-    const {
-      agencyId,
-      date,
-      period,
-      setLoadedDispatch,
-      activitiesDispatch,
-      activityDispatch
-    } = this.props;
+  async getActivityLocations(bookedOnDay, timeSlot) {
+    const { agencyId, date, period, setLoadedDispatch, activitiesDispatch, activityDispatch } = this.props
 
-    setLoadedDispatch(false);
+    setLoadedDispatch(false)
     try {
       if (!bookedOnDay) {
-        bookedOnDay = date;
+        bookedOnDay = date
       }
-      if (bookedOnDay === 'Today') { // replace placeholder text
-        bookedOnDay = moment().format('DD/MM/YYYY');
+      if (bookedOnDay === 'Today') {
+        // replace placeholder text
+        bookedOnDay = moment().format('DD/MM/YYYY')
       }
       if (!timeSlot) {
-        timeSlot = period;
+        timeSlot = period
       }
       const response = await axios.get('/api/activityLocations', {
         params: {
           agencyId,
           bookedOnDay,
-          timeSlot
-        } });
-      activitiesDispatch(response.data);
+          timeSlot,
+        },
+      })
+      activitiesDispatch(response.data)
       // set to unselected
-      activityDispatch('--');
+      activityDispatch('--')
     } catch (error) {
-      this.handleError(error);
+      this.handleError(error)
     }
-    setLoadedDispatch(true);
+    setLoadedDispatch(true)
   }
 
-  handlePeriodChange (event) {
-    const { periodDispatch } = this.props;
+  handlePeriodChange(event) {
+    const { periodDispatch } = this.props
 
-    periodDispatch(event.target.value);
+    periodDispatch(event.target.value)
   }
 
-  handlePeriodChangeWithLocationsUpdate (event) {
-    const { periodDispatch } = this.props;
+  handlePeriodChangeWithLocationsUpdate(event) {
+    const { periodDispatch } = this.props
 
-    periodDispatch(event.target.value);
-    this.getActivityLocations(null, event.target.value);
+    periodDispatch(event.target.value)
+    this.getActivityLocations(null, event.target.value)
   }
 
-  handleSearch (history) {
-    const { activity, currentLocation, orderField, sortOrder } = this.props;
+  handleSearch(history) {
+    const { activity, currentLocation, orderField, sortOrder } = this.props
 
     if (currentLocation && currentLocation !== '--') {
-      history.push('/whereaboutsresultshouseblock');
+      history.push('/whereaboutsresultshouseblock')
     } else if (activity) {
       if (history.location.pathname === '/whereaboutsresultsactivity') {
-        this.getActivityList(orderField, sortOrder);
+        this.getActivityList(orderField, sortOrder)
       } else {
-        history.push('/whereaboutsresultsactivity');
+        history.push('/whereaboutsresultsactivity')
       }
     }
   }
 
-  raiseAnalyticsEvent (event) {
-    const { config } = this.props;
+  raiseAnalyticsEvent(event) {
+    const { config } = this.props
 
     if (config.googleAnalyticsId) {
-      ReactGA.event(event);
+      ReactGA.event(event)
     }
   }
 
-  displayAlertAndLogout (message) {
-    alert(message); // eslint-disable-line no-alert
-    window.location = '/auth/logout';
+  displayAlertAndLogout(message) {
+    alert(message) // eslint-disable-line no-alert
+    window.location = '/auth/logout'
   }
 
-  shouldDisplayInnerContent () {
-    const { shouldShowTerms, user } = this.props;
+  shouldDisplayInnerContent() {
+    const { shouldShowTerms, user } = this.props
 
-    return !shouldShowTerms && (user && user.activeCaseLoadId);
+    return !shouldShowTerms && (user && user.activeCaseLoadId)
   }
 
-  handleLocationChange (event) {
-    const { locationDispatch } = this.props;
+  handleLocationChange(event) {
+    const { locationDispatch } = this.props
 
-    locationDispatch(event.target.value);
+    locationDispatch(event.target.value)
   }
 
-  handleActivityChange (event) {
-    const { activityDispatch } = this.props;
+  handleActivityChange(event) {
+    const { activityDispatch } = this.props
 
-    activityDispatch(event.target.value);
+    activityDispatch(event.target.value)
   }
 
-  handleDateChange (date) {
-    const { dateDispatch } = this.props;
+  handleDateChange(date) {
+    const { dateDispatch } = this.props
 
     if (date) {
-      dateDispatch(moment(date).format('DD/MM/YYYY'));
+      dateDispatch(moment(date).format('DD/MM/YYYY'))
     }
   }
 
-  handleDateChangeWithLocationsUpdate (date) {
-    const { dateDispatch } = this.props;
+  handleDateChangeWithLocationsUpdate(date) {
+    const { dateDispatch } = this.props
 
     if (date) {
-      const formattedDate = moment(date).format('DD/MM/YYYY');
-      dateDispatch(formattedDate);
-      this.getActivityLocations(formattedDate, null);
+      const formattedDate = moment(date).format('DD/MM/YYYY')
+      dateDispatch(formattedDate)
+      this.getActivityLocations(formattedDate, null)
     }
   }
 
-  handleError (error) {
-    const { setErrorDispatch } = this.props;
+  handleError(error) {
+    const { setErrorDispatch } = this.props
 
-    if ((error.response && error.response.status === 401) && (error.response.data && error.response.data.reason === 'session-expired')) {
-      this.displayAlertAndLogout("Your session has expired, please click OK to be redirected back to the login page");
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      (error.response.data && error.response.data.reason === 'session-expired')
+    ) {
+      this.displayAlertAndLogout('Your session has expired, please click OK to be redirected back to the login page')
     } else {
-      setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${  error}`);
+      setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)
     }
   }
 
-  displayError (error) {
-    const { setErrorDispatch } = this.props;
-    
-    setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${  error}`);
+  displayError(error) {
+    const { setErrorDispatch } = this.props
+
+    setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)
   }
 
-  clearMessage () {
-    const { setMessageDispatch } = this.props;
+  clearMessage() {
+    const { setMessageDispatch } = this.props
 
-    setMessageDispatch(null);
+    setMessageDispatch(null)
   }
 
-  hideTermsAndConditions () {
-    const { setTermsVisibilityDispatch } = this.props;
+  hideTermsAndConditions() {
+    const { setTermsVisibilityDispatch } = this.props
 
-    setTermsVisibilityDispatch(false);
+    setTermsVisibilityDispatch(false)
   }
 
-  showTermsAndConditions () {
-    const { setTermsVisibilityDispatch } = this.props;
+  showTermsAndConditions() {
+    const { setTermsVisibilityDispatch } = this.props
 
-    setTermsVisibilityDispatch(true);
+    setTermsVisibilityDispatch(true)
   }
 
-  async switchCaseLoad (newCaseload) {
-    const { switchAgencyDispatch, setErrorDispatch } = this.props;
+  async switchCaseLoad(newCaseload) {
+    const { switchAgencyDispatch, setErrorDispatch } = this.props
 
     try {
-      switchAgencyDispatch(newCaseload);
-      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload });
-      await this.loadUserAndCaseload();
+      switchAgencyDispatch(newCaseload)
+      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
+      await this.loadUserAndCaseload()
     } catch (error) {
-      setErrorDispatch(error.message);
+      setErrorDispatch(error.message)
     }
   }
 
-  async loadUserAndCaseload () {
-    const { userDetailsDispatch } = this.props;
-    const user = await axios.get('/api/me');
-    const caseloads = await axios.get('/api/usercaseloads');
+  async loadUserAndCaseload() {
+    const { userDetailsDispatch } = this.props
+    const user = await axios.get('/api/me')
+    const caseloads = await axios.get('/api/usercaseloads')
 
-    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data });
+    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data })
   }
 
-  async handlePay (activity) {
+  async handlePay(activity) {
     try {
       if (!activity.eventId) {
-        throw new Error('No event id found for this row');
+        throw new Error('No event id found for this row')
       }
       // TODO use this to detect whether we are checking or unchecking ?
       // if (browserEvent.???) ...
       const data = {
         eventOutcome: 'ATT',
-        performance: 'STANDARD'
-      };
-      await axios.put(`/api/updateAttendance?offenderNo=${activity.offenderNo}&activityId=${activity.eventId}`, data);
+        performance: 'STANDARD',
+      }
+      await axios.put(`/api/updateAttendance?offenderNo=${activity.offenderNo}&activityId=${activity.eventId}`, data)
     } catch (error) {
-      this.handleError(error);
+      this.handleError(error)
     }
   }
 
-  render () {
-    const {
-      config,
-      menuOpen,
-      setMenuOpen,
-      shouldShowTerms,
-      showModal
-    } = this.props;
-    const routes = (<div className="inner-content" onClick={() => {
-      if (menuOpen) {
-        setMenuOpen(false);
-      }
-    }}><div className="pure-g">
-        <Route path="(/)" render={() => (<Route exact path="/" render={() => (
-          <Redirect to="/whereaboutssearch"/>
-        )}/>)}/>
-        <Route path="(/whereaboutssearch)" render={() => (
-          <SearchContainer
-            handleError={this.handleError}
-            getActivityLocations={this.getActivityLocations}
-            handleDateChange={(event) => this.handleDateChangeWithLocationsUpdate(event)}
-            handlePeriodChange={(event) => this.handlePeriodChangeWithLocationsUpdate(event)}
-            handleSearch={(history) => this.handleSearch(history)}
-            {...this.props} />
-        )}/>
-        <Route path="(/globalsearch)" render={() => (
-          <GlobalSearchContainer
-            handleError={this.handleError}
-            raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-            {...this.props} />
-        )}/>
-        <Route exact path="/whereaboutsresultshouseblock" render={() => (
-          <ResultsHouseblockContainer
-            handleError={this.handleError}
-            handleDateChange={(event) => this.handleDateChange(event)}
-            handlePeriodChange={(event) => this.handlePeriodChange(event)}
-            raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-            handlePay={this.handlePay}
-            {...this.props}
+  render() {
+    const { config, menuOpen, setMenuOpen, shouldShowTerms, showModal } = this.props
+    const routes = (
+      <div
+        className="inner-content"
+        onClick={() => {
+          if (menuOpen) {
+            setMenuOpen(false)
+          }
+        }}
+      >
+        <div className="pure-g">
+          <Route
+            path="(/)"
+            render={() => <Route exact path="/" render={() => <Redirect to="/whereaboutssearch" />} />}
           />
-        )}/>
-        <Route exact path="/whereaboutsresultsactivity" render={() => (
-          <ResultsActivityContainer
-            handleError={this.handleError}
-            getActivityList = {this.getActivityList}
-            getActivityLocations={this.getActivityLocations}
-            handleDateChange={(event) => this.handleDateChange(event)}
-            handlePeriodChange={(event) => this.handlePeriodChange(event)}
-            handleSearch={(history) => this.handleSearch(history)}
-            raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-            handlePay={this.handlePay}
-            {...this.props} />
-        )}/>
-        <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />}/>
-        <Route exact path="/establishmentroll" render={() => (
-          <EstablishmentRollContainer handleError={this.handleError} {...this.props} />
-        )} />
-      </div></div>);
+          <Route
+            path="(/whereaboutssearch)"
+            render={() => (
+              <SearchContainer
+                handleError={this.handleError}
+                getActivityLocations={this.getActivityLocations}
+                handleDateChange={event => this.handleDateChangeWithLocationsUpdate(event)}
+                handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
+                handleSearch={history => this.handleSearch(history)}
+                {...this.props}
+              />
+            )}
+          />
+          <Route
+            path="(/globalsearch)"
+            render={() => (
+              <GlobalSearchContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                {...this.props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/whereaboutsresultshouseblock"
+            render={() => (
+              <ResultsHouseblockContainer
+                handleError={this.handleError}
+                handleDateChange={event => this.handleDateChange(event)}
+                handlePeriodChange={event => this.handlePeriodChange(event)}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                handlePay={this.handlePay}
+                {...this.props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/whereaboutsresultsactivity"
+            render={() => (
+              <ResultsActivityContainer
+                handleError={this.handleError}
+                getActivityList={this.getActivityList}
+                getActivityLocations={this.getActivityLocations}
+                handleDateChange={event => this.handleDateChange(event)}
+                handlePeriodChange={event => this.handlePeriodChange(event)}
+                handleSearch={history => this.handleSearch(history)}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                handlePay={this.handlePay}
+                {...this.props}
+              />
+            )}
+          />
+          <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />} />
+          <Route
+            exact
+            path="/establishmentroll"
+            render={() => <EstablishmentRollContainer handleError={this.handleError} {...this.props} />}
+          />
+        </div>
+      </div>
+    )
 
-    let innerContent;
+    let innerContent
     if (this.shouldDisplayInnerContent()) {
-      innerContent = routes;
+      innerContent = routes
     } else {
-      innerContent = (<div className="inner-content" onClick={() => setMenuOpen(false)}><div className="pure-g"><ErrorComponent {...this.props} /></div></div>);
+      innerContent = (
+        <div className="inner-content" onClick={() => setMenuOpen(false)}>
+          <div className="pure-g">
+            <ErrorComponent {...this.props} />
+          </div>
+        </div>
+      )
     }
 
     return (
       <Router>
         <div className="content">
-          <Route render={(props) => {
-            if (config && config.googleAnalyticsId) {
-              ReactGA.pageview(props.location.pathname);
-            }
-            return (<Header
-              logoText="HMPPS"
-              title="Activity Lists"
-              homeLink={links.getHomeLink()}
-              switchCaseLoad={this.switchCaseLoad}
-              history={props.history}
-              {...this.props}
-            />);
-          }}
+          <Route
+            render={props => {
+              if (config && config.googleAnalyticsId) {
+                ReactGA.pageview(props.location.pathname)
+              }
+              return (
+                <Header
+                  logoText="HMPPS"
+                  title="Activity Lists"
+                  homeLink={links.getHomeLink()}
+                  switchCaseLoad={this.switchCaseLoad}
+                  history={props.history}
+                  {...this.props}
+                />
+              )
+            }}
           />
           {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
 
@@ -398,7 +422,8 @@ class App extends React.Component {
             mailTo={config && config.mailTo}
           />
         </div>
-      </Router>);
+      </Router>
+    )
   }
 }
 
@@ -431,52 +456,51 @@ App.propTypes = {
   switchAgencyDispatch: PropTypes.func.isRequired,
   user: PropTypes.object,
   userDetailsDispatch: PropTypes.func.isRequired,
-  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired
-};
+  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired,
+}
 
 const mapStateToProps = state => ({
-    error: state.app.error,
-    message: state.app.message,
-    page: state.app.page,
-    config: state.app.config,
-    user: state.app.user,
-    shouldShowTerms: state.app.shouldShowTerms,
-    currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
-    activity: state.search.activity,
-    date: state.search.date,
-    period: state.search.period,
-    agencyId: state.app.user.activeCaseLoadId,
-    orderField: state.events.orderField,
-    sortOrder: state.events.sortOrder,
-    showModal: state.app.showModal,
-    menuOpen: state.app.menuOpen,
-    caseChangeRedirect: state.app.caseChangeRedirect
-  });
+  error: state.app.error,
+  message: state.app.message,
+  page: state.app.page,
+  config: state.app.config,
+  user: state.app.user,
+  shouldShowTerms: state.app.shouldShowTerms,
+  currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
+  activity: state.search.activity,
+  date: state.search.date,
+  period: state.search.period,
+  agencyId: state.app.user.activeCaseLoadId,
+  orderField: state.events.orderField,
+  sortOrder: state.events.sortOrder,
+  showModal: state.app.showModal,
+  menuOpen: state.app.menuOpen,
+  caseChangeRedirect: state.app.caseChangeRedirect,
+})
 
 const mapDispatchToProps = dispatch => ({
-    configDispatch: (config) => dispatch(setConfig(config)),
-    userDetailsDispatch: (user) => dispatch(setUserDetails(user)),
-    switchAgencyDispatch: (agencyId) => dispatch(switchAgency(agencyId)),
-    setTermsVisibilityDispatch: (shouldShowTerms) => dispatch(setTermsVisibility(shouldShowTerms)),
-    setErrorDispatch: (error) => dispatch(setError(error)),
-    resetErrorDispatch: () => dispatch(resetError()),
-    setMessageDispatch: (message) => dispatch(setMessage(message)),
-    locationDispatch: text => dispatch(setSearchLocation(text)),
-    activitiesDispatch: text => dispatch(setSearchActivities(text)),
-    activityDispatch: text => dispatch(setSearchActivity(text)),
-    dateDispatch: text => dispatch(setSearchDate(text)),
-    periodDispatch: text => dispatch(setSearchPeriod(text)),
-    activityDataDispatch: data => dispatch(setActivityData(data)),
-    setLoadedDispatch: (status) => dispatch(setLoaded(status)),
-    setMenuOpen: (flag) => dispatch(setMenuOpen(flag)),
-    setCaseChangeRedirectStatusDispatch: (flag) => dispatch(setCaseChangeRedirectStatus(flag))
-  });
+  configDispatch: config => dispatch(setConfig(config)),
+  userDetailsDispatch: user => dispatch(setUserDetails(user)),
+  switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
+  setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
+  setErrorDispatch: error => dispatch(setError(error)),
+  resetErrorDispatch: () => dispatch(resetError()),
+  setMessageDispatch: message => dispatch(setMessage(message)),
+  locationDispatch: text => dispatch(setSearchLocation(text)),
+  activitiesDispatch: text => dispatch(setSearchActivities(text)),
+  activityDispatch: text => dispatch(setSearchActivity(text)),
+  dateDispatch: text => dispatch(setSearchDate(text)),
+  periodDispatch: text => dispatch(setSearchPeriod(text)),
+  activityDataDispatch: data => dispatch(setActivityData(data)),
+  setLoadedDispatch: status => dispatch(setLoaded(status)),
+  setMenuOpen: flag => dispatch(setMenuOpen(flag)),
+  setCaseChangeRedirectStatusDispatch: flag => dispatch(setCaseChangeRedirectStatus(flag)),
+})
 
+const AppContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
 
-const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
-
-export {
-  App,
-  AppContainer
-};
-export default App;
+export { App, AppContainer }
+export default App

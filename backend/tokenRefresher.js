@@ -1,7 +1,6 @@
-const jwtDecode = require('jwt-decode');
-const contextProperties = require('./contextProperties');
-const logger = require('./log');
-
+const jwtDecode = require('jwt-decode')
+const contextProperties = require('./contextProperties')
+const logger = require('./log')
 
 /**
  * Does the supplied JWT token expire before the supplied time, expressed as seconds since the Posix Epoch?
@@ -12,14 +11,14 @@ const logger = require('./log');
  * @param timeSinceTheEpochInSeconds
  */
 const tokenExpiresBefore = (encodedToken, timeSinceTheEpochInSeconds) => {
-  const token = jwtDecode(encodedToken);
+  const token = jwtDecode(encodedToken)
   if (token.exp < timeSinceTheEpochInSeconds) {
-    logger.info(`Token expiring: user_name '${token.user_name}', exp ${token.exp} >= ${timeSinceTheEpochInSeconds}`);
+    logger.info(`Token expiring: user_name '${token.user_name}', exp ${token.exp} >= ${timeSinceTheEpochInSeconds}`)
   } else {
-    logger.debug(`Token OK: user_name '${token.user_name}', exp ${token.exp} < ${timeSinceTheEpochInSeconds}`);
+    logger.debug(`Token OK: user_name '${token.user_name}', exp ${token.exp} < ${timeSinceTheEpochInSeconds}`)
   }
-  return token.exp < timeSinceTheEpochInSeconds;
-};
+  return token.exp < timeSinceTheEpochInSeconds
+}
 
 /**
  * Return a function that checks and refreshes the OAuth tokens if the access token is approaching expiry or has expired.
@@ -39,14 +38,12 @@ const factory = (refreshFunction, secondsToExpiry) =>
    * useful for testing)
    * @returns a Promise that is settled when decisions and refresh are complete.
    */
-  (context, nowInSecondsSincePosixEpoch = (Date.now() / 1000)) =>
-    tokenExpiresBefore(
-      contextProperties.getAccessToken(context),
-      nowInSecondsSincePosixEpoch + secondsToExpiry
-    ) ? refreshFunction(context) : Promise.resolve();
-
+  (context, nowInSecondsSincePosixEpoch = Date.now() / 1000) =>
+    tokenExpiresBefore(contextProperties.getAccessToken(context), nowInSecondsSincePosixEpoch + secondsToExpiry)
+      ? refreshFunction(context)
+      : Promise.resolve()
 
 module.exports = {
   factory,
-  tokenExpiresBefore
-};
+  tokenExpiresBefore,
+}

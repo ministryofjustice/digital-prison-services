@@ -1,19 +1,19 @@
-const axios = require('axios');
-const logger = require('../log');
+const axios = require('axios')
+const logger = require('../log')
 
-const { addAuthorizationHeader, addPaginationHeaders } = require('./axios-config-decorators');
+const { addAuthorizationHeader, addPaginationHeaders } = require('./axios-config-decorators')
 
-const resultLogger = (result) => {
-  logger.debug(`${result.config.method} ${result.config.url} ${result.status} ${result.statusText}`);
-  return result;
-};
+const resultLogger = result => {
+  logger.debug(`${result.config.method} ${result.config.url} ${result.status} ${result.statusText}`)
+  return result
+}
 
-const errorLogger = (error) => {
-  const status = error.response ? error.response.status : '-';
-  const responseData = error.response ? error.response.data : '-';
-  logger.debug(`Error. ${error.config.method} ${error.config.url} ${status} ${error.message} ${responseData}`);
-  throw error;
-};
+const errorLogger = error => {
+  const status = error.response ? error.response.status : '-'
+  const responseData = error.response ? error.response.data : '-'
+  logger.debug(`Error. ${error.config.method} ${error.config.url} ${status} ${error.message} ${responseData}`)
+  throw error
+}
 
 /**
  * Build a client for the supplied configuration. The client wraps axios get, post, put etc while ensuring that
@@ -26,10 +26,10 @@ const errorLogger = (error) => {
 const factory = ({ baseUrl, timeout }) => {
   const axiosInstance = axios.create({
     baseURL: baseUrl,
-    timeout
-  });
+    timeout,
+  })
 
-  const addHeaders = (context, config) => addPaginationHeaders(context, addAuthorizationHeader(context, config));
+  const addHeaders = (context, config) => addPaginationHeaders(context, addAuthorizationHeader(context, config))
 
   /**
    * An Axios GET request with Oauth token
@@ -42,17 +42,14 @@ const factory = ({ baseUrl, timeout }) => {
    */
   const get = (context, url, resultLimit) =>
     axiosInstance(
-      addHeaders(
-        context,
-        {
-          method: 'get',
-          url,
-          headers: resultLimit ? { 'Page-Limit': resultLimit } : {}
-        }
-      )
+      addHeaders(context, {
+        method: 'get',
+        url,
+        headers: resultLimit ? { 'Page-Limit': resultLimit } : {},
+      })
     )
       .then(resultLogger)
-      .catch(errorLogger);
+      .catch(errorLogger)
 
   /**
    * An Axios POST with Oauth token refresh and retry behaviour
@@ -63,52 +60,42 @@ const factory = ({ baseUrl, timeout }) => {
    */
   const post = (context, url, body) =>
     axiosInstance(
-      addHeaders(
-        context,
-        {
-          method: 'post',
-          url,
-          data: body
-        }
-      )
+      addHeaders(context, {
+        method: 'post',
+        url,
+        data: body,
+      })
     )
       .then(resultLogger)
-      .catch(errorLogger);
+      .catch(errorLogger)
 
   const put = (context, url, body) =>
     axiosInstance(
-      addHeaders(
-        context,
-        {
-          method: 'put',
-          url,
-          data: body
-        }
-      )
+      addHeaders(context, {
+        method: 'put',
+        url,
+        data: body,
+      })
     )
       .then(resultLogger)
-      .catch(errorLogger);
+      .catch(errorLogger)
 
   const getStream = (context, url) =>
     axiosInstance(
-      addHeaders(
-        context,
-        {
-          method: 'get',
-          url,
-          responseType: 'stream'
-        }
-      )
-    )
-      .catch(errorLogger);
+      addHeaders(context, {
+        method: 'get',
+        url,
+        responseType: 'stream',
+      })
+    ).catch(errorLogger)
 
   return {
     get,
     getStream,
     post,
     put,
-    axiosInstance // exposed for testing...
-  };
-};
+    axiosInstance, // exposed for testing...
+  }
+}
 
-module.exports = factory;
+module.exports = factory

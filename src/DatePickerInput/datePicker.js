@@ -1,28 +1,27 @@
-import React, { Component } from 'react';
-import Datetime from 'react-datetime';
-import 'react-datetime/css/react-datetime.css';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import Datetime from 'react-datetime'
+import 'react-datetime/css/react-datetime.css'
+import PropTypes from 'prop-types'
 
 class DatePicker extends Component {
-  constructor () {
-    super();
-    this.renderInput = this.renderInput.bind(this);
+  constructor() {
+    super()
+    this.renderInput = this.renderInput.bind(this)
   }
 
-  renderInput (props) {
-    const { inputId, className, name } = this.props;
+  renderInput(props) {
+    const { inputId, className, name } = this.props
     return (
       <div>
-        <input id={inputId} className={className} name={name} {...props} readOnly/>
+        <input id={inputId} className={className} name={name} {...props} readOnly />
       </div>
-    );
+    )
   }
 
-  render () {
-    const { shouldShowDay, handleDateChange } = this.props;
+  render() {
+    const { shouldShowDay, handleDateChange } = this.props
 
     return (
-
       <Datetime
         className=""
         onChange={handleDateChange}
@@ -34,10 +33,10 @@ class DatePicker extends Component {
         strictParsing
         {...this.props}
         renderInput={this.renderInput}
-      />);
+      />
+    )
   }
 }
-
 
 DatePicker.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
@@ -45,7 +44,7 @@ DatePicker.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
   title: PropTypes.string,
-  inputId: PropTypes.string
-};
+  inputId: PropTypes.string,
+}
 
-export default DatePicker;
+export default DatePicker

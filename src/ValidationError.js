@@ -1,24 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class ValidationErrors extends React.Component {
-  render () {
-    const { validationErrors, fieldName } = this.props;
-   
+  render() {
+    const { validationErrors, fieldName } = this.props
+
     if (validationErrors && validationErrors[fieldName]) {
-      return <span id="validation-message" className="error-message">{validationErrors[fieldName]}</span>;
+      return (
+        <span id="validation-message" className="error-message">
+          {validationErrors[fieldName]}
+        </span>
+      )
     }
     // TODO: If there is any error, this helps with lining fields up, but this depends on layout!
     if (validationErrors) {
-      return <span>&nbsp;</span>;
+      return <span>&nbsp;</span>
     }
-    return '';
+    return ''
   }
 }
 
 ValidationErrors.propTypes = {
   fieldName: PropTypes.string,
-  validationErrors: PropTypes.object
-};
+  validationErrors: PropTypes.object,
+}
 
-export default ValidationErrors;
+export default ValidationErrors

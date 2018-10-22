@@ -1,1 +1,1 @@
-require('./backend');
+require('./backend')
