@@ -140,7 +140,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && yarn test"
     }
   },
   "lint-staged": {
@@ -148,7 +148,6 @@
       "*.{js,json,css,md}": [
         "prettier --write",
         "eslint --fix",
-        "yarn test",
         "git add"
       ]
     },
