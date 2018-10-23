@@ -7,9 +7,9 @@ export const movements = {
     { name: 'Currently out', value: 124 },
     { name: 'Operational cap.', value: 124 },
     { name: 'Net vacancies', value: 124 },
-    { name: 'Out of order', value: 124 }
-  ]
-};
+    { name: 'Out of order', value: 124 },
+  ],
+}
 
 export const blocks = [
   {
@@ -20,8 +20,8 @@ export const blocks = [
       { name: 'Currently out', value: 124 },
       { name: 'Operational cap.', value: 124 },
       { name: 'Net vacancies', value: 124 },
-      { name: 'Out of order', value: 124 }
-    ]
+      { name: 'Out of order', value: 124 },
+    ],
   },
   {
     name: 'Housing block 2',
@@ -31,8 +31,8 @@ export const blocks = [
       { name: 'Currently out', value: 124 },
       { name: 'Operational cap.', value: 124 },
       { name: 'Net vacancies', value: 124 },
-      { name: 'Out of order', value: 124 }
-    ]
+      { name: 'Out of order', value: 124 },
+    ],
   },
   {
     name: 'Housing block 3',
@@ -42,8 +42,8 @@ export const blocks = [
       { name: 'Currently out', value: 124 },
       { name: 'Operational cap.', value: 124 },
       { name: 'Net vacancies', value: 124 },
-      { name: 'Out of order', value: 124 }
-    ]
+      { name: 'Out of order', value: 124 },
+    ],
   },
   {
     name: 'Housing block 4',
@@ -53,10 +53,10 @@ export const blocks = [
       { name: 'Currently out', value: 124 },
       { name: 'Operational cap.', value: 124 },
       { name: 'Net vacancies', value: 124 },
-      { name: 'Out of order', value: 124 }
-    ]
-  }
-];
+      { name: 'Out of order', value: 124 },
+    ],
+  },
+]
 
 export const totals = {
   name: 'Totals',
@@ -66,6 +66,6 @@ export const totals = {
     { name: 'Currently out', value: 124 },
     { name: 'Operational cap.', value: 124 },
     { name: 'Net vacancies', value: 124 },
-    { name: 'Out of order', value: 124 }
-  ]
-};
+    { name: 'Out of order', value: 124 },
+  ],
+}

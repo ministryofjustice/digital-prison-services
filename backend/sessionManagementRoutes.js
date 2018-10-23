@@ -1,11 +1,10 @@
-const logger = require('./log');
-const errorStatusCode = require('./error-status-code');
+const logger = require('./log')
+const errorStatusCode = require('./error-status-code')
 
-const contextProperties = require('./contextProperties');
+const contextProperties = require('./contextProperties')
 
-
-const LOGIN_PATH = '/auth/login';
-const LOGOUT_PATH = '/auth/logout';
+const LOGIN_PATH = '/auth/login'
+const LOGOUT_PATH = '/auth/logout'
 /**
  * Add session management related routes to an express 'app'.
  * These handle login, logout, and middleware to handle the JWT token cookie. (hmppsCookie).
@@ -19,54 +18,61 @@ const LOGOUT_PATH = '/auth/logout';
  */
 const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, tokenRefresher, mailTo, homeLink }) => {
   const loginIndex = async (req, res) => {
-    const isApiUp = await healthApi.isUp();
-    logger.info(`loginIndex - health check called and the isaAppUp = ${isApiUp}`);
-    res.render('login', { authError: false, apiUp: isApiUp, mailTo, homeLink });
-  };
+    const isApiUp = await healthApi.isUp()
+    logger.info(`loginIndex - health check called and the isaAppUp = ${isApiUp}`)
+    res.render('login', { authError: false, apiUp: isApiUp, mailTo, homeLink })
+  }
 
   const login = async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+    const { username, password } = req.body
 
     try {
-      await oauthApi.authenticate(res.locals, username, password);
+      await oauthApi.authenticate(res.locals, username, password)
 
-      hmppsCookieOperations.setCookie(res, res.locals);
+      hmppsCookieOperations.setCookie(res, res.locals)
 
-      res.redirect('/');
+      res.redirect('/')
     } catch (error) {
-      const code = errorStatusCode(error);
-      res.status(code);
-      logger.error(error);
+      const code = errorStatusCode(error)
+      res.status(code)
+      logger.error(error)
       if (code < 500) {
-        logger.warn('Login failed for', { user: String(username) });
-        res.render('login', { authError: true, authErrorText: getAuthErrorDescription(error), apiUp: true, mailTo, homeLink });
+        logger.warn('Login failed for', { user: String(username) })
+        res.render('login', {
+          authError: true,
+          authErrorText: getAuthErrorDescription(error),
+          apiUp: true,
+          mailTo,
+          homeLink,
+        })
       } else {
-        logger.error(error);
-        res.render('login', { authError: false, apiUp: false, mailTo, homeLink });
+        logger.error(error)
+        res.render('login', { authError: false, apiUp: false, mailTo, homeLink })
       }
     }
-  };
+  }
 
-  function getAuthErrorDescription (error) {
-    logger.info(`login error description = ${error.response && error.response.data && error.response.data.error_description}`);
-    let type = 'The username or password you have entered is invalid.';
+  function getAuthErrorDescription(error) {
+    logger.info(
+      `login error description = ${error.response && error.response.data && error.response.data.error_description}`
+    )
+    let type = 'The username or password you have entered is invalid.'
     if (error.response && error.response.data && error.response.data.error_description) {
       if (error.response.data.error_description.includes('ORA-28000')) {
-        type = 'Your user account is locked.';
+        type = 'Your user account is locked.'
       } else if (error.response.data.error_description.includes('does not have access to caseload NWEB')) {
-        type = 'You are not enabled for this service, please contact admin and request access.';
+        type = 'You are not enabled for this service, please contact admin and request access.'
       } else if (error.response.data.error_description.includes('ORA-28001')) {
-        type = 'Your password has expired.';
+        type = 'Your password has expired.'
       }
     }
-    return type;
+    return type
   }
 
   const logout = (req, res) => {
-    hmppsCookieOperations.clearCookie(res);
-    res.redirect(`${process.env.NN_ENDPOINT_URL}${LOGIN_PATH}`);
-  };
+    hmppsCookieOperations.clearCookie(res)
+    res.redirect(`${process.env.NN_ENDPOINT_URL}${LOGIN_PATH}`)
+  }
 
   /**
    * A client who sends valid OAuth tokens when visits the login page is redirected to the
@@ -76,26 +82,27 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
    * @param next
    */
   const loginMiddleware = (req, res, next) => {
-    hmppsCookieOperations.extractCookieValues(req, res.locals);
-    if (contextProperties.hasTokens(res.locals)) { // implies authenticated
-      res.redirect('/');
-      return;
+    hmppsCookieOperations.extractCookieValues(req, res.locals)
+    if (contextProperties.hasTokens(res.locals)) {
+      // implies authenticated
+      res.redirect('/')
+      return
     }
-    next();
-  };
+    next()
+  }
 
   const hmppsCookieMiddleware = async (req, res, next) => {
     try {
-      hmppsCookieOperations.extractCookieValues(req, res.locals);
+      hmppsCookieOperations.extractCookieValues(req, res.locals)
       if (contextProperties.hasTokens(res.locals)) {
-        await tokenRefresher(res.locals);
-        hmppsCookieOperations.setCookie(res, res.locals);
+        await tokenRefresher(res.locals)
+        hmppsCookieOperations.setCookie(res, res.locals)
       }
-      next();
+      next()
     } catch (error) {
-      next(error);
+      next(error)
     }
-  };
+  }
 
   /**
    * If the context does not contain an accessToken the client is denied access to the
@@ -107,34 +114,35 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
    */
   const requireLoginMiddleware = (req, res, next) => {
     if (contextProperties.hasTokens(res.locals)) {
-      next();
-      return;
+      next()
+      return
     }
-    const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+    const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)
 
     if (isXHRRequest) {
-      res.status(401);
-      res.json({ message: 'Session expired, please logout.', reason: 'session-expired' });
-      return;
+      res.status(401)
+      res.json({ message: 'Session expired, please logout.', reason: 'session-expired' })
+      return
     }
 
-    res.redirect(LOGIN_PATH);
-  };
+    res.redirect(LOGIN_PATH)
+  }
 
+  app.get(LOGIN_PATH, loginMiddleware, loginIndex)
+  app.post(LOGIN_PATH, login)
+  app.get(LOGOUT_PATH, logout)
 
-  app.get(LOGIN_PATH, loginMiddleware, loginIndex);
-  app.post(LOGIN_PATH, login);
-  app.get(LOGOUT_PATH, logout);
-
-  app.use(hmppsCookieMiddleware);
-  app.use(requireLoginMiddleware);
+  app.use(hmppsCookieMiddleware)
+  app.use(requireLoginMiddleware)
 
   /**
    * An end-point that does nothing.
    * Clients can periodically 'ping' this end-point to refresh the cookie 'session' and JWT token.
    * Must be installed after the middleware so that OAuth token refresh happens.
    */
-  app.use('/heart-beat', (req, res) => { res.sendStatus(200); });
-};
+  app.use('/heart-beat', (req, res) => {
+    res.sendStatus(200)
+  })
+}
 
-module.exports = { configureRoutes };
+module.exports = { configureRoutes }

@@ -1,52 +1,52 @@
 /* eslint-disable camelcase */
-const config = require('./config');
+const config = require('./config')
 
-const sessionExpiryMinutes = config.hmppsCookie.expiryMinutes * 60 * 1000;
+const sessionExpiryMinutes = config.hmppsCookie.expiryMinutes * 60 * 1000
 
-const encodeToBase64 = (string) => Buffer.from(string).toString('base64');
-const decodedFromBase64 = (string) => Buffer.from(string, 'base64').toString('ascii');
+const encodeToBase64 = string => Buffer.from(string).toString('base64')
+const decodedFromBase64 = string => Buffer.from(string, 'base64').toString('ascii')
 
-const isHmppsCookieValid = (cookie) => {
+const isHmppsCookieValid = cookie => {
   if (!cookie) {
-    return false;
+    return false
   }
 
-  const cookieData = getHmppsCookieData(cookie);
+  const cookieData = getHmppsCookieData(cookie)
 
-  return !(!cookieData.access_token || !cookieData.refresh_token);
-};
+  return !(!cookieData.access_token || !cookieData.refresh_token)
+}
 
-const isAuthenticated = (req) => {
-  const hmppsCookie = req.cookies[config.hmppsCookie.name];
-  return isHmppsCookieValid(hmppsCookie);
-};
+const isAuthenticated = req => {
+  const hmppsCookie = req.cookies[config.hmppsCookie.name]
+  return isHmppsCookieValid(hmppsCookie)
+}
 
 const hmppsSessionMiddleWare = (req, res, next) => {
-  const hmppsCookie = req.cookies[config.hmppsCookie.name];
-  const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+  const hmppsCookie = req.cookies[config.hmppsCookie.name]
+  const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)
 
   if (!isHmppsCookieValid(hmppsCookie)) {
     if (isXHRRequest) {
-      res.status(401);
-      res.json({ message: 'Session expired' });
-      res.end();
-      return;
+      res.status(401)
+      res.json({ message: 'Session expired' })
+      res.end()
+      return
     }
 
-    res.redirect('/auth/login');
-    return;
+    res.redirect('/auth/login')
+    return
   }
 
-  const cookie = getHmppsCookieData(hmppsCookie);
+  const cookie = getHmppsCookieData(hmppsCookie)
 
-  req.access_token = cookie.access_token;
-  req.refresh_token = cookie.refresh_token;
+  req.access_token = cookie.access_token
+  req.refresh_token = cookie.refresh_token
 
-  next();
-};
+  next()
+}
 
 const setHmppsCookie = (res, { access_token, refresh_token }) => {
-  const tokens = encodeToBase64(JSON.stringify({ access_token, refresh_token }));
+  const tokens = encodeToBase64(JSON.stringify({ access_token, refresh_token }))
 
   const cookieConfig = {
     domain: config.hmppsCookie.domain,
@@ -55,48 +55,48 @@ const setHmppsCookie = (res, { access_token, refresh_token }) => {
     maxAge: sessionExpiryMinutes,
     path: '/',
     httpOnly: true,
-    secure: config.app.production
-  };
-
-  res.cookie(config.hmppsCookie.name, tokens, cookieConfig);
-};
-
-const getHmppsCookieData = (cookie) => JSON.parse(decodedFromBase64(cookie));
-
-const extendHmppsCookieMiddleWare = (req, res, next) => {
-  const hmppsCookie = req.cookies[config.hmppsCookie.name];
-
-  if (!hmppsCookie) {
-    next();
-    return;
+    secure: config.app.production,
   }
 
-  const { access_token, refresh_token } = getHmppsCookieData(hmppsCookie);
+  res.cookie(config.hmppsCookie.name, tokens, cookieConfig)
+}
 
-  setHmppsCookie(res, { access_token, refresh_token });
-  next();
-};
+const getHmppsCookieData = cookie => JSON.parse(decodedFromBase64(cookie))
 
-const updateHmppsCookie = (res) => (tokens) => {
-  setHmppsCookie(res, tokens);
-};
+const extendHmppsCookieMiddleWare = (req, res, next) => {
+  const hmppsCookie = req.cookies[config.hmppsCookie.name]
 
-const deleteHmppsCookie = (res) => {
-  res.cookie(config.hmppsCookie.name, '', { expires: new Date(0), domain: config.hmppsCookie.domain, path: '/' });
-};
+  if (!hmppsCookie) {
+    next()
+    return
+  }
+
+  const { access_token, refresh_token } = getHmppsCookieData(hmppsCookie)
+
+  setHmppsCookie(res, { access_token, refresh_token })
+  next()
+}
+
+const updateHmppsCookie = res => tokens => {
+  setHmppsCookie(res, tokens)
+}
+
+const deleteHmppsCookie = res => {
+  res.cookie(config.hmppsCookie.name, '', { expires: new Date(0), domain: config.hmppsCookie.domain, path: '/' })
+}
 
 const loginMiddleware = (req, res, next) => {
   if (req.url.includes('logout')) {
-    next();
-    return;
+    next()
+    return
   }
 
   if (isAuthenticated(req)) {
-    res.redirect('/whereaboutssearch');
-    return;
+    res.redirect('/whereaboutssearch')
+    return
   }
-  next();
-};
+  next()
+}
 
 const service = {
   setHmppsCookie,
@@ -104,7 +104,7 @@ const service = {
   deleteHmppsCookie,
   hmppsSessionMiddleWare,
   extendHmppsCookieMiddleWare,
-  loginMiddleware
-};
+  loginMiddleware,
+}
 
-module.exports = service;
+module.exports = service

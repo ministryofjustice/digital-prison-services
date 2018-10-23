@@ -1,12 +1,12 @@
-import React from 'react';
-import { mount } from 'enzyme';
-import PaymentReasonContainer from './PaymentReasonContainer';
+import React from 'react'
+import { mount } from 'enzyme'
+import PaymentReasonContainer from './PaymentReasonContainer'
 
 const store = {
   getState: () => {},
   subscribe: () => {},
-  dispatch: () => {}
-};
+  dispatch: () => {},
+}
 
 describe('PaymentReasonContainer', () => {
   it('should pass the correct props down to PaymentReasonModal', () => {
@@ -15,19 +15,21 @@ describe('PaymentReasonContainer', () => {
       onConfirm: () => {},
       data: {
         reasons: [{ value: 'one' }, { value: 'two' }],
-        event: { firstName: 'igor', lastName: 'balog' }
+        event: { firstName: 'igor', lastName: 'balog' },
       },
       store,
-      handleError: jest.fn()
-    };
-    const container = mount(<PaymentReasonContainer {...props} />);
-    const modal = container.find('PaymentReasonModal');
+      handleError: jest.fn(),
+    }
+    const container = mount(<PaymentReasonContainer {...props} />)
+    const modal = container.find('PaymentReasonModal')
 
-    expect(JSON.stringify(modal.props())).toEqual(JSON.stringify({
-      onConfirm: props.onConfirm,
-      onClose: props.onClose,
-      reasons: props.data.reasons,
-      event: props.data.event
-    }));
-  });
-});
+    expect(JSON.stringify(modal.props())).toEqual(
+      JSON.stringify({
+        onConfirm: props.onConfirm,
+        onClose: props.onClose,
+        reasons: props.data.reasons,
+        event: props.data.event,
+      })
+    )
+  })
+})

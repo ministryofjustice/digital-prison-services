@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class Error extends Component {
-  render () {
-    if (this.props.error) {
-      return (<div className="error-summary">
-        <div className="error-message">
-          <div> {this.props.error.message || this.props.error} </div>
+  render() {
+    const { error } = this.props
+    if (error) {
+      return (
+        <div className="error-summary">
+          <div className="error-message">
+            <div> {error.message || error} </div>
+          </div>
         </div>
-      </div>);
+      )
     }
-    return '';
+    return ''
   }
 }
 
 Error.propTypes = {
-  error: PropTypes.string
-};
+  error: PropTypes.string,
+}
 
-export default Error;
+export default Error

@@ -1,11 +1,11 @@
-const elite2Api = {};
-const getEstablishmentRollCount = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
-  elite2Api,
-).getEstablishmentRollCount;
+const elite2Api = {}
+const { getEstablishmentRollCount } = require('../controllers/establishmentRollCount').getEstablishmentRollCountFactory(
+  elite2Api
+)
 
 describe('Establishment Roll', () => {
-  const context = {};
-  const agencyId = 'LEI';
+  const context = {}
+  const agencyId = 'LEI'
   const assignedBlockData = [
     {
       livingUnitId: 0,
@@ -17,7 +17,7 @@ describe('Establishment Roll', () => {
       netVacancies: 3,
       maximumCapacity: 0,
       availablePhysical: 0,
-      outOfOrder: 0
+      outOfOrder: 0,
     },
     {
       livingUnitId: 0,
@@ -29,32 +29,32 @@ describe('Establishment Roll', () => {
       netVacancies: 0,
       maximumCapacity: 0,
       availablePhysical: 0,
-      outOfOrder: 0
-    }
-  ];
+      outOfOrder: 0,
+    },
+  ]
 
   const movements = {
     in: 1,
-    out: 3
-  };
+    out: 3,
+  }
 
   beforeEach(() => {
-    elite2Api.getEstablishmentRollBlocksCount = jest.fn();
-    elite2Api.getEstablishmentRollMovementsCount = jest.fn();
-    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => assignedBlockData);
-    elite2Api.getEstablishmentRollMovementsCount.mockImplementation(() => movements);
-  });
+    elite2Api.getEstablishmentRollBlocksCount = jest.fn()
+    elite2Api.getEstablishmentRollMovementsCount = jest.fn()
+    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => assignedBlockData)
+    elite2Api.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
+  })
 
   it('should call the rollcount endpoint', async () => {
-    await getEstablishmentRollCount(context, agencyId);
+    await getEstablishmentRollCount(context, agencyId)
 
-    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, false);
-    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, true);
-    expect(elite2Api.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(context, agencyId);
-  });
+    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, false)
+    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(context, agencyId, true)
+    expect(elite2Api.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(context, agencyId)
+  })
 
   it('should return response with block counts', async () => {
-    const response = await getEstablishmentRollCount(context, agencyId);
+    const response = await getEstablishmentRollCount(context, agencyId)
     const returnedData = {
       movements: {
         name: 'Movements',
@@ -63,8 +63,8 @@ describe('Establishment Roll', () => {
           { name: 'In today', value: 1 },
           { name: 'Out today', value: 3 },
           { name: 'Current roll', value: 10 },
-          { name: 'Unassigned', value: 20 }
-        ]
+          { name: 'Unassigned', value: 20 },
+        ],
       },
       blocks: [
         {
@@ -75,8 +75,8 @@ describe('Establishment Roll', () => {
             { name: 'Currently out', value: 30 },
             { name: 'Operational cap.', value: 2 },
             { name: 'Net vacancies', value: 3 },
-            { name: 'Out of order', value: 0 }
-          ]
+            { name: 'Out of order', value: 0 },
+          ],
         },
         {
           name: 'Housing block 2',
@@ -86,9 +86,9 @@ describe('Establishment Roll', () => {
             { name: 'Currently out', value: 0 },
             { name: 'Operational cap.', value: 0 },
             { name: 'Net vacancies', value: 0 },
-            { name: 'Out of order', value: 0 }
-          ]
-        }
+            { name: 'Out of order', value: 0 },
+          ],
+        },
       ],
       totals: {
         name: 'Totals',
@@ -98,11 +98,11 @@ describe('Establishment Roll', () => {
           { name: 'Total out', value: 30 },
           { name: 'Total op. cap.', value: 2 },
           { name: 'Total vacancies', value: 3 },
-          { name: 'Total out of order', value: 0 }
-        ]
-      }
-    };
+          { name: 'Total out of order', value: 0 },
+        ],
+      },
+    }
 
-    expect(response).toEqual(returnedData);
-  });
-});
+    expect(response).toEqual(returnedData)
+  })
+})

@@ -1,70 +1,65 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { setEstablishmentRollData } from '../redux/actions';
-import EstablishmentRollBlock from './EstablishmentRollBlock';
-import Spinner from '../Spinner';
-import Error from '../Error';
-import axios from 'axios';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import axios from 'axios'
+import { setEstablishmentRollData } from '../redux/actions'
+import EstablishmentRollBlock from './EstablishmentRollBlock'
+import Spinner from '../Spinner'
+import Error from '../Error'
 
 export class EstablishmentRollContainer extends Component {
-  constructor (props) {
-    super(props);
+  componentDidMount() {
+    const { setCaseChangeRedirectStatusDispatch, agencyId } = this.props
+
+    setCaseChangeRedirectStatusDispatch(false)
+    this.getEstablishmentRollBlocks(agencyId)
   }
 
-  componentDidMount () {
-    this.props.setCaseChangeRedirectStatusDispatch(false);
-    this.getEstablishmentRollBlocks(this.props.agencyId);
-  }
+  componentDidUpdate(prevProps) {
+    const { agencyId } = this.props
 
-  componentDidUpdate (prevProps) {
-    if (this.props.agencyId !== prevProps.agencyId) {
-      this.getEstablishmentRollBlocks(this.props.agencyId);
+    if (agencyId !== prevProps.agencyId) {
+      this.getEstablishmentRollBlocks(agencyId)
     }
   }
 
-  async getEstablishmentRollBlocks (agencyId) {
-    const {
-      setLoadedDispatch,
-      resetErrorDispatch,
-      establishmentRollDataDispatch,
-      handleError
-    } = this.props;
-    resetErrorDispatch();
-    setLoadedDispatch(false);
+  async getEstablishmentRollBlocks(agencyId) {
+    const { setLoadedDispatch, resetErrorDispatch, establishmentRollDataDispatch, handleError } = this.props
+    resetErrorDispatch()
+    setLoadedDispatch(false)
     try {
       const establishmentRollResponse = await axios.get('/api/establishmentRollCount', {
         params: {
-          agencyId
-        }
-      });
+          agencyId,
+        },
+      })
 
       establishmentRollDataDispatch({
-        ...establishmentRollResponse.data
-      });
+        ...establishmentRollResponse.data,
+      })
     } catch (error) {
-      handleError(error);
+      handleError(error)
     }
-    setLoadedDispatch(true);
+    setLoadedDispatch(true)
   }
 
-  render () {
-    const { movements, blocks, totals, loaded, error } = this.props;
-    if (!loaded) return <Spinner />;
+  render() {
+    const { movements, blocks, totals, loaded, error } = this.props
+    if (!loaded) return <Spinner />
 
-    if (error) return <Error {...this.props} />;
+    if (error) return <Error {...this.props} />
 
     return (
       <div className="establishment-roll-container">
         <h1 className="heading-large establishment-roll-container__title">Establishment roll</h1>
         <EstablishmentRollBlock block={movements} highlight />
         {blocks.map((block, i, array) => {
-          const isLastBlock = array.length - 1 === i;
-          return <EstablishmentRollBlock block={block} key={i} isLastBlock={isLastBlock} />;
+          const isLastBlock = array.length - 1 === i
+          return <EstablishmentRollBlock block={block} key={i} isLastBlock={isLastBlock} />
         })}
         <EstablishmentRollBlock block={totals} highlight />
       </div>
-    );
+    )
   }
 }
 
@@ -77,23 +72,22 @@ EstablishmentRollContainer.propTypes = {
   handleError: PropTypes.func,
   loaded: PropTypes.bool,
   error: PropTypes.string,
-  setCaseChangeRedirectStatusDispatch: PropTypes.func
-};
+  setCaseChangeRedirectStatusDispatch: PropTypes.func,
+}
 
-const mapStateToProps = state => {
-  return {
-    blocks: state.establishmentRoll.blocks,
-    totals: state.establishmentRoll.totals,
-    movements: state.establishmentRoll.movements,
-    agencyId: state.app.user.activeCaseLoadId,
-    loaded: state.app.loaded
-  };
-};
+const mapStateToProps = state => ({
+  blocks: state.establishmentRoll.blocks,
+  totals: state.establishmentRoll.totals,
+  movements: state.establishmentRoll.movements,
+  agencyId: state.app.user.activeCaseLoadId,
+  loaded: state.app.loaded,
+})
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data)),
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstablishmentRollContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EstablishmentRollContainer)
