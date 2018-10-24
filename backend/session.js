@@ -6,45 +6,6 @@ const sessionExpiryMinutes = config.hmppsCookie.expiryMinutes * 60 * 1000
 const encodeToBase64 = string => Buffer.from(string).toString('base64')
 const decodedFromBase64 = string => Buffer.from(string, 'base64').toString('ascii')
 
-const isHmppsCookieValid = cookie => {
-  if (!cookie) {
-    return false
-  }
-
-  const cookieData = getHmppsCookieData(cookie)
-
-  return !(!cookieData.access_token || !cookieData.refresh_token)
-}
-
-const isAuthenticated = req => {
-  const hmppsCookie = req.cookies[config.hmppsCookie.name]
-  return isHmppsCookieValid(hmppsCookie)
-}
-
-const hmppsSessionMiddleWare = (req, res, next) => {
-  const hmppsCookie = req.cookies[config.hmppsCookie.name]
-  const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)
-
-  if (!isHmppsCookieValid(hmppsCookie)) {
-    if (isXHRRequest) {
-      res.status(401)
-      res.json({ message: 'Session expired' })
-      res.end()
-      return
-    }
-
-    res.redirect('/auth/login')
-    return
-  }
-
-  const cookie = getHmppsCookieData(hmppsCookie)
-
-  req.access_token = cookie.access_token
-  req.refresh_token = cookie.refresh_token
-
-  next()
-}
-
 const setHmppsCookie = (res, { access_token, refresh_token }) => {
   const tokens = encodeToBase64(JSON.stringify({ access_token, refresh_token }))
 
@@ -62,6 +23,16 @@ const setHmppsCookie = (res, { access_token, refresh_token }) => {
 }
 
 const getHmppsCookieData = cookie => JSON.parse(decodedFromBase64(cookie))
+
+const isHmppsCookieValid = cookie => {
+  if (!cookie) {
+    return false
+  }
+
+  const cookieData = getHmppsCookieData(cookie)
+
+  return !(!cookieData.access_token || !cookieData.refresh_token)
+}
 
 const extendHmppsCookieMiddleWare = (req, res, next) => {
   const hmppsCookie = req.cookies[config.hmppsCookie.name]
@@ -85,6 +56,11 @@ const deleteHmppsCookie = res => {
   res.cookie(config.hmppsCookie.name, '', { expires: new Date(0), domain: config.hmppsCookie.domain, path: '/' })
 }
 
+const isAuthenticated = req => {
+  const hmppsCookie = req.cookies[config.hmppsCookie.name]
+  return isHmppsCookieValid(hmppsCookie)
+}
+
 const loginMiddleware = (req, res, next) => {
   if (req.url.includes('logout')) {
     next()
@@ -95,6 +71,30 @@ const loginMiddleware = (req, res, next) => {
     res.redirect('/whereaboutssearch')
     return
   }
+  next()
+}
+
+const hmppsSessionMiddleWare = (req, res, next) => {
+  const hmppsCookie = req.cookies[config.hmppsCookie.name]
+  const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)
+
+  if (!isHmppsCookieValid(hmppsCookie)) {
+    if (isXHRRequest) {
+      res.status(401)
+      res.json({ message: 'Session expired' })
+      res.end()
+      return
+    }
+
+    res.redirect('/auth/login')
+    return
+  }
+
+  const cookie = getHmppsCookieData(hmppsCookie)
+
+  req.access_token = cookie.access_token
+  req.refresh_token = cookie.refresh_token
+
   next()
 }
 

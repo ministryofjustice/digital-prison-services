@@ -11,6 +11,10 @@ const clientId = 'clientId'
 const url = 'http://localhost'
 const clientSecret = 'clientSecret'
 
+function encodeClientCredentials() {
+  return new Buffer(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
+}
+
 describe('oathApi tests', () => {
   it('Should send a valid auth request and save tokens', done => {
     const oauthApi = oauthApiFactory({ url, clientId, clientSecret })
@@ -95,8 +99,4 @@ describe('oathApi tests', () => {
       })
       .then(done, done)
   })
-
-  function encodeClientCredentials() {
-    return new Buffer(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
-  }
 })

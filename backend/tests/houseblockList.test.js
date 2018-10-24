@@ -7,6 +7,157 @@ const houseblockList = require('../controllers/houseblockList').getHouseblockLis
 
 const { distinct, switchDateFormat } = require('../utils')
 
+// There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
+function createResponse() {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'CHAP',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'Chapel',
+      comment: 'comment11',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'VISIT',
+      eventType: 'VISIT',
+      eventDescription: 'Official Visit',
+      comment: 'comment18',
+      startTime: '2017-10-15T19:00:00',
+      endTime: '2017-10-15T20:30:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'CHAP',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'Earliest paid activity',
+      payRate: 1.3,
+      comment: 'commentEarliest',
+      startTime: '2017-10-15T17:30:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'GYM',
+      eventType: 'APP',
+      eventDescription: 'The gym, appointment',
+      comment: 'comment14',
+      startTime: '2017-10-15T17:00:00',
+      endTime: '2017-10-15T17:30:00',
+    },
+    {
+      offenderNo: 'A1234AB',
+      firstName: 'MICHAEL',
+      lastName: 'SMITH',
+      cellLocation: 'LEI-A-1-1',
+      event: 'CHAP',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'Chapel',
+      comment: 'comment12',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AC',
+      firstName: 'FRED',
+      lastName: 'QUIMBY',
+      cellLocation: 'LEI-A-1-3',
+      event: 'CHAP',
+      eventType: 'PRISON_ACT',
+      payRate: 1.3,
+      eventDescription: 'Chapel Activity',
+      comment: 'comment13',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AC',
+      firstName: 'FRED',
+      lastName: 'QUIMBY',
+      cellLocation: 'LEI-A-1-3',
+      event: 'VISIT',
+      eventType: 'VISIT',
+      eventDescription: 'Family Visit',
+      comment: 'comment19',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AD',
+      firstName: 'ONLY',
+      lastName: 'Visits',
+      cellLocation: 'LEI-A-1-7',
+      event: 'VISIT',
+      eventType: 'VISIT',
+      eventDescription: 'Family Visit',
+      comment: 'only unpaid visit',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+  ]
+}
+
+function createMultipleActivities() {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'paid later',
+      startTime: '2017-10-15T09:00:00',
+      payRate: 0.5,
+    },
+    {
+      offenderNo: 'A1234AA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'unpaid early',
+      startTime: '2017-10-15T08:00:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'paid early',
+      startTime: '2017-10-15T08:30:00',
+      payRate: 0.5,
+    },
+  ]
+}
+
+function createMultipleUnpaid() {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'unpaid later',
+      startTime: '2017-10-15T09:00:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'unpaid early',
+      startTime: '2017-10-15T08:00:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'unpaid middle',
+      startTime: '2017-10-15T08:30:00',
+    },
+  ]
+}
+
 describe('Houseblock list controller', async () => {
   beforeEach(() => {
     elite2Api.getHouseblockList = jest.fn()
@@ -194,154 +345,3 @@ describe('Houseblock list controller', async () => {
     ])
   })
 })
-
-// There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
-function createResponse() {
-  return [
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'CHAP',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Chapel',
-      comment: 'comment11',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'VISIT',
-      eventType: 'VISIT',
-      eventDescription: 'Official Visit',
-      comment: 'comment18',
-      startTime: '2017-10-15T19:00:00',
-      endTime: '2017-10-15T20:30:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'CHAP',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Earliest paid activity',
-      payRate: 1.3,
-      comment: 'commentEarliest',
-      startTime: '2017-10-15T17:30:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'GYM',
-      eventType: 'APP',
-      eventDescription: 'The gym, appointment',
-      comment: 'comment14',
-      startTime: '2017-10-15T17:00:00',
-      endTime: '2017-10-15T17:30:00',
-    },
-    {
-      offenderNo: 'A1234AB',
-      firstName: 'MICHAEL',
-      lastName: 'SMITH',
-      cellLocation: 'LEI-A-1-1',
-      event: 'CHAP',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Chapel',
-      comment: 'comment12',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AC',
-      firstName: 'FRED',
-      lastName: 'QUIMBY',
-      cellLocation: 'LEI-A-1-3',
-      event: 'CHAP',
-      eventType: 'PRISON_ACT',
-      payRate: 1.3,
-      eventDescription: 'Chapel Activity',
-      comment: 'comment13',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AC',
-      firstName: 'FRED',
-      lastName: 'QUIMBY',
-      cellLocation: 'LEI-A-1-3',
-      event: 'VISIT',
-      eventType: 'VISIT',
-      eventDescription: 'Family Visit',
-      comment: 'comment19',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AD',
-      firstName: 'ONLY',
-      lastName: 'Visits',
-      cellLocation: 'LEI-A-1-7',
-      event: 'VISIT',
-      eventType: 'VISIT',
-      eventDescription: 'Family Visit',
-      comment: 'only unpaid visit',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-  ]
-}
-
-function createMultipleActivities() {
-  return [
-    {
-      offenderNo: 'A1234AA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'paid later',
-      startTime: '2017-10-15T09:00:00',
-      payRate: 0.5,
-    },
-    {
-      offenderNo: 'A1234AA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'unpaid early',
-      startTime: '2017-10-15T08:00:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'paid early',
-      startTime: '2017-10-15T08:30:00',
-      payRate: 0.5,
-    },
-  ]
-}
-
-function createMultipleUnpaid() {
-  return [
-    {
-      offenderNo: 'A1234AA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'unpaid later',
-      startTime: '2017-10-15T09:00:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'unpaid early',
-      startTime: '2017-10-15T08:00:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'unpaid middle',
-      startTime: '2017-10-15T08:30:00',
-    },
-  ]
-}

@@ -2,7 +2,32 @@ const { switchDateFormat, sortByDateTime } = require('../utils')
 const log = require('../log')
 const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders')
 
+const offenderNumberMultiMap = offenderNumbers =>
+  offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())
+
+const sortActivitiesByEventThenByLastName = data => {
+  data.sort((a, b) => {
+    if (a.comment < b.comment) return -1
+    if (a.comment > b.comment) return 1
+
+    if (a.lastName < b.lastName) return -1
+    if (a.lastName > b.lastName) return 1
+
+    return 0
+  })
+}
+
 const getActivityListFactory = elite2Api => {
+  const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
+    const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
+    const eventsByKind = await Promise.all([
+      elite2Api.getVisits(context, searchCriteria),
+      elite2Api.getAppointments(context, searchCriteria),
+      elite2Api.getActivities(context, searchCriteria),
+    ])
+    return [...eventsByKind[0], ...eventsByKind[1], ...eventsByKind[2]] // Meh. No flatMap or flat.
+  }
+
   const getActivityList = async (context, agencyId, locationIdString, frontEndDate, timeSlot) => {
     const locationId = Number.parseInt(locationIdString, 10)
     const date = switchDateFormat(frontEndDate)
@@ -66,34 +91,9 @@ const getActivityListFactory = elite2Api => {
     return eventsAtLocation
   }
 
-  const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
-    const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
-    const eventsByKind = await Promise.all([
-      elite2Api.getVisits(context, searchCriteria),
-      elite2Api.getAppointments(context, searchCriteria),
-      elite2Api.getActivities(context, searchCriteria),
-    ])
-    return [...eventsByKind[0], ...eventsByKind[1], ...eventsByKind[2]] // Meh. No flatMap or flat.
-  }
-
   return {
     getActivityList,
   }
-}
-
-const offenderNumberMultiMap = offenderNumbers =>
-  offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())
-
-const sortActivitiesByEventThenByLastName = data => {
-  data.sort((a, b) => {
-    if (a.comment < b.comment) return -1
-    if (a.comment > b.comment) return 1
-
-    if (a.lastName < b.lastName) return -1
-    if (a.lastName > b.lastName) return 1
-
-    return 0
-  })
 }
 
 module.exports = { getActivityListFactory }

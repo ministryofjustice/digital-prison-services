@@ -6,6 +6,25 @@ beforeEach(() => {
   elite2Api.globalSearch = jest.fn()
 })
 
+function createResponse() {
+  return [
+    {
+      offenderNo: 'A1234AC',
+      firstName: 'FRED',
+      lastName: 'QUIMBY',
+      latestLocation: 'Leeds HMP',
+      dateOfBirth: '1977-10-15',
+    },
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      latestLocation: 'Moorland HMP',
+      dateOfBirth: '1976-09-15',
+    },
+  ]
+}
+
 describe('Global Search controller', async () => {
   it('Should return no results as an empty array', async () => {
     elite2Api.globalSearch.mockReturnValue([])
@@ -59,22 +78,3 @@ describe('Global Search controller', async () => {
     expect(elite2Api.globalSearch.mock.calls[0][3]).toEqual('')
   })
 })
-
-function createResponse() {
-  return [
-    {
-      offenderNo: 'A1234AC',
-      firstName: 'FRED',
-      lastName: 'QUIMBY',
-      latestLocation: 'Leeds HMP',
-      dateOfBirth: '1977-10-15',
-    },
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      latestLocation: 'Moorland HMP',
-      dateOfBirth: '1976-09-15',
-    },
-  ]
-}

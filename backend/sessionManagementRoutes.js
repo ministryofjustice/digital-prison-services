@@ -23,6 +23,23 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
     res.render('login', { authError: false, apiUp: isApiUp, mailTo, homeLink })
   }
 
+  function getAuthErrorDescription(error) {
+    logger.info(
+      `login error description = ${error.response && error.response.data && error.response.data.error_description}`
+    )
+    let type = 'The username or password you have entered is invalid.'
+    if (error.response && error.response.data && error.response.data.error_description) {
+      if (error.response.data.error_description.includes('ORA-28000')) {
+        type = 'Your user account is locked.'
+      } else if (error.response.data.error_description.includes('does not have access to caseload NWEB')) {
+        type = 'You are not enabled for this service, please contact admin and request access.'
+      } else if (error.response.data.error_description.includes('ORA-28001')) {
+        type = 'Your password has expired.'
+      }
+    }
+    return type
+  }
+
   const login = async (req, res) => {
     const { username, password } = req.body
 
@@ -50,23 +67,6 @@ const configureRoutes = ({ app, healthApi, oauthApi, hmppsCookieOperations, toke
         res.render('login', { authError: false, apiUp: false, mailTo, homeLink })
       }
     }
-  }
-
-  function getAuthErrorDescription(error) {
-    logger.info(
-      `login error description = ${error.response && error.response.data && error.response.data.error_description}`
-    )
-    let type = 'The username or password you have entered is invalid.'
-    if (error.response && error.response.data && error.response.data.error_description) {
-      if (error.response.data.error_description.includes('ORA-28000')) {
-        type = 'Your user account is locked.'
-      } else if (error.response.data.error_description.includes('does not have access to caseload NWEB')) {
-        type = 'You are not enabled for this service, please contact admin and request access.'
-      } else if (error.response.data.error_description.includes('ORA-28001')) {
-        type = 'Your password has expired.'
-      }
-    }
-    return type
   }
 
   const logout = (req, res) => {

@@ -2,6 +2,96 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api).getActivityList
 
+function createActivitiesResponse() {
+  return [
+    {
+      offenderNo: 'A1234AC',
+      firstName: 'FRED',
+      lastName: 'QUIMBY',
+      cellLocation: 'LEI-A-1-3',
+      event: 'CHAP',
+      eventDescription: 'Chapel',
+      comment: 'comment13',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'CHAP',
+      eventDescription: 'Chapel',
+      comment: 'comment11',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+    {
+      offenderNo: 'A1234AB',
+      firstName: 'MICHAEL',
+      lastName: 'SMITH',
+      cellLocation: 'LEI-A-1-2',
+      event: 'CHAP',
+      eventDescription: 'Chapel',
+      comment: 'comment12',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+  ]
+}
+
+function createAppointmentsResponse() {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'GYM',
+      eventDescription: 'The gym',
+      comment: 'comment14',
+      startTime: '2017-10-15T17:00:00',
+      endTime: '2017-10-15T17:30:00',
+    },
+    {
+      offenderNo: 'A1234ZZ',
+      firstName: 'IRRELEVANT',
+      lastName: 'PERSON',
+      cellLocation: 'LEI-Z-1-1',
+      event: 'GYM',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+  ]
+}
+
+function createVisitsResponse() {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      cellLocation: 'LEI-A-1-1',
+      event: 'VISIT',
+      eventDescription: 'Official',
+      comment: 'comment18',
+      startTime: '2017-10-15T11:00:00',
+      endTime: '2017-10-15T11:30:00',
+    },
+    {
+      offenderNo: 'A1234AC',
+      firstName: 'FRED',
+      lastName: 'QUIMBY',
+      cellLocation: 'LEI-A-1-3',
+      event: 'VISIT',
+      eventDescription: 'Family',
+      comment: 'comment19',
+      startTime: '2017-10-15T11:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
+  ]
+}
+
 beforeEach(() => {
   elite2Api.getActivityList = jest.fn()
   elite2Api.getVisits = jest.fn()
@@ -333,93 +423,3 @@ describe('Activity list controller', async () => {
     ])
   })
 })
-
-function createActivitiesResponse() {
-  return [
-    {
-      offenderNo: 'A1234AC',
-      firstName: 'FRED',
-      lastName: 'QUIMBY',
-      cellLocation: 'LEI-A-1-3',
-      event: 'CHAP',
-      eventDescription: 'Chapel',
-      comment: 'comment13',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'CHAP',
-      eventDescription: 'Chapel',
-      comment: 'comment11',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    {
-      offenderNo: 'A1234AB',
-      firstName: 'MICHAEL',
-      lastName: 'SMITH',
-      cellLocation: 'LEI-A-1-2',
-      event: 'CHAP',
-      eventDescription: 'Chapel',
-      comment: 'comment12',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-  ]
-}
-
-function createAppointmentsResponse() {
-  return [
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'GYM',
-      eventDescription: 'The gym',
-      comment: 'comment14',
-      startTime: '2017-10-15T17:00:00',
-      endTime: '2017-10-15T17:30:00',
-    },
-    {
-      offenderNo: 'A1234ZZ',
-      firstName: 'IRRELEVANT',
-      lastName: 'PERSON',
-      cellLocation: 'LEI-Z-1-1',
-      event: 'GYM',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-  ]
-}
-
-function createVisitsResponse() {
-  return [
-    {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: 'LEI-A-1-1',
-      event: 'VISIT',
-      eventDescription: 'Official',
-      comment: 'comment18',
-      startTime: '2017-10-15T11:00:00',
-      endTime: '2017-10-15T11:30:00',
-    },
-    {
-      offenderNo: 'A1234AC',
-      firstName: 'FRED',
-      lastName: 'QUIMBY',
-      cellLocation: 'LEI-A-1-3',
-      event: 'VISIT',
-      eventDescription: 'Family',
-      comment: 'comment19',
-      startTime: '2017-10-15T11:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-  ]
-}
