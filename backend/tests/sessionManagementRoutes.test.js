@@ -78,7 +78,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   const agent = request.agent(app)
 
   const callback = done =>
-    function(err, res) {
+    function checkDone(err, res) {
       if (err) {
         if (done.fail) {
           // jest

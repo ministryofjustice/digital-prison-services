@@ -12,7 +12,6 @@ export const media = Object.keys(sizes).reduce((accumulator, label) => {
   // use em in breakpoints to work properly cross-browser and support users
   // changing their browsers font-size: https://zellwk.com/blog/media-query-units/
   const emSize = sizes[label] / 16
-  // eslint-disable-next-line
   accumulator[label] = (...args) => css`
     @media (min-width: ${emSize}em) {
       ${css(...args)};
@@ -21,10 +20,9 @@ export const media = Object.keys(sizes).reduce((accumulator, label) => {
   return accumulator
 }, {})
 
-export const isMobileUserAgent = function() {
+export const isMobileUserAgent = function mobileUserAgent() {
   let check = false
-  // eslint-disable-next-line
-  ;(function(a) {
+  ;(function checkAgent(a) {
     if (
       /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
         a
