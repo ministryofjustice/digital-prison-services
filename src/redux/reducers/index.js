@@ -58,6 +58,10 @@ const globalSearchInitialState = {
   contextUser: {},
 }
 
+function updateObject(oldObject, newValues) {
+  return Object.assign({}, oldObject, newValues)
+}
+
 export function app(state = appInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_CONFIG:
@@ -242,10 +246,6 @@ export function globalSearch(state = globalSearchInitialState, action) {
     default:
       return state
   }
-}
-
-function updateObject(oldObject, newValues) {
-  return Object.assign({}, oldObject, newValues)
 }
 
 const prisonStaffHubApp = combineReducers({

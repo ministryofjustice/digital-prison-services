@@ -1,20 +1,6 @@
 import React from 'react'
 import { getHoursMinutes, getEventDescription } from '../utils'
 
-export default ({ offenderMainEvent }) =>
-  shouldShowOtherActivities(offenderMainEvent) && (
-    <ul>
-      {offenderMainEvent.releaseScheduled && (
-        <li>
-          <span className="bold-font16">** Release scheduled **</span>
-        </li>
-      )}
-      {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(event)}
-      {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(event)}
-      {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => otherEvent(event, index))}
-    </ul>
-  )
-
 const shouldShowOtherActivities = offenderMainEvent =>
   Boolean(
     offenderMainEvent &&
@@ -52,3 +38,17 @@ const event = event => {
     </li>
   )
 }
+
+export default ({ offenderMainEvent }) =>
+  shouldShowOtherActivities(offenderMainEvent) && (
+    <ul>
+      {offenderMainEvent.releaseScheduled && (
+        <li>
+          <span className="bold-font16">** Release scheduled **</span>
+        </li>
+      )}
+      {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(event)}
+      {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(event)}
+      {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => otherEvent(event, index))}
+    </ul>
+  )

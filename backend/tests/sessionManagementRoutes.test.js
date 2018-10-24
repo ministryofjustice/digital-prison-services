@@ -20,6 +20,11 @@ const hmppsCookieName = 'testCookie'
 const accessToken = 'AT'
 const refreshToken = 'RT'
 
+const hasCookies = expectedNames => res => {
+  const cookieNames = setCookie.parse(res).map(cookie => cookie.name)
+  expect(cookieNames).to.have.members(expectedNames)
+}
+
 describe('Test the routes and middleware installed by sessionManagementRoutes', () => {
   const app = express()
 
@@ -243,8 +248,3 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .end(callback(done))
   })
 })
-
-const hasCookies = expectedNames => res => {
-  const cookieNames = setCookie.parse(res).map(cookie => cookie.name)
-  expect(cookieNames).to.have.members(expectedNames)
-}

@@ -13,6 +13,11 @@ function addToOthers(currentRow, event) {
   }
 }
 
+function safeTimeCompare(a, b) {
+  if (a && b) return moment(b).isBefore(a)
+  return !a
+}
+
 function handleMultipleActivities(currentRow, currentActivity) {
   if (!currentRow.activity.payRate && currentActivity.payRate) {
     // Make current activity the main activity
@@ -79,11 +84,6 @@ const getHouseblockListFactory = elite2Api => {
   return {
     getHouseblockList,
   }
-}
-
-function safeTimeCompare(a, b) {
-  if (a && b) return moment(b).isBefore(a)
-  return !a
 }
 
 module.exports = { getHouseblockListFactory }

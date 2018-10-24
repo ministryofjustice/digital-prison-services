@@ -5,6 +5,76 @@ const elite2Api = elite2ApiFactory(null)
 const externalEvents = require('../shared/getExternalEventsForOffenders')
 const { switchDateFormat } = require('../utils')
 
+function createSentenceDataResponse() {
+  return [
+    {
+      offenderNo: 'A1234AA',
+      sentenceDetail: {
+        releaseDate: switchDateFormat(moment()),
+      },
+    },
+  ]
+}
+function createCourtEventResponse() {
+  return [
+    {
+      event: '19',
+      eventDescription: 'Court Appearance - Police Product Order',
+      eventId: 349360018,
+      eventStatus: 'SCH',
+      eventType: 'COURT',
+      firstName: 'BYSJANHKUMAR',
+      lastName: 'HENRINEE',
+      offenderNo: 'A1234AA',
+      startTime: '2018-09-05T15:00:00',
+    },
+  ]
+}
+
+function createTransfersResponse() {
+  return [
+    {
+      firstName: 'BYSJANHKUMAR',
+      lastName: 'HENRINEE',
+      offenderNo: 'A1234AA',
+      startTime: switchDateFormat(moment()),
+    },
+  ]
+}
+
+function createAllTransferTypes() {
+  return [
+    {
+      firstName: 'BYSJANHKUMAR',
+      lastName: 'HENRINEE',
+      offenderNo: 'A1234AA',
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'SCH',
+    },
+    {
+      firstName: 'BYSJANHKUMAR',
+      lastName: 'HENRINEE',
+      offenderNo: 'A1234AA',
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'EXP',
+    },
+    {
+      firstName: 'BYSJANHKUMAR',
+      lastName: 'HENRINEE',
+      offenderNo: 'A1234AA',
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'CANC',
+    },
+    {
+      firstName: 'BYSJANHKUMAR',
+      lastName: 'HENRINEE',
+      offenderNo: 'A1234AA',
+      startTime: switchDateFormat(moment()),
+      eventStatus: 'COMP',
+    },
+  ]
+}
+
 describe('External events', () => {
   const offenderWithData = 'A1234AA'
   const offenderWithNoData = 'ABCDEEE'
@@ -218,73 +288,3 @@ describe('External events', () => {
     ])
   })
 })
-
-function createSentenceDataResponse() {
-  return [
-    {
-      offenderNo: 'A1234AA',
-      sentenceDetail: {
-        releaseDate: switchDateFormat(moment()),
-      },
-    },
-  ]
-}
-function createCourtEventResponse() {
-  return [
-    {
-      event: '19',
-      eventDescription: 'Court Appearance - Police Product Order',
-      eventId: 349360018,
-      eventStatus: 'SCH',
-      eventType: 'COURT',
-      firstName: 'BYSJANHKUMAR',
-      lastName: 'HENRINEE',
-      offenderNo: 'A1234AA',
-      startTime: '2018-09-05T15:00:00',
-    },
-  ]
-}
-
-function createTransfersResponse() {
-  return [
-    {
-      firstName: 'BYSJANHKUMAR',
-      lastName: 'HENRINEE',
-      offenderNo: 'A1234AA',
-      startTime: switchDateFormat(moment()),
-    },
-  ]
-}
-
-function createAllTransferTypes() {
-  return [
-    {
-      firstName: 'BYSJANHKUMAR',
-      lastName: 'HENRINEE',
-      offenderNo: 'A1234AA',
-      startTime: switchDateFormat(moment()),
-      eventStatus: 'SCH',
-    },
-    {
-      firstName: 'BYSJANHKUMAR',
-      lastName: 'HENRINEE',
-      offenderNo: 'A1234AA',
-      startTime: switchDateFormat(moment()),
-      eventStatus: 'EXP',
-    },
-    {
-      firstName: 'BYSJANHKUMAR',
-      lastName: 'HENRINEE',
-      offenderNo: 'A1234AA',
-      startTime: switchDateFormat(moment()),
-      eventStatus: 'CANC',
-    },
-    {
-      firstName: 'BYSJANHKUMAR',
-      lastName: 'HENRINEE',
-      offenderNo: 'A1234AA',
-      startTime: switchDateFormat(moment()),
-      eventStatus: 'COMP',
-    },
-  ]
-}
