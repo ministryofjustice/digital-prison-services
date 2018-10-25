@@ -29,7 +29,7 @@ class Spinner extends Component {
 
   render() {
     return (
-      <div className="spinner-component" onClick={e => e.preventDefault()}>
+      <div className="spinner-component">
         <div className="spinner-box">
           <h2 className="heading-large">Loading</h2>
           <div ref="spinner" />
