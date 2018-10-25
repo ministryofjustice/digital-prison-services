@@ -170,15 +170,11 @@ class ResultsActivity extends Component {
             <div className="multiple-choice whereaboutsCheckbox">
               {/* Disable pay/other for Part 1 */}
               <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />{' '}
-              {/* onChange={(event) => this.props.handlePay(mainActivity, event)} */}
-              <label htmlFor={`col1_${index}`} />
             </div>
           </td>
           <td className="no-padding checkbox-column">
             <div className="multiple-choice whereaboutsCheckbox">
               <input id={`col2_${index}`} type="checkbox" name="ch2" disabled />{' '}
-              {/* onChange={(event) => this.props.showPaymentReasonModal(mainActivity, event)} */}
-              <label htmlFor={`col2_${index}`} />
             </div>
           </td>
         </tr>
