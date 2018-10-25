@@ -14,17 +14,17 @@ class ModalProvider extends Component {
     }
   }
 
-  onOverlayClick() {
+  onOverlayClick = () => {
     const { onClose } = this.props
 
     onClose()
   }
 
-  onDialogClick(event) {
+  onDialogClick = event => {
     event.stopPropagation()
   }
 
-  listenKeyboard(event) {
+  listenKeyboard = event => {
     const { onClose } = this.props
 
     if (event.key === 'Escape' || event.keyCode === 27) {

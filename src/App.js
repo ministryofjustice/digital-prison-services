@@ -42,19 +42,6 @@ import links from './links'
 const axios = require('axios')
 
 class App extends React.Component {
-  constructor() {
-    super()
-    this.switchCaseLoad = this.switchCaseLoad.bind(this)
-    this.showTermsAndConditions = this.showTermsAndConditions.bind(this)
-    this.hideTermsAndConditions = this.hideTermsAndConditions.bind(this)
-    this.clearMessage = this.clearMessage.bind(this)
-    this.displayError = this.displayError.bind(this)
-    this.handleError = this.handleError.bind(this)
-    this.getActivityList = this.getActivityList.bind(this)
-    this.getActivityLocations = this.getActivityLocations.bind(this)
-    this.raiseAnalyticsEvent = this.raiseAnalyticsEvent.bind(this)
-  }
-
   async componentWillMount() {
     const { configDispatch, setErrorDispatch } = this.props
 
@@ -87,7 +74,7 @@ class App extends React.Component {
     }
   }
 
-  async getActivityList() {
+  getActivityList = async () => {
     let { date } = this.props
     const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch } = this.props
 
@@ -114,7 +101,7 @@ class App extends React.Component {
     setLoadedDispatch(true)
   }
 
-  async getActivityLocations(bookedOnDay, timeSlot) {
+  getActivityLocations = async (bookedOnDay, timeSlot) => {
     const { agencyId, date, period, setLoadedDispatch, activitiesDispatch, activityDispatch } = this.props
 
     setLoadedDispatch(false)
@@ -145,20 +132,20 @@ class App extends React.Component {
     setLoadedDispatch(true)
   }
 
-  handlePeriodChange(event) {
+  handlePeriodChange = event => {
     const { periodDispatch } = this.props
 
     periodDispatch(event.target.value)
   }
 
-  handlePeriodChangeWithLocationsUpdate(event) {
+  handlePeriodChangeWithLocationsUpdate = event => {
     const { periodDispatch } = this.props
 
     periodDispatch(event.target.value)
     this.getActivityLocations(null, event.target.value)
   }
 
-  handleSearch(history) {
+  handleSearch = history => {
     const { activity, currentLocation, orderField, sortOrder } = this.props
 
     if (currentLocation && currentLocation !== '--') {
@@ -172,7 +159,7 @@ class App extends React.Component {
     }
   }
 
-  raiseAnalyticsEvent(event) {
+  raiseAnalyticsEvent = event => {
     const { config } = this.props
 
     if (config.googleAnalyticsId) {
@@ -180,30 +167,30 @@ class App extends React.Component {
     }
   }
 
-  displayAlertAndLogout(message) {
+  displayAlertAndLogout = message => {
     alert(message) // eslint-disable-line no-alert
     window.location = '/auth/logout'
   }
 
-  shouldDisplayInnerContent() {
+  shouldDisplayInnerContent = () => {
     const { shouldShowTerms, user } = this.props
 
     return !shouldShowTerms && (user && user.activeCaseLoadId)
   }
 
-  handleLocationChange(event) {
+  handleLocationChange = event => {
     const { locationDispatch } = this.props
 
     locationDispatch(event.target.value)
   }
 
-  handleActivityChange(event) {
+  handleActivityChange = event => {
     const { activityDispatch } = this.props
 
     activityDispatch(event.target.value)
   }
 
-  handleDateChange(date) {
+  handleDateChange = date => {
     const { dateDispatch } = this.props
 
     if (date) {
@@ -211,7 +198,7 @@ class App extends React.Component {
     }
   }
 
-  handleDateChangeWithLocationsUpdate(date) {
+  handleDateChangeWithLocationsUpdate = date => {
     const { dateDispatch } = this.props
 
     if (date) {
@@ -221,7 +208,7 @@ class App extends React.Component {
     }
   }
 
-  handleError(error) {
+  handleError = error => {
     const { setErrorDispatch } = this.props
 
     if (
@@ -235,31 +222,31 @@ class App extends React.Component {
     }
   }
 
-  displayError(error) {
+  displayError = error => {
     const { setErrorDispatch } = this.props
 
     setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)
   }
 
-  clearMessage() {
+  clearMessage = () => {
     const { setMessageDispatch } = this.props
 
     setMessageDispatch(null)
   }
 
-  hideTermsAndConditions() {
+  hideTermsAndConditions = () => {
     const { setTermsVisibilityDispatch } = this.props
 
     setTermsVisibilityDispatch(false)
   }
 
-  showTermsAndConditions() {
+  showTermsAndConditions = () => {
     const { setTermsVisibilityDispatch } = this.props
 
     setTermsVisibilityDispatch(true)
   }
 
-  async switchCaseLoad(newCaseload) {
+  switchCaseLoad = async newCaseload => {
     const { switchAgencyDispatch, setErrorDispatch } = this.props
 
     try {
@@ -271,7 +258,7 @@ class App extends React.Component {
     }
   }
 
-  async loadUserAndCaseload() {
+  loadUserAndCaseload = async () => {
     const { userDetailsDispatch } = this.props
     const user = await axios.get('/api/me')
     const caseloads = await axios.get('/api/usercaseloads')
@@ -279,7 +266,7 @@ class App extends React.Component {
     userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data })
   }
 
-  async handlePay(activity) {
+  handlePay = async activity => {
     try {
       if (!activity.eventId) {
         throw new Error('No event id found for this row')
