@@ -23,7 +23,7 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
       <tr key={prisoner.offenderNo} className="row-gutters">
         {prisoner.agencyId === agencyId ? (
           <td className="row-gutters">
-            <a target="_blank" className="link" href={getOffenderLink(prisoner.offenderNo)}>
+            <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(prisoner.offenderNo)}>
               {properCaseName(prisoner.lastName)}, {properCaseName(prisoner.firstName)}
             </a>
           </td>
