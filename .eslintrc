@@ -43,7 +43,6 @@
     "react/no-string-refs": 0,
     "react/jsx-no-target-blank": 0,
     "class-methods-use-this": 0,
-    "react/no-array-index-key": 0,
     "prefer-promise-reject-errors": 0,
     "no-restricted-syntax": 0
   },
