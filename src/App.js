@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react'
 import moment from 'moment'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
