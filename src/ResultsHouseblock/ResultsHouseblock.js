@@ -12,22 +12,20 @@ import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
 
 class ResultsHouseblock extends Component {
-  displayBack() {
-    return (
-      <div className="padding-top no-print">
-        <Link
-          id="back_to_selection_link"
-          title="Back to selection screen link"
-          className="link backlink"
-          to="/whereaboutssearch"
-        >
-          <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10" /> Back
-        </Link>
-      </div>
-    )
-  }
+  displayBack = () => (
+    <div className="padding-top no-print">
+      <Link
+        id="back_to_selection_link"
+        title="Back to selection screen link"
+        className="link backlink"
+        to="/whereaboutssearch"
+      >
+        <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10" /> Back
+      </Link>
+    </div>
+  )
 
-  olderThan7Days() {
+  olderThan7Days = () => {
     const { date } = this.props
     const searchDate = moment(date, 'DD/MM/YYYY')
     const days = moment().diff(searchDate, 'day')
@@ -35,7 +33,7 @@ class ResultsHouseblock extends Component {
     return days > 7
   }
 
-  sortableColumn(heading, field) {
+  sortableColumn = (heading, field) => {
     const { sortOrder, getHouseblockList, orderField } = this.props
     let triangleImage = ''
 

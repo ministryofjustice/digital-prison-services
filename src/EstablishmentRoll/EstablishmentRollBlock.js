@@ -4,14 +4,12 @@ import classNames from 'classnames'
 import './EstablishmentRollBlock.scss'
 
 class EstablishmentRollBlock extends Component {
-  renderBlockFigure(label, value) {
-    return (
-      <div className="block-figure">
-        <label className="block-figure__label">{label}</label>
-        <span className="block-figure__value">{value}</span>
-      </div>
-    )
-  }
+  renderBlockFigure = (label, value) => (
+    <div className="block-figure">
+      <label className="block-figure__label">{label}</label>
+      <span className="block-figure__value">{value}</span>
+    </div>
+  )
 
   render() {
     const {
