@@ -238,7 +238,12 @@ class ResultsHouseblock extends Component {
         return (
           <tr key={anyActivity.offenderNo} className="row-gutters">
             <td className="row-gutters">
-              <a target="_blank" className="link" href={getOffenderLink(anyActivity.offenderNo)}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link"
+                href={getOffenderLink(anyActivity.offenderNo)}
+              >
                 {properCaseName(anyActivity.lastName)}, {properCaseName(anyActivity.firstName)}
               </a>
             </td>

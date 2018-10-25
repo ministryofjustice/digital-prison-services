@@ -149,7 +149,7 @@ class ResultsActivity extends Component {
       activityData.map((mainEvent, index) => (
         <tr key={mainEvent.offenderNo} className="row-gutters">
           <td className="row-gutters">
-            <a target="_blank" className="link" href={getOffenderLink(mainEvent.offenderNo)}>
+            <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(mainEvent.offenderNo)}>
               {properCaseName(mainEvent.lastName)}, {properCaseName(mainEvent.firstName)}
             </a>
           </td>
