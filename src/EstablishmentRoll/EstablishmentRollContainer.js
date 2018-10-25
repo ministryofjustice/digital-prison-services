@@ -55,7 +55,7 @@ export class EstablishmentRollContainer extends Component {
         <EstablishmentRollBlock block={movements} highlight />
         {blocks.map((block, i, array) => {
           const isLastBlock = array.length - 1 === i
-          return <EstablishmentRollBlock block={block} key={i} isLastBlock={isLastBlock} />
+          return <EstablishmentRollBlock block={block} key={block.name} isLastBlock={isLastBlock} />
         })}
         <EstablishmentRollBlock block={totals} highlight />
       </div>
