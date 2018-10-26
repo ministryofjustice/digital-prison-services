@@ -10,7 +10,7 @@ const shouldShowOtherActivities = offenderMainEvent =>
         offenderMainEvent.scheduledTransfers)
   )
 
-const otherEvent = (event, index) => {
+const renderOtherEvent = (event, index) => {
   const text = `${getEventDescription(event)} ${getHoursMinutes(event.startTime)}`
   const key = `${event.offenderNo}_others_${index}`
   const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC'
@@ -24,7 +24,7 @@ const otherEvent = (event, index) => {
   }
   return <li key={key}>{text}</li>
 }
-const event = event => {
+const renderEvent = event => {
   const expired = <span className="cancelled">(expired)</span>
   const cancelled = <span className="cancelled">(cancelled)</span>
   const complete = <span className="complete">(complete)</span>
@@ -47,8 +47,8 @@ export default ({ offenderMainEvent }) =>
           <span className="bold-font16">** Release scheduled **</span>
         </li>
       )}
-      {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(event)}
-      {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(event)}
-      {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => otherEvent(event, index))}
+      {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(renderEvent)}
+      {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(renderEvent)}
+      {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => renderOtherEvent(event, index))}
     </ul>
   )

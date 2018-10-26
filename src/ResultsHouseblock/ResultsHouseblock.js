@@ -99,8 +99,8 @@ class ResultsHouseblock extends Component {
       update,
     } = this.props
 
-    const subLocationOptions = subLocations => {
-      if (!subLocations) {
+    const renderLocationOptions = locationOptions => {
+      if (!locationOptions) {
         return (
           <option key="housinglocation_option_All" value="--">
             All
@@ -112,7 +112,7 @@ class ResultsHouseblock extends Component {
         <option key="housinglocation_option_All" value="--">
           All
         </option>,
-        ...subLocations.map(loc => (
+        ...locationOptions.map(loc => (
           <option key={`housinglocation_option_${loc}`} value={loc}>
             {loc}
           </option>
@@ -133,7 +133,7 @@ class ResultsHouseblock extends Component {
           value={currentSubLocation}
           onChange={handleSubLocationChange}
         >
-          {subLocationOptions(subLocations)}
+          {renderLocationOptions(subLocations)}
         </select>
       </div>
     )

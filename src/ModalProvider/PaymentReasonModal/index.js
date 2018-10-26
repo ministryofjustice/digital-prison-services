@@ -93,7 +93,7 @@ class PaymentReasonModal extends Component {
               id="payment-reason-reason"
               name="reasons"
               className={reasonSelectClass}
-              onChange={event => this.onReasonChange(event, reasons)}
+              onChange={e => this.onReasonChange(e, reasons)}
               defaultValue="default"
             >
               <option value="default" disabled hidden>
@@ -115,7 +115,7 @@ class PaymentReasonModal extends Component {
               className={commentClass}
               name="comments"
               rows="5"
-              onChange={event => this.onCommentChange(event)}
+              onChange={e => this.onCommentChange(e)}
             />
           </div>
 

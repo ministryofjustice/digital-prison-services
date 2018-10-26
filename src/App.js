@@ -285,13 +285,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { config, menuOpen, setMenuOpen, shouldShowTerms, showModal } = this.props
+    const { config, menuOpen, boundSetMenuOpen, shouldShowTerms, showModal } = this.props
     const routes = (
       <div
         className="inner-content"
         onClick={() => {
           if (menuOpen) {
-            setMenuOpen(false)
+            boundSetMenuOpen(false)
           }
         }}
       >
@@ -369,7 +369,7 @@ class App extends React.Component {
       innerContent = routes
     } else {
       innerContent = (
-        <div className="inner-content" onClick={() => setMenuOpen(false)}>
+        <div className="inner-content" onClick={() => boundSetMenuOpen(false)}>
           <div className="pure-g">
             <ErrorComponent {...this.props} />
           </div>
@@ -392,6 +392,7 @@ class App extends React.Component {
                   homeLink={links.getHomeLink()}
                   switchCaseLoad={this.switchCaseLoad}
                   history={props.history}
+                  setMenuOpen={boundSetMenuOpen}
                   {...this.props}
                 />
               )
@@ -405,7 +406,7 @@ class App extends React.Component {
 
           {innerContent}
           <Footer
-            setMenuOpen={setMenuOpen}
+            setMenuOpen={boundSetMenuOpen}
             showTermsAndConditions={this.showTermsAndConditions}
             mailTo={config && config.mailTo}
           />
@@ -436,7 +437,7 @@ App.propTypes = {
   resetErrorDispatch: PropTypes.func,
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
-  setMenuOpen: PropTypes.func.isRequired,
+  boundSetMenuOpen: PropTypes.func.isRequired,
   setMessageDispatch: PropTypes.func.isRequired,
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   showModal: PropTypes.object.isRequired,
@@ -481,7 +482,7 @@ const mapDispatchToProps = dispatch => ({
   periodDispatch: text => dispatch(setSearchPeriod(text)),
   activityDataDispatch: data => dispatch(setActivityData(data)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
-  setMenuOpen: flag => dispatch(setMenuOpen(flag)),
+  boundSetMenuOpen: flag => dispatch(setMenuOpen(flag)),
   setCaseChangeRedirectStatusDispatch: flag => dispatch(setCaseChangeRedirectStatus(flag)),
 })
 
