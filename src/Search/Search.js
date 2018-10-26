@@ -25,9 +25,9 @@ class Search extends Component {
       validationErrors,
     } = this.props
 
-    const locationOptions = locations =>
-      locations
-        ? locations.reduce(
+    const renderLocationOptions = locationOptions =>
+      locationOptions
+        ? locationOptions.reduce(
             (options, loc) => {
               options.push(
                 <option key={`housinglocation_option_${loc}`} value={loc}>
@@ -44,9 +44,9 @@ class Search extends Component {
           )
         : []
 
-    const activityOptions = activities =>
-      activities
-        ? activities.reduce(
+    const renderActivityOptions = activityOptions =>
+      activityOptions
+        ? activityOptions.reduce(
             (options, loc) => {
               options.push(
                 <option key={`activity_option_${loc.locationId}`} value={loc.locationId}>
@@ -113,7 +113,7 @@ class Search extends Component {
               value={currentLocation}
               onChange={onLocationChange}
             >
-              {locationOptions(locations)}
+              {renderLocationOptions(locations)}
             </select>
             <div className="padding-top-large padding-bottom-40">
               <button
@@ -149,7 +149,7 @@ class Search extends Component {
               disabled={!loaded}
               onChange={onActivityChange}
             >
-              {activityOptions(activities)}
+              {renderActivityOptions(activities)}
             </select>
             <div className="padding-top-large padding-bottom-40">
               <button

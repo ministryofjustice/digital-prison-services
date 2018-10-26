@@ -45,7 +45,7 @@ const latestCompletedCourtEvent = events => {
   return event && toCourtEvent(event)
 }
 
-const courtEvents = (courtEvents, offenderNo) => {
+const getOffenderCourtEvents = (courtEvents, offenderNo) => {
   const events =
     (courtEvents && courtEvents.length && courtEvents.filter(courtEvent => courtEvent.offenderNo === offenderNo)) || []
 
@@ -90,7 +90,7 @@ const reduceToMap = (offenderNumbers, formattedDate, releaseScheduleData, courtE
   offenderNumbers.reduce((map, offenderNumber) => {
     const offenderData = {
       releaseScheduled: releaseScheduled(releaseScheduleData, offenderNumber, formattedDate),
-      courtEvents: courtEvents(courtEventData, offenderNumber),
+      courtEvents: getOffenderCourtEvents(courtEventData, offenderNumber),
       scheduledTransfers: scheduledTransfers(transferData, offenderNumber),
     }
     return map.set(offenderNumber, offenderData)

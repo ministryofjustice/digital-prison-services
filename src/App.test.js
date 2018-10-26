@@ -29,7 +29,7 @@ const props = {
   setLoadedDispatch: fn,
   orderDispatch: fn,
   sortOrderDispatch: fn,
-  setMenuOpen: fn,
+  boundSetMenuOpen: fn,
   showModal: {},
   setCaseChangeRedirectStatusDispatch: fn,
 }
@@ -83,6 +83,6 @@ describe('App component', () => {
 
   it('should close the menu when the content is clicked', () => {
     component.find('.inner-content').simulate('click')
-    expect(props.setMenuOpen).toHaveBeenCalledWith(false)
+    expect(props.boundSetMenuOpen).toHaveBeenCalledWith(false)
   })
 })

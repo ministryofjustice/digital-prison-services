@@ -55,11 +55,11 @@ describe('<EstablishmentRollContainer />', () => {
 
     it('should render a EstablishmentRollBlock for each housing block', () => {
       /* eslint-disable max-nested-callbacks */
-      const blocks = wrapper.findWhere(
-        block => block.name() === 'EstablishmentRollBlock' && block.prop('highlight') === undefined
+      const rollBlocks = wrapper.findWhere(
+        rollBlock => rollBlock.name() === 'EstablishmentRollBlock' && rollBlock.prop('highlight') === undefined
       )
       /* eslint-enable */
-      expect(blocks.length).toEqual(4)
+      expect(rollBlocks.length).toEqual(4)
     })
 
     it('should render the Totals EstablishmentRollBlock last and with the highlighted prop', () => {
