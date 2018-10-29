@@ -11,7 +11,7 @@ const contextProperties = require('../contextProperties')
  * @returns a configured oauthApi instance
  */
 const oauthApiFactory = ({ clientId, clientSecret, url }) => {
-  const apiClientCredentials = new Buffer(
+  const apiClientCredentials = Buffer.from(
     `${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`
   ).toString('base64')
 
