@@ -102,7 +102,9 @@ class App extends React.Component {
     setLoadedDispatch(true)
   }
 
-  getActivityLocations = async (bookedOnDay, timeSlot) => {
+  getActivityLocations = async (day, time) => {
+    let bookedOnDay = day
+    let timeSlot = time
     const { agencyId, date, period, setLoadedDispatch, activitiesDispatch, activityDispatch } = this.props
 
     setLoadedDispatch(false)
