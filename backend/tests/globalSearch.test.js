@@ -34,9 +34,7 @@ describe('Global Search controller', async () => {
 
     expect(elite2Api.globalSearch).toHaveBeenCalled()
 
-    expect(elite2Api.globalSearch.mock.calls[0][1]).toEqual('')
-    expect(elite2Api.globalSearch.mock.calls[0][2]).toEqual('text')
-    expect(elite2Api.globalSearch.mock.calls[0][3]).toEqual('')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'text', ''])
   })
 
   it('Should return results', async () => {
@@ -53,9 +51,7 @@ describe('Global Search controller', async () => {
 
     const offenderNo = 'Z4444YY'
     await globalSearch({}, offenderNo)
-    expect(elite2Api.globalSearch.mock.calls[0][1]).toEqual(offenderNo)
-    expect(elite2Api.globalSearch.mock.calls[0][2]).toEqual('')
-    expect(elite2Api.globalSearch.mock.calls[0][3]).toEqual('')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, offenderNo, '', ''])
   })
 
   it('Should detect 2 words', async () => {
@@ -63,9 +59,7 @@ describe('Global Search controller', async () => {
     elite2Api.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, 'last first')
-    expect(elite2Api.globalSearch.mock.calls[0][1]).toEqual('')
-    expect(elite2Api.globalSearch.mock.calls[0][2]).toEqual('last')
-    expect(elite2Api.globalSearch.mock.calls[0][3]).toEqual('first')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'last', 'first'])
   })
 
   it('Should ignore leading and trailing whitespace', async () => {
@@ -73,8 +67,6 @@ describe('Global Search controller', async () => {
     elite2Api.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, '  word  ')
-    expect(elite2Api.globalSearch.mock.calls[0][1]).toEqual('')
-    expect(elite2Api.globalSearch.mock.calls[0][2]).toEqual('word')
-    expect(elite2Api.globalSearch.mock.calls[0][3]).toEqual('')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'word', ''])
   })
 })
