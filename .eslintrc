@@ -25,8 +25,7 @@
     "jsx-a11y/label-has-for": 0, // disable as has been deprecated and replaced by label-has-associated-control
     "react/require-default-props": 0,
     "react/forbid-prop-types": 0,
-    "react/prop-types": 0,
-    "no-restricted-syntax": 0
+    "react/prop-types": 0
   },
   "plugins": ["prettier"]
 }
