@@ -30,7 +30,7 @@ class ActivitySpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
         form['period-select'] = 'AM'
-        waitFor { !activity.module(FormElement).disabled }
+        waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc2'
 
         continueButton.click()
@@ -112,7 +112,7 @@ class ActivitySpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
         form['period-select'] = 'PM'
-        waitFor { !activity.module(FormElement).disabled }
+        waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc1'
         continueButton.click()
         at ActivityPage
@@ -155,9 +155,8 @@ class ActivitySpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
         form['period-select'] = 'PM'
-        waitFor { !activity.module(FormElement).disabled }
+        waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc1'
-
         continueButton.click()
         at ActivityPage
 
