@@ -12,7 +12,7 @@ const url = 'http://localhost'
 const clientSecret = 'clientSecret'
 
 function encodeClientCredentials() {
-  return new Buffer(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
+  return Buffer.from(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
 }
 
 describe('oathApi tests', () => {
