@@ -121,6 +121,18 @@ const activities = [
   { locationId: 5, userDescription: 'Chapel Activity' },
 ]
 const activity = '5'
+const mockHistory = {
+  push: jest.fn(),
+  action: 'PUSH',
+  block: jest.fn(),
+  createHref: jest.fn(),
+  go: jest.fn(),
+  goBack: jest.fn(),
+  goForward: jest.fn(),
+  listen: jest.fn(),
+  location: { hash: '', pathname: '', search: '' },
+  replace: jest.fn(),
+}
 
 describe('Offender activity list results component', () => {
   it('should render initial offender results form correctly', async () => {
@@ -129,7 +141,7 @@ describe('Offender activity list results component', () => {
 
     const component = shallow(
       <ResultsActivity
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         activities={activities}
         activity={activity}
         activityData={response}
@@ -345,7 +357,7 @@ describe('Offender activity list results component', () => {
   it('should render empty results list correctly', async () => {
     const component = shallow(
       <ResultsActivity
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         activities={activities}
         activity={activity}
         activityData={[]}
@@ -360,6 +372,7 @@ describe('Offender activity list results component', () => {
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
+        date=""
       />
     )
     const tr = component.find('tr')
@@ -374,7 +387,7 @@ describe('Offender activity list results component', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         activities={activities}
         activity={activity}
         activityData={response}
@@ -412,7 +425,7 @@ describe('Offender activity list results component', () => {
     const today = 'Today'
     const component = shallow(
       <ResultsActivity
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         activities={activities}
         activity={activity}
         activityData={response}
@@ -440,7 +453,7 @@ describe('Offender activity list results component', () => {
     const oldDate = '25/05/2018'
     const component = shallow(
       <ResultsActivity
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         activities={activities}
         activity={activity}
         activityData={response}
@@ -468,7 +481,7 @@ describe('Offender activity list results component', () => {
     const oldDate = '23/05/2018'
     const component = shallow(
       <ResultsActivity
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         activities={activities}
         activity={activity}
         activityData={response}

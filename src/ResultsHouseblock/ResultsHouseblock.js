@@ -325,7 +325,7 @@ ResultsHouseblock.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
-  date: PropTypes.string,
+  date: PropTypes.string.isRequired,
   period: PropTypes.string,
   houseblockData: PropTypes.array,
   subLocations: PropTypes.array,

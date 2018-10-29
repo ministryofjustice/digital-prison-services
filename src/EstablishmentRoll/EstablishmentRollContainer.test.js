@@ -11,8 +11,10 @@ describe('<EstablishmentRollContainer />', () => {
     agencyId: 'LEI',
     setCaseChangeRedirectStatusDispatch: jest.fn(),
     establishmentRollBlockDataDispatch: jest.fn(),
-    setLoadedDispatch: jest.fn(),
     handleError: jest.fn(),
+    setLoadedDispatch: jest.fn(),
+    resetErrorDispatch: jest.fn(),
+    establishmentRollDataDispatch: jest.fn(),
     loaded: false,
   }
 
@@ -53,10 +55,10 @@ describe('<EstablishmentRollContainer />', () => {
       expect(firstBlock.props().highlight).toBe(true)
     })
 
-    it('should render a EstablishmentRollBlock for each housing block', () => {
+    it('should render an EstablishmentRollBlock for each housing block', () => {
       /* eslint-disable max-nested-callbacks */
       const rollBlocks = wrapper.findWhere(
-        rollBlock => rollBlock.name() === 'EstablishmentRollBlock' && rollBlock.prop('highlight') === undefined
+        rollBlock => rollBlock.name() === 'EstablishmentRollBlock' && rollBlock.prop('highlight') === false
       )
       /* eslint-enable */
       expect(rollBlocks.length).toEqual(4)

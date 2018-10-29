@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import DatePicker from './datePicker'
 
 const DatePickerInput = props => {
-  const { additionalClassName, handleDateChange } = props
+  const { additionalClassName, handleDateChange, value, inputId } = props
   return (
     <DatePicker
       inputProps={{
@@ -15,17 +15,21 @@ const DatePickerInput = props => {
       shouldShowDay={date => !date.isAfter(moment().startOf('day'))}
       title="Date"
       handleDateChange={handleDateChange}
-      {...props}
+      inputId={inputId}
+      value={value}
     />
   )
 }
 
 DatePickerInput.propTypes = {
-  history: PropTypes.object,
-  date: PropTypes.string,
-  dateId: PropTypes.string,
-  additionalClassName: PropTypes.string,
   handleDateChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  inputId: PropTypes.string.isRequired,
+  additionalClassName: PropTypes.string,
+}
+
+DatePickerInput.defaultProps = {
+  additionalClassName: '',
 }
 
 export default DatePickerInput

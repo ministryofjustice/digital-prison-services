@@ -64,21 +64,52 @@ export class EstablishmentRollContainer extends Component {
 }
 
 EstablishmentRollContainer.propTypes = {
-  movements: PropTypes.object,
-  blocks: PropTypes.array,
-  totals: PropTypes.object,
+  // props
+  handleError: PropTypes.func.isRequired,
+  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  // mapStateToProps
+  movements: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    numbers: PropTypes.arrayOf(
+      PropTypes.shape({ name: PropTypes.string.isRequired, value: PropTypes.number.isRequired })
+    ).isRequired,
+  }),
+  blocks: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      numbers: PropTypes.arrayOf(
+        PropTypes.shape({ name: PropTypes.string.isRequired, value: PropTypes.number.isRequired })
+      ).isRequired,
+    }).isRequired
+  ),
+  totals: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    numbers: PropTypes.arrayOf(
+      PropTypes.shape({ name: PropTypes.string.isRequired, value: PropTypes.number.isRequired })
+    ).isRequired,
+  }),
   agencyId: PropTypes.string,
-  establishmentRollDataDispatch: PropTypes.func,
-  handleError: PropTypes.func,
-  loaded: PropTypes.bool,
+  loaded: PropTypes.bool.isRequired,
+  // mapDispatchToProps
+  establishmentRollDataDispatch: PropTypes.func.isRequired,
+  // error
   error: PropTypes.string,
-  setCaseChangeRedirectStatusDispatch: PropTypes.func,
+}
+
+EstablishmentRollContainer.defaultProps = {
+  movements: null,
+  blocks: null,
+  totals: null,
+  agencyId: '',
+  error: '',
 }
 
 const mapStateToProps = state => ({
+  movements: state.establishmentRoll.movements,
   blocks: state.establishmentRoll.blocks,
   totals: state.establishmentRoll.totals,
-  movements: state.establishmentRoll.movements,
   agencyId: state.app.user.activeCaseLoadId,
   loaded: state.app.loaded,
 })

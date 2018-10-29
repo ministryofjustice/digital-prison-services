@@ -4,6 +4,7 @@ import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
@@ -219,17 +220,17 @@ class ResultsActivity extends Component {
 }
 
 ResultsActivity.propTypes = {
-  history: PropTypes.object,
   handleSearch: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
-  date: PropTypes.string,
-  period: PropTypes.string,
-  activityData: PropTypes.array,
-  agencyId: PropTypes.string,
+  agencyId: PropTypes.string.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
+  date: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  activityData: PropTypes.array.isRequired,
   activity: PropTypes.string.isRequired,
-  activities: PropTypes.array,
+  activities: PropTypes.array.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

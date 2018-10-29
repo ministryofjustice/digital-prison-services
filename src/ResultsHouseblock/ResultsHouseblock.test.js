@@ -344,6 +344,7 @@ describe('Offender results component Jira NN-843', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         update={jest.fn()}
+        date="today"
       />
     )
     const tr = component.find('tr')
@@ -576,6 +577,7 @@ describe('Offender results component Jira NN-843', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         update={jest.fn()}
+        date="today"
       />
     )
     expect(component.find('#back_to_selection_link').length).toEqual(1)
