@@ -201,7 +201,7 @@ Search.propTypes = {
   onActivityChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
-  date: PropTypes.string,
+  date: PropTypes.string.isRequired,
   period: PropTypes.string,
   activity: PropTypes.string,
   currentLocation: PropTypes.string,

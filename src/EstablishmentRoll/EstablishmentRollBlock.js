@@ -39,9 +39,19 @@ class EstablishmentRollBlock extends Component {
 }
 
 EstablishmentRollBlock.propTypes = {
-  block: PropTypes.object,
+  block: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    numbers: PropTypes.arrayOf(
+      PropTypes.shape({ name: PropTypes.string.isRequired, value: PropTypes.number.isRequired })
+    ).isRequired,
+  }).isRequired,
   highlight: PropTypes.bool,
   isLastBlock: PropTypes.bool,
+}
+
+EstablishmentRollBlock.defaultProps = {
+  isLastBlock: false,
+  highlight: false,
 }
 
 export default EstablishmentRollBlock
