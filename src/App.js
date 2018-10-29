@@ -355,12 +355,10 @@ class App extends React.Component {
               <ResultsActivityContainer
                 handleError={this.handleError}
                 getActivityList={this.getActivityList}
-                getActivityLocations={this.getActivityLocations}
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
-                handleSearch={history => this.handleSearch(history)}
+                handleSearch={h => this.handleSearch(h)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                {...this.props}
               />
             )}
           />
@@ -486,6 +484,7 @@ const mapStateToProps = state => ({
 
 App.defaultProps = {
   agencyId: '',
+  activity: '',
 }
 
 const mapDispatchToProps = dispatch => ({
