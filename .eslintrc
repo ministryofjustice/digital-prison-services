@@ -26,7 +26,6 @@
     "react/require-default-props": 0,
     "react/forbid-prop-types": 0,
     "react/prop-types": 0,
-    "prefer-promise-reject-errors": 0,
     "no-restricted-syntax": 0
   },
   "plugins": ["prettier"]
