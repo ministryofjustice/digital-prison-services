@@ -12,7 +12,7 @@ const Dashboard = () => (
         <a href="https://notm-dev.hmpps.dsd.io">New Nomis</a>
       </li>
       <li>
-        <a href="">Old P-Nomis</a>
+        <span>Old P-Nomis</span>
       </li>
       <li>
         <a href="https://licences-stage.hmpps.dsd.io">Licence Management</a>

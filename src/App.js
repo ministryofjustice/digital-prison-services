@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react'
 import moment from 'moment'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
@@ -298,6 +297,7 @@ class App extends React.Component {
       resetErrorDispatch,
     } = this.props
     const routes = (
+      // eslint-disable-next-line
       <div
         className="inner-content"
         onClick={() => {
@@ -386,6 +386,7 @@ class App extends React.Component {
       innerContent = routes
     } else {
       innerContent = (
+        // eslint-disable-next-line
         <div className="inner-content" onClick={() => boundSetMenuOpen(false)}>
           <div className="pure-g">
             <ErrorComponent {...this.props} />
