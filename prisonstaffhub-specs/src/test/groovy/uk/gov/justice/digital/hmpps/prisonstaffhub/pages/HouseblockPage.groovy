@@ -20,7 +20,7 @@ class HouseblockPage extends DatePickerPage {
         updateButton { $('#updateButton') }
         printButton { $('#printButton') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
-        nameOrderLink { $('th a#Name-sortable-column') }
-        locationOrderLink { $('th a#Location-sortable-column') }
+        nameOrderLink { $('th #Name-sortable-column') }
+        locationOrderLink { $('th #Location-sortable-column') }
     }
 }
