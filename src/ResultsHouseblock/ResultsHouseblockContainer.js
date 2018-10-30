@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
@@ -12,7 +13,6 @@ import {
   setOrderField,
   setSearchSubLocation,
   setSortOrder,
-  showPaymentReasonModal,
 } from '../redux/actions'
 import Spinner from '../Spinner'
 import { getHouseBlockReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
@@ -155,25 +155,39 @@ class ResultsHouseblockContainer extends Component {
 }
 
 ResultsHouseblockContainer.propTypes = {
+  // props
+  handleError: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  handleDateChange: PropTypes.func.isRequired,
+  handlePeriodChange: PropTypes.func.isRequired,
+
+  // mapStateToProps
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
-  date: PropTypes.string,
-  error: PropTypes.string,
-  handleError: PropTypes.func.isRequired,
-  houseblockDataDispatch: PropTypes.func,
-  history: PropTypes.object,
-  loaded: PropTypes.bool,
+  date: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  loaded: PropTypes.bool.isRequired,
+  orderField: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  subLocations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+
+  // mapDispatchToProps
+  houseblockDataDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
-  orderField: PropTypes.string,
-  period: PropTypes.string,
-  raiseAnalyticsEvent: PropTypes.func,
   resetErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
-  sortOrder: PropTypes.string,
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
-  subLocations: PropTypes.array,
+
+  // other?
+  error: PropTypes.string,
+  // special
+  history: ReactRouterPropTypes.history.isRequired,
+}
+
+ResultsHouseblockContainer.defaultProps = {
+  error: '',
 }
 
 const extractSubLocations = (locations, currentLocation) => {
@@ -184,9 +198,11 @@ const extractSubLocations = (locations, currentLocation) => {
 }
 
 const mapStateToProps = state => ({
+  agencyId: state.app.user.activeCaseLoadId,
   currentLocation: state.search.location,
   currentSubLocation: state.search.subLocation,
   date: state.search.date,
+  period: state.search.period,
   houseblockData: state.events.houseBlockData,
   loaded: state.app.loaded,
   orderField: state.events.orderField,
@@ -200,8 +216,6 @@ const mapDispatchToProps = dispatch => ({
   orderDispatch: field => dispatch(setOrderField(field)),
   resetErrorDispatch: () => dispatch(resetError()),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
-  showPaymentReasonModal: (event, browserEvent) =>
-    dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getHouseBlockReasons() })),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
 })

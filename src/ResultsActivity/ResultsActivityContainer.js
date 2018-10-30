@@ -55,20 +55,40 @@ ResultsActivityContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
   getActivityList: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
-
-  history: ReactRouterPropTypes.history.isRequired,
-
-  agencyId: PropTypes.string.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  handlePeriodChange: PropTypes.func.isRequired,
+  handleDateChange: PropTypes.func.isRequired,
   // mapStateToProps
-  activities: PropTypes.array,
-  activityData: PropTypes.array,
+  activity: PropTypes.string.isRequired,
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
+  ),
+  date: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  agencyId: PropTypes.string.isRequired,
+  activityData: PropTypes.arrayOf(
+    PropTypes.shape({
+      offenderNo: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      eventId: PropTypes.number,
+      cellLocation: PropTypes.string.isRequired,
+      eventsElsewhere: PropTypes.array,
+      event: PropTypes.string.isRequired,
+      eventType: PropTypes.string,
+      eventDescription: PropTypes.string.isRequired,
+      eventStatus: PropTypes.string,
+      comment: PropTypes.string.isRequired,
+    })
+  ),
   loaded: PropTypes.bool.isRequired,
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
   showPaymentReasonModal: PropTypes.func.isRequired,
   // other?
-  activity: PropTypes.string.isRequired,
   error: PropTypes.string,
+  // special
+  history: ReactRouterPropTypes.history.isRequired,
 }
 
 ResultsActivityContainer.defaultProps = {
@@ -79,6 +99,10 @@ ResultsActivityContainer.defaultProps = {
 
 const mapStateToProps = state => ({
   activities: state.search.activities,
+  activity: state.search.activity,
+  date: state.search.date,
+  period: state.search.period,
+  agencyId: state.app.user.activeCaseLoadId,
   activityData: state.events.activityData,
   loaded: state.app.loaded,
 })

@@ -36,8 +36,12 @@ class ResultsActivity extends Component {
 
   getActivityName() {
     const { activities, activity } = this.props
-    const filter = activities.filter(a => a.locationId === Number(activity))
-    return filter && filter.length > 0 && filter[0].userDescription
+    return (
+      activities
+        .filter(a => a.locationId === Number(activity))
+        .map(a => a.userDescription)
+        .find(a => !!a) || null
+    )
   }
 
   render() {
@@ -228,9 +232,26 @@ ResultsActivity.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
-  activityData: PropTypes.array.isRequired,
+  activityData: PropTypes.arrayOf(
+    PropTypes.shape({
+      offenderNo: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      eventId: PropTypes.number,
+      cellLocation: PropTypes.string.isRequired,
+      eventsElsewhere: PropTypes.array,
+      event: PropTypes.string.isRequired,
+      eventType: PropTypes.string,
+      eventDescription: PropTypes.string.isRequired,
+      eventStatus: PropTypes.string,
+      comment: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   activity: PropTypes.string.isRequired,
-  activities: PropTypes.array.isRequired,
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
+      .isRequired
+  ).isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

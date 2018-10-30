@@ -18,7 +18,7 @@ class Error extends Component {
 }
 
 Error.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 }
 
 Error.defaultProps = {

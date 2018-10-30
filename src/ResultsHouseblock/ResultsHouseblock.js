@@ -315,20 +315,51 @@ class ResultsHouseblock extends Component {
   }
 }
 ResultsHouseblock.propTypes = {
-  agencyId: PropTypes.string,
-  currentLocation: PropTypes.string,
-  currentSubLocation: PropTypes.string,
-  getHouseblockList: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
+  agencyId: PropTypes.string.isRequired,
+  currentLocation: PropTypes.string.isRequired,
+  currentSubLocation: PropTypes.string.isRequired,
+  getHouseblockList: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
-  period: PropTypes.string,
-  houseblockData: PropTypes.array,
-  subLocations: PropTypes.array,
-  orderField: PropTypes.string,
-  sortOrder: PropTypes.string,
+  period: PropTypes.string.isRequired,
+  houseblockData: PropTypes.arrayOf(
+    PropTypes.shape({
+      activity: PropTypes.shape({
+        offenderNo: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        eventId: PropTypes.number,
+        cellLocation: PropTypes.string.isRequired,
+        others: PropTypes.array,
+        event: PropTypes.string.isRequired,
+        eventType: PropTypes.string,
+        eventDescription: PropTypes.string.isRequired,
+        eventStatus: PropTypes.string,
+        comment: PropTypes.string.isRequired,
+      }),
+      others: PropTypes.arrayOf(
+        PropTypes.shape({
+          offenderNo: PropTypes.string.isRequired,
+          firstName: PropTypes.string.isRequired,
+          lastName: PropTypes.string.isRequired,
+          eventId: PropTypes.number,
+          cellLocation: PropTypes.string.isRequired,
+          others: PropTypes.array,
+          event: PropTypes.string.isRequired,
+          eventType: PropTypes.string,
+          eventDescription: PropTypes.string.isRequired,
+          eventStatus: PropTypes.string,
+          comment: PropTypes.string.isRequired,
+        })
+      ),
+    }).isRequired
+  ).isRequired,
+  subLocations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  orderField: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
 }
 
