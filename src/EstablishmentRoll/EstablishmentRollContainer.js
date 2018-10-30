@@ -47,7 +47,7 @@ export class EstablishmentRollContainer extends Component {
     const { movements, blocks, totals, loaded, error } = this.props
     if (!loaded) return <Spinner />
 
-    if (error) return <Error {...this.props} />
+    if (error) return <Error error={error} />
 
     return (
       <div className="establishment-roll-container">

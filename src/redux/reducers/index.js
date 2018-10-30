@@ -29,7 +29,7 @@ const appInitialState = {
 
 const searchInitialState = {
   locations: [],
-  activities: [''],
+  activities: [],
   location: '',
   subLocation: '--',
   activity: '',

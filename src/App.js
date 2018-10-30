@@ -75,21 +75,16 @@ class App extends React.Component {
   }
 
   getActivityList = async () => {
-    let { date } = this.props
-    const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch } = this.props
+    const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch, date } = this.props
 
     try {
       resetErrorDispatch()
       setLoadedDispatch(false)
-      if (date === 'Today') {
-        // replace placeholder text
-        date = moment().format('DD/MM/YYYY')
-      }
       const config = {
         params: {
           agencyId,
           locationId: activity,
-          date,
+          date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
           timeSlot: period,
         },
       }
@@ -278,6 +273,9 @@ class App extends React.Component {
       setCaseChangeRedirectStatusDispatch,
       setLoadedDispatch,
       resetErrorDispatch,
+      dateDispatch,
+      periodDispatch,
+      error,
     } = this.props
     const routes = (
       // eslint-disable-next-line
@@ -303,18 +301,15 @@ class App extends React.Component {
                 handleDateChange={event => this.handleDateChangeWithLocationsUpdate(event)}
                 handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
                 handleSearch={history => this.handleSearch(history)}
-                {...this.props}
+                dateDispatch={dateDispatch}
+                periodDispatch={periodDispatch}
               />
             )}
           />
           <Route
             path="(/globalsearch)"
             render={() => (
-              <GlobalSearchContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                {...this.props}
-              />
+              <GlobalSearchContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
             )}
           />
           <Route
@@ -368,7 +363,7 @@ class App extends React.Component {
         // eslint-disable-next-line
         <div className="inner-content" onClick={() => boundSetMenuOpen(false)}>
           <div className="pure-g">
-            <ErrorComponent {...this.props} />
+            <ErrorComponent error={error} />
           </div>
         </div>
       )

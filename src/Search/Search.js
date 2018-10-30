@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import '../index.scss'
 import './search.scss'
 import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
 import DatePickerInput from '../DatePickerInput'
 import ValidationErrors from '../ValidationError'
@@ -194,20 +195,27 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  history: PropTypes.object,
-  validationErrors: PropTypes.object,
   onSearch: PropTypes.func.isRequired,
   onLocationChange: PropTypes.func.isRequired,
   onActivityChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
-  period: PropTypes.string,
-  activity: PropTypes.string,
+  period: PropTypes.string.isRequired,
+  activity: PropTypes.string.isRequired,
   currentLocation: PropTypes.string,
-  locations: PropTypes.array,
-  activities: PropTypes.array,
-  loaded: PropTypes.bool,
+  locations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
+  ).isRequired,
+  loaded: PropTypes.bool.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
+  validationErrors: PropTypes.shape({ searchForm: PropTypes.string }),
+}
+
+Search.defaultProps = {
+  currentLocation: '',
+  validationErrors: {},
 }
 
 const SearchWithRouter = withRouter(Search)

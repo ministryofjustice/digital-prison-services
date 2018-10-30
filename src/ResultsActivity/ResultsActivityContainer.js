@@ -36,14 +36,14 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { loaded } = this.props
+    const { loaded, error } = this.props
 
     if (!loaded) {
       return <Spinner />
     }
     return (
       <div>
-        <Error {...this.props} />
+        <Error error={error} />
         <ResultsActivity handlePrint={this.handlePrint} {...this.props} />
       </div>
     )
@@ -92,8 +92,8 @@ ResultsActivityContainer.propTypes = {
 }
 
 ResultsActivityContainer.defaultProps = {
-  activities: null,
-  activityData: null,
+  activities: [],
+  activityData: [],
   error: '',
 }
 

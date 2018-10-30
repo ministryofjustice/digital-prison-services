@@ -91,16 +91,17 @@ class SearchContainer extends Component {
   }
 
   render() {
-    const { error } = this.props
+    const { error, location } = this.props
 
     if (error) {
-      return <Error {...this.props} />
+      return <Error error={error} />
     }
     return (
       <Search
         onSearch={this.onSearch}
         onLocationChange={this.onLocationChange}
         onActivityChange={this.onActivityChange}
+        currentLocation={location}
         {...this.props}
       />
     )
@@ -108,32 +109,54 @@ class SearchContainer extends Component {
 }
 
 SearchContainer.propTypes = {
-  error: PropTypes.string,
+  // props
+  dateDispatch: PropTypes.func.isRequired,
+  periodDispatch: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
+  handleDateChange: PropTypes.func.isRequired,
+  handlePeriodChange: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  getActivityLocations: PropTypes.func.isRequired,
+
+  // mapStateToProps
   agencyId: PropTypes.string.isRequired,
-  locationDispatch: PropTypes.func,
-  locationsDispatch: PropTypes.func,
-  activitiesDispatch: PropTypes.func,
-  activityDispatch: PropTypes.func,
-  dateDispatch: PropTypes.func,
-  periodDispatch: PropTypes.func,
-  handleError: PropTypes.func,
-  handleSearch: PropTypes.func,
-  activities: PropTypes.array,
-  locations: PropTypes.array,
-  activity: PropTypes.string,
-  location: PropTypes.string,
-  setValidationErrorDispatch: PropTypes.func,
-  resetValidationErrorsDispatch: PropTypes.func,
-  getActivityLocations: PropTypes.func,
-  validationErrors: PropTypes.object,
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
+  ),
+  activity: PropTypes.string.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  location: PropTypes.string.isRequired,
+  loaded: PropTypes.bool.isRequired,
+  date: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  validationErrors: PropTypes.shape({ searchForm: PropTypes.string }),
+
+  // mapDispatchToProps
+  locationDispatch: PropTypes.func.isRequired,
+  locationsDispatch: PropTypes.func.isRequired,
+  activityDispatch: PropTypes.func.isRequired,
+  setValidationErrorDispatch: PropTypes.func.isRequired,
+  resetValidationErrorsDispatch: PropTypes.func.isRequired,
+
+  // other?
+  error: PropTypes.string,
+}
+
+SearchContainer.defaultProps = {
+  validationErrors: {},
+  activities: [],
+  error: '',
 }
 
 const mapStateToProps = state => ({
-  locations: state.search.locations.map(l => l.name),
+  agencyId: state.app.user.activeCaseLoadId,
   activities: state.search.activities,
   activity: state.search.activity,
+  locations: state.search.locations.map(l => l.name),
   location: state.search.location,
   loaded: state.app.loaded,
+  date: state.search.date,
+  period: state.search.period,
   validationErrors: state.app.validationErrors,
 })
 

@@ -63,12 +63,22 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
 }
 
 GlobalSearchResultList.propTypes = {
-  agencyId: PropTypes.string,
-  data: PropTypes.array,
-  handlePageAction: PropTypes.func,
-  pageNumber: PropTypes.number,
-  pageSize: PropTypes.number,
-  totalRecords: PropTypes.number,
+  // props
+  handlePageAction: PropTypes.func.isRequired,
+  agencyId: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      offenderNo: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      dateOfBirth: PropTypes.string.isRequired,
+      latestLocation: PropTypes.string.isRequired,
+      agencyId: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  pageNumber: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  totalRecords: PropTypes.number.isRequired,
 }
 
 export default GlobalSearchResultList

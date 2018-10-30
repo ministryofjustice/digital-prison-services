@@ -15,7 +15,6 @@ import {
   setSortOrder,
 } from '../redux/actions'
 import Spinner from '../Spinner'
-import { getHouseBlockReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
 
 const axios = require('axios')
 
@@ -133,7 +132,7 @@ class ResultsHouseblockContainer extends Component {
   }
 
   render() {
-    const { loaded } = this.props
+    const { loaded, error } = this.props
 
     if (!loaded) {
       return <Spinner />
@@ -141,7 +140,7 @@ class ResultsHouseblockContainer extends Component {
 
     return (
       <div>
-        <Error {...this.props} />
+        <Error error={error} />
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
