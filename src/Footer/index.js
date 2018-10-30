@@ -4,7 +4,7 @@ import { linkOnClick } from '../helpers'
 import './footer.scss'
 
 const Footer = ({ showTermsAndConditions, mailTo, setMenuOpen }) => (
-  /* eslint-disable-next-line jsx-a11y/click-events-have-key-events */
+  // eslint-disable-next-line
   <footer className="FooterContainer" onClick={() => setMenuOpen(false)}>
     <div className="footer-content">
       <div className="FooterLinksContainer">

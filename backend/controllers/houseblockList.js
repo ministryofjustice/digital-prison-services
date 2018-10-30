@@ -54,7 +54,8 @@ const getHouseblockListFactory = elite2Api => {
     const rows = []
     let i = -1
     let lastOffenderNo = ''
-    for (const event of data) {
+
+    data.forEach(event => {
       if (event.offenderNo !== lastOffenderNo) {
         i += 1
         lastOffenderNo = event.offenderNo
@@ -77,7 +78,8 @@ const getHouseblockListFactory = elite2Api => {
       currentRow.releaseScheduled = releaseScheduled
       currentRow.courtEvents = courtEvents
       currentRow.scheduledTransfers = scheduledTransfers
-    }
+    })
+
     return rows
   }
 

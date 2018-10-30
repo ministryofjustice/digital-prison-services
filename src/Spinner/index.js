@@ -24,15 +24,18 @@ class Spinner extends Component {
       className: 'spinner', // The CSS class to assign to the spinner
       position: 'relative',
     }
-    new SpinnerPlugin(options).spin(this.refs.spinner)
+    new SpinnerPlugin(options).spin(this.spinner)
   }
 
   render() {
+    const spinner = el => {
+      this.spinner = el
+    }
     return (
       <div className="spinner-component">
         <div className="spinner-box">
           <h2 className="heading-large">Loading</h2>
-          <div ref="spinner" />
+          <div ref={spinner} />
         </div>
       </div>
     )

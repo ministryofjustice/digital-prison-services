@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
+import geb.module.FormElement
 import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
@@ -34,6 +35,7 @@ class HouseblockSpecification extends GebReportingSpec {
 //        days[0].click() // select 1st of this month for now
 
         form['period-select'] = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
         then: 'The houseblock list is displayed, orderded by last name'
@@ -88,7 +90,6 @@ class HouseblockSpecification extends GebReportingSpec {
         def row3 = tableRows[3].find('td')
         row3[3].text() == 'Chapel 11:45'
         row3[4].text() == ''
-
     }
 
     def "The updated houseblock list is displayed"() {
@@ -99,6 +100,7 @@ class HouseblockSpecification extends GebReportingSpec {
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
         form['period-select'] = 'PM'
         form['housing-location-select'] = '1'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
         at HouseblockPage
 
@@ -144,6 +146,7 @@ class HouseblockSpecification extends GebReportingSpec {
 
         form['housing-location-select'] = '1'
         form['period-select'] = 'PM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
         at HouseblockPage
 
@@ -163,8 +166,8 @@ class HouseblockSpecification extends GebReportingSpec {
         elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
 
         form['housing-location-select'] = '1'
-
         form['period-select'] = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
         then: 'Only one main activity is displayed'
@@ -188,8 +191,8 @@ class HouseblockSpecification extends GebReportingSpec {
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
 
         form['housing-location-select'] = '1'
-
         form['period-select'] = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
         then: 'Only one activity is displayed'
@@ -210,6 +213,7 @@ class HouseblockSpecification extends GebReportingSpec {
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
         form['period-select'] = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
         then: 'Only one activity is displayed'
@@ -230,6 +234,7 @@ class HouseblockSpecification extends GebReportingSpec {
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
         form['period-select'] = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
         then: '*** Transfer scheduled *** should be visible in the other activities column'
@@ -249,6 +254,7 @@ class HouseblockSpecification extends GebReportingSpec {
         elite2api.stubGetHouseBlockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
         form['period-select'] = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
         then: 'I should see three court events in the other activities column'
@@ -258,6 +264,5 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[2].contains("** Court visit scheduled **")
         texts[2].contains("** Court visit scheduled ** (complete)")
         texts[2].contains("** Court visit scheduled ** (expired)")
-
     }
 }
