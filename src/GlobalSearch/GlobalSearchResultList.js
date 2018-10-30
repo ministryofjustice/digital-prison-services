@@ -73,7 +73,7 @@ GlobalSearchResultList.propTypes = {
       firstName: PropTypes.string.isRequired,
       dateOfBirth: PropTypes.string.isRequired,
       latestLocation: PropTypes.string.isRequired,
-      agencyId: PropTypes.string.isRequired,
+      agencyId: PropTypes.string,
     })
   ).isRequired,
   pageNumber: PropTypes.number.isRequired,

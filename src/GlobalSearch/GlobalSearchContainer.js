@@ -86,6 +86,7 @@ GlobalSearchContainer.propTypes = {
   // props
   handleError: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
 
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
@@ -97,7 +98,7 @@ GlobalSearchContainer.propTypes = {
       firstName: PropTypes.string.isRequired,
       dateOfBirth: PropTypes.string.isRequired,
       latestLocation: PropTypes.string.isRequired,
-      agencyId: PropTypes.string.isRequired,
+      agencyId: PropTypes.string,
     })
   ).isRequired,
   pageNumber: PropTypes.number.isRequired,

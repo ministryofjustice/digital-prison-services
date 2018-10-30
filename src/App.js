@@ -309,7 +309,11 @@ class App extends React.Component {
           <Route
             path="(/globalsearch)"
             render={() => (
-              <GlobalSearchContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
+              <GlobalSearchContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                setLoadedDispatch={setLoadedDispatch}
+              />
             )}
           />
           <Route
