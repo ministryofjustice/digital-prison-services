@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import Error from '../Error'
@@ -50,16 +51,30 @@ class ResultsActivityContainer extends Component {
 }
 
 ResultsActivityContainer.propTypes = {
-  history: PropTypes.object,
-  error: PropTypes.string,
+  // props
+  handleError: PropTypes.func.isRequired,
+  getActivityList: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+
+  history: ReactRouterPropTypes.history.isRequired,
+
   agencyId: PropTypes.string.isRequired,
+  // mapStateToProps
   activities: PropTypes.array,
-  activity: PropTypes.string.isRequired,
+  activityData: PropTypes.array,
+  loaded: PropTypes.bool.isRequired,
+  // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
-  getActivityList: PropTypes.func,
-  activityDataDispatch: PropTypes.func,
-  loaded: PropTypes.bool,
-  raiseAnalyticsEvent: PropTypes.func,
+  showPaymentReasonModal: PropTypes.func.isRequired,
+  // other?
+  activity: PropTypes.string.isRequired,
+  error: PropTypes.string,
+}
+
+ResultsActivityContainer.defaultProps = {
+  activities: null,
+  activityData: null,
+  error: '',
 }
 
 const mapStateToProps = state => ({

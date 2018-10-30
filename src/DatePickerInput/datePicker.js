@@ -10,10 +10,10 @@ class DatePicker extends Component {
   }
 
   renderInput(props) {
-    const { inputId, className, name } = this.props
+    const { inputId, name } = this.props
     return (
       <div>
-        <input id={inputId} className={className} name={name} {...props} readOnly />
+        <input id={inputId} name={name} {...props} readOnly />
       </div>
     )
   }
@@ -41,10 +41,16 @@ class DatePicker extends Component {
 DatePicker.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   shouldShowDay: PropTypes.func.isRequired,
-  className: PropTypes.string,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  inputId: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  inputId: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  inputProps: PropTypes.shape({ placeholder: PropTypes.string.isRequired, className: PropTypes.string.isRequired })
+    .isRequired,
+}
+
+DatePicker.defaultProps = {
+  value: '',
 }
 
 export default DatePicker

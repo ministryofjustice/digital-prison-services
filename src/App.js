@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react'
 import moment from 'moment'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
@@ -287,8 +286,18 @@ class App extends React.Component {
   }
 
   render() {
-    const { config, menuOpen, boundSetMenuOpen, shouldShowTerms, showModal } = this.props
+    const {
+      config,
+      menuOpen,
+      boundSetMenuOpen,
+      shouldShowTerms,
+      showModal,
+      setCaseChangeRedirectStatusDispatch,
+      setLoadedDispatch,
+      resetErrorDispatch,
+    } = this.props
     const routes = (
+      // eslint-disable-next-line
       <div
         className="inner-content"
         onClick={() => {
@@ -351,16 +360,22 @@ class App extends React.Component {
                 handlePeriodChange={event => this.handlePeriodChange(event)}
                 handleSearch={history => this.handleSearch(history)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                handlePay={this.handlePay}
                 {...this.props}
               />
             )}
           />
-          <Route exact path="/dashboard" render={() => <Dashboard {...this.props} />} />
+          <Route exact path="/dashboard" render={() => <Dashboard />} />
           <Route
             exact
             path="/establishmentroll"
-            render={() => <EstablishmentRollContainer handleError={this.handleError} {...this.props} />}
+            render={() => (
+              <EstablishmentRollContainer
+                handleError={this.handleError}
+                setCaseChangeRedirectStatusDispatch={setCaseChangeRedirectStatusDispatch}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+              />
+            )}
           />
         </div>
       </div>
@@ -371,6 +386,7 @@ class App extends React.Component {
       innerContent = routes
     } else {
       innerContent = (
+        // eslint-disable-next-line
         <div className="inner-content" onClick={() => boundSetMenuOpen(false)}>
           <div className="pure-g">
             <ErrorComponent {...this.props} />
@@ -468,6 +484,10 @@ const mapStateToProps = state => ({
   menuOpen: state.app.menuOpen,
   caseChangeRedirect: state.app.caseChangeRedirect,
 })
+
+App.defaultProps = {
+  agencyId: '',
+}
 
 const mapDispatchToProps = dispatch => ({
   configDispatch: config => dispatch(setConfig(config)),

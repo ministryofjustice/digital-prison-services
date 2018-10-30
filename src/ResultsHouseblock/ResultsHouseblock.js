@@ -10,6 +10,7 @@ import { getHoursMinutes, properCaseName, isToday, stripAgencyPrefix, getEventDe
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
+import { linkOnClick } from '../helpers'
 
 class ResultsHouseblock extends Component {
   displayBack = () => (
@@ -39,43 +40,40 @@ class ResultsHouseblock extends Component {
 
     if (sortOrder === 'ASC') {
       triangleImage = (
-        <a
+        <span
           className="sortableLink"
           id={`${heading}-sort-asc`}
-          href="#"
-          onClick={() => {
+          {...linkOnClick(() => {
             getHouseblockList(field, 'DESC')
-          }}
+          })}
         >
           <img src="/images/Triangle_asc.png" height="8" width="15" alt="Up arrow" />
-        </a>
+        </span>
       )
     } else if (sortOrder === 'DESC') {
       triangleImage = (
-        <a
+        <span
           className="sortableLink"
           id={`${heading}-sort-desc`}
-          href="#"
-          onClick={() => {
+          {...linkOnClick(() => {
             getHouseblockList(field, 'ASC')
-          }}
+          })}
         >
           <img src="/images/Triangle_desc.png" height="8" width="15" alt="Down arrow" />
-        </a>
+        </span>
       )
     }
 
     return orderField !== field ? (
-      <a
+      <span
         className="sortableLink"
         id={`${heading}-sortable-column`}
-        href="#"
-        onClick={() => {
+        {...linkOnClick(() => {
           getHouseblockList(field, 'ASC')
-        }}
+        })}
       >
         {heading}
-      </a>
+      </span>
     ) : (
       <div>
         {heading} {triangleImage}
@@ -325,7 +323,7 @@ ResultsHouseblock.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
-  date: PropTypes.string,
+  date: PropTypes.string.isRequired,
   period: PropTypes.string,
   houseblockData: PropTypes.array,
   subLocations: PropTypes.array,

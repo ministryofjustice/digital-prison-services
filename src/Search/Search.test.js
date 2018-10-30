@@ -17,6 +17,7 @@ describe('Search component', () => {
         onLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        date="today"
       />
     )
     expect(component.find('#housing-location-select option').get(0).props.value).toEqual('--')
@@ -38,6 +39,7 @@ describe('Search component', () => {
         handlePeriodChange={jest.fn()}
         validationErrors={{ text: 'test' }}
         handleDateChange={jest.fn()}
+        date="today"
       />
     )
     expect(component.find('ValidationErrors')).toHaveLength(1)
