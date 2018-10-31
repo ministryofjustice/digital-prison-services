@@ -38,6 +38,8 @@ const PaymentReasonContainer = ({ onClose, data, handleError }) => (
 PaymentReasonContainer.propTypes = {
   onClose: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
+  // FIXME: when this file starts being used
+  // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object.isRequired,
 }
 

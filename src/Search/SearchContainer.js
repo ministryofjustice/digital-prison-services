@@ -139,7 +139,7 @@ SearchContainer.propTypes = {
   resetValidationErrorsDispatch: PropTypes.func.isRequired,
 
   // other?
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 }
 
 SearchContainer.defaultProps = {

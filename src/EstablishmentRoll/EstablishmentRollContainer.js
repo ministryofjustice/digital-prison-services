@@ -95,7 +95,7 @@ EstablishmentRollContainer.propTypes = {
   // mapDispatchToProps
   establishmentRollDataDispatch: PropTypes.func.isRequired,
   // error
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 }
 
 EstablishmentRollContainer.defaultProps = {

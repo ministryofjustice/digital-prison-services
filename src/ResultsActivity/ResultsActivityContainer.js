@@ -86,7 +86,7 @@ ResultsActivityContainer.propTypes = {
   activitiesDispatch: PropTypes.func.isRequired,
   showPaymentReasonModal: PropTypes.func.isRequired,
   // other?
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   // special
   history: ReactRouterPropTypes.history.isRequired,
 }

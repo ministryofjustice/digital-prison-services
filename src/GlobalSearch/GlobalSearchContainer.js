@@ -111,7 +111,7 @@ GlobalSearchContainer.propTypes = {
   totalRecordsDispatch: PropTypes.func.isRequired,
 
   // other?
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // special
   location: ReactRouterPropTypes.location.isRequired,
