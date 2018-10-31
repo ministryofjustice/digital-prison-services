@@ -170,6 +170,7 @@ ResultsHouseblockContainer.propTypes = {
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   subLocations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // mapDispatchToProps
   houseblockDataDispatch: PropTypes.func.isRequired,
@@ -179,8 +180,6 @@ ResultsHouseblockContainer.propTypes = {
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
 
-  // other?
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   // special
   history: ReactRouterPropTypes.history.isRequired,
 }
@@ -208,6 +207,7 @@ const mapStateToProps = state => ({
   paymentReasonReasons: state.events.paymentReasonReasons,
   sortOrder: state.events.sortOrder,
   subLocations: extractSubLocations(state.search.locations, state.search.location),
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

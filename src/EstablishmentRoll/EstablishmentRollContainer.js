@@ -92,10 +92,9 @@ EstablishmentRollContainer.propTypes = {
   }),
   agencyId: PropTypes.string,
   loaded: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   // mapDispatchToProps
   establishmentRollDataDispatch: PropTypes.func.isRequired,
-  // error
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 }
 
 EstablishmentRollContainer.defaultProps = {
@@ -112,6 +111,7 @@ const mapStateToProps = state => ({
   totals: state.establishmentRoll.totals,
   agencyId: state.app.user.activeCaseLoadId,
   loaded: state.app.loaded,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

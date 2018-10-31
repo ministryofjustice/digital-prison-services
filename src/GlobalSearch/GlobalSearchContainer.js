@@ -104,14 +104,12 @@ GlobalSearchContainer.propTypes = {
   pageNumber: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // mapDispatchToProps
   dataDispatch: PropTypes.func.isRequired,
   pageNumberDispatch: PropTypes.func.isRequired,
   totalRecordsDispatch: PropTypes.func.isRequired,
-
-  // other?
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // special
   location: ReactRouterPropTypes.location.isRequired,
@@ -128,6 +126,7 @@ const mapStateToProps = state => ({
   pageNumber: state.globalSearch.pageNumber,
   pageSize: state.globalSearch.pageSize,
   totalRecords: state.globalSearch.totalRecords,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

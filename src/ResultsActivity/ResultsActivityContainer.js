@@ -58,6 +58,7 @@ ResultsActivityContainer.propTypes = {
   handleSearch: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
+
   // mapStateToProps
   activity: PropTypes.string.isRequired,
   activities: PropTypes.arrayOf(
@@ -82,11 +83,12 @@ ResultsActivityContainer.propTypes = {
     })
   ),
   loaded: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
   showPaymentReasonModal: PropTypes.func.isRequired,
-  // other?
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+
   // special
   history: ReactRouterPropTypes.history.isRequired,
 }
@@ -105,6 +107,7 @@ const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
   activityData: state.events.activityData,
   loaded: state.app.loaded,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

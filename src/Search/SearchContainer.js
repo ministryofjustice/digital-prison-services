@@ -130,6 +130,7 @@ SearchContainer.propTypes = {
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   validationErrors: PropTypes.shape({ searchForm: PropTypes.string }),
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // mapDispatchToProps
   locationDispatch: PropTypes.func.isRequired,
@@ -137,9 +138,6 @@ SearchContainer.propTypes = {
   activityDispatch: PropTypes.func.isRequired,
   setValidationErrorDispatch: PropTypes.func.isRequired,
   resetValidationErrorsDispatch: PropTypes.func.isRequired,
-
-  // other?
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 }
 
 SearchContainer.defaultProps = {
@@ -158,6 +156,7 @@ const mapStateToProps = state => ({
   date: state.search.date,
   period: state.search.period,
   validationErrors: state.app.validationErrors,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({
