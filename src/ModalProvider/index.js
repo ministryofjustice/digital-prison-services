@@ -1,7 +1,7 @@
-/*
-  eslint-disable
-  jsx-a11y/click-events-have-key-events
-*/
+/* FIXME: Remove eslint disables when this component starts being used again */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
