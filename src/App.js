@@ -406,8 +406,7 @@ class App extends React.Component {
             setMenuOpen={boundSetMenuOpen}
             showTermsAndConditions={this.showTermsAndConditions}
             mailTo={config && config.mailTo}
-          />{' '}
-          showModal: state.app.showModal,
+          />
         </div>
       </Router>
     )
