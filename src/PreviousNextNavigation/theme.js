@@ -10,7 +10,7 @@ export const PrevNextNavWrapper = styled('ul')`
   flex-direction: row;
   margin: auto;
   width: 100%;
-  padding: 0px 25px;
+  padding: 0px;
   margin-top: 30px;
 
   li {
@@ -38,7 +38,7 @@ export const PrevNavigatorRegion = styled('li')`
   }
 
   div:before {
-    background: transparent url('/img/navigation-arrow-sprite.png') no-repeat -20px -11px;
+    background: transparent url('/images/navigation-arrow-sprite.png') no-repeat -20px -11px;
     margin: -4px 0 0 -32px;
     display: block;
     float: left;
@@ -62,7 +62,7 @@ export const NextNavigatorRegion = styled('li')`
   }
 
   div:before {
-    background: transparent url('/img/navigation-arrow-sprite.png') no-repeat -102px -11px;
+    background: transparent url('/images/navigation-arrow-sprite.png') no-repeat -102px -11px;
     margin: -4px -32px 0 0;
     display: block;
     float: right;
