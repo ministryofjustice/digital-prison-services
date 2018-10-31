@@ -21,6 +21,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
 
     def "should present global search results"() {
         elite2api.stubGlobalSearch('', 'quimby', '', GlobalSearchResponses.response1)
+        elite2api.stubImage()
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
@@ -32,19 +33,22 @@ class GlobalSearchSpecification extends GebReportingSpec {
         at GlobalSearchPage
         tableRows.size() == 3 // Including header row
         def columns1 = tableRows[1].find('td')
-        columns1*.text() == ['Quimby, Fred',
+        columns1*.text() == ['','Quimby, Fred',
                              'A1234AC',
                              '15/10/1977',
-                             'Leeds HMP']
+                             'Leeds HMP',
+                             'Quimby, Fred']
         def columns2 = tableRows[2].find('td')
-        columns2*.text() == ['Quimby, Arthur',
+        columns2*.text() == ['','Quimby, Arthur',
                              'A1234AA',
                              '15/09/1976',
-                             'Moorland HMP']
+                             'Moorland HMP',
+                             'Quimby, Arthur']
     }
 
     def "should be able to navigate pages of results"() {
         elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response2)
+        elite2api.stubImage()
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
@@ -55,7 +59,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         then: "I should be presented with paged results"
         at GlobalSearchPage
         tableRows.size() == 11
-        tableRows[10].find('td')[0].text() == 'Common, Fred10'
+        tableRows[10].find('td')[1].text() == 'Common, Fred10'
 
         when: "I go to next page"
         nextPage.click()
@@ -63,7 +67,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         then: "The second page is shown"
         waitFor { tableRows.size() == 3 }
         at GlobalSearchPage
-        tableRows[1].find('td')[0].text() == 'Common, Fred11'
+        tableRows[1].find('td')[1].text() == 'Common, Fred11'
 
         when: "I go to previous page"
         previousPage.click()
@@ -71,6 +75,6 @@ class GlobalSearchSpecification extends GebReportingSpec {
         then: "The first page is shown"
         waitFor { tableRows.size() == 11 }
         at GlobalSearchPage
-        tableRows[10].find('td')[0].text() == 'Common, Fred10'
+        tableRows[10].find('td')[1].text() == 'Common, Fred10'
     }
 }

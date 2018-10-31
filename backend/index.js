@@ -29,6 +29,7 @@ const { healthFactory } = require('./controllers/health')
 const { updateAttendanceFactory } = require('./controllers/updateAttendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
 const { globalSearchFactory } = require('./controllers/globalSearch')
+const { prisonerImageFactory } = require('./controllers/prisonerImage')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const contextProperties = require('./contextProperties')
@@ -161,6 +162,7 @@ app.use('/api/activityList', controller.getActivityList)
 app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/globalSearch', controller.globalSearch)
+app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))

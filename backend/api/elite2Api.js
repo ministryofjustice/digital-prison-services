@@ -8,6 +8,8 @@ const elite2ApiFactory = client => {
 
   const get = (context, url, resultsLimit) => client.get(context, url, resultsLimit).then(processResponse(context))
 
+  const getStream = (context, url) => client.getStream(context, url).then(processResponse(context))
+
   const post = (context, url, data) => client.post(context, url, data).then(processResponse(context))
 
   const put = (context, url, data) => client.put(context, url, data).then(processResponse(context))
@@ -50,10 +52,12 @@ const elite2ApiFactory = client => {
     post(context, `api/bookings/offenderNo/${offenderNo}/caseNotes`, body)
 
   const getSentenceData = (context, offenderNumbers) => post(context, `api/offender-sentences`, offenderNumbers)
+  const getPrisonerImage = (context, offenderNo) =>
+    getStream(context, `api/bookings/offenderNo/${offenderNo}/image/data`)
   const globalSearch = (context, offenderNo, lastName, firstName) =>
     get(
       context,
-      `api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false`
+      `api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false&includeAliases=true`
     )
 
   return {
@@ -76,6 +80,7 @@ const elite2ApiFactory = client => {
     getExternalTransfers,
     getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount,
+    getPrisonerImage,
   }
 }
 
