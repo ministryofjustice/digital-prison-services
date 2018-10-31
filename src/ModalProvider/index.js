@@ -1,9 +1,7 @@
-/* 
-  eslint-disable 
-  jsx-a11y/no-static-element-interactions,
-  jsx-a11y/no-noninteractive-element-interactions,
-  jsx-a11y/click-events-have-key-events
-*/
+/* FIXME: Remove eslint disables when this component starts being used again */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -68,16 +66,32 @@ class ModalProvider extends Component {
 }
 
 ModalProvider.propTypes = {
-  showModal: PropTypes.object.isRequired,
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  // FIXME: when this file starts being used
+  // eslint-disable-next-line react/forbid-prop-types
+  showModal: PropTypes.shape({ identifier: PropTypes.string, data: PropTypes.object }),
+  // FIXME: when this file starts being used
+  // eslint-disable-next-line react/forbid-prop-types
+  children: PropTypes.oneOfType([
+    PropTypes.shape({ element: PropTypes.element }),
+    PropTypes.arrayOf(PropTypes.shape({ element: PropTypes.element })),
+  ]),
   onClose: PropTypes.func.isRequired,
 }
+
+ModalProvider.defaultProps = {
+  showModal: {},
+  children: {},
+}
+
+const mapStateToProps = state => ({
+  showModal: state.app.showModal,
+})
 
 const mapDispatchToProps = dispatch => ({
   onClose: () => dispatch(hideModal()),
 })
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ModalProvider)

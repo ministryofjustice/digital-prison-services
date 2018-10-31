@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import queryString from 'query-string'
@@ -68,13 +69,13 @@ class GlobalSearchContainer extends Component {
   }
 
   render() {
-    const { loaded } = this.props
+    const { loaded, error } = this.props
 
     if (!loaded) return <Spinner />
 
     return (
       <div>
-        <Error {...this.props} />
+        <Error error={error} />
         <GlobalSearch handlePageAction={this.handlePageAction} {...this.props} />
       </div>
     )
@@ -82,25 +83,50 @@ class GlobalSearchContainer extends Component {
 }
 
 GlobalSearchContainer.propTypes = {
-  history: PropTypes.object,
-  // match: PropTypes.object,
-  error: PropTypes.string,
+  // props
+  handleError: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+
+  // mapStateToProps
+  loaded: PropTypes.bool.isRequired,
   agencyId: PropTypes.string.isRequired,
-  location: PropTypes.object,
-  dataDispatch: PropTypes.func,
-  totalRecordsDispatch: PropTypes.func,
-  pageNumberDispatch: PropTypes.func,
-  handleError: PropTypes.func,
-  pageSize: PropTypes.number,
-  loaded: PropTypes.bool,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      offenderNo: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      dateOfBirth: PropTypes.string.isRequired,
+      latestLocation: PropTypes.string.isRequired,
+      agencyId: PropTypes.string,
+    })
+  ).isRequired,
+  pageNumber: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  totalRecords: PropTypes.number.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+
+  // mapDispatchToProps
+  dataDispatch: PropTypes.func.isRequired,
+  pageNumberDispatch: PropTypes.func.isRequired,
+  totalRecordsDispatch: PropTypes.func.isRequired,
+
+  // special
+  location: ReactRouterPropTypes.location.isRequired,
+}
+
+GlobalSearchContainer.defaultProps = {
+  error: '',
 }
 
 const mapStateToProps = state => ({
   loaded: state.app.loaded,
+  agencyId: state.app.user.activeCaseLoadId,
   data: state.globalSearch.data,
   pageNumber: state.globalSearch.pageNumber,
   pageSize: state.globalSearch.pageSize,
   totalRecords: state.globalSearch.totalRecords,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

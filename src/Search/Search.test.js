@@ -3,13 +3,25 @@ import { shallow } from 'enzyme'
 import { Search } from './Search'
 
 const locations = ['1', '2']
-const activities = [{ locationId: '123456', userDescription: 'little room' }]
+const activities = [{ locationId: 123456, userDescription: 'little room' }]
+const mockHistory = {
+  push: jest.fn(),
+  action: 'PUSH',
+  block: jest.fn(),
+  createHref: jest.fn(),
+  go: jest.fn(),
+  goBack: jest.fn(),
+  goForward: jest.fn(),
+  listen: jest.fn(),
+  location: { hash: '', pathname: '', search: '' },
+  replace: jest.fn(),
+}
 
 describe('Search component', () => {
   it('should render initial search page correctly', async () => {
     const component = shallow(
       <Search
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         locations={locations}
         activities={activities}
         onSearch={jest.fn()}
@@ -18,19 +30,23 @@ describe('Search component', () => {
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
         date="today"
+        period="AM"
+        loaded={false}
+        currentLocation="cellLocation"
+        activity="bob"
       />
     )
     expect(component.find('#housing-location-select option').get(0).props.value).toEqual('--')
     expect(component.find('#housing-location-select option').get(1).props.value).toEqual('1')
 
     expect(component.find('#activity-select option').get(0).props.value).toEqual('--')
-    expect(component.find('#activity-select option').get(1).props.value).toEqual('123456')
+    expect(component.find('#activity-select option').get(1).props.value).toEqual(123456)
   })
 
   it('should render validation error correctly', async () => {
     const component = shallow(
       <Search
-        history={{ push: jest.fn() }}
+        history={mockHistory}
         locations={locations}
         activities={activities}
         onSearch={jest.fn()}
@@ -40,6 +56,10 @@ describe('Search component', () => {
         validationErrors={{ text: 'test' }}
         handleDateChange={jest.fn()}
         date="today"
+        period="AM"
+        loaded={false}
+        currentLocation="cellLocation"
+        activity="bob"
       />
     )
     expect(component.find('ValidationErrors')).toHaveLength(1)
@@ -49,7 +69,8 @@ describe('Search component', () => {
     const handleSearch = jest.fn()
     const component = shallow(
       <Search
-        history={{ push: jest.fn() }}
+        history={mockHistory}
+        activities={[]}
         locations={locations}
         onSearch={handleSearch}
         onActivityChange={jest.fn()}
@@ -59,6 +80,8 @@ describe('Search component', () => {
         date="27/02/2018"
         period="ED"
         currentLocation="BWing"
+        loaded={false}
+        activity="bob"
       />
     )
 

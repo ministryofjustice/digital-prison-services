@@ -14,6 +14,7 @@ const response = [
     lastName: 'QUIMBY',
     latestLocation: 'LEEDS HMP',
     dateOfBirth: '1977-10-15',
+    agencyId: '1',
   },
   {
     offenderNo: 'A1234AA',
@@ -21,12 +22,22 @@ const response = [
     lastName: 'ANDERSON',
     latestLocation: 'Moorland HMP',
     dateOfBirth: '1976-09-15',
+    agencyId: '1',
   },
 ]
 
 describe('Global search results component', () => {
-  it('should render results correctly', async () => {
-    const component = shallow(<GlobalSearchResultList data={response} />)
+  it('should render results correctly', () => {
+    const component = shallow(
+      <GlobalSearchResultList
+        data={response}
+        agencyId="1"
+        pageNumber={1}
+        pageSize={20}
+        totalRecords={3}
+        handlePageAction={() => {}}
+      />
+    )
 
     const tr = component.find('tr')
     expect(tr.length).toEqual(3) // 2 plus table header tr
@@ -89,8 +100,17 @@ describe('Global search results component', () => {
     ).toEqual('1976-09-15')
   })
 
-  it('should render empty results list correctly', async () => {
-    const component = shallow(<GlobalSearchResultList data={[]} />)
+  it('should render empty results list correctly', () => {
+    const component = shallow(
+      <GlobalSearchResultList
+        data={[]}
+        agencyId="1"
+        pageNumber={2}
+        pageSize={2}
+        totalRecords={10}
+        handlePageAction={() => {}}
+      />
+    )
     const tr = component.find('tr')
     expect(tr.length).toEqual(1) // table header tr only
     expect(component.find('div.font-small').text()).toEqual('No prisoners found')

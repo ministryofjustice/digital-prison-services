@@ -75,21 +75,16 @@ class App extends React.Component {
   }
 
   getActivityList = async () => {
-    let { date } = this.props
-    const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch } = this.props
+    const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch, date } = this.props
 
     try {
       resetErrorDispatch()
       setLoadedDispatch(false)
-      if (date === 'Today') {
-        // replace placeholder text
-        date = moment().format('DD/MM/YYYY')
-      }
       const config = {
         params: {
           agencyId,
           locationId: activity,
-          date,
+          date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
           timeSlot: period,
         },
       }
@@ -274,10 +269,14 @@ class App extends React.Component {
       menuOpen,
       boundSetMenuOpen,
       shouldShowTerms,
-      showModal,
       setCaseChangeRedirectStatusDispatch,
       setLoadedDispatch,
       resetErrorDispatch,
+      dateDispatch,
+      periodDispatch,
+      error,
+      user,
+      caseChangeRedirect,
     } = this.props
     const routes = (
       // eslint-disable-next-line
@@ -303,7 +302,8 @@ class App extends React.Component {
                 handleDateChange={event => this.handleDateChangeWithLocationsUpdate(event)}
                 handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
                 handleSearch={history => this.handleSearch(history)}
-                {...this.props}
+                dateDispatch={dateDispatch}
+                periodDispatch={periodDispatch}
               />
             )}
           />
@@ -313,7 +313,7 @@ class App extends React.Component {
               <GlobalSearchContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                {...this.props}
+                setLoadedDispatch={setLoadedDispatch}
               />
             )}
           />
@@ -368,7 +368,7 @@ class App extends React.Component {
         // eslint-disable-next-line
         <div className="inner-content" onClick={() => boundSetMenuOpen(false)}>
           <div className="pure-g">
-            <ErrorComponent {...this.props} />
+            <ErrorComponent error={error} />
           </div>
         </div>
       )
@@ -384,29 +384,30 @@ class App extends React.Component {
               }
               return (
                 <Header
-                  logoText="HMPPS"
-                  title="Activity Lists"
                   homeLink={links.getHomeLink()}
+                  title="Activity Lists"
+                  logoText="HMPPS"
+                  user={user}
                   switchCaseLoad={this.switchCaseLoad}
-                  history={props.history}
+                  menuOpen={menuOpen}
                   setMenuOpen={boundSetMenuOpen}
-                  {...this.props}
+                  caseChangeRedirect={caseChangeRedirect}
+                  history={props.history}
                 />
               )
             }}
           />
           {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
-
-          <ModalProvider {...this.props} showModal={showModal}>
+          <ModalProvider>
             <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
           </ModalProvider>
-
           {innerContent}
           <Footer
             setMenuOpen={boundSetMenuOpen}
             showTermsAndConditions={this.showTermsAndConditions}
             mailTo={config && config.mailTo}
-          />
+          />{' '}
+          showModal: state.app.showModal,
         </div>
       </Router>
     )
@@ -414,78 +415,87 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+  // mapStateToProps
+  activity: PropTypes.string.isRequired,
+  agencyId: PropTypes.string,
+  caseChangeRedirect: PropTypes.bool.isRequired,
+  config: PropTypes.shape({
+    notmEndpointUrl: PropTypes.string,
+    mailTo: PropTypes.string,
+    googleAnalyticsId: PropTypes.string,
+  }).isRequired,
+  currentLocation: PropTypes.string.isRequired, // NOTE prop name location clashes with history props
+  date: PropTypes.string.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+  menuOpen: PropTypes.bool.isRequired,
+  orderField: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  shouldShowTerms: PropTypes.bool.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    firstName: PropTypes.string,
+    activeCaseLoadId: PropTypes.string,
+    isOpen: PropTypes.bool,
+  }),
+
+  // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
-  activity: PropTypes.string,
   activityDataDispatch: PropTypes.func.isRequired,
   activityDispatch: PropTypes.func.isRequired,
-  agencyId: PropTypes.string,
-  config: PropTypes.object,
+  boundSetMenuOpen: PropTypes.func.isRequired,
   configDispatch: PropTypes.func.isRequired,
-  currentLocation: PropTypes.string,
-  currentSubLocation: PropTypes.string,
-  date: PropTypes.string,
   dateDispatch: PropTypes.func.isRequired,
   locationDispatch: PropTypes.func.isRequired,
-  orderField: PropTypes.string,
   periodDispatch: PropTypes.func.isRequired,
-  period: PropTypes.string,
-  shouldShowTerms: PropTypes.bool,
-  menuOpen: PropTypes.bool,
-  resetErrorDispatch: PropTypes.func,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
-  boundSetMenuOpen: PropTypes.func.isRequired,
   setMessageDispatch: PropTypes.func.isRequired,
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
-  showModal: PropTypes.object.isRequired,
-  sortOrder: PropTypes.string,
   switchAgencyDispatch: PropTypes.func.isRequired,
-  user: PropTypes.object,
   userDetailsDispatch: PropTypes.func.isRequired,
-  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  error: state.app.error,
-  message: state.app.message,
-  page: state.app.page,
-  config: state.app.config,
-  user: state.app.user,
-  shouldShowTerms: state.app.shouldShowTerms,
-  currentLocation: state.search.location, // NOTE prop name "location" clashes with history props
   activity: state.search.activity,
-  date: state.search.date,
-  period: state.search.period,
   agencyId: state.app.user.activeCaseLoadId,
-  orderField: state.events.orderField,
-  sortOrder: state.events.sortOrder,
-  showModal: state.app.showModal,
-  menuOpen: state.app.menuOpen,
   caseChangeRedirect: state.app.caseChangeRedirect,
+  config: state.app.config,
+  currentLocation: state.search.location, // NOTE prop name location clashes with history props
+  date: state.search.date,
+  error: state.app.error,
+  menuOpen: state.app.menuOpen,
+  orderField: state.events.orderField,
+  period: state.search.period,
+  shouldShowTerms: state.app.shouldShowTerms,
+  sortOrder: state.events.sortOrder,
+  user: state.app.user,
 })
 
 App.defaultProps = {
   agencyId: '',
-  activity: '',
+  error: null,
+  user: {},
 }
 
 const mapDispatchToProps = dispatch => ({
-  configDispatch: config => dispatch(setConfig(config)),
-  userDetailsDispatch: user => dispatch(setUserDetails(user)),
-  switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
-  setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
-  setErrorDispatch: error => dispatch(setError(error)),
-  resetErrorDispatch: () => dispatch(resetError()),
-  setMessageDispatch: message => dispatch(setMessage(message)),
-  locationDispatch: text => dispatch(setSearchLocation(text)),
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  activityDispatch: text => dispatch(setSearchActivity(text)),
-  dateDispatch: text => dispatch(setSearchDate(text)),
-  periodDispatch: text => dispatch(setSearchPeriod(text)),
   activityDataDispatch: data => dispatch(setActivityData(data)),
-  setLoadedDispatch: status => dispatch(setLoaded(status)),
+  activityDispatch: text => dispatch(setSearchActivity(text)),
   boundSetMenuOpen: flag => dispatch(setMenuOpen(flag)),
+  configDispatch: config => dispatch(setConfig(config)),
+  dateDispatch: text => dispatch(setSearchDate(text)),
+  locationDispatch: text => dispatch(setSearchLocation(text)),
+  periodDispatch: text => dispatch(setSearchPeriod(text)),
+  resetErrorDispatch: () => dispatch(resetError()),
   setCaseChangeRedirectStatusDispatch: flag => dispatch(setCaseChangeRedirectStatus(flag)),
+  setErrorDispatch: error => dispatch(setError(error)),
+  setLoadedDispatch: status => dispatch(setLoaded(status)),
+  setMessageDispatch: message => dispatch(setMessage(message)),
+  setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
+  switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
+  userDetailsDispatch: user => dispatch(setUserDetails(user)),
 })
 
 const AppContainer = connect(

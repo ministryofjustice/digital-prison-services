@@ -1,3 +1,7 @@
+/*
+  eslint-disable
+  jsx-a11y/click-events-have-key-events
+*/
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -136,8 +140,12 @@ class PaymentReasonModal extends Component {
 PaymentReasonModal.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  // FIXME: when this file starts being used
+  // eslint-disable-next-line react/forbid-prop-types
   event: PropTypes.object.isRequired,
   handleError: PropTypes.func.isRequired,
+  // FIXME: when this file starts being used
+  // eslint-disable-next-line react/forbid-prop-types
   reasons: PropTypes.array.isRequired,
 }
 

@@ -36,14 +36,14 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { loaded } = this.props
+    const { loaded, error } = this.props
 
     if (!loaded) {
       return <Spinner />
     }
     return (
       <div>
-        <Error {...this.props} />
+        <Error error={error} />
         <ResultsActivity handlePrint={this.handlePrint} {...this.props} />
       </div>
     )
@@ -58,6 +58,7 @@ ResultsActivityContainer.propTypes = {
   handleSearch: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
+
   // mapStateToProps
   activity: PropTypes.string.isRequired,
   activities: PropTypes.arrayOf(
@@ -82,18 +83,19 @@ ResultsActivityContainer.propTypes = {
     })
   ),
   loaded: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
   showPaymentReasonModal: PropTypes.func.isRequired,
-  // other?
-  error: PropTypes.string,
+
   // special
   history: ReactRouterPropTypes.history.isRequired,
 }
 
 ResultsActivityContainer.defaultProps = {
-  activities: null,
-  activityData: null,
+  activities: [],
+  activityData: [],
   error: '',
 }
 
@@ -105,6 +107,7 @@ const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
   activityData: state.events.activityData,
   loaded: state.app.loaded,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

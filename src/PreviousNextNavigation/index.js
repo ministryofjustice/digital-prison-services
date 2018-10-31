@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Map } from 'immutable'
 
 import {
   PrevNextNavContainer,
@@ -76,30 +75,22 @@ const GetNextNavigationRegion = ({ pN, pageAction, totalPages }) => (
 )
 
 PreviousNextNavigation.propTypes = {
-  pagination: PropTypes.object,
-  totalRecords: PropTypes.number,
-  pageAction: PropTypes.func,
+  pagination: PropTypes.shape({ perPage: PropTypes.number.isRequired, pageNumber: PropTypes.number.isRequired })
+    .isRequired,
+  totalRecords: PropTypes.number.isRequired,
+  pageAction: PropTypes.func.isRequired,
 }
 
 GetPrevNavigationRegion.propTypes = {
-  totalPages: PropTypes.number,
-  pN: PropTypes.number,
-  pageAction: PropTypes.func,
+  totalPages: PropTypes.number.isRequired,
+  pN: PropTypes.number.isRequired,
+  pageAction: PropTypes.func.isRequired,
 }
 
 GetNextNavigationRegion.propTypes = {
-  totalPages: PropTypes.number,
-  pN: PropTypes.number,
-  pageAction: PropTypes.func,
-}
-
-PreviousNextNavigation.defaultProps = {
-  pagination: Map({
-    perPage: 10,
-    pageNumber: 0,
-  }),
-  totalRecords: 0,
-  pageAction: () => {},
+  totalPages: PropTypes.number.isRequired,
+  pN: PropTypes.number.isRequired,
+  pageAction: PropTypes.func.isRequired,
 }
 
 export default PreviousNextNavigation

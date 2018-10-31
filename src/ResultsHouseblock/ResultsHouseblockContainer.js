@@ -15,7 +15,6 @@ import {
   setSortOrder,
 } from '../redux/actions'
 import Spinner from '../Spinner'
-import { getHouseBlockReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
 
 const axios = require('axios')
 
@@ -133,7 +132,7 @@ class ResultsHouseblockContainer extends Component {
   }
 
   render() {
-    const { loaded } = this.props
+    const { loaded, error } = this.props
 
     if (!loaded) {
       return <Spinner />
@@ -141,7 +140,7 @@ class ResultsHouseblockContainer extends Component {
 
     return (
       <div>
-        <Error {...this.props} />
+        <Error error={error} />
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
@@ -171,6 +170,7 @@ ResultsHouseblockContainer.propTypes = {
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   subLocations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // mapDispatchToProps
   houseblockDataDispatch: PropTypes.func.isRequired,
@@ -180,8 +180,6 @@ ResultsHouseblockContainer.propTypes = {
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
 
-  // other?
-  error: PropTypes.string,
   // special
   history: ReactRouterPropTypes.history.isRequired,
 }
@@ -209,6 +207,7 @@ const mapStateToProps = state => ({
   paymentReasonReasons: state.events.paymentReasonReasons,
   sortOrder: state.events.sortOrder,
   subLocations: extractSubLocations(state.search.locations, state.search.location),
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

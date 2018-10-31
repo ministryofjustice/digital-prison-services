@@ -22,7 +22,7 @@ class ValidationErrors extends React.Component {
 
 ValidationErrors.propTypes = {
   fieldName: PropTypes.string.isRequired,
-  validationErrors: PropTypes.object,
+  validationErrors: PropTypes.shape({ searchForm: PropTypes.string }),
 }
 
 ValidationErrors.defaultProps = {

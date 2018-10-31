@@ -3,8 +3,11 @@ import { mount } from 'enzyme'
 import ModalProvider from './index'
 
 describe('ModalProvider', () => {
+  let showModal
   const store = {
-    getState: () => {},
+    getState: () => ({
+      app: { showModal },
+    }),
     subscribe: () => {},
     dispatch: () => {},
   }
@@ -13,17 +16,17 @@ describe('ModalProvider', () => {
   const Com2 = () => <div>Com2</div>
 
   it('should not render the modal when the modal identifier is undefined', () => {
-    const provider = mount(<ModalProvider store={store} showModal={{}} />)
+    const provider = mount(<ModalProvider store={store} />)
 
     expect(provider.contains(<div />)).toBe(true)
   })
 
   it('should not render the modal when the child does not match the identifier past in', () => {
-    const showModal = {
+    showModal = {
       identifier: 'com2',
     }
     const provider = mount(
-      <ModalProvider showModal={showModal} store={store}>
+      <ModalProvider store={store}>
         <Com1 className="com1" key="com1" />
       </ModalProvider>
     )
@@ -32,11 +35,11 @@ describe('ModalProvider', () => {
   })
 
   it('should not render the model when none of the children match the identifier', () => {
-    const showModal = {
+    showModal = {
       identifier: 'com3',
     }
     const provider = mount(
-      <ModalProvider showModal={showModal} store={store}>
+      <ModalProvider store={store}>
         <Com2 className="com2" key="com2" />
         <Com1 className="com1" key="com1" />
       </ModalProvider>
@@ -47,11 +50,11 @@ describe('ModalProvider', () => {
   })
 
   it('should render the modal when the child matches the identifier', () => {
-    const showModal = {
+    showModal = {
       identifier: 'com1',
     }
     const provider = mount(
-      <ModalProvider showModal={showModal} store={store}>
+      <ModalProvider store={store}>
         <Com1 className="com1" key="com1" />
       </ModalProvider>
     )
@@ -60,11 +63,11 @@ describe('ModalProvider', () => {
   })
 
   it('should render the modal when the identifier matches one of the children', () => {
-    const showModal = {
+    showModal = {
       identifier: 'com1',
     }
     const provider = mount(
-      <ModalProvider showModal={showModal} store={store}>
+      <ModalProvider store={store}>
         <Com2 className="com2" key="com2" />
         <Com1 className="com1" key="com1" />
       </ModalProvider>

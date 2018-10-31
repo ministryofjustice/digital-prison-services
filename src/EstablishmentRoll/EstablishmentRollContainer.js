@@ -47,7 +47,7 @@ export class EstablishmentRollContainer extends Component {
     const { movements, blocks, totals, loaded, error } = this.props
     if (!loaded) return <Spinner />
 
-    if (error) return <Error {...this.props} />
+    if (error) return <Error error={error} />
 
     return (
       <div className="establishment-roll-container">
@@ -92,10 +92,9 @@ EstablishmentRollContainer.propTypes = {
   }),
   agencyId: PropTypes.string,
   loaded: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   // mapDispatchToProps
   establishmentRollDataDispatch: PropTypes.func.isRequired,
-  // error
-  error: PropTypes.string,
 }
 
 EstablishmentRollContainer.defaultProps = {
@@ -112,6 +111,7 @@ const mapStateToProps = state => ({
   totals: state.establishmentRoll.totals,
   agencyId: state.app.user.activeCaseLoadId,
   loaded: state.app.loaded,
+  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({
