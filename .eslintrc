@@ -24,7 +24,7 @@
     "prettier/prettier": ["error"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] }],
-    "no-param-reassign": [2, { "props": false }],
+    "no-param-reassign": [2, { "props": true }],
     "import/no-named-as-default": 0, // disable as we use connected components
     "jsx-a11y/label-has-associated-control": [2, { "assert": "either" }],
     "jsx-a11y/label-has-for": 0 // disable as has been deprecated and replaced by label-has-associated-control

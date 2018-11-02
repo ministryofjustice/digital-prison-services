@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+/* eslint no-param-reassign: 2 */
+
 const config = require('./config')
 
 const sessionExpiryMinutes = config.hmppsCookie.expiryMinutes * 60 * 1000

@@ -28,6 +28,27 @@ function createResponse() {
   ]
 }
 
+function createResponseWithFormattedDate() {
+  return [
+    {
+      offenderNo: 'A1234AC',
+      firstName: 'FRED',
+      lastName: 'QUIMBY',
+      latestLocation: 'Leeds HMP',
+      latestLocationId: 'LEI',
+      dateOfBirth: '15/10/1977',
+    },
+    {
+      offenderNo: 'A1234AA',
+      firstName: 'ARTHUR',
+      lastName: 'ANDERSON',
+      latestLocationId: 'MDI',
+      latestLocation: 'Moorland HMP',
+      dateOfBirth: '15/09/1976',
+    },
+  ]
+}
+
 function createOutResponse() {
   return [
     {
@@ -131,7 +152,7 @@ describe('Global Search controller', async () => {
     elite2Api.globalSearch.mockReturnValue(apiResponse)
 
     const response = await globalSearch({}, 'text')
-    expect(response).toEqual(apiResponse)
+    expect(response).toEqual(createResponseWithFormattedDate())
   })
 
   it('Should add released text', async () => {

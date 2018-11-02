@@ -20,29 +20,30 @@ const globalSearchFactory = elite2Api => {
     const data = await (offenderIdPattern.test(text) ? searchByOffender(context, text) : searchByName(context, text))
     log.info(data, 'globalSearch data received')
 
-    const offenderOut = data.filter(offender => offender.latestLocationId === 'OUT')
+    const offenderOutIds = data
+      .filter(offender => offender.latestLocationId === 'OUT')
+      .map(offender => offender.offenderNo)
 
-    /* decorate any 'OUT' prisoners with further information */
-    if (offenderOut.length > 0) {
-      const offenderNoList = offenderOut.map(offender => offender.offenderNo)
-      const prisons = await elite2Api.getLastPrison({ ...context }, offenderNoList)
+    const offenderMovements =
+      (offenderOutIds.length > 0 && (await elite2Api.getLastPrison({ ...context }, offenderOutIds))) || []
 
-      offenderOut.forEach(o => {
-        const element = prisons.find(p => p.offenderNo === o.offenderNo)
-        if (element.movementType === 'REL') {
-          o.latestLocation = `Outside - released from ${element.fromAgencyDescription}`
-        } else {
-          o.latestLocation = `Outside - ${element.movementTypeDescription}`
-        }
-      })
-    }
+    return data.map(offender => {
+      const movement = offenderMovements.filter(mv => mv.offenderNo === offender.offenderNo)[0]
+      const latestLocation =
+        (movement &&
+          (movement.movementType === 'REL'
+            ? `Outside - released from ${movement.fromAgencyDescription}`
+            : `Outside - ${movement.movementTypeDescription}`)) ||
+        offender.latestLocation
 
-    data.forEach(a => {
-      if (a.dateOfBirth) {
-        a.dateOfBirth = moment(a.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
+      const dateOfBirth = offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
+
+      return {
+        ...offender,
+        latestLocation,
+        dateOfBirth,
       }
     })
-    return data
   }
   return { globalSearch }
 }
