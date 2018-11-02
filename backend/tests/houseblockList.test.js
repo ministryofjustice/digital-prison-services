@@ -218,7 +218,7 @@ describe('Houseblock list controller', async () => {
     expect(response[0].others[2].endTime).toBe('2017-10-15T17:30:00')
 
     expect(response[1].activity.offenderNo).toBe('A1234AB')
-    expect(response[1].others).toBeUndefined() // no non paid activities
+    expect(response[1].others.length).toBe(0) // no non paid activities
 
     expect(response[2].others.length).toBe(1)
     expect(response[2].activity.offenderNo).toBe('A1234AC')

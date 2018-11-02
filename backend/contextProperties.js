@@ -4,6 +4,8 @@
  * Note that by convention the controller(s) and Middleware use the res.locals property as the request scoped context.
  * From controllers down to clients, client interceptors etc the context object is called 'context'.
  */
+
+/* eslint no-param-reassign: 2 */
 const setTokens = (context, accessToken, refreshToken) => {
   context.accessToken = accessToken
   context.refreshToken = refreshToken
