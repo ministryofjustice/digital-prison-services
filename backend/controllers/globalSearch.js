@@ -19,6 +19,24 @@ const globalSearchFactory = elite2Api => {
     const text = searchText.trim()
     const data = await (offenderIdPattern.test(text) ? searchByOffender(context, text) : searchByName(context, text))
     log.info(data, 'globalSearch data received')
+
+    const offenderOut = data.filter(offender => offender.latestLocationId === 'OUT')
+
+    /* decorate any 'OUT' prisoners with further information */
+    if (offenderOut.length > 0) {
+      const offenderNoList = offenderOut.map(offender => offender.offenderNo)
+      const prisons = await elite2Api.getLastPrison({ ...context }, offenderNoList)
+
+      offenderOut.forEach(o => {
+        const element = prisons.find(p => p.offenderNo === o.offenderNo)
+        if (element.movementType === 'REL') {
+          o.latestLocation = `Outside - released from ${element.fromAgencyDescription}`
+        } else {
+          o.latestLocation = `Outside - ${element.movementTypeDescription}`
+        }
+      })
+    }
+
     data.forEach(a => {
       if (a.dateOfBirth) {
         a.dateOfBirth = moment(a.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
