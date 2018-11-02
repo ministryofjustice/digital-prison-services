@@ -131,14 +131,14 @@ class Elite2Api extends WireMockRule {
                 ]],
                 [ name: '3', children: [
                         [ name: 'A'],[ name: 'B'],[ name: 'C']
-                ]]]);
+                ]]])
         def jsonSYI = JsonOutput.toJson([
                 [ name: 'block1', children: [
                         [ name: 'A'],[ name: 'B']
                 ]],
                 [ name: 'block2', children: [
                         [ name: 'A'],[ name: 'B'],[ name: 'C']
-                ]]]);
+                ]]])
 
         this.stubFor(
                 get("/api/agencies/${caseload.id}/locations/groups")
@@ -393,6 +393,15 @@ class Elite2Api extends WireMockRule {
                                     .withHeader('page-offset', '10')
                                     .withStatus(200)))
         }
+
+        this.stubFor(
+                post("/api/movements/offenders")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(GlobalSearchResponses.lastPrisonResponse))
+
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
     }
 
     def stubEstablishmentRollCount(String agencyId) {

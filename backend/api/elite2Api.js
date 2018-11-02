@@ -59,6 +59,7 @@ const elite2ApiFactory = client => {
       context,
       `api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false&includeAliases=true`
     )
+  const getLastPrison = (context, body) => post(context, `api/movements/offenders`, body)
 
   return {
     userLocations,
@@ -81,6 +82,7 @@ const elite2ApiFactory = client => {
     getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount,
     getPrisonerImage,
+    getLastPrison,
   }
 }
 

@@ -46,6 +46,27 @@ class GlobalSearchSpecification extends GebReportingSpec {
                              'Quimby, Arthur']
     }
 
+    def "should present global search results with outside descriptions"() {
+        elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response2)
+        elite2api.stubImage()
+
+        given: "I am logged in"
+        fixture.loginAs(ITAG_USER)
+
+        when: "I do a global search"
+        go "/globalsearch?searchText=common"
+
+        then: "I should be presented with results"
+        at GlobalSearchPage
+        tableRows.size() == 11 // Including header row
+        def columns1 = tableRows[1].find('td')
+        columns1*.text() == ['','Common, Fred1',
+                             'T1001AA',
+                             '15/10/1977',
+                             'Outside - released from Low Newton (HMP)',
+                             'Common, Fred1']
+    }
+
     def "should be able to navigate pages of results"() {
         elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response2)
         elite2api.stubImage()
