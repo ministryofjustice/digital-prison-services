@@ -385,7 +385,7 @@ class App extends React.Component {
               return (
                 <Header
                   homeLink={links.getHomeLink()}
-                  title="Activity Lists"
+                  title="Establishment roll"
                   logoText="HMPPS"
                   user={user}
                   switchCaseLoad={this.switchCaseLoad}
