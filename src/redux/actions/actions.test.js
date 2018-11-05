@@ -86,6 +86,15 @@ describe('actions', () => {
     expect(actions.resetValidationErrors()).toEqual(expectedAction)
   })
 
+  it('should create an action to set the application title', () => {
+    const title = 'New Title'
+    const expectedAction = {
+      type: types.SET_APPLICATION_TITLE,
+      title,
+    }
+    expect(actions.setApplicationTitle(title)).toEqual(expectedAction)
+  })
+
   it('should create an action to save search locations', () => {
     const expectedAction = {
       type: types.SET_SEARCH_LOCATIONS,

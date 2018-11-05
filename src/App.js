@@ -277,6 +277,7 @@ class App extends React.Component {
       error,
       user,
       caseChangeRedirect,
+      title,
     } = this.props
     const routes = (
       // eslint-disable-next-line
@@ -385,7 +386,7 @@ class App extends React.Component {
               return (
                 <Header
                   homeLink={links.getHomeLink()}
-                  title="Establishment roll"
+                  title={title}
                   logoText="HMPPS"
                   user={user}
                   switchCaseLoad={this.switchCaseLoad}
@@ -436,6 +437,7 @@ App.propTypes = {
     activeCaseLoadId: PropTypes.string,
     isOpen: PropTypes.bool,
   }),
+  title: PropTypes.string.isRequired,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -470,6 +472,7 @@ const mapStateToProps = state => ({
   shouldShowTerms: state.app.shouldShowTerms,
   sortOrder: state.events.sortOrder,
   user: state.app.user,
+  title: state.app.title,
 })
 
 App.defaultProps = {
