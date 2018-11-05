@@ -24,6 +24,7 @@ const appInitialState = {
   loaded: false,
   menuOpen: false,
   showModal: {},
+  title: 'Activity Lists',
   caseChangeRedirect: true,
 }
 
@@ -122,6 +123,11 @@ export function app(state = appInitialState, action) {
       return {
         ...state,
         caseChangeRedirect: action.bool,
+      }
+    case ActionTypes.SET_APPLICATION_TITLE:
+      return {
+        ...state,
+        title: action.title,
       }
     default:
       return state

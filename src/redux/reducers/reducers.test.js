@@ -8,6 +8,7 @@ const appInitialState = {
   error: null,
   message: null,
   loaded: false,
+  title: 'Activity Lists',
 }
 
 const appWithErrorState = {
@@ -53,6 +54,7 @@ describe('app (global) reducer', () => {
       loaded: false,
       menuOpen: false,
       showModal: {},
+      title: 'Activity Lists',
     })
   })
 
@@ -186,6 +188,21 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       validationErrors: null,
+    })
+  })
+
+  it('should handle SET_APPLICATION_TITLE', () => {
+    expect(
+      app(appInitialState, {
+        type: types.SET_APPLICATION_TITLE,
+        title: 'New Title',
+      })
+    ).toEqual({
+      caseChangeRedirect: true,
+      error: null,
+      message: null,
+      loaded: false,
+      title: 'New Title',
     })
   })
 

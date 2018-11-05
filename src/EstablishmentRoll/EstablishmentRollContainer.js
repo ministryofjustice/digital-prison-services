@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { setEstablishmentRollData } from '../redux/actions'
+import { setEstablishmentRollData, setApplicationTitle } from '../redux/actions'
 import EstablishmentRollBlock from './EstablishmentRollBlock'
 import Spinner from '../Spinner'
 import Error from '../Error'
 
 export class EstablishmentRollContainer extends Component {
   componentDidMount() {
-    const { setCaseChangeRedirectStatusDispatch, agencyId } = this.props
-
+    const { setCaseChangeRedirectStatusDispatch, agencyId, titleDispatch } = this.props
     setCaseChangeRedirectStatusDispatch(false)
+    titleDispatch('Establishment roll')
     this.getEstablishmentRollBlocks(agencyId)
   }
 
@@ -95,6 +95,7 @@ EstablishmentRollContainer.propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   // mapDispatchToProps
   establishmentRollDataDispatch: PropTypes.func.isRequired,
+  titleDispatch: PropTypes.func.isRequired,
 }
 
 EstablishmentRollContainer.defaultProps = {
@@ -116,6 +117,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data)),
+  titleDispatch: title => dispatch(setApplicationTitle(title)),
 })
 
 export default connect(

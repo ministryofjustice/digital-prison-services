@@ -15,6 +15,7 @@ describe('<EstablishmentRollContainer />', () => {
     setLoadedDispatch: jest.fn(),
     resetErrorDispatch: jest.fn(),
     establishmentRollDataDispatch: jest.fn(),
+    titleDispatch: jest.fn(),
     loaded: false,
   }
 

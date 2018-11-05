@@ -150,3 +150,8 @@ export const setGlobalSearchTotalRecords = totalRecords => ({
   type: ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_TOTAL_RECORDS,
   totalRecords,
 })
+
+export const setApplicationTitle = title => ({
+  type: ActionTypes.SET_APPLICATION_TITLE,
+  title,
+})

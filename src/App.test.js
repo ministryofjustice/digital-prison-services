@@ -22,6 +22,7 @@ const props = {
   currentLocation: 'cell',
   date: 'today',
   menuOpen: false,
+  title: 'Application Title',
   orderField: 'cellLocation',
   period: '1',
   shouldShowTerms: true,
