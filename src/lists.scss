@@ -19,7 +19,7 @@
 }
 
 @mixin hideText {
-  text-indent: 100%;
+  text-indent: -9999px;
   overflow: hidden;
   height: 0;
   width: 0;
@@ -168,18 +168,24 @@ tbody > tr + td {
   }
 
   /* box */
-  .whereaboutsCheckbox [type='checkbox'] + label::before {
-    @include checkboxMixin;
-    top: 1px;
-    left: 1px;
-    width: 8px;
-    height: 8px;
-    border: 1.3px solid;
-  }
-  /* tick */
-  .whereaboutsCheckbox [type='checkbox'] + label::after {
-    @include tickMixin;
-    left: 1px;
+  .whereabouts-label {
+    @include hideText;
+
+    /* box */
+    &:before {
+      @include checkboxMixin;
+      top: 1px;
+      left: 1px;
+      width: 8px;
+      height: 8px;
+      border: 1.3px solid;
+    }
+
+    /* tick */
+    &:after {
+      @include tickMixin;
+      left: 1px;
+    }
   }
 
   .multiple-choice label {
