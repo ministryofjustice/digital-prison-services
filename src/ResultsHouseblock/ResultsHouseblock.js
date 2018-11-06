@@ -253,23 +253,35 @@ class ResultsHouseblock extends Component {
             </td>
             <td className="no-padding checkbox-column no-display">
               <div className="multiple-choice whereaboutsCheckbox">
+                <label className="whereabouts-label" htmlFor={`col1_${index}`}>
+                  Unlocked
+                </label>
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled={readOnly} />
               </div>
             </td>
             <td className="no-padding checkbox-column no-display">
               <div className="multiple-choice whereaboutsCheckbox">
+                <label className="whereabouts-label" htmlFor={`col2_${index}`}>
+                  Gone
+                </label>
                 <input id={`col2_${index}`} type="checkbox" name="ch2" disabled={readOnly} />
               </div>
             </td>
             <td className="no-padding checkbox-column no-print">
               <div className="multiple-choice whereaboutsCheckbox">
                 {/* Disable pay/other for Part 1 */}
-                <input id={`col3_${index}`} type="checkbox" name="ch3" disabled />{' '}
+                <label className="whereabouts-label" htmlFor={`col3_${index}`}>
+                  Pay
+                </label>
+                <input id={`col3_${index}`} type="checkbox" name="ch3" disabled />
               </div>
             </td>
             <td className="no-padding checkbox-column no-print">
               <div className="multiple-choice whereaboutsCheckbox">
-                <input id={`col4_${index}`} type="checkbox" name="ch4" disabled />{' '}
+                <label className="whereabouts-label" htmlFor={`col4_${index}`}>
+                  Other
+                </label>
+                <input id={`col4_${index}`} type="checkbox" name="ch4" disabled />
               </div>
             </td>
           </tr>

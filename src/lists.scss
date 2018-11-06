@@ -1,14 +1,15 @@
-@import "colours/palette";
+@import 'colours/palette';
 
 .dateInputResults {
   width: 100%;
 }
 
 .rightHandSide {
-  float: right
+  float: right;
 }
 
-.sortableLink, .sortableLink:hover {
+.sortableLink,
+.sortableLink:hover {
   text-decoration: none;
   color: $link-colour;
 }
@@ -17,8 +18,15 @@
   padding: 0;
 }
 
+@mixin hideText {
+  text-indent: 100%;
+  overflow: hidden;
+  height: 0;
+  width: 0;
+}
+
 @mixin checkboxMixin {
-  content: "";
+  content: '';
   border: 2px solid;
   background: transparent;
   width: 17px;
@@ -29,7 +37,7 @@
 }
 
 @mixin tickMixin {
-  content: "";
+  content: '';
   border: solid;
   border-width: 0 0 3px 3px;
   background: transparent;
@@ -49,14 +57,19 @@
   opacity: 0;
 }
 
-
 /* box */
-.whereaboutsCheckbox [type=checkbox] + label::before {
-  @include checkboxMixin;
-}
-/* tick */
-.whereaboutsCheckbox [type=checkbox] + label::after {
-  @include tickMixin;
+.whereabouts-label {
+  @include hideText;
+
+  /* box */
+  &:before {
+    @include checkboxMixin;
+  }
+
+  /* tick */
+  &:after {
+    @include tickMixin;
+  }
 }
 
 th.straight {
@@ -71,13 +84,11 @@ th.straight {
 }
 
 tbody > tr + td {
-  padding-left: .7em;
+  padding-left: 0.7em;
   color: red;
 }
 
-
 @media screen {
-
   /* from https://css-tricks.com/rotated-table-column-headers */
   th.rotate {
     /* Something you can count on */
@@ -87,10 +98,7 @@ tbody > tr + td {
   }
   th.rotate > div {
     transform:
-            /* Magic Numbers */
-            translate(15px, 0px)
-              /* 45 is really 360 - 45 */
-            rotate(315deg);
+            /* Magic Numbers */ translate(15px, 0px) /* 45 is really 360 - 45 */ rotate(315deg);
     width: 30px;
   }
   th.rotate > div > span {
@@ -110,21 +118,25 @@ tbody > tr + td {
   }
 
   .checkbox-header {
-    padding-left: .8em;
+    padding-left: 0.8em;
   }
 }
 
-
 @media print {
   tbody > tr > td:nth-of-type(7) {
-    padding-right: .4em;
+    padding-right: 0.4em;
   }
 
   .sortableLink {
     color: black;
   }
 
-  .FooterContainer, .page-header, img, #buttons, #updateButton, .no-print {
+  .FooterContainer,
+  .page-header,
+  img,
+  #buttons,
+  #updateButton,
+  .no-print {
     display: none !important;
   }
 
@@ -145,7 +157,8 @@ tbody > tr + td {
     padding: 2px 10px 2px 0;
   }
 
-  th, td {
+  th,
+  td {
     border-bottom-width: 0 !important;
   }
 
@@ -155,7 +168,7 @@ tbody > tr + td {
   }
 
   /* box */
-  .whereaboutsCheckbox [type=checkbox] + label::before {
+  .whereaboutsCheckbox [type='checkbox'] + label::before {
     @include checkboxMixin;
     top: 1px;
     left: 1px;
@@ -164,7 +177,7 @@ tbody > tr + td {
     border: 1.3px solid;
   }
   /* tick */
-  .whereaboutsCheckbox [type=checkbox] + label::after {
+  .whereaboutsCheckbox [type='checkbox'] + label::after {
     @include tickMixin;
     left: 1px;
   }

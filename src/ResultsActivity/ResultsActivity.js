@@ -174,12 +174,18 @@ class ResultsActivity extends Component {
           <td className="no-padding checkbox-column">
             <div className="multiple-choice whereaboutsCheckbox">
               {/* Disable pay/other for Part 1 */}
-              <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />{' '}
+              <label className="whereabouts-label" htmlFor={`col1_${index}`}>
+                Pay
+              </label>
+              <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
             </div>
           </td>
           <td className="no-padding checkbox-column">
             <div className="multiple-choice whereaboutsCheckbox">
-              <input id={`col2_${index}`} type="checkbox" name="ch2" disabled />{' '}
+              <label className="whereabouts-label" htmlFor={`col2_${index}`}>
+                Other
+              </label>
+              <input id={`col2_${index}`} type="checkbox" name="ch2" disabled />
             </div>
           </td>
         </tr>
