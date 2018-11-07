@@ -26,7 +26,7 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
-    "new-nomis-shared-components": "^1.6.0",
+    "new-nomis-shared-components": "^1.7.1",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",
     "react": "^16.3.2",
