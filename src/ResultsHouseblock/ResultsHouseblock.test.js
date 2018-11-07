@@ -9,14 +9,17 @@ const PRISON = 'LEI'
 const OFFENDER_NAME_COLUMN = 0
 const LOCATION_COLUMN = 1
 const NOMS_ID_COLUMN = 2
-const MAIN_COLUMN = 3
-const OTHER_COLUMN = 4
-const ATTEND_COLUMN = 5
-const DONT_ATTEND_COLUMN = 6
+const FLAGS_COLUMN = 3
+const MAIN_COLUMN = 4
+const OTHER_COLUMN = 5
+const ATTEND_COLUMN = 6
+const DONT_ATTEND_COLUMN = 7
 
 const response = [
   {
     releaseScheduled: true,
+    cata: true,
+    alertFlags: ['HA'],
     activity: {
       offenderNo: 'A1234AA',
       firstName: 'ARTHUR',
@@ -202,6 +205,13 @@ describe('Offender results component Jira NN-843', () => {
       tr
         .at(1)
         .find('td')
+        .at(FLAGS_COLUMN)
+        .text()
+    ).toEqual('ACCTCAT\u00a0A') // non-breaking space!
+    expect(
+      tr
+        .at(1)
+        .find('td')
         .at(MAIN_COLUMN)
         .text()
     ).toEqual('Chapel 18:00')
@@ -369,7 +379,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(component.find('div.font-small').text()).toEqual('No prisoners found')
   })
 
-  it.only('should handle buttons correctly', async () => {
+  it('should handle buttons correctly', async () => {
     const update = jest.fn()
     const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')

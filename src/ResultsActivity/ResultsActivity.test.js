@@ -8,10 +8,11 @@ const PRISON = 'SYI'
 const OFFENDER_NAME_COLUMN = 0
 const LOCATION_COLUMN = 1
 const NOMS_ID_COLUMN = 2
-const ACTIVITY_COLUMN = 3
-const OTHER_COLUMN = 4
-const ATTEND_COLUMN = 5
-const DONT_ATTEND_COLUMN = 6
+const FLAGS_COLUMN = 3
+const ACTIVITY_COLUMN = 4
+const OTHER_COLUMN = 5
+const ATTEND_COLUMN = 6
+const DONT_ATTEND_COLUMN = 7
 
 const response = [
   {
@@ -27,6 +28,8 @@ const response = [
     releaseScheduled: true,
     scheduledTransfers: [],
     courtEvents: [],
+    cata: true,
+    alertFlags: ['XEL'],
     eventsElsewhere: [
       {
         offenderNo: 'A1234AA',
@@ -186,6 +189,13 @@ describe('Offender activity list results component', () => {
         .at(NOMS_ID_COLUMN)
         .text()
     ).toEqual('A1234AA')
+    expect(
+      tr
+        .at(1)
+        .find('td')
+        .at(FLAGS_COLUMN)
+        .text()
+    ).toEqual('E-LISTCAT\u00a0A') // non-breaking space!
     expect(
       tr
         .at(1)

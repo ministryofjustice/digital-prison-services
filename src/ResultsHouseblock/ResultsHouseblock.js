@@ -11,6 +11,7 @@ import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
 import { linkOnClick } from '../helpers'
+import Flags from '../Flags/Flags'
 
 class ResultsHouseblock extends Component {
   displayBack = () => (
@@ -199,6 +200,7 @@ class ResultsHouseblock extends Component {
         <th className="straight width15">{this.sortableColumn('Name', 'lastName')}</th>
         <th className="straight width10">{this.sortableColumn('Location', 'cellLocation')}</th>
         <th className="straight width10">NOMS&nbsp;ID</th>
+        <th className="straight width5">Info</th>
         <th className="straight width15">Activity</th>
         <th className="straight">Other activities</th>
         <th className="straightPrint no-display">
@@ -245,6 +247,7 @@ class ResultsHouseblock extends Component {
             </td>
             <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, agencyId)}</td>
             <td className="row-gutters">{anyActivity.offenderNo}</td>
+            <td>{Flags.AlertFlags(row.alertFlags, row.cata, 'flags')}</td>
             <td className="row-gutters small-font">
               {row.activity && `${getEventDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`}
             </td>
@@ -274,6 +277,7 @@ class ResultsHouseblock extends Component {
                   Pay
                 </label>
                 <input id={`col3_${index}`} type="checkbox" name="ch3" disabled />
+                {/* onChange={(event) => this.props.handlePay(anyActivity, event)} NOTE handlePay was in App.js */}
               </div>
             </td>
             <td className="no-padding checkbox-column no-print">
@@ -282,6 +286,8 @@ class ResultsHouseblock extends Component {
                   Other
                 </label>
                 <input id={`col4_${index}`} type="checkbox" name="ch4" disabled />
+                {/* onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)}
+                NOTE showPaymentReasonModal was in dispatch-to-props in the 2 Containers */}
               </div>
             </td>
           </tr>

@@ -172,9 +172,10 @@ class Elite2Api extends WireMockRule {
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseCellOrder)
         //order does not matter here
         stubSentenceData(offenderNumbers, date, true)
-        stubSentenceData(offenderNumbers, date, true)
         stubCourtEvents(offenderNumbers, date)
         stubExternalTransfers(offenderNumbers, date, true)
+        stubAlerts(offenderNumbers)
+        stubAssessments(offenderNumbers)
     }
 
     void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -191,6 +192,8 @@ class Elite2Api extends WireMockRule {
         stubSentenceData(offenderNumbers, date)
         stubCourtEvents(offenderNumbers, date)
         stubExternalTransfers(offenderNumbers, date, true)
+        stubAlerts(offenderNumbers)
+        stubAssessments(offenderNumbers)
     }
 
     void stubGetHouseblockListWithNoActivityOffender(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -207,6 +210,8 @@ class Elite2Api extends WireMockRule {
         stubSentenceData(offenderNumbers, date)
         stubCourtEvents(offenderNumbers, date)
         stubExternalTransfers(offenderNumbers, date)
+        stubAlerts(offenderNumbers)
+        stubAssessments(offenderNumbers)
     }
 
     void stubGetHouseBlockListWithAllCourtEvents(Caseload caseload, String groupName, String timeSlot, String date) {
@@ -222,6 +227,8 @@ class Elite2Api extends WireMockRule {
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseNoActivities)
         stubSentenceData(offenderNumbers, date, true)
         stubExternalTransfers(offenderNumbers, date, true)
+        stubAlerts(offenderNumbers)
+        stubAssessments(offenderNumbers)
 
         this.stubFor(
                 post("/api/schedules/LEI/courtEvents?date=${date}")
@@ -317,6 +324,8 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
         stubExternalTransfers(offenderNumbers, date)
+        stubAlerts(offenderNumbers)
+        stubAssessments(offenderNumbers)
     }
 
     def stubSentenceData(List offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
@@ -360,6 +369,28 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withBody(json)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
+    def stubAlerts(List offenderNumbers, Boolean emptyResponse = false) {
+        this.stubFor(
+                post("/api/bookings/offenderNo/LEI/alerts")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.alertsResponse)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
+    def stubAssessments(List offenderNumbers, Boolean emptyResponse = false) {
+        this.stubFor(
+                post("/api/offender-assessments/CATEGORY")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.assessmentsResponse)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
     }

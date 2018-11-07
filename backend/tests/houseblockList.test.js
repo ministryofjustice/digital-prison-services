@@ -164,6 +164,8 @@ describe('Houseblock list controller', async () => {
     elite2Api.getSentenceData = jest.fn()
     elite2Api.getExternalTransfers = jest.fn()
     elite2Api.getCourtEvents = jest.fn()
+    elite2Api.getAlerts = jest.fn()
+    elite2Api.getAssessments = jest.fn()
   })
 
   it('Should add visit and appointment details to array', async () => {

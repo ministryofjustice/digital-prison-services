@@ -58,7 +58,8 @@ class ActivitySpecification extends GebReportingSpec {
                 'A1234AA',
                 'A1234AA'
         ]
-
+        flags[0]*.text() == ['ACCT','E-LIST','CAT A']
+        flags[1]*.text() == []
         events == [
                 'Activity 1',
                 'Activity 1',

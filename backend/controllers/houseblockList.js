@@ -61,7 +61,9 @@ const getHouseblockListFactory = elite2Api => {
     log.info(data, 'getHouseblockList data received')
 
     const offendersMap = data.reduce((offenders, event) => {
-      const { releaseScheduled, courtEvents, scheduledTransfers } = externalEventsForOffenders.get(event.offenderNo)
+      const { releaseScheduled, courtEvents, scheduledTransfers, alertFlags, cata } = externalEventsForOffenders.get(
+        event.offenderNo
+      )
 
       const offenderData = offenders[event.offenderNo] || {
         offenderNo: event.offenderNo,
@@ -69,6 +71,8 @@ const getHouseblockListFactory = elite2Api => {
         releaseScheduled,
         courtEvents,
         scheduledTransfers,
+        alertFlags,
+        cata,
       }
 
       const updatedEntry = {

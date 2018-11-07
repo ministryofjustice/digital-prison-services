@@ -75,6 +75,77 @@ function createAllTransferTypes() {
   ]
 }
 
+function createAlertsResponse() {
+  return [
+    {
+      alertId: 42,
+      bookingId: 1234,
+      offenderNo: 'A1234AA',
+      alertType: 'H',
+      alertTypeDescription: 'Self Harm',
+      alertCode: 'HA',
+      alertCodeDescription: 'ACCT Open (HMPS)',
+      comment: 'qePqeP',
+      dateCreated: '2016-07-27',
+      expired: false,
+      active: true,
+    },
+    {
+      alertId: 8,
+      bookingId: 1234,
+      offenderNo: 'A1234AA',
+      alertType: 'X',
+      alertTypeDescription: 'Security',
+      alertCode: 'XEL',
+      alertCodeDescription: 'Escape List',
+      dateCreated: '2015-02-16',
+      expired: false,
+      active: true,
+    },
+    {
+      alertId: 2,
+      bookingId: 1234,
+      offenderNo: 'A1234AA',
+      alertType: 'X',
+      alertTypeDescription: 'Security',
+      alertCode: 'XEL',
+      alertCodeDescription: 'Escape List',
+      comment: 'THIS ALERT HAS EXPIRED SO IS IGNORED',
+      dateCreated: '2015-02-16',
+      dateExpires: '2015-04-04',
+      expired: true,
+      active: false,
+    },
+  ]
+}
+
+function createAssessmentsResponse() {
+  return [
+    {
+      bookingId: 1234,
+      offenderNo: 'A1234AA',
+      classificationCode: 'A',
+      classification: 'Cat A',
+      assessmentCode: 'CATEGORY',
+      assessmentDescription: 'Categorisation',
+      cellSharingAlertFlag: false,
+      assessmentDate: '2016-12-27',
+      nextReviewDate: '2017-06-25',
+    },
+    {
+      bookingId: 466,
+      offenderNo: 'ABCDEEE',
+      classificationCode: 'C',
+      classification: 'Cat C',
+      assessmentCode: 'CATEGORY',
+      assessmentDescription: 'Categorisation',
+      cellSharingAlertFlag: false,
+      assessmentDate: '2016-12-27',
+      nextReviewDate: '2017-06-25',
+    },
+  ]
+}
+
 describe('External events', () => {
   const offenderWithData = 'A1234AA'
   const offenderWithNoData = 'ABCDEEE'
@@ -83,11 +154,13 @@ describe('External events', () => {
     elite2Api.getSentenceData = jest.fn()
     elite2Api.getCourtEvents = jest.fn()
     elite2Api.getExternalTransfers = jest.fn()
+    elite2Api.getAlerts = jest.fn()
+    elite2Api.getAssessments = jest.fn()
   })
 
   it('should handle empty offender numbers', async () => {
     const context = {}
-    const response = await await externalEvents(elite2Api, context, {})
+    const response = await externalEvents(elite2Api, context, {})
     expect(response).toEqual([])
   })
 
@@ -111,10 +184,14 @@ describe('External events', () => {
     expect(response.get(offenderWithData).releaseScheduled).toBe(false)
     expect(response.get(offenderWithData).courtEvents.length).toBe(0)
     expect(response.get(offenderWithData).scheduledTransfers.length).toBe(0)
+    expect(response.get(offenderWithData).alertFlags.length).toBe(0)
+    expect(response.get(offenderWithData).cata).toBe(false)
 
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1)
     expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1)
     expect(elite2Api.getSentenceData.mock.calls.length).toBe(1)
+    expect(elite2Api.getAlerts.mock.calls.length).toBe(1)
+    expect(elite2Api.getAssessments.mock.calls.length).toBe(1)
   })
 
   it('should call getSentenceData with the correct parameters', async () => {
@@ -128,7 +205,6 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-
     expect(elite2Api.getSentenceData).toHaveBeenCalledWith({}, [offenderWithData, offenderWithNoData])
   })
 
@@ -143,7 +219,6 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-
     expect(elite2Api.getCourtEvents).toHaveBeenCalledWith(
       {},
       {
@@ -165,7 +240,6 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-
     expect(elite2Api.getExternalTransfers).toHaveBeenCalledWith(
       {},
       {
@@ -176,12 +250,49 @@ describe('External events', () => {
     )
   })
 
-  it('should extend the offender data with released, court flags and transfers', async () => {
+  it('should call getAlerts with the correct parameters', async () => {
+    await externalEvents(
+      elite2Api,
+      {},
+      {
+        agencyId: 'LEI',
+        offenderNumbers: [offenderWithData, offenderWithNoData],
+      }
+    )
+    expect(elite2Api.getAlerts).toHaveBeenCalledWith(
+      {},
+      {
+        agencyId: 'LEI',
+        offenderNumbers: [offenderWithData, offenderWithNoData],
+      }
+    )
+  })
+
+  it('should call getAssessments with the correct parameters', async () => {
+    await externalEvents(
+      elite2Api,
+      {},
+      {
+        offenderNumbers: [offenderWithData, offenderWithNoData],
+      }
+    )
+    expect(elite2Api.getAssessments).toHaveBeenCalledWith(
+      {},
+      {
+        code: 'CATEGORY',
+        offenderNumbers: [offenderWithData, offenderWithNoData],
+      }
+    )
+  })
+
+  it('should extend the offender data with additional call data', async () => {
     const today = moment()
 
-    elite2Api.getSentenceData.mockImplementationOnce(() => createSentenceDataResponse())
+    elite2Api.getSentenceData.mockImplementationOnce(createSentenceDataResponse)
     elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse)
     elite2Api.getExternalTransfers.mockImplementationOnce(createTransfersResponse)
+    elite2Api.getAlerts.mockImplementationOnce(createAlertsResponse)
+    elite2Api.getAssessments.mockImplementationOnce(createAssessmentsResponse)
 
     const response = await externalEvents(
       elite2Api,
@@ -196,14 +307,20 @@ describe('External events', () => {
     expect(response.get(offenderWithData).releaseScheduled).toBe(true)
     expect(response.get(offenderWithData).courtEvents.length).toBe(1)
     expect(response.get(offenderWithData).scheduledTransfers.length).toBe(1)
+    expect(response.get(offenderWithData).alertFlags).toEqual(['HA', 'XEL'])
+    expect(response.get(offenderWithData).cata).toBe(true)
 
     expect(response.get(offenderWithNoData).releaseScheduled).toBe(false)
     expect(response.get(offenderWithNoData).courtEvents.length).toBe(0)
     expect(response.get(offenderWithNoData).scheduledTransfers.length).toBe(0)
+    expect(response.get(offenderWithNoData).alertFlags.length).toBe(0)
+    expect(response.get(offenderWithNoData).cata).toBe(false)
 
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1)
     expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1)
     expect(elite2Api.getSentenceData.mock.calls.length).toBe(1)
+    expect(elite2Api.getAlerts.mock.calls.length).toBe(1)
+    expect(elite2Api.getAssessments.mock.calls.length).toBe(1)
   })
 
   it('should return multiple scheduled transfers along with status descriptions', async () => {

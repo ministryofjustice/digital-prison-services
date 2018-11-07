@@ -12,6 +12,7 @@ import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from 
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
+import Flags from '../Flags/Flags'
 
 class ResultsActivity extends Component {
   static displayBack() {
@@ -120,6 +121,7 @@ class ResultsActivity extends Component {
         <th className="straight width15">Name</th>
         <th className="straight width10">Location</th>
         <th className="straight width10">NOMS&nbsp;ID</th>
+        <th className="straight width5">Info</th>
         <th className="straight"> Activity</th>
         <th className="straight">Other activities</th>
         <th className="straightPrint checkbox-header">
@@ -160,6 +162,7 @@ class ResultsActivity extends Component {
           </td>
           <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, agencyId)}</td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
+          <td>{Flags.AlertFlags(mainEvent.alertFlags, mainEvent.cata, 'flags')}</td>
           {renderMainEvent(mainEvent)}
           <td className="row-gutters small-font last-text-column-padding">
             {
