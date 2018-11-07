@@ -22,7 +22,8 @@ class ActivityPage extends DatePickerPage {
         bodyRows { $('table.row-gutters tr', 1..-1) }
         locations { bodyRows*.$('td', 1)*.text() }
         nomsIds { bodyRows*.$('td', 2)*.text()  }
-        events { bodyRows*.$('td', 3)*.text() }
-        eventsElsewhere { bodyRows*.$('td', 4).collect { it.$('ul li')*.text() } }
+        flags { bodyRows*.$('td', 3)*.$('span') }
+        events { bodyRows*.$('td', 4)*.text() }
+        eventsElsewhere { bodyRows*.$('td', 5).collect { it.$('ul li')*.text() } }
     }
 }

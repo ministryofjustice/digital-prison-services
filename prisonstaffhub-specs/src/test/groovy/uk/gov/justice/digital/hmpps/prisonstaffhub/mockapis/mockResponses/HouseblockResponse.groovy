@@ -144,9 +144,6 @@ class HouseblockResponse {
     ]
 
 
-
-
-
     static courtEvent1 = [
             event           : "19",
             eventDescription: "Court Appearance - Police Product Order",
@@ -157,7 +154,7 @@ class HouseblockResponse {
             lastName        : "ANDREWS",
             offenderNo      : "A1234AA",
             startTime       : "2018-09-05T15:00:00"
-   ]
+    ]
 
     static courtEvent2 = [
             event           : "19",
@@ -211,7 +208,7 @@ class HouseblockResponse {
             response4
     ])
     static courtEventsResponse = JsonOutput.toJson([
-         courtEvent1,
+            courtEvent1,
     ])
 
     static courtEventsWithDifferentStatuesResponse = JsonOutput.toJson([
@@ -225,5 +222,72 @@ class HouseblockResponse {
             externalTransfer2,
             externalTransfer3,
             externalTransfer4
+    ])
+
+    static alertsResponse = JsonOutput.toJson([
+            [
+                    alertId             : 42,
+                    bookingId           : 1234,
+                    offenderNo          : 'A1234AA',
+                    alertType           : 'H',
+                    alertTypeDescription: 'Self Harm',
+                    alertCode           : 'HA',
+                    alertCodeDescription: 'ACCT Open (HMPS)',
+                    comment             : 'qePqeP',
+                    dateCreated         : '2016-07-27',
+                    expired             : false,
+                    active              : true,
+            ],
+            [
+                    alertId             : 8,
+                    bookingId           : 1234,
+                    offenderNo          : 'A1234AA',
+                    alertType           : 'X',
+                    alertTypeDescription: 'Security',
+                    alertCode           : 'XEL',
+                    alertCodeDescription: 'Escape List',
+                    dateCreated         : '2015-02-16',
+                    expired             : false,
+                    active              : true,
+            ],
+            [
+                    alertId             : 2,
+                    bookingId           : 1234,
+                    offenderNo          : 'A1234AA',
+                    alertType           : 'X',
+                    alertTypeDescription: 'Security',
+                    alertCode           : 'XEL',
+                    alertCodeDescription: 'Escape List',
+                    comment             : 'THIS ALERT HAS EXPIRED SO IS IGNORED',
+                    dateCreated         : '2015-02-16',
+                    dateExpires         : '2015-04-04',
+                    expired             : true,
+                    active              : false,
+            ],
+    ])
+
+    static assessmentsResponse = JsonOutput.toJson([
+            [
+                    bookingId            : 1234,
+                    offenderNo           : 'A1234AA',
+                    classificationCode   : 'A',
+                    classification       : 'Cat A',
+                    assessmentCode       : 'CATEGORY',
+                    assessmentDescription: 'Categorisation',
+                    cellSharingAlertFlag : false,
+                    assessmentDate       : '2016-12-27',
+                    nextReviewDate       : '2017-06-25',
+            ],
+            [
+                    bookingId            : 466,
+                    offenderNo           : 'ABCDEEE',
+                    classificationCode   : 'C',
+                    classification       : 'Cat C',
+                    assessmentCode       : 'CATEGORY',
+                    assessmentDescription: 'Categorisation',
+                    cellSharingAlertFlag : false,
+                    assessmentDate       : '2016-12-27',
+                    nextReviewDate       : '2017-06-25',
+            ],
     ])
 }

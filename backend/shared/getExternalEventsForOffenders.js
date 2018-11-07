@@ -5,6 +5,8 @@ const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, form
     elite2Api.getSentenceData(context, offenderNumbers),
     elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }),
     elite2Api.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers }),
+    elite2Api.getAlerts(context, { agencyId, offenderNumbers }),
+    elite2Api.getAssessments(context, { code: 'CATEGORY', offenderNumbers }),
   ])
 
 const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) =>
@@ -86,12 +88,39 @@ const scheduledTransfers = (transfers, offenderNo) =>
     }))) ||
   []
 
-const reduceToMap = (offenderNumbers, formattedDate, releaseScheduleData, courtEventData, transferData) =>
+const isFlagCode = code => ['HA', 'XEL'].includes(code)
+
+const selectAlertFlags = (alertData, offenderNumber) =>
+  (alertData &&
+    alertData
+      .filter(alert => !alert.expired && alert.offenderNo === offenderNumber && isFlagCode(alert.alertCode))
+      .map(alert => alert.alertCode)) ||
+  []
+
+const isCata = (assessmentData, offenderNumber) =>
+  Boolean(
+    assessmentData &&
+      assessmentData
+        .filter(assessment => assessment.offenderNo === offenderNumber)
+        .some(assessment => assessment.classificationCode === 'A')
+  )
+
+const reduceToMap = (
+  offenderNumbers,
+  formattedDate,
+  releaseScheduleData,
+  courtEventData,
+  transferData,
+  alertData,
+  assessmentData
+) =>
   offenderNumbers.reduce((map, offenderNumber) => {
     const offenderData = {
       releaseScheduled: releaseScheduled(releaseScheduleData, offenderNumber, formattedDate),
       courtEvents: getOffenderCourtEvents(courtEventData, offenderNumber),
       scheduledTransfers: scheduledTransfers(transferData, offenderNumber),
+      alertFlags: selectAlertFlags(alertData, offenderNumber),
+      cata: isCata(assessmentData, offenderNumber),
     }
     return map.set(offenderNumber, offenderData)
   }, new Map())
@@ -99,11 +128,23 @@ const reduceToMap = (offenderNumbers, formattedDate, releaseScheduleData, courtE
 module.exports = async (elite2Api, context, { offenderNumbers, formattedDate, agencyId }) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return []
 
-  const [releaseScheduleData, courtEventData, transferData] = await getExternalEvents(elite2Api, context, {
-    offenderNumbers,
-    agencyId,
-    formattedDate,
-  })
+  const [releaseScheduleData, courtEventData, transferData, alertData, assessmentData] = await getExternalEvents(
+    elite2Api,
+    context,
+    {
+      offenderNumbers,
+      agencyId,
+      formattedDate,
+    }
+  )
 
-  return reduceToMap(offenderNumbers, formattedDate, releaseScheduleData, courtEventData, transferData)
+  return reduceToMap(
+    offenderNumbers,
+    formattedDate,
+    releaseScheduleData,
+    courtEventData,
+    transferData,
+    alertData,
+    assessmentData
+  )
 }

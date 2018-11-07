@@ -13,6 +13,10 @@ import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG
 
 class HouseblockSpecification extends GebReportingSpec {
 
+    static final flagsColumn = 3
+    static final activityColumn = 4
+    static final otherActivityColumn = 5
+
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -51,18 +55,20 @@ class HouseblockSpecification extends GebReportingSpec {
 
         texts2[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def reorderedRow1 = tableRows[1].find('td')
-        reorderedRow1[3].text() == 'Woodwork 17:00'
-        reorderedRow1[4].find('li')*.text() == [ '** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
+        reorderedRow1[flagsColumn]*.$('span')[0]*.text() == ['ACCT', 'E-LIST', 'CAT A']
+
+        reorderedRow1[activityColumn].text() == 'Woodwork 17:00'
+        reorderedRow1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
 
 
         // Check order is by name
         texts2[2].contains("Baa, Fred A-1-3 A1234AC")
         def reorderedRow2 = tableRows[2].find('td')
-        reorderedRow2[3].text() == 'Chapel 11:45'
+        reorderedRow2[activityColumn].text() == 'Chapel 11:45'
 
         texts2[3].contains("Balog, Eugene A-1-2 A1234AB")
         def reorderedRow3 = tableRows[3].find('td')
-        reorderedRow3[3].text() == 'TV Repairs 17:45'
+        reorderedRow3[activityColumn].text() == 'TV Repairs 17:45'
 
 
         when: "I order by cell location"
@@ -78,18 +84,18 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def row1 = tableRows[1].find('td')
-        row1[3].text() == 'Woodwork 17:00'
-        row1[4].find('li')*.text() == [ '** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
+        row1[activityColumn].text() == 'Woodwork 17:00'
+        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
 
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
         def row2 = tableRows[2].find('td')
-        row2[3].text() == 'TV Repairs 17:45'
-        row2[4].text() == ''
+        row2[activityColumn].text() == 'TV Repairs 17:45'
+        row2[otherActivityColumn].text() == ''
 
         texts[3].contains("Baa, Fred A-1-3 A1234AC")
         def row3 = tableRows[3].find('td')
-        row3[3].text() == 'Chapel 11:45'
-        row3[4].text() == ''
+        row3[activityColumn].text() == 'Chapel 11:45'
+        row3[otherActivityColumn].text() == ''
     }
 
     def "The updated houseblock list is displayed"() {
@@ -120,12 +126,12 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         def row1 = tableRows[1].find('td')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        row1[3].text() == 'Woodwork 17:00'
-        row1[4].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
+        row1[activityColumn].text() == 'Woodwork 17:00'
+        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
 
         def row2 = tableRows[2].find('td')
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
-        row2[3].text() == 'TV Repairs 17:45'
+        row2[activityColumn].text() == 'TV Repairs 17:45'
 
         when: "I go to the search page afresh"
         browser.to SearchPage
@@ -177,8 +183,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         def row1 = tableRows[1].find('td')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        row1[3].text().contains('Woodwork 17:00')
-        row1[4].text().contains('conflict activity 16:50')
+        row1[activityColumn].text().contains('Woodwork 17:00')
+        row1[otherActivityColumn].text().contains('conflict activity 16:50')
         row1[0].find("a", href: endsWith('/offenders/A1234AA/quick-look')).size() == 1
     }
 

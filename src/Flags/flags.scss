@@ -1,0 +1,57 @@
+.results-houseblock, .results-activity {
+
+  %status-style {
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+  }
+
+  @media screen {
+    /* stylelint-disable property-no-vendor-prefix */
+    %status-style {
+      border: 2px solid;
+      padding: 0.2em 0.6em 0;
+      font-size: 12px;
+
+      // disable text selection in the alert flags.
+      // From https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+      &:not(:last-child) {
+        margin-bottom: 8px; // after all but last
+      }
+    }
+  }
+
+  @media print {
+    %status-style {
+      border: 1px solid;
+      padding: 0.2em 0.4em 0;
+      &:not(:last-child) {
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .acct-status {
+    @extend %status-style;
+    color: #F47738;
+    border-color: #F47738;
+  }
+
+  .elist-status {
+    @extend %status-style;
+    color: #28A197;
+    border-color: #28A197;
+  }
+
+  .cata-status {
+    @extend %status-style;
+    color: #00437B;
+    border-color: #00437B;
+  }
+}

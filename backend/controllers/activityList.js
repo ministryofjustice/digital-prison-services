@@ -73,7 +73,9 @@ const getActivityListFactory = elite2Api => {
     })
 
     const events = eventsAtLocation.map(event => {
-      const { releaseScheduled, courtEvents, scheduledTransfers } = externalEventsForOffenders.get(event.offenderNo)
+      const { releaseScheduled, courtEvents, scheduledTransfers, alertFlags, cata } = externalEventsForOffenders.get(
+        event.offenderNo
+      )
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
@@ -84,6 +86,8 @@ const getActivityListFactory = elite2Api => {
         releaseScheduled,
         courtEvents,
         scheduledTransfers,
+        alertFlags,
+        cata,
       }
     })
 
