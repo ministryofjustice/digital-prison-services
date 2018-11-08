@@ -103,14 +103,14 @@ class ResultsActivity extends Component {
         {isToday(date) && (
           <button
             id="printButton"
-            className="button greyButton rightHandSide"
+            className="button"
             type="button"
             onClick={() => {
               handlePrint()
             }}
           >
-            <img className="print-icon" src="/images/Printer_icon.png" height="23" width="20" alt="Print icon" /> Print
-            list
+            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
+            Print list
           </button>
         )}
       </div>
@@ -124,16 +124,6 @@ class ResultsActivity extends Component {
         <th className="straight width5">Info</th>
         <th className="straight"> Activity</th>
         <th className="straight">Other activities</th>
-        <th className="straightPrint checkbox-header">
-          <div>
-            <span>Pay</span>
-          </div>
-        </th>
-        <th className="straightPrint checkbox-header">
-          <div>
-            <span>Other</span>
-          </div>
-        </th>
       </tr>
     )
 
@@ -153,7 +143,7 @@ class ResultsActivity extends Component {
 
     const offenders =
       activityData &&
-      activityData.map((mainEvent, index) => (
+      activityData.map(mainEvent => (
         <tr key={mainEvent.offenderNo} className="row-gutters">
           <td className="row-gutters">
             <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(mainEvent.offenderNo)}>
@@ -173,23 +163,6 @@ class ResultsActivity extends Component {
                 }}
               />
             }
-          </td>
-          <td className="no-padding checkbox-column">
-            <div className="multiple-choice whereaboutsCheckbox">
-              {/* Disable pay/other for Part 1 */}
-              <label className="whereabouts-label" htmlFor={`col1_${index}`}>
-                Pay
-              </label>
-              <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
-            </div>
-          </td>
-          <td className="no-padding checkbox-column">
-            <div className="multiple-choice whereaboutsCheckbox">
-              <label className="whereabouts-label" htmlFor={`col2_${index}`}>
-                Other
-              </label>
-              <input id={`col2_${index}`} type="checkbox" name="ch2" disabled />
-            </div>
           </td>
         </tr>
       ))

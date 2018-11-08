@@ -182,14 +182,14 @@ class ResultsHouseblock extends Component {
         {isToday(date) && (
           <button
             id="printButton"
-            className="button greyButton rightHandSide"
+            className="button"
             type="button"
             onClick={() => {
               handlePrint()
             }}
           >
-            <img className="print-icon" src="/images/Printer_icon.png" height="23" width="20" alt="Print icon" /> Print
-            list
+            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
+            Print list
           </button>
         )}
       </div>
@@ -211,16 +211,6 @@ class ResultsHouseblock extends Component {
         <th className="straightPrint no-display">
           <div>
             <span>Gone</span>
-          </div>
-        </th>
-        <th className="checkbox-column checkbox-header no-print">
-          <div>
-            <span>Pay</span>
-          </div>
-        </th>
-        <th className="checkbox-column checkbox-header no-print">
-          <div>
-            <span>Other</span>
           </div>
         </th>
       </tr>
@@ -268,26 +258,6 @@ class ResultsHouseblock extends Component {
                   Gone
                 </label>
                 <input id={`col2_${index}`} type="checkbox" name="ch2" disabled={readOnly} />
-              </div>
-            </td>
-            <td className="no-padding checkbox-column no-print">
-              <div className="multiple-choice whereaboutsCheckbox">
-                {/* Disable pay/other for Part 1 */}
-                <label className="whereabouts-label" htmlFor={`col3_${index}`}>
-                  Pay
-                </label>
-                <input id={`col3_${index}`} type="checkbox" name="ch3" disabled />
-                {/* onChange={(event) => this.props.handlePay(anyActivity, event)} NOTE handlePay was in App.js */}
-              </div>
-            </td>
-            <td className="no-padding checkbox-column no-print">
-              <div className="multiple-choice whereaboutsCheckbox">
-                <label className="whereabouts-label" htmlFor={`col4_${index}`}>
-                  Other
-                </label>
-                <input id={`col4_${index}`} type="checkbox" name="ch4" disabled />
-                {/* onChange={(event) => this.props.showPaymentReasonModal(anyActivity, event)}
-                NOTE showPaymentReasonModal was in dispatch-to-props in the 2 Containers */}
               </div>
             </td>
           </tr>
