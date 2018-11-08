@@ -138,7 +138,7 @@ const mockHistory = {
 }
 
 describe('Offender activity list results component', () => {
-  it('should render initial offender results form correctly', async () => {
+  it.skip('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days')
     const date = aFewDaysAgo.format('DD/MM/YYYY')
 
@@ -480,7 +480,7 @@ describe('Offender activity list results component', () => {
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
   })
 
-  it('checkboxes should be read-only when date is over a week ago', async () => {
+  it.skip('checkboxes should be read-only when date is over a week ago', async () => {
     const handleSearch = jest.fn()
     const handlePrint = jest.fn()
     const oldDate = '23/05/2018'
