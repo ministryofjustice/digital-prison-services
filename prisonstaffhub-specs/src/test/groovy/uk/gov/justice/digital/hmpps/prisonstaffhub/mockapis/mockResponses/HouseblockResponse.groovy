@@ -268,10 +268,32 @@ class HouseblockResponse {
 
     static assessmentsResponse = JsonOutput.toJson([
             [
-                    bookingId            : 1234,
+                    bookingId            : -1,
                     offenderNo           : 'A1234AA',
                     classificationCode   : 'A',
                     classification       : 'Cat A',
+                    assessmentCode       : 'CATEGORY',
+                    assessmentDescription: 'Categorisation',
+                    cellSharingAlertFlag : false,
+                    assessmentDate       : '2016-12-27',
+                    nextReviewDate       : '2017-06-25',
+            ],
+            [
+                    bookingId            : -2,
+                    offenderNo           : 'A1234AB',
+                    classificationCode   : 'H',
+                    classification       : 'Cat A High',
+                    assessmentCode       : 'CATEGORY',
+                    assessmentDescription: 'Categorisation',
+                    cellSharingAlertFlag : false,
+                    assessmentDate       : '2016-12-27',
+                    nextReviewDate       : '2017-06-25',
+            ],
+            [
+                    bookingId            : -3,
+                    offenderNo           : 'A1234AC',
+                    classificationCode   : 'P',
+                    classification       : 'Cat A Prov',
                     assessmentCode       : 'CATEGORY',
                     assessmentDescription: 'Categorisation',
                     cellSharingAlertFlag : false,

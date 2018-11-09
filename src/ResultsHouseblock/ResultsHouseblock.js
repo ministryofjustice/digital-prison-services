@@ -237,7 +237,7 @@ class ResultsHouseblock extends Component {
             </td>
             <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, agencyId)}</td>
             <td className="row-gutters">{anyActivity.offenderNo}</td>
-            <td>{Flags.AlertFlags(row.alertFlags, row.cata, 'flags')}</td>
+            <td>{Flags.AlertFlags(row.alertFlags, row.category, 'flags')}</td>
             <td className="row-gutters small-font">
               {row.activity && `${getEventDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`}
             </td>

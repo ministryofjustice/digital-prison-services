@@ -97,13 +97,16 @@ const selectAlertFlags = (alertData, offenderNumber) =>
       .map(alert => alert.alertCode)) ||
   []
 
-const isCata = (assessmentData, offenderNumber) =>
-  Boolean(
-    assessmentData &&
-      assessmentData
-        .filter(assessment => assessment.offenderNo === offenderNumber)
-        .some(assessment => assessment.classificationCode === 'A')
-  )
+const selectCategory = (assessmentData, offenderNumber) => {
+  if (!assessmentData) {
+    return ''
+  }
+  const cat = assessmentData.find(assessment => assessment.offenderNo === offenderNumber)
+  if (!cat) {
+    return ''
+  }
+  return cat.classificationCode
+}
 
 const reduceToMap = (
   offenderNumbers,
@@ -120,7 +123,7 @@ const reduceToMap = (
       courtEvents: getOffenderCourtEvents(courtEventData, offenderNumber),
       scheduledTransfers: scheduledTransfers(transferData, offenderNumber),
       alertFlags: selectAlertFlags(alertData, offenderNumber),
-      cata: isCata(assessmentData, offenderNumber),
+      category: selectCategory(assessmentData, offenderNumber),
     }
     return map.set(offenderNumber, offenderData)
   }, new Map())

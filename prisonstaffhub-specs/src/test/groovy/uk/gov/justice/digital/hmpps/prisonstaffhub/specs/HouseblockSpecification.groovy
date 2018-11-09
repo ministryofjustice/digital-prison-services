@@ -56,18 +56,18 @@ class HouseblockSpecification extends GebReportingSpec {
         texts2[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def reorderedRow1 = tableRows[1].find('td')
         reorderedRow1[flagsColumn]*.$('span')[0]*.text() == ['ACCT', 'E-LIST', 'CAT A']
-
         reorderedRow1[activityColumn].text() == 'Woodwork 17:00'
         reorderedRow1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
-
 
         // Check order is by name
         texts2[2].contains("Baa, Fred A-1-3 A1234AC")
         def reorderedRow2 = tableRows[2].find('td')
+        reorderedRow2[flagsColumn]*.$('span')[0]*.text() == ['CAT A Prov']
         reorderedRow2[activityColumn].text() == 'Chapel 11:45'
 
         texts2[3].contains("Balog, Eugene A-1-2 A1234AB")
         def reorderedRow3 = tableRows[3].find('td')
+        reorderedRow3[flagsColumn]*.$('span')[0]*.text() == ['CAT A H']
         reorderedRow3[activityColumn].text() == 'TV Repairs 17:45'
 
 

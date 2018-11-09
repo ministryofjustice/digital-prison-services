@@ -152,7 +152,7 @@ class ResultsActivity extends Component {
           </td>
           <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, agencyId)}</td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
-          <td>{Flags.AlertFlags(mainEvent.alertFlags, mainEvent.cata, 'flags')}</td>
+          <td>{Flags.AlertFlags(mainEvent.alertFlags, mainEvent.category, 'flags')}</td>
           {renderMainEvent(mainEvent)}
           <td className="row-gutters small-font last-text-column-padding">
             {

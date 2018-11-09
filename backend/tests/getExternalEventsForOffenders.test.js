@@ -135,8 +135,6 @@ function createAssessmentsResponse() {
     {
       bookingId: 466,
       offenderNo: 'ABCDEEE',
-      classificationCode: 'C',
-      classification: 'Cat C',
       assessmentCode: 'CATEGORY',
       assessmentDescription: 'Categorisation',
       cellSharingAlertFlag: false,
@@ -185,7 +183,7 @@ describe('External events', () => {
     expect(response.get(offenderWithData).courtEvents.length).toBe(0)
     expect(response.get(offenderWithData).scheduledTransfers.length).toBe(0)
     expect(response.get(offenderWithData).alertFlags.length).toBe(0)
-    expect(response.get(offenderWithData).cata).toBe(false)
+    expect(response.get(offenderWithData).category).toEqual('')
 
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1)
     expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1)
@@ -308,13 +306,13 @@ describe('External events', () => {
     expect(response.get(offenderWithData).courtEvents.length).toBe(1)
     expect(response.get(offenderWithData).scheduledTransfers.length).toBe(1)
     expect(response.get(offenderWithData).alertFlags).toEqual(['HA', 'XEL'])
-    expect(response.get(offenderWithData).cata).toBe(true)
+    expect(response.get(offenderWithData).category).toBe('A')
 
     expect(response.get(offenderWithNoData).releaseScheduled).toBe(false)
     expect(response.get(offenderWithNoData).courtEvents.length).toBe(0)
     expect(response.get(offenderWithNoData).scheduledTransfers.length).toBe(0)
     expect(response.get(offenderWithNoData).alertFlags.length).toBe(0)
-    expect(response.get(offenderWithNoData).cata).toBe(false)
+    expect(response.get(offenderWithNoData).category).not.toBeDefined()
 
     expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1)
     expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1)
