@@ -58,9 +58,9 @@ class ActivitySpecification extends GebReportingSpec {
                 'A1234AA',
                 'A1234AA'
         ]
-        flags[0]*.text() == ['ACCT','E-LIST','CAT A']
+        flags[0]*.text() == ['ACCT','E\u2011LIST','CAT A']
         flags[1]*.text() == ['CAT A Prov']
-        flags[2]*.text() == ['CAT A H']
+        flags[2]*.text() == ['CAT A High']
         events == [
                 'Activity 1',
                 'Activity 1',

@@ -274,7 +274,7 @@ describe('Offender results component Jira NN-843', () => {
     const row3Tds = tr.at(3).find('td')
     expect(row3Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred')
     expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
-    expect(row3Tds.at(FLAGS_COLUMN).text()).toEqual('CAT\u00a0A\u00a0H')
+    expect(row3Tds.at(FLAGS_COLUMN).text()).toEqual('CAT\u00a0A\u00a0High')
     expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00')
     expect(
       row3Tds
