@@ -54,4 +54,18 @@
     color: #00437B;
     border-color: #00437B;
   }
+
+  .cata-high-status {
+    @extend %status-style;
+    background-color: #00437B;
+    color: white;
+    border-color: #00437B;
+  }
+
+  .cata-prov-status {
+    @extend %status-style;
+    border: 1px dashed;
+    color: #00437B;
+    border-color: #00437B;
+  }
 }

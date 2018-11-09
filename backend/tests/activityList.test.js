@@ -191,7 +191,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }],
         alertFlags: [],
-        cata: false,
+        category: '',
       },
       {
         releaseScheduled: false,
@@ -200,7 +200,7 @@ describe('Activity list controller', async () => {
         offenderNo: 'B',
         eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }],
         alertFlags: [],
-        cata: false,
+        category: '',
       },
       {
         releaseScheduled: false,
@@ -209,7 +209,7 @@ describe('Activity list controller', async () => {
         offenderNo: 'C',
         eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }],
         alertFlags: [],
-        cata: false,
+        category: '',
       },
     ])
   })
@@ -239,7 +239,7 @@ describe('Activity list controller', async () => {
         releaseScheduled: false,
         scheduledTransfers: [],
         alertFlags: [],
-        cata: false,
+        category: '',
       },
       {
         offenderNo: 'B',
@@ -248,7 +248,7 @@ describe('Activity list controller', async () => {
         releaseScheduled: false,
         scheduledTransfers: [],
         alertFlags: [],
-        cata: false,
+        category: '',
       },
       {
         offenderNo: 'C',
@@ -257,7 +257,7 @@ describe('Activity list controller', async () => {
         releaseScheduled: false,
         scheduledTransfers: [],
         alertFlags: [],
-        cata: false,
+        category: '',
       },
     ])
   })
@@ -301,7 +301,7 @@ describe('Activity list controller', async () => {
         releaseScheduled: false,
         scheduledTransfers: [],
         alertFlags: [],
-        cata: false,
+        category: '',
 
         eventsElsewhere: [
           {
@@ -341,7 +341,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [],
         courtEvents: [],
         alertFlags: [],
-        cata: false,
+        category: '',
 
         releaseScheduled: false,
         scheduledTransfers: [],
@@ -358,7 +358,7 @@ describe('Activity list controller', async () => {
         endTime: '2017-10-15T18:30:00',
         courtEvents: [],
         alertFlags: [],
-        cata: false,
+        category: '',
 
         releaseScheduled: false,
         scheduledTransfers: [],

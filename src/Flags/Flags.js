@@ -2,7 +2,7 @@ import React from 'react'
 import { linkOnClick } from '../helpers'
 import './flags.scss'
 
-const AlertFlags = (alerts, cata, divClassName, onAlertFlagClick) => {
+const AlertFlags = (alerts, category, divClassName, onAlertFlagClick) => {
   function isShown(code) {
     if (alerts) {
       return alerts.some(alert => {
@@ -29,7 +29,9 @@ const AlertFlags = (alerts, cata, divClassName, onAlertFlagClick) => {
           E-LIST
         </span>
       )}
-      {cata && <span className="cata-status">CAT&nbsp;A</span>}
+      {(category === 'A' || category === 'E') && <span className="cata-status">CAT&nbsp;A</span>}
+      {category === 'H' && <span className="cata-high-status">CAT&nbsp;A&nbsp;H</span>}
+      {category === 'P' && <span className="cata-prov-status">CAT&nbsp;A&nbsp;Prov</span>}
     </div>
   )
 }

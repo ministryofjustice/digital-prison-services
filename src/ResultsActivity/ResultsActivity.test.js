@@ -28,7 +28,7 @@ const response = [
     releaseScheduled: true,
     scheduledTransfers: [],
     courtEvents: [],
-    cata: true,
+    category: 'A',
     alertFlags: ['XEL'],
     eventsElsewhere: [
       {
@@ -175,45 +175,14 @@ describe('Offender activity list results component', () => {
 
     const tr = component.find('tr')
     expect(tr.length).toEqual(5) // 4 plus table header tr
+    const row1Tds = tr.at(1).find('td')
+    expect(row1Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur')
+    expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E-LISTCAT\u00a0A') // non-breaking space!
+    expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
+    expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('Chapel')
     expect(
-      tr
-        .at(1)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Anderson, Arthur')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(NOMS_ID_COLUMN)
-        .text()
-    ).toEqual('A1234AA')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(FLAGS_COLUMN)
-        .text()
-    ).toEqual('E-LISTCAT\u00a0A') // non-breaking space!
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(LOCATION_COLUMN)
-        .text()
-    ).toEqual('A-1-1')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(ACTIVITY_COLUMN)
-        .text()
-    ).toEqual('Chapel')
-    expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -223,9 +192,7 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('** Release scheduled **')
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -235,9 +202,7 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Visits - Official Visit 11:00')
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -247,85 +212,37 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Medical - Dentist - Appt details 11:40')
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(ATTEND_COLUMN)
         .find('input')
         .some('[type="checkbox"]')
     ).toEqual(true)
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(ATTEND_COLUMN)
         .find('input')
         .debug()
     ).toEqual(expect.stringContaining('disabled={true}')) // TODO should be false in V2 (currently disabled for V1)
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(DONT_ATTEND_COLUMN)
         .find('input')
         .some('[type="checkbox"]')
     ).toEqual(true)
 
-    expect(
-      tr
-        .at(2)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Smith, Michael')
-    expect(
-      tr
-        .at(2)
-        .find('td')
-        .at(LOCATION_COLUMN)
-        .text()
-    ).toEqual('A-1-2')
-    expect(
-      tr
-        .at(2)
-        .find('td')
-        .at(ACTIVITY_COLUMN)
-        .text()
-    ).toEqual('Visits - Family Visit (cancelled)')
-    expect(
-      tr
-        .at(2)
-        .find('td')
-        .at(OTHER_COLUMN)
-        .find('li').length
-    ).toEqual(0)
+    const row2Tds = tr.at(2).find('td')
+    expect(row2Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael')
+    expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
+    expect(row2Tds.at(ACTIVITY_COLUMN).text()).toEqual('Visits - Family Visit (cancelled)')
+    expect(row2Tds.at(OTHER_COLUMN).find('li').length).toEqual(0)
 
+    const row3Tds = tr.at(3).find('td')
+    expect(row3Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred')
+    expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
+    expect(row3Tds.at(ACTIVITY_COLUMN).text()).toEqual('Chapel')
     expect(
-      tr
-        .at(3)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Quimby, Fred')
-    expect(
-      tr
-        .at(3)
-        .find('td')
-        .at(LOCATION_COLUMN)
-        .text()
-    ).toEqual('A-1-3')
-    expect(
-      tr
-        .at(3)
-        .find('td')
-        .at(ACTIVITY_COLUMN)
-        .text()
-    ).toEqual('Chapel')
-    expect(
-      tr
-        .at(3)
-        .find('td')
+      row3Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -335,24 +252,11 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Visits - Family Visit 11:11 (cancelled)')
 
+    const row4Tds = tr.at(4).find('td')
+    expect(row4Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Bunny, Bugs')
+    expect(row4Tds.at(ACTIVITY_COLUMN).text()).toEqual('Carrot Sculpture')
     expect(
-      tr
-        .at(4)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Bunny, Bugs')
-    expect(
-      tr
-        .at(4)
-        .find('td')
-        .at(ACTIVITY_COLUMN)
-        .text()
-    ).toEqual('Carrot Sculpture')
-    expect(
-      tr
-        .at(4)
-        .find('td')
+      row4Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)

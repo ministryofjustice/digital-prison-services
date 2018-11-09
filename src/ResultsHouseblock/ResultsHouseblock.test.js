@@ -18,7 +18,7 @@ const DONT_ATTEND_COLUMN = 7
 const response = [
   {
     releaseScheduled: true,
-    cata: true,
+    category: 'A',
     alertFlags: ['HA'],
     activity: {
       offenderNo: 'A1234AA',
@@ -69,6 +69,7 @@ const response = [
     ],
   },
   {
+    category: 'B',
     activity: {
       offenderNo: 'A1234AB',
       firstName: 'MICHAEL',
@@ -83,6 +84,7 @@ const response = [
     },
   },
   {
+    category: 'H',
     activity: {
       offenderNo: 'A1234AC',
       firstName: 'FRED',
@@ -109,6 +111,21 @@ const response = [
         endTime: '2017-10-15T18:30:00',
       },
     ],
+  },
+  {
+    category: 'P',
+    activity: {
+      offenderNo: 'A1234AD',
+      firstName: 'John',
+      lastName: 'DOE',
+      cellLocation: `${PRISON}-A-1-4`,
+      event: 'PA',
+      eventType: 'PRISON_ACT',
+      eventDescription: 'Prison Activities',
+      comment: 'Chapel Act',
+      startTime: '2017-10-15T18:00:00',
+      endTime: '2017-10-15T18:30:00',
+    },
   },
 ]
 
@@ -179,47 +196,15 @@ describe('Offender results component Jira NN-843', () => {
     expect(periodSelect.some('[value="ED"]')).toEqual(true)
 
     const tr = component.find('tr')
-    expect(tr.length).toEqual(4) // 3 plus table header tr
+    expect(tr.length).toEqual(5) // 4 plus table header tr
+    const row1Tds = tr.at(1).find('td')
+    expect(row1Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur')
+    expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
+    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('ACCTCAT\u00a0A') // non-breaking space!
+    expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('Chapel 18:00')
     expect(
-      tr
-        .at(1)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Anderson, Arthur')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(NOMS_ID_COLUMN)
-        .text()
-    ).toEqual('A1234AA')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(LOCATION_COLUMN)
-        .text()
-    ).toEqual('A-1-1')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(FLAGS_COLUMN)
-        .text()
-    ).toEqual('ACCTCAT\u00a0A') // non-breaking space!
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(MAIN_COLUMN)
-        .text()
-    ).toEqual('Chapel 18:00')
-
-    expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -229,9 +214,7 @@ describe('Offender results component Jira NN-843', () => {
         .text()
     ).toEqual('** Release scheduled **')
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -241,9 +224,7 @@ describe('Offender results component Jira NN-843', () => {
         .text()
     ).toEqual('Visits - Official Visit 11:00')
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -253,9 +234,7 @@ describe('Offender results component Jira NN-843', () => {
         .text()
     ).toEqual('The gym, appointment 17:00')
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -266,47 +245,25 @@ describe('Offender results component Jira NN-843', () => {
     ).toEqual('Medical - Dentist - Appt details 11:40')
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(ATTEND_COLUMN)
         .find('input')
         .some('[type="checkbox"]')
     ).toEqual(true)
     expect(
-      tr
-        .at(1)
-        .find('td')
+      row1Tds
         .at(DONT_ATTEND_COLUMN)
         .find('input')
         .some('[type="checkbox"]')
     ).toEqual(true)
 
+    const row2Tds = tr.at(2).find('td')
+    expect(row2Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael')
+    expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
+    expect(row2Tds.at(FLAGS_COLUMN).text()).toEqual('')
+    expect(row2Tds.at(MAIN_COLUMN).text()).toEqual('Chapel Act 18:00')
     expect(
-      tr
-        .at(2)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Smith, Michael')
-    expect(
-      tr
-        .at(2)
-        .find('td')
-        .at(LOCATION_COLUMN)
-        .text()
-    ).toEqual('A-1-2')
-    expect(
-      tr
-        .at(2)
-        .find('td')
-        .at(MAIN_COLUMN)
-        .text()
-    ).toEqual('Chapel Act 18:00')
-    expect(
-      tr
-        .at(2)
-        .find('td')
+      row2Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -314,31 +271,13 @@ describe('Offender results component Jira NN-843', () => {
         .find('li').length
     ).toEqual(0)
 
+    const row3Tds = tr.at(3).find('td')
+    expect(row3Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred')
+    expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
+    expect(row3Tds.at(FLAGS_COLUMN).text()).toEqual('CAT\u00a0A\u00a0H')
+    expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00')
     expect(
-      tr
-        .at(3)
-        .find('td a')
-        .at(OFFENDER_NAME_COLUMN)
-        .text()
-    ).toEqual('Quimby, Fred')
-    expect(
-      tr
-        .at(3)
-        .find('td')
-        .at(LOCATION_COLUMN)
-        .text()
-    ).toEqual('A-1-3')
-    expect(
-      tr
-        .at(3)
-        .find('td')
-        .at(MAIN_COLUMN)
-        .text()
-    ).toEqual('Chapel Activity 18:00')
-    expect(
-      tr
-        .at(3)
-        .find('td')
+      row3Tds
         .at(OTHER_COLUMN)
         .find(OtherActivitiesView)
         .at(0)
@@ -347,6 +286,14 @@ describe('Offender results component Jira NN-843', () => {
         .at(0)
         .text()
     ).toEqual('Visits - Family Visit 11:11 (cancelled)')
+
+    expect(
+      tr
+        .at(4)
+        .find('td')
+        .at(FLAGS_COLUMN)
+        .text()
+    ).toEqual('CAT\u00a0A\u00a0Prov')
   })
 
   it('should render empty results list correctly', async () => {
