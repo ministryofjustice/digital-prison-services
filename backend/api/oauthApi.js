@@ -19,7 +19,7 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
     baseURL: url,
     url: 'oauth/token',
     method: 'post',
-    timeout: 10000,
+    timeout: 30000,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -51,7 +51,11 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
    * fulfilled promise has no result, but a rejected promise contains an axios response
    */
   const authenticate = (context, username, password) =>
-    makeRequest(context, `username=${username.toUpperCase()}&password=${password}&grant_type=password`, 'authenticate:')
+    makeRequest(
+      context,
+      `username=${username.toUpperCase()}&password=${password}&grant_type=password`,
+      `authenticate: ${username}`
+    )
 
   /**
    * Perform OAuth token refresh, storing the returned tokens in the supplied context. See scopedStore.run.
