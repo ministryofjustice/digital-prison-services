@@ -11,7 +11,7 @@ const resultLogger = result => {
 const errorLogger = error => {
   const status = error.response ? error.response.status : '-'
   const responseData = error.response ? error.response.data : '-'
-  logger.debug(`Error. ${error.config.method} ${error.config.url} ${status} ${error.message} ${responseData}`)
+  logger.warn(`API error in ${error.config.method} ${error.config.url} ${status} ${error.message} ${responseData}`)
   throw error
 }
 
