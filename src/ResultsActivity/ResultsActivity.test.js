@@ -178,7 +178,7 @@ describe('Offender activity list results component', () => {
     const row1Tds = tr.at(1).find('td')
     expect(row1Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
-    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E-LISTCAT\u00a0A') // non-breaking space!
+    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('Chapel')
     expect(

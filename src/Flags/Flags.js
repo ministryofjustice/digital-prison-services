@@ -26,11 +26,11 @@ const AlertFlags = (alerts, category, divClassName, onAlertFlagClick) => {
       )}
       {isShown('XEL') && (
         <span className="elist-status" {...linkOnClick(onAlertFlagClick)}>
-          E-LIST
+          E&#x2011;LIST
         </span>
       )}
       {(category === 'A' || category === 'E') && <span className="cata-status">CAT&nbsp;A</span>}
-      {category === 'H' && <span className="cata-high-status">CAT&nbsp;A&nbsp;H</span>}
+      {category === 'H' && <span className="cata-high-status">CAT&nbsp;A&nbsp;High</span>}
       {category === 'P' && <span className="cata-prov-status">CAT&nbsp;A&nbsp;Prov</span>}
     </div>
   )
