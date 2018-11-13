@@ -73,14 +73,13 @@ class GlobalSearchContainer extends Component {
   }
 
   async handleSearch(history) {
-    const { searchText, location } = this.props
+    const { searchText } = this.props
     history.replace(`/globalsearch?searchText=${searchText}`)
-    location.reload()
+    await this.doGlobalSearch(0, searchText)
   }
 
   handleSearchTextChange(event) {
     const { searchTextDispatch } = this.props
-
     searchTextDispatch(event.target.value)
   }
 
