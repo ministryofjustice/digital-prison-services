@@ -7,42 +7,46 @@ import queryString from 'query-string'
 import Error from '../Error'
 import Spinner from '../Spinner'
 import GlobalSearch from './GlobalSearch'
-import { setGlobalSearchResults, setGlobalSearchPageNumber, setGlobalSearchTotalRecords } from '../redux/actions'
+import {
+  setGlobalSearchResults,
+  setGlobalSearchText,
+  setGlobalSearchPageNumber,
+  setGlobalSearchTotalRecords,
+  setApplicationTitle,
+} from '../redux/actions'
 
 const axios = require('axios')
 
 class GlobalSearchContainer extends Component {
   constructor(props) {
     super(props)
+    const { titleDispatch } = this.props
+    titleDispatch('Global search')
     this.doGlobalSearch = this.doGlobalSearch.bind(this)
     this.handlePageAction = this.handlePageAction.bind(this)
+    this.handleSearchTextChange = this.handleSearchTextChange.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
   }
 
   async componentWillMount() {
-    const { setLoadedDispatch, handleError } = this.props
-
+    const { setLoadedDispatch, handleError, searchTextDispatch, location } = this.props
+    const { searchText } = queryString.parse(location.search)
+    searchTextDispatch(searchText)
     setLoadedDispatch(false)
     try {
-      await this.doGlobalSearch(0)
+      await this.doGlobalSearch(0, searchText)
     } catch (error) {
       handleError(error)
     }
     setLoadedDispatch(true)
   }
 
-  async doGlobalSearch(pageNumber) {
-    const {
-      location,
-      pageSize,
-      totalRecordsDispatch,
-      dataDispatch,
-      pageNumberDispatch,
-      raiseAnalyticsEvent,
-    } = this.props
-    const values = queryString.parse(location.search)
+  async doGlobalSearch(pageNumber, searchText) {
+    const { pageSize, totalRecordsDispatch, dataDispatch, pageNumberDispatch, raiseAnalyticsEvent } = this.props
+
     const response = await axios.get('/api/globalSearch', {
       params: {
-        searchText: values.searchText,
+        searchText,
       },
       headers: {
         'Page-Offset': pageSize * pageNumber,
@@ -59,24 +63,40 @@ class GlobalSearchContainer extends Component {
   }
 
   async handlePageAction(pageNumber) {
-    const { handleError } = this.props
+    const { handleError, searchText } = this.props
 
     try {
-      await this.doGlobalSearch(pageNumber)
+      await this.doGlobalSearch(pageNumber, searchText)
     } catch (error) {
       handleError(error)
     }
+  }
+
+  async handleSearch(history) {
+    const { searchText, location } = this.props
+    history.replace(`/globalsearch?searchText=${searchText}`)
+    location.reload()
+  }
+
+  handleSearchTextChange(event) {
+    const { searchTextDispatch } = this.props
+
+    searchTextDispatch(event.target.value)
   }
 
   render() {
     const { loaded, error } = this.props
 
     if (!loaded) return <Spinner />
-
     return (
       <div>
         <Error error={error} />
-        <GlobalSearch handlePageAction={this.handlePageAction} {...this.props} />
+        <GlobalSearch
+          handlePageAction={this.handlePageAction}
+          handleSearchTextChange={this.handleSearchTextChange}
+          handleSearch={this.handleSearch}
+          {...this.props}
+        />
       </div>
     )
   }
@@ -91,6 +111,7 @@ GlobalSearchContainer.propTypes = {
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
   agencyId: PropTypes.string.isRequired,
+  searchText: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
@@ -110,6 +131,8 @@ GlobalSearchContainer.propTypes = {
   dataDispatch: PropTypes.func.isRequired,
   pageNumberDispatch: PropTypes.func.isRequired,
   totalRecordsDispatch: PropTypes.func.isRequired,
+  searchTextDispatch: PropTypes.func.isRequired,
+  titleDispatch: PropTypes.func.isRequired,
 
   // special
   location: ReactRouterPropTypes.location.isRequired,
@@ -126,13 +149,16 @@ const mapStateToProps = state => ({
   pageNumber: state.globalSearch.pageNumber,
   pageSize: state.globalSearch.pageSize,
   totalRecords: state.globalSearch.totalRecords,
+  searchText: state.globalSearch.searchText,
   error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({
   dataDispatch: data => dispatch(setGlobalSearchResults(data)),
+  searchTextDispatch: text => dispatch(setGlobalSearchText(text)),
   pageNumberDispatch: no => dispatch(setGlobalSearchPageNumber(no)),
   totalRecordsDispatch: no => dispatch(setGlobalSearchTotalRecords(no)),
+  titleDispatch: title => dispatch(setApplicationTitle(title)),
 })
 
 export default withRouter(

@@ -180,6 +180,15 @@ describe('Global Search controller', async () => {
     expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, offenderNo, '', ''])
   })
 
+  it('Should detect an offenderId with lowercase letters', async () => {
+    const apiResponse = createResponse()
+    elite2Api.globalSearch.mockReturnValue(apiResponse)
+
+    const offenderNo = 'z4444yy'
+    await globalSearch({}, offenderNo)
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, offenderNo, '', ''])
+  })
+
   it('Should detect 2 words', async () => {
     const apiResponse = createResponse()
     elite2Api.globalSearch.mockReturnValue(apiResponse)

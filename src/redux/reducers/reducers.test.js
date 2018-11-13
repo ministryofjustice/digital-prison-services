@@ -393,7 +393,22 @@ describe('app (global) reducer', () => {
     ).toEqual({
       ...pagingInitialState,
       contextUser: {},
+      searchText: '',
       data: ['data0', 'data1'],
+    })
+  })
+
+  it('should handle SET_GLOBAL_SEARCH_SEARCH_TEXT', () => {
+    expect(
+      globalSearch(undefined, {
+        type: types.SET_GLOBAL_SEARCH_TEXT,
+        searchText: 'hello',
+      })
+    ).toEqual({
+      ...pagingInitialState,
+      contextUser: {},
+      searchText: 'hello',
+      data: [],
     })
   })
 

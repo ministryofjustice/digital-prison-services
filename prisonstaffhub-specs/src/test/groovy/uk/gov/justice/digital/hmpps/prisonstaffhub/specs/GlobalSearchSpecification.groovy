@@ -67,6 +67,27 @@ class GlobalSearchSpecification extends GebReportingSpec {
                              'Common, Fred1']
     }
 
+    def "should support search again"() {
+        elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response1)
+        elite2api.stubImage()
+
+        given: "I am logged in"
+        fixture.loginAs(ITAG_USER)
+
+        and: "I do a global search"
+        go "/globalsearch?searchText=common"
+
+        when: "I perform another search"
+        at GlobalSearchPage
+        elite2api.stubGlobalSearch('', 'again', '', GlobalSearchResponses.response1)
+        searchText = 'again'
+        searchAgainButton.click()
+
+        then: "I should be presented with results"
+        at GlobalSearchPage
+        tableRows.size() == 3 // Including header row
+    }
+
     def "should be able to navigate pages of results"() {
         elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response2)
         elite2api.stubImage()
