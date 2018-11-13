@@ -4,6 +4,7 @@ import '../lists.scss'
 import '../App.scss'
 import links from '../links'
 import GlobalSearchResultList from './GlobalSearchResultList'
+import GlobalSearchForm from './GlobalSearchForm'
 
 const GlobalSearch = props => (
   <div>
@@ -15,7 +16,7 @@ const GlobalSearch = props => (
       Global search results
     </div>
     <h1 className="heading-large">Global search results</h1>
-    {/* TODO: 'search again' component goes here */}
+    <GlobalSearchForm {...props} />
     <GlobalSearchResultList {...props} />
   </div>
 )

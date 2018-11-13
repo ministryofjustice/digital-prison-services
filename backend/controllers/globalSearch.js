@@ -1,7 +1,7 @@
 const moment = require('moment')
 const log = require('../log')
 
-const offenderIdPattern = /^[A-Z][0-9]{4}[A-Z]{2}$/
+const offenderIdPattern = /^[A-Za-z][0-9]{4}[A-Za-z]{2}$/
 
 const globalSearchFactory = elite2Api => {
   const searchByOffender = (context, offenderNo) => elite2Api.globalSearch(context, offenderNo, '', '')

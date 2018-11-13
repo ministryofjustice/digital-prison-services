@@ -205,6 +205,14 @@ describe('actions', () => {
     expect(actions.setGlobalSearchResults([{ stuff: 'stuff' }])).toEqual(expectedAction)
   })
 
+  it('should create an action to save the global search search text', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_TEXT,
+      searchText: 'Ian',
+    }
+    expect(actions.setGlobalSearchText('Ian')).toEqual(expectedAction)
+  })
+
   it('should create an action to save user search page size', () => {
     const expectedAction = {
       type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE,

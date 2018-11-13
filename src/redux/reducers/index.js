@@ -57,6 +57,7 @@ const globalSearchInitialState = {
   pageSize: 10,
   totalRecords: 0,
   contextUser: {},
+  searchText: '',
 }
 
 function updateObject(oldObject, newValues) {
@@ -248,6 +249,11 @@ export function globalSearch(state = globalSearchInitialState, action) {
       return {
         ...state,
         totalRecords: action.totalRecords,
+      }
+    case ActionTypes.SET_GLOBAL_SEARCH_TEXT:
+      return {
+        ...state,
+        searchText: action.searchText,
       }
     default:
       return state

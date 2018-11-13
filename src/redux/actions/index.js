@@ -131,6 +131,11 @@ export const setEstablishmentRollData = data => ({
   data,
 })
 
+export const setGlobalSearchText = searchText => ({
+  type: ActionTypes.SET_GLOBAL_SEARCH_TEXT,
+  searchText,
+})
+
 export const setGlobalSearchResults = data => ({
   type: ActionTypes.SET_GLOBAL_SEARCH_RESULTS_DATA,
   data,
