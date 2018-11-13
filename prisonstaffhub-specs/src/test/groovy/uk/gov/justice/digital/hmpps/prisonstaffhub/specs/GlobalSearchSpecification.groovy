@@ -79,13 +79,13 @@ class GlobalSearchSpecification extends GebReportingSpec {
 
         when: "I perform another search"
         at GlobalSearchPage
-        elite2api.stubGlobalSearch('', 'again', '', GlobalSearchResponses.response1)
+        elite2api.stubGlobalSearch('', 'again', '', GlobalSearchResponses.response2)
         searchText = 'again'
         searchAgainButton.click()
 
         then: "I should be presented with results"
         at GlobalSearchPage
-        tableRows.size() == 3 // Including header row
+        tableRows.size() == 11 // Including header row
     }
 
     def "should be able to navigate pages of results"() {
