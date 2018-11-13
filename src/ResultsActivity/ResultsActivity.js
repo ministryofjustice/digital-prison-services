@@ -6,7 +6,6 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
-import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from '../utils'
 import DatePickerInput from '../DatePickerInput'
@@ -15,22 +14,6 @@ import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
 
 class ResultsActivity extends Component {
-  static displayBack() {
-    return (
-      <div className="padding-top no-print">
-        <Link id="back_to_menu_link" title="Back" className="link backlink" to="/whereaboutssearch">
-          <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10" /> Back
-        </Link>
-      </div>
-    )
-  }
-
-  static olderThan7Days(date) {
-    const searchDate = moment(date, 'DD/MM/YYYY')
-    const days = moment().diff(searchDate, 'day')
-    return days > 7
-  }
-
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
   }
@@ -42,6 +25,23 @@ class ResultsActivity extends Component {
         .filter(a => a.locationId === Number(activity))
         .map(a => a.userDescription)
         .find(a => !!a) || null
+    )
+  }
+
+  displayBack() {
+    const { resetErrorDispatch } = this.props
+    return (
+      <div className="padding-top no-print">
+        <Link
+          id="back_to_menu_link"
+          title="Back"
+          className="link backlink"
+          to="/whereaboutssearch"
+          onClick={() => resetErrorDispatch()}
+        >
+          <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10" /> Back
+        </Link>
+      </div>
     )
   }
 
@@ -169,7 +169,7 @@ class ResultsActivity extends Component {
 
     return (
       <div className="results-activity">
-        {ResultsActivity.displayBack()}
+        {this.displayBack()}
         <h1 className="heading-large whereabouts-title no-print">{this.getActivityName()}</h1>
         <form className="no-print">
           <div>
@@ -214,6 +214,7 @@ ResultsActivity.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
   activityData: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
