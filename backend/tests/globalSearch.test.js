@@ -197,6 +197,14 @@ describe('Global Search controller', async () => {
     expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'last', 'first'])
   })
 
+  it('Should detect 2 words and remove commas', async () => {
+    const apiResponse = createResponse()
+    elite2Api.globalSearch.mockReturnValue(apiResponse)
+
+    await globalSearch({}, ',last, first,')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'last', 'first'])
+  })
+
   it('Should ignore leading and trailing whitespace', async () => {
     const apiResponse = createResponse()
     elite2Api.globalSearch.mockReturnValue(apiResponse)

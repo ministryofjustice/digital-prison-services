@@ -18,6 +18,8 @@ const elite2ApiFactory = client => {
   const currentUser = context => get(context, 'api/users/me')
   const userCaseLoads = context => get(context, 'api/users/me/caseLoads')
 
+  const encodeQueryString = input => encodeURIComponent(input)
+
   // NB. This function expects a caseload object.
   // The object *must* have non-blank caseLoadId,  description and type properties.
   // However, only 'caseLoadId' has meaning.  The other two properties can take *any* non-blank value and these will be ignored.
@@ -61,7 +63,9 @@ const elite2ApiFactory = client => {
   const globalSearch = (context, offenderNo, lastName, firstName) =>
     get(
       context,
-      `api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false&includeAliases=true`
+      `api/prisoners?offenderNo=${offenderNo}&lastName=${encodeQueryString(lastName)}&firstName=${encodeQueryString(
+        firstName
+      )}&partialNameMatch=false&includeAliases=true`
     )
   const getLastPrison = (context, body) => post(context, `api/movements/offenders`, body)
 
