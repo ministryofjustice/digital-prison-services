@@ -16,7 +16,10 @@ const globalSearchFactory = elite2Api => {
     if (!searchText) {
       return []
     }
-    const text = searchText.trim()
+    const text = searchText
+      .replace(/,/g, ' ')
+      .replace(/\s\s+/g, ' ')
+      .trim()
     const data = await (offenderIdPattern.test(text) ? searchByOffender(context, text) : searchByName(context, text))
     log.info(data, 'globalSearch data received')
 
