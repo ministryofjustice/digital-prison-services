@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import Error from '../Error'
 import ResultsActivity from './ResultsActivity'
-import { setSearchActivities, showPaymentReasonModal } from '../redux/actions'
+import { resetError, setSearchActivities, showPaymentReasonModal } from '../redux/actions'
 import Spinner from '../Spinner'
 import { getActivityListReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
 
@@ -36,7 +36,7 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { loaded, error } = this.props
+    const { loaded, error, resetErrorDispatch } = this.props
 
     if (!loaded) {
       return <Spinner />
@@ -44,7 +44,7 @@ class ResultsActivityContainer extends Component {
     return (
       <div>
         <Error error={error} />
-        <ResultsActivity handlePrint={this.handlePrint} {...this.props} />
+        <ResultsActivity handlePrint={this.handlePrint} resetErrorDispatch={resetErrorDispatch} {...this.props} />
       </div>
     )
   }
@@ -114,6 +114,7 @@ const mapDispatchToProps = dispatch => ({
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
   showPaymentReasonModal: (event, browserEvent) =>
     dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() })),
+  resetErrorDispatch: () => dispatch(resetError()),
 })
 
 export default withRouter(
