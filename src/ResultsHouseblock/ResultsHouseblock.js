@@ -14,18 +14,22 @@ import { linkOnClick } from '../helpers'
 import Flags from '../Flags/Flags'
 
 class ResultsHouseblock extends Component {
-  displayBack = () => (
-    <div className="padding-top no-print">
-      <Link
-        id="back_to_selection_link"
-        title="Back to selection screen link"
-        className="link backlink"
-        to="/whereaboutssearch"
-      >
-        <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10" /> Back
-      </Link>
-    </div>
-  )
+  displayBack = () => {
+    const { resetErrorDispatch } = this.props
+    return (
+      <div className="padding-top no-print">
+        <Link
+          id="back_to_selection_link"
+          title="Back to selection screen link"
+          className="link backlink"
+          to="/whereaboutssearch"
+          onClick={() => resetErrorDispatch()}
+        >
+          <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10" /> Back
+        </Link>
+      </div>
+    )
+  }
 
   olderThan7Days = () => {
     const { date } = this.props
@@ -313,6 +317,7 @@ ResultsHouseblock.propTypes = {
   getHouseblockList: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
   houseblockData: PropTypes.arrayOf(
     PropTypes.shape({
       activity: PropTypes.shape({
