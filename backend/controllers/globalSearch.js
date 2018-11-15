@@ -1,4 +1,5 @@
 const moment = require('moment')
+const shortid = require('shortid')
 const log = require('../log')
 
 const offenderIdPattern = /^[A-Za-z][0-9]{4}[A-Za-z]{2}$/
@@ -40,11 +41,13 @@ const globalSearchFactory = elite2Api => {
         offender.latestLocation
 
       const dateOfBirth = offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
+      const uiId = shortid.generate()
 
       return {
         ...offender,
         latestLocation,
         dateOfBirth,
+        uiId,
       }
     })
   }
