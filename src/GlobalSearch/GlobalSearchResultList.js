@@ -25,7 +25,7 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
   const offenders =
     data &&
     data.map(prisoner => (
-      <tr key={prisoner.offenderNo} className="row-gutters">
+      <tr key={`${prisoner.offenderNo}-${prisoner.uiId}`} className="row-gutters">
         <td className="row-gutters">
           {prisoner.latestLocationId === agencyId ? (
             <a
@@ -107,6 +107,7 @@ GlobalSearchResultList.propTypes = {
       dateOfBirth: PropTypes.string.isRequired,
       latestLocation: PropTypes.string.isRequired,
       agencyId: PropTypes.string,
+      uiId: PropTypes.string,
     })
   ).isRequired,
   pageNumber: PropTypes.number.isRequired,

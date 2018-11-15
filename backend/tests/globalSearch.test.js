@@ -2,6 +2,10 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const { globalSearch } = require('../controllers/globalSearch').globalSearchFactory(elite2Api)
 
+jest.mock('shortid', () => ({
+  generate: () => '123',
+}))
+
 beforeEach(() => {
   elite2Api.globalSearch = jest.fn()
   elite2Api.getLastPrison = jest.fn()
@@ -37,6 +41,7 @@ function createResponseWithFormattedDate() {
       latestLocation: 'Leeds HMP',
       latestLocationId: 'LEI',
       dateOfBirth: '15/10/1977',
+      uiId: '123',
     },
     {
       offenderNo: 'A1234AA',
@@ -45,6 +50,7 @@ function createResponseWithFormattedDate() {
       latestLocationId: 'MDI',
       latestLocation: 'Moorland HMP',
       dateOfBirth: '15/09/1976',
+      uiId: '123',
     },
   ]
 }
@@ -58,6 +64,7 @@ function createOutResponse() {
       latestLocation: 'Leeds HMP',
       latestLocationId: 'LEI',
       dateOfBirth: '1977-10-15',
+      uiId: '123',
     },
     {
       offenderNo: 'A1234AA',
@@ -66,6 +73,7 @@ function createOutResponse() {
       latestLocationId: 'MDI',
       latestLocation: 'Moorland HMP',
       dateOfBirth: '1976-09-15',
+      uiId: '123',
     },
     {
       offenderNo: 'A1234BB',
@@ -74,6 +82,7 @@ function createOutResponse() {
       latestLocationId: 'OUT',
       latestLocation: 'OUTSIDE',
       dateOfBirth: '1976-09-15',
+      uiId: '123',
     },
   ]
 }
@@ -87,6 +96,7 @@ function createDecoratedResponse(locationText) {
       latestLocation: 'Leeds HMP',
       latestLocationId: 'LEI',
       dateOfBirth: '15/10/1977',
+      uiId: '123',
     },
     {
       offenderNo: 'A1234AA',
@@ -95,6 +105,7 @@ function createDecoratedResponse(locationText) {
       latestLocationId: 'MDI',
       latestLocation: 'Moorland HMP',
       dateOfBirth: '15/09/1976',
+      uiId: '123',
     },
     {
       offenderNo: 'A1234BB',
@@ -103,6 +114,7 @@ function createDecoratedResponse(locationText) {
       latestLocationId: 'OUT',
       latestLocation: locationText,
       dateOfBirth: '15/09/1976',
+      uiId: '123',
     },
   ]
 }
