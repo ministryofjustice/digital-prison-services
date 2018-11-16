@@ -11,7 +11,7 @@ const setTokens = (context, accessToken, refreshToken) => {
   context.refresh_token = refreshToken
 }
 
-const hasTokens = context => !!(context && context.access_token && context.refresh_token)
+const hasTokens = context => Boolean(context && context.access_token && context.refresh_token)
 
 const getAccessToken = context => (context && context.access_token ? context.access_token : null)
 
