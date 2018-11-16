@@ -109,6 +109,7 @@ const configureRoutes = ({ app, healthApi, oauthApi, tokenRefresher, mailTo, hom
    */
   const requireLoginMiddleware = (req, res, next) => {
     if (contextProperties.hasTokens(req.session)) {
+      contextProperties.setTokens(req.session, res.locals)
       next()
       return
     }

@@ -146,7 +146,7 @@ if (config.app.production === false) {
 
 // Extract pagination header information from requests and set on the 'context'
 app.use('/api', (req, res, next) => {
-  contextProperties.setRequestPagination(req.session, req.headers)
+  contextProperties.setRequestPagination(res.locals, req.headers)
   next()
 })
 

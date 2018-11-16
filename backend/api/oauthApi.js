@@ -31,7 +31,7 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
       headers: { authorization: `Basic ${apiClientCredentials}` },
     })
       .then(response => {
-        contextProperties.setTokens(context, response.data.access_token, response.data.refresh_token)
+        contextProperties.setTokens(response.data, context)
         logger.debug(
           `${msg} ${response.config.method} ${response.config.url} ${response.status} ${response.statusText}`
         )

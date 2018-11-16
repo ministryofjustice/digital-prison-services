@@ -42,7 +42,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
 
   const setTokensOnContext = context =>
     new Promise(resolve => {
-      contextProperties.setTokens(context, accessToken, refreshToken)
+      contextProperties.setTokens({ access_token: accessToken, refresh_token: refreshToken }, context)
       resolve()
     })
 

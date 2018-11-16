@@ -1,14 +1,16 @@
 /**
  * Wrapper functions to set commonly used fields on an 'context' object that is managed over the scope of a request.
  * Hopefully reduces the liklihood of mis-typing property names.
- * Note that by convention the controller(s) and Middleware use the req.session property as the request scoped context.
+ * Note that by convention the controller(s) and Middleware use the res.locals property as the request scoped context.
  * From controllers down to clients, client interceptors etc the context object is called 'context'.
  */
 
-/* eslint no-param-reassign: 2 */
-const setTokens = (context, accessToken, refreshToken) => {
-  context.access_token = accessToken
-  context.refresh_token = refreshToken
+// eslint-disable-next-line camelcase
+const setTokens = ({ access_token, refresh_token }, context) => {
+  // eslint-disable-next-line no-param-reassign,camelcase
+  context.access_token = access_token
+  // eslint-disable-next-line no-param-reassign,camelcase
+  context.refresh_token = refresh_token
 }
 
 const hasTokens = context => Boolean(context && context.access_token && context.refresh_token)
@@ -39,6 +41,7 @@ const copyNamedHeaders = (headerNames, srcHeaders) =>
 
 const setRequestPagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order']
+  // eslint-disable-next-line no-param-reassign
   context.requestHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
@@ -46,6 +49,8 @@ const getRequestPagination = context => context.requestHeaders || {}
 
 const setResponsePagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order', 'total-records']
+
+  // eslint-disable-next-line no-param-reassign
   context.responseHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 

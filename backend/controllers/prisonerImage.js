@@ -11,7 +11,7 @@ const prisonerImageFactory = elite2Api => {
     } else {
       res.type('image/jpeg')
       try {
-        const data = await elite2Api.getPrisonerImage(req.session, offenderNo)
+        const data = await elite2Api.getPrisonerImage(res.locals, offenderNo)
         data.pipe(res)
       } catch (error) {
         log.error(error)

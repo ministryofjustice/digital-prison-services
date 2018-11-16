@@ -17,7 +17,7 @@ describe('JWT access token refresh', () => {
 
   const stubOauthRefresh = context =>
     new Promise(resolve => {
-      contextProperties.setTokens(context, 'accessRefreshed', 'refreshRefreshed')
+      contextProperties.setTokens({ access_token: 'accessRefreshed', refresh_token: 'refreshRefreshed' }, context)
       resolve()
     })
 
@@ -26,7 +26,7 @@ describe('JWT access token refresh', () => {
     const refreshTokens = tokenRefresher.factory(stubOauthRefresh, 60)
 
     const context = {}
-    contextProperties.setTokens(context, ACCESS_TOKEN, 'XXX')
+    contextProperties.setTokens({ access_token: ACCESS_TOKEN, refresh_token: 'XXX' }, context)
 
     const nowInSeconds = EXIPIRY_TIME - 59
 
@@ -42,7 +42,7 @@ describe('JWT access token refresh', () => {
     const refreshTokens = tokenRefresher.factory(stubOauthRefresh, 60)
 
     const context = {}
-    contextProperties.setTokens(context, ACCESS_TOKEN, 'XXX')
+    contextProperties.setTokens({ access_token: ACCESS_TOKEN, refresh_token: 'XXX' }, context)
 
     const nowInSeconds = EXIPIRY_TIME - 60
 
