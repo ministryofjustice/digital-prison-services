@@ -2,7 +2,7 @@
 const request = require('supertest')
 const express = require('express')
 const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
 const setCookie = require('set-cookie-parser')
 const chai = require('chai')
 
@@ -13,7 +13,6 @@ const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
 
 const sessionManagementRoutes = require('../sessionManagementRoutes')
-const hmppsCookie = require('../hmppsCookie')
 const contextProperties = require('../contextProperties')
 
 const hmppsCookieName = 'testCookie'
@@ -31,14 +30,15 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
 
   app.set('view engine', 'ejs')
   app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(cookieParser())
 
-  const hmppsCookieOperations = hmppsCookie.cookieOperationsFactory({
-    name: hmppsCookieName,
-    cookieLifetimeInMinutes: 1,
-    domain: '127.0.0.1',
-    secure: false,
-  })
+  app.use(
+    cookieSession({
+      name: hmppsCookieName,
+      maxAge: 1 * 60 * 1000,
+      secure: false,
+      signed: false, // supertest can't cope with multiple cookies - https://github.com/visionmedia/supertest/issues/336
+    })
+  )
 
   const setTokensOnContext = context =>
     new Promise(resolve => {
@@ -69,7 +69,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
     app,
     healthApi,
     oauthApi,
-    hmppsCookieOperations,
     tokenRefresher,
     mailTo: 'test@site.com',
   })
@@ -127,7 +126,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .end(callback(done))
   })
 
-  it('GET "/auth/login" when  authenticated redirects to "/"', done => {
+  it('GET "/auth/login" when authenticated redirects to "/"', done => {
     agent
       .get('/auth/login')
       .expect(302)
@@ -140,7 +139,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .get('/')
       .expect(200)
       .expect('static')
-      .expect(hasCookies(['testCookie']))
       .end(callback(done))
   })
 
@@ -148,7 +146,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
     agent
       .get('/heart-beat')
       .expect(200)
-      .expect(hasCookies(['testCookie']))
       .expect(() => {
         // eslint-disable-next-line
         expect(tokenRefresher).to.be.called

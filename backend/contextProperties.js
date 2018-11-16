@@ -1,32 +1,21 @@
 /**
  * Wrapper functions to set commonly used fields on an 'context' object that is managed over the scope of a request.
  * Hopefully reduces the liklihood of mis-typing property names.
- * Note that by convention the controller(s) and Middleware use the res.locals property as the request scoped context.
+ * Note that by convention the controller(s) and Middleware use the req.session property as the request scoped context.
  * From controllers down to clients, client interceptors etc the context object is called 'context'.
  */
 
 /* eslint no-param-reassign: 2 */
 const setTokens = (context, accessToken, refreshToken) => {
-  context.accessToken = accessToken
-  context.refreshToken = refreshToken
+  context.access_token = accessToken
+  context.refresh_token = refreshToken
 }
 
-const hasTokens = context => {
-  if (!context) return false
-  return !(!context.accessToken || !context.refreshToken)
-}
+const hasTokens = context => !!(context && context.access_token && context.refresh_token)
 
-const getAccessToken = context => {
-  if (!context) return null
-  if (!context.accessToken) return null
-  return context.accessToken
-}
+const getAccessToken = context => (context && context.access_token ? context.access_token : null)
 
-const getRefreshToken = context => {
-  if (!context) return null
-  if (!context.refreshToken) return null
-  return context.refreshToken
-}
+const getRefreshToken = context => (context && context.refresh_token ? context.refresh_token : null)
 
 const normalizeHeaderNames = srcHeaders =>
   Object.keys(srcHeaders).reduce(

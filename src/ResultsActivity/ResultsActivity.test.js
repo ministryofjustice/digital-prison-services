@@ -158,6 +158,7 @@ describe('Offender activity list results component', () => {
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
+        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('.whereabouts-title').text()).toEqual('Chapel Activity')
@@ -285,6 +286,7 @@ describe('Offender activity list results component', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         date=""
+        resetErrorDispatch={jest.fn()}
       />
     )
     const tr = component.find('tr')
@@ -314,6 +316,7 @@ describe('Offender activity list results component', () => {
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -351,6 +354,7 @@ describe('Offender activity list results component', () => {
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
+        resetErrorDispatch={jest.fn()}
       />
     )
     // If today, print button is present
@@ -378,6 +382,7 @@ describe('Offender activity list results component', () => {
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -405,6 +410,7 @@ describe('Offender activity list results component', () => {
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
+        resetErrorDispatch={jest.fn()}
       />
     )
 
