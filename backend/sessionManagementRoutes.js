@@ -67,7 +67,7 @@ const configureRoutes = ({ app, healthApi, oauthApi, tokenRefresher, mailTo, hom
   }
 
   const logout = (req, res) => {
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-param-reassign
     req.session = null
     res.redirect(`${process.env.NN_ENDPOINT_URL}${LOGIN_PATH}`)
   }
