@@ -138,7 +138,7 @@ const mockHistory = {
 }
 
 describe('Offender activity list results component', () => {
-  it.skip('should render initial offender results form correctly', async () => {
+  it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days')
     const date = aFewDaysAgo.format('DD/MM/YYYY')
 
@@ -212,25 +212,26 @@ describe('Offender activity list results component', () => {
         .at(2)
         .text()
     ).toEqual('Medical - Dentist - Appt details 11:40')
-    expect(
-      row1Tds
-        .at(ATTEND_COLUMN)
-        .find('input')
-        .some('[type="checkbox"]')
-    ).toEqual(true)
+    // Reinstate with checkboxes in V2
+    // expect(
+    //   row1Tds
+    //     .at(ATTEND_COLUMN)
+    //     .find('input')
+    //     .some('[type="checkbox"]')
+    // ).toEqual(true)
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
-    expect(
-      row1Tds
-        .at(ATTEND_COLUMN)
-        .find('input')
-        .debug()
-    ).toEqual(expect.stringContaining('disabled={true}')) // TODO should be false in V2 (currently disabled for V1)
-    expect(
-      row1Tds
-        .at(DONT_ATTEND_COLUMN)
-        .find('input')
-        .some('[type="checkbox"]')
-    ).toEqual(true)
+    // expect(
+    //   row1Tds
+    //     .at(ATTEND_COLUMN)
+    //     .find('input')
+    //     .debug()
+    // ).toEqual(expect.stringContaining('disabled={false}'))
+    // expect(
+    //   row1Tds
+    //     .at(DONT_ATTEND_COLUMN)
+    //     .find('input')
+    //     .some('[type="checkbox"]')
+    // ).toEqual(true)
 
     const row2Tds = tr.at(2).find('td')
     expect(row2Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael')

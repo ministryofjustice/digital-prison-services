@@ -12,7 +12,13 @@ const DatePickerInput = props => {
         className: `datePickerInput form-control ${additionalClassName}`,
       }}
       name="date"
-      shouldShowDay={date => !date.isAfter(moment().startOf('day'))}
+      shouldShowDay={date =>
+        !date.isAfter(
+          moment()
+            .add(1, 'days')
+            .startOf('day')
+        )
+      }
       title="Date"
       handleDateChange={handleDateChange}
       inputId={inputId}
