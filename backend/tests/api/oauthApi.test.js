@@ -81,7 +81,7 @@ describe('oathApi tests', () => {
     })
 
     const obj = {}
-    contextProperties.setTokens(obj, 'accessToken', 'refreshToken')
+    contextProperties.setTokens({ access_token: 'accessToken', refresh_token: 'refreshToken' }, obj)
 
     oauthApi
       .refresh(obj)

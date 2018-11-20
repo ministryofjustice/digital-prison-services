@@ -10,7 +10,6 @@
     "bunyan": "^1.8.12",
     "bunyan-middleware": "^0.8.0",
     "classnames": "^2.2.6",
-    "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",

@@ -178,6 +178,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('.whereabouts-title').text()).toEqual('1')
@@ -319,6 +320,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
     const tr = component.find('tr')
@@ -351,6 +353,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -392,6 +395,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
@@ -421,6 +425,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -467,6 +472,7 @@ describe('Offender results component Jira NN-843', () => {
         user={user}
         update={jest.fn()}
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -500,6 +506,7 @@ describe('Offender results component Jira NN-843', () => {
         user={user}
         update={jest.fn()}
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -535,6 +542,7 @@ describe('Offender results component Jira NN-843', () => {
         user={user}
         update={jest.fn()}
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -567,6 +575,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('#back_to_selection_link').length).toEqual(1)
@@ -614,6 +623,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -654,6 +664,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -708,6 +719,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -775,6 +787,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -833,6 +846,7 @@ describe('Offender results component Jira NN-843', () => {
         currentLocation="BWing"
         currentSubLocation="--"
         offenderNo="1"
+        resetErrorDispatch={jest.fn()}
       />
     )
 

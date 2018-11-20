@@ -5,28 +5,19 @@
  * From controllers down to clients, client interceptors etc the context object is called 'context'.
  */
 
-/* eslint no-param-reassign: 2 */
-const setTokens = (context, accessToken, refreshToken) => {
-  context.accessToken = accessToken
-  context.refreshToken = refreshToken
+// eslint-disable-next-line camelcase
+const setTokens = ({ access_token, refresh_token }, context) => {
+  // eslint-disable-next-line no-param-reassign,camelcase
+  context.access_token = access_token
+  // eslint-disable-next-line no-param-reassign,camelcase
+  context.refresh_token = refresh_token
 }
 
-const hasTokens = context => {
-  if (!context) return false
-  return !(!context.accessToken || !context.refreshToken)
-}
+const hasTokens = context => Boolean(context && context.access_token && context.refresh_token)
 
-const getAccessToken = context => {
-  if (!context) return null
-  if (!context.accessToken) return null
-  return context.accessToken
-}
+const getAccessToken = context => (context && context.access_token ? context.access_token : null)
 
-const getRefreshToken = context => {
-  if (!context) return null
-  if (!context.refreshToken) return null
-  return context.refreshToken
-}
+const getRefreshToken = context => (context && context.refresh_token ? context.refresh_token : null)
 
 const normalizeHeaderNames = srcHeaders =>
   Object.keys(srcHeaders).reduce(
@@ -50,6 +41,7 @@ const copyNamedHeaders = (headerNames, srcHeaders) =>
 
 const setRequestPagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order']
+  // eslint-disable-next-line no-param-reassign
   context.requestHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
@@ -57,6 +49,8 @@ const getRequestPagination = context => context.requestHeaders || {}
 
 const setResponsePagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order', 'total-records']
+
+  // eslint-disable-next-line no-param-reassign
   context.responseHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 

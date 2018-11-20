@@ -25,7 +25,7 @@ describe('Test clients built by oauthEnabledClient', () => {
 
     it('Should set the authorization header with "Bearer <access token>"', async () => {
       const context = {}
-      contextProperties.setTokens(context, 'a', 'b')
+      contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
 
       const response = await client.get(context, '/api/users/me')
 
