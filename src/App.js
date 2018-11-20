@@ -243,13 +243,18 @@ class App extends React.Component {
     setTermsVisibilityDispatch(true)
   }
 
-  switchCaseLoad = async newCaseload => {
+  switchCaseLoad = async (newCaseload, location) => {
     const { switchAgencyDispatch, setErrorDispatch } = this.props
 
     try {
-      switchAgencyDispatch(newCaseload)
-      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
-      await this.loadUserAndCaseload()
+      if (location.pathname.includes('globalsearch')) {
+        await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
+        window.location.assign(links.notmEndpointUrl)
+      } else {
+        switchAgencyDispatch(newCaseload)
+        await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
+        await this.loadUserAndCaseload()
+      }
     } catch (error) {
       setErrorDispatch(error.message)
     }
@@ -389,7 +394,7 @@ class App extends React.Component {
                   title={title}
                   logoText="HMPPS"
                   user={user}
-                  switchCaseLoad={this.switchCaseLoad}
+                  switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, props.location)}
                   menuOpen={menuOpen}
                   setMenuOpen={boundSetMenuOpen}
                   caseChangeRedirect={caseChangeRedirect}
