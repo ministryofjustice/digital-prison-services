@@ -40,7 +40,7 @@ const controllerFactory = require('./controllers/controller').factory
 const clientFactory = require('./api/oauthEnabledClient')
 const { healthApiFactory } = require('./api/healthApi')
 const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory
-const oauthApiFactory = require('./api/oauthApi')
+const { oauthApiFactory } = require('./api/oauthApi')
 
 const log = require('./log')
 const config = require('./config')

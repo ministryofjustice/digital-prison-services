@@ -1,4 +1,4 @@
-/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable no-unused-expressions, prefer-promise-reject-errors */
 const request = require('supertest')
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -14,6 +14,7 @@ chai.use(sinonChai)
 
 const sessionManagementRoutes = require('../sessionManagementRoutes')
 const contextProperties = require('../contextProperties')
+const { AuthClientError } = require('../api/oauthApi')
 
 const hmppsCookieName = 'testCookie'
 
@@ -47,8 +48,8 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
     })
 
   const rejectWithStatus = rejectStatus => () => Promise.reject({ response: { status: rejectStatus } })
-  const rejectWithAuthenticationError = errorText => () =>
-    Promise.reject({ response: { data: { error_description: errorText }, status: 401 } })
+
+  const rejectWithAuthenticationError = errorText => () => Promise.reject(AuthClientError(errorText))
 
   const oauthApi = {
     authenticate: setTokensOnContext,
@@ -83,7 +84,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   const agent = request.agent(app)
 
   const callback = done =>
-    function checkDone(err, res) {
+    function checkDone(err) {
       if (err) {
         if (done.fail) {
           // jest
@@ -147,7 +148,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .get('/heart-beat')
       .expect(200)
       .expect(() => {
-        // eslint-disable-next-line
         expect(tokenRefresher).to.be.called
       })
       .end(callback(done))
@@ -160,7 +160,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .get('/heart-beat')
       .expect(500)
       .expect(() => {
-        // eslint-disable-next-line
         expect(tokenRefresher).to.be.called
       })
       .end(callback(done))
@@ -190,38 +189,10 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .end(callback(done))
   })
 
-  it('Unsuccessful signin - API up', done => {
-    oauthApi.authenticate = rejectWithStatus(401)
+  it('Unsuccessful signin - auth client error', () => {
+    oauthApi.authenticate = rejectWithAuthenticationError('Your password has expired.')
 
-    agent
-      .post('/auth/login')
-      .send('username=test&password=testPassowrd')
-      .expect(401)
-      .expect(res => {
-        expect(res.error.path).to.equal('/auth/login')
-        expect(res.text).to.include('The username or password you have entered is invalid.')
-      })
-      .end(callback(done))
-  })
-
-  it('Unsuccessful signin - API up, locked account', done => {
-    oauthApi.authenticate = rejectWithAuthenticationError('ORA-28000')
-
-    agent
-      .post('/auth/login')
-      .send('username=test&password=testPassowrd')
-      .expect(401)
-      .expect(res => {
-        expect(res.error.path).to.equal('/auth/login')
-        expect(res.text).to.include('Your user account is locked.')
-      })
-      .end(callback(done))
-  })
-
-  it('Unsuccessful signin - API up, expired account', done => {
-    oauthApi.authenticate = rejectWithAuthenticationError('ORA-28001')
-
-    agent
+    return agent
       .post('/auth/login')
       .send('username=test&password=testPassowrd')
       .expect(401)
@@ -229,13 +200,11 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
         expect(res.error.path).to.equal('/auth/login')
         expect(res.text).to.include('Your password has expired.')
       })
-      .end(callback(done))
   })
-
-  it('Unsuccessful signin - API down', done => {
+  it('Unsuccessful signin - server error', () => {
     oauthApi.authenticate = rejectWithStatus(503)
 
-    agent
+    return agent
       .post('/auth/login')
       .send('username=test&password=testPassowrd')
       .expect(503)
@@ -243,6 +212,5 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
         expect(res.error.path).to.equal('/auth/login')
         expect(res.text).to.include('Service unavailable. Please try again later.')
       })
-      .end(callback(done))
   })
 })
