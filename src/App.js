@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
@@ -15,21 +15,20 @@ import './App.scss'
 
 import {
   resetError,
+  setActivityData,
   setConfig,
   setError,
-  setMessage,
-  setTermsVisibility,
-  setUserDetails,
-  switchAgency,
   setLoaded,
+  setMenuOpen,
+  setMessage,
+  setSearchActivities,
+  setSearchActivity,
   setSearchDate,
   setSearchLocation,
   setSearchPeriod,
-  setActivityData,
-  setSearchActivity,
-  setSearchActivities,
-  setMenuOpen,
-  setCaseChangeRedirectStatus,
+  setTermsVisibility,
+  setUserDetails,
+  switchAgency,
 } from './redux/actions/index'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
@@ -274,14 +273,12 @@ class App extends React.Component {
       menuOpen,
       boundSetMenuOpen,
       shouldShowTerms,
-      setCaseChangeRedirectStatusDispatch,
       setLoadedDispatch,
       resetErrorDispatch,
       dateDispatch,
       periodDispatch,
       error,
       user,
-      caseChangeRedirect,
       title,
     } = this.props
     const routes = (
@@ -356,7 +353,6 @@ class App extends React.Component {
             render={() => (
               <EstablishmentRollContainer
                 handleError={this.handleError}
-                setCaseChangeRedirectStatusDispatch={setCaseChangeRedirectStatusDispatch}
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
               />
@@ -384,21 +380,25 @@ class App extends React.Component {
       <Router>
         <div className="content">
           <Route
-            render={props => {
+            render={({ location, history }) => {
               if (config && config.googleAnalyticsId) {
-                ReactGA.pageview(props.location.pathname)
+                ReactGA.pageview(location.pathname)
               }
+              const locationRequiresRedirectWhenCaseloadChanges = !(
+                location.pathname.includes('globalsearch') || location.pathname.includes('establishmentroll')
+              )
+
               return (
                 <Header
                   homeLink={links.getHomeLink()}
                   title={title}
                   logoText="HMPPS"
                   user={user}
-                  switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, props.location)}
+                  switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
                   menuOpen={menuOpen}
                   setMenuOpen={boundSetMenuOpen}
-                  caseChangeRedirect={caseChangeRedirect}
-                  history={props.history}
+                  caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
+                  history={history}
                 />
               )
             }}
@@ -423,7 +423,6 @@ App.propTypes = {
   // mapStateToProps
   activity: PropTypes.string.isRequired,
   agencyId: PropTypes.string,
-  caseChangeRedirect: PropTypes.bool.isRequired,
   config: PropTypes.shape({
     notmEndpointUrl: PropTypes.string,
     mailTo: PropTypes.string,
@@ -454,7 +453,6 @@ App.propTypes = {
   locationDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
-  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   setMessageDispatch: PropTypes.func.isRequired,
@@ -496,7 +494,6 @@ const mapDispatchToProps = dispatch => ({
   locationDispatch: text => dispatch(setSearchLocation(text)),
   periodDispatch: text => dispatch(setSearchPeriod(text)),
   resetErrorDispatch: () => dispatch(resetError()),
-  setCaseChangeRedirectStatusDispatch: flag => dispatch(setCaseChangeRedirectStatus(flag)),
   setErrorDispatch: error => dispatch(setError(error)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   setMessageDispatch: message => dispatch(setMessage(message)),

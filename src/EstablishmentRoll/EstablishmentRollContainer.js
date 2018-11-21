@@ -9,8 +9,7 @@ import Error from '../Error'
 
 export class EstablishmentRollContainer extends Component {
   componentDidMount() {
-    const { setCaseChangeRedirectStatusDispatch, agencyId, titleDispatch } = this.props
-    setCaseChangeRedirectStatusDispatch(false)
+    const { agencyId, titleDispatch } = this.props
     titleDispatch('Establishment roll')
     this.getEstablishmentRollBlocks(agencyId)
   }
@@ -66,7 +65,6 @@ export class EstablishmentRollContainer extends Component {
 EstablishmentRollContainer.propTypes = {
   // props
   handleError: PropTypes.func.isRequired,
-  setCaseChangeRedirectStatusDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   // mapStateToProps

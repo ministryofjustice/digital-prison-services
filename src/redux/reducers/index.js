@@ -120,11 +120,6 @@ export function app(state = appInitialState, action) {
         ...state,
         menuOpen: action.payload,
       }
-    case ActionTypes.SET_CASE_CHANGE_REDIRECT:
-      return {
-        ...state,
-        caseChangeRedirect: action.bool,
-      }
     case ActionTypes.SET_APPLICATION_TITLE:
       return {
         ...state,

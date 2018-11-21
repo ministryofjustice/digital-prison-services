@@ -9,7 +9,6 @@ describe('<EstablishmentRollContainer />', () => {
     blocks,
     totals,
     agencyId: 'LEI',
-    setCaseChangeRedirectStatusDispatch: jest.fn(),
     establishmentRollBlockDataDispatch: jest.fn(),
     handleError: jest.fn(),
     setLoadedDispatch: jest.fn(),
@@ -83,7 +82,6 @@ describe('<EstablishmentRollContainer />', () => {
       const getEstablishmentRollBlocksSpy = jest.spyOn(wrapper.instance(), 'getEstablishmentRollBlocks')
       wrapper.setProps({ agencyId: newAgencyID })
 
-      expect(props.setCaseChangeRedirectStatusDispatch).toHaveBeenCalledWith(false)
       expect(getEstablishmentRollBlocksSpy).toHaveBeenCalledWith(newAgencyID)
     })
   })

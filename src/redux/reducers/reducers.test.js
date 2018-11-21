@@ -355,18 +355,6 @@ describe('app (global) reducer', () => {
     expect(state.menuOpen).toBe(false)
   })
 
-  it('should handle SET_CASE_CHANGE_REDIRECT', () => {
-    expect(
-      app(appInitialState, {
-        type: types.SET_CASE_CHANGE_REDIRECT,
-        bool: false,
-      })
-    ).toEqual({
-      ...appInitialState,
-      caseChangeRedirect: false,
-    })
-  })
-
   it('should handle SET_ESTABLISHMENT_ROLL_DATA', () => {
     expect(
       establishmentRoll(establishmentRollInitialState, {
