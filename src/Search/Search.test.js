@@ -37,56 +37,5 @@ describe('Search component', () => {
       />
     )
     expect(component.find('#housing-location-select option').get(0).props.value).toEqual('--')
-    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('1')
-
-    expect(component.find('#activity-select option').get(0).props.value).toEqual('--')
-    expect(component.find('#activity-select option').get(1).props.value).toEqual(123456)
-  })
-
-  it('should render validation error correctly', async () => {
-    const component = shallow(
-      <Search
-        history={mockHistory}
-        locations={locations}
-        activities={activities}
-        onSearch={jest.fn()}
-        onActivityChange={jest.fn()}
-        onLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        validationErrors={{ text: 'test' }}
-        handleDateChange={jest.fn()}
-        date="today"
-        period="AM"
-        loaded={false}
-        currentLocation="cellLocation"
-        activity="bob"
-      />
-    )
-    expect(component.find('ValidationErrors')).toHaveLength(1)
-  })
-
-  it('should handle search button correctly', async () => {
-    const handleSearch = jest.fn()
-    const component = shallow(
-      <Search
-        history={mockHistory}
-        activities={[]}
-        locations={locations}
-        onSearch={handleSearch}
-        onActivityChange={jest.fn()}
-        onLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        date="27/02/2018"
-        period="ED"
-        currentLocation="BWing"
-        loaded={false}
-        activity="bob"
-      />
-    )
-
-    component.find('#continue-housing').simulate('click')
-    component.find('#continue-activity').simulate('click')
-    expect(handleSearch.mock.calls.length).toBe(2)
   })
 })

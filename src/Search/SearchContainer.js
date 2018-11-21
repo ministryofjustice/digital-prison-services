@@ -13,6 +13,7 @@ import {
 import Error from '../Error'
 import Search from './Search'
 import { defaultPeriod } from '../redux/reducers'
+import Spinner from '../Spinner'
 
 class SearchContainer extends Component {
   constructor() {
@@ -91,11 +92,14 @@ class SearchContainer extends Component {
   }
 
   render() {
-    const { error, location } = this.props
+    const { error, location, loaded } = this.props
 
     if (error) {
       return <Error error={error} />
     }
+
+    if (!loaded) return <Spinner />
+
     return (
       <Search
         onSearch={this.onSearch}
