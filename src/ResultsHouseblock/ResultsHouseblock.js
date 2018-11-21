@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { getHoursMinutes, properCaseName, isToday, stripAgencyPrefix, getEventDescription } from '../utils'
+import { getHoursMinutes, properCaseName, isTodayOrAfter, stripAgencyPrefix, getEventDescription } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -183,7 +183,7 @@ class ResultsHouseblock extends Component {
 
     const buttons = (
       <div id="buttons" className="pure-u-md-12-12 padding-bottom">
-        {isToday(date) && (
+        {isTodayOrAfter(date) && (
           <button
             id="printButton"
             className="button"

@@ -371,15 +371,14 @@ describe('Offender results component Jira NN-843', () => {
     expect(handlePrint).toHaveBeenCalled()
   })
 
-  it('should not display print button when date is not today', async () => {
-    const handlePrint = jest.fn()
+  it('should not display print button when date is in the past', async () => {
     const oldDate = '25/05/2018'
     const component = shallow(
       <ResultsHouseblock
         history={mockHistory}
         subLocations={subLocations}
         houseblockData={response}
-        handlePrint={handlePrint}
+        handlePrint={jest.fn()}
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
@@ -399,6 +398,37 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
+  })
+
+  it('should display print button when date is in the future', async () => {
+    const futureDate = moment()
+      .add(1, 'days')
+      .format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsHouseblock
+        history={mockHistory}
+        subLocations={subLocations}
+        houseblockData={response}
+        handlePrint={jest.fn()}
+        handleSubLocationChange={jest.fn()}
+        handlePeriodChange={jest.fn()}
+        handleDateChange={jest.fn()}
+        getHouseblockList={jest.fn()}
+        date={futureDate}
+        period="ED"
+        currentLocation="BWing"
+        currentSubLocation="--"
+        agencyId={PRISON}
+        showPaymentReasonModal={jest.fn()}
+        user={user}
+        update={jest.fn()}
+        orderField="cellLocation"
+        sortOrder="ASC"
+        offenderNo="1"
+        resetErrorDispatch={jest.fn()}
+      />
+    )
+    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it('checkboxes should be read-only when date is over a week ago', async () => {

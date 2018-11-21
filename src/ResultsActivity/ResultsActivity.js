@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import { isToday, properCaseName, getEventDescription, stripAgencyPrefix } from '../utils'
+import { isTodayOrAfter, properCaseName, getEventDescription, stripAgencyPrefix } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -100,7 +100,7 @@ class ResultsActivity extends Component {
 
     const buttons = (
       <div id="buttons" className="pure-u-md-12-12 padding-bottom">
-        {isToday(date) && (
+        {isTodayOrAfter(date) && (
           <button
             id="printButton"
             className="button"
