@@ -38,7 +38,6 @@ const props = {
   locationDispatch: fn,
   orderDispatch: fn,
   periodDispatch: fn,
-  setCaseChangeRedirectStatusDispatch: fn,
   setErrorDispatch: fn,
   resetErrorDispatch: fn,
   setLoadedDispatch: fn,

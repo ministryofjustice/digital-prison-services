@@ -121,11 +121,6 @@ export const setMenuOpen = payload => ({
   payload,
 })
 
-export const setCaseChangeRedirectStatus = bool => ({
-  type: ActionTypes.SET_CASE_CHANGE_REDIRECT,
-  bool,
-})
-
 export const setEstablishmentRollData = data => ({
   type: ActionTypes.SET_ESTABLISHMENT_ROLL_DATA,
   data,
