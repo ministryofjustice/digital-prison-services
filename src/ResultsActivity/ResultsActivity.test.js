@@ -362,9 +362,7 @@ describe('Offender activity list results component', () => {
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
-  it('should not display print button when date is not today', async () => {
-    const handleSearch = jest.fn()
-    const handlePrint = jest.fn()
+  it('should not display print button when date is in the past', async () => {
     const oldDate = '25/05/2018'
     const component = shallow(
       <ResultsActivity
@@ -372,8 +370,8 @@ describe('Offender activity list results component', () => {
         activities={activities}
         activity={activity}
         activityData={response}
-        handleSearch={handleSearch}
-        handlePrint={handlePrint}
+        handleSearch={jest.fn()}
+        handlePrint={jest.fn()}
         handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
@@ -388,6 +386,34 @@ describe('Offender activity list results component', () => {
     )
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
+  })
+
+  it('should display print button when date is in the future', async () => {
+    const futureDate = moment()
+      .add(1, 'days')
+      .format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity
+        history={mockHistory}
+        activities={activities}
+        activity={activity}
+        activityData={response}
+        handleSearch={jest.fn()}
+        handlePrint={jest.fn()}
+        handleLocationChange={jest.fn()}
+        handlePeriodChange={jest.fn()}
+        handleDateChange={jest.fn()}
+        getActivityList={jest.fn()}
+        date={futureDate}
+        period="ED"
+        agencyId={PRISON}
+        showPaymentReasonModal={jest.fn()}
+        user={user}
+        resetErrorDispatch={jest.fn()}
+      />
+    )
+
+    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it.skip('checkboxes should be read-only when date is over a week ago', async () => {

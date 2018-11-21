@@ -21,15 +21,6 @@ const properCaseName = name =>
         .map(properCase)
         .join('-')
 
-const toFullName = ({ firstName, lastName, name }) =>
-  !isBlank(name)
-    ? name
-        .split(' ')
-        .map(properCaseName)
-        .join(', ')
-    : (!isBlank(lastName) ? `${properCaseName(lastName)}, ` : '') +
-      (!isBlank(firstName) ? properCaseName(firstName) : '')
-
 const getHoursMinutes = timestamp => {
   const indexOfT = timestamp.indexOf('T')
   if (indexOfT < 0) {
@@ -38,19 +29,12 @@ const getHoursMinutes = timestamp => {
   return timestamp.substr(indexOfT + 1, 5)
 }
 
-const isToday = date => {
+const isTodayOrAfter = date => {
   if (date === 'Today') {
     return true
   }
   const searchDate = moment(date, 'DD/MM/YYYY')
-  return searchDate.isSame(moment(), 'day')
-}
-
-const getPrisonDescription = user => {
-  const caseLoadOption = user.caseLoadOptions
-    ? user.caseLoadOptions.find(option => option.caseLoadId === user.activeCaseLoadId)
-    : undefined
-  return caseLoadOption ? caseLoadOption.description : user.activeCaseLoadId
+  return searchDate.isSameOrAfter(moment(), 'day')
 }
 
 const stripAgencyPrefix = (location, agency) => {
@@ -77,10 +61,8 @@ const getEventDescription = event => {
 module.exports = {
   properCase,
   properCaseName,
-  toFullName,
   getHoursMinutes,
-  isToday,
-  getPrisonDescription,
+  isTodayOrAfter,
   getEventDescription,
   stripAgencyPrefix,
 }
