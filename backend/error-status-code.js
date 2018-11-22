@@ -1,10 +1,7 @@
 const errorStatusCode = error => {
-  if (error && error.response) {
-    return error.response.status
-  }
-
-  if (error && error.code === 'ECONNREFUSED') {
-    return 503
+  if (error) {
+    if (error.response && error.response.status) return error.response.status
+    if (error.code === 'ECONNREFUSED') return 503
   }
 
   return 500
