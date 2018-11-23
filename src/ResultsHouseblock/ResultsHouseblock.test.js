@@ -163,6 +163,7 @@ describe('Offender results component Jira NN-843', () => {
         currentSubLocation="--"
         date={date}
         getHouseblockList={jest.fn()}
+        setColumnSort={jest.fn()}
         subLocations={subLocations}
         history={mockHistory}
         houseblockData={response}
@@ -308,6 +309,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         period="AM"
         currentLocation="BWing"
@@ -341,6 +343,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={today}
         period="PM"
@@ -382,6 +385,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={oldDate}
         period="ED"
@@ -413,6 +417,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={futureDate}
         period="ED"
@@ -443,6 +448,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={oldDate}
         period="ED"
@@ -490,6 +496,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={today}
         period="ED"
@@ -524,6 +531,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={today}
         period="ED"
@@ -547,7 +555,7 @@ describe('Offender results component Jira NN-843', () => {
   })
 
   it('should handle change of sort order', async () => {
-    const getHouseblockList = jest.fn()
+    const setColumnSort = jest.fn()
     const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
 
@@ -560,7 +568,8 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
-        getHouseblockList={getHouseblockList}
+        getHouseblockList={jest.fn()}
+        setColumnSort={setColumnSort}
         date={today}
         period="ED"
         orderField="cellLocation"
@@ -577,10 +586,10 @@ describe('Offender results component Jira NN-843', () => {
     )
 
     component.find('#Location-sort-asc').simulate('click')
-    expect(getHouseblockList).toHaveBeenCalledWith('cellLocation', 'DESC')
+    expect(setColumnSort).toHaveBeenCalledWith('cellLocation', 'DESC')
 
     component.find('#Name-sortable-column').simulate('click')
-    expect(getHouseblockList).toHaveBeenCalledWith('lastName', 'ASC')
+    expect(setColumnSort).toHaveBeenCalledWith('lastName', 'ASC')
   })
 
   it('should render back link', async () => {
@@ -593,6 +602,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         period="AM"
         currentLocation="BWing"
@@ -641,6 +651,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={date}
         period="ED"
@@ -682,6 +693,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={moment().format('DD/MM/YYYY')}
         period="ED"
@@ -737,6 +749,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={date}
         period="ED"
@@ -805,6 +818,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         date={date}
         period="ED"
@@ -868,6 +882,7 @@ describe('Offender results component Jira NN-843', () => {
         handleSubLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
+        setColumnSort={jest.fn()}
         getHouseblockList={jest.fn()}
         showPaymentReasonModal={showPaymentReasonModal}
         update={jest.fn()}

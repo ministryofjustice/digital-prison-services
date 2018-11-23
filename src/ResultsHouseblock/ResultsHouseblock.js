@@ -40,7 +40,7 @@ class ResultsHouseblock extends Component {
   }
 
   sortableColumn = (heading, field) => {
-    const { sortOrder, getHouseblockList, orderField } = this.props
+    const { sortOrder, setColumnSort, orderField } = this.props
     let triangleImage = ''
 
     if (sortOrder === 'ASC') {
@@ -49,7 +49,7 @@ class ResultsHouseblock extends Component {
           className="sortableLink"
           id={`${heading}-sort-asc`}
           {...linkOnClick(() => {
-            getHouseblockList(field, 'DESC')
+            setColumnSort(field, 'DESC')
           })}
         >
           <img src="/images/Triangle_asc.png" height="8" width="15" alt="Up arrow" />
@@ -61,7 +61,7 @@ class ResultsHouseblock extends Component {
           className="sortableLink"
           id={`${heading}-sort-desc`}
           {...linkOnClick(() => {
-            getHouseblockList(field, 'ASC')
+            setColumnSort(field, 'ASC')
           })}
         >
           <img src="/images/Triangle_desc.png" height="8" width="15" alt="Down arrow" />
@@ -74,7 +74,7 @@ class ResultsHouseblock extends Component {
         className="sortableLink"
         id={`${heading}-sortable-column`}
         {...linkOnClick(() => {
-          getHouseblockList(field, 'ASC')
+          setColumnSort(field, 'ASC')
         })}
       >
         {heading}
@@ -199,13 +199,55 @@ class ResultsHouseblock extends Component {
       </div>
     )
 
+    const sortLov = () => {
+      const { sortOrder, orderField, setColumnSort } = this.props
+
+      const meh = event => {
+        const [field, order] = event.target.value.split('_')
+        setColumnSort(field, order)
+      }
+      return (
+        <div className="pure-u-md-1-4">
+          <label className="form-label" htmlFor="sort-select">
+            Order the list
+          </label>
+          <select
+            id="sort-select"
+            name="sort-select"
+            className="form-control"
+            onChange={meh}
+            value={`${orderField}_${sortOrder}`}
+          >
+            <option key="lastName_ASC" value="lastName_ASC">
+              Name (A-Z)
+            </option>
+            <option key="lastName_DESC" value="lastName_DESC">
+              Name (Z-A)
+            </option>
+            <option key="cellLocation_ASC" value="cellLocation_ASC">
+              Location (1-X)
+            </option>
+            <option key="cellLocation_DESC" value="cellLocation_DESC">
+              Location (X-1)
+            </option>
+            <option key="activity_ASC" value="activity_ASC">
+              Activity name (A-Z)
+            </option>
+            <option key="activity_DESC" value="activity_DESC">
+              Activity name (Z-A)
+            </option>
+          </select>
+        </div>
+      )
+    }
+
     const headings = (
       <tr>
         <th className="straight width15">{this.sortableColumn('Name', 'lastName')}</th>
         <th className="straight width10">{this.sortableColumn('Location', 'cellLocation')}</th>
         <th className="straight width10">NOMS&nbsp;ID</th>
         <th className="straight width5">Info</th>
-        <th className="straight width15">Activity</th>
+        <th className="straight width15">{this.sortableColumn('Activity', 'activity')}</th>
         <th className="straight">Other activities</th>
         <th className="straightPrint no-display">
           <div>
@@ -290,6 +332,7 @@ class ResultsHouseblock extends Component {
           </div>
           <hr />
           {buttons}
+          {sortLov()}
         </form>
         <div>
           <table className="row-gutters">
@@ -315,6 +358,7 @@ ResultsHouseblock.propTypes = {
   currentLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   getHouseblockList: PropTypes.func.isRequired,
+  setColumnSort: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,

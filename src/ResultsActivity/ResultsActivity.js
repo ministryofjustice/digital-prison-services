@@ -116,6 +116,46 @@ class ResultsActivity extends Component {
       </div>
     )
 
+    const sortLov = () => (
+      // const { sortOrder, getHouseblockList, orderField } = this.props
+
+      // const sortList = event => {
+      //   const [field, order] = event.target.value.split('_')
+      //   getHouseblockList(field, order)
+      // }
+      <div className="pure-u-md-1-4">
+        <label className="form-label" htmlFor="sort-select">
+          Order the list
+        </label>
+        <select
+          id="sort-select"
+          name="sort-select"
+          className="form-control"
+          // onChange={sortList}
+          // value={`${orderField}_${sortOrder}`}
+        >
+          <option key="lastName_ASC" value="lastName_ASC">
+            Name (A-Z)
+          </option>
+          <option key="lastName_DESC" value="lastName_DESC">
+            Name (Z-A)
+          </option>
+          <option key="cellLocation_ASC" value="cellLocation_ASC">
+            Location (1-X)
+          </option>
+          <option key="cellLocation_DESC" value="cellLocation_DESC">
+            Location (X-1)
+          </option>
+          <option key="activity_ASC" value="activity_ASC">
+            Activity name (A-Z)
+          </option>
+          <option key="activity_DESC" value="activity_DESC">
+            Activity name (Z-A)
+          </option>
+        </select>
+      </div>
+    )
+
     const headings = (
       <tr>
         <th className="straight width15">Name</th>
@@ -188,6 +228,7 @@ class ResultsActivity extends Component {
           </div>
           <hr />
           {buttons}
+          {sortLov()}
         </form>
         <div>
           <table className="row-gutters">
