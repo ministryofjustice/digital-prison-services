@@ -124,7 +124,6 @@ class ResultsActivityContainer extends Component {
 ResultsActivityContainer.propTypes = {
   // props
   handleError: PropTypes.func.isRequired,
-  // getActivityList: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,

@@ -11,6 +11,7 @@ import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
+import SortableColumn from '../ResultsHouseblock/SortableColumn'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -156,17 +157,43 @@ class ResultsActivity extends Component {
       )
     }
 
-    const headings = (
-      <tr>
-        <th className="straight width15">Name</th>
-        <th className="straight width10">Location</th>
-        <th className="straight width10">NOMS&nbsp;ID</th>
-        <th className="straight width5">Info</th>
-        <th className="straight"> Activity</th>
-        <th className="straight">Other activities</th>
-      </tr>
-    )
-
+    const headings = () => {
+      const { sortOrder, orderField, setColumnSort } = this.props
+      return (
+        <tr>
+          <th className="straight width15">
+            <SortableColumn
+              heading="Name"
+              field="lastName"
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              orderField={orderField}
+            />
+          </th>
+          <th className="straight width10">
+            <SortableColumn
+              heading="Location"
+              field="cellLocation"
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              orderField={orderField}
+            />
+          </th>
+          <th className="straight width10">NOMS&nbsp;ID</th>
+          <th className="straight width5">Info</th>
+          <th className="straight width15">
+            <SortableColumn
+              heading="Activity"
+              field="activity"
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              orderField={orderField}
+            />
+          </th>
+          <th className="straight">Other activities</th>
+        </tr>
+      )
+    }
     // Disabled until whereabouts v2
     // const readOnly = this.olderThan7Days(this.props.date);
     const renderMainEvent = event => {
@@ -232,7 +259,7 @@ class ResultsActivity extends Component {
         </form>
         <div>
           <table className="row-gutters">
-            <thead>{headings}</thead>
+            <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>
           </table>
           {!offenders || offenders.length === 0 ? (

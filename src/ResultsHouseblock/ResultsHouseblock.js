@@ -10,7 +10,7 @@ import { getHoursMinutes, properCaseName, isTodayOrAfter, stripAgencyPrefix, get
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
-import { linkOnClick } from '../helpers'
+import SortableColumn from './SortableColumn'
 import Flags from '../Flags/Flags'
 
 class ResultsHouseblock extends Component {
@@ -37,53 +37,6 @@ class ResultsHouseblock extends Component {
     const days = moment().diff(searchDate, 'day')
 
     return days > 7
-  }
-
-  sortableColumn = (heading, field) => {
-    const { sortOrder, setColumnSort, orderField } = this.props
-    let triangleImage = ''
-
-    if (sortOrder === 'ASC') {
-      triangleImage = (
-        <span
-          className="sortableLink"
-          id={`${heading}-sort-asc`}
-          {...linkOnClick(() => {
-            setColumnSort(field, 'DESC')
-          })}
-        >
-          <img src="/images/Triangle_asc.png" height="8" width="15" alt="Up arrow" />
-        </span>
-      )
-    } else if (sortOrder === 'DESC') {
-      triangleImage = (
-        <span
-          className="sortableLink"
-          id={`${heading}-sort-desc`}
-          {...linkOnClick(() => {
-            setColumnSort(field, 'ASC')
-          })}
-        >
-          <img src="/images/Triangle_desc.png" height="8" width="15" alt="Down arrow" />
-        </span>
-      )
-    }
-
-    return orderField !== field ? (
-      <span
-        className="sortableLink"
-        id={`${heading}-sortable-column`}
-        {...linkOnClick(() => {
-          setColumnSort(field, 'ASC')
-        })}
-      >
-        {heading}
-      </span>
-    ) : (
-      <div>
-        {heading} {triangleImage}
-      </div>
-    )
   }
 
   render() {
@@ -241,26 +194,53 @@ class ResultsHouseblock extends Component {
       )
     }
 
-    const headings = (
-      <tr>
-        <th className="straight width15">{this.sortableColumn('Name', 'lastName')}</th>
-        <th className="straight width10">{this.sortableColumn('Location', 'cellLocation')}</th>
-        <th className="straight width10">NOMS&nbsp;ID</th>
-        <th className="straight width5">Info</th>
-        <th className="straight width15">{this.sortableColumn('Activity', 'activity')}</th>
-        <th className="straight">Other activities</th>
-        <th className="straightPrint no-display">
-          <div>
-            <span>Unlocked</span>
-          </div>
-        </th>
-        <th className="straightPrint no-display">
-          <div>
-            <span>Gone</span>
-          </div>
-        </th>
-      </tr>
-    )
+    const headings = () => {
+      const { sortOrder, orderField, setColumnSort } = this.props
+      return (
+        <tr>
+          <th className="straight width15">
+            <SortableColumn
+              heading="Name"
+              field="lastName"
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              orderField={orderField}
+            />
+          </th>
+          <th className="straight width10">
+            <SortableColumn
+              heading="Location"
+              field="cellLocation"
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              orderField={orderField}
+            />
+          </th>
+          <th className="straight width10">NOMS&nbsp;ID</th>
+          <th className="straight width5">Info</th>
+          <th className="straight width15">
+            <SortableColumn
+              heading="Activity"
+              field="activity"
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              orderField={orderField}
+            />
+          </th>
+          <th className="straight">Other activities</th>
+          <th className="straightPrint no-display">
+            <div>
+              <span>Unlocked</span>
+            </div>
+          </th>
+          <th className="straightPrint no-display">
+            <div>
+              <span>Gone</span>
+            </div>
+          </th>
+        </tr>
+      )
+    }
 
     const readOnly = this.olderThan7Days()
 
@@ -336,7 +316,7 @@ class ResultsHouseblock extends Component {
         </form>
         <div>
           <table className="row-gutters">
-            <thead>{headings}</thead>
+            <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>
           </table>
           {!offenders || offenders.length === 0 ? (
