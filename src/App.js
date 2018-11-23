@@ -116,16 +116,6 @@ class App extends React.Component {
     this.getActivityLocations(null, event.target.value)
   }
 
-  handleSearch = history => {
-    const { activity, currentLocation } = this.props
-
-    if (currentLocation && currentLocation !== '--') {
-      history.push('/whereaboutsresultshouseblock')
-    } else if (activity) {
-      history.push('/whereaboutsresultsactivity')
-    }
-  }
-
   raiseAnalyticsEvent = event => {
     const { config } = this.props
 
@@ -251,7 +241,6 @@ class App extends React.Component {
                 getActivityLocations={this.getActivityLocations}
                 handleDateChange={event => this.handleDateChangeWithLocationsUpdate(event)}
                 handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
-                handleSearch={history => this.handleSearch(history)}
                 dateDispatch={dateDispatch}
                 periodDispatch={periodDispatch}
               />
@@ -287,7 +276,6 @@ class App extends React.Component {
                 handleError={this.handleError}
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
-                // handleSearch={h => this.handleSearch(h)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
               />
             )}
@@ -367,14 +355,12 @@ class App extends React.Component {
 
 App.propTypes = {
   // mapStateToProps
-  activity: PropTypes.string.isRequired,
   agencyId: PropTypes.string,
   config: PropTypes.shape({
     notmEndpointUrl: PropTypes.string,
     mailTo: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
   }).isRequired,
-  currentLocation: PropTypes.string.isRequired, // NOTE prop name location clashes with history props
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   menuOpen: PropTypes.bool.isRequired,
@@ -403,11 +389,9 @@ App.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  activity: state.search.activity,
   agencyId: state.app.user.activeCaseLoadId,
   caseChangeRedirect: state.app.caseChangeRedirect,
   config: state.app.config,
-  currentLocation: state.search.location, // NOTE prop name location clashes with history props
   date: state.search.date,
   error: state.app.error,
   menuOpen: state.app.menuOpen,
