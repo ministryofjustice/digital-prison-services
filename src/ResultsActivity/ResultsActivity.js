@@ -4,7 +4,6 @@ import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
-import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import { isTodayOrAfter, properCaseName, getEventDescription, stripAgencyPrefix } from '../utils'
@@ -54,8 +53,7 @@ class ResultsActivity extends Component {
       handlePeriodChange,
       handlePrint,
       activityData,
-      handleSearch,
-      history,
+      getActivityList,
     } = this.props
 
     const dateSelect = (
@@ -116,45 +114,47 @@ class ResultsActivity extends Component {
       </div>
     )
 
-    const sortLov = () => (
-      // const { sortOrder, getHouseblockList, orderField } = this.props
+    const sortLov = () => {
+      const { sortOrder, orderField, setColumnSort } = this.props
 
-      // const sortList = event => {
-      //   const [field, order] = event.target.value.split('_')
-      //   getHouseblockList(field, order)
-      // }
-      <div className="pure-u-md-1-4">
-        <label className="form-label" htmlFor="sort-select">
-          Order the list
-        </label>
-        <select
-          id="sort-select"
-          name="sort-select"
-          className="form-control"
-          // onChange={sortList}
-          // value={`${orderField}_${sortOrder}`}
-        >
-          <option key="lastName_ASC" value="lastName_ASC">
-            Name (A-Z)
-          </option>
-          <option key="lastName_DESC" value="lastName_DESC">
-            Name (Z-A)
-          </option>
-          <option key="cellLocation_ASC" value="cellLocation_ASC">
-            Location (1-X)
-          </option>
-          <option key="cellLocation_DESC" value="cellLocation_DESC">
-            Location (X-1)
-          </option>
-          <option key="activity_ASC" value="activity_ASC">
-            Activity name (A-Z)
-          </option>
-          <option key="activity_DESC" value="activity_DESC">
-            Activity name (Z-A)
-          </option>
-        </select>
-      </div>
-    )
+      const invokeColumnSortWithEventData = event => {
+        const [field, order] = event.target.value.split('_')
+        setColumnSort(field, order)
+      }
+      return (
+        <div className="pure-u-md-1-4">
+          <label className="form-label" htmlFor="sort-select">
+            Order the list
+          </label>
+          <select
+            id="sort-select"
+            name="sort-select"
+            className="form-control"
+            onChange={invokeColumnSortWithEventData}
+            value={`${orderField}_${sortOrder}`}
+          >
+            <option key="lastName_ASC" value="lastName_ASC">
+              Name (A-Z)
+            </option>
+            <option key="lastName_DESC" value="lastName_DESC">
+              Name (Z-A)
+            </option>
+            <option key="cellLocation_ASC" value="cellLocation_ASC">
+              Location (1-X)
+            </option>
+            <option key="cellLocation_DESC" value="cellLocation_DESC">
+              Location (X-1)
+            </option>
+            <option key="activity_ASC" value="activity_ASC">
+              Activity name (A-Z)
+            </option>
+            <option key="activity_DESC" value="activity_DESC">
+              Activity name (Z-A)
+            </option>
+          </select>
+        </div>
+      )
+    }
 
     const headings = (
       <tr>
@@ -220,7 +220,7 @@ class ResultsActivity extends Component {
               className="button greyButton margin-left margin-top"
               type="button"
               onClick={() => {
-                handleSearch(history)
+                getActivityList()
               }}
             >
               Update
@@ -247,12 +247,11 @@ class ResultsActivity extends Component {
 }
 
 ResultsActivity.propTypes = {
-  handleSearch: PropTypes.func.isRequired,
+  getActivityList: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   agencyId: PropTypes.string.isRequired,
-  history: ReactRouterPropTypes.history.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
@@ -276,6 +275,9 @@ ResultsActivity.propTypes = {
     PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
       .isRequired
   ).isRequired,
+  setColumnSort: PropTypes.func.isRequired,
+  orderField: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

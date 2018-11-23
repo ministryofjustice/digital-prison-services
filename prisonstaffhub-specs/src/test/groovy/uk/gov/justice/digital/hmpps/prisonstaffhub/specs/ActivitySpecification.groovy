@@ -45,28 +45,29 @@ class ActivitySpecification extends GebReportingSpec {
 
         locations == [
                 'A-1-1',
-                'A-1-3',
-                'A-1-2',
                 'A-1-1',
-                'A-1-1'
+                'A-1-1',
+                'A-1-2',
+                'A-1-3',
         ]
 
         nomsIds == [
                 'A1234AA',
-                'A1234AC',
-                'A1234AB',
                 'A1234AA',
-                'A1234AA'
+                'A1234AA',
+                'A1234AB',
+                'A1234AC',
         ]
         flags[0]*.text() == ['ACCT','E\u2011LIST','CAT A']
-        flags[1]*.text() == ['CAT A Prov']
-        flags[2]*.text() == ['CAT A High']
+        flags[1]*.text() == ['ACCT','E\u2011LIST','CAT A']
+        flags[2]*.text() == ['ACCT','E\u2011LIST','CAT A']
+        flags[3]*.text() == ['CAT A High']
         events == [
                 'Activity 1',
-                'Activity 1',
-                'Activity 1',
                 'Activity 2',
-                'Activity 3'
+                'Activity 3',
+                'Activity 1',
+                'Activity 1',
         ]
 
         eventsElsewhere == [
@@ -80,9 +81,6 @@ class ActivitySpecification extends GebReportingSpec {
                         '** Transfer scheduled ** (expired)',
                         'Medical - Dentist - Appt details 15:30',
                         'Visits - Friends 18:00'],
-                [
-                        '** Release scheduled **'],
-                [],
                 [
                         '** Court visit scheduled **',
                         '** Court visit scheduled ** (expired)',
@@ -103,7 +101,10 @@ class ActivitySpecification extends GebReportingSpec {
                         '** Transfer scheduled ** (cancelled)',
                         '** Transfer scheduled ** (expired)',
                         'Medical - Dentist - Appt details 15:30',
-                        'Visits - Friends 18:00']
+                        'Visits - Friends 18:00'],
+                [],
+                [
+                        '** Release scheduled **'],
         ]
     }
 
@@ -134,11 +135,11 @@ class ActivitySpecification extends GebReportingSpec {
 
         events == [
                 'Activity 1',
-                'Activity 1',
-                'Activity 1',
                 'Activity 2',
-                'Activity 3'
-        ]
+                'Activity 3',
+                'Activity 1',
+                'Activity 1',
+         ]
 
 
         when: "I go to the search page afresh"

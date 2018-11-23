@@ -1,12 +1,10 @@
 import { getEventDescription } from '../utils'
 
-const anyActivity = obj => obj.activity || obj.others[0]
-
 const fieldExtractor = {
-  firstName: obj => anyActivity(obj).firstName,
-  lastName: obj => anyActivity(obj).lastName,
-  cellLocation: obj => anyActivity(obj).cellLocation,
-  activity: obj => (obj.activity ? getEventDescription(obj.activity) : ''),
+  firstName: obj => obj.firstName,
+  lastName: obj => obj.lastName,
+  cellLocation: obj => obj.cellLocation,
+  activity: obj => getEventDescription(obj),
 }
 
 const fieldComparator = field => {
@@ -32,11 +30,11 @@ const comparators = {
   activity: thenComparing(fieldComparator('activity'), lastNameComparator),
 }
 
-const sortHouseBlockData = (houseBlockData, orderField, sortOrder) => {
-  houseBlockData.sort(comparators[orderField])
+const sortActivityData = (activityData, orderField, sortOrder) => {
+  activityData.sort(comparators[orderField])
   if (sortOrder === 'DESC') {
-    houseBlockData.reverse()
+    activityData.reverse()
   }
 }
 
-export default sortHouseBlockData
+export default sortActivityData

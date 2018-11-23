@@ -158,7 +158,6 @@ class ResultsHouseblockContainer extends Component {
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
           setColumnSort={this.setColumnSort}
-          getHouseblockList={this.getHouseblockList}
           update={this.update}
           {...this.props}
         />

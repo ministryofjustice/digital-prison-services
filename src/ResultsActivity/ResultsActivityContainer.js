@@ -3,26 +3,91 @@ import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
+import moment from 'moment'
 import Error from '../Error'
 import ResultsActivity from './ResultsActivity'
-import { resetError, setSearchActivities, showPaymentReasonModal } from '../redux/actions'
+import {
+  resetError,
+  setActivityData,
+  setLoaded,
+  setOrderField,
+  setSearchActivities,
+  setSortOrder,
+  showPaymentReasonModal,
+} from '../redux/actions'
 import Spinner from '../Spinner'
 import { getActivityListReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
+import sortActivityData from './activityDataSorter'
+
+const axios = require('axios')
 
 class ResultsActivityContainer extends Component {
+  constructor(props) {
+    super(props)
+    this.handlePrint = this.handlePrint.bind(this)
+    this.setColumnSort = this.setColumnSort.bind(this)
+    this.getActivityList = this.getActivityList.bind(this)
+  }
+
   async componentWillMount() {
-    const { activity, getActivityList, history } = this.props
+    const { activity, history, orderDispatch, sortOrderDispatch } = this.props
 
     try {
-      this.handlePrint = this.handlePrint.bind(this)
       if (activity) {
-        getActivityList()
+        orderDispatch('lastName')
+        sortOrderDispatch('ASC')
+
+        this.getActivityList()
       } else {
         history.push('/whereaboutssearch')
       }
     } catch (error) {
       this.handleError(error)
     }
+  }
+
+  setColumnSort(orderField, sortOrder) {
+    const { orderDispatch, sortOrderDispatch, activityData, activityDataDispatch } = this.props
+    orderDispatch(orderField)
+    sortOrderDispatch(sortOrder)
+    const copy = activityData.slice()
+    sortActivityData(copy, orderField, sortOrder)
+    activityDataDispatch(copy)
+  }
+
+  async getActivityList() {
+    const {
+      agencyId,
+      activity,
+      period,
+      resetErrorDispatch,
+      setLoadedDispatch,
+      activityDataDispatch,
+      date,
+      orderField,
+      sortOrder,
+      handleError,
+    } = this.props
+
+    try {
+      resetErrorDispatch()
+      setLoadedDispatch(false)
+      const config = {
+        params: {
+          agencyId,
+          locationId: activity,
+          date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
+          timeSlot: period,
+        },
+      }
+      const response = await axios.get('/api/activitylist', config)
+      const activityData = response.data
+      sortActivityData(activityData, orderField, sortOrder)
+      activityDataDispatch(activityData)
+    } catch (error) {
+      handleError(error)
+    }
+    setLoadedDispatch(true)
   }
 
   handlePrint() {
@@ -44,7 +109,13 @@ class ResultsActivityContainer extends Component {
     return (
       <div>
         <Error error={error} />
-        <ResultsActivity handlePrint={this.handlePrint} resetErrorDispatch={resetErrorDispatch} {...this.props} />
+        <ResultsActivity
+          handlePrint={this.handlePrint}
+          getActivityList={this.getActivityList}
+          resetErrorDispatch={resetErrorDispatch}
+          setColumnSort={this.setColumnSort}
+          {...this.props}
+        />
       </div>
     )
   }
@@ -53,9 +124,8 @@ class ResultsActivityContainer extends Component {
 ResultsActivityContainer.propTypes = {
   // props
   handleError: PropTypes.func.isRequired,
-  getActivityList: PropTypes.func.isRequired,
+  // getActivityList: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
 
@@ -88,6 +158,11 @@ ResultsActivityContainer.propTypes = {
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
   showPaymentReasonModal: PropTypes.func.isRequired,
+  orderDispatch: PropTypes.func.isRequired,
+  sortOrderDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  activityDataDispatch: PropTypes.func.isRequired,
 
   // special
   history: ReactRouterPropTypes.history.isRequired,
@@ -108,13 +183,19 @@ const mapStateToProps = state => ({
   activityData: state.events.activityData,
   loaded: state.app.loaded,
   error: state.app.error,
+  orderField: state.events.orderField,
+  sortOrder: state.events.sortOrder,
 })
 
 const mapDispatchToProps = dispatch => ({
+  orderDispatch: field => dispatch(setOrderField(field)),
+  sortOrderDispatch: field => dispatch(setSortOrder(field)),
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
   showPaymentReasonModal: (event, browserEvent) =>
     dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() })),
+  setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
+  activityDataDispatch: data => dispatch(setActivityData(data)),
 })
 
 export default withRouter(

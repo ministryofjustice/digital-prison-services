@@ -202,7 +202,7 @@ class ResultsHouseblock extends Component {
     const sortLov = () => {
       const { sortOrder, orderField, setColumnSort } = this.props
 
-      const meh = event => {
+      const invokeColumnSortWithEventData = event => {
         const [field, order] = event.target.value.split('_')
         setColumnSort(field, order)
       }
@@ -215,7 +215,7 @@ class ResultsHouseblock extends Component {
             id="sort-select"
             name="sort-select"
             className="form-control"
-            onChange={meh}
+            onChange={invokeColumnSortWithEventData}
             value={`${orderField}_${sortOrder}`}
           >
             <option key="lastName_ASC" value="lastName_ASC">
@@ -357,7 +357,6 @@ ResultsHouseblock.propTypes = {
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
-  getHouseblockList: PropTypes.func.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
@@ -389,7 +388,7 @@ ResultsHouseblock.propTypes = {
           eventType: PropTypes.string,
           eventDescription: PropTypes.string.isRequired,
           eventStatus: PropTypes.string,
-          comment: PropTypes.string.isRequired,
+          comment: PropTypes.string,
         })
       ),
     }).isRequired

@@ -148,7 +148,6 @@ describe('Offender activity list results component', () => {
         activities={activities}
         activity={activity}
         activityData={response}
-        handleSearch={jest.fn()}
         handlePrint={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
@@ -159,6 +158,9 @@ describe('Offender activity list results component', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
     expect(component.find('.whereabouts-title').text()).toEqual('Chapel Activity')
@@ -276,9 +278,8 @@ describe('Offender activity list results component', () => {
         activities={activities}
         activity={activity}
         activityData={[]}
-        handleSearch={jest.fn()}
         handlePrint={jest.fn()}
-        handleLocationChange={jest.fn()}
+        // handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
         getActivityList={jest.fn()}
@@ -288,6 +289,9 @@ describe('Offender activity list results component', () => {
         user={user}
         date=""
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
     const tr = component.find('tr')
@@ -296,7 +300,7 @@ describe('Offender activity list results component', () => {
   })
 
   it('should handle buttons correctly', async () => {
-    const handleSearch = jest.fn()
+    const getActivityList = jest.fn()
 
     const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
@@ -306,25 +310,27 @@ describe('Offender activity list results component', () => {
         activities={activities}
         activity={activity}
         activityData={response}
-        handleSearch={handleSearch}
+        getActivityList={getActivityList}
         handlePrint={handlePrint}
-        handleLocationChange={jest.fn()}
+        // handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
         date={today}
         period="AM"
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
 
     component.find('#updateButton').simulate('click')
-    expect(handleSearch).toHaveBeenCalled()
+    expect(getActivityList).toHaveBeenCalled()
     expect(handlePrint).not.toHaveBeenCalled()
     expect(handlePrint).not.toHaveBeenCalled()
     component
@@ -335,7 +341,7 @@ describe('Offender activity list results component', () => {
   })
 
   it('should recognise "Today"', async () => {
-    const handleSearch = jest.fn()
+    const getActivityList = jest.fn()
     const handlePrint = jest.fn()
     const today = 'Today'
     const component = shallow(
@@ -344,18 +350,20 @@ describe('Offender activity list results component', () => {
         activities={activities}
         activity={activity}
         activityData={response}
-        handleSearch={handleSearch}
+        getActivityList={getActivityList}
         handlePrint={handlePrint}
-        handleLocationChange={jest.fn()}
+        // handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
         date={today}
         period="AM"
         agencyId={PRISON}
         showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
     // If today, print button is present
@@ -370,9 +378,8 @@ describe('Offender activity list results component', () => {
         activities={activities}
         activity={activity}
         activityData={response}
-        handleSearch={jest.fn()}
         handlePrint={jest.fn()}
-        handleLocationChange={jest.fn()}
+        // handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
         getActivityList={jest.fn()}
@@ -382,6 +389,9 @@ describe('Offender activity list results component', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
 
@@ -400,7 +410,7 @@ describe('Offender activity list results component', () => {
         activityData={response}
         handleSearch={jest.fn()}
         handlePrint={jest.fn()}
-        handleLocationChange={jest.fn()}
+        // handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
         getActivityList={jest.fn()}
@@ -410,6 +420,9 @@ describe('Offender activity list results component', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
 
@@ -428,7 +441,7 @@ describe('Offender activity list results component', () => {
         activityData={response}
         handleSearch={handleSearch}
         handlePrint={handlePrint}
-        handleLocationChange={jest.fn()}
+        // handleLocationChange={jest.fn()}
         handlePeriodChange={jest.fn()}
         handleDateChange={jest.fn()}
         getActivityList={jest.fn()}
@@ -438,6 +451,9 @@ describe('Offender activity list results component', () => {
         showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
       />
     )
 
