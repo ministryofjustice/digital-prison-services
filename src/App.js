@@ -15,16 +15,13 @@ import './App.scss'
 
 import {
   resetError,
-  setActivityData,
   setConfig,
   setError,
   setLoaded,
   setMenuOpen,
-  setMessage,
   setSearchActivities,
   setSearchActivity,
   setSearchDate,
-  setSearchLocation,
   setSearchPeriod,
   setTermsVisibility,
   setUserDetails,
@@ -73,28 +70,6 @@ class App extends React.Component {
     }
   }
 
-  getActivityList = async () => {
-    const { agencyId, activity, period, resetErrorDispatch, setLoadedDispatch, activityDataDispatch, date } = this.props
-
-    try {
-      resetErrorDispatch()
-      setLoadedDispatch(false)
-      const config = {
-        params: {
-          agencyId,
-          locationId: activity,
-          date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
-          timeSlot: period,
-        },
-      }
-      const response = await axios.get('/api/activitylist', config)
-      activityDataDispatch(response.data)
-    } catch (error) {
-      this.handleError(error)
-    }
-    setLoadedDispatch(true)
-  }
-
   getActivityLocations = async (day, time) => {
     let bookedOnDay = day
     let timeSlot = time
@@ -141,20 +116,6 @@ class App extends React.Component {
     this.getActivityLocations(null, event.target.value)
   }
 
-  handleSearch = history => {
-    const { activity, currentLocation, orderField, sortOrder } = this.props
-
-    if (currentLocation && currentLocation !== '--') {
-      history.push('/whereaboutsresultshouseblock')
-    } else if (activity) {
-      if (history.location.pathname === '/whereaboutsresultsactivity') {
-        this.getActivityList(orderField, sortOrder)
-      } else {
-        history.push('/whereaboutsresultsactivity')
-      }
-    }
-  }
-
   raiseAnalyticsEvent = event => {
     const { config } = this.props
 
@@ -172,18 +133,6 @@ class App extends React.Component {
     const { shouldShowTerms, user } = this.props
 
     return !shouldShowTerms && (user && user.activeCaseLoadId)
-  }
-
-  handleLocationChange = event => {
-    const { locationDispatch } = this.props
-
-    locationDispatch(event.target.value)
-  }
-
-  handleActivityChange = event => {
-    const { activityDispatch } = this.props
-
-    activityDispatch(event.target.value)
   }
 
   handleDateChange = date => {
@@ -216,18 +165,6 @@ class App extends React.Component {
     } else {
       setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)
     }
-  }
-
-  displayError = error => {
-    const { setErrorDispatch } = this.props
-
-    setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)
-  }
-
-  clearMessage = () => {
-    const { setMessageDispatch } = this.props
-
-    setMessageDispatch(null)
   }
 
   hideTermsAndConditions = () => {
@@ -304,7 +241,6 @@ class App extends React.Component {
                 getActivityLocations={this.getActivityLocations}
                 handleDateChange={event => this.handleDateChangeWithLocationsUpdate(event)}
                 handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
-                handleSearch={history => this.handleSearch(history)}
                 dateDispatch={dateDispatch}
                 periodDispatch={periodDispatch}
               />
@@ -338,10 +274,8 @@ class App extends React.Component {
             render={() => (
               <ResultsActivityContainer
                 handleError={this.handleError}
-                getActivityList={this.getActivityList}
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
-                handleSearch={h => this.handleSearch(h)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
               />
             )}
@@ -421,21 +355,17 @@ class App extends React.Component {
 
 App.propTypes = {
   // mapStateToProps
-  activity: PropTypes.string.isRequired,
   agencyId: PropTypes.string,
   config: PropTypes.shape({
     notmEndpointUrl: PropTypes.string,
     mailTo: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
   }).isRequired,
-  currentLocation: PropTypes.string.isRequired, // NOTE prop name location clashes with history props
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   menuOpen: PropTypes.bool.isRequired,
-  orderField: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   shouldShowTerms: PropTypes.bool.isRequired,
-  sortOrder: PropTypes.string.isRequired,
   user: PropTypes.shape({
     firstName: PropTypes.string,
     activeCaseLoadId: PropTypes.string,
@@ -445,35 +375,28 @@ App.propTypes = {
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
-  activityDataDispatch: PropTypes.func.isRequired,
   activityDispatch: PropTypes.func.isRequired,
   boundSetMenuOpen: PropTypes.func.isRequired,
   configDispatch: PropTypes.func.isRequired,
   dateDispatch: PropTypes.func.isRequired,
-  locationDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
-  setMessageDispatch: PropTypes.func.isRequired,
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  activity: state.search.activity,
   agencyId: state.app.user.activeCaseLoadId,
   caseChangeRedirect: state.app.caseChangeRedirect,
   config: state.app.config,
-  currentLocation: state.search.location, // NOTE prop name location clashes with history props
   date: state.search.date,
   error: state.app.error,
   menuOpen: state.app.menuOpen,
-  orderField: state.events.orderField,
   period: state.search.period,
   shouldShowTerms: state.app.shouldShowTerms,
-  sortOrder: state.events.sortOrder,
   user: state.app.user,
   title: state.app.title,
 })
@@ -486,17 +409,14 @@ App.defaultProps = {
 
 const mapDispatchToProps = dispatch => ({
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  activityDataDispatch: data => dispatch(setActivityData(data)),
   activityDispatch: text => dispatch(setSearchActivity(text)),
   boundSetMenuOpen: flag => dispatch(setMenuOpen(flag)),
   configDispatch: config => dispatch(setConfig(config)),
   dateDispatch: text => dispatch(setSearchDate(text)),
-  locationDispatch: text => dispatch(setSearchLocation(text)),
   periodDispatch: text => dispatch(setSearchPeriod(text)),
   resetErrorDispatch: () => dispatch(resetError()),
   setErrorDispatch: error => dispatch(setError(error)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
-  setMessageDispatch: message => dispatch(setMessage(message)),
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
   switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),

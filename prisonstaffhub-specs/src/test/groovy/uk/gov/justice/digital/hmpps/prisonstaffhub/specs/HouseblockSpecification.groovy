@@ -204,9 +204,9 @@ class HouseblockSpecification extends GebReportingSpec {
         then: 'Only one activity is displayed'
         at HouseblockPage
         def texts = tableRows*.text()
-        texts[1].contains("James, John A-1-12 A1234AH")
-        texts[1].contains("non paid act 1 17:10")
-        texts[1].contains("hair cut - non paid act 2 19:10")
+        texts[4].contains("James, John A-1-12 A1234AH")
+        texts[4].contains("non paid act 1 17:10")
+        texts[4].contains("hair cut - non paid act 2 19:10")
     }
 
     def "should indicate that an offender is going to be released today"() {
@@ -225,9 +225,9 @@ class HouseblockSpecification extends GebReportingSpec {
         then: 'Only one activity is displayed'
         at HouseblockPage
         def texts = tableRows*.text()
-        texts[1].contains("James, John A-1-12 A1234AH")
-        texts[1].contains("non paid act 1 17:10")
-        texts[1].contains("** Release scheduled **")
+        texts[4].contains("James, John A-1-12 A1234AH")
+        texts[4].contains("non paid act 1 17:10")
+        texts[4].contains("** Release scheduled **")
     }
 
     def "should indicate that an offender is going to be transferred"() {
@@ -246,8 +246,8 @@ class HouseblockSpecification extends GebReportingSpec {
         then: '*** Transfer scheduled *** should be visible in the other activities column'
         at HouseblockPage
         def texts = tableRows*.text()
-        texts[2].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[2].contains("** Transfer scheduled **")
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
+        texts[1].contains("** Transfer scheduled **")
     }
 
     def "should show all court events with the relevant status descriptions"() {
@@ -266,9 +266,9 @@ class HouseblockSpecification extends GebReportingSpec {
         then: 'I should see three court events in the other activities column'
         at HouseblockPage
         def texts = tableRows*.text()
-        texts[2].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[2].contains("** Court visit scheduled **")
-        texts[2].contains("** Court visit scheduled ** (complete)")
-        texts[2].contains("** Court visit scheduled ** (expired)")
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
+        texts[1].contains("** Court visit scheduled **")
+        texts[1].contains("** Court visit scheduled ** (complete)")
+        texts[1].contains("** Court visit scheduled ** (expired)")
     }
 }

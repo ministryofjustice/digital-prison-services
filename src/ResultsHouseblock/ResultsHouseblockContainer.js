@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import Error from '../Error'
+import sortHouseBlockData from './houseBlockDataSorter'
 import ResultsHouseblock from './ResultsHouseblock'
 import {
   resetError,
@@ -23,6 +24,7 @@ class ResultsHouseblockContainer extends Component {
     super(props)
     this.handleSubLocationChange = this.handleSubLocationChange.bind(this)
     this.getHouseblockList = this.getHouseblockList.bind(this)
+    this.setColumnSort = this.setColumnSort.bind(this)
     this.handlePrint = this.handlePrint.bind(this)
     this.update = this.update.bind(this)
     this.state = {
@@ -42,6 +44,15 @@ class ResultsHouseblockContainer extends Component {
     } catch (error) {
       this.handleError(error)
     }
+  }
+
+  setColumnSort(orderField, sortOrder) {
+    const { orderDispatch, sortOrderDispatch, houseblockData, houseblockDataDispatch } = this.props
+    orderDispatch(orderField)
+    sortOrderDispatch(sortOrder)
+    const copy = houseblockData.slice()
+    sortHouseBlockData(copy, orderField, sortOrder)
+    houseblockDataDispatch(copy)
   }
 
   async getHouseblockList(orderField, sortOrder) {
@@ -86,13 +97,15 @@ class ResultsHouseblockContainer extends Component {
           timeSlot: period,
         },
         headers: {
-          'Sort-Fields': orderField,
-          'Sort-Order': sortOrder,
+          'Sort-Fields': 'lastName',
+          'Sort-Order': 'ASC',
         },
       }
 
       const response = await axios.get('/api/houseblocklist', config)
-      houseblockDataDispatch(response.data)
+      const houseBlockData = response.data
+      sortHouseBlockData(houseBlockData, orderField, sortOrder)
+      houseblockDataDispatch(houseBlockData)
     } catch (error) {
       handleError(error)
     }
@@ -144,7 +157,7 @@ class ResultsHouseblockContainer extends Component {
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
-          getHouseblockList={this.getHouseblockList}
+          setColumnSort={this.setColumnSort}
           update={this.update}
           {...this.props}
         />

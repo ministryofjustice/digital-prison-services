@@ -22,6 +22,7 @@ class SearchContainer extends Component {
     this.onLocationChange = this.onLocationChange.bind(this)
     this.validate = this.validate.bind(this)
     this.onSearch = this.onSearch.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
   }
 
   componentWillMount() {
@@ -57,12 +58,10 @@ class SearchContainer extends Component {
   }
 
   onSearch(history) {
-    const { handleSearch } = this.props
-
     if (!this.validate()) {
       return
     }
-    handleSearch(history)
+    this.handleSearch(history)
   }
 
   async getLocations() {
@@ -77,6 +76,16 @@ class SearchContainer extends Component {
       locationsDispatch(response.data)
     } catch (error) {
       handleError(error)
+    }
+  }
+
+  handleSearch = history => {
+    const { activity, location } = this.props
+
+    if (location && location !== '--') {
+      history.push('/whereaboutsresultshouseblock')
+    } else if (activity) {
+      history.push('/whereaboutsresultsactivity')
     }
   }
 
@@ -119,7 +128,6 @@ SearchContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   getActivityLocations: PropTypes.func.isRequired,
 
   // mapStateToProps
