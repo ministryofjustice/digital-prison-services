@@ -30,13 +30,10 @@ class ResultsActivityContainer extends Component {
   }
 
   async componentWillMount() {
-    const { activity, history, orderDispatch, sortOrderDispatch } = this.props
+    const { activity, history } = this.props
 
     try {
       if (activity) {
-        orderDispatch('lastName')
-        sortOrderDispatch('ASC')
-
         this.getActivityList()
       } else {
         history.push('/whereaboutssearch')
@@ -63,9 +60,9 @@ class ResultsActivityContainer extends Component {
       resetErrorDispatch,
       setLoadedDispatch,
       activityDataDispatch,
+      orderDispatch,
+      sortOrderDispatch,
       date,
-      orderField,
-      sortOrder,
       handleError,
     } = this.props
 
@@ -82,6 +79,13 @@ class ResultsActivityContainer extends Component {
       }
       const response = await axios.get('/api/activitylist', config)
       const activityData = response.data
+
+      const orderField = 'activity'
+      const sortOrder = 'ASC'
+
+      orderDispatch(orderField)
+      sortOrderDispatch(sortOrder)
+
       sortActivityData(activityData, orderField, sortOrder)
       activityDataDispatch(activityData)
     } catch (error) {
