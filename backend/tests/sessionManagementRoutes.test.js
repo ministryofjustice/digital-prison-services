@@ -139,7 +139,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   })
 
   it('GET "/logout" clears the cookie', () => {
-    const newNomisEndpointUrl = 'https://newnomis.url'
+    const newNomisEndpointUrl = 'https://newnomis.url/'
     config.app.notmEndpointUrl = newNomisEndpointUrl
     tokenRefresher.resolves()
 
@@ -147,7 +147,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       agent
         .get('/auth/logout')
         .expect(302)
-        .expect('location', `${newNomisEndpointUrl}/login`)
+        .expect('location', `${newNomisEndpointUrl}login`)
         // The server sends a set cookie header to clear the cookie.
         // The next test shows that the cookie was cleared because of the redirect to '/'
         .expect(hasCookies(['testCookie']))
