@@ -7,7 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 
 class LoginPage extends Page {
 
-    static url = 'auth/login'
+    static url = '/login'
 
     static at = {
         title == 'Prison Staff Hub'

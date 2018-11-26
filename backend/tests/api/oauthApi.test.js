@@ -4,7 +4,6 @@ const { expect } = chai
 
 const MockAdapter = require('axios-mock-adapter')
 const querystring = require('querystring')
-const contextProperties = require('../../contextProperties')
 const { oauthApiFactory } = require('../../api/oauthApi')
 
 const clientId = 'clientId'
@@ -37,7 +36,6 @@ describe('oathApi tests', () => {
 
   describe('authenticate', () => {
     describe('successful path', () => {
-      const context = {}
       let authenticateResponse
 
       beforeAll(() => {
@@ -48,18 +46,18 @@ describe('oathApi tests', () => {
           refresh_token: 'refreshToken',
         })
 
-        authenticateResponse = oauthApi.authenticate(context, 'name', 'password')
+        authenticateResponse = oauthApi.authenticate('name', 'password')
       })
 
       describe('should save tokens', () => {
         it('should save access token', () =>
-          authenticateResponse.then(() => {
-            expect(contextProperties.getAccessToken(context)).to.equal('accessToken')
+          authenticateResponse.then(response => {
+            expect(response.access_token).to.equal('accessToken')
           }))
 
         it('should save refresh token', () =>
-          authenticateResponse.then(() => {
-            expect(contextProperties.getRefreshToken(context)).to.equal('refreshToken')
+          authenticateResponse.then(response => {
+            expect(response.refresh_token).to.equal('refreshToken')
           }))
       })
 
@@ -89,7 +87,7 @@ describe('oathApi tests', () => {
           return Promise.reject(error)
         })
 
-        return oauthApi.authenticate({}, 'name', 'password').catch(error => {
+        return oauthApi.authenticate('name', 'password').catch(error => {
           expect(error.message).to.be.equal('some server problem')
         })
       })
@@ -107,7 +105,7 @@ describe('oathApi tests', () => {
           return Promise.reject(error)
         })
 
-        return oauthApi.authenticate({}, 'name', 'password').catch(error => {
+        return oauthApi.authenticate('name', 'password').catch(error => {
           expect(error.message).to.be.equal('Your password has expired.')
         })
       })
@@ -125,7 +123,7 @@ describe('oathApi tests', () => {
           return Promise.reject(error)
         })
 
-        return oauthApi.authenticate({}, 'name', 'password').catch(error => {
+        return oauthApi.authenticate('name', 'password').catch(error => {
           expect(error.message).to.be.equal('Your user account is locked.')
         })
       })
@@ -143,7 +141,7 @@ describe('oathApi tests', () => {
           return Promise.reject(error)
         })
 
-        return oauthApi.authenticate({}, 'name', 'password').catch(error => {
+        return oauthApi.authenticate('name', 'password').catch(error => {
           expect(error.message).to.be.equal('Missing credentials.')
         })
       })
@@ -161,7 +159,7 @@ describe('oathApi tests', () => {
           return Promise.reject(error)
         })
 
-        return oauthApi.authenticate({}, 'name', 'password').catch(error => {
+        return oauthApi.authenticate('name', 'password').catch(error => {
           expect(error.message).to.be.equal('The username or password you have entered is invalid.')
         })
       })
@@ -169,7 +167,6 @@ describe('oathApi tests', () => {
   })
 
   describe('refresh', () => {
-    const context = {}
     let refreshResponse
 
     beforeAll(() => {
@@ -180,25 +177,23 @@ describe('oathApi tests', () => {
         refresh_token: 'newRefreshToken',
       })
 
-      contextProperties.setTokens({ access_token: 'accessToken', refresh_token: 'refreshToken' }, context)
-
-      refreshResponse = oauthApi.refresh(context)
+      refreshResponse = oauthApi.refresh('refreshToken')
     })
 
     describe('should save tokens', () => {
       it('should save access token', () =>
-        refreshResponse.then(() => {
-          expect(contextProperties.getAccessToken(context)).to.equal('newAccessToken')
+        refreshResponse.then(response => {
+          expect(response.access_token).to.equal('newAccessToken')
         }))
 
       it('should save refresh token', () =>
-        refreshResponse.then(() => {
-          expect(contextProperties.getRefreshToken(context)).to.equal('newRefreshToken')
+        refreshResponse.then(response => {
+          expect(response.refresh_token).to.equal('newRefreshToken')
         }))
     })
 
     it('should have set correct request configuration', () =>
-      refreshResponse.then(() => {
+      refreshResponse.then(response => {
         expect(requestConfig.method).to.equal('post')
         expect(requestConfig.baseURL).to.equal(url)
         expect(requestConfig.url).to.equal('/oauth/token')

@@ -1,7 +1,6 @@
 const axios = require('axios')
 const querystring = require('querystring')
 const logger = require('../log')
-const contextProperties = require('../contextProperties')
 const errorStatusCode = require('../error-status-code')
 
 const AuthClientErrorName = 'AuthClientError'
@@ -30,6 +29,12 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
     },
   })
 
+  // eslint-disable-next-line camelcase
+  const parseOauthTokens = ({ access_token, refresh_token }) => ({
+    access_token,
+    refresh_token,
+  })
+
   const translateAuthClientError = error => {
     logger.info(`login error description = ${error}`)
 
@@ -42,13 +47,13 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
     return 'The username or password you have entered is invalid.'
   }
 
-  const makeTokenRequest = (context, data, msg) =>
+  const makeTokenRequest = (data, msg) =>
     oauthAxios({ data })
       .then(response => {
-        contextProperties.setTokens(response.data, context)
         logger.debug(
           `${msg} ${response.config.method} ${response.config.url} ${response.status} ${response.statusText}`
         )
+        return parseOauthTokens(response.data)
       })
       .catch(error => {
         const status = errorStatusCode(error)
@@ -65,30 +70,23 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
       })
 
   /**
-   * Perform OAuth authentication, storing the returned tokens in the supplied context.
-   * @param context The request scoped context.
+   * Perform OAuth authentication
    * @param username
    * @param password
-   * @returns a Promise that is fulfilled when authentication has succeeded and the OAuth tokens have been stored. A
+   * @returns a Promise that is fulfilled when authentication has succeeded and the OAuth tokens have been returned. A
    * fulfilled promise has no result, but a rejected promise contains an axios response
    */
-  const authenticate = (context, username, password) =>
+  const authenticate = (username, password) =>
     makeTokenRequest(
-      context,
       `username=${username.toUpperCase()}&password=${password}&grant_type=password`,
       `authenticate: ${username}`
     )
 
   /**
-   * Perform OAuth token refresh, storing the returned tokens in the supplied context. See scopedStore.run.
-   * @returns A Promise that resolves when token refresh has succeeded and the OAuth tokens have been stored.
+   * Perform OAuth token refresh, returning the tokens to the caller. See scopedStore.run.
+   * @returns A Promise that resolves when token refresh has succeeded and the OAuth tokens have been returned.
    */
-  const refresh = context =>
-    makeTokenRequest(
-      context,
-      `refresh_token=${contextProperties.getRefreshToken(context)}&grant_type=refresh_token`,
-      'refresh:'
-    )
+  const refresh = refreshToken => makeTokenRequest(`refresh_token=${refreshToken}&grant_type=refresh_token`, 'refresh:')
 
   return {
     authenticate,

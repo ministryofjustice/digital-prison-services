@@ -118,8 +118,8 @@ class LoginSpecification extends GebReportingSpec {
         when: "I log out"
         header.logout()
 
-        then: "I am returned to the Login page."
-        at LoginPage
+        then: "I am taken to the NOTM Login page."
+        browser.getCurrentUrl() == 'http://localhost:3000/login'
 
        /* then: "I am on the dashboard."
         at DashboardPage*/

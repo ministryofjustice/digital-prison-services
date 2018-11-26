@@ -1,55 +1,42 @@
+const passport = require('passport')
 const logger = require('./log')
-const { AuthClientErrorName } = require('./api/oauthApi')
 const contextProperties = require('./contextProperties')
+const config = require('./config')
 
-const LOGIN_PATH = '/auth/login'
-const LOGOUT_PATH = '/auth/logout'
+const isXHRRequest = req =>
+  req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1) || (req.path && req.path.endsWith('.js'))
+
 /**
  * Add session management related routes to an express 'app'.
  * These handle login, logout, and middleware to handle the JWT token cookie. (hmppsCookie).
  * @param app an Express instance.
  * @param healthApi a configured healthApi instance.
- * @param oauthApi (authenticate, refresh)
  * @param tokenRefresher a function which uses the 'context' object to perform an OAuth token refresh (returns a promise).
  * @param mailTo The email address displayed at the bottom of the login page.
  * @param homeLink The URL for the home page.
  */
-const configureRoutes = ({ app, healthApi, oauthApi, tokenRefresher, mailTo, homeLink }) => {
+const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) => {
   const loginIndex = async (req, res) => {
     const isApiUp = await healthApi.isUp()
-    logger.info(`loginIndex - health check called and the isaAppUp = ${isApiUp}`)
-    res.render('login', { authError: false, apiUp: isApiUp, mailTo, homeLink })
+    logger.info(`loginIndex - health check called and isApiUp = ${isApiUp}`)
+    const errors = req.flash('error')
+    const authError = Boolean(errors && errors.length > 0)
+    const authErrorText = (authError && errors[0]) || ''
+    res.render('login', { authError, authErrorText, apiUp: isApiUp, mailTo, homeLink })
   }
 
-  const login = async (req, res) => {
-    const { username, password } = req.body
-
-    try {
-      await oauthApi.authenticate(req.session, username, password)
-
-      res.redirect('/')
-    } catch (error) {
-      if (error.name === AuthClientErrorName) {
-        res.status(401)
-        res.render('login', {
-          authError: true,
-          authErrorText: error.message,
-          apiUp: true,
-          mailTo,
-          homeLink,
-        })
-      } else {
-        res.status(503)
-        logger.error(error)
-        res.render('login', { authError: false, apiUp: false, mailTo, homeLink })
-      }
-    }
-  }
+  const login = (req, res) =>
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/login',
+      failureFlash: true,
+    })(req, res)
 
   const logout = (req, res) => {
+    req.logout()
     // eslint-disable-next-line no-param-reassign
     req.session = null
-    res.redirect(`${process.env.NN_ENDPOINT_URL}${LOGIN_PATH}`)
+    res.redirect(`${config.app.notmEndpointUrl}login`)
   }
 
   /**
@@ -60,55 +47,64 @@ const configureRoutes = ({ app, healthApi, oauthApi, tokenRefresher, mailTo, hom
    * @param next
    */
   const loginMiddleware = (req, res, next) => {
-    if (contextProperties.hasTokens(req.session)) {
-      // implies authenticated
+    if (req.isAuthenticated()) {
       res.redirect('/')
       return
     }
     next()
   }
 
-  const hmppsCookieMiddleware = async (req, res, next) => {
+  /**
+   * Check that the authenticated user has a valid token and if not then attempt to refresh it
+   */
+  const refreshTokenMiddleware = async (req, res, next) => {
     try {
-      if (contextProperties.hasTokens(req.session)) {
-        await tokenRefresher(req.session)
+      if (req.isAuthenticated()) {
+        await tokenRefresher(req.user)
       }
       next()
     } catch (error) {
-      next(error)
+      // need to logout here otherwise user will still be considered authenticated when we take them to /login
+      req.logout()
+
+      if (isXHRRequest(req)) {
+        res.status(401)
+        res.json({ reason: 'session-expired' })
+        next(error)
+        return
+      }
+
+      res.redirect('/login')
     }
   }
 
   /**
-   * If the context does not contain an accessToken the client is denied access to the
-   * application and is redirected to the login page.
-   * (or if this is a 'data' request then the response is an Http 404 status (Not Found)
-   * @param req
-   * @param res
-   * @param next
+   * If the user is not authenticated the client is denied access to the application and is redirected to the login page.
+   * (or if this is a 'data' request then the response is an Http 401 status (Expired)
    */
   const requireLoginMiddleware = (req, res, next) => {
-    if (contextProperties.hasTokens(req.session)) {
-      contextProperties.setTokens(req.session, res.locals)
+    if (req.isAuthenticated()) {
+      contextProperties.setTokens(req.user, res.locals)
       next()
       return
     }
-    const isXHRRequest = req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)
-
-    if (isXHRRequest) {
+    if (isXHRRequest(req)) {
       res.status(401)
-      res.json({ message: 'Session expired, please logout.', reason: 'session-expired' })
+      res.json({ reason: 'session-expired' })
       return
     }
 
-    res.redirect(LOGIN_PATH)
+    res.redirect('/login')
   }
 
-  app.get(LOGIN_PATH, loginMiddleware, loginIndex)
-  app.post(LOGIN_PATH, login)
-  app.get(LOGOUT_PATH, logout)
+  app.get('/login', loginMiddleware, loginIndex)
+  app.post('/login', login)
+  app.get('/auth/logout', logout)
+  app.get('/logout', (req, res) => {
+    res.redirect('/auth/logout')
+  })
 
-  app.use(hmppsCookieMiddleware)
+  app.use(refreshTokenMiddleware)
   app.use(requireLoginMiddleware)
 
   /**
