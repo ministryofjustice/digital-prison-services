@@ -3,6 +3,8 @@ const request = require('supertest')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
+const passport = require('passport')
+const flash = require('connect-flash')
 const setCookie = require('set-cookie-parser')
 const chai = require('chai')
 
@@ -13,13 +15,11 @@ const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
 
 const sessionManagementRoutes = require('../sessionManagementRoutes')
-const contextProperties = require('../contextProperties')
+const auth = require('../auth')
 const { AuthClientError } = require('../api/oauthApi')
+const config = require('../config')
 
 const hmppsCookieName = 'testCookie'
-
-const accessToken = 'AT'
-const refreshToken = 'RT'
 
 const hasCookies = expectedNames => res => {
   const cookieNames = setCookie.parse(res).map(cookie => cookie.name)
@@ -41,20 +41,19 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
     })
   )
 
-  const setTokensOnContext = context =>
-    new Promise(resolve => {
-      contextProperties.setTokens({ access_token: accessToken, refresh_token: refreshToken }, context)
-      resolve()
-    })
+  app.use(passport.initialize())
+  app.use(passport.session())
+  app.use(flash())
 
   const rejectWithStatus = rejectStatus => () => Promise.reject({ response: { status: rejectStatus } })
 
   const rejectWithAuthenticationError = errorText => () => Promise.reject(AuthClientError(errorText))
 
   const oauthApi = {
-    authenticate: setTokensOnContext,
-    refresh: () => Promise.resolve(),
+    authenticate: () => Promise.resolve({ access_token: 'token' }),
+    refresh: () => Promise.resolve({ access_token: 'newToken' }),
   }
+  auth.init(oauthApi)
 
   const healthApi = {
     isUp: () => Promise.resolve(true),
@@ -69,7 +68,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   sessionManagementRoutes.configureRoutes({
     app,
     healthApi,
-    oauthApi,
     tokenRefresher,
     mailTo: 'test@site.com',
   })
@@ -83,134 +81,109 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   // because the outcome of each test depends upon the successful completion of the previous tests.
   const agent = request.agent(app)
 
-  const callback = done =>
-    function checkDone(err) {
-      if (err) {
-        if (done.fail) {
-          // jest
-          done.fail(err)
-        } else {
-          // mocha
-          done(err)
-        }
-      } else {
-        done()
-      }
-    }
-
-  it('GET "/" with no cookie (not authenticated) redirects to /auth/login', done => {
+  it('GET "/" with no cooke (not authenticated) redirects to /login', () => {
     tokenRefresher.resolves()
 
-    agent
+    return agent
       .get('/')
       .expect(302)
-      .expect('location', '/auth/login')
-      .end(callback(done))
+      .expect('location', '/login')
   })
 
-  it('GET "/auth/login" when not authenticated returns login page', done => {
+  it('GET "/login" when not authenticated returns login page', () =>
     agent
-      .get('/auth/login')
+      .get('/login')
       .expect(200)
       .expect('content-type', /text\/html/)
-      .expect(/Login/)
-      .end(callback(done))
-  })
+      .expect(/Login/))
 
-  it('successful login redirects to "/" setting hmpps cookie', done => {
+  it('successful login redirects to "/" setting hmpps cookie', () =>
     agent
-      .post('/auth/login')
+      .post('/login')
       .send('username=test&password=testPassowrd')
       .expect(302)
       .expect('location', '/')
-      .expect(hasCookies(['testCookie']))
-      .end(callback(done))
-  })
+      .expect(hasCookies(['testCookie'])))
 
-  it('GET "/auth/login" when authenticated redirects to "/"', done => {
+  it('GET "/login" when authenticated redirects to "/"', () =>
     agent
-      .get('/auth/login')
+      .get('/login')
       .expect(302)
-      .expect('location', '/')
-      .end(callback(done))
-  })
+      .expect('location', '/'))
 
-  it('GET "/" with cookie serves content', done => {
+  it('GET "/" with cookie serves content', () =>
     agent
       .get('/')
       .expect(200)
-      .expect('static')
-      .end(callback(done))
-  })
+      .expect('static'))
 
-  it('GET "/heart-beat"', done => {
+  it('GET "/heart-beat"', () =>
     agent
       .get('/heart-beat')
+      .set('Accept', 'application/json')
       .expect(200)
       .expect(() => {
         expect(tokenRefresher).to.be.called
-      })
-      .end(callback(done))
-  })
+      }))
 
-  it('GET "/heart-beat" when refresh fails', done => {
+  it('GET "/heart-beat" when refresh fails', () => {
     tokenRefresher.rejects()
 
-    agent
+    return agent
       .get('/heart-beat')
-      .expect(500)
+      .set('Accept', 'application/json')
+      .expect(401)
       .expect(() => {
         expect(tokenRefresher).to.be.called
       })
-      .end(callback(done))
   })
 
-  it('GET "/auth/logout" clears the cookie', done => {
+  it('GET "/logout" clears the cookie', () => {
     const newNomisEndpointUrl = 'https://newnomis.url'
-    process.env.NN_ENDPOINT_URL = newNomisEndpointUrl
+    config.app.notmEndpointUrl = newNomisEndpointUrl
     tokenRefresher.resolves()
 
-    agent
-      .get('/auth/logout')
-      .expect(302)
-      .expect('location', `${newNomisEndpointUrl}/auth/login`)
-      // The server sends a set cookie header to clear the cookie.
-      // The next test shows that the cookie was cleared because of the redirect to '/'
-      .expect(hasCookies(['testCookie']))
-      .end(callback(done))
+    return (
+      agent
+        .get('/auth/logout')
+        .expect(302)
+        .expect('location', `${newNomisEndpointUrl}/login`)
+        // The server sends a set cookie header to clear the cookie.
+        // The next test shows that the cookie was cleared because of the redirect to '/'
+        .expect(hasCookies(['testCookie']))
+    )
   })
 
-  it('After logout get "/" should redirect to "/auth/login"', done => {
+  it('After logout get "/" should redirect to "/login"', () =>
     agent
       .get('/')
       .expect(302)
-      .expect('location', '/auth/login')
-      .expect(hasCookies([]))
-      .end(callback(done))
-  })
+      .expect('location', '/login')
+      .expect(hasCookies([])))
 
   it('Unsuccessful signin - auth client error', () => {
     oauthApi.authenticate = rejectWithAuthenticationError('Your password has expired.')
 
     return agent
-      .post('/auth/login')
+      .post('/login')
       .send('username=test&password=testPassowrd')
-      .expect(401)
+      .redirects(1)
+      .expect(/Login/)
       .expect(res => {
-        expect(res.error.path).to.equal('/auth/login')
         expect(res.text).to.include('Your password has expired.')
       })
   })
+
   it('Unsuccessful signin - server error', () => {
     oauthApi.authenticate = rejectWithStatus(503)
 
     return agent
-      .post('/auth/login')
+      .post('/login')
       .send('username=test&password=testPassowrd')
-      .expect(503)
+      .redirects(1)
+      .expect(/Login/)
       .expect(res => {
-        expect(res.error.path).to.equal('/auth/login')
-        expect(res.text).to.include('Service unavailable. Please try again later.')
+        expect(res.text).to.include('A system error occurred; please try again later')
       })
   })
 })

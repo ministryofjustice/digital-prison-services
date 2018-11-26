@@ -7,6 +7,7 @@ require('./azure-appinsights')
 const path = require('path')
 const express = require('express')
 const cookieSession = require('cookie-session')
+const passport = require('passport')
 const bodyParser = require('body-parser')
 const bunyanMiddleware = require('bunyan-middleware')
 const hsts = require('hsts')
@@ -14,8 +15,9 @@ const helmet = require('helmet')
 const webpack = require('webpack')
 const middleware = require('webpack-dev-middleware')
 const hrm = require('webpack-hot-middleware')
-const ensureHttps = require('./middleware/ensureHttps')
+const flash = require('connect-flash')
 
+const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
 const { userLocationsFactory } = require('./controllers/userLocations')
@@ -32,6 +34,7 @@ const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
+const auth = require('./auth')
 const contextProperties = require('./contextProperties')
 
 const tokenRefresherFactory = require('./tokenRefresher').factory
@@ -112,6 +115,7 @@ const controller = controllerFactory(
 )
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 })
+auth.init(oauthApi)
 const tokenRefresher = tokenRefresherFactory(oauthApi.refresh, config.app.tokenRefreshThresholdSeconds)
 
 app.use(
@@ -134,11 +138,14 @@ app.use((req, res, next) => {
   next()
 })
 
-/* login, logout, hmppsCookie management, token refresh etc */
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
+
+/* login, logout, token refresh etc */
 sessionManagementRoutes.configureRoutes({
   app,
   healthApi,
-  oauthApi,
   tokenRefresher,
   mailTo: config.app.mailTo,
   homeLink: config.app.notmEndpointUrl,
