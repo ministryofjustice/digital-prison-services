@@ -17,7 +17,7 @@ import {
 } from '../redux/actions'
 import Spinner from '../Spinner'
 import { getActivityListReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
-import sortActivityData from './activityDataSorter'
+import sortActivityData from './activityResultsSorter'
 
 const axios = require('axios')
 

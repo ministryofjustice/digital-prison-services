@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import Error from '../Error'
-import sortHouseBlockData from './houseBlockDataSorter'
+import sortHouseBlockData from './houseBlockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
 import {
   resetError,
