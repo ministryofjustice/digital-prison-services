@@ -293,7 +293,8 @@ class ResultsHouseblock extends Component {
     return (
       <div className="results-houseblock">
         {this.displayBack()}
-        <h1 className="heading-large whereabouts-title no-print">{currentLocation}</h1>
+        <h1 className="heading-large whereabouts-title">{currentLocation}</h1>
+        <hr className="print-only" />
         <form className="no-print">
           <div>
             {locationSelect}

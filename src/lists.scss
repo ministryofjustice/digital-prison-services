@@ -123,6 +123,18 @@ tbody > tr + td {
 }
 
 @media print {
+  .whereabouts-title {
+    width: auto;
+    display: inline-block;
+    margin: 0;
+    font-size: 24px;
+    padding-right: 1em;
+  }
+
+  hr {
+  margin: 1px;
+  }
+
   tbody > tr > td:nth-of-type(7) {
     padding-right: 0.4em;
   }
