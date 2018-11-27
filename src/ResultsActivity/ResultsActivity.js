@@ -237,7 +237,8 @@ class ResultsActivity extends Component {
     return (
       <div className="results-activity">
         {this.displayBack()}
-        <h1 className="heading-large whereabouts-title no-print">{this.getActivityName()}</h1>
+        <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
+        <hr className="print-only" />
         <form className="no-print">
           <div>
             {dateSelect}
