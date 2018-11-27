@@ -26,6 +26,9 @@ const hasCookies = expectedNames => res => {
   expect(cookieNames).to.have.members(expectedNames)
 }
 
+const newNomisEndpointUrl = 'https://newnomis.url/'
+config.app.notmEndpointUrl = newNomisEndpointUrl
+
 describe('Test the routes and middleware installed by sessionManagementRoutes', () => {
   const app = express()
 
@@ -139,8 +142,6 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   })
 
   it('GET "/logout" clears the cookie', () => {
-    const newNomisEndpointUrl = 'https://newnomis.url/'
-    config.app.notmEndpointUrl = newNomisEndpointUrl
     tokenRefresher.resolves()
 
     return (

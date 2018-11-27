@@ -29,6 +29,7 @@
     "new-nomis-shared-components": "^1.7.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",
     "react": "^16.3.2",
