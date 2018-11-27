@@ -6,6 +6,9 @@ const errorStatusCode = require('../error-status-code')
 const AuthClientErrorName = 'AuthClientError'
 const AuthClientError = message => ({ name: AuthClientErrorName, message, stack: new Error().stack })
 
+const apiClientCredentials = (clientId, clientSecret) =>
+  Buffer.from(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
+
 /**
  * Return an oauthApi built using the supplied configuration.
  * @param clientId
@@ -14,10 +17,6 @@ const AuthClientError = message => ({ name: AuthClientErrorName, message, stack:
  * @returns a configured oauthApi instance
  */
 const oauthApiFactory = ({ clientId, clientSecret, url }) => {
-  const apiClientCredentials = Buffer.from(
-    `${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`
-  ).toString('base64')
-
   const oauthAxios = axios.create({
     baseURL: url,
     url: 'oauth/token',
@@ -25,7 +24,7 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
     timeout: 30000,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      authorization: `Basic ${apiClientCredentials}`,
+      authorization: `Basic ${apiClientCredentials(clientId, clientSecret)}`,
     },
   })
 
@@ -96,4 +95,4 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
   }
 }
 
-module.exports = { oauthApiFactory, AuthClientError, AuthClientErrorName }
+module.exports = { oauthApiFactory, AuthClientError, AuthClientErrorName, apiClientCredentials }
