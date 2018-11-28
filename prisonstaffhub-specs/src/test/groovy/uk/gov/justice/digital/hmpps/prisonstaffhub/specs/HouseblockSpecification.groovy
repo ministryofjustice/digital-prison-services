@@ -34,9 +34,6 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = new Date().format('YYYY-MM-dd')
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
-      //  form['date'] = ??? TODO cannot set input, have to click calendar!
-//        datePicker.click()
-//        days[0].click() // select 1st of this month for now
 
         form['period-select'] = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
@@ -56,19 +53,19 @@ class HouseblockSpecification extends GebReportingSpec {
         texts2[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def reorderedRow1 = tableRows[1].find('td')
         reorderedRow1[flagsColumn]*.$('span')[0]*.text() == ['ACCT', 'E\u2011LIST', 'CAT A']
-        reorderedRow1[activityColumn].text() == 'Woodwork 17:00'
-        reorderedRow1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ];
+        reorderedRow1[activityColumn].text() == '17:00 - Woodwork'
+        reorderedRow1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
 
         // Check order is by name
         texts2[2].contains("Baa, Fred A-1-3 A1234AC")
         def reorderedRow2 = tableRows[2].find('td')
         reorderedRow2[flagsColumn]*.$('span')[0]*.text() == ['CAT A Prov']
-        reorderedRow2[activityColumn].text() == 'Chapel 11:45'
+        reorderedRow2[activityColumn].text() == '11:45 - Chapel'
 
         texts2[3].contains("Balog, Eugene A-1-2 A1234AB")
         def reorderedRow3 = tableRows[3].find('td')
         reorderedRow3[flagsColumn]*.$('span')[0]*.text() == ['CAT A High']
-        reorderedRow3[activityColumn].text() == 'TV Repairs 17:45'
+        reorderedRow3[activityColumn].text() == '17:45 - TV Repairs'
 
 
         when: "I order by cell location"
@@ -84,17 +81,17 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def row1 = tableRows[1].find('td')
-        row1[activityColumn].text() == 'Woodwork 17:00'
-        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
+        row1[activityColumn].text() == '17:00 - Woodwork'
+        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
 
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
         def row2 = tableRows[2].find('td')
-        row2[activityColumn].text() == 'TV Repairs 17:45'
+        row2[activityColumn].text() == '17:45 - TV Repairs'
         row2[otherActivityColumn].text() == ''
 
         texts[3].contains("Baa, Fred A-1-3 A1234AC")
         def row3 = tableRows[3].find('td')
-        row3[activityColumn].text() == 'Chapel 11:45'
+        row3[activityColumn].text() == '11:45 - Chapel'
         row3[otherActivityColumn].text() == ''
     }
 
@@ -126,12 +123,12 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         def row1 = tableRows[1].find('td')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        row1[activityColumn].text() == 'Woodwork 17:00'
-        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', 'Visits - Friends 18:00', 'Visits - Friends 18:30 (cancelled)' ]
+        row1[activityColumn].text() == '17:00 - Woodwork'
+        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
 
         def row2 = tableRows[2].find('td')
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
-        row2[activityColumn].text() == 'TV Repairs 17:45'
+        row2[activityColumn].text() == '17:45 - TV Repairs'
 
         when: "I go to the search page afresh"
         browser.to SearchPage
@@ -183,8 +180,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def texts = tableRows*.text()
         def row1 = tableRows[1].find('td')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        row1[activityColumn].text().contains('Woodwork 17:00')
-        row1[otherActivityColumn].text().contains('conflict activity 16:50')
+        row1[activityColumn].text().contains('17:00 - Woodwork')
+        row1[otherActivityColumn].text().contains('16:50 - 18:30 - conflict activity')
         row1[0].find("a", href: endsWith('/offenders/A1234AA/quick-look')).size() == 1
     }
 
@@ -205,8 +202,8 @@ class HouseblockSpecification extends GebReportingSpec {
         at HouseblockPage
         def texts = tableRows*.text()
         texts[4].contains("James, John A-1-12 A1234AH")
-        texts[4].contains("non paid act 1 17:10")
-        texts[4].contains("hair cut - non paid act 2 19:10")
+        texts[4].contains("17:10 - 18:30 - docs - non paid act 1")
+        texts[4].contains("19:10 - 20:30 - hair cut - non paid act 2")
     }
 
     def "should indicate that an offender is going to be released today"() {
@@ -226,7 +223,7 @@ class HouseblockSpecification extends GebReportingSpec {
         at HouseblockPage
         def texts = tableRows*.text()
         texts[4].contains("James, John A-1-12 A1234AH")
-        texts[4].contains("non paid act 1 17:10")
+        texts[4].contains("17:10 - 18:30 - docs - non paid act 1")
         texts[4].contains("** Release scheduled **")
     }
 

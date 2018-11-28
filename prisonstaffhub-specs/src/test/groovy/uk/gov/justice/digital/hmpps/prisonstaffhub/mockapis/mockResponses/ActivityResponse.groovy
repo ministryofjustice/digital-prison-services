@@ -87,6 +87,7 @@ class ActivityResponse {
             comment         : "Appt details",
             event           : "MEDE",
             eventDescription: "Medical - Dentist",
+            eventLocation:    "Medical Room1",
             startTime       : "2017-10-15T15:30:00",
             locationId      : 4
     ]

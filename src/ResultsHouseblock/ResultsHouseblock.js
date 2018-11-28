@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { getHoursMinutes, properCaseName, isTodayOrAfter, stripAgencyPrefix, getEventDescription } from '../utils'
+import { getHoursMinutes, properCaseName, isTodayOrAfter, stripAgencyPrefix, getMainEventDescription } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -160,7 +160,7 @@ class ResultsHouseblock extends Component {
         setColumnSort(field, order)
       }
       return (
-        <div className="pure-u-md-1-4">
+        <div className="pure-u-md-1-4 margin-top-small margin-bottom-large">
           <label className="form-label" htmlFor="sort-select">
             Order the list
           </label>
@@ -265,7 +265,7 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">{anyActivity.offenderNo}</td>
             <td>{Flags.AlertFlags(row.alertFlags, row.category, 'flags')}</td>
             <td className="row-gutters small-font">
-              {row.activity && `${getEventDescription(row.activity)} ${getHoursMinutes(row.activity.startTime)}`}
+              {row.activity && `${getHoursMinutes(row.activity.startTime)} - ${getMainEventDescription(row.activity)}`}
             </td>
             <td className="row-gutters small-font">
               <OtherActivitiesView offenderMainEvent={row} />

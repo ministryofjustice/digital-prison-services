@@ -103,6 +103,21 @@ class HouseblockResponse {
             endTime         : "2017-10-15T20:30:00"
     ]
 
+    static response8 = [
+            offenderNo      : "A1234AA",
+            firstName       : "JOHN",
+            lastName        : "JAMES",
+            cellLocation    : "LEI-A-1-12",
+            event           : "HC",
+            eventType       : "APP",
+            eventDescription: "hair cut",
+            eventLocation   : "room 1",
+            comment         : "crew cut",
+            startTime       : "2017-10-15T19:10:00",
+            endTime         : "2017-10-15T20:30:00"
+    ]
+
+
     static externalTransfer1 = [
             eventDescription: "Transfer to high security prison",
             eventStatus     : "SCH",
@@ -185,14 +200,16 @@ class HouseblockResponse {
             response2,
             response2_2,
             response3,
-            response4
+            response4,
+            response8
     ])
     static responseNameOrder = JsonOutput.toJson([
             response1,
             response2,
             response2_2,
             response4,
-            response3
+            response3,
+            response8
     ])
     static responseMultipleActivities = JsonOutput.toJson([
             response1,

@@ -204,7 +204,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('ACCTCAT\u00a0A') // non-breaking space!
-    expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('Chapel 18:00')
+    expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -224,7 +224,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(1)
         .text()
-    ).toEqual('Visits - Official Visit 11:00')
+    ).toEqual('11:00 - Visits - Official Visit')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -234,7 +234,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(2)
         .text()
-    ).toEqual('The gym, appointment 17:00')
+    ).toEqual('17:00 - 17:30 - The gym, appointment')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -244,7 +244,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(3)
         .text()
-    ).toEqual('Medical - Dentist - Appt details 11:40')
+    ).toEqual('11:40 - Medical - Dentist - Appt details')
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
     expect(
       row1Tds
@@ -263,7 +263,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(row2Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael')
     expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
     expect(row2Tds.at(FLAGS_COLUMN).text()).toEqual('')
-    expect(row2Tds.at(MAIN_COLUMN).text()).toEqual('Chapel Act 18:00')
+    expect(row2Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Act')
     expect(
       row2Tds
         .at(OTHER_COLUMN)
@@ -277,7 +277,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(row3Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred')
     expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
     expect(row3Tds.at(FLAGS_COLUMN).text()).toEqual('CAT\u00a0A\u00a0High')
-    expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('Chapel Activity 18:00')
+    expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Activity')
     expect(
       row3Tds
         .at(OTHER_COLUMN)
@@ -287,7 +287,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('Visits - Family Visit 11:11 (cancelled)')
+    ).toEqual('11:11 - Visits - Family Visit (cancelled)')
 
     expect(
       tr

@@ -62,11 +62,11 @@ class ActivitySpecification extends GebReportingSpec {
         flags[1]*.text() == ['CAT A Prov']
         flags[2]*.text() == ['CAT A High']
         events == [
-                'Activity 1',
-                'Activity 1',
-                'Activity 1',
-                'Activity 2',
-                'Activity 3'
+                '17:00 - Activity 1',
+                '11:45 - Activity 1',
+                '17:45 - Activity 1',
+                '17:00 - Activity 2',
+                '17:00 - Activity 3'
         ]
 
         eventsElsewhere == [
@@ -78,8 +78,8 @@ class ActivitySpecification extends GebReportingSpec {
                         '** Transfer scheduled ** (complete)',
                         '** Transfer scheduled ** (cancelled)',
                         '** Transfer scheduled ** (expired)',
-                        'Medical - Dentist - Appt details 15:30',
-                        'Visits - Friends 18:00'],
+                        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
+                        '18:00 - Visits - Friends'],
                 [
                         '** Release scheduled **'],
                 [],
@@ -91,8 +91,8 @@ class ActivitySpecification extends GebReportingSpec {
                         '** Transfer scheduled ** (complete)',
                         '** Transfer scheduled ** (cancelled)',
                         '** Transfer scheduled ** (expired)',
-                        'Medical - Dentist - Appt details 15:30',
-                        'Visits - Friends 18:00'
+                        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
+                        '18:00 - Visits - Friends'
                 ],
                 [
                         '** Court visit scheduled **',
@@ -102,8 +102,8 @@ class ActivitySpecification extends GebReportingSpec {
                         '** Transfer scheduled ** (complete)',
                         '** Transfer scheduled ** (cancelled)',
                         '** Transfer scheduled ** (expired)',
-                        'Medical - Dentist - Appt details 15:30',
-                        'Visits - Friends 18:00']
+                        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
+                        '18:00 - Visits - Friends']
         ]
     }
 
@@ -133,11 +133,11 @@ class ActivitySpecification extends GebReportingSpec {
         form['period-select'] == 'PM'
 
         events == [
-                'Activity 1',
-                'Activity 1',
-                'Activity 1',
-                'Activity 2',
-                'Activity 3'
+                '17:00 - Activity 1',
+                '11:45 - Activity 1',
+                '17:45 - Activity 1',
+                '17:00 - Activity 2',
+                '17:00 - Activity 3'
         ]
 
 
