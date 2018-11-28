@@ -123,7 +123,7 @@ class ResultsActivity extends Component {
         setColumnSort(field, order)
       }
       return (
-        <div className="pure-u-md-1-4">
+        <div className="pure-u-md-1-4 margin-top-small margin-bottom-large">
           <label className="form-label" htmlFor="sort-select">
             Order the list
           </label>
