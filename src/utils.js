@@ -63,6 +63,13 @@ const getEventDescription = event => {
   return removeBlanks([event.eventDescription, event.eventLocation, event.comment]).join(' - ')
 }
 
+const setListSizeClass = list => {
+  if (!list || list.length === 0) return 'empty-list'
+  if (list.length < 20) return 'small-list'
+  if (list.length < 40) return 'medium-list'
+  return 'large-list'
+}
+
 module.exports = {
   properCase,
   properCaseName,
@@ -71,4 +78,5 @@ module.exports = {
   getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,
+  setListSizeClass,
 }

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { getHoursMinutes, properCaseName, isTodayOrAfter, stripAgencyPrefix, getMainEventDescription } from '../utils'
+import { getHoursMinutes, properCaseName, isTodayOrAfter, stripAgencyPrefix, getMainEventDescription, setListSizeClass } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -315,7 +315,7 @@ class ResultsHouseblock extends Component {
           {buttons}
           {sortLov()}
         </form>
-        <div>
+        <div className={setListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>

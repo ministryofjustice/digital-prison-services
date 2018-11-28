@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
-import './index.scss'
 import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import { isTodayOrAfter, properCaseName, getMainEventDescription, stripAgencyPrefix, getHoursMinutes } from '../utils'
+import {
+  isTodayOrAfter,
+  properCaseName,
+  getMainEventDescription,
+  stripAgencyPrefix,
+  getHoursMinutes,
+  setListSizeClass,
+} from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -259,7 +265,7 @@ class ResultsActivity extends Component {
           {buttons}
           {sortLov()}
         </form>
-        <div>
+        <div className={setListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>

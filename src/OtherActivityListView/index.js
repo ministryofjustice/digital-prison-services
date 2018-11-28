@@ -38,7 +38,7 @@ const renderEvent = event => {
 
   return (
     <li className="transfer" key={event.eventId}>
-      <span className="bold-font16">** {event.eventDescription} ** </span>
+      <strong className="other-activity">** {event.eventDescription} ** </strong>
       {event.expired && expired}
       {event.complete && complete}
       {event.cancelled && cancelled}
@@ -51,7 +51,7 @@ const OtherActivityListView = ({ offenderMainEvent }) =>
     <ul>
       {offenderMainEvent.releaseScheduled && (
         <li>
-          <span className="bold-font16">** Release scheduled **</span>
+          <strong className="other-activity">** Release scheduled **</strong>
         </li>
       )}
       {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(renderEvent)}
