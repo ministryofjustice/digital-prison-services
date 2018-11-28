@@ -6,7 +6,7 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import { isTodayOrAfter, properCaseName, getEventDescription, stripAgencyPrefix } from '../utils'
+import { isTodayOrAfter, properCaseName, getMainEventDescription, stripAgencyPrefix, getHoursMinutes } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -197,15 +197,16 @@ class ResultsActivity extends Component {
     // Disabled until whereabouts v2
     // const readOnly = this.olderThan7Days(this.props.date);
     const renderMainEvent = event => {
+      const mainEventDescription = `${getHoursMinutes(event.startTime)} - ${getMainEventDescription(event)}`
       if (ResultsActivity.eventCancelled(event)) {
         return (
           <td className="row-gutters">
-            {getEventDescription(event)}
+            {mainEventDescription}
             <span className="cancelled"> (cancelled)</span>
           </td>
         )
       }
-      return <td className="row-gutters">{getEventDescription(event)}</td>
+      return <td className="row-gutters">{mainEventDescription}</td>
     }
 
     const offenders =

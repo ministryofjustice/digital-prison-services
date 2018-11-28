@@ -6,6 +6,7 @@ const properCase = word =>
 function isBlank(str) {
   return !str || /^\s*$/.test(str)
 }
+const removeBlanks = array => array.filter(item => !!item)
 
 /**
  * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
@@ -48,14 +49,18 @@ const stripAgencyPrefix = (location, agency) => {
   return location
 }
 
+const getMainEventDescription = event => {
+  if (event.eventType === 'PRISON_ACT' || event.event === 'PA') {
+    return event.comment
+  }
+  return removeBlanks([event.eventDescription, event.comment]).join(' - ')
+}
+
 const getEventDescription = event => {
   if (event.eventType === 'PRISON_ACT' || event.event === 'PA') {
     return event.comment
   }
-  if (event.comment) {
-    return `${event.eventDescription} - ${event.comment}`
-  }
-  return event.eventDescription
+  return removeBlanks([event.eventDescription, event.eventLocation, event.comment]).join(' - ')
 }
 
 module.exports = {
@@ -63,6 +68,7 @@ module.exports = {
   properCaseName,
   getHoursMinutes,
   isTodayOrAfter,
+  getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,
 }

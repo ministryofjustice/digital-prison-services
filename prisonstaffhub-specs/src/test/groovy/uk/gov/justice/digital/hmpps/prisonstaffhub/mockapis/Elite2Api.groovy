@@ -278,7 +278,7 @@ class Elite2Api extends WireMockRule {
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                         aResponse()
-                                .withBody(ActivityResponse.appointments)
+                                .withBody(ActivityResponse.visits)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
@@ -288,7 +288,7 @@ class Elite2Api extends WireMockRule {
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                         aResponse()
-                                .withBody(ActivityResponse.visits)
+                                .withBody(ActivityResponse.appointments)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )

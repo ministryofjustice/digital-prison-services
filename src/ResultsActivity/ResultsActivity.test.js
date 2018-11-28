@@ -183,7 +183,7 @@ describe('Offender activity list results component', () => {
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
     expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
-    expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('Chapel')
+    expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -203,7 +203,7 @@ describe('Offender activity list results component', () => {
         .find('li')
         .at(1)
         .text()
-    ).toEqual('Visits - Official Visit 11:00')
+    ).toEqual('11:00 - Visits - Official Visit')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -213,7 +213,7 @@ describe('Offender activity list results component', () => {
         .find('li')
         .at(2)
         .text()
-    ).toEqual('Medical - Dentist - Appt details 11:40')
+    ).toEqual('11:40 - Medical - Dentist - Appt details')
     // Reinstate with checkboxes in V2
     // expect(
     //   row1Tds
@@ -238,13 +238,13 @@ describe('Offender activity list results component', () => {
     const row2Tds = tr.at(2).find('td')
     expect(row2Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Smith, Michael')
     expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
-    expect(row2Tds.at(ACTIVITY_COLUMN).text()).toEqual('Visits - Family Visit (cancelled)')
+    expect(row2Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Visits - Family Visit (cancelled)')
     expect(row2Tds.at(OTHER_COLUMN).find('li').length).toEqual(0)
 
     const row3Tds = tr.at(3).find('td')
     expect(row3Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Quimby, Fred')
     expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
-    expect(row3Tds.at(ACTIVITY_COLUMN).text()).toEqual('Chapel')
+    expect(row3Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
     expect(
       row3Tds
         .at(OTHER_COLUMN)
@@ -254,11 +254,11 @@ describe('Offender activity list results component', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('Visits - Family Visit 11:11 (cancelled)')
+    ).toEqual('11:11 - Visits - Family Visit (cancelled)')
 
     const row4Tds = tr.at(4).find('td')
     expect(row4Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Bunny, Bugs')
-    expect(row4Tds.at(ACTIVITY_COLUMN).text()).toEqual('Carrot Sculpture')
+    expect(row4Tds.at(ACTIVITY_COLUMN).text()).toEqual('14:00 - Carrot Sculpture')
     expect(
       row4Tds
         .at(OTHER_COLUMN)
@@ -474,5 +474,63 @@ describe('Offender activity list results component', () => {
         .find('input')
         .some('[disabled]')
     ).toEqual(true)
+  })
+
+  it('should not display the location of the main activity', () => {
+    const data = [
+      {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'APP',
+        eventDescription: 'Gym',
+        comment: 'Workout',
+        eventLocation: 'GYM Room 1',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        releaseScheduled: true,
+        scheduledTransfers: [],
+        courtEvents: [],
+        category: 'A',
+        alertFlags: ['XEL'],
+        locationId: 1,
+        userDescription: 'test',
+      },
+    ]
+
+    const handleSearch = jest.fn()
+    const handlePrint = jest.fn()
+    const oldDate = '23/05/2018'
+    const component = shallow(
+      <ResultsActivity
+        history={mockHistory}
+        activities={data}
+        activity="1"
+        activityData={data}
+        handleSearch={handleSearch}
+        handlePrint={handlePrint}
+        handlePeriodChange={jest.fn()}
+        handleDateChange={jest.fn()}
+        getActivityList={jest.fn()}
+        date={oldDate}
+        period="ED"
+        agencyId={PRISON}
+        showPaymentReasonModal={jest.fn()}
+        user={user}
+        resetErrorDispatch={jest.fn()}
+        setColumnSort={jest.fn()}
+        orderField="lastName"
+        sortOrder="ASC"
+      />
+    )
+
+    const tr = component.find('tr')
+    const row1Tds = tr.at(1).find('td')
+    expect(row1Tds.at(OFFENDER_NAME_COLUMN).text()).toEqual('Anderson, Arthur')
+    expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
+    expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
+    expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Gym - Workout')
   })
 })

@@ -12,7 +12,12 @@ const shouldShowOtherActivities = offenderMainEvent =>
   )
 
 const renderOtherEvent = (event, index) => {
-  const text = `${getEventDescription(event)} ${getHoursMinutes(event.startTime)}`
+  const parts = [
+    getHoursMinutes(event.startTime),
+    event.event !== 'VISIT' && event.endTime && getHoursMinutes(event.endTime),
+    getEventDescription(event),
+  ]
+  const text = parts.filter(part => !!part).join(' - ')
   const key = `${event.offenderNo}_others_${index}`
   const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC'
 
@@ -23,6 +28,7 @@ const renderOtherEvent = (event, index) => {
       </li>
     )
   }
+
   return <li key={key}>{text}</li>
 }
 const renderEvent = event => {
