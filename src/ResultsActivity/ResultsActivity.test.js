@@ -141,6 +141,7 @@ describe('Offender activity list results component', () => {
   it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days')
     const date = aFewDaysAgo.format('DD/MM/YYYY')
+    const longDateFormat = aFewDaysAgo.format('dddd Do MMMM')
 
     const component = shallow(
       <ResultsActivity
@@ -164,6 +165,7 @@ describe('Offender activity list results component', () => {
       />
     )
     expect(component.find('.whereabouts-title').text()).toEqual('Chapel Activity')
+    expect(component.find('.whereabouts-date').text()).toEqual(`- ${longDateFormat} - ED`)
 
     // Dig into the DatePicker component
     const searchDate = component

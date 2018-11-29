@@ -63,6 +63,18 @@ const getEventDescription = event => {
   return removeBlanks([event.eventDescription, event.eventLocation, event.comment]).join(' - ')
 }
 
+const getListSizeClass = list => {
+  if (!list || list.length === 0) return 'empty-list'
+  if (list.length < 20) return 'small-list'
+  if (list.length < 40) return 'medium-list'
+  return 'large-list'
+}
+
+const getLongDateFormat = date => {
+  if (date && date !== 'Today') return moment(date, 'DD/MM/YYYY').format('dddd Do MMMM')
+  return moment().format('dddd Do MMMM')
+}
+
 module.exports = {
   properCase,
   properCaseName,
@@ -71,4 +83,6 @@ module.exports = {
   getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,
+  getListSizeClass,
+  getLongDateFormat,
 }
