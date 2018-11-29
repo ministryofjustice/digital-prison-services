@@ -11,7 +11,8 @@ import {
   getMainEventDescription,
   stripAgencyPrefix,
   getHoursMinutes,
-  setListSizeClass,
+  getListSizeClass,
+  getLongDateFormat,
 } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import { getOffenderLink } from '../links'
@@ -245,6 +246,9 @@ class ResultsActivity extends Component {
       <div className="results-activity">
         {this.displayBack()}
         <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
+        <span className="whereabouts-date print-only">
+          - {getLongDateFormat(date)} - {period}
+        </span>
         <hr className="print-only" />
         <form className="no-print">
           <div>
@@ -265,7 +269,7 @@ class ResultsActivity extends Component {
           {buttons}
           {sortLov()}
         </form>
-        <div className={setListSizeClass(offenders)}>
+        <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>
