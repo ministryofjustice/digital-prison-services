@@ -115,10 +115,18 @@ table tr:nth-child(even){
 
 .width10 {
   width: 10%;
+
+  @media print {
+    width: auto;
+  }
 }
 
 .width15 {
   width: 15%;
+
+  @media print {
+    width: auto;
+  }
 }
 
 .padding-top {
@@ -217,8 +225,7 @@ table tr:nth-child(even){
   margin-bottom: 30px;
 }
 
-
-.bold {
+strong, .bold {
   font-weight: bold;
 }
 
@@ -266,11 +273,6 @@ tr a.link:visited {
   @media print {
     color: black;
   }
-}
-
-.bold-font16 {
-  font-size: 16px !important;
-  font-weight: bold;
 }
 
 .cancelled {
