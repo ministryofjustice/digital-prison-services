@@ -1,0 +1,91 @@
+@import "colours/palette";
+
+/* stylelint-disable */
+/* Copied from Govuk details css, part of the newer https://github.com/alphagov/govuk-frontend project
+which replaces govuk-elements */
+.govuk-details {
+  font-family: 'nta', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.25;
+  color: #0b0c0c;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.govuk-details__summary {
+  // Make the focus outline shrink-wrap the text content of the summary
+  display: inline-block;
+
+  // Absolutely position the marker against this element
+  position: relative;
+
+  margin-bottom: 5px;
+
+  // Allow for absolutely positioned marker and align with disclosed text
+  padding-left: 20px;
+
+  // Style the summary to look like a link...
+  color: $link-colour;
+  cursor: pointer;
+}
+
+// ...but only underline the text, not the arrow
+.govuk-details__summary-text {
+  text-decoration: underline;
+}
+
+.govuk-details__summary:hover {
+  color: $link-hover-colour;
+}
+
+.govuk-details__summary:focus {
+  // -1px offset fixes gap between background and outline in Firefox
+  outline: 4px solid $focus-colour;
+  outline-offset: -1px;
+  // When focussed, the text colour needs to be darker to ensure that colour
+  // contrast is still acceptable
+  color: black;
+  background: $focus-colour;
+}
+
+// Remove the default details marker so we can style our own consistently and
+// ensure it displays in Firefox (see implementation.md for details)
+.govuk-details__summary::-webkit-details-marker {
+  display: none;
+}
+
+// Append our own open / closed marker using a pseudo-element
+.govuk-details__summary:before {
+  content: '';
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  margin: auto;
+
+  @include govuk-shape-arrow($direction: right, $base: 14px);
+
+  .govuk-details[open] > & {
+    @include govuk-shape-arrow($direction: down, $base: 14px);
+  }
+}
+
+.govuk-details__text {
+  padding: 15px;
+  padding-left: 20px;
+  border-left: 5px solid $border-colour;
+}
+
+.govuk-details__text p {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.govuk-details__text > :last-child {
+  margin-bottom: 0;
+}

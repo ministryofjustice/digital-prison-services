@@ -13,6 +13,8 @@ import {
   setGlobalSearchPageNumber,
   setGlobalSearchTotalRecords,
   setApplicationTitle,
+  setGlobalSearchLocationFilter,
+  setGlobalSearchGenderFilter,
 } from '../redux/actions'
 
 const axios = require('axios')
@@ -25,7 +27,10 @@ class GlobalSearchContainer extends Component {
     this.doGlobalSearch = this.doGlobalSearch.bind(this)
     this.handlePageAction = this.handlePageAction.bind(this)
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this)
+    this.handleSearchLocationFilterChange = this.handleSearchLocationFilterChange.bind(this)
+    this.handleSearchGenderFilterChange = this.handleSearchGenderFilterChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.clearFilters = this.clearFilters.bind(this)
   }
 
   async componentWillMount() {
@@ -42,11 +47,21 @@ class GlobalSearchContainer extends Component {
   }
 
   async doGlobalSearch(pageNumber, searchText) {
-    const { pageSize, totalRecordsDispatch, dataDispatch, pageNumberDispatch, raiseAnalyticsEvent } = this.props
+    const {
+      pageSize,
+      totalRecordsDispatch,
+      dataDispatch,
+      pageNumberDispatch,
+      raiseAnalyticsEvent,
+      genderFilter,
+      locationFilter,
+    } = this.props
 
     const response = await axios.get('/api/globalSearch', {
       params: {
         searchText,
+        genderFilter,
+        locationFilter,
       },
       headers: {
         'Page-Offset': pageSize * pageNumber,
@@ -83,6 +98,22 @@ class GlobalSearchContainer extends Component {
     searchTextDispatch(event.target.value)
   }
 
+  handleSearchLocationFilterChange(event) {
+    const { locationFilterDispatch } = this.props
+    locationFilterDispatch(event.target.value)
+  }
+
+  handleSearchGenderFilterChange(event) {
+    const { genderFilterDispatch } = this.props
+    genderFilterDispatch(event.target.value)
+  }
+
+  clearFilters() {
+    const { genderFilterDispatch, locationFilterDispatch } = this.props
+    genderFilterDispatch('ALL')
+    locationFilterDispatch('ALL')
+  }
+
   render() {
     const { loaded, error } = this.props
 
@@ -93,7 +124,10 @@ class GlobalSearchContainer extends Component {
         <GlobalSearch
           handlePageAction={this.handlePageAction}
           handleSearchTextChange={this.handleSearchTextChange}
+          handleSearchLocationFilterChange={this.handleSearchLocationFilterChange}
+          handleSearchGenderFilterChange={this.handleSearchGenderFilterChange}
           handleSearch={this.handleSearch}
+          clearFilters={this.clearFilters}
           {...this.props}
         />
       </div>
@@ -111,6 +145,8 @@ GlobalSearchContainer.propTypes = {
   loaded: PropTypes.bool.isRequired,
   agencyId: PropTypes.string.isRequired,
   searchText: PropTypes.string.isRequired,
+  genderFilter: PropTypes.string.isRequired,
+  locationFilter: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
@@ -131,6 +167,8 @@ GlobalSearchContainer.propTypes = {
   pageNumberDispatch: PropTypes.func.isRequired,
   totalRecordsDispatch: PropTypes.func.isRequired,
   searchTextDispatch: PropTypes.func.isRequired,
+  genderFilterDispatch: PropTypes.func.isRequired,
+  locationFilterDispatch: PropTypes.func.isRequired,
   titleDispatch: PropTypes.func.isRequired,
 
   // special
@@ -149,12 +187,16 @@ const mapStateToProps = state => ({
   pageSize: state.globalSearch.pageSize,
   totalRecords: state.globalSearch.totalRecords,
   searchText: state.globalSearch.searchText,
+  locationFilter: state.globalSearch.locationFilter,
+  genderFilter: state.globalSearch.genderFilter,
   error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({
   dataDispatch: data => dispatch(setGlobalSearchResults(data)),
   searchTextDispatch: text => dispatch(setGlobalSearchText(text)),
+  genderFilterDispatch: text => dispatch(setGlobalSearchGenderFilter(text)),
+  locationFilterDispatch: text => dispatch(setGlobalSearchLocationFilter(text)),
   pageNumberDispatch: no => dispatch(setGlobalSearchPageNumber(no)),
   totalRecordsDispatch: no => dispatch(setGlobalSearchTotalRecords(no)),
   titleDispatch: title => dispatch(setApplicationTitle(title)),

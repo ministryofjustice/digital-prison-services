@@ -399,7 +399,7 @@ class Elite2Api extends WireMockRule {
         final totalRecords = String.valueOf(response.size())
 
         this.stubFor(
-                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false&includeAliases=true")
+                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&partialNameMatch=false&includeAliases=true")
                         .withHeader('page-offset', equalTo('0'))
                         .withHeader('page-limit', equalTo('10'))
                         .willReturn(
@@ -412,7 +412,7 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
         if (response.size() > 10) {
             this.stubFor(
-                    get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&partialNameMatch=false&includeAliases=true")
+                    get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&partialNameMatch=false&includeAliases=true")
                             .withHeader('page-offset', equalTo('10'))
                             .withHeader('page-limit', equalTo('10'))
                             .willReturn(

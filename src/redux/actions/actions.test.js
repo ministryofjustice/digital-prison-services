@@ -204,6 +204,22 @@ describe('actions', () => {
     expect(actions.setGlobalSearchText('Ian')).toEqual(expectedAction)
   })
 
+  it('should create an action to save the global search location filter', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_LOCATION_FILTER,
+      locationFilter: 'Ian',
+    }
+    expect(actions.setGlobalSearchLocationFilter('Ian')).toEqual(expectedAction)
+  })
+
+  it('should create an action to save the global search gender filter', () => {
+    const expectedAction = {
+      type: types.SET_GLOBAL_SEARCH_GENDER_FILTER,
+      genderFilter: 'Ian',
+    }
+    expect(actions.setGlobalSearchGenderFilter('Ian')).toEqual(expectedAction)
+  })
+
   it('should create an action to save user search page size', () => {
     const expectedAction = {
       type: types.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE,

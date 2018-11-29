@@ -284,6 +284,10 @@ tr a.link:visited {
   font-weight: 700;
 }
 
+.visible {
+  display: block !important;
+}
+
 /* Removes headers and footers for printing purposes */
 @media print {
   @page {

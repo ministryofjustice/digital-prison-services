@@ -75,6 +75,15 @@ const getLongDateFormat = date => {
   return moment().format('dddd Do MMMM')
 }
 
+const linkOnClick = handlerFn => ({
+  tabIndex: 0,
+  role: 'link',
+  onClick: handlerFn,
+  onKeyDown: event => {
+    if (event.key === 'Enter') handlerFn(event)
+  },
+})
+
 module.exports = {
   properCase,
   properCaseName,
@@ -85,4 +94,5 @@ module.exports = {
   stripAgencyPrefix,
   getListSizeClass,
   getLongDateFormat,
+  linkOnClick,
 }

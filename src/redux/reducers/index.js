@@ -58,6 +58,8 @@ const globalSearchInitialState = {
   totalRecords: 0,
   contextUser: {},
   searchText: '',
+  locationFilter: 'ALL',
+  genderFilter: 'ALL',
 }
 
 function updateObject(oldObject, newValues) {
@@ -249,6 +251,16 @@ export function globalSearch(state = globalSearchInitialState, action) {
       return {
         ...state,
         searchText: action.searchText,
+      }
+    case ActionTypes.SET_GLOBAL_SEARCH_LOCATION_FILTER:
+      return {
+        ...state,
+        locationFilter: action.locationFilter,
+      }
+    case ActionTypes.SET_GLOBAL_SEARCH_GENDER_FILTER:
+      return {
+        ...state,
+        genderFilter: action.genderFilter,
       }
     default:
       return state

@@ -131,6 +131,16 @@ export const setGlobalSearchText = searchText => ({
   searchText,
 })
 
+export const setGlobalSearchLocationFilter = locationFilter => ({
+  type: ActionTypes.SET_GLOBAL_SEARCH_LOCATION_FILTER,
+  locationFilter,
+})
+
+export const setGlobalSearchGenderFilter = genderFilter => ({
+  type: ActionTypes.SET_GLOBAL_SEARCH_GENDER_FILTER,
+  genderFilter,
+})
+
 export const setGlobalSearchResults = data => ({
   type: ActionTypes.SET_GLOBAL_SEARCH_RESULTS_DATA,
   data,
