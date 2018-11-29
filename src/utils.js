@@ -71,7 +71,7 @@ const getListSizeClass = list => {
 }
 
 const getLongDateFormat = date => {
-  if (date !== 'Today') return moment(date, 'DD/MM/YYYY').format('dddd Do MMMM')
+  if (date && date !== 'Today') return moment(date, 'DD/MM/YYYY').format('dddd Do MMMM')
   return moment().format('dddd Do MMMM')
 }
 
