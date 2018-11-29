@@ -155,7 +155,6 @@ class App extends React.Component {
 
   handleError = error => {
     const { setErrorDispatch } = this.props
-
     if (
       error.response &&
       error.response.status === 401 &&
@@ -180,7 +179,7 @@ class App extends React.Component {
   }
 
   switchCaseLoad = async (newCaseload, location) => {
-    const { switchAgencyDispatch, setErrorDispatch } = this.props
+    const { switchAgencyDispatch } = this.props
 
     try {
       if (location.pathname.includes('globalsearch')) {
@@ -192,7 +191,7 @@ class App extends React.Component {
         await this.loadUserAndCaseload()
       }
     } catch (error) {
-      setErrorDispatch(error.message)
+      this.handleError(error)
     }
   }
 
