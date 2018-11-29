@@ -382,6 +382,8 @@ describe('app (global) reducer', () => {
       ...pagingInitialState,
       contextUser: {},
       searchText: '',
+      locationFilter: 'ALL',
+      genderFilter: 'ALL',
       data: ['data0', 'data1'],
     })
   })
@@ -396,6 +398,40 @@ describe('app (global) reducer', () => {
       ...pagingInitialState,
       contextUser: {},
       searchText: 'hello',
+      locationFilter: 'ALL',
+      genderFilter: 'ALL',
+      data: [],
+    })
+  })
+
+  it('should handle SET_GLOBAL_SEARCH_LOCATION_FILTER', () => {
+    expect(
+      globalSearch(undefined, {
+        type: types.SET_GLOBAL_SEARCH_LOCATION_FILTER,
+        locationFilter: 'MDI',
+      })
+    ).toEqual({
+      ...pagingInitialState,
+      contextUser: {},
+      searchText: '',
+      locationFilter: 'MDI',
+      genderFilter: 'ALL',
+      data: [],
+    })
+  })
+
+  it('should handle SET_GLOBAL_SEARCH_GENDER_FILTER', () => {
+    expect(
+      globalSearch(undefined, {
+        type: types.SET_GLOBAL_SEARCH_GENDER_FILTER,
+        genderFilter: 'F',
+      })
+    ).toEqual({
+      ...pagingInitialState,
+      contextUser: {},
+      searchText: '',
+      locationFilter: 'ALL',
+      genderFilter: 'F',
       data: [],
     })
   })

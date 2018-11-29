@@ -60,12 +60,12 @@ const elite2ApiFactory = client => {
   const getSentenceData = (context, offenderNumbers) => post(context, `api/offender-sentences`, offenderNumbers)
   const getPrisonerImage = (context, offenderNo) =>
     getStream(context, `api/bookings/offenderNo/${offenderNo}/image/data`)
-  const globalSearch = (context, offenderNo, lastName, firstName) =>
+  const globalSearch = (context, offenderNo, lastName, firstName, genderFilter, locationFilter) =>
     get(
       context,
       `api/prisoners?offenderNo=${offenderNo}&lastName=${encodeQueryString(lastName)}&firstName=${encodeQueryString(
         firstName
-      )}&partialNameMatch=false&includeAliases=true`
+      )}&gender=${genderFilter}&location=${locationFilter}&partialNameMatch=false&includeAliases=true`
     )
   const getLastPrison = (context, body) => post(context, `api/movements/offenders`, body)
 
