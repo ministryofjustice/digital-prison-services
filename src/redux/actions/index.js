@@ -141,6 +141,11 @@ export const setGlobalSearchGenderFilter = genderFilter => ({
   genderFilter,
 })
 
+export const setGlobalSearchDateOfBirthFilter = dateOfBirthFilter => ({
+  type: ActionTypes.SET_GLOBAL_SEARCH_DATE_OF_BIRTH_FILTER,
+  dateOfBirthFilter,
+})
+
 export const setGlobalSearchResults = data => ({
   type: ActionTypes.SET_GLOBAL_SEARCH_RESULTS_DATA,
   data,

@@ -23,5 +23,8 @@ class GlobalSearchPage extends Page {
         clearFiltersLink { $('#clearFilters') }
         locationSelect { $('#location-select') }
         genderSelect { $('#gender-select') }
+        dobDay { $('input', 0, type: 'number') }
+        dobMonth { $('input', 1, type: 'number') }
+        dobYear { $('input', 2, type: 'number') }
     }
 }
