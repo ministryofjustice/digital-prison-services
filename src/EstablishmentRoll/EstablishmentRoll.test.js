@@ -1,9 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { EstablishmentRollContainer } from './EstablishmentRollContainer'
+import { EstablishmentRoll } from './EstablishmentRoll'
 import { movements, blocks, totals } from './establishmentRollDummyData'
 
-describe('<EstablishmentRollContainer />', () => {
+describe('<EstablishmentRoll />', () => {
   const props = {
     movements,
     blocks,
@@ -15,28 +15,17 @@ describe('<EstablishmentRollContainer />', () => {
     resetErrorDispatch: jest.fn(),
     establishmentRollDataDispatch: jest.fn(),
     titleDispatch: jest.fn(),
-    loaded: false,
   }
 
-  const wrapper = shallow(<EstablishmentRollContainer {...props} />)
+  const wrapper = shallow(<EstablishmentRoll {...props} />)
 
-  describe('when loading the data', () => {
-    it('should display the loading <Spinner /> component', () => {
-      expect(wrapper.find('Spinner').exists()).toBe(true)
-    })
-  })
-
-  describe('when the data has loaded', () => {
-    beforeEach(() => {
-      wrapper.setProps({ loaded: true })
-    })
-
+  describe('when loaded', () => {
     it('should render without error', () => {
       expect(wrapper.find('.establishment-roll-container').exists()).toBe(true)
     })
 
     it('should have the correct page title', () => {
-      expect(wrapper.find('.heading-large').text()).toBe('Establishment roll')
+      expect(wrapper.find('Connect(Page)').prop('title')).toBe('Establishment roll')
     })
 
     it('should render the correct amount of EstablishmentRollBlock components', () => {
