@@ -81,11 +81,11 @@ class GlobalSearchForm extends Component {
           <option key="ALL" value="ALL">
             All
           </option>
-          <option key="FEMALE" value="F">
-            Female
-          </option>
           <option key="MALE" value="M">
             Male
+          </option>
+          <option key="FEMALE" value="F">
+            Female
           </option>
           <option key="NOT_KNOWN" value="NK">
             Not known
@@ -132,13 +132,15 @@ class GlobalSearchForm extends Component {
             role="switch"
             aria-checked={showFilters}
           >
-            <span className="govuk-details__summary-text">{showFilters ? 'Hide filters' : 'Show filters'}</span>
+            <span id="showFiltersLink" className="govuk-details__summary-text">
+              {showFilters ? 'Hide filters' : 'Show filters'}
+            </span>
           </summary>
           <div className="govuk-details__text">
             <div className="pure-u-md-1-4 padding-top padding-bottom-large">{locationSelect}</div>
             <div className="pure-u-md-1-4 padding-top padding-bottom-large padding-left">{genderSelect}</div>
             <div>
-              <a className="clear-filters link clickable" {...linkOnClick(clearFilters)}>
+              <a id="clearFilters" className="clear-filters link clickable" {...linkOnClick(clearFilters)}>
                 Clear filters
               </a>
             </div>

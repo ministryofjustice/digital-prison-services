@@ -88,6 +88,52 @@ class GlobalSearchSpecification extends GebReportingSpec {
         tableRows.size() == 11 // Including header row
     }
 
+    def "should present search filters"() {
+        elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response1)
+        elite2api.stubImage()
+
+        given: "I am logged in"
+        fixture.loginAs(ITAG_USER)
+
+        when: "I do a global search"
+        go "/globalsearch?searchText=common"
+
+        then: "I presented with a hidden search filter"
+        at GlobalSearchPage
+        showFiltersLink.text() == 'Show filters'
+
+        when: "i click the show filters link"
+        showFiltersLink.click()
+
+        then: "I am presented with a search filter div"
+        showFiltersLink.text() == 'Hide filters'
+        locationSelect == 'ALL'
+        genderSelect == 'ALL'
+
+        when: "I select filter values and search"
+        locationSelect = 'OUT'
+        genderSelect = 'F'
+        elite2api.stubGlobalSearch('', 'common', '', 'OUT', 'F', GlobalSearchResponses.response1)
+        searchAgainButton.click()
+
+        then: "the filters retain their values"
+        locationSelect == 'OUT'
+        genderSelect == 'F'
+
+        when: "clear filters link is selected"
+        clearFiltersLink.click()
+
+        then: "the filters are reset"
+        locationSelect == 'ALL'
+        genderSelect == 'ALL'
+
+        when: "hide filters link is selected"
+        showFiltersLink.click()
+
+        then: "the filter div is hidden"
+        showFiltersLink.text() == 'Show filters'
+    }
+
     def "should be able to navigate pages of results"() {
         elite2api.stubGlobalSearch('', 'common', '', GlobalSearchResponses.response2)
         elite2api.stubImage()
