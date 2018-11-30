@@ -19,7 +19,7 @@ const appInitialState = {
   config: { mailTo: '' },
   user: { activeCaseLoadId: null },
   shouldShowTerms: false,
-  error: null,
+  error: '',
   message: null,
   loaded: false,
   menuOpen: false,
@@ -88,7 +88,7 @@ export function app(state = appInitialState, action) {
       })
     case ActionTypes.RESET_ERROR:
       return updateObject(state, {
-        error: null,
+        error: '',
       })
     case ActionTypes.SET_MESSAGE:
       return {

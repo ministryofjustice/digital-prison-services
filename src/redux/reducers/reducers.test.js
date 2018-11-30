@@ -5,7 +5,7 @@ import { setMenuOpen } from '../actions'
 
 const appInitialState = {
   caseChangeRedirect: true,
-  error: null,
+  error: '',
   message: null,
   loaded: false,
   title: 'Activity Lists',
@@ -49,7 +49,7 @@ describe('app (global) reducer', () => {
       config: { mailTo: '' },
       user: { activeCaseLoadId: null },
       shouldShowTerms: false,
-      error: null,
+      error: '',
       message: null,
       loaded: false,
       menuOpen: false,
@@ -125,7 +125,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       ...appWithErrorState,
-      error: null,
+      error: '',
     })
   })
 
@@ -199,7 +199,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       caseChangeRedirect: true,
-      error: null,
+      error: '',
       message: null,
       loaded: false,
       title: 'New Title',

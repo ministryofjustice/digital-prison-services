@@ -1,9 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { EstablishmentRoll } from './EstablishmentRoll'
+import { EstablishmentRollContainer } from './EstablishmentRollContainer'
 import { movements, blocks, totals } from './establishmentRollDummyData'
 
-describe('<EstablishmentRoll />', () => {
+describe('<EstablishmentRollContainer />', () => {
   const props = {
     movements,
     blocks,
@@ -17,7 +17,7 @@ describe('<EstablishmentRoll />', () => {
     titleDispatch: jest.fn(),
   }
 
-  const wrapper = shallow(<EstablishmentRoll {...props} />)
+  const wrapper = shallow(<EstablishmentRollContainer {...props} />)
 
   describe('when loaded', () => {
     it('should render without error', () => {

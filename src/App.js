@@ -9,7 +9,7 @@ import Dashboard from './Dashboard/index'
 import Footer from './Footer/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
-import EstablishmentRoll from './EstablishmentRoll/EstablishmentRoll'
+import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
 
@@ -284,7 +284,7 @@ class App extends React.Component {
             exact
             path="/establishmentroll"
             render={() => (
-              <EstablishmentRoll
+              <EstablishmentRollContainer
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
