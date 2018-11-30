@@ -6,7 +6,7 @@ import { setEstablishmentRollData, setApplicationTitle } from '../redux/actions'
 import EstablishmentRollBlock from './EstablishmentRollBlock'
 import Page from '../Page/Page'
 
-export class EstablishmentRoll extends Component {
+export class EstablishmentRollContainer extends Component {
   componentDidMount() {
     const { agencyId, titleDispatch } = this.props
     titleDispatch('Establishment roll')
@@ -48,10 +48,11 @@ export class EstablishmentRoll extends Component {
       <Page title="Establishment roll">
         <div className="establishment-roll-container">
           <EstablishmentRollBlock block={movements} highlight />
-          {blocks.map((block, i, array) => {
-            const isLastBlock = array.length - 1 === i
-            return <EstablishmentRollBlock block={block} key={block.name} isLastBlock={isLastBlock} />
-          })}
+          {blocks.length > 0 &&
+            blocks.map((block, i, array) => {
+              const isLastBlock = array.length - 1 === i
+              return <EstablishmentRollBlock block={block} key={block.name} isLastBlock={isLastBlock} />
+            })}
           <EstablishmentRollBlock block={totals} highlight />
         </div>
       </Page>
@@ -59,7 +60,7 @@ export class EstablishmentRoll extends Component {
   }
 }
 
-EstablishmentRoll.propTypes = {
+EstablishmentRollContainer.propTypes = {
   // props
   handleError: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
@@ -91,7 +92,7 @@ EstablishmentRoll.propTypes = {
   titleDispatch: PropTypes.func.isRequired,
 }
 
-EstablishmentRoll.defaultProps = {
+EstablishmentRollContainer.defaultProps = {
   movements: null,
   blocks: null,
   totals: null,
@@ -113,4 +114,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EstablishmentRoll)
+)(EstablishmentRollContainer)
