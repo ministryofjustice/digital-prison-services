@@ -10,6 +10,6 @@ class EstablishmentRollPage extends Page {
     }
 
     static content = {
-        pageTitle { $('h1.heading-large.establishment-roll-container__title').text() }
+        pageTitle { $('h1').text() }
         blocks { $('.establishment-roll-block') } }
 }
