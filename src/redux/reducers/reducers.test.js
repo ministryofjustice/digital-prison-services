@@ -42,6 +42,18 @@ const pagingInitialState = {
   totalRecords: 0,
 }
 
+const globalSearchInitialState = {
+  data: [],
+  pageNumber: 0,
+  pageSize: 10,
+  totalRecords: 0,
+  contextUser: {},
+  searchText: '',
+  locationFilter: 'ALL',
+  genderFilter: 'ALL',
+  dateOfBirthFilter: { valid: false, blank: true },
+}
+
 describe('app (global) reducer', () => {
   it('should return the initial state', () => {
     expect(app(undefined, {})).toEqual({
@@ -379,11 +391,7 @@ describe('app (global) reducer', () => {
         data: ['data0', 'data1'],
       })
     ).toEqual({
-      ...pagingInitialState,
-      contextUser: {},
-      searchText: '',
-      locationFilter: 'ALL',
-      genderFilter: 'ALL',
+      ...globalSearchInitialState,
       data: ['data0', 'data1'],
     })
   })
@@ -395,12 +403,8 @@ describe('app (global) reducer', () => {
         searchText: 'hello',
       })
     ).toEqual({
-      ...pagingInitialState,
-      contextUser: {},
+      ...globalSearchInitialState,
       searchText: 'hello',
-      locationFilter: 'ALL',
-      genderFilter: 'ALL',
-      data: [],
     })
   })
 
@@ -411,12 +415,8 @@ describe('app (global) reducer', () => {
         locationFilter: 'MDI',
       })
     ).toEqual({
-      ...pagingInitialState,
-      contextUser: {},
-      searchText: '',
+      ...globalSearchInitialState,
       locationFilter: 'MDI',
-      genderFilter: 'ALL',
-      data: [],
     })
   })
 
@@ -427,12 +427,20 @@ describe('app (global) reducer', () => {
         genderFilter: 'F',
       })
     ).toEqual({
-      ...pagingInitialState,
-      contextUser: {},
-      searchText: '',
-      locationFilter: 'ALL',
+      ...globalSearchInitialState,
       genderFilter: 'F',
-      data: [],
+    })
+  })
+
+  it('should handle SET_GLOBAL_SEARCH_DATE_OF_BIRTH_FILTER', () => {
+    expect(
+      globalSearch(undefined, {
+        type: types.SET_GLOBAL_SEARCH_DATE_OF_BIRTH_FILTER,
+        dateOfBirthFilter: { isoDate: '29-11-2018', valid: true, blank: false },
+      })
+    ).toEqual({
+      ...globalSearchInitialState,
+      dateOfBirthFilter: { isoDate: '29-11-2018', valid: true, blank: false },
     })
   })
 

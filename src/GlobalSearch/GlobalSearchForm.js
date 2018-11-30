@@ -6,13 +6,27 @@ import '../govStyles/govuk_frontend/all.scss'
 import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { linkOnClick } from '../utils'
+import DateOfBirth from './DateOfBirth'
 
 class GlobalSearchForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showFilters: false,
+      // clearFilterCount is used as the value of the 'key' prop on the DateOfBirth component. When the 'Clear Filters'
+      // link is clicked clearFilterCount is incremented by the 'clearFiltersInternal' function and a new DateOfBirth
+      // instance is created by react.  The effect is to clear the component's fields and publish its initial state.
+      // Follows a pattern from
+      // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
+      clearFilterCount: 0,
     }
+    this.clearFiltersInternal = this.clearFiltersInternal.bind(this)
+  }
+
+  clearFiltersInternal() {
+    const { clearFilters } = this.props
+    this.setState(state => ({ clearFilterCount: state.clearFilterCount + 1 }))
+    clearFilters()
   }
 
   render() {
@@ -25,15 +39,15 @@ class GlobalSearchForm extends Component {
       locationFilter,
       handleSearchGenderFilterChange,
       handleSearchLocationFilterChange,
-      clearFilters,
+      handleDateOfBirthChange,
+      showErrors,
     } = this.props
 
     const toggleDetails = (event, clear) => {
       event.preventDefault()
       const { showFilters } = this.state
-      this.setState({
-        showFilters: !showFilters,
-      })
+      event.preventDefault()
+      this.setState(state => ({ showFilters: !state.showFilters }))
       if (showFilters) {
         clear()
       }
@@ -97,7 +111,7 @@ class GlobalSearchForm extends Component {
       </Fragment>
     )
 
-    const { showFilters } = this.state
+    const { showFilters, clearFilterCount } = this.state
     return (
       <div>
         <div className="pure-u-md-11-12 searchForm padding-top padding-bottom-large padding-left-30">
@@ -126,7 +140,7 @@ class GlobalSearchForm extends Component {
         <details className="govuk-details visible" open={showFilters}>
           <summary
             className="govuk-details__summary"
-            onClick={event => toggleDetails(event, clearFilters)}
+            onClick={event => toggleDetails(event, this.clearFiltersInternal)}
             onKeyDown={() => {}}
             tabIndex="0"
             role="switch"
@@ -139,8 +153,13 @@ class GlobalSearchForm extends Component {
           <div className="govuk-details__text">
             <div className="pure-u-md-1-4 padding-top padding-bottom-large">{locationSelect}</div>
             <div className="pure-u-md-1-4 padding-top padding-bottom-large padding-left">{genderSelect}</div>
+            <DateOfBirth
+              handleDateOfBirthChange={handleDateOfBirthChange}
+              key={clearFilterCount}
+              showErrors={showErrors}
+            />
             <div>
-              <a id="clearFilters" className="clear-filters link clickable" {...linkOnClick(clearFilters)}>
+              <a id="clearFilters" className="clear-filters link clickable" {...linkOnClick(this.clearFiltersInternal)}>
                 Clear filters
               </a>
             </div>
