@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { setEstablishmentRollData, setApplicationTitle } from '../redux/actions'
 import EstablishmentRollBlock from './EstablishmentRollBlock'
-import Spinner from '../Spinner'
-import Error from '../Error'
+import Page from '../Page/Page'
 
-export class EstablishmentRollContainer extends Component {
+export class EstablishmentRoll extends Component {
   componentDidMount() {
     const { agencyId, titleDispatch } = this.props
     titleDispatch('Establishment roll')
@@ -43,26 +42,24 @@ export class EstablishmentRollContainer extends Component {
   }
 
   render() {
-    const { movements, blocks, totals, loaded, error } = this.props
-    if (!loaded) return <Spinner />
-
-    if (error) return <Error error={error} />
+    const { movements, blocks, totals } = this.props
 
     return (
-      <div className="establishment-roll-container">
-        <h1 className="heading-large establishment-roll-container__title">Establishment roll</h1>
-        <EstablishmentRollBlock block={movements} highlight />
-        {blocks.map((block, i, array) => {
-          const isLastBlock = array.length - 1 === i
-          return <EstablishmentRollBlock block={block} key={block.name} isLastBlock={isLastBlock} />
-        })}
-        <EstablishmentRollBlock block={totals} highlight />
-      </div>
+      <Page title="Establishment roll">
+        <div className="establishment-roll-container">
+          <EstablishmentRollBlock block={movements} highlight />
+          {blocks.map((block, i, array) => {
+            const isLastBlock = array.length - 1 === i
+            return <EstablishmentRollBlock block={block} key={block.name} isLastBlock={isLastBlock} />
+          })}
+          <EstablishmentRollBlock block={totals} highlight />
+        </div>
+      </Page>
     )
   }
 }
 
-EstablishmentRollContainer.propTypes = {
+EstablishmentRoll.propTypes = {
   // props
   handleError: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
@@ -89,19 +86,16 @@ EstablishmentRollContainer.propTypes = {
     ).isRequired,
   }),
   agencyId: PropTypes.string,
-  loaded: PropTypes.bool.isRequired,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   // mapDispatchToProps
   establishmentRollDataDispatch: PropTypes.func.isRequired,
   titleDispatch: PropTypes.func.isRequired,
 }
 
-EstablishmentRollContainer.defaultProps = {
+EstablishmentRoll.defaultProps = {
   movements: null,
   blocks: null,
   totals: null,
   agencyId: '',
-  error: '',
 }
 
 const mapStateToProps = state => ({
@@ -109,8 +103,6 @@ const mapStateToProps = state => ({
   blocks: state.establishmentRoll.blocks,
   totals: state.establishmentRoll.totals,
   agencyId: state.app.user.activeCaseLoadId,
-  loaded: state.app.loaded,
-  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -121,4 +113,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EstablishmentRollContainer)
+)(EstablishmentRoll)
