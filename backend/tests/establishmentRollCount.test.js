@@ -57,7 +57,7 @@ describe('Establishment Roll', () => {
     const response = await getEstablishmentRollCount(context, agencyId)
     const returnedData = {
       movements: {
-        name: 'Movements',
+        name: "Today's movements",
         numbers: [
           { name: 'Unlock roll', value: 12 },
           { name: 'In today', value: 1 },

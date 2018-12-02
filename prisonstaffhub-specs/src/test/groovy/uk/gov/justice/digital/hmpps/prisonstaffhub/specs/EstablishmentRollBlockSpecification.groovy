@@ -35,7 +35,7 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         def totalsBlock = getReadableColumns(blocks[3])
 
         movementsBlock == [
-            'Movements',
+            "Today's movements",
             'Unlock roll', '329',
             'In today', '1',
             'Out today', '2',

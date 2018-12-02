@@ -11,7 +11,7 @@ const getEstablishmentRollCountFactory = elite2Api => {
     const totalRoll = getTotals(assignedResponse, 'bedsInUse')
 
     const movements = {
-      name: 'Movements',
+      name: "Today's movements",
       numbers: [
         { name: 'Unlock roll', value: totalRoll - movementsResponse.in + movementsResponse.out },
         { name: 'In today', value: movementsResponse.in },
