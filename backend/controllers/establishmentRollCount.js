@@ -18,7 +18,7 @@ const getEstablishmentRollCountFactory = elite2Api => {
         { name: 'Out today', value: movementsResponse.out },
         { name: 'Current roll', value: totalRoll },
         {
-          name: 'Unassigned',
+          name: 'In reception',
           value: getTotals(unassignedResponse, 'currentlyInCell'),
         },
       ],

@@ -63,7 +63,7 @@ describe('Establishment Roll', () => {
           { name: 'In today', value: 1 },
           { name: 'Out today', value: 3 },
           { name: 'Current roll', value: 10 },
-          { name: 'Unassigned', value: 20 },
+          { name: 'In reception', value: 20 },
         ],
       },
       blocks: [
