@@ -44,7 +44,7 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         ]
 
         firstBlock == [
-            'Housing Block 1',
+            'Houseblock 1',
             'Beds in use', '156',
             'Currently in cell', '154',
             'Currently out', '2',

@@ -10,7 +10,7 @@ class EstablishmentRollResponses {
 
     static assignedBlock1 = [
             livingUnitId       : 0,
-            livingUnitDesc     : 'Housing Block 1',
+            livingUnitDesc     : 'HOUSEBLOCK 1',
             bedsInUse          : 156,
             currentlyInCell    : 154,
             currentlyOut       : 2,
@@ -23,7 +23,7 @@ class EstablishmentRollResponses {
 
     static assignedBlock2 = [
             livingUnitId       : 0,
-            livingUnitDesc     : 'Housing Block 2',
+            livingUnitDesc     : 'HOUSEBLOCK 2',
             bedsInUse          : 172,
             currentlyInCell    : 172,
             currentlyOut       : 0,

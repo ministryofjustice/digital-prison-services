@@ -1,3 +1,5 @@
+const { capitalize } = require('../utils')
+
 const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + block[figure], 0)
 
 const getEstablishmentRollCountFactory = elite2Api => {
@@ -25,7 +27,7 @@ const getEstablishmentRollCountFactory = elite2Api => {
     }
 
     const blocks = assignedResponse.map(block => ({
-      name: block.livingUnitDesc,
+      name: capitalize(block.livingUnitDesc),
       numbers: [
         { name: 'Beds in use', value: block.bedsInUse },
         { name: 'Currently in cell', value: block.currentlyInCell },

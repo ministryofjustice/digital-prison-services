@@ -19,8 +19,15 @@ const sortByDateTime = (t1, t2) => {
   return 0
 }
 
+const capitalize = string => {
+  if (typeof string !== 'string') return ''
+  const lowerCase = string.toLowerCase()
+  return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
+}
+
 module.exports = {
   switchDateFormat,
   distinct,
   sortByDateTime,
+  capitalize,
 }
