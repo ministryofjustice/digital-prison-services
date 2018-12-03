@@ -304,7 +304,7 @@ class ResultsHouseblock extends Component {
         {this.displayBack()}
         <h1 className="heading-large whereabouts-title">
           {currentLocation}
-          {activeSubLocation !== '--' && activeSubLocation}
+          {activeSubLocation !== '--' && ` -  ${activeSubLocation}`}
         </h1>
         <span className="whereabouts-date print-only">
           - {getLongDateFormat(date)} - {period}
