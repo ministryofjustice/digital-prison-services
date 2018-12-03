@@ -233,6 +233,23 @@ describe('Global Search controller', async () => {
     expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'last', 'first', '', ''])
   })
 
+  it('Should propagate filter values to global search call', async () => {
+    const apiResponse = createResponse()
+    elite2Api.globalSearch.mockReturnValue(apiResponse)
+
+    await globalSearch({}, ', last , first other, ', 'F', 'OUT')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, '', 'last', 'first', 'F', 'OUT'])
+  })
+
+  it('Should propagate filter values to global search by offender call', async () => {
+    const apiResponse = createResponse()
+    elite2Api.globalSearch.mockReturnValue(apiResponse)
+
+    const offenderNo = 'z4444yy'
+    await globalSearch({}, offenderNo, 'F', 'OUT')
+    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([{}, offenderNo, '', '', 'F', 'OUT'])
+  })
+
   it('Should ignore leading and trailing whitespace', async () => {
     const apiResponse = createResponse()
     elite2Api.globalSearch.mockReturnValue(apiResponse)

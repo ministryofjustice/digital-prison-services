@@ -18,5 +18,10 @@ class GlobalSearchPage extends Page {
         previousPage(required: false) { $('#previous-page')}
         searchAgainButton { $('#search-again') }
         searchInput { $('#search-text') }
+        detailsDiv { $('#detailsDiv') }
+        showFiltersLink { $('#showFiltersLink') }
+        clearFiltersLink { $('#clearFilters') }
+        locationSelect { $('#location-select') }
+        genderSelect { $('#gender-select') }
     }
 }

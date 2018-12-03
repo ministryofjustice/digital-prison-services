@@ -395,6 +395,23 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
+    def stubGlobalSearch(offenderNo, lastName, firstName, location, gender, response) {
+        final totalRecords = String.valueOf(response.size())
+
+        this.stubFor(
+                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=${gender}&location=${location}&partialNameMatch=false&includeAliases=true")
+                        .withHeader('page-offset', equalTo('0'))
+                        .withHeader('page-limit', equalTo('10'))
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(response[0..Math.min(9, response.size() - 1)]))
+                                .withHeader('Content-Type', 'application/json')
+                                .withHeader('total-records', totalRecords)
+                                .withHeader('page-limit', '10')
+                                .withHeader('page-offset', '0')
+                                .withStatus(200)))
+    }
+
     def stubGlobalSearch(offenderNo, lastName, firstName, response) {
         final totalRecords = String.valueOf(response.size())
 
