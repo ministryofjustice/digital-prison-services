@@ -28,7 +28,7 @@ class ResultsHouseblockContainer extends Component {
     this.handlePrint = this.handlePrint.bind(this)
     this.update = this.update.bind(this)
     this.state = {
-      previousSubLocation: null,
+      activeSubLocation: null,
     }
   }
 
@@ -73,7 +73,7 @@ class ResultsHouseblockContainer extends Component {
     try {
       this.setState(state => ({
         ...state,
-        previousSubLocation: currentSubLocation,
+        activeSubLocation: currentSubLocation,
       }))
       resetErrorDispatch()
       setLoadedDispatch(false)
@@ -114,15 +114,15 @@ class ResultsHouseblockContainer extends Component {
 
   update() {
     const { currentSubLocation, orderField, sortOrder } = this.props
-    const { previousSubLocation } = this.state
+    const { activeSubLocation } = this.state
 
     if (currentSubLocation === '--') {
-      if (previousSubLocation !== '--') {
+      if (activeSubLocation !== '--') {
         this.getHouseblockList('lastName', 'ASC')
       } else {
         this.getHouseblockList(orderField, sortOrder)
       }
-    } else if (previousSubLocation === '--') {
+    } else if (activeSubLocation === '--') {
       this.getHouseblockList('cellLocation', 'ASC')
     } else {
       this.getHouseblockList(orderField, sortOrder)
@@ -146,6 +146,7 @@ class ResultsHouseblockContainer extends Component {
 
   render() {
     const { loaded, error } = this.props
+    const { activeSubLocation } = this.state
 
     if (!loaded) {
       return <Spinner />
@@ -159,6 +160,7 @@ class ResultsHouseblockContainer extends Component {
           handleSubLocationChange={this.handleSubLocationChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
+          activeSubLocation={activeSubLocation}
           {...this.props}
         />
       </div>

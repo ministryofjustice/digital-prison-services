@@ -42,6 +42,7 @@ class HouseblockSpecification extends GebReportingSpec {
         then: 'The houseblock list is displayed, orderded by last name'
 
         at HouseblockPage
+        headingText.contains('1')
         form['housing-location-select'] == '--'
         form['date'] == 'Today'
         form['period-select'] == 'AM'
@@ -122,6 +123,7 @@ class HouseblockSpecification extends GebReportingSpec {
         form['period-select'] == 'PM'
         def texts = tableRows*.text()
         def row1 = tableRows[1].find('td')
+        headingText.contains('1B')
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         row1[activityColumn].text() == '17:00 - Woodwork'
         row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
