@@ -61,6 +61,7 @@ class ResultsHouseblock extends Component {
       houseblockData,
       currentLocation,
       update,
+      activeSubLocation,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -301,7 +302,10 @@ class ResultsHouseblock extends Component {
     return (
       <div className="results-houseblock">
         {this.displayBack()}
-        <h1 className="heading-large whereabouts-title">{currentLocation}</h1>
+        <h1 className="heading-large whereabouts-title">
+          {currentLocation}
+          {activeSubLocation !== '--' && activeSubLocation}
+        </h1>
         <span className="whereabouts-date print-only">
           - {getLongDateFormat(date)} - {period}
         </span>
@@ -349,6 +353,7 @@ ResultsHouseblock.propTypes = {
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
+  activeSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,

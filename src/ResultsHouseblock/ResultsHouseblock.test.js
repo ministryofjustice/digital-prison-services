@@ -151,6 +151,24 @@ const mockHistory = {
   replace: jest.fn(),
 }
 
+const props = {
+  activeSubLocation: '--',
+  agencyId: PRISON,
+  currentSubLocation: '--',
+  getHouseblockList: jest.fn(),
+  setColumnSort: jest.fn(),
+  subLocations,
+  history: mockHistory,
+  handleSearch: jest.fn(),
+  handlePrint: jest.fn(),
+  handleSubLocationChange: jest.fn(),
+  handlePeriodChange: jest.fn(),
+  handleDateChange: jest.fn(),
+  showPaymentReasonModal: jest.fn(),
+  update: jest.fn(),
+  resetErrorDispatch: jest.fn(),
+}
+
 describe('Offender results component Jira NN-843', () => {
   it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days')
@@ -159,28 +177,15 @@ describe('Offender results component Jira NN-843', () => {
 
     const component = shallow(
       <ResultsHouseblock
-        agencyId={PRISON}
+        {...props}
         currentLocation="1"
-        currentSubLocation="--"
         date={date}
-        getHouseblockList={jest.fn()}
-        setColumnSort={jest.fn()}
-        subLocations={subLocations}
-        history={mockHistory}
         houseblockData={response}
-        handleSearch={jest.fn()}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
         period="ED"
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('.whereabouts-title').text()).toEqual('1')
@@ -303,28 +308,15 @@ describe('Offender results component Jira NN-843', () => {
   it('should render empty results list correctly', async () => {
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={[]}
-        handleSearch={jest.fn()}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         period="AM"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         date="today"
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
     const tr = component.find('tr')
@@ -333,74 +325,48 @@ describe('Offender results component Jira NN-843', () => {
   })
 
   it('should handle buttons correctly', async () => {
-    const update = jest.fn()
-    const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={handlePrint}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
+        handlePrint={props.handlePrint}
         date={today}
         period="PM"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={update}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
 
     component.find('#updateButton').simulate('click')
-    expect(update).toHaveBeenCalled()
-    expect(handlePrint).not.toHaveBeenCalled()
-    expect(handlePrint).not.toHaveBeenCalled()
+    expect(props.update).toHaveBeenCalled()
+    expect(props.handlePrint).not.toHaveBeenCalled()
 
     component
       .find('#printButton')
       .at(0)
       .simulate('click')
-    expect(handlePrint).toHaveBeenCalled()
+    expect(props.handlePrint).toHaveBeenCalled()
   })
 
   it('should not display print button when date is in the past', async () => {
     const oldDate = '25/05/2018'
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         date={oldDate}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
@@ -412,58 +378,34 @@ describe('Offender results component Jira NN-843', () => {
       .format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         date={futureDate}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it('checkboxes should be read-only when date is over a week ago', async () => {
-    const handlePrint = jest.fn()
     const oldDate = '23/05/2018'
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={handlePrint}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
+        handlePrint={props.handlePrint}
         date={oldDate}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -487,31 +429,19 @@ describe('Offender results component Jira NN-843', () => {
   })
 
   it('should display the correct sorting headings for Location', async () => {
-    const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={handlePrint}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
+        handlePrint={props.handlePrint}
         date={today}
         period="ED"
         orderField="cellLocation"
         sortOrder="ASC"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -549,31 +479,19 @@ describe('Offender results component Jira NN-843', () => {
   })
 
   it('should display the correct sorting headings for Name', async () => {
-    const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={handlePrint}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
+        handlePrint={props.handlePrint}
         date={today}
         period="ED"
         orderField="lastName"
         sortOrder="DESC"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -611,67 +529,42 @@ describe('Offender results component Jira NN-843', () => {
   })
 
   it.skip('should handle change of sort order', async () => {
-    const setColumnSort = jest.fn()
-    const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
-
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={response}
-        handlePrint={handlePrint}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getHouseblockList={jest.fn()}
-        setColumnSort={setColumnSort}
+        handlePrint={props.handlePrint}
+        setColumnSort={props.setColumnSort}
         date={today}
         period="ED"
         orderField="cellLocation"
         sortOrder="ASC"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
     component.find('#Location-sort-asc').simulate('click')
-    expect(setColumnSort).toHaveBeenCalledWith('cellLocation', 'DESC')
+    expect(props.setColumnSort).toHaveBeenCalledWith('cellLocation', 'DESC')
 
     component.find('#Name-sortable-column').simulate('click')
-    expect(setColumnSort).toHaveBeenCalledWith('lastName', 'ASC')
+    expect(props.setColumnSort).toHaveBeenCalledWith('lastName', 'ASC')
   })
 
   it('should render back link', async () => {
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={[]}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         period="AM"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         date="today"
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
     expect(component.find('#back_to_selection_link').length).toEqual(1)
@@ -700,27 +593,15 @@ describe('Offender results component Jira NN-843', () => {
     const date = aFewDaysAgo.format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={data}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         date={date}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -742,27 +623,15 @@ describe('Offender results component Jira NN-843', () => {
   it('Should render sub-locations in drop-down', () => {
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={[]}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         date={moment().format('DD/MM/YYYY')}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -798,27 +667,15 @@ describe('Offender results component Jira NN-843', () => {
 
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={data}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         date={date}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -867,27 +724,15 @@ describe('Offender results component Jira NN-843', () => {
 
     const component = shallow(
       <ResultsHouseblock
-        history={mockHistory}
-        subLocations={subLocations}
+        {...props}
         houseblockData={data}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
         date={date}
         period="ED"
         currentLocation="BWing"
-        currentSubLocation="--"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
-        update={jest.fn()}
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -928,26 +773,16 @@ describe('Offender results component Jira NN-843', () => {
 
   // TODO Skipped for Part 1
   it.skip('should call showPaymentReasonModal with event and offender information', () => {
-    const showPaymentReasonModal = jest.fn()
-
     const component = shallow(
       <ResultsHouseblock
+        {...props}
         user={{}}
         houseblockData={[response[0]]}
-        handlePrint={jest.fn()}
-        handleSubLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        setColumnSort={jest.fn()}
-        getHouseblockList={jest.fn()}
-        showPaymentReasonModal={showPaymentReasonModal}
-        update={jest.fn()}
+        showPaymentReasonModal={props.showPaymentReasonModal}
         orderField="cellLocation"
         sortOrder="ASC"
         currentLocation="BWing"
-        currentSubLocation="--"
         offenderNo="1"
-        resetErrorDispatch={jest.fn()}
       />
     )
 
@@ -961,6 +796,6 @@ describe('Offender results component Jira NN-843', () => {
       .last()
       .simulate('change', browserEvent)
 
-    expect(showPaymentReasonModal).toHaveBeenCalledWith(response[0].activity[0], browserEvent)
+    expect(props.showPaymentReasonModal).toHaveBeenCalledWith(response[0].activity[0], browserEvent)
   })
 })
