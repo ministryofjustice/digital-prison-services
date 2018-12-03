@@ -1,3 +1,5 @@
+const { capitalize } = require('../utils')
+
 const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + block[figure], 0)
 
 const getEstablishmentRollCountFactory = elite2Api => {
@@ -11,21 +13,21 @@ const getEstablishmentRollCountFactory = elite2Api => {
     const totalRoll = getTotals(assignedResponse, 'bedsInUse')
 
     const movements = {
-      name: 'Movements',
+      name: "Today's movements",
       numbers: [
         { name: 'Unlock roll', value: totalRoll - movementsResponse.in + movementsResponse.out },
         { name: 'In today', value: movementsResponse.in },
         { name: 'Out today', value: movementsResponse.out },
         { name: 'Current roll', value: totalRoll },
         {
-          name: 'Unassigned',
+          name: 'In reception',
           value: getTotals(unassignedResponse, 'currentlyInCell'),
         },
       ],
     }
 
     const blocks = assignedResponse.map(block => ({
-      name: block.livingUnitDesc,
+      name: capitalize(block.livingUnitDesc),
       numbers: [
         { name: 'Beds in use', value: block.bedsInUse },
         { name: 'Currently in cell', value: block.currentlyInCell },

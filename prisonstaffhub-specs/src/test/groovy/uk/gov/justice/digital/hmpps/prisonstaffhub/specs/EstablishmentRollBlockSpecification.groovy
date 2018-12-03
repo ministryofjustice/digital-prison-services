@@ -35,16 +35,16 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         def totalsBlock = getReadableColumns(blocks[3])
 
         movementsBlock == [
-            'Movements',
+            "Today's movements",
             'Unlock roll', '329',
             'In today', '1',
             'Out today', '2',
             'Current roll', '328',
-            'Unassigned', '2'
+            'In reception', '2'
         ]
 
         firstBlock == [
-            'Housing Block 1',
+            'Houseblock 1',
             'Beds in use', '156',
             'Currently in cell', '154',
             'Currently out', '2',
