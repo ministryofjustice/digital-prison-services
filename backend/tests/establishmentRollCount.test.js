@@ -9,7 +9,7 @@ describe('Establishment Roll', () => {
   const assignedBlockData = [
     {
       livingUnitId: 0,
-      livingUnitDesc: 'Housing block 1',
+      livingUnitDesc: 'HOUSEBLOCK 1',
       bedsInUse: 10,
       currentlyInCell: 20,
       currentlyOut: 30,
@@ -21,7 +21,7 @@ describe('Establishment Roll', () => {
     },
     {
       livingUnitId: 0,
-      livingUnitDesc: 'Housing block 2',
+      livingUnitDesc: 'HOUSEBLOCK 2',
       bedsInUse: 0,
       currentlyInCell: 0,
       currentlyOut: 0,
@@ -57,18 +57,18 @@ describe('Establishment Roll', () => {
     const response = await getEstablishmentRollCount(context, agencyId)
     const returnedData = {
       movements: {
-        name: 'Movements',
+        name: "Today's movements",
         numbers: [
           { name: 'Unlock roll', value: 12 },
           { name: 'In today', value: 1 },
           { name: 'Out today', value: 3 },
           { name: 'Current roll', value: 10 },
-          { name: 'Unassigned', value: 20 },
+          { name: 'In reception', value: 20 },
         ],
       },
       blocks: [
         {
-          name: 'Housing block 1',
+          name: 'Houseblock 1',
           numbers: [
             { name: 'Beds in use', value: 10 },
             { name: 'Currently in cell', value: 20 },
@@ -79,7 +79,7 @@ describe('Establishment Roll', () => {
           ],
         },
         {
-          name: 'Housing block 2',
+          name: 'Houseblock 2',
           numbers: [
             { name: 'Beds in use', value: 0 },
             { name: 'Currently in cell', value: 0 },
