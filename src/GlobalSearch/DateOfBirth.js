@@ -83,7 +83,7 @@ DateOfBirth.EARLIEST_DATE = moment({ day: 1, month: 0, year: 1900 })
 DateOfBirth.propTypes = {
   // props
   showErrors: PropTypes.bool,
-  // This component calls onChange with an object like { isoDate: '2018-10-25', valid: true }
+  // This component calls handleDateOfBirthChange with an object like { isoDate: '2018-10-25', valid: true, blank: false }
   handleDateOfBirthChange: PropTypes.func,
 }
 
