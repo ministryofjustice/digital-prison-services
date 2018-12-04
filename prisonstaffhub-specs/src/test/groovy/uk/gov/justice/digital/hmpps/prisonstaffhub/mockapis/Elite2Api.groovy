@@ -395,11 +395,11 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
-    def stubGlobalSearch(offenderNo, lastName, firstName, location, gender, response) {
+    def stubGlobalSearch(offenderNo, lastName, firstName, location, gender, dob, response) {
         final totalRecords = String.valueOf(response.size())
 
         this.stubFor(
-                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=${gender}&location=${location}&partialNameMatch=false&includeAliases=true")
+                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=${gender}&location=${location}&dob=${dob}&partialNameMatch=false&includeAliases=true")
                         .withHeader('page-offset', equalTo('0'))
                         .withHeader('page-limit', equalTo('10'))
                         .willReturn(
@@ -416,7 +416,7 @@ class Elite2Api extends WireMockRule {
         final totalRecords = String.valueOf(response.size())
 
         this.stubFor(
-                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&partialNameMatch=false&includeAliases=true")
+                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&dob=&partialNameMatch=false&includeAliases=true")
                         .withHeader('page-offset', equalTo('0'))
                         .withHeader('page-limit', equalTo('10'))
                         .willReturn(
@@ -429,7 +429,7 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
         if (response.size() > 10) {
             this.stubFor(
-                    get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&partialNameMatch=false&includeAliases=true")
+                    get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&dob=&partialNameMatch=false&includeAliases=true")
                             .withHeader('page-offset', equalTo('10'))
                             .withHeader('page-limit', equalTo('10'))
                             .willReturn(

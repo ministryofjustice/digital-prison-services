@@ -5,15 +5,23 @@ const log = require('../log')
 const offenderIdPattern = /^[A-Za-z][0-9]{4}[A-Za-z]{2}$/
 
 const globalSearchFactory = elite2Api => {
-  const searchByOffender = (context, offenderNo, genderFilter, locationFilter) =>
-    elite2Api.globalSearch(context, offenderNo, '', '', genderFilter, locationFilter)
+  const searchByOffender = (context, offenderNo, genderFilter, locationFilter, dateOfBirthFilter) =>
+    elite2Api.globalSearch(context, offenderNo, '', '', genderFilter, locationFilter, dateOfBirthFilter)
 
-  const searchByName = (context, name, genderFilter, locationFilter) => {
+  const searchByName = (context, name, genderFilter, locationFilter, dateOfBirthFilter) => {
     const [lastName, firstName] = name.split(' ')
-    return elite2Api.globalSearch(context, '', lastName, firstName || '', genderFilter, locationFilter)
+    return elite2Api.globalSearch(
+      context,
+      '',
+      lastName,
+      firstName || '',
+      genderFilter,
+      locationFilter,
+      dateOfBirthFilter
+    )
   }
 
-  const globalSearch = async (context, searchText, genderFilter, locationFilter) => {
+  const globalSearch = async (context, searchText, genderFilter, locationFilter, dateOfBirthFilter) => {
     log.info(`In globalSearch, searchText=${searchText}`)
     if (!searchText) {
       return []
@@ -23,8 +31,8 @@ const globalSearchFactory = elite2Api => {
       .replace(/\s\s+/g, ' ')
       .trim()
     const data = await (offenderIdPattern.test(text)
-      ? searchByOffender(context, text, genderFilter, locationFilter)
-      : searchByName(context, text, genderFilter, locationFilter))
+      ? searchByOffender(context, text, genderFilter, locationFilter, dateOfBirthFilter)
+      : searchByName(context, text, genderFilter, locationFilter, dateOfBirthFilter))
     log.info(data, 'globalSearch data received')
 
     const offenderOutIds = data

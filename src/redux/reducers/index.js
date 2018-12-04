@@ -60,6 +60,7 @@ const globalSearchInitialState = {
   searchText: '',
   locationFilter: 'ALL',
   genderFilter: 'ALL',
+  dateOfBirthFilter: { valid: false, blank: true },
 }
 
 function updateObject(oldObject, newValues) {
@@ -261,6 +262,11 @@ export function globalSearch(state = globalSearchInitialState, action) {
       return {
         ...state,
         genderFilter: action.genderFilter,
+      }
+    case ActionTypes.SET_GLOBAL_SEARCH_DATE_OF_BIRTH_FILTER:
+      return {
+        ...state,
+        dateOfBirthFilter: action.dateOfBirthFilter,
       }
     default:
       return state
