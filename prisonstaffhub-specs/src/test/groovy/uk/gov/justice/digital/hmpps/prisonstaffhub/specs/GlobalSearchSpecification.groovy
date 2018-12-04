@@ -113,12 +113,19 @@ class GlobalSearchSpecification extends GebReportingSpec {
         when: "I select filter values and search"
         locationSelect = 'OUT'
         genderSelect = 'F'
-        elite2api.stubGlobalSearch('', 'common', '', 'OUT', 'F', GlobalSearchResponses.response1)
+        dobDay = '1'
+        dobMonth = '1'
+        dobYear = '1970'
+
+        elite2api.stubGlobalSearch('', 'common', '', 'OUT', 'F', '1970-01-01', GlobalSearchResponses.response1)
         searchAgainButton.click()
 
         then: "the filters retain their values"
         locationSelect == 'OUT'
         genderSelect == 'F'
+        dobDay == '1'
+        dobMonth == '1'
+        dobYear == '1970'
 
         when: "clear filters link is selected"
         clearFiltersLink.click()
@@ -126,6 +133,9 @@ class GlobalSearchSpecification extends GebReportingSpec {
         then: "the filters are reset"
         locationSelect == 'ALL'
         genderSelect == 'ALL'
+        dobDay == ''
+        dobMonth == ''
+        dobYear == ''
 
         when: "hide filters link is selected"
         showFiltersLink.click()

@@ -32,8 +32,14 @@ const factory = (
   })
 
   const globalSearch = asyncMiddleware(async (req, res) => {
-    const { searchText, genderFilter, locationFilter } = req.query
-    const viewModel = await globalSearchService.globalSearch(res.locals, searchText, genderFilter, locationFilter)
+    const { searchText, genderFilter, locationFilter, dateOfBirthFilter } = req.query
+    const viewModel = await globalSearchService.globalSearch(
+      res.locals,
+      searchText,
+      genderFilter,
+      locationFilter,
+      dateOfBirthFilter
+    )
     res.set(res.locals.responseHeaders)
     res.json(viewModel)
   })

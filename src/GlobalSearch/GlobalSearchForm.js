@@ -55,7 +55,7 @@ class GlobalSearchForm extends Component {
 
     const locationSelect = (
       <Fragment>
-        <label className="form-label bold" htmlFor="location-select">
+        <label className="form-label" htmlFor="location-select">
           Location status of prisoner
         </label>
 
@@ -81,7 +81,7 @@ class GlobalSearchForm extends Component {
 
     const genderSelect = (
       <Fragment>
-        <label className="form-label bold" htmlFor="gender-select">
+        <label className="form-label" htmlFor="gender-select">
           Prisoner gender
         </label>
 
