@@ -15,6 +15,7 @@ import {
   setApplicationTitle,
   setGlobalSearchLocationFilter,
   setGlobalSearchGenderFilter,
+  resetError,
 } from '../redux/actions'
 
 const axios = require('axios')
@@ -34,8 +35,9 @@ class GlobalSearchContainer extends Component {
   }
 
   async componentWillMount() {
-    const { setLoadedDispatch, handleError, searchTextDispatch, location } = this.props
+    const { setLoadedDispatch, handleError, searchTextDispatch, location, resetErrorDispatch } = this.props
     const { searchText } = queryString.parse(location.search)
+    resetErrorDispatch()
     searchTextDispatch(searchText)
     setLoadedDispatch(false)
     try {
@@ -78,7 +80,9 @@ class GlobalSearchContainer extends Component {
   }
 
   async handlePageAction(pageNumber) {
-    const { handleError, searchText } = this.props
+    const { handleError, searchText, resetErrorDispatch } = this.props
+
+    resetErrorDispatch()
 
     try {
       await this.doGlobalSearch(pageNumber, searchText)
@@ -88,9 +92,16 @@ class GlobalSearchContainer extends Component {
   }
 
   async handleSearch(history) {
-    const { searchText } = this.props
+    const { searchText, handleError, resetErrorDispatch } = this.props
+
+    resetErrorDispatch()
     history.replace(`/globalsearch?searchText=${searchText}`)
-    await this.doGlobalSearch(0, searchText)
+
+    try {
+      await this.doGlobalSearch(0, searchText)
+    } catch (error) {
+      handleError(error)
+    }
   }
 
   handleSearchTextChange(event) {
@@ -170,6 +181,7 @@ GlobalSearchContainer.propTypes = {
   genderFilterDispatch: PropTypes.func.isRequired,
   locationFilterDispatch: PropTypes.func.isRequired,
   titleDispatch: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
 
   // special
   location: ReactRouterPropTypes.location.isRequired,
@@ -200,6 +212,7 @@ const mapDispatchToProps = dispatch => ({
   pageNumberDispatch: no => dispatch(setGlobalSearchPageNumber(no)),
   totalRecordsDispatch: no => dispatch(setGlobalSearchTotalRecords(no)),
   titleDispatch: title => dispatch(setApplicationTitle(title)),
+  resetErrorDispatch: () => dispatch(resetError()),
 })
 
 export default withRouter(
