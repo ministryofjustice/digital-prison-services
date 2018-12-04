@@ -5,12 +5,12 @@ import DateOfBirth from './DateOfBirth'
 
 describe('DateOfBirth', () => {
   it('Should render', () => {
-    const component = shallow(<DateOfBirth />)
+    shallow(<DateOfBirth />)
   })
 
   it('handleDateOfBirthChange is called during initialisation', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = shallow(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
+    shallow(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
   })
 

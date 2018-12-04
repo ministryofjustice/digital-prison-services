@@ -99,10 +99,8 @@ class GlobalSearchContainer extends Component {
   }
 
   async handleSearch(history) {
-    const { searchText, handleError, resetErrorDispatch } = this.props
-
+    const { searchText, handleError, resetErrorDispatch, dateOfBirthFilter } = this.props
     resetErrorDispatch()
-    const { searchText, dateOfBirthFilter } = this.props
     const validForm = dateOfBirthFilter.blank || dateOfBirthFilter.valid
     this.setState(state => ({
       ...state,
