@@ -20,7 +20,7 @@ class DateOfBirth extends Component {
     this.onChange({})
   }
 
-  onChange(value) {
+  onChange = value => {
     const { handleDateOfBirthChange } = this.props
     const { day, month, year } = value
 
