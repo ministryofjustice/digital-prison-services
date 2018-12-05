@@ -115,18 +115,18 @@ table tr:nth-child(even){
 
 .width10 {
   width: 10%;
-
-  @media print {
-    width: auto;
-  }
 }
 
 .width15 {
   width: 15%;
 
   @media print {
-    width: auto;
+    width: 17.5%;
   }
+}
+
+.width20 {
+  width: 20%;
 }
 
 .padding-top {
