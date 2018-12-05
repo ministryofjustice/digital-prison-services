@@ -226,8 +226,8 @@ class ResultsHouseblock extends Component {
             />
           </th>
           <th className="straight width10">NOMS&nbsp;ID</th>
-          <th className="straight width5">Info</th>
-          <th className="straight width15">
+          <th className="straight width10">Info</th>
+          <th className="straight width20">
             <SortableColumn
               heading="Activity"
               field="activity"
@@ -273,10 +273,10 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, agencyId)}</td>
             <td className="row-gutters">{anyActivity.offenderNo}</td>
             <td>{Flags.AlertFlags(row.alertFlags, row.category, 'flags')}</td>
-            <td className="row-gutters small-font">
+            <td className="row-gutters">
               {row.activity && `${getHoursMinutes(row.activity.startTime)} - ${getMainEventDescription(row.activity)}`}
             </td>
-            <td className="row-gutters small-font">
+            <td className="row-gutters">
               <OtherActivitiesView offenderMainEvent={row} />
             </td>
             <td className="no-padding checkbox-column no-display">

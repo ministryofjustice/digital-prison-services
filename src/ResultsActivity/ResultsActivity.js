@@ -187,8 +187,8 @@ class ResultsActivity extends Component {
             />
           </th>
           <th className="straight width10">NOMS&nbsp;ID</th>
-          <th className="straight width5">Info</th>
-          <th className="straight width15">
+          <th className="straight width10">Info</th>
+          <th className="straight width20">
             <SortableColumn
               heading="Activity"
               field="activity"
@@ -198,6 +198,11 @@ class ResultsActivity extends Component {
             />
           </th>
           <th className="straight">Other activities</th>
+          <th className="straightPrint checkbox-header no-display">
+            <div>
+              <span>Received</span>
+            </div>
+          </th>
         </tr>
       )
     }
@@ -218,7 +223,7 @@ class ResultsActivity extends Component {
 
     const offenders =
       activityData &&
-      activityData.map(mainEvent => (
+      activityData.map((mainEvent, index) => (
         <tr key={mainEvent.offenderNo} className="row-gutters">
           <td className="row-gutters">
             <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(mainEvent.offenderNo)}>
@@ -229,7 +234,7 @@ class ResultsActivity extends Component {
           <td className="row-gutters">{mainEvent.offenderNo}</td>
           <td>{Flags.AlertFlags(mainEvent.alertFlags, mainEvent.category, 'flags')}</td>
           {renderMainEvent(mainEvent)}
-          <td className="row-gutters small-font last-text-column-padding">
+          <td className="row-gutters last-text-column-padding">
             {
               <OtherActivitiesView
                 offenderMainEvent={{
@@ -238,6 +243,14 @@ class ResultsActivity extends Component {
                 }}
               />
             }
+          </td>
+          <td className="no-padding checkbox-column">
+            <div className="multiple-choice whereaboutsCheckbox no-display">
+              <label className="whereabouts-label" htmlFor={`col1_${index}`}>
+                Received
+              </label>
+              <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
+            </div>
           </td>
         </tr>
       ))
