@@ -1,16 +1,22 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { mount } from 'enzyme'
 import moment from 'moment'
+import { JSDOM } from 'jsdom'
 import DateOfBirth from './DateOfBirth'
+
+const jsdom = new JSDOM('<!doctype html><html lang="en"><body></body></html>')
+const { window } = jsdom
+global.window = window
+global.document = window.document
 
 describe('DateOfBirth', () => {
   it('Should render', () => {
-    shallow(<DateOfBirth />)
+    mount(<DateOfBirth />)
   })
 
   it('handleDateOfBirthChange is called during initialisation', () => {
     const handleDateOfBirthChange = jest.fn()
-    shallow(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
+    mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
   })
 
@@ -18,20 +24,15 @@ describe('DateOfBirth', () => {
     const handleDateOfBirthChange = jest.fn()
     const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
-    dob
-      .find('input[type="number"]')
-      .at(0)
-      .simulate('change', { target: { value: '1' } })
+    const textinputs = dob.find('input[type="number"]')
+
+    textinputs.at(0).simulate('change', { target: { value: '1' } })
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: false })
-    dob
-      .find('input[type="number"]')
-      .at(1)
-      .simulate('change', { target: { value: '1' } })
+    textinputs.at(0).instance().value = '1'
+    textinputs.at(1).simulate('change', { target: { value: '1' } })
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: false })
-    dob
-      .find('input[type="number"]')
-      .at(2)
-      .simulate('change', { target: { value: '2000' } })
+    textinputs.at(1).instance().value = '1'
+    textinputs.at(2).simulate('change', { target: { value: '2000' } })
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: true, blank: false, isoDate: '2000-01-01' })
   })
 
@@ -63,8 +64,8 @@ describe('DateOfBirth', () => {
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
     const textinputs = dob.find('input[type="number"]')
-    textinputs.at(0).simulate('change', { target: { value: '31' } })
-    textinputs.at(1).simulate('change', { target: { value: '12' } })
+    textinputs.at(0).instance().value = '31'
+    textinputs.at(1).instance().value = '12'
     textinputs.at(2).simulate('change', { target: { value: '1899' } })
 
     expect(dob.instance().errorText()).toEqual('Date of birth must be after 1 January 1900')
@@ -76,8 +77,8 @@ describe('DateOfBirth', () => {
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
     const textinputs = dob.find('input[type="number"]')
-    textinputs.at(0).simulate('change', { target: { value: '1' } })
-    textinputs.at(1).simulate('change', { target: { value: '1' } })
+    textinputs.at(0).instance().value = '1'
+    textinputs.at(1).instance().value = '1'
     textinputs.at(2).simulate('change', { target: { value: '1900' } })
 
     expect(dob.instance().errorText()).toBeUndefined()
@@ -92,8 +93,8 @@ describe('DateOfBirth', () => {
     const yesterday = moment().subtract(1, 'days')
 
     const textinputs = dob.find('input[type="number"]')
-    textinputs.at(0).simulate('change', { target: { value: yesterday.date() } })
-    textinputs.at(1).simulate('change', { target: { value: yesterday.month() + 1 } })
+    textinputs.at(0).instance().value = yesterday.date()
+    textinputs.at(1).instance().value = yesterday.month() + 1
     textinputs.at(2).simulate('change', { target: { value: yesterday.year() } })
 
     expect(dob.instance().errorText()).toBeUndefined()
@@ -112,8 +113,8 @@ describe('DateOfBirth', () => {
     const today = moment()
 
     const textinputs = dob.find('input[type="number"]')
-    textinputs.at(0).simulate('change', { target: { value: today.date() } })
-    textinputs.at(1).simulate('change', { target: { value: today.month() + 1 } })
+    textinputs.at(0).instance().value = today.date()
+    textinputs.at(1).instance().value = today.month() + 1
     textinputs.at(2).simulate('change', { target: { value: today.year() } })
 
     expect(dob.instance().errorText()).toEqual('Date of birth must be in the past')
