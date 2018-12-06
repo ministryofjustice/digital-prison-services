@@ -7,11 +7,11 @@ class DateOfBirth extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: {},
       dateIsValid: false,
       dateIsInThePast: true,
       blank: true,
     }
+    this.dateRef = React.createRef()
     this.onChange = this.onChange.bind(this)
     this.errorText = this.errorText.bind(this)
   }
@@ -22,7 +22,13 @@ class DateOfBirth extends Component {
 
   onChange = value => {
     const { handleDateOfBirthChange } = this.props
-    const { day, month, year } = value
+    // value only holds the current input value, so need to copy all over and then replace
+    const {
+      day: { value: dayRefValue },
+      month: { value: monthRefValue },
+      year: { value: yearRefValue },
+    } = this.dateRef.current.inputs
+    const { day = dayRefValue, month = monthRefValue, year = yearRefValue } = value
 
     const d = Number.parseInt(day, 10)
     const m = Number.parseInt(month, 10)
@@ -39,7 +45,6 @@ class DateOfBirth extends Component {
     const blank = !day && !month && !year
 
     this.setState({
-      value,
       dateIsValid,
       dateIsInThePast,
       dateIsTooEarly,
@@ -69,9 +74,8 @@ class DateOfBirth extends Component {
   }
 
   render() {
-    const { value } = this.state
     return (
-      <DateField input={{ value, onChange: this.onChange }} errorText={this.errorText()}>
+      <DateField input={{ ref: this.dateRef, onChange: this.onChange }} errorText={this.errorText()}>
         Date of birth
       </DateField>
     )
