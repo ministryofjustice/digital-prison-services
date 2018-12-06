@@ -38,10 +38,12 @@ const factory = (refreshFunction, secondsToExpiry) =>
    * useful for testing)
    * @returns a Promise that is settled when decisions and refresh are complete.
    */
-  (context, nowInSecondsSincePosixEpoch = Date.now() / 1000) =>
-    tokenExpiresBefore(contextProperties.getAccessToken(context), nowInSecondsSincePosixEpoch + secondsToExpiry)
-      ? refreshFunction(context)
-      : Promise.resolve()
+  async (context, nowInSecondsSincePosixEpoch = Date.now() / 1000) => {
+    if (tokenExpiresBefore(contextProperties.getAccessToken(context), nowInSecondsSincePosixEpoch + secondsToExpiry)) {
+      const response = await refreshFunction(contextProperties.getRefreshToken(context))
+      contextProperties.setTokens(response, context)
+    }
+  }
 
 module.exports = {
   factory,
