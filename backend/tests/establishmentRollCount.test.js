@@ -6,6 +6,32 @@ const { getEstablishmentRollCount } = require('../controllers/establishmentRollC
 describe('Establishment Roll', () => {
   const context = {}
   const agencyId = 'LEI'
+  const unassignedBlockData = [
+    {
+      livingUnitId: 0,
+      livingUnitDesc: 'Reception',
+      bedsInUse: 0,
+      currentlyInCell: 5,
+      currentlyOut: 0,
+      operationalCapacity: 0,
+      netVacancies: 0,
+      maximumCapacity: 0,
+      availablePhysical: 0,
+      outOfOrder: 0,
+    },
+    {
+      livingUnitId: 0,
+      livingUnitDesc: 'TAP',
+      bedsInUse: 0,
+      currentlyInCell: 3,
+      currentlyOut: 0,
+      operationalCapacity: 0,
+      netVacancies: 0,
+      maximumCapacity: 0,
+      availablePhysical: 0,
+      outOfOrder: 0,
+    },
+  ]
   const assignedBlockData = [
     {
       livingUnitId: 0,
@@ -41,7 +67,9 @@ describe('Establishment Roll', () => {
   beforeEach(() => {
     elite2Api.getEstablishmentRollBlocksCount = jest.fn()
     elite2Api.getEstablishmentRollMovementsCount = jest.fn()
-    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(() => assignedBlockData)
+    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(
+      (_context, _agencyId, _unassigned) => (_unassigned ? unassignedBlockData : assignedBlockData)
+    )
     elite2Api.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
   })
 
@@ -59,11 +87,11 @@ describe('Establishment Roll', () => {
       movements: {
         name: "Today's movements",
         numbers: [
-          { name: 'Unlock roll', value: 12 },
+          { name: 'Unlock roll', value: 30 },
           { name: 'In today', value: 1 },
           { name: 'Out today', value: 3 },
-          { name: 'Current roll', value: 10 },
-          { name: 'In reception', value: 20 },
+          { name: 'Current roll', value: 28 },
+          { name: 'In reception', value: 8 },
         ],
       },
       blocks: [
