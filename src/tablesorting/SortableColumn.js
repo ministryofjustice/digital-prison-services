@@ -1,24 +1,25 @@
 import React from 'react'
 import * as PropTypes from 'prop-types'
 import { linkOnClick } from '../helpers'
+import { ASC, DESC } from './sortOrder'
 
 const SortableColumn = props => {
   const { heading, field, sortOrder, setColumnSort, orderField } = props
   let triangleImage = ''
 
-  if (sortOrder === 'ASC') {
+  if (sortOrder === ASC) {
     triangleImage = (
       <span
         className="sortableLink"
         id={`${heading}-sort-asc`}
         {...linkOnClick(() => {
-          setColumnSort(field, 'DESC')
+          setColumnSort(field, DESC)
         })}
       >
         <img src="/images/Triangle_asc.png" height="8" width="15" alt="Up arrow" />
       </span>
     )
-  } else if (sortOrder === 'DESC') {
+  } else if (sortOrder === DESC) {
     triangleImage = (
       <span
         className="sortableLink"
@@ -37,7 +38,7 @@ const SortableColumn = props => {
       className="sortableLink"
       id={`${heading}-sortable-column`}
       {...linkOnClick(() => {
-        setColumnSort(field, 'ASC')
+        setColumnSort(field, ASC)
       })}
     >
       {heading}

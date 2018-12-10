@@ -5,20 +5,16 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import {
-  isTodayOrAfter,
-  properCaseName,
-  getMainEventDescription,
-  stripAgencyPrefix,
-  getHoursMinutes,
-  getListSizeClass,
-  getLongDateFormat,
-} from '../utils'
+import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import DatePickerInput from '../DatePickerInput'
-import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
-import SortableColumn from '../ResultsHouseblock/SortableColumn'
+import SortableColumn from '../tablesorting/SortableColumn'
+import SortLov from '../tablesorting/SortLov'
+import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
+import OffenderName from '../OffenderName'
+import OffenderLink from '../OffenderLink'
+import Location from '../Location'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -54,7 +50,6 @@ class ResultsActivity extends Component {
 
   render() {
     const {
-      agencyId,
       handleDateChange,
       date,
       period,
@@ -62,6 +57,9 @@ class ResultsActivity extends Component {
       handlePrint,
       activityData,
       getActivityList,
+      sortOrder,
+      orderField,
+      setColumnSort,
     } = this.props
 
     const dateSelect = (
@@ -122,90 +120,46 @@ class ResultsActivity extends Component {
       </div>
     )
 
-    const sortLov = () => {
-      const { sortOrder, orderField, setColumnSort } = this.props
+    const headings = () => (
+      <tr>
+        <th className="straight width15">
+          <SortableColumn
+            heading="Name"
+            field="lastName"
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+            orderField={orderField}
+          />
+        </th>
+        <th className="straight width10">
+          <SortableColumn
+            heading="Location"
+            field="cellLocation"
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+            orderField={orderField}
+          />
+        </th>
+        <th className="straight width10">NOMS&nbsp;ID</th>
+        <th className="straight width10">Info</th>
+        <th className="straight width20">
+          <SortableColumn
+            heading="Activity"
+            field="activity"
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+            orderField={orderField}
+          />
+        </th>
+        <th className="straight">Other activities</th>
+        <th className="straightPrint checkbox-header no-display">
+          <div>
+            <span>Received</span>
+          </div>
+        </th>
+      </tr>
+    )
 
-      const invokeColumnSortWithEventData = event => {
-        const [field, order] = event.target.value.split('_')
-        setColumnSort(field, order)
-      }
-      return (
-        <div className="pure-u-md-1-4 margin-top-small margin-bottom-large">
-          <label className="form-label" htmlFor="sort-select">
-            Order the list
-          </label>
-          <select
-            id="sort-select"
-            name="sort-select"
-            className="form-control"
-            onChange={invokeColumnSortWithEventData}
-            value={`${orderField}_${sortOrder}`}
-          >
-            <option key="lastName_ASC" value="lastName_ASC">
-              Name (A-Z)
-            </option>
-            <option key="lastName_DESC" value="lastName_DESC">
-              Name (Z-A)
-            </option>
-            <option key="cellLocation_ASC" value="cellLocation_ASC">
-              Location (1-X)
-            </option>
-            <option key="cellLocation_DESC" value="cellLocation_DESC">
-              Location (X-1)
-            </option>
-            <option key="activity_ASC" value="activity_ASC">
-              Activity name (A-Z)
-            </option>
-            <option key="activity_DESC" value="activity_DESC">
-              Activity name (Z-A)
-            </option>
-          </select>
-        </div>
-      )
-    }
-
-    const headings = () => {
-      const { sortOrder, orderField, setColumnSort } = this.props
-      return (
-        <tr>
-          <th className="straight width15">
-            <SortableColumn
-              heading="Name"
-              field="lastName"
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-              orderField={orderField}
-            />
-          </th>
-          <th className="straight width10">
-            <SortableColumn
-              heading="Location"
-              field="cellLocation"
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-              orderField={orderField}
-            />
-          </th>
-          <th className="straight width10">NOMS&nbsp;ID</th>
-          <th className="straight width10">Info</th>
-          <th className="straight width20">
-            <SortableColumn
-              heading="Activity"
-              field="activity"
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-              orderField={orderField}
-            />
-          </th>
-          <th className="straight">Other activities</th>
-          <th className="straightPrint checkbox-header no-display">
-            <div>
-              <span>Received</span>
-            </div>
-          </th>
-        </tr>
-      )
-    }
     // Disabled until whereabouts v2
     // const readOnly = this.olderThan7Days(this.props.date);
     const renderMainEvent = event => {
@@ -226,11 +180,13 @@ class ResultsActivity extends Component {
       activityData.map((mainEvent, index) => (
         <tr key={mainEvent.offenderNo} className="row-gutters">
           <td className="row-gutters">
-            <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(mainEvent.offenderNo)}>
-              {properCaseName(mainEvent.lastName)}, {properCaseName(mainEvent.firstName)}
-            </a>
+            <OffenderLink offenderNo={mainEvent.offenderNo}>
+              <OffenderName firstName={mainEvent.firstName} lastName={mainEvent.lastName} />
+            </OffenderLink>
           </td>
-          <td className="row-gutters">{stripAgencyPrefix(mainEvent.cellLocation, agencyId)}</td>
+          <td className="row-gutters">
+            <Location location={mainEvent.cellLocation} />
+          </td>
           <td className="row-gutters">{mainEvent.offenderNo}</td>
           <td>{Flags.AlertFlags(mainEvent.alertFlags, mainEvent.category, 'flags')}</td>
           {renderMainEvent(mainEvent)}
@@ -280,7 +236,12 @@ class ResultsActivity extends Component {
           </div>
           <hr />
           {buttons}
-          {sortLov()}
+          <SortLov
+            sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
+            sortColumn={orderField}
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+          />
         </form>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
@@ -303,7 +264,6 @@ ResultsActivity.propTypes = {
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
-  agencyId: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,

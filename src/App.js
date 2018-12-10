@@ -34,6 +34,7 @@ import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 import ModalProvider from './ModalProvider/index'
 import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer'
 import links from './links'
+import MovementsInContainer from './MovementsIn/MovementsInContainer'
 
 const axios = require('axios')
 
@@ -289,6 +290,13 @@ class App extends React.Component {
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
               />
+            )}
+          />
+          <Route
+            exact
+            path="/movements/in"
+            render={() => (
+              <MovementsInContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
             )}
           />
         </div>

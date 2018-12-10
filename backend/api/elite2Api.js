@@ -72,6 +72,8 @@ const elite2ApiFactory = client => {
       }&partialNameMatch=false&includeAliases=true`
     )
   const getLastPrison = (context, body) => post(context, `api/movements/offenders`, body)
+  const getMovementsIn = (context, agencyId, movementDate) =>
+    get(context, `api/movements/${agencyId}/in/${movementDate}`)
 
   return {
     userLocations,
@@ -98,6 +100,7 @@ const elite2ApiFactory = client => {
     getEstablishmentRollEnrouteCount,
     getPrisonerImage,
     getLastPrison,
+    getMovementsIn,
   }
 }
 
