@@ -48,6 +48,8 @@ const elite2ApiFactory = client => {
     get(context, `api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
   const getEstablishmentRollMovementsCount = (context, agencyId) =>
     get(context, `api/movements/rollcount/${agencyId}/movements`)
+  const getEstablishmentRollEnrouteCount = (context, agencyId) =>
+    get(context, `api/movements/rollcount/${agencyId}/enroute`)
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
@@ -93,6 +95,7 @@ const elite2ApiFactory = client => {
     getAssessments,
     getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount,
+    getEstablishmentRollEnrouteCount,
     getPrisonerImage,
     getLastPrison,
   }

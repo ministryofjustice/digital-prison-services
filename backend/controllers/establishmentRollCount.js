@@ -4,10 +4,11 @@ const getTotals = (array, figure) => array.reduce((accumulator, block) => accumu
 
 const getEstablishmentRollCountFactory = elite2Api => {
   const getEstablishmentRollCount = async (context, agencyId) => {
-    const [assignedResponse, unassignedResponse, movementsResponse] = await Promise.all([
+    const [assignedResponse, unassignedResponse, movementsResponse, enroute] = await Promise.all([
       elite2Api.getEstablishmentRollBlocksCount(context, agencyId, false),
       elite2Api.getEstablishmentRollBlocksCount(context, agencyId, true),
       elite2Api.getEstablishmentRollMovementsCount(context, agencyId),
+      elite2Api.getEstablishmentRollEnrouteCount(context, agencyId),
     ])
 
     const unassignedIn = getTotals(unassignedResponse, 'currentlyInCell')
@@ -23,6 +24,10 @@ const getEstablishmentRollCountFactory = elite2Api => {
         {
           name: 'In reception',
           value: unassignedIn,
+        },
+        {
+          name: 'En-route',
+          value: enroute,
         },
       ],
     }

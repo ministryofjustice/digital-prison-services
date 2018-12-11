@@ -40,7 +40,8 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
             'In today', '1',
             'Out today', '2',
             'Current roll', '328',
-            'In reception', '2'
+            'In reception', '2',
+            'En-route', '6'
         ]
 
         firstBlock == [
