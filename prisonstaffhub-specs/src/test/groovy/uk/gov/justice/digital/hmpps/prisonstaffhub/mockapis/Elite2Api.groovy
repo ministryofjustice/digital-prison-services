@@ -479,6 +479,15 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}/enroute")
+                        .willReturn(
+                        aResponse()
+                                .withBody('6')
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 
     void stubImage() {
