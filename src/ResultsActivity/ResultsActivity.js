@@ -125,19 +125,19 @@ class ResultsActivity extends Component {
         <th className="straight width15">
           <SortableColumn
             heading="Name"
-            field="lastName"
+            column={LAST_NAME}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={orderField}
+            sortColumn={orderField}
           />
         </th>
         <th className="straight width10">
           <SortableColumn
             heading="Location"
-            field="cellLocation"
+            column={CELL_LOCATION}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={orderField}
+            sortColumn={orderField}
           />
         </th>
         <th className="straight width10">NOMS&nbsp;ID</th>
@@ -145,10 +145,10 @@ class ResultsActivity extends Component {
         <th className="straight width20">
           <SortableColumn
             heading="Activity"
-            field="activity"
+            column={ACTIVITY}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={orderField}
+            sortColumn={orderField}
           />
         </th>
         <th className="straight">Other activities</th>
@@ -177,39 +177,42 @@ class ResultsActivity extends Component {
 
     const offenders =
       activityData &&
-      activityData.map((mainEvent, index) => (
-        <tr key={mainEvent.offenderNo} className="row-gutters">
-          <td className="row-gutters">
-            <OffenderLink offenderNo={mainEvent.offenderNo}>
-              <OffenderName firstName={mainEvent.firstName} lastName={mainEvent.lastName} />
-            </OffenderLink>
-          </td>
-          <td className="row-gutters">
-            <Location location={mainEvent.cellLocation} />
-          </td>
-          <td className="row-gutters">{mainEvent.offenderNo}</td>
-          <td>{Flags.AlertFlags(mainEvent.alertFlags, mainEvent.category, 'flags')}</td>
-          {renderMainEvent(mainEvent)}
-          <td className="row-gutters last-text-column-padding">
-            {
-              <OtherActivitiesView
-                offenderMainEvent={{
-                  ...mainEvent,
-                  others: mainEvent.eventsElsewhere,
-                }}
-              />
-            }
-          </td>
-          <td className="no-padding checkbox-column">
-            <div className="multiple-choice whereaboutsCheckbox no-display">
-              <label className="whereabouts-label" htmlFor={`col1_${index}`}>
-                Received
-              </label>
-              <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
-            </div>
-          </td>
-        </tr>
-      ))
+      activityData.map((mainEvent, index) => {
+        const { offenderNo, firstName, lastName, cellLocation, alertFlags, category } = mainEvent
+        return (
+          <tr key={offenderNo} className="row-gutters">
+            <td className="row-gutters">
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName} lastName={lastName} />
+              </OffenderLink>
+            </td>
+            <td className="row-gutters">
+              <Location location={cellLocation} />
+            </td>
+            <td className="row-gutters">{offenderNo}</td>
+            <td>{Flags.AlertFlags(alertFlags, category, 'flags')}</td>
+            {renderMainEvent(mainEvent)}
+            <td className="row-gutters last-text-column-padding">
+              {
+                <OtherActivitiesView
+                  offenderMainEvent={{
+                    ...mainEvent,
+                    others: mainEvent.eventsElsewhere,
+                  }}
+                />
+              }
+            </td>
+            <td className="no-padding checkbox-column">
+              <div className="multiple-choice whereaboutsCheckbox no-display">
+                <label className="whereabouts-label" htmlFor={`col1_${index}`}>
+                  Received
+                </label>
+                <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
+              </div>
+            </td>
+          </tr>
+        )
+      })
 
     return (
       <div className="results-activity">
@@ -227,9 +230,7 @@ class ResultsActivity extends Component {
               id="updateButton"
               className="button greyButton margin-left margin-top"
               type="button"
-              onClick={() => {
-                getActivityList()
-              }}
+              onClick={getActivityList}
             >
               Update
             </button>

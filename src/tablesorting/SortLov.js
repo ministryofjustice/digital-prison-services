@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ASC, DESC } from './sortOrder'
+import { ACTIVITY, CELL_LOCATION, LAST_NAME } from './sortColumns'
 
 const SORT_OPTIONS = {
-  lastName: { ASC: 'Name (A-Z)', DESC: 'Name (Z-A)' },
-  cellLocation: { ASC: 'Location (1-X)', DESC: 'Location (X-1)' },
-  activity: { ASC: 'Activity name (A-Z)', DESC: 'Activity name (Z-A)' },
+  [LAST_NAME]: { [ASC]: 'Name (A-Z)', [DESC]: 'Name (Z-A)' },
+  [CELL_LOCATION]: { [ASC]: 'Location (1-X)', [DESC]: 'Location (X-1)' },
+  [ACTIVITY]: { [ASC]: 'Activity name (A-Z)', [DESC]: 'Activity name (Z-A)' },
 }
 
 const keyOrValue = (sortColumn, sortOrder) => `${sortColumn}_${sortOrder}`

@@ -294,7 +294,7 @@ class App extends React.Component {
           />
           <Route
             exact
-            path="/movements/in"
+            path="/movements/inToday"
             render={() => (
               <MovementsInContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
             )}

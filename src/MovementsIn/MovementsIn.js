@@ -30,7 +30,6 @@ const MovementsIn = props => {
   const { movementsIn, sortOrder, setColumnSort } = props
   return (
     <div>
-      <h1 className="heading-large">In Today</h1>
       <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
       <MovementsInTable movementsIn={movementsIn} sortOrder={sortOrder} setColumnSort={setColumnSort} />
     </div>
@@ -61,10 +60,10 @@ const MovementsInTableHeadings = props => {
         <th className="straight width15">
           <SortableColumn
             heading="Name"
-            field={LAST_NAME}
+            column={LAST_NAME}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={LAST_NAME}
+            sortColumn={LAST_NAME}
           />
         </th>
         <th className="straight width15">Prison No.</th>

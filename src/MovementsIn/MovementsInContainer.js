@@ -5,19 +5,21 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 
 import MovementsIn from './MovementsIn'
-import Spinner from '../Spinner'
-import { resetError } from '../redux/actions'
+import { resetError, setLoaded } from '../redux/actions'
 import Error from '../Error'
-import { fieldComparator, thenComparing } from '../ResultsHouseblock/comparatorComposition'
+import { fieldComparator, thenComparing } from '../tablesorting/comparatorComposition'
 import { ASC, DESC } from '../tablesorting/sortOrder'
+import Page from '../Page/Page'
 
 class MovementsInContainer extends Component {
-  lastNameComparator = thenComparing(fieldComparator(obj => obj.lastName), fieldComparator(obj => obj.firstName))
+  lastNameComparator = thenComparing(
+    thenComparing(fieldComparator(obj => obj.lastName), fieldComparator(obj => obj.firstName)),
+    fieldComparator(obj => obj.offenderNo)
+  )
 
   constructor(props) {
     super(props)
     this.state = {
-      loaded: false,
       movementsIn: [],
       sortOrder: ASC,
     }
@@ -29,14 +31,15 @@ class MovementsInContainer extends Component {
   }
 
   async getMovementsIn() {
-    const { agencyId, handleError, resetErrorDispatch } = this.props
+    const { agencyId, handleError, resetErrorDispatch, setLoadedDispatch } = this.props
     try {
-      this.setState({ loaded: false })
       resetErrorDispatch()
+      setLoadedDispatch(false)
       const response = await axios.get(`/api/movements/${agencyId}/in`)
       const movementsIn = response.data
       this.sortMovementsIn(movementsIn, ASC)
-      this.setState({ movementsIn, loaded: true })
+      this.setState({ movementsIn })
+      setLoadedDispatch(true)
     } catch (error) {
       handleError(error)
     }
@@ -61,14 +64,11 @@ class MovementsInContainer extends Component {
     const { movementsIn, loaded, sortOrder } = this.state
     const { error } = this.props
 
-    if (!loaded) {
-      return <Spinner />
-    }
     return (
-      <React.Fragment>
+      <Page title="In today" error={error} loaded={loaded}>
         <Error error={error} />
         <MovementsIn movementsIn={movementsIn} sortOrder={sortOrder} setColumnSort={this.setColumnSort} />
-      </React.Fragment>
+      </Page>
     )
   }
 }
@@ -96,6 +96,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   resetErrorDispatch: () => dispatch(resetError()),
+  setLoadedDispatch: status => dispatch(setLoaded(status)),
 })
 
 export default connect(

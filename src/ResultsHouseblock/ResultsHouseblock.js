@@ -164,19 +164,19 @@ class ResultsHouseblock extends Component {
         <th className="straight width15">
           <SortableColumn
             heading="Name"
-            field="lastName"
+            column={LAST_NAME}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={orderField}
+            sortColumn={orderField}
           />
         </th>
         <th className="straight width10">
           <SortableColumn
             heading="Location"
-            field="cellLocation"
+            column={CELL_LOCATION}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={orderField}
+            sortColumn={orderField}
           />
         </th>
         <th className="straight width10">NOMS&nbsp;ID</th>
@@ -184,10 +184,10 @@ class ResultsHouseblock extends Component {
         <th className="straight width20">
           <SortableColumn
             heading="Activity"
-            field="activity"
+            column={ACTIVITY}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
-            orderField={orderField}
+            sortColumn={orderField}
           />
         </th>
         <th className="straight">Other activities</th>
@@ -211,17 +211,19 @@ class ResultsHouseblock extends Component {
       houseblockData.map((row, index) => {
         const anyActivity = row.activity || row.others[0]
 
+        const { offenderNo, firstName, lastName, cellLocation } = anyActivity
+
         return (
-          <tr key={anyActivity.offenderNo} className="row-gutters">
+          <tr key={offenderNo} className="row-gutters">
             <td className="row-gutters">
-              <OffenderLink offenderNo={anyActivity.offenderNo}>
-                <OffenderName firstName={anyActivity.firstName} lastName={anyActivity.lastName} />
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName} lastName={lastName} />
               </OffenderLink>
             </td>
             <td className="row-gutters">
-              <Location location={anyActivity.cellLocation} />
+              <Location location={cellLocation} />
             </td>
-            <td className="row-gutters">{anyActivity.offenderNo}</td>
+            <td className="row-gutters">{offenderNo}</td>
             <td>{Flags.AlertFlags(row.alertFlags, row.category, 'flags')}</td>
             <td className="row-gutters">
               {row.activity && `${getHoursMinutes(row.activity.startTime)} - ${getMainEventDescription(row.activity)}`}
@@ -269,9 +271,7 @@ class ResultsHouseblock extends Component {
               id="updateButton"
               className="button greyButton margin-left margin-top"
               type="button"
-              onClick={() => {
-                update()
-              }}
+              onClick={update}
             >
               Update
             </button>
