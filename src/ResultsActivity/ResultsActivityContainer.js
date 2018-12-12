@@ -43,12 +43,12 @@ class ResultsActivityContainer extends Component {
     }
   }
 
-  setColumnSort(orderField, sortOrder) {
+  setColumnSort(sortColumn, sortOrder) {
     const { orderDispatch, sortOrderDispatch, activityData, activityDataDispatch } = this.props
-    orderDispatch(orderField)
+    orderDispatch(sortColumn)
     sortOrderDispatch(sortOrder)
     const copy = activityData.slice()
-    sortActivityData(copy, orderField, sortOrder)
+    sortActivityData(copy, sortColumn, sortOrder)
     activityDataDispatch(copy)
   }
 

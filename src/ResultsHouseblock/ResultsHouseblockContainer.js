@@ -46,12 +46,12 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  setColumnSort(orderField, sortOrder) {
+  setColumnSort(sortColumn, sortOrder) {
     const { orderDispatch, sortOrderDispatch, houseblockData, houseblockDataDispatch } = this.props
-    orderDispatch(orderField)
+    orderDispatch(sortColumn)
     sortOrderDispatch(sortOrder)
     const copy = houseblockData.slice()
-    sortHouseBlockData(copy, orderField, sortOrder)
+    sortHouseBlockData(copy, sortColumn, sortOrder)
     houseblockDataDispatch(copy)
   }
 

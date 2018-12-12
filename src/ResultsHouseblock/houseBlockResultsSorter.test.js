@@ -1,4 +1,6 @@
 import sortHouseBlockData from './houseBlockResultsSorter'
+import { ASC, DESC } from '../tablesorting/sortOrder'
+import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 
 describe('Houseblock data sorter tests', () => {
   it('sorts an empty array', () => {
@@ -10,7 +12,7 @@ describe('Houseblock data sorter tests', () => {
       const data = [{ activity: { lastName: 'B' } }, { activity: { lastName: 'A' } }, { activity: { lastName: 'C' } }]
 
       it('ascending', () => {
-        sortHouseBlockData(data, 'lastName', 'ASC')
+        sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activity: { lastName: 'A' } },
           { activity: { lastName: 'B' } },
@@ -19,7 +21,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, 'lastName', 'DESC')
+        sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { activity: { lastName: 'C' } },
           { activity: { lastName: 'B' } },
@@ -32,7 +34,7 @@ describe('Houseblock data sorter tests', () => {
       const data = [{ others: [{ lastName: 'B' }] }, { others: [{ lastName: 'A' }] }, { others: [{ lastName: 'C' }] }]
 
       it('ascending', () => {
-        sortHouseBlockData(data, 'lastName', 'ASC')
+        sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { others: [{ lastName: 'A' }] },
           { others: [{ lastName: 'B' }] },
@@ -41,7 +43,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, 'lastName', 'DESC')
+        sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { others: [{ lastName: 'C' }] },
           { others: [{ lastName: 'B' }] },
@@ -54,7 +56,7 @@ describe('Houseblock data sorter tests', () => {
       const data = [{ others: [{ lastName: 'B' }] }, { activity: { lastName: 'A' } }, { others: [{ lastName: 'C' }] }]
 
       it('ascending', () => {
-        sortHouseBlockData(data, 'lastName', 'ASC')
+        sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activity: { lastName: 'A' } },
           { others: [{ lastName: 'B' }] },
@@ -63,7 +65,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, 'lastName', 'DESC')
+        sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { others: [{ lastName: 'C' }] },
           { others: [{ lastName: 'B' }] },
@@ -83,7 +85,7 @@ describe('Houseblock data sorter tests', () => {
       ]
 
       it('ascending', () => {
-        sortHouseBlockData(data, 'lastName', 'ASC')
+        sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activity: { lastName: 'A', firstName: 'P' } },
           { activity: { lastName: 'A', firstName: 'Q' } },
@@ -93,7 +95,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, 'lastName', 'DESC')
+        sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { activity: { lastName: 'B', firstName: 'Q' } },
           { activity: { lastName: 'B', firstName: 'P' } },
@@ -112,7 +114,7 @@ describe('Houseblock data sorter tests', () => {
     ]
 
     it('ascending', () => {
-      sortHouseBlockData(data, 'cellLocation', 'ASC')
+      sortHouseBlockData(data, CELL_LOCATION, ASC)
       expect(data).toEqual([
         { activity: { cellLocation: 'MDI-1-1-007' } },
         { others: [{ cellLocation: 'MDI-1-2-006' }] },
@@ -134,7 +136,7 @@ describe('Houseblock data sorter tests', () => {
       { activity: { eventDescription: 'C', lastName: 'B', firstName: 'Q' } },
     ]
     it('sorts ascending', () => {
-      sortHouseBlockData(data, 'activity', 'ASC')
+      sortHouseBlockData(data, ACTIVITY, ASC)
       expect(data).toEqual([
         { activity: { eventType: 'PRISON_ACT', comment: 'A' } },
         { activity: { event: 'PA', comment: 'B' } },
