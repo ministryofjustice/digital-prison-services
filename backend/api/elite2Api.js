@@ -40,8 +40,10 @@ const elite2ApiFactory = client => {
     post(context, `api/schedules/${agencyId}/courtEvents?date=${date}`, offenderNumbers)
   const getExternalTransfers = (context, { agencyId, date, offenderNumbers }) =>
     post(context, `api/schedules/${agencyId}/externalTransfers?date=${date}`, offenderNumbers)
+  // TODO can refactor these alerts calls later to just use the system one once the client id is established in env
   const getAlerts = (context, { agencyId, offenderNumbers }) =>
     post(context, `api/bookings/offenderNo/${agencyId}/alerts`, offenderNumbers)
+  const getAlertsSystem = (context, offenderNumbers) => post(context, 'api/bookings/offenderNo/alerts', offenderNumbers)
   const getAssessments = (context, { code, offenderNumbers }) =>
     post(context, `api/offender-assessments/${code}`, offenderNumbers)
   const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
@@ -94,6 +96,7 @@ const elite2ApiFactory = client => {
     globalSearch,
     getExternalTransfers,
     getAlerts,
+    getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount,
