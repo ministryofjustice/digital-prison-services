@@ -6,7 +6,7 @@ describe('ISO date string to age in years', () => {
   it('converts a valid ISO date to age', () => {
     expect(ageFromIsoDate('1961-12-10')).toBe(57)
     expect(ageFromIsoDate('1961-12-11')).toBe(57)
-    expect(ageFromIsoDate('1961-12-12')).toBe(56)
+    expect(ageFromIsoDate('1961-12-12')).toBe(57)
   })
 
   it('renders a valid ISO date as an age in years', () => {
