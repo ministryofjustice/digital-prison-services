@@ -1,4 +1,5 @@
 const moment = require('moment')
+const oauthClientId = require('../api/oauthClientId')
 
 const movementsServiceFactory = (elite2Api, oauthClientId) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
@@ -20,6 +21,9 @@ const movementsServiceFactory = (elite2Api, oauthClientId) => {
   const getMovementsIn = (context, agencyId) => {
     const isoDateToday = moment().format('YYYY-MM-DD')
     return elite2Api.getMovementsIn(context, agencyId, isoDateToday)
+    // TODO getting flags etc:
+    // const systemContext = await oauthClientId.getClientCredentialsTokens()
+    // const stuff = await elite2Api.getAlertsSystem(systemContext, offenderNos)
   }
 
   const getMovementsOut = async (context, agencyId) => {
