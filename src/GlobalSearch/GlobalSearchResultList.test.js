@@ -41,6 +41,7 @@ describe('Global search results component', () => {
     )
     const tr = component.find('tr')
     expect(tr.length).toEqual(3) // 2 plus table header tr
+    expect(tr.at(0).contains('Prison no'))
     expect(
       tr
         .at(1)

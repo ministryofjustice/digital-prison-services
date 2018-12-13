@@ -13,7 +13,7 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
     <tr>
       <th className="straight" />
       <th className="straight">Name</th>
-      <th className="straight">NOMS&nbsp;ID</th>
+      <th className="straight">Prison&nbsp;no</th>
       <th className="straight">Date of birth</th>
       <th className="straight">Location</th>
       <th className="straight">Actual working name</th>
