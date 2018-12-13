@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 import './EstablishmentRollBlock.scss'
+import { routePaths } from '../App'
 
-class EstablishmentRollBlock extends Component {
+export class EstablishmentRollBlock extends Component {
+  linkedFigures = new Map([['In today', routePaths.inToday], ['Out today', routePaths.outToday]])
+
+  addLink(label, content) {
+    return this.linkedFigures.has(label) ? <Link to={this.linkedFigures.get(label)}>{content}</Link> : content
+  }
+
   renderBlockFigure = (label, value) => (
     <div className="block-figure">
       <label className="block-figure__label">{label}</label>
-      <span className="block-figure__value">{value}</span>
+      {this.addLink(label, <span className="block-figure__value">{value}</span>)}
     </div>
   )
 
@@ -53,4 +62,4 @@ EstablishmentRollBlock.defaultProps = {
   highlight: false,
 }
 
-export default EstablishmentRollBlock
+export default withRouter(EstablishmentRollBlock)
