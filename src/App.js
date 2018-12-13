@@ -39,6 +39,12 @@ import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 
 const axios = require('axios')
 
+const routePaths = {
+  establishmentRoll: '/establishmentroll',
+  inToday: '/establishmentroll/in-today',
+  outToday: '/establishmentroll/out-today',
+}
+
 class App extends React.Component {
   async componentWillMount() {
     const { configDispatch, setErrorDispatch } = this.props
@@ -284,7 +290,7 @@ class App extends React.Component {
           <Route exact path="/dashboard" render={() => <Dashboard />} />
           <Route
             exact
-            path="/establishmentroll"
+            path={routePaths.establishmentRoll}
             render={() => (
               <EstablishmentRollContainer
                 handleError={this.handleError}
@@ -295,15 +301,13 @@ class App extends React.Component {
           />
           <Route
             exact
-            path="/movements/inToday"
-            render={() => (
-              <MovementsInContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
-            )}
+            path={routePaths.inToday}
+            render={() => <MovementsInContainer handleError={this.handleError} />}
           />
 
           <Route
             exact
-            path="/establishmentroll/out-today"
+            path={routePaths.outToday}
             render={() => (
               <MovementsOutContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
             )}
@@ -443,5 +447,5 @@ const AppContainer = connect(
   mapDispatchToProps
 )(App)
 
-export { App, AppContainer }
+export { App, AppContainer, routePaths }
 export default App

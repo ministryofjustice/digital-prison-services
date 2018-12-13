@@ -2,8 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import DateFormatter from '.'
 
-describe('DateOfBirth', () => {
-  it('Should render undefined dob', () => {
+describe('DateFormatter', () => {
+  it('Should render undefined date', () => {
     const wrapper = shallow(<DateFormatter />)
     expect(wrapper.equals('')).toEqual(true)
   })

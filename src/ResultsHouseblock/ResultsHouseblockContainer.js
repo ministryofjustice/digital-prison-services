@@ -32,7 +32,7 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const { currentLocation, history } = this.props
 
     try {
@@ -44,6 +44,11 @@ class ResultsHouseblockContainer extends Component {
     } catch (error) {
       this.handleError(error)
     }
+  }
+
+  componentWillUnmount() {
+    const { houseblockDataDispatch } = this.props
+    houseblockDataDispatch([])
   }
 
   setColumnSort(sortColumn, sortOrder) {

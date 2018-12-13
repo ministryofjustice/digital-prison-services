@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Page from '../Page/Page'
 import SortableColumn from '../tablesorting/SortableColumn'
 import OffenderName from '../OffenderName'
 import DateFormatter from '../DateFormatter'
@@ -29,10 +28,10 @@ const movementsInType = {
 const MovementsIn = props => {
   const { movementsIn, sortOrder, setColumnSort } = props
   return (
-    <div>
+    <React.Fragment>
       <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
       <MovementsInTable movementsIn={movementsIn} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    </div>
+    </React.Fragment>
   )
 }
 
@@ -56,8 +55,8 @@ const MovementsInTableHeadings = props => {
   return (
     <thead>
       <tr>
-        <th className="straight width15" />
-        <th className="straight width15">
+        <th className="straight width10" />
+        <th className="straight width20">
           <SortableColumn
             heading="Name"
             column={LAST_NAME}
@@ -66,12 +65,11 @@ const MovementsInTableHeadings = props => {
             sortColumn={LAST_NAME}
           />
         </th>
-        <th className="straight width15">Prison No.</th>
-        <th className="straight width5">D.O.B.</th>
-        <th className="straight width10">Location</th>
+        <th className="straight width10">Prison No.</th>
+        <th className="straight width10">D.O.B.</th>
+        <th className="straight width20">Location</th>
         <th className="straight width10">Time in</th>
-        <th className="straight width15">Arrived from</th>
-        <th className="straight width15">Flags</th>
+        <th className="straight width20">Arrived from</th>
       </tr>
     </thead>
   )
@@ -108,7 +106,6 @@ const MovementInRow = props => {
         <HoursAndMinutes hhmmss={movementTime} />
       </td>
       <td>{fromAgencyDescription}</td>
-      <td className="row-gutters">Some Flags</td>
     </tr>
   )
 }

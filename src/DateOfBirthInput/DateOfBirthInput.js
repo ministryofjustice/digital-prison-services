@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import DateField from '@govuk-react/date-field'
 import moment from 'moment'
 
-class DateOfBirth extends Component {
+class DateOfBirthInput extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,7 +41,7 @@ class DateOfBirth extends Component {
     })
     const dateIsValid = date.isValid() && !Number.isNaN(d) && !Number.isNaN(m) && !Number.isNaN(y)
     const dateIsInThePast = dateIsValid ? date.isBefore(moment(), 'day') : false
-    const dateIsTooEarly = dateIsValid ? date.isBefore(DateOfBirth.EARLIEST_DATE) : true
+    const dateIsTooEarly = dateIsValid ? date.isBefore(DateOfBirthInput.EARLIEST_DATE) : true
     const blank = !day && !month && !year
 
     this.setState({
@@ -82,18 +82,18 @@ class DateOfBirth extends Component {
   }
 }
 
-DateOfBirth.EARLIEST_DATE = moment({ day: 1, month: 0, year: 1900 })
+DateOfBirthInput.EARLIEST_DATE = moment({ day: 1, month: 0, year: 1900 })
 
-DateOfBirth.propTypes = {
+DateOfBirthInput.propTypes = {
   // props
   showErrors: PropTypes.bool,
   // This component calls handleDateOfBirthChange with an object like { isoDate: '2018-10-25', valid: true, blank: false }
   handleDateOfBirthChange: PropTypes.func,
 }
 
-DateOfBirth.defaultProps = {
+DateOfBirthInput.defaultProps = {
   showErrors: false,
   handleDateOfBirthChange: undefined,
 }
 
-export default DateOfBirth
+export default DateOfBirthInput
