@@ -205,7 +205,7 @@ describe('Offender results component Jira NN-843', () => {
     expect(periodSelect.some('[value="ED"]')).toEqual(true)
 
     const tr = component.find('tr')
-    expect(tr.at(0).contains('Prison no'))
+    expect(tr.at(0).contains('Prison no.'))
     expect(tr.length).toEqual(5) // 4 plus table header tr
     const row1Tds = tr.at(1).find('td')
     expect(

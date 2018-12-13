@@ -563,7 +563,7 @@ describe('Offender activity list results component', () => {
     )
 
     const tr = component.find('tr')
-    expect(tr.at(0).contains('Prison no'))
+    expect(tr.at(0).contains('Prison no.'))
     const row1Tds = tr.at(1).find('td')
     expect(
       row1Tds
