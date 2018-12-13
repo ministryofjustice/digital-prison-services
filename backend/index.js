@@ -45,6 +45,7 @@ const clientFactory = require('./api/oauthEnabledClient')
 const { healthApiFactory } = require('./api/healthApi')
 const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory
 const { oauthApiFactory } = require('./api/oauthApi')
+const oauthClientId = require('./api/oauthClientId')
 
 const log = require('./log')
 const config = require('./config')
@@ -113,7 +114,7 @@ const controller = controllerFactory({
   updateAttendanceService: updateAttendanceFactory(elite2Api),
   establishmentRollService: establishmentRollFactory(elite2Api),
   globalSearchService: globalSearchFactory(elite2Api),
-  movementsService: movementsServiceFactory(elite2Api),
+  movementsService: movementsServiceFactory(elite2Api, oauthClientId),
 })
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 })
@@ -181,6 +182,7 @@ app.use('/api/activityList', controller.getActivityList)
 app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/movements/:agencyId/in', controller.getMovementsIn)
+app.use('/api/movements/:agencyId/out', controller.getMovementsOut)
 app.use('/api/globalSearch', controller.globalSearch)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 

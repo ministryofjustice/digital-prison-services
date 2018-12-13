@@ -51,6 +51,12 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const getMovementsOut = asyncMiddleware(async (req, res) => {
+    const { agencyId } = req.params
+    const viewModel = await movementsService.getMovementsOut(res.locals, agencyId)
+    res.json(viewModel)
+  })
+
   return {
     getActivityList,
     getHouseblockList,
@@ -58,6 +64,7 @@ const factory = ({
     getEstablishmentRollCount,
     globalSearch,
     getMovementsIn,
+    getMovementsOut,
   }
 }
 

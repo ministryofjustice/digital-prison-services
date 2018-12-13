@@ -11,6 +11,7 @@ const SortableColumn = props => {
     triangleImage = (
       <span
         className="sortableLink"
+        role="link"
         id={`${heading}-sort-asc`}
         {...linkOnClick(() => {
           setColumnSort(column, DESC)
@@ -23,6 +24,7 @@ const SortableColumn = props => {
     triangleImage = (
       <span
         className="sortableLink"
+        role="link"
         id={`${heading}-sort-desc`}
         {...linkOnClick(() => {
           setColumnSort(column, ASC)
@@ -36,6 +38,7 @@ const SortableColumn = props => {
   return sortColumn !== column ? (
     <span
       className="sortableLink"
+      role="link"
       id={`${heading}-sortable-column`}
       {...linkOnClick(() => {
         setColumnSort(column, ASC)
