@@ -16,7 +16,7 @@ const movementOutType = {
   timeOut: PropTypes.string,
   reasonDescription: PropTypes.string,
   category: PropTypes.string,
-  alerts: PropTypes.arrayOf(PropTypes.shape(PropTypes.object)),
+  alerts: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
 }
 
 const movementsOutType = {
@@ -30,14 +30,14 @@ const MovementsOut = props => {
   return (
     <div>
       <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-      <MovementsInTable movementsOut={movementsOut} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+      <MovementsOutTable movementsOut={movementsOut} sortOrder={sortOrder} setColumnSort={setColumnSort} />
     </div>
   )
 }
 
 MovementsOut.propTypes = movementsOutType
 
-const MovementsInTable = ({ movementsOut, sortOrder, setColumnSort }) => (
+const MovementsOutTable = ({ movementsOut, sortOrder, setColumnSort }) => (
   <table className="row-gutters">
     <MovementsInTableHeadings sortOrder={sortOrder} setColumnSort={setColumnSort} />
     <tbody>
@@ -48,7 +48,7 @@ const MovementsInTable = ({ movementsOut, sortOrder, setColumnSort }) => (
   </table>
 )
 
-MovementsInTable.propTypes = movementsOutType
+MovementsOutTable.propTypes = movementsOutType
 
 const MovementsInTableHeadings = props => {
   const { sortOrder, setColumnSort } = props
