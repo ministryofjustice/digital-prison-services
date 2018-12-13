@@ -75,7 +75,6 @@ class MovementsInContainer extends Component {
 
 MovementsInContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
-  // raiseAnalyticsEvent: PropTypes.func.isRequired,
 
   // redux state
   agencyId: PropTypes.string.isRequired,
