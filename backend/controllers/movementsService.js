@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-const movementsServiceFactory = (elite2Api, oauthClientId) => {
+const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
     const assessments = (await elite2Api.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
 
@@ -13,7 +13,7 @@ const movementsServiceFactory = (elite2Api, oauthClientId) => {
   }
 
   const getAlerts = async offenderNumbers => {
-    const systemContext = await oauthClientId.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
     return elite2Api.getAlertsSystem(systemContext, offenderNumbers)
   }
 
