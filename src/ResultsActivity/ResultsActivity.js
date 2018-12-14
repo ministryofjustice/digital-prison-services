@@ -140,7 +140,7 @@ class ResultsActivity extends Component {
             sortColumn={orderField}
           />
         </th>
-        <th className="straight width10">NOMS&nbsp;ID</th>
+        <th className="straight width10">Prison&nbsp;no.</th>
         <th className="straight width10">Info</th>
         <th className="straight width20">
           <SortableColumn
