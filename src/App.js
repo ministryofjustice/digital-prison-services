@@ -36,14 +36,9 @@ import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentRe
 import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
+import routePaths from './routePaths'
 
 const axios = require('axios')
-
-const routePaths = {
-  establishmentRoll: '/establishmentroll',
-  inToday: '/establishmentroll/in-today',
-  outToday: '/establishmentroll/out-today',
-}
 
 class App extends React.Component {
   async componentWillMount() {
@@ -447,5 +442,5 @@ const AppContainer = connect(
   mapDispatchToProps
 )(App)
 
-export { App, AppContainer, routePaths }
+export { App, AppContainer }
 export default App
