@@ -29,7 +29,7 @@ class ResultsActivityContainer extends Component {
     this.getActivityList = this.getActivityList.bind(this)
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const { activity, history } = this.props
 
     try {
@@ -41,6 +41,11 @@ class ResultsActivityContainer extends Component {
     } catch (error) {
       this.handleError(error)
     }
+  }
+
+  componentWillUnmount() {
+    const { activityDataDispatch } = this.props
+    activityDataDispatch([])
   }
 
   setColumnSort(sortColumn, sortOrder) {

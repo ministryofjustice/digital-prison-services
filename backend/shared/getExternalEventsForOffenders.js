@@ -1,4 +1,4 @@
-const { sortByDateTime } = require('../utils')
+const { sortByDateTime, isViewableFlag } = require('../utils')
 
 const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, formattedDate }) =>
   Promise.all([
@@ -88,12 +88,10 @@ const scheduledTransfers = (transfers, offenderNo) =>
     }))) ||
   []
 
-const isFlagCode = code => ['HA', 'XEL'].includes(code)
-
 const selectAlertFlags = (alertData, offenderNumber) =>
   (alertData &&
     alertData
-      .filter(alert => !alert.expired && alert.offenderNo === offenderNumber && isFlagCode(alert.alertCode))
+      .filter(alert => !alert.expired && alert.offenderNo === offenderNumber && isViewableFlag(alert.alertCode))
       .map(alert => alert.alertCode)) ||
   []
 

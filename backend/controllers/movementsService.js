@@ -1,4 +1,5 @@
 const moment = require('moment')
+const { isViewableFlag } = require('../utils')
 
 const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
@@ -12,9 +13,10 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     }, new Map())
   }
 
-  const getAlerts = async offenderNumbers => {
+  const getActiveAlerts = async offenderNumbers => {
     const systemContext = await systemOauthClient.getClientCredentialsTokens()
-    return elite2Api.getAlertsSystem(systemContext, offenderNumbers)
+    const alerts = await elite2Api.getAlertsSystem(systemContext, offenderNumbers)
+    return alerts && alerts.filter(alert => !alert.expired && isViewableFlag(alert.alertCode))
   }
 
   const getMovementsIn = (context, agencyId) => {
@@ -29,7 +31,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     if (!offenders || offenders.length === 0) return []
 
     const offenderNumbers = offenders.map(offender => offender.offenderNo)
-    const alerts = await getAlerts(offenderNumbers)
+    const alerts = await getActiveAlerts(offenderNumbers)
     const assessmentMap = await getAssessmentMap(context, offenderNumbers)
 
     return offenders.map(offender => {
@@ -38,7 +40,8 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
       if (assessmentMap.has(offender.offenderNo))
         extraProperties.category = assessmentMap.get(offender.offenderNo).classificationCode
 
-      if (alerts) extraProperties.alerts = alerts.filter(o => o.offenderNo === offender.offenderNo)
+      if (alerts)
+        extraProperties.alerts = alerts.filter(o => o.offenderNo === offender.offenderNo).map(alert => alert.alertCode)
 
       return {
         ...offender,

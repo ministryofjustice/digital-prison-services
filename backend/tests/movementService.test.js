@@ -51,5 +51,34 @@ describe('Movement service', () => {
 
       expect(eliteApi.getAssessments).toHaveBeenCalledWith(context, { code: 'CATEGORY', offenderNumbers })
     })
+
+    it('should only return active alert flags for HA and XEL', async () => {
+      eliteApi.getMovementsOut.mockReturnValue(offenders)
+      eliteApi.getAlertsSystem.mockReturnValue([
+        {
+          offenderNo: offenderNumbers[0],
+          expired: true,
+          alertCode: 'HA',
+        },
+        {
+          offenderNo: offenderNumbers[0],
+          expired: false,
+          alertCode: 'HA',
+        },
+        {
+          offenderNo: offenderNumbers[0],
+          expired: true,
+          alertCode: 'XEL',
+        },
+        {
+          offenderNo: offenderNumbers[0],
+          expired: false,
+          alertCode: 'XEL',
+        },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsOut(context, agency)
+      expect(response[0].alerts).toEqual(['HA', 'XEL'])
+    })
   })
 })
