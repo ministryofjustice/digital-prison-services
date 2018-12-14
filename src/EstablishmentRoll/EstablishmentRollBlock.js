@@ -4,19 +4,23 @@ import classNames from 'classnames'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import './EstablishmentRollBlock.scss'
-import { routePaths } from '../App'
+import routePaths from '../routePaths'
 
+const pathsToStatisticsDetailsPages = new Map([['In today', routePaths.inToday], ['Out today', routePaths.outToday]])
 export class EstablishmentRollBlock extends Component {
-  linkedFigures = new Map([['In today', routePaths.inToday], ['Out today', routePaths.outToday]])
-
-  addLink(label, content) {
-    return this.linkedFigures.has(label) ? <Link to={this.linkedFigures.get(label)}>{content}</Link> : content
-  }
+  addLinkToDetailsPage = (label, content) =>
+    pathsToStatisticsDetailsPages.has(label) ? (
+      <Link to={pathsToStatisticsDetailsPages.get(label)} className="link">
+        {content}
+      </Link>
+    ) : (
+      content
+    )
 
   renderBlockFigure = (label, value) => (
     <div className="block-figure">
       <label className="block-figure__label">{label}</label>
-      {this.addLink(label, <span className="block-figure__value">{value}</span>)}
+      {this.addLinkToDetailsPage(label, <span className="block-figure__value">{value}</span>)}
     </div>
   )
 

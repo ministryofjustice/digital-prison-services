@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { EstablishmentRollBlock } from './EstablishmentRollBlock'
-import { routePaths } from '../App'
+import routePaths from '../routePaths'
 
 describe('<EstablishmentRollBlock />', () => {
   const props = {
