@@ -65,7 +65,7 @@ const MovementsInTableHeadings = props => {
             sortColumn={LAST_NAME}
           />
         </th>
-        <th className="straight width15">Prison No.</th>
+        <th className="straight width15">Prison no.</th>
         <th className="straight width5">D.O.B.</th>
         <th className="straight width10">Time Out</th>
         <th className="straight width15">Reason</th>
