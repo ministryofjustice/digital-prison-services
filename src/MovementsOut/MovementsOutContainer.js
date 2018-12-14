@@ -30,6 +30,14 @@ class MovementsOutContainer extends Component {
     this.getMovementsOut()
   }
 
+  componentDidUpdate(props) {
+    const { agencyId } = this.props
+
+    if (agencyId !== props.agencyId) {
+      this.getMovementsOut()
+    }
+  }
+
   async getMovementsOut() {
     const { agencyId, handleError, resetErrorDispatch, setLoadedDispatch } = this.props
     try {
