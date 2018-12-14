@@ -297,14 +297,18 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.inToday}
-            render={() => <MovementsInContainer handleError={this.handleError} />}
+            render={({ history }) => <MovementsInContainer handleError={this.handleError} history={history} />}
           />
 
           <Route
             exact
             path={routePaths.outToday}
-            render={() => (
-              <MovementsOutContainer handleError={this.handleError} raiseAnalyticsEvent={this.raiseAnalyticsEvent} />
+            render={({ history }) => (
+              <MovementsOutContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
             )}
           />
         </div>
