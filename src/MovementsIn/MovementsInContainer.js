@@ -30,6 +30,14 @@ class MovementsInContainer extends Component {
     this.getMovementsIn()
   }
 
+  componentDidUpdate(props) {
+    const { agencyId } = this.props
+
+    if (agencyId !== props.agencyId) {
+      this.getMovementsIn()
+    }
+  }
+
   async getMovementsIn() {
     const { agencyId, handleError, resetErrorDispatch, setLoadedDispatch } = this.props
     try {
