@@ -10,6 +10,7 @@ import Error from '../Error'
 import { fieldComparator, thenComparing } from '../tablesorting/comparatorComposition'
 import { ASC, DESC } from '../tablesorting/sortOrder'
 import Page from '../Page/Page'
+import routePaths from '../routePaths'
 
 class MovementsOutContainer extends Component {
   lastNameComparator = thenComparing(
@@ -30,11 +31,11 @@ class MovementsOutContainer extends Component {
     this.getMovementsOut()
   }
 
-  componentDidUpdate(props) {
-    const { agencyId } = this.props
+  componentDidUpdate(previousProps) {
+    const { agencyId, history } = this.props
 
-    if (agencyId !== props.agencyId) {
-      this.getMovementsOut()
+    if (agencyId !== previousProps.agencyId) {
+      history.push(routePaths.establishmentRoll)
     }
   }
 
@@ -86,6 +87,9 @@ MovementsOutContainer.propTypes = {
   agencyId: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   resetErrorDispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 MovementsOutContainer.defaultProps = {

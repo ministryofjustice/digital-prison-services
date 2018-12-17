@@ -10,6 +10,7 @@ import Error from '../Error'
 import { fieldComparator, thenComparing } from '../tablesorting/comparatorComposition'
 import { ASC, DESC } from '../tablesorting/sortOrder'
 import Page from '../Page/Page'
+import routePaths from '../routePaths'
 
 class MovementsInContainer extends Component {
   lastNameComparator = thenComparing(
@@ -30,11 +31,11 @@ class MovementsInContainer extends Component {
     this.getMovementsIn()
   }
 
-  componentDidUpdate(props) {
-    const { agencyId } = this.props
+  componentDidUpdate(previousProps) {
+    const { agencyId, history } = this.props
 
-    if (agencyId !== props.agencyId) {
-      this.getMovementsIn()
+    if (agencyId !== previousProps.agencyId) {
+      history.replace(routePaths.establishmentRoll)
     }
   }
 
@@ -83,6 +84,9 @@ class MovementsInContainer extends Component {
 
 MovementsInContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
 
   // redux state
   agencyId: PropTypes.string.isRequired,
