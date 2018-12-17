@@ -4,8 +4,6 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import queryString from 'query-string'
-import Error from '../Error'
-import Spinner from '../Spinner'
 import GlobalSearch from './GlobalSearch'
 import {
   setGlobalSearchResults,
@@ -18,6 +16,7 @@ import {
   resetError,
   setGlobalSearchDateOfBirthFilter,
 } from '../redux/actions'
+import Page from '../Components/Page'
 
 const axios = require('axios')
 
@@ -109,7 +108,7 @@ class GlobalSearchContainer extends Component {
 
     if (!validForm) return
 
-    history.replace(`/globalsearch?searchText=${searchText}`)
+    history.replace(`/global-search-results?searchText=${searchText}`)
 
     try {
       await this.doGlobalSearch(0, searchText)
@@ -145,13 +144,10 @@ class GlobalSearchContainer extends Component {
   }
 
   render() {
-    const { loaded, error } = this.props
     const { validForm } = this.state
 
-    if (!loaded) return <Spinner />
     return (
-      <div>
-        <Error error={error} />
+      <Page title="Global search results" alwaysRender>
         <GlobalSearch
           handlePageAction={this.handlePageAction}
           handleSearchTextChange={this.handleSearchTextChange}
@@ -163,7 +159,7 @@ class GlobalSearchContainer extends Component {
           showErrors={!validForm}
           {...this.props}
         />
-      </div>
+      </Page>
     )
   }
 }

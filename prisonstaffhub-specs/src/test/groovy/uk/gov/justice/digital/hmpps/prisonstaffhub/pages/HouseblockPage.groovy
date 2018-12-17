@@ -5,7 +5,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class HouseblockPage extends DatePickerPage {
 
-    static url = "/whereaboutsresultshouseblock"
+    static url = "/search-prisoner-whereabouts/housing-block-results"
 
     static at = {
         updateButton.displayed

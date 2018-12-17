@@ -6,4 +6,7 @@ export const Breadcrumbs = styled('div')`
 `
 export const Container = styled('div')`
   padding-top: ${SPACING.SCALE_4};
+  @media print {
+    padding-top: 0;
+  }
 `

@@ -78,7 +78,6 @@ class Search extends Component {
         <label className="form-label bold" htmlFor="period-select">
           Period
         </label>
-
         <select
           id="period-select"
           name="period-select"
@@ -172,8 +171,6 @@ class Search extends Component {
 
     return (
       <Fragment>
-        <h1 className="heading-large">Search prisoner whereabouts</h1>
-        <hr />
         <ValidationErrors validationErrors={validationErrors} fieldName="searchForm" />
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">

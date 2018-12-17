@@ -27,7 +27,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I do a global search"
-        go "/globalsearch?searchText=quimby"
+        go "/global-search-results?searchText=quimby"
 
         then: "I should be presented with results"
         at GlobalSearchPage
@@ -54,7 +54,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I do a global search"
-        go "/globalsearch?searchText=common"
+        go "/global-search-results?searchText=common"
 
         then: "I should be presented with results"
         at GlobalSearchPage
@@ -75,7 +75,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         and: "I do a global search"
-        go "/globalsearch?searchText=common"
+        go "/global-search-results?searchText=common"
 
         when: "I perform another search"
         at GlobalSearchPage
@@ -96,7 +96,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I do a global search"
-        go "/globalsearch?searchText=common"
+        go "/global-search-results?searchText=common"
 
         then: "I presented with a hidden search filter"
         at GlobalSearchPage
@@ -152,7 +152,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I do a global search resulting in more than 10 rows"
-        go "/globalsearch?searchText=common"
+        go "/global-search-results?searchText=common"
 
         then: "I should be presented with paged results"
         at GlobalSearchPage

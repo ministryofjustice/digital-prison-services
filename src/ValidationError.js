@@ -12,10 +12,7 @@ class ValidationErrors extends React.Component {
         </span>
       )
     }
-    // TODO: If there is any error, this helps with lining fields up, but this depends on layout!
-    if (validationErrors) {
-      return <span>&nbsp;</span>
-    }
+
     return ''
   }
 }

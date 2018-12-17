@@ -4,7 +4,6 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
-import { Link } from 'react-router-dom'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -21,33 +20,6 @@ class ResultsActivity extends Component {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
   }
 
-  getActivityName() {
-    const { activities, activity } = this.props
-    return (
-      activities
-        .filter(a => a.locationId === Number(activity))
-        .map(a => a.userDescription)
-        .find(a => !!a) || null
-    )
-  }
-
-  displayBack() {
-    const { resetErrorDispatch } = this.props
-    return (
-      <div className="padding-top no-print">
-        <Link
-          id="back_to_menu_link"
-          title="Back"
-          className="link backlink"
-          to="/whereaboutssearch"
-          onClick={() => resetErrorDispatch()}
-        >
-          <img className="back-triangle" src="/images/BackTriangle.png" alt="" width="6" height="10" /> Back
-        </Link>
-      </div>
-    )
-  }
-
   render() {
     const {
       handleDateChange,
@@ -60,6 +32,7 @@ class ResultsActivity extends Component {
       sortOrder,
       orderField,
       setColumnSort,
+      activityName,
     } = this.props
 
     const dateSelect = (
@@ -216,10 +189,8 @@ class ResultsActivity extends Component {
 
     return (
       <div className="results-activity">
-        {this.displayBack()}
-        <h1 className="heading-large whereabouts-title">{this.getActivityName()}</h1>
         <span className="whereabouts-date print-only">
-          - {getLongDateFormat(date)} - {period}
+          <strong>{activityName}</strong> - {getLongDateFormat(date)} - {period}
         </span>
         <hr className="print-only" />
         <form className="no-print">
@@ -267,7 +238,6 @@ ResultsActivity.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
-  resetErrorDispatch: PropTypes.func.isRequired,
   activityData: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
@@ -283,11 +253,7 @@ ResultsActivity.propTypes = {
       comment: PropTypes.string.isRequired,
     })
   ).isRequired,
-  activity: PropTypes.string.isRequired,
-  activities: PropTypes.arrayOf(
-    PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
-      .isRequired
-  ).isRequired,
+  activityName: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,

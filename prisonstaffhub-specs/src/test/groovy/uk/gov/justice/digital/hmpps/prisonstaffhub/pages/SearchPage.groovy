@@ -4,7 +4,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class SearchPage extends DatePickerPage {
 
-    static url = "/whereaboutssearch"
+    static url = "/search-prisoner-whereabouts"
 
     static at = {
         headingText == 'Search prisoner whereabouts'

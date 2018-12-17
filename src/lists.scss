@@ -130,6 +130,8 @@ tbody > tr + td {
 }
 
 @media print {
+  h1 { display: none;}
+  
   .whereabouts-title {
     display: inline-block;
     margin: 0;

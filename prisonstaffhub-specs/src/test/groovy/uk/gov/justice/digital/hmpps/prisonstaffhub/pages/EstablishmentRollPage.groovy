@@ -3,7 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 
 class EstablishmentRollPage extends Page {
-    static url = "/establishmentroll"
+    static url = "/establishment-roll"
 
     static at = {
         pageTitle == 'Establishment roll'

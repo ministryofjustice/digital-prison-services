@@ -1,5 +1,5 @@
 export default {
-  establishmentRoll: '/establishmentroll',
-  inToday: '/establishmentroll/in-today',
-  outToday: '/establishmentroll/out-today',
+  establishmentRoll: '/establishment-roll',
+  inToday: '/establishment-roll/in-today',
+  outToday: '/establishment-roll/out-today',
 }
