@@ -5,7 +5,6 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
 import { getHoursMinutes, isTodayOrAfter, getMainEventDescription, getListSizeClass, getLongDateFormat } from '../utils'
 import DatePickerInput from '../DatePickerInput'
 import OtherActivitiesView from '../OtherActivityListView'
@@ -18,23 +17,6 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 
 class ResultsHouseblock extends Component {
-  displayBack = () => {
-    const { resetErrorDispatch } = this.props
-    return (
-      <div className="padding-top no-print">
-        <Link
-          id="back_to_selection_link"
-          title="Back to selection screen link"
-          className="link backlink"
-          to="/whereaboutssearch"
-          onClick={() => resetErrorDispatch()}
-        >
-          <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10" /> Back
-        </Link>
-      </div>
-    )
-  }
-
   olderThan7Days = () => {
     const { date } = this.props
     const searchDate = moment(date, 'DD/MM/YYYY')
@@ -54,12 +36,11 @@ class ResultsHouseblock extends Component {
       handlePeriodChange,
       handlePrint,
       houseblockData,
-      currentLocation,
       update,
-      activeSubLocation,
       sortOrder,
       orderField,
       setColumnSort,
+      locationWithSubLocation,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -253,13 +234,8 @@ class ResultsHouseblock extends Component {
 
     return (
       <div className="results-houseblock">
-        {this.displayBack()}
-        <h1 className="heading-large whereabouts-title">
-          {currentLocation}
-          {activeSubLocation !== '--' && ` -  ${activeSubLocation}`}
-        </h1>
         <span className="whereabouts-date print-only">
-          - {getLongDateFormat(date)} - {period}
+          <strong>{locationWithSubLocation}</strong> - {getLongDateFormat(date)} - {period}
         </span>
         <hr className="print-only" />
         <form className="no-print">
@@ -305,13 +281,11 @@ ResultsHouseblock.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
-  currentLocation: PropTypes.string.isRequired,
+  locationWithSubLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
-  activeSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
-  resetErrorDispatch: PropTypes.func.isRequired,
   houseblockData: PropTypes.arrayOf(
     PropTypes.shape({
       activity: PropTypes.shape({

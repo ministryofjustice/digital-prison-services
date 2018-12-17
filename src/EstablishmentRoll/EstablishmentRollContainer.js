@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { setEstablishmentRollData, setApplicationTitle } from '../redux/actions'
 import EstablishmentRollBlock from './EstablishmentRollBlock'
-import Page from '../Page/Page'
+import Page from '../Components/Page'
 
 export class EstablishmentRollContainer extends Component {
   componentDidMount() {

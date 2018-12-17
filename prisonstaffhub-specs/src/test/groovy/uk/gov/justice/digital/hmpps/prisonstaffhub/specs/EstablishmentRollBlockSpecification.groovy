@@ -25,7 +25,7 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I navigate to the establishment roll count page"
-        go "/establishmentroll"
+        go "/establishment-roll"
 
         then: "I should be presented with roll counts for each house block"
         at EstablishmentRollPage

@@ -4,7 +4,6 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
-import Error from '../Error'
 import ResultsActivity from './ResultsActivity'
 import {
   resetError,
@@ -15,9 +14,9 @@ import {
   setSortOrder,
   showPaymentReasonModal,
 } from '../redux/actions'
-import Spinner from '../Spinner'
 import { getActivityListReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
 import sortActivityData from './activityResultsSorter'
+import Page from '../Components/Page'
 
 const axios = require('axios')
 
@@ -36,7 +35,7 @@ class ResultsActivityContainer extends Component {
       if (activity) {
         this.getActivityList()
       } else {
-        history.push('/whereaboutssearch')
+        history.push('/search-prisoner-whereabouts')
       }
     } catch (error) {
       this.handleError(error)
@@ -99,6 +98,16 @@ class ResultsActivityContainer extends Component {
     setLoadedDispatch(true)
   }
 
+  getActivityName() {
+    const { activities, activity } = this.props
+    return (
+      activities
+        .filter(a => a.locationId === Number(activity))
+        .map(a => a.userDescription)
+        .find(a => !!a) || null
+    )
+  }
+
   handlePrint() {
     const { raiseAnalyticsEvent } = this.props
 
@@ -110,22 +119,20 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { loaded, error, resetErrorDispatch } = this.props
+    const { resetErrorDispatch } = this.props
+    const activityName = this.getActivityName()
 
-    if (!loaded) {
-      return <Spinner />
-    }
     return (
-      <div>
-        <Error error={error} />
+      <Page title={activityName} alwaysRender>
         <ResultsActivity
           handlePrint={this.handlePrint}
           getActivityList={this.getActivityList}
           resetErrorDispatch={resetErrorDispatch}
           setColumnSort={this.setColumnSort}
+          activityName={activityName}
           {...this.props}
         />
-      </div>
+      </Page>
     )
   }
 }

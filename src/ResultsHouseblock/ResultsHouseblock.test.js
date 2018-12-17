@@ -7,7 +7,6 @@ import OtherActivitiesView from '../OtherActivityListView'
 const PRISON = 'LEI'
 
 const OFFENDER_NAME_COLUMN = 0
-const LOCATION_COLUMN = 1
 const NOMS_ID_COLUMN = 2
 const FLAGS_COLUMN = 3
 const MAIN_COLUMN = 4
@@ -167,6 +166,7 @@ const props = {
   showPaymentReasonModal: jest.fn(),
   update: jest.fn(),
   resetErrorDispatch: jest.fn(),
+  locationWithSubLocation: '1',
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -188,8 +188,7 @@ describe('Offender results component Jira NN-843', () => {
         offenderNo="1"
       />
     )
-    expect(component.find('.whereabouts-title').text()).toEqual('1')
-    expect(component.find('.whereabouts-date').text()).toEqual(`- ${longDateFormat} - ED`)
+    expect(component.find('.whereabouts-date').text()).toEqual(`1 - ${longDateFormat} - ED`)
 
     const housingLocationSelect = component.find('#housing-location-select')
     expect(housingLocationSelect.some('[value="--"]')).toEqual(true)
@@ -579,23 +578,6 @@ describe('Offender results component Jira NN-843', () => {
 
     component.find('#Name-sortable-column').simulate('click')
     expect(props.setColumnSort).toHaveBeenCalledWith('lastName', 'ASC')
-  })
-
-  it('should render back link', async () => {
-    const component = shallow(
-      <ResultsHouseblock
-        {...props}
-        houseblockData={[]}
-        period="AM"
-        currentLocation="BWing"
-        user={user}
-        date="today"
-        orderField="cellLocation"
-        sortOrder="ASC"
-        offenderNo="1"
-      />
-    )
-    expect(component.find('#back_to_selection_link').length).toEqual(1)
   })
 
   it('should show released today when there are no other activity', () => {

@@ -10,10 +10,9 @@ import {
   resetValidationErrors,
   setValidationError,
 } from '../redux/actions'
-import Error from '../Error'
 import Search from './Search'
 import { defaultPeriod } from '../redux/reducers'
-import Spinner from '../Spinner'
+import Page from '../Components/Page'
 
 class SearchContainer extends Component {
   constructor() {
@@ -83,9 +82,9 @@ class SearchContainer extends Component {
     const { activity, location } = this.props
 
     if (location && location !== '--') {
-      history.push('/whereaboutsresultshouseblock')
+      history.push('/search-prisoner-whereabouts/housing-block-results')
     } else if (activity) {
-      history.push('/whereaboutsresultsactivity')
+      history.push('/search-prisoner-whereabouts/activity-results')
     }
   }
 
@@ -101,22 +100,18 @@ class SearchContainer extends Component {
   }
 
   render() {
-    const { error, location, loaded } = this.props
-
-    if (error) {
-      return <Error error={error} />
-    }
-
-    if (!loaded) return <Spinner />
+    const { location } = this.props
 
     return (
-      <Search
-        onSearch={this.onSearch}
-        onLocationChange={this.onLocationChange}
-        onActivityChange={this.onActivityChange}
-        currentLocation={location}
-        {...this.props}
-      />
+      <Page title="Search prisoner whereabouts">
+        <Search
+          onSearch={this.onSearch}
+          onLocationChange={this.onLocationChange}
+          onActivityChange={this.onActivityChange}
+          currentLocation={location}
+          {...this.props}
+        />
+      </Page>
     )
   }
 }

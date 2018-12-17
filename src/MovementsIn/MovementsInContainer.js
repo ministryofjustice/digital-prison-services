@@ -9,7 +9,7 @@ import { resetError, setLoaded } from '../redux/actions'
 import Error from '../Error'
 import { fieldComparator, thenComparing } from '../tablesorting/comparatorComposition'
 import { ASC, DESC } from '../tablesorting/sortOrder'
-import Page from '../Page/Page'
+import Page from '../Components/Page'
 import routePaths from '../routePaths'
 
 class MovementsInContainer extends Component {
