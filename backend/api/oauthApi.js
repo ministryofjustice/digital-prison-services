@@ -1,13 +1,11 @@
 const axios = require('axios')
-const querystring = require('querystring')
 const logger = require('../log')
 const errorStatusCode = require('../error-status-code')
 
 const AuthClientErrorName = 'AuthClientError'
 const AuthClientError = message => ({ name: AuthClientErrorName, message, stack: new Error().stack })
 
-const apiClientCredentials = (clientId, clientSecret) =>
-  Buffer.from(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
+const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
 
 /**
  * Return an oauthApi built using the supplied configuration.
