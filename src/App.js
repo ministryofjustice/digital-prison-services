@@ -185,7 +185,7 @@ class App extends React.Component {
     const { switchAgencyDispatch } = this.props
 
     try {
-      if (location.pathname.includes('globalsearch')) {
+      if (location.pathname.includes('global-search-results')) {
         await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
         window.location.assign(links.notmEndpointUrl)
       } else {
@@ -339,7 +339,7 @@ class App extends React.Component {
                 ReactGA.pageview(location.pathname)
               }
               const locationRequiresRedirectWhenCaseloadChanges = !(
-                location.pathname.includes('globalsearch') || location.pathname.includes('establishmentroll')
+                location.pathname.includes('global-search-results') || location.pathname.includes('establishment-roll')
               )
 
               return (
