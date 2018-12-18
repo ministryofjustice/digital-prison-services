@@ -19,12 +19,12 @@ module.exports = {
   },
   apis: {
     oauth2: {
-      url: process.env.OAUTH_ENDPOINT_URL || process.env.API_ENDPOINT_URL || 'http://localhost:9090/auth',
+      url: process.env.OAUTH_ENDPOINT_URL || process.env.API_ENDPOINT_URL || 'http://localhost:9090/auth/',
       ui_url:
         process.env.OAUTH_ENDPOINT_UI_URL ||
         process.env.OAUTH_ENDPOINT_URL ||
         process.env.API_ENDPOINT_URL ||
-        'http://localhost:9090/auth',
+        'http://localhost:9090/auth/',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 10,
       clientId: process.env.API_CLIENT_ID || 'elite2apiclient',
       clientSecret: process.env.API_CLIENT_SECRET || 'clientsecret',
