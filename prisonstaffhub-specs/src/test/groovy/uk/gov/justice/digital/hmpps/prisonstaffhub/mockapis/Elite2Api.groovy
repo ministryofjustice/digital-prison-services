@@ -386,6 +386,17 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
+    def stubSystemAccessAlerts(List offenderNumbers, Boolean emptyResponse = false) {
+        this.stubFor(
+                post("/api/bookings/offenderNo/alerts")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                        aResponse()
+                                .withBody(emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.alertsResponse)
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
     def stubAssessments(List offenderNumbers, Boolean emptyResponse = false) {
         this.stubFor(
                 post("/api/offender-assessments/CATEGORY")
@@ -531,6 +542,33 @@ class Elite2Api extends WireMockRule {
                                         fromAgencyDescription: 'Outside',
                                         movementTime: '23:59:59',
                                         location: 'LEI-A-02-011'
+                                ]
+                        ]))))
+    }
+
+    void stubGetMovementsOut(agencyId, movementDate) {
+        this.stubFor(
+                get("/api/movements/${agencyId}/out/${movementDate.format(DateTimeFormatter.ISO_DATE)}")
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson([
+                                [
+                                        offenderNo: 'A1234AA',
+                                        dateOfBirth: '1980-01-01',
+                                        firstName: 'AAAAB',
+                                        lastName: 'AAAAA',
+                                        reasonDescription: 'Normal transfer',
+                                        timeOut: '01:01:45',
+                                ],
+                                [
+                                        offenderNo: 'G0000AA',
+                                        dateOfBirth: '1980-12-31',
+                                        firstName: 'AAAAA',
+                                        lastName: 'AAAAA',
+                                        reasonDescription: 'Normal transfer',
+                                        timeOut: '23:59:59',
                                 ]
                         ]))))
     }
