@@ -19,8 +19,8 @@ const init = oauthApi => {
     config.app.remoteAuthStrategy
       ? new OAuth2Strategy(
           {
-            authorizationURL: `${config.apis.oauth2.ui_url}/oauth/authorize`,
-            tokenURL: `${config.apis.oauth2.url}/oauth/token`,
+            authorizationURL: `${config.apis.oauth2.ui_url}oauth/authorize`,
+            tokenURL: `${config.apis.oauth2.url}oauth/token`,
             clientID: config.apis.oauth2.clientId,
             clientSecret: config.apis.oauth2.clientSecret,
             callbackURL: `${config.app.url}/login/callback`,
