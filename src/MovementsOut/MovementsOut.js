@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Flags from '../Flags/Flags'
+import FullFlags from '../FullFlags/FullFlags'
 import SortableColumn from '../tablesorting/SortableColumn'
 import OffenderName from '../OffenderName'
 import DateFormatter from '../DateFormatter'
@@ -55,7 +55,7 @@ const MovementsInTableHeadings = props => {
   return (
     <thead>
       <tr>
-        <th className="straight width15" />
+        <th className="straight width5" />
         <th className="straight width15">
           <SortableColumn
             heading="Name"
@@ -65,10 +65,10 @@ const MovementsInTableHeadings = props => {
             sortColumn={LAST_NAME}
           />
         </th>
-        <th className="straight width15">Prison no.</th>
+        <th className="straight width5">Prison no.</th>
         <th className="straight width5">D.O.B.</th>
-        <th className="straight width10">Time Out</th>
-        <th className="straight width15">Reason</th>
+        <th className="straight width5">Time out</th>
+        <th className="straight width10">Reason</th>
         <th className="straight width15">Flags</th>
       </tr>
     </thead>
@@ -99,7 +99,7 @@ const MovementOutRow = props => {
         <HoursAndMinutes hhmmss={timeOut} />
       </td>
       <td>{reasonDescription}</td>
-      <td className="row-gutters">{Flags.AlertFlags(alerts, category, 'flags')}</td>
+      <td className="row-gutters">{FullFlags(alerts, category)}</td>
     </tr>
   )
 }

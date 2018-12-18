@@ -1,5 +1,4 @@
 const moment = require('moment')
-const { isViewableFlag } = require('../utils')
 
 const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
@@ -16,7 +15,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getActiveAlerts = async offenderNumbers => {
     const systemContext = await systemOauthClient.getClientCredentialsTokens()
     const alerts = await elite2Api.getAlertsSystem(systemContext, offenderNumbers)
-    return alerts && alerts.filter(alert => !alert.expired && isViewableFlag(alert.alertCode))
+    return alerts && alerts.filter(alert => !alert.expired)
   }
 
   const getMovementsIn = (context, agencyId) => {
