@@ -18,35 +18,50 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return alerts && alerts.filter(alert => !alert.expired)
   }
 
-  const getMovementsIn = (context, agencyId) => {
-    const isoDateToday = moment().format('YYYY-MM-DD')
-    return elite2Api.getMovementsIn(context, agencyId, isoDateToday)
+  const extractOffenderNumbers = movements => movements.map(m => m.offenderNo)
+
+  const alertCodesForOffenderNo = (alerts, offenderNo) =>
+    alerts.filter(alert => alert.offenderNo === offenderNo).map(alert => alert.alertCode)
+
+  const addAlerts = (movements, alerts) =>
+    alerts
+      ? movements.map(movement => ({
+          ...movement,
+          alerts: alertCodesForOffenderNo(alerts, movement.offenderNo),
+        }))
+      : movements
+
+  const categoryFromAssessment = assessment => (assessment ? { category: assessment.classificationCode } : {})
+
+  const addCategory = (movements, assessmentMap) =>
+    assessmentMap
+      ? movements.map(movement => ({
+          ...movement,
+          ...categoryFromAssessment(assessmentMap.get(movement.offenderNo)),
+        }))
+      : movements
+
+  const decorateMovements = async (context, movements) => {
+    if (!movements || movements.length === 0) return []
+    const offenderNumbers = extractOffenderNumbers(movements)
+    const [alerts, assessmentMap] = await Promise.all([
+      getActiveAlerts(offenderNumbers),
+      getAssessmentMap(context, offenderNumbers),
+    ])
+    const movementsWithAlerts = addAlerts(movements, alerts)
+    return addCategory(movementsWithAlerts, assessmentMap)
+  }
+
+  const isoDateToday = () => moment().format('YYYY-MM-DD')
+
+  const getMovementsIn = async (context, agencyId) => {
+    const movements = await elite2Api.getMovementsIn(context, agencyId, isoDateToday())
+    return decorateMovements(context, movements)
   }
 
   const getMovementsOut = async (context, agencyId) => {
-    const isoDateToday = moment().format('YYYY-MM-DD')
-    const offenders = await elite2Api.getMovementsOut(context, agencyId, isoDateToday)
-
-    if (!offenders || offenders.length === 0) return []
-
-    const offenderNumbers = offenders.map(offender => offender.offenderNo)
-    const alerts = await getActiveAlerts(offenderNumbers)
-    const assessmentMap = await getAssessmentMap(context, offenderNumbers)
-
-    return offenders.map(offender => {
-      const extraProperties = {}
-
-      if (assessmentMap.has(offender.offenderNo))
-        extraProperties.category = assessmentMap.get(offender.offenderNo).classificationCode
-
-      if (alerts)
-        extraProperties.alerts = alerts.filter(o => o.offenderNo === offender.offenderNo).map(alert => alert.alertCode)
-
-      return {
-        ...offender,
-        ...extraProperties,
-      }
-    })
+    const movements = await elite2Api.getMovementsOut(context, agencyId, isoDateToday())
+    return decorateMovements(context, movements)
   }
 
   return {

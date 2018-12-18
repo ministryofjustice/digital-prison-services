@@ -4,11 +4,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.EstablishmentRollResponses
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.GlobalSearchResponses
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.HouseblockResponse
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityLocationsResponse
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.*
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 
@@ -28,14 +24,14 @@ class Elite2Api extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withStatus(200)
-              ))
+                ))
     }
 
     void stubGetMyDetails(UserAccount user) {
         stubGetMyDetails(user, Caseload.LEI.id)
     }
 
-    void stubGetMyDetails(UserAccount user, String caseloadId ) {
+    void stubGetMyDetails(UserAccount user, String caseloadId) {
         this.stubFor(
                 get('/api/users/me')
                         .willReturn(
@@ -125,21 +121,21 @@ class Elite2Api extends WireMockRule {
     void stubGroups(Caseload caseload) {
 
         def json = JsonOutput.toJson([
-                [ name: '1', children: [
-                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                [name: '1', children: [
+                        [name: 'A'], [name: 'B'], [name: 'C']
                 ]],
-                [ name: '2', children: [
-                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                [name: '2', children: [
+                        [name: 'A'], [name: 'B'], [name: 'C']
                 ]],
-                [ name: '3', children: [
-                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                [name: '3', children: [
+                        [name: 'A'], [name: 'B'], [name: 'C']
                 ]]])
         def jsonSYI = JsonOutput.toJson([
-                [ name: 'block1', children: [
-                        [ name: 'A'],[ name: 'B']
+                [name: 'block1', children: [
+                        [name: 'A'], [name: 'B']
                 ]],
-                [ name: 'block2', children: [
-                        [ name: 'A'],[ name: 'B'],[ name: 'C']
+                [name: 'block2', children: [
+                        [name: 'A'], [name: 'B'], [name: 'C']
                 ]]])
 
         this.stubFor(
@@ -270,9 +266,9 @@ class Elite2Api extends WireMockRule {
         )
 
         def offenderNumbers = [
-            ActivityResponse.activity1_1.offenderNo,
-            ActivityResponse.activity2.offenderNo,
-            ActivityResponse.activity3.offenderNo
+                ActivityResponse.activity1_1.offenderNo,
+                ActivityResponse.activity2.offenderNo,
+                ActivityResponse.activity3.offenderNo
         ]
 
         this.stubFor(
@@ -305,15 +301,15 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200))
         )
 
-       this.stubFor(
+        this.stubFor(
                 post("/api/offender-sentences")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                         aResponse()
                                 .withBody(JsonOutput.toJson([[
-                                    "offenderNo":   ActivityResponse.activity3.offenderNo,
-                                    "sentenceDetail": ["releaseDate": date]
-                                ]]))
+                                                                     "offenderNo"    : ActivityResponse.activity3.offenderNo,
+                                                                     "sentenceDetail": ["releaseDate": date]
+                                                             ]]))
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
@@ -333,12 +329,14 @@ class Elite2Api extends WireMockRule {
     def stubSentenceData(List offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
         def index = 0
 
-        def response = emptyResponse ? [] : offenderNumbers.collect({no -> [
-                "offenderNo": no,
-                "firstName": "firstName-${index++}",
-                "lastName": "lastName-${index++}",
-                "sentenceDetail": ["releaseDate": formattedReleaseDate]
-        ]})
+        def response = emptyResponse ? [] : offenderNumbers.collect({ no ->
+            [
+                    "offenderNo"    : no,
+                    "firstName"     : "firstName-${index++}",
+                    "lastName"      : "lastName-${index++}",
+                    "sentenceDetail": ["releaseDate": formattedReleaseDate]
+            ]
+        })
 
         this.stubFor(
                 post("/api/offender-sentences")
@@ -512,7 +510,7 @@ class Elite2Api extends WireMockRule {
 
     static def extractOffenderNumbers(String json) {
         return (new JsonSlurper().parseText(json) as ArrayList)
-                .collect({a -> a.offenderNo})
+                .collect({ a -> a.offenderNo })
                 .unique()
                 .toList()
     }
@@ -520,28 +518,28 @@ class Elite2Api extends WireMockRule {
     void stubGetMovementsIn(agencyId, movementDate) {
         this.stubFor(
                 get("/api/movements/${agencyId}/in/${movementDate.format(DateTimeFormatter.ISO_DATE)}")
-                .willReturn(
+                        .willReturn(
                         aResponse()
-                        .withStatus(200)
-                        .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson([
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson([
                                 [
-                                        offenderNo: 'G0001AA',
-                                        dateOfBirth: '1980-01-01',
-                                        firstName: 'AAAAB',
-                                        lastName: 'AAAAA',
+                                        offenderNo           : 'A1234AA',
+                                        dateOfBirth          : '1980-01-01',
+                                        firstName            : 'AAAAB',
+                                        lastName             : 'AAAAA',
                                         fromAgencyDescription: 'Hull (HMP)',
-                                        movementTime: '01:01:45',
-                                        location: 'LEI-A-01-011'
+                                        movementTime         : '01:01:45',
+                                        location             : 'LEI-A-01-011'
                                 ],
                                 [
-                                        offenderNo: 'G0000AA',
-                                        dateOfBirth: '1980-12-31',
-                                        firstName: 'AAAAA',
-                                        lastName: 'AAAAA',
+                                        offenderNo           : 'G0000AA',
+                                        dateOfBirth          : '1980-12-31',
+                                        firstName            : 'AAAAA',
+                                        lastName             : 'AAAAA',
                                         fromAgencyDescription: 'Outside',
-                                        movementTime: '23:59:59',
-                                        location: 'LEI-A-02-011'
+                                        movementTime         : '23:59:59',
+                                        location             : 'LEI-A-02-011'
                                 ]
                         ]))))
     }
@@ -555,20 +553,20 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson([
                                 [
-                                        offenderNo: 'A1234AA',
-                                        dateOfBirth: '1980-01-01',
-                                        firstName: 'AAAAB',
-                                        lastName: 'AAAAA',
+                                        offenderNo       : 'A1234AA',
+                                        dateOfBirth      : '1980-01-01',
+                                        firstName        : 'AAAAB',
+                                        lastName         : 'AAAAA',
                                         reasonDescription: 'Normal transfer',
-                                        timeOut: '01:01:45',
+                                        timeOut          : '01:01:45',
                                 ],
                                 [
-                                        offenderNo: 'G0000AA',
-                                        dateOfBirth: '1980-12-31',
-                                        firstName: 'AAAAA',
-                                        lastName: 'AAAAA',
+                                        offenderNo       : 'G0000AA',
+                                        dateOfBirth      : '1980-12-31',
+                                        firstName        : 'AAAAA',
+                                        lastName         : 'AAAAA',
                                         reasonDescription: 'Normal transfer',
-                                        timeOut: '23:59:59',
+                                        timeOut          : '23:59:59',
                                 ]
                         ]))))
     }

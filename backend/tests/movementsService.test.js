@@ -8,14 +8,14 @@ describe('Movement service', () => {
   const offenders = [{ offenderNo: 'offenderNo1' }, { offenderNo: 'offenderNo2' }]
   const offenderNumbers = offenders.map(offender => offender.offenderNo)
 
-  beforeEach(() => {
-    eliteApi.getMovementsOut = jest.fn()
-    eliteApi.getAlertsSystem = jest.fn()
-    eliteApi.getAssessments = jest.fn()
-    oauthClient.getClientCredentialsTokens = jest.fn()
-  })
-
   describe('Out today', () => {
+    beforeEach(() => {
+      eliteApi.getMovementsOut = jest.fn()
+      eliteApi.getAlertsSystem = jest.fn()
+      eliteApi.getAssessments = jest.fn()
+      oauthClient.getClientCredentialsTokens = jest.fn()
+    })
+
     it('handles no offenders out today', async () => {
       const response = await movementsServiceFactory(eliteApi).getMovementsOut({}, 'LEI')
       expect(response).toEqual([])
@@ -26,11 +26,7 @@ describe('Movement service', () => {
 
       const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsOut(context, agency)
 
-      expect(response).toEqual(
-        offenders.map(offender => ({
-          ...offender,
-        }))
-      )
+      expect(response).toEqual([{ offenderNo: 'offenderNo1' }, { offenderNo: 'offenderNo2' }])
     })
 
     it('should make a request for alerts using the systemContext and offender numbers', async () => {
@@ -79,6 +75,54 @@ describe('Movement service', () => {
 
       const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsOut(context, agency)
       expect(response[0].alerts).toEqual(['HA', 'XEL'])
+    })
+  })
+
+  describe('In today', () => {
+    beforeEach(() => {
+      eliteApi.getMovementsIn = jest.fn()
+      eliteApi.getAlertsSystem = jest.fn()
+      eliteApi.getAssessments = jest.fn()
+      oauthClient.getClientCredentialsTokens = jest.fn()
+    })
+
+    it('Returns an empty array when there are no offenders in today', async () => {
+      eliteApi.getMovementsIn.mockReturnValue([])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsIn(context, agency)
+      expect(response).toHaveLength(0)
+    })
+
+    it('Returns movements in', async () => {
+      eliteApi.getMovementsIn.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsIn(context, agency)
+      expect(response).toEqual([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
+    })
+
+    it('Decorates movements in with active alerts', async () => {
+      eliteApi.getMovementsIn.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
+      eliteApi.getAlertsSystem.mockReturnValue([
+        { offenderNo: 'G0001GG', expired: true, alertCode: 'HA' },
+        { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsIn(context, agency)
+      expect(response).toEqual([{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }])
+    })
+
+    it('Decorates movements in with categories', async () => {
+      eliteApi.getMovementsIn.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
+      eliteApi.getAlertsSystem.mockReturnValue([])
+      eliteApi.getAssessments.mockReturnValue([
+        { offenderNo: 'G0000GG', classificationCode: 'A' },
+        { offenderNo: 'G0001GG', classificationCode: 'E' },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsIn(context, agency)
+      expect(response).toEqual([
+        { offenderNo: 'G0000GG', category: 'A', alerts: [] },
+        { offenderNo: 'G0001GG', category: 'E', alerts: [] },
+      ])
     })
   })
 })
