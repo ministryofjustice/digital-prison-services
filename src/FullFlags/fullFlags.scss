@@ -1,0 +1,119 @@
+.full-flags {
+  /* stylelint-disable property-no-vendor-prefix */
+  %status-style {
+    border: 3px solid;
+    padding: .4em 0.8em 0;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    display: inline-block;
+    min-width: 7em;
+    height: 29px;
+
+    // disable text selection in the alert flags.
+    // From https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+  }
+
+  %alert-status-style {
+    @extend %status-style;
+    cursor: pointer;
+  }
+
+  .acct-status {
+    @extend %alert-status-style;
+    color: #D34700;
+    border-color: #D34700;
+  }
+
+  .assault-status {
+    @extend %alert-status-style;
+    color: #4C2C92;
+    border-color: #4C2C92;
+  }
+
+  .disability-status {
+    @extend %alert-status-style;
+    padding-top: 0.32em;
+    color: #2B88C8;
+    border-color: #2B88C8;
+  }
+
+  .disability-adjust {
+    margin-bottom: 2px;
+    position: relative;
+    left: 0;
+    top: -1px;
+  }
+
+  .arsonist-status {
+    @extend %alert-status-style;
+    padding-top: 0.18em;
+    color: #DF3034;
+    border-color: #DF3034;
+  }
+
+  .arsonist-adjust {
+    margin-bottom: 7px;
+    position: relative;
+    left: 0;
+    top: 2px;
+  }
+
+  .elist-status {
+    @extend %alert-status-style;
+    color: #28A197;
+    border-color: #28A197;
+  }
+
+  .risk-females-status {
+    @extend %alert-status-style;
+    color: #6F71AF;
+    border-color: #6F71AF;
+  }
+
+  .tact-status {
+    @extend %alert-status-style;
+    color: #D53880;
+    border-color: #D53880;
+  }
+
+  .cata-status {
+    @extend %status-style;
+    color: #00437B;
+    border-color: #00437B;
+  }
+
+  .cata-high-status {
+    @extend %status-style;
+    background-color: #00437B;
+    color: white;
+    border-color: #00437B;
+  }
+
+  .cata-prov-status {
+    @extend %status-style;
+    border: 3px dashed;
+    color: #00437B;
+    border-color: #00437B;
+  }
+
+  @media (min-width: 481px) {
+    .inline-header-large {
+      display: inline-block;
+    }
+
+    .align-alerts {
+      vertical-align: 8px;
+    }
+  }
+}
