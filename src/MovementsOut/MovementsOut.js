@@ -15,8 +15,7 @@ const movementOutType = {
   lastName: PropTypes.string.isRequired,
   timeOut: PropTypes.string,
   reasonDescription: PropTypes.string,
-  category: PropTypes.string,
-  alerts: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
+  alerts: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
 const movementsOutType = {
@@ -25,15 +24,12 @@ const movementsOutType = {
   setColumnSort: PropTypes.func.isRequired,
 }
 
-const MovementsOut = props => {
-  const { movementsOut, sortOrder, setColumnSort } = props
-  return (
-    <div>
-      <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-      <MovementsOutTable movementsOut={movementsOut} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    </div>
-  )
-}
+const MovementsOut = ({ movementsOut, sortOrder, setColumnSort }) => (
+  <div>
+    <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+    <MovementsOutTable movementsOut={movementsOut} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+  </div>
+)
 
 MovementsOut.propTypes = movementsOutType
 
@@ -81,7 +77,7 @@ MovementsInTableHeadings.propTypes = {
 
 const MovementOutRow = props => {
   const {
-    movementOut: { lastName, firstName, offenderNo, dateOfBirth, timeOut, reasonDescription, alerts, category },
+    movementOut: { lastName, firstName, offenderNo, dateOfBirth, timeOut, reasonDescription, alerts },
   } = props
   return (
     <tr className="row-gutters">
@@ -99,13 +95,13 @@ const MovementOutRow = props => {
         <HoursAndMinutes hhmmss={timeOut} />
       </td>
       <td>{reasonDescription}</td>
-      <td className="row-gutters">{FullFlags(alerts, category)}</td>
+      <td className="row-gutters">{FullFlags(alerts)}</td>
     </tr>
   )
 }
 
 MovementOutRow.propTypes = {
-  movementOut: PropTypes.shape(movementOutType).isRequired,
+  movementOut: PropTypes.shape(movementsOutType).isRequired,
 }
 
 export default MovementsOut

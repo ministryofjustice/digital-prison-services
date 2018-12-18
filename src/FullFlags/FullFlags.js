@@ -1,9 +1,10 @@
 import React from 'react'
-import { linkOnClick } from '../helpers'
+import PropTypes from 'prop-types'
 
+import { linkOnClick } from '../helpers'
 import './fullFlags.scss'
 
-const FullFlags = (alerts, divClassName, onAlertFlagClick) => {
+const FullFlags = (alerts, onAlertFlagClick) => {
   const addClickIfValid = () => onAlertFlagClick && linkOnClick(onAlertFlagClick)
 
   function isShown(code) {
@@ -61,6 +62,15 @@ const FullFlags = (alerts, divClassName, onAlertFlagClick) => {
       )}
     </div>
   )
+}
+
+FullFlags.defaultProps = {
+  onAlertFlagClick: null,
+}
+
+FullFlags.propTypes = {
+  alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  onAlertFlagClick: PropTypes.func,
 }
 
 export default FullFlags
