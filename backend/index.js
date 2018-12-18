@@ -30,6 +30,7 @@ const houseblockListFactory = require('./controllers/houseblockList').getHousebl
 const { healthFactory } = require('./controllers/health')
 const { updateAttendanceFactory } = require('./controllers/updateAttendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
+const { movementsServiceFactory } = require('./controllers/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 
@@ -44,6 +45,7 @@ const clientFactory = require('./api/oauthEnabledClient')
 const { healthApiFactory } = require('./api/healthApi')
 const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory
 const { oauthApiFactory } = require('./api/oauthApi')
+const oauthClientId = require('./api/oauthClientId')
 
 const log = require('./log')
 const config = require('./config')
@@ -106,13 +108,14 @@ const elite2Api = eliteApiFactory(
   })
 )
 
-const controller = controllerFactory(
-  activityListFactory(elite2Api),
-  houseblockListFactory(elite2Api),
-  updateAttendanceFactory(elite2Api),
-  establishmentRollFactory(elite2Api),
-  globalSearchFactory(elite2Api)
-)
+const controller = controllerFactory({
+  activityListService: activityListFactory(elite2Api),
+  houseblockListService: houseblockListFactory(elite2Api),
+  updateAttendanceService: updateAttendanceFactory(elite2Api),
+  establishmentRollService: establishmentRollFactory(elite2Api),
+  globalSearchService: globalSearchFactory(elite2Api),
+  movementsService: movementsServiceFactory(elite2Api, oauthClientId),
+})
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 })
 auth.init(oauthApi)
@@ -178,6 +181,8 @@ app.use('/api/houseblocklist', controller.getHouseblockList)
 app.use('/api/activityList', controller.getActivityList)
 app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
+app.use('/api/movements/:agencyId/in', controller.getMovementsIn)
+app.use('/api/movements/:agencyId/out', controller.getMovementsOut)
 app.use('/api/globalSearch', controller.globalSearch)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 

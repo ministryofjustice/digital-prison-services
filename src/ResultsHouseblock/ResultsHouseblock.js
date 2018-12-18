@@ -5,40 +5,18 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
-import {
-  getHoursMinutes,
-  properCaseName,
-  isTodayOrAfter,
-  stripAgencyPrefix,
-  getMainEventDescription,
-  getListSizeClass,
-  getLongDateFormat,
-} from '../utils'
+import { getHoursMinutes, isTodayOrAfter, getMainEventDescription, getListSizeClass, getLongDateFormat } from '../utils'
 import DatePickerInput from '../DatePickerInput'
-import { getOffenderLink } from '../links'
 import OtherActivitiesView from '../OtherActivityListView'
-import SortableColumn from './SortableColumn'
+import SortableColumn from '../tablesorting/SortableColumn'
 import Flags from '../Flags/Flags'
+import SortLov from '../tablesorting/SortLov'
+import { LAST_NAME, CELL_LOCATION, ACTIVITY } from '../tablesorting/sortColumns'
+import OffenderName from '../OffenderName'
+import OffenderLink from '../OffenderLink'
+import Location from '../Location'
 
 class ResultsHouseblock extends Component {
-  displayBack = () => {
-    const { resetErrorDispatch } = this.props
-    return (
-      <div className="padding-top no-print">
-        <Link
-          id="back_to_selection_link"
-          title="Back to selection screen link"
-          className="link backlink"
-          to="/whereaboutssearch"
-          onClick={() => resetErrorDispatch()}
-        >
-          <img className="back-triangle" src="/images/BackTriangle.png" alt="Back icon" width="6" height="10" /> Back
-        </Link>
-      </div>
-    )
-  }
-
   olderThan7Days = () => {
     const { date } = this.props
     const searchDate = moment(date, 'DD/MM/YYYY')
@@ -49,7 +27,6 @@ class ResultsHouseblock extends Component {
 
   render() {
     const {
-      agencyId,
       date,
       currentSubLocation,
       handleSubLocationChange,
@@ -59,9 +36,11 @@ class ResultsHouseblock extends Component {
       handlePeriodChange,
       handlePrint,
       houseblockData,
-      currentLocation,
       update,
-      activeSubLocation,
+      sortOrder,
+      orderField,
+      setColumnSort,
+      locationWithSubLocation,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -161,95 +140,50 @@ class ResultsHouseblock extends Component {
       </div>
     )
 
-    const sortLov = () => {
-      const { sortOrder, orderField, setColumnSort } = this.props
-
-      const invokeColumnSortWithEventData = event => {
-        const [field, order] = event.target.value.split('_')
-        setColumnSort(field, order)
-      }
-      return (
-        <div className="pure-u-md-1-4 margin-top-small margin-bottom-large">
-          <label className="form-label" htmlFor="sort-select">
-            Order the list
-          </label>
-          <select
-            id="sort-select"
-            name="sort-select"
-            className="form-control"
-            onChange={invokeColumnSortWithEventData}
-            value={`${orderField}_${sortOrder}`}
-          >
-            <option key="lastName_ASC" value="lastName_ASC">
-              Name (A-Z)
-            </option>
-            <option key="lastName_DESC" value="lastName_DESC">
-              Name (Z-A)
-            </option>
-            <option key="cellLocation_ASC" value="cellLocation_ASC">
-              Location (1-X)
-            </option>
-            <option key="cellLocation_DESC" value="cellLocation_DESC">
-              Location (X-1)
-            </option>
-            <option key="activity_ASC" value="activity_ASC">
-              Activity name (A-Z)
-            </option>
-            <option key="activity_DESC" value="activity_DESC">
-              Activity name (Z-A)
-            </option>
-          </select>
-        </div>
-      )
-    }
-
-    const headings = () => {
-      const { sortOrder, orderField, setColumnSort } = this.props
-      return (
-        <tr>
-          <th className="straight width15">
-            <SortableColumn
-              heading="Name"
-              field="lastName"
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-              orderField={orderField}
-            />
-          </th>
-          <th className="straight width10">
-            <SortableColumn
-              heading="Location"
-              field="cellLocation"
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-              orderField={orderField}
-            />
-          </th>
-          <th className="straight width10">NOMS&nbsp;ID</th>
-          <th className="straight width10">Info</th>
-          <th className="straight width20">
-            <SortableColumn
-              heading="Activity"
-              field="activity"
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-              orderField={orderField}
-            />
-          </th>
-          <th className="straight">Other activities</th>
-          <th className="straightPrint no-display">
-            <div>
-              <span>Unlocked</span>
-            </div>
-          </th>
-          <th className="straightPrint no-display">
-            <div>
-              <span>Gone</span>
-            </div>
-          </th>
-        </tr>
-      )
-    }
+    const headings = () => (
+      <tr>
+        <th className="straight width15">
+          <SortableColumn
+            heading="Name"
+            column={LAST_NAME}
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+            sortColumn={orderField}
+          />
+        </th>
+        <th className="straight width10">
+          <SortableColumn
+            heading="Location"
+            column={CELL_LOCATION}
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+            sortColumn={orderField}
+          />
+        </th>
+        <th className="straight width10">Prison&nbsp;no.</th>
+        <th className="straight width10">Info</th>
+        <th className="straight width20">
+          <SortableColumn
+            heading="Activity"
+            column={ACTIVITY}
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+            sortColumn={orderField}
+          />
+        </th>
+        <th className="straight">Other activities</th>
+        <th className="straightPrint no-display">
+          <div>
+            <span>Unlocked</span>
+          </div>
+        </th>
+        <th className="straightPrint no-display">
+          <div>
+            <span>Gone</span>
+          </div>
+        </th>
+      </tr>
+    )
 
     const readOnly = this.olderThan7Days()
 
@@ -258,20 +192,19 @@ class ResultsHouseblock extends Component {
       houseblockData.map((row, index) => {
         const anyActivity = row.activity || row.others[0]
 
+        const { offenderNo, firstName, lastName, cellLocation } = anyActivity
+
         return (
-          <tr key={anyActivity.offenderNo} className="row-gutters">
+          <tr key={offenderNo} className="row-gutters">
             <td className="row-gutters">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link"
-                href={getOffenderLink(anyActivity.offenderNo)}
-              >
-                {properCaseName(anyActivity.lastName)}, {properCaseName(anyActivity.firstName)}
-              </a>
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName} lastName={lastName} />
+              </OffenderLink>
             </td>
-            <td className="row-gutters">{stripAgencyPrefix(anyActivity.cellLocation, agencyId)}</td>
-            <td className="row-gutters">{anyActivity.offenderNo}</td>
+            <td className="row-gutters">
+              <Location location={cellLocation} />
+            </td>
+            <td className="row-gutters">{offenderNo}</td>
             <td>{Flags.AlertFlags(row.alertFlags, row.category, 'flags')}</td>
             <td className="row-gutters">
               {row.activity && `${getHoursMinutes(row.activity.startTime)} - ${getMainEventDescription(row.activity)}`}
@@ -301,13 +234,8 @@ class ResultsHouseblock extends Component {
 
     return (
       <div className="results-houseblock">
-        {this.displayBack()}
-        <h1 className="heading-large whereabouts-title">
-          {currentLocation}
-          {activeSubLocation !== '--' && ` -  ${activeSubLocation}`}
-        </h1>
         <span className="whereabouts-date print-only">
-          - {getLongDateFormat(date)} - {period}
+          <strong>{locationWithSubLocation}</strong> - {getLongDateFormat(date)} - {period}
         </span>
         <hr className="print-only" />
         <form className="no-print">
@@ -319,16 +247,19 @@ class ResultsHouseblock extends Component {
               id="updateButton"
               className="button greyButton margin-left margin-top"
               type="button"
-              onClick={() => {
-                update()
-              }}
+              onClick={update}
             >
               Update
             </button>
           </div>
           <hr />
           {buttons}
-          {sortLov()}
+          <SortLov
+            sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
+            sortColumn={orderField}
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+          />
         </form>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
@@ -350,14 +281,11 @@ ResultsHouseblock.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
-  agencyId: PropTypes.string.isRequired,
-  currentLocation: PropTypes.string.isRequired,
+  locationWithSubLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
-  activeSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
-  resetErrorDispatch: PropTypes.func.isRequired,
   houseblockData: PropTypes.arrayOf(
     PropTypes.shape({
       activity: PropTypes.shape({

@@ -25,7 +25,7 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I navigate to the establishment roll count page"
-        go "/establishmentroll"
+        go "/establishment-roll"
 
         then: "I should be presented with roll counts for each house block"
         at EstablishmentRollPage
@@ -40,7 +40,8 @@ class EstablishmentRollBlockSpecification  extends GebReportingSpec {
             'In today', '1',
             'Out today', '2',
             'Current roll', '328',
-            'In reception', '2'
+            'In reception', '2',
+            'En-route', '6'
         ]
 
         firstBlock == [

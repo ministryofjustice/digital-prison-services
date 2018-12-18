@@ -4,24 +4,30 @@ const getTotals = (array, figure) => array.reduce((accumulator, block) => accumu
 
 const getEstablishmentRollCountFactory = elite2Api => {
   const getEstablishmentRollCount = async (context, agencyId) => {
-    const [assignedResponse, unassignedResponse, movementsResponse] = await Promise.all([
+    const [assignedResponse, unassignedResponse, movementsResponse, enroute] = await Promise.all([
       elite2Api.getEstablishmentRollBlocksCount(context, agencyId, false),
       elite2Api.getEstablishmentRollBlocksCount(context, agencyId, true),
       elite2Api.getEstablishmentRollMovementsCount(context, agencyId),
+      elite2Api.getEstablishmentRollEnrouteCount(context, agencyId),
     ])
 
-    const totalRoll = getTotals(assignedResponse, 'bedsInUse')
+    const unassignedIn = getTotals(unassignedResponse, 'currentlyInCell')
+    const currentRoll = getTotals(assignedResponse, 'currentlyInCell') + unassignedIn
 
     const movements = {
       name: "Today's movements",
       numbers: [
-        { name: 'Unlock roll', value: totalRoll - movementsResponse.in + movementsResponse.out },
+        { name: 'Unlock roll', value: currentRoll - movementsResponse.in + movementsResponse.out },
         { name: 'In today', value: movementsResponse.in },
         { name: 'Out today', value: movementsResponse.out },
-        { name: 'Current roll', value: totalRoll },
+        { name: 'Current roll', value: currentRoll },
         {
           name: 'In reception',
-          value: getTotals(unassignedResponse, 'currentlyInCell'),
+          value: unassignedIn,
+        },
+        {
+          name: 'En-route',
+          value: enroute,
         },
       ],
     }
@@ -41,7 +47,7 @@ const getEstablishmentRollCountFactory = elite2Api => {
     const totals = {
       name: 'Totals',
       numbers: [
-        { name: 'Total roll', value: totalRoll },
+        { name: 'Total roll', value: getTotals(assignedResponse, 'bedsInUse') },
         { name: 'Total in cell', value: getTotals(assignedResponse, 'currentlyInCell') },
         { name: 'Total out', value: getTotals(assignedResponse, 'currentlyOut') },
         { name: 'Total op. cap.', value: getTotals(assignedResponse, 'operationalCapacity') },

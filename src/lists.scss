@@ -8,6 +8,9 @@
   float: right;
 }
 
+.sortableLink {
+  cursor: pointer;
+}
 .sortableLink,
 .sortableLink:hover {
   text-decoration: none;
@@ -127,6 +130,8 @@ tbody > tr + td {
 }
 
 @media print {
+  h1 { display: none;}
+  
   .whereabouts-title {
     display: inline-block;
     margin: 0;

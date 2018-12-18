@@ -4,7 +4,6 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
-import Error from '../Error'
 import sortHouseBlockData from './houseBlockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
 import {
@@ -15,7 +14,7 @@ import {
   setSearchSubLocation,
   setSortOrder,
 } from '../redux/actions'
-import Spinner from '../Spinner'
+import Page from '../Components/Page'
 
 const axios = require('axios')
 
@@ -32,26 +31,32 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  async componentWillMount() {
-    const { currentLocation, history } = this.props
+  async componentDidMount() {
+    const { currentLocation, history, resetErrorDispatch } = this.props
+    resetErrorDispatch()
 
     try {
       if (currentLocation) {
         this.getHouseblockList('lastName', 'ASC')
       } else {
-        history.push('/whereaboutssearch')
+        history.push('/search-prisoner-whereabouts')
       }
     } catch (error) {
       this.handleError(error)
     }
   }
 
-  setColumnSort(orderField, sortOrder) {
+  componentWillUnmount() {
+    const { houseblockDataDispatch } = this.props
+    houseblockDataDispatch([])
+  }
+
+  setColumnSort(sortColumn, sortOrder) {
     const { orderDispatch, sortOrderDispatch, houseblockData, houseblockDataDispatch } = this.props
-    orderDispatch(orderField)
+    orderDispatch(sortColumn)
     sortOrderDispatch(sortOrder)
     const copy = houseblockData.slice()
-    sortHouseBlockData(copy, orderField, sortOrder)
+    sortHouseBlockData(copy, sortColumn, sortOrder)
     houseblockDataDispatch(copy)
   }
 
@@ -145,25 +150,21 @@ class ResultsHouseblockContainer extends Component {
   }
 
   render() {
-    const { loaded, error } = this.props
     const { activeSubLocation } = this.state
-
-    if (!loaded) {
-      return <Spinner />
-    }
+    const { currentLocation } = this.props
+    const locationWithSubLocation = `${currentLocation} ${activeSubLocation !== '--' ? ` -  ${activeSubLocation}` : ''}`
 
     return (
-      <div>
-        <Error error={error} />
+      <Page title={locationWithSubLocation} alwaysRender>
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
-          activeSubLocation={activeSubLocation}
+          locationWithSubLocation={locationWithSubLocation}
           {...this.props}
         />
-      </div>
+      </Page>
     )
   }
 }

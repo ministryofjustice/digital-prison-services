@@ -12,6 +12,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.Activi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 
+import java.time.format.DateTimeFormatter
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 class Elite2Api extends WireMockRule {
@@ -479,6 +481,15 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}/enroute")
+                        .willReturn(
+                        aResponse()
+                                .withBody('6')
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200))
+        )
     }
 
     void stubImage() {
@@ -493,5 +504,34 @@ class Elite2Api extends WireMockRule {
                 .collect({a -> a.offenderNo})
                 .unique()
                 .toList()
+    }
+
+    void stubGetMovementsIn(agencyId, movementDate) {
+        this.stubFor(
+                get("/api/movements/${agencyId}/in/${movementDate.format(DateTimeFormatter.ISO_DATE)}")
+                .willReturn(
+                        aResponse()
+                        .withStatus(200)
+                        .withHeader('Content-Type', 'application/json')
+                        .withBody(JsonOutput.toJson([
+                                [
+                                        offenderNo: 'G0001AA',
+                                        dateOfBirth: '1980-01-01',
+                                        firstName: 'AAAAB',
+                                        lastName: 'AAAAA',
+                                        fromAgencyDescription: 'Hull (HMP)',
+                                        movementTime: '01:01:45',
+                                        location: 'LEI-A-01-011'
+                                ],
+                                [
+                                        offenderNo: 'G0000AA',
+                                        dateOfBirth: '1980-12-31',
+                                        firstName: 'AAAAA',
+                                        lastName: 'AAAAA',
+                                        fromAgencyDescription: 'Outside',
+                                        movementTime: '23:59:59',
+                                        location: 'LEI-A-02-011'
+                                ]
+                        ]))))
     }
 }

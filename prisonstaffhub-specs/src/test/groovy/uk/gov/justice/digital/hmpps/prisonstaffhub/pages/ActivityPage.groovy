@@ -5,14 +5,14 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class ActivityPage extends DatePickerPage {
 
-    static url = "/whereaboutsresultsactivity"
+    static url = "/search-prisoner-whereabouts/activity-results"
 
     static at = {
         updateButton.displayed
     }
 
     static content = {
-        activityTitle { $('h1.whereabouts-title').text() }
+        activityTitle { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         period { $('#period-select') }
         form { $('form')}

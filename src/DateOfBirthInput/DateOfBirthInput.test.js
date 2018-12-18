@@ -2,27 +2,27 @@ import React from 'react'
 import { mount } from 'enzyme'
 import moment from 'moment'
 import { JSDOM } from 'jsdom'
-import DateOfBirth from './DateOfBirth'
+import DateOfBirthInput from './DateOfBirthInput'
 
 const jsdom = new JSDOM('<!doctype html><html lang="en"><body></body></html>')
 const { window } = jsdom
 global.window = window
 global.document = window.document
 
-describe('DateOfBirth', () => {
+describe('DateOfBirthInput', () => {
   it('Should render', () => {
-    mount(<DateOfBirth />)
+    mount(<DateOfBirthInput />)
   })
 
   it('handleDateOfBirthChange is called during initialisation', () => {
     const handleDateOfBirthChange = jest.fn()
-    mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
+    mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
   })
 
   it('Entering parts of a date calls handleDateOfBirthChange with new outputs', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
     const textinputs = dob.find('input[type="number"]')
 
@@ -38,7 +38,7 @@ describe('DateOfBirth', () => {
 
   it('Does not report errors by default', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
     dob
       .find('input[type="number"]')
@@ -49,7 +49,7 @@ describe('DateOfBirth', () => {
 
   it('Will report errors', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
     dob
       .find('input[type="number"]')
@@ -60,7 +60,7 @@ describe('DateOfBirth', () => {
 
   it('Will rejects date before 1900-01-01', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
     const textinputs = dob.find('input[type="number"]')
@@ -73,7 +73,7 @@ describe('DateOfBirth', () => {
 
   it('Accepts 1900-01-01', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
     const textinputs = dob.find('input[type="number"]')
@@ -87,7 +87,7 @@ describe('DateOfBirth', () => {
 
   it('Accepts yesterday', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
     const yesterday = moment().subtract(1, 'days')
@@ -107,7 +107,7 @@ describe('DateOfBirth', () => {
 
   it('Rejects today', () => {
     const handleDateOfBirthChange = jest.fn()
-    const dob = mount(<DateOfBirth handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
+    const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
     const today = moment()

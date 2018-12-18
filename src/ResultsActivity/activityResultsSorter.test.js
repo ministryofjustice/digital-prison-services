@@ -1,4 +1,6 @@
 import sortActivityData from './activityResultsSorter'
+import { ASC, DESC } from '../tablesorting/sortOrder'
+import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 
 describe('Activity results sorter tests', () => {
   it('sorts an empty array', () => {
@@ -10,12 +12,12 @@ describe('Activity results sorter tests', () => {
       const data = [{ lastName: 'B' }, { lastName: 'A' }, { lastName: 'C' }]
 
       it('ascending', () => {
-        sortActivityData(data, 'lastName', 'ASC')
+        sortActivityData(data, LAST_NAME, ASC)
         expect(data).toEqual([{ lastName: 'A' }, { lastName: 'B' }, { lastName: 'C' }])
       })
 
       it('descending', () => {
-        sortActivityData(data, 'lastName', 'DESC')
+        sortActivityData(data, LAST_NAME, DESC)
         expect(data).toEqual([{ lastName: 'C' }, { lastName: 'B' }, { lastName: 'A' }])
       })
     })
@@ -31,7 +33,7 @@ describe('Activity results sorter tests', () => {
       ]
 
       it('ascending', () => {
-        sortActivityData(data, 'lastName', 'ASC')
+        sortActivityData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { lastName: 'A', firstName: 'P' },
           { lastName: 'A', firstName: 'Q' },
@@ -41,7 +43,7 @@ describe('Activity results sorter tests', () => {
       })
 
       it('descending', () => {
-        sortActivityData(data, 'lastName', 'DESC')
+        sortActivityData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { lastName: 'B', firstName: 'Q' },
           { lastName: 'B', firstName: 'P' },
@@ -56,7 +58,7 @@ describe('Activity results sorter tests', () => {
     const data = [{ cellLocation: 'MDI-1-2-007' }, { cellLocation: 'MDI-1-2-006' }, { cellLocation: 'MDI-1-1-007' }]
 
     it('ascending', () => {
-      sortActivityData(data, 'cellLocation', 'ASC')
+      sortActivityData(data, CELL_LOCATION, ASC)
       expect(data).toEqual([
         { cellLocation: 'MDI-1-1-007' },
         { cellLocation: 'MDI-1-2-006' },
@@ -78,7 +80,7 @@ describe('Activity results sorter tests', () => {
       { eventDescription: 'C', lastName: 'B', firstName: 'Q' },
     ]
     it('sorts ascending', () => {
-      sortActivityData(data, 'activity', 'ASC')
+      sortActivityData(data, ACTIVITY, ASC)
       expect(data).toEqual([
         { eventType: 'PRISON_ACT', comment: 'A' },
         { event: 'PA', comment: 'B' },

@@ -38,7 +38,7 @@ class AgencySelectionSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         and: 'I do a global search'
-        go "/globalsearch?searchText=quimby"
+        go "/global-search-results?searchText=quimby"
         at GlobalSearchPage
 
         when: 'I select another agency'

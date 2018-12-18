@@ -6,15 +6,15 @@ import '../govStyles/govuk_frontend/all.scss'
 import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { linkOnClick } from '../utils'
-import DateOfBirth from './DateOfBirth'
+import DateOfBirthInput from '../DateOfBirthInput/DateOfBirthInput'
 
 class GlobalSearchForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showFilters: false,
-      // clearFilterCount is used as the value of the 'key' prop on the DateOfBirth component. When the 'Clear Filters'
-      // link is clicked clearFilterCount is incremented by the 'clearFiltersInternal' function and a new DateOfBirth
+      // clearFilterCount is used as the value of the 'key' prop on the DateOfBirthInput component. When the 'Clear Filters'
+      // link is clicked clearFilterCount is incremented by the 'clearFiltersInternal' function and a new DateOfBirthInput
       // instance is created by react.  The effect is to clear the component's fields and publish its initial state.
       // Follows a pattern from
       // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
@@ -153,7 +153,7 @@ class GlobalSearchForm extends Component {
           <div className="govuk-details__text">
             <div className="pure-u-md-1-4 padding-top padding-bottom-large">{locationSelect}</div>
             <div className="pure-u-md-1-4 padding-top padding-bottom-large padding-left">{genderSelect}</div>
-            <DateOfBirth
+            <DateOfBirthInput
               handleDateOfBirthChange={handleDateOfBirthChange}
               key={clearFilterCount}
               showErrors={showErrors}

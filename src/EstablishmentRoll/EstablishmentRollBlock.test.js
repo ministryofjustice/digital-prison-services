@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import EstablishmentRollBlock from './EstablishmentRollBlock'
+import { EstablishmentRollBlock } from './EstablishmentRollBlock'
+import routePaths from '../routePaths'
 
 describe('<EstablishmentRollBlock />', () => {
   const props = {
@@ -8,8 +9,8 @@ describe('<EstablishmentRollBlock />', () => {
       name: 'Test Housing Block',
       numbers: [
         { name: 'Beds in use', value: 123 },
-        { name: 'Currently in cell', value: 123 },
-        { name: 'Currently out', value: 123 },
+        { name: 'In today', value: 123 },
+        { name: 'Out today', value: 123 },
         { name: 'Operational cap.', value: 123 },
         { name: 'Net vacancies', value: 123 },
         { name: 'Out of order', value: 123 },
@@ -28,6 +29,30 @@ describe('<EstablishmentRollBlock />', () => {
 
   it('should render the correct amount of block figures', () => {
     expect(wrapper.find('.block-figures__figure').length).toEqual(6)
+  })
+
+  it('should render a <Link/> for the "In today" statistic', () => {
+    const statistic = wrapper.find('.block-figure').filterWhere(ww =>
+      ww
+        .find('label')
+        .filterWhere(w => w.text() === 'In today')
+        .exists()
+    )
+    const link = statistic.find('Link')
+    expect(link.exists()).toEqual(true)
+    expect(link.props().to).toEqual(routePaths.inToday)
+  })
+
+  it('should render a <Link/> for the "Out today" statistic', () => {
+    const statistic = wrapper.find('.block-figure').filterWhere(ww =>
+      ww
+        .find('label')
+        .filterWhere(w => w.text() === 'Out today')
+        .exists()
+    )
+    const link = statistic.find('Link')
+    expect(link.exists()).toEqual(true)
+    expect(link.props().to).toEqual(routePaths.outToday)
   })
 
   describe('when highlight prop is true', () => {

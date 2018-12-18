@@ -25,9 +25,12 @@ const capitalize = string => {
   return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
 }
 
+const isViewableFlag = code => ['HA', 'XEL'].includes(code)
+
 module.exports = {
   switchDateFormat,
   distinct,
   sortByDateTime,
   capitalize,
+  isViewableFlag,
 }
