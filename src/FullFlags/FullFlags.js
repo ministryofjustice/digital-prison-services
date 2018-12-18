@@ -34,12 +34,14 @@ const FullFlags = (alerts, divClassName, onAlertFlagClick) => {
       )}
       {isShown('XA') && (
         <span className="arsonist-status" {...addClickIfValid(onAlertFlagClick)}>
-          <img src="/img/Arsonist_icon.png" className="arsonist-adjust" alt="" width="11" height="14" /> ARSONIST
+          <img src="/images/Arsonist_icon.png" className="arsonist-adjust" alt="" width="11" height="14" />
+          <span> ARSONIST </span>
         </span>
       )}
       {isShown('PEEP') && (
         <span className="disability-status" {...addClickIfValid(onAlertFlagClick)}>
-          <img src="/img/Disability_icon.png" className="disability-adjust" alt="" width="14" height="15" /> PEEP
+          <img src="/images/Disability_icon.png" className="disability-adjust" alt="" width="11" height="14" />
+          <span> PEEP </span>
         </span>
       )}
       {isShown('XEL') && (

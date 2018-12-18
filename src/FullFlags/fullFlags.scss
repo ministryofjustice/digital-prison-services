@@ -26,7 +26,6 @@
 
   %alert-status-style {
     @extend %status-style;
-    cursor: pointer;
   }
 
   .acct-status {
@@ -48,25 +47,11 @@
     border-color: #2B88C8;
   }
 
-  .disability-adjust {
-    margin-bottom: 2px;
-    position: relative;
-    left: 0;
-    top: -1px;
-  }
-
   .arsonist-status {
     @extend %alert-status-style;
-    padding-top: 0.18em;
+    padding-top: 0.32em;
     color: #DF3034;
     border-color: #DF3034;
-  }
-
-  .arsonist-adjust {
-    margin-bottom: 7px;
-    position: relative;
-    left: 0;
-    top: 2px;
   }
 
   .elist-status {
