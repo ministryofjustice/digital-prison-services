@@ -9,7 +9,7 @@ import SortLov from '../tablesorting/SortLov'
 import Location from '../Location'
 import HoursAndMinutes from '../HoursAndMinutes'
 import { LAST_NAME } from '../tablesorting/sortColumns'
-import Flags from './Flags'
+import Flags from '../FullFlags/Flags'
 
 const movementInType = {
   offenderNo: PropTypes.string.isRequired,

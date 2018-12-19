@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FullFlags from '../FullFlags/FullFlags'
+import Flags from '../FullFlags/Flags'
 import SortableColumn from '../tablesorting/SortableColumn'
 import OffenderName from '../OffenderName'
 import DateFormatter from '../DateFormatter'
@@ -95,7 +95,9 @@ const MovementOutRow = props => {
         <HoursAndMinutes hhmmss={timeOut} />
       </td>
       <td>{reasonDescription}</td>
-      <td className="row-gutters">{FullFlags(alerts)}</td>
+      <td className="row-gutters">
+        <Flags alerts={alerts} />
+      </td>
     </tr>
   )
 }
