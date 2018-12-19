@@ -13,7 +13,7 @@ import java.time.LocalDate
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class MovementssSpecification extends GebReportingSpec {
+class MovementsSpecification extends GebReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -28,6 +28,9 @@ class MovementssSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I navigate to the establishment roll count In today page"
+
+        stubFlags(["A1234AA", "G0000AA"])
+
         elite2api.stubGetMovementsIn(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
         to InTodayPage
@@ -38,8 +41,8 @@ class MovementssSpecification extends GebReportingSpec {
         def cellTextInRows = tableRows.collect { row -> row.children().collect { cell -> cell.text() } }
 
         cellTextInRows == [
-                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', '23:59', 'Outside'],
-                ['', 'Aaaaa, Aaaab', 'G0001AA', '01/01/1980', 'A-01-011', '01:01', 'Hull (HMP)']
+                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', '23:59', 'Outside', ''],
+                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', '01:01', 'Hull (HMP)', 'ACCT OPENE‑LIST']
         ]
     }
 
@@ -50,11 +53,7 @@ class MovementssSpecification extends GebReportingSpec {
 
         when: "I navigate to the establishment roll count out today page"
 
-        ArrayList offenders = new ArrayList<>()
-        offenders.push("A1234AA")
-        offenders.push("G0000AA")
-
-        stubFlags(offenders)
+        stubFlags(["A1234AA", "G0000AA"])
 
         elite2api.stubGetMovementsOut(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
@@ -74,11 +73,7 @@ class MovementssSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I navigate to the establishment roll count out today page"
-        ArrayList offenders = new ArrayList<>()
-        offenders.push("A1234AA")
-        offenders.push("G0000AA")
-
-        stubFlags(offenders)
+        stubFlags(["A1234AA", "G0000AA"])
         elite2api.stubGetMovementsOut(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
         to OutTodayPage
@@ -112,7 +107,7 @@ class MovementssSpecification extends GebReportingSpec {
     }
 
 
-    def stubFlags(ArrayList offenders) {
+    def stubFlags(List offenders) {
         oauthApi.stubSystemUserTokenRequest()
         elite2api.stubSystemAccessAlerts(offenders)
         elite2api.stubAssessments(offenders)

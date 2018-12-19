@@ -1,0 +1,249 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Movements in should render page correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <MovementsIn
+    movementsIn={
+      Array [
+        Object {
+          "alerts": Array [
+            "HA",
+            "XSA",
+            "XA",
+            "PEEP",
+            "XEL",
+            "XRF",
+            "XTACT",
+          ],
+          "firstName": "firstName",
+          "fromAgencyDescription": "Hull (HMP)",
+          "lastName": "lastName",
+          "location": "MDI-1-3-017",
+          "movementTime": "12:01:02",
+          "offenderNo": "G0000GG",
+        },
+      ]
+    }
+    setColumnSort={[MockFunction]}
+    sortOrder="ASC"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <SortLov
+          setColumnSort={[MockFunction]}
+          sortColumn="lastName"
+          sortColumns={
+            Array [
+              "lastName",
+            ]
+          }
+          sortOrder="ASC"
+        />,
+        <MovementsInTable
+          movementsIn={
+            Array [
+              Object {
+                "alerts": Array [
+                  "HA",
+                  "XSA",
+                  "XA",
+                  "PEEP",
+                  "XEL",
+                  "XRF",
+                  "XTACT",
+                ],
+                "firstName": "firstName",
+                "fromAgencyDescription": "Hull (HMP)",
+                "lastName": "lastName",
+                "location": "MDI-1-3-017",
+                "movementTime": "12:01:02",
+                "offenderNo": "G0000GG",
+              },
+            ]
+          }
+          setColumnSort={[MockFunction]}
+          sortOrder="ASC"
+        />,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "setColumnSort": [MockFunction],
+          "sortColumn": "lastName",
+          "sortColumns": Array [
+            "lastName",
+          ],
+          "sortOrder": "ASC",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "movementsIn": Array [
+            Object {
+              "alerts": Array [
+                "HA",
+                "XSA",
+                "XA",
+                "PEEP",
+                "XEL",
+                "XRF",
+                "XTACT",
+              ],
+              "firstName": "firstName",
+              "fromAgencyDescription": "Hull (HMP)",
+              "lastName": "lastName",
+              "location": "MDI-1-3-017",
+              "movementTime": "12:01:02",
+              "offenderNo": "G0000GG",
+            },
+          ],
+          "setColumnSort": [MockFunction],
+          "sortOrder": "ASC",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <SortLov
+            setColumnSort={[MockFunction]}
+            sortColumn="lastName"
+            sortColumns={
+              Array [
+                "lastName",
+              ]
+            }
+            sortOrder="ASC"
+          />,
+          <MovementsInTable
+            movementsIn={
+              Array [
+                Object {
+                  "alerts": Array [
+                    "HA",
+                    "XSA",
+                    "XA",
+                    "PEEP",
+                    "XEL",
+                    "XRF",
+                    "XTACT",
+                  ],
+                  "firstName": "firstName",
+                  "fromAgencyDescription": "Hull (HMP)",
+                  "lastName": "lastName",
+                  "location": "MDI-1-3-017",
+                  "movementTime": "12:01:02",
+                  "offenderNo": "G0000GG",
+                },
+              ]
+            }
+            setColumnSort={[MockFunction]}
+            sortOrder="ASC"
+          />,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "setColumnSort": [MockFunction],
+            "sortColumn": "lastName",
+            "sortColumns": Array [
+              "lastName",
+            ],
+            "sortOrder": "ASC",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "movementsIn": Array [
+              Object {
+                "alerts": Array [
+                  "HA",
+                  "XSA",
+                  "XA",
+                  "PEEP",
+                  "XEL",
+                  "XRF",
+                  "XTACT",
+                ],
+                "firstName": "firstName",
+                "fromAgencyDescription": "Hull (HMP)",
+                "lastName": "lastName",
+                "location": "MDI-1-3-017",
+                "movementTime": "12:01:02",
+                "offenderNo": "G0000GG",
+              },
+            ],
+            "setColumnSort": [MockFunction],
+            "sortOrder": "ASC",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": Symbol(react.fragment),
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

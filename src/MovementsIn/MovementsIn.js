@@ -9,6 +9,8 @@ import SortLov from '../tablesorting/SortLov'
 import Location from '../Location'
 import HoursAndMinutes from '../HoursAndMinutes'
 import { LAST_NAME } from '../tablesorting/sortColumns'
+import Flags from '../Flags/Flags'
+import FullFlags from '../FullFlags/FullFlags'
 
 const movementInType = {
   offenderNo: PropTypes.string.isRequired,
@@ -17,6 +19,8 @@ const movementInType = {
   location: PropTypes.string.isRequired,
   movementTime: PropTypes.string,
   fromAgencyDescription: PropTypes.string,
+  alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  category: PropTypes.string,
 }
 
 const movementsInType = {
@@ -56,7 +60,7 @@ const MovementsInTableHeadings = props => {
     <thead>
       <tr>
         <th className="straight width10" />
-        <th className="straight width20">
+        <th className="straight width10">
           <SortableColumn
             heading="Name"
             column={LAST_NAME}
@@ -67,9 +71,10 @@ const MovementsInTableHeadings = props => {
         </th>
         <th className="straight width10">Prison no.</th>
         <th className="straight width10">D.O.B.</th>
-        <th className="straight width20">Location</th>
+        <th className="straight width10">Location</th>
         <th className="straight width10">Time in</th>
-        <th className="straight width20">Arrived from</th>
+        <th className="straight width15">Arrived from</th>
+        <th className="straight width25">Flags</th>
       </tr>
     </thead>
   )
@@ -81,7 +86,17 @@ MovementsInTableHeadings.propTypes = {
 
 const MovementInRow = props => {
   const {
-    movementIn: { lastName, firstName, offenderNo, location, dateOfBirth, movementTime, fromAgencyDescription },
+    movementIn: {
+      alerts,
+      category,
+      dateOfBirth,
+      firstName,
+      fromAgencyDescription,
+      lastName,
+      location,
+      movementTime,
+      offenderNo,
+    },
   } = props
   return (
     <tr className="row-gutters">
@@ -106,6 +121,7 @@ const MovementInRow = props => {
         <HoursAndMinutes hhmmss={movementTime} />
       </td>
       <td>{fromAgencyDescription}</td>
+      <td className="row-gutters">{FullFlags(alerts, category)}</td>
     </tr>
   )
 }
