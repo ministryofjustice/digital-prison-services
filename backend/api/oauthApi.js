@@ -1,11 +1,13 @@
 const axios = require('axios')
+const querystring = require('querystring')
 const logger = require('../log')
 const errorStatusCode = require('../error-status-code')
 
 const AuthClientErrorName = 'AuthClientError'
 const AuthClientError = message => ({ name: AuthClientErrorName, message, stack: new Error().stack })
 
-const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
+const apiClientCredentials = (clientId, clientSecret) =>
+  Buffer.from(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
 
 /**
  * Return an oauthApi built using the supplied configuration.
@@ -75,7 +77,7 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
    */
   const authenticate = (username, password) =>
     makeTokenRequest(
-      `username=${username.toUpperCase()}&password=${password}&grant_type=password`,
+      querystring.stringify({ username: username.toUpperCase(), password, grant_type: 'password' }),
       `authenticate: ${username}`
     )
 
@@ -83,7 +85,8 @@ const oauthApiFactory = ({ clientId, clientSecret, url }) => {
    * Perform OAuth token refresh, returning the tokens to the caller. See scopedStore.run.
    * @returns A Promise that resolves when token refresh has succeeded and the OAuth tokens have been returned.
    */
-  const refresh = refreshToken => makeTokenRequest(`refresh_token=${refreshToken}&grant_type=refresh_token`, 'refresh:')
+  const refresh = refreshToken =>
+    makeTokenRequest(querystring.stringify({ refresh_token: refreshToken, grant_type: 'refresh_token' }), 'refresh:')
 
   return {
     authenticate,
