@@ -98,7 +98,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .get('/login')
       .expect(200)
       .expect('content-type', /text\/html/)
-      .expect(/Login/))
+      .expect(/Sign in/))
 
   it('successful login redirects to "/" setting hmpps cookie', () =>
     agent
@@ -169,7 +169,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .post('/login')
       .send('username=test&password=testPassowrd')
       .redirects(1)
-      .expect(/Login/)
+      .expect(/Sign in/)
       .expect(res => {
         expect(res.text).to.include('Your password has expired.')
       })
@@ -182,7 +182,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .post('/login')
       .send('username=test&password=testPassowrd')
       .redirects(1)
-      .expect(/Login/)
+      .expect(/Sign in/)
       .expect(res => {
         expect(res.text).to.include('A system error occurred; please try again later')
       })
