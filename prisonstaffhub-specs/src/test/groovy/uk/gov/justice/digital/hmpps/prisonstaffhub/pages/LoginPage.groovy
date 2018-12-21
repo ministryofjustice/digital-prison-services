@@ -11,7 +11,7 @@ class LoginPage extends Page {
 
     static at = {
         title == 'Prison Staff Hub'
-        headingText == 'Login'
+        headingText == 'Sign in'
     }
 
     static content = {
