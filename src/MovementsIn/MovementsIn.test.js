@@ -16,7 +16,7 @@ describe('Movements in', () => {
         alerts: ['HA', 'XSA', 'XA', 'PEEP', 'XEL', 'XRF', 'XTACT'],
       },
     ]
-    const wrapper = shallow(<MovementsIn sortOrder="ASC" setColumnSort={jest.fn()} movementsIn={movements} />)
+    const wrapper = shallow(<MovementsIn sortOrder="ASC" setColumnSort={jest.fn()} rows={movements} />)
 
     expect(wrapper).toMatchSnapshot()
   })

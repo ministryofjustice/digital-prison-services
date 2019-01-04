@@ -5,6 +5,7 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InReception
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InTodayPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.OutTodayPage
 
@@ -104,6 +105,28 @@ class MovementsSpecification extends GebReportingSpec {
                 ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', '01:01', 'Normal transfer', 'ACCT OPENE‑LIST']
         ]
 
+    }
+
+    def "in-reception"() {
+        given: "I am logged in"
+        fixture.loginAs(ITAG_USER)
+
+        when: "I navigate to the establishment roll count out today page"
+
+        stubFlags(["A1234AA", "G0000AA"])
+
+        elite2api.stubInReception(ITAG_USER.workingCaseload)
+        elite2api.stubImage()
+        elite2api.stubRecentMovements([[ "offenderNo": "A1234AA", "fromAgencyDescription": "Low Newton (HMP)"]])
+        to InReception
+
+        then:
+        at InReception
+
+        getCells(tableRows) == [
+           ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', '', '' ],
+           ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Low Newton (HMP)', 'ACCT OPENE‑LIST']
+        ]
     }
 
 

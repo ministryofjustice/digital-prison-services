@@ -10,4 +10,9 @@ const thenComparing = (compareFirst, compareNext) => (a, b) => {
   return res !== 0 ? res : compareNext(a, b)
 }
 
-export { fieldComparator, thenComparing }
+const lastNameComparator = thenComparing(
+  thenComparing(fieldComparator(obj => obj.lastName), fieldComparator(obj => obj.firstName)),
+  fieldComparator(obj => obj.offenderNo)
+)
+
+export { fieldComparator, thenComparing, lastNameComparator }

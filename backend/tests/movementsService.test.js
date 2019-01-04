@@ -7,6 +7,34 @@ describe('Movement service', () => {
   const agency = 'LEI'
   const offenders = [{ offenderNo: 'offenderNo1' }, { offenderNo: 'offenderNo2' }]
   const offenderNumbers = offenders.map(offender => offender.offenderNo)
+  const alertFlags = [
+    {
+      offenderNo: offenderNumbers[0],
+      expired: true,
+      alertCode: 'HA',
+    },
+    {
+      offenderNo: offenderNumbers[0],
+      expired: false,
+      alertCode: 'HA',
+    },
+    {
+      offenderNo: offenderNumbers[0],
+      expired: true,
+      alertCode: 'XEL',
+    },
+    {
+      offenderNo: offenderNumbers[0],
+      expired: false,
+      alertCode: 'XEL',
+    },
+  ]
+
+  const inReceptionDefaults = {
+    fromAgency: undefined,
+    fromAgencyDescription: undefined,
+    alerts: [],
+  }
 
   describe('Out today', () => {
     beforeEach(() => {
@@ -50,28 +78,7 @@ describe('Movement service', () => {
 
     it('should only return active alert flags for HA and XEL', async () => {
       eliteApi.getMovementsOut.mockReturnValue(offenders)
-      eliteApi.getAlertsSystem.mockReturnValue([
-        {
-          offenderNo: offenderNumbers[0],
-          expired: true,
-          alertCode: 'HA',
-        },
-        {
-          offenderNo: offenderNumbers[0],
-          expired: false,
-          alertCode: 'HA',
-        },
-        {
-          offenderNo: offenderNumbers[0],
-          expired: true,
-          alertCode: 'XEL',
-        },
-        {
-          offenderNo: offenderNumbers[0],
-          expired: false,
-          alertCode: 'XEL',
-        },
-      ])
+      eliteApi.getAlertsSystem.mockReturnValue(alertFlags)
 
       const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsOut(context, agency)
       expect(response[0].alerts).toEqual(['HA', 'XEL'])
@@ -122,6 +129,87 @@ describe('Movement service', () => {
       expect(response).toEqual([
         { offenderNo: 'G0000GG', category: 'A', alerts: [] },
         { offenderNo: 'G0001GG', category: 'E', alerts: [] },
+      ])
+    })
+  })
+
+  describe('In Reception', () => {
+    beforeEach(() => {
+      eliteApi.getRecentMovements = jest.fn()
+      eliteApi.getAlertsSystem = jest.fn()
+      eliteApi.getAssessments = jest.fn()
+      eliteApi.getOffendersInReception = jest.fn()
+      oauthClient.getClientCredentialsTokens = jest.fn()
+    })
+
+    it('returns a empty array when there are no offenders in reception ', async () => {
+      eliteApi.getOffendersInReception.mockReturnValue(undefined)
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(response).toEqual([])
+    })
+
+    it('should call recent movements for offenders in reception', async () => {
+      eliteApi.getOffendersInReception.mockReturnValue(offenders)
+
+      await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(eliteApi.getRecentMovements).toHaveBeenCalledWith(context, offenderNumbers, ['TRN'])
+    })
+
+    it('should populate offenders in reception with the from agency', async () => {
+      eliteApi.getOffendersInReception.mockReturnValue(offenders)
+      eliteApi.getRecentMovements.mockReturnValue([
+        {
+          offenderNo: offenders[0].offenderNo,
+          fromAgencyDescription: 'Leeds',
+          fromAgency: 'LEI',
+        },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(response).toEqual([
+        {
+          ...offenders[0],
+          ...inReceptionDefaults,
+          fromAgencyDescription: 'Leeds',
+          fromAgency: 'LEI',
+        },
+        {
+          ...offenders[1],
+          ...inReceptionDefaults,
+        },
+      ])
+    })
+
+    it('should request flags for the offenders in reception', async () => {
+      eliteApi.getOffendersInReception.mockReturnValue(offenders)
+      oauthClient.getClientCredentialsTokens.mockReturnValue({})
+
+      await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(eliteApi.getAlertsSystem).toHaveBeenCalledWith(context, offenderNumbers)
+    })
+
+    it('should populate offenders in reception with alert flags', async () => {
+      eliteApi.getOffendersInReception.mockReturnValue(offenders)
+      eliteApi.getAlertsSystem.mockReturnValue(alertFlags)
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(response).toEqual([
+        {
+          ...offenders[0],
+          ...inReceptionDefaults,
+
+          alerts: ['HA', 'XEL'],
+        },
+        {
+          ...offenders[1],
+          ...inReceptionDefaults,
+        },
       ])
     })
   })

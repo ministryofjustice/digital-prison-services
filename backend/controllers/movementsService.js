@@ -1,15 +1,10 @@
 const moment = require('moment')
+const { toMap } = require('../utils')
 
 const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
     const assessments = (await elite2Api.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
-
-    return assessments.reduce((map, current) => {
-      if (map.has(current.offenderNo) === false) {
-        map.set(current.offenderNo, current)
-      }
-      return map
-    }, new Map())
+    return toMap('offenderNo', assessments)
   }
 
   const getActiveAlerts = async offenderNumbers => {
@@ -64,9 +59,31 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return decorateMovements(context, movements)
   }
 
+  const getOffendersInReception = async (context, agencyId) => {
+    const offenders = (await elite2Api.getOffendersInReception(context, agencyId)) || []
+    const offenderNumbers = offenders.map(offender => offender.offenderNo)
+    const recentMovements = (await elite2Api.getRecentMovements(context, offenderNumbers, ['TRN'])) || []
+    const alerts = (await getActiveAlerts(offenderNumbers)) || []
+
+    const recentMovementsMap = toMap('offenderNo', recentMovements)
+
+    return offenders.map(offender => {
+      const { fromAgencyDescription, fromAgency } = recentMovementsMap.get(offender.offenderNo) || {}
+      const alertFlags = alertCodesForOffenderNo(alerts, offender.offenderNo)
+
+      return {
+        ...offender,
+        fromAgency,
+        fromAgencyDescription,
+        alerts: alertFlags,
+      }
+    })
+  }
+
   return {
     getMovementsIn,
     getMovementsOut,
+    getOffendersInReception,
   }
 }
 

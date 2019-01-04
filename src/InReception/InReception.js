@@ -1,24 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SortableColumn from '../tablesorting/SortableColumn'
-import OffenderName from '../OffenderName'
-import DateFormatter from '../DateFormatter'
+import { LAST_NAME } from '../tablesorting/sortColumns'
 import OffenderLink from '../OffenderLink'
 import OffenderImage from '../OffenderImage'
-import SortLov from '../tablesorting/SortLov'
-import Location from '../Location'
-import HoursAndMinutes from '../HoursAndMinutes'
-import { LAST_NAME } from '../tablesorting/sortColumns'
+import OffenderName from '../OffenderName'
+import DateFormatter from '../DateFormatter'
 import Flags from '../FullFlags/Flags'
+import SortLov from '../tablesorting/SortLov'
 
-const MovementsIn = ({ rows, sortOrder, setColumnSort }) => (
+const InReception = ({ sortOrder, setColumnSort, rows }) => (
   <React.Fragment>
     <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    <table className="row-gutters">
+    <table>
       <thead>
         <tr>
           <th className="straight width10" />
-          <th className="straight width10">
+          <th className="straight width15">
             <SortableColumn
               heading="Name"
               column={LAST_NAME}
@@ -29,9 +27,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort }) => (
           </th>
           <th className="straight width10">Prison no.</th>
           <th className="straight width10">D.O.B.</th>
-          <th className="straight width10">Location</th>
-          <th className="straight width10">Time in</th>
-          <th className="straight width15">Arrived from</th>
+          <th className="straight width15"> Received from </th>
           <th className="straight width25">Flags</th>
         </tr>
       </thead>
@@ -52,15 +48,9 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort }) => (
             <td className="row-gutters">
               <DateFormatter isoDate={row.dateOfBirth} />
             </td>
+            <td> {row.fromAgencyDescription} </td>
             <td className="row-gutters">
-              <Location location={row.location} />
-            </td>
-            <td>
-              <HoursAndMinutes hhmmss={row.movementTime} />
-            </td>
-            <td>{row.fromAgencyDescription}</td>
-            <td className="row-gutters">
-              <Flags offenderNo={row.offenderNo} alerts={row.alerts} category={row.category} />
+              <Flags offenderNo={row.offenderNo} alerts={row.alerts} />
             </td>
           </tr>
         ))}
@@ -69,26 +59,24 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort }) => (
   </React.Fragment>
 )
 
-MovementsIn.propTypes = {
+InReception.defaultProps = {
+  sortOrder: '',
+  setColumnSort: () => {},
+  rows: [],
+}
+
+InReception.propTypes = {
+  sortOrder: PropTypes.string,
+  setColumnSort: PropTypes.func,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
       firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      movementTime: PropTypes.string,
       fromAgencyDescription: PropTypes.string,
-      alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-      category: PropTypes.string,
+      dateOfBirth: PropTypes.string.isRequired,
+      alerts: PropTypes.arrayOf(PropTypes.string),
     })
   ),
-  sortOrder: PropTypes.string,
-  setColumnSort: PropTypes.func,
-}
-MovementsIn.defaultProps = {
-  rows: [],
-  sortOrder: '',
-  setColumnSort: () => {},
 }
 
-export default MovementsIn
+export default InReception
