@@ -6,7 +6,12 @@ import { Link } from 'react-router-dom'
 import './EstablishmentRollBlock.scss'
 import routePaths from '../routePaths'
 
-const pathsToStatisticsDetailsPages = new Map([['In today', routePaths.inToday], ['Out today', routePaths.outToday]])
+const pathsToStatisticsDetailsPages = new Map([
+  ['In today', routePaths.inToday],
+  ['Out today', routePaths.outToday],
+  ['In reception', routePaths.inReception],
+])
+
 export class EstablishmentRollBlock extends Component {
   addLinkToDetailsPage = (label, content) =>
     pathsToStatisticsDetailsPages.has(label) ? (

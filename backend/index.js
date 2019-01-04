@@ -183,6 +183,7 @@ app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/movements/:agencyId/in', controller.getMovementsIn)
 app.use('/api/movements/:agencyId/out', controller.getMovementsOut)
+app.use('/api/movements/:agencyId/in-reception', controller.getOffendersInReception)
 app.use('/api/globalSearch', controller.globalSearch)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 

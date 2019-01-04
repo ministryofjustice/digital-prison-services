@@ -36,6 +36,8 @@ import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentRe
 import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
+import InReceptionContainer from './InReception/InReceptionContainer'
+
 import routePaths from './routePaths'
 
 const axios = require('axios')
@@ -306,6 +308,18 @@ class App extends React.Component {
             path={routePaths.outToday}
             render={({ history }) => (
               <MovementsOutContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.inReception}
+            render={({ history }) => (
+              <InReceptionContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}

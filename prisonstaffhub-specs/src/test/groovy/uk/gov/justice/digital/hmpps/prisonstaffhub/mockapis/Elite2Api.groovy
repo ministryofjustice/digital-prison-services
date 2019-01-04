@@ -463,6 +463,16 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
+    def stubRecentMovements(movements = []) {
+        this.stubFor(
+                post("/api/movements/offenders?movementTypes=TRN")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(movements))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
     def stubEstablishmentRollCount(String agencyId) {
         this.stubFor(
                 get("/api/movements/rollcount/${agencyId}?unassigned=false")
@@ -567,6 +577,29 @@ class Elite2Api extends WireMockRule {
                                         lastName         : 'AAAAA',
                                         reasonDescription: 'Normal transfer',
                                         timeOut          : '23:59:59',
+                                ]
+                        ]))))
+    }
+
+    void stubInReception(agencyId) {
+        this.stubFor(
+                get("/api/movements/rollcount/${agencyId}/in-reception")
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson([
+                                [
+                                        offenderNo           : 'A1234AA',
+                                        dateOfBirth          : '1980-01-01',
+                                        firstName            : 'AAAAB',
+                                        lastName             : 'AAAAA',
+                                ],
+                                [
+                                        offenderNo              : 'G0000AA',
+                                        dateOfBirth             : '1980-12-31',
+                                        firstName               : 'AAAAA',
+                                        lastName                : 'AAAAA',
                                 ]
                         ]))))
     }

@@ -27,10 +27,22 @@ const capitalize = string => {
 
 const isViewableFlag = code => ['HA', 'XEL'].includes(code)
 
+const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${item}`).join('&')
+
+const toMap = (key, array) =>
+  array.reduce((map, current) => {
+    if (map.has(current[key]) === false) {
+      map.set(current[key], current)
+    }
+    return map
+  }, new Map())
+
 module.exports = {
   switchDateFormat,
   distinct,
   sortByDateTime,
   capitalize,
   isViewableFlag,
+  arrayToQueryString,
+  toMap,
 }

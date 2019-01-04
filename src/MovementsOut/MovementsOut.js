@@ -9,101 +9,74 @@ import SortLov from '../tablesorting/SortLov'
 import HoursAndMinutes from '../HoursAndMinutes'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 
-const movementOutType = {
-  offenderNo: PropTypes.string.isRequired,
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
-  timeOut: PropTypes.string,
-  reasonDescription: PropTypes.string,
-  alerts: PropTypes.arrayOf(PropTypes.string).isRequired,
-}
-
-const movementsOutType = {
-  movementsOut: PropTypes.arrayOf(PropTypes.shape(movementOutType)).isRequired,
-  sortOrder: PropTypes.string.isRequired,
-  setColumnSort: PropTypes.func.isRequired,
-}
-
-const MovementsOut = ({ movementsOut, sortOrder, setColumnSort }) => (
-  <div>
+const MovementsOut = ({ rows, sortOrder, setColumnSort }) => (
+  <React.Fragment>
     <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    <MovementsOutTable movementsOut={movementsOut} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-  </div>
+    <table className="row-gutters">
+      <thead>
+        <tr>
+          <th className="straight width5" />
+          <th className="straight width15">
+            <SortableColumn
+              heading="Name"
+              column={LAST_NAME}
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+              sortColumn={LAST_NAME}
+            />
+          </th>
+          <th className="straight width5">Prison no.</th>
+          <th className="straight width5">D.O.B.</th>
+          <th className="straight width5">Time out</th>
+          <th className="straight width10">Reason</th>
+          <th className="straight width15">Flags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(row => (
+          <tr className="row-gutters" key={row.offenderNo}>
+            <td className="row-gutters">
+              <OffenderImage offenderNo={row.offenderNo} />
+            </td>
+            <td className="row-gutters">
+              <OffenderName lastName={row.lastName} firstName={row.firstName} />
+            </td>
+            <td className="row-gutters">{row.offenderNo}</td>
+            <td className="row-gutters">
+              <DateFormatter isoDate={row.dateOfBirth} />
+            </td>
+            <td>
+              <HoursAndMinutes hhmmss={row.timeOut} />
+            </td>
+            <td>{row.reasonDescription}</td>
+            <td className="row-gutters">
+              <Flags alerts={row.alerts} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </React.Fragment>
 )
 
-MovementsOut.propTypes = movementsOutType
-
-const MovementsOutTable = ({ movementsOut, sortOrder, setColumnSort }) => (
-  <table className="row-gutters">
-    <MovementsInTableHeadings sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    <tbody>
-      {movementsOut.map(movementOut => (
-        <MovementOutRow movementOut={movementOut} key={movementOut.offenderNo} />
-      ))}
-    </tbody>
-  </table>
-)
-
-MovementsOutTable.propTypes = movementsOutType
-
-const MovementsInTableHeadings = props => {
-  const { sortOrder, setColumnSort } = props
-  return (
-    <thead>
-      <tr>
-        <th className="straight width5" />
-        <th className="straight width15">
-          <SortableColumn
-            heading="Name"
-            column={LAST_NAME}
-            sortOrder={sortOrder}
-            setColumnSort={setColumnSort}
-            sortColumn={LAST_NAME}
-          />
-        </th>
-        <th className="straight width5">Prison no.</th>
-        <th className="straight width5">D.O.B.</th>
-        <th className="straight width5">Time out</th>
-        <th className="straight width10">Reason</th>
-        <th className="straight width15">Flags</th>
-      </tr>
-    </thead>
-  )
+MovementsOut.propTypes = {
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      offenderNo: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      timeOut: PropTypes.string,
+      reasonDescription: PropTypes.string,
+      alerts: PropTypes.arrayOf(PropTypes.string).isRequired,
+    })
+  ),
+  sortOrder: PropTypes.string,
+  setColumnSort: PropTypes.func,
 }
-MovementsInTableHeadings.propTypes = {
-  sortOrder: PropTypes.string.isRequired,
-  setColumnSort: PropTypes.func.isRequired,
-}
-
-const MovementOutRow = props => {
-  const {
-    movementOut: { lastName, firstName, offenderNo, dateOfBirth, timeOut, reasonDescription, alerts },
-  } = props
-  return (
-    <tr className="row-gutters">
-      <td className="row-gutters">
-        <OffenderImage offenderNo={offenderNo} />
-      </td>
-      <td className="row-gutters">
-        <OffenderName lastName={lastName} firstName={firstName} />
-      </td>
-      <td className="row-gutters">{offenderNo}</td>
-      <td className="row-gutters">
-        <DateFormatter isoDate={dateOfBirth} />
-      </td>
-      <td>
-        <HoursAndMinutes hhmmss={timeOut} />
-      </td>
-      <td>{reasonDescription}</td>
-      <td className="row-gutters">
-        <Flags alerts={alerts} />
-      </td>
-    </tr>
-  )
-}
-
-MovementOutRow.propTypes = {
-  movementOut: PropTypes.shape(movementsOutType).isRequired,
+MovementsOut.defaultProps = {
+  rows: [],
+  sortOrder: '',
+  setColumnSort: () => {},
 }
 
 export default MovementsOut

@@ -1,4 +1,5 @@
 const contextProperties = require('../contextProperties')
+const { arrayToQueryString } = require('../utils')
 
 const elite2ApiFactory = client => {
   const processResponse = context => response => {
@@ -74,11 +75,22 @@ const elite2ApiFactory = client => {
       }&partialNameMatch=false&includeAliases=true`
     )
   const getLastPrison = (context, body) => post(context, `api/movements/offenders`, body)
+
+  const getRecentMovements = (context, body, movementTypes) =>
+    post(
+      context,
+      `api/movements/offenders${movementTypes && `?${arrayToQueryString(movementTypes, 'movementTypes')}`}`,
+      body
+    )
+
   const getMovementsIn = (context, agencyId, movementDate) =>
     get(context, `api/movements/${agencyId}/in/${movementDate}`)
 
   const getMovementsOut = (context, agencyId, movementDate) =>
     get(context, `api/movements/${agencyId}/out/${movementDate}`)
+
+  const getOffendersInReception = (context, agencyId) =>
+    get(context, `api/movements/rollcount/${agencyId}/in-reception`)
 
   return {
     userLocations,
@@ -108,6 +120,8 @@ const elite2ApiFactory = client => {
     getLastPrison,
     getMovementsIn,
     getMovementsOut,
+    getOffendersInReception,
+    getRecentMovements,
   }
 }
 

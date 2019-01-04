@@ -7,24 +7,19 @@ import axios from 'axios'
 import MovementsOut from './MovementsOut'
 import { resetError, setLoaded } from '../redux/actions'
 import Error from '../Error'
-import { fieldComparator, thenComparing } from '../tablesorting/comparatorComposition'
-import { ASC, DESC } from '../tablesorting/sortOrder'
+import { ASC } from '../tablesorting/sortOrder'
 import Page from '../Components/Page'
 import routePaths from '../routePaths'
 
-class MovementsOutContainer extends Component {
-  lastNameComparator = thenComparing(
-    thenComparing(fieldComparator(obj => obj.lastName), fieldComparator(obj => obj.firstName)),
-    fieldComparator(obj => obj.offenderNo)
-  )
+import SortableDataSource from '../tablesorting/SortableDataSource'
+import { lastNameComparator } from '../tablesorting/comparatorComposition'
 
+class MovementsOutContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       movementsOut: [],
-      sortOrder: ASC,
     }
-    this.setColumnSort = this.setColumnSort.bind(this)
   }
 
   componentDidMount() {
@@ -46,7 +41,6 @@ class MovementsOutContainer extends Component {
       setLoadedDispatch(false)
       const response = await axios.get(`/api/movements/${agencyId}/out`)
       const movementsOut = response.data
-      this.sortMovementsOut(movementsOut, ASC)
       this.setState({ movementsOut })
       setLoadedDispatch(true)
     } catch (error) {
@@ -54,29 +48,16 @@ class MovementsOutContainer extends Component {
     }
   }
 
-  setColumnSort(sortColumn, sortOrder) {
-    this.setState(currentState => {
-      const copy = currentState.movementsOut.slice()
-      this.sortMovementsOut(copy, sortOrder)
-      return { sortOrder, movementsOut: copy }
-    })
-  }
-
-  sortMovementsOut = (movementsOut, sortOrder) => {
-    movementsOut.sort(this.lastNameComparator)
-    if (sortOrder === DESC) {
-      movementsOut.reverse()
-    }
-  }
-
   render() {
-    const { movementsOut, loaded, sortOrder } = this.state
+    const { movementsOut, loaded } = this.state
     const { error } = this.props
 
     return (
       <Page title="Out today" error={error} loaded={loaded}>
         <Error error={error} />
-        <MovementsOut movementsOut={movementsOut} sortOrder={sortOrder} setColumnSort={this.setColumnSort} />
+        <SortableDataSource sortOrder={ASC} rows={movementsOut} comparator={lastNameComparator}>
+          <MovementsOut />
+        </SortableDataSource>
       </Page>
     )
   }

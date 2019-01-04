@@ -57,6 +57,12 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const getOffendersInReception = asyncMiddleware(async (req, res) => {
+    const { agencyId } = req.params
+    const viewModel = await movementsService.getOffendersInReception(res.locals, agencyId)
+    res.json(viewModel)
+  })
+
   return {
     getActivityList,
     getHouseblockList,
@@ -65,6 +71,7 @@ const factory = ({
     globalSearch,
     getMovementsIn,
     getMovementsOut,
+    getOffendersInReception,
   }
 }
 
