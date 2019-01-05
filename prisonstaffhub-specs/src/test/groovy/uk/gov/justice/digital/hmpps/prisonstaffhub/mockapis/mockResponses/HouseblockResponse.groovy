@@ -2,6 +2,8 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses
 
 import groovy.json.JsonOutput
 
+import java.text.SimpleDateFormat
+
 class HouseblockResponse {
 
     static response1 = [
@@ -125,7 +127,7 @@ class HouseblockResponse {
             firstName       : "EAMONN",
             lastName        : "ANDREWS",
             offenderNo      : "A1234AA",
-            startTime       : new Date().format('YYYY-MM-dd')
+            startTime       : getNow()
     ]
 
     static externalTransfer2 = [
@@ -135,7 +137,7 @@ class HouseblockResponse {
             firstName       : "EAMONN",
             lastName        : "ANDREWS",
             offenderNo      : "A1234AA",
-            startTime       : new Date().format('YYYY-MM-dd')
+            startTime       : getNow()
     ]
 
     static externalTransfer3 = [
@@ -145,7 +147,7 @@ class HouseblockResponse {
             firstName       : "EAMONN",
             lastName        : "ANDREWS",
             offenderNo      : "A1234AA",
-            startTime       : new Date().format('YYYY-MM-dd')
+            startTime       : getNow()
     ]
 
     static externalTransfer4 = [
@@ -155,7 +157,7 @@ class HouseblockResponse {
             firstName       : "EAMONN",
             lastName        : "ANDREWS",
             offenderNo      : "A1234AA",
-            startTime       : new Date().format('YYYY-MM-dd')
+            startTime       : getNow()
     ]
 
 
@@ -329,4 +331,10 @@ class HouseblockResponse {
                     nextReviewDate       : '2017-06-25',
             ],
     ])
+
+    private static String getNow() {
+        String pattern = "YYYY-MM-dd"
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern)
+        simpleDateFormat.format(new Date())
+    }
 }
