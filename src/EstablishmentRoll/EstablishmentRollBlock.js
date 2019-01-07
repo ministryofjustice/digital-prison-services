@@ -13,8 +13,8 @@ const pathsToStatisticsDetailsPages = new Map([
 ])
 
 export class EstablishmentRollBlock extends Component {
-  addLinkToDetailsPage = (label, content) =>
-    pathsToStatisticsDetailsPages.has(label) ? (
+  addLinkToDetailsPage = (label, content, value) =>
+    value !== 0 && pathsToStatisticsDetailsPages.has(label) ? (
       <Link to={pathsToStatisticsDetailsPages.get(label)} className="link">
         {content}
       </Link>
@@ -25,7 +25,7 @@ export class EstablishmentRollBlock extends Component {
   renderBlockFigure = (label, value) => (
     <div className="block-figure">
       <label className="block-figure__label">{label}</label>
-      {this.addLinkToDetailsPage(label, <span className="block-figure__value">{value}</span>)}
+      {this.addLinkToDetailsPage(label, <span className="block-figure__value">{value}</span>, value)}
     </div>
   )
 
