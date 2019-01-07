@@ -13,6 +13,12 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return alerts && alerts.filter(alert => !alert.expired)
   }
 
+  const getRecentMovements = async offenderNumbers => {
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+
+    return elite2Api.getRecentMovements(systemContext, offenderNumbers, ['TRN'])
+  }
+
   const extractOffenderNumbers = movements => movements.map(m => m.offenderNo)
 
   const alertCodesForOffenderNo = (alerts, offenderNo) =>
@@ -62,7 +68,8 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getOffendersInReception = async (context, agencyId) => {
     const offenders = (await elite2Api.getOffendersInReception(context, agencyId)) || []
     const offenderNumbers = offenders.map(offender => offender.offenderNo)
-    const recentMovements = (await elite2Api.getRecentMovements(context, offenderNumbers, ['TRN'])) || []
+    const recentMovements = (await getRecentMovements(offenderNumbers)) || []
+
     const alerts = (await getActiveAlerts(offenderNumbers)) || []
 
     const recentMovementsMap = toMap('offenderNo', recentMovements)
