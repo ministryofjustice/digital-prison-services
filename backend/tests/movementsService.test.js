@@ -151,11 +151,13 @@ describe('Movement service', () => {
     })
 
     it('should call recent movements for offenders in reception', async () => {
+      const systemContext = { system: 'context' }
       eliteApi.getOffendersInReception.mockReturnValue(offenders)
+      oauthClient.getClientCredentialsTokens.mockReturnValue(systemContext)
 
       await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
 
-      expect(eliteApi.getRecentMovements).toHaveBeenCalledWith(context, offenderNumbers, ['TRN'])
+      expect(eliteApi.getRecentMovements).toHaveBeenCalledWith(systemContext, offenderNumbers, ['TRN'])
     })
 
     it('should populate offenders in reception with the from agency', async () => {
