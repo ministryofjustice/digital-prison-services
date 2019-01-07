@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: circleci/node:8.10.0-browsers
+    - image: circleci/node:10.15.0-browsers
 
 version: 2
 jobs:
@@ -43,7 +43,7 @@ jobs:
   integration_tests:
     working_directory: ~/app
     docker:
-      - image: circleci/openjdk:8u162-jdk-node-browsers
+      - image: circleci/openjdk:11-jdk-node-browsers
     steps:
       - checkout
       - attach_workspace:

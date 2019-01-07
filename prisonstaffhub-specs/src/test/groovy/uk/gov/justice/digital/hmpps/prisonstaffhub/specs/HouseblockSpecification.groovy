@@ -9,6 +9,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.HouseblockPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
+import java.text.SimpleDateFormat
+
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class HouseblockSpecification extends GebReportingSpec {
@@ -31,7 +33,8 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: "I select and display a location"
-        def today = new Date().format('YYYY-MM-dd')
+        String today = getNow()
+
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
 
@@ -100,7 +103,7 @@ class HouseblockSpecification extends GebReportingSpec {
         given: 'I am on the houseblock list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
         form['period-select'] = 'PM'
         form['housing-location-select'] = '1'
@@ -146,7 +149,7 @@ class HouseblockSpecification extends GebReportingSpec {
         given: 'I am on the houseblock list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
 
         form['housing-location-select'] = '1'
@@ -167,7 +170,10 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: "I select and display a location"
-        def today = new Date().format('YYYY-MM-dd')
+        String pattern = "YYYY-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        def today = simpleDateFormat.format(new Date());
+
         elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
 
         form['housing-location-select'] = '1'
@@ -192,7 +198,7 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: "I select and display a location"
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
 
         form['housing-location-select'] = '1'
@@ -213,7 +219,7 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: "I select and display a location"
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
@@ -234,7 +240,7 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: 'I select and display a location'
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
@@ -254,7 +260,7 @@ class HouseblockSpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: 'I select and display a location'
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
 
         elite2api.stubGetHouseBlockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         form['housing-location-select'] = '1'
@@ -269,5 +275,11 @@ class HouseblockSpecification extends GebReportingSpec {
         texts[1].contains("** Court visit scheduled **")
         texts[1].contains("** Court visit scheduled ** (complete)")
         texts[1].contains("** Court visit scheduled ** (expired)")
+    }
+
+    private static String getNow() {
+        String pattern = "YYYY-MM-dd"
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern)
+        simpleDateFormat.format(new Date())
     }
 }

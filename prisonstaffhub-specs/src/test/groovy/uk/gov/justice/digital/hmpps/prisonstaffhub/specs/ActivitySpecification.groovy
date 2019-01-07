@@ -9,6 +9,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ActivityPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
+import java.text.SimpleDateFormat
+
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class ActivitySpecification extends GebReportingSpec {
@@ -27,7 +29,7 @@ class ActivitySpecification extends GebReportingSpec {
         fixture.toSearch()
 
         when: "I select and display a location"
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
         form['period-select'] = 'AM'
         waitFor { activity.module(FormElement).enabled }
@@ -111,7 +113,7 @@ class ActivitySpecification extends GebReportingSpec {
         given: 'I am on the activity list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
@@ -154,7 +156,7 @@ class ActivitySpecification extends GebReportingSpec {
         given: 'I am on the activity list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
-        def today = new Date().format('YYYY-MM-dd')
+        def today = getNow()
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
@@ -167,5 +169,11 @@ class ActivitySpecification extends GebReportingSpec {
 
         then: "I should be redirected to the search page"
         at SearchPage
+    }
+
+    private static String getNow() {
+        String pattern = "YYYY-MM-dd"
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern)
+        simpleDateFormat.format(new Date())
     }
 }
