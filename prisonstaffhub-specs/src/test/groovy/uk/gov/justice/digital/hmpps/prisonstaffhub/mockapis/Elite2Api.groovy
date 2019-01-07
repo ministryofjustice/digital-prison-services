@@ -465,7 +465,7 @@ class Elite2Api extends WireMockRule {
 
     def stubRecentMovements(movements = []) {
         this.stubFor(
-                post("/api/movements/offenders?movementTypes=TRN")
+                post("/api/movements/offenders")
                         .willReturn(
                         aResponse()
                                 .withBody(JsonOutput.toJson(movements))

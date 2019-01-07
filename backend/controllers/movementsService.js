@@ -16,7 +16,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getRecentMovements = async offenderNumbers => {
     const systemContext = await systemOauthClient.getClientCredentialsTokens()
 
-    return elite2Api.getRecentMovements(systemContext, offenderNumbers, ['TRN'])
+    return elite2Api.getRecentMovements(systemContext, offenderNumbers, [])
   }
 
   const extractOffenderNumbers = movements => movements.map(m => m.offenderNo)
