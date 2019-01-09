@@ -235,7 +235,7 @@ describe('Movement service', () => {
       ])
     })
 
-    it('should not request extra information in there are no offenders in reception', async () => {
+    it('should not request extra information if there are no offenders in reception', async () => {
       await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
 
       expect(eliteApi.getAlertsSystem.mock.calls.length).toBe(0)
