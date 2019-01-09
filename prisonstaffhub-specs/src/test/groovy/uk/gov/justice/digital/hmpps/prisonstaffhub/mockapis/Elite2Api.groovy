@@ -591,16 +591,32 @@ class Elite2Api extends WireMockRule {
                                 .withBody(JsonOutput.toJson([
                                 [
                                         offenderNo           : 'A1234AA',
+                                        bookingId            : -1,
                                         dateOfBirth          : '1980-01-01',
                                         firstName            : 'AAAAB',
                                         lastName             : 'AAAAA',
                                 ],
                                 [
                                         offenderNo              : 'G0000AA',
+                                        bookingId               : -2,
                                         dateOfBirth             : '1980-12-31',
                                         firstName               : 'AAAAA',
                                         lastName                : 'AAAAA',
                                 ]
                         ]))))
+    }
+
+    void stubImpSummariesForBookings(bookings) {
+        def response = bookings.collect{ booking -> [bookingId: booking, iepLevel: 'Basic']}
+        def queryParameters = bookings.collect{ booking -> "bookings=${booking}"}.join("&")
+
+        this.stubFor(
+                get("/api/bookings/offenders/iepSummary?${queryParameters}")
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response)))
+        )
     }
 }

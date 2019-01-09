@@ -28,6 +28,7 @@ const InReception = ({ sortOrder, setColumnSort, rows }) => (
           <th className="straight width10">Prison no.</th>
           <th className="straight width10">D.O.B.</th>
           <th className="straight width15"> Received from </th>
+          <th className="straight width10">IEP </th>
           <th className="straight width25">Flags</th>
         </tr>
       </thead>
@@ -49,6 +50,7 @@ const InReception = ({ sortOrder, setColumnSort, rows }) => (
               <DateFormatter isoDate={row.dateOfBirth} />
             </td>
             <td> {row.fromAgencyDescription} </td>
+            <td> {row.iepLevel} </td>
             <td className="row-gutters">
               <Flags offenderNo={row.offenderNo} alerts={row.alerts} />
             </td>
@@ -75,6 +77,7 @@ InReception.propTypes = {
       fromAgencyDescription: PropTypes.string,
       dateOfBirth: PropTypes.string.isRequired,
       alerts: PropTypes.arrayOf(PropTypes.string),
+      iepLevel: PropTypes.string,
     })
   ),
 }

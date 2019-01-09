@@ -13,6 +13,7 @@ describe('In Reception', () => {
         fromAgencyDescription: 'Leeds',
         dateOfBirth: '1980-10-10',
         alerts: ['HA', 'XSA', 'XA', 'PEEP', 'XEL', 'XRF', 'XTACT'],
+        iepLevel: 'Entry',
       },
     ]
     const wrapper = shallow(<InReception setColumnSort={jest.fn()} sortOrder="ASC" rows={inReception} />)

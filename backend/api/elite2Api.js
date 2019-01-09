@@ -92,6 +92,9 @@ const elite2ApiFactory = client => {
   const getOffendersInReception = (context, agencyId) =>
     get(context, `api/movements/rollcount/${agencyId}/in-reception`)
 
+  const getIepSummary = (context, bookings) =>
+    get(context, `api/bookings/offenders/iepSummary?${arrayToQueryString(bookings, 'bookings')}`)
+
   return {
     userLocations,
     currentUser,
@@ -122,6 +125,7 @@ const elite2ApiFactory = client => {
     getMovementsOut,
     getOffendersInReception,
     getRecentMovements,
+    getIepSummary,
   }
 }
 
