@@ -5,7 +5,7 @@ describe('Movement service', () => {
   const oauthClient = {}
   const context = {}
   const agency = 'LEI'
-  const offenders = [{ offenderNo: 'offenderNo1' }, { offenderNo: 'offenderNo2' }]
+  const offenders = [{ offenderNo: 'offenderNo1', bookingId: 1 }, { offenderNo: 'offenderNo2', bookingId: 2 }]
   const offenderNumbers = offenders.map(offender => offender.offenderNo)
   const alertFlags = [
     {
@@ -54,7 +54,10 @@ describe('Movement service', () => {
 
       const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsOut(context, agency)
 
-      expect(response).toEqual([{ offenderNo: 'offenderNo1' }, { offenderNo: 'offenderNo2' }])
+      expect(response).toEqual([
+        { offenderNo: 'offenderNo1', bookingId: 1 },
+        { offenderNo: 'offenderNo2', bookingId: 2 },
+      ])
     })
 
     it('should make a request for alerts using the systemContext and offender numbers', async () => {
@@ -90,6 +93,7 @@ describe('Movement service', () => {
       eliteApi.getMovementsIn = jest.fn()
       eliteApi.getAlertsSystem = jest.fn()
       eliteApi.getAssessments = jest.fn()
+
       oauthClient.getClientCredentialsTokens = jest.fn()
     })
 
@@ -140,6 +144,7 @@ describe('Movement service', () => {
       eliteApi.getAssessments = jest.fn()
       eliteApi.getOffendersInReception = jest.fn()
       oauthClient.getClientCredentialsTokens = jest.fn()
+      eliteApi.getIepSummary = jest.fn()
     })
 
     it('returns a empty array when there are no offenders in reception ', async () => {
@@ -213,6 +218,31 @@ describe('Movement service', () => {
           ...inReceptionDefaults,
         },
       ])
+    })
+
+    it('should request iep summary information for offenders in reception', async () => {
+      eliteApi.getOffendersInReception.mockReturnValue(offenders)
+      eliteApi.getIepSummary.mockReturnValue([
+        { ...offenders[0], iepLevel: 'basic' },
+        { ...offenders[1], iepLevel: 'standard' },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(response).toEqual([
+        { ...inReceptionDefaults, ...offenders[0], iepLevel: 'basic' },
+        { ...inReceptionDefaults, ...offenders[1], iepLevel: 'standard' },
+      ])
+    })
+
+    it('should not request extra information in there are no offenders in reception', async () => {
+      await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
+
+      expect(eliteApi.getAlertsSystem.mock.calls.length).toBe(0)
+      expect(eliteApi.getRecentMovements.mock.calls.length).toBe(0)
+      expect(eliteApi.getIepSummary.mock.calls.length).toBe(0)
+      expect(eliteApi.getAssessments.mock.calls.length).toBe(0)
+      expect(oauthClient.getClientCredentialsTokens.mock.calls.length).toBe(0)
     })
   })
 })

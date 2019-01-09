@@ -116,6 +116,7 @@ class MovementsSpecification extends GebReportingSpec {
         stubFlags(["A1234AA", "G0000AA"])
 
         elite2api.stubInReception(ITAG_USER.workingCaseload)
+        elite2api.stubImpSummariesForBookings([-1, -2])
         elite2api.stubImage()
         elite2api.stubRecentMovements([[ "offenderNo": "A1234AA", "fromAgencyDescription": "Low Newton (HMP)"]])
         to InReception
@@ -124,8 +125,8 @@ class MovementsSpecification extends GebReportingSpec {
         at InReception
 
         getCells(tableRows) == [
-           ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', '', '' ],
-           ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Low Newton (HMP)', 'ACCT OPENE‑LIST']
+           ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', '','Basic', '' ],
+           ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Low Newton (HMP)','Basic', 'ACCT OPENE‑LIST']
         ]
     }
 

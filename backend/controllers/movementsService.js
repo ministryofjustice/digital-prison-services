@@ -66,22 +66,31 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   }
 
   const getOffendersInReception = async (context, agencyId) => {
-    const offenders = (await elite2Api.getOffendersInReception(context, agencyId)) || []
+    const offenders = await elite2Api.getOffendersInReception(context, agencyId)
+
+    if (!offenders) return []
+
     const offenderNumbers = offenders.map(offender => offender.offenderNo)
+    const bookingIds = offenders.map(offender => offender.bookingId)
     const recentMovements = (await getRecentMovements(offenderNumbers)) || []
 
     const alerts = (await getActiveAlerts(offenderNumbers)) || []
 
     const recentMovementsMap = toMap('offenderNo', recentMovements)
+    const iepData = (await elite2Api.getIepSummary(context, bookingIds)) || []
+
+    const iepMap = toMap('bookingId', iepData)
 
     return offenders.map(offender => {
       const { fromAgencyDescription, fromAgency } = recentMovementsMap.get(offender.offenderNo) || {}
       const alertFlags = alertCodesForOffenderNo(alerts, offender.offenderNo)
+      const iepSummary = iepMap.get(offender.bookingId) || {}
 
       return {
         ...offender,
         fromAgency,
         fromAgencyDescription,
+        iepLevel: iepSummary.iepLevel,
         alerts: alertFlags,
       }
     })
