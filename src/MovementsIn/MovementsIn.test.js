@@ -22,7 +22,7 @@ describe('Movements in', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('should not make the offender clickable because there is no assigned location', () => {
+  it('should remove the offender link when the location is not set', () => {
     const movements = [
       {
         offenderNo: 'G0000GG',
@@ -39,7 +39,7 @@ describe('Movements in', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('should not make the offender clickable because their toAgencyId does not match to active caseload', () => {
+  it('should remove the offender link when the toAgencyId does not match the current agencyId/active case load', () => {
     const movements = [
       {
         offenderNo: 'G0000GG',
