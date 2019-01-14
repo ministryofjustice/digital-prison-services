@@ -39,7 +39,7 @@ describe('Movements in', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('should not make the offender clickable because there their toAgencyId does not match to active caseload', () => {
+  it('should not make the offender clickable because their toAgencyId does not match to active caseload', () => {
     const movements = [
       {
         offenderNo: 'G0000GG',
