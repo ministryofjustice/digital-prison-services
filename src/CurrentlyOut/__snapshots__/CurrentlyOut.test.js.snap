@@ -1,0 +1,1930 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Currently out should render the page 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <CurrentlyOut
+    rows={
+      Array [
+        Object {
+          "alerts": Array [
+            "HA",
+            "XSA",
+            "XA",
+            "PEEP",
+            "XEL",
+            "XRF",
+            "XTACT",
+          ],
+          "category": "C",
+          "commentText": "Comment text",
+          "dateOfBirth": "1960-12-31",
+          "firstName": "FirstName",
+          "lastName": "LastName",
+          "location": "MDI-1-3-017",
+          "offenderNo": "G000GG",
+          "toAgencyDescription": "To Agency Description",
+        },
+      ]
+    }
+    setColumnSort={[MockFunction]}
+    sortOrder=""
+    sortOrer="ASC"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <SortLov
+          setColumnSort={[MockFunction]}
+          sortColumn="lastName"
+          sortColumns={
+            Array [
+              "lastName",
+            ]
+          }
+          sortOrder=""
+        />,
+        <table
+          className="row-gutters"
+        >
+          <thead>
+            <tr>
+              <th
+                className="straight width10"
+              />
+              <th
+                className="straight width10"
+              >
+                <SortableColumn
+                  column="lastName"
+                  heading="Name"
+                  setColumnSort={[MockFunction]}
+                  sortColumn="lastName"
+                  sortOrder=""
+                />
+              </th>
+              <th
+                className="straight width10"
+              >
+                Prison no.
+              </th>
+              <th
+                className="straight width10"
+              >
+                D.O.B.
+              </th>
+              <th
+                className="straight width10"
+              >
+                Location
+              </th>
+              <th
+                className="straight width15"
+              >
+                Flags
+              </th>
+              <th
+                className="straight width15"
+              >
+                Current location
+              </th>
+              <th
+                className="straight width20"
+              >
+                Comment
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              className="row-gutters"
+            >
+              <td
+                className="row-gutters"
+              >
+                <OffenderLink
+                  alerts={false}
+                  offenderNo="G000GG"
+                >
+                  <OffenderImage
+                    offenderNo="G000GG"
+                  />
+                </OffenderLink>
+              </td>
+              <td
+                className="row-gutters"
+              >
+                <OffenderLink
+                  alerts={false}
+                  offenderNo="G000GG"
+                >
+                  <OffenderName
+                    firstName="FirstName"
+                    lastName="LastName"
+                  />
+                </OffenderLink>
+              </td>
+              <td
+                className="row-gutters"
+              >
+                G000GG
+              </td>
+              <td
+                className="row-gutters"
+              >
+                <FormattedDate
+                  isoDate="1960-12-31"
+                />
+              </td>
+              <td
+                className="row-gutters"
+              >
+                <Connect(Location)
+                  location="MDI-1-3-017"
+                />
+              </td>
+              <td
+                className="row-gutters"
+              >
+                <Flags
+                  alerts={
+                    Array [
+                      "HA",
+                      "XSA",
+                      "XA",
+                      "PEEP",
+                      "XEL",
+                      "XRF",
+                      "XTACT",
+                    ]
+                  }
+                  category="C"
+                  offenderNo="G000GG"
+                />
+              </td>
+              <td
+                className="row-gutters"
+              >
+                To Agency Description
+              </td>
+              <td
+                className="row-gutters"
+              >
+                Comment text
+              </td>
+            </tr>
+          </tbody>
+        </table>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "setColumnSort": [MockFunction],
+          "sortColumn": "lastName",
+          "sortColumns": Array [
+            "lastName",
+          ],
+          "sortOrder": "",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <thead>
+              <tr>
+                <th
+                  className="straight width10"
+                />
+                <th
+                  className="straight width10"
+                >
+                  <SortableColumn
+                    column="lastName"
+                    heading="Name"
+                    setColumnSort={[MockFunction]}
+                    sortColumn="lastName"
+                    sortOrder=""
+                  />
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  Prison no.
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  D.O.B.
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  Location
+                </th>
+                <th
+                  className="straight width15"
+                >
+                  Flags
+                </th>
+                <th
+                  className="straight width15"
+                >
+                  Current location
+                </th>
+                <th
+                  className="straight width20"
+                >
+                  Comment
+                </th>
+              </tr>
+            </thead>,
+            <tbody>
+              <tr
+                className="row-gutters"
+              >
+                <td
+                  className="row-gutters"
+                >
+                  <OffenderLink
+                    alerts={false}
+                    offenderNo="G000GG"
+                  >
+                    <OffenderImage
+                      offenderNo="G000GG"
+                    />
+                  </OffenderLink>
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <OffenderLink
+                    alerts={false}
+                    offenderNo="G000GG"
+                  >
+                    <OffenderName
+                      firstName="FirstName"
+                      lastName="LastName"
+                    />
+                  </OffenderLink>
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  G000GG
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <FormattedDate
+                    isoDate="1960-12-31"
+                  />
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <Connect(Location)
+                    location="MDI-1-3-017"
+                  />
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <Flags
+                    alerts={
+                      Array [
+                        "HA",
+                        "XSA",
+                        "XA",
+                        "PEEP",
+                        "XEL",
+                        "XRF",
+                        "XTACT",
+                      ]
+                    }
+                    category="C"
+                    offenderNo="G000GG"
+                  />
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  To Agency Description
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  Comment text
+                </td>
+              </tr>
+            </tbody>,
+          ],
+          "className": "row-gutters",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <tr>
+                <th
+                  className="straight width10"
+                />
+                <th
+                  className="straight width10"
+                >
+                  <SortableColumn
+                    column="lastName"
+                    heading="Name"
+                    setColumnSort={[MockFunction]}
+                    sortColumn="lastName"
+                    sortOrder=""
+                  />
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  Prison no.
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  D.O.B.
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  Location
+                </th>
+                <th
+                  className="straight width15"
+                >
+                  Flags
+                </th>
+                <th
+                  className="straight width15"
+                >
+                  Current location
+                </th>
+                <th
+                  className="straight width20"
+                >
+                  Comment
+                </th>
+              </tr>,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <th
+                    className="straight width10"
+                  />,
+                  <th
+                    className="straight width10"
+                  >
+                    <SortableColumn
+                      column="lastName"
+                      heading="Name"
+                      setColumnSort={[MockFunction]}
+                      sortColumn="lastName"
+                      sortOrder=""
+                    />
+                  </th>,
+                  <th
+                    className="straight width10"
+                  >
+                    Prison no.
+                  </th>,
+                  <th
+                    className="straight width10"
+                  >
+                    D.O.B.
+                  </th>,
+                  <th
+                    className="straight width10"
+                  >
+                    Location
+                  </th>,
+                  <th
+                    className="straight width15"
+                  >
+                    Flags
+                  </th>,
+                  <th
+                    className="straight width15"
+                  >
+                    Current location
+                  </th>,
+                  <th
+                    className="straight width20"
+                  >
+                    Comment
+                  </th>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "className": "straight width10",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SortableColumn
+                      column="lastName"
+                      heading="Name"
+                      setColumnSort={[MockFunction]}
+                      sortColumn="lastName"
+                      sortOrder=""
+                    />,
+                    "className": "straight width10",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "column": "lastName",
+                      "heading": "Name",
+                      "setColumnSort": [MockFunction],
+                      "sortColumn": "lastName",
+                      "sortOrder": "",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Prison no.",
+                    "className": "straight width10",
+                  },
+                  "ref": null,
+                  "rendered": "Prison no.",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "D.O.B.",
+                    "className": "straight width10",
+                  },
+                  "ref": null,
+                  "rendered": "D.O.B.",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Location",
+                    "className": "straight width10",
+                  },
+                  "ref": null,
+                  "rendered": "Location",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Flags",
+                    "className": "straight width15",
+                  },
+                  "ref": null,
+                  "rendered": "Flags",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Current location",
+                    "className": "straight width15",
+                  },
+                  "ref": null,
+                  "rendered": "Current location",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Comment",
+                    "className": "straight width20",
+                  },
+                  "ref": null,
+                  "rendered": "Comment",
+                  "type": "th",
+                },
+              ],
+              "type": "tr",
+            },
+            "type": "thead",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <tr
+                  className="row-gutters"
+                >
+                  <td
+                    className="row-gutters"
+                  >
+                    <OffenderLink
+                      alerts={false}
+                      offenderNo="G000GG"
+                    >
+                      <OffenderImage
+                        offenderNo="G000GG"
+                      />
+                    </OffenderLink>
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <OffenderLink
+                      alerts={false}
+                      offenderNo="G000GG"
+                    >
+                      <OffenderName
+                        firstName="FirstName"
+                        lastName="LastName"
+                      />
+                    </OffenderLink>
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    G000GG
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <FormattedDate
+                      isoDate="1960-12-31"
+                    />
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <Connect(Location)
+                      location="MDI-1-3-017"
+                    />
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <Flags
+                      alerts={
+                        Array [
+                          "HA",
+                          "XSA",
+                          "XA",
+                          "PEEP",
+                          "XEL",
+                          "XRF",
+                          "XTACT",
+                        ]
+                      }
+                      category="C"
+                      offenderNo="G000GG"
+                    />
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    To Agency Description
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    Comment text
+                  </td>
+                </tr>,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "G000GG",
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <td
+                      className="row-gutters"
+                    >
+                      <OffenderLink
+                        alerts={false}
+                        offenderNo="G000GG"
+                      >
+                        <OffenderImage
+                          offenderNo="G000GG"
+                        />
+                      </OffenderLink>
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      <OffenderLink
+                        alerts={false}
+                        offenderNo="G000GG"
+                      >
+                        <OffenderName
+                          firstName="FirstName"
+                          lastName="LastName"
+                        />
+                      </OffenderLink>
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      G000GG
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      <FormattedDate
+                        isoDate="1960-12-31"
+                      />
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      <Connect(Location)
+                        location="MDI-1-3-017"
+                      />
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      <Flags
+                        alerts={
+                          Array [
+                            "HA",
+                            "XSA",
+                            "XA",
+                            "PEEP",
+                            "XEL",
+                            "XRF",
+                            "XTACT",
+                          ]
+                        }
+                        category="C"
+                        offenderNo="G000GG"
+                      />
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      To Agency Description
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      Comment text
+                    </td>,
+                  ],
+                  "className": "row-gutters",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <OffenderLink
+                        alerts={false}
+                        offenderNo="G000GG"
+                      >
+                        <OffenderImage
+                          offenderNo="G000GG"
+                        />
+                      </OffenderLink>,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "alerts": false,
+                        "children": <OffenderImage
+                          offenderNo="G000GG"
+                        />,
+                        "offenderNo": "G000GG",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "offenderNo": "G000GG",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <OffenderLink
+                        alerts={false}
+                        offenderNo="G000GG"
+                      >
+                        <OffenderName
+                          firstName="FirstName"
+                          lastName="LastName"
+                        />
+                      </OffenderLink>,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "alerts": false,
+                        "children": <OffenderName
+                          firstName="FirstName"
+                          lastName="LastName"
+                        />,
+                        "offenderNo": "G000GG",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "firstName": "FirstName",
+                          "lastName": "LastName",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "G000GG",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "G000GG",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedDate
+                        isoDate="1960-12-31"
+                      />,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "isoDate": "1960-12-31",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <Connect(Location)
+                        location="MDI-1-3-017"
+                      />,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "location": "MDI-1-3-017",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <Flags
+                        alerts={
+                          Array [
+                            "HA",
+                            "XSA",
+                            "XA",
+                            "PEEP",
+                            "XEL",
+                            "XRF",
+                            "XTACT",
+                          ]
+                        }
+                        category="C"
+                        offenderNo="G000GG"
+                      />,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "alerts": Array [
+                          "HA",
+                          "XSA",
+                          "XA",
+                          "PEEP",
+                          "XEL",
+                          "XRF",
+                          "XTACT",
+                        ],
+                        "category": "C",
+                        "offenderNo": "G000GG",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "To Agency Description",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "To Agency Description",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Comment text",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "Comment text",
+                    "type": "td",
+                  },
+                ],
+                "type": "tr",
+              },
+            ],
+            "type": "tbody",
+          },
+        ],
+        "type": "table",
+      },
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <SortLov
+            setColumnSort={[MockFunction]}
+            sortColumn="lastName"
+            sortColumns={
+              Array [
+                "lastName",
+              ]
+            }
+            sortOrder=""
+          />,
+          <table
+            className="row-gutters"
+          >
+            <thead>
+              <tr>
+                <th
+                  className="straight width10"
+                />
+                <th
+                  className="straight width10"
+                >
+                  <SortableColumn
+                    column="lastName"
+                    heading="Name"
+                    setColumnSort={[MockFunction]}
+                    sortColumn="lastName"
+                    sortOrder=""
+                  />
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  Prison no.
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  D.O.B.
+                </th>
+                <th
+                  className="straight width10"
+                >
+                  Location
+                </th>
+                <th
+                  className="straight width15"
+                >
+                  Flags
+                </th>
+                <th
+                  className="straight width15"
+                >
+                  Current location
+                </th>
+                <th
+                  className="straight width20"
+                >
+                  Comment
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                className="row-gutters"
+              >
+                <td
+                  className="row-gutters"
+                >
+                  <OffenderLink
+                    alerts={false}
+                    offenderNo="G000GG"
+                  >
+                    <OffenderImage
+                      offenderNo="G000GG"
+                    />
+                  </OffenderLink>
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <OffenderLink
+                    alerts={false}
+                    offenderNo="G000GG"
+                  >
+                    <OffenderName
+                      firstName="FirstName"
+                      lastName="LastName"
+                    />
+                  </OffenderLink>
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  G000GG
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <FormattedDate
+                    isoDate="1960-12-31"
+                  />
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <Connect(Location)
+                    location="MDI-1-3-017"
+                  />
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <Flags
+                    alerts={
+                      Array [
+                        "HA",
+                        "XSA",
+                        "XA",
+                        "PEEP",
+                        "XEL",
+                        "XRF",
+                        "XTACT",
+                      ]
+                    }
+                    category="C"
+                    offenderNo="G000GG"
+                  />
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  To Agency Description
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  Comment text
+                </td>
+              </tr>
+            </tbody>
+          </table>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "setColumnSort": [MockFunction],
+            "sortColumn": "lastName",
+            "sortColumns": Array [
+              "lastName",
+            ],
+            "sortOrder": "",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <thead>
+                <tr>
+                  <th
+                    className="straight width10"
+                  />
+                  <th
+                    className="straight width10"
+                  >
+                    <SortableColumn
+                      column="lastName"
+                      heading="Name"
+                      setColumnSort={[MockFunction]}
+                      sortColumn="lastName"
+                      sortOrder=""
+                    />
+                  </th>
+                  <th
+                    className="straight width10"
+                  >
+                    Prison no.
+                  </th>
+                  <th
+                    className="straight width10"
+                  >
+                    D.O.B.
+                  </th>
+                  <th
+                    className="straight width10"
+                  >
+                    Location
+                  </th>
+                  <th
+                    className="straight width15"
+                  >
+                    Flags
+                  </th>
+                  <th
+                    className="straight width15"
+                  >
+                    Current location
+                  </th>
+                  <th
+                    className="straight width20"
+                  >
+                    Comment
+                  </th>
+                </tr>
+              </thead>,
+              <tbody>
+                <tr
+                  className="row-gutters"
+                >
+                  <td
+                    className="row-gutters"
+                  >
+                    <OffenderLink
+                      alerts={false}
+                      offenderNo="G000GG"
+                    >
+                      <OffenderImage
+                        offenderNo="G000GG"
+                      />
+                    </OffenderLink>
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <OffenderLink
+                      alerts={false}
+                      offenderNo="G000GG"
+                    >
+                      <OffenderName
+                        firstName="FirstName"
+                        lastName="LastName"
+                      />
+                    </OffenderLink>
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    G000GG
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <FormattedDate
+                      isoDate="1960-12-31"
+                    />
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <Connect(Location)
+                      location="MDI-1-3-017"
+                    />
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <Flags
+                      alerts={
+                        Array [
+                          "HA",
+                          "XSA",
+                          "XA",
+                          "PEEP",
+                          "XEL",
+                          "XRF",
+                          "XTACT",
+                        ]
+                      }
+                      category="C"
+                      offenderNo="G000GG"
+                    />
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    To Agency Description
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    Comment text
+                  </td>
+                </tr>
+              </tbody>,
+            ],
+            "className": "row-gutters",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <tr>
+                  <th
+                    className="straight width10"
+                  />
+                  <th
+                    className="straight width10"
+                  >
+                    <SortableColumn
+                      column="lastName"
+                      heading="Name"
+                      setColumnSort={[MockFunction]}
+                      sortColumn="lastName"
+                      sortOrder=""
+                    />
+                  </th>
+                  <th
+                    className="straight width10"
+                  >
+                    Prison no.
+                  </th>
+                  <th
+                    className="straight width10"
+                  >
+                    D.O.B.
+                  </th>
+                  <th
+                    className="straight width10"
+                  >
+                    Location
+                  </th>
+                  <th
+                    className="straight width15"
+                  >
+                    Flags
+                  </th>
+                  <th
+                    className="straight width15"
+                  >
+                    Current location
+                  </th>
+                  <th
+                    className="straight width20"
+                  >
+                    Comment
+                  </th>
+                </tr>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <th
+                      className="straight width10"
+                    />,
+                    <th
+                      className="straight width10"
+                    >
+                      <SortableColumn
+                        column="lastName"
+                        heading="Name"
+                        setColumnSort={[MockFunction]}
+                        sortColumn="lastName"
+                        sortOrder=""
+                      />
+                    </th>,
+                    <th
+                      className="straight width10"
+                    >
+                      Prison no.
+                    </th>,
+                    <th
+                      className="straight width10"
+                    >
+                      D.O.B.
+                    </th>,
+                    <th
+                      className="straight width10"
+                    >
+                      Location
+                    </th>,
+                    <th
+                      className="straight width15"
+                    >
+                      Flags
+                    </th>,
+                    <th
+                      className="straight width15"
+                    >
+                      Current location
+                    </th>,
+                    <th
+                      className="straight width20"
+                    >
+                      Comment
+                    </th>,
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "className": "straight width10",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <SortableColumn
+                        column="lastName"
+                        heading="Name"
+                        setColumnSort={[MockFunction]}
+                        sortColumn="lastName"
+                        sortOrder=""
+                      />,
+                      "className": "straight width10",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "column": "lastName",
+                        "heading": "Name",
+                        "setColumnSort": [MockFunction],
+                        "sortColumn": "lastName",
+                        "sortOrder": "",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Prison no.",
+                      "className": "straight width10",
+                    },
+                    "ref": null,
+                    "rendered": "Prison no.",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "D.O.B.",
+                      "className": "straight width10",
+                    },
+                    "ref": null,
+                    "rendered": "D.O.B.",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Location",
+                      "className": "straight width10",
+                    },
+                    "ref": null,
+                    "rendered": "Location",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Flags",
+                      "className": "straight width15",
+                    },
+                    "ref": null,
+                    "rendered": "Flags",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Current location",
+                      "className": "straight width15",
+                    },
+                    "ref": null,
+                    "rendered": "Current location",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Comment",
+                      "className": "straight width20",
+                    },
+                    "ref": null,
+                    "rendered": "Comment",
+                    "type": "th",
+                  },
+                ],
+                "type": "tr",
+              },
+              "type": "thead",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <tr
+                    className="row-gutters"
+                  >
+                    <td
+                      className="row-gutters"
+                    >
+                      <OffenderLink
+                        alerts={false}
+                        offenderNo="G000GG"
+                      >
+                        <OffenderImage
+                          offenderNo="G000GG"
+                        />
+                      </OffenderLink>
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      <OffenderLink
+                        alerts={false}
+                        offenderNo="G000GG"
+                      >
+                        <OffenderName
+                          firstName="FirstName"
+                          lastName="LastName"
+                        />
+                      </OffenderLink>
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      G000GG
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      <FormattedDate
+                        isoDate="1960-12-31"
+                      />
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      <Connect(Location)
+                        location="MDI-1-3-017"
+                      />
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      <Flags
+                        alerts={
+                          Array [
+                            "HA",
+                            "XSA",
+                            "XA",
+                            "PEEP",
+                            "XEL",
+                            "XRF",
+                            "XTACT",
+                          ]
+                        }
+                        category="C"
+                        offenderNo="G000GG"
+                      />
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      To Agency Description
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      Comment text
+                    </td>
+                  </tr>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "G000GG",
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <td
+                        className="row-gutters"
+                      >
+                        <OffenderLink
+                          alerts={false}
+                          offenderNo="G000GG"
+                        >
+                          <OffenderImage
+                            offenderNo="G000GG"
+                          />
+                        </OffenderLink>
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        <OffenderLink
+                          alerts={false}
+                          offenderNo="G000GG"
+                        >
+                          <OffenderName
+                            firstName="FirstName"
+                            lastName="LastName"
+                          />
+                        </OffenderLink>
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        G000GG
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        <FormattedDate
+                          isoDate="1960-12-31"
+                        />
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        <Connect(Location)
+                          location="MDI-1-3-017"
+                        />
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        <Flags
+                          alerts={
+                            Array [
+                              "HA",
+                              "XSA",
+                              "XA",
+                              "PEEP",
+                              "XEL",
+                              "XRF",
+                              "XTACT",
+                            ]
+                          }
+                          category="C"
+                          offenderNo="G000GG"
+                        />
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        To Agency Description
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        Comment text
+                      </td>,
+                    ],
+                    "className": "row-gutters",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <OffenderLink
+                          alerts={false}
+                          offenderNo="G000GG"
+                        >
+                          <OffenderImage
+                            offenderNo="G000GG"
+                          />
+                        </OffenderLink>,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "alerts": false,
+                          "children": <OffenderImage
+                            offenderNo="G000GG"
+                          />,
+                          "offenderNo": "G000GG",
+                        },
+                        "ref": null,
+                        "rendered": Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "function",
+                          "props": Object {
+                            "offenderNo": "G000GG",
+                          },
+                          "ref": null,
+                          "rendered": null,
+                          "type": [Function],
+                        },
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <OffenderLink
+                          alerts={false}
+                          offenderNo="G000GG"
+                        >
+                          <OffenderName
+                            firstName="FirstName"
+                            lastName="LastName"
+                          />
+                        </OffenderLink>,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "alerts": false,
+                          "children": <OffenderName
+                            firstName="FirstName"
+                            lastName="LastName"
+                          />,
+                          "offenderNo": "G000GG",
+                        },
+                        "ref": null,
+                        "rendered": Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "function",
+                          "props": Object {
+                            "firstName": "FirstName",
+                            "lastName": "LastName",
+                          },
+                          "ref": null,
+                          "rendered": null,
+                          "type": [Function],
+                        },
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "G000GG",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "G000GG",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FormattedDate
+                          isoDate="1960-12-31"
+                        />,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "isoDate": "1960-12-31",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <Connect(Location)
+                          location="MDI-1-3-017"
+                        />,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "location": "MDI-1-3-017",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <Flags
+                          alerts={
+                            Array [
+                              "HA",
+                              "XSA",
+                              "XA",
+                              "PEEP",
+                              "XEL",
+                              "XRF",
+                              "XTACT",
+                            ]
+                          }
+                          category="C"
+                          offenderNo="G000GG"
+                        />,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "alerts": Array [
+                            "HA",
+                            "XSA",
+                            "XA",
+                            "PEEP",
+                            "XEL",
+                            "XRF",
+                            "XTACT",
+                          ],
+                          "category": "C",
+                          "offenderNo": "G000GG",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "To Agency Description",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "To Agency Description",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Comment text",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "Comment text",
+                      "type": "td",
+                    },
+                  ],
+                  "type": "tr",
+                },
+              ],
+              "type": "tbody",
+            },
+          ],
+          "type": "table",
+        },
+      ],
+      "type": Symbol(react.fragment),
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
