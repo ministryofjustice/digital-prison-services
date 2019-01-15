@@ -44,7 +44,7 @@ describe('Sortable Data Source', () => {
 
   it('should inject the correct props', () => {
     const wrapper = mount(
-      <SortableDataSource sortOrder={ASC} rows={rows} comparator={lastNameComparator}>
+      <SortableDataSource sortOrder={ASC} rows={rows} comparator={lastNameComparator} agencyId="LEI">
         <ExampleComponent />
       </SortableDataSource>
     )
@@ -53,6 +53,7 @@ describe('Sortable Data Source', () => {
 
     expect(props.rows).toBe(rows)
     expect(props.sortOrder).toBe(ASC)
+    expect(props.agencyId).toBe('LEI')
     expect(typeof props.setColumnSort).toBe('function')
   })
 

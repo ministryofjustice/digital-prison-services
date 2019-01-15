@@ -567,7 +567,7 @@ ShallowWrapper {
             "rendered": Array [
               Object {
                 "instance": null,
-                "key": "offenderNo",
+                "key": "offenderNo_reasonDescription_12:00",
                 "nodeType": "host",
                 "props": Object {
                   "children": Array [
@@ -1341,7 +1341,7 @@ ShallowWrapper {
               "rendered": Array [
                 Object {
                   "instance": null,
-                  "key": "offenderNo",
+                  "key": "offenderNo_reasonDescription_12:00",
                   "nodeType": "host",
                   "props": Object {
                     "children": Array [

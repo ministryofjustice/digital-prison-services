@@ -34,7 +34,7 @@ const MovementsOut = ({ rows, sortOrder, setColumnSort }) => (
       </thead>
       <tbody>
         {rows.map(row => (
-          <tr className="row-gutters" key={row.offenderNo}>
+          <tr className="row-gutters" key={[row.offenderNo, row.reasonDescription, row.timeOut].join('_')}>
             <td className="row-gutters">
               <OffenderImage offenderNo={row.offenderNo} />
             </td>

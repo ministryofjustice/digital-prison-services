@@ -50,12 +50,12 @@ class MovementsInContainer extends Component {
 
   render() {
     const { movementsIn, loaded } = this.state
-    const { error } = this.props
+    const { error, agencyId } = this.props
 
     return (
       <Page title="In today" error={error} loaded={loaded}>
         <Error error={error} />
-        <SortableDataSource sortOrder={ASC} rows={movementsIn} comparator={lastNameComparator}>
+        <SortableDataSource sortOrder={ASC} rows={movementsIn} comparator={lastNameComparator} agencyId={agencyId}>
           <MovementsIn />
         </SortableDataSource>
       </Page>

@@ -39,6 +39,7 @@ class SortableDataSource extends Component {
 
     const cloneWithProps = child =>
       React.cloneElement(child, {
+        ...this.props,
         rows: this.sortOffenders(rows, sortOrder),
         sortOrder,
         setColumnSort: this.setColumnSort,

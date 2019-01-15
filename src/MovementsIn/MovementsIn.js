@@ -11,7 +11,16 @@ import HoursAndMinutes from '../HoursAndMinutes'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 import Flags from '../FullFlags/Flags'
 
-const MovementsIn = ({ rows, sortOrder, setColumnSort }) => (
+const shouldBeClickable = (row, agencyId) => Boolean(row && row.toAgencyId === agencyId && row.location)
+
+const withLink = (row, activeCaseLoadId, element) => {
+  if (shouldBeClickable(row, activeCaseLoadId)) {
+    return <OffenderLink offenderNo={row.offenderNo}>{element}</OffenderLink>
+  }
+  return element
+}
+
+const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
   <React.Fragment>
     <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
     <table className="row-gutters">
@@ -37,16 +46,13 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort }) => (
       </thead>
       <tbody>
         {rows.map(row => (
-          <tr className="row-gutters" key={row.offenderNo}>
+          <tr
+            className="row-gutters"
+            key={[row.offenderNo, row.fromAgencyDescription, row.movementsOut, row.location, row.toAgencyId].join('_')}
+          >
+            <td className="row-gutters">{withLink(row, agencyId, <OffenderImage offenderNo={row.offenderNo} />)}</td>
             <td className="row-gutters">
-              <OffenderLink offenderNo={row.offenderNo}>
-                <OffenderImage offenderNo={row.offenderNo} />
-              </OffenderLink>
-            </td>
-            <td className="row-gutters">
-              <OffenderLink offenderNo={row.offenderNo}>
-                <OffenderName lastName={row.lastName} firstName={row.firstName} />
-              </OffenderLink>
+              {withLink(row, agencyId, <OffenderName lastName={row.lastName} firstName={row.firstName} />)}
             </td>
             <td className="row-gutters">{row.offenderNo}</td>
             <td className="row-gutters">
@@ -75,7 +81,7 @@ MovementsIn.propTypes = {
       offenderNo: PropTypes.string.isRequired,
       firstName: PropTypes.string.isRequired,
       lastName: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
+      location: PropTypes.string,
       movementTime: PropTypes.string,
       fromAgencyDescription: PropTypes.string,
       alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -84,11 +90,13 @@ MovementsIn.propTypes = {
   ),
   sortOrder: PropTypes.string,
   setColumnSort: PropTypes.func,
+  agencyId: PropTypes.string,
 }
 MovementsIn.defaultProps = {
   rows: [],
   sortOrder: '',
   setColumnSort: () => {},
+  agencyId: '',
 }
 
 export default MovementsIn
