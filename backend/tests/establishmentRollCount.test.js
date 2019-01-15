@@ -46,7 +46,7 @@ describe('Establishment Roll', () => {
       outOfOrder: 0,
     },
     {
-      livingUnitId: 0,
+      livingUnitId: 1,
       livingUnitDesc: 'HOUSEBLOCK 2',
       bedsInUse: 0,
       currentlyInCell: 0,
@@ -101,6 +101,7 @@ describe('Establishment Roll', () => {
       blocks: [
         {
           name: 'Houseblock 1',
+          livingUnitId: 0,
           numbers: [
             { name: 'Beds in use', value: 10 },
             { name: 'Currently in cell', value: 20 },
@@ -112,6 +113,7 @@ describe('Establishment Roll', () => {
         },
         {
           name: 'Houseblock 2',
+          livingUnitId: 1,
           numbers: [
             { name: 'Beds in use', value: 0 },
             { name: 'Currently in cell', value: 0 },

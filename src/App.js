@@ -37,6 +37,7 @@ import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
+import CurrentlyOutContainer from './CurrentlyOut/CurrentlyOutContainer'
 
 import routePaths from './routePaths'
 
@@ -323,6 +324,19 @@ class App extends React.Component {
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.currentlyOut}
+            render={({ history, match }) => (
+              <CurrentlyOutContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+                match={match}
               />
             )}
           />

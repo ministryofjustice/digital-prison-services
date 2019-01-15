@@ -3,4 +3,5 @@ export default {
   inToday: '/establishment-roll/in-today',
   outToday: '/establishment-roll/out-today',
   inReception: '/establishment-roll/in-reception',
+  currentlyOut: '/establishment-roll/:livingUnitId/currently-out',
 }
