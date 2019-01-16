@@ -1,8 +1,9 @@
 const { capitalize } = require('../utils')
 
-const safeNumber = number => Number(number || 0)
+const zeroIfNotDefined = number => number || 0
 
-const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + safeNumber(block[figure]), 0)
+const getTotals = (array, figure) =>
+  array.reduce((accumulator, block) => accumulator + zeroIfNotDefined(block[figure]), 0)
 
 const getEstablishmentRollCountFactory = elite2Api => {
   const getEstablishmentRollCount = async (context, agencyId) => {
@@ -19,29 +20,23 @@ const getEstablishmentRollCountFactory = elite2Api => {
     const movements = {
       name: "Today's movements",
       numbers: [
-        { name: 'Unlock roll', value: safeNumber(currentRoll - movementsResponse.in + movementsResponse.out) },
-        { name: 'In today', value: safeNumber(movementsResponse.in) },
-        { name: 'Out today', value: safeNumber(movementsResponse.out) },
-        { name: 'Current roll', value: safeNumber(currentRoll) },
-        {
-          name: 'In reception',
-          value: safeNumber(unassignedIn),
-        },
-        {
-          name: 'En-route',
-          value: safeNumber(enroute),
-        },
+        { name: 'Unlock roll', value: currentRoll - movementsResponse.in + movementsResponse.out },
+        { name: 'In today', value: movementsResponse.in },
+        { name: 'Out today', value: movementsResponse.out },
+        { name: 'Current roll', value: currentRoll },
+        { name: 'In reception', value: unassignedIn },
+        { name: 'En-route', value: enroute },
       ],
     }
     const blocks = assignedResponse.map(block => ({
       name: capitalize(block.livingUnitDesc),
       numbers: [
-        { name: 'Beds in use', value: safeNumber(block.bedsInUse) },
-        { name: 'Currently in cell', value: safeNumber(block.currentlyInCell) },
-        { name: 'Currently out', value: safeNumber(block.currentlyOut) },
-        { name: 'Operational cap.', value: safeNumber(block.operationalCapacity) },
-        { name: 'Net vacancies', value: safeNumber(block.netVacancies) },
-        { name: 'Out of order', value: safeNumber(block.outOfOrder) },
+        { name: 'Beds in use', value: zeroIfNotDefined(block.bedsInUse) },
+        { name: 'Currently in cell', value: zeroIfNotDefined(block.currentlyInCell) },
+        { name: 'Currently out', value: zeroIfNotDefined(block.currentlyOut) },
+        { name: 'Operational cap.', value: zeroIfNotDefined(block.operationalCapacity) },
+        { name: 'Net vacancies', value: zeroIfNotDefined(block.netVacancies) },
+        { name: 'Out of order', value: zeroIfNotDefined(block.outOfOrder) },
       ],
     }))
 

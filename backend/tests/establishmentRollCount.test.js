@@ -51,6 +51,7 @@ describe('Establishment Roll', () => {
       bedsInUse: 0,
       currentlyInCell: 0,
       currentlyOut: 0,
+      operationalCapacity: 0,
       netVacancies: 0,
       maximumCapacity: 0,
       availablePhysical: 0,
@@ -135,5 +136,73 @@ describe('Establishment Roll', () => {
     }
 
     expect(response).toEqual(returnedData)
+  })
+
+  it('should default to zero when data is undefined for blocks and totals', async () => {
+    elite2Api.getEstablishmentRollBlocksCount.mockReturnValue([{ livingUnitDesc: 'livingUnitDesc1', bedsInUse: 100 }])
+
+    const response = await getEstablishmentRollCount(context, agencyId)
+
+    expect(response.blocks).toEqual([
+      {
+        name: 'Livingunitdesc1',
+        numbers: [
+          {
+            name: 'Beds in use',
+            value: 100,
+          },
+          {
+            name: 'Currently in cell',
+            value: 0,
+          },
+          {
+            name: 'Currently out',
+            value: 0,
+          },
+          {
+            name: 'Operational cap.',
+            value: 0,
+          },
+          {
+            name: 'Net vacancies',
+            value: 0,
+          },
+          {
+            name: 'Out of order',
+            value: 0,
+          },
+        ],
+      },
+    ])
+
+    expect(response.totals).toEqual({
+      name: 'Totals',
+      numbers: [
+        {
+          name: 'Total roll',
+          value: 100,
+        },
+        {
+          name: 'Total in cell',
+          value: 0,
+        },
+        {
+          name: 'Total out',
+          value: 0,
+        },
+        {
+          name: 'Total op. cap.',
+          value: 0,
+        },
+        {
+          name: 'Total vacancies',
+          value: 0,
+        },
+        {
+          name: 'Total out of order',
+          value: 0,
+        },
+      ],
+    })
   })
 })
