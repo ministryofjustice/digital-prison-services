@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import pathToRegexp from 'path-to-regexp'
 import { EstablishmentRollBlock } from './EstablishmentRollBlock'
 import routePaths from '../routePaths'
 
@@ -7,6 +8,7 @@ describe('<EstablishmentRollBlock />', () => {
   const props = {
     block: {
       name: 'Test Housing Block',
+      livingUnitId: 123456789,
       numbers: [
         { name: 'Beds in use', value: 123 },
         { name: 'In today', value: 123 },
@@ -14,6 +16,7 @@ describe('<EstablishmentRollBlock />', () => {
         { name: 'Operational cap.', value: 123 },
         { name: 'Net vacancies', value: 123 },
         { name: 'Out of order', value: 123 },
+        { name: 'Currently out', value: 1 },
       ],
     },
   }
@@ -28,7 +31,7 @@ describe('<EstablishmentRollBlock />', () => {
   })
 
   it('should render the correct amount of block figures', () => {
-    expect(wrapper.find('.block-figures__figure').length).toEqual(6)
+    expect(wrapper.find('.block-figures__figure').length).toEqual(7)
   })
 
   it('should render a <Link/> for the "In today" statistic', () => {
@@ -53,6 +56,19 @@ describe('<EstablishmentRollBlock />', () => {
     const link = statistic.find('Link')
     expect(link.exists()).toEqual(true)
     expect(link.props().to).toEqual(routePaths.outToday)
+  })
+
+  it('should render a <Link/> for the "Currently out" statistic', () => {
+    const statistic = wrapper.find('.block-figure').filterWhere(ww =>
+      ww
+        .find('label')
+        .filterWhere(w => w.text() === 'Currently out')
+        .exists()
+    )
+    const link = statistic.find('Link')
+    expect(link.exists()).toEqual(true)
+    const expectedPath = pathToRegexp.compile(routePaths.currentlyOut)({ livingUnitId: 123456789 })
+    expect(link.props().to).toEqual(expectedPath)
   })
 
   describe('when highlight prop is true', () => {

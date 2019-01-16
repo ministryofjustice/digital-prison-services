@@ -630,4 +630,56 @@ class Elite2Api extends WireMockRule {
                                 .withBody(JsonOutput.toJson(response)))
         )
     }
+
+    void stubCurrentlyOut(long livingUnitId) {
+
+        this.stubFor(
+                get("/api/movements/${livingUnitId}/currently-out")
+                .willReturn(
+                        aResponse()
+                        .withStatus(200)
+                        .withHeader('Content-Type', 'application/json')
+                        .withBody(JsonOutput.toJson([
+                                [
+                                        offenderNo           : 'A1234AA',
+                                        bookingId            : -1L,
+                                        dateOfBirth          : '1980-01-01',
+                                        firstName            : 'AAAAB',
+                                        lastName             : 'AAAAA',
+                                        location             : 'LEI-A-01-011'
+                                ],
+                                [
+                                        offenderNo           : 'G0000AA',
+                                        bookingId            : -2L,
+                                        dateOfBirth          : '1980-12-31',
+                                        firstName            : 'AAAAA',
+                                        lastName             : 'AAAAA',
+                                        location             : 'LEI-A-02-011'
+                                ]
+                        ]))
+                )
+        )
+    }
+
+
+    void stubLocation(long livingUnitId) {
+        this.stubFor(
+                get("/api/locations/${livingUnitId}")
+                .willReturn(
+                        aResponse()
+                        .withStatus(200)
+                        .withHeader('Content-Type', 'application/json')
+                        .withBody(JsonOutput.toJson([
+                                    "locationId": livingUnitId,
+                                    "locationType": "WING",
+                                    "description": "HB1",
+                                    "agencyId": "RNI",
+                                    "currentOccupancy": 243,
+                                    "locationPrefix": "RNI-HB1",
+                                    "internalLocationCode": "HB1"
+                        ]))
+                )
+        )
+    }
+
 }

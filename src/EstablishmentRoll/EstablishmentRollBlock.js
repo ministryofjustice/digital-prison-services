@@ -4,35 +4,36 @@ import classNames from 'classnames'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import './EstablishmentRollBlock.scss'
+import pathToRegexp from 'path-to-regexp'
 import routePaths from '../routePaths'
 
 const pathsToStatisticsDetailsPages = new Map([
-  ['In today', routePaths.inToday],
-  ['Out today', routePaths.outToday],
-  ['In reception', routePaths.inReception],
-  ['En-route', routePaths.enRoute],
+  ['In today', pathToRegexp.compile(routePaths.inToday)],
+  ['Out today', pathToRegexp.compile(routePaths.outToday)],
+  ['In reception', pathToRegexp.compile(routePaths.inReception)],
+  ['Currently out', pathToRegexp.compile(routePaths.currentlyOut)],
+  ['En-route', pathToRegexp.compile(routePaths.enRoute)],
 ])
 
 export class EstablishmentRollBlock extends Component {
-  addLinkToDetailsPage = (label, content, value) =>
-    value !== 0 && pathsToStatisticsDetailsPages.has(label) ? (
-      <Link to={pathsToStatisticsDetailsPages.get(label)} className="link">
-        {content}
-      </Link>
-    ) : (
-      content
-    )
+  linkPath = (label, livingUnitId) => pathsToStatisticsDetailsPages.get(label)({ livingUnitId })
 
-  renderBlockFigure = (label, value) => (
+  renderBlockFigure = (label, value, livingUnitId) => (
     <div className="block-figure">
       <label className="block-figure__label">{label}</label>
-      {this.addLinkToDetailsPage(label, <span className="block-figure__value">{value}</span>, value)}
+      {value === 0 || !pathsToStatisticsDetailsPages.has(label) ? (
+        <span className="block-figure__value">{value}</span>
+      ) : (
+        <Link to={this.linkPath(label, livingUnitId)} className="link">
+          <span className="block-figure__value">{value}</span>
+        </Link>
+      )}
     </div>
   )
 
   render() {
     const {
-      block: { name, numbers },
+      block: { name, livingUnitId, numbers },
       highlight,
       isLastBlock,
     } = this.props
@@ -48,7 +49,7 @@ export class EstablishmentRollBlock extends Component {
         <div className="establishment-roll-block__figures block-figures">
           {numbers.map(number => (
             <div className="block-figures__figure" key={`${name}_${number.name}`}>
-              {this.renderBlockFigure(number.name, number.value)}
+              {this.renderBlockFigure(number.name, number.value, livingUnitId)}
             </div>
           ))}
         </div>
@@ -60,6 +61,7 @@ export class EstablishmentRollBlock extends Component {
 EstablishmentRollBlock.propTypes = {
   block: PropTypes.shape({
     name: PropTypes.string,
+    livingUnitId: PropTypes.number,
     numbers: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.number })),
   }),
   highlight: PropTypes.bool,

@@ -30,6 +30,7 @@ const getEstablishmentRollCountFactory = elite2Api => {
     }
     const blocks = assignedResponse.map(block => ({
       name: capitalize(block.livingUnitDesc),
+      livingUnitId: block.livingUnitId,
       numbers: [
         { name: 'Beds in use', value: zeroIfNotDefined(block.bedsInUse) },
         { name: 'Currently in cell', value: zeroIfNotDefined(block.currentlyInCell) },

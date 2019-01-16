@@ -7,7 +7,7 @@ const logger = require('../log')
 const getClientCredentialsTokens = async () => {
   const oauthRequest = querystring.stringify({ grant_type: 'client_credentials' })
 
-  const oauthResult = oauthApi
+  const oauthResult = await oauthApi
     .oauthApiFactory({
       clientId: config.apis.oauth2.systemClientId,
       clientSecret: config.apis.oauth2.systemClientSecret,
