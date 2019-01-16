@@ -5,6 +5,7 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.CurrentlyOutPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InReception
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InTodayPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.OutTodayPage
@@ -39,9 +40,7 @@ class MovementsSpecification extends GebReportingSpec {
         then:
         at InTodayPage
 
-        def cellTextInRows = tableRows.collect { row -> row.children().collect { cell -> cell.text() } }
-
-        cellTextInRows == [
+        getCells(tableRows) == [
                 ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', '23:59', 'Outside', ''],
                 ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', '01:01', 'Hull (HMP)', 'ACCT OPENE‑LISTCAT A']
         ]
@@ -118,15 +117,44 @@ class MovementsSpecification extends GebReportingSpec {
         elite2api.stubInReception(ITAG_USER.workingCaseload)
         elite2api.stubImpSummariesForBookings([-1, -2])
         elite2api.stubImage()
-        elite2api.stubRecentMovements([[ "offenderNo": "A1234AA", "fromAgencyDescription": "Low Newton (HMP)"]])
+        elite2api.stubRecentMovements([["offenderNo": "A1234AA", "fromAgencyDescription": "Low Newton (HMP)"]])
         to InReception
 
         then:
         at InReception
 
         getCells(tableRows) == [
-           ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', '','Basic', '' ],
-           ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Low Newton (HMP)','Basic', 'ACCT OPENE‑LIST']
+                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', '', 'Basic', ''],
+                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Low Newton (HMP)', 'Basic', 'ACCT OPENE‑LIST']
+        ]
+    }
+
+    def 'Currently out'() {
+        given: 'I am logged in'
+        fixture.loginAs(ITAG_USER)
+
+        when: 'I navigate to the establishment Currently out page'
+
+        elite2api.stubCurrentlyOut(123456L)
+        elite2api.stubImage()
+        elite2api.stubRecentMovements([
+                [
+                    "offenderNo"         : "A1234AA",
+                    "toAgencyDescription": "Low Newton (HMP)",
+                    "commentText"        : "Comment text"
+                ]
+        ])
+        stubFlags(["A1234AA", "G0000AA"])
+        elite2api.stubLocation(123456L)
+
+        to CurrentlyOutPage
+
+        then:
+        at CurrentlyOutPage
+
+        getCells(tableRows) == [
+                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', '', '', ''],
+                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', 'ACCT OPENE‑LISTCAT A', 'Low Newton (HMP)', 'Comment text']
         ]
     }
 
