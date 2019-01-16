@@ -245,4 +245,46 @@ describe('Movement service', () => {
       expect(oauthClient.getClientCredentialsTokens.mock.calls.length).toBe(0)
     })
   })
+
+  describe('En-route', () => {
+    beforeEach(() => {
+      eliteApi.getAlertsSystem = jest.fn()
+      eliteApi.getAssessments = jest.fn()
+      eliteApi.getOffendersEnroute = jest.fn()
+      oauthClient.getClientCredentialsTokens = jest.fn()
+    })
+
+    it('should make a request for offenders en-route to an establishment', async () => {
+      await movementsServiceFactory(eliteApi, oauthClient).getOffendersEnRoute(context, agency)
+
+      expect(eliteApi.getOffendersEnroute).toHaveBeenCalledWith(context, agency)
+    })
+
+    it('should make a request for alerts using the systemContext and offender numbers', async () => {
+      const securityContext = 'securityContextData'
+
+      eliteApi.getOffendersEnroute.mockReturnValue(offenders)
+      oauthClient.getClientCredentialsTokens.mockReturnValue(securityContext)
+
+      await movementsServiceFactory(eliteApi, oauthClient).getOffendersEnRoute(context, agency)
+
+      expect(eliteApi.getAlertsSystem).toHaveBeenCalledWith(securityContext, offenderNumbers)
+    })
+
+    it('should make a request for assessments with the correct offender numbers and assessment code', async () => {
+      eliteApi.getOffendersEnroute.mockReturnValue(offenders)
+
+      await movementsServiceFactory(eliteApi, oauthClient).getOffendersEnRoute(context, agency)
+
+      expect(eliteApi.getAssessments).toHaveBeenCalledWith(context, { code: 'CATEGORY', offenderNumbers })
+    })
+
+    it('should only return active alert flags for HA and XEL', async () => {
+      eliteApi.getOffendersEnroute.mockReturnValue(offenders)
+      eliteApi.getAlertsSystem.mockReturnValue(alertFlags)
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersEnRoute(context, agency)
+      expect(response[0].alerts).toEqual(['HA', 'XEL'])
+    })
+  })
 })

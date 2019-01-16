@@ -8,6 +8,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InReception
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InTodayPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.OutTodayPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.EnRoutePage
 
 
 import java.time.LocalDate
@@ -127,6 +128,53 @@ class MovementsSpecification extends GebReportingSpec {
         getCells(tableRows) == [
            ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', '','Basic', '' ],
            ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Low Newton (HMP)','Basic', 'ACCT OPENE‑LIST']
+        ]
+    }
+
+    def "en-route"() {
+        given: "I am logged in"
+        fixture.loginAs(ITAG_USER)
+
+        when: "I navigate to the establishment roll count en route page"
+
+        stubFlags(["A1234AA", "G0000AA"])
+        elite2api.stubInReception(ITAG_USER.workingCaseload.id)
+        elite2api.stubImage()
+
+        def movements = [
+                Map.of(
+                        "firstName","firstname1",
+                        "lastName", "lastName1",
+                        "offenderNo", "A1234AA",
+                        "fromAgencyDescription","Low Newton (HMP)",
+                        "movementReasonDescription","Normal transfer",
+                        "movementTime", "12:00:00",
+                        "movementDate", "2019-10-10",
+                        "dateOfBirth", "2019-10-10"
+                ),
+                Map.of(
+                        "firstName","firstName2",
+                        "lastName", "lastName2",
+                        "offenderNo", "G0000AA",
+                        "fromAgencyDescription", "Leeds (HMP)",
+                        "movementReasonDescription", "Normal transfer",
+                        "movementTime", "13:00:00",
+                        "movementDate", "2018-10-10",
+                        "dateOfBirth", "1980-10-10"
+                ),
+        ]
+
+        elite2api.stubEnRoute(ITAG_USER.workingCaseload.id, movements)
+        EnRoutePage.agency = 'LEEDS (HMP)'
+        to EnRoutePage
+
+        then:
+        at EnRoutePage
+
+        getCells(tableRows) == [
+                ['', 'Lastname1, Firstname1','A1234AA','10/10/2019', '12:00\n10/10/2019', 'Low Newton (HMP)','Normal transfer', 'ACCT OPENE‑LISTCAT A'],
+                ['', 'Lastname2, Firstname2', 'G0000AA', '10/10/1980', '13:00\n10/10/2018', 'Leeds (HMP)', 'Normal transfer','' ]
+
         ]
     }
 

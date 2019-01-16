@@ -37,6 +37,7 @@ import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
+import EnRouteContainer from './EnRoute/EnRouteContainer'
 
 import routePaths from './routePaths'
 
@@ -320,6 +321,18 @@ class App extends React.Component {
             path={routePaths.inReception}
             render={({ history }) => (
               <InReceptionContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.enRoute}
+            render={({ history }) => (
+              <EnRouteContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
