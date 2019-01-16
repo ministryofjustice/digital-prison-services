@@ -36,14 +36,16 @@ class MovementsSpecification extends GebReportingSpec {
 
         elite2api.stubGetMovementsIn(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
+        elite2api.stubIepSummariesForBookings([-1L, -2L])
+
         to InTodayPage
 
         then:
         at InTodayPage
 
         getCells(tableRows) == [
-                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', '23:59', 'Outside', ''],
-                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', '01:01', 'Hull (HMP)', 'ACCT OPENE‑LISTCAT A']
+                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'Basic', 'A-02-011', '23:59', 'Outside', ''],
+                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'Basic', 'A-01-011', '01:01', 'Hull (HMP)', 'ACCT OPENE‑LISTCAT A']
         ]
     }
 
@@ -116,7 +118,7 @@ class MovementsSpecification extends GebReportingSpec {
         stubFlags(["A1234AA", "G0000AA"])
 
         elite2api.stubInReception(ITAG_USER.workingCaseload)
-        elite2api.stubImpSummariesForBookings([-1, -2])
+        elite2api.stubIepSummariesForBookings([-1, -2])
         elite2api.stubImage()
         elite2api.stubRecentMovements([["offenderNo": "A1234AA", "fromAgencyDescription": "Low Newton (HMP)"]])
         to InReception
@@ -147,7 +149,7 @@ class MovementsSpecification extends GebReportingSpec {
         ])
         stubFlags(["A1234AA", "G0000AA"])
         elite2api.stubLocation(123456L)
-        elite2api.stubImpSummariesForBookings([-1, -2])
+        elite2api.stubIepSummariesForBookings([-1, -2])
 
 
         to CurrentlyOutPage
