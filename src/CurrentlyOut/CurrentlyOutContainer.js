@@ -6,7 +6,6 @@ import axios from 'axios'
 import { resetError, setLoaded } from '../redux/actions'
 import routePaths from '../routePaths'
 import Page from '../Components/Page'
-import Error from '../Error'
 import { ASC } from '../tablesorting/sortOrder'
 import SortableDataSource from '../tablesorting/SortableDataSource'
 import { lastNameComparator } from '../tablesorting/comparatorComposition'
@@ -56,11 +55,9 @@ class CurrentlyOutContainer extends Component {
   }
 
   render() {
-    const { currentlyOut, location, loaded } = this.state
-    const { error } = this.props
+    const { currentlyOut, location } = this.state
     return (
-      <Page title={`Currently out - ${location}`} error={error} loaded={loaded}>
-        <Error error={error} />
+      <Page title={`Currently out - ${location}`}>
         <SortableDataSource sortOrder={ASC} rows={currentlyOut} comparator={lastNameComparator}>
           <CurrentlyOut />
         </SortableDataSource>
@@ -80,14 +77,9 @@ CurrentlyOutContainer.propTypes = {
 
   // redux state
   agencyId: PropTypes.string.isRequired,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // redux dispatch
   resetErrorDispatch: PropTypes.func.isRequired,
-}
-
-CurrentlyOutContainer.defaultProps = {
-  error: '',
 }
 
 const mapStateToProps = state => ({
