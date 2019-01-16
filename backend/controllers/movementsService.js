@@ -12,14 +12,12 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return toMap('bookingId', iepData)
   }
 
-  const getRecentMovementsMap = async offenderNumbers => {
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+  const getRecentMovementsMap = async (systemContext, offenderNumbers) => {
     const recentMovements = (await elite2Api.getRecentMovements(systemContext, offenderNumbers, [])) || []
     return toMap('offenderNo', recentMovements)
   }
 
-  const getActiveAlerts = async offenderNumbers => {
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+  const getActiveAlerts = async (systemContext, offenderNumbers) => {
     const alerts = await elite2Api.getAlertsSystem(systemContext, offenderNumbers)
     return alerts && alerts.filter(alert => !alert.expired)
   }
@@ -78,8 +76,9 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const addAlertsAndCategory = async (context, obj) => {
     if (!obj || obj.length === 0) return []
     const offenderNumbers = extractOffenderNumbers(obj)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
     const [alerts, assessmentMap] = await Promise.all([
-      getActiveAlerts(offenderNumbers),
+      getActiveAlerts(systemContext, offenderNumbers),
       getAssessmentMap(context, offenderNumbers),
     ])
     const movementsWithAlerts = addAlerts(obj, alerts)
@@ -106,10 +105,12 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     const offenderNumbers = extractOffenderNumbers(offenders)
     const bookingIds = extractBookingIds(offenders)
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+
     const [alerts, iepMap, recentMovementsMap] = await Promise.all([
-      getActiveAlerts(offenderNumbers),
+      getActiveAlerts(systemContext, offenderNumbers),
       getIepMap(context, bookingIds),
-      getRecentMovementsMap(offenderNumbers),
+      getRecentMovementsMap(systemContext, offenderNumbers),
     ])
 
     const withMovements = addMovements(offenders, recentMovementsMap)
@@ -122,10 +123,13 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
 
     if (!offenders || offenders.length === 0) return []
     const offenderNumbers = extractOffenderNumbers(offenders)
+
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+
     const [alerts, assessmentMap, recentMovementsMap, location] = await Promise.all([
-      getActiveAlerts(offenderNumbers),
+      getActiveAlerts(systemContext, offenderNumbers),
       getAssessmentMap(context, offenderNumbers),
-      getRecentMovementsMap(offenderNumbers),
+      getRecentMovementsMap(systemContext, offenderNumbers),
       elite2Api.getLocation(context, livingUnitId),
     ])
     const withAlerts = addAlerts(offenders, alerts)
