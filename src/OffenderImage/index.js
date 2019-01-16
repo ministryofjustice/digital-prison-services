@@ -4,9 +4,7 @@ import PropTypes from 'prop-types'
 const OffenderImage = props => {
   const { offenderNo } = props
   const offenderImageUrl = `/app/images/${offenderNo}/data`
-  return (
-    <img id={`image-${offenderNo}`} alt={`prisoner ${offenderNo}`} className="photo clickable" src={offenderImageUrl} />
-  )
+  return <img id={`image-${offenderNo}`} alt={`prisoner ${offenderNo}`} className="photo" src={offenderImageUrl} />
 }
 
 OffenderImage.propTypes = {
