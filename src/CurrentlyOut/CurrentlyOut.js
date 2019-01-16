@@ -29,9 +29,10 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
           <th className="straight width10">Prison no.</th>
           <th className="straight width10">D.O.B.</th>
           <th className="straight width10">Location</th>
+          <th className="straight width10">IEP</th>
           <th className="straight width15">Flags</th>
-          <th className="straight width15">Current location</th>
-          <th className="straight width20">Comment</th>
+          <th className="straight width10">Current location</th>
+          <th className="straight width15">Comment</th>
         </tr>
       </thead>
       <tbody>
@@ -54,6 +55,7 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
             <td className="row-gutters">
               <Location location={row.location} />
             </td>
+            <td className="row-gutters">{row.iepLevel}</td>
             <td className="row-gutters">
               <Flags offenderNo={row.offenderNo} alerts={row.alerts} category={row.category} />
             </td>

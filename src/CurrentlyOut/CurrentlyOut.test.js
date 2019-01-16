@@ -12,6 +12,7 @@ describe('Currently out', () => {
         lastName: 'LastName',
         location: 'MDI-1-3-017',
         dateOfBirth: '1960-12-31',
+        ipeLevel: 'standard',
         alerts: ['HA', 'XSA', 'XA', 'PEEP', 'XEL', 'XRF', 'XTACT'],
         category: 'C',
         toAgencyDescription: 'To Agency Description',

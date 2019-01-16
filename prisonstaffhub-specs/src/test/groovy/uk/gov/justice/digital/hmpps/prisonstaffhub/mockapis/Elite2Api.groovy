@@ -642,6 +642,7 @@ class Elite2Api extends WireMockRule {
                         .withBody(JsonOutput.toJson([
                                 [
                                         offenderNo           : 'A1234AA',
+                                        bookingId            : -1L,
                                         dateOfBirth          : '1980-01-01',
                                         firstName            : 'AAAAB',
                                         lastName             : 'AAAAA',
@@ -649,6 +650,7 @@ class Elite2Api extends WireMockRule {
                                 ],
                                 [
                                         offenderNo           : 'G0000AA',
+                                        bookingId            : -2L,
                                         dateOfBirth          : '1980-12-31',
                                         firstName            : 'AAAAA',
                                         lastName             : 'AAAAA',

@@ -147,6 +147,8 @@ class MovementsSpecification extends GebReportingSpec {
         ])
         stubFlags(["A1234AA", "G0000AA"])
         elite2api.stubLocation(123456L)
+        elite2api.stubImpSummariesForBookings([-1, -2])
+
 
         to CurrentlyOutPage
 
@@ -154,8 +156,8 @@ class MovementsSpecification extends GebReportingSpec {
         at CurrentlyOutPage
 
         getCells(tableRows) == [
-                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', '', '', ''],
-                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', 'ACCT OPENE‑LISTCAT A', 'Low Newton (HMP)', 'Comment text']
+                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', 'Basic', '', '', ''],
+                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', 'Basic', 'ACCT OPENE‑LISTCAT A', 'Low Newton (HMP)', 'Comment text']
         ]
     }
 

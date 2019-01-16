@@ -358,6 +358,35 @@ describe('Movement service', () => {
         ],
       })
     })
+
+    it('should request iep summary information for offenders in reception', async () => {
+      eliteApi.getOffendersCurrentlyOut.mockReturnValue([
+        { offenderNo: 'G0000GG', bookingId: 1 },
+        { offenderNo: 'G0001GG', bookingId: 2 },
+      ])
+      eliteApi.getIepSummary.mockReturnValue([
+        { bookingId: 1, iepLevel: 'basic' },
+        { bookingId: 2, iepLevel: 'standard' },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
+
+      expect(response).toEqual({
+        location: 'location',
+        currentlyOut: [
+          {
+            bookingId: 1,
+            offenderNo: 'G0000GG',
+            iepLevel: 'basic',
+          },
+          {
+            bookingId: 2,
+            offenderNo: 'G0001GG',
+            iepLevel: 'standard',
+          },
+        ],
+      })
+    })
   })
 
   describe('En-route', () => {

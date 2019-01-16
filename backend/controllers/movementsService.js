@@ -122,21 +122,26 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     const offenders = await elite2Api.getOffendersCurrentlyOut(context, livingUnitId)
 
     if (!offenders || offenders.length === 0) return []
+
     const offenderNumbers = extractOffenderNumbers(offenders)
+    const bookingIds = extractBookingIds(offenders)
 
     const systemContext = await systemOauthClient.getClientCredentialsTokens()
 
-    const [alerts, assessmentMap, recentMovementsMap, location] = await Promise.all([
+    const [alerts, iepMap, assessmentMap, recentMovementsMap, location] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
+      getIepMap(context, bookingIds),
       getAssessmentMap(context, offenderNumbers),
       getRecentMovementsMap(systemContext, offenderNumbers),
       elite2Api.getLocation(context, livingUnitId),
     ])
     const withAlerts = addAlerts(offenders, alerts)
     const withCategories = addCategory(withAlerts, assessmentMap)
+    const withIep = addIepSummaries(withCategories, iepMap)
+    const withMovements = addMovements(withIep, recentMovementsMap)
     return {
       location: location.userDescription || location.internalLocationCode || '',
-      currentlyOut: addMovements(withCategories, recentMovementsMap),
+      currentlyOut: withMovements,
     }
   }
 
