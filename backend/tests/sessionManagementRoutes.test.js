@@ -187,4 +187,20 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
         expect(res.text).to.include('A system error occurred; please try again later')
       })
   })
+
+  it('Auth error - no cookies present', () =>
+    agent
+      .get('/autherror')
+      .expect(302)
+      .expect('location', '/login'))
+
+  it('Auth error - auth cookie exists', () => {
+    const cookie = Buffer.from('{ "oauth2": { "state": "zASm3qhjcKqEjPMN4gHAbEKK" } }').toString('base64')
+
+    return agent
+      .get('/autherror')
+      .set('Cookie', [cookie])
+      .expect(302)
+      .expect('location', '/login')
+  })
 })
