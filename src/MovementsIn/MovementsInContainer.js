@@ -6,7 +6,6 @@ import axios from 'axios'
 
 import MovementsIn from './MovementsIn'
 import { resetError, setLoaded } from '../redux/actions'
-import Error from '../Error'
 import { ASC } from '../tablesorting/sortOrder'
 import Page from '../Components/Page'
 import routePaths from '../routePaths'
@@ -49,12 +48,11 @@ class MovementsInContainer extends Component {
   }
 
   render() {
-    const { movementsIn, loaded } = this.state
-    const { error, agencyId } = this.props
+    const { movementsIn } = this.state
+    const { agencyId } = this.props
 
     return (
-      <Page title="In today" error={error} loaded={loaded}>
-        <Error error={error} />
+      <Page title="In today">
         <SortableDataSource sortOrder={ASC} rows={movementsIn} comparator={lastNameComparator} agencyId={agencyId}>
           <MovementsIn />
         </SortableDataSource>
@@ -69,21 +67,12 @@ MovementsInContainer.propTypes = {
     replace: PropTypes.func.isRequired,
   }).isRequired,
 
-  // redux state
   agencyId: PropTypes.string.isRequired,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
-
-  // redux dispatch
   resetErrorDispatch: PropTypes.func.isRequired,
-}
-
-MovementsInContainer.defaultProps = {
-  error: '',
 }
 
 const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
-  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

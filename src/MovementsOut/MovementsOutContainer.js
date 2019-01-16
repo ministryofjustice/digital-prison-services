@@ -6,7 +6,6 @@ import axios from 'axios'
 
 import MovementsOut from './MovementsOut'
 import { resetError, setLoaded } from '../redux/actions'
-import Error from '../Error'
 import { ASC } from '../tablesorting/sortOrder'
 import Page from '../Components/Page'
 import routePaths from '../routePaths'
@@ -49,12 +48,10 @@ class MovementsOutContainer extends Component {
   }
 
   render() {
-    const { movementsOut, loaded } = this.state
-    const { error } = this.props
+    const { movementsOut } = this.state
 
     return (
-      <Page title="Out today" error={error} loaded={loaded}>
-        <Error error={error} />
+      <Page title="Out today">
         <SortableDataSource sortOrder={ASC} rows={movementsOut} comparator={lastNameComparator}>
           <MovementsOut />
         </SortableDataSource>
@@ -66,20 +63,14 @@ class MovementsOutContainer extends Component {
 MovementsOutContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
   agencyId: PropTypes.string.isRequired,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   resetErrorDispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
 }
 
-MovementsOutContainer.defaultProps = {
-  error: '',
-}
-
 const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
-  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({

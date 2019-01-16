@@ -5,7 +5,6 @@ import axios from 'axios'
 
 import EnRoute from './EnRoute'
 import { resetError, setLoaded } from '../redux/actions'
-import Error from '../Error'
 import { ASC } from '../tablesorting/sortOrder'
 import Page from '../Components/Page'
 import routePaths from '../routePaths'
@@ -48,14 +47,13 @@ class EnRouteContainer extends Component {
   }
 
   render() {
-    const { offenders, loaded } = this.state
-    const { error, agencyId, caseLoadOptions } = this.props
+    const { offenders } = this.state
+    const { agencyId, caseLoadOptions } = this.props
     const { description } = caseLoadOptions.find(cl => cl.caseLoadId === agencyId)
     const pageTitle = `En route to ${description}`
 
     return (
-      <Page title={pageTitle} error={error} loaded={loaded}>
-        <Error error={error} />
+      <Page title={pageTitle}>
         <SortableDataSource sortOrder={ASC} rows={offenders} comparator={lastNameComparator}>
           <EnRoute />
         </SortableDataSource>
@@ -72,18 +70,12 @@ EnRouteContainer.propTypes = {
 
   agencyId: PropTypes.string.isRequired,
   caseLoadOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   resetErrorDispatch: PropTypes.func.isRequired,
-}
-
-EnRouteContainer.defaultProps = {
-  error: '',
 }
 
 const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
   caseLoadOptions: state.app.user.caseLoadOptions,
-  error: state.app.error,
 })
 
 const mapDispatchToProps = dispatch => ({
