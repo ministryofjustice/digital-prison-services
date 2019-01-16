@@ -25,7 +25,6 @@ const init = oauthApi => {
             clientSecret: config.apis.oauth2.clientSecret,
             callbackURL: `${config.app.url}/login/callback`,
             state: true,
-            sessionKey: 'oauth2',
             customHeaders: {
               Authorization: `Basic ${apiClientCredentials(
                 config.apis.oauth2.clientId,
