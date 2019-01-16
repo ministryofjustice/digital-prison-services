@@ -100,6 +100,8 @@ const elite2ApiFactory = client => {
 
   const getLocation = (context, livingUnitId) => get(context, `api/locations/${livingUnitId}`)
 
+  const getOffendersEnRoute = (context, agencyId) => get(context, `api/movements/${agencyId}/enroute`)
+
   return {
     userLocations,
     currentUser,
@@ -133,6 +135,7 @@ const elite2ApiFactory = client => {
     getIepSummary,
     getOffendersCurrentlyOut,
     getLocation,
+    getOffendersEnRoute,
   }
 }
 

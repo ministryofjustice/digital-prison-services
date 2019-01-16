@@ -38,6 +38,7 @@ import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer from './CurrentlyOut/CurrentlyOutContainer'
+import EnRouteContainer from './EnRoute/EnRouteContainer'
 
 import routePaths from './routePaths'
 
@@ -337,6 +338,18 @@ class App extends React.Component {
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
                 match={match}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.enRoute}
+            render={({ history }) => (
+              <EnRouteContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
               />
             )}
           />

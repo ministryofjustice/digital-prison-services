@@ -48,12 +48,11 @@ class InReceptionContainer extends Component {
   }
 
   render() {
-    const { loaded, error } = this.props
     const { offendersInReception } = this.state
 
     return (
       <div>
-        <Page title="In reception" loaded={loaded} error={error}>
+        <Page title="In reception">
           <SortableDataSource sortOrder={ASC} rows={offendersInReception} comparator={lastNameComparator}>
             <InReception />
           </SortableDataSource>
@@ -65,8 +64,6 @@ class InReceptionContainer extends Component {
 
 InReceptionContainer.propTypes = {
   agencyId: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
-  loaded: PropTypes.bool.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
@@ -74,8 +71,6 @@ InReceptionContainer.propTypes = {
 
 const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
-  error: state.app.error,
-  loaded: state.app.loaded,
 })
 
 const mapDispatchToProps = dispatch => ({

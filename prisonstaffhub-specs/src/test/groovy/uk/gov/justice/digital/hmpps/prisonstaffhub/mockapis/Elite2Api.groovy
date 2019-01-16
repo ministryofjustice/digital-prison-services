@@ -473,6 +473,17 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
+    def stubEnRoute(String agencyId, movements = []) {
+        this.stubFor(
+                get("/api/movements/${agencyId}/enroute")
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(movements))
+                                .withHeader('Content-Type', 'application/json')
+                                .withStatus(200)))
+    }
+
+
     def stubEstablishmentRollCount(String agencyId) {
         this.stubFor(
                 get("/api/movements/rollcount/${agencyId}?unassigned=false")
