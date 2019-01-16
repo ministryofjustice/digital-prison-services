@@ -112,6 +112,12 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
     passport.authenticate('oauth2', { successReturnToOrRedirect: '/', failureRedirect: '/autherror' })
   )
   app.get('/autherror', (req, res) => {
+    // see if it is an error caused by the state in the session being empty
+    if (!req.session.oauth2) {
+      // so have another go at passport authentication
+      res.redirect('/login')
+    }
+
     res.status(401)
     return res.render('pages/autherror', {
       authURL: authLogoutUrl,
