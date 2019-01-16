@@ -95,6 +95,7 @@ describe('Movement service', () => {
       eliteApi.getMovementsIn = jest.fn()
       eliteApi.getAlertsSystem = jest.fn()
       eliteApi.getAssessments = jest.fn()
+      eliteApi.getIepSummary = jest.fn()
 
       oauthClient.getClientCredentialsTokens = jest.fn()
     })
@@ -135,6 +136,32 @@ describe('Movement service', () => {
       expect(response).toEqual([
         { offenderNo: 'G0000GG', category: 'A', alerts: [] },
         { offenderNo: 'G0001GG', category: 'E', alerts: [] },
+      ])
+    })
+
+    it('should request iep summary information ', async () => {
+      eliteApi.getMovementsIn.mockReturnValue([
+        { offenderNo: 'G0000GG', bookingId: 1 },
+        { offenderNo: 'G0001GG', bookingId: 2 },
+      ])
+      eliteApi.getIepSummary.mockReturnValue([
+        { bookingId: 1, iepLevel: 'basic' },
+        { bookingId: 2, iepLevel: 'standard' },
+      ])
+
+      const response = await movementsServiceFactory(eliteApi, oauthClient).getMovementsIn(context, agency)
+
+      expect(response).toEqual([
+        {
+          bookingId: 1,
+          offenderNo: 'G0000GG',
+          iepLevel: 'basic',
+        },
+        {
+          bookingId: 2,
+          offenderNo: 'G0001GG',
+          iepLevel: 'standard',
+        },
       ])
     })
   })
