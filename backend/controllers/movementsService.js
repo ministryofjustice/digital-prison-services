@@ -89,7 +89,20 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
 
   const getMovementsIn = async (context, agencyId) => {
     const movements = await elite2Api.getMovementsIn(context, agencyId, isoDateToday())
-    return addAlertsAndCategory(context, movements)
+
+    if (!movements || movements.length === 0) return []
+    const offenderNumbers = extractOffenderNumbers(movements)
+    const bookingIds = extractBookingIds(movements)
+
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const [alerts, iepMap, assessmentMap] = await Promise.all([
+      getActiveAlerts(systemContext, offenderNumbers),
+      getIepMap(context, bookingIds),
+      getAssessmentMap(context, offenderNumbers),
+    ])
+    const movementsWithAlerts = addAlerts(movements, alerts)
+    const withCategories = addCategory(movementsWithAlerts, assessmentMap)
+    return addIepSummaries(withCategories, iepMap)
   }
 
   const getMovementsOut = async (context, agencyId) => {
