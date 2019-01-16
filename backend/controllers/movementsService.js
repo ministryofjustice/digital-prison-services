@@ -96,10 +96,16 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     })
   }
 
+  const getOffendersEnRoute = async (context, agency) => {
+    const offenders = await elite2Api.getOffendersEnRoute(context, agency)
+    return decorateMovements(context, offenders)
+  }
+
   return {
     getMovementsIn,
     getMovementsOut,
     getOffendersInReception,
+    getOffendersEnRoute,
   }
 }
 
