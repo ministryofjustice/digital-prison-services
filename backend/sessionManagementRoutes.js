@@ -107,17 +107,32 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
 
   app.get('/login', loginMiddleware, config.app.remoteAuthStrategy ? remoteLoginIndex : loginIndex)
   if (!config.app.remoteAuthStrategy) app.post('/login', login)
-  app.get(
-    '/login/callback',
-    passport.authenticate('oauth2', { successReturnToOrRedirect: '/', failureRedirect: '/autherror' })
-  )
-  app.get('/autherror', (req, res) => {
-    // see if it is an error caused by the state in the session being empty
-    if (!req.session.oauth2) {
-      // so have another go at passport authentication
-      res.redirect('/login')
-    }
 
+  app.get('/login/callback', (req, res, next) => {
+    passport.authenticate('oauth2', (err, user, info) => {
+      if (err) {
+        return res.redirect('/autherror')
+      }
+      if (!user) {
+        if (info && info.message === 'Unable to verify authorization request state.') {
+          // failure to due authorisation state not being there on return, so retry
+          logger.info('Retrying auth callback as no state found')
+          return res.redirect('/')
+        }
+        logger.info(`Auth failure due to ${JSON.stringify(info)}`)
+        return res.redirect('/autherror')
+      }
+      req.logIn(user, err2 => {
+        if (err2) {
+          return next(err2)
+        }
+        return res.redirect('/')
+      })
+      return null
+    })(req, res, next)
+  })
+
+  app.get('/autherror', (req, res) => {
     res.status(401)
     return res.render('pages/autherror', {
       authURL: authLogoutUrl,
