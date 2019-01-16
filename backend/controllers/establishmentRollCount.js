@@ -1,6 +1,9 @@
 const { capitalize } = require('../utils')
 
-const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + block[figure], 0)
+const zeroIfNotDefined = number => number || 0
+
+const getTotals = (array, figure) =>
+  array.reduce((accumulator, block) => accumulator + zeroIfNotDefined(block[figure]), 0)
 
 const getEstablishmentRollCountFactory = elite2Api => {
   const getEstablishmentRollCount = async (context, agencyId) => {
@@ -21,26 +24,19 @@ const getEstablishmentRollCountFactory = elite2Api => {
         { name: 'In today', value: movementsResponse.in },
         { name: 'Out today', value: movementsResponse.out },
         { name: 'Current roll', value: currentRoll },
-        {
-          name: 'In reception',
-          value: unassignedIn,
-        },
-        {
-          name: 'En-route',
-          value: enroute,
-        },
+        { name: 'In reception', value: unassignedIn },
+        { name: 'En-route', value: enroute },
       ],
     }
-
     const blocks = assignedResponse.map(block => ({
       name: capitalize(block.livingUnitDesc),
       numbers: [
-        { name: 'Beds in use', value: block.bedsInUse },
-        { name: 'Currently in cell', value: block.currentlyInCell },
-        { name: 'Currently out', value: block.currentlyOut },
-        { name: 'Operational cap.', value: block.operationalCapacity },
-        { name: 'Net vacancies', value: block.netVacancies },
-        { name: 'Out of order', value: block.outOfOrder },
+        { name: 'Beds in use', value: zeroIfNotDefined(block.bedsInUse) },
+        { name: 'Currently in cell', value: zeroIfNotDefined(block.currentlyInCell) },
+        { name: 'Currently out', value: zeroIfNotDefined(block.currentlyOut) },
+        { name: 'Operational cap.', value: zeroIfNotDefined(block.operationalCapacity) },
+        { name: 'Net vacancies', value: zeroIfNotDefined(block.netVacancies) },
+        { name: 'Out of order', value: zeroIfNotDefined(block.outOfOrder) },
       ],
     }))
 
