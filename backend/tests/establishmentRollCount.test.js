@@ -51,7 +51,6 @@ describe('Establishment Roll', () => {
       bedsInUse: 0,
       currentlyInCell: 0,
       currentlyOut: 0,
-      operationalCapacity: 0,
       netVacancies: 0,
       maximumCapacity: 0,
       availablePhysical: 0,

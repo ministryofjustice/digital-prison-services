@@ -1,6 +1,8 @@
 const { capitalize } = require('../utils')
 
-const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + block[figure], 0)
+const safeNumber = number => Number(number || 0)
+
+const getTotals = (array, figure) => array.reduce((accumulator, block) => accumulator + safeNumber(block[figure]), 0)
 
 const getEstablishmentRollCountFactory = elite2Api => {
   const getEstablishmentRollCount = async (context, agencyId) => {
@@ -17,30 +19,29 @@ const getEstablishmentRollCountFactory = elite2Api => {
     const movements = {
       name: "Today's movements",
       numbers: [
-        { name: 'Unlock roll', value: currentRoll - movementsResponse.in + movementsResponse.out },
-        { name: 'In today', value: movementsResponse.in },
-        { name: 'Out today', value: movementsResponse.out },
-        { name: 'Current roll', value: currentRoll },
+        { name: 'Unlock roll', value: safeNumber(currentRoll - movementsResponse.in + movementsResponse.out) },
+        { name: 'In today', value: safeNumber(movementsResponse.in) },
+        { name: 'Out today', value: safeNumber(movementsResponse.out) },
+        { name: 'Current roll', value: safeNumber(currentRoll) },
         {
           name: 'In reception',
-          value: unassignedIn,
+          value: safeNumber(unassignedIn),
         },
         {
           name: 'En-route',
-          value: enroute,
+          value: safeNumber(enroute),
         },
       ],
     }
-
     const blocks = assignedResponse.map(block => ({
       name: capitalize(block.livingUnitDesc),
       numbers: [
-        { name: 'Beds in use', value: block.bedsInUse },
-        { name: 'Currently in cell', value: block.currentlyInCell },
-        { name: 'Currently out', value: block.currentlyOut },
-        { name: 'Operational cap.', value: block.operationalCapacity },
-        { name: 'Net vacancies', value: block.netVacancies },
-        { name: 'Out of order', value: block.outOfOrder },
+        { name: 'Beds in use', value: safeNumber(block.bedsInUse) },
+        { name: 'Currently in cell', value: safeNumber(block.currentlyInCell) },
+        { name: 'Currently out', value: safeNumber(block.currentlyOut) },
+        { name: 'Operational cap.', value: safeNumber(block.operationalCapacity) },
+        { name: 'Net vacancies', value: safeNumber(block.netVacancies) },
+        { name: 'Out of order', value: safeNumber(block.outOfOrder) },
       ],
     }))
 
