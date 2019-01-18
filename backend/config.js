@@ -9,7 +9,7 @@ module.exports = {
     url: process.env.PRISON_STAFF_HUB_UI_URL || `http://localhost:${process.env.PORT || 3002}`,
   },
   analytics: {
-    googleTagManagerId: process.env.GOOGLE_TAG_MANAGER_ID,
+    googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
   },
   hmppsCookie: {
     name: process.env.HMPPS_COOKIE_NAME || 'hmpps-session-dev',
