@@ -9,11 +9,12 @@ import SortLov from '../tablesorting/SortLov'
 import Location from '../Location'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 import Flags from '../FullFlags/Flags'
+import './CurrentlyOut.scss'
 
 const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
   <React.Fragment>
     <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    <table className="row-gutters">
+    <table className="row-gutters currently-out">
       <thead>
         <tr>
           <th className="straight width10" />

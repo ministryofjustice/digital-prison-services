@@ -57,7 +57,7 @@ ShallowWrapper {
           sortOrder=""
         />,
         <table
-          className="row-gutters"
+          className="row-gutters currently-out"
         >
           <thead>
             <tr>
@@ -357,7 +357,7 @@ ShallowWrapper {
               </tr>
             </tbody>,
           ],
-          "className": "row-gutters",
+          "className": "row-gutters currently-out",
         },
         "ref": null,
         "rendered": Array [
@@ -1048,7 +1048,7 @@ ShallowWrapper {
             sortOrder=""
           />,
           <table
-            className="row-gutters"
+            className="row-gutters currently-out"
           >
             <thead>
               <tr>
@@ -1348,7 +1348,7 @@ ShallowWrapper {
                 </tr>
               </tbody>,
             ],
-            "className": "row-gutters",
+            "className": "row-gutters currently-out",
           },
           "ref": null,
           "rendered": Array [
