@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const config = require('./backend/config')
 
 const developmentEntries =
   process.env.NODE_ENV === 'development'
@@ -120,6 +121,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'html-template/index.html',
       publicUrl: process.env.PUBLIC_URL,
+      googleTagManagerId: config.analytics.googleTagManagerId,
     }),
   ],
 }

@@ -3,7 +3,6 @@ import moment from 'moment'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import ReactGA from 'react-ga'
 import { Header } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import Footer from './Footer/index'
@@ -67,9 +66,6 @@ class App extends React.Component {
 
       const config = await axios.get('/api/config')
       links.notmEndpointUrl = config.data.notmEndpointUrl
-      if (config.data.googleAnalyticsId) {
-        ReactGA.initialize(config.data.googleAnalyticsId)
-      }
 
       configDispatch(config.data)
     } catch (error) {
@@ -121,14 +117,6 @@ class App extends React.Component {
 
     periodDispatch(event.target.value)
     this.getActivityLocations(null, event.target.value)
-  }
-
-  raiseAnalyticsEvent = event => {
-    const { config } = this.props
-
-    if (config.googleAnalyticsId) {
-      ReactGA.event(event)
-    }
   }
 
   displayAlertAndLogout = message => {
@@ -256,11 +244,7 @@ class App extends React.Component {
           <Route
             path="(/global-search-results)"
             render={() => (
-              <GlobalSearchContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                setLoadedDispatch={setLoadedDispatch}
-              />
+              <GlobalSearchContainer handleError={this.handleError} setLoadedDispatch={setLoadedDispatch} />
             )}
           />
           <Route
@@ -271,7 +255,6 @@ class App extends React.Component {
                 handleError={this.handleError}
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
               />
             )}
           />
@@ -283,7 +266,6 @@ class App extends React.Component {
                 handleError={this.handleError}
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
               />
             )}
           />
@@ -308,25 +290,13 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.outToday}
-            render={({ history }) => (
-              <MovementsOutContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
+            render={({ history }) => <MovementsOutContainer handleError={this.handleError} history={history} />}
           />
 
           <Route
             exact
             path={routePaths.inReception}
-            render={({ history }) => (
-              <InReceptionContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
+            render={({ history }) => <InReceptionContainer handleError={this.handleError} history={history} />}
           />
 
           <Route
@@ -345,13 +315,7 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.enRoute}
-            render={({ history }) => (
-              <EnRouteContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
+            render={({ history }) => <EnRouteContainer handleError={this.handleError} history={history} />}
           />
         </div>
       </div>
@@ -376,9 +340,6 @@ class App extends React.Component {
         <div className="content">
           <Route
             render={({ location, history }) => {
-              if (config && config.googleAnalyticsId) {
-                ReactGA.pageview(location.pathname)
-              }
               const locationRequiresRedirectWhenCaseloadChanges = !(
                 location.pathname.includes('global-search-results') || location.pathname.includes('establishment-roll')
               )
