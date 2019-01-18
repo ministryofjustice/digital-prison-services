@@ -13,6 +13,7 @@ const pathsToStatisticsDetailsPages = new Map([
   ['In reception', pathToRegexp.compile(routePaths.inReception)],
   ['Currently out', pathToRegexp.compile(routePaths.currentlyOut)],
   ['En-route', pathToRegexp.compile(routePaths.enRoute)],
+  ['Total out', pathToRegexp.compile(routePaths.totalOut)],
 ])
 
 export class EstablishmentRollBlock extends Component {

@@ -37,7 +37,7 @@ import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
-import CurrentlyOutContainer from './CurrentlyOut/CurrentlyOutContainer'
+import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 
 import routePaths from './routePaths'
@@ -223,6 +223,7 @@ class App extends React.Component {
       error,
       user,
       title,
+      agencyId,
     } = this.props
     const routes = (
       // eslint-disable-next-line
@@ -332,12 +333,23 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.currentlyOut}
-            render={({ history, match }) => (
+            render={({ history, match: { params } }) => (
               <CurrentlyOutContainer
                 handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
-                match={match}
+                dataFetcher={fetchLivingUnitData(params)}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.totalOut}
+            render={({ history }) => (
+              <CurrentlyOutContainer
+                handleError={this.handleError}
+                history={history}
+                dataFetcher={fetchAgencyData(agencyId)}
               />
             )}
           />
