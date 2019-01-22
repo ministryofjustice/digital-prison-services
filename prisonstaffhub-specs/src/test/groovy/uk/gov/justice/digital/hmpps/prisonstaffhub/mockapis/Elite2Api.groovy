@@ -454,7 +454,7 @@ class Elite2Api extends WireMockRule {
         }
 
         this.stubFor(
-                post("/api/movements/offenders")
+                post("/api/movements/offenders?mostRecent=true")
                         .willReturn(
                         aResponse()
                                 .withBody(JsonOutput.toJson(GlobalSearchResponses.lastPrisonResponse))
@@ -465,7 +465,7 @@ class Elite2Api extends WireMockRule {
 
     def stubRecentMovements(movements = []) {
         this.stubFor(
-                post("/api/movements/offenders")
+                post("/api/movements/offenders?mostRecent=true")
                         .willReturn(
                         aResponse()
                                 .withBody(JsonOutput.toJson(movements))

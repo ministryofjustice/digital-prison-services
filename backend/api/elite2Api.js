@@ -74,14 +74,22 @@ const elite2ApiFactory = client => {
         dateOfBirthFilter === undefined ? '' : dateOfBirthFilter
       }&partialNameMatch=false&includeAliases=true`
     )
-  const getLastPrison = (context, body) => post(context, `api/movements/offenders`, body)
+  const getLastPrison = (context, body) => post(context, `api/movements/offenders?mostRecent=true`, body)
 
-  const getRecentMovements = (context, body, movementTypes) =>
-    post(
-      context,
-      `api/movements/offenders${movementTypes && `?${arrayToQueryString(movementTypes, 'movementTypes')}`}`,
-      body
-    )
+  const getRecentMovements = (context, body, filters) => {
+    const queryParameters = []
+    const { movementTypes, fromAgency, toAgency, directionCode } = filters || {}
+
+    if (fromAgency) queryParameters.push(`fromAgency=${fromAgency}`)
+    if (toAgency) queryParameters.push(`toAgency=${toAgency}`)
+    if (directionCode) queryParameters.push(`directionCode=${directionCode}`)
+    if (movementTypes) queryParameters.push(`${arrayToQueryString(movementTypes, 'movementTypes')}`)
+
+    const mostRecent = 'mostRecent=true'
+    const queryString = queryParameters.length > 0 ? `${mostRecent}&${queryParameters.join('&')}` : mostRecent
+
+    return post(context, `api/movements/offenders?${queryString}`, body)
+  }
 
   const getMovementsIn = (context, agencyId, movementDate) =>
     get(context, `api/movements/${agencyId}/in/${movementDate}`)

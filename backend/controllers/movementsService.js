@@ -1,6 +1,8 @@
 const moment = require('moment')
 const { toMap } = require('../utils')
 
+const movementTypes = ['CRT', 'REL', 'TRN', 'ADM']
+
 const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
     const assessments = (await elite2Api.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
@@ -13,7 +15,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   }
 
   const getRecentMovementsMap = async (systemContext, offenderNumbers) => {
-    const recentMovements = (await elite2Api.getRecentMovements(systemContext, offenderNumbers, [])) || []
+    const recentMovements = (await elite2Api.getRecentMovements(systemContext, offenderNumbers)) || []
     return toMap('offenderNo', recentMovements)
   }
 
@@ -98,7 +100,11 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     const [alerts, iepMap, assessmentMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
       getIepMap(context, bookingIds),
-      getAssessmentMap(context, offenderNumbers),
+      getAssessmentMap(context, offenderNumbers, {
+        movementTypes,
+        toAgency: agencyId,
+        directionCode: 'IN',
+      }),
     ])
     const movementsWithAlerts = addAlerts(movements, alerts)
     const withCategories = addCategory(movementsWithAlerts, assessmentMap)
@@ -123,7 +129,11 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     const [alerts, iepMap, recentMovementsMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
       getIepMap(context, bookingIds),
-      getRecentMovementsMap(systemContext, offenderNumbers),
+      getRecentMovementsMap(systemContext, offenderNumbers, {
+        movementTypes,
+        toAgency: agencyId,
+        directionCode: 'IN',
+      }),
     ])
 
     const withMovements = addMovements(offenders, recentMovementsMap)
@@ -131,7 +141,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return addIepSummaries(withAlerts, iepMap)
   }
 
-  const addAlertsCategoryIepMovements = async (context, offenders) => {
+  const addAlertsCategoryIepMovements = async (context, offenders, movementFilters) => {
     if (!offenders || offenders.length === 0) return []
 
     const offenderNumbers = extractOffenderNumbers(offenders)
@@ -143,7 +153,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
       getActiveAlerts(systemContext, offenderNumbers),
       getIepMap(context, bookingIds),
       getAssessmentMap(context, offenderNumbers),
-      getRecentMovementsMap(systemContext, offenderNumbers),
+      getRecentMovementsMap(systemContext, offenderNumbers, movementFilters),
     ])
     const withAlerts = addAlerts(offenders, alerts)
     const withCategories = addCategory(withAlerts, assessmentMap)

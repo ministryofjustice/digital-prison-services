@@ -195,7 +195,7 @@ describe('Movement service', () => {
 
       await movementsServiceFactory(eliteApi, oauthClient).getOffendersInReception(context, agency)
 
-      expect(eliteApi.getRecentMovements).toHaveBeenCalledWith(systemContext, offenderNumbers, [])
+      expect(eliteApi.getRecentMovements).toHaveBeenCalledWith(systemContext, offenderNumbers)
     })
 
     it('should populate offenders in reception with the from agency', async () => {
