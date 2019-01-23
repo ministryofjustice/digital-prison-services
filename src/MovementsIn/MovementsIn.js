@@ -66,7 +66,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
             <td>
               <HoursAndMinutes hhmmss={row.movementTime} />
             </td>
-            <td>{row.fromAgencyDescription}</td>
+            <td>{row.fromAgencyDescription || row.fromCity}</td>
             <td className="row-gutters">
               <Flags offenderNo={row.offenderNo} alerts={row.alerts} category={row.category} />
             </td>
@@ -88,6 +88,7 @@ MovementsIn.propTypes = {
       fromAgencyDescription: PropTypes.string,
       alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
       category: PropTypes.string,
+      fromCity: PropTypes.string,
     })
   ),
   sortOrder: PropTypes.string,
