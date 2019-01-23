@@ -60,7 +60,7 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
             <td className="row-gutters">
               <Flags offenderNo={row.offenderNo} alerts={row.alerts} category={row.category} />
             </td>
-            <td className="row-gutters">{row.toAgencyDescription}</td>
+            <td className="row-gutters">{row.toAgencyDescription || row.toCity}</td>
             <td className="row-gutters">{row.commentText}</td>
           </tr>
         ))}
@@ -80,6 +80,7 @@ CurrentlyOut.propTypes = {
       fromAgencyDescription: PropTypes.string,
       alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
       category: PropTypes.string,
+      toCity: PropTypes.string,
     })
   ),
   sortOrder: PropTypes.string,

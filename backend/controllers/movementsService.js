@@ -52,7 +52,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
       if (!m) {
         return obj
       }
-      const { toAgency, toAgencyDescription, fromAgency, fromAgencyDescription, commentText } = m
+      const { toAgency, toAgencyDescription, fromAgency, fromAgencyDescription, commentText, fromCity, toCity } = m
       return {
         ...obj,
         toAgency,
@@ -60,6 +60,8 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
         fromAgency,
         fromAgencyDescription,
         commentText,
+        fromCity,
+        toCity,
       }
     })
 

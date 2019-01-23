@@ -49,7 +49,7 @@ const InReception = ({ sortOrder, setColumnSort, rows }) => (
             <td className="row-gutters">
               <DateFormatter isoDate={row.dateOfBirth} />
             </td>
-            <td> {row.fromAgencyDescription} </td>
+            <td> {row.fromAgencyDescription || row.fromCity} </td>
             <td> {row.iepLevel} </td>
             <td className="row-gutters">
               <Flags offenderNo={row.offenderNo} alerts={row.alerts} />
@@ -78,6 +78,7 @@ InReception.propTypes = {
       dateOfBirth: PropTypes.string.isRequired,
       alerts: PropTypes.arrayOf(PropTypes.string),
       iepLevel: PropTypes.string,
+      fromCity: PropTypes.string,
     })
   ),
 }
