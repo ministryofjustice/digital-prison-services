@@ -10,7 +10,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InReception
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InTodayPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.OutTodayPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.EnRoutePage
-
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.TotalOutPage
 
 import java.time.LocalDate
 
@@ -162,6 +162,39 @@ class MovementsSpecification extends GebReportingSpec {
                 ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', 'Basic', 'ACCT OPENE‑LISTCAT A', 'Low Newton (HMP)', 'Comment text']
         ]
     }
+
+    def 'Total out'() {
+        given: 'I am logged in'
+        fixture.loginAs(ITAG_USER)
+
+        when: 'I navigate to the establishment Total out page'
+
+        elite2api.stubTotalOut('LEI')
+        elite2api.stubImage()
+        elite2api.stubRecentMovements([
+                [
+                        "offenderNo"         : "A1234AA",
+                        "toAgencyDescription": "Low Newton (HMP)",
+                        "commentText"        : "Comment text"
+                ]
+        ])
+        stubFlags(["A1234AA", "G0000AA"])
+        elite2api.stubLocation(123456L)
+        elite2api.stubIepSummariesForBookings([-1, -2])
+
+
+        to TotalOutPage
+
+        then:
+        at TotalOutPage
+
+        getCells(tableRows) == [
+                ['', 'Aaaaa, Aaaaa', 'G0000AA', '31/12/1980', 'A-02-011', 'Basic', '', '', ''],
+                ['', 'Aaaaa, Aaaab', 'A1234AA', '01/01/1980', 'A-01-011', 'Basic', 'ACCT OPENE‑LISTCAT A', 'Low Newton (HMP)', 'Comment text']
+        ]
+    }
+
+
 
     def "en-route"() {
         given: "I am logged in"

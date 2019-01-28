@@ -9,11 +9,12 @@ import SortLov from '../tablesorting/SortLov'
 import Location from '../Location'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 import Flags from '../FullFlags/Flags'
+import './CurrentlyOut.scss'
 
 const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
   <React.Fragment>
     <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    <table className="row-gutters">
+    <table className="row-gutters currently-out">
       <thead>
         <tr>
           <th className="straight width10" />
@@ -59,7 +60,7 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
             <td className="row-gutters">
               <Flags offenderNo={row.offenderNo} alerts={row.alerts} category={row.category} />
             </td>
-            <td className="row-gutters">{row.toAgencyDescription}</td>
+            <td className="row-gutters">{row.toAgencyDescription || row.toCity}</td>
             <td className="row-gutters">{row.commentText}</td>
           </tr>
         ))}
@@ -79,6 +80,7 @@ CurrentlyOut.propTypes = {
       fromAgencyDescription: PropTypes.string,
       alerts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
       category: PropTypes.string,
+      toCity: PropTypes.string,
     })
   ),
   sortOrder: PropTypes.string,

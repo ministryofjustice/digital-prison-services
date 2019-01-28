@@ -11,12 +11,26 @@ import SortableDataSource from '../tablesorting/SortableDataSource'
 import { lastNameComparator } from '../tablesorting/comparatorComposition'
 import CurrentlyOut from './CurrentlyOut'
 
+// Data fetchers. One of these is passed to the CurrentlyOut container by a Route in App.js.
+// params is the
+export const fetchLivingUnitData = params => async () => {
+  const response = await axios.get(`/api/movements/livingUnit/${params.livingUnitId}/currently-out`)
+  const { currentlyOut, location } = response.data
+  return { currentlyOut, location: `Currently out - ${location}` }
+}
+
+export const fetchAgencyData = agencyId => async () => {
+  const response = await axios.get(`/api/movements/agency/${agencyId}/currently-out`)
+  const currentlyOut = response.data
+  return { currentlyOut, location: 'Total currently out' }
+}
+
 class CurrentlyOutContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       currentlyOut: [],
-      location: {},
+      location: '',
     }
   }
 
@@ -33,21 +47,15 @@ class CurrentlyOutContainer extends Component {
   }
 
   async getOffendersCurrentlyOut() {
-    const {
-      handleError,
-      resetErrorDispatch,
-      setLoadedDispatch,
-      match: {
-        params: { livingUnitId },
-      },
-    } = this.props
+    const { dataFetcher, handleError, resetErrorDispatch, setLoadedDispatch } = this.props
 
     try {
       resetErrorDispatch()
       setLoadedDispatch(false)
-      const response = await axios.get(`/api/movements/${livingUnitId}/currently-out`)
-      const { currentlyOut, location } = response.data
-      this.setState({ currentlyOut, location })
+
+      const nextState = await dataFetcher()
+
+      this.setState(nextState)
       setLoadedDispatch(true)
     } catch (error) {
       handleError(error)
@@ -57,7 +65,7 @@ class CurrentlyOutContainer extends Component {
   render() {
     const { currentlyOut, location } = this.state
     return (
-      <Page title={`Currently out - ${location}`}>
+      <Page title={location}>
         <SortableDataSource sortOrder={ASC} rows={currentlyOut} comparator={lastNameComparator}>
           <CurrentlyOut />
         </SortableDataSource>
@@ -67,13 +75,12 @@ class CurrentlyOutContainer extends Component {
 }
 
 CurrentlyOutContainer.propTypes = {
+  dataFetcher: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
   // history from Redux Router Route
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
-  // match from Redux Router Route
-  match: PropTypes.shape({}).isRequired,
 
   // redux state
   agencyId: PropTypes.string.isRequired,

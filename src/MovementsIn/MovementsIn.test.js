@@ -56,4 +56,21 @@ describe('Movements in', () => {
 
     expect(wrapper).toMatchSnapshot()
   })
+
+  it('should display fromCity when fromAgencyDescription is not set ', () => {
+    const offenders = [
+      {
+        offenderNo: 'G0000GG',
+        firstName: 'firstName',
+        lastName: 'lastName',
+        movementTime: '12:01:02',
+        location: 'CELL-1',
+        fromCity: 'York',
+        toAgencyCode: 'HLI',
+        alerts: ['HA', 'XSA', 'XA', 'PEEP', 'XEL', 'XRF', 'XTACT'],
+      },
+    ]
+    const wrapper = shallow(<MovementsIn sortOrder="ASC" setColumnSort={jest.fn()} rows={offenders} agencyId="LEI" />)
+    expect(wrapper).toMatchSnapshot()
+  })
 })

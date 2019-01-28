@@ -52,7 +52,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
       if (!m) {
         return obj
       }
-      const { toAgency, toAgencyDescription, fromAgency, fromAgencyDescription, commentText } = m
+      const { toAgency, toAgencyDescription, fromAgency, fromAgencyDescription, commentText, fromCity, toCity } = m
       return {
         ...obj,
         toAgency,
@@ -60,6 +60,8 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
         fromAgency,
         fromAgencyDescription,
         commentText,
+        fromCity,
+        toCity,
       }
     })
 
@@ -131,9 +133,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return addIepSummaries(withAlerts, iepMap)
   }
 
-  const getOffendersCurrentlyOut = async (context, livingUnitId) => {
-    const offenders = await elite2Api.getOffendersCurrentlyOut(context, livingUnitId)
-
+  const addAlertsCategoryIepMovements = async (context, offenders) => {
     if (!offenders || offenders.length === 0) return []
 
     const offenderNumbers = extractOffenderNumbers(offenders)
@@ -141,21 +141,34 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
 
     const systemContext = await systemOauthClient.getClientCredentialsTokens()
 
-    const [alerts, iepMap, assessmentMap, recentMovementsMap, location] = await Promise.all([
+    const [alerts, iepMap, assessmentMap, recentMovementsMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
       getIepMap(context, bookingIds),
       getAssessmentMap(context, offenderNumbers),
       getRecentMovementsMap(systemContext, offenderNumbers),
-      elite2Api.getLocation(context, livingUnitId),
     ])
     const withAlerts = addAlerts(offenders, alerts)
     const withCategories = addCategory(withAlerts, assessmentMap)
     const withIep = addIepSummaries(withCategories, iepMap)
-    const withMovements = addMovements(withIep, recentMovementsMap)
+    return addMovements(withIep, recentMovementsMap)
+  }
+
+  const getOffendersCurrentlyOutOfLivingUnit = async (context, livingUnitId) => {
+    const offenders = await elite2Api.getOffendersCurrentlyOutOfLivingUnit(context, livingUnitId)
+    const [currentlyOut, location] = await Promise.all([
+      addAlertsCategoryIepMovements(context, offenders),
+      elite2Api.getLocation(context, livingUnitId),
+    ])
+
     return {
       location: location.userDescription || location.internalLocationCode || '',
-      currentlyOut: withMovements,
+      currentlyOut,
     }
+  }
+
+  const getOffendersCurrentlyOutOfAgency = async (context, agencyId) => {
+    const offenders = await elite2Api.getOffendersCurrentlyOutOfAgency(context, agencyId)
+    return addAlertsCategoryIepMovements(context, offenders)
   }
 
   const getOffendersEnRoute = async (context, agency) => {
@@ -167,7 +180,8 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     getMovementsIn,
     getMovementsOut,
     getOffendersInReception,
-    getOffendersCurrentlyOut,
+    getOffendersCurrentlyOutOfLivingUnit,
+    getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
   }
 }

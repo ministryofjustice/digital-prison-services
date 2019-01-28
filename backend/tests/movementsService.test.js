@@ -275,106 +275,305 @@ describe('Movement service', () => {
   })
 
   describe('Currently out', () => {
-    beforeEach(() => {
-      eliteApi.getAlertsSystem = jest.fn()
-      eliteApi.getAssessments = jest.fn()
-      eliteApi.getOffendersCurrentlyOut = jest.fn()
-      eliteApi.getLocation = jest.fn()
-      eliteApi.getRecentMovements = jest.fn()
-      oauthClient.getClientCredentialsTokens = jest.fn()
+    describe('livingUnit', () => {
+      const key = 123
 
-      eliteApi.getLocation.mockReturnValue({ userDescription: 'location' })
-    })
+      beforeEach(() => {
+        eliteApi.getAlertsSystem = jest.fn()
+        eliteApi.getAssessments = jest.fn()
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit = jest.fn()
+        eliteApi.getLocation = jest.fn()
+        eliteApi.getRecentMovements = jest.fn()
+        oauthClient.getClientCredentialsTokens = jest.fn()
 
-    it('Returns an empty array when there are no offenders currently out', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([])
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toHaveLength(0)
-    })
+        eliteApi.getLocation.mockReturnValue({ userDescription: 'location' })
+      })
 
-    it('falls back to internalLocationCode for location', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([{ offenderNo: 'G0000GG' }])
-      eliteApi.getRecentMovements.mockReturnValue([])
-      eliteApi.getLocation.mockReturnValue({ internalLocationCode: 'internalLocationCode' })
+      it('Returns an default result when there are no offenders currently out', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([])
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({ currentlyOut: [], location: 'location' })
+      })
 
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toEqual({
-        location: 'internalLocationCode',
-        currentlyOut: [{ offenderNo: 'G0000GG' }],
+      it('falls back to internalLocationCode for location', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([{ offenderNo: 'G0000GG' }])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getLocation.mockReturnValue({ internalLocationCode: 'internalLocationCode' })
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({
+          location: 'internalLocationCode',
+          currentlyOut: [{ offenderNo: 'G0000GG' }],
+        })
+      })
+
+      it('falls back to blank location', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([{ offenderNo: 'G0000GG' }])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getLocation.mockReturnValue({})
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({
+          location: '',
+          currentlyOut: [{ offenderNo: 'G0000GG' }],
+        })
+      })
+
+      it('Returns offenders currently out', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({
+          location: 'location',
+          currentlyOut: [{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }],
+        })
+      })
+
+      it('Decorates with active alerts', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getAlertsSystem.mockReturnValue([
+          { offenderNo: 'G0001GG', expired: true, alertCode: 'HA' },
+          { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
+        ])
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({
+          location: 'location',
+          currentlyOut: [{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }],
+        })
+      })
+
+      it('Decorates with categories', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getAlertsSystem.mockReturnValue([])
+        eliteApi.getAssessments.mockReturnValue([
+          { offenderNo: 'G0000GG', classificationCode: 'A' },
+          { offenderNo: 'G0001GG', classificationCode: 'E' },
+        ])
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({
+          location: 'location',
+          currentlyOut: [
+            { offenderNo: 'G0000GG', category: 'A', alerts: [] },
+            { offenderNo: 'G0001GG', category: 'E', alerts: [] },
+          ],
+        })
+      })
+
+      it('Decorates with movements', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([
+          {
+            offenderNo: 'G0000GG',
+            toAgency: 'To Agency',
+            toAgencyDescription: 'To Agency Description',
+            commentText: 'Comment text',
+          },
+        ])
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+        expect(response).toEqual({
+          location: 'location',
+          currentlyOut: [
+            {
+              offenderNo: 'G0000GG',
+              toAgency: 'To Agency',
+              toAgencyDescription: 'To Agency Description',
+              commentText: 'Comment text',
+            },
+            { offenderNo: 'G0001GG' },
+          ],
+        })
+      })
+
+      it('should request iep summary information for offenders in reception', async () => {
+        eliteApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([
+          { offenderNo: 'G0000GG', bookingId: 1 },
+          { offenderNo: 'G0001GG', bookingId: 2 },
+        ])
+        eliteApi.getIepSummary.mockReturnValue([
+          { bookingId: 1, iepLevel: 'basic' },
+          { bookingId: 2, iepLevel: 'standard' },
+        ])
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
+          context,
+          key
+        )
+
+        expect(response).toEqual({
+          location: 'location',
+          currentlyOut: [
+            {
+              bookingId: 1,
+              offenderNo: 'G0000GG',
+              iepLevel: 'basic',
+            },
+            {
+              bookingId: 2,
+              offenderNo: 'G0001GG',
+              iepLevel: 'standard',
+            },
+          ],
+        })
       })
     })
 
-    it('falls back to blank location', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([{ offenderNo: 'G0000GG' }])
-      eliteApi.getRecentMovements.mockReturnValue([])
-      eliteApi.getLocation.mockReturnValue({})
+    describe('agency', () => {
+      const key = 'MDI'
 
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toEqual({
-        location: '',
-        currentlyOut: [{ offenderNo: 'G0000GG' }],
+      beforeEach(() => {
+        eliteApi.getAlertsSystem = jest.fn()
+        eliteApi.getAssessments = jest.fn()
+        eliteApi.getOffendersCurrentlyOutOfAgency = jest.fn()
+        eliteApi.getLocation = jest.fn()
+        eliteApi.getRecentMovements = jest.fn()
+        oauthClient.getClientCredentialsTokens = jest.fn()
+
+        eliteApi.getLocation.mockReturnValue({ userDescription: 'location' })
       })
-    })
 
-    it('Returns offenders currently out', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
-      eliteApi.getRecentMovements.mockReturnValue([])
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toEqual({
-        location: 'location',
-        currentlyOut: [{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }],
+      it('Returns an default result when there are no offenders currently out', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([])
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([])
       })
-    })
 
-    it('Decorates with active alerts', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
-      eliteApi.getRecentMovements.mockReturnValue([])
-      eliteApi.getAlertsSystem.mockReturnValue([
-        { offenderNo: 'G0001GG', expired: true, alertCode: 'HA' },
-        { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
-      ])
+      it('falls back to internalLocationCode for location', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([{ offenderNo: 'G0000GG' }])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getLocation.mockReturnValue({ internalLocationCode: 'internalLocationCode' })
 
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toEqual({
-        location: 'location',
-        currentlyOut: [{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }],
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([{ offenderNo: 'G0000GG' }])
       })
-    })
 
-    it('Decorates with categories', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
-      eliteApi.getRecentMovements.mockReturnValue([])
-      eliteApi.getAlertsSystem.mockReturnValue([])
-      eliteApi.getAssessments.mockReturnValue([
-        { offenderNo: 'G0000GG', classificationCode: 'A' },
-        { offenderNo: 'G0001GG', classificationCode: 'E' },
-      ])
+      it('falls back to blank location', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([{ offenderNo: 'G0000GG' }])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getLocation.mockReturnValue({})
 
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toEqual({
-        location: 'location',
-        currentlyOut: [
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([{ offenderNo: 'G0000GG' }])
+      })
+
+      it('Returns offenders currently out', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
+      })
+
+      it('Decorates with active alerts', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getAlertsSystem.mockReturnValue([
+          { offenderNo: 'G0001GG', expired: true, alertCode: 'HA' },
+          { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
+        ])
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }])
+      })
+
+      it('Decorates with categories', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([])
+        eliteApi.getAlertsSystem.mockReturnValue([])
+        eliteApi.getAssessments.mockReturnValue([
+          { offenderNo: 'G0000GG', classificationCode: 'A' },
+          { offenderNo: 'G0001GG', classificationCode: 'E' },
+        ])
+
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([
           { offenderNo: 'G0000GG', category: 'A', alerts: [] },
           { offenderNo: 'G0001GG', category: 'E', alerts: [] },
-        ],
+        ])
       })
-    })
 
-    it('Decorates with movements', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
-      eliteApi.getRecentMovements.mockReturnValue([
-        {
-          offenderNo: 'G0000GG',
-          toAgency: 'To Agency',
-          toAgencyDescription: 'To Agency Description',
-          commentText: 'Comment text',
-        },
-      ])
+      it('Decorates with movements', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([
+          { offenderNo: 'G0000GG' },
+          { offenderNo: 'G0001GG' },
+        ])
+        eliteApi.getRecentMovements.mockReturnValue([
+          {
+            offenderNo: 'G0000GG',
+            toAgency: 'To Agency',
+            toAgencyDescription: 'To Agency Description',
+            commentText: 'Comment text',
+          },
+        ])
 
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
-      expect(response).toEqual({
-        location: 'location',
-        currentlyOut: [
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
+        expect(response).toEqual([
           {
             offenderNo: 'G0000GG',
             toAgency: 'To Agency',
@@ -382,25 +581,25 @@ describe('Movement service', () => {
             commentText: 'Comment text',
           },
           { offenderNo: 'G0001GG' },
-        ],
+        ])
       })
-    })
 
-    it('should request iep summary information for offenders in reception', async () => {
-      eliteApi.getOffendersCurrentlyOut.mockReturnValue([
-        { offenderNo: 'G0000GG', bookingId: 1 },
-        { offenderNo: 'G0001GG', bookingId: 2 },
-      ])
-      eliteApi.getIepSummary.mockReturnValue([
-        { bookingId: 1, iepLevel: 'basic' },
-        { bookingId: 2, iepLevel: 'standard' },
-      ])
+      it('should request iep summary information for offenders in reception', async () => {
+        eliteApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([
+          { offenderNo: 'G0000GG', bookingId: 1 },
+          { offenderNo: 'G0001GG', bookingId: 2 },
+        ])
+        eliteApi.getIepSummary.mockReturnValue([
+          { bookingId: 1, iepLevel: 'basic' },
+          { bookingId: 2, iepLevel: 'standard' },
+        ])
 
-      const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOut(context, agency)
+        const response = await movementsServiceFactory(eliteApi, oauthClient).getOffendersCurrentlyOutOfAgency(
+          context,
+          key
+        )
 
-      expect(response).toEqual({
-        location: 'location',
-        currentlyOut: [
+        expect(response).toEqual([
           {
             bookingId: 1,
             offenderNo: 'G0000GG',
@@ -411,7 +610,7 @@ describe('Movement service', () => {
             offenderNo: 'G0001GG',
             iepLevel: 'standard',
           },
-        ],
+        ])
       })
     })
   })
