@@ -18,7 +18,7 @@ const fn = jest.fn()
 const props = {
   activity: '',
   caseChangeRedirect: true,
-  config: {},
+  config: { notmEndpointUrl: '' },
   currentLocation: 'cell',
   date: 'today',
   menuOpen: false,
@@ -27,6 +27,7 @@ const props = {
   period: '1',
   shouldShowTerms: true,
   sortOrder: 'ASC',
+  user: { roles: [] },
 
   activitiesDispatch: fn,
   activityDataDispatch: fn,

@@ -20,7 +20,7 @@ import Page from '../Components/Page'
 
 const axios = require('axios')
 
-class GlobalSearchContainer extends Component {
+export class GlobalSearchContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -145,9 +145,12 @@ class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
+    const { searchText, licencesUrl, userRoles } = this.props
+    const pageTitle = searchText ? 'Global search results' : 'Global search'
+    const licencesUser = userRoles.includes('LICENCE_RO')
 
     return (
-      <Page title="Global search results" alwaysRender>
+      <Page title={pageTitle} alwaysRender>
         <GlobalSearch
           handlePageAction={this.handlePageAction}
           handleSearchTextChange={this.handleSearchTextChange}
@@ -157,6 +160,9 @@ class GlobalSearchContainer extends Component {
           clearFilters={this.clearFilters}
           handleDateOfBirthChange={this.handleDateOfBirthChange}
           showErrors={!validForm}
+          searchPerformed={!!searchText}
+          licencesUrl={licencesUrl}
+          licencesUser={licencesUser}
           {...this.props}
         />
       </Page>
@@ -173,7 +179,7 @@ GlobalSearchContainer.propTypes = {
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
   agencyId: PropTypes.string.isRequired,
-  searchText: PropTypes.string.isRequired,
+  searchText: PropTypes.string,
   genderFilter: PropTypes.string.isRequired,
   locationFilter: PropTypes.string.isRequired,
   dateOfBirthFilter: PropTypes.shape({
@@ -195,6 +201,7 @@ GlobalSearchContainer.propTypes = {
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+  licencesUrl: PropTypes.string.isRequired,
 
   // mapDispatchToProps
   dataDispatch: PropTypes.func.isRequired,
@@ -213,6 +220,7 @@ GlobalSearchContainer.propTypes = {
 
 GlobalSearchContainer.defaultProps = {
   error: '',
+  searchText: '',
 }
 
 const mapStateToProps = state => ({
@@ -227,6 +235,8 @@ const mapStateToProps = state => ({
   genderFilter: state.globalSearch.genderFilter,
   dateOfBirthFilter: state.globalSearch.dateOfBirthFilter,
   error: state.app.error,
+  licencesUrl: state.app.config.licencesUrl,
+  userRoles: state.app.user.roles,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -58,8 +58,8 @@ describe('app (global) reducer', () => {
   it('should return the initial state', () => {
     expect(app(undefined, {})).toEqual({
       caseChangeRedirect: true,
-      config: { mailTo: '' },
-      user: { activeCaseLoadId: null },
+      config: { mailTo: '', notmEndpointUrl: '' },
+      user: { activeCaseLoadId: null, roles: [] },
       shouldShowTerms: false,
       error: '',
       message: null,

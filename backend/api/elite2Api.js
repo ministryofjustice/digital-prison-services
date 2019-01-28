@@ -17,6 +17,7 @@ const elite2ApiFactory = client => {
 
   const userLocations = context => get(context, 'api/users/me/locations')
   const currentUser = context => get(context, 'api/users/me')
+  const userRoles = context => get(context, 'api/users/me/roles')
   const userCaseLoads = context => get(context, 'api/users/me/caseLoads')
 
   const encodeQueryString = input => encodeURIComponent(input)
@@ -110,6 +111,7 @@ const elite2ApiFactory = client => {
   return {
     userLocations,
     currentUser,
+    userRoles,
     userCaseLoads,
     setActiveCaseload,
     getHouseblockList,

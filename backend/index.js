@@ -182,6 +182,7 @@ app.use('/api', (req, res, next) => {
 app.use(express.static(path.join(__dirname, '../build')))
 
 app.use('/api/config', getConfiguration)
+app.use('/api/userroles', userMeFactory(elite2Api).userRoles)
 app.use('/api/me', userMeFactory(elite2Api).userMe)
 app.use('/api/usercaseloads', userCaseLoadsFactory(elite2Api).userCaseloads)
 app.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)

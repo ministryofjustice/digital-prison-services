@@ -43,6 +43,8 @@ class GlobalSearchForm extends Component {
       showErrors,
     } = this.props
 
+    const buttonText = searchText ? 'Search again' : 'Search'
+
     const toggleDetails = (event, clear) => {
       event.preventDefault()
       const { showFilters } = this.state
@@ -134,7 +136,7 @@ class GlobalSearchForm extends Component {
               handleSearch(history)
             }}
           >
-            Search again
+            {buttonText}
           </button>
         </div>
         <details className="govuk-details visible" open={showFilters}>
