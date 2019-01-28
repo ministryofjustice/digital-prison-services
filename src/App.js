@@ -46,7 +46,7 @@ const axios = require('axios')
 
 class App extends React.Component {
   async componentWillMount() {
-    const { configDispatch, setErrorDispatch } = this.props
+    const { configDispatch, setErrorDispatch, userDetailsDispatch } = this.props
 
     axios.interceptors.response.use(
       config => {
@@ -63,15 +63,19 @@ class App extends React.Component {
     )
 
     try {
-      this.loadUserAndCaseload()
+      const [config, user, caseloads, roles] = await Promise.all([
+        axios.get('/api/config'),
+        axios.get('/api/me'),
+        axios.get('/api/usercaseloads'),
+        axios.get('/api/userroles'),
+      ])
 
-      const config = await axios.get('/api/config')
       links.notmEndpointUrl = config.data.notmEndpointUrl
       if (config.data.googleAnalyticsId) {
         ReactGA.initialize(config.data.googleAnalyticsId)
       }
-
       configDispatch(config.data)
+      userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data, roles: roles.data })
     } catch (error) {
       setErrorDispatch(error.message)
     }
@@ -202,14 +206,6 @@ class App extends React.Component {
     }
   }
 
-  loadUserAndCaseload = async () => {
-    const { userDetailsDispatch } = this.props
-    const user = await axios.get('/api/me')
-    const caseloads = await axios.get('/api/usercaseloads')
-
-    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data })
-  }
-
   render() {
     const {
       config,
@@ -225,6 +221,10 @@ class App extends React.Component {
       title,
       agencyId,
     } = this.props
+
+    const licencesUser = user.roles.includes('LICENCE_RO')
+    const homeLink = licencesUser ? config.licencesUrl : config.notmEndpointUrl || ''
+
     const routes = (
       // eslint-disable-next-line
       <div
@@ -255,12 +255,14 @@ class App extends React.Component {
             )}
           />
           <Route
-            path="(/global-search-results)"
+            path="/(global-search-results|global-search)"
             render={() => (
               <GlobalSearchContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 setLoadedDispatch={setLoadedDispatch}
+                homeLink={homeLink}
+                licencesUser={licencesUser}
               />
             )}
           />
@@ -397,7 +399,7 @@ class App extends React.Component {
 
               return (
                 <Header
-                  homeLink={links.getHomeLink()}
+                  homeLink={homeLink}
                   title={title}
                   logoText="HMPPS"
                   user={user}
@@ -443,6 +445,7 @@ App.propTypes = {
     firstName: PropTypes.string,
     activeCaseLoadId: PropTypes.string,
     isOpen: PropTypes.bool,
+    roles: PropTypes.arrayOf(PropTypes.string),
   }),
   title: PropTypes.string.isRequired,
 

@@ -27,6 +27,7 @@ const props = {
   period: '1',
   shouldShowTerms: true,
   sortOrder: 'ASC',
+  user: { roles: [] },
 
   activitiesDispatch: fn,
   activityDataDispatch: fn,

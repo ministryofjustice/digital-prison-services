@@ -23,12 +23,12 @@ export class Page extends Component {
   }
 
   render() {
-    const { error, loaded, title, children, alwaysRender, showBreadcrumb } = this.props
+    const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink, defaultHome } = this.props
 
     if (loaded || error) {
       return (
         <Fragment>
-          {showBreadcrumb && <Breadcrumb />}
+          {showBreadcrumb && <Breadcrumb homeLink={homeLink || defaultHome} />}
           <Container>
             <Header level={1} size="LARGE">
               {title}
@@ -51,16 +51,20 @@ Page.propTypes = {
   children: childrenType.isRequired,
   alwaysRender: PropTypes.bool,
   showBreadcrumb: PropTypes.bool,
+  homeLink: PropTypes.string,
+  defaultHome: PropTypes.string.isRequired,
 }
 
 Page.defaultProps = {
   alwaysRender: false,
   showBreadcrumb: true,
+  homeLink: '',
 }
 
 const mapStateToProps = state => ({
   error: state.app.error,
   loaded: state.app.loaded,
+  defaultHome: state.app.config.notmEndpointUrl,
 })
 
 export default connect(mapStateToProps)(Page)
