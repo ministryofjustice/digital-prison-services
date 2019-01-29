@@ -44,10 +44,12 @@ export class GlobalSearchContainer extends Component {
     resetErrorDispatch()
     searchTextDispatch(searchText)
     setLoadedDispatch(false)
-    try {
-      await this.doGlobalSearch(0, searchText)
-    } catch (error) {
-      handleError(error)
+    if (searchText) {
+      try {
+        await this.doGlobalSearch(0, searchText)
+      } catch (error) {
+        handleError(error)
+      }
     }
     setLoadedDispatch(true)
   }
@@ -146,8 +148,8 @@ export class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
-    const { searchText, licencesUrl, userRoles } = this.props
-    const pageTitle = searchText ? 'Global search results' : 'Global search'
+    const { searchPerformed, licencesUrl, userRoles, data } = this.props
+    const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
     const licencesUser = userRoles.includes('LICENCE_RO')
 
     return (
@@ -161,7 +163,7 @@ export class GlobalSearchContainer extends Component {
           clearFilters={this.clearFilters}
           handleDateOfBirthChange={this.handleDateOfBirthChange}
           showErrors={!validForm}
-          searchPerformed={!!searchText}
+          searchPerformed={searchPerformed}
           licencesUrl={licencesUrl}
           licencesUser={licencesUser}
           {...this.props}
@@ -181,6 +183,7 @@ GlobalSearchContainer.propTypes = {
   loaded: PropTypes.bool.isRequired,
   agencyId: PropTypes.string.isRequired,
   searchText: PropTypes.string,
+  searchPerformed: PropTypes.bool.isRequired,
   genderFilter: PropTypes.string.isRequired,
   locationFilter: PropTypes.string.isRequired,
   dateOfBirthFilter: PropTypes.shape({
@@ -232,6 +235,7 @@ const mapStateToProps = state => ({
   pageSize: state.globalSearch.pageSize,
   totalRecords: state.globalSearch.totalRecords,
   searchText: state.globalSearch.searchText,
+  searchPerformed: state.globalSearch.searchPerformed,
   locationFilter: state.globalSearch.locationFilter,
   genderFilter: state.globalSearch.genderFilter,
   dateOfBirthFilter: state.globalSearch.dateOfBirthFilter,

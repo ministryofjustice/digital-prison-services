@@ -37,6 +37,7 @@ const standardProps = {
   dateOfBirthDispatch: () => {},
   resetErrorDispatch: () => {},
   location: mockLocation,
+  searchPerformed: true,
 }
 
 describe('Global search container', () => {
@@ -63,8 +64,8 @@ describe('Global search container', () => {
     ).toHaveLength(1)
   })
 
-  it('should pass Global search as page title if there is no searchText', async () => {
-    const noSearchTextProps = { ...standardProps, searchText: null }
+  it('should pass Global search as page title if serchPerformed is false', async () => {
+    const noSearchTextProps = { ...standardProps, searchPerformed: false }
     const component = shallow(<GlobalSearchContainer {...noSearchTextProps} />)
 
     expect(component.find({ title: 'Global search results' })).toHaveLength(0)
@@ -72,7 +73,7 @@ describe('Global search container', () => {
   })
 
   it('should pass licenceUrl and that search has not been performed to Global search', async () => {
-    const noSearchTextProps = { ...standardProps, searchText: null }
+    const noSearchTextProps = { ...standardProps, searchPerformed: false }
     const component = shallow(<GlobalSearchContainer {...noSearchTextProps} />)
 
     expect(component.find({ searchPerformed: false, licencesUrl: 'http://licences/' })).toHaveLength(1)

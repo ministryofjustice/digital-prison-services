@@ -16,7 +16,7 @@ const mockHistory = {
 }
 
 describe('Global search container', () => {
-  it('should render button label when there is a search term correctly', async () => {
+  it('should render button label when no search has been performed', async () => {
     const component = shallow(
       <GlobalSearchForm
         handleSearch={() => {}}
@@ -28,12 +28,13 @@ describe('Global search container', () => {
         locationFilter="loc"
         genderFilter="m"
         history={mockHistory}
+        searchPerformed={false}
       />
     )
     expect(component.find('#search-again').text()).toEqual('Search')
   })
 
-  it('should render button label for no search term correctly', async () => {
+  it('should render button label for search performed', async () => {
     const component = shallow(
       <GlobalSearchForm
         handleSearch={() => {}}
@@ -45,6 +46,7 @@ describe('Global search container', () => {
         locationFilter="loc"
         genderFilter="m"
         history={mockHistory}
+        searchPerformed
       />
     )
     expect(component.find('#search-again').text()).toEqual('Search again')
