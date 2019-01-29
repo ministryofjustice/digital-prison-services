@@ -5,6 +5,7 @@ require('dotenv').config()
 require('./azure-appinsights')
 
 const path = require('path')
+const os = require('os')
 const express = require('express')
 const cookieSession = require('cookie-session')
 const passport = require('passport')
@@ -16,6 +17,7 @@ const webpack = require('webpack')
 const middleware = require('webpack-dev-middleware')
 const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
+const formData = require('express-form-data')
 
 const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
@@ -33,6 +35,7 @@ const establishmentRollFactory = require('./controllers/establishmentRollCount')
 const { movementsServiceFactory } = require('./controllers/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
+const { offenderLoaderFactory } = require('./controllers/offender-loader')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -58,6 +61,13 @@ app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
 
 app.use(helmet())
+
+app.use(
+  formData.parse({
+    uploadDir: os.tmpdir(),
+    autoClean: true,
+  })
+)
 
 app.use(
   hsts({
@@ -115,6 +125,7 @@ const controller = controllerFactory({
   establishmentRollService: establishmentRollFactory(elite2Api),
   globalSearchService: globalSearchFactory(elite2Api),
   movementsService: movementsServiceFactory(elite2Api, oauthClientId),
+  offenderLoader: offenderLoaderFactory(elite2Api),
 })
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 })
@@ -188,6 +199,7 @@ app.use('/api/movements/livingUnit/:livingUnitId/currently-out', controller.getO
 app.use('/api/movements/agency/:agencyId/currently-out', controller.getOffendersCurrentlyOutOfAgency)
 app.use('/api/movements/:agencyId/en-route', controller.getOffendersEnRoute)
 app.use('/api/globalSearch', controller.globalSearch)
+app.use('/api/appointments/upload-offenders', controller.uploadOffenders)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 
 app.get('*', (req, res) => {
