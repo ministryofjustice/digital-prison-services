@@ -51,7 +51,7 @@ class UploadOffendersContainer extends Component {
     const { offenders } = this.state
 
     return (
-      <Page title="Bulk upload offenders" keepContentVisibleOnError>
+      <Page title="Bulk upload offenders">
         <form className="form-group">
           <div>
             <h3 className="heading-medium">CSV example below</h3>

@@ -23,7 +23,7 @@ export class Page extends Component {
   }
 
   render() {
-    const { error, loaded, title, children, alwaysRender, showBreadcrumb, keepContentVisibleOnError } = this.props
+    const { error, loaded, title, children, alwaysRender, showBreadcrumb } = this.props
 
     if (loaded || error) {
       return (
@@ -34,7 +34,7 @@ export class Page extends Component {
               {title}
             </Header>
             {error && <Error error={error} />}
-            {(keepContentVisibleOnError || !error || alwaysRender) && <div className="page-content">{children}</div>}
+            {(!error || alwaysRender) && <div className="page-content">{children}</div>}
           </Container>
         </Fragment>
       )
@@ -51,13 +51,11 @@ Page.propTypes = {
   children: childrenType.isRequired,
   alwaysRender: PropTypes.bool,
   showBreadcrumb: PropTypes.bool,
-  keepContentVisibleOnError: PropTypes.bool,
 }
 
 Page.defaultProps = {
   alwaysRender: false,
   showBreadcrumb: true,
-  keepContentVisibleOnError: false,
 }
 
 const mapStateToProps = state => ({
