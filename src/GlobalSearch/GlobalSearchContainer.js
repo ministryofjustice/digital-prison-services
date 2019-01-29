@@ -20,7 +20,7 @@ import Page from '../Components/Page'
 
 const axios = require('axios')
 
-class GlobalSearchContainer extends Component {
+export class GlobalSearchContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -44,10 +44,12 @@ class GlobalSearchContainer extends Component {
     resetErrorDispatch()
     searchTextDispatch(searchText)
     setLoadedDispatch(false)
-    try {
-      await this.doGlobalSearch(0, searchText)
-    } catch (error) {
-      handleError(error)
+    if (searchText) {
+      try {
+        await this.doGlobalSearch(0, searchText)
+      } catch (error) {
+        handleError(error)
+      }
     }
     setLoadedDispatch(true)
   }
@@ -76,6 +78,7 @@ class GlobalSearchContainer extends Component {
         'Page-Limit': pageSize,
       },
     })
+
     totalRecordsDispatch(parseInt(response.headers['total-records'], 10))
     dataDispatch(response.data)
     pageNumberDispatch(pageNumber)
@@ -145,9 +148,12 @@ class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
+    const { searchPerformed, licencesUrl, userRoles, data } = this.props
+    const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
+    const licencesUser = userRoles.includes('LICENCE_RO')
 
     return (
-      <Page title="Global search results" alwaysRender>
+      <Page title={pageTitle} alwaysRender>
         <GlobalSearch
           handlePageAction={this.handlePageAction}
           handleSearchTextChange={this.handleSearchTextChange}
@@ -157,6 +163,9 @@ class GlobalSearchContainer extends Component {
           clearFilters={this.clearFilters}
           handleDateOfBirthChange={this.handleDateOfBirthChange}
           showErrors={!validForm}
+          searchPerformed={searchPerformed}
+          licencesUrl={licencesUrl}
+          licencesUser={licencesUser}
           {...this.props}
         />
       </Page>
@@ -173,7 +182,8 @@ GlobalSearchContainer.propTypes = {
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
   agencyId: PropTypes.string.isRequired,
-  searchText: PropTypes.string.isRequired,
+  searchText: PropTypes.string,
+  searchPerformed: PropTypes.bool.isRequired,
   genderFilter: PropTypes.string.isRequired,
   locationFilter: PropTypes.string.isRequired,
   dateOfBirthFilter: PropTypes.shape({
@@ -195,6 +205,7 @@ GlobalSearchContainer.propTypes = {
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+  licencesUrl: PropTypes.string.isRequired,
 
   // mapDispatchToProps
   dataDispatch: PropTypes.func.isRequired,
@@ -213,6 +224,7 @@ GlobalSearchContainer.propTypes = {
 
 GlobalSearchContainer.defaultProps = {
   error: '',
+  searchText: '',
 }
 
 const mapStateToProps = state => ({
@@ -223,10 +235,13 @@ const mapStateToProps = state => ({
   pageSize: state.globalSearch.pageSize,
   totalRecords: state.globalSearch.totalRecords,
   searchText: state.globalSearch.searchText,
+  searchPerformed: state.globalSearch.searchPerformed,
   locationFilter: state.globalSearch.locationFilter,
   genderFilter: state.globalSearch.genderFilter,
   dateOfBirthFilter: state.globalSearch.dateOfBirthFilter,
   error: state.app.error,
+  licencesUrl: state.app.config.licencesUrl,
+  userRoles: state.app.user.roles,
 })
 
 const mapDispatchToProps = dispatch => ({

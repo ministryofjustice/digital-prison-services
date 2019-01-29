@@ -158,6 +158,7 @@ class ActivitySpecification extends GebReportingSpec {
         this.initialPeriod = period.value()
         def today = getNow()
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
+        elite2api.stubGetMyRoles()
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc1'
