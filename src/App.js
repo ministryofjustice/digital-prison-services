@@ -39,6 +39,8 @@ import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
+import UploadOffendersContainer from './UploadOffenders/UploadOffendersContainer'
+import Appointments from './Appointments/appointments'
 
 import routePaths from './routePaths'
 
@@ -359,6 +361,30 @@ class App extends React.Component {
             path={routePaths.enRoute}
             render={({ history }) => (
               <EnRouteContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.bulkAppoinetments}
+            render={({ history }) => (
+              <Appointments
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.uploadOffenders}
+            render={({ history }) => (
+              <UploadOffendersContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
