@@ -76,6 +76,7 @@ export class GlobalSearchContainer extends Component {
         'Page-Limit': pageSize,
       },
     })
+
     totalRecordsDispatch(parseInt(response.headers['total-records'], 10))
     dataDispatch(response.data)
     pageNumberDispatch(pageNumber)

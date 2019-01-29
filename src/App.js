@@ -48,7 +48,7 @@ const axios = require('axios')
 
 class App extends React.Component {
   async componentWillMount() {
-    const { configDispatch, setErrorDispatch, userDetailsDispatch } = this.props
+    const { configDispatch, setErrorDispatch } = this.props
 
     axios.interceptors.response.use(
       config => {
@@ -65,19 +65,14 @@ class App extends React.Component {
     )
 
     try {
-      const [config, user, caseloads, roles] = await Promise.all([
-        axios.get('/api/config'),
-        axios.get('/api/me'),
-        axios.get('/api/usercaseloads'),
-        axios.get('/api/userroles'),
-      ])
+      const [config] = await Promise.all([axios.get('/api/config'), this.loadUserAndCaseload()])
 
       links.notmEndpointUrl = config.data.notmEndpointUrl
       if (config.data.googleAnalyticsId) {
         ReactGA.initialize(config.data.googleAnalyticsId)
       }
+
       configDispatch(config.data)
-      userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data, roles: roles.data })
     } catch (error) {
       setErrorDispatch(error.message)
     }
@@ -192,12 +187,12 @@ class App extends React.Component {
   }
 
   switchCaseLoad = async (newCaseload, location) => {
-    const { switchAgencyDispatch } = this.props
+    const { switchAgencyDispatch, config } = this.props
 
     try {
       if (location.pathname.includes('global-search-results')) {
         await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
-        window.location.assign(links.notmEndpointUrl)
+        window.location.assign(config.notmEndpointUrl)
       } else {
         switchAgencyDispatch(newCaseload)
         await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
@@ -206,6 +201,17 @@ class App extends React.Component {
     } catch (error) {
       this.handleError(error)
     }
+  }
+
+  loadUserAndCaseload = async () => {
+    const { userDetailsDispatch } = this.props
+    const [user, caseloads, roles] = await Promise.all([
+      axios.get('/api/me'),
+      axios.get('/api/usercaseloads'),
+      axios.get('/api/userroles'),
+    ])
+
+    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data, roles: roles.data })
   }
 
   render() {
@@ -456,6 +462,7 @@ App.propTypes = {
     notmEndpointUrl: PropTypes.string,
     mailTo: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
+    licencesUrl: PropTypes.string,
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
@@ -466,7 +473,7 @@ App.propTypes = {
     firstName: PropTypes.string,
     activeCaseLoadId: PropTypes.string,
     isOpen: PropTypes.bool,
-    roles: PropTypes.arrayOf(PropTypes.string),
+    roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   title: PropTypes.string.isRequired,
 

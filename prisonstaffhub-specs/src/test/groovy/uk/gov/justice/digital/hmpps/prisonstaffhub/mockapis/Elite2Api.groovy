@@ -48,6 +48,16 @@ class Elite2Api extends WireMockRule {
                         ]))))
     }
 
+    void stubGetMyRoles() {
+        this.stubFor(
+                get('/api/users/me/roles')
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(['ROLE']))))
+    }
+
     void stubGetMyCaseloads(List<Caseload> caseloads) {
         def json = new JsonBuilder()
         json caseloads, { caseload ->

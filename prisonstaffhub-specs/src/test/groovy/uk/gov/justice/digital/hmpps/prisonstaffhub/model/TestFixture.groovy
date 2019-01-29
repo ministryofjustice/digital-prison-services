@@ -30,6 +30,7 @@ class TestFixture {
         browser.to LoginPage
         oauthApi.stubValidOAuthTokenRequest currentUser
         elite2Api.stubGetMyDetails currentUser
+        elite2Api.stubGetMyRoles()
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
         elite2Api.stubActivityLocations()
