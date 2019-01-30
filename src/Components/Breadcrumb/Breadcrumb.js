@@ -2,16 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
-import links from '../../links'
 import { BreadcrumbContainer, BreadcrumbList, BreadcrumbListItem } from './Breadcrumb.styles'
 import { routeMatchType } from '../../types'
 import routes from '../../routes'
 
-export const Breadcrumb = ({ breadcrumbs, match }) => (
+export const Breadcrumb = ({ breadcrumbs, match, homeLink }) => (
   <BreadcrumbContainer>
     <BreadcrumbList>
       <BreadcrumbListItem>
-        <a data-qa="breadcrumb-home-page-link" href={links.getHomeLink()}>
+        <a data-qa="breadcrumb-home-page-link" href={homeLink}>
           Home
         </a>
       </BreadcrumbListItem>
@@ -35,6 +34,7 @@ export const Breadcrumb = ({ breadcrumbs, match }) => (
 Breadcrumb.propTypes = {
   breadcrumbs: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: routeMatchType.isRequired,
+  homeLink: PropTypes.string.isRequired,
 }
 
 export default withBreadcrumbs(routes)(Breadcrumb)

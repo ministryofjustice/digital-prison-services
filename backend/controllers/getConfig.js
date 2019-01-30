@@ -6,6 +6,7 @@ const getConfiguration = asyncMiddleware(async (req, res) =>
     notmEndpointUrl: config.app.notmEndpointUrl,
     mailTo: config.app.mailTo,
     googleAnalyticsId: config.analytics.googleAnalyticsId,
+    licencesUrl: config.app.licencesUrl,
   })
 )
 

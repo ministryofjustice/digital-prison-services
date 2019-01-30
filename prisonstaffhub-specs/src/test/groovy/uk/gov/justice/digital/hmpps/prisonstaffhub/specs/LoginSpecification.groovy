@@ -46,6 +46,7 @@ class LoginSpecification extends GebReportingSpec {
 
         oauthApi.stubValidOAuthTokenRequest(ITAG_USER)
         elite2api.stubGetMyDetails(ITAG_USER)
+        elite2api.stubGetMyRoles()
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
         elite2api.stubActivityLocations()
@@ -66,6 +67,7 @@ class LoginSpecification extends GebReportingSpec {
         and: 'The OAuth server responds with a long delay'
         oauthApi.stubValidOAuthTokenRequest(ITAG_USER, true)
         elite2api.stubGetMyDetails(ITAG_USER)
+        elite2api.stubGetMyRoles()
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups ITAG_USER.workingCaseload
         elite2api.stubActivityLocations()

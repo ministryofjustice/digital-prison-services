@@ -33,6 +33,7 @@ class GlobalSearchForm extends Component {
     const {
       handleSearchTextChange,
       searchText,
+      searchPerformed,
       handleSearch,
       history,
       genderFilter,
@@ -42,6 +43,8 @@ class GlobalSearchForm extends Component {
       handleDateOfBirthChange,
       showErrors,
     } = this.props
+
+    const buttonText = searchPerformed ? 'Search again' : 'Search'
 
     const toggleDetails = (event, clear) => {
       event.preventDefault()
@@ -134,7 +137,7 @@ class GlobalSearchForm extends Component {
               handleSearch(history)
             }}
           >
-            Search again
+            {buttonText}
           </button>
         </div>
         <details className="govuk-details visible" open={showFilters}>

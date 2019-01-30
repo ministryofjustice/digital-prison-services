@@ -6,8 +6,14 @@ const userMeFactory = elite2Api => {
     res.json(data)
   })
 
+  const userRoles = asyncMiddleware(async (req, res) => {
+    const data = await elite2Api.userRoles(res.locals)
+    res.json(data.map(role => role.roleCode))
+  })
+
   return {
     userMe,
+    userRoles,
   }
 }
 

@@ -16,8 +16,8 @@ export function defaultPeriod(time) {
 }
 
 const appInitialState = {
-  config: { mailTo: '' },
-  user: { activeCaseLoadId: null },
+  config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '' },
+  user: { activeCaseLoadId: null, roles: [] },
   shouldShowTerms: false,
   error: '',
   message: null,
@@ -58,6 +58,7 @@ const globalSearchInitialState = {
   totalRecords: 0,
   contextUser: {},
   searchText: '',
+  searchPerformed: false,
   locationFilter: 'ALL',
   genderFilter: 'ALL',
   dateOfBirthFilter: { valid: false, blank: true },
@@ -232,6 +233,7 @@ export function globalSearch(state = globalSearchInitialState, action) {
       return {
         ...state,
         data: action.data,
+        searchPerformed: true,
       }
     case ActionTypes.SET_GLOBAL_SEARCH_PAGINATION_PAGE_SIZE:
       return {
