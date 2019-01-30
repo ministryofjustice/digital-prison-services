@@ -24,7 +24,6 @@ const standardProps = {
   pageNumber: 1,
   pageSize: 1,
   totalRecords: 1,
-  licencesUser: false,
   licencesUrl: 'http://licences/',
   userRoles: ['SOMETHING'],
   dataDispatch: () => {},
@@ -55,13 +54,11 @@ describe('Global search container', () => {
     ).toHaveLength(1)
   })
 
-  it('should pass licencesUser true if roles includes LICENCES_RO', async () => {
-    const licencesProps = { ...standardProps, userRoles: ['SOMETHING', 'LICENCES_RO'] }
+  it('should pass licencesUser true if roles includes LICENCE_RO', async () => {
+    const licencesProps = { ...standardProps, userRoles: ['SOMETHING', 'LICENCE_RO'] }
     const component = shallow(<GlobalSearchContainer {...licencesProps} />)
 
-    expect(
-      component.find({ searchPerformed: true, licencesUrl: 'http://licences/', licencesUser: false })
-    ).toHaveLength(1)
+    expect(component.find('GlobalSearch').props().licencesUser).toEqual(true)
   })
 
   it('should pass Global search as page title if serchPerformed is false', async () => {
