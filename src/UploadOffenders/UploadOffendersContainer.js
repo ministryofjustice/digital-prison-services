@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import moment from 'moment'
+
 import Page from '../Components/Page/Page'
+import TimePicker from '../Components/TimePicker/TimePicker'
+
 import { resetError, setApplicationTitle, setLoaded } from '../redux/actions'
 
 class UploadOffendersContainer extends Component {
@@ -90,8 +94,15 @@ class UploadOffendersContainer extends Component {
                     <td className="row-gutters">{row.firstName}</td>
 
                     <td className="row-gutters">
-                      <input className="form-control" defaultValue={row.startTime} />
-                      <input className="form-control" />
+                      <TimePicker
+                        meta={{}}
+                        input={{ value: '', name: 'StartTime' }}
+                        title="Start time"
+                        component={TimePicker}
+                        date={moment()}
+                        now={moment()}
+                        futureTimeOnly
+                      />
                     </td>
                     <td />
                   </tr>
