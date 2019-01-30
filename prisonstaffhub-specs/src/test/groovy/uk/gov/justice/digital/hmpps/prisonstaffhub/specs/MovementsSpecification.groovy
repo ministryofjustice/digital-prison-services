@@ -31,11 +31,11 @@ class MovementsSpecification extends GebReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I navigate to the establishment roll count In today page"
-
         stubFlags(["A1234AA", "G0000AA"])
 
         elite2api.stubGetMovementsIn(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
+
         elite2api.stubIepSummariesForBookings([-1L, -2L])
 
         to InTodayPage
@@ -60,6 +60,7 @@ class MovementsSpecification extends GebReportingSpec {
 
         elite2api.stubGetMovementsOut(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
+        elite2api.stubGetMyRoles()
         to OutTodayPage
 
         then:
@@ -79,6 +80,7 @@ class MovementsSpecification extends GebReportingSpec {
         stubFlags(["A1234AA", "G0000AA"])
         elite2api.stubGetMovementsOut(ITAG_USER.workingCaseload, LocalDate.now())
         elite2api.stubImage()
+        elite2api.stubGetMyRoles()
         to OutTodayPage
 
         then:
@@ -120,6 +122,7 @@ class MovementsSpecification extends GebReportingSpec {
         elite2api.stubInReception(ITAG_USER.workingCaseload)
         elite2api.stubIepSummariesForBookings([-1, -2])
         elite2api.stubImage()
+        elite2api.stubGetMyRoles()
         elite2api.stubRecentMovements([["offenderNo": "A1234AA", "fromAgencyDescription": "Low Newton (HMP)"]])
         to InReception
 
@@ -140,6 +143,7 @@ class MovementsSpecification extends GebReportingSpec {
 
         elite2api.stubCurrentlyOut(123456L)
         elite2api.stubImage()
+        elite2api.stubGetMyRoles()
         elite2api.stubRecentMovements([
                 [
                     "offenderNo"         : "A1234AA",
@@ -171,6 +175,7 @@ class MovementsSpecification extends GebReportingSpec {
 
         elite2api.stubTotalOut('LEI')
         elite2api.stubImage()
+        elite2api.stubGetMyRoles()
         elite2api.stubRecentMovements([
                 [
                         "offenderNo"         : "A1234AA",
@@ -205,6 +210,7 @@ class MovementsSpecification extends GebReportingSpec {
         stubFlags(["A1234AA", "G0000AA"])
         elite2api.stubInReception(ITAG_USER.workingCaseload.id)
         elite2api.stubImage()
+        elite2api.stubGetMyRoles()
 
         def movements = [
                 Map.of(

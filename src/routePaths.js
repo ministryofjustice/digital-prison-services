@@ -6,4 +6,6 @@ export default {
   currentlyOut: '/establishment-roll/:livingUnitId/currently-out',
   enRoute: '/establishment-roll/en-route',
   totalOut: '/establishment-roll/total-currently-out',
+  uploadOffenders: '/bulk-appointments/upload-offenders',
+  bulkAppoinetments: '/bulk-appointments',
 }

@@ -17,6 +17,7 @@ const elite2ApiFactory = client => {
 
   const userLocations = context => get(context, 'api/users/me/locations')
   const currentUser = context => get(context, 'api/users/me')
+  const userRoles = context => get(context, 'api/users/me/roles')
   const userCaseLoads = context => get(context, 'api/users/me/caseLoads')
 
   const encodeQueryString = input => encodeURIComponent(input)
@@ -105,9 +106,12 @@ const elite2ApiFactory = client => {
 
   const getOffendersEnRoute = (context, agencyId) => get(context, `api/movements/${agencyId}/enroute`)
 
+  const getBooking = (context, offenderNo) => get(context, `api/bookings/offenderNo/${offenderNo}`)
+
   return {
     userLocations,
     currentUser,
+    userRoles,
     userCaseLoads,
     setActiveCaseload,
     getHouseblockList,
@@ -140,6 +144,7 @@ const elite2ApiFactory = client => {
     getOffendersCurrentlyOutOfAgency,
     getLocation,
     getOffendersEnRoute,
+    getBooking,
   }
 }
 

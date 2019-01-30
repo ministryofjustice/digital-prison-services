@@ -52,14 +52,15 @@ const globalSearchInitialState = {
   locationFilter: 'ALL',
   genderFilter: 'ALL',
   dateOfBirthFilter: { valid: false, blank: true },
+  searchPerformed: false,
 }
 
 describe('app (global) reducer', () => {
   it('should return the initial state', () => {
     expect(app(undefined, {})).toEqual({
       caseChangeRedirect: true,
-      config: { mailTo: '' },
-      user: { activeCaseLoadId: null },
+      config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '' },
+      user: { activeCaseLoadId: null, roles: [] },
       shouldShowTerms: false,
       error: '',
       message: null,
@@ -393,6 +394,7 @@ describe('app (global) reducer', () => {
     ).toEqual({
       ...globalSearchInitialState,
       data: ['data0', 'data1'],
+      searchPerformed: true,
     })
   })
 

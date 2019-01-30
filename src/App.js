@@ -39,6 +39,8 @@ import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
+import UploadOffendersContainer from './UploadOffenders/UploadOffendersContainer'
+import Appointments from './Appointments/appointments'
 
 import routePaths from './routePaths'
 
@@ -63,9 +65,8 @@ class App extends React.Component {
     )
 
     try {
-      this.loadUserAndCaseload()
+      const [config] = await Promise.all([axios.get('/api/config'), this.loadUserAndCaseload()])
 
-      const config = await axios.get('/api/config')
       links.notmEndpointUrl = config.data.notmEndpointUrl
       if (config.data.googleAnalyticsId) {
         ReactGA.initialize(config.data.googleAnalyticsId)
@@ -186,12 +187,12 @@ class App extends React.Component {
   }
 
   switchCaseLoad = async (newCaseload, location) => {
-    const { switchAgencyDispatch } = this.props
+    const { switchAgencyDispatch, config } = this.props
 
     try {
       if (location.pathname.includes('global-search-results')) {
         await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
-        window.location.assign(links.notmEndpointUrl)
+        window.location.assign(config.notmEndpointUrl)
       } else {
         switchAgencyDispatch(newCaseload)
         await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
@@ -204,10 +205,13 @@ class App extends React.Component {
 
   loadUserAndCaseload = async () => {
     const { userDetailsDispatch } = this.props
-    const user = await axios.get('/api/me')
-    const caseloads = await axios.get('/api/usercaseloads')
+    const [user, caseloads, roles] = await Promise.all([
+      axios.get('/api/me'),
+      axios.get('/api/usercaseloads'),
+      axios.get('/api/userroles'),
+    ])
 
-    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data })
+    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data, roles: roles.data })
   }
 
   render() {
@@ -225,6 +229,7 @@ class App extends React.Component {
       title,
       agencyId,
     } = this.props
+
     const routes = (
       // eslint-disable-next-line
       <div
@@ -255,7 +260,7 @@ class App extends React.Component {
             )}
           />
           <Route
-            path="(/global-search-results)"
+            path="/(global-search-results|global-search)"
             render={() => (
               <GlobalSearchContainer
                 handleError={this.handleError}
@@ -365,6 +370,30 @@ class App extends React.Component {
               />
             )}
           />
+
+          <Route
+            exact
+            path={routePaths.bulkAppoinetments}
+            render={({ history }) => (
+              <Appointments
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.uploadOffenders}
+            render={({ history }) => (
+              <UploadOffendersContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
         </div>
       </div>
     )
@@ -397,7 +426,7 @@ class App extends React.Component {
 
               return (
                 <Header
-                  homeLink={links.getHomeLink()}
+                  homeLink={config.notmEndpointUrl}
                   title={title}
                   logoText="HMPPS"
                   user={user}
@@ -433,6 +462,7 @@ App.propTypes = {
     notmEndpointUrl: PropTypes.string,
     mailTo: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
+    licencesUrl: PropTypes.string,
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
@@ -443,6 +473,7 @@ App.propTypes = {
     firstName: PropTypes.string,
     activeCaseLoadId: PropTypes.string,
     isOpen: PropTypes.bool,
+    roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   title: PropTypes.string.isRequired,
 

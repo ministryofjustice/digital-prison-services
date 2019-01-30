@@ -8,7 +8,17 @@ import { getOffenderLink } from '../links'
 import PreviousNextNavigation from '../PreviousNextNavigation'
 import { properCaseName } from '../utils'
 
-const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRecords, handlePageAction }) => {
+const GlobalSearchResultList = ({
+  agencyId,
+  data,
+  pageSize,
+  pageNumber,
+  totalRecords,
+  handlePageAction,
+  licencesUser,
+  licencesUrl,
+  searchPerformed,
+}) => {
   const headings = (
     <tr>
       <th className="straight" />
@@ -17,6 +27,7 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
       <th className="straight">Date of birth</th>
       <th className="straight">Location</th>
       <th className="straight">Actual working name</th>
+      {licencesUser && <th className="straight" />}
     </tr>
   )
 
@@ -68,10 +79,21 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
         <td className="row-gutters">
           {properCaseName(prisoner.currentWorkingLastName)}, {properCaseName(prisoner.currentWorkingFirstName)}
         </td>
+        {licencesUser && (
+          <td className="row-gutters">
+            <a
+              href={`${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`}
+              className="clear-filters link clickable toLicences"
+            >
+              Update licence
+            </a>
+          </td>
+        )}
       </tr>
     ))
 
   const pagination = { perPage: pageSize, pageNumber }
+  const noResultsText = searchPerformed ? 'No prisoners found' : 'Use the search box above'
 
   return (
     <div>
@@ -80,7 +102,7 @@ const GlobalSearchResultList = ({ agencyId, data, pageSize, pageNumber, totalRec
         <tbody>{offenders}</tbody>
       </table>
       {(!offenders || offenders.length === 0) && (
-        <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
+        <div className="font-small padding-top-large padding-bottom padding-left">{noResultsText}</div>
       )}
       <div>
         <PreviousNextNavigation
@@ -113,6 +135,9 @@ GlobalSearchResultList.propTypes = {
   pageNumber: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
+  licencesUser: PropTypes.bool.isRequired,
+  licencesUrl: PropTypes.string.isRequired,
+  searchPerformed: PropTypes.bool.isRequired,
 }
 
 export default GlobalSearchResultList

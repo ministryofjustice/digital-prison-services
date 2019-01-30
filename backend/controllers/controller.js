@@ -1,4 +1,8 @@
+const fs = require('fs')
+const { isBinaryFileSync } = require('isbinaryfile')
+
 const asyncMiddleware = require('../middleware/asyncHandler')
+const { CsvParseError, readFile } = require('../csv-parser')
 
 const factory = ({
   activityListService,
@@ -7,6 +11,7 @@ const factory = ({
   establishmentRollService,
   globalSearchService,
   movementsService,
+  offenderLoader,
 }) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
@@ -81,6 +86,39 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const uploadOffenders = asyncMiddleware(async (req, res) => {
+    try {
+      const { offenders } = req.files
+      const { size } = fs.lstatSync(offenders.path)
+
+      const mb200 = 200000000
+
+      if (size > mb200) {
+        res.status(400)
+        res.send('The csv is to lage. Maximum file size is 200MB')
+        return
+      }
+
+      const bytes = fs.readFileSync(offenders.path)
+      if (isBinaryFileSync(bytes, size)) {
+        res.status(400)
+        res.send('Unsupported file type')
+        return
+      }
+
+      const fileContent = await readFile(offenders.path)
+      const viewModel = await offenderLoader.loadFromCsvContent(res.locals, fileContent)
+      res.json(viewModel)
+    } catch (error) {
+      if (error.name === CsvParseError.name) {
+        res.status(400)
+        res.send(error.message)
+        return
+      }
+      throw error
+    }
+  })
+
   return {
     getActivityList,
     getHouseblockList,
@@ -93,6 +131,7 @@ const factory = ({
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
+    uploadOffenders,
   }
 }
 
