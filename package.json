@@ -6,6 +6,7 @@
     "@govuk-react/constants": "^0.3.1",
     "@govuk-react/date-field": "^0.3.1",
     "@govuk-react/header": "^0.3.1",
+    "@govuk-react/select": "^0.5.0",
     "applicationinsights": "^1.0.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
