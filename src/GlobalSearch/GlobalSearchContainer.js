@@ -148,12 +148,15 @@ export class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
-    const { searchPerformed, licencesUrl, userRoles, data } = this.props
+    const { searchPerformed, licencesUrl, userRoles, location } = this.props
     const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
     const licencesUser = userRoles.includes('LICENCE_RO')
+    const backWhiteList = { licences: licencesUrl }
+    const { referrer } = queryString.parse(location.search)
+    const backLink = backWhiteList[referrer]
 
     return (
-      <Page title={pageTitle} alwaysRender>
+      <Page title={pageTitle} alwaysRender showBreadcrumb={!backLink} backLink={backLink}>
         <GlobalSearch
           handlePageAction={this.handlePageAction}
           handleSearchTextChange={this.handleSearchTextChange}
