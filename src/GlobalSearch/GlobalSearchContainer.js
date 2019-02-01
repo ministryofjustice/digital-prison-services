@@ -26,7 +26,7 @@ export class GlobalSearchContainer extends Component {
     this.state = {
       validForm: true,
     }
-    const { titleDispatch } = this.props
+    const { titleDispatch, location } = this.props
     titleDispatch('Global search')
     this.doGlobalSearch = this.doGlobalSearch.bind(this)
     this.handlePageAction = this.handlePageAction.bind(this)
@@ -36,6 +36,7 @@ export class GlobalSearchContainer extends Component {
     this.handleSearch = this.handleSearch.bind(this)
     this.clearFilters = this.clearFilters.bind(this)
     this.handleDateOfBirthChange = this.handleDateOfBirthChange.bind(this)
+    this.referrer = queryString.parse(location.search).referrer
   }
 
   async componentWillMount() {
@@ -111,7 +112,9 @@ export class GlobalSearchContainer extends Component {
 
     if (!validForm) return
 
-    history.replace(`/global-search-results?searchText=${searchText}`)
+    const searchPath = `/global-search-results?searchText=${searchText}`
+    const newPath = this.referrer ? `${searchPath}&referrer=${this.referrer}` : searchPath
+    history.replace(newPath)
 
     try {
       await this.doGlobalSearch(0, searchText)
@@ -148,12 +151,11 @@ export class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
-    const { searchPerformed, licencesUrl, userRoles, location } = this.props
+    const { searchPerformed, licencesUrl, userRoles } = this.props
     const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
     const licencesUser = userRoles.includes('LICENCE_RO')
     const backWhiteList = { licences: licencesUrl }
-    const { referrer } = queryString.parse(location.search)
-    const backLink = backWhiteList[referrer]
+    const backLink = backWhiteList[this.referrer]
 
     return (
       <Page title={pageTitle} alwaysRender showBreadcrumb={!backLink} backLink={backLink}>

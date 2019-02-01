@@ -99,26 +99,66 @@ describe('Global search container', () => {
   })
 
   it('should pass a backLink to Page if recognised referrer query', async () => {
-    const unknownReferrer = {
+    const knownReferrer = {
       hash: 'h',
       key: 'k',
       pathname: 'pn',
       search: '?referrer=licences',
       state: 'st',
     }
-    const component = shallow(<GlobalSearchContainer {...standardProps} location={unknownReferrer} />)
+    const component = shallow(<GlobalSearchContainer {...standardProps} location={knownReferrer} />)
     expect(component.find('Connect(Page)').props().backLink).toEqual('http://licences/')
   })
 
   it('should not show breadcrumbs if recognised referrer query', async () => {
-    const unknownReferrer = {
+    const knownReferrer = {
       hash: 'h',
       key: 'k',
       pathname: 'pn',
       search: '?referrer=licences',
       state: 'st',
     }
-    const component = shallow(<GlobalSearchContainer {...standardProps} location={unknownReferrer} />)
+    const component = shallow(<GlobalSearchContainer {...standardProps} location={knownReferrer} />)
     expect(component.find('Connect(Page)').props().showBreadcrumb).toEqual(false)
+  })
+
+  it('should include referrer on redirect url after search', async () => {
+    const historyMock = { replace: jest.fn() }
+    const knownReferrer = {
+      hash: 'h',
+      key: 'k',
+      pathname: 'pn',
+      search: '?referrer=licences',
+      state: 'st',
+    }
+
+    const component = shallow(<GlobalSearchContainer {...standardProps} location={knownReferrer} />)
+    component
+      .find('GlobalSearch')
+      .props()
+      .handleSearch(historyMock)
+
+    expect(historyMock.replace).toBeCalled()
+    expect(historyMock.replace).toBeCalledWith('/global-search-results?searchText=s&referrer=licences')
+  })
+
+  it('should not include referrer on redirect url after search if no referrer in query', async () => {
+    const historyMock = { replace: jest.fn() }
+    const knownReferrer = {
+      hash: 'h',
+      key: 'k',
+      pathname: 'pn',
+      search: '?oldSearch',
+      state: 'st',
+    }
+
+    const component = shallow(<GlobalSearchContainer {...standardProps} location={knownReferrer} />)
+    component
+      .find('GlobalSearch')
+      .props()
+      .handleSearch(historyMock)
+
+    expect(historyMock.replace).toBeCalled()
+    expect(historyMock.replace).toBeCalledWith('/global-search-results?searchText=s')
   })
 })
