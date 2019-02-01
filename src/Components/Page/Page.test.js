@@ -11,6 +11,7 @@ describe('<Page />', () => {
     children: 'Page content',
     homeLink: 'http://home/',
     defaultHome: 'http://notmhome/',
+    backLink: 'http://this/',
   }
 
   describe('when the page is loading', () => {
@@ -53,6 +54,15 @@ describe('<Page />', () => {
       ).toEqual(true)
     })
 
+    it('should render a back link if prop passed in', () => {
+      expect(
+        wrapper
+          .find('BackLink')
+          .find({ href: 'http://this/' })
+          .exists()
+      ).toEqual(true)
+    })
+
     it('should NOT display the Breadcrumb component when showBreadcrumb is false', () => {
       wrapper = mount(
         <MemoryRouter initialEntries={['/random']}>
@@ -61,6 +71,16 @@ describe('<Page />', () => {
       )
 
       expect(wrapper.find('Breadcrumb').exists()).toEqual(false)
+    })
+
+    it('should NOT display the back link component when no backLink prop', () => {
+      wrapper = mount(
+        <MemoryRouter initialEntries={['/random']}>
+          <Page {...props} loaded backLink="" />
+        </MemoryRouter>
+      )
+
+      expect(wrapper.find('BackLink').exists()).toEqual(false)
     })
   })
 

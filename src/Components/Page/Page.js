@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Header from '@govuk-react/header'
+import BackLink from '@govuk-react/back-link'
 import Error from '../../Error'
 import Spinner from '../../Spinner'
 import { Container } from './Page.styles'
@@ -23,12 +24,13 @@ export class Page extends Component {
   }
 
   render() {
-    const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink } = this.props
+    const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink, backLink } = this.props
 
     if (loaded || error) {
       return (
         <Fragment>
           {showBreadcrumb && <Breadcrumb homeLink={homeLink} />}
+          {backLink && <BackLink href={backLink}>Back</BackLink>}
           <Container>
             <Header level={1} size="LARGE">
               {title}
@@ -52,11 +54,13 @@ Page.propTypes = {
   alwaysRender: PropTypes.bool,
   showBreadcrumb: PropTypes.bool,
   homeLink: PropTypes.string.isRequired,
+  backLink: PropTypes.string,
 }
 
 Page.defaultProps = {
   alwaysRender: false,
   showBreadcrumb: true,
+  backLink: '',
 }
 
 const mapStateToProps = state => ({
