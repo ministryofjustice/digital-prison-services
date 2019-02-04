@@ -4,6 +4,7 @@ import { css } from 'react-emotion'
 import { Link } from 'react-router-dom'
 import { FOCUS_WIDTH } from '@govuk-react/constants'
 import { FOOTER_LINK, FOOTER_LINK_HOVER, TEXT_COLOUR, FOCUS_COLOUR } from 'govuk-colours'
+import { linkOnClick } from '../../../helpers'
 
 export const footerLinkStyle = css`
   text-decoration: underline;
@@ -29,19 +30,6 @@ export const footerLinkStyle = css`
     ${TEXT_COLOUR};
   }
 `
-
-const linkOnClick = handlerFn => {
-  if (!handlerFn) return null
-
-  return {
-    tabIndex: 0,
-    role: 'link',
-    onClick: handlerFn,
-    onKeyDown: event => {
-      if (event.key === 'Enter') handlerFn(event)
-    },
-  }
-}
 
 const FooterLink = ({ href, to, clickHandler, children }) => {
   let LinkComponent = 'a'
