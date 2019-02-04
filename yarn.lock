@@ -158,6 +158,15 @@
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
 
+"@govuk-react/back-link@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/back-link/-/back-link-0.5.0.tgz#5f285fcb2f06be614451e35ab09e487dfd292127"
+  integrity sha512-WiYj6guUMOKzIgIbcZ+f8uAhlPYDx2XhLI5WCpA4RI450+1zl9Zhn6ws8CEZSmgl92A7NY9i55bsCKnRkFsM1Q==
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/constants@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.3.1.tgz#9c31afd86b27181a33b07c5bd2e97b058e058495"
