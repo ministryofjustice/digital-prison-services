@@ -1,0 +1,517 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Footer /> should match the default snapshot 1`] = `
+<footer
+  className="css-1ynevfo"
+  role="contentinfo"
+>
+  <div
+    className="css-1fmqkun"
+  >
+    <div
+      className="css-dzhhuw"
+    >
+      <div
+        className="css-1c78jxr"
+      >
+        <svg
+          className="css-11k3glg"
+          focusable="false"
+          height="17"
+          role="presentation"
+          viewBox="0 0 483.2 195.7"
+          width="41"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+            fill="currentColor"
+          />
+        </svg>
+        <span
+          className="css-7kp13n"
+        >
+          All content is available under the
+           
+          <a
+            className="css-1timic5"
+            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+            to={undefined}
+          >
+            Open Government Licence v3.0
+          </a>
+          , except where otherwise stated
+        </span>
+      </div>
+      <div
+        className="css-ua7yhj"
+      >
+        <a
+          className="css-1v1p8ig"
+          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+        >
+          © Crown copyright
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+`;
+
+exports[`<Footer /> should match the with children snapshot 1`] = `
+<footer
+  className="css-1ynevfo"
+  role="contentinfo"
+>
+  <div
+    className="css-1fmqkun"
+  >
+    <div
+      className="css-dzhhuw"
+    >
+      <div
+        className="css-1c78jxr"
+      >
+        <div
+          className="css-op3zxg"
+        >
+          Built by the 
+          <a
+            href="/gds"
+          >
+            Government Digital Service
+          </a>
+        </div>
+        <svg
+          className="css-11k3glg"
+          focusable="false"
+          height="17"
+          role="presentation"
+          viewBox="0 0 483.2 195.7"
+          width="41"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+            fill="currentColor"
+          />
+        </svg>
+        <span
+          className="css-7kp13n"
+        >
+          All content is available under the
+           
+          <a
+            className="css-1timic5"
+            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+            to={undefined}
+          >
+            Open Government Licence v3.0
+          </a>
+          , except where otherwise stated
+        </span>
+      </div>
+      <div
+        className="css-ua7yhj"
+      >
+        <a
+          className="css-1v1p8ig"
+          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+        >
+          © Crown copyright
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+`;
+
+exports[`<Footer /> should match the with meta snapshot 1`] = `
+<footer
+  className="css-1ynevfo"
+  role="contentinfo"
+>
+  <div
+    className="css-1fmqkun"
+  >
+    <div
+      className="css-dzhhuw"
+    >
+      <div
+        className="css-1c78jxr"
+      >
+        <h2
+          className="css-a97mk7-StyledHeader-StyledHoc e4u1u2g0"
+          size={undefined}
+        >
+          Support links
+        </h2>
+        <div
+          className="css-z5k0ly"
+        >
+          <li>
+            <a
+              className="css-1timic5"
+              href="/normal-link"
+              to={undefined}
+            >
+              Normal Link
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/router-link"
+              onClick={[Function]}
+            >
+              Router Link
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href={undefined}
+              onClick={[MockFunction]}
+              onKeyDown={[Function]}
+              role="link"
+              tabIndex={0}
+              to={undefined}
+            >
+              onClick Link
+            </a>
+          </li>
+        </div>
+        <svg
+          className="css-11k3glg"
+          focusable="false"
+          height="17"
+          role="presentation"
+          viewBox="0 0 483.2 195.7"
+          width="41"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+            fill="currentColor"
+          />
+        </svg>
+        <span
+          className="css-7kp13n"
+        >
+          All content is available under the
+           
+          <a
+            className="css-1timic5"
+            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+            to={undefined}
+          >
+            Open Government Licence v3.0
+          </a>
+          , except where otherwise stated
+        </span>
+      </div>
+      <div
+        className="css-ua7yhj"
+      >
+        <a
+          className="css-1v1p8ig"
+          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+        >
+          © Crown copyright
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+`;
+
+exports[`<Footer /> should match the with navigation snapshot 1`] = `
+<footer
+  className="css-1ynevfo"
+  role="contentinfo"
+>
+  <div
+    className="css-1fmqkun"
+  >
+    <div
+      className="css-thb5ct"
+    >
+      <div
+        className="css-cvoisk"
+      >
+        <h2
+          className="css-1yris73-StyledHeader-StyledHoc e4u1u2g0"
+          size="MEDIUM"
+        >
+          Services and information
+        </h2>
+        <ul
+          className="css-1wreg1n"
+        >
+          <li>
+            <a
+              className="css-1timic5"
+              href="/benefits"
+              to={undefined}
+            >
+              Benefits
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/births-deaths"
+              to={undefined}
+            >
+              Births, deaths, marriages and care
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/business-self-employed"
+              to={undefined}
+            >
+              Business and self-employed
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/childcare-parenting"
+              to={undefined}
+            >
+              Childcare and parenting
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/citizenship"
+              to={undefined}
+            >
+              Citizenship and living in the UK
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/crime-justice"
+              to={undefined}
+            >
+              Crime, justice and the law
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/disabled-people"
+              to={undefined}
+            >
+              Disabled people
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/driving-transport"
+              to={undefined}
+            >
+              Driving and transport
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/education-learning"
+              to={undefined}
+            >
+              Education and learning
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/employing-people"
+              to={undefined}
+            >
+              Employing people
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/environment-countryside"
+              to={undefined}
+            >
+              Environment and countryside
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/housing-local"
+              to={undefined}
+            >
+              Housing and local services
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/money-tax"
+              to={undefined}
+            >
+              Money and tax
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/passports-abroad"
+              to={undefined}
+            >
+              Passports, travel and living abroad
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/visas-immigration"
+              to={undefined}
+            >
+              Visas and immigration
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/working-pensions"
+              to={undefined}
+            >
+              Working, jobs and pensions
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div
+        className="css-cvoisk"
+      >
+        <h2
+          className="css-1yris73-StyledHeader-StyledHoc e4u1u2g0"
+          size="MEDIUM"
+        >
+          Departments and policy
+        </h2>
+        <ul
+          className="css-ul2glb"
+        >
+          <li>
+            <a
+              className="css-1timic5"
+              href="/how-gov-works"
+              to={undefined}
+            >
+              How government works
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/departments"
+              to={undefined}
+            >
+              Departments
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/worldwide"
+              to={undefined}
+            >
+              Worldwide
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/policies"
+              to={undefined}
+            >
+              Policies
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/publications"
+              to={undefined}
+            >
+              Publications
+            </a>
+          </li>
+          <li>
+            <a
+              className="css-1timic5"
+              href="/announcements"
+              to={undefined}
+            >
+              Announcements
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr
+      className="css-uf3sj0"
+    />
+    <div
+      className="css-dzhhuw"
+    >
+      <div
+        className="css-1c78jxr"
+      >
+        <svg
+          className="css-11k3glg"
+          focusable="false"
+          height="17"
+          role="presentation"
+          viewBox="0 0 483.2 195.7"
+          width="41"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+            fill="currentColor"
+          />
+        </svg>
+        <span
+          className="css-7kp13n"
+        >
+          All content is available under the
+           
+          <a
+            className="css-1timic5"
+            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+            to={undefined}
+          >
+            Open Government Licence v3.0
+          </a>
+          , except where otherwise stated
+        </span>
+      </div>
+      <div
+        className="css-ua7yhj"
+      >
+        <a
+          className="css-1v1p8ig"
+          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+        >
+          © Crown copyright
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+`;
