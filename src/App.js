@@ -4,9 +4,8 @@ import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
-import { Header } from 'new-nomis-shared-components'
+import { Header, Footer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
-import Footer from './Components/Footer'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
 import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
@@ -41,8 +40,8 @@ import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './C
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import UploadOffendersContainer from './UploadOffenders/UploadOffendersContainer'
 import Appointments from './Appointments/appointments'
-
 import routePaths from './routePaths'
+import { linkOnClick } from './helpers'
 
 const axios = require('axios')
 
@@ -448,7 +447,7 @@ class App extends React.Component {
             meta={{
               items: [
                 { text: 'Contact us', href: `mailto:${config && config.mailTo}` },
-                { text: 'Terms and conditions', clickHandler: this.showTermsAndConditions },
+                { text: 'Terms and conditions', ...linkOnClick(this.showTermsAndConditions) },
               ],
             }}
           />
