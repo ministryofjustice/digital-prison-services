@@ -177,5 +177,14 @@ const client = contentful.createClient({
   accessToken: 'abdc8ae3aa1f2c4101dc91c44d49314b979c2116e40ae8ec0ba36d24f103a01d',
 })
 
+// Fetch Footer pages.  TODO: pass in param to set meta or footer
+// https://www.contentful.com/blog/2018/01/23/how-to-write-reusable-sane-api-based-components/
+// https://www.cuga-moylan.com/blog/searching-entries-by-linked-content-types-in-contentful/
 export const fetchContent = () => dispatch =>
-  client.getEntries().then(response => dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items }))
+  client
+    .getEntries({
+      content_type: 'pages',
+      'fields.category.sys.contentType.sys.id': 'categories',
+      'fields.category.fields.title': 'Footer',
+    })
+    .then(response => console.log(response) || dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items }))

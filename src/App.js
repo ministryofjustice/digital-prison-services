@@ -415,10 +415,6 @@ class App extends React.Component {
       )
     }
 
-    const supportLinks = content
-      .filter(item => item.fields.category && item.fields.category.fields.title === 'Footer')
-      .map(link => link.fields.title)
-
     return (
       <Router>
         <div className="content">
@@ -461,7 +457,7 @@ class App extends React.Component {
             navigation={[
               {
                 title: 'Support links',
-                items: supportLinks.map(item => ({ href: '/test', text: item })),
+                items: content.map(item => ({ href: '/test', text: item.fields.title })),
               },
             ]}
           />
