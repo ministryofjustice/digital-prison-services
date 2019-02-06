@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import './index.scss'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import logger from 'redux-logger'
 import allocationApp from './redux/reducers'
 
@@ -11,7 +12,7 @@ import allocationApp from './redux/reducers'
 import { AppContainer } from './App'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-const store = createStore(allocationApp, composeEnhancers(applyMiddleware(logger)))
+const store = createStore(allocationApp, composeEnhancers(applyMiddleware(thunkMiddleware, logger)))
 
 ReactDOM.render(
   <Provider store={store}>

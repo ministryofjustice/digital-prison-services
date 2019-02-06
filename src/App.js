@@ -25,6 +25,7 @@ import {
   setTermsVisibility,
   setUserDetails,
   switchAgency,
+  fetchContent,
 } from './redux/actions/index'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
@@ -47,7 +48,9 @@ const axios = require('axios')
 
 class App extends React.Component {
   async componentWillMount() {
-    const { configDispatch, setErrorDispatch } = this.props
+    const { configDispatch, setErrorDispatch, fetchContentDispatch } = this.props
+
+    fetchContentDispatch()
 
     axios.interceptors.response.use(
       config => {
@@ -227,6 +230,7 @@ class App extends React.Component {
       user,
       title,
       agencyId,
+      content,
     } = this.props
 
     const routes = (
@@ -411,6 +415,10 @@ class App extends React.Component {
       )
     }
 
+    const supportLinks = content
+      .filter(item => item.fields.category && item.fields.category.fields.title === 'Footer')
+      .map(link => link.fields.title)
+
     return (
       <Router>
         <div className="content">
@@ -450,6 +458,12 @@ class App extends React.Component {
                 { text: 'Terms and conditions', ...linkOnClick(this.showTermsAndConditions) },
               ],
             }}
+            navigation={[
+              {
+                title: 'Support links',
+                items: supportLinks.map(item => ({ href: '/test', text: item })),
+              },
+            ]}
           />
         </div>
       </Router>
@@ -478,6 +492,7 @@ App.propTypes = {
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   title: PropTypes.string.isRequired,
+  content: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -505,6 +520,7 @@ const mapStateToProps = state => ({
   shouldShowTerms: state.app.shouldShowTerms,
   user: state.app.user,
   title: state.app.title,
+  content: state.app.content,
 })
 
 App.defaultProps = {
@@ -526,6 +542,7 @@ const mapDispatchToProps = dispatch => ({
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
   switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
+  fetchContentDispatch: () => dispatch(fetchContent()),
 })
 
 const AppContainer = connect(

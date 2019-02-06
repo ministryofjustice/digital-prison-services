@@ -26,6 +26,7 @@ const appInitialState = {
   showModal: {},
   title: 'Activity Lists',
   caseChangeRedirect: true,
+  content: [],
 }
 
 const searchInitialState = {
@@ -128,6 +129,11 @@ export function app(state = appInitialState, action) {
       return {
         ...state,
         title: action.title,
+      }
+    case ActionTypes.FETCH_CONTENT:
+      return {
+        ...state,
+        content: action.payload,
       }
     default:
       return state

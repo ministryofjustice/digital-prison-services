@@ -1,3 +1,4 @@
+import * as contentful from 'contentful'
 import * as ActionTypes from './actionTypes'
 
 export const setConfig = config => ({
@@ -170,3 +171,11 @@ export const setApplicationTitle = title => ({
   type: ActionTypes.SET_APPLICATION_TITLE,
   title,
 })
+
+const client = contentful.createClient({
+  space: 'edstadadqo4d',
+  accessToken: 'abdc8ae3aa1f2c4101dc91c44d49314b979c2116e40ae8ec0ba36d24f103a01d',
+})
+
+export const fetchContent = () => dispatch =>
+  client.getEntries().then(response => dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items }))
