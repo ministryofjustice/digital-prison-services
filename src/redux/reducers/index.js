@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import moment from 'moment'
 import * as ActionTypes from '../actions/actionTypes'
+import content from './content'
 
 export function defaultPeriod(time) {
   const midnight = moment('12:00a', 'HH:mm a')
@@ -132,20 +133,15 @@ export function app(state = appInitialState, action) {
         title: action.title,
       }
     case ActionTypes.FETCH_CONTENT_LINKS:
-      // console.log('action.payload: ', action.payload)
-
       return {
         ...state,
         links: action.payload,
       }
 
     case ActionTypes.FETCH_CONTENT:
-      // console.log('action.payload: ', action.payload)
-
       return {
         ...state,
         content: [...state.content, action.payload],
-        // content: 
       }
     default:
       return state
@@ -299,6 +295,7 @@ const prisonStaffHubApp = combineReducers({
   search,
   establishmentRoll,
   globalSearch,
+  // content,
 })
 
 export default prisonStaffHubApp

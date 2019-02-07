@@ -19,11 +19,7 @@ class Content extends Component {
   render() {
     const pageContent = this.getPageContent()
 
-    return (
-      <Page title={(pageContent && pageContent.title) || 'Content title'}>
-        {(pageContent && pageContent.title) || 'Body content'}
-      </Page>
-    )
+    return <Page title={pageContent && pageContent.title}>{pageContent && pageContent.title}</Page>
   }
 }
 
