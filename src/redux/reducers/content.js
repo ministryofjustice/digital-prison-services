@@ -41,11 +41,10 @@ export default function content(state = initialState, action) {
         ...state,
         links: action.payload,
       }
-
     case ActionTypes.FETCH_CONTENT:
       return {
         ...state,
-        content: [...state.content, action.payload],
+        entries: [...state.entries, action.payload],
       }
     default:
       return state

@@ -28,7 +28,6 @@ const props = {
   shouldShowTerms: true,
   sortOrder: 'ASC',
   user: { roles: [] },
-
   activitiesDispatch: fn,
   activityDataDispatch: fn,
   activityDispatch: fn,
@@ -47,6 +46,31 @@ const props = {
   sortOrderDispatch: fn,
   switchAgencyDispatch: fn,
   userDetailsDispatch: fn,
+  fetchContentLinksDispatch: fn,
+  links: {
+    Meta: [
+      {
+        fields: {
+          title: 'Terms and Conditions',
+          path: 'terms-conditions',
+        },
+      },
+    ],
+    Footer: [
+      {
+        fields: {
+          title: 'Features',
+          path: 'features',
+        },
+      },
+      {
+        fields: {
+          title: "What's new",
+          path: 'whats-new',
+        },
+      },
+    ],
+  },
 }
 
 describe('App component', () => {

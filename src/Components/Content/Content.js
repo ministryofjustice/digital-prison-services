@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -28,7 +29,7 @@ Content.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  content: state.app.content,
+  content: state.content.entries,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -27,8 +27,6 @@ const appInitialState = {
   showModal: {},
   title: 'Activity Lists',
   caseChangeRedirect: true,
-  content: [],
-  links: [],
 }
 
 const searchInitialState = {
@@ -131,17 +129,6 @@ export function app(state = appInitialState, action) {
       return {
         ...state,
         title: action.title,
-      }
-    case ActionTypes.FETCH_CONTENT_LINKS:
-      return {
-        ...state,
-        links: action.payload,
-      }
-
-    case ActionTypes.FETCH_CONTENT:
-      return {
-        ...state,
-        content: [...state.content, action.payload],
       }
     default:
       return state
@@ -295,7 +282,7 @@ const prisonStaffHubApp = combineReducers({
   search,
   establishmentRoll,
   globalSearch,
-  // content,
+  content,
 })
 
 export default prisonStaffHubApp

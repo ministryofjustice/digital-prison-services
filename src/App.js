@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import moment from 'moment'
 import { BrowserRouter as Router, Redirect, Route, Link } from 'react-router-dom'
@@ -43,7 +44,6 @@ import EnRouteContainer from './EnRoute/EnRouteContainer'
 import UploadOffendersContainer from './UploadOffenders/UploadOffendersContainer'
 import Appointments from './Appointments/appointments'
 import routePaths from './routePaths'
-import { linkOnClick } from './helpers'
 import Content from './Components/Content/Content'
 
 const axios = require('axios')
@@ -397,7 +397,6 @@ class App extends React.Component {
             path="/content/:post"
             // render={({ history }) => <Content setLoadedDispatch={setLoadedDispatch} />}
             component={Content}
-            // setLoadedDispatch={setLoadedDispatch}
           />
 
           <Route
@@ -540,7 +539,7 @@ const mapStateToProps = state => ({
   shouldShowTerms: state.app.shouldShowTerms,
   user: state.app.user,
   title: state.app.title,
-  links: state.app.links,
+  links: state.content.links,
 })
 
 App.defaultProps = {
