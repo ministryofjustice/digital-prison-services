@@ -181,12 +181,50 @@ const client = contentful.createClient({
 // https://www.contentful.com/blog/2018/01/23/how-to-write-reusable-sane-api-based-components/
 // https://www.cuga-moylan.com/blog/searching-entries-by-linked-content-types-in-contentful/
 // https://hackernoon.com/adding-redux-to-a-react-blog-97f5fea606c2
-export const fetchContent = () => dispatch =>
+// export const fetchContentLinks = () => dispatch =>
+//   client
+//     .getEntries({
+//       content_type: 'pages',
+//       'fields.category.sys.contentType.sys.id': 'categories',
+//       'fields.category.fields.title': 'Footer',
+//     })
+//     .then(response => console.log(response) || dispatch({ type: ActionTypes.FETCH_CONTENT_LINKS, payload: response.items }))
+//     .catch(error => console.log(error))
+
+// Get only page titles
+export const fetchContentLinks = () => dispatch =>
   client
     .getEntries({
       content_type: 'pages',
-      'fields.category.sys.contentType.sys.id': 'categories',
-      'fields.category.fields.title': 'Footer',
+      // select: 'sys.id,fields.<field_name>',
+      // 'fields.category.sys.contentType.sys.id': 'categories',
+      // 'fields.category.fields.title': 'Footer',
+      select: 'fields.title,fields.path,fields.category',
     })
-    .then(response => console.log(response) || dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items }))
-    .catch(error => console.log(error))
+    // Group links into their categories
+    .then(response =>
+      response.items.reduce((links, linkItem) => {
+        links[linkItem.fields.category.fields.title] = links[linkItem.fields.category.fields.title] || []
+        links[linkItem.fields.category.fields.title].push(linkItem)
+        return links
+      }, {})
+    )
+    .then(linkCategories => dispatch({ type: ActionTypes.FETCH_CONTENT_LINKS, payload: linkCategories }))
+    .catch(console.error)
+
+// get Individual post content based on path
+export const fetchContent = path => {
+  return dispatch => {
+    dispatch(setLoaded(false))
+    return client
+      .getEntries({
+        content_type: 'pages',
+        'fields.path': path,
+      })
+      .then(response => {
+        dispatch(setLoaded(true))
+        return dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items[0].fields })
+      })
+      .catch(console.error)
+  }
+}

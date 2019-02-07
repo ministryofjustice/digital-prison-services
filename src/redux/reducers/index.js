@@ -27,6 +27,7 @@ const appInitialState = {
   title: 'Activity Lists',
   caseChangeRedirect: true,
   content: [],
+  links: [],
 }
 
 const searchInitialState = {
@@ -130,10 +131,21 @@ export function app(state = appInitialState, action) {
         ...state,
         title: action.title,
       }
-    case ActionTypes.FETCH_CONTENT:
+    case ActionTypes.FETCH_CONTENT_LINKS:
+      // console.log('action.payload: ', action.payload)
+
       return {
         ...state,
-        content: action.payload,
+        links: action.payload,
+      }
+
+    case ActionTypes.FETCH_CONTENT:
+      // console.log('action.payload: ', action.payload)
+
+      return {
+        ...state,
+        content: [...state.content, action.payload],
+        // content: 
       }
     default:
       return state

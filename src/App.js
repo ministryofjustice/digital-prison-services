@@ -26,7 +26,7 @@ import {
   setTermsVisibility,
   setUserDetails,
   switchAgency,
-  fetchContent,
+  fetchContentLinks,
 } from './redux/actions/index'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
@@ -81,9 +81,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchContentDispatch } = this.props
+    const { fetchContentLinksDispatch } = this.props
 
-    fetchContentDispatch()
+    fetchContentLinksDispatch()
   }
 
   getActivityLocations = async (day, time) => {
@@ -236,7 +236,7 @@ class App extends React.Component {
       user,
       title,
       agencyId,
-      content,
+      links,
     } = this.props
 
     const routes = (
@@ -395,14 +395,9 @@ class App extends React.Component {
           <Route
             exact
             path="/content/:post"
-            // render={({ history }) => (
-            //   <Content
-            //     handleError={this.handleError}
-            //     raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-            //     history={history}
-            //   />
-            // )}
+            // render={({ history }) => <Content setLoadedDispatch={setLoadedDispatch} />}
             component={Content}
+            // setLoadedDispatch={setLoadedDispatch}
           />
 
           <Route
@@ -433,6 +428,14 @@ class App extends React.Component {
         </div>
       )
     }
+
+    const getLinksFromCategory = category =>
+      links[category] &&
+      links[category].map(item => ({
+        linkType: Link,
+        to: `/content/${item.fields.path}`,
+        text: item.fields.title,
+      }))
 
     return (
       <Router>
@@ -470,19 +473,13 @@ class App extends React.Component {
             {innerContent}
             <Footer
               meta={{
-                items: [
-                  { text: 'Contact us', href: `mailto:${config && config.mailTo}` },
-                  { text: 'Terms and conditions', ...linkOnClick(this.showTermsAndConditions) },
-                ],
+                items: getLinksFromCategory('Meta'),
               }}
               navigation={[
                 {
                   title: 'Support links',
-                  items: content.map(item => ({
-                    linkType: Link,
-                    to: `/content/${item.fields.path}`,
-                    text: item.fields.title,
-                  })),
+                  items: getLinksFromCategory('Footer'),
+                  // columns: 2,
                 },
               ]}
             />
@@ -514,7 +511,7 @@ App.propTypes = {
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   title: PropTypes.string.isRequired,
-  content: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  // content: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -529,7 +526,7 @@ App.propTypes = {
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
-  fetchContentDispatch: PropTypes.func.isRequired,
+  fetchContentLinksDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -543,7 +540,7 @@ const mapStateToProps = state => ({
   shouldShowTerms: state.app.shouldShowTerms,
   user: state.app.user,
   title: state.app.title,
-  content: state.app.content,
+  links: state.app.links,
 })
 
 App.defaultProps = {
@@ -565,7 +562,7 @@ const mapDispatchToProps = dispatch => ({
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
   switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
-  fetchContentDispatch: () => dispatch(fetchContent()),
+  fetchContentLinksDispatch: () => dispatch(fetchContentLinks()),
 })
 
 const AppContainer = connect(

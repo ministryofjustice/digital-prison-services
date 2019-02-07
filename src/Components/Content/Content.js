@@ -1,36 +1,45 @@
-import React from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-import { documentToReactComponent } from '@shinetools/rich-text-react-renderer'
-import { BLOCKS } from '@contentful/rich-text-types'
-import Header from '@govuk-react/header'
 import Page from '../Page'
+import { fetchContent } from '../../redux/actions'
 
-const options = {
-  // renderMark: {
-  //   [MARKS.BOLD]: text => `<custom-bold>${text}<custom-bold>`
-  // },
-  renderNode: {
-    [BLOCKS.HEADING_2]: (node, next) => (
-      <Header level={2} size="MEDIUM">
-        {next(node.content)}
-      </Header>
-    ),
-  },
+class Content extends Component {
+  componentDidMount() {}
+
+  getPageContent = () => {
+    const { match, content, fetchContentDispatch } = this.props
+    const pageContent = content.find(obj => obj.path === match.params.post)
+
+    if (!pageContent) fetchContentDispatch(match.params.post)
+
+    return pageContent
+  }
+
+  render() {
+    const pageContent = this.getPageContent()
+
+    return (
+      <Page title={(pageContent && pageContent.title) || 'Content title'}>
+        {(pageContent && pageContent.title) || 'Body content'}
+      </Page>
+    )
+  }
 }
 
-const Content = ({ content, match }) => {
-  const blogPost = content.filter(post => post.fields.path === match.params.post)
-  console.log('blogPost', blogPost)
-  return (
-    <Page title={blogPost[0].fields.title}>
-      {documentToReactComponent(blogPost[0].fields.body, options)}
-    </Page>
-  )
+Content.propTypes = {
+  fetchContentDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   content: state.app.content,
 })
 
-export default connect(mapStateToProps)(Content)
+const mapDispatchToProps = dispatch => ({
+  fetchContentDispatch: path => dispatch(fetchContent(path)),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Content)
