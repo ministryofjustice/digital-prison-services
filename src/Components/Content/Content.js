@@ -1,9 +1,28 @@
 /* eslint-disable */
 import React, { Component } from 'react'
+import Header from '@govuk-react/header'
+import { documentToReactComponent } from '@shinetools/rich-text-react-renderer'
+import { BLOCKS } from '@contentful/rich-text-types'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Page from '../Page'
 import { fetchContent } from '../../redux/actions'
+
+// TODO:
+// Probably switch to markdown as unsure about rich-text-react-renderer at the moment
+// Manage how and when the content is loaded, component didmount etc
+// Look at reducers and set their own loading, success, error state etc, rather than relying on app wide state
+
+const options = {
+  renderNode: {
+    [BLOCKS.HEADING_2]: (node, next) => (
+      <Header level={2} size="MEDIUM">
+        {next(node.content)}
+      </Header>
+    ),
+    [BLOCKS.UL_LIST]: (node, next) => <ul className="list list-bullet">{next(node.content)}</ul>,
+  },
+}
 
 class Content extends Component {
   componentDidMount() {}
@@ -20,7 +39,11 @@ class Content extends Component {
   render() {
     const pageContent = this.getPageContent()
 
-    return <Page title={pageContent && pageContent.title}>{pageContent && pageContent.title}</Page>
+    return (
+      <Page title={pageContent && pageContent.title}>
+        {pageContent && documentToReactComponent(pageContent.body, options)}
+      </Page>
+    )
   }
 }
 
