@@ -180,6 +180,7 @@ const client = contentful.createClient({
 // Fetch Footer pages.  TODO: pass in param to set meta or footer
 // https://www.contentful.com/blog/2018/01/23/how-to-write-reusable-sane-api-based-components/
 // https://www.cuga-moylan.com/blog/searching-entries-by-linked-content-types-in-contentful/
+// https://hackernoon.com/adding-redux-to-a-react-blog-97f5fea606c2
 export const fetchContent = () => dispatch =>
   client
     .getEntries({
@@ -188,3 +189,4 @@ export const fetchContent = () => dispatch =>
       'fields.category.fields.title': 'Footer',
     })
     .then(response => console.log(response) || dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items }))
+    .catch(error => console.log(error))

@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
@@ -11,6 +11,7 @@ import SearchContainer from './Search/SearchContainer'
 import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
+import ScrollToTop from './Components/ScrollToTop'
 
 import {
   resetError,
@@ -43,14 +44,13 @@ import UploadOffendersContainer from './UploadOffenders/UploadOffendersContainer
 import Appointments from './Appointments/appointments'
 import routePaths from './routePaths'
 import { linkOnClick } from './helpers'
+import Content from './Components/Content/Content'
 
 const axios = require('axios')
 
 class App extends React.Component {
   async componentWillMount() {
-    const { configDispatch, setErrorDispatch, fetchContentDispatch } = this.props
-
-    fetchContentDispatch()
+    const { configDispatch, setErrorDispatch } = this.props
 
     axios.interceptors.response.use(
       config => {
@@ -78,6 +78,12 @@ class App extends React.Component {
     } catch (error) {
       setErrorDispatch(error.message)
     }
+  }
+
+  componentDidMount() {
+    const { fetchContentDispatch } = this.props
+
+    fetchContentDispatch()
   }
 
   getActivityLocations = async (day, time) => {
@@ -388,6 +394,19 @@ class App extends React.Component {
 
           <Route
             exact
+            path="/content/:post"
+            // render={({ history }) => (
+            //   <Content
+            //     handleError={this.handleError}
+            //     raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+            //     history={history}
+            //   />
+            // )}
+            component={Content}
+          />
+
+          <Route
+            exact
             path={routePaths.uploadOffenders}
             render={({ history }) => (
               <UploadOffendersContainer
@@ -418,49 +437,56 @@ class App extends React.Component {
     return (
       <Router>
         <div className="content">
-          <Route
-            render={({ location, history }) => {
-              if (config && config.googleAnalyticsId) {
-                ReactGA.pageview(location.pathname)
-              }
-              const locationRequiresRedirectWhenCaseloadChanges = !(
-                location.pathname.includes('global-search-results') || location.pathname.includes('establishment-roll')
-              )
+          <ScrollToTop>
+            <Route
+              render={({ location, history }) => {
+                if (config && config.googleAnalyticsId) {
+                  ReactGA.pageview(location.pathname)
+                }
+                const locationRequiresRedirectWhenCaseloadChanges = !(
+                  location.pathname.includes('global-search-results') ||
+                  location.pathname.includes('establishment-roll')
+                )
 
-              return (
-                <Header
-                  homeLink={config.notmEndpointUrl}
-                  title={title}
-                  logoText="HMPPS"
-                  user={user}
-                  switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
-                  menuOpen={menuOpen}
-                  setMenuOpen={boundSetMenuOpen}
-                  caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
-                  history={history}
-                />
-              )
-            }}
-          />
-          {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
-          <ModalProvider>
-            <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
-          </ModalProvider>
-          {innerContent}
-          <Footer
-            meta={{
-              items: [
-                { text: 'Contact us', href: `mailto:${config && config.mailTo}` },
-                { text: 'Terms and conditions', ...linkOnClick(this.showTermsAndConditions) },
-              ],
-            }}
-            navigation={[
-              {
-                title: 'Support links',
-                items: content.map(item => ({ href: '/test', text: item.fields.title })),
-              },
-            ]}
-          />
+                return (
+                  <Header
+                    homeLink={config.notmEndpointUrl}
+                    title={title}
+                    logoText="HMPPS"
+                    user={user}
+                    switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
+                    menuOpen={menuOpen}
+                    setMenuOpen={boundSetMenuOpen}
+                    caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
+                    history={history}
+                  />
+                )
+              }}
+            />
+            {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
+            <ModalProvider>
+              <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
+            </ModalProvider>
+            {innerContent}
+            <Footer
+              meta={{
+                items: [
+                  { text: 'Contact us', href: `mailto:${config && config.mailTo}` },
+                  { text: 'Terms and conditions', ...linkOnClick(this.showTermsAndConditions) },
+                ],
+              }}
+              navigation={[
+                {
+                  title: 'Support links',
+                  items: content.map(item => ({
+                    linkType: Link,
+                    to: `/content/${item.fields.path}`,
+                    text: item.fields.title,
+                  })),
+                },
+              ]}
+            />
+          </ScrollToTop>
         </div>
       </Router>
     )
@@ -503,6 +529,7 @@ App.propTypes = {
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
+  fetchContentDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

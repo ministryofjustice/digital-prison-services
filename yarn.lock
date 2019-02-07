@@ -120,6 +120,24 @@
     follow-redirects "^1.2.5"
     is-buffer "^1.1.5"
 
+"@contentful/rich-text-html-renderer@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-html-renderer/-/rich-text-html-renderer-13.0.0.tgz#659b8f3af2476588ba6d02944be5d16ecb676a4b"
+  integrity sha512-gUhEjNyU/QR36+RsJ7/N+IaqJbQ9GiTezNRpF2NztOILdyjxplIbTt3HN5Yo99DT9K+qs8GbFV43EsIxbWgVjA==
+  dependencies:
+    "@contentful/rich-text-types" "^13.0.0"
+    escape-html "^1.0.3"
+
+"@contentful/rich-text-types@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-11.0.0.tgz#2f72baac297d9cdd12099fdd58bcd0f24dac7f9f"
+  integrity sha512-jPQUDCHqFowFg0OfXK2olXTr9eWF7g0iPbX6czymeXuejMbdqToBFjYVX6Ab2bSGKQuIVKO0bnq/HlzQW7XGCg==
+
+"@contentful/rich-text-types@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-13.0.0.tgz#22daa89b551980edc81ef277f7e929c7b5551cfb"
+  integrity sha512-1+a/WAFVBZl1tJb4J7nHZxbqde1CqwLYE+xtpqO8Pqr5zOgVV4MJHzA2t7SDYc/ypJIoNL0W8yEUNgf43iFL/Q==
+
 "@emotion/babel-utils@^0.6.4":
   version "0.6.10"
   resolved "https://registry.yarnpkg.com/@emotion/babel-utils/-/babel-utils-0.6.10.tgz#83dbf3dfa933fae9fc566e54fbb45f14674c6ccc"
@@ -330,6 +348,14 @@
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
   dependencies:
     any-observable "^0.3.0"
+
+"@shinetools/rich-text-react-renderer@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@shinetools/rich-text-react-renderer/-/rich-text-react-renderer-12.0.0.tgz#043f572ec813c41818cb23c4c10848502dd83054"
+  integrity sha512-NsYla1aIvEEoLLEDvDFP6sN7TB/n2rL6Vo0UUkWKlkN7vWL/hmPYwRBcaMZxKDIWPFDE1Y8o6b+B8b/v8gUU5A==
+  dependencies:
+    "@contentful/rich-text-types" "^11.0.0"
+    react "^16.6.3"
 
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
@@ -3256,7 +3282,7 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-escape-html@~1.0.3:
+escape-html@^1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
 
@@ -6353,10 +6379,10 @@ neo-async@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
-new-nomis-shared-components@^1.8.3:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.8.3.tgz#a044a03aa07757f310533915a6818941ca0ba245"
-  integrity sha512-XVOyZatA6p69T9EIKvVj5aLjJ5ri53cUkbv3hYHxGxOYM+BGtn9ZjNL+iI4xQBQCf2cr2TRFbseqRpG0/+uqxQ==
+new-nomis-shared-components@^1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.8.4.tgz#cabdf18a4a4e7194611261188f4a6dde1cc371dc"
+  integrity sha512-KfWI9RQesTR8hKqtOCnkhxYzJIHBxl1hAm09TRPmZ0/U1vROAufnMM7uVZ7ybKgVAshzVoBSvB5M1Nh+bRpWEA==
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -7747,6 +7773,16 @@ react@^16.3.2:
     prop-types "^15.6.2"
     scheduler "^0.11.2"
 
+react@^16.6.3:
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.1.tgz#ae11831f6cb2a05d58603a976afc8a558e852c4a"
+  integrity sha512-wLw5CFGPdo7p/AgteFz7GblI2JPOos0+biSoxf1FPsGxWQZdN/pj6oToJs1crn61DL3Ln7mN86uZ4j74p31ELQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.13.1"
+
 read-chunk@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/read-chunk/-/read-chunk-2.1.0.tgz#6a04c0928005ed9d42e1a6ac5600e19cbc7ff655"
@@ -8275,6 +8311,14 @@ scheduler@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
   integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.1.tgz#1a217df1bfaabaf4f1b92a9127d5d732d85a9591"
+  integrity sha512-VJKOkiKIN2/6NOoexuypwSrybx13MY7NSy9RNt8wPvZDMRT1CW6qlpF5jXRToXNHz3uWzbm2elNpZfXfGPqP9A==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
