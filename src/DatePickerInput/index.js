@@ -4,12 +4,13 @@ import PropTypes from 'prop-types'
 import DatePicker from './datePicker'
 
 const DatePickerInput = props => {
-  const { additionalClassName, handleDateChange, value, inputId } = props
+  const { additionalClassName, handleDateChange, label, value, inputId } = props
   return (
     <DatePicker
       inputProps={{
         placeholder: 'Today',
         className: `datePickerInput form-control ${additionalClassName}`,
+        label,
       }}
       name="date"
       shouldShowDay={date =>
@@ -32,10 +33,12 @@ DatePickerInput.propTypes = {
   value: PropTypes.string.isRequired,
   inputId: PropTypes.string.isRequired,
   additionalClassName: PropTypes.string,
+  label: PropTypes.string,
 }
 
 DatePickerInput.defaultProps = {
   additionalClassName: '',
+  label: '',
 }
 
 export default DatePickerInput

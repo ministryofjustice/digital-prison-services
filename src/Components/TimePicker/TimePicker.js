@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import moment from 'moment'
+import moment, { lang } from 'moment'
 import PropTypes from 'prop-types'
 import Select from '@govuk-react/select'
 import { Container } from './TimePicker.styles'
@@ -141,6 +141,7 @@ class TimePicker extends Component {
       futureTimeOnly,
       pastTimeOnly,
       input: { name },
+      label,
     } = this.props
     const { hours, minutes } = this.state
 
@@ -160,19 +161,26 @@ class TimePicker extends Component {
     })
 
     return (
-      <Container>
-        <Select disabled={!date} name="hours" id={name} onChange={this.onHoursChange} defaultValue="--" value={hours}>
-          {constructedHours.map(hour => (
-            <option key={hour}>{hour}</option>
-          ))}
-        </Select>
+      <div>
+        {label && (
+          <label className="form-label" htmlFor="hours">
+            {label}
+          </label>
+        )}
+        <Container>
+          <Select disabled={!date} name="hours" id={name} onChange={this.onHoursChange} defaultValue="--" value={hours}>
+            {constructedHours.map(hour => (
+              <option key={hour}>{hour}</option>
+            ))}
+          </Select>
 
-        <Select disabled={!date} name="minutes" onChange={this.onMinutesChange} defaultValue="--" value={minutes}>
-          {constructedMinutes.map(minute => (
-            <option key={minute}>{minute}</option>
-          ))}
-        </Select>
-      </Container>
+          <Select disabled={!date} name="minutes" onChange={this.onMinutesChange} defaultValue="--" value={minutes}>
+            {constructedMinutes.map(minute => (
+              <option key={minute}>{minute}</option>
+            ))}
+          </Select>
+        </Container>
+      </div>
     )
   }
 }
@@ -184,6 +192,7 @@ TimePicker.propTypes = {
   pastTimeOnly: PropTypes.bool,
   futureTimeOnly: PropTypes.bool,
   input: inputType.isRequired,
+  label: PropTypes.string,
 }
 
 TimePicker.defaultProps = {
@@ -191,6 +200,7 @@ TimePicker.defaultProps = {
   initialiseToNow: false,
   pastTimeOnly: false,
   futureTimeOnly: false,
+  label: '',
 }
 
 export default TimePicker
