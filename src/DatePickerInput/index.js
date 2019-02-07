@@ -4,18 +4,20 @@ import PropTypes from 'prop-types'
 import DatePicker from './datePicker'
 
 const DatePickerInput = props => {
-  const { additionalClassName, handleDateChange, value, inputId } = props
+  const { additionalClassName, handleDateChange, label, value, inputId, error } = props
   return (
     <DatePicker
       inputProps={{
         placeholder: 'Today',
         className: `datePickerInput form-control ${additionalClassName}`,
+        label,
+        error,
       }}
       name="date"
       shouldShowDay={date =>
-        !date.isAfter(
+        date.isAfter(
           moment()
-            .add(1, 'days')
+            .subtract(1, 'days')
             .startOf('day')
         )
       }
@@ -29,13 +31,18 @@ const DatePickerInput = props => {
 
 DatePickerInput.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   inputId: PropTypes.string.isRequired,
   additionalClassName: PropTypes.string,
+  label: PropTypes.string,
+  error: PropTypes.string,
 }
 
 DatePickerInput.defaultProps = {
   additionalClassName: '',
+  label: '',
+  error: '',
+  value: '',
 }
 
 export default DatePickerInput
