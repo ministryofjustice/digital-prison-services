@@ -1,7 +1,11 @@
 {
+  "engines": {
+    "node": "10.15.0"
+  },
   "name": "prisonstaffhub",
   "version": "0.0.1",
   "private": false,
+  "main": "backend/index.js",
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^13.0.0",
     "@contentful/rich-text-types": "^13.0.0",
