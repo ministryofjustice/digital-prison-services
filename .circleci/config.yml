@@ -149,3 +149,7 @@ workflows:
       - deploy_release_eb:
           requires:
             - build_docker
+          filters:
+            branches:
+              only:
+                - master
