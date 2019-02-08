@@ -158,9 +158,24 @@
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
 
+"@govuk-react/back-link@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/back-link/-/back-link-0.5.0.tgz#5f285fcb2f06be614451e35ab09e487dfd292127"
+  integrity sha512-WiYj6guUMOKzIgIbcZ+f8uAhlPYDx2XhLI5WCpA4RI450+1zl9Zhn6ws8CEZSmgl92A7NY9i55bsCKnRkFsM1Q==
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/constants@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.3.1.tgz#9c31afd86b27181a33b07c5bd2e97b058e058495"
+  dependencies:
+    govuk-colours "^1.0.3"
+
+"@govuk-react/constants@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.5.0.tgz#2ac187fc00f20964ba5f863f1c9c157aa6a35572"
   dependencies:
     govuk-colours "^1.0.3"
 
@@ -185,6 +200,14 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/error-text@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/error-text/-/error-text-0.5.0.tgz#0d17db7d73c57569e3a0bd6de1b7bdf8f14fb5e7"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/header@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/header/-/header-0.3.1.tgz#8380c9bd978ba50949e9bf1e0a5afb8e300a2317"
@@ -201,6 +224,14 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/hint-text@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/hint-text/-/hint-text-0.5.0.tgz#9c208e377e7684fea5af4dfbd3bd951c270d110f"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/hoc@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.3.1.tgz#bdf90cafccf3d86fb9e587b1d5693fe3e18f2d28"
@@ -209,11 +240,26 @@
     "@govuk-react/icons" "^0.3.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/hoc@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.5.0.tgz#ee4d58b85ce0b87233e13a0fdea328a16d4b0c51"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/icons" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/icons@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.3.1.tgz#5e7bca4d53f9eae969d10c741a15a2eb0f78a2c7"
   dependencies:
     "@govuk-react/constants" "^0.3.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/icons@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.5.0.tgz#cd8e99027bb652611947f3689a4654fe329e231f"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/label-text@^0.3.1":
@@ -224,12 +270,40 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/label-text@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/label-text/-/label-text-0.5.0.tgz#3d01bdf0790e54f1bb65e160c73dfdbdc996f5b4"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/label@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/label/-/label-0.3.1.tgz#940b85b45dc0f63f675bb6ed149caa148804b7a1"
   dependencies:
     "@govuk-react/constants" "^0.3.1"
     "@govuk-react/hoc" "^0.3.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/label@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/label/-/label-0.5.0.tgz#1129b184b70fddcc89918b03dc5c5af62825151c"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/select@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/select/-/select-0.5.0.tgz#ebc1f805b9adc082e654e9b0dd97de2d13cdef85"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/error-text" "^0.5.0"
+    "@govuk-react/hint-text" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/label" "^0.5.0"
+    "@govuk-react/label-text" "^0.5.0"
     govuk-colours "^1.0.3"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -6238,9 +6312,10 @@ neo-async@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
-new-nomis-shared-components@^1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.7.2.tgz#d14ff0a686cc99dae28b26a99713085706cee55b"
+new-nomis-shared-components@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.8.3.tgz#a044a03aa07757f310533915a6818941ca0ba245"
+  integrity sha512-XVOyZatA6p69T9EIKvVj5aLjJ5ri53cUkbv3hYHxGxOYM+BGtn9ZjNL+iI4xQBQCf2cr2TRFbseqRpG0/+uqxQ==
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -7542,6 +7617,11 @@ react-is@^16.3.2, react-is@^16.6.0, react-is@^16.6.1, react-is@^16.6.3:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
 
+react-is@^16.7.0:
+  version "16.7.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
+  integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
+
 react-lifecycles-compat@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
@@ -7606,6 +7686,16 @@ react-test-renderer@^16.0.0-0:
     prop-types "^15.6.2"
     react-is "^16.6.3"
     scheduler "^0.11.2"
+
+react-test-renderer@^16.7.0:
+  version "16.7.0"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.7.0.tgz#1ca96c2b450ab47c36ba92cd8c03fcefc52ea01c"
+  integrity sha512-tFbhSjknSQ6+ttzmuGdv+SjQfmvGcq3PFKyPItohwhhOBmRoTf1We3Mlt3rJtIn85mjPXOkKV+TaKK4irvk9Yg==
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    react-is "^16.7.0"
+    scheduler "^0.12.0"
 
 react@^16.3.2:
   version "16.6.3"
@@ -8131,6 +8221,14 @@ saxes@^3.1.3:
 scheduler@^0.11.2:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.11.2.tgz#a8db5399d06eba5abac51b705b7151d2319d33d3"
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
+  integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

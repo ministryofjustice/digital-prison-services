@@ -1,4 +1,5 @@
 const passport = require('passport')
+const querystring = require('querystring')
 const logger = require('./log')
 const contextProperties = require('./contextProperties')
 const config = require('./config')
@@ -31,7 +32,11 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
     res.render('login', { authError, authErrorText, apiUp: isApiUp, mailTo, homeLink })
   }
 
-  const remoteLoginIndex = passport.authenticate('oauth2')
+  const remoteLoginIndex = (req, res, next) => {
+    // eslint-disable-next-line no-param-reassign
+    req.session.returnTo = req.query.returnTo
+    return passport.authenticate('oauth2')(req, res, next)
+  }
 
   const login = (req, res) =>
     passport.authenticate('local', {
@@ -82,7 +87,8 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
         return
       }
 
-      res.redirect('/login')
+      const query = querystring.stringify({ returnTo: req.originalUrl })
+      res.redirect(`/login?${query}`)
     }
   }
 
@@ -102,7 +108,8 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
       return
     }
 
-    res.redirect('/login')
+    const query = querystring.stringify({ returnTo: req.originalUrl })
+    res.redirect(`/login?${query}`)
   }
 
   app.get('/login', loginMiddleware, config.app.remoteAuthStrategy ? remoteLoginIndex : loginIndex)
@@ -125,6 +132,10 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
       req.logIn(user, err2 => {
         if (err2) {
           return next(err2)
+        }
+        const { returnTo } = req.session
+        if (typeof returnTo === 'string' && returnTo.startsWith('/')) {
+          return res.redirect(returnTo)
         }
         return res.redirect('/')
       })
