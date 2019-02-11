@@ -7,9 +7,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Page from '../Page'
 import { fetchContent } from '../../redux/actions'
+import withLoading from '../Loading';
 
 // TODO:
-// Probably switch to markdown as unsure about rich-text-react-renderer at the moment
+// Probably switch to markdown as unsure about rich-text-react-renderer at the moment as it's in beta
 // Manage how and when the content is loaded, component didmount etc
 // Look at reducers and set their own loading, success, error state etc, rather than relying on app wide state
 
@@ -38,7 +39,7 @@ class Content extends Component {
 
   render() {
     const pageContent = this.getPageContent()
-
+    
     return (
       <Page title={pageContent && pageContent.title}>
         {pageContent && documentToReactComponent(pageContent.body, options)}
@@ -53,6 +54,7 @@ Content.propTypes = {
 
 const mapStateToProps = state => ({
   content: state.content.entries,
+  loading: state.content.loading,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -62,4 +64,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Content)
+)(withLoading(Content))

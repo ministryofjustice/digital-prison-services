@@ -30,6 +30,7 @@ import * as ActionTypes from '../actions/actionTypes'
 // }
 
 const initialState = {
+  loading: false,
   links: [],
   entries: [],
 }
@@ -41,12 +42,21 @@ export default function content(state = initialState, action) {
         ...state,
         links: action.payload,
       }
+    case ActionTypes.CONTENT_LOADING:
+      return {
+        ...state,
+        loading: action.isLoading,
+      }
     case ActionTypes.FETCH_CONTENT:
       return {
         ...state,
         entries: [...state.entries, action.payload],
+        loading: false,
       }
     default:
       return state
   }
 }
+
+// reducer for getting page content
+// reducers for getting links to content
