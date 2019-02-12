@@ -215,22 +215,20 @@ export const fetchContentLinks = () => dispatch =>
 
 // get Individual post content based on path
 export const fetchContent = path => dispatch => {
-  // dispatch(setLoaded(false)) //remove
-  dispatch(contentLoading())
+  dispatch(setLoaded(false)) //remove
+  dispatch(contentLoading()) // custom loader for content?
   return client
     .getEntries({
       content_type: 'pages',
       'fields.path': path,
     })
     .then(response => {
-      // dispatch(setLoaded(true)) //remove
-      // console.log(response.items)
-      // return dispatch({ type: ActionTypes.FETCH_CONTENT, payload: response.items[0].fields })
+      dispatch(setLoaded(true)) //remove
       dispatch(fetchContentSuccess(response.items[0].fields))
     })
     .catch(error => {
       console.error(error)
-      dispatch(contentLoading(false))
+      dispatch(contentLoading(false)) //custom loader for content?
     })
 }
 

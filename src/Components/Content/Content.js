@@ -38,9 +38,13 @@ class Content extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    const { match } = this.props
-    
-    if (nextProps.match !== match) this.setContent()
+    const { match, content } = this.props
+    const urlUpdated = nextProps.match.url !== match.url
+    const contentUpdated = nextProps.content !== content
+
+    if (urlUpdated || contentUpdated) {
+      this.setContent()
+    }
   }
 
   setContent() {
@@ -57,9 +61,9 @@ class Content extends Component {
     console.log('this.state', this.state)
 
     return (
-      // <Page title={pageContent && pageContent.title}>
-      <React.Fragment>{pageContent && documentToReactComponent(pageContent.body, options)}</React.Fragment>
-      // </Page>
+      <Page title={pageContent && pageContent.title}>
+        <React.Fragment>{pageContent && documentToReactComponent(pageContent.body, options)}</React.Fragment>
+      </Page>
     )
   }
 }
@@ -80,4 +84,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withLoading(Content))
+)(Content)
