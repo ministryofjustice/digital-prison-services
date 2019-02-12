@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Page from '../Page'
 import { fetchContent } from '../../redux/actions'
-import withLoading from '../Loading';
+import withLoading from '../Loading'
 
 // TODO:
 // Probably switch to markdown as unsure about rich-text-react-renderer at the moment as it's in beta
@@ -26,24 +26,40 @@ const options = {
 }
 
 class Content extends Component {
-  componentDidMount() {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      pageContent: undefined,
+    }
+  }
 
-  getPageContent = () => {
+  componentDidMount() {
+    this.setContent()
+  }
+
+  componentDidUpdate(nextProps) {
+    const { match } = this.props
+    
+    if (nextProps.match !== match) this.setContent()
+  }
+
+  setContent() {
     const { match, content, fetchContentDispatch } = this.props
-    const pageContent = content.find(obj => obj.path === match.params.post)
+    const preLoadedContent = content.find(obj => obj.path === match.params.post)
 
-    if (!pageContent) fetchContentDispatch(match.params.post)
-
-    return pageContent
+    if (preLoadedContent) this.setState({ pageContent: preLoadedContent })
+    else fetchContentDispatch(match.params.post)
   }
 
   render() {
-    const pageContent = this.getPageContent()
-    
+    const { pageContent } = this.state
+
+    console.log('this.state', this.state)
+
     return (
-      <Page title={pageContent && pageContent.title}>
-        {pageContent && documentToReactComponent(pageContent.body, options)}
-      </Page>
+      // <Page title={pageContent && pageContent.title}>
+      <React.Fragment>{pageContent && documentToReactComponent(pageContent.body, options)}</React.Fragment>
+      // </Page>
     )
   }
 }

@@ -428,13 +428,16 @@ class App extends React.Component {
       )
     }
 
-    const getLinksFromCategory = category =>
-      links[category] &&
-      links[category].map(item => ({
-        linkType: Link,
-        to: `/content/${item.fields.path}`,
-        text: item.fields.title,
-      }))
+    const getLinksFromCategory = category => {
+      if (links[category])
+        return links[category].map(item => ({
+          linkType: Link,
+          to: `/content/${item.fields.path}`,
+          text: item.fields.title,
+        }))
+
+      return []
+    }
 
     return (
       <Router>
@@ -477,7 +480,14 @@ class App extends React.Component {
               navigation={[
                 {
                   title: 'Support links',
-                  items: getLinksFromCategory('Footer'),
+                  items: [
+                    ...getLinksFromCategory('Footer'),
+                    {
+                      linkType: Link,
+                      to: `/`,
+                      text: 'Check unmount and mount link',
+                    },
+                  ],
                   // columns: 2,
                 },
               ]}
