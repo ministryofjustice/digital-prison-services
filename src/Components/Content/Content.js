@@ -45,15 +45,12 @@ class Content extends Component {
   }
 
   setContent() {
-    const { match, content, fetchContentDispatch } = this.props
-    // Check if content for this path is already loaded
+    const { match, content, dispatch } = this.props
     const preLoadedContent = content.find(obj => obj.path === match.params.post)
 
-    // If so, use it
     if (preLoadedContent) return this.setState({ pageContent: preLoadedContent })
 
-    // If not, fetch it - this will trigger re render and the above will then apply
-    return fetchContentDispatch(match.params.post)
+    return dispatch(fetchContent(match.params.post))
   }
 
   render() {
@@ -71,7 +68,7 @@ class Content extends Component {
 
 Content.propTypes = {
   content: PropTypes.arrayOf(PropTypes.shape({ title: PropTypes.string, body: PropTypes.object })).isRequired,
-  fetchContentDispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   match: routeMatchType.isRequired,
 }
 
@@ -79,11 +76,4 @@ const mapStateToProps = state => ({
   content: state.content.entries,
 })
 
-const mapDispatchToProps = dispatch => ({
-  fetchContentDispatch: path => dispatch(fetchContent(path)),
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Content)
+export default connect(mapStateToProps)(Content)
