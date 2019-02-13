@@ -10,6 +10,32 @@ jest.mock('./Spinner/index', () => '')
 const store = {
   getState: () => ({
     app: { showModal: {} },
+    content: {
+      links: {
+        Meta: [
+          {
+            fields: {
+              title: 'Terms and Conditions',
+              path: 'terms-conditions',
+            },
+          },
+        ],
+        Footer: [
+          {
+            fields: {
+              title: 'Features',
+              path: 'features',
+            },
+          },
+          {
+            fields: {
+              title: "What's new",
+              path: 'whats-new',
+            },
+          },
+        ],
+      },
+    },
   }),
   subscribe: () => {},
   dispatch: () => {},
@@ -18,7 +44,7 @@ const fn = jest.fn()
 const props = {
   activity: '',
   caseChangeRedirect: true,
-  config: { notmEndpointUrl: '' },
+  config: { notmEndpointUrl: '', mailTo: 'feedback@test.com' },
   currentLocation: 'cell',
   date: 'today',
   menuOpen: false,
@@ -47,30 +73,6 @@ const props = {
   switchAgencyDispatch: fn,
   userDetailsDispatch: fn,
   fetchContentLinksDispatch: fn,
-  links: {
-    Meta: [
-      {
-        fields: {
-          title: 'Terms and Conditions',
-          path: 'terms-conditions',
-        },
-      },
-    ],
-    Footer: [
-      {
-        fields: {
-          title: 'Features',
-          path: 'features',
-        },
-      },
-      {
-        fields: {
-          title: "What's new",
-          path: 'whats-new',
-        },
-      },
-    ],
-  },
 }
 
 describe('App component', () => {

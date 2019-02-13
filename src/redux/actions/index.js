@@ -177,65 +177,59 @@ const client = contentful.createClient({
   accessToken: 'abdc8ae3aa1f2c4101dc91c44d49314b979c2116e40ae8ec0ba36d24f103a01d',
 })
 
-/* eslint-disable */
-// Fetch Footer pages.  TODO: pass in param to set meta or footer
-// https://www.contentful.com/blog/2018/01/23/how-to-write-reusable-sane-api-based-components/
-// https://www.cuga-moylan.com/blog/searching-entries-by-linked-content-types-in-contentful/
-// https://hackernoon.com/adding-redux-to-a-react-blog-97f5fea606c2
-// export const fetchContentLinks = () => dispatch =>
-//   client
-//     .getEntries({
-//       content_type: 'pages',
-//       'fields.category.sys.contentType.sys.id': 'categories',
-//       'fields.category.fields.title': 'Footer',
-//     })
-//     .then(response => console.log(response) || dispatch({ type: ActionTypes.FETCH_CONTENT_LINKS, payload: response.items }))
-//     .catch(error => console.log(error))
+// /* eslint-disable */
 
-// Get only page titles
+const groupBy = (list, keyGetter) => {
+  const map = new Map()
+  list.forEach(item => {
+    const key = keyGetter(item)
+    const collection = map.get(key)
+    if (!collection) {
+      map.set(key, [item])
+    } else {
+      collection.push(item)
+    }
+  })
+  return map
+}
+
+export function fetchContentLinksSuccess(links) {
+  return { type: ActionTypes.SET_CONTENT_LINKS_SUCCESS, payload: links }
+}
+
 export const fetchContentLinks = () => dispatch =>
   client
     .getEntries({
       content_type: 'pages',
-      // select: 'sys.id,fields.<field_name>',
-      // 'fields.category.sys.contentType.sys.id': 'categories',
-      // 'fields.category.fields.title': 'Footer',
       select: 'fields.title,fields.path,fields.category',
     })
-    // Group links into their categories
-    .then(response =>
-      response.items.reduce((links, linkItem) => {
-        links[linkItem.fields.category.fields.title] = links[linkItem.fields.category.fields.title] || []
-        links[linkItem.fields.category.fields.title].push(linkItem)
-        return links
-      }, {})
-    )
-    .then(linkCategories => dispatch({ type: ActionTypes.FETCH_CONTENT_LINKS, payload: linkCategories }))
-    .catch(console.error)
+    .then(response => {
+      const groupedByCategory = groupBy(response.items, link => link.fields.category.fields.title)
+      dispatch(fetchContentLinksSuccess(groupedByCategory))
+    })
+    .catch(error => {
+      dispatch(setError(error.message))
+    })
 
-// get Individual post content based on path
+export function fetchContentSuccess(content) {
+  return { type: ActionTypes.SET_CONTENT_SUCCESS, payload: content }
+}
+
 export const fetchContent = path => dispatch => {
-  dispatch(setLoaded(false)) //remove
-  dispatch(contentLoading()) // custom loader for content?
+  dispatch(setLoaded(false))
+  dispatch(resetError())
   return client
     .getEntries({
       content_type: 'pages',
       'fields.path': path,
     })
     .then(response => {
-      dispatch(setLoaded(true)) //remove
-      dispatch(fetchContentSuccess(response.items[0].fields))
+      if (response.items.length === 0) dispatch(setError('There is no content for this path.'))
+      else dispatch(fetchContentSuccess(response.items[0].fields))
+      dispatch(setLoaded(true))
     })
     .catch(error => {
-      console.error(error)
-      dispatch(contentLoading(false)) //custom loader for content?
+      dispatch(setError(error))
+      dispatch(setLoaded(true))
     })
-}
-
-export function fetchContentSuccess(content) {
-  return { type: ActionTypes.FETCH_CONTENT, payload: content }
-}
-
-export function contentLoading(isLoading = true) {
-  return { type: ActionTypes.CONTENT_LOADING, isLoading }
 }

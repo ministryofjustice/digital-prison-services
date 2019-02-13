@@ -205,6 +205,13 @@
   dependencies:
     govuk-colours "^1.0.3"
 
+"@govuk-react/constants@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.5.1.tgz#cfa8ab2ce5fde8384e299b572ba8f39b2b9bf3a3"
+  integrity sha512-cexLDwKYKBMRJIBz/P/nQhRHXT60QNCog4P0eMeFm30VFkc1JaC761cckgg/vSmD/j7njweT+Nz+z1Cp7MKghg==
+  dependencies:
+    govuk-colours "^1.0.3"
+
 "@govuk-react/date-field@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/date-field/-/date-field-0.3.1.tgz#798fdc5636d40ec524a4ebefcbf7b75766afb69b"
@@ -232,6 +239,23 @@
   dependencies:
     "@govuk-react/constants" "^0.5.0"
     "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/grid-col@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/grid-col/-/grid-col-0.5.1.tgz#e0c306c49d11f583ce1c9d97e26032715fd6cc01"
+  integrity sha512-Sp1EXA9UNAutZcSQqYkQsPUYpItgEukmlC58glsHnQVJQk1g0G8KeqK2sgB7iyoZnTR0wBWgHdQXs2cZyZ0yVw==
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/grid-row@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/grid-row/-/grid-row-0.5.1.tgz#ddf024eece9c45986fce46fb590d445707550390"
+  integrity sha512-cT+nwAg2pv5tZ8+e2Kgw2DFc8BM5uYLuoEgCOH3KI2pbkluTtkDDe46FLSxfHiyulNeJxfl6K7gO1/kBEXmA+g==
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/layout" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/header@^0.3.1":
@@ -318,6 +342,14 @@
   dependencies:
     "@govuk-react/constants" "^0.5.0"
     "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/layout@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/layout/-/layout-0.5.1.tgz#33bbf2dbca1724ff7f13c4f7012c3c6d9878e33f"
+  integrity sha512-EQ7zWeLCb5/BfhALnKmTsxj3NjYeqOPkpS0Z3P+TReidyDLGcK53iftLa3C0LYZfHvFfqHAsSzLknqT76m+ezQ==
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/select@^0.5.0":

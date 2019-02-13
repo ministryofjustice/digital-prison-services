@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import moment from 'moment'
-import { BrowserRouter as Router, Redirect, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
@@ -27,7 +27,6 @@ import {
   setTermsVisibility,
   setUserDetails,
   switchAgency,
-  fetchContentLinks,
 } from './redux/actions/index'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
@@ -45,6 +44,7 @@ import UploadOffendersContainer from './UploadOffenders/UploadOffendersContainer
 import Appointments from './Appointments/appointments'
 import routePaths from './routePaths'
 import Content from './Components/Content/Content'
+import FooterContainer from './FooterContainer'
 
 const axios = require('axios')
 
@@ -78,12 +78,6 @@ class App extends React.Component {
     } catch (error) {
       setErrorDispatch(error.message)
     }
-  }
-
-  componentDidMount() {
-    const { fetchContentLinksDispatch } = this.props
-
-    fetchContentLinksDispatch()
   }
 
   getActivityLocations = async (day, time) => {
@@ -236,7 +230,6 @@ class App extends React.Component {
       user,
       title,
       agencyId,
-      links,
     } = this.props
 
     const routes = (
@@ -428,17 +421,6 @@ class App extends React.Component {
       )
     }
 
-    const getLinksFromCategory = category => {
-      if (links[category])
-        return links[category].map(item => ({
-          linkType: Link,
-          to: `/content/${item.fields.path}`,
-          text: item.fields.title,
-        }))
-
-      return []
-    }
-
     return (
       <Router>
         <div className="content">
@@ -473,25 +455,7 @@ class App extends React.Component {
               <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
             </ModalProvider>
             {innerContent}
-            <Footer
-              meta={{
-                items: getLinksFromCategory('Meta'),
-              }}
-              navigation={[
-                {
-                  title: 'Support links',
-                  items: [
-                    ...getLinksFromCategory('Footer'),
-                    {
-                      linkType: Link,
-                      to: `/`,
-                      text: 'Check unmount and mount link',
-                    },
-                  ],
-                  // columns: 2,
-                },
-              ]}
-            />
+            <FooterContainer feedbackEmail={config.mailTo} />
           </ScrollToTop>
         </div>
       </Router>
@@ -520,7 +484,6 @@ App.propTypes = {
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   title: PropTypes.string.isRequired,
-  // content: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -535,7 +498,6 @@ App.propTypes = {
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
-  fetchContentLinksDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -549,7 +511,6 @@ const mapStateToProps = state => ({
   shouldShowTerms: state.app.shouldShowTerms,
   user: state.app.user,
   title: state.app.title,
-  links: state.content.links,
 })
 
 App.defaultProps = {
@@ -571,7 +532,6 @@ const mapDispatchToProps = dispatch => ({
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
   switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
-  fetchContentLinksDispatch: () => dispatch(fetchContentLinks()),
 })
 
 const AppContainer = connect(

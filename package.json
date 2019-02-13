@@ -8,6 +8,8 @@
     "@govuk-react/back-link": "^0.5.0",
     "@govuk-react/constants": "^0.3.1",
     "@govuk-react/date-field": "^0.3.1",
+    "@govuk-react/grid-col": "^0.5.1",
+    "@govuk-react/grid-row": "^0.5.1",
     "@govuk-react/header": "^0.3.1",
     "@govuk-react/select": "^0.5.0",
     "@shinetools/rich-text-react-renderer": "^12.0.0",
