@@ -268,7 +268,7 @@ describe('actions', () => {
       store = mockStore({})
     })
 
-    it('creates SET_CONTENT_LINKS_SUCESS when fetching content links from contentful is completed', async () => {
+    it('creates SET_CONTENT_LINKS_SUCCESS when fetching content links from contentful is completed', async () => {
       const response = {
         items: [
           {

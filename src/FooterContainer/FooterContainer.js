@@ -25,10 +25,11 @@ class FooterContainer extends Component {
 
   render() {
     const { contentLinks, feedbackEmail } = this.props
-    const footerNavigationLinks = contentLinks.size > 0 ? this.getLinksFromCategory(contentLinks.get('Footer')) : []
+    const footerNavigationLinks =
+      contentLinks.size > 0 ? this.getLinksFromCategory(contentLinks.get('FooterNavigation')) : []
     const footerMetaLinks = [
-      ...(contentLinks.size > 0 ? this.getLinksFromCategory(contentLinks.get('Meta')) : []),
       { text: 'Contact', href: `mailto:${feedbackEmail}` },
+      ...(contentLinks.size > 0 ? this.getLinksFromCategory(contentLinks.get('FooterMeta')) : []),
     ]
 
     return (

@@ -225,6 +225,7 @@
 "@govuk-react/date-field@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/date-field/-/date-field-0.3.1.tgz#798fdc5636d40ec524a4ebefcbf7b75766afb69b"
+  integrity sha512-zNOeeCvQb9ka9HBNcPlYOwi0LD/7jIqNc7BzVszFoaHAmGbO8SIPwtR4Kcd2FxJeunkRkkfN1w8WnzWgHGaHYA==
   dependencies:
     "@govuk-react/constants" "^0.3.1"
     "@govuk-react/error-text" "^0.3.1"
@@ -294,6 +295,7 @@
 "@govuk-react/header@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/header/-/header-0.3.1.tgz#8380c9bd978ba50949e9bf1e0a5afb8e300a2317"
+  integrity sha512-qmiPpReLnWI6fTTuh0nkJKkt0XO9VXMDYHScEAPLqIeSM8XLFhQeiJqhH7hkxUFUASqE96mEYlvKyzyoQz4p+g==
   dependencies:
     "@govuk-react/constants" "^0.3.1"
     "@govuk-react/hoc" "^0.3.1"
@@ -336,7 +338,6 @@
 "@govuk-react/hoc@^0.5.0", "@govuk-react/hoc@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.5.1.tgz#051c2ffbeed0f9ccea9f40f74e19a3a0ac65339d"
-  integrity sha512-rCIMcWu0FIcLj48nEVt9yKy9T8dA2/b6Av9p0X3TqR7LSupaNTz53I+wqyObp1fJWhn8ZThBD8heMkTupChYrA==
   dependencies:
     "@govuk-react/constants" "^0.5.1"
     "@govuk-react/icons" "^0.5.1"
@@ -353,7 +354,6 @@
 "@govuk-react/icons@^0.5.0", "@govuk-react/icons@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.5.1.tgz#20e4c9bef1fa9d2c40c7c921be989419b64f3639"
-  integrity sha512-CIENeRcTJFpmbqw3RiqPigtLZGnIYEeCjjJqT8zMORdvcse/3jslJEyDRj13ffHzkKkFeYdkJeI1AIN9pon44g==
   dependencies:
     "@govuk-react/constants" "^0.5.1"
     govuk-colours "^1.0.3"
@@ -3028,6 +3028,7 @@ debug@3.1.0, debug@=3.1.0:
 debug@^3.1.0, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
+  integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
   dependencies:
     ms "^2.1.1"
 
@@ -5853,6 +5854,7 @@ json-stable-stringify@^1.0.1:
 json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
+  integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
 json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
@@ -7838,6 +7840,7 @@ qs@6.5.2, qs@~6.5.2:
 qs@^6.5.1, qs@^6.5.2:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.6.0.tgz#a99c0f69a8d26bf7ef012f871cdabb0aee4424c2"
+  integrity sha512-KIJqT9jQJDQx5h5uAVPimw6yVg2SekOKu959OCtktD3FjzbpvaPr8i4zzg07DOMz+igA4W/aNM7OV8H37pFYfA==
 
 query-string@^4.1.0:
   version "4.3.4"

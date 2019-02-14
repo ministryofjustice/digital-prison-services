@@ -41,7 +41,7 @@ import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './C
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import BulkAppointmentsContainer from './BulkAppointments/BulkAppointmentsContainer'
 import routePaths from './routePaths'
-import Content from './Components/Content/Content'
+import Content from './Components/Content'
 import FooterContainer from './FooterContainer'
 
 const axios = require('axios')
@@ -383,6 +383,8 @@ class App extends React.Component {
             )}
           />
         </div>
+
+        <Route exact path="/content/:post" component={Content} />
       </div>
     )
 
