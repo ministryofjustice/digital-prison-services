@@ -15,9 +15,9 @@ class FooterContainer extends Component {
   getLinksFromCategory = links => {
     if (links)
       return links.map(item => ({
-        linkType: Link,
-        to: `/content/${item.fields.path}`,
+        href: `/content/${item.fields.path}`,
         text: item.fields.title,
+        target: '_blank',
       }))
 
     return []
