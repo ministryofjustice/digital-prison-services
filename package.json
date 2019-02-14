@@ -112,6 +112,7 @@
     "style-loader": "^0.21.0",
     "supertest": "^3.1.0",
     "url-loader": "^1.0.1",
+    "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^2.1.3",
     "whatwg-fetch": "2.0.4"
   },
@@ -123,7 +124,8 @@
     "record-build-info": "node scripts/record-build-info",
     "plant-beanstalk": "node scripts/plant-beanstalk.js",
     "lint": "node node_modules/eslint/bin/eslint.js src backend",
-    "verify": "yarn lint && yarn test"
+    "verify": "yarn lint && yarn test",
+    "view-bundle-stats": "yarn build && webpack-bundle-analyzer build/stats.json"
   },
   "jest": {
     "collectCoverageFrom": [
