@@ -1,5 +1,5 @@
-import * as contentful from 'contentful'
 import * as ActionTypes from './actionTypes'
+import contentfulClient from '../../contentfulClient'
 
 export const setConfig = config => ({
   type: ActionTypes.SET_CONFIG,
@@ -172,11 +172,6 @@ export const setApplicationTitle = title => ({
   title,
 })
 
-const client = contentful.createClient({
-  space: 'edstadadqo4d',
-  accessToken: 'abdc8ae3aa1f2c4101dc91c44d49314b979c2116e40ae8ec0ba36d24f103a01d',
-})
-
 const groupBy = (list, keyGetter) => {
   const map = new Map()
   list.forEach(item => {
@@ -196,7 +191,7 @@ export function fetchContentLinksSuccess(links) {
 }
 
 export const fetchContentLinks = () => dispatch =>
-  client
+  contentfulClient
     .getEntries({
       content_type: 'pages',
       select: 'fields.title,fields.path,fields.category',
@@ -206,7 +201,7 @@ export const fetchContentLinks = () => dispatch =>
       dispatch(fetchContentLinksSuccess(groupedByCategory))
     })
     .catch(error => {
-      dispatch(setError(error.message))
+      // No reason to setError and crash the app if footer links aren't loading
     })
 
 export function fetchContentSuccess(content) {
@@ -216,7 +211,7 @@ export function fetchContentSuccess(content) {
 export const fetchContent = path => dispatch => {
   dispatch(setLoaded(false))
   dispatch(resetError())
-  return client
+  return contentfulClient
     .getEntries({
       content_type: 'pages',
       'fields.path': path,

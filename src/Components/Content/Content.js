@@ -1,26 +1,33 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import Header from '@govuk-react/header'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import { documentToReactComponent } from '@shinetools/rich-text-react-renderer'
-import { BLOCKS } from '@contentful/rich-text-types'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { BLOCKS, MARKS } from '@contentful/rich-text-types'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import Page from '../Page'
 import { fetchContent } from '../../redux/actions'
 import { routeMatchType } from '../../types'
-
-// TODO:
-// Probably switch to markdown as unsure about rich-text-react-renderer at the moment as it's in beta
+import { StyledList, StyledListItem } from './Content.styles'
 
 const options = {
+  renderMark: {
+    [MARKS.BOLD]: text => <strong>{text}</strong>,
+  },
   renderNode: {
-    [BLOCKS.HEADING_2]: (node, next) => (
+    [BLOCKS.HEADING_2]: (node, children) => (
       <Header level={2} size="MEDIUM">
-        {next(node.content)}
+        {children}
       </Header>
     ),
-    [BLOCKS.UL_LIST]: (node, next) => <ul className="list list-bullet">{next(node.content)}</ul>,
+    [BLOCKS.HEADING_3]: (node, children) => (
+      <Header level={3} size="SMALL">
+        {children}
+      </Header>
+    ),
+    [BLOCKS.UL_LIST]: (node, children) => <StyledList>{children}</StyledList>,
+    [BLOCKS.LIST_ITEM]: (node, children) => <StyledListItem>{children}</StyledListItem>,
   },
 }
 
@@ -59,7 +66,7 @@ class Content extends Component {
     return (
       <Page title={pageContent && pageContent.title}>
         <GridRow>
-          <GridCol columnTwoThirds>{pageContent && documentToReactComponent(pageContent.body, options)}</GridCol>
+          <GridCol columnTwoThirds>{pageContent && documentToReactComponents(pageContent.body, options)}</GridCol>
         </GridRow>
       </Page>
     )

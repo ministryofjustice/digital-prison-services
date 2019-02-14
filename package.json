@@ -4,6 +4,7 @@
   "private": false,
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^13.0.0",
+    "@contentful/rich-text-react-renderer": "^13.0.1",
     "@contentful/rich-text-types": "^13.0.0",
     "@govuk-react/back-link": "^0.5.0",
     "@govuk-react/constants": "^0.3.1",
@@ -11,8 +12,9 @@
     "@govuk-react/grid-col": "^0.5.1",
     "@govuk-react/grid-row": "^0.5.1",
     "@govuk-react/header": "^0.3.1",
+    "@govuk-react/hoc": "^0.5.1",
+    "@govuk-react/lib": "^0.6.0-alpha.1",
     "@govuk-react/select": "^0.5.0",
-    "@shinetools/rich-text-react-renderer": "^12.0.0",
     "applicationinsights": "^1.0.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
