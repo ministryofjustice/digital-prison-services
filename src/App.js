@@ -1,11 +1,10 @@
-/* eslint-disable */
 import React from 'react'
 import moment from 'moment'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
-import { Header, Footer } from 'new-nomis-shared-components'
+import { Header } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
@@ -385,12 +384,7 @@ class App extends React.Component {
             )}
           />
 
-          <Route
-            exact
-            path="/content/:post"
-            // render={({ history }) => <Content setLoadedDispatch={setLoadedDispatch} />}
-            component={Content}
-          />
+          <Route exact path="/content/:post" component={Content} />
 
           <Route
             exact
