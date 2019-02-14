@@ -98,6 +98,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                 <LabelText> Select date </LabelText>
                 {meta.touched && meta.error && <ErrorText>{meta.error}</ErrorText>}
                 <DatePicker
+                  futureOnly
                   inputId="date"
                   title="date"
                   error={String(meta.touched && meta.error)}
