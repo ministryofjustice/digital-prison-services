@@ -1,7 +1,6 @@
 import * as ActionTypes from '../actions/actionTypes'
 
 const initialState = {
-  loading: false,
   links: [],
   entries: [],
 }
