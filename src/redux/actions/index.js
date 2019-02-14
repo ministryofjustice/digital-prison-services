@@ -1,5 +1,6 @@
 import * as ActionTypes from './actionTypes'
 import contentfulClient from '../../contentfulClient'
+import { groupBy } from '../../helpers'
 
 export const setConfig = config => ({
   type: ActionTypes.SET_CONFIG,
@@ -171,20 +172,6 @@ export const setApplicationTitle = title => ({
   type: ActionTypes.SET_APPLICATION_TITLE,
   title,
 })
-
-const groupBy = (list, keyGetter) => {
-  const map = new Map()
-  list.forEach(item => {
-    const key = keyGetter(item)
-    const collection = map.get(key)
-    if (!collection) {
-      map.set(key, [item])
-    } else {
-      collection.push(item)
-    }
-  })
-  return map
-}
 
 export function fetchContentLinksSuccess(links) {
   return { type: ActionTypes.SET_CONTENT_LINKS_SUCCESS, payload: links }

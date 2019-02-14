@@ -1,5 +1,11 @@
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 import * as actions from './index'
 import * as types from './actionTypes'
+import contentfulClient from '../../contentfulClient'
+
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
 
 describe('actions', () => {
   it('should create an action to update the config', () => {
@@ -252,5 +258,96 @@ describe('actions', () => {
       totalRecords: 6,
     }
     expect(actions.setGlobalSearchTotalRecords(6)).toEqual(expectedAction)
+  })
+
+  describe('content actions', () => {
+    let store
+    const getEntriesSpy = jest.spyOn(contentfulClient, 'getEntries')
+
+    beforeEach(() => {
+      store = mockStore({})
+    })
+
+    it('creates SET_CONTENT_LINKS_SUCESS when fetching content links from contentful is completed', async () => {
+      const response = {
+        items: [
+          {
+            fields: {
+              title: 'Footer link',
+              path: 'footer-link',
+              category: {
+                fields: {
+                  title: 'Footer',
+                },
+              },
+            },
+          },
+          {
+            fields: {
+              title: 'Meta link',
+              path: 'meta-link',
+              category: {
+                fields: {
+                  title: 'Meta',
+                },
+              },
+            },
+          },
+        ],
+      }
+      const groupedByCategory = new Map([['Footer', [response.items[0]]], ['Meta', [response.items[1]]]])
+      const expectedActions = [{ type: types.SET_CONTENT_LINKS_SUCCESS, payload: groupedByCategory }]
+
+      getEntriesSpy.mockResolvedValue(response)
+
+      return store.dispatch(actions.fetchContentLinks()).then(() => {
+        expect(store.getActions()).toEqual(expectedActions)
+      })
+    })
+
+    it('creates SET_ERROR when there is no content for specified path', async () => {
+      const response = {
+        items: [],
+      }
+      const expectedActions = [
+        { type: types.SET_LOADED, loaded: false },
+        { type: types.RESET_ERROR },
+        { type: types.SET_ERROR, error: 'There is no content for this path.' },
+        { type: types.SET_LOADED, loaded: true },
+      ]
+
+      getEntriesSpy.mockResolvedValue(response)
+
+      return store.dispatch(actions.fetchContent()).then(() => {
+        expect(store.getActions()).toEqual(expectedActions)
+      })
+    })
+
+    it('creates SET_CONTENT_SUCCESS when there is content for specified path', async () => {
+      const response = {
+        items: [
+          {
+            fields: {
+              title: 'Content',
+              path: 'content',
+              category: 'footer',
+              body: 'Content body',
+            },
+          },
+        ],
+      }
+      const expectedActions = [
+        { type: types.SET_LOADED, loaded: false },
+        { type: types.RESET_ERROR },
+        { type: types.SET_CONTENT_SUCCESS, payload: response.items[0].fields },
+        { type: types.SET_LOADED, loaded: true },
+      ]
+
+      getEntriesSpy.mockResolvedValue(response)
+
+      return store.dispatch(actions.fetchContent()).then(() => {
+        expect(store.getActions()).toEqual(expectedActions)
+      })
+    })
   })
 })
