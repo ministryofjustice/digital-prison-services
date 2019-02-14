@@ -7,5 +7,5 @@ export default {
   enRoute: '/establishment-roll/en-route',
   totalOut: '/establishment-roll/total-currently-out',
   uploadOffenders: '/bulk-appointments/upload-offenders',
-  bulkAppoinetments: '/bulk-appointments',
+  bulkAppoinetments: '/add-bulk-appointments',
 }

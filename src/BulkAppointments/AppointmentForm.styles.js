@@ -1,6 +1,5 @@
 import styled from 'react-emotion'
 
-// eslint-disable-next-line import/prefer-default-export
 export const HorizontallyStacked = styled('div')`
   display: flex;
   flex-direction: row;
@@ -13,9 +12,9 @@ export const HorizontallyStacked = styled('div')`
     margin-right: 5px;
   }
 `
-export const FlexContainer = styled('div')`
+export const Container = styled('div')`
   display: flex;
-  flex-direction: ${props => props.direction};
+  flex-direction: row;
 `
 
 export const Section = styled('div')`
