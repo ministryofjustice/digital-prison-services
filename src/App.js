@@ -4,13 +4,14 @@ import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
-import { Header, Footer } from 'new-nomis-shared-components'
+import { Header } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
 import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
+import ScrollToTop from './Components/ScrollToTop'
 
 import {
   resetError,
@@ -40,7 +41,8 @@ import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './C
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import BulkAppointmentsContainer from './BulkAppointments/BulkAppointmentsContainer'
 import routePaths from './routePaths'
-import { linkOnClick } from './helpers'
+import Content from './Components/Content'
+import FooterContainer from './FooterContainer'
 
 const axios = require('axios')
 
@@ -381,6 +383,8 @@ class App extends React.Component {
             )}
           />
         </div>
+
+        <Route exact path="/content/:post" component={Content} />
       </div>
     )
 
@@ -401,43 +405,39 @@ class App extends React.Component {
     return (
       <Router>
         <div className="content">
-          <Route
-            render={({ location, history }) => {
-              if (config && config.googleAnalyticsId) {
-                ReactGA.pageview(location.pathname)
-              }
-              const locationRequiresRedirectWhenCaseloadChanges = !(
-                location.pathname.includes('global-search-results') || location.pathname.includes('establishment-roll')
-              )
+          <ScrollToTop>
+            <Route
+              render={({ location, history }) => {
+                if (config && config.googleAnalyticsId) {
+                  ReactGA.pageview(location.pathname)
+                }
+                const locationRequiresRedirectWhenCaseloadChanges = !(
+                  location.pathname.includes('global-search-results') ||
+                  location.pathname.includes('establishment-roll')
+                )
 
-              return (
-                <Header
-                  homeLink={config.notmEndpointUrl}
-                  title={title}
-                  logoText="HMPPS"
-                  user={user}
-                  switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
-                  menuOpen={menuOpen}
-                  setMenuOpen={boundSetMenuOpen}
-                  caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
-                  history={history}
-                />
-              )
-            }}
-          />
-          {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
-          <ModalProvider>
-            <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
-          </ModalProvider>
-          {innerContent}
-          <Footer
-            meta={{
-              items: [
-                { text: 'Contact us', href: `mailto:${config && config.mailTo}` },
-                { text: 'Terms and conditions', ...linkOnClick(this.showTermsAndConditions) },
-              ],
-            }}
-          />
+                return (
+                  <Header
+                    homeLink={config.notmEndpointUrl}
+                    title={title}
+                    logoText="HMPPS"
+                    user={user}
+                    switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
+                    menuOpen={menuOpen}
+                    setMenuOpen={boundSetMenuOpen}
+                    caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
+                    history={history}
+                  />
+                )
+              }}
+            />
+            {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
+            <ModalProvider>
+              <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
+            </ModalProvider>
+            {innerContent}
+            <FooterContainer feedbackEmail={config.mailTo} />
+          </ScrollToTop>
         </div>
       </Router>
     )

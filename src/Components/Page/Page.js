@@ -49,8 +49,8 @@ export class Page extends Component {
 Page.propTypes = {
   error: PropTypes.string.isRequired,
   loaded: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
-  children: childrenType.isRequired,
+  title: PropTypes.string,
+  children: childrenType,
   alwaysRender: PropTypes.bool,
   showBreadcrumb: PropTypes.bool,
   homeLink: PropTypes.string.isRequired,
@@ -61,6 +61,8 @@ Page.defaultProps = {
   alwaysRender: false,
   showBreadcrumb: true,
   backLink: '',
+  title: undefined,
+  children: undefined,
 }
 
 const mapStateToProps = state => ({

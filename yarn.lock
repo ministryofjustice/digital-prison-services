@@ -118,6 +118,26 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@contentful/axios@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@contentful/axios/-/axios-0.18.0.tgz#576e0e6047411a66971e82d40688a8c795e62f27"
+  integrity sha512-4r4Ww1IJlmRolKgovLTTmdS6CsdvXYVxgXRFwWSh1x36T/0Wg9kTwdaVaApZXcv1DfYyw9RSNdxIGSwTP2/Lag==
+  dependencies:
+    follow-redirects "^1.2.5"
+    is-buffer "^1.1.5"
+
+"@contentful/rich-text-react-renderer@^13.0.1":
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-react-renderer/-/rich-text-react-renderer-13.0.1.tgz#ec42f0c2735f92b8db82f4bc3f0233a90f1d22e7"
+  integrity sha512-oF4DQPQ5FAwq/na5a317rkRhDkESjYpqQ0BLZw4ewlfZ51C+vSJA/ZvJizJDenkt65VZszqaAiDg7DBTqScheg==
+  dependencies:
+    "@contentful/rich-text-types" "^13.0.0"
+
+"@contentful/rich-text-types@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-13.0.0.tgz#22daa89b551980edc81ef277f7e929c7b5551cfb"
+  integrity sha512-1+a/WAFVBZl1tJb4J7nHZxbqde1CqwLYE+xtpqO8Pqr5zOgVV4MJHzA2t7SDYc/ypJIoNL0W8yEUNgf43iFL/Q==
+
 "@emotion/babel-utils@^0.6.4":
   version "0.6.10"
   resolved "https://registry.yarnpkg.com/@emotion/babel-utils/-/babel-utils-0.6.10.tgz#83dbf3dfa933fae9fc566e54fbb45f14674c6ccc"
@@ -164,12 +184,14 @@
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
 
-"@govuk-react/back-link@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/back-link/-/back-link-0.5.0.tgz#5f285fcb2f06be614451e35ab09e487dfd292127"
+"@govuk-react/back-link@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/back-link/-/back-link-0.5.1.tgz#fa50f85ef686cc0c6cc584e7113e177412681fb9"
+  integrity sha512-S9ZvLDsiX9mp6lYvKmL2ehTpoGkCAtivHK+8ed64Np+cW61OmT57K1GF1/5OxqpqYgjqlphfDffNkhW/RzUf0A==
   dependencies:
-    "@govuk-react/constants" "^0.5.0"
-    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/button@0.5.0":
@@ -181,7 +203,7 @@
     "@govuk-react/icons" "^0.5.0"
     govuk-colours "^1.0.3"
 
-"@govuk-react/constants@0.3.1", "@govuk-react/constants@^0.3.1":
+"@govuk-react/constants@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.3.1.tgz#9c31afd86b27181a33b07c5bd2e97b058e058495"
   dependencies:
@@ -193,9 +215,17 @@
   dependencies:
     govuk-colours "^1.0.3"
 
-"@govuk-react/date-field@0.3.1":
+"@govuk-react/constants@^0.6.0-alpha.1":
+  version "0.6.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.6.0-alpha.1.tgz#4169cef7ca7d3f58fde394a0e4d1b7f589d3ef30"
+  integrity sha512-B8oE6ufriBq6JRf9E/ZIXJPMjek1u3xb4zJYPhBL/+ONUpgJs9bWr0OWVK/297dDkz2q/115C48WwdoM+K+7iQ==
+  dependencies:
+    govuk-colours "^1.0.3"
+
+"@govuk-react/date-field@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/date-field/-/date-field-0.3.1.tgz#798fdc5636d40ec524a4ebefcbf7b75766afb69b"
+  integrity sha512-zNOeeCvQb9ka9HBNcPlYOwi0LD/7jIqNc7BzVszFoaHAmGbO8SIPwtR4Kcd2FxJeunkRkkfN1w8WnzWgHGaHYA==
   dependencies:
     "@govuk-react/constants" "^0.3.1"
     "@govuk-react/error-text" "^0.3.1"
@@ -245,9 +275,27 @@
     "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/header@0.3.1":
+"@govuk-react/grid-col@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/grid-col/-/grid-col-0.5.1.tgz#e0c306c49d11f583ce1c9d97e26032715fd6cc01"
+  integrity sha512-Sp1EXA9UNAutZcSQqYkQsPUYpItgEukmlC58glsHnQVJQk1g0G8KeqK2sgB7iyoZnTR0wBWgHdQXs2cZyZ0yVw==
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/grid-row@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/grid-row/-/grid-row-0.5.1.tgz#ddf024eece9c45986fce46fb590d445707550390"
+  integrity sha512-cT+nwAg2pv5tZ8+e2Kgw2DFc8BM5uYLuoEgCOH3KI2pbkluTtkDDe46FLSxfHiyulNeJxfl6K7gO1/kBEXmA+g==
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/layout" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/header@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/header/-/header-0.3.1.tgz#8380c9bd978ba50949e9bf1e0a5afb8e300a2317"
+  integrity sha512-qmiPpReLnWI6fTTuh0nkJKkt0XO9VXMDYHScEAPLqIeSM8XLFhQeiJqhH7hkxUFUASqE96mEYlvKyzyoQz4p+g==
   dependencies:
     "@govuk-react/constants" "^0.3.1"
     "@govuk-react/hoc" "^0.3.1"
@@ -380,11 +428,27 @@
     "@govuk-react/hoc" "^0.5.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/layout@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/layout/-/layout-0.5.1.tgz#33bbf2dbca1724ff7f13c4f7012c3c6d9878e33f"
+  integrity sha512-EQ7zWeLCb5/BfhALnKmTsxj3NjYeqOPkpS0Z3P+TReidyDLGcK53iftLa3C0LYZfHvFfqHAsSzLknqT76m+ezQ==
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/lib@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/lib/-/lib-0.5.1.tgz#da46860e62fa5126e931a5de42fca2ec766c93bf"
   dependencies:
     "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/lib@^0.6.0-alpha.1":
+  version "0.6.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/lib/-/lib-0.6.0-alpha.1.tgz#45c09e9e3e3bcd7215e6ba19da14ac5e10305776"
+  integrity sha512-W5Ai4EOgEkhYlGueVOM//zjN4r6S0Mk4OXPbHF74px+tkB6AoPODA9EO8xHFcvYlcEAbcxZ1pU8m0DGO/jWtFg==
+  dependencies:
+    "@govuk-react/constants" "^0.6.0-alpha.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/list-item@^0.5.0":
@@ -2587,6 +2651,32 @@ content-type@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
 
+contentful-resolve-response@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/contentful-resolve-response/-/contentful-resolve-response-1.1.4.tgz#9eb656876eecb2cd00444f0adf26bd91a5ec1992"
+  integrity sha512-oFq6n6zjbiwD9/7mBa8YHPwvPM0B0D4uOgg1n/rVzpQPhCrzeIixNj6fbJAbDiJt05rZqxiY3K1Db7pPRhRaZw==
+  dependencies:
+    lodash "^4.17.4"
+
+contentful-sdk-core@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/contentful-sdk-core/-/contentful-sdk-core-6.2.1.tgz#1d190674ffa94e27a0c12e05a6d7350986827a1a"
+  integrity sha512-fCZ2GNpsoWyroZ/j86JUHnGWmjCMcGGNqD4ll6fepR3EFN9YGySLLJzkQiXEDGap5+vmwcURyac8MPl6jP2FsQ==
+  dependencies:
+    lodash "^4.17.10"
+    qs "^6.5.2"
+
+contentful@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/contentful/-/contentful-7.3.0.tgz#b4dbedf61639842d99ae524d651a7d6185c5a650"
+  integrity sha512-4RFW4+g0Io+I/X2EIsYzu8nVqh1B58v7lVnQofnHQpMdXeR9lufW6aXgsPvb1utJdbmesTEyr9Z0jgAP48p0mg==
+  dependencies:
+    "@contentful/axios" "^0.18.0"
+    contentful-resolve-response "^1.1.4"
+    contentful-sdk-core "^6.2.1"
+    json-stringify-safe "^5.0.1"
+    lodash "^4.17.5"
+
 convert-source-map@^1.4.0, convert-source-map@^1.5.0, convert-source-map@^1.5.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.6.0.tgz#51b537a8c43e0f04dec1993bffcdd504e758ac20"
@@ -2935,9 +3025,10 @@ debug@3.1.0, debug@=3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@^3.1.0:
+debug@^3.1.0, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
+  integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
   dependencies:
     ms "^2.1.1"
 
@@ -4022,6 +4113,13 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
+
+follow-redirects@^1.2.5:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.7.0.tgz#489ebc198dc0e7f64167bd23b03c4c19b5784c76"
+  integrity sha512-m/pZQy4Gj287eNy94nivy5wchN3Kp+Q5WgUPNy5lJSZ3sgkVKSYV/ZChMAQVIgx1SqfZ2zBZtPA2YlXIWxxJOQ==
+  dependencies:
+    debug "^3.2.6"
 
 follow-redirects@^1.3.0:
   version "1.5.10"
@@ -5753,9 +5851,10 @@ json-stable-stringify@^1.0.1:
   dependencies:
     jsonify "~0.0.0"
 
-json-stringify-safe@~5.0.1:
+json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
+  integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
 json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
@@ -6548,9 +6647,10 @@ neo-async@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
-new-nomis-shared-components@^1.8.3:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.8.3.tgz#a044a03aa07757f310533915a6818941ca0ba245"
+new-nomis-shared-components@^1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.8.6.tgz#da36c596fd0c3f8647b5884ab283205fc577d5af"
+  integrity sha512-UVkCPKDAVHvwqeBI6swV/MQQzcMx/FuyoL9AMXi9JFKlQq0EzLIdRloxVo1EHIhOhnoKA86PjvAe3KD3r9LwHw==
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -7737,9 +7837,10 @@ qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
 
-qs@^6.5.1:
+qs@^6.5.1, qs@^6.5.2:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.6.0.tgz#a99c0f69a8d26bf7ef012f871cdabb0aee4424c2"
+  integrity sha512-KIJqT9jQJDQx5h5uAVPimw6yVg2SekOKu959OCtktD3FjzbpvaPr8i4zzg07DOMz+igA4W/aNM7OV8H37pFYfA==
 
 query-string@^4.1.0:
   version "4.3.4"
@@ -8125,6 +8226,18 @@ redux-logger@^3.0.6:
   resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
   dependencies:
     deep-diff "^0.3.5"
+
+redux-mock-store@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.5.3.tgz#1f10528949b7ce8056c2532624f7cafa98576c6d"
+  integrity sha512-ryhkkb/4D4CUGpAV2ln1GOY/uh51aczjcRz9k2L2bPx/Xja3c5pSGJJPyR25GNVRXtKIExScdAgFdiXp68GmJA==
+  dependencies:
+    lodash.isplainobject "^4.0.6"
+
+redux-thunk@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+  integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
 redux@^4.0.0:
   version "4.0.1"

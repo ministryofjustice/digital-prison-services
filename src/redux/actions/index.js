@@ -1,4 +1,6 @@
 import * as ActionTypes from './actionTypes'
+import contentfulClient from '../../contentfulClient'
+import { groupBy } from '../../helpers'
 
 export const setConfig = config => ({
   type: ActionTypes.SET_CONFIG,
@@ -170,3 +172,44 @@ export const setApplicationTitle = title => ({
   type: ActionTypes.SET_APPLICATION_TITLE,
   title,
 })
+
+export function fetchContentLinksSuccess(links) {
+  return { type: ActionTypes.SET_CONTENT_LINKS_SUCCESS, payload: links }
+}
+
+export const fetchContentLinks = () => dispatch =>
+  contentfulClient
+    .getEntries({
+      content_type: 'pages',
+      select: 'fields.title,fields.path,fields.category',
+    })
+    .then(response => {
+      const groupedByCategory = groupBy(response.items, link => link.fields.category.fields.title)
+      dispatch(fetchContentLinksSuccess(groupedByCategory))
+    })
+    .catch(error => {
+      // No reason to setError and crash the app if footer links aren't loading
+    })
+
+export function fetchContentSuccess(content) {
+  return { type: ActionTypes.SET_CONTENT_SUCCESS, payload: content }
+}
+
+export const fetchContent = path => dispatch => {
+  dispatch(setLoaded(false))
+  dispatch(resetError())
+  return contentfulClient
+    .getEntries({
+      content_type: 'pages',
+      'fields.path': path,
+    })
+    .then(response => {
+      if (response.items.length === 0) dispatch(setError('There is no content for this path.'))
+      else dispatch(fetchContentSuccess(response.items[0].fields))
+      dispatch(setLoaded(true))
+    })
+    .catch(error => {
+      dispatch(setError(error))
+      dispatch(setLoaded(true))
+    })
+}
