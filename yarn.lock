@@ -72,6 +72,12 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
+"@babel/runtime@^7.1.5":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/template@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.0.0-beta.44.tgz#f8832f4fdcee5d59bf515e595fc5106c529b394f"
@@ -158,28 +164,36 @@
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
 
-"@govuk-react/back-link@^0.5.0":
+"@govuk-react/back-link@0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/back-link/-/back-link-0.5.0.tgz#5f285fcb2f06be614451e35ab09e487dfd292127"
-  integrity sha512-WiYj6guUMOKzIgIbcZ+f8uAhlPYDx2XhLI5WCpA4RI450+1zl9Zhn6ws8CEZSmgl92A7NY9i55bsCKnRkFsM1Q==
   dependencies:
     "@govuk-react/constants" "^0.5.0"
     "@govuk-react/hoc" "^0.5.0"
     govuk-colours "^1.0.3"
 
-"@govuk-react/constants@^0.3.1":
+"@govuk-react/button@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/button/-/button-0.5.0.tgz#7c2020472cf5df8d38106c0c48eafa7edc50ce85"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/icons" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/constants@0.3.1", "@govuk-react/constants@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.3.1.tgz#9c31afd86b27181a33b07c5bd2e97b058e058495"
   dependencies:
     govuk-colours "^1.0.3"
 
-"@govuk-react/constants@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.5.0.tgz#2ac187fc00f20964ba5f863f1c9c157aa6a35572"
+"@govuk-react/constants@^0.5.0", "@govuk-react/constants@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.5.1.tgz#cfa8ab2ce5fde8384e299b572ba8f39b2b9bf3a3"
   dependencies:
     govuk-colours "^1.0.3"
 
-"@govuk-react/date-field@^0.3.1":
+"@govuk-react/date-field@0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/date-field/-/date-field-0.3.1.tgz#798fdc5636d40ec524a4ebefcbf7b75766afb69b"
   dependencies:
@@ -192,6 +206,28 @@
     govuk-colours "^1.0.3"
     multi-input-input "0.0.3"
 
+"@govuk-react/error-summary@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/error-summary/-/error-summary-0.5.0.tgz#9be0454b0e152e8ce05de73513a57b9d447364ff"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/header" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/input-field" "^0.5.0"
+    "@govuk-react/list-item" "^0.5.0"
+    "@govuk-react/paragraph" "^0.5.0"
+    "@govuk-react/text-area" "^0.5.0"
+    "@govuk-react/unordered-list" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/error-text@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/error-text/-/error-text-0.5.0.tgz#0d17db7d73c57569e3a0bd6de1b7bdf8f14fb5e7"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/error-text@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/error-text/-/error-text-0.3.1.tgz#f98edbcdf6d9f1a9e5fd192e7e811d74aa0ff220"
@@ -200,20 +236,30 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/error-text@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/error-text/-/error-text-0.5.0.tgz#0d17db7d73c57569e3a0bd6de1b7bdf8f14fb5e7"
+"@govuk-react/error-text@^0.5.0", "@govuk-react/error-text@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/error-text/-/error-text-0.5.1.tgz#c11f26f4140d522382e3243d5b81ca5ea04aec08"
   dependencies:
-    "@govuk-react/constants" "^0.5.0"
-    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/header@^0.3.1":
+"@govuk-react/header@0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/header/-/header-0.3.1.tgz#8380c9bd978ba50949e9bf1e0a5afb8e300a2317"
   dependencies:
     "@govuk-react/constants" "^0.3.1"
     "@govuk-react/hoc" "^0.3.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/header@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/header/-/header-0.5.1.tgz#38c591782383690ce151a888065179a2aac5c9a3"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/hint-text@^0.3.1":
@@ -224,12 +270,13 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/hint-text@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/hint-text/-/hint-text-0.5.0.tgz#9c208e377e7684fea5af4dfbd3bd951c270d110f"
+"@govuk-react/hint-text@^0.5.0", "@govuk-react/hint-text@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/hint-text/-/hint-text-0.5.1.tgz#7b97fa52e5e0e2a4753acc8ed12285f7d696920a"
   dependencies:
-    "@govuk-react/constants" "^0.5.0"
-    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/hoc@^0.3.1":
@@ -240,12 +287,13 @@
     "@govuk-react/icons" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/hoc@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.5.0.tgz#ee4d58b85ce0b87233e13a0fdea328a16d4b0c51"
+"@govuk-react/hoc@^0.5.0", "@govuk-react/hoc@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.5.1.tgz#051c2ffbeed0f9ccea9f40f74e19a3a0ac65339d"
   dependencies:
-    "@govuk-react/constants" "^0.5.0"
-    "@govuk-react/icons" "^0.5.0"
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/icons" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@govuk-react/icons@^0.3.1":
@@ -255,11 +303,41 @@
     "@govuk-react/constants" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/icons@^0.5.0":
+"@govuk-react/icons@^0.5.0", "@govuk-react/icons@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.5.1.tgz#20e4c9bef1fa9d2c40c7c921be989419b64f3639"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/input-field@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/input-field/-/input-field-0.5.1.tgz#cdc0bc302547a66cdeb8e305c977c6a7f3712440"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/error-text" "^0.5.1"
+    "@govuk-react/hint-text" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/input" "^0.5.1"
+    "@govuk-react/label" "^0.5.1"
+    "@govuk-react/label-text" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/input@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/input/-/input-0.5.1.tgz#1ad022739ba135510f0e5f3d0e5ac804fe81728e"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/label-text@0.5.0":
   version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.5.0.tgz#cd8e99027bb652611947f3689a4654fe329e231f"
+  resolved "https://registry.yarnpkg.com/@govuk-react/label-text/-/label-text-0.5.0.tgz#3d01bdf0790e54f1bb65e160c73dfdbdc996f5b4"
   dependencies:
     "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/label-text@^0.3.1":
@@ -270,9 +348,17 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/label-text@^0.5.0":
+"@govuk-react/label-text@^0.5.0", "@govuk-react/label-text@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/label-text/-/label-text-0.5.1.tgz#42e0ee66ed4e06aee96e6768ad285994b043a9fc"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/label@.0.5.0":
   version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/label-text/-/label-text-0.5.0.tgz#3d01bdf0790e54f1bb65e160c73dfdbdc996f5b4"
+  resolved "https://registry.yarnpkg.com/@govuk-react/label/-/label-0.5.0.tgz#1129b184b70fddcc89918b03dc5c5af62825151c"
   dependencies:
     "@govuk-react/constants" "^0.5.0"
     "@govuk-react/hoc" "^0.5.0"
@@ -286,15 +372,38 @@
     "@govuk-react/hoc" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/label@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/label/-/label-0.5.0.tgz#1129b184b70fddcc89918b03dc5c5af62825151c"
+"@govuk-react/label@^0.5.0", "@govuk-react/label@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/label/-/label-0.5.1.tgz#16acebe3f21f08c61ababc96f47aeabd5bae17eb"
   dependencies:
-    "@govuk-react/constants" "^0.5.0"
-    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/select@^0.5.0":
+"@govuk-react/lib@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/lib/-/lib-0.5.1.tgz#da46860e62fa5126e931a5de42fca2ec766c93bf"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/list-item@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/list-item/-/list-item-0.5.1.tgz#8b74aa52aa19d09acb94dd9e5ac0635755be9826"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/paragraph@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/paragraph/-/paragraph-0.5.1.tgz#12aaf7a52d1bf34bb81a412b1bb62da83a815281"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/select@0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/select/-/select-0.5.0.tgz#ebc1f805b9adc082e654e9b0dd97de2d13cdef85"
   dependencies:
@@ -304,6 +413,38 @@
     "@govuk-react/hoc" "^0.5.0"
     "@govuk-react/label" "^0.5.0"
     "@govuk-react/label-text" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/text-area@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/text-area/-/text-area-0.5.0.tgz#08005cc655c7685b53662c332b9487272547cbe9"
+  dependencies:
+    "@govuk-react/constants" "^0.5.0"
+    "@govuk-react/error-text" "^0.5.0"
+    "@govuk-react/hint-text" "^0.5.0"
+    "@govuk-react/hoc" "^0.5.0"
+    "@govuk-react/label" "^0.5.0"
+    "@govuk-react/label-text" "^0.5.0"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/text-area@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/text-area/-/text-area-0.5.1.tgz#9271290995ffaa5ec986a44bb7e79fe8e14ac639"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/error-text" "^0.5.1"
+    "@govuk-react/hint-text" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/label" "^0.5.1"
+    "@govuk-react/label-text" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/unordered-list@^0.5.0":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/unordered-list/-/unordered-list-0.5.1.tgz#b757ee41757c795a3a509979b9c20561a026e767"
+  dependencies:
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
     govuk-colours "^1.0.3"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -1657,6 +1798,10 @@ babylon@^7.0.0-beta.47:
   version "7.0.0-beta.47"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.47.tgz#6d1fa44f0abec41ab7c780481e62fd9aafbdea80"
 
+bail@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/bail/-/bail-1.0.3.tgz#63cfb9ddbac829b02a3128cd53224be78e6c21a3"
+
 balanced-match@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"
@@ -2091,6 +2236,18 @@ chalk@~0.4.0:
     has-color "~0.1.0"
     strip-ansi "~0.1.0"
 
+character-entities-legacy@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/character-entities-legacy/-/character-entities-legacy-1.1.2.tgz#7c6defb81648498222c9855309953d05f4d63a9c"
+
+character-entities@^1.0.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/character-entities/-/character-entities-1.2.2.tgz#58c8f371c0774ef0ba9b2aca5f00d8f100e6e363"
+
+character-reference-invalid@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/character-reference-invalid/-/character-reference-invalid-1.1.2.tgz#21e421ad3d84055952dab4a43a04e73cd425d3ed"
+
 chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
@@ -2283,6 +2440,10 @@ coa@~1.0.1:
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
+
+collapse-white-space@^1.0.2:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/collapse-white-space/-/collapse-white-space-1.0.4.tgz#ce05cf49e54c3277ae573036a26851ba430a0091"
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -3779,6 +3940,12 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
+final-form@^4.11.0:
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.11.0.tgz#81750bda11b82c3ddf7b27092f29ebe427f8a560"
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+
 finalhandler@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.1.1.tgz#eebf4ed840079c83f4249038c9d703008301b105"
@@ -4748,6 +4915,17 @@ is-accessor-descriptor@^1.0.0:
   dependencies:
     kind-of "^6.0.0"
 
+is-alphabetical@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-alphabetical/-/is-alphabetical-1.0.2.tgz#1fa6e49213cb7885b75d15862fb3f3d96c884f41"
+
+is-alphanumerical@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-alphanumerical/-/is-alphanumerical-1.0.2.tgz#1138e9ae5040158dc6ff76b820acd6b7a181fd40"
+  dependencies:
+    is-alphabetical "^1.0.0"
+    is-decimal "^1.0.0"
+
 is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
@@ -4762,7 +4940,7 @@ is-boolean-object@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-boolean-object/-/is-boolean-object-1.0.0.tgz#98f8b28030684219a95f375cfbd88ce3405dff93"
 
-is-buffer@^1.1.5:
+is-buffer@^1.1.4, is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
 
@@ -4797,6 +4975,10 @@ is-data-descriptor@^1.0.0:
 is-date-object@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/is-date-object/-/is-date-object-1.0.1.tgz#9aa20eb6aeebbff77fbd33e74ca01b33581d3a16"
+
+is-decimal@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-decimal/-/is-decimal-1.0.2.tgz#894662d6a8709d307f3a276ca4339c8fa5dff0ff"
 
 is-descriptor@^0.1.0:
   version "0.1.6"
@@ -4883,6 +5065,10 @@ is-glob@^4.0.0:
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-4.0.0.tgz#9521c76845cc2610a85203ddf080a958c2ffabc0"
   dependencies:
     is-extglob "^2.1.1"
+
+is-hexadecimal@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-hexadecimal/-/is-hexadecimal-1.0.2.tgz#b6e710d7d07bb66b98cb8cece5c9b4921deeb835"
 
 is-number-object@^1.0.3:
   version "1.0.3"
@@ -4996,9 +5182,17 @@ is-utf8@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
 
+is-whitespace-character@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-whitespace-character/-/is-whitespace-character-1.0.2.tgz#ede53b4c6f6fb3874533751ec9280d01928d03ed"
+
 is-windows@^1.0.1, is-windows@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
+
+is-word-character@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-word-character/-/is-word-character-1.0.2.tgz#46a5dac3f2a1840898b91e576cd40d493f3ae553"
 
 isarray@0.0.1:
   version "0.0.1"
@@ -5980,6 +6174,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+markdown-escapes@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.2.tgz#e639cbde7b99c841c0bacc8a07982873b46d2122"
+
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.17.tgz#de819fdbcd84dccd8fae59c6aeb79615b9d266ac"
@@ -6353,7 +6551,6 @@ neo-async@^2.5.0:
 new-nomis-shared-components@^1.8.3:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.8.3.tgz#a044a03aa07757f310533915a6818941ca0ba245"
-  integrity sha512-XVOyZatA6p69T9EIKvVj5aLjJ5ri53cUkbv3hYHxGxOYM+BGtn9ZjNL+iI4xQBQCf2cr2TRFbseqRpG0/+uqxQ==
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -6890,6 +7087,17 @@ parse-asn1@^5.0.0:
     create-hash "^1.1.0"
     evp_bytestokey "^1.0.0"
     pbkdf2 "^3.0.3"
+
+parse-entities@^1.0.2:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/parse-entities/-/parse-entities-1.2.0.tgz#9deac087661b2e36814153cb78d7e54a4c5fd6f4"
+  dependencies:
+    character-entities "^1.0.0"
+    character-entities-legacy "^1.0.0"
+    character-reference-invalid "^1.0.0"
+    is-alphanumerical "^1.0.0"
+    is-decimal "^1.0.0"
+    is-hexadecimal "^1.0.0"
 
 parse-glob@^3.0.4:
   version "3.0.4"
@@ -7450,7 +7658,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.7, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -7652,6 +7860,12 @@ react-emotion@^9.2.12:
     babel-plugin-emotion "^9.2.11"
     create-emotion-styled "^9.2.8"
 
+react-final-form@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-4.0.2.tgz#fa829d7fb60dcc168804bf2edda58f3d62c4607b"
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+
 react-ga@^2.5.2:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.5.6.tgz#5a2e2fa78ae298e5b0a4498210eeec631ef1b562"
@@ -7663,11 +7877,20 @@ react-is@^16.3.2, react-is@^16.6.0, react-is@^16.6.1, react-is@^16.6.3:
 react-is@^16.7.0:
   version "16.7.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
-  integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
 
 react-lifecycles-compat@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+
+react-markdown@=3.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-3.2.2.tgz#439774c14f25eb25d1b96c126f28ca1486fb0a24"
+  dependencies:
+    prop-types "^15.6.0"
+    remark-parse "^4.0.0"
+    unified "^6.1.5"
+    unist-util-visit "^1.1.3"
+    xtend "^4.0.1"
 
 react-onclickoutside@^6.5.0:
   version "6.7.1"
@@ -7733,7 +7956,6 @@ react-test-renderer@^16.0.0-0:
 react-test-renderer@^16.7.0:
   version "16.7.0"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.7.0.tgz#1ca96c2b450ab47c36ba92cd8c03fcefc52ea01c"
-  integrity sha512-tFbhSjknSQ6+ttzmuGdv+SjQfmvGcq3PFKyPItohwhhOBmRoTf1We3Mlt3rJtIn85mjPXOkKV+TaKK4irvk9Yg==
   dependencies:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
@@ -7986,6 +8208,26 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
+remark-parse@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/remark-parse/-/remark-parse-4.0.0.tgz#99f1f049afac80382366e2e0d0bd55429dd45d8b"
+  dependencies:
+    collapse-white-space "^1.0.2"
+    is-alphabetical "^1.0.0"
+    is-decimal "^1.0.0"
+    is-whitespace-character "^1.0.0"
+    is-word-character "^1.0.0"
+    markdown-escapes "^1.0.0"
+    parse-entities "^1.0.2"
+    repeat-string "^1.5.4"
+    state-toggle "^1.0.0"
+    trim "0.0.1"
+    trim-trailing-lines "^1.0.0"
+    unherit "^1.0.4"
+    unist-util-remove-position "^1.0.0"
+    vfile-location "^2.0.0"
+    xtend "^4.0.1"
+
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz#c24bce2a283adad5bc3f58e0d48249b92379d8ef"
@@ -8004,7 +8246,7 @@ repeat-element@^1.1.2:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/repeat-element/-/repeat-element-1.1.3.tgz#782e0d825c0c5a3bb39731f84efee6b742e6b1ce"
 
-repeat-string@^1.5.2, repeat-string@^1.6.1:
+repeat-string@^1.5.2, repeat-string@^1.5.4, repeat-string@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/repeat-string/-/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
 
@@ -8018,7 +8260,7 @@ replace-ext@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-0.0.1.tgz#29bbd92078a739f0bcce2b4ee41e837953522924"
 
-replace-ext@^1.0.0:
+replace-ext@1.0.0, replace-ext@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-1.0.0.tgz#de63128373fcbf7c3ccfa4de5a480c45a67958eb"
 
@@ -8271,7 +8513,6 @@ scheduler@^0.11.2:
 scheduler@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
-  integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -8619,6 +8860,10 @@ stack-utils@^1.0.1:
 staged-git-files@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/staged-git-files/-/staged-git-files-1.1.1.tgz#37c2218ef0d6d26178b1310719309a16a59f8f7b"
+
+state-toggle@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/state-toggle/-/state-toggle-1.0.1.tgz#c3cb0974f40a6a0f8e905b96789eb41afa1cde3a"
 
 static-extend@^0.1.1:
   version "0.1.2"
@@ -9040,6 +9285,18 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
+trim-trailing-lines@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/trim-trailing-lines/-/trim-trailing-lines-1.1.1.tgz#e0ec0810fd3c3f1730516b45f49083caaf2774d9"
+
+trim@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.1.tgz#5858547f6b290757ee95cccc666fb50084c460dd"
+
+trough@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.3.tgz#e29bd1614c6458d44869fc28b255ab7857ef7c24"
+
 "true-case-path@^1.0.2":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/true-case-path/-/true-case-path-1.0.3.tgz#f813b5a8c86b40da59606722b144e3225799f47d"
@@ -9139,6 +9396,24 @@ underscore@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
 
+unherit@^1.0.4:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/unherit/-/unherit-1.1.1.tgz#132748da3e88eab767e08fabfbb89c5e9d28628c"
+  dependencies:
+    inherits "^2.0.1"
+    xtend "^4.0.1"
+
+unified@^6.1.5:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/unified/-/unified-6.2.0.tgz#7fbd630f719126d67d40c644b7e3f617035f6dba"
+  dependencies:
+    bail "^1.0.0"
+    extend "^3.0.0"
+    is-plain-obj "^1.1.0"
+    trough "^1.0.0"
+    vfile "^2.0.0"
+    x-is-string "^0.1.0"
+
 union-value@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/union-value/-/union-value-1.0.0.tgz#5c71c34cb5bad5dcebe3ea0cd08207ba5aa1aea4"
@@ -9167,6 +9442,32 @@ unique-slug@^2.0.0:
   resolved "https://registry.yarnpkg.com/unique-slug/-/unique-slug-2.0.1.tgz#5e9edc6d1ce8fb264db18a507ef9bd8544451ca6"
   dependencies:
     imurmurhash "^0.1.4"
+
+unist-util-is@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/unist-util-is/-/unist-util-is-2.1.2.tgz#1193fa8f2bfbbb82150633f3a8d2eb9a1c1d55db"
+
+unist-util-remove-position@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/unist-util-remove-position/-/unist-util-remove-position-1.1.2.tgz#86b5dad104d0bbfbeb1db5f5c92f3570575c12cb"
+  dependencies:
+    unist-util-visit "^1.1.0"
+
+unist-util-stringify-position@^1.0.0, unist-util-stringify-position@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/unist-util-stringify-position/-/unist-util-stringify-position-1.1.2.tgz#3f37fcf351279dcbca7480ab5889bb8a832ee1c6"
+
+unist-util-visit-parents@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-2.0.1.tgz#63fffc8929027bee04bfef7d2cce474f71cb6217"
+  dependencies:
+    unist-util-is "^2.1.2"
+
+unist-util-visit@^1.1.0, unist-util-visit@^1.1.3:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-1.4.0.tgz#1cb763647186dc26f5e1df5db6bd1e48b3cc2fb1"
+  dependencies:
+    unist-util-visit-parents "^2.0.0"
 
 universalify@^0.1.0:
   version "0.1.2"
@@ -9305,6 +9606,25 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vfile-location@^2.0.0:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/vfile-location/-/vfile-location-2.0.4.tgz#2a5e7297dd0d9e2da4381464d04acc6b834d3e55"
+
+vfile-message@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/vfile-message/-/vfile-message-1.1.1.tgz#5833ae078a1dfa2d96e9647886cd32993ab313e1"
+  dependencies:
+    unist-util-stringify-position "^1.1.1"
+
+vfile@^2.0.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/vfile/-/vfile-2.3.0.tgz#e62d8e72b20e83c324bc6c67278ee272488bf84a"
+  dependencies:
+    is-buffer "^1.1.4"
+    replace-ext "1.0.0"
+    unist-util-stringify-position "^1.0.0"
+    vfile-message "^1.0.0"
 
 vinyl-file@^2.0.0:
   version "2.0.0"
@@ -9640,6 +9960,10 @@ ws@^6.1.0:
   dependencies:
     async-limiter "~1.0.0"
 
+x-is-string@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/x-is-string/-/x-is-string-0.1.0.tgz#474b50865af3a49a9c4657f05acd145458f77d82"
+
 x-xss-protection@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/x-xss-protection/-/x-xss-protection-1.1.0.tgz#4f1898c332deb1e7f2be1280efb3e2c53d69c1a7"
@@ -9652,7 +9976,7 @@ xmlchars@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-1.3.1.tgz#1dda035f833dbb4f86a0c28eaa6ca769214793cf"
 
-xtend@^4.0.0, xtend@~4.0.0, xtend@~4.0.1:
+xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.0, xtend@~4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 

@@ -10,9 +10,14 @@ class DatePicker extends Component {
   }
 
   renderInput(props) {
-    const { inputId, name } = this.props
+    const { inputId, name, label } = this.props
     return (
       <div>
+        {label && (
+          <label className="form-label" htmlFor={name}>
+            {label}
+          </label>
+        )}
         <input id={inputId} name={name} {...props} readOnly />
       </div>
     )

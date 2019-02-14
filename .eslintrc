@@ -18,7 +18,7 @@
     "no-unused-vars": [
       1,
       {
-        "argsIgnorePattern": "res|next|^err"
+        "argsIgnorePattern": "res|next|^err|_"
       }
     ],
     "prettier/prettier": ["error"],

@@ -4,7 +4,7 @@ const offenderLoaderFactory = eliteApi => {
   const loadFromCsvContent = async (context, content) => {
     const rows = await parseCsvData(content)
     const offenderNumbers = rows.map(row => row[0])
-    const offenders = await Promise.all(offenderNumbers.map(offender => eliteApi.getBooking(context, offender)))
+    const offenders = await eliteApi.getBasicInmateDetailsForOffenders(context, offenderNumbers)
 
     if (!offenders) return []
 

@@ -12,6 +12,7 @@ const factory = ({
   globalSearchService,
   movementsService,
   offenderLoader,
+  bulkAppoinemtnsService,
 }) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
@@ -119,6 +120,12 @@ const factory = ({
     }
   })
 
+  const getBulkAppointmentsViewModel = asyncMiddleware(async (req, res) => {
+    const { agencyId } = req.query
+    const viewModel = await bulkAppoinemtnsService.getBulkAppointmentsViewModel(res.locals, agencyId)
+    res.json(viewModel)
+  })
+
   return {
     getActivityList,
     getHouseblockList,
@@ -132,6 +139,7 @@ const factory = ({
     getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
     uploadOffenders,
+    getBulkAppointmentsViewModel,
   }
 }
 

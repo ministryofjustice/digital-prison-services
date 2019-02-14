@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import PropTypes from 'prop-types'
+
 import Select from '@govuk-react/select'
+import LabelText from '@govuk-react/label-text'
+import Label from '@govuk-react/label'
+import ErrorText from '@govuk-react/error-text'
+
 import { Container } from './TimePicker.styles'
-import { inputType } from '../../types'
+import { inputType, metaType } from '../../types'
 
 import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from './date-formats'
 
@@ -141,6 +146,8 @@ class TimePicker extends Component {
       futureTimeOnly,
       pastTimeOnly,
       input: { name },
+      label,
+      meta,
     } = this.props
     const { hours, minutes } = this.state
 
@@ -160,19 +167,32 @@ class TimePicker extends Component {
     })
 
     return (
-      <Container>
-        <Select disabled={!date} name="hours" id={name} onChange={this.onHoursChange} defaultValue="--" value={hours}>
-          {constructedHours.map(hour => (
-            <option key={hour}>{hour}</option>
-          ))}
-        </Select>
+      <div>
+        <Label htmlFor="hours" error={meta.touched && meta.error}>
+          {label && <LabelText> {label} </LabelText>}
+          {meta.touched && meta.error && <ErrorText>{meta.error}</ErrorText>}
+          <Container error={Boolean(meta.error)} name={name}>
+            <Select
+              disabled={!date}
+              name="hours"
+              id="hours"
+              onChange={this.onHoursChange}
+              defaultValue="--"
+              value={hours}
+            >
+              {constructedHours.map(hour => (
+                <option key={hour}>{hour}</option>
+              ))}
+            </Select>
 
-        <Select disabled={!date} name="minutes" onChange={this.onMinutesChange} defaultValue="--" value={minutes}>
-          {constructedMinutes.map(minute => (
-            <option key={minute}>{minute}</option>
-          ))}
-        </Select>
-      </Container>
+            <Select disabled={!date} name="minutes" onChange={this.onMinutesChange} defaultValue="--" value={minutes}>
+              {constructedMinutes.map(minute => (
+                <option key={minute}>{minute}</option>
+              ))}
+            </Select>
+          </Container>
+        </Label>
+      </div>
     )
   }
 }
@@ -184,6 +204,8 @@ TimePicker.propTypes = {
   pastTimeOnly: PropTypes.bool,
   futureTimeOnly: PropTypes.bool,
   input: inputType.isRequired,
+  label: PropTypes.string,
+  meta: metaType,
 }
 
 TimePicker.defaultProps = {
@@ -191,6 +213,8 @@ TimePicker.defaultProps = {
   initialiseToNow: false,
   pastTimeOnly: false,
   futureTimeOnly: false,
+  label: '',
+  meta: {},
 }
 
 export default TimePicker
