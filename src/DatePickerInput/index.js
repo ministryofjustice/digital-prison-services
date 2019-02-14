@@ -15,9 +15,9 @@ const DatePickerInput = props => {
       }}
       name="date"
       shouldShowDay={date =>
-        !date.isAfter(
+        date.isAfter(
           moment()
-            .add(1, 'days')
+            .subtract(1, 'days')
             .startOf('day')
         )
       }

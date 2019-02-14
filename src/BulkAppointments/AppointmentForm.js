@@ -108,6 +108,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
           />
           <FieldWithError
             date={values.date}
+            futureTimeOnly
             errors={errors}
             name="startTime"
             now={now}
@@ -130,6 +131,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
         </FieldWithError>
         <FieldWithError
           date={values.date}
+          futureTimeOnly
           errors={errors}
           name="endTime"
           now={now}
