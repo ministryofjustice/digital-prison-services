@@ -36,6 +36,7 @@ const { movementsServiceFactory } = require('./controllers/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
+const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -126,6 +127,7 @@ const controller = controllerFactory({
   globalSearchService: globalSearchFactory(elite2Api),
   movementsService: movementsServiceFactory(elite2Api, oauthClientId),
   offenderLoader: offenderLoaderFactory(elite2Api),
+  bulkAppoinemtnsService: bulkAppointmentsServiceFactory(elite2Api),
 })
 
 const oauthApi = oauthApiFactory({ ...config.apis.oauth2 })
@@ -202,6 +204,7 @@ app.use('/api/movements/:agencyId/en-route', controller.getOffendersEnRoute)
 app.use('/api/globalSearch', controller.globalSearch)
 app.use('/api/appointments/upload-offenders', controller.uploadOffenders)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
+app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewModel)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
