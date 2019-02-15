@@ -70,7 +70,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <StyledHoc
-          description="Please fix"
+          description={undefined}
           errors={
             Array [
               Object {
@@ -99,7 +99,7 @@ ShallowWrapper {
               },
             ]
           }
-          heading="Errors"
+          heading="There is a problem"
           onHandleErrorClick={[Function]}
         />,
         <Styled(div)>
@@ -307,7 +307,6 @@ ShallowWrapper {
               now={"2019-01-01T21:00:00.000Z"}
             />
             <FieldWithError
-              component={[Function]}
               errors={
                 Array [
                   Object {
@@ -336,8 +335,8 @@ ShallowWrapper {
                   },
                 ]
               }
-              label="Comments (optional)"
               name="comments"
+              render={[Function]}
             />
           </Styled(div)>
         </Styled(div)>,
@@ -350,7 +349,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "description": "Please fix",
+          "description": undefined,
           "errors": Array [
             Object {
               "targetName": "date",
@@ -377,7 +376,7 @@ ShallowWrapper {
               "text": "location type test message",
             },
           ],
-          "heading": "Errors",
+          "heading": "There is a problem",
           "onHandleErrorClick": [Function],
         },
         "ref": null,
@@ -594,7 +593,6 @@ ShallowWrapper {
                 now={"2019-01-01T21:00:00.000Z"}
               />
               <FieldWithError
-                component={[Function]}
                 errors={
                   Array [
                     Object {
@@ -623,8 +621,8 @@ ShallowWrapper {
                     },
                   ]
                 }
-                label="Comments (optional)"
                 name="comments"
+                render={[Function]}
               />
             </Styled(div)>,
           ],
@@ -1095,7 +1093,6 @@ ShallowWrapper {
                   now={"2019-01-01T21:00:00.000Z"}
                 />,
                 <FieldWithError
-                  component={[Function]}
                   errors={
                     Array [
                       Object {
@@ -1124,8 +1121,8 @@ ShallowWrapper {
                       },
                     ]
                   }
-                  label="Comments (optional)"
                   name="comments"
+                  render={[Function]}
                 />,
               ],
             },
@@ -1261,7 +1258,6 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "function",
                 "props": Object {
-                  "component": [Function],
                   "errors": Array [
                     Object {
                       "targetName": "date",
@@ -1288,8 +1284,8 @@ ShallowWrapper {
                       "text": "location type test message",
                     },
                   ],
-                  "label": "Comments (optional)",
                   "name": "comments",
+                  "render": [Function],
                 },
                 "ref": null,
                 "rendered": null,
@@ -1312,7 +1308,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <StyledHoc
-            description="Please fix"
+            description={undefined}
             errors={
               Array [
                 Object {
@@ -1341,7 +1337,7 @@ ShallowWrapper {
                 },
               ]
             }
-            heading="Errors"
+            heading="There is a problem"
             onHandleErrorClick={[Function]}
           />,
           <Styled(div)>
@@ -1549,7 +1545,6 @@ ShallowWrapper {
                 now={"2019-01-01T21:00:00.000Z"}
               />
               <FieldWithError
-                component={[Function]}
                 errors={
                   Array [
                     Object {
@@ -1578,8 +1573,8 @@ ShallowWrapper {
                     },
                   ]
                 }
-                label="Comments (optional)"
                 name="comments"
+                render={[Function]}
               />
             </Styled(div)>
           </Styled(div)>,
@@ -1592,7 +1587,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "description": "Please fix",
+            "description": undefined,
             "errors": Array [
               Object {
                 "targetName": "date",
@@ -1619,7 +1614,7 @@ ShallowWrapper {
                 "text": "location type test message",
               },
             ],
-            "heading": "Errors",
+            "heading": "There is a problem",
             "onHandleErrorClick": [Function],
           },
           "ref": null,
@@ -1836,7 +1831,6 @@ ShallowWrapper {
                   now={"2019-01-01T21:00:00.000Z"}
                 />
                 <FieldWithError
-                  component={[Function]}
                   errors={
                     Array [
                       Object {
@@ -1865,8 +1859,8 @@ ShallowWrapper {
                       },
                     ]
                   }
-                  label="Comments (optional)"
                   name="comments"
+                  render={[Function]}
                 />
               </Styled(div)>,
             ],
@@ -2337,7 +2331,6 @@ ShallowWrapper {
                     now={"2019-01-01T21:00:00.000Z"}
                   />,
                   <FieldWithError
-                    component={[Function]}
                     errors={
                       Array [
                         Object {
@@ -2366,8 +2359,8 @@ ShallowWrapper {
                         },
                       ]
                     }
-                    label="Comments (optional)"
                     name="comments"
+                    render={[Function]}
                   />,
                 ],
               },
@@ -2503,7 +2496,6 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "function",
                   "props": Object {
-                    "component": [Function],
                     "errors": Array [
                       Object {
                         "targetName": "date",
@@ -2530,8 +2522,8 @@ ShallowWrapper {
                         "text": "location type test message",
                       },
                     ],
-                    "label": "Comments (optional)",
                     "name": "comments",
+                    "render": [Function],
                   },
                   "ref": null,
                   "rendered": null,
@@ -2573,6 +2565,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <AppointmentForm
     appointmentTypes={Array []}
     error=""
+    initialValues={null}
     locationTypes={Array []}
     now={"2019-01-01T21:00:00.000Z"}
     trySubmit={[MockFunction]}
@@ -2590,6 +2583,7 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
+      "initialValues": null,
       "onSubmit": [Function],
       "render": [Function],
     },
@@ -2603,6 +2597,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
+        "initialValues": null,
         "onSubmit": [Function],
         "render": [Function],
       },
@@ -2635,6 +2630,7 @@ exports[`Appointment form Form should render correctly 2`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ReactFinalForm
+    initialValues={null}
     onSubmit={[Function]}
     render={[Function]}
   />,
