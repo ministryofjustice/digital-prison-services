@@ -18,14 +18,14 @@ const pastDateOnly = date =>
   )
 
 const DatePickerInput = props => {
-  const { additionalClassName, handleDateChange, label, value, inputId, error, futureOnly } = props
+  const { additionalClassName, handleDateChange, label, value, inputId, error, futureOnly, placeholder } = props
 
   const validDate = futureOnly ? futureDateOnly : pastDateOnly
 
   return (
     <DatePicker
       inputProps={{
-        placeholder: 'Today',
+        placeholder,
         className: `datePickerInput form-control ${additionalClassName}`,
         label,
         error,
@@ -48,6 +48,7 @@ DatePickerInput.propTypes = {
   label: PropTypes.string,
   error: PropTypes.string,
   futureOnly: PropTypes.bool,
+  placeholder: PropTypes.string,
 }
 
 DatePickerInput.defaultProps = {
@@ -56,6 +57,7 @@ DatePickerInput.defaultProps = {
   error: '',
   value: '',
   futureOnly: false,
+  placeholder: 'Today',
 }
 
 export default DatePickerInput
