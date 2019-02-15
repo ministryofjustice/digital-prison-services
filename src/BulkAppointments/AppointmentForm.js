@@ -53,16 +53,18 @@ export const onSubmit = onSucces => values => {
     formErrors.push({ targetName: 'endTime', text: 'The end time must be in the future' })
   }
 
-  const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
+  if (values.startTime && values.endTime) {
+    const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 
-  const endNotAfterStart = !moment(values.endTime, DATE_TIME_FORMAT_SPEC).isAfter(
-    moment(values.startTime, DATE_TIME_FORMAT_SPEC),
-    'minute'
-  )
+    const endNotAfterStart = !moment(values.endTime, DATE_TIME_FORMAT_SPEC).isAfter(
+      moment(values.startTime, DATE_TIME_FORMAT_SPEC),
+      'minute'
+    )
 
-  if (endNotAfterStart) {
-    formErrors.push({ targetName: 'startTime', text: 'The start time must be before the end time' })
-    formErrors.push({ targetName: 'endTime', text: 'The end time must be after the start time' })
+    if (endNotAfterStart) {
+      formErrors.push({ targetName: 'startTime', text: 'The start time must be before the end time' })
+      formErrors.push({ targetName: 'endTime', text: 'The end time must be after the start time' })
+    }
   }
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }

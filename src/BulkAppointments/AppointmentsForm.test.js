@@ -50,6 +50,16 @@ describe('Appointment form', () => {
       expect(comments.text).toBe('Maximum length should not exceed 3600 characters')
     })
 
+    it('should not return validation messages for optional values', () => {
+      const validationMessages = onSubmit(() => {})({
+        date: moment(),
+        location: '1',
+        appointmentType: 2,
+      })
+
+      expect(validationMessages).toBeUndefined()
+    })
+
     it('should return error message when the start time in the past', () => {
       const validationMessages = onSubmit(jest.fn)({
         date: moment(),
@@ -125,15 +135,14 @@ describe('Appointment form', () => {
         done()
       }
 
-      const validationErrors = onSubmit(onSuccess)({
+      const validationMessages = onSubmit(onSuccess)({
         date,
         startTime: '2019-01-01T21:00:00',
         endTime: '2019-01-01T22:00:00',
         appointmentType: 'ap1',
         location: 'loc1',
       })
-
-      expect(validationErrors).toBeUndefined()
+      expect(validationMessages).toBeUndefined()
     })
   })
 })
