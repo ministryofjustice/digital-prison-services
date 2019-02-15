@@ -123,4 +123,10 @@ describe('App component', () => {
       })
     })
   })
+
+  it('should pass through correct props to the footer container', () => {
+    const component = shallow(<App {...props} store={store} />)
+
+    expect(component.find({ feedbackEmail: props.config.mailTo }).prop('prisonStaffHubUrl')).toEqual('/')
+  })
 })
