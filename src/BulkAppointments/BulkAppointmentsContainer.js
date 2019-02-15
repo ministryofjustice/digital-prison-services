@@ -6,7 +6,7 @@ import axios from 'axios'
 import moment from 'moment'
 
 import Page from '../Components/Page'
-import { setApplicationTitle, setLoaded, resetError, hideModal } from '../redux/actions'
+import { setApplicationTitle, setLoaded, resetError } from '../redux/actions'
 
 import AppointmentForm from './AppointmentForm'
 import ChooseOffenders from './ChooseOffenders'

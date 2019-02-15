@@ -7,7 +7,7 @@ import GridCol from '@govuk-react/grid-col'
 import { BLOCKS, MARKS } from '@contentful/rich-text-types'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import Page from '../Page'
-import { fetchContent } from '../../redux/actions'
+import { fetchContent, setApplicationTitle } from '../../redux/actions'
 import { routeMatchType } from '../../types'
 import { StyledList, StyledListItem } from './Content.styles'
 
@@ -40,6 +40,9 @@ class Content extends Component {
   }
 
   componentDidMount() {
+    const { dispatch } = this.props
+
+    dispatch(setApplicationTitle('Digital Prison Services'))
     this.setContent()
   }
 

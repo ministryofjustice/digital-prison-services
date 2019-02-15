@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { Footer } from 'new-nomis-shared-components'
 import { fetchContentLinks } from '../redux/actions/index'
 
@@ -15,9 +14,9 @@ class FooterContainer extends Component {
   getLinksFromCategory = links => {
     if (links)
       return links.map(item => ({
-        linkType: Link,
-        to: `/content/${item.fields.path}`,
+        href: `/content/${item.fields.path}`,
         text: item.fields.title,
+        target: '_blank',
       }))
 
     return []

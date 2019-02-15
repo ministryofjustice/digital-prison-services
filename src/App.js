@@ -413,7 +413,8 @@ class App extends React.Component {
                 }
                 const locationRequiresRedirectWhenCaseloadChanges = !(
                   location.pathname.includes('global-search-results') ||
-                  location.pathname.includes('establishment-roll')
+                  location.pathname.includes('establishment-roll') ||
+                  location.pathname.includes('content')
                 )
 
                 return (
