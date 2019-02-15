@@ -57,7 +57,7 @@ describe('Appointment form', () => {
       })
 
       const startTime = findValidationError('startTime', validationMessages)
-      expect(startTime.text).toBe('Start time must be in the future')
+      expect(startTime.text).toBe("Start time shouldn't be in the past")
     })
 
     it('should return error message when the end time in the past', () => {

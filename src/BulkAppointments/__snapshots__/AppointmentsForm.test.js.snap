@@ -70,7 +70,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <StyledHoc
-          description="Please fix"
+          description={undefined}
           errors={
             Array [
               Object {
@@ -99,7 +99,7 @@ ShallowWrapper {
               },
             ]
           }
-          heading="Errors"
+          heading="There is a problem"
           onHandleErrorClick={[Function]}
         />,
         <Styled(div)>
@@ -349,7 +349,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "description": "Please fix",
+          "description": undefined,
           "errors": Array [
             Object {
               "targetName": "date",
@@ -376,7 +376,7 @@ ShallowWrapper {
               "text": "location type test message",
             },
           ],
-          "heading": "Errors",
+          "heading": "There is a problem",
           "onHandleErrorClick": [Function],
         },
         "ref": null,
@@ -1308,7 +1308,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <StyledHoc
-            description="Please fix"
+            description={undefined}
             errors={
               Array [
                 Object {
@@ -1337,7 +1337,7 @@ ShallowWrapper {
                 },
               ]
             }
-            heading="Errors"
+            heading="There is a problem"
             onHandleErrorClick={[Function]}
           />,
           <Styled(div)>
@@ -1587,7 +1587,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "description": "Please fix",
+            "description": undefined,
             "errors": Array [
               Object {
                 "targetName": "date",
@@ -1614,7 +1614,7 @@ ShallowWrapper {
                 "text": "location type test message",
               },
             ],
-            "heading": "Errors",
+            "heading": "There is a problem",
             "onHandleErrorClick": [Function],
           },
           "ref": null,

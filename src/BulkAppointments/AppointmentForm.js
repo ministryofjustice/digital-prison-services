@@ -46,7 +46,7 @@ export const onSubmit = onSucces => values => {
   }
 
   if (isToday && moment(values.startTime).isBefore(now)) {
-    formErrors.push({ targetName: 'startTime', text: 'Start time must be in the future' })
+    formErrors.push({ targetName: 'startTime', text: "Start time shouldn't be in the past" })
   }
 
   if (isToday && moment(values.endTime).isBefore(now)) {
@@ -68,9 +68,7 @@ export const onSubmit = onSucces => values => {
 
 export const FormFields = ({ errors, values, appointmentTypes, locationTypes, now }) => (
   <React.Fragment>
-    {errors && (
-      <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="Errors" description="Please fix" errors={errors} />
-    )}
+    {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
     <Container>
       <Section>
         <FieldWithError
