@@ -57,7 +57,7 @@ describe('Appointment form', () => {
       })
 
       const startTime = findValidationError('startTime', validationMessages)
-      expect(startTime.text).toBe("Start time shouldn't be in the past")
+      expect(startTime.text).toBe('The start time must not be in the past')
     })
 
     it('should return error message when the end time in the past', () => {
@@ -67,13 +67,28 @@ describe('Appointment form', () => {
       })
 
       const startTime = findValidationError('endTime', validationMessages)
-      expect(startTime.text).toBe('End time must be in the future')
+      expect(startTime.text).toBe('The end time must be in the future')
     })
 
     it('should return error messages whent the start date is after the end date', () => {
       const validationMessages = onSubmit(jest.fn)({
         startTime: '2019-01-01T21:00:00',
         endTime: '2019-01-01T20:00:00',
+      })
+
+      const startTime = findValidationError('startTime', validationMessages)
+      const endTime = findValidationError('endTime', validationMessages)
+
+      expect(startTime.text).toBe('The start time must be before the end time')
+      expect(endTime.text).toBe('The end time must be after the start time')
+    })
+
+    it('should not allow the start and end time to be the same', () => {
+      const date = moment('2019-01-01')
+      const validationMessages = onSubmit(jest.fn)({
+        date,
+        startTime: '2019-01-01T21:00:00',
+        endTime: '2019-01-01T21:00:00',
       })
 
       const startTime = findValidationError('startTime', validationMessages)
@@ -95,25 +110,29 @@ describe('Appointment form', () => {
       expect(applicationType.text).toBe('Select appointment type')
     })
 
-    it('should call onSucess with form values', () => {
-      const today = moment()
-      const onSuccess = jest.fn()
+    it('should call onSucess with form values', done => {
+      const date = moment('2019-01-01')
+
+      const onSuccess = values => {
+        expect(values).toEqual({
+          appointmentType: 'ap1',
+          location: 'loc1',
+          date,
+          startTime: '2019-01-01T21:00:00',
+          endTime: '2019-01-01T22:00:00',
+        })
+
+        done()
+      }
 
       const validationErrors = onSubmit(onSuccess)({
-        date: today,
-        startTime: today,
-        endTime: today,
+        date,
+        startTime: '2019-01-01T21:00:00',
+        endTime: '2019-01-01T22:00:00',
         appointmentType: 'ap1',
         location: 'loc1',
       })
 
-      expect(onSuccess).toHaveBeenCalledWith({
-        appointmentType: 'ap1',
-        date: today,
-        endTime: today,
-        location: 'loc1',
-        startTime: today,
-      })
       expect(validationErrors).toBeUndefined()
     })
   })

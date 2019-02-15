@@ -46,21 +46,29 @@ export const onSubmit = onSucces => values => {
   }
 
   if (isToday && moment(values.startTime).isBefore(now)) {
-    formErrors.push({ targetName: 'startTime', text: "Start time shouldn't be in the past" })
+    formErrors.push({ targetName: 'startTime', text: 'The start time must not be in the past' })
   }
 
   if (isToday && moment(values.endTime).isBefore(now)) {
-    formErrors.push({ targetName: 'endTime', text: 'End time must be in the future' })
+    formErrors.push({ targetName: 'endTime', text: 'The end time must be in the future' })
   }
 
   const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 
-  if (
-    moment(values.endTime, DATE_TIME_FORMAT_SPEC).isBefore(moment(values.startTime, DATE_TIME_FORMAT_SPEC), 'minute')
-  ) {
+  const isBefore = moment(values.endTime, DATE_TIME_FORMAT_SPEC).isBefore(
+    moment(values.startTime, DATE_TIME_FORMAT_SPEC),
+    'minute'
+  )
+  const isSame = moment(values.endTime, DATE_TIME_FORMAT_SPEC).isSame(
+    moment(values.startTime, DATE_TIME_FORMAT_SPEC),
+    'minute'
+  )
+
+  if (isBefore || isSame) {
     formErrors.push({ targetName: 'startTime', text: 'The start time must be before the end time' })
     formErrors.push({ targetName: 'endTime', text: 'The end time must be after the start time' })
   }
+
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
   return onSucces(values)
