@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
-import { Header } from 'new-nomis-shared-components'
+import { Header, FooterContainer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
@@ -42,7 +42,6 @@ import EnRouteContainer from './EnRoute/EnRouteContainer'
 import BulkAppointmentsContainer from './BulkAppointments/BulkAppointmentsContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
-import FooterContainer from './FooterContainer'
 
 const axios = require('axios')
 
@@ -437,7 +436,7 @@ class App extends React.Component {
               <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
             </ModalProvider>
             {innerContent}
-            <FooterContainer feedbackEmail={config.mailTo} />
+            <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
           </ScrollToTop>
         </div>
       </Router>

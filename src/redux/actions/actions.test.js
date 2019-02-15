@@ -268,43 +268,6 @@ describe('actions', () => {
       store = mockStore({})
     })
 
-    it('creates SET_CONTENT_LINKS_SUCCESS when fetching content links from contentful is completed', async () => {
-      const response = {
-        items: [
-          {
-            fields: {
-              title: 'Footer link',
-              path: 'footer-link',
-              category: {
-                fields: {
-                  title: 'Footer',
-                },
-              },
-            },
-          },
-          {
-            fields: {
-              title: 'Meta link',
-              path: 'meta-link',
-              category: {
-                fields: {
-                  title: 'Meta',
-                },
-              },
-            },
-          },
-        ],
-      }
-      const groupedByCategory = new Map([['Footer', [response.items[0]]], ['Meta', [response.items[1]]]])
-      const expectedActions = [{ type: types.SET_CONTENT_LINKS_SUCCESS, payload: groupedByCategory }]
-
-      getEntriesSpy.mockResolvedValue(response)
-
-      return store.dispatch(actions.fetchContentLinks()).then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
-    })
-
     it('creates SET_ERROR when there is no content for specified path', async () => {
       const response = {
         items: [],
