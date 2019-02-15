@@ -55,16 +55,12 @@ export const onSubmit = onSucces => values => {
 
   const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 
-  const isBefore = moment(values.endTime, DATE_TIME_FORMAT_SPEC).isBefore(
-    moment(values.startTime, DATE_TIME_FORMAT_SPEC),
-    'minute'
-  )
-  const isSame = moment(values.endTime, DATE_TIME_FORMAT_SPEC).isSame(
+  const endNotAfterStart = !moment(values.endTime, DATE_TIME_FORMAT_SPEC).isAfter(
     moment(values.startTime, DATE_TIME_FORMAT_SPEC),
     'minute'
   )
 
-  if (isBefore || isSame) {
+  if (endNotAfterStart) {
     formErrors.push({ targetName: 'startTime', text: 'The start time must be before the end time' })
     formErrors.push({ targetName: 'endTime', text: 'The end time must be after the start time' })
   }
