@@ -34,11 +34,11 @@ export const onSubmit = onSucces => values => {
   }
 
   if (!values.appointmentType) {
-    formErrors.push({ targetName: 'appointmentType', text: 'Appointment type is required' })
+    formErrors.push({ targetName: 'appointmentType', text: 'Select appointment type' })
   }
 
   if (!values.location) {
-    formErrors.push({ targetName: 'location', text: 'Location is required' })
+    formErrors.push({ targetName: 'location', text: 'Select location' })
   }
 
   if (!values.date) {
@@ -46,21 +46,27 @@ export const onSubmit = onSucces => values => {
   }
 
   if (isToday && moment(values.startTime).isBefore(now)) {
-    formErrors.push({ targetName: 'startTime', text: "Start time shouldn't be in the past" })
+    formErrors.push({ targetName: 'startTime', text: 'The start time must not be in the past' })
   }
 
   if (isToday && moment(values.endTime).isBefore(now)) {
-    formErrors.push({ targetName: 'endTime', text: "End time shouldn't be in the past" })
+    formErrors.push({ targetName: 'endTime', text: 'The end time must be in the future' })
   }
 
-  const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
+  if (values.startTime && values.endTime) {
+    const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 
-  if (
-    moment(values.endTime, DATE_TIME_FORMAT_SPEC).isBefore(moment(values.startTime, DATE_TIME_FORMAT_SPEC), 'minute')
-  ) {
-    formErrors.push({ targetName: 'startTime', text: "Start time should't be after End time" })
-    formErrors.push({ targetName: 'endTime', text: "End time shouldn't be before Start time" })
+    const endNotAfterStart = !moment(values.endTime, DATE_TIME_FORMAT_SPEC).isAfter(
+      moment(values.startTime, DATE_TIME_FORMAT_SPEC),
+      'minute'
+    )
+
+    if (endNotAfterStart) {
+      formErrors.push({ targetName: 'startTime', text: 'The start time must be before the end time' })
+      formErrors.push({ targetName: 'endTime', text: 'The end time must be after the start time' })
+    }
   }
+
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
   return onSucces(values)
@@ -68,9 +74,7 @@ export const onSubmit = onSucces => values => {
 
 export const FormFields = ({ errors, values, appointmentTypes, locationTypes, now }) => (
   <React.Fragment>
-    {errors && (
-      <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="Errors" description="Please fix" errors={errors} />
-    )}
+    {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
     <Container>
       <Section>
         <FieldWithError
@@ -98,6 +102,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                 <LabelText> Select date </LabelText>
                 {meta.touched && meta.error && <ErrorText>{meta.error}</ErrorText>}
                 <DatePicker
+                  placeholder="Select"
                   futureOnly
                   inputId="date"
                   title="date"
@@ -139,7 +144,15 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
           component={TimePicker}
           label="Group end time (optional)"
         />
-        <FieldWithError errors={errors} name="comments" component={TextArea} label="Comments (optional)" />
+        <FieldWithError
+          errors={errors}
+          name="comments"
+          render={({ input, meta }) => (
+            <TextArea {...input} {...meta}>
+              Comments (optional)
+            </TextArea>
+          )}
+        />
       </Section>
     </Container>
   </React.Fragment>
@@ -175,8 +188,9 @@ FormFields.defaultProps = {
   values: {},
 }
 
-const AppointmentForm = ({ appointmentTypes, locationTypes, trySubmit, error, now }) => (
+const AppointmentForm = ({ appointmentTypes, locationTypes, trySubmit, error, now, initialValues }) => (
   <Form
+    initialValues={initialValues}
     onSubmit={onSubmit(trySubmit)}
     render={({ handleSubmit, pristine, submitError, values }) => (
       <form onSubmit={handleSubmit}>
@@ -213,12 +227,14 @@ AppointmentForm.propTypes = {
   trySubmit: PropTypes.func.isRequired,
   error: PropTypes.string,
   now: PropTypes.instanceOf(moment).isRequired,
+  initialValues: PropTypes.shape(PropTypes.object),
 }
 
 AppointmentForm.defaultProps = {
   appointmentTypes: [],
   locationTypes: [],
   error: '',
+  initialValues: null,
 }
 
 export default AppointmentForm

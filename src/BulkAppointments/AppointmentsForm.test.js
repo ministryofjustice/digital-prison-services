@@ -50,6 +50,16 @@ describe('Appointment form', () => {
       expect(comments.text).toBe('Maximum length should not exceed 3600 characters')
     })
 
+    it('should not return validation messages for optional values', () => {
+      const validationMessages = onSubmit(() => {})({
+        date: moment(),
+        location: '1',
+        appointmentType: 2,
+      })
+
+      expect(validationMessages).toBeUndefined()
+    })
+
     it('should return error message when the start time in the past', () => {
       const validationMessages = onSubmit(jest.fn)({
         date: moment(),
@@ -57,7 +67,7 @@ describe('Appointment form', () => {
       })
 
       const startTime = findValidationError('startTime', validationMessages)
-      expect(startTime.text).toBe("Start time shouldn't be in the past")
+      expect(startTime.text).toBe('The start time must not be in the past')
     })
 
     it('should return error message when the end time in the past', () => {
@@ -67,7 +77,7 @@ describe('Appointment form', () => {
       })
 
       const startTime = findValidationError('endTime', validationMessages)
-      expect(startTime.text).toBe("End time shouldn't be in the past")
+      expect(startTime.text).toBe('The end time must be in the future')
     })
 
     it('should return error messages whent the start date is after the end date', () => {
@@ -79,8 +89,23 @@ describe('Appointment form', () => {
       const startTime = findValidationError('startTime', validationMessages)
       const endTime = findValidationError('endTime', validationMessages)
 
-      expect(startTime.text).toBe("Start time should't be after End time")
-      expect(endTime.text).toBe("End time shouldn't be before Start time")
+      expect(startTime.text).toBe('The start time must be before the end time')
+      expect(endTime.text).toBe('The end time must be after the start time')
+    })
+
+    it('should not allow the start and end time to be the same', () => {
+      const date = moment('2019-01-01')
+      const validationMessages = onSubmit(jest.fn)({
+        date,
+        startTime: '2019-01-01T21:00:00',
+        endTime: '2019-01-01T21:00:00',
+      })
+
+      const startTime = findValidationError('startTime', validationMessages)
+      const endTime = findValidationError('endTime', validationMessages)
+
+      expect(startTime.text).toBe('The start time must be before the end time')
+      expect(endTime.text).toBe('The end time must be after the start time')
     })
 
     it('should return a message when required fields are missing', () => {
@@ -91,30 +116,33 @@ describe('Appointment form', () => {
       const applicationType = findValidationError('appointmentType', validationMessages)
 
       expect(date.text).toBe('Date is required')
-      expect(location.text).toBe('Location is required')
-      expect(applicationType.text).toBe('Appointment type is required')
+      expect(location.text).toBe('Select location')
+      expect(applicationType.text).toBe('Select appointment type')
     })
 
-    it('should call onSucess with form values', () => {
-      const today = moment()
-      const onSuccess = jest.fn()
+    it('should call onSucess with form values', done => {
+      const date = moment('2019-01-01')
 
-      const validationErrors = onSubmit(onSuccess)({
-        date: today,
-        startTime: today,
-        endTime: today,
+      const onSuccess = values => {
+        expect(values).toEqual({
+          appointmentType: 'ap1',
+          location: 'loc1',
+          date,
+          startTime: '2019-01-01T21:00:00',
+          endTime: '2019-01-01T22:00:00',
+        })
+
+        done()
+      }
+
+      const validationMessages = onSubmit(onSuccess)({
+        date,
+        startTime: '2019-01-01T21:00:00',
+        endTime: '2019-01-01T22:00:00',
         appointmentType: 'ap1',
         location: 'loc1',
       })
-
-      expect(onSuccess).toHaveBeenCalledWith({
-        appointmentType: 'ap1',
-        date: today,
-        endTime: today,
-        location: 'loc1',
-        startTime: today,
-      })
-      expect(validationErrors).toBeUndefined()
+      expect(validationMessages).toBeUndefined()
     })
   })
 })
