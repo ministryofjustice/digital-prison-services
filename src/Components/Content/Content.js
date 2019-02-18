@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Header from '@govuk-react/header'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import { BLOCKS, MARKS } from '@contentful/rich-text-types'
+import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import Page from '../Page'
 import { fetchContent, setApplicationTitle } from '../../redux/actions'
@@ -28,6 +28,12 @@ const options = {
     ),
     [BLOCKS.UL_LIST]: (node, children) => <StyledList>{children}</StyledList>,
     [BLOCKS.LIST_ITEM]: (node, children) => <StyledListItem>{children}</StyledListItem>,
+    [INLINES.HYPERLINK]: (node, children) => (
+      // Update to @govuk-react/link when out of Alpha
+      <a className="link" href={node.data.uri}>
+        {children}
+      </a>
+    ),
   },
 }
 
