@@ -145,7 +145,6 @@ workflows:
             branches:
               only:
                 - master
-                - contentful-spike
       - deploy_release_eb:
           requires:
             - build_docker
