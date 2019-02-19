@@ -130,8 +130,10 @@ tbody > tr + td {
 }
 
 @media print {
-  h1 { display: none;}
-  
+  h1 {
+    display: none;
+  }
+
   .whereabouts-title {
     display: inline-block;
     margin: 0;
@@ -241,11 +243,15 @@ tbody > tr + td {
     }
 
     .medium-list & {
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .large-list & {
-      font-size: 11px;
+      font-size: 12px;
+    }
+
+    .extra-large-list & {
+      font-size: 10px;
     }
   }
 }

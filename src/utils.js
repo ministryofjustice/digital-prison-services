@@ -66,8 +66,9 @@ const getEventDescription = event => {
 const getListSizeClass = list => {
   if (!list || list.length === 0) return 'empty-list'
   if (list.length < 20) return 'small-list'
-  if (list.length < 40) return 'medium-list'
-  return 'large-list'
+  if (list.length < 30) return 'medium-list'
+  if (list.length < 40) return 'large-list'
+  return 'extra-large-list'
 }
 
 const getLongDateFormat = date => {
