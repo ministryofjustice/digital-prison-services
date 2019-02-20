@@ -5,9 +5,7 @@ const { healthApiFactory } = require('../../api/healthApi')
 
 describe('healthApi', () => {
   const client1 = clientFactory({})
-
   const mock1 = new MockAdapter(client1.axiosInstance)
-
   const healthApi = healthApiFactory(client1)
 
   afterEach(() => {

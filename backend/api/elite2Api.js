@@ -15,17 +15,14 @@ const elite2ApiFactory = client => {
 
   const put = (context, url, data) => client.put(context, url, data).then(processResponse(context))
 
-  const userLocations = context => get(context, 'api/users/me/locations')
-  const currentUser = context => get(context, 'api/users/me')
-  const userRoles = context => get(context, 'api/users/me/roles')
-  const userCaseLoads = context => get(context, 'api/users/me/caseLoads')
+  const userLocations = context => (context.authSource !== 'auth' ? get(context, 'api/users/me/locations') : [])
+  const userCaseLoads = context => (context.authSource !== 'auth' ? get(context, 'api/users/me/caseLoads') : [])
 
   const encodeQueryString = input => encodeURIComponent(input)
 
   // NB. This function expects a caseload object.
   // The object *must* have non-blank caseLoadId,  description and type properties.
   // However, only 'caseLoadId' has meaning.  The other two properties can take *any* non-blank value and these will be ignored.
-  // TODO: Tech Debt: This might be better expressed as a PUT of the desired active caseload id to users/me/activeCaseloadId
   const setActiveCaseload = (context, caseload) => put(context, 'api/users/me/activeCaseLoad', caseload)
 
   const getHouseblockList = (context, agencyId, groupName, date, timeSlot) =>
@@ -115,8 +112,6 @@ const elite2ApiFactory = client => {
 
   return {
     userLocations,
-    currentUser,
-    userRoles,
     userCaseLoads,
     setActiveCaseload,
     getHouseblockList,

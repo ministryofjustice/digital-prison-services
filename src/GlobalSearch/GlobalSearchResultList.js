@@ -57,7 +57,7 @@ const GlobalSearchResultList = ({
             <img
               alt={`prisoner ${prisoner.offenderNo}`}
               id={`image-${prisoner.offenderNo}`}
-              className="photo clickable"
+              className="photo"
               src={offenderImageUrl(prisoner.offenderNo)}
             />
           )}
@@ -120,7 +120,7 @@ const GlobalSearchResultList = ({
 GlobalSearchResultList.propTypes = {
   // props
   handlePageAction: PropTypes.func.isRequired,
-  agencyId: PropTypes.string.isRequired,
+  agencyId: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
@@ -138,6 +138,10 @@ GlobalSearchResultList.propTypes = {
   licencesUser: PropTypes.bool.isRequired,
   licencesUrl: PropTypes.string.isRequired,
   searchPerformed: PropTypes.bool.isRequired,
+}
+
+GlobalSearchResultList.defaultProps = {
+  agencyId: '',
 }
 
 export default GlobalSearchResultList

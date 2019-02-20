@@ -5,13 +5,16 @@ const contextProperties = require('../contextProperties')
 describe('Should read/write properties', () => {
   describe('Should set / get tokens', () => {
     const context = {}
-    contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
+    contextProperties.setTokens({ access_token: 'a', refresh_token: 'b', authSource: 'joe' }, context)
 
     it('should set the access token', () => {
       expect(contextProperties.getAccessToken(context)).to.be.equal('a')
     })
     it('should set the refresh token', () => {
       expect(contextProperties.getRefreshToken(context)).to.be.equal('b')
+    })
+    it('should set the auth source', () => {
+      expect(context.authSource).to.be.equal('joe')
     })
   })
 

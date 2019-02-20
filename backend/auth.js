@@ -32,8 +32,8 @@ const init = oauthApi => {
               )}`,
             },
           },
-          (accessToken, refreshToken, profile, done) =>
-            done(null, { access_token: accessToken, refresh_token: refreshToken })
+          (accessToken, refreshToken, params, profile, done) =>
+            done(null, { access_token: accessToken, refresh_token: refreshToken, authSource: params.auth_source })
         )
       : new LocalStrategy(async (username, password, done) => {
           try {

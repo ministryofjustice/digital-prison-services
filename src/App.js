@@ -139,7 +139,8 @@ class App extends React.Component {
   shouldDisplayInnerContent = () => {
     const { shouldShowTerms, user } = this.props
 
-    return !shouldShowTerms && (user && user.activeCaseLoadId)
+    // only show inner content if the user has been loaded
+    return !shouldShowTerms && user && user.username
   }
 
   handleDateChange = date => {

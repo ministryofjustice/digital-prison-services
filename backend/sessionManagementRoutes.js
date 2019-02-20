@@ -145,7 +145,7 @@ const configureRoutes = ({ app, healthApi, tokenRefresher, mailTo, homeLink }) =
 
   app.get('/autherror', (req, res) => {
     res.status(401)
-    return res.render('pages/autherror', {
+    return res.render('autherror', {
       authURL: authLogoutUrl,
       mailTo,
       homeLink,

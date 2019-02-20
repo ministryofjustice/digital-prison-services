@@ -186,7 +186,7 @@ GlobalSearchContainer.propTypes = {
 
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
-  agencyId: PropTypes.string.isRequired,
+  agencyId: PropTypes.string,
   searchText: PropTypes.string,
   searchPerformed: PropTypes.bool.isRequired,
   genderFilter: PropTypes.string.isRequired,
@@ -230,6 +230,7 @@ GlobalSearchContainer.propTypes = {
 GlobalSearchContainer.defaultProps = {
   error: '',
   searchText: '',
+  agencyId: '',
 }
 
 const mapStateToProps = state => ({
