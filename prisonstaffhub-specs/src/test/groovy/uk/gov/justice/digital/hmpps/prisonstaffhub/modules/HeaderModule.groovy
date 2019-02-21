@@ -9,7 +9,7 @@ class HeaderModule extends Module {
         username   { $('.info-wrapper .user-name').text() }
         caseload   { $('.info-wrapper .case-load').text() }
         caseloadSYI(required: false) { $('#menu-option-SYI') }
-        logoutLink { $('a', text: 'Log out' ) }
+        logoutLink { $('a', text: 'Sign out' ) }
     }
 
     def logout() {
