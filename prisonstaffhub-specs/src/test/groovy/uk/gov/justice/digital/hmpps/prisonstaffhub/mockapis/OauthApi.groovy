@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonOutput
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
@@ -66,5 +67,36 @@ class OauthApi extends WireMockRule {
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
                         .withRequestBody(equalTo("grant_type=client_credentials"))
                         .willReturn(aResponse().withStatus(200)))
+    }
+
+    void stubGetMyDetails(UserAccount user) {
+        stubGetMyDetails(user, Caseload.LEI.id)
+    }
+
+    void stubGetMyDetails(UserAccount user, String caseloadId) {
+        this.stubFor(
+                get('/auth/api/user/me')
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson([
+                                staffId         : user.staffMember.id,
+                                username        : user.username,
+                                firstName       : user.staffMember.firstName,
+                                lastName        : user.staffMember.lastName,
+                                email           : 'itaguser@syscon.net',
+                                activeCaseLoadId: caseloadId
+                        ]))))
+    }
+
+    void stubGetMyRoles() {
+        this.stubFor(
+                get('/auth/api/user/me/roles')
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(['ROLE']))))
     }
 }

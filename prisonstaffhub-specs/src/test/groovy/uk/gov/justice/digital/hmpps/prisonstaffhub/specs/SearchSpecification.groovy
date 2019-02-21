@@ -85,8 +85,8 @@ class SearchSpecification extends GebReportingSpec {
         elite2api.stubHealth()
         elite2api.stubUpdateActiveCaseload()
         elite2api.stubGroups Caseload.SYI
-        elite2api.stubGetMyDetails(ITAG_USER, Caseload.SYI.id)
-        elite2api.stubGetMyRoles()
+        oauthApi.stubGetMyDetails(ITAG_USER, Caseload.SYI.id)
+        oauthApi.stubGetMyRoles()
         elite2api.stubGetMyCaseloads ITAG_USER.caseloads
         elite2api.stubActivityLocations()
         header.switchCaseload(Caseload.SYI.id);

@@ -1,5 +1,8 @@
 const chai = require('chai')
+const sinon = require('sinon')
+const sinonChai = require('sinon-chai')
 
+chai.use(sinonChai)
 const { expect } = chai
 
 const MockAdapter = require('axios-mock-adapter')
@@ -13,7 +16,8 @@ const clientSecret = 'clientSecret'
 const encodeClientCredentials = () =>
   Buffer.from(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
 
-const oauthApi = oauthApiFactory({ url, clientId, clientSecret })
+const client = sinon.stub()
+const oauthApi = oauthApiFactory(client, { url, clientId, clientSecret })
 const mock = new MockAdapter(oauthApi.oauthAxios)
 
 const baseResponse = {
