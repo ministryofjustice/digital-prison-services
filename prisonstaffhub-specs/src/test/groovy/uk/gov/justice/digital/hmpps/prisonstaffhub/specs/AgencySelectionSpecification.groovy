@@ -33,7 +33,7 @@ class AgencySelectionSpecification extends GebReportingSpec {
     def 'Agency selection from global search page redirects to new-nomis-ui'() {
         elite2api.stubGlobalSearch('', 'quimby', '', GlobalSearchResponses.response1)
         elite2api.stubImage()
-        elite2api.stubGetMyRoles()
+        oauthApi.stubGetMyRoles()
 
         given: 'I am logged in'
         fixture.loginAs(ITAG_USER)
@@ -63,8 +63,8 @@ class AgencySelectionSpecification extends GebReportingSpec {
 
         when: 'I select another agency'
         elite2api.stubUpdateActiveCaseload()
-        elite2api.stubGetMyDetails(ITAG_USER)
-        elite2api.stubGetMyRoles()
+        oauthApi.stubGetMyDetails(ITAG_USER)
+        oauthApi.stubGetMyRoles()
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
         elite2api.stubGroups Caseload.MDI
         elite2api.stubActivityLocations()
