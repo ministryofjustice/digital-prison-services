@@ -211,7 +211,10 @@ class App extends React.Component {
       axios.get('/api/userroles'),
     ])
 
-    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data, roles: roles.data })
+    const activeCaseLoad = caseloads.data.find(cl => cl.currentlyActive)
+    const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+
+    userDetailsDispatch({ ...user.data, activeCaseLoadId, caseLoadOptions: caseloads.data, roles: roles.data })
   }
 
   render() {
