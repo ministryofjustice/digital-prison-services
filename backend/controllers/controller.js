@@ -106,7 +106,7 @@ const factory = ({
       if (isBinaryFileSync(bytes, size)) {
         logger.error(`Unsupported file type rejected, filename ${offenders.originalFilename}`)
         res.status(400)
-        res.send('The file you have selected is not a CSV file, please use the template provided')
+        res.send('There was a problem importing your file, please use the template provided')
         return
       }
 
