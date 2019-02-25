@@ -106,10 +106,6 @@ class OauthApi extends WireMockRule {
     }
 
     void stubGetMyDetails(UserAccount user) {
-        stubGetMyDetails(user, Caseload.LEI.id)
-    }
-
-    void stubGetMyDetails(UserAccount user, String caseloadId) {
         this.stubFor(
                 get('/auth/api/user/me')
                         .willReturn(
@@ -121,8 +117,7 @@ class OauthApi extends WireMockRule {
                                 username        : user.username,
                                 firstName       : user.staffMember.firstName,
                                 lastName        : user.staffMember.lastName,
-                                email           : 'itaguser@syscon.net',
-                                activeCaseLoadId: caseloadId
+                                email           : 'itaguser@syscon.net'
                         ]))))
     }
 

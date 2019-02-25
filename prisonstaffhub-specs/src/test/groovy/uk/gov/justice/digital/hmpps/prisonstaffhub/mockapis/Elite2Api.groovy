@@ -28,12 +28,17 @@ class Elite2Api extends WireMockRule {
     }
 
     void stubGetMyCaseloads(List<Caseload> caseloads) {
+        stubGetMyCaseloads(caseloads, Caseload.LEI.id)
+    }
+
+    void stubGetMyCaseloads(List<Caseload> caseloads, caseload) {
         def json = new JsonBuilder()
-        json caseloads, { caseload ->
-            caseLoadId caseload.id
-            description caseload.description
-            type caseload.type
+        json caseloads, { cl ->
+            caseLoadId cl.id
+            description cl.description
+            type cl.type
             caseloadFunction 'DUMMY'
+            currentlyActive cl.id == caseload
         }
 
         this.stubFor(
