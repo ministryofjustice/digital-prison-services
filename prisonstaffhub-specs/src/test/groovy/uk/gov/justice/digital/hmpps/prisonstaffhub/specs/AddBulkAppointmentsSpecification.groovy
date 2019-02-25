@@ -47,7 +47,7 @@ class AddBulkAppointmentsSpecification extends GebReportingSpec {
         selectFile()
 
         and: "I will be presented with offenders from the csv file"
-        waitFor { tableRows[0].size() > 0 }
+        waitFor { tableRows.size() > 0 }
         tableRows[0].children()[0].text() == "A12345"
         tableRows[0].children()[1].text() == "Doe"
         tableRows[0].children()[2].text() == "John"
