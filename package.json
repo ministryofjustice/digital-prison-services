@@ -51,7 +51,6 @@
     "moment-timezone": "^0.5.21",
     "new-nomis-shared-components": "^1.10.1",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
     "passport-oauth2": "^1.4.0",
     "path-to-regexp": "^2.4.0",
     "prop-types": "^15.6.2",

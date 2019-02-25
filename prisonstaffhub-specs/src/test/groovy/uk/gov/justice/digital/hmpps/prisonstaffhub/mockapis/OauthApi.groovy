@@ -1,19 +1,55 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonOutput
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+
 
 class OauthApi extends WireMockRule {
 
     OauthApi() {
-        super(9090)
+        super(wireMockConfig().port(9090).extensions(new ResponseTemplateTransformer(true)))
     }
 
-    void stubValidOAuthTokenRequest(UserAccount user, Boolean delayOAuthResponse = false) {
+    void stubAuthorizeRequest() {
+        this.stubFor(
+                get(urlPathEqualTo('/auth/oauth/authorize'))
+                        .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader('Content-Type', 'text/html;charset=UTF-8')
+                        .withBody('<head><title>Prison-NOMIS</title></head>' +
+                        '<body><h1>Sign in</h1>This is a stubbed login page' +
+                        '<form action="/auth/login?state={{request.requestLine.query.state}}" method="POST" id="loginForm">' +
+                        '  <input id="username" name="username" type="text">' +
+                        '  <input id="password" name="password" type="password">' +
+                        '  <input id="submit" type="submit" value="Sign in">' +
+                        '</form>' +
+                        '</body>')))
+
+        this.stubFor(
+                post(urlPathEqualTo('/auth/login'))
+                        .willReturn(temporaryRedirect("http://localhost:3002/login/callback?code=code&state={{request.requestLine.query.state}}")))
+
+        this.stubFor(
+                get('/favicon.ico')
+                        .willReturn(aResponse().withBody("favicon")))
+    }
+
+    void stubLogout() {
+        this.stubFor(
+                get(urlPathEqualTo('/auth/logout'))
+                        .willReturn(aResponse().withBody('<head><title>Prison-NOMIS</title></head>' +
+                        '<body><h1>Sign in</h1>This is a stubbed logout page</body>')
+                ))
+    }
+
+    void stubValidOAuthTokenRequest(Boolean delayOAuthResponse = false) {
+        stubAuthorizeRequest()
 
         final accessToken = JwtFactory.token()
 
@@ -37,7 +73,7 @@ class OauthApi extends WireMockRule {
                 post('/auth/oauth/token')
                         .withHeader('authorization', equalTo('Basic ZWxpdGUyYXBpY2xpZW50OmNsaWVudHNlY3JldA=='))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
-                        .withRequestBody(equalTo("username=${user.username}&password=password&grant_type=password"))
+                        .withRequestBody(equalTo("grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A3002%2Flogin%2Fcallback&client_id=elite2apiclient&client_secret=clientsecret&code=code"))
                         .willReturn(response))
     }
 

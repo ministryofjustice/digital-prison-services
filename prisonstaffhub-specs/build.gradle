@@ -37,7 +37,7 @@ dependencies {
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
     testCompile 'io.github.http-builder-ng:http-builder-ng-apache:1.0.3'
 
-    testCompile 'com.github.tomakehurst:wiremock-standalone:2.15.0'
+    testCompile 'com.github.tomakehurst:wiremock-standalone:2.21.0'
     testCompile 'com.github.tomjankes:wiremock-groovy:0.2.0'
     testCompile 'org.slf4j:slf4j-api:1.7.25'
     testCompile 'ch.qos.logback:logback-classic:1.2.3'
