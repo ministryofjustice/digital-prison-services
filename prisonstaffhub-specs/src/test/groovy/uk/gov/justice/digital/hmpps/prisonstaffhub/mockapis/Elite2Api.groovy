@@ -724,16 +724,6 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubPostBulkAppointments() {
-        this.stubFor(
-                post("/api/appointments")
-                .willReturn(
-                        aResponse()
-                        .withStatus(200)
-                )
-        )
-    }
-
     void stubJsonPostRequest(String url, def response) {
         this.stubFor(
                 post(url)
@@ -743,6 +733,16 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson(response))
 
+                )
+        )
+    }
+
+    void stubPostBulkAppointments() {
+        this.stubFor(
+                post("/api/appointments")
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
                 )
         )
     }

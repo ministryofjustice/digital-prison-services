@@ -12,23 +12,21 @@ export default class WithDataSource extends React.Component {
   }
 
   componentDidMount() {
-    const { request, useExistingData } = this.props
+    const { request } = this.props
     const { url, params } = request
 
-    if (!useExistingData) {
-      axios
-        .get(url, { params })
-        .then(response =>
-          this.setState({
-            data: response.data,
-          })
-        )
-        .catch(error =>
-          this.setState({
-            error,
-          })
-        )
-    }
+    axios
+      .get(url, { params })
+      .then(response =>
+        this.setState({
+          data: response.data,
+        })
+      )
+      .catch(error =>
+        this.setState({
+          error,
+        })
+      )
   }
 
   render() {
@@ -48,9 +46,4 @@ WithDataSource.propTypes = {
     params: PropTypes.object,
   }).isRequired,
   render: PropTypes.func.isRequired,
-  useExistingData: PropTypes.bool,
-}
-
-WithDataSource.defaultProps = {
-  useExistingData: false,
 }
