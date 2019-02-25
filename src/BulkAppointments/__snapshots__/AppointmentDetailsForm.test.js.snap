@@ -2562,13 +2562,14 @@ ShallowWrapper {
 exports[`Appointment form Form should render correctly 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <AppointmentForm
+  Symbol(enzyme.__unrendered__): <AppointmentDetailsForm
     appointmentTypes={Array []}
     error=""
-    initialValues={null}
+    initialValues={Object {}}
     locationTypes={Array []}
     now={"2019-01-01T21:00:00.000Z"}
-    trySubmit={[MockFunction]}
+    onError={[MockFunction]}
+    onSuccess={[MockFunction]}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -2583,7 +2584,7 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
-      "initialValues": null,
+      "initialValues": Object {},
       "onSubmit": [Function],
       "render": [Function],
     },
@@ -2597,7 +2598,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
-        "initialValues": null,
+        "initialValues": Object {},
         "onSubmit": [Function],
         "render": [Function],
       },
@@ -2630,7 +2631,7 @@ exports[`Appointment form Form should render correctly 2`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ReactFinalForm
-    initialValues={null}
+    initialValues={Object {}}
     onSubmit={[Function]}
     render={[Function]}
   />,
@@ -2659,7 +2660,7 @@ ShallowWrapper {
           values={Object {}}
         />
         <StyledHoc
-          disabled={true}
+          disabled={false}
           icon={undefined}
           start={false}
           type="submit"
@@ -2703,7 +2704,7 @@ ShallowWrapper {
             values={Object {}}
           />,
           <StyledHoc
-            disabled={true}
+            disabled={false}
             icon={undefined}
             start={false}
             type="submit"
@@ -2737,7 +2738,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "children": "Continue",
-            "disabled": true,
+            "disabled": false,
             "icon": undefined,
             "start": false,
             "type": "submit",
@@ -2786,7 +2787,7 @@ ShallowWrapper {
             values={Object {}}
           />
           <StyledHoc
-            disabled={true}
+            disabled={false}
             icon={undefined}
             start={false}
             type="submit"
@@ -2830,7 +2831,7 @@ ShallowWrapper {
               values={Object {}}
             />,
             <StyledHoc
-              disabled={true}
+              disabled={false}
               icon={undefined}
               start={false}
               type="submit"
@@ -2864,7 +2865,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": "Continue",
-              "disabled": true,
+              "disabled": false,
               "icon": undefined,
               "start": false,
               "type": "submit",

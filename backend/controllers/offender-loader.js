@@ -1,8 +1,10 @@
+const logger = require('../log')
 const { parseCsvData } = require('../csv-parser')
 
 const offenderLoaderFactory = eliteApi => {
   const loadFromCsvContent = async (context, content) => {
     const rows = await parseCsvData(content)
+    logger.info(`Csv file was imported with ${rows.length} rows of data`)
     const offenderNumbers = rows.map(row => row[0])
     const offenders = await eliteApi.getBasicInmateDetailsForOffenders(context, offenderNumbers)
 

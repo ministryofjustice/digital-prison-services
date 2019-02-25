@@ -1,36 +1,32 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import BackLink from '@govuk-react/back-link'
-import axios from 'axios'
 import moment from 'moment'
 
+import { H3 } from '@govuk-react/header'
+import Button from '@govuk-react/button'
+import { ButtonArrow } from '@govuk-react/icons'
+import BackLink from '@govuk-react/back-link'
+
+import { Container } from './BulkAppointmentsContainer.styles'
+import ChooseOffenders from './ChooseOffenders'
 import Page from '../Components/Page'
 import { setApplicationTitle, setLoaded, resetError } from '../redux/actions'
-
-import AppointmentForm from './AppointmentForm'
-import ChooseOffenders from './ChooseOffenders'
-import OffenderTable from './OffenderTable'
+import AppointmentDetailsForm from './AppointmentDetailsForm'
+import AddAppointmentForm from './AddAppointmentForm'
 import WithDataSource from '../WithDataSource/WirhDataSource'
 
-const createFileFormDataFromEvent = event => {
-  const files = Array.from(event.target.files)
-  const file = files[0]
-
-  const formData = new FormData()
-  formData.append('offenders', file)
-
-  return formData
+const defaultState = {
+  currentStep: 0,
+  offenders: [],
+  appointment: {},
 }
 
 class BulkAppointmentsContainer extends Component {
   constructor() {
     super()
     this.state = {
-      appointmentTypes: [],
-      currentStep: 0,
-      offenders: [],
-      appointment: {},
+      ...defaultState,
     }
   }
 
@@ -43,69 +39,96 @@ class BulkAppointmentsContainer extends Component {
     titleDispatch('Whereabouts')
   }
 
-  async onFileInputChanged(event) {
-    const { handleError, resetErrorDispatch } = this.props
-    resetErrorDispatch()
-
-    try {
-      event.preventDefault()
-      const formData = createFileFormDataFromEvent(event)
-
-      const response = await axios.post('/api/appointments/upload-offenders', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      this.setState({
-        offenders: response.data,
-      })
-    } catch (error) {
-      handleError(error)
-    }
-  }
-
-  BackToAppointmentDetails() {
-    const { appointmentTypes, appointment } = this.state
-    this.setState({
-      appointmentTypes,
-      appointment,
-      currentStep: 0,
-    })
+  previousStep() {
+    this.setState(state => ({
+      ...state,
+      currentStep: state.currentStep - 1,
+    }))
   }
 
   render() {
-    const { agencyId } = this.props
-    const { offenders, currentStep } = this.state
+    const { agencyId, handleError, resetErrorDispatch } = this.props
+    const { complete, offenders, currentStep, appointment } = this.state
 
-    const steps = [
-      <WithDataSource
-        request={{ url: '/api/bulk-appointments/view-model', params: { agencyId } }}
-        render={({ data, error }) => (
-          <AppointmentForm
-            now={moment()}
-            appointmentTypes={data.appointmentTypes}
-            error={error}
-            locationTypes={data.locationTypes}
-            trySubmit={values =>
-              this.setState(state => ({
-                ...state,
-                currentStep: currentStep + 1,
-                appointment: values,
-              }))
-            }
-          />
-        )}
-      />,
-
-      <div>
-        <BackLink onClick={() => this.BackToAppointmentDetails()}> Back</BackLink>
-        <ChooseOffenders onFileInputChanged={event => this.onFileInputChanged(event)} />
-        <OffenderTable offenders={offenders} />
-      </div>,
-    ]
     return (
-      <Page title="Add bulk appointments">
-        <div>{steps[currentStep]}</div>
+      <Page title="Add bulk appointments" alwaysRender>
+        {complete && (
+          <div>
+            <H3> Appointments have been successfully created. </H3>
+            <div>
+              <Button
+                onClick={() =>
+                  this.setState({
+                    ...defaultState,
+                    complete: false,
+                  })
+                }
+                icon={<ButtonArrow />}
+              >
+                Start again
+              </Button>
+            </div>
+          </div>
+        )}
+        {!complete && (
+          <div>
+            {currentStep === 0 && (
+              <WithDataSource
+                request={{ url: '/api/bulk-appointments/view-model', params: { agencyId } }}
+                render={({ data, error }) => (
+                  <AppointmentDetailsForm
+                    initialValues={appointment}
+                    now={moment()}
+                    appointmentTypes={data.appointmentTypes}
+                    error={error}
+                    locationTypes={data.locationTypes}
+                    onSuccess={values =>
+                      this.setState(state => ({
+                        ...state,
+                        currentStep: currentStep + 1,
+                        appointment: values,
+                      }))
+                    }
+                  />
+                )}
+              />
+            )}
+            {currentStep === 1 && (
+              <Container>
+                <BackLink onClick={() => this.previousStep()}> Back</BackLink>
+                <ChooseOffenders
+                  onError={error => handleError(error)}
+                  onSuccess={data => {
+                    resetErrorDispatch()
+                    this.setState(state => ({
+                      ...state,
+                      offenders: null,
+                    }))
+                    this.setState(state => ({
+                      ...state,
+                      offenders: data,
+                    }))
+                  }}
+                />
+                <AddAppointmentForm
+                  onError={error => handleError(error)}
+                  onSuccess={() => {
+                    resetErrorDispatch()
+                    this.setState({
+                      ...defaultState,
+                      complete: true,
+                    })
+                  }}
+                  appointment={appointment}
+                  offenders={offenders}
+                  now={moment()}
+                  date={appointment.date}
+                  startTime={appointment.startTime}
+                />
+              </Container>
+            )}
+          </div>
+        )}
       </Page>
     )
   }
@@ -116,6 +139,7 @@ BulkAppointmentsContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   agencyId: PropTypes.string.isRequired,
+  handleError: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

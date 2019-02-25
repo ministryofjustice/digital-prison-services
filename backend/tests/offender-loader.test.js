@@ -25,7 +25,8 @@ describe('offender loader', () => {
     ]
     const csvData = `
         A111111, 14:00
-        A222222,         
+        A222222,
+                 
     `
     elite2Api.getBasicInmateDetailsForOffenders.mockReturnValue(offenders)
 
