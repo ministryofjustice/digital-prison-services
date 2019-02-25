@@ -27,44 +27,18 @@ class Elite2Api extends WireMockRule {
                 ))
     }
 
-    void stubGetMyDetails(UserAccount user) {
-        stubGetMyDetails(user, Caseload.LEI.id)
-    }
-
-    void stubGetMyDetails(UserAccount user, String caseloadId) {
-        this.stubFor(
-                get('/api/users/me')
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson([
-                                staffId         : user.staffMember.id,
-                                username        : user.username,
-                                firstName       : user.staffMember.firstName,
-                                lastName        : user.staffMember.lastName,
-                                email           : 'itaguser@syscon.net',
-                                activeCaseLoadId: caseloadId
-                        ]))))
-    }
-
-    void stubGetMyRoles() {
-        this.stubFor(
-                get('/api/users/me/roles')
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(['ROLE']))))
-    }
-
     void stubGetMyCaseloads(List<Caseload> caseloads) {
+        stubGetMyCaseloads(caseloads, Caseload.LEI.id)
+    }
+
+    void stubGetMyCaseloads(List<Caseload> caseloads, caseload) {
         def json = new JsonBuilder()
-        json caseloads, { caseload ->
-            caseLoadId caseload.id
-            description caseload.description
-            type caseload.type
+        json caseloads, { cl ->
+            caseLoadId cl.id
+            description cl.description
+            type cl.type
             caseloadFunction 'DUMMY'
+            currentlyActive cl.id == caseload
         }
 
         this.stubFor(

@@ -25,12 +25,11 @@ class TestFixture {
 
     def loginAs(UserAccount user) {
         currentUser = user
-        elite2Api.stubHealth()
+        oauthApi.stubValidOAuthTokenRequest()
 
         browser.to LoginPage
-        oauthApi.stubValidOAuthTokenRequest currentUser
-        elite2Api.stubGetMyDetails currentUser
-        elite2Api.stubGetMyRoles()
+        oauthApi.stubGetMyDetails currentUser
+        oauthApi.stubGetMyRoles()
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
         elite2Api.stubActivityLocations()

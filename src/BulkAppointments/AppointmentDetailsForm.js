@@ -101,7 +101,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                   futureOnly
                   inputId="date"
                   title="date"
-                  error={String(meta.touched && meta.error)}
+                  error={meta.touched && meta.error}
                   handleDateChange={input.onChange}
                   value={values.date}
                 />

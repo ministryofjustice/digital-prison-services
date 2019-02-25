@@ -46,8 +46,7 @@ const tokenRefresherFactory = require('./tokenRefresher').factory
 const controllerFactory = require('./controllers/controller').factory
 
 const clientFactory = require('./api/oauthEnabledClient')
-const { healthApiFactory } = require('./api/healthApi')
-const eliteApiFactory = require('./api/elite2Api').elite2ApiFactory
+const { elite2ApiFactory } = require('./api/elite2Api')
 const { oauthApiFactory } = require('./api/oauthApi')
 const oauthClientId = require('./api/oauthClientId')
 
@@ -105,14 +104,7 @@ app.get('/terms', async (req, res) => {
   res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
 })
 
-const healthApi = healthApiFactory(
-  clientFactory({
-    baseUrl: config.apis.elite2.url,
-    timeout: 2000,
-  })
-)
-
-const elite2Api = eliteApiFactory(
+const elite2Api = elite2ApiFactory(
   clientFactory({
     baseUrl: config.apis.elite2.url,
     timeout: config.apis.elite2.timeoutSeconds * 1000,
@@ -130,8 +122,14 @@ const controller = controllerFactory({
   bulkAppoinemtnsService: bulkAppointmentsServiceFactory(elite2Api),
 })
 
-const oauthApi = oauthApiFactory({ ...config.apis.oauth2 })
-auth.init(oauthApi)
+const oauthApi = oauthApiFactory(
+  clientFactory({
+    baseUrl: config.apis.oauth2.url,
+    timeout: config.apis.oauth2.timeoutSeconds * 1000,
+  }),
+  { ...config.apis.oauth2 }
+)
+auth.init()
 const tokenRefresher = tokenRefresherFactory(oauthApi.refresh, config.app.tokenRefreshThresholdSeconds)
 
 app.use(
@@ -162,7 +160,6 @@ app.use(flash())
 /* login, logout, token refresh etc */
 sessionManagementRoutes.configureRoutes({
   app,
-  healthApi,
   tokenRefresher,
   mailTo: config.app.mailTo,
   homeLink: config.app.notmEndpointUrl,
@@ -184,8 +181,8 @@ app.use('/api', (req, res, next) => {
 app.use(express.static(path.join(__dirname, '../build')))
 
 app.use('/api/config', getConfiguration)
-app.use('/api/userroles', userMeFactory(elite2Api).userRoles)
-app.use('/api/me', userMeFactory(elite2Api).userMe)
+app.use('/api/userroles', userMeFactory(oauthApi).userRoles)
+app.use('/api/me', userMeFactory(oauthApi).userMe)
 app.use('/api/usercaseloads', userCaseLoadsFactory(elite2Api).userCaseloads)
 app.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)
 app.use('/api/setactivecaseload', setActiveCaseLoadFactory(elite2Api).setActiveCaseload)

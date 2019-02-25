@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
-import { Header } from 'new-nomis-shared-components'
+import { Header, FooterContainer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
@@ -42,7 +42,6 @@ import EnRouteContainer from './EnRoute/EnRouteContainer'
 import BulkAppointmentsContainer from './BulkAppointments/BulkAppointmentsContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
-import FooterContainer from './FooterContainer'
 
 const axios = require('axios')
 
@@ -140,7 +139,8 @@ class App extends React.Component {
   shouldDisplayInnerContent = () => {
     const { shouldShowTerms, user } = this.props
 
-    return !shouldShowTerms && (user && user.activeCaseLoadId)
+    // only show inner content if the user has been loaded
+    return !shouldShowTerms && user && user.username
   }
 
   handleDateChange = date => {
@@ -211,7 +211,10 @@ class App extends React.Component {
       axios.get('/api/userroles'),
     ])
 
-    userDetailsDispatch({ ...user.data, caseLoadOptions: caseloads.data, roles: roles.data })
+    const activeCaseLoad = caseloads.data.find(cl => cl.currentlyActive)
+    const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+
+    userDetailsDispatch({ ...user.data, activeCaseLoadId, caseLoadOptions: caseloads.data, roles: roles.data })
   }
 
   render() {
@@ -437,7 +440,7 @@ class App extends React.Component {
               <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
             </ModalProvider>
             {innerContent}
-            <FooterContainer feedbackEmail={config.mailTo} />
+            <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
           </ScrollToTop>
         </div>
       </Router>

@@ -17,13 +17,18 @@ describe('getListSizeClass()', () => {
   })
 
   it('should return medium-list if provided array has less than 40 entries', () => {
-    const list = new Array(39)
+    const list = new Array(29)
     expect(getListSizeClass(list)).toEqual('medium-list')
   })
 
   it('should return large-list if provided array has 40 or more entries', () => {
-    const list = new Array(40)
+    const list = new Array(39)
     expect(getListSizeClass(list)).toEqual('large-list')
+  })
+
+  it('should return extra-large-list if provided array has 40 or more entries', () => {
+    const list = new Array(40)
+    expect(getListSizeClass(list)).toEqual('extra-large-list')
   })
 })
 

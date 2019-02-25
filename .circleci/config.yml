@@ -104,18 +104,16 @@ jobs:
                  --build-arg BUILD_NUMBER=$VERSION \
                  --build-arg GIT_REF=$GIT_REF \
                  --build-arg GIT_DATE=$GIT_DATE \
-                 --tag "mojdigitalstudio/whereabouts:$BUILD_VERSION" \
+                 --tag "mojdigitalstudio/prisonstaffhub:$BUILD_VERSION" \
                  --label "maintainer=michael.willis@digital.justice.gov.uk" \
                  --label "build.number=$CIRCLE_BUILD_NUM" \
                  --label "build.url=$CIRCLE_BUILD_URL" \
                  --label "build.gitref=$GIT_REF"
 
-             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-               docker login -u $DOCKER_USER -p $DOCKER_PASS
-               docker tag mojdigitalstudio/whereabouts:$BUILD_VERSION mojdigitalstudio/whereabouts:latest
-               docker push mojdigitalstudio/whereabouts:$BUILD_VERSION
-               docker push mojdigitalstudio/whereabouts:latest
-             fi
+             docker login -u $DOCKER_USER -p $DOCKER_PASS
+             docker tag mojdigitalstudio/prisonstaffhub:$BUILD_VERSION mojdigitalstudio/prisonstaffhub:latest
+             docker push mojdigitalstudio/prisonstaffhub:$BUILD_VERSION
+             docker push mojdigitalstudio/prisonstaffhub:latest
 
   deploy_release_eb:
       working_directory: ~/app
@@ -145,7 +143,12 @@ workflows:
             - integration_tests
           filters:
             branches:
-              only: master
+              only:
+                - master
       - deploy_release_eb:
           requires:
             - build_docker
+          filters:
+            branches:
+              only:
+                - master
