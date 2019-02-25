@@ -9,8 +9,8 @@ import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC, formatDateAndTime } from 
 
 describe('Add appointment form', () => {
   const stubFunc = () => {}
-  const now = moment('2019-10-10T21:00:00')
-  const startTime = '2019-10-10T22:00:00'
+  const now = moment('2019-10-10T21:00:00Z')
+  const startTime = '2019-10-10T22:00:00Z'
 
   const offenders = [
     { offenderNo: 'offenderNo1', bookingId: 1, firstName: 'firstName1', lastName: 'lastName1' },
@@ -55,7 +55,7 @@ describe('Add appointment form', () => {
     })
     it('should use start time from offenders or use the start time passed in', () => {
       const date = moment('2019-10-10').format(DATE_ONLY_FORMAT_SPEC)
-      const optionalStartTime = moment('2000-10-10T22:10:00').format(DATE_TIME_FORMAT_SPEC)
+      const optionalStartTime = moment('2000-10-10T22:10:00Z').format(DATE_TIME_FORMAT_SPEC)
 
       const values = getInitalValues({ offenders, date, startTime: optionalStartTime })
       expect(values).toEqual({

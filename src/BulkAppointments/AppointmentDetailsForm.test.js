@@ -10,7 +10,7 @@ describe('Appointment form', () => {
   describe('Form', () => {
     it('should render correctly', () => {
       const outer = shallow(
-        <AppointmentDetailsForm onSuccess={jest.fn()} onError={jest.fn()} now={moment('2019-01-01T21:00:00')} />
+        <AppointmentDetailsForm onSuccess={jest.fn()} onError={jest.fn()} now={moment('2019-01-01T21:00:00Z')} />
       )
       expect(outer).toMatchSnapshot()
 
@@ -21,8 +21,8 @@ describe('Appointment form', () => {
     it('should pass correct props to all fields', () => {
       const wrapper = shallow(
         <FormFields
-          values={{ date: '2019-01-01T21:00:00' }}
-          now={moment('2019-01-01T21:00:00')}
+          values={{ date: '2019-01-01T21:00:00Z' }}
+          now={moment('2019-01-01T21:00:00Z')}
           appointmentTypes={[{ id: '1', description: 'app1' }]}
           locationTypes={[{ id: 1, description: 'loc1' }]}
           errors={[
@@ -40,7 +40,7 @@ describe('Appointment form', () => {
   })
   describe('Form validation', () => {
     const findValidationError = (key, errors) => errors[FORM_ERROR].find(item => item.targetName === key)
-    it('should return a message when the comment has exceeded 3600 charactors', () => {
+    it('should return a message when the comment has exceeded 3600 characters', () => {
       const massiveComment = [...Array(3601).keys()].map(_ => 'A').join('')
 
       const validationMessages = validateThenSubmit(jest.fn)({
@@ -83,8 +83,8 @@ describe('Appointment form', () => {
 
     it('should return error messages whent the start date is after the end date', () => {
       const validationMessages = validateThenSubmit(jest.fn)({
-        startTime: '2019-01-01T21:00:00',
-        endTime: '2019-01-01T20:00:00',
+        startTime: '2019-01-01T21:00:00Z',
+        endTime: '2019-01-01T20:00:00Z',
       })
 
       const startTime = findValidationError('startTime', validationMessages)
@@ -98,8 +98,8 @@ describe('Appointment form', () => {
       const date = moment('2019-01-01')
       const validationMessages = validateThenSubmit(jest.fn)({
         date,
-        startTime: '2019-01-01T21:00:00',
-        endTime: '2019-01-01T21:00:00',
+        startTime: '2019-01-01T21:00:00Z',
+        endTime: '2019-01-01T21:00:00Z',
       })
 
       const startTime = findValidationError('startTime', validationMessages)
@@ -129,8 +129,8 @@ describe('Appointment form', () => {
           appointmentType: 'ap1',
           location: 'loc1',
           date,
-          startTime: '2019-01-01T21:00:00',
-          endTime: '2019-01-01T22:00:00',
+          startTime: '2019-01-01T21:00:00Z',
+          endTime: '2019-01-01T22:00:00Z',
         })
 
         done()
@@ -138,8 +138,8 @@ describe('Appointment form', () => {
 
       const validationMessages = validateThenSubmit(onSuccess)({
         date,
-        startTime: '2019-01-01T21:00:00',
-        endTime: '2019-01-01T22:00:00',
+        startTime: '2019-01-01T21:00:00Z',
+        endTime: '2019-01-01T22:00:00Z',
         appointmentType: 'ap1',
         location: 'loc1',
       })
