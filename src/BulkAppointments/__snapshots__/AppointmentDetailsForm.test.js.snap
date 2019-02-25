@@ -1,0 +1,2918 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Appointment form Form should pass correct props to all fields 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FormFields
+    appointmentTypes={
+      Array [
+        Object {
+          "description": "app1",
+          "id": "1",
+        },
+      ]
+    }
+    errors={
+      Array [
+        Object {
+          "targetName": "date",
+          "text": "Date test message",
+        },
+        Object {
+          "targetName": "startTime",
+          "text": "Start test message",
+        },
+        Object {
+          "targetName": "endTime",
+          "text": "End time test message",
+        },
+        Object {
+          "targetName": "comments",
+          "text": "Date test message",
+        },
+        Object {
+          "targetName": "appointmentType",
+          "text": "appointment type test message",
+        },
+        Object {
+          "targetName": "locationType",
+          "text": "location type test message",
+        },
+      ]
+    }
+    locationTypes={
+      Array [
+        Object {
+          "description": "loc1",
+          "id": 1,
+        },
+      ]
+    }
+    now={"2019-01-01T21:00:00.000Z"}
+    values={
+      Object {
+        "date": "2019-01-01T21:00:00Z",
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <StyledHoc
+          description={undefined}
+          errors={
+            Array [
+              Object {
+                "targetName": "date",
+                "text": "Date test message",
+              },
+              Object {
+                "targetName": "startTime",
+                "text": "Start test message",
+              },
+              Object {
+                "targetName": "endTime",
+                "text": "End time test message",
+              },
+              Object {
+                "targetName": "comments",
+                "text": "Date test message",
+              },
+              Object {
+                "targetName": "appointmentType",
+                "text": "appointment type test message",
+              },
+              Object {
+                "targetName": "locationType",
+                "text": "location type test message",
+              },
+            ]
+          }
+          heading="There is a problem"
+          onHandleErrorClick={[Function]}
+        />,
+        <Styled(div)>
+          <Styled(div)>
+            <FieldWithError
+              component={[Function]}
+              errors={
+                Array [
+                  Object {
+                    "targetName": "date",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "startTime",
+                    "text": "Start test message",
+                  },
+                  Object {
+                    "targetName": "endTime",
+                    "text": "End time test message",
+                  },
+                  Object {
+                    "targetName": "comments",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "appointmentType",
+                    "text": "appointment type test message",
+                  },
+                  Object {
+                    "targetName": "locationType",
+                    "text": "location type test message",
+                  },
+                ]
+              }
+              label="Appointment type"
+              name="appointmentType"
+              placeholder="Select"
+            >
+              <option
+                disabled={true}
+                hidden={true}
+                value=""
+              >
+                Select
+              </option>
+              <option
+                value="1"
+              >
+                app1
+              </option>
+            </FieldWithError>
+            <Styled(div)>
+              <FieldWithError
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                name="date"
+                render={[Function]}
+              />
+              <FieldWithError
+                component={[Function]}
+                date="2019-01-01T21:00:00Z"
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                futureTimeOnly={true}
+                label="Group start time (optional)"
+                name="startTime"
+                now={"2019-01-01T21:00:00.000Z"}
+              />
+            </Styled(div)>
+          </Styled(div)>
+          <Styled(div)>
+            <FieldWithError
+              component={[Function]}
+              errors={
+                Array [
+                  Object {
+                    "targetName": "date",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "startTime",
+                    "text": "Start test message",
+                  },
+                  Object {
+                    "targetName": "endTime",
+                    "text": "End time test message",
+                  },
+                  Object {
+                    "targetName": "comments",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "appointmentType",
+                    "text": "appointment type test message",
+                  },
+                  Object {
+                    "targetName": "locationType",
+                    "text": "location type test message",
+                  },
+                ]
+              }
+              label="Location"
+              name="location"
+              placeholder="Select"
+            >
+              <option
+                disabled={true}
+                hidden={true}
+                value=""
+              >
+                Select
+              </option>
+              <option
+                value={1}
+              >
+                loc1
+              </option>
+            </FieldWithError>
+            <FieldWithError
+              component={[Function]}
+              date="2019-01-01T21:00:00Z"
+              errors={
+                Array [
+                  Object {
+                    "targetName": "date",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "startTime",
+                    "text": "Start test message",
+                  },
+                  Object {
+                    "targetName": "endTime",
+                    "text": "End time test message",
+                  },
+                  Object {
+                    "targetName": "comments",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "appointmentType",
+                    "text": "appointment type test message",
+                  },
+                  Object {
+                    "targetName": "locationType",
+                    "text": "location type test message",
+                  },
+                ]
+              }
+              futureTimeOnly={true}
+              label="Group end time (optional)"
+              name="endTime"
+              now={"2019-01-01T21:00:00.000Z"}
+            />
+            <FieldWithError
+              errors={
+                Array [
+                  Object {
+                    "targetName": "date",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "startTime",
+                    "text": "Start test message",
+                  },
+                  Object {
+                    "targetName": "endTime",
+                    "text": "End time test message",
+                  },
+                  Object {
+                    "targetName": "comments",
+                    "text": "Date test message",
+                  },
+                  Object {
+                    "targetName": "appointmentType",
+                    "text": "appointment type test message",
+                  },
+                  Object {
+                    "targetName": "locationType",
+                    "text": "location type test message",
+                  },
+                ]
+              }
+              name="comments"
+              render={[Function]}
+            />
+          </Styled(div)>
+        </Styled(div)>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "description": undefined,
+          "errors": Array [
+            Object {
+              "targetName": "date",
+              "text": "Date test message",
+            },
+            Object {
+              "targetName": "startTime",
+              "text": "Start test message",
+            },
+            Object {
+              "targetName": "endTime",
+              "text": "End time test message",
+            },
+            Object {
+              "targetName": "comments",
+              "text": "Date test message",
+            },
+            Object {
+              "targetName": "appointmentType",
+              "text": "appointment type test message",
+            },
+            Object {
+              "targetName": "locationType",
+              "text": "location type test message",
+            },
+          ],
+          "heading": "There is a problem",
+          "onHandleErrorClick": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <Styled(div)>
+              <FieldWithError
+                component={[Function]}
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                label="Appointment type"
+                name="appointmentType"
+                placeholder="Select"
+              >
+                <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  Select
+                </option>
+                <option
+                  value="1"
+                >
+                  app1
+                </option>
+              </FieldWithError>
+              <Styled(div)>
+                <FieldWithError
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  name="date"
+                  render={[Function]}
+                />
+                <FieldWithError
+                  component={[Function]}
+                  date="2019-01-01T21:00:00Z"
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  futureTimeOnly={true}
+                  label="Group start time (optional)"
+                  name="startTime"
+                  now={"2019-01-01T21:00:00.000Z"}
+                />
+              </Styled(div)>
+            </Styled(div)>,
+            <Styled(div)>
+              <FieldWithError
+                component={[Function]}
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                label="Location"
+                name="location"
+                placeholder="Select"
+              >
+                <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  Select
+                </option>
+                <option
+                  value={1}
+                >
+                  loc1
+                </option>
+              </FieldWithError>
+              <FieldWithError
+                component={[Function]}
+                date="2019-01-01T21:00:00Z"
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                futureTimeOnly={true}
+                label="Group end time (optional)"
+                name="endTime"
+                now={"2019-01-01T21:00:00.000Z"}
+              />
+              <FieldWithError
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                name="comments"
+                render={[Function]}
+              />
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <FieldWithError
+                  component={[Function]}
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  label="Appointment type"
+                  name="appointmentType"
+                  placeholder="Select"
+                >
+                  <option
+                    disabled={true}
+                    hidden={true}
+                    value=""
+                  >
+                    Select
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    app1
+                  </option>
+                </FieldWithError>,
+                <Styled(div)>
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    name="date"
+                    render={[Function]}
+                  />
+                  <FieldWithError
+                    component={[Function]}
+                    date="2019-01-01T21:00:00Z"
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    futureTimeOnly={true}
+                    label="Group start time (optional)"
+                    name="startTime"
+                    now={"2019-01-01T21:00:00.000Z"}
+                  />
+                </Styled(div)>,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "children": Array [
+                    <option
+                      disabled={true}
+                      hidden={true}
+                      value=""
+                    >
+                      Select
+                    </option>,
+                    Array [
+                      <option
+                        value="1"
+                      >
+                        app1
+                      </option>,
+                    ],
+                  ],
+                  "component": [Function],
+                  "errors": Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ],
+                  "label": "Appointment type",
+                  "name": "appointmentType",
+                  "placeholder": "Select",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Select",
+                      "disabled": true,
+                      "hidden": true,
+                      "value": "",
+                    },
+                    "ref": null,
+                    "rendered": "Select",
+                    "type": "option",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": "app1",
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "app1",
+                      "value": "1",
+                    },
+                    "ref": null,
+                    "rendered": "app1",
+                    "type": "option",
+                  },
+                ],
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": Array [
+                    <FieldWithError
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "date",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "startTime",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "endTime",
+                            "text": "End time test message",
+                          },
+                          Object {
+                            "targetName": "comments",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "appointmentType",
+                            "text": "appointment type test message",
+                          },
+                          Object {
+                            "targetName": "locationType",
+                            "text": "location type test message",
+                          },
+                        ]
+                      }
+                      name="date"
+                      render={[Function]}
+                    />,
+                    <FieldWithError
+                      component={[Function]}
+                      date="2019-01-01T21:00:00Z"
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "date",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "startTime",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "endTime",
+                            "text": "End time test message",
+                          },
+                          Object {
+                            "targetName": "comments",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "appointmentType",
+                            "text": "appointment type test message",
+                          },
+                          Object {
+                            "targetName": "locationType",
+                            "text": "location type test message",
+                          },
+                        ]
+                      }
+                      futureTimeOnly={true}
+                      label="Group start time (optional)"
+                      name="startTime"
+                      now={"2019-01-01T21:00:00.000Z"}
+                    />,
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "errors": Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ],
+                      "name": "date",
+                      "render": [Function],
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "component": [Function],
+                      "date": "2019-01-01T21:00:00Z",
+                      "errors": Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ],
+                      "futureTimeOnly": true,
+                      "label": "Group start time (optional)",
+                      "name": "startTime",
+                      "now": "2019-01-01T21:00:00.000Z",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": [Function],
+              },
+            ],
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <FieldWithError
+                  component={[Function]}
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  label="Location"
+                  name="location"
+                  placeholder="Select"
+                >
+                  <option
+                    disabled={true}
+                    hidden={true}
+                    value=""
+                  >
+                    Select
+                  </option>
+                  <option
+                    value={1}
+                  >
+                    loc1
+                  </option>
+                </FieldWithError>,
+                <FieldWithError
+                  component={[Function]}
+                  date="2019-01-01T21:00:00Z"
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  futureTimeOnly={true}
+                  label="Group end time (optional)"
+                  name="endTime"
+                  now={"2019-01-01T21:00:00.000Z"}
+                />,
+                <FieldWithError
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  name="comments"
+                  render={[Function]}
+                />,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "children": Array [
+                    <option
+                      disabled={true}
+                      hidden={true}
+                      value=""
+                    >
+                      Select
+                    </option>,
+                    Array [
+                      <option
+                        value={1}
+                      >
+                        loc1
+                      </option>,
+                    ],
+                  ],
+                  "component": [Function],
+                  "errors": Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ],
+                  "label": "Location",
+                  "name": "location",
+                  "placeholder": "Select",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Select",
+                      "disabled": true,
+                      "hidden": true,
+                      "value": "",
+                    },
+                    "ref": null,
+                    "rendered": "Select",
+                    "type": "option",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": "loc1",
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "loc1",
+                      "value": 1,
+                    },
+                    "ref": null,
+                    "rendered": "loc1",
+                    "type": "option",
+                  },
+                ],
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "component": [Function],
+                  "date": "2019-01-01T21:00:00Z",
+                  "errors": Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ],
+                  "futureTimeOnly": true,
+                  "label": "Group end time (optional)",
+                  "name": "endTime",
+                  "now": "2019-01-01T21:00:00.000Z",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "errors": Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ],
+                  "name": "comments",
+                  "render": [Function],
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <StyledHoc
+            description={undefined}
+            errors={
+              Array [
+                Object {
+                  "targetName": "date",
+                  "text": "Date test message",
+                },
+                Object {
+                  "targetName": "startTime",
+                  "text": "Start test message",
+                },
+                Object {
+                  "targetName": "endTime",
+                  "text": "End time test message",
+                },
+                Object {
+                  "targetName": "comments",
+                  "text": "Date test message",
+                },
+                Object {
+                  "targetName": "appointmentType",
+                  "text": "appointment type test message",
+                },
+                Object {
+                  "targetName": "locationType",
+                  "text": "location type test message",
+                },
+              ]
+            }
+            heading="There is a problem"
+            onHandleErrorClick={[Function]}
+          />,
+          <Styled(div)>
+            <Styled(div)>
+              <FieldWithError
+                component={[Function]}
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                label="Appointment type"
+                name="appointmentType"
+                placeholder="Select"
+              >
+                <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  Select
+                </option>
+                <option
+                  value="1"
+                >
+                  app1
+                </option>
+              </FieldWithError>
+              <Styled(div)>
+                <FieldWithError
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  name="date"
+                  render={[Function]}
+                />
+                <FieldWithError
+                  component={[Function]}
+                  date="2019-01-01T21:00:00Z"
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  futureTimeOnly={true}
+                  label="Group start time (optional)"
+                  name="startTime"
+                  now={"2019-01-01T21:00:00.000Z"}
+                />
+              </Styled(div)>
+            </Styled(div)>
+            <Styled(div)>
+              <FieldWithError
+                component={[Function]}
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                label="Location"
+                name="location"
+                placeholder="Select"
+              >
+                <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  Select
+                </option>
+                <option
+                  value={1}
+                >
+                  loc1
+                </option>
+              </FieldWithError>
+              <FieldWithError
+                component={[Function]}
+                date="2019-01-01T21:00:00Z"
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                futureTimeOnly={true}
+                label="Group end time (optional)"
+                name="endTime"
+                now={"2019-01-01T21:00:00.000Z"}
+              />
+              <FieldWithError
+                errors={
+                  Array [
+                    Object {
+                      "targetName": "date",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "startTime",
+                      "text": "Start test message",
+                    },
+                    Object {
+                      "targetName": "endTime",
+                      "text": "End time test message",
+                    },
+                    Object {
+                      "targetName": "comments",
+                      "text": "Date test message",
+                    },
+                    Object {
+                      "targetName": "appointmentType",
+                      "text": "appointment type test message",
+                    },
+                    Object {
+                      "targetName": "locationType",
+                      "text": "location type test message",
+                    },
+                  ]
+                }
+                name="comments"
+                render={[Function]}
+              />
+            </Styled(div)>
+          </Styled(div)>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "description": undefined,
+            "errors": Array [
+              Object {
+                "targetName": "date",
+                "text": "Date test message",
+              },
+              Object {
+                "targetName": "startTime",
+                "text": "Start test message",
+              },
+              Object {
+                "targetName": "endTime",
+                "text": "End time test message",
+              },
+              Object {
+                "targetName": "comments",
+                "text": "Date test message",
+              },
+              Object {
+                "targetName": "appointmentType",
+                "text": "appointment type test message",
+              },
+              Object {
+                "targetName": "locationType",
+                "text": "location type test message",
+              },
+            ],
+            "heading": "There is a problem",
+            "onHandleErrorClick": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <Styled(div)>
+                <FieldWithError
+                  component={[Function]}
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  label="Appointment type"
+                  name="appointmentType"
+                  placeholder="Select"
+                >
+                  <option
+                    disabled={true}
+                    hidden={true}
+                    value=""
+                  >
+                    Select
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    app1
+                  </option>
+                </FieldWithError>
+                <Styled(div)>
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    name="date"
+                    render={[Function]}
+                  />
+                  <FieldWithError
+                    component={[Function]}
+                    date="2019-01-01T21:00:00Z"
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    futureTimeOnly={true}
+                    label="Group start time (optional)"
+                    name="startTime"
+                    now={"2019-01-01T21:00:00.000Z"}
+                  />
+                </Styled(div)>
+              </Styled(div)>,
+              <Styled(div)>
+                <FieldWithError
+                  component={[Function]}
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  label="Location"
+                  name="location"
+                  placeholder="Select"
+                >
+                  <option
+                    disabled={true}
+                    hidden={true}
+                    value=""
+                  >
+                    Select
+                  </option>
+                  <option
+                    value={1}
+                  >
+                    loc1
+                  </option>
+                </FieldWithError>
+                <FieldWithError
+                  component={[Function]}
+                  date="2019-01-01T21:00:00Z"
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  futureTimeOnly={true}
+                  label="Group end time (optional)"
+                  name="endTime"
+                  now={"2019-01-01T21:00:00.000Z"}
+                />
+                <FieldWithError
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ]
+                  }
+                  name="comments"
+                  render={[Function]}
+                />
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  <FieldWithError
+                    component={[Function]}
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    label="Appointment type"
+                    name="appointmentType"
+                    placeholder="Select"
+                  >
+                    <option
+                      disabled={true}
+                      hidden={true}
+                      value=""
+                    >
+                      Select
+                    </option>
+                    <option
+                      value="1"
+                    >
+                      app1
+                    </option>
+                  </FieldWithError>,
+                  <Styled(div)>
+                    <FieldWithError
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "date",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "startTime",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "endTime",
+                            "text": "End time test message",
+                          },
+                          Object {
+                            "targetName": "comments",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "appointmentType",
+                            "text": "appointment type test message",
+                          },
+                          Object {
+                            "targetName": "locationType",
+                            "text": "location type test message",
+                          },
+                        ]
+                      }
+                      name="date"
+                      render={[Function]}
+                    />
+                    <FieldWithError
+                      component={[Function]}
+                      date="2019-01-01T21:00:00Z"
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "date",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "startTime",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "endTime",
+                            "text": "End time test message",
+                          },
+                          Object {
+                            "targetName": "comments",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "appointmentType",
+                            "text": "appointment type test message",
+                          },
+                          Object {
+                            "targetName": "locationType",
+                            "text": "location type test message",
+                          },
+                        ]
+                      }
+                      futureTimeOnly={true}
+                      label="Group start time (optional)"
+                      name="startTime"
+                      now={"2019-01-01T21:00:00.000Z"}
+                    />
+                  </Styled(div)>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "children": Array [
+                      <option
+                        disabled={true}
+                        hidden={true}
+                        value=""
+                      >
+                        Select
+                      </option>,
+                      Array [
+                        <option
+                          value="1"
+                        >
+                          app1
+                        </option>,
+                      ],
+                    ],
+                    "component": [Function],
+                    "errors": Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ],
+                    "label": "Appointment type",
+                    "name": "appointmentType",
+                    "placeholder": "Select",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Select",
+                        "disabled": true,
+                        "hidden": true,
+                        "value": "",
+                      },
+                      "ref": null,
+                      "rendered": "Select",
+                      "type": "option",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": "app1",
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "app1",
+                        "value": "1",
+                      },
+                      "ref": null,
+                      "rendered": "app1",
+                      "type": "option",
+                    },
+                  ],
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": Array [
+                      <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "date",
+                              "text": "Date test message",
+                            },
+                            Object {
+                              "targetName": "startTime",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "endTime",
+                              "text": "End time test message",
+                            },
+                            Object {
+                              "targetName": "comments",
+                              "text": "Date test message",
+                            },
+                            Object {
+                              "targetName": "appointmentType",
+                              "text": "appointment type test message",
+                            },
+                            Object {
+                              "targetName": "locationType",
+                              "text": "location type test message",
+                            },
+                          ]
+                        }
+                        name="date"
+                        render={[Function]}
+                      />,
+                      <FieldWithError
+                        component={[Function]}
+                        date="2019-01-01T21:00:00Z"
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "date",
+                              "text": "Date test message",
+                            },
+                            Object {
+                              "targetName": "startTime",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "endTime",
+                              "text": "End time test message",
+                            },
+                            Object {
+                              "targetName": "comments",
+                              "text": "Date test message",
+                            },
+                            Object {
+                              "targetName": "appointmentType",
+                              "text": "appointment type test message",
+                            },
+                            Object {
+                              "targetName": "locationType",
+                              "text": "location type test message",
+                            },
+                          ]
+                        }
+                        futureTimeOnly={true}
+                        label="Group start time (optional)"
+                        name="startTime"
+                        now={"2019-01-01T21:00:00.000Z"}
+                      />,
+                    ],
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "errors": Array [
+                          Object {
+                            "targetName": "date",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "startTime",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "endTime",
+                            "text": "End time test message",
+                          },
+                          Object {
+                            "targetName": "comments",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "appointmentType",
+                            "text": "appointment type test message",
+                          },
+                          Object {
+                            "targetName": "locationType",
+                            "text": "location type test message",
+                          },
+                        ],
+                        "name": "date",
+                        "render": [Function],
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "component": [Function],
+                        "date": "2019-01-01T21:00:00Z",
+                        "errors": Array [
+                          Object {
+                            "targetName": "date",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "startTime",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "endTime",
+                            "text": "End time test message",
+                          },
+                          Object {
+                            "targetName": "comments",
+                            "text": "Date test message",
+                          },
+                          Object {
+                            "targetName": "appointmentType",
+                            "text": "appointment type test message",
+                          },
+                          Object {
+                            "targetName": "locationType",
+                            "text": "location type test message",
+                          },
+                        ],
+                        "futureTimeOnly": true,
+                        "label": "Group start time (optional)",
+                        "name": "startTime",
+                        "now": "2019-01-01T21:00:00.000Z",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                  ],
+                  "type": [Function],
+                },
+              ],
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  <FieldWithError
+                    component={[Function]}
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    label="Location"
+                    name="location"
+                    placeholder="Select"
+                  >
+                    <option
+                      disabled={true}
+                      hidden={true}
+                      value=""
+                    >
+                      Select
+                    </option>
+                    <option
+                      value={1}
+                    >
+                      loc1
+                    </option>
+                  </FieldWithError>,
+                  <FieldWithError
+                    component={[Function]}
+                    date="2019-01-01T21:00:00Z"
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    futureTimeOnly={true}
+                    label="Group end time (optional)"
+                    name="endTime"
+                    now={"2019-01-01T21:00:00.000Z"}
+                  />,
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "date",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "startTime",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "endTime",
+                          "text": "End time test message",
+                        },
+                        Object {
+                          "targetName": "comments",
+                          "text": "Date test message",
+                        },
+                        Object {
+                          "targetName": "appointmentType",
+                          "text": "appointment type test message",
+                        },
+                        Object {
+                          "targetName": "locationType",
+                          "text": "location type test message",
+                        },
+                      ]
+                    }
+                    name="comments"
+                    render={[Function]}
+                  />,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "children": Array [
+                      <option
+                        disabled={true}
+                        hidden={true}
+                        value=""
+                      >
+                        Select
+                      </option>,
+                      Array [
+                        <option
+                          value={1}
+                        >
+                          loc1
+                        </option>,
+                      ],
+                    ],
+                    "component": [Function],
+                    "errors": Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ],
+                    "label": "Location",
+                    "name": "location",
+                    "placeholder": "Select",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Select",
+                        "disabled": true,
+                        "hidden": true,
+                        "value": "",
+                      },
+                      "ref": null,
+                      "rendered": "Select",
+                      "type": "option",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": "loc1",
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "loc1",
+                        "value": 1,
+                      },
+                      "ref": null,
+                      "rendered": "loc1",
+                      "type": "option",
+                    },
+                  ],
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "component": [Function],
+                    "date": "2019-01-01T21:00:00Z",
+                    "errors": Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ],
+                    "futureTimeOnly": true,
+                    "label": "Group end time (optional)",
+                    "name": "endTime",
+                    "now": "2019-01-01T21:00:00.000Z",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "errors": Array [
+                      Object {
+                        "targetName": "date",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "startTime",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "endTime",
+                        "text": "End time test message",
+                      },
+                      Object {
+                        "targetName": "comments",
+                        "text": "Date test message",
+                      },
+                      Object {
+                        "targetName": "appointmentType",
+                        "text": "appointment type test message",
+                      },
+                      Object {
+                        "targetName": "locationType",
+                        "text": "location type test message",
+                      },
+                    ],
+                    "name": "comments",
+                    "render": [Function],
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": Symbol(react.fragment),
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`Appointment form Form should render correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AppointmentDetailsForm
+    appointmentTypes={Array []}
+    error=""
+    initialValues={Object {}}
+    locationTypes={Array []}
+    now={"2019-01-01T21:00:00.000Z"}
+    onError={[MockFunction]}
+    onSuccess={[MockFunction]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "initialValues": Object {},
+      "onSubmit": [Function],
+      "render": [Function],
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "initialValues": Object {},
+        "onSubmit": [Function],
+        "render": [Function],
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`Appointment form Form should render correctly 2`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ReactFinalForm
+    initialValues={Object {}}
+    onSubmit={[Function]}
+    render={[Function]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": <form
+        onSubmit={[Function]}
+      >
+        
+        <FormFields
+          appointmentTypes={Array []}
+          errors={null}
+          locationTypes={Array []}
+          now={"2019-01-01T21:00:00.000Z"}
+          values={Object {}}
+        />
+        <StyledHoc
+          disabled={false}
+          icon={undefined}
+          start={false}
+          type="submit"
+        >
+          Continue
+        </StyledHoc>
+      </form>,
+      "value": Object {
+        "batch": [Function],
+        "blur": [Function],
+        "change": [Function],
+        "focus": [Function],
+        "getFieldState": [Function],
+        "getRegisteredFields": [Function],
+        "getState": [Function],
+        "initialize": [Function],
+        "isValidationPaused": [Function],
+        "mutators": Object {},
+        "pauseValidation": [Function],
+        "registerField": [Function],
+        "reset": [Function],
+        "resumeValidation": [Function],
+        "setConfig": [Function],
+        "submit": [Function],
+        "subscribe": [Function],
+      },
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          "",
+          <FormFields
+            appointmentTypes={Array []}
+            errors={null}
+            locationTypes={Array []}
+            now={"2019-01-01T21:00:00.000Z"}
+            values={Object {}}
+          />,
+          <StyledHoc
+            disabled={false}
+            icon={undefined}
+            start={false}
+            type="submit"
+          >
+            Continue
+          </StyledHoc>,
+        ],
+        "onSubmit": [Function],
+      },
+      "ref": null,
+      "rendered": Array [
+        "",
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "appointmentTypes": Array [],
+            "errors": null,
+            "locationTypes": Array [],
+            "now": "2019-01-01T21:00:00.000Z",
+            "values": Object {},
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "Continue",
+            "disabled": false,
+            "icon": undefined,
+            "start": false,
+            "type": "submit",
+          },
+          "ref": null,
+          "rendered": "Continue",
+          "type": [Function],
+        },
+      ],
+      "type": "form",
+    },
+    "type": Object {
+      "$$typeof": Symbol(react.provider),
+      "_context": Object {
+        "$$typeof": Symbol(react.context),
+        "Consumer": Object {
+          "$$typeof": Symbol(react.context),
+          "_calculateChangedBits": null,
+          "_context": [Circular],
+        },
+        "Provider": [Circular],
+        "_calculateChangedBits": null,
+        "_currentRenderer": null,
+        "_currentRenderer2": null,
+        "_currentValue": null,
+        "_currentValue2": null,
+        "_threadCount": 0,
+      },
+    },
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": <form
+          onSubmit={[Function]}
+        >
+          
+          <FormFields
+            appointmentTypes={Array []}
+            errors={null}
+            locationTypes={Array []}
+            now={"2019-01-01T21:00:00.000Z"}
+            values={Object {}}
+          />
+          <StyledHoc
+            disabled={false}
+            icon={undefined}
+            start={false}
+            type="submit"
+          >
+            Continue
+          </StyledHoc>
+        </form>,
+        "value": Object {
+          "batch": [Function],
+          "blur": [Function],
+          "change": [Function],
+          "focus": [Function],
+          "getFieldState": [Function],
+          "getRegisteredFields": [Function],
+          "getState": [Function],
+          "initialize": [Function],
+          "isValidationPaused": [Function],
+          "mutators": Object {},
+          "pauseValidation": [Function],
+          "registerField": [Function],
+          "reset": [Function],
+          "resumeValidation": [Function],
+          "setConfig": [Function],
+          "submit": [Function],
+          "subscribe": [Function],
+        },
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            "",
+            <FormFields
+              appointmentTypes={Array []}
+              errors={null}
+              locationTypes={Array []}
+              now={"2019-01-01T21:00:00.000Z"}
+              values={Object {}}
+            />,
+            <StyledHoc
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
+            >
+              Continue
+            </StyledHoc>,
+          ],
+          "onSubmit": [Function],
+        },
+        "ref": null,
+        "rendered": Array [
+          "",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "appointmentTypes": Array [],
+              "errors": null,
+              "locationTypes": Array [],
+              "now": "2019-01-01T21:00:00.000Z",
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": "Continue",
+              "disabled": false,
+              "icon": undefined,
+              "start": false,
+              "type": "submit",
+            },
+            "ref": null,
+            "rendered": "Continue",
+            "type": [Function],
+          },
+        ],
+        "type": "form",
+      },
+      "type": Object {
+        "$$typeof": Symbol(react.provider),
+        "_context": Object {
+          "$$typeof": Symbol(react.context),
+          "Consumer": Object {
+            "$$typeof": Symbol(react.context),
+            "_calculateChangedBits": null,
+            "_context": [Circular],
+          },
+          "Provider": [Circular],
+          "_calculateChangedBits": null,
+          "_currentRenderer": null,
+          "_currentRenderer2": null,
+          "_currentValue": null,
+          "_currentValue2": null,
+          "_threadCount": 0,
+        },
+      },
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
