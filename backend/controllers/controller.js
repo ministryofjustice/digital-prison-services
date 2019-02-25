@@ -98,7 +98,7 @@ const factory = ({
       if (size > mb200) {
         logger.error(`A file exceeding ${mb200} was rejected, filename ${offenders.originalFilename} size ${size}`)
         res.status(400)
-        res.send('The csv is to large. Maximum file size is 200MB')
+        res.send('The csv is too large. Maximum file size is 200MB')
         return
       }
 
