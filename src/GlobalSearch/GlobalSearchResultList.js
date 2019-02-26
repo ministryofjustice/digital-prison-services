@@ -36,64 +36,67 @@ const GlobalSearchResultList = ({
 
   const offenders =
     data &&
-    data.map(prisoner => (
-      <tr key={`${prisoner.offenderNo}-${prisoner.uiId}`} className="row-gutters">
-        <td className="row-gutters">
-          {(viewInactivePrisoner && prisoner.currentlyInPrison === 'N') ||
-          caseLoads.find(cl => cl === prisoner.latestLocationId) ? (
-            <a
-              id={`imageLink-${prisoner.offenderNo}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link"
-              href={getOffenderLink(prisoner.offenderNo)}
-            >
+    data.map(prisoner => {
+      const shouldAddLink =
+        (viewInactivePrisoner && prisoner.currentlyInPrison === 'N') ||
+        caseLoads.find(cl => cl === prisoner.latestLocationId)
+      return (
+        <tr key={`${prisoner.offenderNo}-${prisoner.uiId}`} className="row-gutters">
+          <td className="row-gutters">
+            {shouldAddLink ? (
+              <a
+                id={`imageLink-${prisoner.offenderNo}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link"
+                href={getOffenderLink(prisoner.offenderNo)}
+              >
+                <img
+                  id={`image-${prisoner.offenderNo}`}
+                  alt={`prisoner ${prisoner.offenderNo}`}
+                  className="photo clickable"
+                  src={offenderImageUrl(prisoner.offenderNo)}
+                />
+              </a>
+            ) : (
               <img
-                id={`image-${prisoner.offenderNo}`}
                 alt={`prisoner ${prisoner.offenderNo}`}
-                className="photo clickable"
+                id={`image-${prisoner.offenderNo}`}
+                className="photo"
                 src={offenderImageUrl(prisoner.offenderNo)}
               />
-            </a>
+            )}
+          </td>
+          {shouldAddLink ? (
+            <td className="row-gutters">
+              <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(prisoner.offenderNo)}>
+                {properCaseName(prisoner.lastName)}, {properCaseName(prisoner.firstName)}
+              </a>
+            </td>
           ) : (
-            <img
-              alt={`prisoner ${prisoner.offenderNo}`}
-              id={`image-${prisoner.offenderNo}`}
-              className="photo"
-              src={offenderImageUrl(prisoner.offenderNo)}
-            />
-          )}
-        </td>
-        {(viewInactivePrisoner && prisoner.currentlyInPrison === 'N') ||
-        caseLoads.find(cl => cl === prisoner.latestLocationId) ? (
-          <td className="row-gutters">
-            <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(prisoner.offenderNo)}>
+            <td className="row-gutters">
               {properCaseName(prisoner.lastName)}, {properCaseName(prisoner.firstName)}
-            </a>
-          </td>
-        ) : (
+            </td>
+          )}
+          <td className="row-gutters">{prisoner.offenderNo}</td>
+          <td className="row-gutters">{prisoner.dateOfBirth}</td>
+          <td className="row-gutters">{prisoner.latestLocation}</td>
           <td className="row-gutters">
-            {properCaseName(prisoner.lastName)}, {properCaseName(prisoner.firstName)}
+            {properCaseName(prisoner.currentWorkingLastName)}, {properCaseName(prisoner.currentWorkingFirstName)}
           </td>
-        )}
-        <td className="row-gutters">{prisoner.offenderNo}</td>
-        <td className="row-gutters">{prisoner.dateOfBirth}</td>
-        <td className="row-gutters">{prisoner.latestLocation}</td>
-        <td className="row-gutters">
-          {properCaseName(prisoner.currentWorkingLastName)}, {properCaseName(prisoner.currentWorkingFirstName)}
-        </td>
-        {licencesUser && (
-          <td className="row-gutters">
-            <a
-              href={`${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`}
-              className="clear-filters link clickable toLicences"
-            >
-              Update licence
-            </a>
-          </td>
-        )}
-      </tr>
-    ))
+          {licencesUser && (
+            <td className="row-gutters">
+              <a
+                href={`${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`}
+                className="clear-filters link clickable toLicences"
+              >
+                Update licence
+              </a>
+            </td>
+          )}
+        </tr>
+      )
+    })
 
   const pagination = { perPage: pageSize, pageNumber }
   const noResultsText = searchPerformed ? 'No prisoners found' : 'Use the search box above'
