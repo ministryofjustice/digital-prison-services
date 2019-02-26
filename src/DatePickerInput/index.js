@@ -3,17 +3,17 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import DatePicker from './datePicker'
 
-const futureDateOnly = date =>
+export const futureDateOnly = date =>
   date.isAfter(
     moment()
       .subtract(1, 'days')
       .startOf('day')
   )
 
-const pastDateOnly = date =>
+export const pastDateOnly = date =>
   date.isBefore(
     moment()
-      .add(1, 'days')
+      .add(2, 'days')
       .startOf('day')
   )
 
