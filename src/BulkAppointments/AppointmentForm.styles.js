@@ -1,4 +1,5 @@
 import styled from 'react-emotion'
+import { BREAKPOINTS, SPACING } from '@govuk-react/constants'
 
 export const HorizontallyStacked = styled('div')`
   display: flex;
@@ -15,12 +16,15 @@ export const HorizontallyStacked = styled('div')`
 export const Container = styled('div')`
   display: flex;
   flex-direction: row;
+  @media (max-width: ${BREAKPOINTS.TABLET}) {
+    flex-direction: column;
+  }
 `
 
 export const Section = styled('div')`
   width: 50%;
-`
-
-export const FullWidthDiv = styled('div')`
-  width: 100% !important;
+  @media (max-width: ${BREAKPOINTS.TABLET}) {
+    width: 100%;
+    margin-bottom: ${SPACING.SCALE_5};
+  }
 `

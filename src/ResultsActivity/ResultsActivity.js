@@ -41,6 +41,7 @@ class ResultsActivity extends Component {
           Date
         </label>
         <DatePickerInput
+          futureDateOnly
           handleDateChange={handleDateChange}
           additionalClassName="dateInputResults"
           value={date}

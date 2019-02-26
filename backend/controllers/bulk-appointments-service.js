@@ -21,8 +21,13 @@ const BulkAppointmentsServiceFactory = elite2Api => {
     }
   }
 
+  const addBulkAppointments = async (context, appointmnets) => {
+    await elite2Api.addBulkAppointments(context, appointmnets)
+  }
+
   return {
     getBulkAppointmentsViewModel,
+    addBulkAppointments,
   }
 }
 

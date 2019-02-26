@@ -6,14 +6,17 @@ const lookupError = (name, errors) => {
   return error && error.text
 }
 
-const FieldWithError = props => {
+export const FieldWithError = props => {
   const { name, errors } = props
   const error = lookupError(name, errors)
   const meta = {
     touched: Boolean(error),
     error,
   }
+
   return <Field {...props} meta={meta} />
 }
 
-export default FieldWithError
+export const onHandleErrorClick = targetName => {
+  document.getElementsByName(targetName)[0].scrollIntoView()
+}
