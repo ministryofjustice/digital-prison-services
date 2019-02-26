@@ -32,6 +32,7 @@ describe('Bulk appointments service', () => {
   beforeEach(() => {
     elite2Api.getLocationsForAppointments = jest.fn()
     elite2Api.getAppointmentTypes = jest.fn()
+    elite2Api.addBulkAppointments = jest.fn()
 
     service = bulkAppointmebulkAppointmentsServiceFactory(elite2Api)
   })
@@ -59,5 +60,31 @@ describe('Bulk appointments service', () => {
       appointmentTypes: [{ id: 'ACTI', description: 'Activities' }],
       locationTypes: [{ id: 27187, description: 'Adj' }, { id: 27188, description: 'RES-MCASU-MCASU' }],
     })
+  })
+
+  it('should make a bulk appointments request with the correct parameters', async () => {
+    const parameters = {
+      appointmentDefaults: {
+        appointmentType: 'ACTI',
+        locationId: 25,
+        startTime: '2018-12-31T14:00',
+        endTime: '2018-12-31T14:50:00',
+        comment:
+          'Please provide helpful supporting text when it applies to all the appointments specified by this request.',
+      },
+      appointments: [
+        {
+          bookingId: 123456,
+          startTime: '2018-12-31T23:50',
+          endTime: '2018-12-31T23:59',
+          comment:
+            'Please provide helpful supporting text relevant to this particular appointment when the default comment is not suitable.',
+        },
+      ],
+    }
+
+    await service.addBulkAppointments(context, parameters)
+
+    expect(elite2Api.addBulkAppointments).toHaveBeenCalledWith(context, parameters)
   })
 })

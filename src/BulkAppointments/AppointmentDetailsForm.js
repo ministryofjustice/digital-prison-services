@@ -18,13 +18,10 @@ import DatePicker from '../DatePickerInput'
 
 import { HorizontallyStacked, Section, Container } from './AppointmentForm.styles'
 
-import FieldWithError from '../final-form-govuk-helpers'
+import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
+import { DATE_TIME_FORMAT_SPEC } from '../date-time-helpers'
 
-const onHandleErrorClick = targetName => {
-  document.getElementsByName(targetName)[0].scrollIntoView()
-}
-
-export const onSubmit = onSucces => values => {
+export const validateThenSubmit = onSuccess => values => {
   const formErrors = []
   const now = moment()
   const isToday = values.date ? values.date.isSame(now, 'day') : false
@@ -42,7 +39,7 @@ export const onSubmit = onSucces => values => {
   }
 
   if (!values.date) {
-    formErrors.push({ targetName: 'date', text: 'Date is required' })
+    formErrors.push({ targetName: 'date', text: 'Select date' })
   }
 
   if (isToday && moment(values.startTime).isBefore(now)) {
@@ -54,8 +51,6 @@ export const onSubmit = onSucces => values => {
   }
 
   if (values.startTime && values.endTime) {
-    const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
-
     const endNotAfterStart = !moment(values.endTime, DATE_TIME_FORMAT_SPEC).isAfter(
       moment(values.startTime, DATE_TIME_FORMAT_SPEC),
       'minute'
@@ -69,7 +64,7 @@ export const onSubmit = onSucces => values => {
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
-  return onSucces(values)
+  return onSuccess(values)
 }
 
 export const FormFields = ({ errors, values, appointmentTypes, locationTypes, now }) => (
@@ -106,8 +101,9 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                   futureOnly
                   inputId="date"
                   title="date"
-                  error={String(meta.touched && meta.error)}
+                  error={meta.touched && meta.error}
                   handleDateChange={input.onChange}
+                  value={values.date}
                 />
               </Label>
             )}
@@ -148,7 +144,13 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
           errors={errors}
           name="comments"
           render={({ input, meta }) => (
-            <TextArea {...input} {...meta}>
+            <TextArea
+              input={{
+                ...input,
+                value: values.comments || input.value,
+              }}
+              {...meta}
+            >
               Comments (optional)
             </TextArea>
           )}
@@ -188,10 +190,10 @@ FormFields.defaultProps = {
   values: {},
 }
 
-const AppointmentForm = ({ appointmentTypes, locationTypes, trySubmit, error, now, initialValues }) => (
+const AppointmentDetailsForm = ({ appointmentTypes, locationTypes, onSuccess, error, now, initialValues }) => (
   <Form
     initialValues={initialValues}
-    onSubmit={onSubmit(trySubmit)}
+    onSubmit={validateThenSubmit(onSuccess)}
     render={({ handleSubmit, pristine, submitError, values }) => (
       <form onSubmit={handleSubmit}>
         {error && <ErrorText> {error} </ErrorText>}
@@ -203,7 +205,7 @@ const AppointmentForm = ({ appointmentTypes, locationTypes, trySubmit, error, no
           locationTypes={locationTypes}
         />
 
-        <Button type="submit" disabled={pristine}>
+        <Button type="submit" disabled={!initialValues && pristine}>
           Continue
         </Button>
       </form>
@@ -211,7 +213,7 @@ const AppointmentForm = ({ appointmentTypes, locationTypes, trySubmit, error, no
   />
 )
 
-AppointmentForm.propTypes = {
+AppointmentDetailsForm.propTypes = {
   appointmentTypes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -224,17 +226,17 @@ AppointmentForm.propTypes = {
       description: PropTypes.string,
     })
   ),
-  trySubmit: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
   error: PropTypes.string,
   now: PropTypes.instanceOf(moment).isRequired,
   initialValues: PropTypes.shape(PropTypes.object),
 }
 
-AppointmentForm.defaultProps = {
+AppointmentDetailsForm.defaultProps = {
   appointmentTypes: [],
   locationTypes: [],
   error: '',
-  initialValues: null,
+  initialValues: {},
 }
 
-export default AppointmentForm
+export default AppointmentDetailsForm

@@ -1,8 +1,9 @@
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
+const logger = require('../log')
 
 const asyncMiddleware = require('../middleware/asyncHandler')
-const { CsvParseError, readFile } = require('../csv-parser')
+const { readFile } = require('../csv-parser')
 
 const factory = ({
   activityListService,
@@ -95,15 +96,17 @@ const factory = ({
       const mb200 = 200000000
 
       if (size > mb200) {
+        logger.error(`A file exceeding ${mb200} was rejected, filename ${offenders.originalFilename} size ${size}`)
         res.status(400)
-        res.send('The csv is to lage. Maximum file size is 200MB')
+        res.send('The csv is too large. Maximum file size is 200MB')
         return
       }
 
       const bytes = fs.readFileSync(offenders.path)
       if (isBinaryFileSync(bytes, size)) {
+        logger.error(`Unsupported file type rejected, filename ${offenders.originalFilename}`)
         res.status(400)
-        res.send('Unsupported file type')
+        res.send('There was a problem importing your file, please use the template provided')
         return
       }
 
@@ -111,19 +114,37 @@ const factory = ({
       const viewModel = await offenderLoader.loadFromCsvContent(res.locals, fileContent)
       res.json(viewModel)
     } catch (error) {
-      if (error.name === CsvParseError.name) {
-        res.status(400)
-        res.send(error.message)
-        return
-      }
-      throw error
+      logger.error(
+        `There was parsing error - ${error && error.message}, filename ${req.files &&
+          req.files.offenders &&
+          req.files.offenders.originalFilename}`
+      )
+      res.status(400)
+      res.send('There was a problem importing your file, please use the template provided')
     }
+  })
+
+  const bulkAppointmentsCsvTemplate = asyncMiddleware(async (req, res) => {
+    res.setHeader('Content-disposition', 'attachment; filename=offenders-for-appointments.csv')
+    res.set('Content-Type', 'text/csv')
+
+    const exampleTimes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
+      .map(minutes => `22:${minutes}`)
+      .join(' - ')
+
+    res.status(200).send(`offenderNo, start time (example: ${exampleTimes})\n,\n`)
+    res.end()
   })
 
   const getBulkAppointmentsViewModel = asyncMiddleware(async (req, res) => {
     const { agencyId } = req.query
     const viewModel = await bulkAppoinemtnsService.getBulkAppointmentsViewModel(res.locals, agencyId)
     res.json(viewModel)
+  })
+
+  const addBulkAppointments = asyncMiddleware(async (req, res) => {
+    await bulkAppoinemtnsService.addBulkAppointments(res.locals, req.body)
+    res.end()
   })
 
   return {
@@ -140,6 +161,8 @@ const factory = ({
     getOffendersEnRoute,
     uploadOffenders,
     getBulkAppointmentsViewModel,
+    addBulkAppointments,
+    bulkAppointmentsCsvTemplate,
   }
 }
 

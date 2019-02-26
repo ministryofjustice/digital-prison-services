@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { DATE_TIME_FORMAT_SPEC } from './date-formats'
+import { DATE_TIME_FORMAT_SPEC } from '../../date-time-helpers'
 
 import TimePicker from './TimePicker'
 
@@ -251,21 +251,39 @@ describe('Time picker', () => {
     expect(input.onChange).toHaveBeenCalledWith(today.format(DATE_TIME_FORMAT_SPEC))
   })
 
-  it('should reset the date when a new one has been passed in', async () => {
+  it('should call on change when input.value when present during componentDidMount', () => {
     const yesterday = moment().subtract(1, 'day')
+    const now = moment()
+
     const input = {
       onChange: jest.fn(),
       value: setTime(yesterday, 3, 0, 0),
       name: 'timePicker',
     }
 
-    const picker = shallow(<TimePicker input={input} date={yesterday} now={moment()} />)
+    shallow(<TimePicker input={input} date={yesterday} now={now} />)
+
+    expect(input.onChange.mock.calls[0][0]).toBe(setTime(yesterday, 3, 0, 0))
+  })
+
+  it('should reset the date when a new one has been passed in', async () => {
+    const yesterday = moment().subtract(1, 'day')
+    const now = moment()
+
+    const input = {
+      onChange: jest.fn(),
+      value: setTime(yesterday, 3, 0, 0),
+      name: 'timePicker',
+    }
+
+    const picker = shallow(<TimePicker input={input} date={yesterday} now={now} />)
 
     const today = moment()
 
     picker.setProps({ input, date: today })
 
-    expect(input.onChange.mock.calls[0][0]).toBe(setTime(today, 3, 0, 0))
+    expect(input.onChange.mock.calls[0][0]).toBe(setTime(yesterday, 3, 0, 0))
+    expect(input.onChange.mock.calls[1][0]).toBe(setTime(today, 3, 0, 0))
   })
 
   it('should default to the current hour and the nearest minute when defaultToNow is set to true', () => {
@@ -284,7 +302,23 @@ describe('Time picker', () => {
     picker.instance().componentDidMount()
 
     expect(input.onChange).toHaveBeenCalledWith(setTime(now, 11, 10, 0))
-    expect(picker.find({ name: 'hours' }).getElement().props.value).toBe('11')
-    expect(picker.find({ name: 'minutes' }).getElement().props.value).toBe('10')
+    expect(picker.find({ name: 'hours' }).getElement().props.input.value).toBe('11')
+    expect(picker.find({ name: 'minutes' }).getElement().props.input.value).toBe('10')
+  })
+
+  it('should handle single digit minutes', () => {
+    const today = moment('2019-02-22')
+    const input = {
+      onChange: jest.fn(),
+      name: 'timePicker',
+      value: '2019-02-22T01:00:00',
+    }
+
+    const now = moment()
+    const picker = shallow(<TimePicker input={input} date={today} now={now} />)
+
+    expect(input.onChange).toHaveBeenCalledWith(setTime(today, 1, 0, 0))
+    expect(picker.find({ name: 'hours' }).getElement().props.input.value).toBe('01')
+    expect(picker.find({ name: 'minutes' }).getElement().props.input.value).toBe('00')
   })
 })

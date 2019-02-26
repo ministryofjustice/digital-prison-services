@@ -696,4 +696,55 @@ class Elite2Api extends WireMockRule {
                 )
         )
     }
+
+    void stubAppointmentLocations(String agencyId, def response) {
+        this.stubJsonGetRequest("/api/agencies/${agencyId}/locations?eventType=APP", response)
+    }
+
+
+
+    void stubAppointmentTypes(def response) {
+        this.stubJsonGetRequest("/api/reference-domains/scheduleReasons?eventType=APP", response)
+    }
+
+    void stubBookingOffenders(def response) {
+        this.stubJsonPostRequest("/api/bookings/offenders", response)
+    }
+
+    void stubJsonGetRequest(String url, def response) {
+        this.stubFor(
+                get(url)
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+
+                )
+        )
+    }
+
+    void stubJsonPostRequest(String url, def response) {
+        this.stubFor(
+                post(url)
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+
+                )
+        )
+    }
+
+    void stubPostBulkAppointments() {
+        this.stubFor(
+                post("/api/appointments")
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                )
+        )
+    }
+
 }

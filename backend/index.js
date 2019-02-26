@@ -202,6 +202,8 @@ app.use('/api/globalSearch', controller.globalSearch)
 app.use('/api/appointments/upload-offenders', controller.uploadOffenders)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewModel)
+app.post('/api/bulk-appointments', controller.addBulkAppointments)
+app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
