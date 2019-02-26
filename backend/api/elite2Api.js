@@ -110,6 +110,8 @@ const elite2ApiFactory = client => {
 
   const getAppointmentTypes = context => get(context, 'api/reference-domains/scheduleReasons?eventType=APP')
 
+  const addBulkAppointments = (context, body) => post(context, 'api/appointments', body)
+
   return {
     userLocations,
     userCaseLoads,
@@ -147,6 +149,7 @@ const elite2ApiFactory = client => {
     getBasicInmateDetailsForOffenders,
     getLocationsForAppointments,
     getAppointmentTypes,
+    addBulkAppointments,
   }
 }
 

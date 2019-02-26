@@ -10,8 +10,16 @@ import ErrorText from '@govuk-react/error-text'
 import { Container } from './TimePicker.styles'
 import { inputType, metaType } from '../../types'
 
-import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from './date-formats'
+import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../date-time-helpers'
 
+const validMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
+
+export const isValidMinutes = minutes => {
+  if (minutes === undefined) return false
+
+  const value = Number(minutes) < 10 ? `0${minutes}` : minutes
+  return validMinutes.includes(String(value))
+}
 const formatNumbersUpTo = total =>
   [...Array(total).keys()].map(i => {
     if (i < 10) return `0${i}`
@@ -28,7 +36,7 @@ const constructHours = ({ dateTime, futureTimeOnly, enableFilters }) => {
 }
 
 const constructMinutes = ({ selectedHour, dateTime, futureTimeOnly, enableFilters }) => {
-  const minutes = ['--', '00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
+  const minutes = ['--', ...validMinutes]
   if (!enableFilters) {
     return minutes
   }
@@ -40,6 +48,9 @@ const constructMinutes = ({ selectedHour, dateTime, futureTimeOnly, enableFilter
 
   return minutes
 }
+
+const addLeadingZeroIfRequired = minutes =>
+  Number(minutes) < 10 && String(minutes).length === 1 ? `0${minutes}` : String(minutes)
 
 class TimePicker extends Component {
   constructor() {
@@ -54,19 +65,26 @@ class TimePicker extends Component {
   }
 
   componentDidMount() {
-    const { initialiseToNow, now } = this.props
+    const { input, initialiseToNow, now } = this.props
+    if (input.value) {
+      const date = moment(input.value, DATE_TIME_FORMAT_SPEC)
+      this.setInputValue({
+        hours: date.hours().toString(),
+        minutes: date.minutes().toString(),
+      })
+    }
+
     if (initialiseToNow) {
-      const time = {
+      this.setInputValue({
         hours: now.hours().toString(),
         minutes: this.getNearestMinute().toString(),
-      }
-
-      this.setInputValue(time)
+      })
     }
   }
 
   componentWillReceiveProps(newProps) {
     const { input } = this.props
+
     if (!input.value) {
       return
     }
@@ -100,20 +118,22 @@ class TimePicker extends Component {
     }
   }
 
-  setInputValue(data) {
+  setInputValue({ hours, minutes }) {
     const { date, input } = this.props
-    if (data.hours && data.hours !== '--' && data.minutes !== '--') {
+    if (hours && hours !== '--' && minutes !== '--') {
       const selectedDate = (date && moment(date, DATE_ONLY_FORMAT_SPEC)) || moment()
 
-      selectedDate.hours(parseInt(data.hours, 10))
-      selectedDate.minutes(parseInt(data.minutes || 0, 10))
+      selectedDate.hours(parseInt(hours, 10))
+      selectedDate.minutes(parseInt(minutes || 0, 10))
       selectedDate.seconds(0)
-
       input.onChange(selectedDate.format(DATE_TIME_FORMAT_SPEC))
     } else {
       input.onChange('')
     }
-    this.setState(data)
+    this.setState({
+      hours,
+      minutes,
+    })
   }
 
   getNearestMinute() {
@@ -176,16 +196,26 @@ class TimePicker extends Component {
               disabled={!date}
               name="hours"
               id="hours"
-              onChange={this.onHoursChange}
               defaultValue="--"
-              value={hours}
+              input={{
+                value: addLeadingZeroIfRequired(hours),
+                onChange: this.onHoursChange,
+              }}
             >
               {constructedHours.map(hour => (
                 <option key={hour}>{hour}</option>
               ))}
             </Select>
 
-            <Select disabled={!date} name="minutes" onChange={this.onMinutesChange} defaultValue="--" value={minutes}>
+            <Select
+              disabled={!date}
+              name="minutes"
+              defaultValue="--"
+              input={{
+                value: addLeadingZeroIfRequired(minutes),
+                onChange: this.onMinutesChange,
+              }}
+            >
               {constructedMinutes.map(minute => (
                 <option key={minute}>{minute}</option>
               ))}
