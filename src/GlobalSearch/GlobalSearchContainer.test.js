@@ -15,7 +15,7 @@ const standardProps = {
   raiseAnalyticsEvent: () => {},
   setLoadedDispatch: () => {},
   loaded: true,
-  agencyId: 'aId',
+  caseLoadOptions: [{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }],
   searchText: 's',
   genderFilter: 'gf',
   locationFilter: 'lf',
@@ -59,6 +59,24 @@ describe('Global search container', () => {
     const component = shallow(<GlobalSearchContainer {...licencesProps} />)
 
     expect(component.find('GlobalSearch').props().licencesUser).toEqual(true)
+  })
+
+  it('should pass viewInactivePrisoner true if roles includes INACTIVE_BOOKINGS', async () => {
+    const inactiveProps = { ...standardProps, userRoles: ['SOMETHING', 'INACTIVE_BOOKINGS'] }
+    const component = shallow(<GlobalSearchContainer {...inactiveProps} />)
+
+    expect(component.find('GlobalSearch').props().viewInactivePrisoner).toEqual(true)
+  })
+
+  it('should map user caseloads to a list of caseload Ids', async () => {
+    const caseloadProps = {
+      ...standardProps,
+      caseLoadOptions: [{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }, { caseLoadId: 'BXI' }],
+    }
+    const component = shallow(<GlobalSearchContainer {...caseloadProps} />)
+
+    expect(component.find('GlobalSearch').props().caseLoads).toHaveLength(3)
+    expect(component.find('GlobalSearch').props().caseLoads).toEqual(['MDI', 'LEI', 'BXI'])
   })
 
   it('should pass Global search as page title if serchPerformed is false', async () => {

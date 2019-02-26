@@ -9,7 +9,6 @@ import PreviousNextNavigation from '../PreviousNextNavigation'
 import { properCaseName } from '../utils'
 
 const GlobalSearchResultList = ({
-  agencyId,
   data,
   pageSize,
   pageNumber,
@@ -18,6 +17,8 @@ const GlobalSearchResultList = ({
   licencesUser,
   licencesUrl,
   searchPerformed,
+  viewInactivePrisoner,
+  caseLoads,
 }) => {
   const headings = (
     <tr>
@@ -38,7 +39,8 @@ const GlobalSearchResultList = ({
     data.map(prisoner => (
       <tr key={`${prisoner.offenderNo}-${prisoner.uiId}`} className="row-gutters">
         <td className="row-gutters">
-          {prisoner.latestLocationId === agencyId ? (
+          {(viewInactivePrisoner && prisoner.currentlyInPrison === 'N') ||
+          caseLoads.find(cl => cl === prisoner.latestLocationId) ? (
             <a
               id={`imageLink-${prisoner.offenderNo}`}
               target="_blank"
@@ -62,7 +64,8 @@ const GlobalSearchResultList = ({
             />
           )}
         </td>
-        {prisoner.latestLocationId === agencyId ? (
+        {(viewInactivePrisoner && prisoner.currentlyInPrison === 'N') ||
+        caseLoads.find(cl => cl === prisoner.latestLocationId) ? (
           <td className="row-gutters">
             <a target="_blank" rel="noopener noreferrer" className="link" href={getOffenderLink(prisoner.offenderNo)}>
               {properCaseName(prisoner.lastName)}, {properCaseName(prisoner.firstName)}
@@ -120,7 +123,6 @@ const GlobalSearchResultList = ({
 GlobalSearchResultList.propTypes = {
   // props
   handlePageAction: PropTypes.func.isRequired,
-  agencyId: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string.isRequired,
@@ -128,7 +130,6 @@ GlobalSearchResultList.propTypes = {
       firstName: PropTypes.string.isRequired,
       dateOfBirth: PropTypes.string.isRequired,
       latestLocation: PropTypes.string.isRequired,
-      agencyId: PropTypes.string,
       uiId: PropTypes.string,
     })
   ).isRequired,
@@ -136,12 +137,10 @@ GlobalSearchResultList.propTypes = {
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
   licencesUser: PropTypes.bool.isRequired,
+  viewInactivePrisoner: PropTypes.bool.isRequired,
   licencesUrl: PropTypes.string.isRequired,
   searchPerformed: PropTypes.bool.isRequired,
-}
-
-GlobalSearchResultList.defaultProps = {
-  agencyId: '',
+  caseLoads: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 
 export default GlobalSearchResultList
