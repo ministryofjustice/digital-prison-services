@@ -11,15 +11,13 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
   const parseCsvData = async data => {
     const output = []
 
-    const parser = parse(data, { trim: true, skip_empty_lines: true })
-      // eslint-disable-next-line func-names
-      .on('readable', function() {
-        let record
-        // eslint-disable-next-line no-cond-assign
-        while ((record = this.read())) {
-          output.push(record)
-        }
-      })
+    const parser = parse(data, { trim: true, skip_empty_lines: true }).on('readable', function() {
+      let record
+      // eslint-disable-next-line no-cond-assign
+      while ((record = this.read())) {
+        output.push(record)
+      }
+    })
 
     return new Promise((resolve, reject) => {
       parser.on('error', error => reject(error))
