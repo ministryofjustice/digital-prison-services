@@ -112,8 +112,8 @@ class BulkAppointmentsContainer extends Component {
                 />
                 <AddAppointmentForm
                   onError={error => handleError(error)}
+                  resetErrors={resetErrorDispatch}
                   onSuccess={() => {
-                    resetErrorDispatch()
                     this.setState({
                       ...defaultState,
                       complete: true,

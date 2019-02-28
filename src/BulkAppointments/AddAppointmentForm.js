@@ -10,7 +10,6 @@ import TimePicker from '../Components/TimePicker/TimePicker'
 import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
 import { appointmentType } from '../types'
 
-import { formatDateAndTime } from '../date-time-helpers'
 import { validateThenSubmit, offenderStartTimeFieldName } from './AddAppointmentFormValidation'
 
 export const FormFields = ({ errors, error, offenders, date, now }) => (
@@ -91,27 +90,30 @@ const submitAppointments = ({ onSuccess, onError, appointment }) => async offend
     onError(error)
   }
 }
-export const getInitalValues = ({ offenders, date, startTime }) =>
+export const getInitialValues = ({ offenders, startTime }) =>
   offenders.reduce((acc, offender) => {
     const key = offenderStartTimeFieldName({ offenderNo: offender.offenderNo })
     if (!acc[key])
       return {
         ...acc,
-        [key]: offender.startTime ? formatDateAndTime({ date, time: offender.startTime }) : startTime,
+        [key]: startTime,
       }
     return acc
   }, {})
 
-const AddAppointmentForm = ({ offenders, appointment, error, now, date, startTime, onError, onSuccess }) =>
+const AddAppointmentForm = ({ offenders, appointment, error, now, date, startTime, onError, onSuccess, resetErrors }) =>
   offenders &&
   offenders.length > 0 && (
     <Form
-      onSubmit={validateThenSubmit({
-        offenders,
-        endTime: appointment.endTime,
-        onSubmitAppointment: submitAppointments({ onError, onSuccess, appointment }),
-      })}
-      initialValues={getInitalValues({ offenders, startTime, date })}
+      onSubmit={values => {
+        resetErrors()
+        return validateThenSubmit({
+          offenders,
+          endTime: appointment.endTime,
+          onSubmitAppointment: submitAppointments({ onError, onSuccess, appointment }),
+        })(values)
+      }}
+      initialValues={getInitialValues({ offenders, startTime })}
       render={({ handleSubmit, submitError, submitting }) => (
         <form onSubmit={handleSubmit}>
           <FormFields offenders={offenders} now={now} date={date} error={error} errors={submitError} />
@@ -138,6 +140,7 @@ AddAppointmentForm.propTypes = {
   onError: PropTypes.func.isRequired,
   onSuccess: PropTypes.func.isRequired,
   appointment: appointmentType.isRequired,
+  resetErrors: PropTypes.func.isRequired,
 }
 
 AddAppointmentForm.defaultProps = {

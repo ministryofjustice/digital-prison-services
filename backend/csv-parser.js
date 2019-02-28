@@ -1,19 +1,17 @@
 const parse = require('csv-parse')
-const fs = require('fs')
+const config = require('./config')
+const logger = require('./log')
 
-function CsvParseError(message) {
-  this.name = 'CsvParseError'
-  this.message = message
+const validationMessages = {
+  invalidFile: 'There was a problem importing your file, please use the template provided',
+  maxFileSizeReached: `The csv is too large. Maximum file size is ${config.app.maximumFileUploadSizeInMb}MB`,
 }
-CsvParseError.prototype = Error.prototype
 
-const parseCsvData = async data => {
-  const output = []
-  let lastError
+const csvParserService = ({ fs, isBinaryFileSync }) => {
+  const parseCsvData = async data => {
+    const output = []
 
-  const parser = parse(data, { trim: true, skip_empty_lines: true })
-    // eslint-disable-next-line func-names
-    .on('readable', function() {
+    const parser = parse(data, { trim: true, skip_empty_lines: true }).on('readable', function() {
       let record
       // eslint-disable-next-line no-cond-assign
       while ((record = this.read())) {
@@ -21,27 +19,59 @@ const parseCsvData = async data => {
       }
     })
 
-  const getCorrectCallBack = (resolve, reject) => (lastError && reject(new CsvParseError(lastError))) || resolve(output)
+    return new Promise((resolve, reject) => {
+      parser.on('error', error => reject(error))
+      parser.on('end', () => resolve(output))
+      parser.on('finish', () => resolve(output))
+    })
+  }
 
-  return new Promise((resolve, reject) => {
-    parser.on('end', () => getCorrectCallBack(resolve, reject))
-    parser.on('finish', () => getCorrectCallBack(resolve, reject))
-  })
+  const readFile = path =>
+    new Promise((resolve, reject) => {
+      fs.readFile(path, (error, result) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(result.toString())
+        }
+      })
+    })
+
+  const validateCsvFile = ({ path, originalFilename }) => {
+    const sizeInMb = config.app.maximumFileUploadSizeInMb
+    const maximumFileSizeInBytes = sizeInMb * 1000000
+
+    const { size } = fs.lstatSync(path)
+
+    if (size > maximumFileSizeInBytes) {
+      logger.error(`A file exceeding ${sizeInMb} was rejected, filename ${originalFilename} size ${size}`)
+      throw new Error(validationMessages.maxFileSizeReached)
+    }
+
+    const bytes = fs.readFileSync(path)
+    if (isBinaryFileSync(bytes, size)) {
+      logger.error(`Unsupported file type rejected, filename ${originalFilename}`)
+      throw new Error(validationMessages.invalidFile)
+    }
+  }
+
+  const loadAndParseCsvFile = async ({ path, originalFilename }) => {
+    await validateCsvFile({ path, originalFilename })
+    try {
+      const data = await readFile(path)
+      return await parseCsvData(data)
+    } catch (error) {
+      logger.error(`There was parsing error - ${(error && error.message) || error}, filename ${originalFilename}`)
+      throw new Error('There was a problem importing your file, please use the template provided')
+    }
+  }
+
+  return {
+    loadAndParseCsvFile,
+  }
 }
 
-const readFile = path =>
-  new Promise((resolve, reject) => {
-    fs.readFile(path, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(result.toString())
-      }
-    })
-  })
-
 module.exports = {
-  readFile,
-  parseCsvData,
-  CsvParseError,
+  csvParserService,
+  validationMessages,
 }
