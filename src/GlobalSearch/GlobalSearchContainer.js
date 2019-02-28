@@ -151,9 +151,11 @@ export class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
-    const { searchPerformed, licencesUrl, userRoles } = this.props
+    const { searchPerformed, licencesUrl, userRoles, caseLoadOptions } = this.props
     const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
     const licencesUser = userRoles.includes('LICENCE_RO')
+    const viewInactivePrisoner = userRoles.includes('INACTIVE_BOOKINGS')
+    const caseLoads = caseLoadOptions.map(caseload => caseload.caseLoadId)
     const backWhiteList = { licences: licencesUrl }
     const backLink = backWhiteList[this.referrer]
 
@@ -171,6 +173,8 @@ export class GlobalSearchContainer extends Component {
           searchPerformed={searchPerformed}
           licencesUrl={licencesUrl}
           licencesUser={licencesUser}
+          caseLoads={caseLoads}
+          viewInactivePrisoner={viewInactivePrisoner}
           {...this.props}
         />
       </Page>
@@ -186,7 +190,7 @@ GlobalSearchContainer.propTypes = {
 
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
-  agencyId: PropTypes.string,
+  caseLoadOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   searchText: PropTypes.string,
   searchPerformed: PropTypes.bool.isRequired,
   genderFilter: PropTypes.string.isRequired,
@@ -203,7 +207,6 @@ GlobalSearchContainer.propTypes = {
       firstName: PropTypes.string.isRequired,
       dateOfBirth: PropTypes.string.isRequired,
       latestLocation: PropTypes.string.isRequired,
-      agencyId: PropTypes.string,
     })
   ).isRequired,
   pageNumber: PropTypes.number.isRequired,
@@ -230,12 +233,11 @@ GlobalSearchContainer.propTypes = {
 GlobalSearchContainer.defaultProps = {
   error: '',
   searchText: '',
-  agencyId: '',
 }
 
 const mapStateToProps = state => ({
   loaded: state.app.loaded,
-  agencyId: state.app.user.activeCaseLoadId,
+  caseLoadOptions: state.app.user.caseLoadOptions,
   data: state.globalSearch.data,
   pageNumber: state.globalSearch.pageNumber,
   pageSize: state.globalSearch.pageSize,
