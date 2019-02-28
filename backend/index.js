@@ -19,6 +19,9 @@ const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
 
+const fs = require('fs')
+const { isBinaryFileSync } = require('isbinaryfile')
+
 const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
@@ -52,6 +55,7 @@ const oauthClientId = require('./api/oauthClientId')
 
 const log = require('./log')
 const config = require('./config')
+const { csvParserService } = require('./csv-parser')
 
 const app = express()
 const sixtyDaysInSeconds = 5184000
@@ -119,7 +123,8 @@ const controller = controllerFactory({
   globalSearchService: globalSearchFactory(elite2Api),
   movementsService: movementsServiceFactory(elite2Api, oauthClientId),
   offenderLoader: offenderLoaderFactory(elite2Api),
-  bulkAppoinemtnsService: bulkAppointmentsServiceFactory(elite2Api),
+  bulkAppointmentsService: bulkAppointmentsServiceFactory(elite2Api),
+  csvParserService: csvParserService({ fs, isBinaryFileSync }),
 })
 
 const oauthApi = oauthApiFactory(

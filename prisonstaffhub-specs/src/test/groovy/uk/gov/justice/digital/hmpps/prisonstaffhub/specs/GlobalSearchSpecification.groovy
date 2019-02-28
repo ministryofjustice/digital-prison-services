@@ -85,6 +85,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
 
         then: "I should be presented with results"
         at GlobalSearchPage
+        waitFor {  tableRows.size() == 11 }
         tableRows.size() == 11 // Including header row
     }
 

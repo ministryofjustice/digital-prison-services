@@ -9,12 +9,14 @@ class AddBulkAppointmentsPage extends Page {
 
     static at = {
         pageTitle == "Add bulk appointments"
+        appointmentTypesLoaded
     }
 
     static content = {
         pageTitle { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         form { $('form')}
+        appointmentTypesLoaded { $(name: 'appointmentType').find('option').size() > 1 }
 
         date { $(name: 'date') }
         topBar { $('th.rdtSwitch') }
@@ -22,9 +24,7 @@ class AddBulkAppointmentsPage extends Page {
         monthBox { value -> $('td', text: value) }
         dayBox { value -> $('td.rdtDay:not(.rdtOld):not(.rdtNew)', 'data-value': value) }
         submitButton { $('button', type: 'submit') }
-
         tableRows { $('tbody tr') }
-
         successMessage { $('h3', text: 'Appointments have been successfully created.')}
     }
 
@@ -47,7 +47,15 @@ class AddBulkAppointmentsPage extends Page {
 
         setDatePicker(year, 'Aug', '1')
 
+        setStartTime("10", "10")
+
         submitButton.click()
+    }
+
+    void setStartTime(String hours, String minutes) {
+        $(name: 'hours').find("option").find{ it.value() == hours }.click()
+        $(name: 'minutes').find("option").find{ it.value() == minutes }.click()
+
     }
 
     void selectFile() {

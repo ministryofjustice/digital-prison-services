@@ -216,7 +216,7 @@ ShallowWrapper {
                   ]
                 }
                 futureTimeOnly={true}
-                label="Group start time (optional)"
+                label="Group start time"
                 name="startTime"
                 now={"2019-01-01T21:00:00.000Z"}
               />
@@ -502,7 +502,7 @@ ShallowWrapper {
                     ]
                   }
                   futureTimeOnly={true}
-                  label="Group start time (optional)"
+                  label="Group start time"
                   name="startTime"
                   now={"2019-01-01T21:00:00.000Z"}
                 />
@@ -747,7 +747,7 @@ ShallowWrapper {
                       ]
                     }
                     futureTimeOnly={true}
-                    label="Group start time (optional)"
+                    label="Group start time"
                     name="startTime"
                     now={"2019-01-01T21:00:00.000Z"}
                   />
@@ -909,7 +909,7 @@ ShallowWrapper {
                         ]
                       }
                       futureTimeOnly={true}
-                      label="Group start time (optional)"
+                      label="Group start time"
                       name="startTime"
                       now={"2019-01-01T21:00:00.000Z"}
                     />,
@@ -989,7 +989,7 @@ ShallowWrapper {
                         },
                       ],
                       "futureTimeOnly": true,
-                      "label": "Group start time (optional)",
+                      "label": "Group start time",
                       "name": "startTime",
                       "now": "2019-01-01T21:00:00.000Z",
                     },
@@ -1454,7 +1454,7 @@ ShallowWrapper {
                     ]
                   }
                   futureTimeOnly={true}
-                  label="Group start time (optional)"
+                  label="Group start time"
                   name="startTime"
                   now={"2019-01-01T21:00:00.000Z"}
                 />
@@ -1740,7 +1740,7 @@ ShallowWrapper {
                       ]
                     }
                     futureTimeOnly={true}
-                    label="Group start time (optional)"
+                    label="Group start time"
                     name="startTime"
                     now={"2019-01-01T21:00:00.000Z"}
                   />
@@ -1985,7 +1985,7 @@ ShallowWrapper {
                         ]
                       }
                       futureTimeOnly={true}
-                      label="Group start time (optional)"
+                      label="Group start time"
                       name="startTime"
                       now={"2019-01-01T21:00:00.000Z"}
                     />
@@ -2147,7 +2147,7 @@ ShallowWrapper {
                           ]
                         }
                         futureTimeOnly={true}
-                        label="Group start time (optional)"
+                        label="Group start time"
                         name="startTime"
                         now={"2019-01-01T21:00:00.000Z"}
                       />,
@@ -2227,7 +2227,7 @@ ShallowWrapper {
                           },
                         ],
                         "futureTimeOnly": true,
-                        "label": "Group start time (optional)",
+                        "label": "Group start time",
                         "name": "startTime",
                         "now": "2019-01-01T21:00:00.000Z",
                       },

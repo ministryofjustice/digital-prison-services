@@ -12,7 +12,7 @@ const createFileFormDataFromEvent = event => {
   const file = files[0]
 
   const formData = new FormData()
-  formData.append('offenders', file)
+  formData.append('file', file)
 
   return formData
 }

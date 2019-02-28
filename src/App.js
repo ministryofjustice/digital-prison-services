@@ -376,7 +376,7 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.bulkAppoinetments}
+            path={routePaths.bulkAppointments}
             render={({ history }) => (
               <BulkAppointmentsContainer
                 handleError={this.handleError}

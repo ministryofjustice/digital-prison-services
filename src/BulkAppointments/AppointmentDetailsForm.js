@@ -42,6 +42,8 @@ export const validateThenSubmit = onSuccess => values => {
     formErrors.push({ targetName: 'date', text: 'Select date' })
   }
 
+  if (!values.startTime) formErrors.push({ targetName: 'startTime', text: 'Select start time' })
+
   if (isToday && moment(values.startTime).isBefore(now)) {
     formErrors.push({ targetName: 'startTime', text: 'The start time must not be in the past' })
   }
@@ -115,7 +117,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
             name="startTime"
             now={now}
             component={TimePicker}
-            label="Group start time (optional)"
+            label="Group start time"
           />
         </HorizontallyStacked>
       </Section>

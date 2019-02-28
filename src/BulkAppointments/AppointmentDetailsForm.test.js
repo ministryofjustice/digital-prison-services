@@ -53,9 +53,10 @@ describe('Appointment form', () => {
 
     it('should not return validation messages for optional values', () => {
       const validationMessages = validateThenSubmit(() => {})({
-        date: moment(),
+        date: moment('2019-10-19'),
         location: '1',
         appointmentType: 2,
+        startTime: '2019-10-10:21:00:00Z',
       })
 
       expect(validationMessages).toBeUndefined()
