@@ -17,5 +17,5 @@ export const appointmentType = shape({
   appointmentType: string.isRequired,
   startTime: string.isRequired,
   endTime: instanceOf(moment),
-  comments: string.isRequired,
+  comments: string,
 })

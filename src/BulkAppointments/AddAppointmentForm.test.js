@@ -35,6 +35,7 @@ describe('Add appointment form', () => {
           startTime={startTime}
           appointment={appointment}
           resetErrors={stubFunc}
+          onCancel={() => {}}
         />
       )
       expect(wrapper.dive()).toMatchSnapshot()

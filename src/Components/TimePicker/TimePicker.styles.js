@@ -7,6 +7,9 @@ export const Container = styled('div')`
   display: flex;
   flex-direction: row;
 
+  span {
+    padding-bottom: 0;
+  }
   select {
     width: 95% !important;
     margin-right: ${SPACING.SCALE_3} !important;

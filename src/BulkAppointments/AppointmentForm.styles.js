@@ -22,9 +22,17 @@ export const Container = styled('div')`
 `
 
 export const Section = styled('div')`
-  width: 50%;
+  width: 50%;web
   @media (max-width: ${BREAKPOINTS.TABLET}) {
     width: 100%;
     margin-bottom: ${SPACING.SCALE_5};
+  }
+`
+
+export const ButtonContainer = styled('div')`
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ${SPACING.SCALE_2};
   }
 `

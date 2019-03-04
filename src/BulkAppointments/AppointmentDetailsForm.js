@@ -12,11 +12,11 @@ import Label from '@govuk-react/label'
 import ErrorText from '@govuk-react/error-text'
 
 import moment from 'moment'
-
+import { GREY_3, BLACK } from 'govuk-colours'
 import TimePicker from '../Components/TimePicker/TimePicker'
 import DatePicker from '../DatePickerInput'
 
-import { HorizontallyStacked, Section, Container } from './AppointmentForm.styles'
+import { HorizontallyStacked, Section, Container, ButtonContainer } from './AppointmentForm.styles'
 
 import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
 import { DATE_TIME_FORMAT_SPEC } from '../date-time-helpers'
@@ -192,7 +192,15 @@ FormFields.defaultProps = {
   values: {},
 }
 
-const AppointmentDetailsForm = ({ appointmentTypes, locationTypes, onSuccess, error, now, initialValues }) => (
+const AppointmentDetailsForm = ({
+  appointmentTypes,
+  locationTypes,
+  onSuccess,
+  error,
+  now,
+  initialValues,
+  onCancel,
+}) => (
   <Form
     initialValues={initialValues}
     onSubmit={validateThenSubmit(onSuccess)}
@@ -206,10 +214,14 @@ const AppointmentDetailsForm = ({ appointmentTypes, locationTypes, onSuccess, er
           appointmentTypes={appointmentTypes}
           locationTypes={locationTypes}
         />
-
-        <Button type="submit" disabled={!initialValues && pristine}>
-          Continue
-        </Button>
+        <ButtonContainer>
+          <Button type="submit" disabled={!initialValues && pristine}>
+            Continue
+          </Button>
+          <Button buttonColour={GREY_3} buttonTextColour={BLACK} onClick={e => onCancel(e)}>
+            Cancel
+          </Button>
+        </ButtonContainer>
       </form>
     )}
   />
@@ -232,6 +244,7 @@ AppointmentDetailsForm.propTypes = {
   error: PropTypes.string,
   now: PropTypes.instanceOf(moment).isRequired,
   initialValues: PropTypes.shape(PropTypes.object),
+  onCancel: PropTypes.func.isRequired,
 }
 
 AppointmentDetailsForm.defaultProps = {

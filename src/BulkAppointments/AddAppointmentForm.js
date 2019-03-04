@@ -6,11 +6,13 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Form } from 'react-final-form'
+import { BLACK, GREY_3 } from 'govuk-colours'
 import TimePicker from '../Components/TimePicker/TimePicker'
 import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
 import { appointmentType } from '../types'
 
 import { validateThenSubmit, offenderStartTimeFieldName } from './AddAppointmentFormValidation'
+import { ButtonContainer } from './AppointmentForm.styles'
 
 export const FormFields = ({ errors, error, offenders, date, now }) => (
   <React.Fragment>
@@ -20,9 +22,9 @@ export const FormFields = ({ errors, error, offenders, date, now }) => (
       <thead>
         <tr>
           <th className="straight width5"> Prison no.</th>
-          <th className="straight width15"> Last name </th>
-          <th className="straight width15"> First name </th>
-          <th className="straight width15"> Start time </th>
+          <th className="straight width5"> Last name </th>
+          <th className="straight width5"> First name </th>
+          <th className="straight width5"> Start time </th>
         </tr>
       </thead>
       <tbody>
@@ -85,11 +87,12 @@ const submitAppointments = ({ onSuccess, onError, appointment }) => async offend
 
   try {
     await axios.post('/api/bulk-appointments', request)
-    onSuccess()
+    onSuccess(request.appointments)
   } catch (error) {
     onError(error)
   }
 }
+
 export const getInitialValues = ({ offenders, startTime }) =>
   offenders.reduce((acc, offender) => {
     const key = offenderStartTimeFieldName({ offenderNo: offender.offenderNo })
@@ -101,7 +104,18 @@ export const getInitialValues = ({ offenders, startTime }) =>
     return acc
   }, {})
 
-const AddAppointmentForm = ({ offenders, appointment, error, now, date, startTime, onError, onSuccess, resetErrors }) =>
+const AddAppointmentForm = ({
+  offenders,
+  appointment,
+  error,
+  now,
+  date,
+  startTime,
+  onError,
+  onSuccess,
+  resetErrors,
+  onCancel,
+}) =>
   offenders &&
   offenders.length > 0 && (
     <Form
@@ -117,9 +131,14 @@ const AddAppointmentForm = ({ offenders, appointment, error, now, date, startTim
       render={({ handleSubmit, submitError, submitting }) => (
         <form onSubmit={handleSubmit}>
           <FormFields offenders={offenders} now={now} date={date} error={error} errors={submitError} />
-          <Button disabled={submitting || offenders.length === 0} type="submit">
-            Add appointment
-          </Button>
+          <ButtonContainer>
+            <Button disabled={submitting || offenders.length === 0} type="submit">
+              Add appointment
+            </Button>
+            <Button buttonColour={GREY_3} buttonTextColour={BLACK} onClick={e => onCancel(e)}>
+              Cancel
+            </Button>
+          </ButtonContainer>
         </form>
       )}
     />
@@ -141,6 +160,7 @@ AddAppointmentForm.propTypes = {
   onSuccess: PropTypes.func.isRequired,
   appointment: appointmentType.isRequired,
   resetErrors: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 }
 
 AddAppointmentForm.defaultProps = {
