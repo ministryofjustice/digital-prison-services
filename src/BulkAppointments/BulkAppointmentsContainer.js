@@ -120,7 +120,7 @@ class BulkAppointmentsContainer extends Component {
                 render={({ data, error }) => (
                   <AppointmentDetailsForm
                     initialValues={appointment}
-                    now={moment()}
+                    now={now}
                     appointmentTypes={data.appointmentTypes}
                     error={error}
                     locationTypes={data.locationTypes}
