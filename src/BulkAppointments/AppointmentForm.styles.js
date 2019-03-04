@@ -22,7 +22,7 @@ export const Container = styled('div')`
 `
 
 export const Section = styled('div')`
-  width: 50%;web
+  width: 50%;
   @media (max-width: ${BREAKPOINTS.TABLET}) {
     width: 100%;
     margin-bottom: ${SPACING.SCALE_5};
