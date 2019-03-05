@@ -7,7 +7,7 @@ ShallowWrapper {
     agencyId="LEI"
     handleError={[Function]}
     notmEndpointUrl="/"
-    now={"2019-10-10T20:00:00.000Z"}
+    now={"2019-10-10T21:00:00.000Z"}
     raiseAnalyticsEvent={[Function]}
     resetErrorDispatch={[Function]}
     setLoadedDispatch={[Function]}
@@ -495,7 +495,7 @@ ShallowWrapper {
     agencyId="LEI"
     handleError={[Function]}
     notmEndpointUrl="/"
-    now={"2019-10-10T20:00:00.000Z"}
+    now={"2019-10-10T21:00:00.000Z"}
     raiseAnalyticsEvent={[Function]}
     resetErrorDispatch={[Function]}
     setLoadedDispatch={[Function]}
@@ -771,7 +771,7 @@ ShallowWrapper {
     agencyId="LEI"
     handleError={[Function]}
     notmEndpointUrl="/"
-    now={"2019-10-10T20:00:00.000Z"}
+    now={"2019-10-10T21:00:00.000Z"}
     raiseAnalyticsEvent={[Function]}
     resetErrorDispatch={[Function]}
     setLoadedDispatch={[Function]}
@@ -946,7 +946,7 @@ ShallowWrapper {
               }
               date="2019-10-10"
               error=""
-              now={"2019-10-10T20:00:00.000Z"}
+              now={"2019-10-10T21:00:00.000Z"}
               offenders={Array []}
               onCancel={[Function]}
               onError={[Function]}
@@ -990,7 +990,7 @@ ShallowWrapper {
                 }
                 date="2019-10-10"
                 error=""
-                now={"2019-10-10T20:00:00.000Z"}
+                now={"2019-10-10T21:00:00.000Z"}
                 offenders={Array []}
                 onCancel={[Function]}
                 onError={[Function]}
@@ -1030,7 +1030,7 @@ ShallowWrapper {
                   }
                   date="2019-10-10"
                   error=""
-                  now={"2019-10-10T20:00:00.000Z"}
+                  now={"2019-10-10T21:00:00.000Z"}
                   offenders={Array []}
                   onCancel={[Function]}
                   onError={[Function]}
@@ -1079,7 +1079,7 @@ ShallowWrapper {
                   },
                   "date": "2019-10-10",
                   "error": "",
-                  "now": "2019-10-10T20:00:00.000Z",
+                  "now": "2019-10-10T21:00:00.000Z",
                   "offenders": Array [],
                   "onCancel": [Function],
                   "onError": [Function],
@@ -1131,7 +1131,7 @@ ShallowWrapper {
                 }
                 date="2019-10-10"
                 error=""
-                now={"2019-10-10T20:00:00.000Z"}
+                now={"2019-10-10T21:00:00.000Z"}
                 offenders={Array []}
                 onCancel={[Function]}
                 onError={[Function]}
@@ -1175,7 +1175,7 @@ ShallowWrapper {
                   }
                   date="2019-10-10"
                   error=""
-                  now={"2019-10-10T20:00:00.000Z"}
+                  now={"2019-10-10T21:00:00.000Z"}
                   offenders={Array []}
                   onCancel={[Function]}
                   onError={[Function]}
@@ -1215,7 +1215,7 @@ ShallowWrapper {
                     }
                     date="2019-10-10"
                     error=""
-                    now={"2019-10-10T20:00:00.000Z"}
+                    now={"2019-10-10T21:00:00.000Z"}
                     offenders={Array []}
                     onCancel={[Function]}
                     onError={[Function]}
@@ -1264,7 +1264,7 @@ ShallowWrapper {
                     },
                     "date": "2019-10-10",
                     "error": "",
-                    "now": "2019-10-10T20:00:00.000Z",
+                    "now": "2019-10-10T21:00:00.000Z",
                     "offenders": Array [],
                     "onCancel": [Function],
                     "onError": [Function],

@@ -11,7 +11,7 @@ import {
 } from './BulkAppointmentsGaEvents'
 
 describe('Bulk appointments container', () => {
-  const now = moment('2019-10-10T:21:00:00Z', 'YYYY-MM-DDTHH:mm:ss')
+  const now = moment('2019-10-10T21:00:00Z')
   const store = {
     getState: jest.fn(),
     subscribe: jest.fn(),
