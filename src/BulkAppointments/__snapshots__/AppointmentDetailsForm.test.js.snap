@@ -2568,6 +2568,7 @@ ShallowWrapper {
     initialValues={Object {}}
     locationTypes={Array []}
     now={"2019-01-01T21:00:00.000Z"}
+    onCancel={[MockFunction]}
     onError={[MockFunction]}
     onSuccess={[MockFunction]}
   />,
@@ -2659,14 +2660,32 @@ ShallowWrapper {
           now={"2019-01-01T21:00:00.000Z"}
           values={Object {}}
         />
-        <StyledHoc
-          disabled={false}
-          icon={undefined}
-          start={false}
-          type="submit"
-        >
-          Continue
-        </StyledHoc>
+        <Styled(div)>
+          <StyledHoc
+            buttonColour={undefined}
+            buttonHoverColour={undefined}
+            buttonShadowColour={undefined}
+            buttonTextColour={undefined}
+            disabled={false}
+            icon={undefined}
+            start={false}
+            type="submit"
+          >
+            Continue
+          </StyledHoc>
+          <StyledHoc
+            buttonColour="#dee0e2"
+            buttonHoverColour={undefined}
+            buttonShadowColour={undefined}
+            buttonTextColour="#0b0c0c"
+            disabled={false}
+            icon={undefined}
+            onClick={[Function]}
+            start={false}
+          >
+            Cancel
+          </StyledHoc>
+        </Styled(div)>
       </form>,
       "value": Object {
         "batch": [Function],
@@ -2703,14 +2722,32 @@ ShallowWrapper {
             now={"2019-01-01T21:00:00.000Z"}
             values={Object {}}
           />,
-          <StyledHoc
-            disabled={false}
-            icon={undefined}
-            start={false}
-            type="submit"
-          >
-            Continue
-          </StyledHoc>,
+          <Styled(div)>
+            <StyledHoc
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
+            >
+              Continue
+            </StyledHoc>
+            <StyledHoc
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Cancel
+            </StyledHoc>
+          </Styled(div)>,
         ],
         "onSubmit": [Function],
       },
@@ -2737,14 +2774,74 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "children": "Continue",
-            "disabled": false,
-            "icon": undefined,
-            "start": false,
-            "type": "submit",
+            "children": Array [
+              <StyledHoc
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                start={false}
+                type="submit"
+              >
+                Continue
+              </StyledHoc>,
+              <StyledHoc
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Cancel
+              </StyledHoc>,
+            ],
           },
           "ref": null,
-          "rendered": "Continue",
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "buttonColour": undefined,
+                "buttonHoverColour": undefined,
+                "buttonShadowColour": undefined,
+                "buttonTextColour": undefined,
+                "children": "Continue",
+                "disabled": false,
+                "icon": undefined,
+                "start": false,
+                "type": "submit",
+              },
+              "ref": null,
+              "rendered": "Continue",
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "buttonColour": "#dee0e2",
+                "buttonHoverColour": undefined,
+                "buttonShadowColour": undefined,
+                "buttonTextColour": "#0b0c0c",
+                "children": "Cancel",
+                "disabled": false,
+                "icon": undefined,
+                "onClick": [Function],
+                "start": false,
+              },
+              "ref": null,
+              "rendered": "Cancel",
+              "type": [Function],
+            },
+          ],
           "type": [Function],
         },
       ],
@@ -2786,14 +2883,32 @@ ShallowWrapper {
             now={"2019-01-01T21:00:00.000Z"}
             values={Object {}}
           />
-          <StyledHoc
-            disabled={false}
-            icon={undefined}
-            start={false}
-            type="submit"
-          >
-            Continue
-          </StyledHoc>
+          <Styled(div)>
+            <StyledHoc
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
+            >
+              Continue
+            </StyledHoc>
+            <StyledHoc
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Cancel
+            </StyledHoc>
+          </Styled(div)>
         </form>,
         "value": Object {
           "batch": [Function],
@@ -2830,14 +2945,32 @@ ShallowWrapper {
               now={"2019-01-01T21:00:00.000Z"}
               values={Object {}}
             />,
-            <StyledHoc
-              disabled={false}
-              icon={undefined}
-              start={false}
-              type="submit"
-            >
-              Continue
-            </StyledHoc>,
+            <Styled(div)>
+              <StyledHoc
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                start={false}
+                type="submit"
+              >
+                Continue
+              </StyledHoc>
+              <StyledHoc
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Cancel
+              </StyledHoc>
+            </Styled(div)>,
           ],
           "onSubmit": [Function],
         },
@@ -2864,14 +2997,74 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": "Continue",
-              "disabled": false,
-              "icon": undefined,
-              "start": false,
-              "type": "submit",
+              "children": Array [
+                <StyledHoc
+                  buttonColour={undefined}
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour={undefined}
+                  disabled={false}
+                  icon={undefined}
+                  start={false}
+                  type="submit"
+                >
+                  Continue
+                </StyledHoc>,
+                <StyledHoc
+                  buttonColour="#dee0e2"
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour="#0b0c0c"
+                  disabled={false}
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
+                >
+                  Cancel
+                </StyledHoc>,
+              ],
             },
             "ref": null,
-            "rendered": "Continue",
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "children": "Continue",
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                  "type": "submit",
+                },
+                "ref": null,
+                "rendered": "Continue",
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "buttonColour": "#dee0e2",
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": "#0b0c0c",
+                  "children": "Cancel",
+                  "disabled": false,
+                  "icon": undefined,
+                  "onClick": [Function],
+                  "start": false,
+                },
+                "ref": null,
+                "rendered": "Cancel",
+                "type": [Function],
+              },
+            ],
             "type": [Function],
           },
         ],

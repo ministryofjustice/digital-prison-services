@@ -16,6 +16,13 @@ import AppointmentDetailsForm from './AppointmentDetailsForm'
 import AddAppointmentForm from './AddAppointmentForm'
 import WithDataSource from '../WithDataSource/WirhDataSource'
 
+import {
+  NumberOfAppointmentsEvent,
+  AppointmentTypeUsed,
+  RecordWhenTheStartTimesHaveBeenAmended,
+  RecordAbandonment,
+} from './BulkAppointmentsGaEvents'
+
 const defaultState = {
   currentStep: 0,
   offenders: [],
@@ -39,6 +46,41 @@ class BulkAppointmentsContainer extends Component {
     titleDispatch('Whereabouts')
   }
 
+  onBulkAppointmentsCreated({ appointments }) {
+    this.raiseEvents({ appointments })
+    this.setState({
+      ...defaultState,
+      complete: true,
+    })
+  }
+
+  setAppointmentDetails({ appointment }) {
+    this.setState(state => ({
+      ...state,
+      currentStep: 1,
+      appointment,
+    }))
+  }
+
+  raiseEvents({ appointments }) {
+    const { raiseAnalyticsEvent, agencyId } = this.props
+    const { appointment } = this.state
+
+    raiseAnalyticsEvent(NumberOfAppointmentsEvent({ total: appointments.length, agencyId }))
+    raiseAnalyticsEvent(
+      AppointmentTypeUsed({
+        total: appointments.length,
+        appointmentType: appointment.appointmentType,
+      })
+    )
+    raiseAnalyticsEvent(
+      RecordWhenTheStartTimesHaveBeenAmended({
+        appointmentsDefaults: appointment,
+        appointments,
+      })
+    )
+  }
+
   previousStep() {
     this.setState(state => ({
       ...state,
@@ -47,7 +89,7 @@ class BulkAppointmentsContainer extends Component {
   }
 
   render() {
-    const { agencyId, handleError, resetErrorDispatch } = this.props
+    const { agencyId, handleError, resetErrorDispatch, notmEndpointUrl, raiseAnalyticsEvent, now } = this.props
     const { complete, offenders, currentStep, appointment } = this.state
 
     return (
@@ -78,17 +120,16 @@ class BulkAppointmentsContainer extends Component {
                 render={({ data, error }) => (
                   <AppointmentDetailsForm
                     initialValues={appointment}
-                    now={moment()}
+                    now={now}
                     appointmentTypes={data.appointmentTypes}
                     error={error}
                     locationTypes={data.locationTypes}
-                    onSuccess={values =>
-                      this.setState(state => ({
-                        ...state,
-                        currentStep: currentStep + 1,
-                        appointment: values,
-                      }))
-                    }
+                    onCancel={event => {
+                      event.preventDefault()
+                      raiseAnalyticsEvent(RecordAbandonment())
+                      window.location = notmEndpointUrl
+                    }}
+                    onSuccess={values => this.setAppointmentDetails({ appointment: values })}
                   />
                 )}
               />
@@ -113,15 +154,15 @@ class BulkAppointmentsContainer extends Component {
                 <AddAppointmentForm
                   onError={error => handleError(error)}
                   resetErrors={resetErrorDispatch}
-                  onSuccess={() => {
-                    this.setState({
-                      ...defaultState,
-                      complete: true,
-                    })
+                  onCancel={event => {
+                    event.preventDefault()
+                    raiseAnalyticsEvent(RecordAbandonment())
+                    window.location = notmEndpointUrl
                   }}
+                  onSuccess={appointments => this.onBulkAppointmentsCreated({ appointments })}
                   appointment={appointment}
                   offenders={offenders}
-                  now={moment()}
+                  now={now}
                   date={appointment.date}
                   startTime={appointment.startTime}
                 />
@@ -140,10 +181,18 @@ BulkAppointmentsContainer.propTypes = {
   resetErrorDispatch: PropTypes.func.isRequired,
   agencyId: PropTypes.string.isRequired,
   handleError: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  notmEndpointUrl: PropTypes.string.isRequired,
+  now: PropTypes.instanceOf(moment),
+}
+
+BulkAppointmentsContainer.defaultProps = {
+  now: moment(),
 }
 
 const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
+  notmEndpointUrl: state.app.config.notmEndpointUrl,
 })
 const mapDispatchToProps = dispatch => ({
   titleDispatch: title => dispatch(setApplicationTitle(title)),

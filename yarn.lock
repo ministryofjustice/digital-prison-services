@@ -78,6 +78,13 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
+"@babel/runtime@^7.2.0":
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.4.tgz#73d12ba819e365fcf7fd152aed56d6df97d21c83"
+  integrity sha512-IvfvnMdSaLBateu0jfsYIpZTxAc2cKEXEMiezGGN75QcBcecDUKd3PgLAncT0oOgxKy8dd8hrJKj9MfzgfZd6g==
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/template@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.0.0-beta.44.tgz#f8832f4fdcee5d59bf515e595fc5106c529b394f"
@@ -194,14 +201,17 @@
     "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/button@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/button/-/button-0.5.0.tgz#7c2020472cf5df8d38106c0c48eafa7edc50ce85"
+"@govuk-react/button@0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/button/-/button-0.5.1.tgz#d16b539676118757506f228e6750b33095ec5230"
+  integrity sha512-exNsBi4U9ssDyq7+pwQRpZyGzkaG6A2RcLyTZnXl+wWuQgX+AxEg4NgGrDeL9c5Z+czcR1s/UfpEf6A9lPjSxA==
   dependencies:
-    "@govuk-react/constants" "^0.5.0"
-    "@govuk-react/hoc" "^0.5.0"
-    "@govuk-react/icons" "^0.5.0"
+    "@govuk-react/constants" "^0.5.1"
+    "@govuk-react/hoc" "^0.5.1"
+    "@govuk-react/icons" "^0.5.1"
+    "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
+    polished "^2.3.3"
 
 "@govuk-react/constants@^0.3.1":
   version "0.3.1"
@@ -351,7 +361,7 @@
     "@govuk-react/constants" "^0.3.1"
     govuk-colours "^1.0.3"
 
-"@govuk-react/icons@^0.5.0", "@govuk-react/icons@^0.5.1":
+"@govuk-react/icons@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.5.1.tgz#20e4c9bef1fa9d2c40c7c921be989419b64f3639"
   dependencies:
@@ -7421,6 +7431,13 @@ pluralize@^7.0.0:
 pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
+
+polished@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/polished/-/polished-2.3.3.tgz#bdbaba962ba8271b0e11aa287f2befd4c87be99a"
+  integrity sha512-59V4fDbdxtH4I1m9TWxFsoGJbC8nnOpUYo5uFmvMfKp9Qh+6suo4VMUle1TGIIUZIGxfkW+Rs485zPk0wcwR2Q==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"

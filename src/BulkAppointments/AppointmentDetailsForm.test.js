@@ -10,7 +10,12 @@ describe('Appointment form', () => {
   describe('Form', () => {
     it('should render correctly', () => {
       const outer = shallow(
-        <AppointmentDetailsForm onSuccess={jest.fn()} onError={jest.fn()} now={moment('2019-01-01T21:00:00Z')} />
+        <AppointmentDetailsForm
+          onCancel={jest.fn()}
+          onSuccess={jest.fn()}
+          onError={jest.fn()}
+          now={moment('2019-01-01T21:00:00Z')}
+        />
       )
       expect(outer).toMatchSnapshot()
 

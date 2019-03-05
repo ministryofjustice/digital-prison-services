@@ -79,17 +79,17 @@ ShallowWrapper {
                  Prison no.
               </th>
               <th
-                className="straight width15"
+                className="straight width5"
               >
                  Last name 
               </th>
               <th
-                className="straight width15"
+                className="straight width5"
               >
                  First name 
               </th>
               <th
-                className="straight width15"
+                className="straight width5"
               >
                  Start time 
               </th>
@@ -226,17 +226,17 @@ ShallowWrapper {
                    Prison no.
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    Last name 
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    First name 
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    Start time 
                 </th>
@@ -347,17 +347,17 @@ ShallowWrapper {
                    Prison no.
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    Last name 
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    First name 
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    Start time 
                 </th>
@@ -376,17 +376,17 @@ ShallowWrapper {
                      Prison no.
                   </th>,
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      Last name 
                   </th>,
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      First name 
                   </th>,
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      Start time 
                   </th>,
@@ -412,7 +412,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": " Last name ",
-                    "className": "straight width15",
+                    "className": "straight width5",
                   },
                   "ref": null,
                   "rendered": " Last name ",
@@ -424,7 +424,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": " First name ",
-                    "className": "straight width15",
+                    "className": "straight width5",
                   },
                   "ref": null,
                   "rendered": " First name ",
@@ -436,7 +436,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": " Start time ",
-                    "className": "straight width15",
+                    "className": "straight width5",
                   },
                   "ref": null,
                   "rendered": " Start time ",
@@ -878,17 +878,17 @@ ShallowWrapper {
                    Prison no.
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    Last name 
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    First name 
                 </th>
                 <th
-                  className="straight width15"
+                  className="straight width5"
                 >
                    Start time 
                 </th>
@@ -1025,17 +1025,17 @@ ShallowWrapper {
                      Prison no.
                   </th>
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      Last name 
                   </th>
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      First name 
                   </th>
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      Start time 
                   </th>
@@ -1146,17 +1146,17 @@ ShallowWrapper {
                      Prison no.
                   </th>
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      Last name 
                   </th>
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      First name 
                   </th>
                   <th
-                    className="straight width15"
+                    className="straight width5"
                   >
                      Start time 
                   </th>
@@ -1175,17 +1175,17 @@ ShallowWrapper {
                        Prison no.
                     </th>,
                     <th
-                      className="straight width15"
+                      className="straight width5"
                     >
                        Last name 
                     </th>,
                     <th
-                      className="straight width15"
+                      className="straight width5"
                     >
                        First name 
                     </th>,
                     <th
-                      className="straight width15"
+                      className="straight width5"
                     >
                        Start time 
                     </th>,
@@ -1211,7 +1211,7 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": " Last name ",
-                      "className": "straight width15",
+                      "className": "straight width5",
                     },
                     "ref": null,
                     "rendered": " Last name ",
@@ -1223,7 +1223,7 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": " First name ",
-                      "className": "straight width15",
+                      "className": "straight width5",
                     },
                     "ref": null,
                     "rendered": " First name ",
@@ -1235,7 +1235,7 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": " Start time ",
-                      "className": "straight width15",
+                      "className": "straight width5",
                     },
                     "ref": null,
                     "rendered": " Start time ",
@@ -1713,14 +1713,32 @@ ShallowWrapper {
             ]
           }
         />
-        <StyledHoc
-          disabled={false}
-          icon={undefined}
-          start={false}
-          type="submit"
-        >
-          Add appointment
-        </StyledHoc>
+        <Styled(div)>
+          <StyledHoc
+            buttonColour={undefined}
+            buttonHoverColour={undefined}
+            buttonShadowColour={undefined}
+            buttonTextColour={undefined}
+            disabled={false}
+            icon={undefined}
+            start={false}
+            type="submit"
+          >
+            Add appointment
+          </StyledHoc>
+          <StyledHoc
+            buttonColour="#dee0e2"
+            buttonHoverColour={undefined}
+            buttonShadowColour={undefined}
+            buttonTextColour="#0b0c0c"
+            disabled={false}
+            icon={undefined}
+            onClick={[Function]}
+            start={false}
+          >
+            Cancel
+          </StyledHoc>
+        </Styled(div)>
       </form>,
       "value": Object {
         "batch": [Function],
@@ -1771,14 +1789,32 @@ ShallowWrapper {
               ]
             }
           />,
-          <StyledHoc
-            disabled={false}
-            icon={undefined}
-            start={false}
-            type="submit"
-          >
-            Add appointment
-          </StyledHoc>,
+          <Styled(div)>
+            <StyledHoc
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
+            >
+              Add appointment
+            </StyledHoc>
+            <StyledHoc
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Cancel
+            </StyledHoc>
+          </Styled(div)>,
         ],
         "onSubmit": [Function],
       },
@@ -1817,14 +1853,74 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "children": "Add appointment",
-            "disabled": false,
-            "icon": undefined,
-            "start": false,
-            "type": "submit",
+            "children": Array [
+              <StyledHoc
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                start={false}
+                type="submit"
+              >
+                Add appointment
+              </StyledHoc>,
+              <StyledHoc
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Cancel
+              </StyledHoc>,
+            ],
           },
           "ref": null,
-          "rendered": "Add appointment",
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "buttonColour": undefined,
+                "buttonHoverColour": undefined,
+                "buttonShadowColour": undefined,
+                "buttonTextColour": undefined,
+                "children": "Add appointment",
+                "disabled": false,
+                "icon": undefined,
+                "start": false,
+                "type": "submit",
+              },
+              "ref": null,
+              "rendered": "Add appointment",
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "buttonColour": "#dee0e2",
+                "buttonHoverColour": undefined,
+                "buttonShadowColour": undefined,
+                "buttonTextColour": "#0b0c0c",
+                "children": "Cancel",
+                "disabled": false,
+                "icon": undefined,
+                "onClick": [Function],
+                "start": false,
+              },
+              "ref": null,
+              "rendered": "Cancel",
+              "type": [Function],
+            },
+          ],
           "type": [Function],
         },
       ],
@@ -1880,14 +1976,32 @@ ShallowWrapper {
               ]
             }
           />
-          <StyledHoc
-            disabled={false}
-            icon={undefined}
-            start={false}
-            type="submit"
-          >
-            Add appointment
-          </StyledHoc>
+          <Styled(div)>
+            <StyledHoc
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
+            >
+              Add appointment
+            </StyledHoc>
+            <StyledHoc
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Cancel
+            </StyledHoc>
+          </Styled(div)>
         </form>,
         "value": Object {
           "batch": [Function],
@@ -1938,14 +2052,32 @@ ShallowWrapper {
                 ]
               }
             />,
-            <StyledHoc
-              disabled={false}
-              icon={undefined}
-              start={false}
-              type="submit"
-            >
-              Add appointment
-            </StyledHoc>,
+            <Styled(div)>
+              <StyledHoc
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                start={false}
+                type="submit"
+              >
+                Add appointment
+              </StyledHoc>
+              <StyledHoc
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Cancel
+              </StyledHoc>
+            </Styled(div)>,
           ],
           "onSubmit": [Function],
         },
@@ -1984,14 +2116,74 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": "Add appointment",
-              "disabled": false,
-              "icon": undefined,
-              "start": false,
-              "type": "submit",
+              "children": Array [
+                <StyledHoc
+                  buttonColour={undefined}
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour={undefined}
+                  disabled={false}
+                  icon={undefined}
+                  start={false}
+                  type="submit"
+                >
+                  Add appointment
+                </StyledHoc>,
+                <StyledHoc
+                  buttonColour="#dee0e2"
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour="#0b0c0c"
+                  disabled={false}
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
+                >
+                  Cancel
+                </StyledHoc>,
+              ],
             },
             "ref": null,
-            "rendered": "Add appointment",
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "children": "Add appointment",
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                  "type": "submit",
+                },
+                "ref": null,
+                "rendered": "Add appointment",
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "buttonColour": "#dee0e2",
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": "#0b0c0c",
+                  "children": "Cancel",
+                  "disabled": false,
+                  "icon": undefined,
+                  "onClick": [Function],
+                  "start": false,
+                },
+                "ref": null,
+                "rendered": "Cancel",
+                "type": [Function],
+              },
+            ],
             "type": [Function],
           },
         ],

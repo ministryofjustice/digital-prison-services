@@ -125,8 +125,7 @@ class App extends React.Component {
 
   raiseAnalyticsEvent = event => {
     const { config } = this.props
-
-    if (config.googleAnalyticsId) {
+    if (event && config.googleAnalyticsId) {
       ReactGA.event(event)
     }
   }

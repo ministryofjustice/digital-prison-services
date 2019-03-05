@@ -103,7 +103,7 @@ const factory = ({
   const bulkAppointmentsCsvTemplate = asyncMiddleware(async (req, res) => {
     res.setHeader('Content-disposition', 'attachment; filename=offenders-for-appointments.csv')
     res.set('Content-Type', 'text/csv')
-    res.status(200).send(`offenderNo\n,\n`)
+    res.status(200).send(`Prison number\n,\n`)
     res.end()
   })
 

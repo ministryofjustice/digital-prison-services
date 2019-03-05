@@ -4,7 +4,7 @@ const logger = require('./log')
 
 const validationMessages = {
   invalidFile: 'There was a problem importing your file, please use the template provided',
-  maxFileSizeReached: `The csv is too large. Maximum file size is ${config.app.maximumFileUploadSizeInMb}MB`,
+  maxFileSizeReached: `The file is too large. Maximum file size is ${config.app.maximumFileUploadSizeInMb}MB`,
 }
 
 const csvParserService = ({ fs, isBinaryFileSync }) => {

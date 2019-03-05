@@ -28,3 +28,11 @@ export const Section = styled('div')`
     margin-bottom: ${SPACING.SCALE_5};
   }
 `
+
+export const ButtonContainer = styled('div')`
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ${SPACING.SCALE_2};
+  }
+`
