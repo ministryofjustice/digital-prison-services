@@ -34,7 +34,7 @@ describe('<Page />', () => {
     })
 
     it('should update the document title', () => {
-      expect(global.window.document.title).toEqual('Page title - Whereabouts - Prison NOMIS')
+      expect(global.window.document.title).toEqual('Page title - Digital Prison Services')
     })
 
     it('should display the children prop', () => {
