@@ -22,7 +22,7 @@ class OauthApi extends WireMockRule {
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'text/html;charset=UTF-8')
-                        .withBody('<head><title>Prison-NOMIS</title></head>' +
+                        .withBody('<head><title>Digital Prison Services</title></head>' +
                         '<body><h1>Sign in</h1>This is a stubbed login page' +
                         '<form action="/auth/login?state={{request.requestLine.query.state}}" method="POST" id="loginForm">' +
                         '  <input id="username" name="username" type="text">' +
@@ -43,7 +43,7 @@ class OauthApi extends WireMockRule {
     void stubLogout() {
         this.stubFor(
                 get(urlPathEqualTo('/auth/logout'))
-                        .willReturn(aResponse().withBody('<head><title>Prison-NOMIS</title></head>' +
+                        .willReturn(aResponse().withBody('<head><title>Digital Prison Services</title></head>' +
                         '<body><h1>Sign in</h1>This is a stubbed logout page</body>')
                 ))
     }

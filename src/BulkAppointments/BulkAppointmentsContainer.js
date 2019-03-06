@@ -43,7 +43,7 @@ class BulkAppointmentsContainer extends Component {
     resetErrorDispatch()
     setLoadedDispatch(true)
 
-    titleDispatch('Whereabouts')
+    titleDispatch('Bulk Appointments')
   }
 
   onBulkAppointmentsCreated({ appointments }) {
