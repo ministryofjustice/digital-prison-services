@@ -5,12 +5,10 @@ import { Container, Info, Text } from './AppointmentDetails.styles'
 import { DAY_MONTH_YEAR, MOMENT_DAY_OF_THE_WEEK, DATE_TIME_FORMAT_SPEC } from '../date-formats'
 
 const DayOfTheWeek = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(MOMENT_DAY_OF_THE_WEEK)
-const DayMonthYear = dateTime =>
-  `${moment(dateTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)} - ${moment(dateTime, DATE_TIME_FORMAT_SPEC).format(
-    'HH:MM'
-  )}`
+const DayMonthYear = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
+const Time = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 
-const AppointmentDetails = ({ appointmentTypeDescription, locationDescription, startTime, comments }) => (
+const AppointmentDetails = ({ appointmentTypeDescription, locationDescription, startTime, endTime, comments }) => (
   <Container>
     <Info>
       <strong> Appointment type </strong>
@@ -26,7 +24,7 @@ const AppointmentDetails = ({ appointmentTypeDescription, locationDescription, s
       <strong> Date and time </strong>
       <Text>
         <div> {DayOfTheWeek(startTime)}</div>
-        {DayMonthYear(startTime)}
+        {`${DayMonthYear(startTime)} - ${Time(startTime)}`} {endTime && ` - ${Time(endTime)}`}
       </Text>
     </Info>
 
@@ -43,11 +41,13 @@ AppointmentDetails.propTypes = {
   appointmentTypeDescription: PropTypes.string.isRequired,
   locationDescription: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
+  endTime: PropTypes.string,
   comments: PropTypes.string,
 }
 
 AppointmentDetails.defaultProps = {
   comments: '',
+  endTime: '',
 }
 
 export default AppointmentDetails

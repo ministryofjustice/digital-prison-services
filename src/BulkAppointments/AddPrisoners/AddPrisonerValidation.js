@@ -47,7 +47,7 @@ const endTimesMustBeAfterStartTimes = ({ offenders, values, endTime }) => {
     )
     .map(startTimeInfo => ({
       targetName: offenderStartTimeFieldName({ offenderNo: startTimeInfo.offenderNo }),
-      text: 'The end time must be in the future',
+      text: 'The start time must be before the end time',
     }))
 }
 

@@ -125,7 +125,7 @@ ShallowWrapper {
         false,
         <UNDEFINED>
           <p>
-             Upload the prison numbers for all prisoners attending the appointment. 
+             Upload the prison numbers for all prisoners attending the below appointment. 
           </p>
           <Styled(form)>
             <Styled(div) />
@@ -133,6 +133,7 @@ ShallowWrapper {
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
               comments="test comment"
+              endTime=""
               locationDescription="Gym"
               locationId={1}
               startTime="2019-10-10T:21:00:00Z"
@@ -181,7 +182,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <p>
-               Upload the prison numbers for all prisoners attending the appointment. 
+               Upload the prison numbers for all prisoners attending the below appointment. 
             </p>,
             <Styled(form)>
               <Styled(div) />
@@ -189,6 +190,7 @@ ShallowWrapper {
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
                 comments="test comment"
+                endTime=""
                 locationDescription="Gym"
                 locationId={1}
                 startTime="2019-10-10T:21:00:00Z"
@@ -232,10 +234,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Upload the prison numbers for all prisoners attending the appointment. ",
+              "children": " Upload the prison numbers for all prisoners attending the below appointment. ",
             },
             "ref": null,
-            "rendered": " Upload the prison numbers for all prisoners attending the appointment. ",
+            "rendered": " Upload the prison numbers for all prisoners attending the below appointment. ",
             "type": "p",
           },
           Object {
@@ -249,6 +251,7 @@ ShallowWrapper {
                   appointmentType="ACC"
                   appointmentTypeDescription="Activities"
                   comments="test comment"
+                  endTime=""
                   locationDescription="Gym"
                   locationId={1}
                   startTime="2019-10-10T:21:00:00Z"
@@ -303,6 +306,7 @@ ShallowWrapper {
                   "appointmentType": "ACC",
                   "appointmentTypeDescription": "Activities",
                   "comments": "test comment",
+                  "endTime": "",
                   "locationDescription": "Gym",
                   "locationId": 1,
                   "startTime": "2019-10-10T:21:00:00Z",
@@ -391,7 +395,7 @@ ShallowWrapper {
           false,
           <UNDEFINED>
             <p>
-               Upload the prison numbers for all prisoners attending the appointment. 
+               Upload the prison numbers for all prisoners attending the below appointment. 
             </p>
             <Styled(form)>
               <Styled(div) />
@@ -399,6 +403,7 @@ ShallowWrapper {
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
                 comments="test comment"
+                endTime=""
                 locationDescription="Gym"
                 locationId={1}
                 startTime="2019-10-10T:21:00:00Z"
@@ -447,7 +452,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <p>
-                 Upload the prison numbers for all prisoners attending the appointment. 
+                 Upload the prison numbers for all prisoners attending the below appointment. 
               </p>,
               <Styled(form)>
                 <Styled(div) />
@@ -455,6 +460,7 @@ ShallowWrapper {
                   appointmentType="ACC"
                   appointmentTypeDescription="Activities"
                   comments="test comment"
+                  endTime=""
                   locationDescription="Gym"
                   locationId={1}
                   startTime="2019-10-10T:21:00:00Z"
@@ -498,10 +504,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Upload the prison numbers for all prisoners attending the appointment. ",
+                "children": " Upload the prison numbers for all prisoners attending the below appointment. ",
               },
               "ref": null,
-              "rendered": " Upload the prison numbers for all prisoners attending the appointment. ",
+              "rendered": " Upload the prison numbers for all prisoners attending the below appointment. ",
               "type": "p",
             },
             Object {
@@ -515,6 +521,7 @@ ShallowWrapper {
                     appointmentType="ACC"
                     appointmentTypeDescription="Activities"
                     comments="test comment"
+                    endTime=""
                     locationDescription="Gym"
                     locationId={1}
                     startTime="2019-10-10T:21:00:00Z"
@@ -569,6 +576,7 @@ ShallowWrapper {
                     "appointmentType": "ACC",
                     "appointmentTypeDescription": "Activities",
                     "comments": "test comment",
+                    "endTime": "",
                     "locationDescription": "Gym",
                     "locationId": 1,
                     "startTime": "2019-10-10T:21:00:00Z",
@@ -809,6 +817,7 @@ ShallowWrapper {
             appointmentType="ACC"
             appointmentTypeDescription="Activities"
             comments="test comment"
+            endTime=""
             locationDescription="Gym"
             locationId={1}
             startTime="2019-10-10T:21:00:00Z"
@@ -863,6 +872,7 @@ ShallowWrapper {
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
               comments="test comment"
+              endTime=""
               locationDescription="Gym"
               locationId={1}
               startTime="2019-10-10T:21:00:00Z"
@@ -934,6 +944,7 @@ ShallowWrapper {
               "appointmentType": "ACC",
               "appointmentTypeDescription": "Activities",
               "comments": "test comment",
+              "endTime": "",
               "locationDescription": "Gym",
               "locationId": 1,
               "startTime": "2019-10-10T:21:00:00Z",
@@ -1053,6 +1064,7 @@ ShallowWrapper {
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
               comments="test comment"
+              endTime=""
               locationDescription="Gym"
               locationId={1}
               startTime="2019-10-10T:21:00:00Z"
@@ -1107,6 +1119,7 @@ ShallowWrapper {
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
                 comments="test comment"
+                endTime=""
                 locationDescription="Gym"
                 locationId={1}
                 startTime="2019-10-10T:21:00:00Z"
@@ -1178,6 +1191,7 @@ ShallowWrapper {
                 "appointmentType": "ACC",
                 "appointmentTypeDescription": "Activities",
                 "comments": "test comment",
+                "endTime": "",
                 "locationDescription": "Gym",
                 "locationId": 1,
                 "startTime": "2019-10-10T:21:00:00Z",
