@@ -98,7 +98,7 @@ class AddPrisonerContainer extends Component {
       <Page title="Add prisoners" applicationTitle="Whereabouts" alwaysRender>
         {complete && (
           <div>
-            <H3> [{appointmentsCreated}] appointments created </H3>
+            <H3> {appointmentsCreated} appointments created </H3>
             <Divider />
             <AppointmentDetails {...lastAppointmentDetails} />
             <Divider />

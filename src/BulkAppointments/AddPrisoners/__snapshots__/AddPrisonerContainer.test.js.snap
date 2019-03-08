@@ -800,9 +800,9 @@ ShallowWrapper {
       "children": Array [
         <div>
           <H3>
-             [
+             
             2
-            ] appointments created 
+             appointments created 
           </H3>
           <Styled(div) />
           <AppointmentDetails
@@ -854,9 +854,9 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <H3>
-               [
+               
               2
-              ] appointments created 
+               appointments created 
             </H3>,
             <Styled(div) />,
             <AppointmentDetails
@@ -904,16 +904,16 @@ ShallowWrapper {
             "nodeType": "function",
             "props": Object {
               "children": Array [
-                " [",
+                " ",
                 2,
-                "] appointments created ",
+                " appointments created ",
               ],
             },
             "ref": null,
             "rendered": Array [
-              " [",
+              " ",
               2,
-              "] appointments created ",
+              " appointments created ",
             ],
             "type": [Function],
           },
@@ -1044,9 +1044,9 @@ ShallowWrapper {
         "children": Array [
           <div>
             <H3>
-               [
+               
               2
-              ] appointments created 
+               appointments created 
             </H3>
             <Styled(div) />
             <AppointmentDetails
@@ -1098,9 +1098,9 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <H3>
-                 [
+                 
                 2
-                ] appointments created 
+                 appointments created 
               </H3>,
               <Styled(div) />,
               <AppointmentDetails
@@ -1148,16 +1148,16 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "children": Array [
-                  " [",
+                  " ",
                   2,
-                  "] appointments created ",
+                  " appointments created ",
                 ],
               },
               "ref": null,
               "rendered": Array [
-                " [",
+                " ",
                 2,
-                "] appointments created ",
+                " appointments created ",
               ],
               "type": [Function],
             },
