@@ -25,7 +25,7 @@ class AddBulkAppointmentsPage extends Page {
         dayBox { value -> $('td.rdtDay:not(.rdtOld):not(.rdtNew)', 'data-value': value) }
         submitButton { $('button', type: 'submit') }
         tableRows { $('tbody tr') }
-        successMessage { $('h3', text: 'Appointments have been successfully created.')}
+        successMessage { $('h3', text: '[1] appointments created')}
     }
 
 

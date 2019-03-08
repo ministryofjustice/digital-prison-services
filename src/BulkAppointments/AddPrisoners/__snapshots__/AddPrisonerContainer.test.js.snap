@@ -1,0 +1,1299 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Add prisoners container should pass props correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AddPrisonerContainer
+    agencyId="LEI"
+    appointmentDetails={
+      Object {
+        "appointmentType": "ACC",
+        "appointmentTypeDescription": "Activities",
+        "comments": "test comment",
+        "locationDescription": "Gym",
+        "locationId": 1,
+        "startTime": "2019-10-10T:21:00:00Z",
+      }
+    }
+    dispatchAppointmentPrisoners={[Function]}
+    dispatchBulkAppointmentsComplete={[Function]}
+    handleError={[Function]}
+    history={
+      Object {
+        "push": [MockFunction],
+        "replace": [MockFunction],
+      }
+    }
+    notmEndpointUrl="/"
+    now={"2019-10-10T21:00:00.000Z"}
+    prisoners={Array []}
+    raiseAnalyticsEvent={[Function]}
+    resetErrorDispatch={[Function]}
+    setLoadedDispatch={[Function]}
+    store={
+      Object {
+        "dispatch": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "loaded": true,
+                "type": "SET_LOADED",
+              },
+            ],
+            Array [
+              Object {
+                "type": "RESET_ERROR",
+              },
+            ],
+          ],
+        },
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      }
+    }
+    storeSubscription={
+      Subscription {
+        "listeners": Object {
+          "clear": [Function],
+          "get": [Function],
+          "notify": [Function],
+          "subscribe": [Function],
+        },
+        "onStateChange": [Function],
+        "parentSub": undefined,
+        "store": Object {
+          "dispatch": [MockFunction] {
+            "calls": Array [
+              Array [
+                Object {
+                  "loaded": true,
+                  "type": "SET_LOADED",
+                },
+              ],
+              Array [
+                Object {
+                  "type": "RESET_ERROR",
+                },
+              ],
+            ],
+          },
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "unsubscribe": undefined,
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "alwaysRender": true,
+      "applicationTitle": "Whereabouts",
+      "children": Array [
+        false,
+        <UNDEFINED>
+          <p>
+             Upload the prison numbers for all prisoners attending the appointment. 
+          </p>
+          <Styled(form)>
+            <Styled(div) />
+            <AppointmentDetails
+              appointmentType="ACC"
+              appointmentTypeDescription="Activities"
+              comments="test comment"
+              locationDescription="Gym"
+              locationId={1}
+              startTime="2019-10-10T:21:00:00Z"
+            />
+            <Styled(div) />
+            <OffenderUpload
+              onCancel={[Function]}
+              onError={[Function]}
+              onSuccess={[Function]}
+              showCancelButton={true}
+            />
+            <Styled(div) />
+            <AddPrisoners
+              appointment={
+                Object {
+                  "appointmentType": "ACC",
+                  "appointmentTypeDescription": "Activities",
+                  "comments": "test comment",
+                  "locationDescription": "Gym",
+                  "locationId": 1,
+                  "startTime": "2019-10-10T:21:00:00Z",
+                }
+              }
+              date={null}
+              error=""
+              now={"2019-10-10T21:00:00.000Z"}
+              offenders={Array []}
+              onCancel={[Function]}
+              onError={[Function]}
+              onSuccess={[Function]}
+              resetErrors={[Function]}
+              startTime="2019-10-10T:21:00:00Z"
+            />
+          </Styled(form)>
+        </UNDEFINED>,
+      ],
+      "title": "Add prisoners",
+    },
+    "ref": null,
+    "rendered": Array [
+      false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "children": Array [
+            <p>
+               Upload the prison numbers for all prisoners attending the appointment. 
+            </p>,
+            <Styled(form)>
+              <Styled(div) />
+              <AppointmentDetails
+                appointmentType="ACC"
+                appointmentTypeDescription="Activities"
+                comments="test comment"
+                locationDescription="Gym"
+                locationId={1}
+                startTime="2019-10-10T:21:00:00Z"
+              />
+              <Styled(div) />
+              <OffenderUpload
+                onCancel={[Function]}
+                onError={[Function]}
+                onSuccess={[Function]}
+                showCancelButton={true}
+              />
+              <Styled(div) />
+              <AddPrisoners
+                appointment={
+                  Object {
+                    "appointmentType": "ACC",
+                    "appointmentTypeDescription": "Activities",
+                    "comments": "test comment",
+                    "locationDescription": "Gym",
+                    "locationId": 1,
+                    "startTime": "2019-10-10T:21:00:00Z",
+                  }
+                }
+                date={null}
+                error=""
+                now={"2019-10-10T21:00:00.000Z"}
+                offenders={Array []}
+                onCancel={[Function]}
+                onError={[Function]}
+                onSuccess={[Function]}
+                resetErrors={[Function]}
+                startTime="2019-10-10T:21:00:00Z"
+              />
+            </Styled(form)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Upload the prison numbers for all prisoners attending the appointment. ",
+            },
+            "ref": null,
+            "rendered": " Upload the prison numbers for all prisoners attending the appointment. ",
+            "type": "p",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <Styled(div) />,
+                <AppointmentDetails
+                  appointmentType="ACC"
+                  appointmentTypeDescription="Activities"
+                  comments="test comment"
+                  locationDescription="Gym"
+                  locationId={1}
+                  startTime="2019-10-10T:21:00:00Z"
+                />,
+                <Styled(div) />,
+                <OffenderUpload
+                  onCancel={[Function]}
+                  onError={[Function]}
+                  onSuccess={[Function]}
+                  showCancelButton={true}
+                />,
+                <Styled(div) />,
+                <AddPrisoners
+                  appointment={
+                    Object {
+                      "appointmentType": "ACC",
+                      "appointmentTypeDescription": "Activities",
+                      "comments": "test comment",
+                      "locationDescription": "Gym",
+                      "locationId": 1,
+                      "startTime": "2019-10-10T:21:00:00Z",
+                    }
+                  }
+                  date={null}
+                  error=""
+                  now={"2019-10-10T21:00:00.000Z"}
+                  offenders={Array []}
+                  onCancel={[Function]}
+                  onError={[Function]}
+                  onSuccess={[Function]}
+                  resetErrors={[Function]}
+                  startTime="2019-10-10T:21:00:00Z"
+                />,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {},
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "appointmentType": "ACC",
+                  "appointmentTypeDescription": "Activities",
+                  "comments": "test comment",
+                  "locationDescription": "Gym",
+                  "locationId": 1,
+                  "startTime": "2019-10-10T:21:00:00Z",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {},
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "onCancel": [Function],
+                  "onError": [Function],
+                  "onSuccess": [Function],
+                  "showCancelButton": true,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {},
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "appointment": Object {
+                    "appointmentType": "ACC",
+                    "appointmentTypeDescription": "Activities",
+                    "comments": "test comment",
+                    "locationDescription": "Gym",
+                    "locationId": 1,
+                    "startTime": "2019-10-10T:21:00:00Z",
+                  },
+                  "date": null,
+                  "error": "",
+                  "now": "2019-10-10T21:00:00.000Z",
+                  "offenders": Array [],
+                  "onCancel": [Function],
+                  "onError": [Function],
+                  "onSuccess": [Function],
+                  "resetErrors": [Function],
+                  "startTime": "2019-10-10T:21:00:00Z",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": Symbol(react.fragment),
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "alwaysRender": true,
+        "applicationTitle": "Whereabouts",
+        "children": Array [
+          false,
+          <UNDEFINED>
+            <p>
+               Upload the prison numbers for all prisoners attending the appointment. 
+            </p>
+            <Styled(form)>
+              <Styled(div) />
+              <AppointmentDetails
+                appointmentType="ACC"
+                appointmentTypeDescription="Activities"
+                comments="test comment"
+                locationDescription="Gym"
+                locationId={1}
+                startTime="2019-10-10T:21:00:00Z"
+              />
+              <Styled(div) />
+              <OffenderUpload
+                onCancel={[Function]}
+                onError={[Function]}
+                onSuccess={[Function]}
+                showCancelButton={true}
+              />
+              <Styled(div) />
+              <AddPrisoners
+                appointment={
+                  Object {
+                    "appointmentType": "ACC",
+                    "appointmentTypeDescription": "Activities",
+                    "comments": "test comment",
+                    "locationDescription": "Gym",
+                    "locationId": 1,
+                    "startTime": "2019-10-10T:21:00:00Z",
+                  }
+                }
+                date={null}
+                error=""
+                now={"2019-10-10T21:00:00.000Z"}
+                offenders={Array []}
+                onCancel={[Function]}
+                onError={[Function]}
+                onSuccess={[Function]}
+                resetErrors={[Function]}
+                startTime="2019-10-10T:21:00:00Z"
+              />
+            </Styled(form)>
+          </UNDEFINED>,
+        ],
+        "title": "Add prisoners",
+      },
+      "ref": null,
+      "rendered": Array [
+        false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <p>
+                 Upload the prison numbers for all prisoners attending the appointment. 
+              </p>,
+              <Styled(form)>
+                <Styled(div) />
+                <AppointmentDetails
+                  appointmentType="ACC"
+                  appointmentTypeDescription="Activities"
+                  comments="test comment"
+                  locationDescription="Gym"
+                  locationId={1}
+                  startTime="2019-10-10T:21:00:00Z"
+                />
+                <Styled(div) />
+                <OffenderUpload
+                  onCancel={[Function]}
+                  onError={[Function]}
+                  onSuccess={[Function]}
+                  showCancelButton={true}
+                />
+                <Styled(div) />
+                <AddPrisoners
+                  appointment={
+                    Object {
+                      "appointmentType": "ACC",
+                      "appointmentTypeDescription": "Activities",
+                      "comments": "test comment",
+                      "locationDescription": "Gym",
+                      "locationId": 1,
+                      "startTime": "2019-10-10T:21:00:00Z",
+                    }
+                  }
+                  date={null}
+                  error=""
+                  now={"2019-10-10T21:00:00.000Z"}
+                  offenders={Array []}
+                  onCancel={[Function]}
+                  onError={[Function]}
+                  onSuccess={[Function]}
+                  resetErrors={[Function]}
+                  startTime="2019-10-10T:21:00:00Z"
+                />
+              </Styled(form)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Upload the prison numbers for all prisoners attending the appointment. ",
+              },
+              "ref": null,
+              "rendered": " Upload the prison numbers for all prisoners attending the appointment. ",
+              "type": "p",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  <Styled(div) />,
+                  <AppointmentDetails
+                    appointmentType="ACC"
+                    appointmentTypeDescription="Activities"
+                    comments="test comment"
+                    locationDescription="Gym"
+                    locationId={1}
+                    startTime="2019-10-10T:21:00:00Z"
+                  />,
+                  <Styled(div) />,
+                  <OffenderUpload
+                    onCancel={[Function]}
+                    onError={[Function]}
+                    onSuccess={[Function]}
+                    showCancelButton={true}
+                  />,
+                  <Styled(div) />,
+                  <AddPrisoners
+                    appointment={
+                      Object {
+                        "appointmentType": "ACC",
+                        "appointmentTypeDescription": "Activities",
+                        "comments": "test comment",
+                        "locationDescription": "Gym",
+                        "locationId": 1,
+                        "startTime": "2019-10-10T:21:00:00Z",
+                      }
+                    }
+                    date={null}
+                    error=""
+                    now={"2019-10-10T21:00:00.000Z"}
+                    offenders={Array []}
+                    onCancel={[Function]}
+                    onError={[Function]}
+                    onSuccess={[Function]}
+                    resetErrors={[Function]}
+                    startTime="2019-10-10T:21:00:00Z"
+                  />,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {},
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "appointmentType": "ACC",
+                    "appointmentTypeDescription": "Activities",
+                    "comments": "test comment",
+                    "locationDescription": "Gym",
+                    "locationId": 1,
+                    "startTime": "2019-10-10T:21:00:00Z",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {},
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "onCancel": [Function],
+                    "onError": [Function],
+                    "onSuccess": [Function],
+                    "showCancelButton": true,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {},
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "appointment": Object {
+                      "appointmentType": "ACC",
+                      "appointmentTypeDescription": "Activities",
+                      "comments": "test comment",
+                      "locationDescription": "Gym",
+                      "locationId": 1,
+                      "startTime": "2019-10-10T:21:00:00Z",
+                    },
+                    "date": null,
+                    "error": "",
+                    "now": "2019-10-10T21:00:00.000Z",
+                    "offenders": Array [],
+                    "onCancel": [Function],
+                    "onError": [Function],
+                    "onSuccess": [Function],
+                    "resetErrors": [Function],
+                    "startTime": "2019-10-10T:21:00:00Z",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": Symbol(react.fragment),
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`Add prisoners container should render completed view 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AddPrisonerContainer
+    agencyId="LEI"
+    appointmentDetails={
+      Object {
+        "appointmentType": "ACC",
+        "appointmentTypeDescription": "Activities",
+        "comments": "test comment",
+        "locationDescription": "Gym",
+        "locationId": 1,
+        "startTime": "2019-10-10T:21:00:00Z",
+      }
+    }
+    dispatchAppointmentPrisoners={[Function]}
+    dispatchBulkAppointmentsComplete={[Function]}
+    handleError={[Function]}
+    history={
+      Object {
+        "push": [MockFunction],
+        "replace": [MockFunction],
+      }
+    }
+    notmEndpointUrl="/"
+    now={"2019-10-10T21:00:00.000Z"}
+    prisoners={Array []}
+    raiseAnalyticsEvent={[Function]}
+    resetErrorDispatch={[Function]}
+    setLoadedDispatch={[Function]}
+    store={
+      Object {
+        "dispatch": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "loaded": true,
+                "type": "SET_LOADED",
+              },
+            ],
+            Array [
+              Object {
+                "type": "RESET_ERROR",
+              },
+            ],
+            Array [
+              Object {
+                "type": "SET_BULK_APPOINTMENTS_COMPLETE",
+              },
+            ],
+          ],
+        },
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      }
+    }
+    storeSubscription={
+      Subscription {
+        "listeners": Object {
+          "clear": [Function],
+          "get": [Function],
+          "notify": [Function],
+          "subscribe": [Function],
+        },
+        "onStateChange": [Function],
+        "parentSub": undefined,
+        "store": Object {
+          "dispatch": [MockFunction] {
+            "calls": Array [
+              Array [
+                Object {
+                  "loaded": true,
+                  "type": "SET_LOADED",
+                },
+              ],
+              Array [
+                Object {
+                  "type": "RESET_ERROR",
+                },
+              ],
+              Array [
+                Object {
+                  "type": "SET_BULK_APPOINTMENTS_COMPLETE",
+                },
+              ],
+            ],
+          },
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "unsubscribe": undefined,
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "alwaysRender": true,
+      "applicationTitle": "Whereabouts",
+      "children": Array [
+        <div>
+          <H3>
+             [
+            2
+            ] appointments created 
+          </H3>
+          <Styled(div) />
+          <AppointmentDetails
+            appointmentType="ACC"
+            appointmentTypeDescription="Activities"
+            comments="test comment"
+            locationDescription="Gym"
+            locationId={1}
+            startTime="2019-10-10T:21:00:00Z"
+          />
+          <Styled(div) />
+          <Styled(div)>
+            <StyledHoc
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Add another appointment
+            </StyledHoc>
+            <StyledHoc
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Back to home page
+            </StyledHoc>
+          </Styled(div)>
+        </div>,
+        false,
+      ],
+      "title": "Add prisoners",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <H3>
+               [
+              2
+              ] appointments created 
+            </H3>,
+            <Styled(div) />,
+            <AppointmentDetails
+              appointmentType="ACC"
+              appointmentTypeDescription="Activities"
+              comments="test comment"
+              locationDescription="Gym"
+              locationId={1}
+              startTime="2019-10-10T:21:00:00Z"
+            />,
+            <Styled(div) />,
+            <Styled(div)>
+              <StyledHoc
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Add another appointment
+              </StyledHoc>
+              <StyledHoc
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Back to home page
+              </StyledHoc>
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": Array [
+                " [",
+                2,
+                "] appointments created ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " [",
+              2,
+              "] appointments created ",
+            ],
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {},
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "appointmentType": "ACC",
+              "appointmentTypeDescription": "Activities",
+              "comments": "test comment",
+              "locationDescription": "Gym",
+              "locationId": 1,
+              "startTime": "2019-10-10T:21:00:00Z",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {},
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <StyledHoc
+                  buttonColour={undefined}
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour={undefined}
+                  disabled={false}
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
+                >
+                  Add another appointment
+                </StyledHoc>,
+                <StyledHoc
+                  buttonColour="#dee0e2"
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour="#0b0c0c"
+                  disabled={false}
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
+                >
+                  Back to home page
+                </StyledHoc>,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "children": "Add another appointment",
+                  "disabled": false,
+                  "icon": undefined,
+                  "onClick": [Function],
+                  "start": false,
+                },
+                "ref": null,
+                "rendered": "Add another appointment",
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "buttonColour": "#dee0e2",
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": "#0b0c0c",
+                  "children": "Back to home page",
+                  "disabled": false,
+                  "icon": undefined,
+                  "onClick": [Function],
+                  "start": false,
+                },
+                "ref": null,
+                "rendered": "Back to home page",
+                "type": [Function],
+              },
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": "div",
+      },
+      false,
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "alwaysRender": true,
+        "applicationTitle": "Whereabouts",
+        "children": Array [
+          <div>
+            <H3>
+               [
+              2
+              ] appointments created 
+            </H3>
+            <Styled(div) />
+            <AppointmentDetails
+              appointmentType="ACC"
+              appointmentTypeDescription="Activities"
+              comments="test comment"
+              locationDescription="Gym"
+              locationId={1}
+              startTime="2019-10-10T:21:00:00Z"
+            />
+            <Styled(div) />
+            <Styled(div)>
+              <StyledHoc
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Add another appointment
+              </StyledHoc>
+              <StyledHoc
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Back to home page
+              </StyledHoc>
+            </Styled(div)>
+          </div>,
+          false,
+        ],
+        "title": "Add prisoners",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <H3>
+                 [
+                2
+                ] appointments created 
+              </H3>,
+              <Styled(div) />,
+              <AppointmentDetails
+                appointmentType="ACC"
+                appointmentTypeDescription="Activities"
+                comments="test comment"
+                locationDescription="Gym"
+                locationId={1}
+                startTime="2019-10-10T:21:00:00Z"
+              />,
+              <Styled(div) />,
+              <Styled(div)>
+                <StyledHoc
+                  buttonColour={undefined}
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour={undefined}
+                  disabled={false}
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
+                >
+                  Add another appointment
+                </StyledHoc>
+                <StyledHoc
+                  buttonColour="#dee0e2"
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour="#0b0c0c"
+                  disabled={false}
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
+                >
+                  Back to home page
+                </StyledHoc>
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": Array [
+                  " [",
+                  2,
+                  "] appointments created ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " [",
+                2,
+                "] appointments created ",
+              ],
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {},
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "appointmentType": "ACC",
+                "appointmentTypeDescription": "Activities",
+                "comments": "test comment",
+                "locationDescription": "Gym",
+                "locationId": 1,
+                "startTime": "2019-10-10T:21:00:00Z",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {},
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  <StyledHoc
+                    buttonColour={undefined}
+                    buttonHoverColour={undefined}
+                    buttonShadowColour={undefined}
+                    buttonTextColour={undefined}
+                    disabled={false}
+                    icon={undefined}
+                    onClick={[Function]}
+                    start={false}
+                  >
+                    Add another appointment
+                  </StyledHoc>,
+                  <StyledHoc
+                    buttonColour="#dee0e2"
+                    buttonHoverColour={undefined}
+                    buttonShadowColour={undefined}
+                    buttonTextColour="#0b0c0c"
+                    disabled={false}
+                    icon={undefined}
+                    onClick={[Function]}
+                    start={false}
+                  >
+                    Back to home page
+                  </StyledHoc>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "children": "Add another appointment",
+                    "disabled": false,
+                    "icon": undefined,
+                    "onClick": [Function],
+                    "start": false,
+                  },
+                  "ref": null,
+                  "rendered": "Add another appointment",
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "buttonColour": "#dee0e2",
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": "#0b0c0c",
+                    "children": "Back to home page",
+                    "disabled": false,
+                    "icon": undefined,
+                    "onClick": [Function],
+                    "start": false,
+                  },
+                  "ref": null,
+                  "rendered": "Back to home page",
+                  "type": [Function],
+                },
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": "div",
+        },
+        false,
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

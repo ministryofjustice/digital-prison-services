@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
+import { connect } from 'react-redux'
+import { resetError, setLoaded } from '../redux/actions'
 
-export default class WithDataSource extends React.Component {
+class WithDataSource extends React.Component {
   constructor(...args) {
     super(...args)
     this.state = {
@@ -12,16 +14,19 @@ export default class WithDataSource extends React.Component {
   }
 
   componentDidMount() {
-    const { request } = this.props
+    const { request, setLoadedDispatch, resetErrorDispatch } = this.props
     const { url, params } = request
+
+    resetErrorDispatch()
 
     axios
       .get(url, { params })
-      .then(response =>
+      .then(response => {
+        setLoadedDispatch(true)
         this.setState({
           data: response.data,
         })
-      )
+      })
       .catch(error =>
         this.setState({
           error,
@@ -46,4 +51,17 @@ WithDataSource.propTypes = {
     params: PropTypes.object,
   }).isRequired,
   render: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
 }
+
+const mapStateToProps = () => ({})
+const mapDispatchToProps = dispatch => ({
+  setLoadedDispatch: status => dispatch(setLoaded(status)),
+  resetErrorDispatch: () => dispatch(resetError()),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WithDataSource)

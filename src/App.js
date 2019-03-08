@@ -39,9 +39,10 @@ import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
-import BulkAppointmentsContainer from './BulkAppointments/BulkAppointmentsContainer'
+import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
+import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
 
 const axios = require('axios')
 
@@ -377,7 +378,19 @@ class App extends React.Component {
             exact
             path={routePaths.bulkAppointments}
             render={({ history }) => (
-              <BulkAppointmentsContainer
+              <AppointmentDetailsContainer
+                handleError={this.handleError}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.bulkAppointmentsAddPrisoners}
+            render={({ history }) => (
+              <AddPrisonerContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}

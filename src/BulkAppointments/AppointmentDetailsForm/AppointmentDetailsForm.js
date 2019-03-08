@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 
-import Select from '@govuk-react/select'
-import TextArea from '@govuk-react/text-area'
 import Button from '@govuk-react/button'
 import ErrorSummary from '@govuk-react/error-summary'
 import LabelText from '@govuk-react/label-text'
@@ -13,15 +11,22 @@ import ErrorText from '@govuk-react/error-text'
 
 import moment from 'moment'
 import { GREY_3, BLACK } from 'govuk-colours'
-import TimePicker from '../Components/TimePicker/TimePicker'
-import DatePicker from '../DatePickerInput'
+import TimePicker from '../../Components/TimePicker/TimePicker'
+import DatePicker from '../../DatePickerInput'
 
-import { HorizontallyStacked, Section, Container, ButtonContainer } from './AppointmentForm.styles'
+import {
+  HorizontallyStacked,
+  RightSection,
+  Container,
+  ButtonContainer,
+  FullWidthTextArea,
+  FullWidthSelect,
+} from '../AddPrisoners/AddPrisoners.styles'
 
-import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
-import { DATE_TIME_FORMAT_SPEC } from '../date-time-helpers'
+import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
+import { DATE_TIME_FORMAT_SPEC } from '../../date-formats'
 
-export const validateThenSubmit = onSuccess => values => {
+export const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => values => {
   const formErrors = []
   const now = moment()
   const isToday = values.date ? values.date.isSame(now, 'day') : false
@@ -66,18 +71,18 @@ export const validateThenSubmit = onSuccess => values => {
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
-  return onSuccess(values)
+  return onSuccess({ ...values, appointmentTypes, locationTypes })
 }
 
 export const FormFields = ({ errors, values, appointmentTypes, locationTypes, now }) => (
   <React.Fragment>
     {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
     <Container>
-      <Section>
+      <div>
         <FieldWithError
           errors={errors}
           name="appointmentType"
-          component={Select}
+          component={FullWidthSelect}
           placeholder="Select"
           label="Appointment type"
         >
@@ -103,7 +108,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                   futureOnly
                   inputId="date"
                   title="date"
-                  error={meta.touched && meta.error}
+                  error={meta.touched && meta.error ? meta.error : ''}
                   handleDateChange={input.onChange}
                   value={values.date}
                 />
@@ -120,10 +125,16 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
             label="Group start time"
           />
         </HorizontallyStacked>
-      </Section>
+      </div>
 
-      <Section>
-        <FieldWithError errors={errors} name="location" component={Select} placeholder="Select" label="Location">
+      <RightSection>
+        <FieldWithError
+          errors={errors}
+          name="location"
+          component={FullWidthSelect}
+          placeholder="Select"
+          label="Location"
+        >
           <option value="" disabled hidden>
             Select
           </option>
@@ -146,7 +157,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
           errors={errors}
           name="comments"
           render={({ input, meta }) => (
-            <TextArea
+            <FullWidthTextArea
               input={{
                 ...input,
                 value: values.comments || input.value,
@@ -154,10 +165,10 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
               {...meta}
             >
               Comments (optional)
-            </TextArea>
+            </FullWidthTextArea>
           )}
         />
-      </Section>
+      </RightSection>
     </Container>
   </React.Fragment>
 )
@@ -203,7 +214,7 @@ const AppointmentDetailsForm = ({
 }) => (
   <Form
     initialValues={initialValues}
-    onSubmit={validateThenSubmit(onSuccess)}
+    onSubmit={validateThenSubmit({ onSuccess, appointmentTypes, locationTypes })}
     render={({ handleSubmit, pristine, submitError, values }) => (
       <form onSubmit={handleSubmit}>
         {error && <ErrorText> {error} </ErrorText>}

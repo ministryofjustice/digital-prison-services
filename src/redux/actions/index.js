@@ -194,3 +194,17 @@ export const fetchContent = path => dispatch => {
       dispatch(setLoaded(true))
     })
 }
+
+export const setAppointmentDetails = appointmentDetails => ({
+  type: ActionTypes.SET_BULK_APPOINTMENT_DETAILS,
+  appointmentDetails,
+})
+
+export const setAppointmentPrisoners = prisoners => ({
+  type: ActionTypes.SET_BULK_APPOINTMENT_PRISONERS,
+  prisoners,
+})
+
+export const setBulkAppointmentsComplete = () => ({
+  type: ActionTypes.SET_BULK_APPOINTMENTS_COMPLETE,
+})
