@@ -81,7 +81,7 @@ describe('Add appointment form validation', () => {
     expect(validationMessages[FORM_ERROR]).toEqual([
       {
         targetName: 'start-time-offenderNo2',
-        text: 'The end time must be in the future',
+        text: 'The start time must be before the end time',
       },
     ])
   })

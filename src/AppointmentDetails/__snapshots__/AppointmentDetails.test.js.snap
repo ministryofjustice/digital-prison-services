@@ -6,6 +6,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <AppointmentDetails
     appointmentTypeDescription="ACT"
     comments=""
+    endTime=""
     locationDescription="GYM"
     startTime="2019-10-10T:21:0:00Z"
   />,
@@ -52,7 +53,9 @@ ShallowWrapper {
                
               Thursday
             </div>
-            10/10/2019 - 21:10
+            10/10/2019 - 21:00
+             
+            
           </Styled(div)>
         </Styled(div)>,
         "",
@@ -176,7 +179,9 @@ ShallowWrapper {
                  
                 Thursday
               </div>
-              10/10/2019 - 21:10
+              10/10/2019 - 21:00
+               
+              
             </Styled(div)>,
           ],
         },
@@ -203,7 +208,9 @@ ShallowWrapper {
                    
                   Thursday
                 </div>,
-                "10/10/2019 - 21:10",
+                "10/10/2019 - 21:00",
+                " ",
+                "",
               ],
             },
             "ref": null,
@@ -225,7 +232,9 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
-              "10/10/2019 - 21:10",
+              "10/10/2019 - 21:00",
+              " ",
+              "",
             ],
             "type": [Function],
           },
@@ -272,7 +281,9 @@ ShallowWrapper {
                  
                 Thursday
               </div>
-              10/10/2019 - 21:10
+              10/10/2019 - 21:00
+               
+              
             </Styled(div)>
           </Styled(div)>,
           "",
@@ -396,7 +407,9 @@ ShallowWrapper {
                    
                   Thursday
                 </div>
-                10/10/2019 - 21:10
+                10/10/2019 - 21:00
+                 
+                
               </Styled(div)>,
             ],
           },
@@ -423,7 +436,9 @@ ShallowWrapper {
                      
                     Thursday
                   </div>,
-                  "10/10/2019 - 21:10",
+                  "10/10/2019 - 21:00",
+                  " ",
+                  "",
                 ],
               },
               "ref": null,
@@ -445,7 +460,9 @@ ShallowWrapper {
                   ],
                   "type": "div",
                 },
-                "10/10/2019 - 21:10",
+                "10/10/2019 - 21:00",
+                " ",
+                "",
               ],
               "type": [Function],
             },
@@ -483,6 +500,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <AppointmentDetails
     appointmentTypeDescription="ACT"
     comments="test"
+    endTime=""
     locationDescription="GYM"
     startTime="2019-10-10T:21:0:00Z"
   />,
@@ -529,7 +547,9 @@ ShallowWrapper {
                
               Thursday
             </div>
-            10/10/2019 - 21:10
+            10/10/2019 - 21:00
+             
+            
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
@@ -662,7 +682,9 @@ ShallowWrapper {
                  
                 Thursday
               </div>
-              10/10/2019 - 21:10
+              10/10/2019 - 21:00
+               
+              
             </Styled(div)>,
           ],
         },
@@ -689,7 +711,9 @@ ShallowWrapper {
                    
                   Thursday
                 </div>,
-                "10/10/2019 - 21:10",
+                "10/10/2019 - 21:00",
+                " ",
+                "",
               ],
             },
             "ref": null,
@@ -711,7 +735,9 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
-              "10/10/2019 - 21:10",
+              "10/10/2019 - 21:00",
+              " ",
+              "",
             ],
             "type": [Function],
           },
@@ -808,7 +834,9 @@ ShallowWrapper {
                  
                 Thursday
               </div>
-              10/10/2019 - 21:10
+              10/10/2019 - 21:00
+               
+              
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
@@ -941,7 +969,9 @@ ShallowWrapper {
                    
                   Thursday
                 </div>
-                10/10/2019 - 21:10
+                10/10/2019 - 21:00
+                 
+                
               </Styled(div)>,
             ],
           },
@@ -968,7 +998,9 @@ ShallowWrapper {
                      
                     Thursday
                   </div>,
-                  "10/10/2019 - 21:10",
+                  "10/10/2019 - 21:00",
+                  " ",
+                  "",
                 ],
               },
               "ref": null,
@@ -990,7 +1022,9 @@ ShallowWrapper {
                   ],
                   "type": "div",
                 },
-                "10/10/2019 - 21:10",
+                "10/10/2019 - 21:00",
+                " ",
+                "",
               ],
               "type": [Function],
             },

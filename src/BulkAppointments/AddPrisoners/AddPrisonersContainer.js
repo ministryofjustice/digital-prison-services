@@ -112,7 +112,7 @@ class AddPrisonerContainer extends Component {
         )}
         {!complete && (
           <React.Fragment>
-            <p> Upload the prison numbers for all prisoners attending the appointment. </p>
+            <p> Upload the prison numbers for all prisoners attending the below appointment. </p>
             <Container>
               <Divider />
               <AppointmentDetails {...appointmentDetails} />
