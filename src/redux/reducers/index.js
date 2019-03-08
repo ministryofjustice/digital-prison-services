@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import moment from 'moment'
 import * as ActionTypes from '../actions/actionTypes'
 import content from './content'
+import bulkAppointments from './bulk-appointments'
 
 export function defaultPeriod(time) {
   const midnight = moment('12:00a', 'HH:mm a')
@@ -283,6 +284,7 @@ const prisonStaffHubApp = combineReducers({
   establishmentRoll,
   globalSearch,
   content,
+  bulkAppointments,
 })
 
 export default prisonStaffHubApp

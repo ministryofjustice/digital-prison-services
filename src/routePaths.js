@@ -8,4 +8,5 @@ export default {
   totalOut: '/establishment-roll/total-currently-out',
   uploadOffenders: '/bulk-appointments/upload-offenders',
   bulkAppointments: '/add-bulk-appointments',
+  bulkAppointmentsAddPrisoners: '/add-bulk-appointments/add-prisoners',
 }

@@ -2,32 +2,47 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
 
-import BulkAppointmentsContainer from './BulkAppointmentsContainer'
+import AddPrisonersContainer from './AddPrisonersContainer'
 
 import {
   NumberOfAppointmentsEvent,
   AppointmentTypeUsed,
   RecordWhenTheStartTimesHaveBeenAmended,
-} from './BulkAppointmentsGaEvents'
+} from '../BulkAppointmentsGaEvents'
 
-describe('Bulk appointments container', () => {
+const initialState = {
+  app: {
+    user: {
+      activeCaseLoadId: 'LEI',
+    },
+    config: {
+      notmEndpointUrl: '/',
+    },
+  },
+  bulkAppointments: {
+    appointmentDetails: {
+      appointmentType: 'ACC',
+      locationId: 1,
+      appointmentTypeDescription: 'Activities',
+      locationDescription: 'Gym',
+      startTime: '2019-10-10T:21:00:00Z',
+      comments: 'test comment',
+    },
+    offenders: [{ bookingId: 1 }, { bookingId: 2 }],
+  },
+}
+
+describe('Add prisoners container', () => {
   const now = moment('2019-10-10T21:00:00Z')
-  const store = {
-    getState: jest.fn(),
-    subscribe: jest.fn(),
-    dispatch: jest.fn(),
-  }
+  const store = {}
+  const history = {}
   beforeEach(() => {
-    store.getState.mockReturnValue({
-      app: {
-        user: {
-          activeCaseLoadId: 'LEI',
-        },
-        config: {
-          notmEndpointUrl: '/',
-        },
-      },
-    })
+    store.getState = jest.fn()
+    store.subscribe = jest.fn()
+    store.dispatch = jest.fn()
+    history.push = jest.fn()
+    history.replace = jest.fn()
+    store.getState.mockReturnValue(initialState)
   })
   const appointment = {
     appointmentType: 'ACC',
@@ -35,27 +50,30 @@ describe('Bulk appointments container', () => {
     startTime: '2019-10-10T21:00:00Z',
     date: '2019-10-10',
   }
-  it('should render default step', () => {
+
+  it('should pass props correctly', () => {
     const wrapper = shallow(
-      <BulkAppointmentsContainer now={now} store={store} handleError={() => {}} raiseAnalyticsEvent={() => {}} />
+      <AddPrisonersContainer
+        now={now}
+        store={store}
+        handleError={() => {}}
+        raiseAnalyticsEvent={() => {}}
+        history={history}
+      />
     )
+
     expect(wrapper.dive()).toMatchSnapshot()
   })
 
-  it('should render offender step', () => {
+  it('should render completed view', () => {
     const wrapper = shallow(
-      <BulkAppointmentsContainer now={now} store={store} handleError={() => {}} raiseAnalyticsEvent={() => {}} />
-    )
-
-    const component = wrapper.dive()
-
-    component.instance().setAppointmentDetails({ appointment })
-    expect(component).toMatchSnapshot()
-  })
-
-  it('should render completed step', () => {
-    const wrapper = shallow(
-      <BulkAppointmentsContainer now={now} store={store} handleError={() => {}} raiseAnalyticsEvent={() => {}} />
+      <AddPrisonersContainer
+        now={now}
+        store={store}
+        handleError={() => {}}
+        raiseAnalyticsEvent={() => {}}
+        history={history}
+      />
     )
 
     const component = wrapper.dive()
@@ -72,16 +90,16 @@ describe('Bulk appointments container', () => {
   it('should call raiseAnalyticsEvent with three different events', () => {
     const raiseAnalyticsEvent = jest.fn()
     const wrapper = shallow(
-      <BulkAppointmentsContainer
+      <AddPrisonersContainer
         now={now}
         store={store}
         handleError={() => {}}
         raiseAnalyticsEvent={raiseAnalyticsEvent}
+        history={history}
       />
     )
 
     const component = wrapper.dive()
-    component.instance().setAppointmentDetails({ appointment })
 
     const appointments = [
       { bookingId: 1, startTime: '2019-01-01T00:00:00Z' },

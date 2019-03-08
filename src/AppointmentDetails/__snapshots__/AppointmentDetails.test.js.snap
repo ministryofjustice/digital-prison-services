@@ -1,0 +1,1073 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Appointment details should hide comment section when there is no comment to display 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AppointmentDetails
+    appointmentTypeDescription="ACT"
+    comments=""
+    locationDescription="GYM"
+    startTime="2019-10-10T:21:0:00Z"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": Array [
+        <Styled(div)>
+          <strong>
+             Appointment type 
+          </strong>
+          <Styled(div)>
+             
+            ACT
+             
+          </Styled(div)>
+        </Styled(div)>,
+        <Styled(div)>
+          <strong>
+             Appointment location 
+          </strong>
+          <Styled(div)>
+             
+            GYM
+             
+          </Styled(div)>
+        </Styled(div)>,
+        <Styled(div)>
+          <strong>
+             Date and time 
+          </strong>
+          <Styled(div)>
+            <div>
+               
+              Thursday
+            </div>
+            10/10/2019 - 21:10
+          </Styled(div)>
+        </Styled(div)>,
+        "",
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Appointment type 
+            </strong>,
+            <Styled(div)>
+               
+              ACT
+               
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Appointment type ",
+            },
+            "ref": null,
+            "rendered": " Appointment type ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                " ",
+                "ACT",
+                " ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " ",
+              "ACT",
+              " ",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Appointment location 
+            </strong>,
+            <Styled(div)>
+               
+              GYM
+               
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Appointment location ",
+            },
+            "ref": null,
+            "rendered": " Appointment location ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                " ",
+                "GYM",
+                " ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " ",
+              "GYM",
+              " ",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Date and time 
+            </strong>,
+            <Styled(div)>
+              <div>
+                 
+                Thursday
+              </div>
+              10/10/2019 - 21:10
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Date and time ",
+            },
+            "ref": null,
+            "rendered": " Date and time ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <div>
+                   
+                  Thursday
+                </div>,
+                "10/10/2019 - 21:10",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    " ",
+                    "Thursday",
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  " ",
+                  "Thursday",
+                ],
+                "type": "div",
+              },
+              "10/10/2019 - 21:10",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      "",
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <Styled(div)>
+            <strong>
+               Appointment type 
+            </strong>
+            <Styled(div)>
+               
+              ACT
+               
+            </Styled(div)>
+          </Styled(div)>,
+          <Styled(div)>
+            <strong>
+               Appointment location 
+            </strong>
+            <Styled(div)>
+               
+              GYM
+               
+            </Styled(div)>
+          </Styled(div)>,
+          <Styled(div)>
+            <strong>
+               Date and time 
+            </strong>
+            <Styled(div)>
+              <div>
+                 
+                Thursday
+              </div>
+              10/10/2019 - 21:10
+            </Styled(div)>
+          </Styled(div)>,
+          "",
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Appointment type 
+              </strong>,
+              <Styled(div)>
+                 
+                ACT
+                 
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Appointment type ",
+              },
+              "ref": null,
+              "rendered": " Appointment type ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  " ",
+                  "ACT",
+                  " ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " ",
+                "ACT",
+                " ",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Appointment location 
+              </strong>,
+              <Styled(div)>
+                 
+                GYM
+                 
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Appointment location ",
+              },
+              "ref": null,
+              "rendered": " Appointment location ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  " ",
+                  "GYM",
+                  " ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " ",
+                "GYM",
+                " ",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Date and time 
+              </strong>,
+              <Styled(div)>
+                <div>
+                   
+                  Thursday
+                </div>
+                10/10/2019 - 21:10
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Date and time ",
+              },
+              "ref": null,
+              "rendered": " Date and time ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  <div>
+                     
+                    Thursday
+                  </div>,
+                  "10/10/2019 - 21:10",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      " ",
+                      "Thursday",
+                    ],
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    " ",
+                    "Thursday",
+                  ],
+                  "type": "div",
+                },
+                "10/10/2019 - 21:10",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        "",
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`Appointment details should render correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AppointmentDetails
+    appointmentTypeDescription="ACT"
+    comments="test"
+    locationDescription="GYM"
+    startTime="2019-10-10T:21:0:00Z"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": Array [
+        <Styled(div)>
+          <strong>
+             Appointment type 
+          </strong>
+          <Styled(div)>
+             
+            ACT
+             
+          </Styled(div)>
+        </Styled(div)>,
+        <Styled(div)>
+          <strong>
+             Appointment location 
+          </strong>
+          <Styled(div)>
+             
+            GYM
+             
+          </Styled(div)>
+        </Styled(div)>,
+        <Styled(div)>
+          <strong>
+             Date and time 
+          </strong>
+          <Styled(div)>
+            <div>
+               
+              Thursday
+            </div>
+            10/10/2019 - 21:10
+          </Styled(div)>
+        </Styled(div)>,
+        <Styled(div)>
+          <strong>
+             Comments 
+          </strong>
+          <Styled(div)>
+             
+            test
+             
+          </Styled(div)>
+        </Styled(div)>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Appointment type 
+            </strong>,
+            <Styled(div)>
+               
+              ACT
+               
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Appointment type ",
+            },
+            "ref": null,
+            "rendered": " Appointment type ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                " ",
+                "ACT",
+                " ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " ",
+              "ACT",
+              " ",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Appointment location 
+            </strong>,
+            <Styled(div)>
+               
+              GYM
+               
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Appointment location ",
+            },
+            "ref": null,
+            "rendered": " Appointment location ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                " ",
+                "GYM",
+                " ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " ",
+              "GYM",
+              " ",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Date and time 
+            </strong>,
+            <Styled(div)>
+              <div>
+                 
+                Thursday
+              </div>
+              10/10/2019 - 21:10
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Date and time ",
+            },
+            "ref": null,
+            "rendered": " Date and time ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <div>
+                   
+                  Thursday
+                </div>,
+                "10/10/2019 - 21:10",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    " ",
+                    "Thursday",
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  " ",
+                  "Thursday",
+                ],
+                "type": "div",
+              },
+              "10/10/2019 - 21:10",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Comments 
+            </strong>,
+            <Styled(div)>
+               
+              test
+               
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Comments ",
+            },
+            "ref": null,
+            "rendered": " Comments ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                " ",
+                "test",
+                " ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " ",
+              "test",
+              " ",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <Styled(div)>
+            <strong>
+               Appointment type 
+            </strong>
+            <Styled(div)>
+               
+              ACT
+               
+            </Styled(div)>
+          </Styled(div)>,
+          <Styled(div)>
+            <strong>
+               Appointment location 
+            </strong>
+            <Styled(div)>
+               
+              GYM
+               
+            </Styled(div)>
+          </Styled(div)>,
+          <Styled(div)>
+            <strong>
+               Date and time 
+            </strong>
+            <Styled(div)>
+              <div>
+                 
+                Thursday
+              </div>
+              10/10/2019 - 21:10
+            </Styled(div)>
+          </Styled(div)>,
+          <Styled(div)>
+            <strong>
+               Comments 
+            </strong>
+            <Styled(div)>
+               
+              test
+               
+            </Styled(div)>
+          </Styled(div)>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Appointment type 
+              </strong>,
+              <Styled(div)>
+                 
+                ACT
+                 
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Appointment type ",
+              },
+              "ref": null,
+              "rendered": " Appointment type ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  " ",
+                  "ACT",
+                  " ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " ",
+                "ACT",
+                " ",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Appointment location 
+              </strong>,
+              <Styled(div)>
+                 
+                GYM
+                 
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Appointment location ",
+              },
+              "ref": null,
+              "rendered": " Appointment location ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  " ",
+                  "GYM",
+                  " ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " ",
+                "GYM",
+                " ",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Date and time 
+              </strong>,
+              <Styled(div)>
+                <div>
+                   
+                  Thursday
+                </div>
+                10/10/2019 - 21:10
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Date and time ",
+              },
+              "ref": null,
+              "rendered": " Date and time ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  <div>
+                     
+                    Thursday
+                  </div>,
+                  "10/10/2019 - 21:10",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      " ",
+                      "Thursday",
+                    ],
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    " ",
+                    "Thursday",
+                  ],
+                  "type": "div",
+                },
+                "10/10/2019 - 21:10",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Comments 
+              </strong>,
+              <Styled(div)>
+                 
+                test
+                 
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Comments ",
+              },
+              "ref": null,
+              "rendered": " Comments ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  " ",
+                  "test",
+                  " ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " ",
+                "test",
+                " ",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

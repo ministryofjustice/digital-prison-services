@@ -7,21 +7,23 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { Form } from 'react-final-form'
 import { BLACK, GREY_3 } from 'govuk-colours'
-import TimePicker from '../Components/TimePicker/TimePicker'
-import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
-import { appointmentType } from '../types'
 
-import { validateThenSubmit, offenderStartTimeFieldName } from './AddAppointmentFormValidation'
-import { ButtonContainer } from './AppointmentForm.styles'
+import { H3 } from '@govuk-react/header'
+import TimePicker from '../../Components/TimePicker/TimePicker'
+import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
+import { appointmentType } from '../../types'
+
+import { validateThenSubmit, offenderStartTimeFieldName } from './AddPrisonerValidation'
+import { ButtonContainer, Table } from './AddPrisoners.styles'
 
 export const FormFields = ({ errors, error, offenders, date, now }) => (
   <React.Fragment>
     {error && <ErrorText> {error} </ErrorText>}
     {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
-    <table className="row-gutters">
+    <Table className="row-gutters">
       <thead>
         <tr>
-          <th className="straight width5"> Prison no.</th>
+          <th className="straight width5"> Prison number </th>
           <th className="straight width5"> Last name </th>
           <th className="straight width5"> First name </th>
           <th className="straight width5"> Start time </th>
@@ -47,7 +49,7 @@ export const FormFields = ({ errors, error, offenders, date, now }) => (
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   </React.Fragment>
 )
 
@@ -104,7 +106,7 @@ export const getInitialValues = ({ offenders, startTime }) =>
     return acc
   }, {})
 
-const AddAppointmentForm = ({
+const AddPrisoners = ({
   offenders,
   appointment,
   error,
@@ -130,6 +132,7 @@ const AddAppointmentForm = ({
       initialValues={getInitialValues({ offenders, startTime })}
       render={({ handleSubmit, submitError, submitting }) => (
         <form onSubmit={handleSubmit}>
+          {offenders.length > 0 && <H3> Selected prisoners </H3>}
           <FormFields offenders={offenders} now={now} date={date} error={error} errors={submitError} />
           <ButtonContainer>
             <Button disabled={submitting || offenders.length === 0} type="submit">
@@ -144,7 +147,7 @@ const AddAppointmentForm = ({
     />
   )
 
-AddAppointmentForm.propTypes = {
+AddPrisoners.propTypes = {
   offenders: PropTypes.arrayOf(
     PropTypes.shape({
       offenderNo: PropTypes.string,
@@ -163,10 +166,10 @@ AddAppointmentForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
 }
 
-AddAppointmentForm.defaultProps = {
+AddPrisoners.defaultProps = {
   error: '',
   startTime: null,
   date: null,
 }
 
-export default AddAppointmentForm
+export default AddPrisoners

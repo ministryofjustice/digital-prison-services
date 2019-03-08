@@ -57,7 +57,7 @@ describe('Appointment form', () => {
     })
 
     it('should not return validation messages for optional values', () => {
-      const validationMessages = validateThenSubmit(() => {})({
+      const validationMessages = validateThenSubmit({ onSuccess: () => {} })({
         date: moment('2019-10-19'),
         location: '1',
         appointmentType: 2,
@@ -116,7 +116,7 @@ describe('Appointment form', () => {
     })
 
     it('should return error messages when required fields are missing', () => {
-      const validationMessages = validateThenSubmit(jest.fn)({})
+      const validationMessages = validateThenSubmit({ onSuccess: jest.fn })({})
 
       const date = findValidationError('date', validationMessages)
       const location = findValidationError('location', validationMessages)
@@ -142,7 +142,7 @@ describe('Appointment form', () => {
         done()
       }
 
-      const validationMessages = validateThenSubmit(onSuccess)({
+      const validationMessages = validateThenSubmit({ onSuccess })({
         date,
         startTime: '2019-01-01T21:00:00Z',
         endTime: '2019-01-01T22:00:00Z',

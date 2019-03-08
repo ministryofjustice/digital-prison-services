@@ -2,10 +2,10 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
 
-import AddAppointmentForm, { FormFields, getInitialValues } from './AddAppointmentForm'
-import { offenderStartTimeFieldName } from './AddAppointmentFormValidation'
+import AddAppointmentForm, { FormFields, getInitialValues } from './AddPrisoners'
+import { offenderStartTimeFieldName } from './AddPrisonerValidation'
 
-import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../date-time-helpers'
+import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../date-formats'
 
 describe('Add appointment form', () => {
   const stubFunc = () => {}

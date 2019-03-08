@@ -8,9 +8,9 @@ const offenderLoaderFactory = eliteApi => {
 
     if (!offenders) return []
 
-    return offenders.filter(offender => offender).map(offender => ({
-      ...offender,
-    }))
+    return offenderNumbers
+      .map(number => offenders.find(offender => offender.offenderNo === number))
+      .filter(offender => Boolean(offender))
   }
   return {
     loadFromCsvContent,

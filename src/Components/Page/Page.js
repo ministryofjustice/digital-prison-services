@@ -8,11 +8,17 @@ import Spinner from '../../Spinner'
 import { Container } from './Page.styles'
 import { childrenType } from '../../types'
 import Breadcrumb from '../Breadcrumb'
+import { setApplicationTitle } from '../../redux/actions'
 
 export class Page extends Component {
   componentDidMount() {
-    const { title } = this.props
+    const { title, applicationTitle, dispatchApplicationTitle } = this.props
+
     this.renderTitleString(title)
+
+    if (applicationTitle) {
+      dispatchApplicationTitle(applicationTitle)
+    }
   }
 
   componentWillUpdate(nextProps) {
@@ -56,6 +62,8 @@ Page.propTypes = {
   showBreadcrumb: PropTypes.bool,
   homeLink: PropTypes.string.isRequired,
   backLink: PropTypes.string,
+  applicationTitle: PropTypes.string,
+  dispatchApplicationTitle: PropTypes.func,
 }
 
 Page.defaultProps = {
@@ -64,7 +72,13 @@ Page.defaultProps = {
   backLink: '',
   title: undefined,
   children: undefined,
+  applicationTitle: '',
+  dispatchApplicationTitle: () => {},
 }
+
+const mapDispatchToProps = dispatch => ({
+  dispatchApplicationTitle: title => dispatch(setApplicationTitle(title)),
+})
 
 const mapStateToProps = state => ({
   error: state.app.error,
@@ -72,4 +86,7 @@ const mapStateToProps = state => ({
   homeLink: state.app.config.notmEndpointUrl,
 })
 
-export default connect(mapStateToProps)(Page)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Page)

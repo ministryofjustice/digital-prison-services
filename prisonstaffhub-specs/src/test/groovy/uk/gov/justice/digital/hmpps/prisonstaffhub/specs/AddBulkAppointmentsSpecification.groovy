@@ -33,11 +33,16 @@ class AddBulkAppointmentsSpecification extends GebReportingSpec {
                 )])
 
         elite2api.stubAppointmentTypes([Map.of("code", "ACTI", "description", "Activities")])
-        elite2api.stubBookingOffenders([Map.of("bookingId", 1, "offenderNo", "A12345", "firstName", "John", "lastName", " Doe")])
+        elite2api.stubBookingOffenders([Map.of(
+                "bookingId", 1,
+                "offenderNo", "A12345",
+                "firstName", "John",
+                "lastName", " Doe")])
+
         elite2api.stubPostBulkAppointments()
 
         given: "I navigate to the add bulk appointments screen"
-        go AddBulkAppointmentsPage.url
+        to AddBulkAppointmentsPage
 
         when: "I fill out the appointments details"
         at AddBulkAppointmentsPage

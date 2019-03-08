@@ -13,4 +13,21 @@ describe('offender loader', () => {
 
     expect(elite2Api.getBasicInmateDetailsForOffenders).toHaveBeenCalledWith(context, ['A111111', 'A222222'])
   })
+
+  it('should return offenders in the same order as the csv file', async () => {
+    elite2Api.getBasicInmateDetailsForOffenders.mockReturnValue([
+      { bookingId: 2, offenderNo: 'A222222' },
+      { bookingId: 1, offenderNo: 'A111111' },
+    ])
+
+    const response = await offenderLoaderFactory(elite2Api).loadFromCsvContent(context, [
+      ['A111111'],
+      ['A222222'],
+      ['BAD_NUMBER'],
+    ])
+
+    expect(response.length).toBe(2)
+    expect(response[0]).toEqual({ bookingId: 1, offenderNo: 'A111111' })
+    expect(response[1]).toEqual({ bookingId: 2, offenderNo: 'A222222' })
+  })
 })
