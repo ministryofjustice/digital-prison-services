@@ -16,7 +16,7 @@ import { appointmentType } from '../../types'
 import { validateThenSubmit, offenderStartTimeFieldName } from './AddPrisonerValidation'
 import { ButtonContainer, Table } from './AddPrisoners.styles'
 
-export const FormFields = ({ errors, error, offenders, date, now }) => (
+export const FormFields = ({ errors, error, offenders, date, now, dispatchAppointmentPrisoners }) => (
   <React.Fragment>
     {error && <ErrorText> {error} </ErrorText>}
     {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
@@ -37,13 +37,34 @@ export const FormFields = ({ errors, error, offenders, date, now }) => (
             <td className="row-gutters">{row.firstName}</td>
             <td className="row-gutters">
               <FieldWithError
-                errors={errors}
                 name={offenderStartTimeFieldName({ offenderNo: row.offenderNo })}
-                title="Start time"
-                date={date}
-                now={now}
-                futureTimeOnly
-                component={TimePicker}
+                render={({ meta, input }) => {
+                  const subScribeToChanges = startTime => {
+                    const offendersIncludingUpdatedStartTime = [
+                      ...offenders.filter(ofn => ofn.offenderNo !== row.offenderNo),
+                      { ...offenders.find(ofn => ofn.offenderNo === row.offenderNo), startTime },
+                    ]
+                    const offendersMaintainingExistingOrdering = offenders.map(offender =>
+                      offendersIncludingUpdatedStartTime.find(ofn => ofn.offenderNo === offender.offenderNo)
+                    )
+                    dispatchAppointmentPrisoners(offendersMaintainingExistingOrdering)
+                    input.onChange(startTime)
+                  }
+                  return (
+                    <TimePicker
+                      input={{
+                        ...input,
+                        onChange: subScribeToChanges,
+                      }}
+                      meta={meta}
+                      errors={errors}
+                      title="Start time"
+                      date={date}
+                      now={now}
+                      futureTimeOnly
+                    />
+                  )
+                }}
               />
             </td>
           </tr>
@@ -64,6 +85,7 @@ FormFields.propTypes = {
     })
   ),
   offenders: PropTypes.arrayOf(PropTypes.shape(PropTypes.map)),
+  dispatchAppointmentPrisoners: PropTypes.func.isRequired,
 }
 
 FormFields.defaultProps = {
@@ -101,7 +123,7 @@ export const getInitialValues = ({ offenders, startTime }) =>
     if (!acc[key])
       return {
         ...acc,
-        [key]: startTime,
+        [key]: offender.startTime || startTime,
       }
     return acc
   }, {})
@@ -117,6 +139,7 @@ const AddPrisoners = ({
   onSuccess,
   resetErrors,
   onCancel,
+  dispatchAppointmentPrisoners,
 }) =>
   offenders &&
   offenders.length > 0 && (
@@ -133,7 +156,14 @@ const AddPrisoners = ({
       render={({ handleSubmit, submitError, submitting }) => (
         <form onSubmit={handleSubmit}>
           {offenders.length > 0 && <H3> Selected prisoners </H3>}
-          <FormFields offenders={offenders} now={now} date={date} error={error} errors={submitError} />
+          <FormFields
+            offenders={offenders}
+            now={now}
+            date={date}
+            error={error}
+            errors={submitError}
+            dispatchAppointmentPrisoners={dispatchAppointmentPrisoners}
+          />
           <ButtonContainer>
             <Button disabled={submitting || offenders.length === 0} type="submit">
               Add appointment
@@ -164,6 +194,7 @@ AddPrisoners.propTypes = {
   appointment: appointmentType.isRequired,
   resetErrors: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
+  dispatchAppointmentPrisoners: PropTypes.func.isRequired,
 }
 
 AddPrisoners.defaultProps = {

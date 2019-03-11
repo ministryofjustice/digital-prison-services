@@ -24,7 +24,7 @@ import {
 } from '../AddPrisoners/AddPrisoners.styles'
 
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
-import { DATE_TIME_FORMAT_SPEC } from '../../date-formats'
+import { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } from '../../date-formats'
 
 export const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => values => {
   const formErrors = []
@@ -110,7 +110,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                   title="date"
                   error={meta.touched && meta.error ? meta.error : ''}
                   handleDateChange={input.onChange}
-                  value={values.date}
+                  value={values.date && values.date.format(DAY_MONTH_YEAR)}
                 />
               </Label>
             )}

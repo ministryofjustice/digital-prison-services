@@ -23,6 +23,7 @@ import routePaths from '../../routePaths'
 import OffenderUpload from '../OffenderUpload/OffenderUpload'
 import AddPrisoners from './AddPrisoners'
 import AppointmentDetails from '../../AppointmentDetails/AppointmentDetails'
+import ScrollToTop from '../../Components/ScrollToTop/ScrollToTop'
 
 class AddPrisonerContainer extends Component {
   constructor(props) {
@@ -97,7 +98,7 @@ class AddPrisonerContainer extends Component {
     return (
       <Page title="Add prisoners" applicationTitle="Whereabouts" alwaysRender>
         {complete && (
-          <div>
+          <ScrollToTop always>
             <H3> {appointmentsCreated} appointments created </H3>
             <Divider />
             <AppointmentDetails {...lastAppointmentDetails} />
@@ -108,7 +109,7 @@ class AddPrisonerContainer extends Component {
                 Back to home page
               </Button>
             </ButtonContainer>
-          </div>
+          </ScrollToTop>
         )}
         {!complete && (
           <React.Fragment>
@@ -137,6 +138,7 @@ class AddPrisonerContainer extends Component {
                 now={now}
                 date={appointmentDetails.date}
                 startTime={appointmentDetails.startTime}
+                dispatchAppointmentPrisoners={dispatchAppointmentPrisoners}
               />
             </Container>
           </React.Fragment>

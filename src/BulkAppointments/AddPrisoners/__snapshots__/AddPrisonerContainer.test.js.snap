@@ -158,6 +158,7 @@ ShallowWrapper {
                 }
               }
               date={null}
+              dispatchAppointmentPrisoners={[Function]}
               error=""
               now={"2019-10-10T21:00:00.000Z"}
               offenders={Array []}
@@ -215,6 +216,7 @@ ShallowWrapper {
                   }
                 }
                 date={null}
+                dispatchAppointmentPrisoners={[Function]}
                 error=""
                 now={"2019-10-10T21:00:00.000Z"}
                 offenders={Array []}
@@ -276,6 +278,7 @@ ShallowWrapper {
                     }
                   }
                   date={null}
+                  dispatchAppointmentPrisoners={[Function]}
                   error=""
                   now={"2019-10-10T21:00:00.000Z"}
                   offenders={Array []}
@@ -361,6 +364,7 @@ ShallowWrapper {
                     "startTime": "2019-10-10T:21:00:00Z",
                   },
                   "date": null,
+                  "dispatchAppointmentPrisoners": [Function],
                   "error": "",
                   "now": "2019-10-10T21:00:00.000Z",
                   "offenders": Array [],
@@ -428,6 +432,7 @@ ShallowWrapper {
                   }
                 }
                 date={null}
+                dispatchAppointmentPrisoners={[Function]}
                 error=""
                 now={"2019-10-10T21:00:00.000Z"}
                 offenders={Array []}
@@ -485,6 +490,7 @@ ShallowWrapper {
                     }
                   }
                   date={null}
+                  dispatchAppointmentPrisoners={[Function]}
                   error=""
                   now={"2019-10-10T21:00:00.000Z"}
                   offenders={Array []}
@@ -546,6 +552,7 @@ ShallowWrapper {
                       }
                     }
                     date={null}
+                    dispatchAppointmentPrisoners={[Function]}
                     error=""
                     now={"2019-10-10T21:00:00.000Z"}
                     offenders={Array []}
@@ -631,6 +638,7 @@ ShallowWrapper {
                       "startTime": "2019-10-10T:21:00:00Z",
                     },
                     "date": null,
+                    "dispatchAppointmentPrisoners": [Function],
                     "error": "",
                     "now": "2019-10-10T21:00:00.000Z",
                     "offenders": Array [],
@@ -806,7 +814,9 @@ ShallowWrapper {
       "alwaysRender": true,
       "applicationTitle": "Whereabouts",
       "children": Array [
-        <div>
+        <withRouter(ScrollToTop)
+          always={true}
+        >
           <H3>
              
             2
@@ -849,7 +859,7 @@ ShallowWrapper {
               Back to home page
             </StyledHoc>
           </Styled(div)>
-        </div>,
+        </withRouter(ScrollToTop)>,
         false,
       ],
       "title": "Add prisoners",
@@ -859,8 +869,9 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "host",
+        "nodeType": "function",
         "props": Object {
+          "always": true,
           "children": Array [
             <H3>
                
@@ -1038,7 +1049,7 @@ ShallowWrapper {
             "type": [Function],
           },
         ],
-        "type": "div",
+        "type": [Function],
       },
       false,
     ],
@@ -1053,7 +1064,9 @@ ShallowWrapper {
         "alwaysRender": true,
         "applicationTitle": "Whereabouts",
         "children": Array [
-          <div>
+          <withRouter(ScrollToTop)
+            always={true}
+          >
             <H3>
                
               2
@@ -1096,7 +1109,7 @@ ShallowWrapper {
                 Back to home page
               </StyledHoc>
             </Styled(div)>
-          </div>,
+          </withRouter(ScrollToTop)>,
           false,
         ],
         "title": "Add prisoners",
@@ -1106,8 +1119,9 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "host",
+          "nodeType": "function",
           "props": Object {
+            "always": true,
             "children": Array [
               <H3>
                  
@@ -1285,7 +1299,7 @@ ShallowWrapper {
               "type": [Function],
             },
           ],
-          "type": "div",
+          "type": [Function],
         },
         false,
       ],
