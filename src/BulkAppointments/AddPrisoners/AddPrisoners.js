@@ -39,7 +39,7 @@ export const FormFields = ({ errors, error, offenders, date, now, dispatchAppoin
               <FieldWithError
                 name={offenderStartTimeFieldName({ offenderNo: row.offenderNo })}
                 render={({ meta, input }) => {
-                  const subScribeToChanges = startTime => {
+                  const subscribeToChanges = startTime => {
                     const offendersIncludingUpdatedStartTime = [
                       ...offenders.filter(ofn => ofn.offenderNo !== row.offenderNo),
                       { ...offenders.find(ofn => ofn.offenderNo === row.offenderNo), startTime },
@@ -54,7 +54,7 @@ export const FormFields = ({ errors, error, offenders, date, now, dispatchAppoin
                     <TimePicker
                       input={{
                         ...input,
-                        onChange: subScribeToChanges,
+                        onChange: subscribeToChanges,
                       }}
                       meta={meta}
                       errors={errors}
