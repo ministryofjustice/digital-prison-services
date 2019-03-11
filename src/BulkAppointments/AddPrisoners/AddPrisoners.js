@@ -8,7 +8,7 @@ import React from 'react'
 import { Form } from 'react-final-form'
 import { BLACK, GREY_3 } from 'govuk-colours'
 
-import { H3 } from '@govuk-react/header'
+import { H3 } from '@govuk-react/heading'
 import TimePicker from '../../Components/TimePicker/TimePicker'
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 import { appointmentType } from '../../types'
