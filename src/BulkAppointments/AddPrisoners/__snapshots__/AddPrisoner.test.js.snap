@@ -118,24 +118,8 @@ ShallowWrapper {
                 className="row-gutters"
               >
                 <FieldWithError
-                  component={[Function]}
-                  date="2019-10-10T22:00:00Z"
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "start-time-offenderNo1",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "start-time-offenderNo2",
-                        "text": "Start test message",
-                      },
-                    ]
-                  }
-                  futureTimeOnly={true}
                   name="start-time-offenderNo1"
-                  now={"2019-10-10T21:00:00.000Z"}
-                  title="Start time"
+                  render={[Function]}
                 />
               </td>
             </tr>
@@ -161,24 +145,8 @@ ShallowWrapper {
                 className="row-gutters"
               >
                 <FieldWithError
-                  component={[Function]}
-                  date="2019-10-10T22:00:00Z"
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "start-time-offenderNo1",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "start-time-offenderNo2",
-                        "text": "Start test message",
-                      },
-                    ]
-                  }
-                  futureTimeOnly={true}
                   name="start-time-offenderNo2"
-                  now={"2019-10-10T21:00:00.000Z"}
-                  title="Start time"
+                  render={[Function]}
                 />
               </td>
             </tr>
@@ -265,24 +233,8 @@ ShallowWrapper {
                   className="row-gutters"
                 >
                   <FieldWithError
-                    component={[Function]}
-                    date="2019-10-10T22:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "start-time-offenderNo1",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "start-time-offenderNo2",
-                          "text": "Start test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
                     name="start-time-offenderNo1"
-                    now={"2019-10-10T21:00:00.000Z"}
-                    title="Start time"
+                    render={[Function]}
                   />
                 </td>
               </tr>
@@ -308,24 +260,8 @@ ShallowWrapper {
                   className="row-gutters"
                 >
                   <FieldWithError
-                    component={[Function]}
-                    date="2019-10-10T22:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "start-time-offenderNo1",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "start-time-offenderNo2",
-                          "text": "Start test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
                     name="start-time-offenderNo2"
-                    now={"2019-10-10T21:00:00.000Z"}
-                    title="Start time"
+                    render={[Function]}
                   />
                 </td>
               </tr>
@@ -475,24 +411,8 @@ ShallowWrapper {
                     className="row-gutters"
                   >
                     <FieldWithError
-                      component={[Function]}
-                      date="2019-10-10T22:00:00Z"
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "start-time-offenderNo1",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "start-time-offenderNo2",
-                            "text": "Start test message",
-                          },
-                        ]
-                      }
-                      futureTimeOnly={true}
                       name="start-time-offenderNo1"
-                      now={"2019-10-10T21:00:00.000Z"}
-                      title="Start time"
+                      render={[Function]}
                     />
                   </td>
                 </tr>,
@@ -518,24 +438,8 @@ ShallowWrapper {
                     className="row-gutters"
                   >
                     <FieldWithError
-                      component={[Function]}
-                      date="2019-10-10T22:00:00Z"
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "start-time-offenderNo1",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "start-time-offenderNo2",
-                            "text": "Start test message",
-                          },
-                        ]
-                      }
-                      futureTimeOnly={true}
                       name="start-time-offenderNo2"
-                      now={"2019-10-10T21:00:00.000Z"}
-                      title="Start time"
+                      render={[Function]}
                     />
                   </td>
                 </tr>,
@@ -568,24 +472,8 @@ ShallowWrapper {
                       className="row-gutters"
                     >
                       <FieldWithError
-                        component={[Function]}
-                        date="2019-10-10T22:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
                         name="start-time-offenderNo1"
-                        now={"2019-10-10T21:00:00.000Z"}
-                        title="Start time"
+                        render={[Function]}
                       />
                     </td>,
                   ],
@@ -635,24 +523,8 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": <FieldWithError
-                        component={[Function]}
-                        date="2019-10-10T22:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
                         name="start-time-offenderNo1"
-                        now={"2019-10-10T21:00:00.000Z"}
-                        title="Start time"
+                        render={[Function]}
                       />,
                       "className": "row-gutters",
                     },
@@ -662,22 +534,8 @@ ShallowWrapper {
                       "key": undefined,
                       "nodeType": "function",
                       "props": Object {
-                        "component": [Function],
-                        "date": "2019-10-10T22:00:00Z",
-                        "errors": Array [
-                          Object {
-                            "targetName": "start-time-offenderNo1",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "start-time-offenderNo2",
-                            "text": "Start test message",
-                          },
-                        ],
-                        "futureTimeOnly": true,
                         "name": "start-time-offenderNo1",
-                        "now": "2019-10-10T21:00:00.000Z",
-                        "title": "Start time",
+                        "render": [Function],
                       },
                       "ref": null,
                       "rendered": null,
@@ -713,24 +571,8 @@ ShallowWrapper {
                       className="row-gutters"
                     >
                       <FieldWithError
-                        component={[Function]}
-                        date="2019-10-10T22:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
                         name="start-time-offenderNo2"
-                        now={"2019-10-10T21:00:00.000Z"}
-                        title="Start time"
+                        render={[Function]}
                       />
                     </td>,
                   ],
@@ -780,24 +622,8 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": <FieldWithError
-                        component={[Function]}
-                        date="2019-10-10T22:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
                         name="start-time-offenderNo2"
-                        now={"2019-10-10T21:00:00.000Z"}
-                        title="Start time"
+                        render={[Function]}
                       />,
                       "className": "row-gutters",
                     },
@@ -807,22 +633,8 @@ ShallowWrapper {
                       "key": undefined,
                       "nodeType": "function",
                       "props": Object {
-                        "component": [Function],
-                        "date": "2019-10-10T22:00:00Z",
-                        "errors": Array [
-                          Object {
-                            "targetName": "start-time-offenderNo1",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "start-time-offenderNo2",
-                            "text": "Start test message",
-                          },
-                        ],
-                        "futureTimeOnly": true,
                         "name": "start-time-offenderNo2",
-                        "now": "2019-10-10T21:00:00.000Z",
-                        "title": "Start time",
+                        "render": [Function],
                       },
                       "ref": null,
                       "rendered": null,
@@ -917,24 +729,8 @@ ShallowWrapper {
                   className="row-gutters"
                 >
                   <FieldWithError
-                    component={[Function]}
-                    date="2019-10-10T22:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "start-time-offenderNo1",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "start-time-offenderNo2",
-                          "text": "Start test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
                     name="start-time-offenderNo1"
-                    now={"2019-10-10T21:00:00.000Z"}
-                    title="Start time"
+                    render={[Function]}
                   />
                 </td>
               </tr>
@@ -960,24 +756,8 @@ ShallowWrapper {
                   className="row-gutters"
                 >
                   <FieldWithError
-                    component={[Function]}
-                    date="2019-10-10T22:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "start-time-offenderNo1",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "start-time-offenderNo2",
-                          "text": "Start test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
                     name="start-time-offenderNo2"
-                    now={"2019-10-10T21:00:00.000Z"}
-                    title="Start time"
+                    render={[Function]}
                   />
                 </td>
               </tr>
@@ -1064,24 +844,8 @@ ShallowWrapper {
                     className="row-gutters"
                   >
                     <FieldWithError
-                      component={[Function]}
-                      date="2019-10-10T22:00:00Z"
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "start-time-offenderNo1",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "start-time-offenderNo2",
-                            "text": "Start test message",
-                          },
-                        ]
-                      }
-                      futureTimeOnly={true}
                       name="start-time-offenderNo1"
-                      now={"2019-10-10T21:00:00.000Z"}
-                      title="Start time"
+                      render={[Function]}
                     />
                   </td>
                 </tr>
@@ -1107,24 +871,8 @@ ShallowWrapper {
                     className="row-gutters"
                   >
                     <FieldWithError
-                      component={[Function]}
-                      date="2019-10-10T22:00:00Z"
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "start-time-offenderNo1",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "start-time-offenderNo2",
-                            "text": "Start test message",
-                          },
-                        ]
-                      }
-                      futureTimeOnly={true}
                       name="start-time-offenderNo2"
-                      now={"2019-10-10T21:00:00.000Z"}
-                      title="Start time"
+                      render={[Function]}
                     />
                   </td>
                 </tr>
@@ -1274,24 +1022,8 @@ ShallowWrapper {
                       className="row-gutters"
                     >
                       <FieldWithError
-                        component={[Function]}
-                        date="2019-10-10T22:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
                         name="start-time-offenderNo1"
-                        now={"2019-10-10T21:00:00.000Z"}
-                        title="Start time"
+                        render={[Function]}
                       />
                     </td>
                   </tr>,
@@ -1317,24 +1049,8 @@ ShallowWrapper {
                       className="row-gutters"
                     >
                       <FieldWithError
-                        component={[Function]}
-                        date="2019-10-10T22:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
                         name="start-time-offenderNo2"
-                        now={"2019-10-10T21:00:00.000Z"}
-                        title="Start time"
+                        render={[Function]}
                       />
                     </td>
                   </tr>,
@@ -1367,24 +1083,8 @@ ShallowWrapper {
                         className="row-gutters"
                       >
                         <FieldWithError
-                          component={[Function]}
-                          date="2019-10-10T22:00:00Z"
-                          errors={
-                            Array [
-                              Object {
-                                "targetName": "start-time-offenderNo1",
-                                "text": "Start test message",
-                              },
-                              Object {
-                                "targetName": "start-time-offenderNo2",
-                                "text": "Start test message",
-                              },
-                            ]
-                          }
-                          futureTimeOnly={true}
                           name="start-time-offenderNo1"
-                          now={"2019-10-10T21:00:00.000Z"}
-                          title="Start time"
+                          render={[Function]}
                         />
                       </td>,
                     ],
@@ -1434,24 +1134,8 @@ ShallowWrapper {
                       "nodeType": "host",
                       "props": Object {
                         "children": <FieldWithError
-                          component={[Function]}
-                          date="2019-10-10T22:00:00Z"
-                          errors={
-                            Array [
-                              Object {
-                                "targetName": "start-time-offenderNo1",
-                                "text": "Start test message",
-                              },
-                              Object {
-                                "targetName": "start-time-offenderNo2",
-                                "text": "Start test message",
-                              },
-                            ]
-                          }
-                          futureTimeOnly={true}
                           name="start-time-offenderNo1"
-                          now={"2019-10-10T21:00:00.000Z"}
-                          title="Start time"
+                          render={[Function]}
                         />,
                         "className": "row-gutters",
                       },
@@ -1461,22 +1145,8 @@ ShallowWrapper {
                         "key": undefined,
                         "nodeType": "function",
                         "props": Object {
-                          "component": [Function],
-                          "date": "2019-10-10T22:00:00Z",
-                          "errors": Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ],
-                          "futureTimeOnly": true,
                           "name": "start-time-offenderNo1",
-                          "now": "2019-10-10T21:00:00.000Z",
-                          "title": "Start time",
+                          "render": [Function],
                         },
                         "ref": null,
                         "rendered": null,
@@ -1512,24 +1182,8 @@ ShallowWrapper {
                         className="row-gutters"
                       >
                         <FieldWithError
-                          component={[Function]}
-                          date="2019-10-10T22:00:00Z"
-                          errors={
-                            Array [
-                              Object {
-                                "targetName": "start-time-offenderNo1",
-                                "text": "Start test message",
-                              },
-                              Object {
-                                "targetName": "start-time-offenderNo2",
-                                "text": "Start test message",
-                              },
-                            ]
-                          }
-                          futureTimeOnly={true}
                           name="start-time-offenderNo2"
-                          now={"2019-10-10T21:00:00.000Z"}
-                          title="Start time"
+                          render={[Function]}
                         />
                       </td>,
                     ],
@@ -1579,24 +1233,8 @@ ShallowWrapper {
                       "nodeType": "host",
                       "props": Object {
                         "children": <FieldWithError
-                          component={[Function]}
-                          date="2019-10-10T22:00:00Z"
-                          errors={
-                            Array [
-                              Object {
-                                "targetName": "start-time-offenderNo1",
-                                "text": "Start test message",
-                              },
-                              Object {
-                                "targetName": "start-time-offenderNo2",
-                                "text": "Start test message",
-                              },
-                            ]
-                          }
-                          futureTimeOnly={true}
                           name="start-time-offenderNo2"
-                          now={"2019-10-10T21:00:00.000Z"}
-                          title="Start time"
+                          render={[Function]}
                         />,
                         "className": "row-gutters",
                       },
@@ -1606,22 +1244,8 @@ ShallowWrapper {
                         "key": undefined,
                         "nodeType": "function",
                         "props": Object {
-                          "component": [Function],
-                          "date": "2019-10-10T22:00:00Z",
-                          "errors": Array [
-                            Object {
-                              "targetName": "start-time-offenderNo1",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "start-time-offenderNo2",
-                              "text": "Start test message",
-                            },
-                          ],
-                          "futureTimeOnly": true,
                           "name": "start-time-offenderNo2",
-                          "now": "2019-10-10T21:00:00.000Z",
-                          "title": "Start time",
+                          "render": [Function],
                         },
                         "ref": null,
                         "rendered": null,
@@ -1696,6 +1320,7 @@ ShallowWrapper {
         </H3>
         <FormFields
           date="2019-10-10T22:00:00Z"
+          dispatchAppointmentPrisoners={[Function]}
           error="network error"
           errors={null}
           now={"2019-10-10T21:00:00.000Z"}
@@ -1775,6 +1400,7 @@ ShallowWrapper {
           </H3>,
           <FormFields
             date="2019-10-10T22:00:00Z"
+            dispatchAppointmentPrisoners={[Function]}
             error="network error"
             errors={null}
             now={"2019-10-10T21:00:00.000Z"}
@@ -1843,6 +1469,7 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "date": "2019-10-10T22:00:00Z",
+            "dispatchAppointmentPrisoners": [Function],
             "error": "network error",
             "errors": null,
             "now": "2019-10-10T21:00:00.000Z",
@@ -1976,6 +1603,7 @@ ShallowWrapper {
           </H3>
           <FormFields
             date="2019-10-10T22:00:00Z"
+            dispatchAppointmentPrisoners={[Function]}
             error="network error"
             errors={null}
             now={"2019-10-10T21:00:00.000Z"}
@@ -2055,6 +1683,7 @@ ShallowWrapper {
             </H3>,
             <FormFields
               date="2019-10-10T22:00:00Z"
+              dispatchAppointmentPrisoners={[Function]}
               error="network error"
               errors={null}
               now={"2019-10-10T21:00:00.000Z"}
@@ -2123,6 +1752,7 @@ ShallowWrapper {
             "nodeType": "function",
             "props": Object {
               "date": "2019-10-10T22:00:00Z",
+              "dispatchAppointmentPrisoners": [Function],
               "error": "network error",
               "errors": null,
               "now": "2019-10-10T21:00:00.000Z",

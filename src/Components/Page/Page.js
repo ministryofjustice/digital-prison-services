@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Header from '@govuk-react/header'
+import Header from '@govuk-react/heading'
 import BackLink from '@govuk-react/back-link'
 import Error from '../../Error'
 import Spinner from '../../Spinner'

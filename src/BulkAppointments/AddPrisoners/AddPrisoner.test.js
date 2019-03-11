@@ -36,6 +36,7 @@ describe('Add appointment form', () => {
           appointment={appointment}
           resetErrors={stubFunc}
           onCancel={() => {}}
+          dispatchAppointmentPrisoners={() => {}}
         />
       )
       expect(wrapper.dive()).toMatchSnapshot()
@@ -63,6 +64,19 @@ describe('Add appointment form', () => {
       expect(values).toEqual({
         'start-time-offenderNo1': preSelectedStartTime,
         'start-time-offenderNo2': preSelectedStartTime,
+      })
+    })
+
+    it('should use start time from offenders or use the start time passed in', () => {
+      const date = moment('2019-10-10').format(DATE_ONLY_FORMAT_SPEC)
+      const originalStartTime = '2000-10-10T22:10:00:00Z'
+      const newStartTime = '2019-10-10T21:00:00Z'
+      const offendersWithStartTime = [offenders[0], { ...offenders[1], startTime: newStartTime }]
+
+      const values = getInitialValues({ offenders: offendersWithStartTime, date, startTime: originalStartTime })
+      expect(values).toEqual({
+        'start-time-offenderNo1': originalStartTime,
+        'start-time-offenderNo2': newStartTime,
       })
     })
   })
