@@ -33,9 +33,10 @@ export class Page extends Component {
   render() {
     const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink, backLink } = this.props
 
-    if (loaded || error) {
+    if (alwaysRender || loaded || error) {
       return (
         <Fragment>
+          {alwaysRender && !loaded && <Spinner />}
           {showBreadcrumb && <Breadcrumb homeLink={homeLink} />}
           {backLink && <BackLink href={backLink}>Back</BackLink>}
           <Container>

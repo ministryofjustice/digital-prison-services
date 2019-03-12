@@ -101,5 +101,11 @@ describe('<Page />', () => {
       expect(wrapper.find('Error').prop('error')).toEqual(error)
       expect(wrapper.find('.page-content').contains(props.children)).toEqual(true)
     })
+
+    it('should display spinner and contents', () => {
+      const wrapper = shallow(<Page {...props} alwaysRender loaded={false} />)
+
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 })
