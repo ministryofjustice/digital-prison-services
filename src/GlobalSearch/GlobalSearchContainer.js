@@ -15,6 +15,7 @@ import {
   setGlobalSearchGenderFilter,
   resetError,
   setGlobalSearchDateOfBirthFilter,
+  setLoaded,
 } from '../redux/actions'
 import Page from '../Components/Page'
 
@@ -50,6 +51,7 @@ export class GlobalSearchContainer extends Component {
         await this.doGlobalSearch(0, searchText)
       } catch (error) {
         handleError(error)
+        setLoadedDispatch(true)
       }
     }
     setLoadedDispatch(true)
@@ -65,8 +67,10 @@ export class GlobalSearchContainer extends Component {
       genderFilter,
       locationFilter,
       dateOfBirthFilter,
+      setLoadedDispatch,
     } = this.props
 
+    setLoadedDispatch(false)
     const response = await axios.get('/api/globalSearch', {
       params: {
         searchText,
@@ -87,6 +91,8 @@ export class GlobalSearchContainer extends Component {
       category: 'Global search',
       action: `search page ${pageNumber} shown`,
     })
+
+    setLoadedDispatch(true)
   }
 
   async handlePageAction(pageNumber) {
@@ -262,6 +268,7 @@ const mapDispatchToProps = dispatch => ({
   titleDispatch: title => dispatch(setApplicationTitle(title)),
   resetErrorDispatch: () => dispatch(resetError()),
   dateOfBirthDispatch: dateOfBirth => dispatch(setGlobalSearchDateOfBirthFilter(dateOfBirth)),
+  setLoadedDispatch: status => dispatch(setLoaded(status)),
 })
 
 export default withRouter(

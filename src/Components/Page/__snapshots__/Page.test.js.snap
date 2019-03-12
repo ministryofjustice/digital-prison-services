@@ -1,0 +1,290 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Page /> when there is an error should display spinner and contents 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Page
+    alwaysRender={true}
+    applicationTitle=""
+    backLink="http://this/"
+    defaultHome="http://notmhome/"
+    dispatchApplicationTitle={[Function]}
+    error=""
+    homeLink="http://home/"
+    loaded={false}
+    showBreadcrumb={true}
+    title="Page title"
+  >
+    Page content
+  </Page>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <Spinner />,
+        <withRouter()
+          homeLink="http://home/"
+        />,
+        <StyledHoc
+          href="http://this/"
+          onClick={undefined}
+        >
+          Back
+        </StyledHoc>,
+        <Styled(div)>
+          <Heading
+            level={1}
+            size="LARGE"
+          >
+            Page title
+          </Heading>
+          
+          <div
+            className="page-content"
+          >
+            Page content
+          </div>
+        </Styled(div)>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {},
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "homeLink": "http://home/",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": "Back",
+          "href": "http://this/",
+          "onClick": undefined,
+        },
+        "ref": null,
+        "rendered": "Back",
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <Heading
+              level={1}
+              size="LARGE"
+            >
+              Page title
+            </Heading>,
+            "",
+            <div
+              className="page-content"
+            >
+              Page content
+            </div>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "Page title",
+              "level": 1,
+              "size": "LARGE",
+            },
+            "ref": null,
+            "rendered": "Page title",
+            "type": [Function],
+          },
+          "",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "Page content",
+              "className": "page-content",
+            },
+            "ref": null,
+            "rendered": "Page content",
+            "type": "div",
+          },
+        ],
+        "type": [Function],
+      },
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <Spinner />,
+          <withRouter()
+            homeLink="http://home/"
+          />,
+          <StyledHoc
+            href="http://this/"
+            onClick={undefined}
+          >
+            Back
+          </StyledHoc>,
+          <Styled(div)>
+            <Heading
+              level={1}
+              size="LARGE"
+            >
+              Page title
+            </Heading>
+            
+            <div
+              className="page-content"
+            >
+              Page content
+            </div>
+          </Styled(div)>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {},
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "homeLink": "http://home/",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "Back",
+            "href": "http://this/",
+            "onClick": undefined,
+          },
+          "ref": null,
+          "rendered": "Back",
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <Heading
+                level={1}
+                size="LARGE"
+              >
+                Page title
+              </Heading>,
+              "",
+              <div
+                className="page-content"
+              >
+                Page content
+              </div>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "Page title",
+                "level": 1,
+                "size": "LARGE",
+              },
+              "ref": null,
+              "rendered": "Page title",
+              "type": [Function],
+            },
+            "",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Page content",
+                "className": "page-content",
+              },
+              "ref": null,
+              "rendered": "Page content",
+              "type": "div",
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": Symbol(react.fragment),
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
