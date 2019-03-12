@@ -5,6 +5,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FormFields
     date="2019-10-10T22:00:00Z"
+    dispatchAppointmentPrisoners={[Function]}
     error={null}
     errors={
       Array [

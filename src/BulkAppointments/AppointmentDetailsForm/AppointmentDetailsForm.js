@@ -5,14 +5,12 @@ import { FORM_ERROR } from 'final-form'
 
 import Button from '@govuk-react/button'
 import ErrorSummary from '@govuk-react/error-summary'
-import LabelText from '@govuk-react/label-text'
-import Label from '@govuk-react/label'
 import ErrorText from '@govuk-react/error-text'
 
 import moment from 'moment'
 import { GREY_3, BLACK } from 'govuk-colours'
 import TimePicker from '../../Components/TimePicker/TimePicker'
-import DatePicker from '../../DatePickerInput'
+import FormDatePicker from '../../DatePickerInput/formDatePicker'
 
 import {
   HorizontallyStacked,
@@ -24,7 +22,7 @@ import {
 } from '../AddPrisoners/AddPrisoners.styles'
 
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
-import { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } from '../../date-formats'
+import { DATE_TIME_FORMAT_SPEC } from '../../date-formats'
 
 export const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => values => {
   const formErrors = []
@@ -99,21 +97,16 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
           <FieldWithError
             name="date"
             errors={errors}
-            render={({ input, meta }) => (
-              <Label error={meta.error}>
-                <LabelText> Select date </LabelText>
-                {meta.touched && meta.error && <ErrorText>{meta.error}</ErrorText>}
-                <DatePicker
-                  placeholder="Select"
-                  futureOnly
-                  inputId="date"
-                  title="date"
-                  error={meta.touched && meta.error ? meta.error : ''}
-                  handleDateChange={input.onChange}
-                  value={values.date && values.date.format(DAY_MONTH_YEAR)}
-                />
-              </Label>
-            )}
+            component={FormDatePicker}
+            label="Date"
+            placeholder="Select"
+            shouldShowDay={date =>
+              date.isAfter(
+                moment()
+                  .subtract(1, 'days')
+                  .startOf('day')
+              )
+            }
           />
           <FieldWithError
             date={values.date}
