@@ -45,6 +45,7 @@ describe('Add appointment form', () => {
     it('should pass correct props to all fields', () => {
       const wrapper = shallow(
         <FormFields
+          dispatchAppointmentPrisoners={() => {}}
           offenders={offenders}
           now={now}
           date={startTime}

@@ -153,6 +153,7 @@ ShallowWrapper {
             </FieldWithError>
             <Styled(div)>
               <FieldWithError
+                component={[Function]}
                 errors={
                   Array [
                     Object {
@@ -181,8 +182,10 @@ ShallowWrapper {
                     },
                   ]
                 }
+                label="Date"
                 name="date"
-                render={[Function]}
+                placeholder="Select"
+                shouldShowDay={[Function]}
               />
               <FieldWithError
                 component={[Function]}
@@ -439,6 +442,7 @@ ShallowWrapper {
               </FieldWithError>
               <Styled(div)>
                 <FieldWithError
+                  component={[Function]}
                   errors={
                     Array [
                       Object {
@@ -467,8 +471,10 @@ ShallowWrapper {
                       },
                     ]
                   }
+                  label="Date"
                   name="date"
-                  render={[Function]}
+                  placeholder="Select"
+                  shouldShowDay={[Function]}
                 />
                 <FieldWithError
                   component={[Function]}
@@ -684,6 +690,7 @@ ShallowWrapper {
                 </FieldWithError>,
                 <Styled(div)>
                   <FieldWithError
+                    component={[Function]}
                     errors={
                       Array [
                         Object {
@@ -712,8 +719,10 @@ ShallowWrapper {
                         },
                       ]
                     }
+                    label="Date"
                     name="date"
-                    render={[Function]}
+                    placeholder="Select"
+                    shouldShowDay={[Function]}
                   />
                   <FieldWithError
                     component={[Function]}
@@ -846,6 +855,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <FieldWithError
+                      component={[Function]}
                       errors={
                         Array [
                           Object {
@@ -874,8 +884,10 @@ ShallowWrapper {
                           },
                         ]
                       }
+                      label="Date"
                       name="date"
-                      render={[Function]}
+                      placeholder="Select"
+                      shouldShowDay={[Function]}
                     />,
                     <FieldWithError
                       component={[Function]}
@@ -922,6 +934,7 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "function",
                     "props": Object {
+                      "component": [Function],
                       "errors": Array [
                         Object {
                           "targetName": "date",
@@ -948,8 +961,10 @@ ShallowWrapper {
                           "text": "location type test message",
                         },
                       ],
+                      "label": "Date",
                       "name": "date",
-                      "render": [Function],
+                      "placeholder": "Select",
+                      "shouldShowDay": [Function],
                     },
                     "ref": null,
                     "rendered": null,
@@ -1391,6 +1406,7 @@ ShallowWrapper {
               </FieldWithError>
               <Styled(div)>
                 <FieldWithError
+                  component={[Function]}
                   errors={
                     Array [
                       Object {
@@ -1419,8 +1435,10 @@ ShallowWrapper {
                       },
                     ]
                   }
+                  label="Date"
                   name="date"
-                  render={[Function]}
+                  placeholder="Select"
+                  shouldShowDay={[Function]}
                 />
                 <FieldWithError
                   component={[Function]}
@@ -1677,6 +1695,7 @@ ShallowWrapper {
                 </FieldWithError>
                 <Styled(div)>
                   <FieldWithError
+                    component={[Function]}
                     errors={
                       Array [
                         Object {
@@ -1705,8 +1724,10 @@ ShallowWrapper {
                         },
                       ]
                     }
+                    label="Date"
                     name="date"
-                    render={[Function]}
+                    placeholder="Select"
+                    shouldShowDay={[Function]}
                   />
                   <FieldWithError
                     component={[Function]}
@@ -1922,6 +1943,7 @@ ShallowWrapper {
                   </FieldWithError>,
                   <Styled(div)>
                     <FieldWithError
+                      component={[Function]}
                       errors={
                         Array [
                           Object {
@@ -1950,8 +1972,10 @@ ShallowWrapper {
                           },
                         ]
                       }
+                      label="Date"
                       name="date"
-                      render={[Function]}
+                      placeholder="Select"
+                      shouldShowDay={[Function]}
                     />
                     <FieldWithError
                       component={[Function]}
@@ -2084,6 +2108,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <FieldWithError
+                        component={[Function]}
                         errors={
                           Array [
                             Object {
@@ -2112,8 +2137,10 @@ ShallowWrapper {
                             },
                           ]
                         }
+                        label="Date"
                         name="date"
-                        render={[Function]}
+                        placeholder="Select"
+                        shouldShowDay={[Function]}
                       />,
                       <FieldWithError
                         component={[Function]}
@@ -2160,6 +2187,7 @@ ShallowWrapper {
                       "key": undefined,
                       "nodeType": "function",
                       "props": Object {
+                        "component": [Function],
                         "errors": Array [
                           Object {
                             "targetName": "date",
@@ -2186,8 +2214,10 @@ ShallowWrapper {
                             "text": "location type test message",
                           },
                         ],
+                        "label": "Date",
                         "name": "date",
-                        "render": [Function],
+                        "placeholder": "Select",
+                        "shouldShowDay": [Function],
                       },
                       "ref": null,
                       "rendered": null,
