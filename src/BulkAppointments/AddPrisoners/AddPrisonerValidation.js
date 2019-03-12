@@ -30,7 +30,7 @@ const startTimeMinutesMustBeIncrementsOfFive = ({ values }) =>
     .filter(error => hasValue(error))
 
 const endTimesMustBeAfterStartTimes = ({ offenders, values, endTime }) => {
-  if (!endTime) return null
+  if (!endTime) return []
 
   const startTimes = offenders.map(offender => ({
     offenderNo: offender.offenderNo,
@@ -53,12 +53,12 @@ const endTimesMustBeAfterStartTimes = ({ offenders, values, endTime }) => {
 
 export const validateThenSubmit = ({ offenders, endTime, onSubmitAppointment }) => values => {
   const formErrors = [
-    ...startTimesMustHaveAValue({ offenders, values }),
-    ...startTimeMinutesMustBeIncrementsOfFive({ values }),
-    ...endTimesMustBeAfterStartTimes({ offenders, values, endTime }),
-  ].filter(error => hasValue(error))
+    ...Array.from(startTimesMustHaveAValue({ offenders, values })),
+    ...Array.from(startTimeMinutesMustBeIncrementsOfFive({ values })),
+    ...Array.from(endTimesMustBeAfterStartTimes({ offenders, values, endTime })),
+  ]
 
-  if (formErrors.length > 0) {
+  if (formErrors.filter(error => hasValue(error)).length > 0) {
     return {
       [FORM_ERROR]: formErrors,
     }
