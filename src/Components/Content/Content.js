@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import Header from '@govuk-react/header'
+import Header from '@govuk-react/heading'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'

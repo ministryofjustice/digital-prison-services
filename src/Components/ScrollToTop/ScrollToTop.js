@@ -5,9 +5,9 @@ import { withRouter } from 'react-router-dom'
 
 class ScrollToTop extends Component {
   componentDidUpdate(prevProps) {
-    const { location } = this.props
+    const { location, always } = this.props
 
-    if (location !== prevProps.location) {
+    if (always || location !== prevProps.location) {
       window.scrollTo(0, 0)
     }
   }
@@ -22,6 +22,11 @@ class ScrollToTop extends Component {
 ScrollToTop.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   children: PropTypes.node.isRequired,
+  always: PropTypes.bool,
+}
+
+ScrollToTop.defaultProps = {
+  always: false,
 }
 
 export default withRouter(ScrollToTop)

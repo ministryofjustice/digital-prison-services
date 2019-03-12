@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import { H3 } from '@govuk-react/header'
+import { H3 } from '@govuk-react/heading'
 import Button from '@govuk-react/button'
 import { BLACK, GREY_3 } from 'govuk-colours'
 import Page from '../../Components/Page'
@@ -23,6 +23,7 @@ import routePaths from '../../routePaths'
 import OffenderUpload from '../OffenderUpload/OffenderUpload'
 import AddPrisoners from './AddPrisoners'
 import AppointmentDetails from '../../AppointmentDetails/AppointmentDetails'
+import ScrollToTop from '../../Components/ScrollToTop'
 
 class AddPrisonerContainer extends Component {
   constructor(props) {
@@ -97,7 +98,7 @@ class AddPrisonerContainer extends Component {
     return (
       <Page title="Add prisoners" applicationTitle="Whereabouts" alwaysRender>
         {complete && (
-          <div>
+          <ScrollToTop always>
             <H3> {appointmentsCreated} appointments created </H3>
             <Divider />
             <AppointmentDetails {...lastAppointmentDetails} />
@@ -108,7 +109,7 @@ class AddPrisonerContainer extends Component {
                 Back to home page
               </Button>
             </ButtonContainer>
-          </div>
+          </ScrollToTop>
         )}
         {!complete && (
           <React.Fragment>
@@ -137,6 +138,7 @@ class AddPrisonerContainer extends Component {
                 now={now}
                 date={appointmentDetails.date}
                 startTime={appointmentDetails.startTime}
+                dispatchAppointmentPrisoners={dispatchAppointmentPrisoners}
               />
             </Container>
           </React.Fragment>
