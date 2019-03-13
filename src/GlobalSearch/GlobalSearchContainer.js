@@ -96,7 +96,7 @@ export class GlobalSearchContainer extends Component {
   }
 
   async handlePageAction(pageNumber) {
-    const { handleError, searchText, resetErrorDispatch } = this.props
+    const { handleError, searchText, resetErrorDispatch, setLoadedDispatch } = this.props
 
     resetErrorDispatch()
 
@@ -104,11 +104,12 @@ export class GlobalSearchContainer extends Component {
       await this.doGlobalSearch(pageNumber, searchText)
     } catch (error) {
       handleError(error)
+      setLoadedDispatch(true)
     }
   }
 
   async handleSearch(history) {
-    const { searchText, handleError, resetErrorDispatch, dateOfBirthFilter } = this.props
+    const { searchText, handleError, resetErrorDispatch, dateOfBirthFilter, setLoadedDispatch } = this.props
     resetErrorDispatch()
     const validForm = dateOfBirthFilter.blank || dateOfBirthFilter.valid
     this.setState(state => ({
@@ -126,6 +127,7 @@ export class GlobalSearchContainer extends Component {
       await this.doGlobalSearch(0, searchText)
     } catch (error) {
       handleError(error)
+      setLoadedDispatch(true)
     }
   }
 
