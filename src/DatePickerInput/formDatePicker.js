@@ -48,7 +48,6 @@ class FormDatePicker extends Component {
 
 FormDatePicker.propTypes = {
   shouldShowDay: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   meta: PropTypes.shape({
     touched: PropTypes.bool,

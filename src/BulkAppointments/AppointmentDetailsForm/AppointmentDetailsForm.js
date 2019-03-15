@@ -1,16 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
-import { FORM_ERROR } from 'final-form'
+import createDecorator from 'final-form-calculate'
 
 import Button from '@govuk-react/button'
 import ErrorSummary from '@govuk-react/error-summary'
 import ErrorText from '@govuk-react/error-text'
+import Checkbox from '@govuk-react/checkbox'
+import Label from '@govuk-react/label'
+import LabelText from '@govuk-react/label-text'
 
 import moment from 'moment'
 import { GREY_3, BLACK } from 'govuk-colours'
+import NumericInput from '../../Components/NumericInput/NumericInput'
 import TimePicker from '../../Components/TimePicker/TimePicker'
 import FormDatePicker from '../../DatePickerInput/formDatePicker'
+
+import RecurringAppointments from '../RecurringAppointments'
+import ValidateThenSubmit from './AppointmentDetailsFormValidation'
 
 import {
   HorizontallyStacked,
@@ -19,59 +26,18 @@ import {
   ButtonContainer,
   FullWidthTextArea,
   FullWidthSelect,
+  Indent,
+  AddSpacing,
 } from '../AddPrisoners/AddPrisoners.styles'
 
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
-import { DATE_TIME_FORMAT_SPEC } from '../../date-formats'
 
-export const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => values => {
-  const formErrors = []
-  const now = moment()
-  const isToday = values.date ? values.date.isSame(now, 'day') : false
-
-  if (values.comments && values.comments.length > 3600) {
-    formErrors.push({ targetName: 'comments', text: 'Maximum length should not exceed 3600 characters' })
-  }
-
-  if (!values.appointmentType) {
-    formErrors.push({ targetName: 'appointmentType', text: 'Select appointment type' })
-  }
-
-  if (!values.location) {
-    formErrors.push({ targetName: 'location', text: 'Select location' })
-  }
-
-  if (!values.date) {
-    formErrors.push({ targetName: 'date', text: 'Select date' })
-  }
-
-  if (!values.startTime) formErrors.push({ targetName: 'startTime', text: 'Select start time' })
-
-  if (isToday && moment(values.startTime).isBefore(now)) {
-    formErrors.push({ targetName: 'startTime', text: 'The start time must not be in the past' })
-  }
-
-  if (isToday && moment(values.endTime).isBefore(now)) {
-    formErrors.push({ targetName: 'endTime', text: 'The end time must be in the future' })
-  }
-
-  if (values.startTime && values.endTime) {
-    const endNotAfterStart = !moment(values.endTime, DATE_TIME_FORMAT_SPEC).isAfter(
-      moment(values.startTime, DATE_TIME_FORMAT_SPEC),
-      'minute'
-    )
-
-    if (endNotAfterStart) {
-      formErrors.push({ targetName: 'startTime', text: 'The start time must be before the end time' })
-      formErrors.push({ targetName: 'endTime', text: 'The end time must be after the start time' })
-    }
-  }
-
-  if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
-
-  return onSuccess({ ...values, appointmentTypes, locationTypes })
-}
-
+const endDateCalculator = createDecorator({
+  field: ['times', 'repeats', 'date', 'startTime'],
+  updates: {
+    recurringEndDate: (change, values) => RecurringAppointments.recurringEndDate(values),
+  },
+})
 export const FormFields = ({ errors, values, appointmentTypes, locationTypes, now }) => (
   <React.Fragment>
     {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
@@ -118,6 +84,53 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
             label="Group start time"
           />
         </HorizontallyStacked>
+
+        <FieldWithError
+          name="recurring"
+          type="checkbox"
+          render={({ input }) => <Checkbox {...input}>This is a recurring appointment</Checkbox>}
+        />
+
+        {values.recurring && (
+          <AddSpacing>
+            <Indent>
+              <FieldWithError
+                errors={errors}
+                name="repeats"
+                component={FullWidthSelect}
+                placeholder="Select"
+                label="Repeats"
+              >
+                <option value="" disabled hidden>
+                  Select
+                </option>
+                <option value="DAILY">Daily</option>
+                <option value="WEEKDAYS">Weekdays (Monday to Friday)</option>
+                <option value="WEEKLY">Weekly</option>
+                <option value="FORTNIGHTLY">Fortnightly</option>
+                <option value="MONTHLY">Monthly</option>
+              </FieldWithError>
+
+              <FieldWithError
+                errors={errors}
+                name="times"
+                label="Number of times"
+                hint="Up to a maximum of 1 year"
+                component={NumericInput}
+              />
+
+              {values.repeats &&
+                values.times &&
+                values.startTime &&
+                values.recurringEndDate && (
+                  <Label>
+                    <LabelText> Ends on</LabelText>
+                    <strong>{values.recurringEndDate}</strong>
+                  </Label>
+                )}
+            </Indent>
+          </AddSpacing>
+        )}
       </div>
 
       <RightSection>
@@ -207,7 +220,8 @@ const AppointmentDetailsForm = ({
 }) => (
   <Form
     initialValues={initialValues}
-    onSubmit={validateThenSubmit({ onSuccess, appointmentTypes, locationTypes })}
+    onSubmit={ValidateThenSubmit({ onSuccess, appointmentTypes, locationTypes })}
+    decorators={[endDateCalculator]}
     render={({ handleSubmit, pristine, submitError, values }) => (
       <form onSubmit={handleSubmit}>
         {error && <ErrorText> {error} </ErrorText>}

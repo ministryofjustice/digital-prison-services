@@ -8,7 +8,10 @@ ShallowWrapper {
     comments=""
     endTime=""
     locationDescription="GYM"
+    recurring={false}
+    repeats=""
     startTime="2019-10-10T:21:0:00Z"
+    times=""
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -59,6 +62,7 @@ ShallowWrapper {
           </Styled(div)>
         </Styled(div)>,
         "",
+        false,
       ],
     },
     "ref": null,
@@ -242,6 +246,7 @@ ShallowWrapper {
         "type": [Function],
       },
       "",
+      false,
     ],
     "type": [Function],
   },
@@ -287,6 +292,7 @@ ShallowWrapper {
             </Styled(div)>
           </Styled(div)>,
           "",
+          false,
         ],
       },
       "ref": null,
@@ -470,6 +476,7 @@ ShallowWrapper {
           "type": [Function],
         },
         "",
+        false,
       ],
       "type": [Function],
     },
@@ -502,7 +509,10 @@ ShallowWrapper {
     comments="test"
     endTime=""
     locationDescription="GYM"
+    recurring={true}
+    repeats="WEEKLY"
     startTime="2019-10-10T:21:0:00Z"
+    times="1"
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -560,6 +570,21 @@ ShallowWrapper {
              
             test
              
+          </Styled(div)>
+        </Styled(div)>,
+        <Styled(div)>
+          <strong>
+             Recurring 
+          </strong>
+          <Styled(div)>
+            Weekly
+            , repeats 
+            1
+             times
+          </Styled(div)>
+          <Styled(div)>
+             Ends 
+            Thursday, October 10th 2019
           </Styled(div)>
         </Styled(div)>,
       ],
@@ -795,6 +820,81 @@ ShallowWrapper {
         ],
         "type": [Function],
       },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <strong>
+               Recurring 
+            </strong>,
+            <Styled(div)>
+              Weekly
+              , repeats 
+              1
+               times
+            </Styled(div)>,
+            <Styled(div)>
+               Ends 
+              Thursday, October 10th 2019
+            </Styled(div)>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": " Recurring ",
+            },
+            "ref": null,
+            "rendered": " Recurring ",
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                "Weekly",
+                ", repeats ",
+                "1",
+                " times",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              "Weekly",
+              ", repeats ",
+              "1",
+              " times",
+            ],
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                " Ends ",
+                "Thursday, October 10th 2019",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              " Ends ",
+              "Thursday, October 10th 2019",
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
     ],
     "type": [Function],
   },
@@ -847,6 +947,21 @@ ShallowWrapper {
                
               test
                
+            </Styled(div)>
+          </Styled(div)>,
+          <Styled(div)>
+            <strong>
+               Recurring 
+            </strong>
+            <Styled(div)>
+              Weekly
+              , repeats 
+              1
+               times
+            </Styled(div)>
+            <Styled(div)>
+               Ends 
+              Thursday, October 10th 2019
             </Styled(div)>
           </Styled(div)>,
         ],
@@ -1076,6 +1191,81 @@ ShallowWrapper {
                 " ",
                 "test",
                 " ",
+              ],
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <strong>
+                 Recurring 
+              </strong>,
+              <Styled(div)>
+                Weekly
+                , repeats 
+                1
+                 times
+              </Styled(div)>,
+              <Styled(div)>
+                 Ends 
+                Thursday, October 10th 2019
+              </Styled(div)>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": " Recurring ",
+              },
+              "ref": null,
+              "rendered": " Recurring ",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  "Weekly",
+                  ", repeats ",
+                  "1",
+                  " times",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                "Weekly",
+                ", repeats ",
+                "1",
+                " times",
+              ],
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": Array [
+                  " Ends ",
+                  "Thursday, October 10th 2019",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                " Ends ",
+                "Thursday, October 10th 2019",
               ],
               "type": [Function],
             },

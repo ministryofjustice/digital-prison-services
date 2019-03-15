@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Appointment form Form should pass correct props to all fields 1`] = `
+exports[`Appointment form should pass correct props to all fields 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FormFields
@@ -224,6 +224,11 @@ ShallowWrapper {
                 now={"2019-01-01T21:00:00.000Z"}
               />
             </Styled(div)>
+            <FieldWithError
+              name="recurring"
+              render={[Function]}
+              type="checkbox"
+            />
           </div>
           <Styled(div)>
             <FieldWithError
@@ -513,6 +518,11 @@ ShallowWrapper {
                   now={"2019-01-01T21:00:00.000Z"}
                 />
               </Styled(div)>
+              <FieldWithError
+                name="recurring"
+                render={[Function]}
+                type="checkbox"
+              />
             </div>,
             <Styled(div)>
               <FieldWithError
@@ -761,6 +771,12 @@ ShallowWrapper {
                     now={"2019-01-01T21:00:00.000Z"}
                   />
                 </Styled(div)>,
+                <FieldWithError
+                  name="recurring"
+                  render={[Function]}
+                  type="checkbox"
+                />,
+                undefined,
               ],
             },
             "ref": null,
@@ -1015,6 +1031,20 @@ ShallowWrapper {
                 ],
                 "type": [Function],
               },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "name": "recurring",
+                  "render": [Function],
+                  "type": "checkbox",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              undefined,
             ],
             "type": "div",
           },
@@ -1477,6 +1507,11 @@ ShallowWrapper {
                   now={"2019-01-01T21:00:00.000Z"}
                 />
               </Styled(div)>
+              <FieldWithError
+                name="recurring"
+                render={[Function]}
+                type="checkbox"
+              />
             </div>
             <Styled(div)>
               <FieldWithError
@@ -1766,6 +1801,11 @@ ShallowWrapper {
                     now={"2019-01-01T21:00:00.000Z"}
                   />
                 </Styled(div)>
+                <FieldWithError
+                  name="recurring"
+                  render={[Function]}
+                  type="checkbox"
+                />
               </div>,
               <Styled(div)>
                 <FieldWithError
@@ -2014,6 +2054,12 @@ ShallowWrapper {
                       now={"2019-01-01T21:00:00.000Z"}
                     />
                   </Styled(div)>,
+                  <FieldWithError
+                    name="recurring"
+                    render={[Function]}
+                    type="checkbox"
+                  />,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -2268,6 +2314,20 @@ ShallowWrapper {
                   ],
                   "type": [Function],
                 },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "name": "recurring",
+                    "render": [Function],
+                    "type": "checkbox",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                undefined,
               ],
               "type": "div",
             },
@@ -2589,7 +2649,7 @@ ShallowWrapper {
 }
 `;
 
-exports[`Appointment form Form should render correctly 1`] = `
+exports[`Appointment form should render correctly 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <AppointmentDetailsForm
@@ -2615,6 +2675,9 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
+      "decorators": Array [
+        [Function],
+      ],
       "initialValues": Object {},
       "onSubmit": [Function],
       "render": [Function],
@@ -2629,6 +2692,9 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
+        "decorators": Array [
+          [Function],
+        ],
         "initialValues": Object {},
         "onSubmit": [Function],
         "render": [Function],
@@ -2658,10 +2724,15 @@ ShallowWrapper {
 }
 `;
 
-exports[`Appointment form Form should render correctly 2`] = `
+exports[`Appointment form should render correctly 2`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ReactFinalForm
+    decorators={
+      Array [
+        [Function],
+      ]
+    }
     initialValues={Object {}}
     onSubmit={[Function]}
     render={[Function]}

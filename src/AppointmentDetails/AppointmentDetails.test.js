@@ -11,6 +11,9 @@ describe('Appointment details', () => {
         locationDescription="GYM"
         comments="test"
         startTime="2019-10-10T:21:0:00Z"
+        repeats="WEEKLY"
+        times="1"
+        recurring
       />
     )
 

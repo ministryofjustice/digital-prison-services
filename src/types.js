@@ -1,5 +1,4 @@
-import { shape, string, bool, oneOfType, arrayOf, node, number, instanceOf } from 'prop-types'
-import moment from 'moment'
+import { shape, string, bool, oneOfType, arrayOf, node, number } from 'prop-types'
 
 export const childrenType = oneOfType([arrayOf(node), node])
 
@@ -13,9 +12,9 @@ export const routeMatchType = shape({
 })
 
 export const appointmentType = shape({
-  locationId: number.isRequired,
-  appointmentType: string.isRequired,
-  startTime: string.isRequired,
-  endTime: instanceOf(moment),
+  locationId: number,
+  appointmentType: string,
+  startTime: string,
+  endTime: string,
   comments: string,
 })

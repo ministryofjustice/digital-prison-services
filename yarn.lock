@@ -846,6 +846,17 @@
     govuk-colours "^1.0.3"
     polished "^2.3.3"
 
+"@govuk-react/checkbox@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/checkbox/-/checkbox-0.6.0.tgz#2d90e1a4df0639815638c7cfa4191776a06d93ef"
+  integrity sha512-hqpcTfGdF1lilDDl/CeiZWaogTstXKfra0+y5veSMhRZKEvPZlu5q0XbwrefbIoL0eqIhp03vaFtQHWXo5BsTA==
+  dependencies:
+    "@govuk-react/constants" "^0.6.0"
+    "@govuk-react/hint-text" "^0.6.0"
+    "@govuk-react/hoc" "^0.6.0"
+    "@govuk-react/lib" "^0.6.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/constants@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.3.1.tgz#9c31afd86b27181a33b07c5bd2e97b058e058495"
@@ -976,6 +987,15 @@
     "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/hint-text@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/hint-text/-/hint-text-0.6.0.tgz#c1c77a6d5d8795b79f906126c76a3921022d07d8"
+  integrity sha512-+0CEQptakmNOIZVLiA46mzHXs8x2id1BjiOvPEPxeI4cO95c4H2QBxAxJ5swGK5HVPpwUYeb8jCPdxEHL/Xa+g==
+  dependencies:
+    "@govuk-react/constants" "^0.6.0"
+    "@govuk-react/lib" "^0.6.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/hoc@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.3.1.tgz#bdf90cafccf3d86fb9e587b1d5693fe3e18f2d28"
@@ -993,6 +1013,17 @@
     "@govuk-react/lib" "^0.5.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/hoc@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.6.0.tgz#0ed10d21a3d4e74b6f7bbe3e68b43a6857243066"
+  integrity sha512-xoZi9OK//Cj6gRFEC2ORPXpnKrGAoloTnE8KM6i5Kn2yPFk7vDzK74wbWbOIFaSZWmmEghaeHPwzWHMZ1p6H5Q==
+  dependencies:
+    "@govuk-react/constants" "^0.6.0"
+    "@govuk-react/icons" "^0.6.0"
+    "@govuk-react/lib" "^0.6.0"
+    "@govuk-react/link" "^0.6.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/icons@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.3.1.tgz#5e7bca4d53f9eae969d10c741a15a2eb0f78a2c7"
@@ -1005,6 +1036,14 @@
   resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.5.1.tgz#20e4c9bef1fa9d2c40c7c921be989419b64f3639"
   dependencies:
     "@govuk-react/constants" "^0.5.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/icons@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.6.0.tgz#5ea423fcbcd8e857708f39e84e486739443185d4"
+  integrity sha512-Dl3UjFI7OJZVmclLjg2CwLxKYI/Vnn18HwdoVFdMrPTNUruPR/vw5EJoMmniJJPiMjFAiHSpsOVDOKVGZNkPrA==
+  dependencies:
+    "@govuk-react/constants" "^0.6.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/input-field@^0.5.0":
@@ -1115,6 +1154,14 @@
   integrity sha512-W5Ai4EOgEkhYlGueVOM//zjN4r6S0Mk4OXPbHF74px+tkB6AoPODA9EO8xHFcvYlcEAbcxZ1pU8m0DGO/jWtFg==
   dependencies:
     "@govuk-react/constants" "^0.6.0-alpha.1"
+    govuk-colours "^1.0.3"
+
+"@govuk-react/link@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/link/-/link-0.6.0.tgz#ea56d0de3ef13839e4c1663145f68323883450a3"
+  integrity sha512-dhtHFSI0uxq9XWTT9QxYkRfJNlR6+FlsxQP2ARNJNyyNnB35CmTpq2GTaXKP5a48jQ48EHx8IU15UZ+/RWd58Q==
+  dependencies:
+    "@govuk-react/lib" "^0.6.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/list-item@^0.5.0":
@@ -4866,6 +4913,11 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
+final-form-calculate@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/final-form-calculate/-/final-form-calculate-1.3.1.tgz#463089114245afa97fea94712bfbfca11da8413e"
+  integrity sha512-vZCvQ08w9FIoHLkZMcJSIXQr5TAVLxHfLD0thmm50zcNyJESruqhgvurSjWYPLoJGnIgbIb94Rumdg5ZXX5WiQ==
+
 final-form@^4.11.0:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.11.0.tgz#81750bda11b82c3ddf7b27092f29ebe427f8a560"
@@ -7566,6 +7618,11 @@ mixin-object@^2.0.1:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+moment-business-days@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/moment-business-days/-/moment-business-days-1.1.3.tgz#2922c3ffab8640a84dd27484336a5e0b3c07175a"
+  integrity sha512-VfpcLQxVWJ9ymq4ljaqPdzoco01kOJblX9sbfOCYguBvqCvVPYDJQTdez49a2gtSoSK8AjL8JfvLvmoQlrBMiQ==
 
 moment-timezone@^0.5.21:
   version "0.5.23"

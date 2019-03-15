@@ -1,14 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { Container, Info, Text } from './AppointmentDetails.styles'
-import { DAY_MONTH_YEAR, MOMENT_DAY_OF_THE_WEEK, DATE_TIME_FORMAT_SPEC } from '../date-formats'
+import { DayOfTheWeek, DayMonthYear, Time } from '../dateHelpers'
+import { properCaseName } from '../utils'
+import RecurringAppointments from '../BulkAppointments/RecurringAppointments'
 
-const DayOfTheWeek = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(MOMENT_DAY_OF_THE_WEEK)
-const DayMonthYear = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
-const Time = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')
-
-const AppointmentDetails = ({ appointmentTypeDescription, locationDescription, startTime, endTime, comments }) => (
+const AppointmentDetails = ({
+  appointmentTypeDescription,
+  locationDescription,
+  startTime,
+  endTime,
+  comments,
+  recurring,
+  repeats,
+  times,
+}) => (
   <Container>
     <Info>
       <strong> Appointment type </strong>
@@ -31,7 +37,17 @@ const AppointmentDetails = ({ appointmentTypeDescription, locationDescription, s
     {comments && (
       <Info>
         <strong> Comments </strong>
-        <Text> {comments.length > 30 ? `${comments.substr(0, 30)}....` : comments} </Text>
+        <Text> {comments.length > 15 ? `${comments.substr(0, 15)}....` : comments} </Text>
+      </Info>
+    )}
+
+    {recurring && (
+      <Info>
+        <strong> Recurring </strong>
+        <Text>
+          {properCaseName(repeats)}, repeats {times} times
+        </Text>
+        <Text> Ends {RecurringAppointments.recurringEndDate({ startTime, repeats, numberOfTimes: times })}</Text>
       </Info>
     )}
   </Container>
@@ -43,11 +59,17 @@ AppointmentDetails.propTypes = {
   startTime: PropTypes.string.isRequired,
   endTime: PropTypes.string,
   comments: PropTypes.string,
+  recurring: PropTypes.bool,
+  repeats: PropTypes.string,
+  times: PropTypes.string,
 }
 
 AppointmentDetails.defaultProps = {
   comments: '',
   endTime: '',
+  recurring: false,
+  repeats: '',
+  times: '',
 }
 
 export default AppointmentDetails
