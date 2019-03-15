@@ -107,6 +107,12 @@ const submitAppointments = ({ onSuccess, onError, appointment }) => async offend
       bookingId: offender.bookingId,
       startTime: offender.startTime,
     })),
+    repeat: appointment.recurring
+      ? {
+          repeatPeriod: appointment.repeats,
+          count: Number(appointment.times),
+        }
+      : undefined,
   }
 
   try {

@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { FORM_ERROR } from 'final-form'
 import { isValidMinutes } from '../../Components/TimePicker/TimePicker'
-import { DATE_TIME_FORMAT_SPEC } from '../../date-formats'
+import { DATE_TIME_FORMAT_SPEC } from '../../dateHelpers'
 
 export const offenderStartTimeFieldName = ({ offenderNo }) => `start-time-${offenderNo}`
 

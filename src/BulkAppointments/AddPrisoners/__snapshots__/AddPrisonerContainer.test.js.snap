@@ -12,7 +12,10 @@ ShallowWrapper {
         "comments": "test comment",
         "locationDescription": "Gym",
         "locationId": 1,
+        "recurring": true,
+        "repeats": "DAILY",
         "startTime": "2019-10-10T:21:00:00Z",
+        "times": "1",
       }
     }
     dispatchAppointmentPrisoners={[Function]}
@@ -136,7 +139,10 @@ ShallowWrapper {
               endTime=""
               locationDescription="Gym"
               locationId={1}
+              recurring={true}
+              repeats="DAILY"
               startTime="2019-10-10T:21:00:00Z"
+              times="1"
             />
             <Styled(div) />
             <OffenderUpload
@@ -154,7 +160,10 @@ ShallowWrapper {
                   "comments": "test comment",
                   "locationDescription": "Gym",
                   "locationId": 1,
+                  "recurring": true,
+                  "repeats": "DAILY",
                   "startTime": "2019-10-10T:21:00:00Z",
+                  "times": "1",
                 }
               }
               date={null}
@@ -194,7 +203,10 @@ ShallowWrapper {
                 endTime=""
                 locationDescription="Gym"
                 locationId={1}
+                recurring={true}
+                repeats="DAILY"
                 startTime="2019-10-10T:21:00:00Z"
+                times="1"
               />
               <Styled(div) />
               <OffenderUpload
@@ -212,7 +224,10 @@ ShallowWrapper {
                     "comments": "test comment",
                     "locationDescription": "Gym",
                     "locationId": 1,
+                    "recurring": true,
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
+                    "times": "1",
                   }
                 }
                 date={null}
@@ -256,7 +271,10 @@ ShallowWrapper {
                   endTime=""
                   locationDescription="Gym"
                   locationId={1}
+                  recurring={true}
+                  repeats="DAILY"
                   startTime="2019-10-10T:21:00:00Z"
+                  times="1"
                 />,
                 <Styled(div) />,
                 <OffenderUpload
@@ -274,7 +292,10 @@ ShallowWrapper {
                       "comments": "test comment",
                       "locationDescription": "Gym",
                       "locationId": 1,
+                      "recurring": true,
+                      "repeats": "DAILY",
                       "startTime": "2019-10-10T:21:00:00Z",
+                      "times": "1",
                     }
                   }
                   date={null}
@@ -312,7 +333,10 @@ ShallowWrapper {
                   "endTime": "",
                   "locationDescription": "Gym",
                   "locationId": 1,
+                  "recurring": true,
+                  "repeats": "DAILY",
                   "startTime": "2019-10-10T:21:00:00Z",
+                  "times": "1",
                 },
                 "ref": null,
                 "rendered": null,
@@ -361,7 +385,10 @@ ShallowWrapper {
                     "comments": "test comment",
                     "locationDescription": "Gym",
                     "locationId": 1,
+                    "recurring": true,
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
+                    "times": "1",
                   },
                   "date": null,
                   "dispatchAppointmentPrisoners": [Function],
@@ -410,7 +437,10 @@ ShallowWrapper {
                 endTime=""
                 locationDescription="Gym"
                 locationId={1}
+                recurring={true}
+                repeats="DAILY"
                 startTime="2019-10-10T:21:00:00Z"
+                times="1"
               />
               <Styled(div) />
               <OffenderUpload
@@ -428,7 +458,10 @@ ShallowWrapper {
                     "comments": "test comment",
                     "locationDescription": "Gym",
                     "locationId": 1,
+                    "recurring": true,
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
+                    "times": "1",
                   }
                 }
                 date={null}
@@ -468,7 +501,10 @@ ShallowWrapper {
                   endTime=""
                   locationDescription="Gym"
                   locationId={1}
+                  recurring={true}
+                  repeats="DAILY"
                   startTime="2019-10-10T:21:00:00Z"
+                  times="1"
                 />
                 <Styled(div) />
                 <OffenderUpload
@@ -486,7 +522,10 @@ ShallowWrapper {
                       "comments": "test comment",
                       "locationDescription": "Gym",
                       "locationId": 1,
+                      "recurring": true,
+                      "repeats": "DAILY",
                       "startTime": "2019-10-10T:21:00:00Z",
+                      "times": "1",
                     }
                   }
                   date={null}
@@ -530,7 +569,10 @@ ShallowWrapper {
                     endTime=""
                     locationDescription="Gym"
                     locationId={1}
+                    recurring={true}
+                    repeats="DAILY"
                     startTime="2019-10-10T:21:00:00Z"
+                    times="1"
                   />,
                   <Styled(div) />,
                   <OffenderUpload
@@ -548,7 +590,10 @@ ShallowWrapper {
                         "comments": "test comment",
                         "locationDescription": "Gym",
                         "locationId": 1,
+                        "recurring": true,
+                        "repeats": "DAILY",
                         "startTime": "2019-10-10T:21:00:00Z",
+                        "times": "1",
                       }
                     }
                     date={null}
@@ -586,7 +631,10 @@ ShallowWrapper {
                     "endTime": "",
                     "locationDescription": "Gym",
                     "locationId": 1,
+                    "recurring": true,
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
+                    "times": "1",
                   },
                   "ref": null,
                   "rendered": null,
@@ -635,7 +683,10 @@ ShallowWrapper {
                       "comments": "test comment",
                       "locationDescription": "Gym",
                       "locationId": 1,
+                      "recurring": true,
+                      "repeats": "DAILY",
                       "startTime": "2019-10-10T:21:00:00Z",
+                      "times": "1",
                     },
                     "date": null,
                     "dispatchAppointmentPrisoners": [Function],
@@ -694,7 +745,10 @@ ShallowWrapper {
         "comments": "test comment",
         "locationDescription": "Gym",
         "locationId": 1,
+        "recurring": true,
+        "repeats": "DAILY",
         "startTime": "2019-10-10T:21:00:00Z",
+        "times": "1",
       }
     }
     dispatchAppointmentPrisoners={[Function]}
@@ -830,7 +884,10 @@ ShallowWrapper {
             endTime=""
             locationDescription="Gym"
             locationId={1}
+            recurring={true}
+            repeats="DAILY"
             startTime="2019-10-10T:21:00:00Z"
+            times="1"
           />
           <Styled(div) />
           <Styled(div)>
@@ -886,7 +943,10 @@ ShallowWrapper {
               endTime=""
               locationDescription="Gym"
               locationId={1}
+              recurring={true}
+              repeats="DAILY"
               startTime="2019-10-10T:21:00:00Z"
+              times="1"
             />,
             <Styled(div) />,
             <Styled(div)>
@@ -958,7 +1018,10 @@ ShallowWrapper {
               "endTime": "",
               "locationDescription": "Gym",
               "locationId": 1,
+              "recurring": true,
+              "repeats": "DAILY",
               "startTime": "2019-10-10T:21:00:00Z",
+              "times": "1",
             },
             "ref": null,
             "rendered": null,
@@ -1080,7 +1143,10 @@ ShallowWrapper {
               endTime=""
               locationDescription="Gym"
               locationId={1}
+              recurring={true}
+              repeats="DAILY"
               startTime="2019-10-10T:21:00:00Z"
+              times="1"
             />
             <Styled(div) />
             <Styled(div)>
@@ -1136,7 +1202,10 @@ ShallowWrapper {
                 endTime=""
                 locationDescription="Gym"
                 locationId={1}
+                recurring={true}
+                repeats="DAILY"
                 startTime="2019-10-10T:21:00:00Z"
+                times="1"
               />,
               <Styled(div) />,
               <Styled(div)>
@@ -1208,7 +1277,10 @@ ShallowWrapper {
                 "endTime": "",
                 "locationDescription": "Gym",
                 "locationId": 1,
+                "recurring": true,
+                "repeats": "DAILY",
                 "startTime": "2019-10-10T:21:00:00Z",
+                "times": "1",
               },
               "ref": null,
               "rendered": null,

@@ -15,6 +15,10 @@ const mapToAppointmentDetails = appointmentDetails => {
     startTime,
     endTime,
     comments,
+    recurring,
+    repeats,
+    times,
+    recurringEndDate,
   } = appointmentDetails
 
   return {
@@ -26,6 +30,10 @@ const mapToAppointmentDetails = appointmentDetails => {
     comments,
     appointmentTypeDescription: appointmentTypes.find(apt => apt.id === appointmentType).description,
     locationDescription: locationTypes.find(loc => loc.id === Number(location)).description,
+    recurring,
+    times,
+    repeats,
+    recurringEndDate,
   }
 }
 

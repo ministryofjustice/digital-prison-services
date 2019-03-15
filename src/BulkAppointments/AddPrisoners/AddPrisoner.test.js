@@ -5,7 +5,7 @@ import moment from 'moment'
 import AddAppointmentForm, { FormFields, getInitialValues } from './AddPrisoners'
 import { offenderStartTimeFieldName } from './AddPrisonerValidation'
 
-import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../date-formats'
+import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../dateHelpers'
 
 describe('Add appointment form', () => {
   const stubFunc = () => {}

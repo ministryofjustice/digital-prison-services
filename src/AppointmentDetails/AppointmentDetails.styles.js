@@ -3,12 +3,18 @@ import { BREAKPOINTS, SPACING, FONT_SIZE } from '@govuk-react/constants'
 
 export const Container = styled('div')`
   display: flex;
-  flow-direction: column;
-  justify-content: space-between;
-  max-width: 80%;
+  flex-direction: row;
 
-  @media (max-width: 1200px) {
-    max-width: 100%;
+  div {
+    margin-right: ${SPACING.SCALE_4};
+  }
+
+  @media (max-width: ${BREAKPOINTS.LARGESCREEN}) {
+    flex-direction: column;
+    div {
+      margin-bottom: ${SPACING.SCALE_2};
+      margin-right: 0;
+    }
   }
 `
 
@@ -27,9 +33,6 @@ export const Text = styled('div')`
   @media (max-width: ${BREAKPOINTS.LARGESCREEN}) {
     font-size: ${FONT_SIZE.SIZE_16};
   }
-  hyphens: auto;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
 `
 
 export default Container

@@ -1,8 +1,8 @@
 import styled from 'react-emotion'
 import Select from '@govuk-react/select'
 import TextArea from '@govuk-react/text-area'
-
-import { BREAKPOINTS, FONT_SIZE, SPACING } from '@govuk-react/constants'
+import { BORDER_COLOUR } from 'govuk-colours'
+import { BREAKPOINTS, FONT_SIZE, SPACING, BORDER_WIDTH } from '@govuk-react/constants'
 
 export const HorizontallyStacked = styled('div')`
   display: flex;
@@ -60,4 +60,15 @@ export const Table = styled('table')`
       font-size: ${FONT_SIZE.SIZE_16} !important;
     }
   }
+`
+
+export const Indent = styled('div')`
+  padding: ${SPACING.SCALE_3};
+  padding-left: ${SPACING.SCALE_4};
+  border-left: ${BORDER_WIDTH} solid ${BORDER_COLOUR};
+  margin-bottom: ${SPACING.SCALE_1};
+`
+
+export const AddSpacing = styled('div')`
+  margin-bottom: ${SPACING.SCALE_5};
 `

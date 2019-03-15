@@ -24,6 +24,7 @@ import OffenderUpload from '../OffenderUpload/OffenderUpload'
 import AddPrisoners from './AddPrisoners'
 import AppointmentDetails from '../../AppointmentDetails/AppointmentDetails'
 import ScrollToTop from '../../Components/ScrollToTop'
+import { DATE_ONLY_FORMAT_SPEC } from '../../dateHelpers'
 
 class AddPrisonerContainer extends Component {
   constructor(props) {
@@ -136,7 +137,7 @@ class AddPrisonerContainer extends Component {
                 appointment={appointmentDetails}
                 offenders={prisoners}
                 now={now}
-                date={appointmentDetails.date}
+                date={appointmentDetails.date && appointmentDetails.date.format(DATE_ONLY_FORMAT_SPEC)}
                 startTime={appointmentDetails.startTime}
                 dispatchAppointmentPrisoners={dispatchAppointmentPrisoners}
               />

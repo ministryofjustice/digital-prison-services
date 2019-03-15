@@ -10,7 +10,7 @@ import ErrorText from '@govuk-react/error-text'
 import { Container } from './TimePicker.styles'
 import { inputType, metaType } from '../../types'
 
-import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../date-formats'
+import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../dateHelpers'
 
 const validMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
 
