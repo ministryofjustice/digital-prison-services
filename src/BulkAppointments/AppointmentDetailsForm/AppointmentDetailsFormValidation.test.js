@@ -78,17 +78,17 @@ describe('Appointment form validation', () => {
   })
 
   it('should return error messages when required fields are missing', () => {
-    const validationMessages = validateThenSubmit({ onSuccess: jest.fn })({})
+    const validationMessages = validateThenSubmit({ onSuccess: jest.fn })({ recurring: true })
 
     const date = findValidationError('date', validationMessages)
     const location = findValidationError('location', validationMessages)
-    const applicationType = findValidationError('appointmentType', validationMessages)
+    const appointmentType = findValidationError('appointmentType', validationMessages)
     const repeats = findValidationError('repeats', validationMessages)
     const times = findValidationError('times', validationMessages)
 
     expect(date.text).toBe('Select date')
     expect(location.text).toBe('Select location')
-    expect(applicationType.text).toBe('Select appointment type')
+    expect(appointmentType.text).toBe('Select appointment type')
     expect(repeats.text).toBe('Select a period')
     expect(times.text).toBe('Enter a number of times')
   })
@@ -138,10 +138,21 @@ describe('Appointment form validation', () => {
     expect(timesValidationError.text).toBe('The number of times cannot exceed 1 year')
   })
 
-  it('should return an error message when the repeats is week day and the date is at the weekend', () => {
-    const date = moment()
-      .endOf('week')
-      .endOf('day')
+  it('should return an error message when date is on a Saturday', () => {
+    const date = moment().day('SATURDAY')
+
+    const validationMessages = validateThenSubmit({})({
+      date,
+      recurring: true,
+      repeats: 'WEEKDAYS',
+    })
+
+    const timesValidationError = findValidationError('date', validationMessages)
+    expect(timesValidationError.text).toBe('The date must be a week day')
+  })
+
+  it('should return an error message when date is on a Sunday', () => {
+    const date = moment().day('SUNDAY')
 
     const validationMessages = validateThenSubmit({})({
       date,

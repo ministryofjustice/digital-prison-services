@@ -72,7 +72,9 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
   }
 
   if (values.recurring && values.repeats === 'WEEKDAYS') {
-    if (moment(values.date).day() === 6 || moment(values.date).day() === 7) {
+    const SATURDAY = 6
+    const SUNDAY = 0
+    if (moment(values.date).day() === SATURDAY || moment(values.date).day() === SUNDAY) {
       formErrors.push({
         targetName: 'date',
         text: 'The date must be a week day',
