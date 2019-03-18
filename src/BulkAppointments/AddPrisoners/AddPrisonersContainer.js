@@ -83,11 +83,13 @@ class AddPrisonerContainer extends Component {
       })
     )
 
-    if (appointmentDetails.recurring)
+    if (appointmentDetails.recurring) {
+      const { repeats, times } = appointmentDetails
       RecordRecurringAppointments({
-        repeatPeriod: appointmentDetails.repeat.repeatPeriod,
-        count: appointmentDetails.repeat.count,
+        repeatPeriod: repeats,
+        count: times,
       })
+    }
   }
 
   render() {

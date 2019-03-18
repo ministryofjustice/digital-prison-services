@@ -29,10 +29,8 @@ const initialState = {
       comments: 'test comment',
       times: '1',
       recurring: true,
-      repeat: {
-        repeatPeriod: 'DAILY',
-        count: 10,
-      },
+      repeats: 'DAILY',
+      counts: '2',
     },
     offenders: [{ bookingId: 1 }, { bookingId: 2 }],
   },
