@@ -15,8 +15,8 @@ const calculateEndDate = ({ startTime, repeats, numberOfTimes }) => {
 
   const unitOfTime = repeatsToMomentMap[repeats]
 
-  const InclusiveAdjustment = numberOfTimes - 1
-  const times = repeats === 'FORTNIGHTLY' ? Number(InclusiveAdjustment * 2) : Number(InclusiveAdjustment)
+  const inclusiveAdjustment = numberOfTimes - 1
+  const times = repeats === 'FORTNIGHTLY' ? Number(inclusiveAdjustment * 2) : Number(inclusiveAdjustment)
 
   return repeats === 'WEEKDAYS'
     ? moment(startTime, DATE_TIME_FORMAT_SPEC).businessAdd(times)
