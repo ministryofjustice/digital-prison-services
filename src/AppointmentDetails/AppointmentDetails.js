@@ -37,7 +37,7 @@ const AppointmentDetails = ({
     {comments && (
       <Info>
         <strong> Comments </strong>
-        <Text> {comments.length > 15 ? `${comments.substr(0, 15)}....` : comments} </Text>
+        <Text> {comments.length > 15 ? `${comments.substr(0, 15)}...` : comments} </Text>
       </Info>
     )}
 
