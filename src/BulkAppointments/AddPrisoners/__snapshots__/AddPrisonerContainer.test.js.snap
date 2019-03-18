@@ -10,13 +10,11 @@ ShallowWrapper {
         "appointmentType": "ACC",
         "appointmentTypeDescription": "Activities",
         "comments": "test comment",
+        "counts": "2",
         "locationDescription": "Gym",
         "locationId": 1,
         "recurring": true,
-        "repeat": Object {
-          "count": 10,
-          "repeatPeriod": "DAILY",
-        },
+        "repeats": "DAILY",
         "startTime": "2019-10-10T:21:00:00Z",
         "times": "1",
       }
@@ -139,17 +137,12 @@ ShallowWrapper {
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
               comments="test comment"
+              counts="2"
               endTime=""
               locationDescription="Gym"
               locationId={1}
               recurring={true}
-              repeat={
-                Object {
-                  "count": 10,
-                  "repeatPeriod": "DAILY",
-                }
-              }
-              repeats=""
+              repeats="DAILY"
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />
@@ -167,13 +160,11 @@ ShallowWrapper {
                   "appointmentType": "ACC",
                   "appointmentTypeDescription": "Activities",
                   "comments": "test comment",
+                  "counts": "2",
                   "locationDescription": "Gym",
                   "locationId": 1,
                   "recurring": true,
-                  "repeat": Object {
-                    "count": 10,
-                    "repeatPeriod": "DAILY",
-                  },
+                  "repeats": "DAILY",
                   "startTime": "2019-10-10T:21:00:00Z",
                   "times": "1",
                 }
@@ -212,17 +203,12 @@ ShallowWrapper {
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
                 comments="test comment"
+                counts="2"
                 endTime=""
                 locationDescription="Gym"
                 locationId={1}
                 recurring={true}
-                repeat={
-                  Object {
-                    "count": 10,
-                    "repeatPeriod": "DAILY",
-                  }
-                }
-                repeats=""
+                repeats="DAILY"
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />
@@ -240,13 +226,11 @@ ShallowWrapper {
                     "appointmentType": "ACC",
                     "appointmentTypeDescription": "Activities",
                     "comments": "test comment",
+                    "counts": "2",
                     "locationDescription": "Gym",
                     "locationId": 1,
                     "recurring": true,
-                    "repeat": Object {
-                      "count": 10,
-                      "repeatPeriod": "DAILY",
-                    },
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
                     "times": "1",
                   }
@@ -289,17 +273,12 @@ ShallowWrapper {
                   appointmentType="ACC"
                   appointmentTypeDescription="Activities"
                   comments="test comment"
+                  counts="2"
                   endTime=""
                   locationDescription="Gym"
                   locationId={1}
                   recurring={true}
-                  repeat={
-                    Object {
-                      "count": 10,
-                      "repeatPeriod": "DAILY",
-                    }
-                  }
-                  repeats=""
+                  repeats="DAILY"
                   startTime="2019-10-10T:21:00:00Z"
                   times="1"
                 />,
@@ -317,13 +296,11 @@ ShallowWrapper {
                       "appointmentType": "ACC",
                       "appointmentTypeDescription": "Activities",
                       "comments": "test comment",
+                      "counts": "2",
                       "locationDescription": "Gym",
                       "locationId": 1,
                       "recurring": true,
-                      "repeat": Object {
-                        "count": 10,
-                        "repeatPeriod": "DAILY",
-                      },
+                      "repeats": "DAILY",
                       "startTime": "2019-10-10T:21:00:00Z",
                       "times": "1",
                     }
@@ -360,15 +337,12 @@ ShallowWrapper {
                   "appointmentType": "ACC",
                   "appointmentTypeDescription": "Activities",
                   "comments": "test comment",
+                  "counts": "2",
                   "endTime": "",
                   "locationDescription": "Gym",
                   "locationId": 1,
                   "recurring": true,
-                  "repeat": Object {
-                    "count": 10,
-                    "repeatPeriod": "DAILY",
-                  },
-                  "repeats": "",
+                  "repeats": "DAILY",
                   "startTime": "2019-10-10T:21:00:00Z",
                   "times": "1",
                 },
@@ -417,13 +391,11 @@ ShallowWrapper {
                     "appointmentType": "ACC",
                     "appointmentTypeDescription": "Activities",
                     "comments": "test comment",
+                    "counts": "2",
                     "locationDescription": "Gym",
                     "locationId": 1,
                     "recurring": true,
-                    "repeat": Object {
-                      "count": 10,
-                      "repeatPeriod": "DAILY",
-                    },
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
                     "times": "1",
                   },
@@ -471,17 +443,12 @@ ShallowWrapper {
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
                 comments="test comment"
+                counts="2"
                 endTime=""
                 locationDescription="Gym"
                 locationId={1}
                 recurring={true}
-                repeat={
-                  Object {
-                    "count": 10,
-                    "repeatPeriod": "DAILY",
-                  }
-                }
-                repeats=""
+                repeats="DAILY"
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />
@@ -499,13 +466,11 @@ ShallowWrapper {
                     "appointmentType": "ACC",
                     "appointmentTypeDescription": "Activities",
                     "comments": "test comment",
+                    "counts": "2",
                     "locationDescription": "Gym",
                     "locationId": 1,
                     "recurring": true,
-                    "repeat": Object {
-                      "count": 10,
-                      "repeatPeriod": "DAILY",
-                    },
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
                     "times": "1",
                   }
@@ -544,17 +509,12 @@ ShallowWrapper {
                   appointmentType="ACC"
                   appointmentTypeDescription="Activities"
                   comments="test comment"
+                  counts="2"
                   endTime=""
                   locationDescription="Gym"
                   locationId={1}
                   recurring={true}
-                  repeat={
-                    Object {
-                      "count": 10,
-                      "repeatPeriod": "DAILY",
-                    }
-                  }
-                  repeats=""
+                  repeats="DAILY"
                   startTime="2019-10-10T:21:00:00Z"
                   times="1"
                 />
@@ -572,13 +532,11 @@ ShallowWrapper {
                       "appointmentType": "ACC",
                       "appointmentTypeDescription": "Activities",
                       "comments": "test comment",
+                      "counts": "2",
                       "locationDescription": "Gym",
                       "locationId": 1,
                       "recurring": true,
-                      "repeat": Object {
-                        "count": 10,
-                        "repeatPeriod": "DAILY",
-                      },
+                      "repeats": "DAILY",
                       "startTime": "2019-10-10T:21:00:00Z",
                       "times": "1",
                     }
@@ -621,17 +579,12 @@ ShallowWrapper {
                     appointmentType="ACC"
                     appointmentTypeDescription="Activities"
                     comments="test comment"
+                    counts="2"
                     endTime=""
                     locationDescription="Gym"
                     locationId={1}
                     recurring={true}
-                    repeat={
-                      Object {
-                        "count": 10,
-                        "repeatPeriod": "DAILY",
-                      }
-                    }
-                    repeats=""
+                    repeats="DAILY"
                     startTime="2019-10-10T:21:00:00Z"
                     times="1"
                   />,
@@ -649,13 +602,11 @@ ShallowWrapper {
                         "appointmentType": "ACC",
                         "appointmentTypeDescription": "Activities",
                         "comments": "test comment",
+                        "counts": "2",
                         "locationDescription": "Gym",
                         "locationId": 1,
                         "recurring": true,
-                        "repeat": Object {
-                          "count": 10,
-                          "repeatPeriod": "DAILY",
-                        },
+                        "repeats": "DAILY",
                         "startTime": "2019-10-10T:21:00:00Z",
                         "times": "1",
                       }
@@ -692,15 +643,12 @@ ShallowWrapper {
                     "appointmentType": "ACC",
                     "appointmentTypeDescription": "Activities",
                     "comments": "test comment",
+                    "counts": "2",
                     "endTime": "",
                     "locationDescription": "Gym",
                     "locationId": 1,
                     "recurring": true,
-                    "repeat": Object {
-                      "count": 10,
-                      "repeatPeriod": "DAILY",
-                    },
-                    "repeats": "",
+                    "repeats": "DAILY",
                     "startTime": "2019-10-10T:21:00:00Z",
                     "times": "1",
                   },
@@ -749,13 +697,11 @@ ShallowWrapper {
                       "appointmentType": "ACC",
                       "appointmentTypeDescription": "Activities",
                       "comments": "test comment",
+                      "counts": "2",
                       "locationDescription": "Gym",
                       "locationId": 1,
                       "recurring": true,
-                      "repeat": Object {
-                        "count": 10,
-                        "repeatPeriod": "DAILY",
-                      },
+                      "repeats": "DAILY",
                       "startTime": "2019-10-10T:21:00:00Z",
                       "times": "1",
                     },
@@ -814,13 +760,11 @@ ShallowWrapper {
         "appointmentType": "ACC",
         "appointmentTypeDescription": "Activities",
         "comments": "test comment",
+        "counts": "2",
         "locationDescription": "Gym",
         "locationId": 1,
         "recurring": true,
-        "repeat": Object {
-          "count": 10,
-          "repeatPeriod": "DAILY",
-        },
+        "repeats": "DAILY",
         "startTime": "2019-10-10T:21:00:00Z",
         "times": "1",
       }
@@ -955,17 +899,12 @@ ShallowWrapper {
             appointmentType="ACC"
             appointmentTypeDescription="Activities"
             comments="test comment"
+            counts="2"
             endTime=""
             locationDescription="Gym"
             locationId={1}
             recurring={true}
-            repeat={
-              Object {
-                "count": 10,
-                "repeatPeriod": "DAILY",
-              }
-            }
-            repeats=""
+            repeats="DAILY"
             startTime="2019-10-10T:21:00:00Z"
             times="1"
           />
@@ -1020,17 +959,12 @@ ShallowWrapper {
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
               comments="test comment"
+              counts="2"
               endTime=""
               locationDescription="Gym"
               locationId={1}
               recurring={true}
-              repeat={
-                Object {
-                  "count": 10,
-                  "repeatPeriod": "DAILY",
-                }
-              }
-              repeats=""
+              repeats="DAILY"
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />,
@@ -1101,15 +1035,12 @@ ShallowWrapper {
               "appointmentType": "ACC",
               "appointmentTypeDescription": "Activities",
               "comments": "test comment",
+              "counts": "2",
               "endTime": "",
               "locationDescription": "Gym",
               "locationId": 1,
               "recurring": true,
-              "repeat": Object {
-                "count": 10,
-                "repeatPeriod": "DAILY",
-              },
-              "repeats": "",
+              "repeats": "DAILY",
               "startTime": "2019-10-10T:21:00:00Z",
               "times": "1",
             },
@@ -1230,17 +1161,12 @@ ShallowWrapper {
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
               comments="test comment"
+              counts="2"
               endTime=""
               locationDescription="Gym"
               locationId={1}
               recurring={true}
-              repeat={
-                Object {
-                  "count": 10,
-                  "repeatPeriod": "DAILY",
-                }
-              }
-              repeats=""
+              repeats="DAILY"
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />
@@ -1295,17 +1221,12 @@ ShallowWrapper {
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
                 comments="test comment"
+                counts="2"
                 endTime=""
                 locationDescription="Gym"
                 locationId={1}
                 recurring={true}
-                repeat={
-                  Object {
-                    "count": 10,
-                    "repeatPeriod": "DAILY",
-                  }
-                }
-                repeats=""
+                repeats="DAILY"
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />,
@@ -1376,15 +1297,12 @@ ShallowWrapper {
                 "appointmentType": "ACC",
                 "appointmentTypeDescription": "Activities",
                 "comments": "test comment",
+                "counts": "2",
                 "endTime": "",
                 "locationDescription": "Gym",
                 "locationId": 1,
                 "recurring": true,
-                "repeat": Object {
-                  "count": 10,
-                  "repeatPeriod": "DAILY",
-                },
-                "repeats": "",
+                "repeats": "DAILY",
                 "startTime": "2019-10-10T:21:00:00Z",
                 "times": "1",
               },

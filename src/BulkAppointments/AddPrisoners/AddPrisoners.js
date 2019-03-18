@@ -38,6 +38,7 @@ export const FormFields = ({ errors, error, offenders, date, now, dispatchAppoin
             <td className="row-gutters">
               <FieldWithError
                 name={offenderStartTimeFieldName({ offenderNo: row.offenderNo })}
+                errors={errors}
                 render={({ meta, input }) => {
                   const subscribeToChanges = startTime => {
                     const offendersIncludingUpdatedStartTime = [
@@ -57,7 +58,6 @@ export const FormFields = ({ errors, error, offenders, date, now, dispatchAppoin
                         onChange: subscribeToChanges,
                       }}
                       meta={meta}
-                      errors={errors}
                       title="Start time"
                       date={date}
                       now={now}
