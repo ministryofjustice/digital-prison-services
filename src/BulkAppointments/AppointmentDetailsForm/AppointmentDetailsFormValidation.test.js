@@ -123,7 +123,7 @@ describe('Appointment form validation', () => {
     const yearAndDay = moment()
       .endOf('day')
       .add('1', 'year')
-      .add(1, 'days')
+      .add(2, 'days')
 
     const days = Math.abs(date.diff(yearAndDay, 'days', true))
 
@@ -171,7 +171,7 @@ describe('Appointment form validation', () => {
       startTime: date,
       recurring: true,
       repeats: 'WEEKDAYS',
-      times: 262,
+      times: 263,
     })
 
     const timesValidationError = findValidationError('times', validationMessages)

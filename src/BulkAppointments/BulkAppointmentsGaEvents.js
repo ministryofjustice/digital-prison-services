@@ -15,9 +15,9 @@ export const AppointmentTypeUsed = ({ total, appointmentType }) => ({
   value: total,
 })
 
-export const RecordWhenTheStartTimesHaveBeenAmended = ({ appointmentsDefaults, appointments }) => {
+export const RecordWhenTheStartTimesHaveBeenAmended = ({ startTime, appointments }) => {
   const countOfDifferences = appointments.filter(
-    appointment => appointment.startTime && appointment.startTime !== appointmentsDefaults.startTime
+    appointment => appointment.startTime && appointment.startTime !== startTime
   ).length
 
   if (countOfDifferences === 0) return null
@@ -32,4 +32,9 @@ export const RecordWhenTheStartTimesHaveBeenAmended = ({ appointmentsDefaults, a
 export const RecordAbandonment = () => ({
   ...bulkAppointmentGaEvent,
   action: `bulk appointments abandoned`,
+})
+
+export const RecordRecurringAppointments = ({ repeatPeriod, count }) => ({
+  ...bulkAppointmentGaEvent,
+  action: `Recurring appointment created ${repeatPeriod} ${count}`,
 })

@@ -13,6 +13,7 @@ import {
   AppointmentTypeUsed,
   NumberOfAppointmentsEvent,
   RecordAbandonment,
+  RecordRecurringAppointments,
   RecordWhenTheStartTimesHaveBeenAmended,
 } from '../BulkAppointmentsGaEvents'
 
@@ -81,6 +82,12 @@ class AddPrisonerContainer extends Component {
         appointments,
       })
     )
+
+    if (appointmentDetails.recurring)
+      RecordRecurringAppointments({
+        repeatPeriod: appointmentDetails.repeat.repeatPeriod,
+        count: appointmentDetails.repeat.count,
+      })
   }
 
   render() {

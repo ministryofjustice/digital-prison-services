@@ -3,6 +3,7 @@ import {
   NumberOfAppointmentsEvent,
   AppointmentTypeUsed,
   RecordWhenTheStartTimesHaveBeenAmended,
+  RecordRecurringAppointments,
 } from './BulkAppointmentsGaEvents'
 
 describe('Bulk appointment ga events', () => {
@@ -49,5 +50,9 @@ describe('Bulk appointment ga events', () => {
         appointments: [{ bookingId: 1 }, { bookingId: 2 }],
       })
     ).toEqual(null)
+  })
+
+  it('should return a ga recording the recurring appointments information', () => {
+    expect(RecordRecurringAppointments({ repeatPeriod: 'WEEKLY', count: 10 }))
   })
 })

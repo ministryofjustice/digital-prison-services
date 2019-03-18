@@ -27,9 +27,12 @@ const initialState = {
       locationDescription: 'Gym',
       startTime: '2019-10-10T:21:00:00Z',
       comments: 'test comment',
-      repeats: 'DAILY',
       times: '1',
       recurring: true,
+      repeat: {
+        repeatPeriod: 'DAILY',
+        count: 10,
+      },
     },
     offenders: [{ bookingId: 1 }, { bookingId: 2 }],
   },
