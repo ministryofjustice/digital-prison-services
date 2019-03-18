@@ -15,12 +15,12 @@ const calculateEndDate = ({ startTime, repeats, numberOfTimes }) => {
 
   const unitOfTime = repeatsToMomentMap[repeats]
 
-  if (repeats === 'WEEKDAYS') return moment(startTime, DATE_TIME_FORMAT_SPEC).businessAdd(numberOfTimes - 1, unitOfTime)
+  const InclusiveAdjustment = numberOfTimes - 1
+  const times = repeats === 'FORTNIGHTLY' ? Number(InclusiveAdjustment * 2) : Number(InclusiveAdjustment)
 
-  if (repeats === 'FORTNIGHTLY')
-    return moment(startTime, DATE_TIME_FORMAT_SPEC).add((numberOfTimes - 1) * 2, unitOfTime)
-
-  return moment(startTime, DATE_TIME_FORMAT_SPEC).add(numberOfTimes - 1, unitOfTime)
+  return repeats === 'WEEKDAYS'
+    ? moment(startTime, DATE_TIME_FORMAT_SPEC).businessAdd(times)
+    : moment(startTime, DATE_TIME_FORMAT_SPEC).add(times, unitOfTime)
 }
 
 const recurringEndDate = values => {
