@@ -17,37 +17,37 @@ const AppointmentDetails = ({
 }) => (
   <Container>
     <Info>
-      <strong> Appointment type </strong>
-      <Text> {appointmentTypeDescription} </Text>
+      <strong>Appointment type</strong>
+      <Text>{appointmentTypeDescription}</Text>
     </Info>
 
     <Info>
-      <strong> Appointment location </strong>
-      <Text> {locationDescription} </Text>
+      <strong>Appointment location</strong>
+      <Text>{locationDescription}</Text>
     </Info>
 
     <Info>
-      <strong> Date and time </strong>
+      <strong>Date and time </strong>
       <Text>
-        <div> {DayOfTheWeek(startTime)}</div>
+        <div>{DayOfTheWeek(startTime)}</div>
         {`${DayMonthYear(startTime)} - ${Time(startTime)}`} {endTime && ` - ${Time(endTime)}`}
       </Text>
     </Info>
 
     {comments && (
       <Info>
-        <strong> Comments </strong>
-        <Text> {comments.length > 15 ? `${comments.substr(0, 15)}...` : comments} </Text>
+        <strong>Comments</strong>
+        <Text>{comments.length > 15 ? `${comments.substr(0, 15)}...` : comments}</Text>
       </Info>
     )}
 
     {recurring && (
       <Info>
-        <strong> Recurring </strong>
+        <strong>Recurring</strong>
         <Text>
           {properCaseName(repeats)}, {times} occurrences
         </Text>
-        <Text> Ends {RecurringAppointments.recurringEndDate({ startTime, repeats, numberOfTimes: times })}</Text>
+        <Text>Ends {RecurringAppointments.recurringEndDate({ startTime, repeats, times })}</Text>
       </Info>
     )}
   </Container>

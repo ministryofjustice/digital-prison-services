@@ -29,31 +29,26 @@ ShallowWrapper {
       "children": Array [
         <Styled(div)>
           <strong>
-             Appointment type 
+            Appointment type
           </strong>
           <Styled(div)>
-             
             ACT
-             
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
           <strong>
-             Appointment location 
+            Appointment location
           </strong>
           <Styled(div)>
-             
             GYM
-             
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
           <strong>
-             Date and time 
+            Date and time 
           </strong>
           <Styled(div)>
             <div>
-               
               Thursday
             </div>
             10/10/2019 - 21:00
@@ -74,12 +69,10 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Appointment type 
+              Appointment type
             </strong>,
             <Styled(div)>
-               
               ACT
-               
             </Styled(div)>,
           ],
         },
@@ -90,10 +83,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Appointment type ",
+              "children": "Appointment type",
             },
             "ref": null,
-            "rendered": " Appointment type ",
+            "rendered": "Appointment type",
             "type": "strong",
           },
           Object {
@@ -101,18 +94,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": Array [
-                " ",
-                "ACT",
-                " ",
-              ],
+              "children": "ACT",
             },
             "ref": null,
-            "rendered": Array [
-              " ",
-              "ACT",
-              " ",
-            ],
+            "rendered": "ACT",
             "type": [Function],
           },
         ],
@@ -125,12 +110,10 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Appointment location 
+              Appointment location
             </strong>,
             <Styled(div)>
-               
               GYM
-               
             </Styled(div)>,
           ],
         },
@@ -141,10 +124,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Appointment location ",
+              "children": "Appointment location",
             },
             "ref": null,
-            "rendered": " Appointment location ",
+            "rendered": "Appointment location",
             "type": "strong",
           },
           Object {
@@ -152,18 +135,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": Array [
-                " ",
-                "GYM",
-                " ",
-              ],
+              "children": "GYM",
             },
             "ref": null,
-            "rendered": Array [
-              " ",
-              "GYM",
-              " ",
-            ],
+            "rendered": "GYM",
             "type": [Function],
           },
         ],
@@ -176,11 +151,10 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Date and time 
+              Date and time 
             </strong>,
             <Styled(div)>
               <div>
-                 
                 Thursday
               </div>
               10/10/2019 - 21:00
@@ -196,10 +170,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Date and time ",
+              "children": "Date and time ",
             },
             "ref": null,
-            "rendered": " Date and time ",
+            "rendered": "Date and time ",
             "type": "strong",
           },
           Object {
@@ -209,7 +183,6 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div>
-                   
                   Thursday
                 </div>,
                 "10/10/2019 - 21:00",
@@ -224,16 +197,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": Array [
-                    " ",
-                    "Thursday",
-                  ],
+                  "children": "Thursday",
                 },
                 "ref": null,
-                "rendered": Array [
-                  " ",
-                  "Thursday",
-                ],
+                "rendered": "Thursday",
                 "type": "div",
               },
               "10/10/2019 - 21:00",
@@ -259,31 +226,26 @@ ShallowWrapper {
         "children": Array [
           <Styled(div)>
             <strong>
-               Appointment type 
+              Appointment type
             </strong>
             <Styled(div)>
-               
               ACT
-               
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
             <strong>
-               Appointment location 
+              Appointment location
             </strong>
             <Styled(div)>
-               
               GYM
-               
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
             <strong>
-               Date and time 
+              Date and time 
             </strong>
             <Styled(div)>
               <div>
-                 
                 Thursday
               </div>
               10/10/2019 - 21:00
@@ -304,12 +266,10 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Appointment type 
+                Appointment type
               </strong>,
               <Styled(div)>
-                 
                 ACT
-                 
               </Styled(div)>,
             ],
           },
@@ -320,10 +280,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Appointment type ",
+                "children": "Appointment type",
               },
               "ref": null,
-              "rendered": " Appointment type ",
+              "rendered": "Appointment type",
               "type": "strong",
             },
             Object {
@@ -331,18 +291,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": Array [
-                  " ",
-                  "ACT",
-                  " ",
-                ],
+                "children": "ACT",
               },
               "ref": null,
-              "rendered": Array [
-                " ",
-                "ACT",
-                " ",
-              ],
+              "rendered": "ACT",
               "type": [Function],
             },
           ],
@@ -355,12 +307,10 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Appointment location 
+                Appointment location
               </strong>,
               <Styled(div)>
-                 
                 GYM
-                 
               </Styled(div)>,
             ],
           },
@@ -371,10 +321,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Appointment location ",
+                "children": "Appointment location",
               },
               "ref": null,
-              "rendered": " Appointment location ",
+              "rendered": "Appointment location",
               "type": "strong",
             },
             Object {
@@ -382,18 +332,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": Array [
-                  " ",
-                  "GYM",
-                  " ",
-                ],
+                "children": "GYM",
               },
               "ref": null,
-              "rendered": Array [
-                " ",
-                "GYM",
-                " ",
-              ],
+              "rendered": "GYM",
               "type": [Function],
             },
           ],
@@ -406,11 +348,10 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Date and time 
+                Date and time 
               </strong>,
               <Styled(div)>
                 <div>
-                   
                   Thursday
                 </div>
                 10/10/2019 - 21:00
@@ -426,10 +367,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Date and time ",
+                "children": "Date and time ",
               },
               "ref": null,
-              "rendered": " Date and time ",
+              "rendered": "Date and time ",
               "type": "strong",
             },
             Object {
@@ -439,7 +380,6 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div>
-                     
                     Thursday
                   </div>,
                   "10/10/2019 - 21:00",
@@ -454,16 +394,10 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": Array [
-                      " ",
-                      "Thursday",
-                    ],
+                    "children": "Thursday",
                   },
                   "ref": null,
-                  "rendered": Array [
-                    " ",
-                    "Thursday",
-                  ],
+                  "rendered": "Thursday",
                   "type": "div",
                 },
                 "10/10/2019 - 21:00",
@@ -510,9 +444,9 @@ ShallowWrapper {
     endTime=""
     locationDescription="GYM"
     recurring={true}
-    repeats="WEEKLY"
-    startTime="2019-10-10T:21:0:00Z"
-    times="1"
+    repeats="DAILY"
+    startTime="2019-03-20T:21:0:00Z"
+    times="5"
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -530,61 +464,54 @@ ShallowWrapper {
       "children": Array [
         <Styled(div)>
           <strong>
-             Appointment type 
+            Appointment type
           </strong>
           <Styled(div)>
-             
             ACT
-             
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
           <strong>
-             Appointment location 
+            Appointment location
           </strong>
           <Styled(div)>
-             
             GYM
-             
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
           <strong>
-             Date and time 
+            Date and time 
           </strong>
           <Styled(div)>
             <div>
-               
-              Thursday
+              Wednesday
             </div>
-            10/10/2019 - 21:00
+            20/03/2019 - 21:00
              
             
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
           <strong>
-             Comments 
+            Comments
           </strong>
           <Styled(div)>
-             
             test
-             
           </Styled(div)>
         </Styled(div)>,
         <Styled(div)>
           <strong>
-             Recurring 
+            Recurring
           </strong>
           <Styled(div)>
-            Weekly
+            Daily
             , 
-            1
+            5
              occurrences
           </Styled(div)>
           <Styled(div)>
-             Ends 
-            Thursday, October 10th 2019
+            Ends 
+            Sunday, March 24th 2019
           </Styled(div)>
         </Styled(div)>,
       ],
@@ -598,12 +525,10 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Appointment type 
+              Appointment type
             </strong>,
             <Styled(div)>
-               
               ACT
-               
             </Styled(div)>,
           ],
         },
@@ -614,10 +539,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Appointment type ",
+              "children": "Appointment type",
             },
             "ref": null,
-            "rendered": " Appointment type ",
+            "rendered": "Appointment type",
             "type": "strong",
           },
           Object {
@@ -625,18 +550,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": Array [
-                " ",
-                "ACT",
-                " ",
-              ],
+              "children": "ACT",
             },
             "ref": null,
-            "rendered": Array [
-              " ",
-              "ACT",
-              " ",
-            ],
+            "rendered": "ACT",
             "type": [Function],
           },
         ],
@@ -649,12 +566,10 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Appointment location 
+              Appointment location
             </strong>,
             <Styled(div)>
-               
               GYM
-               
             </Styled(div)>,
           ],
         },
@@ -665,10 +580,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Appointment location ",
+              "children": "Appointment location",
             },
             "ref": null,
-            "rendered": " Appointment location ",
+            "rendered": "Appointment location",
             "type": "strong",
           },
           Object {
@@ -676,18 +591,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": Array [
-                " ",
-                "GYM",
-                " ",
-              ],
+              "children": "GYM",
             },
             "ref": null,
-            "rendered": Array [
-              " ",
-              "GYM",
-              " ",
-            ],
+            "rendered": "GYM",
             "type": [Function],
           },
         ],
@@ -700,14 +607,13 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Date and time 
+              Date and time 
             </strong>,
             <Styled(div)>
               <div>
-                 
-                Thursday
+                Wednesday
               </div>
-              10/10/2019 - 21:00
+              20/03/2019 - 21:00
                
               
             </Styled(div)>,
@@ -720,10 +626,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Date and time ",
+              "children": "Date and time ",
             },
             "ref": null,
-            "rendered": " Date and time ",
+            "rendered": "Date and time ",
             "type": "strong",
           },
           Object {
@@ -733,10 +639,9 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div>
-                   
-                  Thursday
+                  Wednesday
                 </div>,
-                "10/10/2019 - 21:00",
+                "20/03/2019 - 21:00",
                 " ",
                 "",
               ],
@@ -748,19 +653,13 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": Array [
-                    " ",
-                    "Thursday",
-                  ],
+                  "children": "Wednesday",
                 },
                 "ref": null,
-                "rendered": Array [
-                  " ",
-                  "Thursday",
-                ],
+                "rendered": "Wednesday",
                 "type": "div",
               },
-              "10/10/2019 - 21:00",
+              "20/03/2019 - 21:00",
               " ",
               "",
             ],
@@ -776,12 +675,10 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Comments 
+              Comments
             </strong>,
             <Styled(div)>
-               
               test
-               
             </Styled(div)>,
           ],
         },
@@ -792,10 +689,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Comments ",
+              "children": "Comments",
             },
             "ref": null,
-            "rendered": " Comments ",
+            "rendered": "Comments",
             "type": "strong",
           },
           Object {
@@ -803,18 +700,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": Array [
-                " ",
-                "test",
-                " ",
-              ],
+              "children": "test",
             },
             "ref": null,
-            "rendered": Array [
-              " ",
-              "test",
-              " ",
-            ],
+            "rendered": "test",
             "type": [Function],
           },
         ],
@@ -827,17 +716,17 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <strong>
-               Recurring 
+              Recurring
             </strong>,
             <Styled(div)>
-              Weekly
+              Daily
               , 
-              1
+              5
                occurrences
             </Styled(div)>,
             <Styled(div)>
-               Ends 
-              Thursday, October 10th 2019
+              Ends 
+              Sunday, March 24th 2019
             </Styled(div)>,
           ],
         },
@@ -848,10 +737,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": " Recurring ",
+              "children": "Recurring",
             },
             "ref": null,
-            "rendered": " Recurring ",
+            "rendered": "Recurring",
             "type": "strong",
           },
           Object {
@@ -860,17 +749,17 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": Array [
-                "Weekly",
+                "Daily",
                 ", ",
-                "1",
+                "5",
                 " occurrences",
               ],
             },
             "ref": null,
             "rendered": Array [
-              "Weekly",
+              "Daily",
               ", ",
-              "1",
+              "5",
               " occurrences",
             ],
             "type": [Function],
@@ -881,14 +770,14 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": Array [
-                " Ends ",
-                "Thursday, October 10th 2019",
+                "Ends ",
+                "Sunday, March 24th 2019",
               ],
             },
             "ref": null,
             "rendered": Array [
-              " Ends ",
-              "Thursday, October 10th 2019",
+              "Ends ",
+              "Sunday, March 24th 2019",
             ],
             "type": [Function],
           },
@@ -907,61 +796,54 @@ ShallowWrapper {
         "children": Array [
           <Styled(div)>
             <strong>
-               Appointment type 
+              Appointment type
             </strong>
             <Styled(div)>
-               
               ACT
-               
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
             <strong>
-               Appointment location 
+              Appointment location
             </strong>
             <Styled(div)>
-               
               GYM
-               
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
             <strong>
-               Date and time 
+              Date and time 
             </strong>
             <Styled(div)>
               <div>
-                 
-                Thursday
+                Wednesday
               </div>
-              10/10/2019 - 21:00
+              20/03/2019 - 21:00
                
               
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
             <strong>
-               Comments 
+              Comments
             </strong>
             <Styled(div)>
-               
               test
-               
             </Styled(div)>
           </Styled(div)>,
           <Styled(div)>
             <strong>
-               Recurring 
+              Recurring
             </strong>
             <Styled(div)>
-              Weekly
+              Daily
               , 
-              1
+              5
                occurrences
             </Styled(div)>
             <Styled(div)>
-               Ends 
-              Thursday, October 10th 2019
+              Ends 
+              Sunday, March 24th 2019
             </Styled(div)>
           </Styled(div)>,
         ],
@@ -975,12 +857,10 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Appointment type 
+                Appointment type
               </strong>,
               <Styled(div)>
-                 
                 ACT
-                 
               </Styled(div)>,
             ],
           },
@@ -991,10 +871,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Appointment type ",
+                "children": "Appointment type",
               },
               "ref": null,
-              "rendered": " Appointment type ",
+              "rendered": "Appointment type",
               "type": "strong",
             },
             Object {
@@ -1002,18 +882,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": Array [
-                  " ",
-                  "ACT",
-                  " ",
-                ],
+                "children": "ACT",
               },
               "ref": null,
-              "rendered": Array [
-                " ",
-                "ACT",
-                " ",
-              ],
+              "rendered": "ACT",
               "type": [Function],
             },
           ],
@@ -1026,12 +898,10 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Appointment location 
+                Appointment location
               </strong>,
               <Styled(div)>
-                 
                 GYM
-                 
               </Styled(div)>,
             ],
           },
@@ -1042,10 +912,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Appointment location ",
+                "children": "Appointment location",
               },
               "ref": null,
-              "rendered": " Appointment location ",
+              "rendered": "Appointment location",
               "type": "strong",
             },
             Object {
@@ -1053,18 +923,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": Array [
-                  " ",
-                  "GYM",
-                  " ",
-                ],
+                "children": "GYM",
               },
               "ref": null,
-              "rendered": Array [
-                " ",
-                "GYM",
-                " ",
-              ],
+              "rendered": "GYM",
               "type": [Function],
             },
           ],
@@ -1077,14 +939,13 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Date and time 
+                Date and time 
               </strong>,
               <Styled(div)>
                 <div>
-                   
-                  Thursday
+                  Wednesday
                 </div>
-                10/10/2019 - 21:00
+                20/03/2019 - 21:00
                  
                 
               </Styled(div)>,
@@ -1097,10 +958,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Date and time ",
+                "children": "Date and time ",
               },
               "ref": null,
-              "rendered": " Date and time ",
+              "rendered": "Date and time ",
               "type": "strong",
             },
             Object {
@@ -1110,10 +971,9 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div>
-                     
-                    Thursday
+                    Wednesday
                   </div>,
-                  "10/10/2019 - 21:00",
+                  "20/03/2019 - 21:00",
                   " ",
                   "",
                 ],
@@ -1125,19 +985,13 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": Array [
-                      " ",
-                      "Thursday",
-                    ],
+                    "children": "Wednesday",
                   },
                   "ref": null,
-                  "rendered": Array [
-                    " ",
-                    "Thursday",
-                  ],
+                  "rendered": "Wednesday",
                   "type": "div",
                 },
-                "10/10/2019 - 21:00",
+                "20/03/2019 - 21:00",
                 " ",
                 "",
               ],
@@ -1153,12 +1007,10 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Comments 
+                Comments
               </strong>,
               <Styled(div)>
-                 
                 test
-                 
               </Styled(div)>,
             ],
           },
@@ -1169,10 +1021,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Comments ",
+                "children": "Comments",
               },
               "ref": null,
-              "rendered": " Comments ",
+              "rendered": "Comments",
               "type": "strong",
             },
             Object {
@@ -1180,18 +1032,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": Array [
-                  " ",
-                  "test",
-                  " ",
-                ],
+                "children": "test",
               },
               "ref": null,
-              "rendered": Array [
-                " ",
-                "test",
-                " ",
-              ],
+              "rendered": "test",
               "type": [Function],
             },
           ],
@@ -1204,17 +1048,17 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <strong>
-                 Recurring 
+                Recurring
               </strong>,
               <Styled(div)>
-                Weekly
+                Daily
                 , 
-                1
+                5
                  occurrences
               </Styled(div)>,
               <Styled(div)>
-                 Ends 
-                Thursday, October 10th 2019
+                Ends 
+                Sunday, March 24th 2019
               </Styled(div)>,
             ],
           },
@@ -1225,10 +1069,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": " Recurring ",
+                "children": "Recurring",
               },
               "ref": null,
-              "rendered": " Recurring ",
+              "rendered": "Recurring",
               "type": "strong",
             },
             Object {
@@ -1237,17 +1081,17 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": Array [
-                  "Weekly",
+                  "Daily",
                   ", ",
-                  "1",
+                  "5",
                   " occurrences",
                 ],
               },
               "ref": null,
               "rendered": Array [
-                "Weekly",
+                "Daily",
                 ", ",
-                "1",
+                "5",
                 " occurrences",
               ],
               "type": [Function],
@@ -1258,14 +1102,14 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": Array [
-                  " Ends ",
-                  "Thursday, October 10th 2019",
+                  "Ends ",
+                  "Sunday, March 24th 2019",
                 ],
               },
               "ref": null,
               "rendered": Array [
-                " Ends ",
-                "Thursday, October 10th 2019",
+                "Ends ",
+                "Sunday, March 24th 2019",
               ],
               "type": [Function],
             },

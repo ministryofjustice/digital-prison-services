@@ -10,9 +10,9 @@ describe('Appointment details', () => {
         appointmentTypeDescription="ACT"
         locationDescription="GYM"
         comments="test"
-        startTime="2019-10-10T:21:0:00Z"
-        repeats="WEEKLY"
-        times="1"
+        startTime="2019-03-20T:21:0:00Z"
+        repeats="DAILY"
+        times="5"
         recurring
       />
     )
