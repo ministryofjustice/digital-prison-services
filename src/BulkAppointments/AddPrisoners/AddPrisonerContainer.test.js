@@ -70,6 +70,37 @@ describe('Add prisoners container', () => {
   })
 
   it('should render completed view', () => {
+    store.getState.mockReturnValue({
+      ...initialState,
+      bulkAppointments: {
+        appointmentDetails: {
+          ...initialState.bulkAppointments.appointmentDetails,
+          recurring: false,
+        },
+      },
+    })
+    const wrapper = shallow(
+      <AddPrisonersContainer
+        now={now}
+        store={store}
+        handleError={() => {}}
+        raiseAnalyticsEvent={() => {}}
+        history={history}
+      />
+    )
+
+    const component = wrapper.dive()
+
+    component.instance().onBulkAppointmentsCreated({
+      appointments: [
+        { bookingId: 1, startTime: '2019-01-01T00:00:00Z' },
+        { bookingId: 2, startTime: '2019-01-01T00:00:00Z' },
+      ],
+    })
+    expect(component).toMatchSnapshot()
+  })
+
+  it('should render completed view for recurring', () => {
     const wrapper = shallow(
       <AddPrisonersContainer
         now={now}

@@ -171,7 +171,7 @@ describe('Appointment form validation', () => {
       startTime: date,
       recurring: true,
       repeats: 'WEEKDAYS',
-      times: 263,
+      times: 367,
     })
 
     const timesValidationError = findValidationError('times', validationMessages)

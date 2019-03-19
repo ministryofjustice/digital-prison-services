@@ -55,16 +55,13 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
   }
 
   if (values.recurring && values.repeats && values.times && values.startTime) {
-    const startOfPeriod = moment(values.startTime)
     const endOfPeriod = RecurringAppointments.calculateEndDate({
       startTime: values.startTime,
       repeats: values.repeats,
       numberOfTimes: values.times,
     })
 
-    const years = Math.abs(startOfPeriod.diff(endOfPeriod, 'years', true))
-
-    if (years > 1)
+    if (endOfPeriod && endOfPeriod.isSameOrAfter(now.startOf('day').add(1, 'years')))
       formErrors.push({
         targetName: 'times',
         text: 'The number of times cannot exceed 1 year',

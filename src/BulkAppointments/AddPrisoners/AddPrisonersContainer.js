@@ -109,7 +109,11 @@ class AddPrisonerContainer extends Component {
       <Page title="Add prisoners" applicationTitle="Whereabouts" alwaysRender>
         {complete && (
           <ScrollToTop always>
-            <H3> {appointmentsCreated} appointments created </H3>
+            {lastAppointmentDetails.recurring ? (
+              <H3> Appointments created </H3>
+            ) : (
+              <H3> {appointmentsCreated} appointments created </H3>
+            )}
             <Divider />
             <AppointmentDetails {...lastAppointmentDetails} />
             <Divider />
