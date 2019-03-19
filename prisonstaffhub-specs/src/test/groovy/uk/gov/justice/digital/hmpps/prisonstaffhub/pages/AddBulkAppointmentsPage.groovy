@@ -27,7 +27,7 @@ class AddBulkAppointmentsPage extends Page {
         tableRows { $('tbody tr') }
         successMessage { $('h3', text: 'Appointments created')}
         recurring { $(name: 'recurring') }
-        repats { $(name: 'repeats') }
+        repeats { $(name: 'repeats') }
         times { $(name: 'times') }
 
     }
