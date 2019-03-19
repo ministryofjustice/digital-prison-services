@@ -25,14 +25,14 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
       "children": Array [
-        <StyledHoc>
+        <LabelText>
            
           Age
            
-        </StyledHoc>,
+        </LabelText>,
         <HintText>
            
           Enter a value between 1 and 120
@@ -46,14 +46,14 @@ ShallowWrapper {
           type="number"
         />,
       ],
-      "error": undefined,
+      "error": false,
     },
     "ref": null,
     "rendered": Array [
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             " ",
@@ -105,7 +105,7 @@ ShallowWrapper {
           "$$typeof": Symbol(react.forward_ref),
           "attrs": Array [],
           "componentStyle": ComponentStyle {
-            "componentId": "sc-htpNat",
+            "componentId": "sc-EHOje",
             "isStatic": true,
             "rules": Array [
               "
@@ -116,7 +116,7 @@ ShallowWrapper {
           "displayName": "Styled(Input)",
           "foldedComponentIds": Array [],
           "render": [Function],
-          "styledComponentId": "sc-htpNat",
+          "styledComponentId": "sc-EHOje",
           "target": [Function],
           "toString": [Function],
           "warnTooManyClasses": [Function],
@@ -131,14 +131,14 @@ ShallowWrapper {
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "class",
+      "nodeType": "function",
       "props": Object {
         "children": Array [
-          <StyledHoc>
+          <LabelText>
              
             Age
              
-          </StyledHoc>,
+          </LabelText>,
           <HintText>
              
             Enter a value between 1 and 120
@@ -152,14 +152,14 @@ ShallowWrapper {
             type="number"
           />,
         ],
-        "error": undefined,
+        "error": false,
       },
       "ref": null,
       "rendered": Array [
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               " ",
@@ -211,7 +211,7 @@ ShallowWrapper {
             "$$typeof": Symbol(react.forward_ref),
             "attrs": Array [],
             "componentStyle": ComponentStyle {
-              "componentId": "sc-htpNat",
+              "componentId": "sc-EHOje",
               "isStatic": true,
               "rules": Array [
                 "
@@ -222,7 +222,7 @@ ShallowWrapper {
             "displayName": "Styled(Input)",
             "foldedComponentIds": Array [],
             "render": [Function],
-            "styledComponentId": "sc-htpNat",
+            "styledComponentId": "sc-EHOje",
             "target": [Function],
             "toString": [Function],
             "warnTooManyClasses": [Function],
@@ -284,22 +284,22 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
       "children": Array [
-        <StyledHoc>
+        <LabelText>
            
           Age
            
-        </StyledHoc>,
+        </LabelText>,
         <HintText>
            
           Enter a value between 1 and 120
            
         </HintText>,
-        <StyledHoc>
+        <ErrorText>
           Please enter an age between 1 and 120
-        </StyledHoc>,
+        </ErrorText>,
         <UNDEFINED
           error="Please enter an age between 1 and 120"
           name="age"
@@ -314,7 +314,7 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             " ",
@@ -352,7 +352,7 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": "Please enter an age between 1 and 120",
         },
@@ -376,7 +376,7 @@ ShallowWrapper {
           "$$typeof": Symbol(react.forward_ref),
           "attrs": Array [],
           "componentStyle": ComponentStyle {
-            "componentId": "sc-htpNat",
+            "componentId": "sc-EHOje",
             "isStatic": true,
             "rules": Array [
               "
@@ -387,7 +387,7 @@ ShallowWrapper {
           "displayName": "Styled(Input)",
           "foldedComponentIds": Array [],
           "render": [Function],
-          "styledComponentId": "sc-htpNat",
+          "styledComponentId": "sc-EHOje",
           "target": [Function],
           "toString": [Function],
           "warnTooManyClasses": [Function],
@@ -402,22 +402,22 @@ ShallowWrapper {
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "class",
+      "nodeType": "function",
       "props": Object {
         "children": Array [
-          <StyledHoc>
+          <LabelText>
              
             Age
              
-          </StyledHoc>,
+          </LabelText>,
           <HintText>
              
             Enter a value between 1 and 120
              
           </HintText>,
-          <StyledHoc>
+          <ErrorText>
             Please enter an age between 1 and 120
-          </StyledHoc>,
+          </ErrorText>,
           <UNDEFINED
             error="Please enter an age between 1 and 120"
             name="age"
@@ -432,7 +432,7 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               " ",
@@ -470,7 +470,7 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": "Please enter an age between 1 and 120",
           },
@@ -494,7 +494,7 @@ ShallowWrapper {
             "$$typeof": Symbol(react.forward_ref),
             "attrs": Array [],
             "componentStyle": ComponentStyle {
-              "componentId": "sc-htpNat",
+              "componentId": "sc-EHOje",
               "isStatic": true,
               "rules": Array [
                 "
@@ -505,7 +505,7 @@ ShallowWrapper {
             "displayName": "Styled(Input)",
             "foldedComponentIds": Array [],
             "render": [Function],
-            "styledComponentId": "sc-htpNat",
+            "styledComponentId": "sc-EHOje",
             "target": [Function],
             "toString": [Function],
             "warnTooManyClasses": [Function],

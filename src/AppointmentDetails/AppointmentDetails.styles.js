@@ -1,4 +1,4 @@
-import styled from 'react-emotion'
+import styled from 'styled-components'
 import { BREAKPOINTS, SPACING, FONT_SIZE } from '@govuk-react/constants'
 
 export const Container = styled('div')`

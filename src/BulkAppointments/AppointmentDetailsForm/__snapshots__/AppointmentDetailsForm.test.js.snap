@@ -69,7 +69,7 @@ ShallowWrapper {
     "nodeType": "function",
     "props": Object {
       "children": Array [
-        <StyledHoc
+        <ErrorSummary
           description={undefined}
           errors={
             Array [
@@ -102,10 +102,35 @@ ShallowWrapper {
           heading="There is a problem"
           onHandleErrorClick={[Function]}
         />,
-        <Styled(div)>
+        <UNDEFINED>
           <div>
             <FieldWithError
-              component={[Function]}
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-kEYyzF",
+                    "isStatic": true,
+                    "rules": Array [
+                      "
+  select {
+    width: 100% !important;
+  }
+",
+                    ],
+                  },
+                  "displayName": "Styled(Select)",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-kEYyzF",
+                  "target": [Function],
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                  Symbol(Symbol.hasInstance): [Function],
+                }
+              }
               errors={
                 Array [
                   Object {
@@ -151,7 +176,7 @@ ShallowWrapper {
                 app1
               </option>
             </FieldWithError>
-            <Styled(div)>
+            <UNDEFINED>
               <FieldWithError
                 component={[Function]}
                 errors={
@@ -223,16 +248,41 @@ ShallowWrapper {
                 name="startTime"
                 now={"2019-01-01T21:00:00.000Z"}
               />
-            </Styled(div)>
+            </UNDEFINED>
             <FieldWithError
               name="recurring"
               render={[Function]}
               type="checkbox"
             />
           </div>
-          <Styled(div)>
+          <UNDEFINED>
             <FieldWithError
-              component={[Function]}
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-kEYyzF",
+                    "isStatic": true,
+                    "rules": Array [
+                      "
+  select {
+    width: 100% !important;
+  }
+",
+                    ],
+                  },
+                  "displayName": "Styled(Select)",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-kEYyzF",
+                  "target": [Function],
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                  Symbol(Symbol.hasInstance): [Function],
+                }
+              }
               errors={
                 Array [
                   Object {
@@ -346,8 +396,8 @@ ShallowWrapper {
               name="comments"
               render={[Function]}
             />
-          </Styled(div)>
-        </Styled(div)>,
+          </UNDEFINED>
+        </UNDEFINED>,
       ],
     },
     "ref": null,
@@ -355,7 +405,7 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "description": undefined,
           "errors": Array [
@@ -394,12 +444,37 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <div>
               <FieldWithError
-                component={[Function]}
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-kEYyzF",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  select {
+    width: 100% !important;
+  }
+",
+                      ],
+                    },
+                    "displayName": "Styled(Select)",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-kEYyzF",
+                    "target": [Function],
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                    Symbol(Symbol.hasInstance): [Function],
+                  }
+                }
                 errors={
                   Array [
                     Object {
@@ -445,7 +520,7 @@ ShallowWrapper {
                   app1
                 </option>
               </FieldWithError>
-              <Styled(div)>
+              <UNDEFINED>
                 <FieldWithError
                   component={[Function]}
                   errors={
@@ -517,16 +592,41 @@ ShallowWrapper {
                   name="startTime"
                   now={"2019-01-01T21:00:00.000Z"}
                 />
-              </Styled(div)>
+              </UNDEFINED>
               <FieldWithError
                 name="recurring"
                 render={[Function]}
                 type="checkbox"
               />
             </div>,
-            <Styled(div)>
+            <UNDEFINED>
               <FieldWithError
-                component={[Function]}
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-kEYyzF",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  select {
+    width: 100% !important;
+  }
+",
+                      ],
+                    },
+                    "displayName": "Styled(Select)",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-kEYyzF",
+                    "target": [Function],
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                    Symbol(Symbol.hasInstance): [Function],
+                  }
+                }
                 errors={
                   Array [
                     Object {
@@ -640,7 +740,7 @@ ShallowWrapper {
                 name="comments"
                 render={[Function]}
               />
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -652,7 +752,32 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <FieldWithError
-                  component={[Function]}
+                  component={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kEYyzF",
+                        "isStatic": true,
+                        "rules": Array [
+                          "
+  select {
+    width: 100% !important;
+  }
+",
+                        ],
+                      },
+                      "displayName": "Styled(Select)",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kEYyzF",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                      Symbol(Symbol.hasInstance): [Function],
+                    }
+                  }
                   errors={
                     Array [
                       Object {
@@ -698,7 +823,7 @@ ShallowWrapper {
                     app1
                   </option>
                 </FieldWithError>,
-                <Styled(div)>
+                <UNDEFINED>
                   <FieldWithError
                     component={[Function]}
                     errors={
@@ -770,7 +895,7 @@ ShallowWrapper {
                     name="startTime"
                     now={"2019-01-01T21:00:00.000Z"}
                   />
-                </Styled(div)>,
+                </UNDEFINED>,
                 <FieldWithError
                   name="recurring"
                   render={[Function]}
@@ -802,7 +927,30 @@ ShallowWrapper {
                       </option>,
                     ],
                   ],
-                  "component": [Function],
+                  "component": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-kEYyzF",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  select {
+    width: 100% !important;
+  }
+",
+                      ],
+                    },
+                    "displayName": "Styled(Select)",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-kEYyzF",
+                    "target": [Function],
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                    Symbol(Symbol.hasInstance): [Function],
+                  },
                   "errors": Array [
                     Object {
                       "targetName": "date",
@@ -867,7 +1015,7 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "children": Array [
                     <FieldWithError
@@ -1029,7 +1177,32 @@ ShallowWrapper {
                     "type": [Function],
                   },
                 ],
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-ckVGcZ",
+                    "isStatic": true,
+                    "rules": Array [
+                      "
+  display: flex;
+  flex-direction: row;
+
+  div:first-child {
+    margin-right: 5px;
+  }
+",
+                    ],
+                  },
+                  "displayName": "styled.div",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-ckVGcZ",
+                  "target": "div",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                },
               },
               Object {
                 "instance": null,
@@ -1051,11 +1224,36 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
                 <FieldWithError
-                  component={[Function]}
+                  component={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kEYyzF",
+                        "isStatic": true,
+                        "rules": Array [
+                          "
+  select {
+    width: 100% !important;
+  }
+",
+                        ],
+                      },
+                      "displayName": "Styled(Select)",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kEYyzF",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                      Symbol(Symbol.hasInstance): [Function],
+                    }
+                  }
                   errors={
                     Array [
                       Object {
@@ -1194,7 +1392,30 @@ ShallowWrapper {
                       </option>,
                     ],
                   ],
-                  "component": [Function],
+                  "component": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-kEYyzF",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  select {
+    width: 100% !important;
+  }
+",
+                      ],
+                    },
+                    "displayName": "Styled(Select)",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-kEYyzF",
+                    "target": [Function],
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                    Symbol(Symbol.hasInstance): [Function],
+                  },
                   "errors": Array [
                     Object {
                       "targetName": "date",
@@ -1337,10 +1558,69 @@ ShallowWrapper {
                 "type": [Function],
               },
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-eNQAEJ",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  flex: 1;
+  max-width: 40%;
+  padding-left: 120px;
+
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    padding-left: 0;
+    margin-bottom: ",
+                  "20px",
+                  ";
+    max-width: 100%;
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-eNQAEJ",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-jKJlTe",
+            "isStatic": true,
+            "rules": Array [
+              "
+  display: flex;
+  flex-direction: row;
+
+  @media (max-width: ",
+              "641px",
+              ") {
+    flex-direction: column;
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-jKJlTe",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
     ],
     "type": Symbol(react.fragment),
@@ -1352,7 +1632,7 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "children": Array [
-          <StyledHoc
+          <ErrorSummary
             description={undefined}
             errors={
               Array [
@@ -1385,10 +1665,35 @@ ShallowWrapper {
             heading="There is a problem"
             onHandleErrorClick={[Function]}
           />,
-          <Styled(div)>
+          <UNDEFINED>
             <div>
               <FieldWithError
-                component={[Function]}
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-kEYyzF",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  select {
+    width: 100% !important;
+  }
+",
+                      ],
+                    },
+                    "displayName": "Styled(Select)",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-kEYyzF",
+                    "target": [Function],
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                    Symbol(Symbol.hasInstance): [Function],
+                  }
+                }
                 errors={
                   Array [
                     Object {
@@ -1434,7 +1739,7 @@ ShallowWrapper {
                   app1
                 </option>
               </FieldWithError>
-              <Styled(div)>
+              <UNDEFINED>
                 <FieldWithError
                   component={[Function]}
                   errors={
@@ -1506,16 +1811,41 @@ ShallowWrapper {
                   name="startTime"
                   now={"2019-01-01T21:00:00.000Z"}
                 />
-              </Styled(div)>
+              </UNDEFINED>
               <FieldWithError
                 name="recurring"
                 render={[Function]}
                 type="checkbox"
               />
             </div>
-            <Styled(div)>
+            <UNDEFINED>
               <FieldWithError
-                component={[Function]}
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-kEYyzF",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  select {
+    width: 100% !important;
+  }
+",
+                      ],
+                    },
+                    "displayName": "Styled(Select)",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-kEYyzF",
+                    "target": [Function],
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                    Symbol(Symbol.hasInstance): [Function],
+                  }
+                }
                 errors={
                   Array [
                     Object {
@@ -1629,8 +1959,8 @@ ShallowWrapper {
                 name="comments"
                 render={[Function]}
               />
-            </Styled(div)>
-          </Styled(div)>,
+            </UNDEFINED>
+          </UNDEFINED>,
         ],
       },
       "ref": null,
@@ -1638,7 +1968,7 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "description": undefined,
             "errors": Array [
@@ -1677,12 +2007,37 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <div>
                 <FieldWithError
-                  component={[Function]}
+                  component={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kEYyzF",
+                        "isStatic": true,
+                        "rules": Array [
+                          "
+  select {
+    width: 100% !important;
+  }
+",
+                        ],
+                      },
+                      "displayName": "Styled(Select)",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kEYyzF",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                      Symbol(Symbol.hasInstance): [Function],
+                    }
+                  }
                   errors={
                     Array [
                       Object {
@@ -1728,7 +2083,7 @@ ShallowWrapper {
                     app1
                   </option>
                 </FieldWithError>
-                <Styled(div)>
+                <UNDEFINED>
                   <FieldWithError
                     component={[Function]}
                     errors={
@@ -1800,16 +2155,41 @@ ShallowWrapper {
                     name="startTime"
                     now={"2019-01-01T21:00:00.000Z"}
                   />
-                </Styled(div)>
+                </UNDEFINED>
                 <FieldWithError
                   name="recurring"
                   render={[Function]}
                   type="checkbox"
                 />
               </div>,
-              <Styled(div)>
+              <UNDEFINED>
                 <FieldWithError
-                  component={[Function]}
+                  component={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kEYyzF",
+                        "isStatic": true,
+                        "rules": Array [
+                          "
+  select {
+    width: 100% !important;
+  }
+",
+                        ],
+                      },
+                      "displayName": "Styled(Select)",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kEYyzF",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                      Symbol(Symbol.hasInstance): [Function],
+                    }
+                  }
                   errors={
                     Array [
                       Object {
@@ -1923,7 +2303,7 @@ ShallowWrapper {
                   name="comments"
                   render={[Function]}
                 />
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -1935,7 +2315,32 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <FieldWithError
-                    component={[Function]}
+                    component={
+                      Object {
+                        "$$typeof": Symbol(react.forward_ref),
+                        "attrs": Array [],
+                        "componentStyle": ComponentStyle {
+                          "componentId": "sc-kEYyzF",
+                          "isStatic": true,
+                          "rules": Array [
+                            "
+  select {
+    width: 100% !important;
+  }
+",
+                          ],
+                        },
+                        "displayName": "Styled(Select)",
+                        "foldedComponentIds": Array [],
+                        "render": [Function],
+                        "styledComponentId": "sc-kEYyzF",
+                        "target": [Function],
+                        "toString": [Function],
+                        "warnTooManyClasses": [Function],
+                        "withComponent": [Function],
+                        Symbol(Symbol.hasInstance): [Function],
+                      }
+                    }
                     errors={
                       Array [
                         Object {
@@ -1981,7 +2386,7 @@ ShallowWrapper {
                       app1
                     </option>
                   </FieldWithError>,
-                  <Styled(div)>
+                  <UNDEFINED>
                     <FieldWithError
                       component={[Function]}
                       errors={
@@ -2053,7 +2458,7 @@ ShallowWrapper {
                       name="startTime"
                       now={"2019-01-01T21:00:00.000Z"}
                     />
-                  </Styled(div)>,
+                  </UNDEFINED>,
                   <FieldWithError
                     name="recurring"
                     render={[Function]}
@@ -2085,7 +2490,30 @@ ShallowWrapper {
                         </option>,
                       ],
                     ],
-                    "component": [Function],
+                    "component": Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kEYyzF",
+                        "isStatic": true,
+                        "rules": Array [
+                          "
+  select {
+    width: 100% !important;
+  }
+",
+                        ],
+                      },
+                      "displayName": "Styled(Select)",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kEYyzF",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                      Symbol(Symbol.hasInstance): [Function],
+                    },
                     "errors": Array [
                       Object {
                         "targetName": "date",
@@ -2150,7 +2578,7 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {
                     "children": Array [
                       <FieldWithError
@@ -2312,7 +2740,32 @@ ShallowWrapper {
                       "type": [Function],
                     },
                   ],
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-ckVGcZ",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  display: flex;
+  flex-direction: row;
+
+  div:first-child {
+    margin-right: 5px;
+  }
+",
+                      ],
+                    },
+                    "displayName": "styled.div",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-ckVGcZ",
+                    "target": "div",
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                  },
                 },
                 Object {
                   "instance": null,
@@ -2334,11 +2787,36 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
                   <FieldWithError
-                    component={[Function]}
+                    component={
+                      Object {
+                        "$$typeof": Symbol(react.forward_ref),
+                        "attrs": Array [],
+                        "componentStyle": ComponentStyle {
+                          "componentId": "sc-kEYyzF",
+                          "isStatic": true,
+                          "rules": Array [
+                            "
+  select {
+    width: 100% !important;
+  }
+",
+                          ],
+                        },
+                        "displayName": "Styled(Select)",
+                        "foldedComponentIds": Array [],
+                        "render": [Function],
+                        "styledComponentId": "sc-kEYyzF",
+                        "target": [Function],
+                        "toString": [Function],
+                        "warnTooManyClasses": [Function],
+                        "withComponent": [Function],
+                        Symbol(Symbol.hasInstance): [Function],
+                      }
+                    }
                     errors={
                       Array [
                         Object {
@@ -2477,7 +2955,30 @@ ShallowWrapper {
                         </option>,
                       ],
                     ],
-                    "component": [Function],
+                    "component": Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kEYyzF",
+                        "isStatic": true,
+                        "rules": Array [
+                          "
+  select {
+    width: 100% !important;
+  }
+",
+                        ],
+                      },
+                      "displayName": "Styled(Select)",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kEYyzF",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                      Symbol(Symbol.hasInstance): [Function],
+                    },
                     "errors": Array [
                       Object {
                         "targetName": "date",
@@ -2620,10 +3121,69 @@ ShallowWrapper {
                   "type": [Function],
                 },
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-eNQAEJ",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  flex: 1;
+  max-width: 40%;
+  padding-left: 120px;
+
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    padding-left: 0;
+    margin-bottom: ",
+                    "20px",
+                    ";
+    max-width: 100%;
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-eNQAEJ",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-jKJlTe",
+              "isStatic": true,
+              "rules": Array [
+                "
+  display: flex;
+  flex-direction: row;
+
+  @media (max-width: ",
+                "641px",
+                ") {
+    flex-direction: column;
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-jKJlTe",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
       ],
       "type": Symbol(react.fragment),
@@ -2761,8 +3321,8 @@ ShallowWrapper {
           now={"2019-01-01T21:00:00.000Z"}
           values={Object {}}
         />
-        <Styled(div)>
-          <StyledHoc
+        <UNDEFINED>
+          <UNDEFINED
             buttonColour={undefined}
             buttonHoverColour={undefined}
             buttonShadowColour={undefined}
@@ -2773,8 +3333,8 @@ ShallowWrapper {
             type="submit"
           >
             Continue
-          </StyledHoc>
-          <StyledHoc
+          </UNDEFINED>
+          <UNDEFINED
             buttonColour="#dee0e2"
             buttonHoverColour={undefined}
             buttonShadowColour={undefined}
@@ -2785,8 +3345,8 @@ ShallowWrapper {
             start={false}
           >
             Cancel
-          </StyledHoc>
-        </Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>
       </form>,
       "value": Object {
         "batch": [Function],
@@ -2823,8 +3383,8 @@ ShallowWrapper {
             now={"2019-01-01T21:00:00.000Z"}
             values={Object {}}
           />,
-          <Styled(div)>
-            <StyledHoc
+          <UNDEFINED>
+            <UNDEFINED
               buttonColour={undefined}
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -2835,8 +3395,8 @@ ShallowWrapper {
               type="submit"
             >
               Continue
-            </StyledHoc>
-            <StyledHoc
+            </UNDEFINED>
+            <UNDEFINED
               buttonColour="#dee0e2"
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -2847,8 +3407,8 @@ ShallowWrapper {
               start={false}
             >
               Cancel
-            </StyledHoc>
-          </Styled(div)>,
+            </UNDEFINED>
+          </UNDEFINED>,
         ],
         "onSubmit": [Function],
       },
@@ -2873,10 +3433,10 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
-              <StyledHoc
+              <UNDEFINED
                 buttonColour={undefined}
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -2887,8 +3447,8 @@ ShallowWrapper {
                 type="submit"
               >
                 Continue
-              </StyledHoc>,
-              <StyledHoc
+              </UNDEFINED>,
+              <UNDEFINED
                 buttonColour="#dee0e2"
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -2899,7 +3459,7 @@ ShallowWrapper {
                 start={false}
               >
                 Cancel
-              </StyledHoc>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -2907,7 +3467,7 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "buttonColour": undefined,
                 "buttonHoverColour": undefined,
@@ -2921,12 +3481,34 @@ ShallowWrapper {
               },
               "ref": null,
               "rendered": "Continue",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "defaultProps": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                },
+                "propTypes": Object {
+                  "buttonColour": [Function],
+                  "buttonHoverColour": [Function],
+                  "buttonShadowColour": [Function],
+                  "buttonTextColour": [Function],
+                  "children": [Function],
+                  "disabled": [Function],
+                  "icon": [Function],
+                  "start": [Function],
+                },
+                "render": [Function],
+              },
             },
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "buttonColour": "#dee0e2",
                 "buttonHoverColour": undefined,
@@ -2940,10 +3522,58 @@ ShallowWrapper {
               },
               "ref": null,
               "rendered": "Cancel",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "defaultProps": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                },
+                "propTypes": Object {
+                  "buttonColour": [Function],
+                  "buttonHoverColour": [Function],
+                  "buttonShadowColour": [Function],
+                  "buttonTextColour": [Function],
+                  "children": [Function],
+                  "disabled": [Function],
+                  "icon": [Function],
+                  "start": [Function],
+                },
+                "render": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-hMqMXs",
+              "isStatic": true,
+              "rules": Array [
+                "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                "10px",
+                ";
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-hMqMXs",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
       ],
       "type": "form",
@@ -2984,8 +3614,8 @@ ShallowWrapper {
             now={"2019-01-01T21:00:00.000Z"}
             values={Object {}}
           />
-          <Styled(div)>
-            <StyledHoc
+          <UNDEFINED>
+            <UNDEFINED
               buttonColour={undefined}
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -2996,8 +3626,8 @@ ShallowWrapper {
               type="submit"
             >
               Continue
-            </StyledHoc>
-            <StyledHoc
+            </UNDEFINED>
+            <UNDEFINED
               buttonColour="#dee0e2"
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -3008,8 +3638,8 @@ ShallowWrapper {
               start={false}
             >
               Cancel
-            </StyledHoc>
-          </Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>
         </form>,
         "value": Object {
           "batch": [Function],
@@ -3046,8 +3676,8 @@ ShallowWrapper {
               now={"2019-01-01T21:00:00.000Z"}
               values={Object {}}
             />,
-            <Styled(div)>
-              <StyledHoc
+            <UNDEFINED>
+              <UNDEFINED
                 buttonColour={undefined}
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -3058,8 +3688,8 @@ ShallowWrapper {
                 type="submit"
               >
                 Continue
-              </StyledHoc>
-              <StyledHoc
+              </UNDEFINED>
+              <UNDEFINED
                 buttonColour="#dee0e2"
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -3070,8 +3700,8 @@ ShallowWrapper {
                 start={false}
               >
                 Cancel
-              </StyledHoc>
-            </Styled(div)>,
+              </UNDEFINED>
+            </UNDEFINED>,
           ],
           "onSubmit": [Function],
         },
@@ -3096,10 +3726,10 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
-                <StyledHoc
+                <UNDEFINED
                   buttonColour={undefined}
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -3110,8 +3740,8 @@ ShallowWrapper {
                   type="submit"
                 >
                   Continue
-                </StyledHoc>,
-                <StyledHoc
+                </UNDEFINED>,
+                <UNDEFINED
                   buttonColour="#dee0e2"
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -3122,7 +3752,7 @@ ShallowWrapper {
                   start={false}
                 >
                   Cancel
-                </StyledHoc>,
+                </UNDEFINED>,
               ],
             },
             "ref": null,
@@ -3130,7 +3760,7 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "buttonColour": undefined,
                   "buttonHoverColour": undefined,
@@ -3144,12 +3774,34 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": "Continue",
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
               },
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "buttonColour": "#dee0e2",
                   "buttonHoverColour": undefined,
@@ -3163,10 +3815,58 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": "Cancel",
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
               },
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-hMqMXs",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                  "10px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-hMqMXs",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
         "type": "form",

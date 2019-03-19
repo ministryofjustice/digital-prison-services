@@ -1,4 +1,4 @@
-import styled from 'react-emotion'
+import styled from 'styled-components'
 import { SPACING, BORDER_WIDTH_FORM_ELEMENT } from '@govuk-react/constants'
 import { ERROR_COLOUR } from 'govuk-colours'
 

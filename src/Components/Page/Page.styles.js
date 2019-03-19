@@ -1,4 +1,4 @@
-import styled from 'react-emotion'
+import styled from 'styled-components'
 import { SPACING } from '@govuk-react/constants'
 
 export const Breadcrumbs = styled('div')`

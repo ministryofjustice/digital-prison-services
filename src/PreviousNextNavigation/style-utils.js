@@ -1,5 +1,5 @@
 // Utilities/Helpers for styled components.
-import { css } from 'react-emotion'
+import { css } from 'styled-components'
 
 const sizes = {
   giant: 2450,

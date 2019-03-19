@@ -131,8 +131,8 @@ ShallowWrapper {
           <p>
              Upload the prison numbers for all prisoners attending the below appointment. 
           </p>
-          <Styled(form)>
-            <Styled(div) />
+          <UNDEFINED>
+            <UNDEFINED />
             <AppointmentDetails
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
@@ -146,14 +146,14 @@ ShallowWrapper {
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />
-            <Styled(div) />
+            <UNDEFINED />
             <OffenderUpload
               onCancel={[Function]}
               onError={[Function]}
               onSuccess={[Function]}
               showCancelButton={true}
             />
-            <Styled(div) />
+            <UNDEFINED />
             <AddPrisoners
               appointment={
                 Object {
@@ -180,7 +180,7 @@ ShallowWrapper {
               resetErrors={[Function]}
               startTime="2019-10-10T:21:00:00Z"
             />
-          </Styled(form)>
+          </UNDEFINED>
         </UNDEFINED>,
       ],
       "title": "Add prisoners",
@@ -197,8 +197,8 @@ ShallowWrapper {
             <p>
                Upload the prison numbers for all prisoners attending the below appointment. 
             </p>,
-            <Styled(form)>
-              <Styled(div) />
+            <UNDEFINED>
+              <UNDEFINED />
               <AppointmentDetails
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
@@ -212,14 +212,14 @@ ShallowWrapper {
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />
-              <Styled(div) />
+              <UNDEFINED />
               <OffenderUpload
                 onCancel={[Function]}
                 onError={[Function]}
                 onSuccess={[Function]}
                 showCancelButton={true}
               />
-              <Styled(div) />
+              <UNDEFINED />
               <AddPrisoners
                 appointment={
                   Object {
@@ -246,7 +246,7 @@ ShallowWrapper {
                 resetErrors={[Function]}
                 startTime="2019-10-10T:21:00:00Z"
               />
-            </Styled(form)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -265,10 +265,10 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
-                <Styled(div) />,
+                <UNDEFINED />,
                 <AppointmentDetails
                   appointmentType="ACC"
                   appointmentTypeDescription="Activities"
@@ -282,14 +282,14 @@ ShallowWrapper {
                   startTime="2019-10-10T:21:00:00Z"
                   times="1"
                 />,
-                <Styled(div) />,
+                <UNDEFINED />,
                 <OffenderUpload
                   onCancel={[Function]}
                   onError={[Function]}
                   onSuccess={[Function]}
                   showCancelButton={true}
                 />,
-                <Styled(div) />,
+                <UNDEFINED />,
                 <AddPrisoners
                   appointment={
                     Object {
@@ -323,11 +323,38 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {},
                 "ref": null,
                 "rendered": null,
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-iwsKbI",
+                    "isStatic": true,
+                    "rules": Array [
+                      "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                      "30px",
+                      ";
+  margin-top: ",
+                      "10px",
+                      ";
+",
+                    ],
+                  },
+                  "displayName": "styled.div",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-iwsKbI",
+                  "target": "div",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                },
               },
               Object {
                 "instance": null,
@@ -353,11 +380,38 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {},
                 "ref": null,
                 "rendered": null,
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-iwsKbI",
+                    "isStatic": true,
+                    "rules": Array [
+                      "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                      "30px",
+                      ";
+  margin-top: ",
+                      "10px",
+                      ";
+",
+                    ],
+                  },
+                  "displayName": "styled.div",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-iwsKbI",
+                  "target": "div",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                },
               },
               Object {
                 "instance": null,
@@ -376,11 +430,38 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {},
                 "ref": null,
                 "rendered": null,
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-iwsKbI",
+                    "isStatic": true,
+                    "rules": Array [
+                      "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                      "30px",
+                      ";
+  margin-top: ",
+                      "10px",
+                      ";
+",
+                    ],
+                  },
+                  "displayName": "styled.div",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-iwsKbI",
+                  "target": "div",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                },
               },
               Object {
                 "instance": null,
@@ -415,7 +496,35 @@ ShallowWrapper {
                 "type": [Function],
               },
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-dnqmqq",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "30px",
+                  ";
+
+  button {
+    margin-top: ",
+                  "30px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.form",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-dnqmqq",
+              "target": "form",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
         "type": Symbol(react.fragment),
@@ -437,8 +546,8 @@ ShallowWrapper {
             <p>
                Upload the prison numbers for all prisoners attending the below appointment. 
             </p>
-            <Styled(form)>
-              <Styled(div) />
+            <UNDEFINED>
+              <UNDEFINED />
               <AppointmentDetails
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
@@ -452,14 +561,14 @@ ShallowWrapper {
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />
-              <Styled(div) />
+              <UNDEFINED />
               <OffenderUpload
                 onCancel={[Function]}
                 onError={[Function]}
                 onSuccess={[Function]}
                 showCancelButton={true}
               />
-              <Styled(div) />
+              <UNDEFINED />
               <AddPrisoners
                 appointment={
                   Object {
@@ -486,7 +595,7 @@ ShallowWrapper {
                 resetErrors={[Function]}
                 startTime="2019-10-10T:21:00:00Z"
               />
-            </Styled(form)>
+            </UNDEFINED>
           </UNDEFINED>,
         ],
         "title": "Add prisoners",
@@ -503,8 +612,8 @@ ShallowWrapper {
               <p>
                  Upload the prison numbers for all prisoners attending the below appointment. 
               </p>,
-              <Styled(form)>
-                <Styled(div) />
+              <UNDEFINED>
+                <UNDEFINED />
                 <AppointmentDetails
                   appointmentType="ACC"
                   appointmentTypeDescription="Activities"
@@ -518,14 +627,14 @@ ShallowWrapper {
                   startTime="2019-10-10T:21:00:00Z"
                   times="1"
                 />
-                <Styled(div) />
+                <UNDEFINED />
                 <OffenderUpload
                   onCancel={[Function]}
                   onError={[Function]}
                   onSuccess={[Function]}
                   showCancelButton={true}
                 />
-                <Styled(div) />
+                <UNDEFINED />
                 <AddPrisoners
                   appointment={
                     Object {
@@ -552,7 +661,7 @@ ShallowWrapper {
                   resetErrors={[Function]}
                   startTime="2019-10-10T:21:00:00Z"
                 />
-              </Styled(form)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -571,10 +680,10 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
-                  <Styled(div) />,
+                  <UNDEFINED />,
                   <AppointmentDetails
                     appointmentType="ACC"
                     appointmentTypeDescription="Activities"
@@ -588,14 +697,14 @@ ShallowWrapper {
                     startTime="2019-10-10T:21:00:00Z"
                     times="1"
                   />,
-                  <Styled(div) />,
+                  <UNDEFINED />,
                   <OffenderUpload
                     onCancel={[Function]}
                     onError={[Function]}
                     onSuccess={[Function]}
                     showCancelButton={true}
                   />,
-                  <Styled(div) />,
+                  <UNDEFINED />,
                   <AddPrisoners
                     appointment={
                       Object {
@@ -629,11 +738,38 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {},
                   "ref": null,
                   "rendered": null,
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-iwsKbI",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                        "30px",
+                        ";
+  margin-top: ",
+                        "10px",
+                        ";
+",
+                      ],
+                    },
+                    "displayName": "styled.div",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-iwsKbI",
+                    "target": "div",
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                  },
                 },
                 Object {
                   "instance": null,
@@ -659,11 +795,38 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {},
                   "ref": null,
                   "rendered": null,
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-iwsKbI",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                        "30px",
+                        ";
+  margin-top: ",
+                        "10px",
+                        ";
+",
+                      ],
+                    },
+                    "displayName": "styled.div",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-iwsKbI",
+                    "target": "div",
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                  },
                 },
                 Object {
                   "instance": null,
@@ -682,11 +845,38 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {},
                   "ref": null,
                   "rendered": null,
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "attrs": Array [],
+                    "componentStyle": ComponentStyle {
+                      "componentId": "sc-iwsKbI",
+                      "isStatic": true,
+                      "rules": Array [
+                        "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                        "30px",
+                        ";
+  margin-top: ",
+                        "10px",
+                        ";
+",
+                      ],
+                    },
+                    "displayName": "styled.div",
+                    "foldedComponentIds": Array [],
+                    "render": [Function],
+                    "styledComponentId": "sc-iwsKbI",
+                    "target": "div",
+                    "toString": [Function],
+                    "warnTooManyClasses": [Function],
+                    "withComponent": [Function],
+                  },
                 },
                 Object {
                   "instance": null,
@@ -721,7 +911,35 @@ ShallowWrapper {
                   "type": [Function],
                 },
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-dnqmqq",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "30px",
+                    ";
+
+  button {
+    margin-top: ",
+                    "30px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.form",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-dnqmqq",
+                "target": "form",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
           "type": Symbol(react.fragment),
@@ -894,7 +1112,7 @@ ShallowWrapper {
             2
              appointments created 
           </H3>
-          <Styled(div) />
+          <UNDEFINED />
           <AppointmentDetails
             appointmentType="ACC"
             appointmentTypeDescription="Activities"
@@ -908,9 +1126,9 @@ ShallowWrapper {
             startTime="2019-10-10T:21:00:00Z"
             times="1"
           />
-          <Styled(div) />
-          <Styled(div)>
-            <StyledHoc
+          <UNDEFINED />
+          <UNDEFINED>
+            <UNDEFINED
               buttonColour={undefined}
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -921,8 +1139,8 @@ ShallowWrapper {
               start={false}
             >
               Add another appointment
-            </StyledHoc>
-            <StyledHoc
+            </UNDEFINED>
+            <UNDEFINED
               buttonColour="#dee0e2"
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -933,8 +1151,8 @@ ShallowWrapper {
               start={false}
             >
               Back to home page
-            </StyledHoc>
-          </Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>
         </withRouter(ScrollToTop)>,
         false,
       ],
@@ -954,7 +1172,7 @@ ShallowWrapper {
               2
                appointments created 
             </H3>,
-            <Styled(div) />,
+            <UNDEFINED />,
             <AppointmentDetails
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
@@ -968,9 +1186,9 @@ ShallowWrapper {
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />,
-            <Styled(div) />,
-            <Styled(div)>
-              <StyledHoc
+            <UNDEFINED />,
+            <UNDEFINED>
+              <UNDEFINED
                 buttonColour={undefined}
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -981,8 +1199,8 @@ ShallowWrapper {
                 start={false}
               >
                 Add another appointment
-              </StyledHoc>
-              <StyledHoc
+              </UNDEFINED>
+              <UNDEFINED
                 buttonColour="#dee0e2"
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -993,8 +1211,8 @@ ShallowWrapper {
                 start={false}
               >
                 Back to home page
-              </StyledHoc>
-            </Styled(div)>,
+              </UNDEFINED>
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -1021,11 +1239,38 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {},
             "ref": null,
             "rendered": null,
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-iwsKbI",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                  "30px",
+                  ";
+  margin-top: ",
+                  "10px",
+                  ";
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-iwsKbI",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
           Object {
             "instance": null,
@@ -1051,19 +1296,46 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {},
             "ref": null,
             "rendered": null,
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-iwsKbI",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                  "30px",
+                  ";
+  margin-top: ",
+                  "10px",
+                  ";
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-iwsKbI",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
-                <StyledHoc
+                <UNDEFINED
                   buttonColour={undefined}
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1074,8 +1346,8 @@ ShallowWrapper {
                   start={false}
                 >
                   Add another appointment
-                </StyledHoc>,
-                <StyledHoc
+                </UNDEFINED>,
+                <UNDEFINED
                   buttonColour="#dee0e2"
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1086,7 +1358,7 @@ ShallowWrapper {
                   start={false}
                 >
                   Back to home page
-                </StyledHoc>,
+                </UNDEFINED>,
               ],
             },
             "ref": null,
@@ -1094,7 +1366,7 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "buttonColour": undefined,
                   "buttonHoverColour": undefined,
@@ -1108,12 +1380,34 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": "Add another appointment",
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
               },
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "buttonColour": "#dee0e2",
                   "buttonHoverColour": undefined,
@@ -1127,10 +1421,58 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": "Back to home page",
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
               },
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-gZMcBi",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                  "10px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-gZMcBi",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
         "type": [Function],
@@ -1156,7 +1498,7 @@ ShallowWrapper {
               2
                appointments created 
             </H3>
-            <Styled(div) />
+            <UNDEFINED />
             <AppointmentDetails
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
@@ -1170,9 +1512,9 @@ ShallowWrapper {
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />
-            <Styled(div) />
-            <Styled(div)>
-              <StyledHoc
+            <UNDEFINED />
+            <UNDEFINED>
+              <UNDEFINED
                 buttonColour={undefined}
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -1183,8 +1525,8 @@ ShallowWrapper {
                 start={false}
               >
                 Add another appointment
-              </StyledHoc>
-              <StyledHoc
+              </UNDEFINED>
+              <UNDEFINED
                 buttonColour="#dee0e2"
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -1195,8 +1537,8 @@ ShallowWrapper {
                 start={false}
               >
                 Back to home page
-              </StyledHoc>
-            </Styled(div)>
+              </UNDEFINED>
+            </UNDEFINED>
           </withRouter(ScrollToTop)>,
           false,
         ],
@@ -1216,7 +1558,7 @@ ShallowWrapper {
                 2
                  appointments created 
               </H3>,
-              <Styled(div) />,
+              <UNDEFINED />,
               <AppointmentDetails
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
@@ -1230,9 +1572,9 @@ ShallowWrapper {
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />,
-              <Styled(div) />,
-              <Styled(div)>
-                <StyledHoc
+              <UNDEFINED />,
+              <UNDEFINED>
+                <UNDEFINED
                   buttonColour={undefined}
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1243,8 +1585,8 @@ ShallowWrapper {
                   start={false}
                 >
                   Add another appointment
-                </StyledHoc>
-                <StyledHoc
+                </UNDEFINED>
+                <UNDEFINED
                   buttonColour="#dee0e2"
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1255,8 +1597,8 @@ ShallowWrapper {
                   start={false}
                 >
                   Back to home page
-                </StyledHoc>
-              </Styled(div)>,
+                </UNDEFINED>
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -1283,11 +1625,38 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {},
               "ref": null,
               "rendered": null,
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-iwsKbI",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                    "30px",
+                    ";
+  margin-top: ",
+                    "10px",
+                    ";
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-iwsKbI",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
             Object {
               "instance": null,
@@ -1313,19 +1682,46 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {},
               "ref": null,
               "rendered": null,
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-iwsKbI",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                    "30px",
+                    ";
+  margin-top: ",
+                    "10px",
+                    ";
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-iwsKbI",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
-                  <StyledHoc
+                  <UNDEFINED
                     buttonColour={undefined}
                     buttonHoverColour={undefined}
                     buttonShadowColour={undefined}
@@ -1336,8 +1732,8 @@ ShallowWrapper {
                     start={false}
                   >
                     Add another appointment
-                  </StyledHoc>,
-                  <StyledHoc
+                  </UNDEFINED>,
+                  <UNDEFINED
                     buttonColour="#dee0e2"
                     buttonHoverColour={undefined}
                     buttonShadowColour={undefined}
@@ -1348,7 +1744,7 @@ ShallowWrapper {
                     start={false}
                   >
                     Back to home page
-                  </StyledHoc>,
+                  </UNDEFINED>,
                 ],
               },
               "ref": null,
@@ -1356,7 +1752,7 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {
                     "buttonColour": undefined,
                     "buttonHoverColour": undefined,
@@ -1370,12 +1766,34 @@ ShallowWrapper {
                   },
                   "ref": null,
                   "rendered": "Add another appointment",
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "defaultProps": Object {
+                      "buttonColour": undefined,
+                      "buttonHoverColour": undefined,
+                      "buttonShadowColour": undefined,
+                      "buttonTextColour": undefined,
+                      "disabled": false,
+                      "icon": undefined,
+                      "start": false,
+                    },
+                    "propTypes": Object {
+                      "buttonColour": [Function],
+                      "buttonHoverColour": [Function],
+                      "buttonShadowColour": [Function],
+                      "buttonTextColour": [Function],
+                      "children": [Function],
+                      "disabled": [Function],
+                      "icon": [Function],
+                      "start": [Function],
+                    },
+                    "render": [Function],
+                  },
                 },
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {
                     "buttonColour": "#dee0e2",
                     "buttonHoverColour": undefined,
@@ -1389,10 +1807,58 @@ ShallowWrapper {
                   },
                   "ref": null,
                   "rendered": "Back to home page",
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "defaultProps": Object {
+                      "buttonColour": undefined,
+                      "buttonHoverColour": undefined,
+                      "buttonShadowColour": undefined,
+                      "buttonTextColour": undefined,
+                      "disabled": false,
+                      "icon": undefined,
+                      "start": false,
+                    },
+                    "propTypes": Object {
+                      "buttonColour": [Function],
+                      "buttonHoverColour": [Function],
+                      "buttonShadowColour": [Function],
+                      "buttonTextColour": [Function],
+                      "children": [Function],
+                      "disabled": [Function],
+                      "icon": [Function],
+                      "start": [Function],
+                    },
+                    "render": [Function],
+                  },
                 },
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-gZMcBi",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                    "10px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-gZMcBi",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
           "type": [Function],
@@ -1564,7 +2030,7 @@ ShallowWrapper {
           <H3>
              Appointments created 
           </H3>
-          <Styled(div) />
+          <UNDEFINED />
           <AppointmentDetails
             appointmentType="ACC"
             appointmentTypeDescription="Activities"
@@ -1578,9 +2044,9 @@ ShallowWrapper {
             startTime="2019-10-10T:21:00:00Z"
             times="1"
           />
-          <Styled(div) />
-          <Styled(div)>
-            <StyledHoc
+          <UNDEFINED />
+          <UNDEFINED>
+            <UNDEFINED
               buttonColour={undefined}
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -1591,8 +2057,8 @@ ShallowWrapper {
               start={false}
             >
               Add another appointment
-            </StyledHoc>
-            <StyledHoc
+            </UNDEFINED>
+            <UNDEFINED
               buttonColour="#dee0e2"
               buttonHoverColour={undefined}
               buttonShadowColour={undefined}
@@ -1603,8 +2069,8 @@ ShallowWrapper {
               start={false}
             >
               Back to home page
-            </StyledHoc>
-          </Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>
         </withRouter(ScrollToTop)>,
         false,
       ],
@@ -1622,7 +2088,7 @@ ShallowWrapper {
             <H3>
                Appointments created 
             </H3>,
-            <Styled(div) />,
+            <UNDEFINED />,
             <AppointmentDetails
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
@@ -1636,9 +2102,9 @@ ShallowWrapper {
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />,
-            <Styled(div) />,
-            <Styled(div)>
-              <StyledHoc
+            <UNDEFINED />,
+            <UNDEFINED>
+              <UNDEFINED
                 buttonColour={undefined}
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -1649,8 +2115,8 @@ ShallowWrapper {
                 start={false}
               >
                 Add another appointment
-              </StyledHoc>
-              <StyledHoc
+              </UNDEFINED>
+              <UNDEFINED
                 buttonColour="#dee0e2"
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -1661,8 +2127,8 @@ ShallowWrapper {
                 start={false}
               >
                 Back to home page
-              </StyledHoc>
-            </Styled(div)>,
+              </UNDEFINED>
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -1681,11 +2147,38 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {},
             "ref": null,
             "rendered": null,
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-iwsKbI",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                  "30px",
+                  ";
+  margin-top: ",
+                  "10px",
+                  ";
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-iwsKbI",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
           Object {
             "instance": null,
@@ -1711,19 +2204,46 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {},
             "ref": null,
             "rendered": null,
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-iwsKbI",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                  "30px",
+                  ";
+  margin-top: ",
+                  "10px",
+                  ";
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-iwsKbI",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
-                <StyledHoc
+                <UNDEFINED
                   buttonColour={undefined}
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1734,8 +2254,8 @@ ShallowWrapper {
                   start={false}
                 >
                   Add another appointment
-                </StyledHoc>,
-                <StyledHoc
+                </UNDEFINED>,
+                <UNDEFINED
                   buttonColour="#dee0e2"
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1746,7 +2266,7 @@ ShallowWrapper {
                   start={false}
                 >
                   Back to home page
-                </StyledHoc>,
+                </UNDEFINED>,
               ],
             },
             "ref": null,
@@ -1754,7 +2274,7 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "buttonColour": undefined,
                   "buttonHoverColour": undefined,
@@ -1768,12 +2288,34 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": "Add another appointment",
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
               },
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "buttonColour": "#dee0e2",
                   "buttonHoverColour": undefined,
@@ -1787,10 +2329,58 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": "Back to home page",
-                "type": [Function],
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
               },
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-gZMcBi",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                  "10px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-gZMcBi",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
         "type": [Function],
@@ -1814,7 +2404,7 @@ ShallowWrapper {
             <H3>
                Appointments created 
             </H3>
-            <Styled(div) />
+            <UNDEFINED />
             <AppointmentDetails
               appointmentType="ACC"
               appointmentTypeDescription="Activities"
@@ -1828,9 +2418,9 @@ ShallowWrapper {
               startTime="2019-10-10T:21:00:00Z"
               times="1"
             />
-            <Styled(div) />
-            <Styled(div)>
-              <StyledHoc
+            <UNDEFINED />
+            <UNDEFINED>
+              <UNDEFINED
                 buttonColour={undefined}
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -1841,8 +2431,8 @@ ShallowWrapper {
                 start={false}
               >
                 Add another appointment
-              </StyledHoc>
-              <StyledHoc
+              </UNDEFINED>
+              <UNDEFINED
                 buttonColour="#dee0e2"
                 buttonHoverColour={undefined}
                 buttonShadowColour={undefined}
@@ -1853,8 +2443,8 @@ ShallowWrapper {
                 start={false}
               >
                 Back to home page
-              </StyledHoc>
-            </Styled(div)>
+              </UNDEFINED>
+            </UNDEFINED>
           </withRouter(ScrollToTop)>,
           false,
         ],
@@ -1872,7 +2462,7 @@ ShallowWrapper {
               <H3>
                  Appointments created 
               </H3>,
-              <Styled(div) />,
+              <UNDEFINED />,
               <AppointmentDetails
                 appointmentType="ACC"
                 appointmentTypeDescription="Activities"
@@ -1886,9 +2476,9 @@ ShallowWrapper {
                 startTime="2019-10-10T:21:00:00Z"
                 times="1"
               />,
-              <Styled(div) />,
-              <Styled(div)>
-                <StyledHoc
+              <UNDEFINED />,
+              <UNDEFINED>
+                <UNDEFINED
                   buttonColour={undefined}
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1899,8 +2489,8 @@ ShallowWrapper {
                   start={false}
                 >
                   Add another appointment
-                </StyledHoc>
-                <StyledHoc
+                </UNDEFINED>
+                <UNDEFINED
                   buttonColour="#dee0e2"
                   buttonHoverColour={undefined}
                   buttonShadowColour={undefined}
@@ -1911,8 +2501,8 @@ ShallowWrapper {
                   start={false}
                 >
                   Back to home page
-                </StyledHoc>
-              </Styled(div)>,
+                </UNDEFINED>
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -1931,11 +2521,38 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {},
               "ref": null,
               "rendered": null,
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-iwsKbI",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                    "30px",
+                    ";
+  margin-top: ",
+                    "10px",
+                    ";
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-iwsKbI",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
             Object {
               "instance": null,
@@ -1961,19 +2578,46 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {},
               "ref": null,
               "rendered": null,
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-iwsKbI",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  border: solid 1px #979797;
+  width: 100%;
+  margin-bottom: ",
+                    "30px",
+                    ";
+  margin-top: ",
+                    "10px",
+                    ";
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-iwsKbI",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
-                  <StyledHoc
+                  <UNDEFINED
                     buttonColour={undefined}
                     buttonHoverColour={undefined}
                     buttonShadowColour={undefined}
@@ -1984,8 +2628,8 @@ ShallowWrapper {
                     start={false}
                   >
                     Add another appointment
-                  </StyledHoc>,
-                  <StyledHoc
+                  </UNDEFINED>,
+                  <UNDEFINED
                     buttonColour="#dee0e2"
                     buttonHoverColour={undefined}
                     buttonShadowColour={undefined}
@@ -1996,7 +2640,7 @@ ShallowWrapper {
                     start={false}
                   >
                     Back to home page
-                  </StyledHoc>,
+                  </UNDEFINED>,
                 ],
               },
               "ref": null,
@@ -2004,7 +2648,7 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {
                     "buttonColour": undefined,
                     "buttonHoverColour": undefined,
@@ -2018,12 +2662,34 @@ ShallowWrapper {
                   },
                   "ref": null,
                   "rendered": "Add another appointment",
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "defaultProps": Object {
+                      "buttonColour": undefined,
+                      "buttonHoverColour": undefined,
+                      "buttonShadowColour": undefined,
+                      "buttonTextColour": undefined,
+                      "disabled": false,
+                      "icon": undefined,
+                      "start": false,
+                    },
+                    "propTypes": Object {
+                      "buttonColour": [Function],
+                      "buttonHoverColour": [Function],
+                      "buttonShadowColour": [Function],
+                      "buttonTextColour": [Function],
+                      "children": [Function],
+                      "disabled": [Function],
+                      "icon": [Function],
+                      "start": [Function],
+                    },
+                    "render": [Function],
+                  },
                 },
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "function",
                   "props": Object {
                     "buttonColour": "#dee0e2",
                     "buttonHoverColour": undefined,
@@ -2037,10 +2703,58 @@ ShallowWrapper {
                   },
                   "ref": null,
                   "rendered": "Back to home page",
-                  "type": [Function],
+                  "type": Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "defaultProps": Object {
+                      "buttonColour": undefined,
+                      "buttonHoverColour": undefined,
+                      "buttonShadowColour": undefined,
+                      "buttonTextColour": undefined,
+                      "disabled": false,
+                      "icon": undefined,
+                      "start": false,
+                    },
+                    "propTypes": Object {
+                      "buttonColour": [Function],
+                      "buttonHoverColour": [Function],
+                      "buttonShadowColour": [Function],
+                      "buttonTextColour": [Function],
+                      "children": [Function],
+                      "disabled": [Function],
+                      "icon": [Function],
+                      "start": [Function],
+                    },
+                    "render": [Function],
+                  },
                 },
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-gZMcBi",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                    "10px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-gZMcBi",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
           "type": [Function],

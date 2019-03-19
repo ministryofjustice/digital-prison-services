@@ -56,13 +56,13 @@ describe('<Breadcrumb />', () => {
   const wrapper = shallow(<Breadcrumb {...props} />)
 
   it('should display the correct amount of breadcrumbs', () => {
-    expect(wrapper.find('Styled(li)').length).toBe(3)
+    expect(wrapper.find('BreadcrumbItem').length).toBe(3)
   })
 
   it('should have the Home link as the first Breadcrumb ', () => {
     expect(
       wrapper
-        .find('Styled(li)')
+        .find('BreadcrumbItem')
         .first()
         .find('a')
         .text()
@@ -72,7 +72,7 @@ describe('<Breadcrumb />', () => {
   it('should link to the homeLink prop', () => {
     expect(
       wrapper
-        .find('Styled(li)')
+        .find('BreadcrumbItem')
         .first()
         .find('a')
         .prop('href')
@@ -82,14 +82,14 @@ describe('<Breadcrumb />', () => {
   it('should link back to the Application homepage', () => {
     expect(
       wrapper
-        .find('Styled(li)')
+        .find('BreadcrumbItem')
         .at(1)
         .find('Link')
         .prop('to')
     ).toEqual('/')
     expect(
       wrapper
-        .find('Styled(li)')
+        .find('BreadcrumbItem')
         .at(1)
         .find('span')
         .text()
@@ -99,14 +99,14 @@ describe('<Breadcrumb />', () => {
   it('should not apply a link to the current page breadcrumb', () => {
     expect(
       wrapper
-        .find('Styled(li)')
+        .find('BreadcrumbItem')
         .last()
         .find('Link')
         .exists()
     ).toBe(false)
     expect(
       wrapper
-        .find('Styled(li)')
+        .find('BreadcrumbItem')
         .last()
         .find('span')
         .text()

@@ -24,38 +24,38 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
       "children": Array [
-        <Styled(div)>
+        <UNDEFINED>
           <strong>
             Appointment type
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             ACT
-          </Styled(div)>
-        </Styled(div)>,
-        <Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>,
+        <UNDEFINED>
           <strong>
             Appointment location
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             GYM
-          </Styled(div)>
-        </Styled(div)>,
-        <Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>,
+        <UNDEFINED>
           <strong>
             Date and time 
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             <div>
               Thursday
             </div>
             10/10/2019 - 21:00
              
             
-          </Styled(div)>
-        </Styled(div)>,
+          </UNDEFINED>
+        </UNDEFINED>,
         "",
         false,
       ],
@@ -65,15 +65,15 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Appointment type
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               ACT
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -92,29 +92,90 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": "ACT",
             },
             "ref": null,
             "rendered": "ACT",
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Appointment location
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               GYM
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -133,34 +194,95 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": "GYM",
             },
             "ref": null,
             "rendered": "GYM",
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Date and time 
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               <div>
                 Thursday
               </div>
               10/10/2019 - 21:00
                
               
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -179,7 +301,7 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
                 <div>
@@ -207,52 +329,152 @@ ShallowWrapper {
               " ",
               "",
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       "",
       false,
     ],
-    "type": [Function],
+    "type": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "sc-bdVaJa",
+        "isStatic": true,
+        "rules": Array [
+          "
+  display: flex;
+  flex-direction: row;
+
+  div {
+    margin-right: ",
+          "20px",
+          ";
+  }
+
+  @media (max-width: ",
+          "641px",
+          ") {
+    flex-direction: column;
+    div {
+      margin-bottom: ",
+          "10px",
+          ";
+      margin-right: 0;
+    }
+  }
+",
+        ],
+      },
+      "displayName": "styled.div",
+      "foldedComponentIds": Array [],
+      "render": [Function],
+      "styledComponentId": "sc-bdVaJa",
+      "target": "div",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    },
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "class",
+      "nodeType": "function",
       "props": Object {
         "children": Array [
-          <Styled(div)>
+          <UNDEFINED>
             <strong>
               Appointment type
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               ACT
-            </Styled(div)>
-          </Styled(div)>,
-          <Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>,
+          <UNDEFINED>
             <strong>
               Appointment location
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               GYM
-            </Styled(div)>
-          </Styled(div)>,
-          <Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>,
+          <UNDEFINED>
             <strong>
               Date and time 
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               <div>
                 Thursday
               </div>
               10/10/2019 - 21:00
                
               
-            </Styled(div)>
-          </Styled(div)>,
+            </UNDEFINED>
+          </UNDEFINED>,
           "",
           false,
         ],
@@ -262,15 +484,15 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Appointment type
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 ACT
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -289,29 +511,90 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": "ACT",
               },
               "ref": null,
               "rendered": "ACT",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Appointment location
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 GYM
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -330,34 +613,95 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": "GYM",
               },
               "ref": null,
               "rendered": "GYM",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Date and time 
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 <div>
                   Thursday
                 </div>
                 10/10/2019 - 21:00
                  
                 
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -376,7 +720,7 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
                   <div>
@@ -404,15 +748,115 @@ ShallowWrapper {
                 " ",
                 "",
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         "",
         false,
       ],
-      "type": [Function],
+      "type": Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [],
+        "componentStyle": ComponentStyle {
+          "componentId": "sc-bdVaJa",
+          "isStatic": true,
+          "rules": Array [
+            "
+  display: flex;
+  flex-direction: row;
+
+  div {
+    margin-right: ",
+            "20px",
+            ";
+  }
+
+  @media (max-width: ",
+            "641px",
+            ") {
+    flex-direction: column;
+    div {
+      margin-bottom: ",
+            "10px",
+            ";
+      margin-right: 0;
+    }
+  }
+",
+          ],
+        },
+        "displayName": "styled.div",
+        "foldedComponentIds": Array [],
+        "render": [Function],
+        "styledComponentId": "sc-bdVaJa",
+        "target": "div",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      },
     },
   ],
   Symbol(enzyme.__options__): Object {
@@ -459,61 +903,61 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
       "children": Array [
-        <Styled(div)>
+        <UNDEFINED>
           <strong>
             Appointment type
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             ACT
-          </Styled(div)>
-        </Styled(div)>,
-        <Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>,
+        <UNDEFINED>
           <strong>
             Appointment location
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             GYM
-          </Styled(div)>
-        </Styled(div)>,
-        <Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>,
+        <UNDEFINED>
           <strong>
             Date and time 
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             <div>
               Wednesday
             </div>
             20/03/2019 - 21:00
              
             
-          </Styled(div)>
-        </Styled(div)>,
-        <Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>,
+        <UNDEFINED>
           <strong>
             Comments
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             test
-          </Styled(div)>
-        </Styled(div)>,
-        <Styled(div)>
+          </UNDEFINED>
+        </UNDEFINED>,
+        <UNDEFINED>
           <strong>
             Recurring
           </strong>
-          <Styled(div)>
+          <UNDEFINED>
             Daily
             , 
             5
              occurrences
-          </Styled(div)>
-          <Styled(div)>
+          </UNDEFINED>
+          <UNDEFINED>
             Ends 
             Sunday, March 24th 2019
-          </Styled(div)>
-        </Styled(div)>,
+          </UNDEFINED>
+        </UNDEFINED>,
       ],
     },
     "ref": null,
@@ -521,15 +965,15 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Appointment type
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               ACT
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -548,29 +992,90 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": "ACT",
             },
             "ref": null,
             "rendered": "ACT",
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Appointment location
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               GYM
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -589,34 +1094,95 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": "GYM",
             },
             "ref": null,
             "rendered": "GYM",
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Date and time 
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               <div>
                 Wednesday
               </div>
               20/03/2019 - 21:00
                
               
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -635,7 +1201,7 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
                 <div>
@@ -663,23 +1229,84 @@ ShallowWrapper {
               " ",
               "",
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Comments
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               test
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -698,36 +1325,97 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": "test",
             },
             "ref": null,
             "rendered": "test",
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <strong>
               Recurring
             </strong>,
-            <Styled(div)>
+            <UNDEFINED>
               Daily
               , 
               5
                occurrences
-            </Styled(div)>,
-            <Styled(div)>
+            </UNDEFINED>,
+            <UNDEFINED>
               Ends 
               Sunday, March 24th 2019
-            </Styled(div)>,
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -746,7 +1434,7 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
                 "Daily",
@@ -762,12 +1450,41 @@ ShallowWrapper {
               "5",
               " occurrences",
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
                 "Ends ",
@@ -779,73 +1496,173 @@ ShallowWrapper {
               "Ends ",
               "Sunday, March 24th 2019",
             ],
-            "type": [Function],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-htpNat",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  margin-top: ",
+                  "5px",
+                  ";
+  @media (max-width: ",
+                  "641px",
+                  ") {
+    font-size: ",
+                  "16px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-htpNat",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bwzfXH",
+            "isStatic": true,
+            "rules": Array [
+              "
+  @media (max-width: ",
+              "641px",
+              ") {
+    margin-right: ",
+              "5px",
+              ";
+
+    strong {
+      font-size: ",
+              "16px",
+              ";
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bwzfXH",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
     ],
-    "type": [Function],
+    "type": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "sc-bdVaJa",
+        "isStatic": true,
+        "rules": Array [
+          "
+  display: flex;
+  flex-direction: row;
+
+  div {
+    margin-right: ",
+          "20px",
+          ";
+  }
+
+  @media (max-width: ",
+          "641px",
+          ") {
+    flex-direction: column;
+    div {
+      margin-bottom: ",
+          "10px",
+          ";
+      margin-right: 0;
+    }
+  }
+",
+        ],
+      },
+      "displayName": "styled.div",
+      "foldedComponentIds": Array [],
+      "render": [Function],
+      "styledComponentId": "sc-bdVaJa",
+      "target": "div",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    },
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "class",
+      "nodeType": "function",
       "props": Object {
         "children": Array [
-          <Styled(div)>
+          <UNDEFINED>
             <strong>
               Appointment type
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               ACT
-            </Styled(div)>
-          </Styled(div)>,
-          <Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>,
+          <UNDEFINED>
             <strong>
               Appointment location
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               GYM
-            </Styled(div)>
-          </Styled(div)>,
-          <Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>,
+          <UNDEFINED>
             <strong>
               Date and time 
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               <div>
                 Wednesday
               </div>
               20/03/2019 - 21:00
                
               
-            </Styled(div)>
-          </Styled(div)>,
-          <Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>,
+          <UNDEFINED>
             <strong>
               Comments
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               test
-            </Styled(div)>
-          </Styled(div)>,
-          <Styled(div)>
+            </UNDEFINED>
+          </UNDEFINED>,
+          <UNDEFINED>
             <strong>
               Recurring
             </strong>
-            <Styled(div)>
+            <UNDEFINED>
               Daily
               , 
               5
                occurrences
-            </Styled(div)>
-            <Styled(div)>
+            </UNDEFINED>
+            <UNDEFINED>
               Ends 
               Sunday, March 24th 2019
-            </Styled(div)>
-          </Styled(div)>,
+            </UNDEFINED>
+          </UNDEFINED>,
         ],
       },
       "ref": null,
@@ -853,15 +1670,15 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Appointment type
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 ACT
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -880,29 +1697,90 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": "ACT",
               },
               "ref": null,
               "rendered": "ACT",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Appointment location
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 GYM
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -921,34 +1799,95 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": "GYM",
               },
               "ref": null,
               "rendered": "GYM",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Date and time 
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 <div>
                   Wednesday
                 </div>
                 20/03/2019 - 21:00
                  
                 
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -967,7 +1906,7 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
                   <div>
@@ -995,23 +1934,84 @@ ShallowWrapper {
                 " ",
                 "",
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Comments
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 test
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -1030,36 +2030,97 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": "test",
               },
               "ref": null,
               "rendered": "test",
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <strong>
                 Recurring
               </strong>,
-              <Styled(div)>
+              <UNDEFINED>
                 Daily
                 , 
                 5
                  occurrences
-              </Styled(div)>,
-              <Styled(div)>
+              </UNDEFINED>,
+              <UNDEFINED>
                 Ends 
                 Sunday, March 24th 2019
-              </Styled(div)>,
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -1078,7 +2139,7 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
                   "Daily",
@@ -1094,12 +2155,41 @@ ShallowWrapper {
                 "5",
                 " occurrences",
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "children": Array [
                   "Ends ",
@@ -1111,13 +2201,113 @@ ShallowWrapper {
                 "Ends ",
                 "Sunday, March 24th 2019",
               ],
-              "type": [Function],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-htpNat",
+                  "isStatic": true,
+                  "rules": Array [
+                    "
+  margin-top: ",
+                    "5px",
+                    ";
+  @media (max-width: ",
+                    "641px",
+                    ") {
+    font-size: ",
+                    "16px",
+                    ";
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-htpNat",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bwzfXH",
+              "isStatic": true,
+              "rules": Array [
+                "
+  @media (max-width: ",
+                "641px",
+                ") {
+    margin-right: ",
+                "5px",
+                ";
+
+    strong {
+      font-size: ",
+                "16px",
+                ";
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bwzfXH",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
       ],
-      "type": [Function],
+      "type": Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [],
+        "componentStyle": ComponentStyle {
+          "componentId": "sc-bdVaJa",
+          "isStatic": true,
+          "rules": Array [
+            "
+  display: flex;
+  flex-direction: row;
+
+  div {
+    margin-right: ",
+            "20px",
+            ";
+  }
+
+  @media (max-width: ",
+            "641px",
+            ") {
+    flex-direction: column;
+    div {
+      margin-bottom: ",
+            "10px",
+            ";
+      margin-right: 0;
+    }
+  }
+",
+          ],
+        },
+        "displayName": "styled.div",
+        "foldedComponentIds": Array [],
+        "render": [Function],
+        "styledComponentId": "sc-bdVaJa",
+        "target": "div",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      },
     },
   ],
   Symbol(enzyme.__options__): Object {
