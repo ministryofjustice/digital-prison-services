@@ -578,9 +578,9 @@ ShallowWrapper {
           </strong>
           <Styled(div)>
             Weekly
-            , repeats 
+            , 
             1
-             times
+             occurrences
           </Styled(div)>
           <Styled(div)>
              Ends 
@@ -831,9 +831,9 @@ ShallowWrapper {
             </strong>,
             <Styled(div)>
               Weekly
-              , repeats 
+              , 
               1
-               times
+               occurrences
             </Styled(div)>,
             <Styled(div)>
                Ends 
@@ -861,17 +861,17 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 "Weekly",
-                ", repeats ",
+                ", ",
                 "1",
-                " times",
+                " occurrences",
               ],
             },
             "ref": null,
             "rendered": Array [
               "Weekly",
-              ", repeats ",
+              ", ",
               "1",
-              " times",
+              " occurrences",
             ],
             "type": [Function],
           },
@@ -955,9 +955,9 @@ ShallowWrapper {
             </strong>
             <Styled(div)>
               Weekly
-              , repeats 
+              , 
               1
-               times
+               occurrences
             </Styled(div)>
             <Styled(div)>
                Ends 
@@ -1208,9 +1208,9 @@ ShallowWrapper {
               </strong>,
               <Styled(div)>
                 Weekly
-                , repeats 
+                , 
                 1
-                 times
+                 occurrences
               </Styled(div)>,
               <Styled(div)>
                  Ends 
@@ -1238,17 +1238,17 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   "Weekly",
-                  ", repeats ",
+                  ", ",
                   "1",
-                  " times",
+                  " occurrences",
                 ],
               },
               "ref": null,
               "rendered": Array [
                 "Weekly",
-                ", repeats ",
+                ", ",
                 "1",
-                " times",
+                " occurrences",
               ],
               "type": [Function],
             },
