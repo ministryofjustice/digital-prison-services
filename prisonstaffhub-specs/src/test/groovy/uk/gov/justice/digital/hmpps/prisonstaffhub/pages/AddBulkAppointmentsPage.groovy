@@ -25,7 +25,11 @@ class AddBulkAppointmentsPage extends Page {
         dayBox { value -> $('td.rdtDay:not(.rdtOld):not(.rdtNew)', 'data-value': value) }
         submitButton { $('button', type: 'submit') }
         tableRows { $('tbody tr') }
-        successMessage { $('h3', text: '1 appointments created')}
+        successMessage { $('h3', text: 'Appointments created')}
+        recurring { $(name: 'recurring') }
+        repats { $(name: 'repeats') }
+        times { $(name: 'times') }
+
     }
 
 
@@ -48,6 +52,10 @@ class AddBulkAppointmentsPage extends Page {
         setDatePicker(year, 'Aug', '1')
 
         setStartTime("10", "10")
+
+        recurring = true
+        repeats = "WEEKLY"
+        times = 3
 
         submitButton.click()
     }
