@@ -47,7 +47,7 @@ const AppointmentDetails = ({
         <Text>
           {properCaseName(repeats)}, {times} occurrences
         </Text>
-        <Text> Ends {RecurringAppointments.recurringEndDate({ startTime, repeats, numberOfTimes: times })}</Text>
+        <Text> Ends {RecurringAppointments.recurringEndDate({ startTime, repeats, times })}</Text>
       </Info>
     )}
   </Container>
