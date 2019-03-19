@@ -82,7 +82,7 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
   if (values.times <= 0) {
     formErrors.push({
       targetName: 'times',
-      text: 'Occurrences value must 1 or more',
+      text: 'Number of occurrences must be 1 or more',
     })
   }
 

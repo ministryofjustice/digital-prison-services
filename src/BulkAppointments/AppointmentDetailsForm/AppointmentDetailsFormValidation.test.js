@@ -200,6 +200,6 @@ describe('Appointment form validation', () => {
     })
 
     const timesValidationError = findValidationError('times', validationMessages)
-    expect(timesValidationError.text).toBe('Occurrences value must 1 or more')
+    expect(timesValidationError.text).toBe('Number of occurrences must be 1 or more')
   })
 })
