@@ -26,7 +26,7 @@ const appInitialState = {
   loaded: false,
   menuOpen: false,
   showModal: {},
-  title: 'Digital Prison Services',
+  title: 'Activity Lists',
   caseChangeRedirect: true,
 }
 
