@@ -26,7 +26,7 @@ export class Page extends Component {
   }
 
   renderTitleString = title => {
-    const appName = 'Digital Prison Services'
+    const appName = 'Whereabouts - Prison NOMIS'
     document.title = title ? `${title} - ${appName}` : appName
   }
 

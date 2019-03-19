@@ -8,7 +8,7 @@ const appInitialState = {
   error: '',
   message: null,
   loaded: false,
-  title: 'Digital Prison Services',
+  title: 'Activity Lists',
 }
 
 const appWithErrorState = {
@@ -67,7 +67,7 @@ describe('app (global) reducer', () => {
       loaded: false,
       menuOpen: false,
       showModal: {},
-      title: 'Digital Prison Services',
+      title: 'Activity Lists',
     })
   })
 
