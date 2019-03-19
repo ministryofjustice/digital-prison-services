@@ -135,7 +135,7 @@ describe('Appointment form validation', () => {
     })
 
     const timesValidationError = findValidationError('times', validationMessages)
-    expect(timesValidationError.text).toBe('The number of times cannot exceed 1 year')
+    expect(timesValidationError.text).toBe('Number of occurrences cannot exceed 1 year')
   })
 
   it('should return an error message when date is on a Saturday', () => {
@@ -175,7 +175,7 @@ describe('Appointment form validation', () => {
     })
 
     const timesValidationError = findValidationError('times', validationMessages)
-    expect(timesValidationError.text).toBe('The number of times cannot exceed 1 year')
+    expect(timesValidationError.text).toBe('Number of occurrences cannot exceed 1 year')
   })
 
   it('should NOT return error when weekdays x working days equals 1 year', () => {
@@ -190,5 +190,16 @@ describe('Appointment form validation', () => {
 
     const timesValidationError = findValidationError('times', validationMessages)
     expect(timesValidationError).toBe(undefined)
+  })
+
+  it('Occurrences should be higher than zero', () => {
+    const validationMessages = validateThenSubmit({})({
+      recurring: true,
+      repeats: 'WEEKDAYS',
+      times: -1,
+    })
+
+    const timesValidationError = findValidationError('times', validationMessages)
+    expect(timesValidationError.text).toBe('Occurrences value must 1 or more')
   })
 })

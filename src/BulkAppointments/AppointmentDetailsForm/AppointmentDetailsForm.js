@@ -114,7 +114,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
               <FieldWithError
                 errors={errors}
                 name="times"
-                label="Number of times"
+                label="Occurrences"
                 hint="Up to a maximum of 1 year"
                 component={NumericInput}
               />

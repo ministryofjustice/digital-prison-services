@@ -64,7 +64,7 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
     if (endOfPeriod && endOfPeriod.isSameOrAfter(now.startOf('day').add(1, 'years')))
       formErrors.push({
         targetName: 'times',
-        text: 'The number of times cannot exceed 1 year',
+        text: 'Number of occurrences cannot exceed 1 year',
       })
   }
 
@@ -77,6 +77,13 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
         text: 'The date must be a week day',
       })
     }
+  }
+
+  if (values.times <= 0) {
+    formErrors.push({
+      targetName: 'times',
+      text: 'Occurrences value must 1 or more',
+    })
   }
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
