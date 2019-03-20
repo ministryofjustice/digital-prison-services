@@ -116,7 +116,7 @@ class GlobalSearchForm extends Component {
 
     const { showFilters, clearFilterCount } = this.state
     return (
-      <div>
+      <form onSubmit={() => handleSearch(history)}>
         <div className="pure-u-md-11-12 searchForm padding-top padding-bottom-large padding-left-30">
           <label className="form-label" htmlFor="search-text">
             Enter prisoner name or ID
@@ -129,14 +129,7 @@ class GlobalSearchForm extends Component {
             value={searchText}
             onChange={handleSearchTextChange}
           />
-          <button
-            type="button"
-            id="search-again"
-            className="button margin-left"
-            onClick={() => {
-              handleSearch(history)
-            }}
-          >
+          <button type="submit" id="search-again" className="button margin-left">
             {buttonText}
           </button>
         </div>
@@ -168,7 +161,7 @@ class GlobalSearchForm extends Component {
             </div>
           </div>
         </details>
-      </div>
+      </form>
     )
   }
 }
