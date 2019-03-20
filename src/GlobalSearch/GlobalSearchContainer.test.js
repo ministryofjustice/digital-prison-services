@@ -39,6 +39,8 @@ const standardProps = {
   searchPerformed: true,
 }
 
+const event = { preventDefault: jest.fn() }
+
 describe('Global search container', () => {
   it('should pass Global search results as page title if there is a searchText', async () => {
     const component = shallow(<GlobalSearchContainer {...standardProps} />)
@@ -154,7 +156,7 @@ describe('Global search container', () => {
     component
       .find('GlobalSearch')
       .props()
-      .handleSearch(historyMock)
+      .handleSearch(event, historyMock)
 
     expect(historyMock.replace).toBeCalled()
     expect(historyMock.replace).toBeCalledWith('/global-search-results?searchText=s&referrer=licences')
@@ -174,7 +176,7 @@ describe('Global search container', () => {
     component
       .find('GlobalSearch')
       .props()
-      .handleSearch(historyMock)
+      .handleSearch(event, historyMock)
 
     expect(historyMock.replace).toBeCalled()
     expect(historyMock.replace).toBeCalledWith('/global-search-results?searchText=s')
