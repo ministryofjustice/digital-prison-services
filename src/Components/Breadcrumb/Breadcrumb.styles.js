@@ -1,4 +1,4 @@
-import styled from 'react-emotion'
+import styled from 'styled-components'
 import { BLACK, GREY_1, YELLOW } from 'govuk-colours'
 import { FONT_SIZE, LINE_HEIGHT, MEDIA_QUERIES, NTA_LIGHT, SPACING } from '@govuk-react/constants'
 
@@ -24,7 +24,7 @@ export const BreadcrumbList = styled('ul')({
   display: 'block',
 })
 
-export const BreadcrumbListItem = styled('li')({
+const BreadcrumbListItem = styled('li')({
   position: 'relative',
   display: 'inline-block',
   whiteSpace: 'no-wrap',
@@ -62,3 +62,7 @@ export const BreadcrumbListItem = styled('li')({
     },
   },
 })
+
+BreadcrumbListItem.displayName = 'BreadcrumbItem'
+
+export { BreadcrumbListItem }

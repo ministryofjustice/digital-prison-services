@@ -1,4 +1,4 @@
-import styled from 'react-emotion'
+import styled from 'styled-components'
 import Select from '@govuk-react/select'
 import TextArea from '@govuk-react/text-area'
 import { BORDER_COLOUR } from 'govuk-colours'

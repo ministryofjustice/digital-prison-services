@@ -35,13 +35,13 @@ ShallowWrapper {
         <withRouter()
           homeLink="http://home/"
         />,
-        <StyledHoc
+        <BackLink
           href="http://this/"
           onClick={undefined}
         >
           Back
-        </StyledHoc>,
-        <Styled(div)>
+        </BackLink>,
+        <UNDEFINED>
           <Heading
             level={1}
             size="LARGE"
@@ -54,7 +54,7 @@ ShallowWrapper {
           >
             Page content
           </div>
-        </Styled(div)>,
+        </UNDEFINED>,
       ],
     },
     "ref": null,
@@ -82,7 +82,7 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": "Back",
           "href": "http://this/",
@@ -95,7 +95,7 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "class",
+        "nodeType": "function",
         "props": Object {
           "children": Array [
             <Heading
@@ -141,7 +141,33 @@ ShallowWrapper {
             "type": "div",
           },
         ],
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bxivhb",
+            "isStatic": true,
+            "lastClassName": "hWZXLf",
+            "rules": Array [
+              "
+  padding-top: ",
+              "20px",
+              ";
+  @media print {
+    padding-top: 0;
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bxivhb",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
       },
     ],
     "type": Symbol(react.fragment),
@@ -157,13 +183,13 @@ ShallowWrapper {
           <withRouter()
             homeLink="http://home/"
           />,
-          <StyledHoc
+          <BackLink
             href="http://this/"
             onClick={undefined}
           >
             Back
-          </StyledHoc>,
-          <Styled(div)>
+          </BackLink>,
+          <UNDEFINED>
             <Heading
               level={1}
               size="LARGE"
@@ -176,7 +202,7 @@ ShallowWrapper {
             >
               Page content
             </div>
-          </Styled(div)>,
+          </UNDEFINED>,
         ],
       },
       "ref": null,
@@ -204,7 +230,7 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": "Back",
             "href": "http://this/",
@@ -217,7 +243,7 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <Heading
@@ -263,7 +289,33 @@ ShallowWrapper {
               "type": "div",
             },
           ],
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-bxivhb",
+              "isStatic": true,
+              "lastClassName": "hWZXLf",
+              "rules": Array [
+                "
+  padding-top: ",
+                "20px",
+                ";
+  @media print {
+    padding-top: 0;
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-bxivhb",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
         },
       ],
       "type": Symbol(react.fragment),
