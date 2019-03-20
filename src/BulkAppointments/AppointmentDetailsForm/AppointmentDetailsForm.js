@@ -26,8 +26,7 @@ import {
   ButtonContainer,
   FullWidthTextArea,
   FullWidthSelect,
-  Indent,
-  AddSpacing,
+  IndentedContent,
 } from '../AddPrisoners/AddPrisoners.styles'
 
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
@@ -92,44 +91,42 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
         />
 
         {values.recurring && (
-          <AddSpacing>
-            <Indent>
-              <FieldWithError
-                errors={errors}
-                name="repeats"
-                component={FullWidthSelect}
-                placeholder="Select"
-                label="Repeats"
-              >
-                <option value="" disabled hidden>
-                  Select
-                </option>
-                <option value="DAILY">Daily</option>
-                <option value="WEEKDAYS">Weekdays (Monday to Friday)</option>
-                <option value="WEEKLY">Weekly</option>
-                <option value="FORTNIGHTLY">Fortnightly</option>
-                <option value="MONTHLY">Monthly</option>
-              </FieldWithError>
+          <IndentedContent>
+            <FieldWithError
+              errors={errors}
+              name="repeats"
+              component={FullWidthSelect}
+              placeholder="Select"
+              label="Repeats"
+            >
+              <option value="" disabled hidden>
+                Select
+              </option>
+              <option value="DAILY">Daily</option>
+              <option value="WEEKDAYS">Weekdays (Monday to Friday)</option>
+              <option value="WEEKLY">Weekly</option>
+              <option value="FORTNIGHTLY">Fortnightly</option>
+              <option value="MONTHLY">Monthly</option>
+            </FieldWithError>
 
-              <FieldWithError
-                errors={errors}
-                name="times"
-                label="Occurrences"
-                hint="Up to a maximum of 1 year"
-                component={NumericInput}
-              />
+            <FieldWithError
+              errors={errors}
+              name="times"
+              label="Occurrences"
+              hint="Up to a maximum of 1 year"
+              component={NumericInput}
+            />
 
-              {values.repeats &&
-                values.times &&
-                values.startTime &&
-                values.recurringEndDate && (
-                  <Label>
-                    <LabelText> Ends on</LabelText>
-                    <strong>{values.recurringEndDate}</strong>
-                  </Label>
-                )}
-            </Indent>
-          </AddSpacing>
+            {values.repeats &&
+              values.times &&
+              values.startTime &&
+              values.recurringEndDate && (
+                <Label>
+                  <LabelText> Ends on</LabelText>
+                  <strong>{values.recurringEndDate}</strong>
+                </Label>
+              )}
+          </IndentedContent>
         )}
       </div>
 
@@ -169,6 +166,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
                 value: values.comments || input.value,
               }}
               {...meta}
+              mb={6}
             >
               Comments (optional)
             </FullWidthTextArea>
