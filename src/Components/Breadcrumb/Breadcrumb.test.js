@@ -80,36 +80,16 @@ describe('<Breadcrumb />', () => {
   })
 
   it('should link back to the Application homepage', () => {
-    expect(
-      wrapper
-        .find('BreadcrumbItem')
-        .at(1)
-        .find('Link')
-        .prop('to')
-    ).toEqual('/')
-    expect(
-      wrapper
-        .find('BreadcrumbItem')
-        .at(1)
-        .find('span')
-        .text()
-    ).toEqual('Application homepage')
+    const breadcrumbItem = wrapper.find('BreadcrumbItem').at(1)
+
+    expect(breadcrumbItem.find('Link').prop('to')).toEqual('/')
+    expect(breadcrumbItem.find('span').text()).toEqual('Application homepage')
   })
 
   it('should not apply a link to the current page breadcrumb', () => {
-    expect(
-      wrapper
-        .find('BreadcrumbItem')
-        .last()
-        .find('Link')
-        .exists()
-    ).toBe(false)
-    expect(
-      wrapper
-        .find('BreadcrumbItem')
-        .last()
-        .find('span')
-        .text()
-    ).toEqual('Test page')
+    const breadcrumbItem = wrapper.find('BreadcrumbItem').last()
+
+    expect(breadcrumbItem.find('Link').exists()).toBe(false)
+    expect(breadcrumbItem.find('span').text()).toEqual('Test page')
   })
 })
