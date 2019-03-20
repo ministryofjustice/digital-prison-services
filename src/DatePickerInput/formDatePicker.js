@@ -22,7 +22,14 @@ class FormDatePicker extends Component {
       <Label error={meta.error}>
         <LabelText> {label} </LabelText>
         {meta.touched && meta.error && <ErrorText>{meta.error}</ErrorText>}
-        <Input {...props} name={input.name} error={meta.touched && meta.error} placeholder={placeholder} readOnly />
+        <Input
+          {...props}
+          name={input.name}
+          error={meta.touched && meta.error}
+          placeholder={placeholder}
+          readOnly
+          mb={6}
+        />
       </Label>
     )
   }

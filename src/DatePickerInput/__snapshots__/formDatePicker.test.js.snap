@@ -54,6 +54,7 @@ ShallowWrapper {
             <Input
               className="form-control"
               error="there was an error"
+              mb={6}
               name="date"
               onChange={[Function]}
               onClick={[Function]}
@@ -128,6 +129,7 @@ ShallowWrapper {
             <Input
               className="form-control"
               error="there was an error"
+              mb={6}
               name="date"
               onChange={[Function]}
               onClick={[Function]}
@@ -157,6 +159,7 @@ ShallowWrapper {
               <Input
                 className="form-control"
                 error="there was an error"
+                mb={6}
                 name="date"
                 onChange={[Function]}
                 onClick={[Function]}
@@ -209,6 +212,7 @@ ShallowWrapper {
               "props": Object {
                 "className": "form-control",
                 "error": "there was an error",
+                "mb": 6,
                 "name": "date",
                 "onChange": [Function],
                 "onClick": [Function],
@@ -320,6 +324,7 @@ ShallowWrapper {
               <Input
                 className="form-control"
                 error="there was an error"
+                mb={6}
                 name="date"
                 onChange={[Function]}
                 onClick={[Function]}
@@ -394,6 +399,7 @@ ShallowWrapper {
               <Input
                 className="form-control"
                 error="there was an error"
+                mb={6}
                 name="date"
                 onChange={[Function]}
                 onClick={[Function]}
@@ -423,6 +429,7 @@ ShallowWrapper {
                 <Input
                   className="form-control"
                   error="there was an error"
+                  mb={6}
                   name="date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -475,6 +482,7 @@ ShallowWrapper {
                 "props": Object {
                   "className": "form-control",
                   "error": "there was an error",
+                  "mb": 6,
                   "name": "date",
                   "onChange": [Function],
                   "onClick": [Function],
