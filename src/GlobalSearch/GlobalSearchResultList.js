@@ -2,7 +2,6 @@ import React from 'react'
 import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
-import './GlobalSearch.scss'
 import PropTypes from 'prop-types'
 import { getOffenderLink } from '../links'
 import PreviousNextNavigation from '../PreviousNextNavigation'
@@ -54,7 +53,9 @@ const GlobalSearchResultList = ({
                 <img
                   id={`image-${prisoner.offenderNo}`}
                   alt={`prisoner ${prisoner.offenderNo}`}
-                  className="photo clickable"
+                  className="clickable"
+                  height="100"
+                  width="80"
                   src={offenderImageUrl(prisoner.offenderNo)}
                 />
               </a>
@@ -62,7 +63,8 @@ const GlobalSearchResultList = ({
               <img
                 alt={`prisoner ${prisoner.offenderNo}`}
                 id={`image-${prisoner.offenderNo}`}
-                className="photo"
+                height="100"
+                width="80"
                 src={offenderImageUrl(prisoner.offenderNo)}
               />
             )}

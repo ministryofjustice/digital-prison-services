@@ -1,4 +1,8 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
+import GridRow from '@govuk-react/grid-row'
+import GridCol from '@govuk-react/grid-col'
+import InputField from '@govuk-react/input-field'
+import Button from '@govuk-react/button'
 import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
@@ -7,6 +11,7 @@ import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { linkOnClick } from '../utils'
 import DateOfBirthInput from '../DateOfBirthInput/DateOfBirthInput'
+import { SearchContainer, SearchInput, StyledSelect } from './GlobalSearchForm.styles'
 
 class GlobalSearchForm extends Component {
   constructor(props) {
@@ -56,83 +61,31 @@ class GlobalSearchForm extends Component {
       }
     }
 
-    const locationSelect = (
-      <Fragment>
-        <label className="form-label" htmlFor="location-select">
-          Location status of prisoner
-        </label>
-
-        <select
-          id="location-select"
-          name="location-select"
-          className="form-control width40"
-          value={locationFilter}
-          onChange={handleSearchLocationFilterChange}
-        >
-          <option key="ALL" value="ALL">
-            All
-          </option>
-          <option key="IN" value="IN">
-            Inside
-          </option>
-          <option key="EVENING" value="OUT">
-            Outside
-          </option>
-        </select>
-      </Fragment>
-    )
-
-    const genderSelect = (
-      <Fragment>
-        <label className="form-label" htmlFor="gender-select">
-          Prisoner gender
-        </label>
-
-        <select
-          id="gender-select"
-          name="gender-select"
-          className="form-control width40"
-          value={genderFilter}
-          onChange={handleSearchGenderFilterChange}
-        >
-          <option key="ALL" value="ALL">
-            All
-          </option>
-          <option key="MALE" value="M">
-            Male
-          </option>
-          <option key="FEMALE" value="F">
-            Female
-          </option>
-          <option key="NOT_KNOWN" value="NK">
-            Not known
-          </option>
-          <option key="NOT_SPECIFIED" value="NS">
-            Not specified
-          </option>
-        </select>
-      </Fragment>
-    )
-
     const { showFilters, clearFilterCount } = this.state
     return (
-      <form onSubmit={() => handleSearch(history)}>
-        <div className="pure-u-md-11-12 searchForm padding-top padding-bottom-large padding-left-30">
-          <label className="form-label" htmlFor="search-text">
-            Enter prisoner name or ID
-          </label>
-          <input
-            type="text"
-            className="width40 form-control"
-            id="search-text"
-            name="searchText"
-            value={searchText}
-            onChange={handleSearchTextChange}
-          />
-          <button type="submit" id="search-again" className="button margin-left">
-            {buttonText}
-          </button>
-        </div>
+      <form onSubmit={event => handleSearch(event, history)}>
+        <GridRow>
+          <GridCol setWidth="one-half">
+            <SearchContainer>
+              <SearchInput>
+                <InputField
+                  input={{
+                    id: 'search-text',
+                    name: 'searchText',
+                    value: searchText,
+                    onChange: handleSearchTextChange,
+                  }}
+                >
+                  Enter prisoner name or ID
+                </InputField>
+              </SearchInput>
+              <Button type="submit" id="search-again" mb={1}>
+                {buttonText}
+              </Button>
+            </SearchContainer>
+          </GridCol>
+        </GridRow>
+
         <details className="govuk-details visible" open={showFilters}>
           <summary
             className="govuk-details__summary"
@@ -146,9 +99,60 @@ class GlobalSearchForm extends Component {
               {showFilters ? 'Hide filters' : 'Show filters'}
             </span>
           </summary>
+
           <div className="govuk-details__text">
-            <div className="pure-u-md-1-4 padding-top padding-bottom-large">{locationSelect}</div>
-            <div className="pure-u-md-1-4 padding-top padding-bottom-large padding-left">{genderSelect}</div>
+            <GridRow>
+              <GridCol setWidth="one-half">
+                <StyledSelect
+                  label="Location status of prisoner"
+                  mb={6}
+                  input={{
+                    id: 'location-select',
+                    name: 'location-select',
+                    value: locationFilter,
+                    onChange: handleSearchLocationFilterChange,
+                  }}
+                >
+                  <option key="ALL" value="ALL">
+                    All
+                  </option>
+                  <option key="IN" value="IN">
+                    Inside
+                  </option>
+                  <option key="EVENING" value="OUT">
+                    Outside
+                  </option>
+                </StyledSelect>
+
+                <StyledSelect
+                  label="Prisoner gender"
+                  mb={6}
+                  input={{
+                    id: 'gender-select',
+                    name: 'gender-select',
+                    value: genderFilter,
+                    onChange: handleSearchGenderFilterChange,
+                  }}
+                >
+                  <option key="ALL" value="ALL">
+                    All
+                  </option>
+                  <option key="MALE" value="M">
+                    Male
+                  </option>
+                  <option key="FEMALE" value="F">
+                    Female
+                  </option>
+                  <option key="NOT_KNOWN" value="NK">
+                    Not known
+                  </option>
+                  <option key="NOT_SPECIFIED" value="NS">
+                    Not specified
+                  </option>
+                </StyledSelect>
+              </GridCol>
+            </GridRow>
+
             <DateOfBirthInput
               handleDateOfBirthChange={handleDateOfBirthChange}
               key={clearFilterCount}

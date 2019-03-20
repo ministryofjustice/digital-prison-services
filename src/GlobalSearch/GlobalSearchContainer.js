@@ -108,7 +108,8 @@ export class GlobalSearchContainer extends Component {
     }
   }
 
-  async handleSearch(history) {
+  async handleSearch(event, history) {
+    event.preventDefault()
     const { searchText, handleError, resetErrorDispatch, dateOfBirthFilter, setLoadedDispatch } = this.props
     resetErrorDispatch()
     const validForm = dateOfBirthFilter.blank || dateOfBirthFilter.valid
