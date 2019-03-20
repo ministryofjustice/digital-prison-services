@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 import { SPACING, BORDER_WIDTH_FORM_ELEMENT } from '@govuk-react/constants'
 import { ERROR_COLOUR } from 'govuk-colours'
+import { spacing } from '@govuk-react/lib'
 
 // eslint-disable-next-line import/prefer-default-export
 export const Container = styled('div')`
   display: flex;
-  flex-direction: row;
+  ${spacing.withWhiteSpace({ marginBottom: 6 })};
 
   span {
     padding-bottom: 0;

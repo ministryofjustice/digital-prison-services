@@ -14,7 +14,7 @@ export const FieldWithError = props => {
     error,
   }
 
-  return <Field {...props} meta={meta} />
+  return <Field {...props} meta={meta} mb={6} />
 }
 
 export const onHandleErrorClick = targetName => {

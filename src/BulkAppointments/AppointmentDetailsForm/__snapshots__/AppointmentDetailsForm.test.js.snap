@@ -1186,7 +1186,6 @@ ShallowWrapper {
                     "rules": Array [
                       "
   display: flex;
-  flex-direction: row;
 
   div:first-child {
     margin-right: 5px;
@@ -2749,7 +2748,6 @@ ShallowWrapper {
                       "rules": Array [
                         "
   display: flex;
-  flex-direction: row;
 
   div:first-child {
     margin-right: 5px;

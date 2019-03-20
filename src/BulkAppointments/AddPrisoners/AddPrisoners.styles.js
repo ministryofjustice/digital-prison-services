@@ -3,10 +3,10 @@ import Select from '@govuk-react/select'
 import TextArea from '@govuk-react/text-area'
 import { BORDER_COLOUR } from 'govuk-colours'
 import { BREAKPOINTS, FONT_SIZE, SPACING, BORDER_WIDTH } from '@govuk-react/constants'
+import { spacing } from '@govuk-react/lib'
 
 export const HorizontallyStacked = styled('div')`
   display: flex;
-  flex-direction: row;
 
   div:first-child {
     margin-right: 5px;
@@ -62,13 +62,9 @@ export const Table = styled('table')`
   }
 `
 
-export const Indent = styled('div')`
+export const IndentedContent = styled('div')`
   padding: ${SPACING.SCALE_3};
   padding-left: ${SPACING.SCALE_4};
   border-left: ${BORDER_WIDTH} solid ${BORDER_COLOUR};
-  margin-bottom: ${SPACING.SCALE_1};
-`
-
-export const AddSpacing = styled('div')`
-  margin-bottom: ${SPACING.SCALE_5};
+  ${spacing.withWhiteSpace({ marginBottom: 6 })};
 `
