@@ -37,7 +37,9 @@ class AddBulkAppointmentsSpecification extends GebReportingSpec {
                 "bookingId", 1,
                 "offenderNo", "A12345",
                 "firstName", "John",
-                "lastName", " Doe")])
+                "lastName", " Doe",
+                "agencyId", "LEI"
+        )])
 
         elite2api.stubPostBulkAppointments()
 

@@ -86,11 +86,12 @@ const factory = ({
 
   const uploadOffenders = asyncMiddleware(async (req, res) => {
     const { file } = req.files
+    const { agencyId } = req.params
 
     csvParserService
       .loadAndParseCsvFile(file)
       .then(async fileContent => {
-        const viewModel = await offenderLoader.loadFromCsvContent(res.locals, fileContent)
+        const viewModel = await offenderLoader.loadFromCsvContent(res.locals, fileContent, agencyId)
         res.json(viewModel)
       })
       .catch(error => {
