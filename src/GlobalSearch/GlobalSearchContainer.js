@@ -163,6 +163,7 @@ export class GlobalSearchContainer extends Component {
     const { searchPerformed, licencesUrl, userRoles, caseLoadOptions } = this.props
     const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
     const licencesUser = userRoles.includes('LICENCE_RO')
+    const licencesVaryUser = userRoles.includes('LICENCE_VARY')
     const viewInactivePrisoner = userRoles.includes('INACTIVE_BOOKINGS')
     const caseLoads = caseLoadOptions.map(caseload => caseload.caseLoadId)
     const backWhiteList = { licences: licencesUrl }
@@ -182,6 +183,7 @@ export class GlobalSearchContainer extends Component {
           searchPerformed={searchPerformed}
           licencesUrl={licencesUrl}
           licencesUser={licencesUser}
+          licencesVaryUser={licencesVaryUser}
           caseLoads={caseLoads}
           viewInactivePrisoner={viewInactivePrisoner}
           {...this.props}
