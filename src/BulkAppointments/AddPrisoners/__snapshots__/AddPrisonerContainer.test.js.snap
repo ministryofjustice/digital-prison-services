@@ -148,6 +148,7 @@ ShallowWrapper {
             />
             <UNDEFINED />
             <OffenderUpload
+              agencyId="LEI"
               onCancel={[Function]}
               onError={[Function]}
               onSuccess={[Function]}
@@ -214,6 +215,7 @@ ShallowWrapper {
               />
               <UNDEFINED />
               <OffenderUpload
+                agencyId="LEI"
                 onCancel={[Function]}
                 onError={[Function]}
                 onSuccess={[Function]}
@@ -284,6 +286,7 @@ ShallowWrapper {
                 />,
                 <UNDEFINED />,
                 <OffenderUpload
+                  agencyId="LEI"
                   onCancel={[Function]}
                   onError={[Function]}
                   onSuccess={[Function]}
@@ -418,6 +421,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "function",
                 "props": Object {
+                  "agencyId": "LEI",
                   "onCancel": [Function],
                   "onError": [Function],
                   "onSuccess": [Function],
@@ -563,6 +567,7 @@ ShallowWrapper {
               />
               <UNDEFINED />
               <OffenderUpload
+                agencyId="LEI"
                 onCancel={[Function]}
                 onError={[Function]}
                 onSuccess={[Function]}
@@ -629,6 +634,7 @@ ShallowWrapper {
                 />
                 <UNDEFINED />
                 <OffenderUpload
+                  agencyId="LEI"
                   onCancel={[Function]}
                   onError={[Function]}
                   onSuccess={[Function]}
@@ -699,6 +705,7 @@ ShallowWrapper {
                   />,
                   <UNDEFINED />,
                   <OffenderUpload
+                    agencyId="LEI"
                     onCancel={[Function]}
                     onError={[Function]}
                     onSuccess={[Function]}
@@ -833,6 +840,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "function",
                   "props": Object {
+                    "agencyId": "LEI",
                     "onCancel": [Function],
                     "onError": [Function],
                     "onSuccess": [Function],

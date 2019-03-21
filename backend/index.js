@@ -204,7 +204,7 @@ app.use('/api/movements/livingUnit/:livingUnitId/currently-out', controller.getO
 app.use('/api/movements/agency/:agencyId/currently-out', controller.getOffendersCurrentlyOutOfAgency)
 app.use('/api/movements/:agencyId/en-route', controller.getOffendersEnRoute)
 app.use('/api/globalSearch', controller.globalSearch)
-app.use('/api/appointments/upload-offenders', controller.uploadOffenders)
+app.use('/api/appointments/upload-offenders/:agencyId', controller.uploadOffenders)
 app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
 app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewModel)
 app.post('/api/bulk-appointments', controller.addBulkAppointments)

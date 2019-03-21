@@ -19,13 +19,13 @@ const createFileFormDataFromEvent = event => {
   return formData
 }
 
-const onFileInputChanged = async ({ event, onError, onSuccess }) => {
+const onFileInputChanged = async ({ event, onError, onSuccess, agencyId }) => {
   try {
     event.preventDefault()
     if (!event.target.files) return
     const formData = createFileFormDataFromEvent(event)
 
-    const response = await axios.post('/api/appointments/upload-offenders', formData, {
+    const response = await axios.post(`/api/appointments/upload-offenders/${agencyId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -36,7 +36,7 @@ const onFileInputChanged = async ({ event, onError, onSuccess }) => {
   }
 }
 
-const OffenderUpload = ({ onError, onSuccess, onCancel, showCancelButton }) => (
+const OffenderUpload = ({ onError, onSuccess, onCancel, showCancelButton, agencyId }) => (
   <React.Fragment>
     <Container>
       <a href="/bulk-appointments/csv-template" className="link">
@@ -48,7 +48,7 @@ const OffenderUpload = ({ onError, onSuccess, onCancel, showCancelButton }) => (
           name="file"
           type="file"
           id="file-input"
-          onChange={event => onFileInputChanged({ event, onError, onSuccess })}
+          onChange={event => onFileInputChanged({ event, onError, onSuccess, agencyId })}
           accept=".csv"
         />
       </Label>
@@ -66,6 +66,7 @@ OffenderUpload.propTypes = {
   onSuccess: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   showCancelButton: PropTypes.bool,
+  agencyId: PropTypes.string.isRequired,
 }
 
 OffenderUpload.defaultProps = {

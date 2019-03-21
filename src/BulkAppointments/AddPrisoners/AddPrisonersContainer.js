@@ -101,6 +101,7 @@ class AddPrisonerContainer extends Component {
       history,
       dispatchAppointmentPrisoners,
       prisoners,
+      agencyId,
     } = this.props
 
     const { complete, appointmentsCreated, lastAppointmentDetails } = this.state
@@ -136,6 +137,7 @@ class AddPrisonerContainer extends Component {
                 showCancelButton={prisoners.length === 0}
                 onCancel={event => this.onCancel(event)}
                 onError={error => handleError(error)}
+                agencyId={agencyId}
                 onSuccess={data => {
                   resetErrorDispatch()
                   dispatchAppointmentPrisoners(data)
