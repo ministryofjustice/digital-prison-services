@@ -63,6 +63,13 @@ describe('Global search container', () => {
     expect(component.find('GlobalSearch').props().licencesUser).toEqual(true)
   })
 
+  it('should pass licencesVaryUser true if roles includes LICENCE_VARY', async () => {
+    const licencesProps = { ...standardProps, userRoles: ['SOMETHING', 'LICENCE_VARY'] }
+    const component = shallow(<GlobalSearchContainer {...licencesProps} />)
+
+    expect(component.find('GlobalSearch').props().licencesVaryUser).toEqual(true)
+  })
+
   it('should pass viewInactivePrisoner true if roles includes INACTIVE_BOOKINGS', async () => {
     const inactiveProps = { ...standardProps, userRoles: ['SOMETHING', 'INACTIVE_BOOKINGS'] }
     const component = shallow(<GlobalSearchContainer {...inactiveProps} />)

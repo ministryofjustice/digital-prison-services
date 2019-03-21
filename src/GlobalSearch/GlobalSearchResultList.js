@@ -14,6 +14,7 @@ const GlobalSearchResultList = ({
   totalRecords,
   handlePageAction,
   licencesUser,
+  licencesVaryUser,
   licencesUrl,
   searchPerformed,
   viewInactivePrisoner,
@@ -32,6 +33,8 @@ const GlobalSearchResultList = ({
   )
 
   const offenderImageUrl = offenderNo => `/app/images/${offenderNo}/data`
+
+  const canUpdateLicence = prisoner => licencesUser && (prisoner.currentlyInPrison === 'Y' || licencesVaryUser)
 
   const offenders =
     data &&
@@ -86,7 +89,7 @@ const GlobalSearchResultList = ({
           <td className="row-gutters">
             {properCaseName(prisoner.currentWorkingLastName)}, {properCaseName(prisoner.currentWorkingFirstName)}
           </td>
-          {licencesUser && (
+          {canUpdateLicence(prisoner) && (
             <td className="row-gutters">
               <a
                 href={`${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`}
@@ -142,6 +145,7 @@ GlobalSearchResultList.propTypes = {
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
   licencesUser: PropTypes.bool.isRequired,
+  licencesVaryUser: PropTypes.bool.isRequired,
   viewInactivePrisoner: PropTypes.bool.isRequired,
   licencesUrl: PropTypes.string.isRequired,
   searchPerformed: PropTypes.bool.isRequired,
