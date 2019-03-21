@@ -30,4 +30,10 @@ describe('offender loader', () => {
     expect(response[0]).toEqual({ bookingId: 1, offenderNo: 'A111111' })
     expect(response[1]).toEqual({ bookingId: 2, offenderNo: 'A222222' })
   })
+
+  it('should remove duplicates from the file', async () => {
+    await offenderLoaderFactory(elite2Api).loadFromCsvContent(context, [['A111111'], ['A111111']])
+
+    expect(elite2Api.getBasicInmateDetailsForOffenders).toHaveBeenCalledWith(context, ['A111111'])
+  })
 })
