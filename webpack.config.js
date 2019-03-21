@@ -112,10 +112,10 @@ module.exports = {
   },
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-    new BundleAnalyzerPlugin({
-      generateStatsFile: true,
-      analyzerMode: 'disabled',
-    }),
+    // new BundleAnalyzerPlugin({
+    //   generateStatsFile: true,
+    //   analyzerMode: 'disabled',
+    // }),
     new CopyWebpackPlugin([
       {
         from: 'static',
