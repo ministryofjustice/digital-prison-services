@@ -96,7 +96,6 @@ describe('App component', () => {
 
       beforeEach(() => {
         appInstance.displayAlertAndLogout = jest.fn()
-        window.scrollTo = jest.fn()
       })
 
       it('should display alert', () => {
@@ -121,7 +120,6 @@ describe('App component', () => {
       it('should not display alert if unknown error', () => {
         appInstance.handleError({})
         expect(appInstance.displayAlertAndLogout).not.toBeCalled()
-        expect(window.scrollTo).toHaveBeenCalled()
       })
     })
   })

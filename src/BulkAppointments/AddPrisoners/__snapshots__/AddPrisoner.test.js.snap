@@ -1,620 +1,2379 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Add appointment form Form should pass correct props to all fields 1`] = `
-Array [
-  <div
-    className="sc-htoDjs ktXyoQ"
-    tabIndex={-1}
-  >
-    <h2
-      className="sc-htpNat bpICJA"
-      size="LARGE"
-    >
-      There is a problem
-    </h2>
-    <ul
-      className="sc-bZQynM hmHAnm"
-    >
-      <li
-        className="sc-EHOje cxhhxd"
-      >
-        <a
-          className="sc-bxivhb sc-gzVnrw gdRiKK"
-          muted={false}
-          onClick={[Function]}
-          tabIndex={1}
-        >
-          Start test message
-        </a>
-      </li>
-      <li
-        className="sc-EHOje cxhhxd"
-      >
-        <a
-          className="sc-bxivhb sc-gzVnrw gdRiKK"
-          muted={false}
-          onClick={[Function]}
-          tabIndex={2}
-        >
-          Start test message
-        </a>
-      </li>
-    </ul>
-  </div>,
-  <table
-    className="row-gutters sc-ckVGcZ fUmfyi"
-  >
-    <thead>
-      <tr>
-        <th
-          className="straight width5"
-        >
-           Prison number 
-        </th>
-        <th
-          className="straight width5"
-        >
-           Last name 
-        </th>
-        <th
-          className="straight width5"
-        >
-           First name 
-        </th>
-        <th
-          className="straight width5"
-        >
-           Start time 
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        className="row-gutters"
-      >
-        <td
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FormFields
+    date="2019-10-10T22:00:00Z"
+    dispatchAppointmentPrisoners={[Function]}
+    error={null}
+    errors={
+      Array [
+        Object {
+          "targetName": "start-time-offenderNo1",
+          "text": "Start test message",
+        },
+        Object {
+          "targetName": "start-time-offenderNo2",
+          "text": "Start test message",
+        },
+      ]
+    }
+    now={"2019-10-10T21:00:00.000Z"}
+    offenders={
+      Array [
+        Object {
+          "bookingId": 1,
+          "firstName": "firstName1",
+          "lastName": "lastName1",
+          "offenderNo": "offenderNo1",
+        },
+        Object {
+          "bookingId": 2,
+          "firstName": "firstName2",
+          "lastName": "lastName2",
+          "offenderNo": "offenderNo2",
+        },
+      ]
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        null,
+        <ErrorSummary
+          description={undefined}
+          errors={
+            Array [
+              Object {
+                "targetName": "start-time-offenderNo1",
+                "text": "Start test message",
+              },
+              Object {
+                "targetName": "start-time-offenderNo2",
+                "text": "Start test message",
+              },
+            ]
+          }
+          heading="There is a problem"
+          onHandleErrorClick={[Function]}
+        />,
+        <UNDEFINED
           className="row-gutters"
         >
-          offenderNo1
-        </td>
-        <td
-          className="row-gutters"
-        >
-          lastName1
-        </td>
-        <td
-          className="row-gutters"
-        >
-          firstName1
-        </td>
-        <td
-          className="row-gutters"
-        >
-          <div>
-            <label
-              className="sc-gZMcBi jYAMvP"
-              htmlFor="hours"
+          <thead>
+            <tr>
+              <th
+                className="straight width5"
+              >
+                 Prison number 
+              </th>
+              <th
+                className="straight width5"
+              >
+                 Last name 
+              </th>
+              <th
+                className="straight width5"
+              >
+                 First name 
+              </th>
+              <th
+                className="straight width5"
+              >
+                 Start time 
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              className="row-gutters"
             >
-              
-              <span
-                className="sc-dnqmqq bUFnck"
+              <td
+                className="row-gutters"
               >
-                Start test message
-              </span>
-              <div
-                className="sc-fjdhpX gpoCJK"
-                name="start-time-offenderNo1"
+                offenderNo1
+              </td>
+              <td
+                className="row-gutters"
               >
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
-                  disabled={false}
-                  id="hours"
-                  name="hours"
-                >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="undefined"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      22
-                    </option>
-                    <option>
-                      23
-                    </option>
-                  </select>
-                </label>
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
-                  disabled={false}
-                  name="minutes"
-                >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="undefined"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      00
-                    </option>
-                    <option>
-                      05
-                    </option>
-                    <option>
-                      10
-                    </option>
-                    <option>
-                      15
-                    </option>
-                    <option>
-                      20
-                    </option>
-                    <option>
-                      25
-                    </option>
-                    <option>
-                      30
-                    </option>
-                    <option>
-                      35
-                    </option>
-                    <option>
-                      40
-                    </option>
-                    <option>
-                      45
-                    </option>
-                    <option>
-                      50
-                    </option>
-                    <option>
-                      55
-                    </option>
-                  </select>
-                </label>
-              </div>
-            </label>
-          </div>
-        </td>
-      </tr>
-      <tr
-        className="row-gutters"
-      >
-        <td
-          className="row-gutters"
-        >
-          offenderNo2
-        </td>
-        <td
-          className="row-gutters"
-        >
-          lastName2
-        </td>
-        <td
-          className="row-gutters"
-        >
-          firstName2
-        </td>
-        <td
-          className="row-gutters"
-        >
-          <div>
-            <label
-              className="sc-gZMcBi jYAMvP"
-              htmlFor="hours"
+                lastName1
+              </td>
+              <td
+                className="row-gutters"
+              >
+                firstName1
+              </td>
+              <td
+                className="row-gutters"
+              >
+                <FieldWithError
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "start-time-offenderNo1",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "start-time-offenderNo2",
+                        "text": "Start test message",
+                      },
+                    ]
+                  }
+                  name="start-time-offenderNo1"
+                  render={[Function]}
+                />
+              </td>
+            </tr>
+            <tr
+              className="row-gutters"
             >
-              
-              <span
-                className="sc-dnqmqq bUFnck"
+              <td
+                className="row-gutters"
               >
-                Start test message
-              </span>
-              <div
-                className="sc-fjdhpX gpoCJK"
-                name="start-time-offenderNo2"
+                offenderNo2
+              </td>
+              <td
+                className="row-gutters"
               >
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
-                  disabled={false}
-                  id="hours"
-                  name="hours"
+                lastName2
+              </td>
+              <td
+                className="row-gutters"
+              >
+                firstName2
+              </td>
+              <td
+                className="row-gutters"
+              >
+                <FieldWithError
+                  errors={
+                    Array [
+                      Object {
+                        "targetName": "start-time-offenderNo1",
+                        "text": "Start test message",
+                      },
+                      Object {
+                        "targetName": "start-time-offenderNo2",
+                        "text": "Start test message",
+                      },
+                    ]
+                  }
+                  name="start-time-offenderNo2"
+                  render={[Function]}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </UNDEFINED>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      null,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "description": undefined,
+          "errors": Array [
+            Object {
+              "targetName": "start-time-offenderNo1",
+              "text": "Start test message",
+            },
+            Object {
+              "targetName": "start-time-offenderNo2",
+              "text": "Start test message",
+            },
+          ],
+          "heading": "There is a problem",
+          "onHandleErrorClick": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "children": Array [
+            <thead>
+              <tr>
+                <th
+                  className="straight width5"
                 >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="undefined"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      22
-                    </option>
-                    <option>
-                      23
-                    </option>
-                  </select>
-                </label>
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
-                  disabled={false}
-                  name="minutes"
+                   Prison number 
+                </th>
+                <th
+                  className="straight width5"
                 >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
+                   Last name 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   First name 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   Start time 
+                </th>
+              </tr>
+            </thead>,
+            <tbody>
+              <tr
+                className="row-gutters"
+              >
+                <td
+                  className="row-gutters"
+                >
+                  offenderNo1
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  lastName1
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  firstName1
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "start-time-offenderNo1",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "start-time-offenderNo2",
+                          "text": "Start test message",
+                        },
+                      ]
+                    }
+                    name="start-time-offenderNo1"
+                    render={[Function]}
                   />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="undefined"
+                </td>
+              </tr>
+              <tr
+                className="row-gutters"
+              >
+                <td
+                  className="row-gutters"
+                >
+                  offenderNo2
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  lastName2
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  firstName2
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "start-time-offenderNo1",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "start-time-offenderNo2",
+                          "text": "Start test message",
+                        },
+                      ]
+                    }
+                    name="start-time-offenderNo2"
+                    render={[Function]}
+                  />
+                </td>
+              </tr>
+            </tbody>,
+          ],
+          "className": "row-gutters",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <tr>
+                <th
+                  className="straight width5"
+                >
+                   Prison number 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   Last name 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   First name 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   Start time 
+                </th>
+              </tr>,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <th
+                    className="straight width5"
                   >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      00
-                    </option>
-                    <option>
-                      05
-                    </option>
-                    <option>
-                      10
-                    </option>
-                    <option>
-                      15
-                    </option>
-                    <option>
-                      20
-                    </option>
-                    <option>
-                      25
-                    </option>
-                    <option>
-                      30
-                    </option>
-                    <option>
-                      35
-                    </option>
-                    <option>
-                      40
-                    </option>
-                    <option>
-                      45
-                    </option>
-                    <option>
-                      50
-                    </option>
-                    <option>
-                      55
-                    </option>
-                  </select>
-                </label>
-              </div>
-            </label>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>,
-]
+                     Prison number 
+                  </th>,
+                  <th
+                    className="straight width5"
+                  >
+                     Last name 
+                  </th>,
+                  <th
+                    className="straight width5"
+                  >
+                     First name 
+                  </th>,
+                  <th
+                    className="straight width5"
+                  >
+                     Start time 
+                  </th>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": " Prison number ",
+                    "className": "straight width5",
+                  },
+                  "ref": null,
+                  "rendered": " Prison number ",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": " Last name ",
+                    "className": "straight width5",
+                  },
+                  "ref": null,
+                  "rendered": " Last name ",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": " First name ",
+                    "className": "straight width5",
+                  },
+                  "ref": null,
+                  "rendered": " First name ",
+                  "type": "th",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": " Start time ",
+                    "className": "straight width5",
+                  },
+                  "ref": null,
+                  "rendered": " Start time ",
+                  "type": "th",
+                },
+              ],
+              "type": "tr",
+            },
+            "type": "thead",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <tr
+                  className="row-gutters"
+                >
+                  <td
+                    className="row-gutters"
+                  >
+                    offenderNo1
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    lastName1
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    firstName1
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <FieldWithError
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "start-time-offenderNo1",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "start-time-offenderNo2",
+                            "text": "Start test message",
+                          },
+                        ]
+                      }
+                      name="start-time-offenderNo1"
+                      render={[Function]}
+                    />
+                  </td>
+                </tr>,
+                <tr
+                  className="row-gutters"
+                >
+                  <td
+                    className="row-gutters"
+                  >
+                    offenderNo2
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    lastName2
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    firstName2
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <FieldWithError
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "start-time-offenderNo1",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "start-time-offenderNo2",
+                            "text": "Start test message",
+                          },
+                        ]
+                      }
+                      name="start-time-offenderNo2"
+                      render={[Function]}
+                    />
+                  </td>
+                </tr>,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "offenderNo1",
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <td
+                      className="row-gutters"
+                    >
+                      offenderNo1
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      lastName1
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      firstName1
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ]
+                        }
+                        name="start-time-offenderNo1"
+                        render={[Function]}
+                      />
+                    </td>,
+                  ],
+                  "className": "row-gutters",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "offenderNo1",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "offenderNo1",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "lastName1",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "lastName1",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "firstName1",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "firstName1",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ]
+                        }
+                        name="start-time-offenderNo1"
+                        render={[Function]}
+                      />,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "errors": Array [
+                          Object {
+                            "targetName": "start-time-offenderNo1",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "start-time-offenderNo2",
+                            "text": "Start test message",
+                          },
+                        ],
+                        "name": "start-time-offenderNo1",
+                        "render": [Function],
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                ],
+                "type": "tr",
+              },
+              Object {
+                "instance": null,
+                "key": "offenderNo2",
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <td
+                      className="row-gutters"
+                    >
+                      offenderNo2
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      lastName2
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      firstName2
+                    </td>,
+                    <td
+                      className="row-gutters"
+                    >
+                      <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ]
+                        }
+                        name="start-time-offenderNo2"
+                        render={[Function]}
+                      />
+                    </td>,
+                  ],
+                  "className": "row-gutters",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "offenderNo2",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "offenderNo2",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "lastName2",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "lastName2",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "firstName2",
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": "firstName2",
+                    "type": "td",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ]
+                        }
+                        name="start-time-offenderNo2"
+                        render={[Function]}
+                      />,
+                      "className": "row-gutters",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "errors": Array [
+                          Object {
+                            "targetName": "start-time-offenderNo1",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "start-time-offenderNo2",
+                            "text": "Start test message",
+                          },
+                        ],
+                        "name": "start-time-offenderNo2",
+                        "render": [Function],
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "td",
+                  },
+                ],
+                "type": "tr",
+              },
+            ],
+            "type": "tbody",
+          },
+        ],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-ckVGcZ",
+            "isStatic": true,
+            "rules": Array [
+              "
+  th,
+  td {
+    font-size: ",
+              "19px",
+              " !important;
+    @media (max-width: ",
+              "641px",
+              ") {
+      font-size: ",
+              "16px",
+              " !important;
+    }
+  }
+",
+            ],
+          },
+          "displayName": "styled.table",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-ckVGcZ",
+          "target": "table",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
+      },
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          null,
+          <ErrorSummary
+            description={undefined}
+            errors={
+              Array [
+                Object {
+                  "targetName": "start-time-offenderNo1",
+                  "text": "Start test message",
+                },
+                Object {
+                  "targetName": "start-time-offenderNo2",
+                  "text": "Start test message",
+                },
+              ]
+            }
+            heading="There is a problem"
+            onHandleErrorClick={[Function]}
+          />,
+          <UNDEFINED
+            className="row-gutters"
+          >
+            <thead>
+              <tr>
+                <th
+                  className="straight width5"
+                >
+                   Prison number 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   Last name 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   First name 
+                </th>
+                <th
+                  className="straight width5"
+                >
+                   Start time 
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                className="row-gutters"
+              >
+                <td
+                  className="row-gutters"
+                >
+                  offenderNo1
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  lastName1
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  firstName1
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "start-time-offenderNo1",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "start-time-offenderNo2",
+                          "text": "Start test message",
+                        },
+                      ]
+                    }
+                    name="start-time-offenderNo1"
+                    render={[Function]}
+                  />
+                </td>
+              </tr>
+              <tr
+                className="row-gutters"
+              >
+                <td
+                  className="row-gutters"
+                >
+                  offenderNo2
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  lastName2
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  firstName2
+                </td>
+                <td
+                  className="row-gutters"
+                >
+                  <FieldWithError
+                    errors={
+                      Array [
+                        Object {
+                          "targetName": "start-time-offenderNo1",
+                          "text": "Start test message",
+                        },
+                        Object {
+                          "targetName": "start-time-offenderNo2",
+                          "text": "Start test message",
+                        },
+                      ]
+                    }
+                    name="start-time-offenderNo2"
+                    render={[Function]}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </UNDEFINED>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        null,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "description": undefined,
+            "errors": Array [
+              Object {
+                "targetName": "start-time-offenderNo1",
+                "text": "Start test message",
+              },
+              Object {
+                "targetName": "start-time-offenderNo2",
+                "text": "Start test message",
+              },
+            ],
+            "heading": "There is a problem",
+            "onHandleErrorClick": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <thead>
+                <tr>
+                  <th
+                    className="straight width5"
+                  >
+                     Prison number 
+                  </th>
+                  <th
+                    className="straight width5"
+                  >
+                     Last name 
+                  </th>
+                  <th
+                    className="straight width5"
+                  >
+                     First name 
+                  </th>
+                  <th
+                    className="straight width5"
+                  >
+                     Start time 
+                  </th>
+                </tr>
+              </thead>,
+              <tbody>
+                <tr
+                  className="row-gutters"
+                >
+                  <td
+                    className="row-gutters"
+                  >
+                    offenderNo1
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    lastName1
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    firstName1
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <FieldWithError
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "start-time-offenderNo1",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "start-time-offenderNo2",
+                            "text": "Start test message",
+                          },
+                        ]
+                      }
+                      name="start-time-offenderNo1"
+                      render={[Function]}
+                    />
+                  </td>
+                </tr>
+                <tr
+                  className="row-gutters"
+                >
+                  <td
+                    className="row-gutters"
+                  >
+                    offenderNo2
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    lastName2
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    firstName2
+                  </td>
+                  <td
+                    className="row-gutters"
+                  >
+                    <FieldWithError
+                      errors={
+                        Array [
+                          Object {
+                            "targetName": "start-time-offenderNo1",
+                            "text": "Start test message",
+                          },
+                          Object {
+                            "targetName": "start-time-offenderNo2",
+                            "text": "Start test message",
+                          },
+                        ]
+                      }
+                      name="start-time-offenderNo2"
+                      render={[Function]}
+                    />
+                  </td>
+                </tr>
+              </tbody>,
+            ],
+            "className": "row-gutters",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <tr>
+                  <th
+                    className="straight width5"
+                  >
+                     Prison number 
+                  </th>
+                  <th
+                    className="straight width5"
+                  >
+                     Last name 
+                  </th>
+                  <th
+                    className="straight width5"
+                  >
+                     First name 
+                  </th>
+                  <th
+                    className="straight width5"
+                  >
+                     Start time 
+                  </th>
+                </tr>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <th
+                      className="straight width5"
+                    >
+                       Prison number 
+                    </th>,
+                    <th
+                      className="straight width5"
+                    >
+                       Last name 
+                    </th>,
+                    <th
+                      className="straight width5"
+                    >
+                       First name 
+                    </th>,
+                    <th
+                      className="straight width5"
+                    >
+                       Start time 
+                    </th>,
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": " Prison number ",
+                      "className": "straight width5",
+                    },
+                    "ref": null,
+                    "rendered": " Prison number ",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": " Last name ",
+                      "className": "straight width5",
+                    },
+                    "ref": null,
+                    "rendered": " Last name ",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": " First name ",
+                      "className": "straight width5",
+                    },
+                    "ref": null,
+                    "rendered": " First name ",
+                    "type": "th",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": " Start time ",
+                      "className": "straight width5",
+                    },
+                    "ref": null,
+                    "rendered": " Start time ",
+                    "type": "th",
+                  },
+                ],
+                "type": "tr",
+              },
+              "type": "thead",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <tr
+                    className="row-gutters"
+                  >
+                    <td
+                      className="row-gutters"
+                    >
+                      offenderNo1
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      lastName1
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      firstName1
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ]
+                        }
+                        name="start-time-offenderNo1"
+                        render={[Function]}
+                      />
+                    </td>
+                  </tr>,
+                  <tr
+                    className="row-gutters"
+                  >
+                    <td
+                      className="row-gutters"
+                    >
+                      offenderNo2
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      lastName2
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      firstName2
+                    </td>
+                    <td
+                      className="row-gutters"
+                    >
+                      <FieldWithError
+                        errors={
+                          Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ]
+                        }
+                        name="start-time-offenderNo2"
+                        render={[Function]}
+                      />
+                    </td>
+                  </tr>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "offenderNo1",
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <td
+                        className="row-gutters"
+                      >
+                        offenderNo1
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        lastName1
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        firstName1
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        <FieldWithError
+                          errors={
+                            Array [
+                              Object {
+                                "targetName": "start-time-offenderNo1",
+                                "text": "Start test message",
+                              },
+                              Object {
+                                "targetName": "start-time-offenderNo2",
+                                "text": "Start test message",
+                              },
+                            ]
+                          }
+                          name="start-time-offenderNo1"
+                          render={[Function]}
+                        />
+                      </td>,
+                    ],
+                    "className": "row-gutters",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "offenderNo1",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "offenderNo1",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "lastName1",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "lastName1",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "firstName1",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "firstName1",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FieldWithError
+                          errors={
+                            Array [
+                              Object {
+                                "targetName": "start-time-offenderNo1",
+                                "text": "Start test message",
+                              },
+                              Object {
+                                "targetName": "start-time-offenderNo2",
+                                "text": "Start test message",
+                              },
+                            ]
+                          }
+                          name="start-time-offenderNo1"
+                          render={[Function]}
+                        />,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "errors": Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ],
+                          "name": "start-time-offenderNo1",
+                          "render": [Function],
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                  ],
+                  "type": "tr",
+                },
+                Object {
+                  "instance": null,
+                  "key": "offenderNo2",
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <td
+                        className="row-gutters"
+                      >
+                        offenderNo2
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        lastName2
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        firstName2
+                      </td>,
+                      <td
+                        className="row-gutters"
+                      >
+                        <FieldWithError
+                          errors={
+                            Array [
+                              Object {
+                                "targetName": "start-time-offenderNo1",
+                                "text": "Start test message",
+                              },
+                              Object {
+                                "targetName": "start-time-offenderNo2",
+                                "text": "Start test message",
+                              },
+                            ]
+                          }
+                          name="start-time-offenderNo2"
+                          render={[Function]}
+                        />
+                      </td>,
+                    ],
+                    "className": "row-gutters",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "offenderNo2",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "offenderNo2",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "lastName2",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "lastName2",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "firstName2",
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": "firstName2",
+                      "type": "td",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FieldWithError
+                          errors={
+                            Array [
+                              Object {
+                                "targetName": "start-time-offenderNo1",
+                                "text": "Start test message",
+                              },
+                              Object {
+                                "targetName": "start-time-offenderNo2",
+                                "text": "Start test message",
+                              },
+                            ]
+                          }
+                          name="start-time-offenderNo2"
+                          render={[Function]}
+                        />,
+                        "className": "row-gutters",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "function",
+                        "props": Object {
+                          "errors": Array [
+                            Object {
+                              "targetName": "start-time-offenderNo1",
+                              "text": "Start test message",
+                            },
+                            Object {
+                              "targetName": "start-time-offenderNo2",
+                              "text": "Start test message",
+                            },
+                          ],
+                          "name": "start-time-offenderNo2",
+                          "render": [Function],
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "td",
+                    },
+                  ],
+                  "type": "tr",
+                },
+              ],
+              "type": "tbody",
+            },
+          ],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-ckVGcZ",
+              "isStatic": true,
+              "rules": Array [
+                "
+  th,
+  td {
+    font-size: ",
+                "19px",
+                " !important;
+    @media (max-width: ",
+                "641px",
+                ") {
+      font-size: ",
+                "16px",
+                " !important;
+    }
+  }
+",
+              ],
+            },
+            "displayName": "styled.table",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-ckVGcZ",
+            "target": "table",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
+        },
+      ],
+      "type": Symbol(react.fragment),
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
 `;
 
 exports[`Add appointment form Form should render correctly 1`] = `
-<form
-  onSubmit={[Function]}
->
-  <h3
-    className="sc-iwsKbI eUACTV"
-  >
-     Selected prisoners 
-  </h3>
-  <span
-    className="sc-dnqmqq bUFnck"
-  >
-     
-    network error
-     
-  </span>
-  <table
-    className="row-gutters sc-ckVGcZ fUmfyi"
-  >
-    <thead>
-      <tr>
-        <th
-          className="straight width5"
-        >
-           Prison number 
-        </th>
-        <th
-          className="straight width5"
-        >
-           Last name 
-        </th>
-        <th
-          className="straight width5"
-        >
-           First name 
-        </th>
-        <th
-          className="straight width5"
-        >
-           Start time 
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        className="row-gutters"
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ReactFinalForm
+    initialValues={
+      Object {
+        "start-time-offenderNo1": "2019-10-10T22:00:00Z",
+        "start-time-offenderNo2": "2019-10-10T22:00:00Z",
+      }
+    }
+    onSubmit={[Function]}
+    render={[Function]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": <form
+        onSubmit={[Function]}
       >
-        <td
-          className="row-gutters"
-        >
-          offenderNo1
-        </td>
-        <td
-          className="row-gutters"
-        >
-          lastName1
-        </td>
-        <td
-          className="row-gutters"
-        >
-          firstName1
-        </td>
-        <td
-          className="row-gutters"
-        >
-          <div>
-            <label
-              className="sc-gZMcBi dbUOKw"
-              htmlFor="hours"
+        <H3>
+           Selected prisoners 
+        </H3>
+        <FormFields
+          date="2019-10-10T22:00:00Z"
+          dispatchAppointmentPrisoners={[Function]}
+          error="network error"
+          errors={null}
+          now={"2019-10-10T21:00:00.000Z"}
+          offenders={
+            Array [
+              Object {
+                "bookingId": 1,
+                "firstName": "firstName1",
+                "lastName": "lastName1",
+                "offenderNo": "offenderNo1",
+              },
+              Object {
+                "bookingId": 2,
+                "firstName": "firstName2",
+                "lastName": "lastName2",
+                "offenderNo": "offenderNo2",
+              },
+            ]
+          }
+        />
+        <UNDEFINED>
+          <UNDEFINED
+            buttonColour={undefined}
+            buttonHoverColour={undefined}
+            buttonShadowColour={undefined}
+            buttonTextColour={undefined}
+            disabled={false}
+            icon={undefined}
+            start={false}
+            type="submit"
+          >
+            Add appointment
+          </UNDEFINED>
+          <UNDEFINED
+            buttonColour="#dee0e2"
+            buttonHoverColour={undefined}
+            buttonShadowColour={undefined}
+            buttonTextColour="#0b0c0c"
+            disabled={false}
+            icon={undefined}
+            onClick={[Function]}
+            start={false}
+          >
+            Cancel
+          </UNDEFINED>
+        </UNDEFINED>
+      </form>,
+      "value": Object {
+        "batch": [Function],
+        "blur": [Function],
+        "change": [Function],
+        "focus": [Function],
+        "getFieldState": [Function],
+        "getRegisteredFields": [Function],
+        "getState": [Function],
+        "initialize": [Function],
+        "isValidationPaused": [Function],
+        "mutators": Object {},
+        "pauseValidation": [Function],
+        "registerField": [Function],
+        "reset": [Function],
+        "resumeValidation": [Function],
+        "setConfig": [Function],
+        "submit": [Function],
+        "subscribe": [Function],
+      },
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <H3>
+             Selected prisoners 
+          </H3>,
+          <FormFields
+            date="2019-10-10T22:00:00Z"
+            dispatchAppointmentPrisoners={[Function]}
+            error="network error"
+            errors={null}
+            now={"2019-10-10T21:00:00.000Z"}
+            offenders={
+              Array [
+                Object {
+                  "bookingId": 1,
+                  "firstName": "firstName1",
+                  "lastName": "lastName1",
+                  "offenderNo": "offenderNo1",
+                },
+                Object {
+                  "bookingId": 2,
+                  "firstName": "firstName2",
+                  "lastName": "lastName2",
+                  "offenderNo": "offenderNo2",
+                },
+              ]
+            }
+          />,
+          <UNDEFINED>
+            <UNDEFINED
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
             >
-              
-              <div
-                className="sc-fjdhpX bromYg"
-                name="start-time-offenderNo1"
-              >
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
-                  disabled={false}
-                  id="hours"
-                  name="hours"
-                >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="22"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      22
-                    </option>
-                    <option>
-                      23
-                    </option>
-                  </select>
-                </label>
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
-                  disabled={false}
-                  name="minutes"
-                >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="00"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      00
-                    </option>
-                    <option>
-                      05
-                    </option>
-                    <option>
-                      10
-                    </option>
-                    <option>
-                      15
-                    </option>
-                    <option>
-                      20
-                    </option>
-                    <option>
-                      25
-                    </option>
-                    <option>
-                      30
-                    </option>
-                    <option>
-                      35
-                    </option>
-                    <option>
-                      40
-                    </option>
-                    <option>
-                      45
-                    </option>
-                    <option>
-                      50
-                    </option>
-                    <option>
-                      55
-                    </option>
-                  </select>
-                </label>
-              </div>
-            </label>
-          </div>
-        </td>
-      </tr>
-      <tr
-        className="row-gutters"
-      >
-        <td
-          className="row-gutters"
-        >
-          offenderNo2
-        </td>
-        <td
-          className="row-gutters"
-        >
-          lastName2
-        </td>
-        <td
-          className="row-gutters"
-        >
-          firstName2
-        </td>
-        <td
-          className="row-gutters"
-        >
-          <div>
-            <label
-              className="sc-gZMcBi dbUOKw"
-              htmlFor="hours"
+              Add appointment
+            </UNDEFINED>
+            <UNDEFINED
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
             >
-              
-              <div
-                className="sc-fjdhpX bromYg"
-                name="start-time-offenderNo2"
+              Cancel
+            </UNDEFINED>
+          </UNDEFINED>,
+        ],
+        "onSubmit": [Function],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": " Selected prisoners ",
+          },
+          "ref": null,
+          "rendered": " Selected prisoners ",
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "date": "2019-10-10T22:00:00Z",
+            "dispatchAppointmentPrisoners": [Function],
+            "error": "network error",
+            "errors": null,
+            "now": "2019-10-10T21:00:00.000Z",
+            "offenders": Array [
+              Object {
+                "bookingId": 1,
+                "firstName": "firstName1",
+                "lastName": "lastName1",
+                "offenderNo": "offenderNo1",
+              },
+              Object {
+                "bookingId": 2,
+                "firstName": "firstName2",
+                "lastName": "lastName2",
+                "offenderNo": "offenderNo2",
+              },
+            ],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <UNDEFINED
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                start={false}
+                type="submit"
               >
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
+                Add appointment
+              </UNDEFINED>,
+              <UNDEFINED
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Cancel
+              </UNDEFINED>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "buttonColour": undefined,
+                "buttonHoverColour": undefined,
+                "buttonShadowColour": undefined,
+                "buttonTextColour": undefined,
+                "children": "Add appointment",
+                "disabled": false,
+                "icon": undefined,
+                "start": false,
+                "type": "submit",
+              },
+              "ref": null,
+              "rendered": "Add appointment",
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "defaultProps": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                },
+                "propTypes": Object {
+                  "buttonColour": [Function],
+                  "buttonHoverColour": [Function],
+                  "buttonShadowColour": [Function],
+                  "buttonTextColour": [Function],
+                  "children": [Function],
+                  "disabled": [Function],
+                  "icon": [Function],
+                  "start": [Function],
+                },
+                "render": [Function],
+              },
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "buttonColour": "#dee0e2",
+                "buttonHoverColour": undefined,
+                "buttonShadowColour": undefined,
+                "buttonTextColour": "#0b0c0c",
+                "children": "Cancel",
+                "disabled": false,
+                "icon": undefined,
+                "onClick": [Function],
+                "start": false,
+              },
+              "ref": null,
+              "rendered": "Cancel",
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "defaultProps": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                },
+                "propTypes": Object {
+                  "buttonColour": [Function],
+                  "buttonHoverColour": [Function],
+                  "buttonShadowColour": [Function],
+                  "buttonTextColour": [Function],
+                  "children": [Function],
+                  "disabled": [Function],
+                  "icon": [Function],
+                  "start": [Function],
+                },
+                "render": [Function],
+              },
+            },
+          ],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-kGXeez",
+              "isStatic": true,
+              "rules": Array [
+                "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                "10px",
+                ";
+  }
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-kGXeez",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
+        },
+      ],
+      "type": "form",
+    },
+    "type": Object {
+      "$$typeof": Symbol(react.provider),
+      "_context": Object {
+        "$$typeof": Symbol(react.context),
+        "Consumer": Object {
+          "$$typeof": Symbol(react.context),
+          "_calculateChangedBits": null,
+          "_context": [Circular],
+        },
+        "Provider": [Circular],
+        "_calculateChangedBits": null,
+        "_currentRenderer": null,
+        "_currentRenderer2": null,
+        "_currentValue": null,
+        "_currentValue2": null,
+        "_threadCount": 0,
+      },
+    },
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": <form
+          onSubmit={[Function]}
+        >
+          <H3>
+             Selected prisoners 
+          </H3>
+          <FormFields
+            date="2019-10-10T22:00:00Z"
+            dispatchAppointmentPrisoners={[Function]}
+            error="network error"
+            errors={null}
+            now={"2019-10-10T21:00:00.000Z"}
+            offenders={
+              Array [
+                Object {
+                  "bookingId": 1,
+                  "firstName": "firstName1",
+                  "lastName": "lastName1",
+                  "offenderNo": "offenderNo1",
+                },
+                Object {
+                  "bookingId": 2,
+                  "firstName": "firstName2",
+                  "lastName": "lastName2",
+                  "offenderNo": "offenderNo2",
+                },
+              ]
+            }
+          />
+          <UNDEFINED>
+            <UNDEFINED
+              buttonColour={undefined}
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour={undefined}
+              disabled={false}
+              icon={undefined}
+              start={false}
+              type="submit"
+            >
+              Add appointment
+            </UNDEFINED>
+            <UNDEFINED
+              buttonColour="#dee0e2"
+              buttonHoverColour={undefined}
+              buttonShadowColour={undefined}
+              buttonTextColour="#0b0c0c"
+              disabled={false}
+              icon={undefined}
+              onClick={[Function]}
+              start={false}
+            >
+              Cancel
+            </UNDEFINED>
+          </UNDEFINED>
+        </form>,
+        "value": Object {
+          "batch": [Function],
+          "blur": [Function],
+          "change": [Function],
+          "focus": [Function],
+          "getFieldState": [Function],
+          "getRegisteredFields": [Function],
+          "getState": [Function],
+          "initialize": [Function],
+          "isValidationPaused": [Function],
+          "mutators": Object {},
+          "pauseValidation": [Function],
+          "registerField": [Function],
+          "reset": [Function],
+          "resumeValidation": [Function],
+          "setConfig": [Function],
+          "submit": [Function],
+          "subscribe": [Function],
+        },
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <H3>
+               Selected prisoners 
+            </H3>,
+            <FormFields
+              date="2019-10-10T22:00:00Z"
+              dispatchAppointmentPrisoners={[Function]}
+              error="network error"
+              errors={null}
+              now={"2019-10-10T21:00:00.000Z"}
+              offenders={
+                Array [
+                  Object {
+                    "bookingId": 1,
+                    "firstName": "firstName1",
+                    "lastName": "lastName1",
+                    "offenderNo": "offenderNo1",
+                  },
+                  Object {
+                    "bookingId": 2,
+                    "firstName": "firstName2",
+                    "lastName": "lastName2",
+                    "offenderNo": "offenderNo2",
+                  },
+                ]
+              }
+            />,
+            <UNDEFINED>
+              <UNDEFINED
+                buttonColour={undefined}
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour={undefined}
+                disabled={false}
+                icon={undefined}
+                start={false}
+                type="submit"
+              >
+                Add appointment
+              </UNDEFINED>
+              <UNDEFINED
+                buttonColour="#dee0e2"
+                buttonHoverColour={undefined}
+                buttonShadowColour={undefined}
+                buttonTextColour="#0b0c0c"
+                disabled={false}
+                icon={undefined}
+                onClick={[Function]}
+                start={false}
+              >
+                Cancel
+              </UNDEFINED>
+            </UNDEFINED>,
+          ],
+          "onSubmit": [Function],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": " Selected prisoners ",
+            },
+            "ref": null,
+            "rendered": " Selected prisoners ",
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "date": "2019-10-10T22:00:00Z",
+              "dispatchAppointmentPrisoners": [Function],
+              "error": "network error",
+              "errors": null,
+              "now": "2019-10-10T21:00:00.000Z",
+              "offenders": Array [
+                Object {
+                  "bookingId": 1,
+                  "firstName": "firstName1",
+                  "lastName": "lastName1",
+                  "offenderNo": "offenderNo1",
+                },
+                Object {
+                  "bookingId": 2,
+                  "firstName": "firstName2",
+                  "lastName": "lastName2",
+                  "offenderNo": "offenderNo2",
+                },
+              ],
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": Array [
+                <UNDEFINED
+                  buttonColour={undefined}
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour={undefined}
                   disabled={false}
-                  id="hours"
-                  name="hours"
+                  icon={undefined}
+                  start={false}
+                  type="submit"
                 >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="22"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      22
-                    </option>
-                    <option>
-                      23
-                    </option>
-                  </select>
-                </label>
-                <label
-                  className="sc-gZMcBi dbUOKw"
-                  defaultValue="--"
+                  Add appointment
+                </UNDEFINED>,
+                <UNDEFINED
+                  buttonColour="#dee0e2"
+                  buttonHoverColour={undefined}
+                  buttonShadowColour={undefined}
+                  buttonTextColour="#0b0c0c"
                   disabled={false}
-                  name="minutes"
+                  icon={undefined}
+                  onClick={[Function]}
+                  start={false}
                 >
-                  <span
-                    className="sc-gqjmRU hMYAWR"
-                  />
-                  <select
-                    className="sc-jTzLTM iQtMCx"
-                    onChange={[Function]}
-                    value="00"
-                  >
-                    <option>
-                      --
-                    </option>
-                    <option>
-                      00
-                    </option>
-                    <option>
-                      05
-                    </option>
-                    <option>
-                      10
-                    </option>
-                    <option>
-                      15
-                    </option>
-                    <option>
-                      20
-                    </option>
-                    <option>
-                      25
-                    </option>
-                    <option>
-                      30
-                    </option>
-                    <option>
-                      35
-                    </option>
-                    <option>
-                      40
-                    </option>
-                    <option>
-                      45
-                    </option>
-                    <option>
-                      50
-                    </option>
-                    <option>
-                      55
-                    </option>
-                  </select>
-                </label>
-              </div>
-            </label>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div
-    className="sc-kGXeez jbxvBs"
-  >
-    <button
-      className="sc-bdVaJa jyfNnr"
-      disabled={false}
-      type="submit"
-    >
-      Add appointment
-    </button>
-    <button
-      className="sc-bdVaJa hdRJwX"
-      disabled={false}
-      onClick={[Function]}
-    >
-      Cancel
-    </button>
-  </div>
-</form>
+                  Cancel
+                </UNDEFINED>,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "buttonColour": undefined,
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": undefined,
+                  "children": "Add appointment",
+                  "disabled": false,
+                  "icon": undefined,
+                  "start": false,
+                  "type": "submit",
+                },
+                "ref": null,
+                "rendered": "Add appointment",
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "buttonColour": "#dee0e2",
+                  "buttonHoverColour": undefined,
+                  "buttonShadowColour": undefined,
+                  "buttonTextColour": "#0b0c0c",
+                  "children": "Cancel",
+                  "disabled": false,
+                  "icon": undefined,
+                  "onClick": [Function],
+                  "start": false,
+                },
+                "ref": null,
+                "rendered": "Cancel",
+                "type": Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "defaultProps": Object {
+                    "buttonColour": undefined,
+                    "buttonHoverColour": undefined,
+                    "buttonShadowColour": undefined,
+                    "buttonTextColour": undefined,
+                    "disabled": false,
+                    "icon": undefined,
+                    "start": false,
+                  },
+                  "propTypes": Object {
+                    "buttonColour": [Function],
+                    "buttonHoverColour": [Function],
+                    "buttonShadowColour": [Function],
+                    "buttonTextColour": [Function],
+                    "children": [Function],
+                    "disabled": [Function],
+                    "icon": [Function],
+                    "start": [Function],
+                  },
+                  "render": [Function],
+                },
+              },
+            ],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-kGXeez",
+                "isStatic": true,
+                "rules": Array [
+                  "
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ",
+                  "10px",
+                  ";
+  }
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-kGXeez",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
+          },
+        ],
+        "type": "form",
+      },
+      "type": Object {
+        "$$typeof": Symbol(react.provider),
+        "_context": Object {
+          "$$typeof": Symbol(react.context),
+          "Consumer": Object {
+            "$$typeof": Symbol(react.context),
+            "_calculateChangedBits": null,
+            "_context": [Circular],
+          },
+          "Provider": [Circular],
+          "_calculateChangedBits": null,
+          "_currentRenderer": null,
+          "_currentRenderer2": null,
+          "_currentValue": null,
+          "_currentValue2": null,
+          "_threadCount": 0,
+        },
+      },
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
 `;

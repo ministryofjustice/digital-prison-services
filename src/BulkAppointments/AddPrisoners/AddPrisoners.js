@@ -16,18 +16,6 @@ import { appointmentType } from '../../types'
 import { validateThenSubmit, offenderStartTimeFieldName } from './AddPrisonerValidation'
 import { ButtonContainer, Table } from './AddPrisoners.styles'
 
-export const interceptOnChange = ({ input, currentOffender, offenders, dispatchAppointmentPrisoners }) => startTime => {
-  const offendersIncludingUpdatedStartTime = [
-    ...offenders.filter(ofn => ofn.offenderNo !== currentOffender.offenderNo),
-    { ...offenders.find(ofn => ofn.offenderNo === currentOffender.offenderNo), startTime },
-  ]
-  const offendersMaintainingExistingOrdering = offenders.map(offender =>
-    offendersIncludingUpdatedStartTime.find(ofn => ofn.offenderNo === offender.offenderNo)
-  )
-  dispatchAppointmentPrisoners(offendersMaintainingExistingOrdering)
-  input.onChange(startTime)
-}
-
 export const FormFields = ({ errors, error, offenders, date, now, dispatchAppointmentPrisoners }) => (
   <React.Fragment>
     {error && <ErrorText> {error} </ErrorText>}
@@ -51,24 +39,32 @@ export const FormFields = ({ errors, error, offenders, date, now, dispatchAppoin
               <FieldWithError
                 name={offenderStartTimeFieldName({ offenderNo: row.offenderNo })}
                 errors={errors}
-                render={({ meta, input }) => (
-                  <TimePicker
-                    input={{
-                      ...input,
-                      onChange: interceptOnChange({
-                        input,
-                        currentOffender: row,
-                        offenders,
-                        dispatchAppointmentPrisoners,
-                      }),
-                    }}
-                    meta={meta}
-                    title="Start time"
-                    date={moment(date)}
-                    now={now}
-                    futureTimeOnly
-                  />
-                )}
+                render={({ meta, input }) => {
+                  const subscribeToChanges = startTime => {
+                    const offendersIncludingUpdatedStartTime = [
+                      ...offenders.filter(ofn => ofn.offenderNo !== row.offenderNo),
+                      { ...offenders.find(ofn => ofn.offenderNo === row.offenderNo), startTime },
+                    ]
+                    const offendersMaintainingExistingOrdering = offenders.map(offender =>
+                      offendersIncludingUpdatedStartTime.find(ofn => ofn.offenderNo === offender.offenderNo)
+                    )
+                    dispatchAppointmentPrisoners(offendersMaintainingExistingOrdering)
+                    input.onChange(startTime)
+                  }
+                  return (
+                    <TimePicker
+                      input={{
+                        ...input,
+                        onChange: subscribeToChanges,
+                      }}
+                      meta={meta}
+                      title="Start time"
+                      date={date}
+                      now={now}
+                      futureTimeOnly
+                    />
+                  )
+                }}
               />
             </td>
           </tr>
@@ -156,15 +152,11 @@ const AddPrisoners = ({
     <Form
       onSubmit={values => {
         resetErrors()
-        const errors = validateThenSubmit({
+        return validateThenSubmit({
           offenders,
           endTime: appointment.endTime,
           onSubmitAppointment: submitAppointments({ onError, onSuccess, appointment }),
         })(values)
-
-        if (errors) window.scrollTo(0, 0)
-
-        return errors
       }}
       initialValues={getInitialValues({ offenders, startTime })}
       render={({ handleSubmit, submitError, submitting }) => (

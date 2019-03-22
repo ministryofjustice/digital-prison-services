@@ -51,7 +51,7 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
   }
 
   if (values.recurring && !values.times) {
-    formErrors.push({ targetName: 'times', text: 'Number of occurrences must be 1 or more' })
+    formErrors.push({ targetName: 'times', text: 'Enter a number of times' })
   }
 
   if (values.recurring && values.repeats && values.times && values.startTime) {

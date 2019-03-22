@@ -1,9 +1,8 @@
 import React from 'react'
-import testRenderer from 'react-test-renderer'
+import { shallow } from 'enzyme'
 import moment from 'moment'
 
-import { Form } from 'react-final-form'
-import AddAppointmentForm, { FormFields, getInitialValues, interceptOnChange } from './AddPrisoners'
+import AddAppointmentForm, { FormFields, getInitialValues } from './AddPrisoners'
 import { offenderStartTimeFieldName } from './AddPrisonerValidation'
 
 import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../dateHelpers'
@@ -25,54 +24,38 @@ describe('Add appointment form', () => {
       comments: 'test',
     }
     it('should render correctly', () => {
-      const tree = testRenderer
-        .create(
-          <AddAppointmentForm
-            onError={stubFunc}
-            onSuccess={stubFunc}
-            offenders={offenders}
-            error="network error"
-            date={startTime}
-            now={now}
-            startTime={startTime}
-            appointment={appointment}
-            resetErrors={stubFunc}
-            onCancel={() => {}}
-            dispatchAppointmentPrisoners={() => {}}
-          />
-        )
-        .toJSON()
-
-      expect(tree).toMatchSnapshot()
+      const wrapper = shallow(
+        <AddAppointmentForm
+          onError={stubFunc}
+          onSuccess={stubFunc}
+          offenders={offenders}
+          error="network error"
+          date={startTime}
+          now={now}
+          startTime={startTime}
+          appointment={appointment}
+          resetErrors={stubFunc}
+          onCancel={() => {}}
+          dispatchAppointmentPrisoners={() => {}}
+        />
+      )
+      expect(wrapper.dive()).toMatchSnapshot()
     })
 
     it('should pass correct props to all fields', () => {
-      const tree = testRenderer
-        .create(
-          <Form
-            onSubmit={() => {}}
-            render={() => (
-              <FormFields
-                dispatchAppointmentPrisoners={() => {}}
-                offenders={offenders}
-                now={now}
-                date={startTime}
-                errors={[
-                  {
-                    targetName: offenderStartTimeFieldName({ offenderNo: 'offenderNo1' }),
-                    text: 'Start test message',
-                  },
-                  {
-                    targetName: offenderStartTimeFieldName({ offenderNo: 'offenderNo2' }),
-                    text: 'Start test message',
-                  },
-                ]}
-              />
-            )}
-          />
-        )
-        .toJSON()
-      expect(tree).toMatchSnapshot()
+      const wrapper = shallow(
+        <FormFields
+          dispatchAppointmentPrisoners={() => {}}
+          offenders={offenders}
+          now={now}
+          date={startTime}
+          errors={[
+            { targetName: offenderStartTimeFieldName({ offenderNo: 'offenderNo1' }), text: 'Start test message' },
+            { targetName: offenderStartTimeFieldName({ offenderNo: 'offenderNo2' }), text: 'Start test message' },
+          ]}
+        />
+      )
+      expect(wrapper).toMatchSnapshot()
     })
     it('should set the offender start time to the from past in', () => {
       const date = moment('2019-10-10').format(DATE_ONLY_FORMAT_SPEC)
@@ -96,26 +79,6 @@ describe('Add appointment form', () => {
         'start-time-offenderNo1': originalStartTime,
         'start-time-offenderNo2': newStartTime,
       })
-    })
-
-    it('should trigger dispatchAppointmentPrisoners with newly entered offender start times and continue to bubble changes back up to final form', () => {
-      const input = {
-        onChange: jest.fn(),
-      }
-      const dispatchAppointmentPrisoners = jest.fn()
-      interceptOnChange({ input, dispatchAppointmentPrisoners, currentOffender: offenders[0], offenders })(startTime)
-
-      expect(input.onChange).toHaveBeenCalledWith(startTime)
-      expect(dispatchAppointmentPrisoners).toHaveBeenCalledWith([
-        {
-          bookingId: 1,
-          firstName: 'firstName1',
-          lastName: 'lastName1',
-          offenderNo: 'offenderNo1',
-          startTime: '2019-10-10T22:00:00Z',
-        },
-        { bookingId: 2, firstName: 'firstName2', lastName: 'lastName2', offenderNo: 'offenderNo2' },
-      ])
     })
   })
 })

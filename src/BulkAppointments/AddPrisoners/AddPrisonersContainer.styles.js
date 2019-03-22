@@ -2,7 +2,8 @@ import styled from 'styled-components'
 
 import { SPACING } from '@govuk-react/constants'
 
-export const Container = styled('div')`
+// eslint-disable-next-line import/prefer-default-export
+export const Container = styled('form')`
   margin-top: ${SPACING.SCALE_5};
 
   button {
