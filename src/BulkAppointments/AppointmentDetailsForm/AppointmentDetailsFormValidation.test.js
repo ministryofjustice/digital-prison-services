@@ -90,7 +90,7 @@ describe('Appointment form validation', () => {
     expect(location.text).toBe('Select location')
     expect(appointmentType.text).toBe('Select appointment type')
     expect(repeats.text).toBe('Select a period')
-    expect(times.text).toBe('Enter a number of times')
+    expect(times.text).toBe('Number of occurrences must be 1 or more')
   })
 
   it('should call onSuccess with form values', done => {

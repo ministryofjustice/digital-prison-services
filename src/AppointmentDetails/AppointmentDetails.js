@@ -54,8 +54,8 @@ const AppointmentDetails = ({
 )
 
 AppointmentDetails.propTypes = {
-  appointmentTypeDescription: PropTypes.string.isRequired,
-  locationDescription: PropTypes.string.isRequired,
+  appointmentTypeDescription: PropTypes.string,
+  locationDescription: PropTypes.string,
   startTime: PropTypes.string.isRequired,
   endTime: PropTypes.string,
   comments: PropTypes.string,
@@ -70,6 +70,8 @@ AppointmentDetails.defaultProps = {
   recurring: false,
   repeats: '',
   times: '',
+  appointmentTypeDescription: '',
+  locationDescription: '',
 }
 
 export default AppointmentDetails
