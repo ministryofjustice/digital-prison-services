@@ -32,6 +32,7 @@ const onFileInputChanged = async ({ event, onError, onSuccess, agencyId }) => {
     })
     onSuccess(response.data)
   } catch (error) {
+    onSuccess([])
     onError(error)
   }
 }
