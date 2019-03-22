@@ -1,3910 +1,1670 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Appointment form should pass correct props to all fields 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <FormFields
-    appointmentTypes={
-      Array [
-        Object {
-          "description": "app1",
-          "id": "1",
-        },
-      ]
-    }
-    errors={
-      Array [
-        Object {
-          "targetName": "date",
-          "text": "Date test message",
-        },
-        Object {
-          "targetName": "startTime",
-          "text": "Start test message",
-        },
-        Object {
-          "targetName": "endTime",
-          "text": "End time test message",
-        },
-        Object {
-          "targetName": "comments",
-          "text": "Date test message",
-        },
-        Object {
-          "targetName": "appointmentType",
-          "text": "appointment type test message",
-        },
-        Object {
-          "targetName": "locationType",
-          "text": "location type test message",
-        },
-      ]
-    }
-    locationTypes={
-      Array [
-        Object {
-          "description": "loc1",
-          "id": 1,
-        },
-      ]
-    }
-    now={"2019-01-01T21:00:00.000Z"}
-    values={
-      Object {
-        "date": "2019-01-01T21:00:00Z",
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "children": Array [
-        <ErrorSummary
-          description={undefined}
-          errors={
-            Array [
-              Object {
-                "targetName": "date",
-                "text": "Date test message",
-              },
-              Object {
-                "targetName": "startTime",
-                "text": "Start test message",
-              },
-              Object {
-                "targetName": "endTime",
-                "text": "End time test message",
-              },
-              Object {
-                "targetName": "comments",
-                "text": "Date test message",
-              },
-              Object {
-                "targetName": "appointmentType",
-                "text": "appointment type test message",
-              },
-              Object {
-                "targetName": "locationType",
-                "text": "location type test message",
-              },
-            ]
-          }
-          heading="There is a problem"
-          onHandleErrorClick={[Function]}
-        />,
-        <UNDEFINED>
+Array [
+  <div
+    className="sc-htoDjs ktXyoQ"
+    tabIndex={-1}
+  >
+    <h2
+      className="sc-htpNat bpICJA"
+      size="LARGE"
+    >
+      There is a problem
+    </h2>
+    <ul
+      className="sc-bZQynM hmHAnm"
+    >
+      <li
+        className="sc-EHOje cxhhxd"
+      >
+        <a
+          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={1}
+        >
+          Date test message
+        </a>
+      </li>
+      <li
+        className="sc-EHOje cxhhxd"
+      >
+        <a
+          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={2}
+        >
+          Start test message
+        </a>
+      </li>
+      <li
+        className="sc-EHOje cxhhxd"
+      >
+        <a
+          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={3}
+        >
+          End time test message
+        </a>
+      </li>
+      <li
+        className="sc-EHOje cxhhxd"
+      >
+        <a
+          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={4}
+        >
+          Date test message
+        </a>
+      </li>
+      <li
+        className="sc-EHOje cxhhxd"
+      >
+        <a
+          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={5}
+        >
+          appointment type test message
+        </a>
+      </li>
+      <li
+        className="sc-EHOje cxhhxd"
+      >
+        <a
+          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={6}
+        >
+          location type test message
+        </a>
+      </li>
+    </ul>
+  </div>,
+  <div
+    className="sc-jKJlTe dPgCTm"
+  >
+    <div>
+      <label
+        className="sc-kEYyzF hqMHpG sc-fjdhpX ecXZFL"
+        placeholder="Select"
+      >
+        <span
+          className="sc-jzJRlG fYwhH"
+        >
+          Appointment type
+        </span>
+        <span
+          className="sc-dnqmqq bUFnck"
+        >
+          appointment type test message
+        </span>
+        <select
+          className="sc-kgoBCf iXXnBB"
+          name="appointmentType"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value=""
+        >
+          <option
+            disabled={true}
+            hidden={true}
+            value=""
+          >
+            Select
+          </option>
+          <option
+            value="1"
+          >
+            app1
+          </option>
+        </select>
+      </label>
+      <div
+        className="sc-ckVGcZ bGcuOB"
+      >
+        <div
+          className="rdt"
+        >
           <div>
-            <FieldWithError
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "attrs": Array [],
-                  "componentStyle": ComponentStyle {
-                    "componentId": "sc-kEYyzF",
-                    "isStatic": true,
-                    "rules": Array [
-                      "
-  select {
-    width: 100% !important;
-  }
-",
-                    ],
-                  },
-                  "displayName": "Styled(Select)",
-                  "foldedComponentIds": Array [],
-                  "render": [Function],
-                  "styledComponentId": "sc-kEYyzF",
-                  "target": [Function],
-                  "toString": [Function],
-                  "warnTooManyClasses": [Function],
-                  "withComponent": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                }
-              }
-              errors={
-                Array [
-                  Object {
-                    "targetName": "date",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "startTime",
-                    "text": "Start test message",
-                  },
-                  Object {
-                    "targetName": "endTime",
-                    "text": "End time test message",
-                  },
-                  Object {
-                    "targetName": "comments",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "appointmentType",
-                    "text": "appointment type test message",
-                  },
-                  Object {
-                    "targetName": "locationType",
-                    "text": "location type test message",
-                  },
-                ]
-              }
-              label="Appointment type"
-              name="appointmentType"
-              placeholder="Select"
+            <label
+              className="sc-fjdhpX jurWKt"
             >
-              <option
-                disabled={true}
-                hidden={true}
-                value=""
+              <span
+                className="sc-jzJRlG fYwhH"
               >
-                Select
-              </option>
-              <option
-                value="1"
+                 
+                Date
+                 
+              </span>
+              <span
+                className="sc-dnqmqq bUFnck"
               >
-                app1
-              </option>
-            </FieldWithError>
-            <UNDEFINED>
-              <FieldWithError
-                component={[Function]}
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                label="Date"
+                Date test message
+              </span>
+              <input
+                className="form-control sc-cSHVUG cDbTgL"
                 name="date"
+                onChange={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
                 placeholder="Select"
-                shouldShowDay={[Function]}
-              />
-              <FieldWithError
-                component={[Function]}
-                date="2019-01-01T21:00:00Z"
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                futureTimeOnly={true}
-                label="Group start time"
-                name="startTime"
-                now={"2019-01-01T21:00:00.000Z"}
-              />
-            </UNDEFINED>
-            <FieldWithError
-              name="recurring"
-              render={[Function]}
-              type="checkbox"
-            />
-          </div>
-          <UNDEFINED>
-            <FieldWithError
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "attrs": Array [],
-                  "componentStyle": ComponentStyle {
-                    "componentId": "sc-kEYyzF",
-                    "isStatic": true,
-                    "rules": Array [
-                      "
-  select {
-    width: 100% !important;
-  }
-",
-                    ],
-                  },
-                  "displayName": "Styled(Select)",
-                  "foldedComponentIds": Array [],
-                  "render": [Function],
-                  "styledComponentId": "sc-kEYyzF",
-                  "target": [Function],
-                  "toString": [Function],
-                  "warnTooManyClasses": [Function],
-                  "withComponent": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                }
-              }
-              errors={
-                Array [
-                  Object {
-                    "targetName": "date",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "startTime",
-                    "text": "Start test message",
-                  },
-                  Object {
-                    "targetName": "endTime",
-                    "text": "End time test message",
-                  },
-                  Object {
-                    "targetName": "comments",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "appointmentType",
-                    "text": "appointment type test message",
-                  },
-                  Object {
-                    "targetName": "locationType",
-                    "text": "location type test message",
-                  },
-                ]
-              }
-              label="Location"
-              name="location"
-              placeholder="Select"
-            >
-              <option
-                disabled={true}
-                hidden={true}
+                readOnly={true}
+                type="text"
                 value=""
-              >
-                Select
-              </option>
-              <option
-                value={1}
-              >
-                loc1
-              </option>
-            </FieldWithError>
-            <FieldWithError
-              component={[Function]}
-              date="2019-01-01T21:00:00Z"
-              errors={
-                Array [
-                  Object {
-                    "targetName": "date",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "startTime",
-                    "text": "Start test message",
-                  },
-                  Object {
-                    "targetName": "endTime",
-                    "text": "End time test message",
-                  },
-                  Object {
-                    "targetName": "comments",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "appointmentType",
-                    "text": "appointment type test message",
-                  },
-                  Object {
-                    "targetName": "locationType",
-                    "text": "location type test message",
-                  },
-                ]
-              }
-              futureTimeOnly={true}
-              label="Group end time (optional)"
-              name="endTime"
-              now={"2019-01-01T21:00:00.000Z"}
-            />
-            <FieldWithError
-              errors={
-                Array [
-                  Object {
-                    "targetName": "date",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "startTime",
-                    "text": "Start test message",
-                  },
-                  Object {
-                    "targetName": "endTime",
-                    "text": "End time test message",
-                  },
-                  Object {
-                    "targetName": "comments",
-                    "text": "Date test message",
-                  },
-                  Object {
-                    "targetName": "appointmentType",
-                    "text": "appointment type test message",
-                  },
-                  Object {
-                    "targetName": "locationType",
-                    "text": "location type test message",
-                  },
-                ]
-              }
-              name="comments"
-              render={[Function]}
-            />
-          </UNDEFINED>
-        </UNDEFINED>,
-      ],
-    },
-    "ref": null,
-    "rendered": Array [
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "function",
-        "props": Object {
-          "description": undefined,
-          "errors": Array [
-            Object {
-              "targetName": "date",
-              "text": "Date test message",
-            },
-            Object {
-              "targetName": "startTime",
-              "text": "Start test message",
-            },
-            Object {
-              "targetName": "endTime",
-              "text": "End time test message",
-            },
-            Object {
-              "targetName": "comments",
-              "text": "Date test message",
-            },
-            Object {
-              "targetName": "appointmentType",
-              "text": "appointment type test message",
-            },
-            Object {
-              "targetName": "locationType",
-              "text": "location type test message",
-            },
-          ],
-          "heading": "There is a problem",
-          "onHandleErrorClick": [Function],
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "function",
-        "props": Object {
-          "children": Array [
-            <div>
-              <FieldWithError
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-kEYyzF",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  select {
-    width: 100% !important;
-  }
-",
-                      ],
-                    },
-                    "displayName": "Styled(Select)",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-kEYyzF",
-                    "target": [Function],
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  }
-                }
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                label="Appointment type"
-                name="appointmentType"
-                placeholder="Select"
-              >
-                <option
-                  disabled={true}
-                  hidden={true}
-                  value=""
-                >
-                  Select
-                </option>
-                <option
-                  value="1"
-                >
-                  app1
-                </option>
-              </FieldWithError>
-              <UNDEFINED>
-                <FieldWithError
-                  component={[Function]}
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  label="Date"
-                  name="date"
-                  placeholder="Select"
-                  shouldShowDay={[Function]}
-                />
-                <FieldWithError
-                  component={[Function]}
-                  date="2019-01-01T21:00:00Z"
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  futureTimeOnly={true}
-                  label="Group start time"
-                  name="startTime"
-                  now={"2019-01-01T21:00:00.000Z"}
-                />
-              </UNDEFINED>
-              <FieldWithError
-                name="recurring"
-                render={[Function]}
-                type="checkbox"
               />
-            </div>,
-            <UNDEFINED>
-              <FieldWithError
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-kEYyzF",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  select {
-    width: 100% !important;
-  }
-",
-                      ],
-                    },
-                    "displayName": "Styled(Select)",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-kEYyzF",
-                    "target": [Function],
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  }
-                }
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                label="Location"
-                name="location"
-                placeholder="Select"
-              >
-                <option
-                  disabled={true}
-                  hidden={true}
-                  value=""
-                >
-                  Select
-                </option>
-                <option
-                  value={1}
-                >
-                  loc1
-                </option>
-              </FieldWithError>
-              <FieldWithError
-                component={[Function]}
-                date="2019-01-01T21:00:00Z"
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                futureTimeOnly={true}
-                label="Group end time (optional)"
-                name="endTime"
-                now={"2019-01-01T21:00:00.000Z"}
-              />
-              <FieldWithError
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                name="comments"
-                render={[Function]}
-              />
-            </UNDEFINED>,
-          ],
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <FieldWithError
-                  component={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "sc-kEYyzF",
-                        "isStatic": true,
-                        "rules": Array [
-                          "
-  select {
-    width: 100% !important;
-  }
-",
-                        ],
-                      },
-                      "displayName": "Styled(Select)",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "sc-kEYyzF",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                      Symbol(Symbol.hasInstance): [Function],
-                    }
-                  }
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  label="Appointment type"
-                  name="appointmentType"
-                  placeholder="Select"
-                >
-                  <option
-                    disabled={true}
-                    hidden={true}
-                    value=""
-                  >
-                    Select
-                  </option>
-                  <option
-                    value="1"
-                  >
-                    app1
-                  </option>
-                </FieldWithError>,
-                <UNDEFINED>
-                  <FieldWithError
-                    component={[Function]}
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    label="Date"
-                    name="date"
-                    placeholder="Select"
-                    shouldShowDay={[Function]}
-                  />
-                  <FieldWithError
-                    component={[Function]}
-                    date="2019-01-01T21:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
-                    label="Group start time"
-                    name="startTime"
-                    now={"2019-01-01T21:00:00.000Z"}
-                  />
-                </UNDEFINED>,
-                <FieldWithError
-                  name="recurring"
-                  render={[Function]}
-                  type="checkbox"
-                />,
-                undefined,
-              ],
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "children": Array [
-                    <option
-                      disabled={true}
-                      hidden={true}
-                      value=""
+            </label>
+          </div>
+          <div
+            className="rdtPicker"
+          >
+            <div
+              className="rdtDays"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th
+                      className="rdtPrev"
+                      onClick={[Function]}
                     >
-                      Select
-                    </option>,
-                    Array [
-                      <option
-                        value="1"
-                      >
-                        app1
-                      </option>,
-                    ],
-                  ],
-                  "component": Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-kEYyzF",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  select {
-    width: 100% !important;
-  }
-",
-                      ],
-                    },
-                    "displayName": "Styled(Select)",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-kEYyzF",
-                    "target": [Function],
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  },
-                  "errors": Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ],
-                  "label": "Appointment type",
-                  "name": "appointmentType",
-                  "placeholder": "Select",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": "Select",
-                      "disabled": true,
-                      "hidden": true,
-                      "value": "",
-                    },
-                    "ref": null,
-                    "rendered": "Select",
-                    "type": "option",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": "app1",
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": "app1",
-                      "value": "1",
-                    },
-                    "ref": null,
-                    "rendered": "app1",
-                    "type": "option",
-                  },
-                ],
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "children": Array [
-                    <FieldWithError
-                      component={[Function]}
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "date",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "startTime",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "endTime",
-                            "text": "End time test message",
-                          },
-                          Object {
-                            "targetName": "comments",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "appointmentType",
-                            "text": "appointment type test message",
-                          },
-                          Object {
-                            "targetName": "locationType",
-                            "text": "location type test message",
-                          },
-                        ]
-                      }
-                      label="Date"
-                      name="date"
-                      placeholder="Select"
-                      shouldShowDay={[Function]}
-                    />,
-                    <FieldWithError
-                      component={[Function]}
-                      date="2019-01-01T21:00:00Z"
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "date",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "startTime",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "endTime",
-                            "text": "End time test message",
-                          },
-                          Object {
-                            "targetName": "comments",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "appointmentType",
-                            "text": "appointment type test message",
-                          },
-                          Object {
-                            "targetName": "locationType",
-                            "text": "location type test message",
-                          },
-                        ]
-                      }
-                      futureTimeOnly={true}
-                      label="Group start time"
-                      name="startTime"
-                      now={"2019-01-01T21:00:00.000Z"}
-                    />,
-                  ],
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "function",
-                    "props": Object {
-                      "component": [Function],
-                      "errors": Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ],
-                      "label": "Date",
-                      "name": "date",
-                      "placeholder": "Select",
-                      "shouldShowDay": [Function],
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "function",
-                    "props": Object {
-                      "component": [Function],
-                      "date": "2019-01-01T21:00:00Z",
-                      "errors": Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ],
-                      "futureTimeOnly": true,
-                      "label": "Group start time",
-                      "name": "startTime",
-                      "now": "2019-01-01T21:00:00.000Z",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                ],
-                "type": Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "attrs": Array [],
-                  "componentStyle": ComponentStyle {
-                    "componentId": "sc-ckVGcZ",
-                    "isStatic": true,
-                    "rules": Array [
-                      "
-  display: flex;
-
-  div:first-child {
-    margin-right: 5px;
-  }
-",
-                    ],
-                  },
-                  "displayName": "styled.div",
-                  "foldedComponentIds": Array [],
-                  "render": [Function],
-                  "styledComponentId": "sc-ckVGcZ",
-                  "target": "div",
-                  "toString": [Function],
-                  "warnTooManyClasses": [Function],
-                  "withComponent": [Function],
-                },
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "name": "recurring",
-                  "render": [Function],
-                  "type": "checkbox",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              undefined,
-            ],
-            "type": "div",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": Array [
-                <FieldWithError
-                  component={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "sc-kEYyzF",
-                        "isStatic": true,
-                        "rules": Array [
-                          "
-  select {
-    width: 100% !important;
-  }
-",
-                        ],
-                      },
-                      "displayName": "Styled(Select)",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "sc-kEYyzF",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                      Symbol(Symbol.hasInstance): [Function],
-                    }
-                  }
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  label="Location"
-                  name="location"
-                  placeholder="Select"
-                >
-                  <option
-                    disabled={true}
-                    hidden={true}
-                    value=""
-                  >
-                    Select
-                  </option>
-                  <option
-                    value={1}
-                  >
-                    loc1
-                  </option>
-                </FieldWithError>,
-                <FieldWithError
-                  component={[Function]}
-                  date="2019-01-01T21:00:00Z"
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  futureTimeOnly={true}
-                  label="Group end time (optional)"
-                  name="endTime"
-                  now={"2019-01-01T21:00:00.000Z"}
-                />,
-                <FieldWithError
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  name="comments"
-                  render={[Function]}
-                />,
-              ],
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "children": Array [
-                    <option
-                      disabled={true}
-                      hidden={true}
-                      value=""
+                      <span>
+                        ‹
+                      </span>
+                    </th>
+                    <th
+                      className="rdtSwitch"
+                      colSpan={5}
+                      data-value={2}
+                      onClick={[Function]}
                     >
-                      Select
-                    </option>,
-                    Array [
-                      <option
-                        value={1}
-                      >
-                        loc1
-                      </option>,
-                    ],
-                  ],
-                  "component": Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-kEYyzF",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  select {
-    width: 100% !important;
-  }
-",
-                      ],
-                    },
-                    "displayName": "Styled(Select)",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-kEYyzF",
-                    "target": [Function],
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  },
-                  "errors": Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ],
-                  "label": "Location",
-                  "name": "location",
-                  "placeholder": "Select",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": "Select",
-                      "disabled": true,
-                      "hidden": true,
-                      "value": "",
-                    },
-                    "ref": null,
-                    "rendered": "Select",
-                    "type": "option",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": "loc1",
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": "loc1",
-                      "value": 1,
-                    },
-                    "ref": null,
-                    "rendered": "loc1",
-                    "type": "option",
-                  },
-                ],
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "component": [Function],
-                  "date": "2019-01-01T21:00:00Z",
-                  "errors": Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ],
-                  "futureTimeOnly": true,
-                  "label": "Group end time (optional)",
-                  "name": "endTime",
-                  "now": "2019-01-01T21:00:00.000Z",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "errors": Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ],
-                  "name": "comments",
-                  "render": [Function],
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-            ],
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-eNQAEJ",
-                "isStatic": true,
-                "rules": Array [
-                  "
-  flex: 1;
-  max-width: 40%;
-  padding-left: 120px;
-
-  @media (max-width: ",
-                  "641px",
-                  ") {
-    padding-left: 0;
-    margin-bottom: ",
-                  "20px",
-                  ";
-    max-width: 100%;
-  }
-",
-                ],
-              },
-              "displayName": "styled.div",
-              "foldedComponentIds": Array [],
-              "render": [Function],
-              "styledComponentId": "sc-eNQAEJ",
-              "target": "div",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-        ],
-        "type": Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "attrs": Array [],
-          "componentStyle": ComponentStyle {
-            "componentId": "sc-jKJlTe",
-            "isStatic": true,
-            "rules": Array [
-              "
-  display: flex;
-  flex-direction: row;
-
-  @media (max-width: ",
-              "641px",
-              ") {
-    flex-direction: column;
-  }
-",
-            ],
-          },
-          "displayName": "styled.div",
-          "foldedComponentIds": Array [],
-          "render": [Function],
-          "styledComponentId": "sc-jKJlTe",
-          "target": "div",
-          "toString": [Function],
-          "warnTooManyClasses": [Function],
-          "withComponent": [Function],
-        },
-      },
-    ],
-    "type": Symbol(react.fragment),
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "children": Array [
-          <ErrorSummary
-            description={undefined}
-            errors={
-              Array [
-                Object {
-                  "targetName": "date",
-                  "text": "Date test message",
-                },
-                Object {
-                  "targetName": "startTime",
-                  "text": "Start test message",
-                },
-                Object {
-                  "targetName": "endTime",
-                  "text": "End time test message",
-                },
-                Object {
-                  "targetName": "comments",
-                  "text": "Date test message",
-                },
-                Object {
-                  "targetName": "appointmentType",
-                  "text": "appointment type test message",
-                },
-                Object {
-                  "targetName": "locationType",
-                  "text": "location type test message",
-                },
-              ]
-            }
-            heading="There is a problem"
-            onHandleErrorClick={[Function]}
-          />,
-          <UNDEFINED>
-            <div>
-              <FieldWithError
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-kEYyzF",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  select {
-    width: 100% !important;
-  }
-",
-                      ],
-                    },
-                    "displayName": "Styled(Select)",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-kEYyzF",
-                    "target": [Function],
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  }
-                }
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                label="Appointment type"
-                name="appointmentType"
-                placeholder="Select"
-              >
-                <option
-                  disabled={true}
-                  hidden={true}
-                  value=""
-                >
-                  Select
-                </option>
-                <option
-                  value="1"
-                >
-                  app1
-                </option>
-              </FieldWithError>
-              <UNDEFINED>
-                <FieldWithError
-                  component={[Function]}
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  label="Date"
-                  name="date"
-                  placeholder="Select"
-                  shouldShowDay={[Function]}
-                />
-                <FieldWithError
-                  component={[Function]}
-                  date="2019-01-01T21:00:00Z"
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  futureTimeOnly={true}
-                  label="Group start time"
-                  name="startTime"
-                  now={"2019-01-01T21:00:00.000Z"}
-                />
-              </UNDEFINED>
-              <FieldWithError
-                name="recurring"
-                render={[Function]}
-                type="checkbox"
-              />
+                      March 2019
+                    </th>
+                    <th
+                      className="rdtNext"
+                      onClick={[Function]}
+                    >
+                      <span>
+                        ›
+                      </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th
+                      className="dow"
+                    >
+                      Mo
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Tu
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      We
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Th
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Fr
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Sa
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Su
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={25}
+                    >
+                      25
+                    </td>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={26}
+                    >
+                      26
+                    </td>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={27}
+                    >
+                      27
+                    </td>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={28}
+                    >
+                      28
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={1}
+                    >
+                      1
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={2}
+                    >
+                      2
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={3}
+                    >
+                      3
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={4}
+                    >
+                      4
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={5}
+                    >
+                      5
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={6}
+                    >
+                      6
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={7}
+                    >
+                      7
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={8}
+                    >
+                      8
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={9}
+                    >
+                      9
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={10}
+                    >
+                      10
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={11}
+                    >
+                      11
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={12}
+                    >
+                      12
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={13}
+                    >
+                      13
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={14}
+                    >
+                      14
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={15}
+                    >
+                      15
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={16}
+                    >
+                      16
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={17}
+                    >
+                      17
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={18}
+                    >
+                      18
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={19}
+                    >
+                      19
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={20}
+                    >
+                      20
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={21}
+                    >
+                      21
+                    </td>
+                    <td
+                      className="rdtDay rdtToday"
+                      data-value={22}
+                      onClick={[Function]}
+                    >
+                      22
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={23}
+                      onClick={[Function]}
+                    >
+                      23
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={24}
+                      onClick={[Function]}
+                    >
+                      24
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay"
+                      data-value={25}
+                      onClick={[Function]}
+                    >
+                      25
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={26}
+                      onClick={[Function]}
+                    >
+                      26
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={27}
+                      onClick={[Function]}
+                    >
+                      27
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={28}
+                      onClick={[Function]}
+                    >
+                      28
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={29}
+                      onClick={[Function]}
+                    >
+                      29
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={30}
+                      onClick={[Function]}
+                    >
+                      30
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={31}
+                      onClick={[Function]}
+                    >
+                      31
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={1}
+                      onClick={[Function]}
+                    >
+                      1
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={2}
+                      onClick={[Function]}
+                    >
+                      2
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={3}
+                      onClick={[Function]}
+                    >
+                      3
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={4}
+                      onClick={[Function]}
+                    >
+                      4
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={5}
+                      onClick={[Function]}
+                    >
+                      5
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={6}
+                      onClick={[Function]}
+                    >
+                      6
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={7}
+                      onClick={[Function]}
+                    >
+                      7
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <UNDEFINED>
-              <FieldWithError
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-kEYyzF",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  select {
-    width: 100% !important;
-  }
-",
-                      ],
-                    },
-                    "displayName": "Styled(Select)",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-kEYyzF",
-                    "target": [Function],
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  }
-                }
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                label="Location"
-                name="location"
-                placeholder="Select"
+          </div>
+        </div>
+        <div>
+          <label
+            className="sc-fjdhpX jurWKt"
+            htmlFor="hours"
+          >
+            <span
+              className="sc-jzJRlG fYwhH"
+            >
+               
+              Group start time
+               
+            </span>
+            <span
+              className="sc-dnqmqq bUFnck"
+            >
+              Start test message
+            </span>
+            <div
+              className="sc-kGXeez cfRJCB"
+              name="startTime"
+            >
+              <label
+                className="sc-fjdhpX bMZnoP"
+                defaultValue="--"
+                disabled={false}
+                id="hours"
+                name="hours"
               >
-                <option
-                  disabled={true}
-                  hidden={true}
-                  value=""
+                <span
+                  className="sc-jzJRlG fYwhH"
+                />
+                <select
+                  className="sc-kgoBCf kIBVnR"
+                  onChange={[Function]}
+                  value="undefined"
                 >
-                  Select
-                </option>
-                <option
-                  value={1}
+                  <option>
+                    --
+                  </option>
+                  <option>
+                    21
+                  </option>
+                  <option>
+                    22
+                  </option>
+                  <option>
+                    23
+                  </option>
+                </select>
+              </label>
+              <label
+                className="sc-fjdhpX bMZnoP"
+                defaultValue="--"
+                disabled={false}
+                name="minutes"
+              >
+                <span
+                  className="sc-jzJRlG fYwhH"
+                />
+                <select
+                  className="sc-kgoBCf kIBVnR"
+                  onChange={[Function]}
+                  value="undefined"
                 >
-                  loc1
-                </option>
-              </FieldWithError>
-              <FieldWithError
-                component={[Function]}
-                date="2019-01-01T21:00:00Z"
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                futureTimeOnly={true}
-                label="Group end time (optional)"
-                name="endTime"
-                now={"2019-01-01T21:00:00.000Z"}
+                  <option>
+                    --
+                  </option>
+                  <option>
+                    00
+                  </option>
+                  <option>
+                    05
+                  </option>
+                  <option>
+                    10
+                  </option>
+                  <option>
+                    15
+                  </option>
+                  <option>
+                    20
+                  </option>
+                  <option>
+                    25
+                  </option>
+                  <option>
+                    30
+                  </option>
+                  <option>
+                    35
+                  </option>
+                  <option>
+                    40
+                  </option>
+                  <option>
+                    45
+                  </option>
+                  <option>
+                    50
+                  </option>
+                  <option>
+                    55
+                  </option>
+                </select>
+              </label>
+            </div>
+          </label>
+        </div>
+      </div>
+      <label
+        className="sc-gZMcBi iJOhOq"
+      >
+        <input
+          checked={false}
+          className="sc-gqjmRU cVVaVl"
+          name="recurring"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          type="checkbox"
+          value=""
+        />
+        <span
+          className="sc-VigVT bimECd"
+        >
+          This is a recurring appointment
+        </span>
+      </label>
+    </div>
+    <div
+      className="sc-eNQAEJ fHPcrb"
+    >
+      <label
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
+        placeholder="Select"
+      >
+        <span
+          className="sc-jzJRlG fYwhH"
+        >
+          Location
+        </span>
+        <select
+          className="sc-kgoBCf kIBVnR"
+          name="location"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value=""
+        >
+          <option
+            disabled={true}
+            hidden={true}
+            value=""
+          >
+            Select
+          </option>
+          <option
+            value={1}
+          >
+            loc1
+          </option>
+        </select>
+      </label>
+      <div>
+        <label
+          className="sc-fjdhpX jurWKt"
+          htmlFor="hours"
+        >
+          <span
+            className="sc-jzJRlG fYwhH"
+          >
+             
+            Group end time (optional)
+             
+          </span>
+          <span
+            className="sc-dnqmqq bUFnck"
+          >
+            End time test message
+          </span>
+          <div
+            className="sc-kGXeez cfRJCB"
+            name="endTime"
+          >
+            <label
+              className="sc-fjdhpX bMZnoP"
+              defaultValue="--"
+              disabled={false}
+              id="hours"
+              name="hours"
+            >
+              <span
+                className="sc-jzJRlG fYwhH"
               />
-              <FieldWithError
-                errors={
-                  Array [
-                    Object {
-                      "targetName": "date",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "startTime",
-                      "text": "Start test message",
-                    },
-                    Object {
-                      "targetName": "endTime",
-                      "text": "End time test message",
-                    },
-                    Object {
-                      "targetName": "comments",
-                      "text": "Date test message",
-                    },
-                    Object {
-                      "targetName": "appointmentType",
-                      "text": "appointment type test message",
-                    },
-                    Object {
-                      "targetName": "locationType",
-                      "text": "location type test message",
-                    },
-                  ]
-                }
-                name="comments"
-                render={[Function]}
+              <select
+                className="sc-kgoBCf kIBVnR"
+                onChange={[Function]}
+                value="undefined"
+              >
+                <option>
+                  --
+                </option>
+                <option>
+                  21
+                </option>
+                <option>
+                  22
+                </option>
+                <option>
+                  23
+                </option>
+              </select>
+            </label>
+            <label
+              className="sc-fjdhpX bMZnoP"
+              defaultValue="--"
+              disabled={false}
+              name="minutes"
+            >
+              <span
+                className="sc-jzJRlG fYwhH"
               />
-            </UNDEFINED>
-          </UNDEFINED>,
-        ],
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "function",
-          "props": Object {
-            "description": undefined,
-            "errors": Array [
-              Object {
-                "targetName": "date",
-                "text": "Date test message",
-              },
-              Object {
-                "targetName": "startTime",
-                "text": "Start test message",
-              },
-              Object {
-                "targetName": "endTime",
-                "text": "End time test message",
-              },
-              Object {
-                "targetName": "comments",
-                "text": "Date test message",
-              },
-              Object {
-                "targetName": "appointmentType",
-                "text": "appointment type test message",
-              },
-              Object {
-                "targetName": "locationType",
-                "text": "location type test message",
-              },
-            ],
-            "heading": "There is a problem",
-            "onHandleErrorClick": [Function],
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "function",
-          "props": Object {
-            "children": Array [
-              <div>
-                <FieldWithError
-                  component={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "sc-kEYyzF",
-                        "isStatic": true,
-                        "rules": Array [
-                          "
-  select {
-    width: 100% !important;
-  }
-",
-                        ],
-                      },
-                      "displayName": "Styled(Select)",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "sc-kEYyzF",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                      Symbol(Symbol.hasInstance): [Function],
-                    }
-                  }
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  label="Appointment type"
-                  name="appointmentType"
-                  placeholder="Select"
-                >
-                  <option
-                    disabled={true}
-                    hidden={true}
-                    value=""
-                  >
-                    Select
-                  </option>
-                  <option
-                    value="1"
-                  >
-                    app1
-                  </option>
-                </FieldWithError>
-                <UNDEFINED>
-                  <FieldWithError
-                    component={[Function]}
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    label="Date"
-                    name="date"
-                    placeholder="Select"
-                    shouldShowDay={[Function]}
-                  />
-                  <FieldWithError
-                    component={[Function]}
-                    date="2019-01-01T21:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
-                    label="Group start time"
-                    name="startTime"
-                    now={"2019-01-01T21:00:00.000Z"}
-                  />
-                </UNDEFINED>
-                <FieldWithError
-                  name="recurring"
-                  render={[Function]}
-                  type="checkbox"
-                />
-              </div>,
-              <UNDEFINED>
-                <FieldWithError
-                  component={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "sc-kEYyzF",
-                        "isStatic": true,
-                        "rules": Array [
-                          "
-  select {
-    width: 100% !important;
-  }
-",
-                        ],
-                      },
-                      "displayName": "Styled(Select)",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "sc-kEYyzF",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                      Symbol(Symbol.hasInstance): [Function],
-                    }
-                  }
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  label="Location"
-                  name="location"
-                  placeholder="Select"
-                >
-                  <option
-                    disabled={true}
-                    hidden={true}
-                    value=""
-                  >
-                    Select
-                  </option>
-                  <option
-                    value={1}
-                  >
-                    loc1
-                  </option>
-                </FieldWithError>
-                <FieldWithError
-                  component={[Function]}
-                  date="2019-01-01T21:00:00Z"
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  futureTimeOnly={true}
-                  label="Group end time (optional)"
-                  name="endTime"
-                  now={"2019-01-01T21:00:00.000Z"}
-                />
-                <FieldWithError
-                  errors={
-                    Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ]
-                  }
-                  name="comments"
-                  render={[Function]}
-                />
-              </UNDEFINED>,
-            ],
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <FieldWithError
-                    component={
-                      Object {
-                        "$$typeof": Symbol(react.forward_ref),
-                        "attrs": Array [],
-                        "componentStyle": ComponentStyle {
-                          "componentId": "sc-kEYyzF",
-                          "isStatic": true,
-                          "rules": Array [
-                            "
-  select {
-    width: 100% !important;
-  }
-",
-                          ],
-                        },
-                        "displayName": "Styled(Select)",
-                        "foldedComponentIds": Array [],
-                        "render": [Function],
-                        "styledComponentId": "sc-kEYyzF",
-                        "target": [Function],
-                        "toString": [Function],
-                        "warnTooManyClasses": [Function],
-                        "withComponent": [Function],
-                        Symbol(Symbol.hasInstance): [Function],
-                      }
-                    }
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    label="Appointment type"
-                    name="appointmentType"
-                    placeholder="Select"
-                  >
-                    <option
-                      disabled={true}
-                      hidden={true}
-                      value=""
-                    >
-                      Select
-                    </option>
-                    <option
-                      value="1"
-                    >
-                      app1
-                    </option>
-                  </FieldWithError>,
-                  <UNDEFINED>
-                    <FieldWithError
-                      component={[Function]}
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "date",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "startTime",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "endTime",
-                            "text": "End time test message",
-                          },
-                          Object {
-                            "targetName": "comments",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "appointmentType",
-                            "text": "appointment type test message",
-                          },
-                          Object {
-                            "targetName": "locationType",
-                            "text": "location type test message",
-                          },
-                        ]
-                      }
-                      label="Date"
-                      name="date"
-                      placeholder="Select"
-                      shouldShowDay={[Function]}
-                    />
-                    <FieldWithError
-                      component={[Function]}
-                      date="2019-01-01T21:00:00Z"
-                      errors={
-                        Array [
-                          Object {
-                            "targetName": "date",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "startTime",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "endTime",
-                            "text": "End time test message",
-                          },
-                          Object {
-                            "targetName": "comments",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "appointmentType",
-                            "text": "appointment type test message",
-                          },
-                          Object {
-                            "targetName": "locationType",
-                            "text": "location type test message",
-                          },
-                        ]
-                      }
-                      futureTimeOnly={true}
-                      label="Group start time"
-                      name="startTime"
-                      now={"2019-01-01T21:00:00.000Z"}
-                    />
-                  </UNDEFINED>,
-                  <FieldWithError
-                    name="recurring"
-                    render={[Function]}
-                    type="checkbox"
-                  />,
-                  undefined,
-                ],
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "function",
-                  "props": Object {
-                    "children": Array [
-                      <option
-                        disabled={true}
-                        hidden={true}
-                        value=""
-                      >
-                        Select
-                      </option>,
-                      Array [
-                        <option
-                          value="1"
-                        >
-                          app1
-                        </option>,
-                      ],
-                    ],
-                    "component": Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "sc-kEYyzF",
-                        "isStatic": true,
-                        "rules": Array [
-                          "
-  select {
-    width: 100% !important;
-  }
-",
-                        ],
-                      },
-                      "displayName": "Styled(Select)",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "sc-kEYyzF",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                      Symbol(Symbol.hasInstance): [Function],
-                    },
-                    "errors": Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ],
-                    "label": "Appointment type",
-                    "name": "appointmentType",
-                    "placeholder": "Select",
-                  },
-                  "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": "Select",
-                        "disabled": true,
-                        "hidden": true,
-                        "value": "",
-                      },
-                      "ref": null,
-                      "rendered": "Select",
-                      "type": "option",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": "app1",
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": "app1",
-                        "value": "1",
-                      },
-                      "ref": null,
-                      "rendered": "app1",
-                      "type": "option",
-                    },
-                  ],
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "function",
-                  "props": Object {
-                    "children": Array [
-                      <FieldWithError
-                        component={[Function]}
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "date",
-                              "text": "Date test message",
-                            },
-                            Object {
-                              "targetName": "startTime",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "endTime",
-                              "text": "End time test message",
-                            },
-                            Object {
-                              "targetName": "comments",
-                              "text": "Date test message",
-                            },
-                            Object {
-                              "targetName": "appointmentType",
-                              "text": "appointment type test message",
-                            },
-                            Object {
-                              "targetName": "locationType",
-                              "text": "location type test message",
-                            },
-                          ]
-                        }
-                        label="Date"
-                        name="date"
-                        placeholder="Select"
-                        shouldShowDay={[Function]}
-                      />,
-                      <FieldWithError
-                        component={[Function]}
-                        date="2019-01-01T21:00:00Z"
-                        errors={
-                          Array [
-                            Object {
-                              "targetName": "date",
-                              "text": "Date test message",
-                            },
-                            Object {
-                              "targetName": "startTime",
-                              "text": "Start test message",
-                            },
-                            Object {
-                              "targetName": "endTime",
-                              "text": "End time test message",
-                            },
-                            Object {
-                              "targetName": "comments",
-                              "text": "Date test message",
-                            },
-                            Object {
-                              "targetName": "appointmentType",
-                              "text": "appointment type test message",
-                            },
-                            Object {
-                              "targetName": "locationType",
-                              "text": "location type test message",
-                            },
-                          ]
-                        }
-                        futureTimeOnly={true}
-                        label="Group start time"
-                        name="startTime"
-                        now={"2019-01-01T21:00:00.000Z"}
-                      />,
-                    ],
-                  },
-                  "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "function",
-                      "props": Object {
-                        "component": [Function],
-                        "errors": Array [
-                          Object {
-                            "targetName": "date",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "startTime",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "endTime",
-                            "text": "End time test message",
-                          },
-                          Object {
-                            "targetName": "comments",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "appointmentType",
-                            "text": "appointment type test message",
-                          },
-                          Object {
-                            "targetName": "locationType",
-                            "text": "location type test message",
-                          },
-                        ],
-                        "label": "Date",
-                        "name": "date",
-                        "placeholder": "Select",
-                        "shouldShowDay": [Function],
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "function",
-                      "props": Object {
-                        "component": [Function],
-                        "date": "2019-01-01T21:00:00Z",
-                        "errors": Array [
-                          Object {
-                            "targetName": "date",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "startTime",
-                            "text": "Start test message",
-                          },
-                          Object {
-                            "targetName": "endTime",
-                            "text": "End time test message",
-                          },
-                          Object {
-                            "targetName": "comments",
-                            "text": "Date test message",
-                          },
-                          Object {
-                            "targetName": "appointmentType",
-                            "text": "appointment type test message",
-                          },
-                          Object {
-                            "targetName": "locationType",
-                            "text": "location type test message",
-                          },
-                        ],
-                        "futureTimeOnly": true,
-                        "label": "Group start time",
-                        "name": "startTime",
-                        "now": "2019-01-01T21:00:00.000Z",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                  ],
-                  "type": Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "attrs": Array [],
-                    "componentStyle": ComponentStyle {
-                      "componentId": "sc-ckVGcZ",
-                      "isStatic": true,
-                      "rules": Array [
-                        "
-  display: flex;
-
-  div:first-child {
-    margin-right: 5px;
-  }
-",
-                      ],
-                    },
-                    "displayName": "styled.div",
-                    "foldedComponentIds": Array [],
-                    "render": [Function],
-                    "styledComponentId": "sc-ckVGcZ",
-                    "target": "div",
-                    "toString": [Function],
-                    "warnTooManyClasses": [Function],
-                    "withComponent": [Function],
-                  },
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "function",
-                  "props": Object {
-                    "name": "recurring",
-                    "render": [Function],
-                    "type": "checkbox",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                undefined,
-              ],
-              "type": "div",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": Array [
-                  <FieldWithError
-                    component={
-                      Object {
-                        "$$typeof": Symbol(react.forward_ref),
-                        "attrs": Array [],
-                        "componentStyle": ComponentStyle {
-                          "componentId": "sc-kEYyzF",
-                          "isStatic": true,
-                          "rules": Array [
-                            "
-  select {
-    width: 100% !important;
-  }
-",
-                          ],
-                        },
-                        "displayName": "Styled(Select)",
-                        "foldedComponentIds": Array [],
-                        "render": [Function],
-                        "styledComponentId": "sc-kEYyzF",
-                        "target": [Function],
-                        "toString": [Function],
-                        "warnTooManyClasses": [Function],
-                        "withComponent": [Function],
-                        Symbol(Symbol.hasInstance): [Function],
-                      }
-                    }
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    label="Location"
-                    name="location"
-                    placeholder="Select"
-                  >
-                    <option
-                      disabled={true}
-                      hidden={true}
-                      value=""
-                    >
-                      Select
-                    </option>
-                    <option
-                      value={1}
-                    >
-                      loc1
-                    </option>
-                  </FieldWithError>,
-                  <FieldWithError
-                    component={[Function]}
-                    date="2019-01-01T21:00:00Z"
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    futureTimeOnly={true}
-                    label="Group end time (optional)"
-                    name="endTime"
-                    now={"2019-01-01T21:00:00.000Z"}
-                  />,
-                  <FieldWithError
-                    errors={
-                      Array [
-                        Object {
-                          "targetName": "date",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "startTime",
-                          "text": "Start test message",
-                        },
-                        Object {
-                          "targetName": "endTime",
-                          "text": "End time test message",
-                        },
-                        Object {
-                          "targetName": "comments",
-                          "text": "Date test message",
-                        },
-                        Object {
-                          "targetName": "appointmentType",
-                          "text": "appointment type test message",
-                        },
-                        Object {
-                          "targetName": "locationType",
-                          "text": "location type test message",
-                        },
-                      ]
-                    }
-                    name="comments"
-                    render={[Function]}
-                  />,
-                ],
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "function",
-                  "props": Object {
-                    "children": Array [
-                      <option
-                        disabled={true}
-                        hidden={true}
-                        value=""
-                      >
-                        Select
-                      </option>,
-                      Array [
-                        <option
-                          value={1}
-                        >
-                          loc1
-                        </option>,
-                      ],
-                    ],
-                    "component": Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "sc-kEYyzF",
-                        "isStatic": true,
-                        "rules": Array [
-                          "
-  select {
-    width: 100% !important;
-  }
-",
-                        ],
-                      },
-                      "displayName": "Styled(Select)",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "sc-kEYyzF",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                      Symbol(Symbol.hasInstance): [Function],
-                    },
-                    "errors": Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ],
-                    "label": "Location",
-                    "name": "location",
-                    "placeholder": "Select",
-                  },
-                  "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": "Select",
-                        "disabled": true,
-                        "hidden": true,
-                        "value": "",
-                      },
-                      "ref": null,
-                      "rendered": "Select",
-                      "type": "option",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": "loc1",
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": "loc1",
-                        "value": 1,
-                      },
-                      "ref": null,
-                      "rendered": "loc1",
-                      "type": "option",
-                    },
-                  ],
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "function",
-                  "props": Object {
-                    "component": [Function],
-                    "date": "2019-01-01T21:00:00Z",
-                    "errors": Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ],
-                    "futureTimeOnly": true,
-                    "label": "Group end time (optional)",
-                    "name": "endTime",
-                    "now": "2019-01-01T21:00:00.000Z",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "function",
-                  "props": Object {
-                    "errors": Array [
-                      Object {
-                        "targetName": "date",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "startTime",
-                        "text": "Start test message",
-                      },
-                      Object {
-                        "targetName": "endTime",
-                        "text": "End time test message",
-                      },
-                      Object {
-                        "targetName": "comments",
-                        "text": "Date test message",
-                      },
-                      Object {
-                        "targetName": "appointmentType",
-                        "text": "appointment type test message",
-                      },
-                      Object {
-                        "targetName": "locationType",
-                        "text": "location type test message",
-                      },
-                    ],
-                    "name": "comments",
-                    "render": [Function],
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-              ],
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-eNQAEJ",
-                  "isStatic": true,
-                  "rules": Array [
-                    "
-  flex: 1;
-  max-width: 40%;
-  padding-left: 120px;
-
-  @media (max-width: ",
-                    "641px",
-                    ") {
-    padding-left: 0;
-    margin-bottom: ",
-                    "20px",
-                    ";
-    max-width: 100%;
-  }
-",
-                  ],
-                },
-                "displayName": "styled.div",
-                "foldedComponentIds": Array [],
-                "render": [Function],
-                "styledComponentId": "sc-eNQAEJ",
-                "target": "div",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              },
-            },
-          ],
-          "type": Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "attrs": Array [],
-            "componentStyle": ComponentStyle {
-              "componentId": "sc-jKJlTe",
-              "isStatic": true,
-              "rules": Array [
-                "
-  display: flex;
-  flex-direction: row;
-
-  @media (max-width: ",
-                "641px",
-                ") {
-    flex-direction: column;
-  }
-",
-              ],
-            },
-            "displayName": "styled.div",
-            "foldedComponentIds": Array [],
-            "render": [Function],
-            "styledComponentId": "sc-jKJlTe",
-            "target": "div",
-            "toString": [Function],
-            "warnTooManyClasses": [Function],
-            "withComponent": [Function],
-          },
-        },
-      ],
-      "type": Symbol(react.fragment),
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getDerivedStateFromProps": true,
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-  },
-}
+              <select
+                className="sc-kgoBCf kIBVnR"
+                onChange={[Function]}
+                value="undefined"
+              >
+                <option>
+                  --
+                </option>
+                <option>
+                  00
+                </option>
+                <option>
+                  05
+                </option>
+                <option>
+                  10
+                </option>
+                <option>
+                  15
+                </option>
+                <option>
+                  20
+                </option>
+                <option>
+                  25
+                </option>
+                <option>
+                  30
+                </option>
+                <option>
+                  35
+                </option>
+                <option>
+                  40
+                </option>
+                <option>
+                  45
+                </option>
+                <option>
+                  50
+                </option>
+                <option>
+                  55
+                </option>
+              </select>
+            </label>
+          </div>
+        </label>
+      </div>
+      <label
+        className="sc-kkGfuU jeqVra sc-fjdhpX ecXZFL"
+      >
+        <span
+          className="sc-jzJRlG fYwhH"
+        >
+          Comments (optional)
+        </span>
+        <textarea
+          className="sc-dxgOiQ iJXpRW"
+          name="comments"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          rows="5"
+          type="text"
+          value=""
+        />
+      </label>
+    </div>
+  </div>,
+]
 `;
 
 exports[`Appointment form should render correctly 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <AppointmentDetailsForm
-    appointmentTypes={Array []}
-    error=""
-    initialValues={Object {}}
-    locationTypes={Array []}
-    now={"2019-01-01T21:00:00.000Z"}
-    onCancel={[MockFunction]}
-    onError={[MockFunction]}
-    onSuccess={[MockFunction]}
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "class",
-    "props": Object {
-      "decorators": Array [
-        [Function],
-      ],
-      "initialValues": Object {},
-      "onSubmit": [Function],
-      "render": [Function],
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "decorators": Array [
-          [Function],
-        ],
-        "initialValues": Object {},
-        "onSubmit": [Function],
-        "render": [Function],
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getDerivedStateFromProps": true,
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`Appointment form should render correctly 2`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <ReactFinalForm
-    decorators={
-      Array [
-        [Function],
-      ]
-    }
-    initialValues={Object {}}
-    onSubmit={[Function]}
-    render={[Function]}
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "children": <form
-        onSubmit={[Function]}
+<form
+  noValidate={true}
+  onSubmit={[Function]}
+>
+  
+  <div
+    className="sc-jKJlTe dPgCTm"
+  >
+    <div>
+      <label
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
+        placeholder="Select"
       >
-        
-        <FormFields
-          appointmentTypes={Array []}
-          errors={null}
-          locationTypes={Array []}
-          now={"2019-01-01T21:00:00.000Z"}
-          values={Object {}}
-        />
-        <UNDEFINED>
-          <UNDEFINED
-            buttonColour={undefined}
-            buttonHoverColour={undefined}
-            buttonShadowColour={undefined}
-            buttonTextColour={undefined}
-            disabled={false}
-            icon={undefined}
-            start={false}
-            type="submit"
-          >
-            Continue
-          </UNDEFINED>
-          <UNDEFINED
-            buttonColour="#dee0e2"
-            buttonHoverColour={undefined}
-            buttonShadowColour={undefined}
-            buttonTextColour="#0b0c0c"
-            disabled={false}
-            icon={undefined}
-            onClick={[Function]}
-            start={false}
-          >
-            Cancel
-          </UNDEFINED>
-        </UNDEFINED>
-      </form>,
-      "value": Object {
-        "batch": [Function],
-        "blur": [Function],
-        "change": [Function],
-        "focus": [Function],
-        "getFieldState": [Function],
-        "getRegisteredFields": [Function],
-        "getState": [Function],
-        "initialize": [Function],
-        "isValidationPaused": [Function],
-        "mutators": Object {},
-        "pauseValidation": [Function],
-        "registerField": [Function],
-        "reset": [Function],
-        "resumeValidation": [Function],
-        "setConfig": [Function],
-        "submit": [Function],
-        "subscribe": [Function],
-      },
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          "",
-          <FormFields
-            appointmentTypes={Array []}
-            errors={null}
-            locationTypes={Array []}
-            now={"2019-01-01T21:00:00.000Z"}
-            values={Object {}}
-          />,
-          <UNDEFINED>
-            <UNDEFINED
-              buttonColour={undefined}
-              buttonHoverColour={undefined}
-              buttonShadowColour={undefined}
-              buttonTextColour={undefined}
-              disabled={false}
-              icon={undefined}
-              start={false}
-              type="submit"
-            >
-              Continue
-            </UNDEFINED>
-            <UNDEFINED
-              buttonColour="#dee0e2"
-              buttonHoverColour={undefined}
-              buttonShadowColour={undefined}
-              buttonTextColour="#0b0c0c"
-              disabled={false}
-              icon={undefined}
-              onClick={[Function]}
-              start={false}
-            >
-              Cancel
-            </UNDEFINED>
-          </UNDEFINED>,
-        ],
-        "onSubmit": [Function],
-      },
-      "ref": null,
-      "rendered": Array [
-        "",
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "function",
-          "props": Object {
-            "appointmentTypes": Array [],
-            "errors": null,
-            "locationTypes": Array [],
-            "now": "2019-01-01T21:00:00.000Z",
-            "values": Object {},
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "function",
-          "props": Object {
-            "children": Array [
-              <UNDEFINED
-                buttonColour={undefined}
-                buttonHoverColour={undefined}
-                buttonShadowColour={undefined}
-                buttonTextColour={undefined}
-                disabled={false}
-                icon={undefined}
-                start={false}
-                type="submit"
-              >
-                Continue
-              </UNDEFINED>,
-              <UNDEFINED
-                buttonColour="#dee0e2"
-                buttonHoverColour={undefined}
-                buttonShadowColour={undefined}
-                buttonTextColour="#0b0c0c"
-                disabled={false}
-                icon={undefined}
-                onClick={[Function]}
-                start={false}
-              >
-                Cancel
-              </UNDEFINED>,
-            ],
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "buttonColour": undefined,
-                "buttonHoverColour": undefined,
-                "buttonShadowColour": undefined,
-                "buttonTextColour": undefined,
-                "children": "Continue",
-                "disabled": false,
-                "icon": undefined,
-                "start": false,
-                "type": "submit",
-              },
-              "ref": null,
-              "rendered": "Continue",
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "defaultProps": Object {
-                  "buttonColour": undefined,
-                  "buttonHoverColour": undefined,
-                  "buttonShadowColour": undefined,
-                  "buttonTextColour": undefined,
-                  "disabled": false,
-                  "icon": undefined,
-                  "start": false,
-                },
-                "propTypes": Object {
-                  "buttonColour": [Function],
-                  "buttonHoverColour": [Function],
-                  "buttonShadowColour": [Function],
-                  "buttonTextColour": [Function],
-                  "children": [Function],
-                  "disabled": [Function],
-                  "icon": [Function],
-                  "start": [Function],
-                },
-                "render": [Function],
-              },
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "buttonColour": "#dee0e2",
-                "buttonHoverColour": undefined,
-                "buttonShadowColour": undefined,
-                "buttonTextColour": "#0b0c0c",
-                "children": "Cancel",
-                "disabled": false,
-                "icon": undefined,
-                "onClick": [Function],
-                "start": false,
-              },
-              "ref": null,
-              "rendered": "Cancel",
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "defaultProps": Object {
-                  "buttonColour": undefined,
-                  "buttonHoverColour": undefined,
-                  "buttonShadowColour": undefined,
-                  "buttonTextColour": undefined,
-                  "disabled": false,
-                  "icon": undefined,
-                  "start": false,
-                },
-                "propTypes": Object {
-                  "buttonColour": [Function],
-                  "buttonHoverColour": [Function],
-                  "buttonShadowColour": [Function],
-                  "buttonTextColour": [Function],
-                  "children": [Function],
-                  "disabled": [Function],
-                  "icon": [Function],
-                  "start": [Function],
-                },
-                "render": [Function],
-              },
-            },
-          ],
-          "type": Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "attrs": Array [],
-            "componentStyle": ComponentStyle {
-              "componentId": "sc-hMqMXs",
-              "isStatic": true,
-              "rules": Array [
-                "
-  display: flex;
-  flex-direction: row;
-  button {
-    margin-right: ",
-                "10px",
-                ";
-  }
-",
-              ],
-            },
-            "displayName": "styled.div",
-            "foldedComponentIds": Array [],
-            "render": [Function],
-            "styledComponentId": "sc-hMqMXs",
-            "target": "div",
-            "toString": [Function],
-            "warnTooManyClasses": [Function],
-            "withComponent": [Function],
-          },
-        },
-      ],
-      "type": "form",
-    },
-    "type": Object {
-      "$$typeof": Symbol(react.provider),
-      "_context": Object {
-        "$$typeof": Symbol(react.context),
-        "Consumer": Object {
-          "$$typeof": Symbol(react.context),
-          "_calculateChangedBits": null,
-          "_context": [Circular],
-        },
-        "Provider": [Circular],
-        "_calculateChangedBits": null,
-        "_currentRenderer": null,
-        "_currentRenderer2": null,
-        "_currentValue": null,
-        "_currentValue2": null,
-        "_threadCount": 0,
-      },
-    },
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "children": <form
-          onSubmit={[Function]}
+        <span
+          className="sc-jzJRlG fYwhH"
         >
-          
-          <FormFields
-            appointmentTypes={Array []}
-            errors={null}
-            locationTypes={Array []}
-            now={"2019-01-01T21:00:00.000Z"}
-            values={Object {}}
-          />
-          <UNDEFINED>
-            <UNDEFINED
-              buttonColour={undefined}
-              buttonHoverColour={undefined}
-              buttonShadowColour={undefined}
-              buttonTextColour={undefined}
-              disabled={false}
-              icon={undefined}
-              start={false}
-              type="submit"
+          Appointment type
+        </span>
+        <select
+          className="sc-kgoBCf kIBVnR"
+          name="appointmentType"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value=""
+        >
+          <option
+            disabled={true}
+            hidden={true}
+            value=""
+          >
+            Select
+          </option>
+        </select>
+      </label>
+      <div
+        className="sc-ckVGcZ bGcuOB"
+      >
+        <div
+          className="rdt"
+        >
+          <div>
+            <label
+              className="sc-fjdhpX bMZnoP"
             >
-              Continue
-            </UNDEFINED>
-            <UNDEFINED
-              buttonColour="#dee0e2"
-              buttonHoverColour={undefined}
-              buttonShadowColour={undefined}
-              buttonTextColour="#0b0c0c"
-              disabled={false}
-              icon={undefined}
-              onClick={[Function]}
-              start={false}
-            >
-              Cancel
-            </UNDEFINED>
-          </UNDEFINED>
-        </form>,
-        "value": Object {
-          "batch": [Function],
-          "blur": [Function],
-          "change": [Function],
-          "focus": [Function],
-          "getFieldState": [Function],
-          "getRegisteredFields": [Function],
-          "getState": [Function],
-          "initialize": [Function],
-          "isValidationPaused": [Function],
-          "mutators": Object {},
-          "pauseValidation": [Function],
-          "registerField": [Function],
-          "reset": [Function],
-          "resumeValidation": [Function],
-          "setConfig": [Function],
-          "submit": [Function],
-          "subscribe": [Function],
-        },
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            "",
-            <FormFields
-              appointmentTypes={Array []}
-              errors={null}
-              locationTypes={Array []}
-              now={"2019-01-01T21:00:00.000Z"}
-              values={Object {}}
-            />,
-            <UNDEFINED>
-              <UNDEFINED
-                buttonColour={undefined}
-                buttonHoverColour={undefined}
-                buttonShadowColour={undefined}
-                buttonTextColour={undefined}
-                disabled={false}
-                icon={undefined}
-                start={false}
-                type="submit"
+              <span
+                className="sc-jzJRlG fYwhH"
               >
-                Continue
-              </UNDEFINED>
-              <UNDEFINED
-                buttonColour="#dee0e2"
-                buttonHoverColour={undefined}
-                buttonShadowColour={undefined}
-                buttonTextColour="#0b0c0c"
-                disabled={false}
-                icon={undefined}
+                 
+                Date
+                 
+              </span>
+              <input
+                className="form-control sc-cSHVUG jzuejU"
+                name="date"
+                onChange={[Function]}
                 onClick={[Function]}
-                start={false}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="Select"
+                readOnly={true}
+                type="text"
+                value=""
+              />
+            </label>
+          </div>
+          <div
+            className="rdtPicker"
+          >
+            <div
+              className="rdtDays"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th
+                      className="rdtPrev"
+                      onClick={[Function]}
+                    >
+                      <span>
+                        ‹
+                      </span>
+                    </th>
+                    <th
+                      className="rdtSwitch"
+                      colSpan={5}
+                      data-value={2}
+                      onClick={[Function]}
+                    >
+                      March 2019
+                    </th>
+                    <th
+                      className="rdtNext"
+                      onClick={[Function]}
+                    >
+                      <span>
+                        ›
+                      </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th
+                      className="dow"
+                    >
+                      Mo
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Tu
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      We
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Th
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Fr
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Sa
+                    </th>
+                    <th
+                      className="dow"
+                    >
+                      Su
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={25}
+                    >
+                      25
+                    </td>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={26}
+                    >
+                      26
+                    </td>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={27}
+                    >
+                      27
+                    </td>
+                    <td
+                      className="rdtDay rdtOld rdtDisabled"
+                      data-value={28}
+                    >
+                      28
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={1}
+                    >
+                      1
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={2}
+                    >
+                      2
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={3}
+                    >
+                      3
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={4}
+                    >
+                      4
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={5}
+                    >
+                      5
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={6}
+                    >
+                      6
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={7}
+                    >
+                      7
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={8}
+                    >
+                      8
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={9}
+                    >
+                      9
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={10}
+                    >
+                      10
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={11}
+                    >
+                      11
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={12}
+                    >
+                      12
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={13}
+                    >
+                      13
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={14}
+                    >
+                      14
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={15}
+                    >
+                      15
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={16}
+                    >
+                      16
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={17}
+                    >
+                      17
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={18}
+                    >
+                      18
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={19}
+                    >
+                      19
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={20}
+                    >
+                      20
+                    </td>
+                    <td
+                      className="rdtDay rdtDisabled"
+                      data-value={21}
+                    >
+                      21
+                    </td>
+                    <td
+                      className="rdtDay rdtToday"
+                      data-value={22}
+                      onClick={[Function]}
+                    >
+                      22
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={23}
+                      onClick={[Function]}
+                    >
+                      23
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={24}
+                      onClick={[Function]}
+                    >
+                      24
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay"
+                      data-value={25}
+                      onClick={[Function]}
+                    >
+                      25
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={26}
+                      onClick={[Function]}
+                    >
+                      26
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={27}
+                      onClick={[Function]}
+                    >
+                      27
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={28}
+                      onClick={[Function]}
+                    >
+                      28
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={29}
+                      onClick={[Function]}
+                    >
+                      29
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={30}
+                      onClick={[Function]}
+                    >
+                      30
+                    </td>
+                    <td
+                      className="rdtDay"
+                      data-value={31}
+                      onClick={[Function]}
+                    >
+                      31
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={1}
+                      onClick={[Function]}
+                    >
+                      1
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={2}
+                      onClick={[Function]}
+                    >
+                      2
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={3}
+                      onClick={[Function]}
+                    >
+                      3
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={4}
+                      onClick={[Function]}
+                    >
+                      4
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={5}
+                      onClick={[Function]}
+                    >
+                      5
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={6}
+                      onClick={[Function]}
+                    >
+                      6
+                    </td>
+                    <td
+                      className="rdtDay rdtNew"
+                      data-value={7}
+                      onClick={[Function]}
+                    >
+                      7
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label
+            className="sc-fjdhpX bMZnoP"
+            htmlFor="hours"
+          >
+            <span
+              className="sc-jzJRlG fYwhH"
+            >
+               
+              Group start time
+               
+            </span>
+            <div
+              className="sc-kGXeez fIGAOA"
+              name="startTime"
+            >
+              <label
+                className="sc-fjdhpX bMZnoP"
+                defaultValue="--"
+                disabled={true}
+                id="hours"
+                name="hours"
               >
-                Cancel
-              </UNDEFINED>
-            </UNDEFINED>,
-          ],
-          "onSubmit": [Function],
-        },
-        "ref": null,
-        "rendered": Array [
-          "",
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "appointmentTypes": Array [],
-              "errors": null,
-              "locationTypes": Array [],
-              "now": "2019-01-01T21:00:00.000Z",
-              "values": Object {},
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": Array [
-                <UNDEFINED
-                  buttonColour={undefined}
-                  buttonHoverColour={undefined}
-                  buttonShadowColour={undefined}
-                  buttonTextColour={undefined}
-                  disabled={false}
-                  icon={undefined}
-                  start={false}
-                  type="submit"
+                <span
+                  className="sc-jzJRlG fYwhH"
+                />
+                <select
+                  className="sc-kgoBCf kIBVnR"
+                  onChange={[Function]}
+                  value="undefined"
                 >
-                  Continue
-                </UNDEFINED>,
-                <UNDEFINED
-                  buttonColour="#dee0e2"
-                  buttonHoverColour={undefined}
-                  buttonShadowColour={undefined}
-                  buttonTextColour="#0b0c0c"
-                  disabled={false}
-                  icon={undefined}
-                  onClick={[Function]}
-                  start={false}
+                  <option>
+                    --
+                  </option>
+                  <option>
+                    00
+                  </option>
+                  <option>
+                    01
+                  </option>
+                  <option>
+                    02
+                  </option>
+                  <option>
+                    03
+                  </option>
+                  <option>
+                    04
+                  </option>
+                  <option>
+                    05
+                  </option>
+                  <option>
+                    06
+                  </option>
+                  <option>
+                    07
+                  </option>
+                  <option>
+                    08
+                  </option>
+                  <option>
+                    09
+                  </option>
+                  <option>
+                    10
+                  </option>
+                  <option>
+                    11
+                  </option>
+                  <option>
+                    12
+                  </option>
+                  <option>
+                    13
+                  </option>
+                  <option>
+                    14
+                  </option>
+                  <option>
+                    15
+                  </option>
+                  <option>
+                    16
+                  </option>
+                  <option>
+                    17
+                  </option>
+                  <option>
+                    18
+                  </option>
+                  <option>
+                    19
+                  </option>
+                  <option>
+                    20
+                  </option>
+                  <option>
+                    21
+                  </option>
+                  <option>
+                    22
+                  </option>
+                  <option>
+                    23
+                  </option>
+                </select>
+              </label>
+              <label
+                className="sc-fjdhpX bMZnoP"
+                defaultValue="--"
+                disabled={true}
+                name="minutes"
+              >
+                <span
+                  className="sc-jzJRlG fYwhH"
+                />
+                <select
+                  className="sc-kgoBCf kIBVnR"
+                  onChange={[Function]}
+                  value="undefined"
                 >
-                  Cancel
-                </UNDEFINED>,
-              ],
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "buttonColour": undefined,
-                  "buttonHoverColour": undefined,
-                  "buttonShadowColour": undefined,
-                  "buttonTextColour": undefined,
-                  "children": "Continue",
-                  "disabled": false,
-                  "icon": undefined,
-                  "start": false,
-                  "type": "submit",
-                },
-                "ref": null,
-                "rendered": "Continue",
-                "type": Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "defaultProps": Object {
-                    "buttonColour": undefined,
-                    "buttonHoverColour": undefined,
-                    "buttonShadowColour": undefined,
-                    "buttonTextColour": undefined,
-                    "disabled": false,
-                    "icon": undefined,
-                    "start": false,
-                  },
-                  "propTypes": Object {
-                    "buttonColour": [Function],
-                    "buttonHoverColour": [Function],
-                    "buttonShadowColour": [Function],
-                    "buttonTextColour": [Function],
-                    "children": [Function],
-                    "disabled": [Function],
-                    "icon": [Function],
-                    "start": [Function],
-                  },
-                  "render": [Function],
-                },
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "buttonColour": "#dee0e2",
-                  "buttonHoverColour": undefined,
-                  "buttonShadowColour": undefined,
-                  "buttonTextColour": "#0b0c0c",
-                  "children": "Cancel",
-                  "disabled": false,
-                  "icon": undefined,
-                  "onClick": [Function],
-                  "start": false,
-                },
-                "ref": null,
-                "rendered": "Cancel",
-                "type": Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "defaultProps": Object {
-                    "buttonColour": undefined,
-                    "buttonHoverColour": undefined,
-                    "buttonShadowColour": undefined,
-                    "buttonTextColour": undefined,
-                    "disabled": false,
-                    "icon": undefined,
-                    "start": false,
-                  },
-                  "propTypes": Object {
-                    "buttonColour": [Function],
-                    "buttonHoverColour": [Function],
-                    "buttonShadowColour": [Function],
-                    "buttonTextColour": [Function],
-                    "children": [Function],
-                    "disabled": [Function],
-                    "icon": [Function],
-                    "start": [Function],
-                  },
-                  "render": [Function],
-                },
-              },
-            ],
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-hMqMXs",
-                "isStatic": true,
-                "rules": Array [
-                  "
-  display: flex;
-  flex-direction: row;
-  button {
-    margin-right: ",
-                  "10px",
-                  ";
-  }
-",
-                ],
-              },
-              "displayName": "styled.div",
-              "foldedComponentIds": Array [],
-              "render": [Function],
-              "styledComponentId": "sc-hMqMXs",
-              "target": "div",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-        ],
-        "type": "form",
-      },
-      "type": Object {
-        "$$typeof": Symbol(react.provider),
-        "_context": Object {
-          "$$typeof": Symbol(react.context),
-          "Consumer": Object {
-            "$$typeof": Symbol(react.context),
-            "_calculateChangedBits": null,
-            "_context": [Circular],
-          },
-          "Provider": [Circular],
-          "_calculateChangedBits": null,
-          "_currentRenderer": null,
-          "_currentRenderer2": null,
-          "_currentValue": null,
-          "_currentValue2": null,
-          "_threadCount": 0,
-        },
-      },
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getDerivedStateFromProps": true,
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-  },
-}
+                  <option>
+                    --
+                  </option>
+                  <option>
+                    00
+                  </option>
+                  <option>
+                    05
+                  </option>
+                  <option>
+                    10
+                  </option>
+                  <option>
+                    15
+                  </option>
+                  <option>
+                    20
+                  </option>
+                  <option>
+                    25
+                  </option>
+                  <option>
+                    30
+                  </option>
+                  <option>
+                    35
+                  </option>
+                  <option>
+                    40
+                  </option>
+                  <option>
+                    45
+                  </option>
+                  <option>
+                    50
+                  </option>
+                  <option>
+                    55
+                  </option>
+                </select>
+              </label>
+            </div>
+          </label>
+        </div>
+      </div>
+      <label
+        className="sc-gZMcBi iJOhOq"
+      >
+        <input
+          checked={false}
+          className="sc-gqjmRU cVVaVl"
+          name="recurring"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          type="checkbox"
+          value=""
+        />
+        <span
+          className="sc-VigVT bimECd"
+        >
+          This is a recurring appointment
+        </span>
+      </label>
+    </div>
+    <div
+      className="sc-eNQAEJ fHPcrb"
+    >
+      <label
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
+        placeholder="Select"
+      >
+        <span
+          className="sc-jzJRlG fYwhH"
+        >
+          Location
+        </span>
+        <select
+          className="sc-kgoBCf kIBVnR"
+          name="location"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value=""
+        >
+          <option
+            disabled={true}
+            hidden={true}
+            value=""
+          >
+            Select
+          </option>
+        </select>
+      </label>
+      <div>
+        <label
+          className="sc-fjdhpX bMZnoP"
+          htmlFor="hours"
+        >
+          <span
+            className="sc-jzJRlG fYwhH"
+          >
+             
+            Group end time (optional)
+             
+          </span>
+          <div
+            className="sc-kGXeez fIGAOA"
+            name="endTime"
+          >
+            <label
+              className="sc-fjdhpX bMZnoP"
+              defaultValue="--"
+              disabled={true}
+              id="hours"
+              name="hours"
+            >
+              <span
+                className="sc-jzJRlG fYwhH"
+              />
+              <select
+                className="sc-kgoBCf kIBVnR"
+                onChange={[Function]}
+                value="undefined"
+              >
+                <option>
+                  --
+                </option>
+                <option>
+                  00
+                </option>
+                <option>
+                  01
+                </option>
+                <option>
+                  02
+                </option>
+                <option>
+                  03
+                </option>
+                <option>
+                  04
+                </option>
+                <option>
+                  05
+                </option>
+                <option>
+                  06
+                </option>
+                <option>
+                  07
+                </option>
+                <option>
+                  08
+                </option>
+                <option>
+                  09
+                </option>
+                <option>
+                  10
+                </option>
+                <option>
+                  11
+                </option>
+                <option>
+                  12
+                </option>
+                <option>
+                  13
+                </option>
+                <option>
+                  14
+                </option>
+                <option>
+                  15
+                </option>
+                <option>
+                  16
+                </option>
+                <option>
+                  17
+                </option>
+                <option>
+                  18
+                </option>
+                <option>
+                  19
+                </option>
+                <option>
+                  20
+                </option>
+                <option>
+                  21
+                </option>
+                <option>
+                  22
+                </option>
+                <option>
+                  23
+                </option>
+              </select>
+            </label>
+            <label
+              className="sc-fjdhpX bMZnoP"
+              defaultValue="--"
+              disabled={true}
+              name="minutes"
+            >
+              <span
+                className="sc-jzJRlG fYwhH"
+              />
+              <select
+                className="sc-kgoBCf kIBVnR"
+                onChange={[Function]}
+                value="undefined"
+              >
+                <option>
+                  --
+                </option>
+                <option>
+                  00
+                </option>
+                <option>
+                  05
+                </option>
+                <option>
+                  10
+                </option>
+                <option>
+                  15
+                </option>
+                <option>
+                  20
+                </option>
+                <option>
+                  25
+                </option>
+                <option>
+                  30
+                </option>
+                <option>
+                  35
+                </option>
+                <option>
+                  40
+                </option>
+                <option>
+                  45
+                </option>
+                <option>
+                  50
+                </option>
+                <option>
+                  55
+                </option>
+              </select>
+            </label>
+          </div>
+        </label>
+      </div>
+      <label
+        className="sc-kkGfuU jeqVra sc-fjdhpX TlFPV"
+      >
+        <span
+          className="sc-jzJRlG fYwhH"
+        >
+          Comments (optional)
+        </span>
+        <textarea
+          className="sc-dxgOiQ iJXpRW"
+          name="comments"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          rows="5"
+          type="text"
+          value=""
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="sc-hMqMXs gZEeCy"
+  >
+    <button
+      className="sc-bdVaJa jyfNnr"
+      disabled={false}
+      type="submit"
+    >
+      Continue
+    </button>
+    <button
+      className="sc-bdVaJa hdRJwX"
+      disabled={false}
+      onClick={[Function]}
+    >
+      Cancel
+    </button>
+  </div>
+</form>
 `;

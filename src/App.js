@@ -170,6 +170,7 @@ class App extends React.Component {
     ) {
       this.displayAlertAndLogout('Your session has expired, please click OK to be redirected back to the login page')
     } else {
+      window.scrollTo(0, 0)
       setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)
     }
   }

@@ -221,7 +221,7 @@ const AppointmentDetailsForm = ({
     onSubmit={ValidateThenSubmit({ onSuccess, appointmentTypes, locationTypes })}
     decorators={[endDateCalculator]}
     render={({ handleSubmit, pristine, submitError, values }) => (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         {error && <ErrorText> {error} </ErrorText>}
         <FormFields
           now={now}
