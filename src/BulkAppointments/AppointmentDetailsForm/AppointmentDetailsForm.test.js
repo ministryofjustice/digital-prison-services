@@ -22,6 +22,8 @@ describe('Appointment form', () => {
   })
 
   it('should pass correct props to all fields', () => {
+    Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
+
     const tree = testRenderer
       .create(
         <Form
