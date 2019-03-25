@@ -406,7 +406,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
                   <select
                     className="sc-jTzLTM iQtMCx"
                     onChange={[Function]}
-                    value="22"
+                    value="21"
                   >
                     <option>
                       --
@@ -523,7 +523,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
                   <select
                     className="sc-jTzLTM iQtMCx"
                     onChange={[Function]}
-                    value="22"
+                    value="21"
                   >
                     <option>
                       --

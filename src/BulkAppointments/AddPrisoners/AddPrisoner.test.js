@@ -11,7 +11,7 @@ import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../dateHelpers'
 describe('Add appointment form', () => {
   const stubFunc = () => {}
   const now = moment('2019-10-10T21:00:00Z')
-  const startTime = '2019-10-10T22:00:00Z'
+  const startTime = '2019-10-10T21:00:00Z'
 
   const offenders = [
     { offenderNo: 'offenderNo1', bookingId: 1, firstName: 'firstName1', lastName: 'lastName1' },
@@ -112,7 +112,7 @@ describe('Add appointment form', () => {
           firstName: 'firstName1',
           lastName: 'lastName1',
           offenderNo: 'offenderNo1',
-          startTime: '2019-10-10T22:00:00Z',
+          startTime,
         },
         { bookingId: 2, firstName: 'firstName2', lastName: 'lastName2', offenderNo: 'offenderNo2' },
       ])
