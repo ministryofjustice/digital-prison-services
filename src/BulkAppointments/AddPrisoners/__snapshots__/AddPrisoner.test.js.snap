@@ -124,6 +124,9 @@ Array [
                       --
                     </option>
                     <option>
+                      21
+                    </option>
+                    <option>
                       22
                     </option>
                     <option>
@@ -244,6 +247,9 @@ Array [
                   >
                     <option>
                       --
+                    </option>
+                    <option>
+                      21
                     </option>
                     <option>
                       22
@@ -412,6 +418,9 @@ exports[`Add appointment form Form should render correctly 1`] = `
                       --
                     </option>
                     <option>
+                      21
+                    </option>
+                    <option>
                       22
                     </option>
                     <option>
@@ -527,6 +536,9 @@ exports[`Add appointment form Form should render correctly 1`] = `
                   >
                     <option>
                       --
+                    </option>
+                    <option>
+                      21
                     </option>
                     <option>
                       22

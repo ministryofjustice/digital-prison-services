@@ -18,5 +18,5 @@ export const FieldWithError = props => {
 }
 
 export const onHandleErrorClick = targetName => {
-  document.getElementsByName(targetName)[0].scrollIntoView()
+  document.getElementsByName(targetName)[0].focus()
 }
