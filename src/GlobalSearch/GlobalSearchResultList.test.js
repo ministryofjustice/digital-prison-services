@@ -41,6 +41,7 @@ const props = {
   pageSize: 20,
   totalRecords: 4,
   handlePageAction: () => {},
+  handleResultsPerPageChange: () => {},
   data: response,
   licencesUrl: 'LICENCES/',
   licencesUser: false,
