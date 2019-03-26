@@ -4,8 +4,11 @@ import moment from 'moment'
 
 import { Form } from 'react-final-form'
 import AppointmentDetailsForm, { FormFields } from './AppointmentDetailsForm'
+import { DATE_TIME_FORMAT_SPEC } from '../../dateHelpers'
 
 describe('Appointment form', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
+
   it('should render correctly', () => {
     const tree = testRenderer
       .create(
@@ -13,7 +16,7 @@ describe('Appointment form', () => {
           onCancel={jest.fn()}
           onSuccess={jest.fn()}
           onError={jest.fn()}
-          now={moment('2019-01-01T21:00:00Z')}
+          now={moment('2019-01-01T21:00:00Z', DATE_TIME_FORMAT_SPEC)}
         />
       )
       .toJSON()
@@ -22,16 +25,14 @@ describe('Appointment form', () => {
   })
 
   it('should pass correct props to all fields', () => {
-    Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
-
     const tree = testRenderer
       .create(
         <Form
           onSubmit={() => {}}
           render={() => (
             <FormFields
-              values={{ date: moment('2019-01-01T21:00:00Z') }}
-              now={moment('2019-01-01T21:00:00Z')}
+              values={{ date: moment('2019-01-01T21:00:00Z', DATE_TIME_FORMAT_SPEC) }}
+              now={moment('2019-01-01T21:00:00Z', DATE_TIME_FORMAT_SPEC)}
               appointmentTypes={[{ id: '1', description: 'app1' }]}
               locationTypes={[{ id: 1, description: 'loc1' }]}
               errors={[

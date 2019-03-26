@@ -107,7 +107,7 @@ class AddPrisonerContainer extends Component {
     const { complete, appointmentsCreated, lastAppointmentDetails } = this.state
 
     return (
-      <Page title="Add prisoners" applicationTitle="Whereabouts" alwaysRender>
+      <Page title="Add prisoners" alwaysRender>
         {complete && (
           <ScrollToTop always>
             {lastAppointmentDetails.recurring ? (
