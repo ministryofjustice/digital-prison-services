@@ -56,7 +56,7 @@ const establishmentRollInitialState = {
 const globalSearchInitialState = {
   data: [],
   pageNumber: 0,
-  pageSize: 10,
+  pageSize: 20,
   totalRecords: 0,
   contextUser: {},
   searchText: '',

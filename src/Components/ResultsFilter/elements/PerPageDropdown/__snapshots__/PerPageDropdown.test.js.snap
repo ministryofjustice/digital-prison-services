@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
+<div
+  className="sc-EHOje KqnQa"
+>
+  <label
+    htmlFor="perPage"
+  >
+    <span
+      className="sc-bdVaJa fqDsBO"
+    >
+      Results per page
+    </span>
+  </label>
+  <select
+    className="sc-ifAKCX kDzsBS"
+    id="perPage"
+    onChange={[Function]}
+    value={10}
+  >
+    <option
+      value={10}
+    >
+      All
+    </option>
+  </select>
+</div>
+`;
+
+exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
+<div
+  className="sc-EHOje KqnQa"
+>
+  <label
+    htmlFor="perPage"
+  >
+    <span
+      className="sc-bdVaJa fqDsBO"
+    >
+      Results per page
+    </span>
+  </label>
+  <select
+    className="sc-ifAKCX kDzsBS"
+    id="perPage"
+    onChange={[Function]}
+    value={20}
+  >
+    <option
+      value="10"
+    >
+      10
+    </option>
+    <option
+      value={20}
+    >
+      All
+    </option>
+  </select>
+</div>
+`;
+
+exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
+<div
+  className="sc-EHOje KqnQa"
+>
+  <label
+    htmlFor="perPage"
+  >
+    <span
+      className="sc-bdVaJa fqDsBO"
+    >
+      Results per page
+    </span>
+  </label>
+  <select
+    className="sc-ifAKCX kDzsBS"
+    id="perPage"
+    onChange={[Function]}
+    value={20}
+  >
+    <option
+      value="10"
+    >
+      10
+    </option>
+    <option
+      value="20"
+    >
+      20
+    </option>
+    <option
+      value={50}
+    >
+      All
+    </option>
+  </select>
+</div>
+`;
+
+exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
+<div
+  className="sc-EHOje KqnQa"
+>
+  <label
+    htmlFor="perPage"
+  >
+    <span
+      className="sc-bdVaJa fqDsBO"
+    >
+      Results per page
+    </span>
+  </label>
+  <select
+    className="sc-ifAKCX kDzsBS"
+    id="perPage"
+    onChange={[Function]}
+    value={20}
+  >
+    <option
+      value="10"
+    >
+      10
+    </option>
+    <option
+      value="20"
+    >
+      20
+    </option>
+    <option
+      value="50"
+    >
+      50
+    </option>
+    <option
+      value={100}
+    >
+      All
+    </option>
+  </select>
+</div>
+`;
+
+exports[`<PerPageDropdown /> should match the default snapshot 1`] = `
+<div
+  className="sc-EHOje KqnQa"
+>
+  <label
+    htmlFor="perPage"
+  >
+    <span
+      className="sc-bdVaJa fqDsBO"
+    >
+      Results per page
+    </span>
+  </label>
+  <select
+    className="sc-ifAKCX kDzsBS"
+    id="perPage"
+    onChange={[Function]}
+    value={20}
+  >
+    <option
+      value="10"
+    >
+      10
+    </option>
+    <option
+      value="20"
+    >
+      20
+    </option>
+    <option
+      value="50"
+    >
+      50
+    </option>
+    <option
+      value="100"
+    >
+      100
+    </option>
+    <option
+      value={999}
+    >
+      All
+    </option>
+  </select>
+</div>
+`;

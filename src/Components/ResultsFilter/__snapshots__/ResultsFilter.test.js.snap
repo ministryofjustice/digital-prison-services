@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ResultsFilter /> should match the default snapshot 1`] = `
+<div
+  className="sc-bwzfXH iVuJNs"
+>
+  <div
+    className="sc-bdVaJa fnMMZe"
+  >
+    0
+     - 
+    0
+     of
+     
+    0
+     results
+  </div>
+</div>
+`;
+
+exports[`<ResultsFilter /> should match the with children snapshot 1`] = `
+<div
+  className="sc-bwzfXH iVuJNs"
+>
+  <div
+    className="sc-bdVaJa fnMMZe"
+  >
+    21
+     - 
+    40
+     of
+     
+    100
+     results
+  </div>
+  <div
+    className="sc-gzVnrw gdYXbN"
+  >
+    <label
+      htmlFor="perPage"
+    >
+      <span
+        className="sc-htpNat eCRQZP"
+      >
+        Results per page
+      </span>
+    </label>
+    <select
+      className="sc-bZQynM bAkyMP"
+      id="perPage"
+      onChange={[Function]}
+      value={20}
+    >
+      <option
+        value="10"
+      >
+        10
+      </option>
+      <option
+        value="20"
+      >
+        20
+      </option>
+      <option
+        value="50"
+      >
+        50
+      </option>
+      <option
+        value={100}
+      >
+        All
+      </option>
+    </select>
+  </div>
+</div>
+`;

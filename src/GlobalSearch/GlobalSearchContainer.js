@@ -16,6 +16,7 @@ import {
   resetError,
   setGlobalSearchDateOfBirthFilter,
   setLoaded,
+  setGlobalSearchPageSize,
 } from '../redux/actions'
 import Page from '../Components/Page'
 
@@ -55,6 +56,12 @@ export class GlobalSearchContainer extends Component {
       }
     }
     setLoadedDispatch(true)
+  }
+
+  handleResultsPerPageChange = async perPage => {
+    const { pageSizeDispatch } = this.props
+    await pageSizeDispatch(Number(perPage))
+    this.handlePageAction(0)
   }
 
   async doGlobalSearch(pageNumber, searchText) {
@@ -186,6 +193,7 @@ export class GlobalSearchContainer extends Component {
           licencesVaryUser={licencesVaryUser}
           caseLoads={caseLoads}
           viewInactivePrisoner={viewInactivePrisoner}
+          handleResultsPerPageChange={this.handleResultsPerPageChange}
           {...this.props}
         />
       </Page>
@@ -236,6 +244,7 @@ GlobalSearchContainer.propTypes = {
   titleDispatch: PropTypes.func.isRequired,
   dateOfBirthDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  pageSizeDispatch: PropTypes.func.isRequired,
 
   // special
   location: ReactRouterPropTypes.location.isRequired,
@@ -274,6 +283,7 @@ const mapDispatchToProps = dispatch => ({
   resetErrorDispatch: () => dispatch(resetError()),
   dateOfBirthDispatch: dateOfBirth => dispatch(setGlobalSearchDateOfBirthFilter(dateOfBirth)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
+  pageSizeDispatch: pageSize => dispatch(setGlobalSearchPageSize(pageSize)),
 })
 
 export default withRouter(

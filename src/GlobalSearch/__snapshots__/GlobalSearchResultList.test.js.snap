@@ -2,6 +2,46 @@
 
 exports[`Global search results component should render results correctly 1`] = `
 <div>
+  <div
+    className="sc-htoDjs fknHoe"
+  >
+    <div
+      className="sc-gzVnrw bwiLzH"
+    >
+      4
+       - 
+      4
+       of
+       
+      4
+       results
+    </div>
+    <div
+      className="sc-jTzLTM dwYLEN"
+    >
+      <label
+        htmlFor="perPage"
+      >
+        <span
+          className="sc-dnqmqq ePgwDj"
+        >
+          Results per page
+        </span>
+      </label>
+      <select
+        className="sc-VigVT egqawv"
+        id="perPage"
+        onChange={[Function]}
+        value={4}
+      >
+        <option
+          value={4}
+        >
+          All
+        </option>
+      </select>
+    </div>
+  </div>
   <table
     className="row-gutters"
   >
@@ -230,6 +270,46 @@ exports[`Global search results component should render results correctly 1`] = `
 
 exports[`Global search results component should render results when has inactive booking role 1`] = `
 <div>
+  <div
+    className="sc-htoDjs fknHoe"
+  >
+    <div
+      className="sc-gzVnrw bwiLzH"
+    >
+      4
+       - 
+      4
+       of
+       
+      4
+       results
+    </div>
+    <div
+      className="sc-jTzLTM dwYLEN"
+    >
+      <label
+        htmlFor="perPage"
+      >
+        <span
+          className="sc-dnqmqq ePgwDj"
+        >
+          Results per page
+        </span>
+      </label>
+      <select
+        className="sc-VigVT egqawv"
+        id="perPage"
+        onChange={[Function]}
+        value={4}
+      >
+        <option
+          value={4}
+        >
+          All
+        </option>
+      </select>
+    </div>
+  </div>
   <table
     className="row-gutters"
   >

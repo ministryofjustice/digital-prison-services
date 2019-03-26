@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ResultsTotals /> should match the default snapshot 1`] = `
+<div
+  className="sc-bdVaJa fnMMZe"
+>
+  0
+   - 
+  0
+   of
+   
+  0
+   results
+</div>
+`;
+
+exports[`<ResultsTotals /> should match the first page snapshot 1`] = `
+<div
+  className="sc-bdVaJa fnMMZe"
+>
+  1
+   - 
+  20
+   of
+   
+  100
+   results
+</div>
+`;
+
+exports[`<ResultsTotals /> should match the with page number snapshot 1`] = `
+<div
+  className="sc-bdVaJa fnMMZe"
+>
+  61
+   - 
+  80
+   of
+   
+  100
+   results
+</div>
+`;

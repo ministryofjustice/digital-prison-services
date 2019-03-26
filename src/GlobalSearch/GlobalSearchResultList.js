@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { getOffenderLink } from '../links'
 import PreviousNextNavigation from '../PreviousNextNavigation'
 import { properCaseName } from '../utils'
+import ResultsFilter from '../Components/ResultsFilter'
 
 const GlobalSearchResultList = ({
   data,
@@ -19,6 +20,7 @@ const GlobalSearchResultList = ({
   searchPerformed,
   viewInactivePrisoner,
   caseLoads,
+  handleResultsPerPageChange,
 }) => {
   const headings = (
     <tr>
@@ -108,6 +110,15 @@ const GlobalSearchResultList = ({
 
   return (
     <div>
+      {totalRecords > 0 && (
+        <ResultsFilter perPage={pageSize} pageNumber={pageNumber} totalResults={totalRecords} noBorder>
+          <ResultsFilter.PerPageDropdown
+            handleChange={handleResultsPerPageChange}
+            totalResults={totalRecords}
+            perPage={pageSize}
+          />
+        </ResultsFilter>
+      )}
       <table className="row-gutters">
         <thead>{headings}</thead>
         <tbody>{offenders}</tbody>
@@ -150,6 +161,7 @@ GlobalSearchResultList.propTypes = {
   licencesUrl: PropTypes.string.isRequired,
   searchPerformed: PropTypes.bool.isRequired,
   caseLoads: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  handleResultsPerPageChange: PropTypes.func.isRequired,
 }
 
 export default GlobalSearchResultList

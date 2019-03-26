@@ -35,6 +35,7 @@ const standardProps = {
   titleDispatch: () => {},
   dateOfBirthDispatch: () => {},
   resetErrorDispatch: () => {},
+  pageSizeDispatch: jest.fn(),
   location: mockLocation,
   searchPerformed: true,
 }
@@ -187,5 +188,15 @@ describe('Global search container', () => {
 
     expect(historyMock.replace).toBeCalled()
     expect(historyMock.replace).toBeCalledWith('/global-search-results?searchText=s')
+  })
+
+  it('should handle changing the number of results per page', async () => {
+    const wrapper = shallow(<GlobalSearchContainer {...standardProps} />)
+    const spy = jest.spyOn(wrapper.instance(), 'handlePageAction')
+
+    wrapper.instance().handleResultsPerPageChange(50)
+
+    await expect(standardProps.pageSizeDispatch).toBeCalledWith(50)
+    expect(spy).toBeCalledWith(0)
   })
 })
