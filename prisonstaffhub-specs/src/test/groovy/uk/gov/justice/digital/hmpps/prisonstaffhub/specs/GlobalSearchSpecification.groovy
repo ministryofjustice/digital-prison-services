@@ -58,7 +58,7 @@ class GlobalSearchSpecification extends GebReportingSpec {
 
         then: "I should be presented with results"
         at GlobalSearchPage
-        tableRows.size() == 11 // Including header row
+        tableRows.size() == 21 // Including header row
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ['','Common, Fred1',
                              'T1001AA',
@@ -85,8 +85,8 @@ class GlobalSearchSpecification extends GebReportingSpec {
 
         then: "I should be presented with results"
         at GlobalSearchPage
-        waitFor {  tableRows.size() == 11 }
-        tableRows.size() == 11 // Including header row
+        waitFor {  tableRows.size() == 21 }
+        tableRows.size() == 21 // Including header row
     }
 
     def "should present search filters"() {
@@ -152,28 +152,28 @@ class GlobalSearchSpecification extends GebReportingSpec {
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
-        when: "I do a global search resulting in more than 10 rows"
+        when: "I do a global search resulting in more than 20 rows"
         go "/global-search-results?searchText=common"
 
         then: "I should be presented with paged results"
         at GlobalSearchPage
-        tableRows.size() == 11
-        tableRows[10].find('td')[1].text() == 'Common, Fred10'
+        tableRows.size() == 21
+        tableRows[20].find('td')[1].text() == 'Common, Fred20'
 
         when: "I go to next page"
         nextPage.click()
 
         then: "The second page is shown"
-        waitFor { tableRows.size() == 3 }
+        waitFor { tableRows.size() == 2 }
         at GlobalSearchPage
-        tableRows[1].find('td')[1].text() == 'Common, Fred11'
+        tableRows[1].find('td')[1].text() == 'Common, Fred21'
 
         when: "I go to previous page"
         previousPage.click()
 
         then: "The first page is shown"
-        waitFor { tableRows.size() == 11 }
+        waitFor { tableRows.size() == 21 }
         at GlobalSearchPage
-        tableRows[10].find('td')[1].text() == 'Common, Fred10'
+        tableRows[20].find('td')[1].text() == 'Common, Fred20'
     }
 }

@@ -35,7 +35,16 @@ class GlobalSearchResponses {
             [offenderNo: "T1009AA", firstName: "FRED9", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED9"],
             [offenderNo: "T1010AA", firstName: "FRED10", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED10"],
             [offenderNo: "T1011AA", firstName: "FRED11", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED11"],
-            [offenderNo: "T1012AA", firstName: "FRED12", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED12"]
+            [offenderNo: "T1012AA", firstName: "FRED12", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED12"],
+            [offenderNo: "T1013AA", firstName: "FRED13", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED13"],
+            [offenderNo: "T1014AA", firstName: "FRED14", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED14"],
+            [offenderNo: "T1015AA", firstName: "FRED15", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED15"],
+            [offenderNo: "T1016AA", firstName: "FRED16", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED16"],
+            [offenderNo: "T1017AA", firstName: "FRED17", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED17"],
+            [offenderNo: "T1018AA", firstName: "FRED18", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED18"],
+            [offenderNo: "T1019AA", firstName: "FRED19", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED19"],
+            [offenderNo: "T1020AA", firstName: "FRED20", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED20"],
+            [offenderNo: "T1021AA", firstName: "FRED21", lastName: "COMMON", "latestLocationId": "LEI", latestLocation: "Leeds HMP", dateOfBirth: "1977-10-15", currentWorkingLastName : "COMMON", currentWorkingFirstName : "FRED21"]
     ]
 
     static lastPrisonResponse = [[
