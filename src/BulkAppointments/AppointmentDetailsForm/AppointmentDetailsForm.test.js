@@ -7,6 +7,8 @@ import AppointmentDetailsForm, { FormFields } from './AppointmentDetailsForm'
 import { DATE_TIME_FORMAT_SPEC } from '../../dateHelpers'
 
 describe('Appointment form', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
+
   it('should render correctly', () => {
     const tree = testRenderer
       .create(
@@ -23,8 +25,6 @@ describe('Appointment form', () => {
   })
 
   it('should pass correct props to all fields', () => {
-    Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
-
     const tree = testRenderer
       .create(
         <Form
