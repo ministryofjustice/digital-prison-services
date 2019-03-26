@@ -24,7 +24,7 @@ const AppointmentDetailsFormContainer = ({
   <WithDataSource
     request={{ url: '/api/bulk-appointments/view-model', params: { agencyId } }}
     render={({ data, error }) => (
-      <Page title="Add bulk appointments" applicationTitle="Whereabouts" alwaysRender>
+      <Page title="Add bulk appointments" alwaysRender>
         <AppointmentDetailsForm
           initialValues={appointmentDetails}
           now={now}

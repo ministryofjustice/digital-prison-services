@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { setEstablishmentRollData, setApplicationTitle } from '../redux/actions'
+import { setEstablishmentRollData } from '../redux/actions'
 import EstablishmentRollBlock from './EstablishmentRollBlock'
 import Page from '../Components/Page'
 
 export class EstablishmentRollContainer extends Component {
   componentDidMount() {
-    const { agencyId, titleDispatch } = this.props
-    titleDispatch('Establishment roll')
+    const { agencyId } = this.props
     this.getEstablishmentRollBlocks(agencyId)
   }
 
@@ -87,9 +86,7 @@ EstablishmentRollContainer.propTypes = {
     ).isRequired,
   }),
   agencyId: PropTypes.string,
-  // mapDispatchToProps
   establishmentRollDataDispatch: PropTypes.func.isRequired,
-  titleDispatch: PropTypes.func.isRequired,
 }
 
 EstablishmentRollContainer.defaultProps = {
@@ -108,7 +105,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   establishmentRollDataDispatch: data => dispatch(setEstablishmentRollData(data)),
-  titleDispatch: title => dispatch(setApplicationTitle(title)),
 })
 
 export default connect(

@@ -124,7 +124,6 @@ ShallowWrapper {
     "nodeType": "class",
     "props": Object {
       "alwaysRender": true,
-      "applicationTitle": "Whereabouts",
       "children": Array [
         false,
         <UNDEFINED>
@@ -543,7 +542,6 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "alwaysRender": true,
-        "applicationTitle": "Whereabouts",
         "children": Array [
           false,
           <UNDEFINED>
@@ -1110,7 +1108,6 @@ ShallowWrapper {
     "nodeType": "class",
     "props": Object {
       "alwaysRender": true,
-      "applicationTitle": "Whereabouts",
       "children": Array [
         <withRouter(ScrollToTop)
           always={true}
@@ -1496,7 +1493,6 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "alwaysRender": true,
-        "applicationTitle": "Whereabouts",
         "children": Array [
           <withRouter(ScrollToTop)
             always={true}
@@ -2030,7 +2026,6 @@ ShallowWrapper {
     "nodeType": "class",
     "props": Object {
       "alwaysRender": true,
-      "applicationTitle": "Whereabouts",
       "children": Array [
         <withRouter(ScrollToTop)
           always={true}
@@ -2404,7 +2399,6 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "alwaysRender": true,
-        "applicationTitle": "Whereabouts",
         "children": Array [
           <withRouter(ScrollToTop)
             always={true}

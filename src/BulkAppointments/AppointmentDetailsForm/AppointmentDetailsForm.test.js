@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import { Form } from 'react-final-form'
 import AppointmentDetailsForm, { FormFields } from './AppointmentDetailsForm'
+import { DATE_TIME_FORMAT_SPEC } from '../../dateHelpers'
 
 describe('Appointment form', () => {
   it('should render correctly', () => {
@@ -13,7 +14,7 @@ describe('Appointment form', () => {
           onCancel={jest.fn()}
           onSuccess={jest.fn()}
           onError={jest.fn()}
-          now={moment('2019-01-01T21:00:00Z')}
+          now={moment('2019-01-01T21:00:00Z', DATE_TIME_FORMAT_SPEC)}
         />
       )
       .toJSON()
@@ -30,8 +31,8 @@ describe('Appointment form', () => {
           onSubmit={() => {}}
           render={() => (
             <FormFields
-              values={{ date: moment('2019-01-01T21:00:00Z') }}
-              now={moment('2019-01-01T21:00:00Z')}
+              values={{ date: moment('2019-01-01T21:00:00Z', DATE_TIME_FORMAT_SPEC) }}
+              now={moment('2019-01-01T21:00:00Z', DATE_TIME_FORMAT_SPEC)}
               appointmentTypes={[{ id: '1', description: 'app1' }]}
               locationTypes={[{ id: 1, description: 'loc1' }]}
               errors={[
