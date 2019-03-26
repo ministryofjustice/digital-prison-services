@@ -11,7 +11,7 @@ const DropdownContainer = styled.div`
 `
 
 const PerPageDropdown = ({ handleChange, totalResults, perPage }) => {
-  const defaultValue = totalResults <= 20 && perPage !== 10 ? totalResults : perPage
+  const defaultValue = Math.min(totalResults, perPage)
 
   return (
     <DropdownContainer>
