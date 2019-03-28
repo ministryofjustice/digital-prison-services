@@ -41,6 +41,7 @@ const standardProps = {
 }
 
 const event = { preventDefault: jest.fn() }
+const historyMock = { replace: jest.fn() }
 
 describe('Global search container', () => {
   it('should pass Global search results as page title if there is a searchText', async () => {
@@ -151,7 +152,6 @@ describe('Global search container', () => {
   })
 
   it('should include referrer on redirect url after search', async () => {
-    const historyMock = { replace: jest.fn() }
     const knownReferrer = {
       hash: 'h',
       key: 'k',
@@ -171,7 +171,6 @@ describe('Global search container', () => {
   })
 
   it('should not include referrer on redirect url after search if no referrer in query', async () => {
-    const historyMock = { replace: jest.fn() }
     const knownReferrer = {
       hash: 'h',
       key: 'k',
@@ -198,5 +197,13 @@ describe('Global search container', () => {
 
     await expect(standardProps.pageSizeDispatch).toBeCalledWith(50)
     expect(spy).toBeCalledWith(0)
+    standardProps.pageSizeDispatch.mockClear()
+  })
+
+  it('should reset the page size for each new search', () => {
+    const wrapper = shallow(<GlobalSearchContainer {...standardProps} />)
+
+    wrapper.instance().handleSearch(event, historyMock)
+    expect(standardProps.pageSizeDispatch).toBeCalledWith(20)
   })
 })

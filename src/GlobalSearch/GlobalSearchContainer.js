@@ -117,7 +117,14 @@ export class GlobalSearchContainer extends Component {
 
   async handleSearch(event, history) {
     event.preventDefault()
-    const { searchText, handleError, resetErrorDispatch, dateOfBirthFilter, setLoadedDispatch } = this.props
+    const {
+      searchText,
+      handleError,
+      resetErrorDispatch,
+      dateOfBirthFilter,
+      setLoadedDispatch,
+      pageSizeDispatch,
+    } = this.props
     resetErrorDispatch()
     const validForm = dateOfBirthFilter.blank || dateOfBirthFilter.valid
     this.setState(state => ({
@@ -132,6 +139,7 @@ export class GlobalSearchContainer extends Component {
     history.replace(newPath)
 
     try {
+      await pageSizeDispatch(20)
       await this.doGlobalSearch(0, searchText)
     } catch (error) {
       handleError(error)
