@@ -131,7 +131,7 @@ class ActivitySpecification extends GebReportingSpec {
 
         then: 'The new activity list results are displayed'
         at ActivityPage
-        form['date'] == firstOfMonthDisplayFormat
+        form['search-date'] == firstOfMonthDisplayFormat
         form['period-select'] == 'PM'
 
         events == [
