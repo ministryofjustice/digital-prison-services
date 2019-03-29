@@ -4,8 +4,8 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
+import moment from 'moment'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
-import DatePickerInput from '../DatePickerInput'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -14,6 +14,20 @@ import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
+import FormDatePicker from '../DatePickerInput/formDatePicker'
+
+export const daysToShow = date => {
+  let daysInAdvance = 2
+
+  // If Friday, show Monday
+  if (moment().isoWeekday() === 5) daysInAdvance = 4
+
+  return date.isBefore(
+    moment()
+      .add(daysInAdvance, 'days')
+      .startOf('day')
+  )
+}
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -37,15 +51,12 @@ class ResultsActivity extends Component {
 
     const dateSelect = (
       <div className="pure-u-md-1-6 padding-right">
-        <label className="form-label" htmlFor="search-date">
-          Date
-        </label>
-        <DatePickerInput
-          futureDateOnly
-          handleDateChange={handleDateChange}
-          additionalClassName="dateInputResults"
-          value={date}
-          inputId="search-date"
+        <FormDatePicker
+          name="search-date"
+          input={{ onChange: handleDateChange, value: date, name: 'search-date' }}
+          label="Date"
+          placeholder="Select"
+          shouldShowDay={daysToShow}
         />
       </div>
     )
