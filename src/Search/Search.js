@@ -4,8 +4,8 @@ import './search.scss'
 import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
-import DatePickerInput from '../DatePickerInput'
 import ValidationErrors from '../ValidationError'
+import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 
 class Search extends Component {
   render() {
@@ -64,18 +64,9 @@ class Search extends Component {
           )
         : []
 
-    const dateSelect = (
-      <Fragment>
-        <label className="form-label bold" htmlFor="search-date">
-          Date
-        </label>
-        <DatePickerInput handleDateChange={handleDateChange} value={date} inputId="search-date" />
-      </Fragment>
-    )
-
     const periodSelect = (
       <Fragment>
-        <label className="form-label bold" htmlFor="period-select">
+        <label className="form-label" htmlFor="period-select">
           Period
         </label>
         <select
@@ -175,7 +166,9 @@ class Search extends Component {
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">
             <div className="pure-u-md-1-6">
-              <div className="padding-right">{dateSelect}</div>
+              <div className="padding-right">
+                <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
+              </div>
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
           </div>

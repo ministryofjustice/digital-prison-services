@@ -194,12 +194,10 @@ describe('Offender results component Jira NN-843', () => {
     expect(housingLocationSelect.some('[value="--"]')).toEqual(true)
     // Dig into the DatePicker component
     const searchDate = component
-      .find('[additionalClassName="dateInputResults"]')
-      .shallow()
-      .shallow()
-      .shallow()
-      .find('input')
-    expect(searchDate.some(`[value='${date}']`)).toEqual(true)
+      .find('WhereaboutsDatePicker')
+      .dive()
+      .prop('input').value
+    expect(searchDate).toEqual(date)
     const periodSelect = component.find('#period-select')
     expect(periodSelect.some('[value="ED"]')).toEqual(true)
 

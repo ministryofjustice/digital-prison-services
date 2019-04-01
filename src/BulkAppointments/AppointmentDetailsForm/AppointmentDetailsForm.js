@@ -14,7 +14,7 @@ import moment from 'moment'
 import { GREY_3, BLACK } from 'govuk-colours'
 import NumericInput from '../../Components/NumericInput/NumericInput'
 import TimePicker from '../../Components/TimePicker/TimePicker'
-import FormDatePicker from '../../DatePickerInput/formDatePicker'
+import FormDatePicker from '../../DatePickers/FormDatePicker'
 
 import RecurringAppointments from '../RecurringAppointments'
 import ValidateThenSubmit from './AppointmentDetailsFormValidation'

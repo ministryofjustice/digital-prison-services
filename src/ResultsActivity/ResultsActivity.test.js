@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsActivity, daysToShow } from './ResultsActivity'
+import { ResultsActivity } from './ResultsActivity'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'SYI'
@@ -167,7 +167,10 @@ describe('Offender activity list results component', () => {
     expect(component.find('.whereabouts-date').text()).toEqual(`Gym - ${longDateFormat} - ED`)
 
     // Dig into the DatePicker component
-    const searchDate = component.find('FormDatePicker').prop('input').value
+    const searchDate = component
+      .find('WhereaboutsDatePicker')
+      .dive()
+      .prop('input').value
     expect(searchDate).toEqual(date)
     const periodSelect = component.find('#period-select')
     expect(periodSelect.some('[value="ED"]')).toEqual(true)
@@ -580,38 +583,5 @@ describe('Offender activity list results component', () => {
     // TODO: Find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Gym - Workout')
-  })
-
-  describe('daysToShow() future dates', () => {
-    let dateNowSpy
-
-    afterEach(() => dateNowSpy.mockRestore())
-
-    it('should return the following Monday if Friday', () => {
-      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // "Fri Mar 29 2019 12:00:00 GMT+0000"
-      const followingMonday = moment()
-        .add(3, 'day')
-        .startOf('day')
-
-      const dayAfterMonday = moment(followingMonday)
-        .add(1, 'day')
-        .startOf('day')
-
-      expect(daysToShow(followingMonday)).toEqual(true)
-      expect(daysToShow(dayAfterMonday)).toEqual(false)
-    })
-
-    it('should return just Tomorrow if not Friday', () => {
-      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 1553774400000) // "Thu Mar 28 2019 12:00:00 GMT+0000"
-      const tomorrow = moment()
-        .add(1, 'day')
-        .startOf('day')
-      const dayAfterTomorrow = moment(tomorrow)
-        .add(1, 'days')
-        .startOf('day')
-
-      expect(daysToShow(tomorrow)).toEqual(true)
-      expect(daysToShow(dayAfterTomorrow)).toEqual(false)
-    })
   })
 })

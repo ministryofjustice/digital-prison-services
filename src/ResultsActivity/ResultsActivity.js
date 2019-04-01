@@ -14,20 +14,7 @@ import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
-import FormDatePicker from '../DatePickerInput/formDatePicker'
-
-export const daysToShow = date => {
-  let daysInAdvance = 2
-
-  // If Friday, show Monday
-  if (moment().isoWeekday() === 5) daysInAdvance = 4
-
-  return date.isBefore(
-    moment()
-      .add(daysInAdvance, 'days')
-      .startOf('day')
-  )
-}
+import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -48,18 +35,6 @@ class ResultsActivity extends Component {
       setColumnSort,
       activityName,
     } = this.props
-
-    const dateSelect = (
-      <div className="pure-u-md-1-6 padding-right">
-        <FormDatePicker
-          name="search-date"
-          input={{ onChange: handleDateChange, value: date, name: 'search-date' }}
-          label="Date"
-          placeholder="Select"
-          shouldShowDay={daysToShow}
-        />
-      </div>
-    )
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -207,7 +182,9 @@ class ResultsActivity extends Component {
         <hr className="print-only" />
         <form className="no-print">
           <div>
-            {dateSelect}
+            <div className="pure-u-md-1-6 padding-right">
+              <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
+            </div>
             {periodSelect}
             <button
               id="updateButton"
