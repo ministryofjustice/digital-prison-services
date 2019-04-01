@@ -47,7 +47,7 @@ class HouseblockSpecification extends GebReportingSpec {
         at HouseblockPage
         headingText.contains('1')
         form['housing-location-select'] == '--'
-        form['date'] == 'Today'
+        form['search-date'] == 'Today'
         form['period-select'] == 'AM'
 
         locationOrderLink.text() == 'Location'
@@ -122,7 +122,7 @@ class HouseblockSpecification extends GebReportingSpec {
         then: 'The new houseblock list results are displayed'
         at HouseblockPage
         form['housing-location-select'] == 'B'
-        form['date'] == firstOfMonthDisplayFormat
+        form['search-date'] == firstOfMonthDisplayFormat
         form['period-select'] == 'PM'
         def texts = tableRows*.text()
         def row1 = tableRows[1].find('td')

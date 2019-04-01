@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import { getHoursMinutes, isTodayOrAfter, getMainEventDescription, getListSizeClass, getLongDateFormat } from '../utils'
-import DatePickerInput from '../DatePickerInput'
 import OtherActivitiesView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
 import Flags from '../Flags/Flags'
@@ -15,6 +14,7 @@ import { LAST_NAME, CELL_LOCATION, ACTIVITY } from '../tablesorting/sortColumns'
 import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
+import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 
 class ResultsHouseblock extends Component {
   olderThan7Days = () => {
@@ -84,15 +84,7 @@ class ResultsHouseblock extends Component {
 
     const dateSelect = (
       <div className="pure-u-md-1-6 padding-left padding-right">
-        <label className="form-label" htmlFor="search-date">
-          Date
-        </label>
-        <DatePickerInput
-          handleDateChange={handleDateChange}
-          additionalClassName="dateInputResults"
-          value={date}
-          inputId="search-date"
-        />
+        <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
       </div>
     )
 
