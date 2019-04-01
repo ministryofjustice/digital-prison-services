@@ -12,7 +12,6 @@ class ActivityPage extends DatePickerPage {
     }
 
     static content = {
-        date { $('input', name: 'search-date') }
         activityTitle { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         period { $('#period-select') }

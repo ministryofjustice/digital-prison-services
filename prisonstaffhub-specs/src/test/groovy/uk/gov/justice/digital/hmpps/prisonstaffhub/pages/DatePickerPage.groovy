@@ -5,7 +5,7 @@ import geb.Page
 abstract class DatePickerPage extends Page {
 
     static content = {
-        date { $('#search-date') }
+        date { $('input', name: 'search-date') }
         topBar { $('th.rdtSwitch') }
         yearBox { value -> $('td', 'data-value': value) }
         monthBox { value -> $('td', text: value) }
