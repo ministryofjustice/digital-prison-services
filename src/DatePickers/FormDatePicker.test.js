@@ -5,6 +5,8 @@ import renderer from 'react-test-renderer'
 import FormDatePicker from './FormDatePicker'
 
 describe('Form date picker', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
+
   it('should render correctly', () => {
     const wrapper = renderer
       .create(
