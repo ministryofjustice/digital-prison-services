@@ -158,6 +158,8 @@ class HouseblockSpecification extends GebReportingSpec {
         continueButton.click()
         at HouseblockPage
 
+        fixture.stubForLogin(ITAG_USER)
+
         when: "I refresh the page"
         driver.navigate().refresh()
 

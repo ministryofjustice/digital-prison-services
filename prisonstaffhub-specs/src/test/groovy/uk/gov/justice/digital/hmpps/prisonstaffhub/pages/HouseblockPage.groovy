@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
-import geb.Page
 import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class HouseblockPage extends DatePickerPage {

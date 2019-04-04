@@ -57,8 +57,8 @@ class ResultsHouseblock extends Component {
           All
         </option>,
         ...locationOptions.map(loc => (
-          <option key={`housinglocation_option_${loc}`} value={loc}>
-            {loc}
+          <option key={`housinglocation_option_${loc.key}`} value={loc.key}>
+            {loc.name}
           </option>
         )),
       ]
@@ -310,7 +310,7 @@ ResultsHouseblock.propTypes = {
       ),
     }).isRequired
   ).isRequired,
-  subLocations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  subLocations: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,

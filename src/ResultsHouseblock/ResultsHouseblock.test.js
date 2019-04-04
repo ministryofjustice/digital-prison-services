@@ -128,7 +128,7 @@ const response = [
   },
 ]
 
-const subLocations = ['1', '2']
+const subLocations = [{ name: '1', key: '1' }, { name: '2', key: '2' }]
 
 const user = {
   activeCaseLoadId: 'SYI',
@@ -553,7 +553,7 @@ describe('Offender results component Jira NN-843', () => {
     ).toEqual(0)
   })
 
-  it.skip('should handle change of sort order', async () => {
+  it('should handle change of sort order', async () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
@@ -571,10 +571,22 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    component.find('#Location-sort-asc').simulate('click')
+    component
+      .find('SortableColumn')
+      .at(1)
+      .shallow()
+      .find('#Location-sort-asc')
+      .simulate('click')
+
     expect(props.setColumnSort).toHaveBeenCalledWith('cellLocation', 'DESC')
 
-    component.find('#Name-sortable-column').simulate('click')
+    component
+      .find('SortableColumn')
+      .at(0)
+      .shallow()
+      .find('#Name-sortable-column')
+      .simulate('click')
+
     expect(props.setColumnSort).toHaveBeenCalledWith('lastName', 'ASC')
   })
 
