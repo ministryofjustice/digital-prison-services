@@ -4,7 +4,7 @@ const removeDuplicates = array => [...new Set(array)]
 
 const offenderLoaderFactory = eliteApi => {
   const loadFromCsvContent = async (context, rows, agencyId) => {
-    logger.info(`Csv file was imported with ${rows.length} rows of data`)
+    logger.debug(`Csv file was imported with ${rows.length} rows of data`)
     const offenderNumbers = removeDuplicates(rows.map(row => row[0]))
     const offenders = await eliteApi.getBasicInmateDetailsForOffenders(context, offenderNumbers)
 
