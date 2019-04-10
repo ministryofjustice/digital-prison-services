@@ -1,0 +1,378 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form date picker should render correctly 1`] = `
+<div
+  className="rdt"
+>
+  <div>
+    <label
+      className="sc-bwzfXH eIEKoM"
+    >
+      <span
+        className="sc-bdVaJa fqDsBO"
+      >
+         
+         
+      </span>
+      <span
+        className="sc-htpNat lbiKAP"
+      >
+        there was an error
+      </span>
+      <input
+        className="form-control sc-bxivhb fCvXxf"
+        name="date"
+        onChange={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        placeholder="Select"
+        readOnly={true}
+        type="text"
+        value="2017-01-01T:21:00:00Z"
+      />
+    </label>
+  </div>
+  <div
+    className="rdtPicker"
+  >
+    <div
+      className="rdtDays"
+    >
+      <table>
+        <thead>
+          <tr>
+            <th
+              className="rdtPrev"
+              onClick={[Function]}
+            >
+              <span>
+                ‹
+              </span>
+            </th>
+            <th
+              className="rdtSwitch"
+              colSpan={5}
+              data-value={1}
+              onClick={[Function]}
+            >
+              February 2017
+            </th>
+            <th
+              className="rdtNext"
+              onClick={[Function]}
+            >
+              <span>
+                ›
+              </span>
+            </th>
+          </tr>
+          <tr>
+            <th
+              className="dow"
+            >
+              Mo
+            </th>
+            <th
+              className="dow"
+            >
+              Tu
+            </th>
+            <th
+              className="dow"
+            >
+              We
+            </th>
+            <th
+              className="dow"
+            >
+              Th
+            </th>
+            <th
+              className="dow"
+            >
+              Fr
+            </th>
+            <th
+              className="dow"
+            >
+              Sa
+            </th>
+            <th
+              className="dow"
+            >
+              Su
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              className="rdtDay rdtOld rdtDisabled"
+              data-value={30}
+            >
+              30
+            </td>
+            <td
+              className="rdtDay rdtOld rdtDisabled"
+              data-value={31}
+            >
+              31
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={1}
+            >
+              1
+            </td>
+            <td
+              className="rdtDay rdtToday rdtDisabled"
+              data-value={2}
+            >
+              2
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={3}
+            >
+              3
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={4}
+            >
+              4
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={5}
+            >
+              5
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={6}
+            >
+              6
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={7}
+            >
+              7
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={8}
+            >
+              8
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={9}
+            >
+              9
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={10}
+            >
+              10
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={11}
+            >
+              11
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={12}
+            >
+              12
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={13}
+            >
+              13
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={14}
+            >
+              14
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={15}
+            >
+              15
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={16}
+            >
+              16
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={17}
+            >
+              17
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={18}
+            >
+              18
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={19}
+            >
+              19
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={20}
+            >
+              20
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={21}
+            >
+              21
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={22}
+            >
+              22
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={23}
+            >
+              23
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={24}
+            >
+              24
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={25}
+            >
+              25
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={26}
+            >
+              26
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={27}
+            >
+              27
+            </td>
+            <td
+              className="rdtDay rdtDisabled"
+              data-value={28}
+            >
+              28
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={1}
+            >
+              1
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={2}
+            >
+              2
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={3}
+            >
+              3
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={4}
+            >
+              4
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={5}
+            >
+              5
+            </td>
+          </tr>
+          <tr>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={6}
+            >
+              6
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={7}
+            >
+              7
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={8}
+            >
+              8
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={9}
+            >
+              9
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={10}
+            >
+              10
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={11}
+            >
+              11
+            </td>
+            <td
+              className="rdtDay rdtNew rdtDisabled"
+              data-value={12}
+            >
+              12
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+`;
