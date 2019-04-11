@@ -25,16 +25,21 @@ class TestFixture {
 
     def loginAs(UserAccount user) {
         currentUser = user
-        oauthApi.stubValidOAuthTokenRequest()
+        stubForLogin(currentUser)
 
         browser.to LoginPage
+        browser.page.loginAs currentUser, 'password'
+        browser.at SearchPage
+    }
+
+    private void stubForLogin(UserAccount currentUser) {
+        oauthApi.stubValidOAuthTokenRequest()
+
         oauthApi.stubGetMyDetails currentUser
         oauthApi.stubGetMyRoles()
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
         elite2Api.stubActivityLocations()
-        browser.page.loginAs currentUser, 'password'
-        browser.at SearchPage
     }
 
     def toSearch() {

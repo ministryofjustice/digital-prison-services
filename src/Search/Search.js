@@ -31,8 +31,8 @@ class Search extends Component {
         ? locationOptions.reduce(
             (options, loc) => {
               options.push(
-                <option key={`housinglocation_option_${loc}`} value={loc}>
-                  {loc}
+                <option key={`housinglocation_option_${loc.key}`} value={loc.key}>
+                  {loc.name}
                 </option>
               )
               return options
@@ -194,7 +194,7 @@ Search.propTypes = {
   period: PropTypes.string.isRequired,
   activity: PropTypes.string.isRequired,
   currentLocation: PropTypes.string,
-  locations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   activities: PropTypes.arrayOf(
     PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
   ).isRequired,

@@ -131,7 +131,7 @@ SearchContainer.propTypes = {
     PropTypes.shape({ locationId: PropTypes.number.isRequired, userDescription: PropTypes.string.isRequired })
   ),
   activity: PropTypes.string.isRequired,
-  locations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object).isRequired,
   location: PropTypes.string.isRequired,
   loaded: PropTypes.bool.isRequired,
   date: PropTypes.string.isRequired,
@@ -157,7 +157,7 @@ const mapStateToProps = state => ({
   agencyId: state.app.user.activeCaseLoadId,
   activities: state.search.activities,
   activity: state.search.activity,
-  locations: state.search.locations.map(l => l.name),
+  locations: state.search.locations,
   location: state.search.location,
   loaded: state.app.loaded,
   date: state.search.date,

@@ -149,19 +149,27 @@ class ResultsHouseblockContainer extends Component {
     subLocationDispatch(event.target.value)
   }
 
-  render() {
+  titleString() {
     const { activeSubLocation } = this.state
-    const { currentLocation } = this.props
-    const locationWithSubLocation = `${currentLocation} ${activeSubLocation !== '--' ? ` -  ${activeSubLocation}` : ''}`
+    const { locations, subLocations, currentLocation } = this.props
+    const locationName = locations.filter(location => location.key === currentLocation).map(it => it.name)[0]
+    if (activeSubLocation && activeSubLocation !== '--') {
+      const subLocationName = subLocations.filter(location => location.key === activeSubLocation).map(it => it.name)[0]
+      return `${locationName} -  ${subLocationName}`
+    }
+    return locationName
+  }
 
+  render() {
+    const title = this.titleString()
     return (
-      <Page title={locationWithSubLocation} alwaysRender>
+      <Page title={title} alwaysRender>
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
-          locationWithSubLocation={locationWithSubLocation}
+          locationWithSubLocation={title}
           {...this.props}
         />
       </Page>
@@ -185,7 +193,7 @@ ResultsHouseblockContainer.propTypes = {
   loaded: PropTypes.bool.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
-  subLocations: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  subLocations: PropTypes.arrayOf(PropTypes.object).isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
 
   // mapDispatchToProps
@@ -207,8 +215,7 @@ ResultsHouseblockContainer.defaultProps = {
 const extractSubLocations = (locations, currentLocation) => {
   if (!locations) return []
   if (!currentLocation) return []
-  const subLocations = locations.filter(l => l.name === currentLocation).map(l => l.children)
-  return subLocations ? subLocations[0].map(l => l.name) : []
+  return locations.filter(l => l.key === currentLocation).flatMap(l => l.children)
 }
 
 const mapStateToProps = state => ({
@@ -222,6 +229,7 @@ const mapStateToProps = state => ({
   orderField: state.events.orderField,
   paymentReasonReasons: state.events.paymentReasonReasons,
   sortOrder: state.events.sortOrder,
+  locations: state.search.locations,
   subLocations: extractSubLocations(state.search.locations, state.search.location),
   error: state.app.error,
 })

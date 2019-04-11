@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Search } from './Search'
 
-const locations = ['1', '2']
+const locations = [{ name: '1', key: 'K1' }, { name: '2', key: 'K2' }]
 const activities = [{ locationId: 123456, userDescription: 'little room' }]
 const mockHistory = {
   push: jest.fn(),
@@ -37,7 +37,7 @@ describe('Search component', () => {
       />
     )
     expect(component.find('#housing-location-select option').get(0).props.value).toEqual('--')
-    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('1')
+    expect(component.find('#housing-location-select option').get(1).props.value).toEqual('K1')
 
     expect(component.find('#activity-select option').get(0).props.value).toEqual('--')
     expect(component.find('#activity-select option').get(1).props.value).toEqual(123456)
