@@ -22,7 +22,7 @@ class ActivitySpecification extends GebReportingSpec {
     OauthApi oauthApi = new OauthApi()
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
-    def initialPeriod;
+    def initialPeriod
 
     def "The activity list is displayed"() {
         given: 'I am on the whereabouts search page'
@@ -109,6 +109,64 @@ class ActivitySpecification extends GebReportingSpec {
         ]
     }
 
+    def "The activity list handles sorting correctly"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: "I select and display a location"
+        def today = getNow()
+        elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
+        form['period-select'] = 'AM'
+        waitFor { activity.module(FormElement).enabled }
+        form['activity-select'] = 'loc2'
+
+        continueButton.click()
+
+        then: 'The activity list is displayed'
+        at ActivityPage
+
+        tableRows.size() == 6
+
+        nomsIds == [
+                'A1234AA',
+                'A1234AC',
+                'A1234AB',
+                'A1234AA',
+                'A1234AA'
+        ]
+
+        when:
+        sortSelect = 'lastName_ASC'
+
+        then:
+        tableRows.size() == 6
+
+        nomsIds == [
+                'A1234AA',
+                'A1234AA',
+                'A1234AA',
+                'A1234AC',
+                'A1234AB',
+        ]
+
+        when:
+        sortSelect = 'lastName_DESC'
+
+        then:
+        tableRows.size() == 6
+
+        nomsIds == [
+                'A1234AB',
+                'A1234AC',
+                'A1234AA',
+                'A1234AA',
+                'A1234AA',
+
+        ]
+
+    }
+
+
     def "The updated activity list is displayed"() {
         given: 'I am on the activity list page'
         fixture.toSearch()
@@ -166,7 +224,7 @@ class ActivitySpecification extends GebReportingSpec {
         at ActivityPage
 
         when: "I refresh the page"
-        driver.navigate().refresh();
+        driver.navigate().refresh()
 
         then: "I should be redirected to the search page"
         at SearchPage

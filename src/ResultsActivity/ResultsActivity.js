@@ -137,9 +137,10 @@ class ResultsActivity extends Component {
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
-        const { offenderNo, firstName, lastName, cellLocation, alertFlags, category } = mainEvent
+        const { offenderNo, firstName, lastName, cellLocation, alertFlags, category, eventId } = mainEvent
+        const key = `${offenderNo}-${eventId}`
         return (
-          <tr key={offenderNo} className="row-gutters">
+          <tr key={key} className="row-gutters">
             <td className="row-gutters">
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName} lastName={lastName} />
