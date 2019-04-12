@@ -15,6 +15,8 @@ class ActivityPage extends DatePickerPage {
         activityTitle { $('h1').text() }
         header(required: false) { module(HeaderModule) }
         period { $('#period-select') }
+        sortSelect { $('#sort-select') }
+
         form { $('form')}
         updateButton { $('#updateButton') }
         printButton { $('#printButton') }

@@ -31,13 +31,13 @@ const renderOtherEvent = (event, index) => {
 
   return <li key={key}>{text}</li>
 }
-const renderEvent = event => {
+const renderEvent = (event, type, index) => {
   const expired = <span className="cancelled">(expired)</span>
   const cancelled = <span className="cancelled">(cancelled)</span>
   const complete = <span className="complete">(complete)</span>
-
+  const key = `${type}_${index}`
   return (
-    <li className="transfer" key={event.eventId}>
+    <li className="transfer" key={key}>
       <strong className="other-activity">** {event.eventDescription} ** </strong>
       {event.expired && expired}
       {event.complete && complete}
@@ -50,12 +50,14 @@ const OtherActivityListView = ({ offenderMainEvent }) =>
   shouldShowOtherActivities(offenderMainEvent) && (
     <ul>
       {offenderMainEvent.releaseScheduled && (
-        <li>
+        <li key="release">
           <strong className="other-activity">** Release scheduled **</strong>
         </li>
       )}
-      {offenderMainEvent.courtEvents && offenderMainEvent.courtEvents.map(renderEvent)}
-      {offenderMainEvent.scheduledTransfers && offenderMainEvent.scheduledTransfers.map(renderEvent)}
+      {offenderMainEvent.courtEvents &&
+        offenderMainEvent.courtEvents.map((event, index) => renderEvent(event, 'court', index))}
+      {offenderMainEvent.scheduledTransfers &&
+        offenderMainEvent.scheduledTransfers.map((event, index) => renderEvent(event, 'transfer', index))}
       {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => renderOtherEvent(event, index))}
     </ul>
   )
