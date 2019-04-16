@@ -215,7 +215,8 @@ ResultsHouseblockContainer.defaultProps = {
 const extractSubLocations = (locations, currentLocation) => {
   if (!locations) return []
   if (!currentLocation) return []
-  return locations.filter(l => l.key === currentLocation).flatMap(l => l.children)
+  const children = locations.filter(l => l.key === currentLocation).map(l => (l.children ? l.children : []))
+  return children.length > 0 ? children[0] : []
 }
 
 const mapStateToProps = state => ({
@@ -242,6 +243,8 @@ const mapDispatchToProps = dispatch => ({
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
 })
+
+export { extractSubLocations }
 
 export default withRouter(
   connect(
