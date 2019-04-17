@@ -14,6 +14,7 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
+import PayOffender from '../Components/PayOffender'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -33,6 +34,8 @@ class ResultsActivity extends Component {
       orderField,
       setColumnSort,
       activityName,
+      updateAttendanceEnabled,
+      payable,
     } = this.props
 
     const periodSelect = (
@@ -116,6 +119,7 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
+        {updateAttendanceEnabled && payable && <th className="straight">Pay</th>}
       </tr>
     )
 
@@ -162,14 +166,20 @@ class ResultsActivity extends Component {
                 />
               }
             </td>
-            <td className="no-padding checkbox-column">
-              <div className="multiple-choice whereaboutsCheckbox no-display">
+            <td className="no-padding checkbox-column no-display">
+              <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                   Received
                 </label>
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
               </div>
             </td>
+            {updateAttendanceEnabled &&
+              payable && (
+                <td className="no-padding checkbox-column">
+                  <PayOffender offenderNo={offenderNo} eventId={eventId} />
+                </td>
+              )}
           </tr>
         )
       })
@@ -246,6 +256,8 @@ ResultsActivity.propTypes = {
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
+  payable: PropTypes.bool.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

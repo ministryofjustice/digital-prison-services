@@ -26,6 +26,9 @@ class ResultsActivityContainer extends Component {
     this.handlePrint = this.handlePrint.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
     this.getActivityList = this.getActivityList.bind(this)
+    this.state = {
+      payable: true,
+    }
   }
 
   async componentDidMount() {
@@ -95,6 +98,7 @@ class ResultsActivityContainer extends Component {
     } catch (error) {
       handleError(error)
     }
+    this.setState({ payable: this.isPayableDate() })
     setLoadedDispatch(true)
   }
 
@@ -106,6 +110,19 @@ class ResultsActivityContainer extends Component {
         .map(a => a.userDescription)
         .find(a => !!a) || null
     )
+  }
+
+  isPayableDate = () => {
+    const { date } = this.props
+
+    const selectedDate = moment(date, 'DD-MM-YYYY')
+    const historicRange = moment()
+      .subtract(6, 'd')
+      .startOf('day')
+
+    if (selectedDate.isBefore(historicRange)) return false
+
+    return true
   }
 
   handlePrint() {
@@ -120,6 +137,7 @@ class ResultsActivityContainer extends Component {
 
   render() {
     const { resetErrorDispatch } = this.props
+    const { payable } = this.state
     const activityName = this.getActivityName()
 
     return (
@@ -130,6 +148,7 @@ class ResultsActivityContainer extends Component {
           resetErrorDispatch={resetErrorDispatch}
           setColumnSort={this.setColumnSort}
           activityName={activityName}
+          payable={payable}
           {...this.props}
         />
       </Page>
@@ -200,6 +219,7 @@ const mapStateToProps = state => ({
   error: state.app.error,
   orderField: state.events.orderField,
   sortOrder: state.events.sortOrder,
+  updateAttendanceEnabled: state.app.config.updateAttendanceEnabled,
 })
 
 const mapDispatchToProps = dispatch => ({

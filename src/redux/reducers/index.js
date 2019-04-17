@@ -18,7 +18,7 @@ export function defaultPeriod(time) {
 }
 
 const appInitialState = {
-  config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '' },
+  config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '', updateAttendanceEnabled: false },
   user: { activeCaseLoadId: null, roles: [] },
   shouldShowTerms: false,
   error: '',

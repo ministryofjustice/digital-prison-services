@@ -24,6 +24,7 @@
     "@govuk-react/lib": "^0.7.0",
     "@govuk-react/select": "^0.7.0",
     "@govuk-react/text-area": "^0.7.0",
+    "@govuk-react/visually-hidden": "^0.7.0",
     "applicationinsights": "^1.0.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
