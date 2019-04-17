@@ -53,7 +53,7 @@ class PayOffender extends Component {
 
     return (
       <StyledPayOffender>
-        <Checkbox onClick={this.payOffender} checked={checked}>
+        <Checkbox onChange={this.payOffender} checked={checked}>
           <VisuallyHidden>Pay</VisuallyHidden>
         </Checkbox>
       </StyledPayOffender>
@@ -63,7 +63,7 @@ class PayOffender extends Component {
 
 PayOffender.propTypes = {
   offenderNo: PropTypes.string,
-  eventId: PropTypes.string,
+  eventId: PropTypes.number,
 }
 
 PayOffender.defaultProps = {

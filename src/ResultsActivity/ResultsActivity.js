@@ -14,7 +14,7 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import PayOffender from '../Components/PayOffender/PayOffender'
+import PayOffender from '../Components/PayOffender'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -35,6 +35,7 @@ class ResultsActivity extends Component {
       setColumnSort,
       activityName,
       updateAttendanceEnabled,
+      payable,
     } = this.props
 
     const periodSelect = (
@@ -118,7 +119,7 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        {updateAttendanceEnabled && <th className="straight">Pay</th>}
+        {updateAttendanceEnabled && payable && <th className="straight">Pay</th>}
       </tr>
     )
 
@@ -173,11 +174,12 @@ class ResultsActivity extends Component {
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
               </div>
             </td>
-            {updateAttendanceEnabled && (
-              <td className="no-padding checkbox-column">
-                <PayOffender offenderNo={offenderNo} eventId={eventId} />
-              </td>
-            )}
+            {updateAttendanceEnabled &&
+              payable && (
+                <td className="no-padding checkbox-column">
+                  <PayOffender offenderNo={offenderNo} eventId={eventId} />
+                </td>
+              )}
           </tr>
         )
       })
@@ -255,6 +257,7 @@ ResultsActivity.propTypes = {
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
+  payable: PropTypes.bool.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

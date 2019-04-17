@@ -163,6 +163,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
     expect(component.find('.whereabouts-date').text()).toEqual(`Gym - ${longDateFormat} - ED`)
@@ -329,6 +330,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
     const tr = component.find('tr')
@@ -363,6 +365,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
 
@@ -405,6 +408,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
     // If today, print button is present
@@ -435,6 +439,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
 
@@ -468,6 +473,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
 
@@ -501,6 +507,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
 
@@ -571,6 +578,7 @@ describe('Offender activity list results component', () => {
         sortOrder="ASC"
         activityName="Gym"
         updateAttendanceEnabled={false}
+        payable
       />
     )
 
