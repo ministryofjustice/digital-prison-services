@@ -8,6 +8,7 @@ class HouseblockPage extends DatePickerPage {
 
     static at = {
         updateButton.displayed
+        tableRows.size() > 1
     }
 
     static content = {
