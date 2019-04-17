@@ -14,6 +14,7 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
+import PayOffender from '../Components/PayOffender/PayOffender'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -117,7 +118,7 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        {updateAttendanceEnabled && <th className="checkbox-header straight">Pay</th>}
+        {updateAttendanceEnabled && <th className="straight">Pay</th>}
       </tr>
     )
 
@@ -174,12 +175,7 @@ class ResultsActivity extends Component {
             </td>
             {updateAttendanceEnabled && (
               <td className="no-padding checkbox-column">
-                <div className="multiple-choice whereaboutsCheckbox">
-                  <label className="whereabouts-label" htmlFor={`pay_${index}`}>
-                    Pay
-                  </label>
-                  <input id={`pay_${index}`} type="checkbox" name="ch1" disabled />
-                </div>
+                <PayOffender offenderNo={offenderNo} eventId={eventId} />
               </td>
             )}
           </tr>

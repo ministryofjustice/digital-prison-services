@@ -1088,6 +1088,14 @@
   dependencies:
     "@govuk-react/ordered-list" "^0.7.0"
 
+"@govuk-react/visually-hidden@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/visually-hidden/-/visually-hidden-0.7.0.tgz#b7675f83ef48ba26a42bcaef68717ed06ceb6725"
+  integrity sha512-qHSkMJvzQHa56ZGuykApOCZd3cKvyDPYIFHLu8yzZr4wl26mB0IszvTpHSW3HCJzTPpyVS6QW/xH+91PHtLr5A==
+  dependencies:
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
