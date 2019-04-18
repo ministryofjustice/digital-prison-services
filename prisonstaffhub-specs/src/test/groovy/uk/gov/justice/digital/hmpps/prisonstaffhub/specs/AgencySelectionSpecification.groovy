@@ -2,7 +2,6 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -16,7 +15,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class AgencySelectionSpecification extends GebReportingSpec {
+class AgencySelectionSpecification extends BrowserReportingSpec {
 
     static final NOTM_URL = 'http://localhost:3000/'
     @Rule

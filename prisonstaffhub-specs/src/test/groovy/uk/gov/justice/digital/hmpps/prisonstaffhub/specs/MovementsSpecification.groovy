@@ -1,22 +1,17 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
-import geb.spock.GebReportingSpec
+
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.CurrentlyOutPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InReception
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.InTodayPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.OutTodayPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.EnRoutePage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.TotalOutPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.*
 
 import java.time.LocalDate
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class MovementsSpecification extends GebReportingSpec {
+class MovementsSpecification extends BrowserReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 

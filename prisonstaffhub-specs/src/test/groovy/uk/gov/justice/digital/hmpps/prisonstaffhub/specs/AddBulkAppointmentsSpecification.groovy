@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
-import geb.spock.GebReportingSpec
+
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -10,7 +10,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddBulkAppointmentsPage
 
 import java.time.LocalDate
 
-class AddBulkAppointmentsSpecification extends GebReportingSpec {
+class AddBulkAppointmentsSpecification extends BrowserReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 

@@ -134,7 +134,8 @@
     "whatwg-fetch": "2.0.4"
   },
   "scripts": {
-    "start": "node backend/index.js",
+    "start": "node $NODE_DEBUG_OPTION backend/index.js",
+    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ node $NODE_DEBUG_OPTION backend/index.js",
     "build": "webpack --mode=production",
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
@@ -191,7 +192,7 @@
   },
   "lint-staged": {
     "linters": {
-      "*.{js,json,css,md}": [
+      "*.{js,json,css}": [
         "prettier --write",
         "eslint --fix",
         "git add"

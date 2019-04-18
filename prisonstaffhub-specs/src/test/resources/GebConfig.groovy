@@ -26,7 +26,7 @@ driver = {
     new ChromeDriver()
 }
 
-baseUrl = "http://localhost:3002/"
+baseUrl = "http://localhost:3006/"
 
 reportsDir = "build/geb-reports"
 

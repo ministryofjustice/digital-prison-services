@@ -50,7 +50,7 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: yarn start
+          command: yarn start-feature
           background: true
 #      - run:
 #          name: Wait for node app to start

@@ -9,6 +9,7 @@ class SearchPage extends DatePickerPage {
     static at = {
         headingText == 'Search prisoner whereabouts'
         continueButton.displayed
+        location.find('option')[1].text() == '1'
     }
 
     static content = {
