@@ -21,7 +21,7 @@ const init = () => {
         tokenURL: `${config.apis.oauth2.url}oauth/token`,
         clientID: config.apis.oauth2.clientId,
         clientSecret: config.apis.oauth2.clientSecret,
-        callbackURL: `${config.app.url}/login/callback`,
+        callbackURL: `${config.app.url}login/callback`,
         state: true,
         customHeaders: {
           Authorization: `Basic ${apiClientCredentials(config.apis.oauth2.clientId, config.apis.oauth2.clientSecret)}`,
