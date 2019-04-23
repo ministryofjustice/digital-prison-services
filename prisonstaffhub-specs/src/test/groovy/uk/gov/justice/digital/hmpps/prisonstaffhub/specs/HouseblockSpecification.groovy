@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import geb.module.FormElement
-import geb.spock.GebReportingSpec
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -13,7 +12,7 @@ import java.text.SimpleDateFormat
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class HouseblockSpecification extends GebReportingSpec {
+class HouseblockSpecification extends BrowserReportingSpec {
 
     static final flagsColumn = 3
     static final activityColumn = 4
@@ -36,9 +35,9 @@ class HouseblockSpecification extends GebReportingSpec {
         String today = getNow()
 
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'AM', today)
-        form['housing-location-select'] = '1'
 
-        form['period-select'] = 'AM'
+        location = '1'
+        period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
@@ -46,9 +45,9 @@ class HouseblockSpecification extends GebReportingSpec {
 
         at HouseblockPage
         headingText.contains('1')
-        form['housing-location-select'] == '--'
+        location == '--'
         form['search-date'] == 'Today'
-        form['period-select'] == 'AM'
+        period == 'AM'
 
         locationOrderLink.text() == 'Location'
 
@@ -70,7 +69,6 @@ class HouseblockSpecification extends GebReportingSpec {
         def reorderedRow3 = tableRows[3].find('td')
         reorderedRow3[flagsColumn]*.$('span')[0]*.text() == ['CAT A High']
         reorderedRow3[activityColumn].text() == '17:45 - TV Repairs'
-
 
         when: "I order by cell location"
         locationOrderLink.click()
@@ -105,8 +103,8 @@ class HouseblockSpecification extends GebReportingSpec {
         this.initialPeriod = period.value()
         def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
-        form['period-select'] = 'PM'
-        form['housing-location-select'] = '1'
+        location = '1'
+        period = 'PM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
         at HouseblockPage
@@ -115,25 +113,23 @@ class HouseblockSpecification extends GebReportingSpec {
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1_B', 'PM', firstOfMonthApiFormat)
-        form['housing-location-select'] = 'B'
+        location = 'B'
         setDatePicker('2018', 'Aug', '1')
         updateButton.click()
 
         then: 'The new houseblock list results are displayed'
         at HouseblockPage
-        form['housing-location-select'] == 'B'
+        location == 'B'
         form['search-date'] == firstOfMonthDisplayFormat
-        form['period-select'] == 'PM'
-        def texts = tableRows*.text()
-        def row1 = tableRows[1].find('td')
-        headingText.contains('1 - B')
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        row1[activityColumn].text() == '17:00 - Woodwork'
-        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
+        period == 'PM'
 
-        def row2 = tableRows[2].find('td')
+        headingText.contains('1 - B')
+        waitFor { tableRows[1].find('td')[activityColumn].text() == '17:00 - Woodwork' }
+        waitFor { tableRows[2].find('td')[activityColumn].text() == '17:45 - TV Repairs' }
+        tableRows[1].find('td')[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
+        def texts = tableRows*.text()
+        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
-        row2[activityColumn].text() == '17:45 - TV Repairs'
 
         when: "I go to the search page afresh"
         browser.to SearchPage
@@ -152,8 +148,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
 
-        form['housing-location-select'] = '1'
-        form['period-select'] = 'PM'
+        location = '1'
+        period = 'PM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
         at HouseblockPage
@@ -178,8 +174,8 @@ class HouseblockSpecification extends GebReportingSpec {
 
         elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
 
-        form['housing-location-select'] = '1'
-        form['period-select'] = 'AM'
+        location = '1'
+        period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
@@ -203,8 +199,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = getNow()
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
 
-        form['housing-location-select'] = '1'
-        form['period-select'] = 'AM'
+        location = '1'
+        period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
@@ -224,8 +220,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = getNow()
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
-        form['housing-location-select'] = '1'
-        form['period-select'] = 'AM'
+        location = '1'
+        period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
@@ -245,8 +241,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = getNow()
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
-        form['housing-location-select'] = '1'
-        form['period-select'] = 'AM'
+        location = '1'
+        period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 
@@ -265,8 +261,8 @@ class HouseblockSpecification extends GebReportingSpec {
         def today = getNow()
 
         elite2api.stubGetHouseBlockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
-        form['housing-location-select'] = '1'
-        form['period-select'] = 'AM'
+        location = '1'
+        period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
 

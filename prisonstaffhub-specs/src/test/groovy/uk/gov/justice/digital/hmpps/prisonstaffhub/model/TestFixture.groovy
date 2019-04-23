@@ -27,13 +27,11 @@ class TestFixture {
         currentUser = user
         stubForLogin(currentUser)
 
-        browser.to LoginPage
-        browser.page.loginAs currentUser, 'password'
-        browser.at SearchPage
+        browser.to SearchPage
     }
 
     private void stubForLogin(UserAccount currentUser) {
-        oauthApi.stubValidOAuthTokenRequest()
+        oauthApi.stubValidOAuthTokenLogin()
 
         oauthApi.stubGetMyDetails currentUser
         oauthApi.stubGetMyRoles()

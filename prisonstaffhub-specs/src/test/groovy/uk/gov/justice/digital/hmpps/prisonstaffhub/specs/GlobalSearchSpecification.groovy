@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
-import geb.spock.GebReportingSpec
+
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -10,7 +10,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.GlobalSearchPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class GlobalSearchSpecification extends GebReportingSpec {
+class GlobalSearchSpecification extends BrowserReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
