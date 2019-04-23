@@ -169,7 +169,6 @@ class ResultsHouseblockContainer extends Component {
           handleSubLocationChange={this.handleSubLocationChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
-          locationWithSubLocation={title}
           {...this.props}
         />
       </Page>
