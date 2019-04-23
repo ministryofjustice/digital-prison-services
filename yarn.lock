@@ -1055,6 +1055,16 @@
     "@govuk-react/lib" "^0.7.0"
     "@govuk-react/link" "^0.7.0"
 
+"@govuk-react/radio@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/radio/-/radio-0.7.0.tgz#9296c33c6c7df77673fa9823e5f5a1b9952f12a0"
+  integrity sha512-FqOxr+1szdVY/yK63SifwxO7Vq4c8HZHstj15xIYn8rS1zb98ivo9sKJSzsz9OoSfo/DT0YncJPKyTxtK3vv1w==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/hint-text" "^0.7.0"
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/select@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/select/-/select-0.7.0.tgz#35727e84ffea1c83ce7ec4bc3203a9856e9a8b2a"

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Checkbox from '@govuk-react/checkbox'
+import Radio from '@govuk-react/radio'
 import VisuallyHidden from '@govuk-react/visually-hidden'
 import axios from 'axios'
 import { MEDIA_QUERIES } from '@govuk-react/constants'
@@ -53,9 +53,9 @@ class PayOffender extends Component {
 
     return (
       <StyledPayOffender>
-        <Checkbox onChange={this.payOffender} checked={checked}>
+        <Radio onChange={this.payOffender} checked={checked}>
           <VisuallyHidden>Pay</VisuallyHidden>
-        </Checkbox>
+        </Radio>
       </StyledPayOffender>
     )
   }

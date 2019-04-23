@@ -8,7 +8,7 @@ jest.mock('axios')
 
 describe('<PayOffender />', () => {
   let wrapper
-  let checkbox
+  let radio
 
   describe('without all props', () => {
     it('should render without crashing', () => {
@@ -17,16 +17,16 @@ describe('<PayOffender />', () => {
       expect(wrapper).toHaveLength(1)
     })
 
-    it('should not render a checkbox when missing an eventId', () => {
+    it('should not render a radio when missing an eventId', () => {
       wrapper = shallow(<PayOffender offenderNo="A123" />)
 
-      expect(wrapper.find('Checkbox')).toHaveLength(0)
+      expect(wrapper.find('Radio')).toHaveLength(0)
     })
 
-    it('should not render a checkbox when missing an offenderNo', () => {
+    it('should not render a radio when missing an offenderNo', () => {
       wrapper = shallow(<PayOffender eventId={456} />)
 
-      expect(wrapper.find('Checkbox')).toHaveLength(0)
+      expect(wrapper.find('Radio')).toHaveLength(0)
     })
   })
 
@@ -35,22 +35,22 @@ describe('<PayOffender />', () => {
 
     beforeEach(() => {
       wrapper = shallow(<PayOffender {...props} />)
-      checkbox = wrapper.find('Checkbox')
+      radio = wrapper.find('Radio')
     })
 
-    it('should render a checkbox', () => {
-      expect(wrapper.find('Checkbox')).toHaveLength(1)
+    it('should render a radio', () => {
+      expect(radio).toHaveLength(1)
     })
 
-    describe('when checkbox IS NOT checked and then clicked', () => {
-      it('should mark the checkbox as checked', () => {
+    describe('when radio IS NOT checked and then clicked', () => {
+      it('should mark the radio as checked', () => {
         expect(wrapper.state().checked).toBe(false)
-        checkbox.simulate('change')
+        radio.simulate('change')
         expect(wrapper.state().checked).toBe(true)
       })
 
       it('should call updateAttendance endpoint with correct parameters', () => {
-        checkbox.simulate('change')
+        radio.simulate('change')
         expect(axios.put).toBeCalledWith(
           `/api/updateAttendance?offenderNo=${props.offenderNo}&activityId=${props.eventId}`,
           { eventOutcome: 'ATT', outcomeComment: '', performance: 'STANDARD' }
@@ -59,14 +59,14 @@ describe('<PayOffender />', () => {
       })
     })
 
-    describe('when checkbox IS checked and then clicked', () => {
+    describe('when radio IS checked and then clicked', () => {
       beforeEach(() => {
         wrapper.setState({ checked: true })
-        checkbox = wrapper.find('Checkbox')
-        checkbox.simulate('change')
+        radio = wrapper.find('Radio')
+        radio.simulate('change')
       })
 
-      it('should mark the checkbox as unchecked', () => {
+      it('should mark the radio as unchecked', () => {
         expect(wrapper.state().checked).toBe(false)
       })
 
