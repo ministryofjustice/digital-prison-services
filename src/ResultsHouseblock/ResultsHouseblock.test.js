@@ -166,7 +166,6 @@ const props = {
   showPaymentReasonModal: jest.fn(),
   update: jest.fn(),
   resetErrorDispatch: jest.fn(),
-  locationWithSubLocation: '1',
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -188,7 +187,7 @@ describe('Offender results component Jira NN-843', () => {
         offenderNo="1"
       />
     )
-    expect(component.find('.whereabouts-date').text()).toEqual(`1 - ${longDateFormat} - ED`)
+    expect(component.find('.whereabouts-date').text()).toEqual(`${longDateFormat} - ED`)
 
     const housingLocationSelect = component.find('#housing-location-select')
     expect(housingLocationSelect.some('[value="--"]')).toEqual(true)

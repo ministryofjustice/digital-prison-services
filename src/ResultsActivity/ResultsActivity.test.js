@@ -161,12 +161,11 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
     )
-    expect(component.find('.whereabouts-date').text()).toEqual(`Gym - ${longDateFormat} - ED`)
+    expect(component.find('.whereabouts-date').text()).toEqual(`${longDateFormat} - ED`)
 
     // Dig into the DatePicker component
     const searchDate = component
@@ -328,7 +327,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
@@ -363,7 +361,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
@@ -406,7 +403,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
@@ -437,7 +433,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
@@ -471,7 +466,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
@@ -505,7 +499,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />
@@ -576,7 +569,6 @@ describe('Offender activity list results component', () => {
         setColumnSort={jest.fn()}
         orderField="lastName"
         sortOrder="ASC"
-        activityName="Gym"
         updateAttendanceEnabled={false}
         payable
       />

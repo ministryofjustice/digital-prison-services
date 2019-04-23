@@ -40,7 +40,6 @@ class ResultsHouseblock extends Component {
       sortOrder,
       orderField,
       setColumnSort,
-      locationWithSubLocation,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -227,7 +226,7 @@ class ResultsHouseblock extends Component {
     return (
       <div className="results-houseblock">
         <span className="whereabouts-date print-only">
-          <strong>{locationWithSubLocation}</strong> - {getLongDateFormat(date)} - {period}
+          {getLongDateFormat(date)} - {period}
         </span>
         <hr className="print-only" />
         <form className="no-print">
@@ -273,7 +272,6 @@ ResultsHouseblock.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
-  locationWithSubLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,

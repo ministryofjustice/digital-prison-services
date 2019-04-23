@@ -147,7 +147,6 @@ class ResultsActivityContainer extends Component {
           getActivityList={this.getActivityList}
           resetErrorDispatch={resetErrorDispatch}
           setColumnSort={this.setColumnSort}
-          activityName={activityName}
           payable={payable}
           {...this.props}
         />

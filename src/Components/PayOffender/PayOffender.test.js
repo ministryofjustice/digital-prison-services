@@ -60,15 +60,17 @@ describe('<PayOffender />', () => {
     })
 
     describe('when checkbox IS checked and then clicked', () => {
-      it('should mark the checkbox as unchecked', () => {
+      beforeEach(() => {
         wrapper.setState({ checked: true })
+        checkbox = wrapper.find('Checkbox')
         checkbox.simulate('change')
+      })
+
+      it('should mark the checkbox as unchecked', () => {
         expect(wrapper.state().checked).toBe(false)
       })
 
       it('should not call updateAttendance endpoint', () => {
-        wrapper.setState({ checked: true })
-        checkbox.simulate('change')
         expect(axios.put).not.toBeCalled()
       })
     })

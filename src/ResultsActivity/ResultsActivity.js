@@ -33,7 +33,6 @@ class ResultsActivity extends Component {
       sortOrder,
       orderField,
       setColumnSort,
-      activityName,
       updateAttendanceEnabled,
       payable,
     } = this.props
@@ -187,7 +186,7 @@ class ResultsActivity extends Component {
     return (
       <div className="results-activity">
         <span className="whereabouts-date print-only">
-          <strong>{activityName}</strong> - {getLongDateFormat(date)} - {period}
+          {getLongDateFormat(date)} - {period}
         </span>
         <hr className="print-only" />
         <form className="no-print">
@@ -252,7 +251,6 @@ ResultsActivity.propTypes = {
       comment: PropTypes.string.isRequired,
     })
   ).isRequired,
-  activityName: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
