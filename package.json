@@ -130,7 +130,7 @@
     "style-loader": "^0.21.0",
     "supertest": "^3.1.0",
     "url-loader": "^1.0.1",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^2.1.3",
     "whatwg-fetch": "2.0.4"
   },
@@ -138,13 +138,13 @@
     "start": "node $NODE_DEBUG_OPTION backend/index.js",
     "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ node $NODE_DEBUG_OPTION backend/index.js",
     "build": "webpack --mode=production",
+    "build:analyse": "BUNDLE_ANALYSE=true yarn build",
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
     "record-build-info": "node scripts/record-build-info",
     "plant-beanstalk": "node scripts/plant-beanstalk.js",
     "lint": "node node_modules/eslint/bin/eslint.js src backend",
-    "verify": "yarn lint && yarn test",
-    "view-bundle-stats": "yarn build && webpack-bundle-analyzer build/stats.json"
+    "verify": "yarn lint && yarn test"
   },
   "jest": {
     "collectCoverageFrom": [
