@@ -2,7 +2,7 @@ import React from 'react'
 import renderer from 'react-test-renderer'
 import 'jest-styled-components'
 import { BREAKPOINTS } from '@govuk-react/constants'
-import { MobileOnly, DesktopOnly } from '.'
+import { MobileOnly, DesktopOnly } from './Sizing'
 
 describe('<DesktopOnly />', () => {
   it('Renders correctly at different sizes', () => {

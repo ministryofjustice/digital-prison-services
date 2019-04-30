@@ -1,17 +1,3 @@
-import styled from 'styled-components'
-import { MEDIA_QUERIES } from '@govuk-react/constants'
+import { DesktopOnly, MobileOnly } from './Sizing'
 
-export const MobileOnly = styled.div`
-  display: block;
-  ${MEDIA_QUERIES.DESKTOP} {
-    display: none;
-  }
-`
-
-export const DesktopOnly = styled.div`
-  display: none;
-  ${MEDIA_QUERIES.DESKTOP} {
-    display: block;
-    height: 100%;
-  }
-`
+export { DesktopOnly, MobileOnly }
