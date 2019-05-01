@@ -38,6 +38,7 @@ import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
+import IepHistoryContainer from './IepHistory/IepHistoryContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
 import AdjudicationHistory from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
@@ -307,6 +308,19 @@ class App extends React.Component {
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
+              />
+            )}
+          />
+          <Route
+            exact
+            path={routePaths.iepHistory}
+            render={({ history, match: { params } }) => (
+              <IepHistoryContainer
+                offenderNo={params.offenderNo}
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                history={history}
               />
             )}
           />

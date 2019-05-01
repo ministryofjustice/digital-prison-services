@@ -3,6 +3,7 @@ const asyncMiddleware = require('../middleware/asyncHandler')
 const factory = ({
   activityListService,
   adjudicationHistoryService,
+  iepHistoryService,
   houseblockListService,
   updateAttendanceService,
   establishmentRollService,
@@ -22,6 +23,12 @@ const factory = ({
     const { offenderNumber } = req.params
     const viewModel = await adjudicationHistoryService.getAdjudications(res.locals, offenderNumber, req.query)
     res.set(res.locals.responseHeaders)
+    res.json(viewModel)
+  })
+
+  const getIepHistory = asyncMiddleware(async (req, res) => {
+    const { bookingId } = req.params
+    const viewModel = await iepHistoryService.getIepHistory(res.locals, bookingId)
     res.json(viewModel)
   })
 
@@ -136,6 +143,7 @@ const factory = ({
     globalSearch,
     getMovementsIn,
     getMovementsOut,
+    getIepHistory,
     getOffendersInReception,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
