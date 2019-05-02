@@ -25,7 +25,7 @@ jobs:
           name: Run Tests
           command: |
              set -e
-             yarn test
+             yarn test --maxWorkers=2
       - run: NODE_ENV=production yarn build
       - run: |
              DATE=$(date '+%Y-%m-%d')
