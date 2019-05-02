@@ -27,8 +27,8 @@ const factory = ({
   })
 
   const getIepHistory = asyncMiddleware(async (req, res) => {
-    const { bookingId } = req.params
-    const viewModel = await iepHistoryService.getIepHistory(res.locals, bookingId)
+    const { offenderNo } = req.params
+    const viewModel = await iepHistoryService.getIepHistory(res.locals, offenderNo)
     res.json(viewModel)
   })
 

@@ -1,10 +1,8 @@
-const asyncMiddleware = require('../middleware/asyncHandler')
-
 const getIepHistoryFactory = elite2Api => {
-  const getIepHistory = asyncMiddleware(async (req, res) => {
-    const bookingDetails = await elite2Api.getDetails(res.locals, req.params.offenderNo)
-    const iepSummary = await elite2Api.getIepSummaryWithDetails(res.locals, bookingDetails.bookingId)
-    const response = {
+  const getIepHistory = async ({ context, offenderNo }) => {
+    const bookingDetails = await elite2Api.getDetails(context, offenderNo)
+    const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
+    return {
       currentIepLevel: iepSummary.iepLevel,
       daysOnIepLevel: iepSummary.daysSinceReview,
       currentIepDateTime: iepSummary.iepTime,
@@ -12,8 +10,7 @@ const getIepHistoryFactory = elite2Api => {
       iepHistory: iepSummary.iepDetails,
       offenderName: `${bookingDetails.lastName}, ${bookingDetails.firstName}`,
     }
-    res.json(response)
-  })
+  }
 
   return {
     getIepHistory,
