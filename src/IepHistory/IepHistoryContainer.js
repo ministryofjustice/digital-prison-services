@@ -12,8 +12,8 @@ class IepHistoryContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      iepHistory: [],
-      location: 'IEP history for ',
+      iepSummary: {},
+      location: '',
     }
   }
 
@@ -26,7 +26,7 @@ class IepHistoryContainer extends Component {
   getIepHistory = async () => {
     const { offenderNo, handleError, resetErrorDispatch, setLoadedDispatch } = this.props
     const response = await axios.get(`/api/bookings/${offenderNo}/iepSummary`)
-    this.setState({ iepHistory: response.data })
+    this.setState({ iepSummary: response.data, location: `IEP history for ${response.data.offenderName}` })
 
     try {
       resetErrorDispatch()
@@ -38,11 +38,11 @@ class IepHistoryContainer extends Component {
   }
 
   render() {
-    const { iepHistory, location } = this.state
+    const { iepSummary, location } = this.state
 
     return (
       <Page title={location}>
-        <IepHistory iepHistory={iepHistory} />
+        <IepHistory iepHistory={iepSummary.iepHistory} />
       </Page>
     )
   }
