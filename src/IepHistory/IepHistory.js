@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DateFormatter from '../DateFormatter'
+import DateTimeFormatter from '../DateTimeFormatter'
 
 const IepHistory = ({ iepHistory }) => (
   <React.Fragment>
@@ -18,12 +18,12 @@ const IepHistory = ({ iepHistory }) => (
         {iepHistory.map(row => (
           <tr className="row-gutters" key={row.bookingId}>
             <td className="row-gutters">
-              <DateFormatter isoDate={row.iepTime} />
+              <DateTimeFormatter isoDate={row.iepTime} />
             </td>
             <td className="row-gutters">{row.iepLevel}</td>
             <td className="row-gutters">{row.iepCommentText}</td>
-            <td className="row-gutters">{row.iepEstablishment}</td>
-            <td className="row-gutters">{row.iepStaffMember}</td>
+            <td className="row-gutters">{row.agencyId}</td>
+            <td className="row-gutters">{row.userId}</td>
           </tr>
         ))}
       </tbody>

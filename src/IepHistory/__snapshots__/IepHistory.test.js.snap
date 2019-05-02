@@ -70,7 +70,7 @@ ShallowWrapper {
             <td
               className="row-gutters"
             >
-              <FormattedDate
+              <FormattedDateTime
                 isoDate="2017-08-15T16:04:35"
               />
             </td>
@@ -84,7 +84,9 @@ ShallowWrapper {
             />
             <td
               className="row-gutters"
-            />
+            >
+              LEI
+            </td>
             <td
               className="row-gutters"
             />
@@ -137,7 +139,7 @@ ShallowWrapper {
               <td
                 className="row-gutters"
               >
-                <FormattedDate
+                <FormattedDateTime
                   isoDate="2017-08-15T16:04:35"
                 />
               </td>
@@ -151,7 +153,9 @@ ShallowWrapper {
               />
               <td
                 className="row-gutters"
-              />
+              >
+                LEI
+              </td>
               <td
                 className="row-gutters"
               />
@@ -311,7 +315,7 @@ ShallowWrapper {
                 <td
                   className="row-gutters"
                 >
-                  <FormattedDate
+                  <FormattedDateTime
                     isoDate="2017-08-15T16:04:35"
                   />
                 </td>
@@ -325,7 +329,9 @@ ShallowWrapper {
                 />
                 <td
                   className="row-gutters"
-                />
+                >
+                  LEI
+                </td>
                 <td
                   className="row-gutters"
                 />
@@ -343,7 +349,7 @@ ShallowWrapper {
                   <td
                     className="row-gutters"
                   >
-                    <FormattedDate
+                    <FormattedDateTime
                       isoDate="2017-08-15T16:04:35"
                     />
                   </td>,
@@ -357,7 +363,9 @@ ShallowWrapper {
                   />,
                   <td
                     className="row-gutters"
-                  />,
+                  >
+                    LEI
+                  </td>,
                   <td
                     className="row-gutters"
                   />,
@@ -371,7 +379,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <FormattedDate
+                    "children": <FormattedDateTime
                       isoDate="2017-08-15T16:04:35"
                     />,
                     "className": "row-gutters",
@@ -419,11 +427,11 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": undefined,
+                    "children": "LEI",
                     "className": "row-gutters",
                   },
                   "ref": null,
-                  "rendered": null,
+                  "rendered": "LEI",
                   "type": "td",
                 },
                 Object {
@@ -496,7 +504,7 @@ ShallowWrapper {
               <td
                 className="row-gutters"
               >
-                <FormattedDate
+                <FormattedDateTime
                   isoDate="2017-08-15T16:04:35"
                 />
               </td>
@@ -510,7 +518,9 @@ ShallowWrapper {
               />
               <td
                 className="row-gutters"
-              />
+              >
+                LEI
+              </td>
               <td
                 className="row-gutters"
               />
@@ -563,7 +573,7 @@ ShallowWrapper {
                 <td
                   className="row-gutters"
                 >
-                  <FormattedDate
+                  <FormattedDateTime
                     isoDate="2017-08-15T16:04:35"
                   />
                 </td>
@@ -577,7 +587,9 @@ ShallowWrapper {
                 />
                 <td
                   className="row-gutters"
-                />
+                >
+                  LEI
+                </td>
                 <td
                   className="row-gutters"
                 />
@@ -737,7 +749,7 @@ ShallowWrapper {
                   <td
                     className="row-gutters"
                   >
-                    <FormattedDate
+                    <FormattedDateTime
                       isoDate="2017-08-15T16:04:35"
                     />
                   </td>
@@ -751,7 +763,9 @@ ShallowWrapper {
                   />
                   <td
                     className="row-gutters"
-                  />
+                  >
+                    LEI
+                  </td>
                   <td
                     className="row-gutters"
                   />
@@ -769,7 +783,7 @@ ShallowWrapper {
                     <td
                       className="row-gutters"
                     >
-                      <FormattedDate
+                      <FormattedDateTime
                         isoDate="2017-08-15T16:04:35"
                       />
                     </td>,
@@ -783,7 +797,9 @@ ShallowWrapper {
                     />,
                     <td
                       className="row-gutters"
-                    />,
+                    >
+                      LEI
+                    </td>,
                     <td
                       className="row-gutters"
                     />,
@@ -797,7 +813,7 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
-                      "children": <FormattedDate
+                      "children": <FormattedDateTime
                         isoDate="2017-08-15T16:04:35"
                       />,
                       "className": "row-gutters",
@@ -845,11 +861,11 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
-                      "children": undefined,
+                      "children": "LEI",
                       "className": "row-gutters",
                     },
                     "ref": null,
-                    "rendered": null,
+                    "rendered": "LEI",
                     "type": "td",
                   },
                   Object {
