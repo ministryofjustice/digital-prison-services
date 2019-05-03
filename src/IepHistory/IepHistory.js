@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { H3 } from '@govuk-react/heading'
 import DateTimeFormatter from '../DateTimeFormatter'
 
 const IepHistory = ({ iepHistory }) => (
   <React.Fragment>
+    <H3> IEP history </H3>
     <table className="row-gutters iep-history">
       <thead>
         <tr className="row-gutters">
@@ -16,14 +18,14 @@ const IepHistory = ({ iepHistory }) => (
       </thead>
       <tbody>
         {iepHistory.map(row => (
-          <tr className="row-gutters" key={row.bookingId}>
+          <tr className="row-gutters" key={row.iepTime}>
             <td className="row-gutters">
               <DateTimeFormatter isoDate={row.iepTime} />
             </td>
             <td className="row-gutters">{row.iepLevel}</td>
             <td className="row-gutters">{row.iepCommentText}</td>
-            <td className="row-gutters">{row.agencyId}</td>
-            <td className="row-gutters">{row.userId}</td>
+            <td className="row-gutters">{row.iepEstablishment}</td>
+            <td className="row-gutters">{row.iepStaffMember}</td>
           </tr>
         ))}
       </tbody>

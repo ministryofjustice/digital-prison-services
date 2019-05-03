@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { resetError, setLoaded } from '../redux/actions'
 import Page from '../Components/Page'
 import IepHistory from './IepHistory'
+import CurrentIepLevel from './CurrentIepLevel'
 
 const axios = require('axios')
 
@@ -42,6 +43,7 @@ class IepHistoryContainer extends Component {
 
     return (
       <Page title={location}>
+        <CurrentIepLevel level={iepSummary.currentIepLevel} days={iepSummary.daysOnIepLevel} />
         <IepHistory iepHistory={iepSummary.iepHistory} />
       </Page>
     )

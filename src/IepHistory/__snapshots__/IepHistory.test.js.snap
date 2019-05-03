@@ -84,9 +84,7 @@ ShallowWrapper {
             />
             <td
               className="row-gutters"
-            >
-              LEI
-            </td>
+            />
             <td
               className="row-gutters"
             />
@@ -153,9 +151,7 @@ ShallowWrapper {
               />
               <td
                 className="row-gutters"
-              >
-                LEI
-              </td>
+              />
               <td
                 className="row-gutters"
               />
@@ -329,9 +325,7 @@ ShallowWrapper {
                 />
                 <td
                   className="row-gutters"
-                >
-                  LEI
-                </td>
+                />
                 <td
                   className="row-gutters"
                 />
@@ -342,7 +336,7 @@ ShallowWrapper {
           "rendered": Array [
             Object {
               "instance": null,
-              "key": "-1",
+              "key": "2017-08-15T16:04:35",
               "nodeType": "host",
               "props": Object {
                 "children": Array [
@@ -363,9 +357,7 @@ ShallowWrapper {
                   />,
                   <td
                     className="row-gutters"
-                  >
-                    LEI
-                  </td>,
+                  />,
                   <td
                     className="row-gutters"
                   />,
@@ -427,11 +419,11 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": "LEI",
+                    "children": undefined,
                     "className": "row-gutters",
                   },
                   "ref": null,
-                  "rendered": "LEI",
+                  "rendered": null,
                   "type": "td",
                 },
                 Object {
@@ -518,9 +510,7 @@ ShallowWrapper {
               />
               <td
                 className="row-gutters"
-              >
-                LEI
-              </td>
+              />
               <td
                 className="row-gutters"
               />
@@ -587,9 +577,7 @@ ShallowWrapper {
                 />
                 <td
                   className="row-gutters"
-                >
-                  LEI
-                </td>
+                />
                 <td
                   className="row-gutters"
                 />
@@ -763,9 +751,7 @@ ShallowWrapper {
                   />
                   <td
                     className="row-gutters"
-                  >
-                    LEI
-                  </td>
+                  />
                   <td
                     className="row-gutters"
                   />
@@ -776,7 +762,7 @@ ShallowWrapper {
             "rendered": Array [
               Object {
                 "instance": null,
-                "key": "-1",
+                "key": "2017-08-15T16:04:35",
                 "nodeType": "host",
                 "props": Object {
                   "children": Array [
@@ -797,9 +783,7 @@ ShallowWrapper {
                     />,
                     <td
                       className="row-gutters"
-                    >
-                      LEI
-                    </td>,
+                    />,
                     <td
                       className="row-gutters"
                     />,
@@ -861,11 +845,11 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
-                      "children": "LEI",
+                      "children": undefined,
                       "className": "row-gutters",
                     },
                     "ref": null,
-                    "rendered": "LEI",
+                    "rendered": null,
                     "type": "td",
                   },
                   Object {

@@ -6,14 +6,17 @@ function createIepHistoryReponse() {
     currentIepLevel: 'Standard',
     daysOnIepLevel: 625,
     currentIepDateTime: '2017-08-15T16:04:35',
-    currentIepEstablishment: 'LEI',
+    currentIepEstablishment: 'Leeds',
     iepHistory: [
       {
         bookingId: -1,
-        iepDate: '2017-08-15',
-        iepTime: '2017-08-15T16:04:35',
+        iepDate: '2017-08-13',
+        iepTime: '2017-08-13T16:04:35',
+        iepEstablishment: 'Leeds',
+        iepStaffMember: 'Staff Member',
         agencyId: 'LEI',
         iepLevel: 'Standard',
+        userId: 1,
       },
     ],
     offenderName: 'ANDERSON, ARTHUR',
@@ -23,6 +26,8 @@ function createIepHistoryReponse() {
 beforeEach(() => {
   elite2Api.getDetails = jest.fn()
   elite2Api.getIepSummaryWithDetails = jest.fn()
+  elite2Api.getAgencyDetails = jest.fn()
+  elite2Api.getStaffDetails = jest.fn()
 })
 
 describe('Activity list controller', async () => {
@@ -30,6 +35,15 @@ describe('Activity list controller', async () => {
     elite2Api.getDetails.mockReturnValue({
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
+    })
+
+    elite2Api.getStaffDetails.mockReturnValue({
+      firstName: 'Staff',
+      lastName: 'Member',
+    })
+
+    elite2Api.getAgencyDetails.mockReturnValue({
+      description: 'Leeds',
     })
     elite2Api.getIepSummaryWithDetails.mockReturnValue({
       bookingId: -1,
@@ -44,6 +58,15 @@ describe('Activity list controller', async () => {
           iepTime: '2017-08-15T16:04:35',
           agencyId: 'LEI',
           iepLevel: 'Standard',
+          userId: 1,
+        },
+        {
+          bookingId: -1,
+          iepDate: '2017-08-13',
+          iepTime: '2017-08-13T16:04:35',
+          agencyId: 'LEI',
+          iepLevel: 'Standard',
+          userId: 1,
         },
       ],
     })
