@@ -863,6 +863,15 @@
     "@govuk-react/lib" "^0.7.0"
     govuk-colours "^1.0.3"
 
+"@govuk-react/fieldset@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/fieldset/-/fieldset-0.7.0.tgz#75ff3c69a0c21cb842b604d506642a1fcf4e135c"
+  integrity sha512-j9LkaVC4nd7aOjOjeeDjW0La1oROmWHdadSkSlTfXDj37T6tigA1/+mIFgzfxO4MuwedzIhXR4xdWgqLu0in+g==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/grid-col@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/grid-col/-/grid-col-0.7.0.tgz#6d81d0a53fba9f99a6f6b86411a5cac42c0b2005"
@@ -1037,6 +1046,18 @@
   dependencies:
     "@govuk-react/constants" "^0.7.0"
     "@govuk-react/lib" "^0.7.0"
+
+"@govuk-react/multi-choice@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/multi-choice/-/multi-choice-0.7.0.tgz#789a2744a9fefd8debf682f319574fd31fea77ab"
+  integrity sha512-/XadJFV1pZrq2Yhb+eP1v6J2JsbeHoDPqY2eRQuVQAKaFOukoXA52oWMc2dGBAze+1L1LZK76yowqTpBY4io3g==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/error-text" "^0.7.0"
+    "@govuk-react/hint-text" "^0.7.0"
+    "@govuk-react/label-text" "^0.7.0"
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
 
 "@govuk-react/ordered-list@^0.7.0":
   version "0.7.0"
@@ -4460,6 +4481,11 @@ execa@^1.0.0:
     p-finally "^1.0.0"
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
+
+exenv@^1.2.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+  integrity sha1-KueOhdmJQVhnCwPUe+wfA72Ru50=
 
 exit@^0.1.2:
   version "0.1.2"
@@ -8784,7 +8810,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.4:
+prop-types@^15.5.10, prop-types@^15.5.4:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -9030,6 +9056,16 @@ react-markdown@=3.2:
     unified "^6.1.5"
     unist-util-visit "^1.1.3"
     xtend "^4.0.1"
+
+react-modal@^3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.8.1.tgz#7300f94a6f92a2e17994de0be6ccb61734464c9e"
+  integrity sha512-aLKeZM9pgXpIKVwopRHMuvqKWiBajkqisDA8UzocdCF6S4fyKVfLWmZR5G1Q0ODBxxxxf2XIwiCP8G/11GJAuw==
+  dependencies:
+    exenv "^1.2.0"
+    prop-types "^15.5.10"
+    react-lifecycles-compat "^3.0.0"
+    warning "^3.0.0"
 
 react-onclickoutside@^6.5.0:
   version "6.7.1"

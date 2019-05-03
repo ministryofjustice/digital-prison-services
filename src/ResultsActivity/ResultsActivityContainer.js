@@ -12,11 +12,10 @@ import {
   setOrderField,
   setSearchActivities,
   setSortOrder,
-  showPaymentReasonModal,
 } from '../redux/actions'
-import { getActivityListReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
 import sortActivityData from './activityResultsSorter'
 import Page from '../Components/Page'
+import { isTodayOrAfter } from '../utils'
 
 const axios = require('axios')
 
@@ -136,12 +135,13 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch } = this.props
+    const { resetErrorDispatch, date } = this.props
     const { payable } = this.state
     const activityName = this.getActivityName()
+    const canPrint = isTodayOrAfter(date)
 
     return (
-      <Page title={activityName} alwaysRender>
+      <Page title={activityName} alwaysRender showPrint={canPrint}>
         <ResultsActivity
           handlePrint={this.handlePrint}
           getActivityList={this.getActivityList}
@@ -190,7 +190,6 @@ ResultsActivityContainer.propTypes = {
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
-  showPaymentReasonModal: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
@@ -225,8 +224,6 @@ const mapDispatchToProps = dispatch => ({
   orderDispatch: field => dispatch(setOrderField(field)),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  showPaymentReasonModal: (event, browserEvent) =>
-    dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() })),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
   activityDataDispatch: data => dispatch(setActivityData(data)),

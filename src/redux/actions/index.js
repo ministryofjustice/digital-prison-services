@@ -105,18 +105,6 @@ export const setActivityData = data => ({
   data,
 })
 
-export const showPaymentReasonModal = data => ({
-  type: ActionTypes.SET_SHOW_MODAL,
-  payload: {
-    identifier: 'payment-reason-modal',
-    data,
-  },
-})
-
-export const hideModal = () => ({
-  type: ActionTypes.SET_SHOW_MODAL,
-})
-
 export const setMenuOpen = payload => ({
   type: ActionTypes.SET_MENU_OPEN,
   payload,

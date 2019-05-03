@@ -155,7 +155,6 @@ describe('Offender activity list results component', () => {
         date={date}
         period="ED"
         agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
         setColumnSort={jest.fn()}
@@ -320,7 +319,6 @@ describe('Offender activity list results component', () => {
         getActivityList={jest.fn()}
         period="PM"
         agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
         date=""
         resetErrorDispatch={jest.fn()}
@@ -334,81 +332,6 @@ describe('Offender activity list results component', () => {
     const tr = component.find('tr')
     expect(tr.length).toEqual(1) // table header tr only
     expect(component.find('div.font-small').text()).toEqual('No prisoners found')
-  })
-
-  it('should handle buttons correctly', async () => {
-    const getActivityList = jest.fn()
-
-    const handlePrint = jest.fn()
-    const today = moment().format('DD/MM/YYYY')
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        getActivityList={getActivityList}
-        handlePrint={handlePrint}
-        // handleLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        date={today}
-        period="AM"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
-
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
-
-    component.find('#updateButton').simulate('click')
-    expect(getActivityList).toHaveBeenCalled()
-    expect(handlePrint).not.toHaveBeenCalled()
-    expect(handlePrint).not.toHaveBeenCalled()
-    component
-      .find('#printButton')
-      .at(0)
-      .simulate('click')
-    expect(handlePrint).toHaveBeenCalled()
-  })
-
-  it('should recognise "Today"', async () => {
-    const getActivityList = jest.fn()
-    const handlePrint = jest.fn()
-    const today = 'Today'
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        getActivityList={getActivityList}
-        handlePrint={handlePrint}
-        // handleLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        date={today}
-        period="AM"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
-    // If today, print button is present
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it('should not display print button when date is in the past', async () => {
@@ -427,7 +350,6 @@ describe('Offender activity list results component', () => {
         date={oldDate}
         period="ED"
         agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
         setColumnSort={jest.fn()}
@@ -439,39 +361,6 @@ describe('Offender activity list results component', () => {
     )
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
-  })
-
-  it('should display print button when date is in the future', async () => {
-    const futureDate = moment()
-      .add(1, 'days')
-      .format('DD/MM/YYYY')
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        handleSearch={jest.fn()}
-        handlePrint={jest.fn()}
-        // handleLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        date={futureDate}
-        period="ED"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
-
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it.skip('checkboxes should be read-only when date is over a week ago', async () => {
@@ -493,7 +382,6 @@ describe('Offender activity list results component', () => {
         date={oldDate}
         period="ED"
         agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
         setColumnSort={jest.fn()}
@@ -563,7 +451,6 @@ describe('Offender activity list results component', () => {
         date={oldDate}
         period="ED"
         agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
         user={user}
         resetErrorDispatch={jest.fn()}
         setColumnSort={jest.fn()}

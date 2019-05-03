@@ -19,44 +19,42 @@ const StyledPayOffender = styled.div`
 `
 
 class PayOffender extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      checked: false,
-    }
-  }
-
   payOffender = async () => {
     const { offenderNo, eventId } = this.props
-    const { checked } = this.state
 
-    this.setState({ checked: !checked })
-
-    if (!checked) {
-      try {
-        await axios.put(`/api/updateAttendance?offenderNo=${offenderNo}&activityId=${eventId}`, {
-          eventOutcome: 'ATT',
-          performance: 'STANDARD',
-          outcomeComment: '',
-        })
-      } catch (error) {
-        // do nothing for now
-      }
+    try {
+      await axios.put(`/api/updateAttendance?offenderNo=${offenderNo}&activityId=${eventId}`, {
+        eventOutcome: 'ATT',
+        performance: 'STANDARD',
+        outcomeComment: '',
+      })
+    } catch (error) {
+      // do nothing for now
     }
   }
 
   render() {
     const { offenderNo, eventId } = this.props
-    const { checked } = this.state
 
     if (!offenderNo || !eventId) return null
 
     return (
-      <StyledPayOffender>
-        <Radio onChange={this.payOffender} checked={checked}>
-          <VisuallyHidden>Pay</VisuallyHidden>
-        </Radio>
-      </StyledPayOffender>
+      <React.Fragment>
+        <td>
+          <StyledPayOffender>
+            <Radio onChange={this.payOffender} name="payOptions">
+              <VisuallyHidden>Pay</VisuallyHidden>
+            </Radio>
+          </StyledPayOffender>
+        </td>
+        <td>
+          <StyledPayOffender>
+            <Radio name="payOptions">
+              <VisuallyHidden>Pay</VisuallyHidden>
+            </Radio>
+          </StyledPayOffender>
+        </td>
+      </React.Fragment>
     )
   }
 }

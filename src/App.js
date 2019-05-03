@@ -31,8 +31,6 @@ import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockCon
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
 import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 
-import ModalProvider from './ModalProvider/index'
-import PaymentReasonContainer from './ModalProvider/PaymentReasonModal/PaymentReasonContainer'
 import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
@@ -449,9 +447,6 @@ class App extends React.Component {
               }}
             />
             {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
-            <ModalProvider>
-              <PaymentReasonContainer key="payment-reason-modal" handleError={this.handleError} />
-            </ModalProvider>
             {innerContent}
             <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
           </ScrollToTop>

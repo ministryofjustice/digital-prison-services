@@ -116,11 +116,6 @@ export function app(state = appInitialState, action) {
         ...state,
         validationErrors: null,
       }
-    case ActionTypes.SET_SHOW_MODAL:
-      return {
-        ...state,
-        showModal: action.payload,
-      }
     case ActionTypes.SET_MENU_OPEN:
       return {
         ...state,

@@ -4,7 +4,7 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
-import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
+import { getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -14,11 +14,47 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import PayOffender from '../Components/PayOffender'
+import ResultsFilter from '../Components/ResultsFilter'
+import PayOptions from './elements/PayOptions'
+import PayOtherForm from './elements/PayOtherForm'
+import ModalContainer from '../Components/ModalContainer/ModalContainer'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      payModalOpen: false,
+      activeOffender: {
+        id: undefined,
+        firstName: undefined,
+        lastName: undefined,
+      },
+    }
+  }
+
+  openModal = e => {
+    const { firstName, lastName } = e.target.dataset
+    this.setState({
+      activeOffender: {
+        id: e.target.name,
+        firstName,
+        lastName,
+      },
+      payModalOpen: true,
+    })
+  }
+
+  closeModal = () => {
+    // TODO: Clear the previously checked other input if form input is cancelled
+    this.setState({ payModalOpen: false })
+  }
+
+  onPaySubmit = () => {
+    console.log('Pay submit')
   }
 
   render() {
@@ -27,7 +63,6 @@ class ResultsActivity extends Component {
       date,
       period,
       handlePeriodChange,
-      handlePrint,
       activityData,
       getActivityList,
       sortOrder,
@@ -36,6 +71,8 @@ class ResultsActivity extends Component {
       updateAttendanceEnabled,
       payable,
     } = this.props
+
+    const { payModalOpen, activeOffender } = this.state
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -60,24 +97,6 @@ class ResultsActivity extends Component {
             Evening (ED)
           </option>
         </select>
-      </div>
-    )
-
-    const buttons = (
-      <div id="buttons" className="pure-u-md-12-12 padding-bottom">
-        {isTodayOrAfter(date) && (
-          <button
-            id="printButton"
-            className="button"
-            type="button"
-            onClick={() => {
-              handlePrint()
-            }}
-          >
-            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
-            Print list
-          </button>
-        )}
       </div>
     )
 
@@ -118,7 +137,13 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        {updateAttendanceEnabled && payable && <th className="straight">Pay</th>}
+        {updateAttendanceEnabled &&
+          payable && (
+            <React.Fragment>
+              <th className="straight width10">Pay</th>
+              <th className="straight width10">Other</th>
+            </React.Fragment>
+          )}
       </tr>
     )
 
@@ -175,9 +200,13 @@ class ResultsActivity extends Component {
             </td>
             {updateAttendanceEnabled &&
               payable && (
-                <td className="no-padding checkbox-column">
-                  <PayOffender offenderNo={offenderNo} eventId={eventId} />
-                </td>
+                <PayOptions
+                  offenderNo={offenderNo}
+                  eventId={eventId}
+                  otherHandler={this.openModal}
+                  firstName={firstName}
+                  lastName={lastName}
+                />
               )}
           </tr>
         )
@@ -185,6 +214,9 @@ class ResultsActivity extends Component {
 
     return (
       <div className="results-activity">
+        <ModalContainer isOpen={payModalOpen} onRequestClose={this.closeModal}>
+          <PayOtherForm offender={activeOffender} cancelHandler={this.closeModal} onSubmit={this.onPaySubmit} />
+        </ModalContainer>
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
         </span>
@@ -205,24 +237,24 @@ class ResultsActivity extends Component {
             </button>
           </div>
           <hr />
-          {buttons}
-          <SortLov
-            sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
-            sortColumn={orderField}
-            sortOrder={sortOrder}
-            setColumnSort={setColumnSort}
-          />
+          <ResultsFilter noBorder>
+            <SortLov
+              sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
+              sortColumn={orderField}
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+            />
+          </ResultsFilter>
         </form>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>
           </table>
-          {!offenders || offenders.length === 0 ? (
-            <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
-          ) : (
-            <div className="padding-top"> {buttons} </div>
-          )}
+          {!offenders ||
+            (offenders.length === 0 && (
+              <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
+            ))}
         </div>
       </div>
     )
@@ -231,7 +263,6 @@ class ResultsActivity extends Component {
 
 ResultsActivity.propTypes = {
   getActivityList: PropTypes.func.isRequired,
-  handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
