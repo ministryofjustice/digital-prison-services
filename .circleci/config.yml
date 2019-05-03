@@ -25,7 +25,7 @@ jobs:
           name: Run Tests
           command: |
              set -e
-             yarn test
+             yarn test --maxWorkers=2
       - run: NODE_ENV=production yarn build
       - run: |
              DATE=$(date '+%Y-%m-%d')
@@ -100,7 +100,6 @@ jobs:
              fi
 
              docker build --rm=false . \
-                 --build-arg CLIENT=hmpps \
                  --build-arg BUILD_NUMBER=$VERSION \
                  --build-arg GIT_REF=$GIT_REF \
                  --build-arg GIT_DATE=$GIT_DATE \
