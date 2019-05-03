@@ -9,4 +9,5 @@ export default {
   uploadOffenders: '/bulk-appointments/upload-offenders',
   bulkAppointments: '/add-bulk-appointments',
   bulkAppointmentsAddPrisoners: '/add-bulk-appointments/add-prisoners',
+  adjudications: '/adjudications/:offenderNo',
 }
