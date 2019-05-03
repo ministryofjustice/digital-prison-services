@@ -1,36 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { H3 } from '@govuk-react/heading'
-import DateTimeFormatter from '../DateTimeFormatter'
+import Table from '@govuk-react/table'
+import moment from 'moment'
 
 const IepHistory = ({ iepHistory }) => (
-  <React.Fragment>
-    <H3> IEP history </H3>
-    <table className="row-gutters iep-history">
-      <thead>
-        <tr className="row-gutters">
-          <th className="straight width10">Date and Time</th>
-          <th className="straight width10">IEP Description</th>
-          <th className="straight width10">Comments</th>
-          <th className="straight width10">Establishment</th>
-          <th className="straight width10">Staff member</th>
-        </tr>
-      </thead>
-      <tbody>
-        {iepHistory.map(row => (
-          <tr className="row-gutters" key={row.iepTime}>
-            <td className="row-gutters">
-              <DateTimeFormatter isoDate={row.iepTime} />
-            </td>
-            <td className="row-gutters">{row.iepLevel}</td>
-            <td className="row-gutters">{row.iepCommentText}</td>
-            <td className="row-gutters">{row.iepEstablishment}</td>
-            <td className="row-gutters">{row.iepStaffMember}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </React.Fragment>
+  <Table caption="IEP history">
+    <Table.Row>
+      <Table.CellHeader>Date and Time</Table.CellHeader>
+      <Table.CellHeader>IEP Description</Table.CellHeader>
+      <Table.CellHeader>Comments</Table.CellHeader>
+      <Table.CellHeader>Establishment</Table.CellHeader>
+      <Table.CellHeader>Staff member</Table.CellHeader>
+    </Table.Row>
+    {iepHistory.map(row => (
+      <Table.Row key={row.iepTime}>
+        <Table.Cell>{moment(row.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+        <Table.Cell>{row.iepLevel}</Table.Cell>
+        <Table.Cell>{row.iepCommentText}</Table.Cell>
+        <Table.Cell>{row.iepEstablishment}</Table.Cell>
+        <Table.Cell>{row.iepStaffMember}</Table.Cell>
+      </Table.Row>
+    ))}
+  </Table>
 )
 
 IepHistory.propTypes = {

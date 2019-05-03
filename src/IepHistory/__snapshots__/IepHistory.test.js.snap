@@ -29,425 +29,372 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "function",
     "props": Object {
-      "children": <table
-        className="row-gutters iep-history"
-      >
-        <thead>
-          <tr
-            className="row-gutters"
-          >
-            <th
-              className="straight width10"
-            >
-              Date and Time
-            </th>
-            <th
-              className="straight width10"
-            >
-              IEP Description
-            </th>
-            <th
-              className="straight width10"
-            >
-              Comments
-            </th>
-            <th
-              className="straight width10"
-            >
-              Establishment
-            </th>
-            <th
-              className="straight width10"
-            >
-              Staff member
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            className="row-gutters"
-          >
-            <td
-              className="row-gutters"
-            >
-              <FormattedDateTime
-                isoDate="2017-08-15T16:04:35"
-              />
-            </td>
-            <td
-              className="row-gutters"
-            >
+      "body": undefined,
+      "caption": "IEP history",
+      "children": Array [
+        <UNDEFINED>
+          <CellHeader>
+            Date and Time
+          </CellHeader>
+          <CellHeader>
+            IEP Description
+          </CellHeader>
+          <CellHeader>
+            Comments
+          </CellHeader>
+          <CellHeader>
+            Establishment
+          </CellHeader>
+          <CellHeader>
+            Staff member
+          </CellHeader>
+        </UNDEFINED>,
+        Array [
+          <UNDEFINED>
+            <UNDEFINED>
+              15/08/2017 - 16:04
+            </UNDEFINED>
+            <UNDEFINED>
               Standard
-            </td>
-            <td
-              className="row-gutters"
-            />
-            <td
-              className="row-gutters"
-            />
-            <td
-              className="row-gutters"
-            />
-          </tr>
-        </tbody>
-      </table>,
+            </UNDEFINED>
+            <UNDEFINED />
+            <UNDEFINED />
+            <UNDEFINED />
+          </UNDEFINED>,
+        ],
+      ],
+      "head": undefined,
     },
     "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <thead>
-            <tr
-              className="row-gutters"
-            >
-              <th
-                className="straight width10"
-              >
-                Date and Time
-              </th>
-              <th
-                className="straight width10"
-              >
-                IEP Description
-              </th>
-              <th
-                className="straight width10"
-              >
-                Comments
-              </th>
-              <th
-                className="straight width10"
-              >
-                Establishment
-              </th>
-              <th
-                className="straight width10"
-              >
-                Staff member
-              </th>
-            </tr>
-          </thead>,
-          <tbody>
-            <tr
-              className="row-gutters"
-            >
-              <td
-                className="row-gutters"
-              >
-                <FormattedDateTime
-                  isoDate="2017-08-15T16:04:35"
-                />
-              </td>
-              <td
-                className="row-gutters"
-              >
-                Standard
-              </td>
-              <td
-                className="row-gutters"
-              />
-              <td
-                className="row-gutters"
-              />
-              <td
-                className="row-gutters"
-              />
-            </tr>
-          </tbody>,
-        ],
-        "className": "row-gutters iep-history",
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <tr
-              className="row-gutters"
-            >
-              <th
-                className="straight width10"
-              >
-                Date and Time
-              </th>
-              <th
-                className="straight width10"
-              >
-                IEP Description
-              </th>
-              <th
-                className="straight width10"
-              >
-                Comments
-              </th>
-              <th
-                className="straight width10"
-              >
-                Establishment
-              </th>
-              <th
-                className="straight width10"
-              >
-                Staff member
-              </th>
-            </tr>,
-          },
-          "ref": null,
-          "rendered": Object {
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "children": Array [
+            <CellHeader>
+              Date and Time
+            </CellHeader>,
+            <CellHeader>
+              IEP Description
+            </CellHeader>,
+            <CellHeader>
+              Comments
+            </CellHeader>,
+            <CellHeader>
+              Establishment
+            </CellHeader>,
+            <CellHeader>
+              Staff member
+            </CellHeader>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "host",
+            "nodeType": "function",
             "props": Object {
-              "children": Array [
-                <th
-                  className="straight width10"
-                >
-                  Date and Time
-                </th>,
-                <th
-                  className="straight width10"
-                >
-                  IEP Description
-                </th>,
-                <th
-                  className="straight width10"
-                >
-                  Comments
-                </th>,
-                <th
-                  className="straight width10"
-                >
-                  Establishment
-                </th>,
-                <th
-                  className="straight width10"
-                >
-                  Staff member
-                </th>,
-              ],
-              "className": "row-gutters",
+              "children": "Date and Time",
             },
             "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "Date and Time",
-                  "className": "straight width10",
-                },
-                "ref": null,
-                "rendered": "Date and Time",
-                "type": "th",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "IEP Description",
-                  "className": "straight width10",
-                },
-                "ref": null,
-                "rendered": "IEP Description",
-                "type": "th",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "Comments",
-                  "className": "straight width10",
-                },
-                "ref": null,
-                "rendered": "Comments",
-                "type": "th",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "Establishment",
-                  "className": "straight width10",
-                },
-                "ref": null,
-                "rendered": "Establishment",
-                "type": "th",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "Staff member",
-                  "className": "straight width10",
-                },
-                "ref": null,
-                "rendered": "Staff member",
-                "type": "th",
-              },
-            ],
-            "type": "tr",
+            "rendered": "Date and Time",
+            "type": [Function],
           },
-          "type": "thead",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <tr
-                className="row-gutters"
-              >
-                <td
-                  className="row-gutters"
-                >
-                  <FormattedDateTime
-                    isoDate="2017-08-15T16:04:35"
-                  />
-                </td>
-                <td
-                  className="row-gutters"
-                >
-                  Standard
-                </td>
-                <td
-                  className="row-gutters"
-                />
-                <td
-                  className="row-gutters"
-                />
-                <td
-                  className="row-gutters"
-                />
-              </tr>,
-            ],
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": "2017-08-15T16:04:35",
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <td
-                    className="row-gutters"
-                  >
-                    <FormattedDateTime
-                      isoDate="2017-08-15T16:04:35"
-                    />
-                  </td>,
-                  <td
-                    className="row-gutters"
-                  >
-                    Standard
-                  </td>,
-                  <td
-                    className="row-gutters"
-                  />,
-                  <td
-                    className="row-gutters"
-                  />,
-                  <td
-                    className="row-gutters"
-                  />,
-                ],
-                "className": "row-gutters",
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedDateTime
-                      isoDate="2017-08-15T16:04:35"
-                    />,
-                    "className": "row-gutters",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "function",
-                    "props": Object {
-                      "isoDate": "2017-08-15T16:04:35",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "td",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "Standard",
-                    "className": "row-gutters",
-                  },
-                  "ref": null,
-                  "rendered": "Standard",
-                  "type": "td",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": undefined,
-                    "className": "row-gutters",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": "td",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": undefined,
-                    "className": "row-gutters",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": "td",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": undefined,
-                    "className": "row-gutters",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": "td",
-                },
-              ],
-              "type": "tr",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "IEP Description",
             },
-          ],
-          "type": "tbody",
+            "ref": null,
+            "rendered": "IEP Description",
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "Comments",
+            },
+            "ref": null,
+            "rendered": "Comments",
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "Establishment",
+            },
+            "ref": null,
+            "rendered": "Establishment",
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "Staff member",
+            },
+            "ref": null,
+            "rendered": "Staff member",
+            "type": [Function],
+          },
+        ],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-ifAKCX",
+            "isStatic": true,
+            "rules": Array [
+              "",
+            ],
+          },
+          "displayName": "styled.tr",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-ifAKCX",
+          "target": "tr",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
         },
-      ],
-      "type": "table",
-    },
-    "type": Symbol(react.fragment),
+      },
+      Object {
+        "instance": null,
+        "key": "2017-08-15T16:04:35",
+        "nodeType": "function",
+        "props": Object {
+          "children": Array [
+            <UNDEFINED>
+              15/08/2017 - 16:04
+            </UNDEFINED>,
+            <UNDEFINED>
+              Standard
+            </UNDEFINED>,
+            <UNDEFINED />,
+            <UNDEFINED />,
+            <UNDEFINED />,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "15/08/2017 - 16:04",
+            },
+            "ref": null,
+            "rendered": "15/08/2017 - 16:04",
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-bxivhb",
+                "isStatic": false,
+                "rules": Array [
+                  [Function],
+                  [Function],
+                  [Function],
+                ],
+              },
+              "displayName": "styled.td",
+              "foldedComponentIds": Array [],
+              "propTypes": Object {
+                "alignRight": [Function],
+                "children": [Function],
+                "isHeader": [Function],
+                "numeric": [Function],
+              },
+              "render": [Function],
+              "styledComponentId": "sc-bxivhb",
+              "target": "td",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": "Standard",
+            },
+            "ref": null,
+            "rendered": "Standard",
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-bxivhb",
+                "isStatic": false,
+                "rules": Array [
+                  [Function],
+                  [Function],
+                  [Function],
+                ],
+              },
+              "displayName": "styled.td",
+              "foldedComponentIds": Array [],
+              "propTypes": Object {
+                "alignRight": [Function],
+                "children": [Function],
+                "isHeader": [Function],
+                "numeric": [Function],
+              },
+              "render": [Function],
+              "styledComponentId": "sc-bxivhb",
+              "target": "td",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-bxivhb",
+                "isStatic": false,
+                "rules": Array [
+                  [Function],
+                  [Function],
+                  [Function],
+                ],
+              },
+              "displayName": "styled.td",
+              "foldedComponentIds": Array [],
+              "propTypes": Object {
+                "alignRight": [Function],
+                "children": [Function],
+                "isHeader": [Function],
+                "numeric": [Function],
+              },
+              "render": [Function],
+              "styledComponentId": "sc-bxivhb",
+              "target": "td",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-bxivhb",
+                "isStatic": false,
+                "rules": Array [
+                  [Function],
+                  [Function],
+                  [Function],
+                ],
+              },
+              "displayName": "styled.td",
+              "foldedComponentIds": Array [],
+              "propTypes": Object {
+                "alignRight": [Function],
+                "children": [Function],
+                "isHeader": [Function],
+                "numeric": [Function],
+              },
+              "render": [Function],
+              "styledComponentId": "sc-bxivhb",
+              "target": "td",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-bxivhb",
+                "isStatic": false,
+                "rules": Array [
+                  [Function],
+                  [Function],
+                  [Function],
+                ],
+              },
+              "displayName": "styled.td",
+              "foldedComponentIds": Array [],
+              "propTypes": Object {
+                "alignRight": [Function],
+                "children": [Function],
+                "isHeader": [Function],
+                "numeric": [Function],
+              },
+              "render": [Function],
+              "styledComponentId": "sc-bxivhb",
+              "target": "td",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
+          },
+        ],
+        "type": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-ifAKCX",
+            "isStatic": true,
+            "rules": Array [
+              "",
+            ],
+          },
+          "displayName": "styled.tr",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-ifAKCX",
+          "target": "tr",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        },
+      },
+    ],
+    "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
@@ -455,425 +402,372 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "function",
       "props": Object {
-        "children": <table
-          className="row-gutters iep-history"
-        >
-          <thead>
-            <tr
-              className="row-gutters"
-            >
-              <th
-                className="straight width10"
-              >
-                Date and Time
-              </th>
-              <th
-                className="straight width10"
-              >
-                IEP Description
-              </th>
-              <th
-                className="straight width10"
-              >
-                Comments
-              </th>
-              <th
-                className="straight width10"
-              >
-                Establishment
-              </th>
-              <th
-                className="straight width10"
-              >
-                Staff member
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              className="row-gutters"
-            >
-              <td
-                className="row-gutters"
-              >
-                <FormattedDateTime
-                  isoDate="2017-08-15T16:04:35"
-                />
-              </td>
-              <td
-                className="row-gutters"
-              >
+        "body": undefined,
+        "caption": "IEP history",
+        "children": Array [
+          <UNDEFINED>
+            <CellHeader>
+              Date and Time
+            </CellHeader>
+            <CellHeader>
+              IEP Description
+            </CellHeader>
+            <CellHeader>
+              Comments
+            </CellHeader>
+            <CellHeader>
+              Establishment
+            </CellHeader>
+            <CellHeader>
+              Staff member
+            </CellHeader>
+          </UNDEFINED>,
+          Array [
+            <UNDEFINED>
+              <UNDEFINED>
+                15/08/2017 - 16:04
+              </UNDEFINED>
+              <UNDEFINED>
                 Standard
-              </td>
-              <td
-                className="row-gutters"
-              />
-              <td
-                className="row-gutters"
-              />
-              <td
-                className="row-gutters"
-              />
-            </tr>
-          </tbody>
-        </table>,
+              </UNDEFINED>
+              <UNDEFINED />
+              <UNDEFINED />
+              <UNDEFINED />
+            </UNDEFINED>,
+          ],
+        ],
+        "head": undefined,
       },
       "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <thead>
-              <tr
-                className="row-gutters"
-              >
-                <th
-                  className="straight width10"
-                >
-                  Date and Time
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  IEP Description
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  Comments
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  Establishment
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  Staff member
-                </th>
-              </tr>
-            </thead>,
-            <tbody>
-              <tr
-                className="row-gutters"
-              >
-                <td
-                  className="row-gutters"
-                >
-                  <FormattedDateTime
-                    isoDate="2017-08-15T16:04:35"
-                  />
-                </td>
-                <td
-                  className="row-gutters"
-                >
-                  Standard
-                </td>
-                <td
-                  className="row-gutters"
-                />
-                <td
-                  className="row-gutters"
-                />
-                <td
-                  className="row-gutters"
-                />
-              </tr>
-            </tbody>,
-          ],
-          "className": "row-gutters iep-history",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <tr
-                className="row-gutters"
-              >
-                <th
-                  className="straight width10"
-                >
-                  Date and Time
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  IEP Description
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  Comments
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  Establishment
-                </th>
-                <th
-                  className="straight width10"
-                >
-                  Staff member
-                </th>
-              </tr>,
-            },
-            "ref": null,
-            "rendered": Object {
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <CellHeader>
+                Date and Time
+              </CellHeader>,
+              <CellHeader>
+                IEP Description
+              </CellHeader>,
+              <CellHeader>
+                Comments
+              </CellHeader>,
+              <CellHeader>
+                Establishment
+              </CellHeader>,
+              <CellHeader>
+                Staff member
+              </CellHeader>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "host",
+              "nodeType": "function",
               "props": Object {
-                "children": Array [
-                  <th
-                    className="straight width10"
-                  >
-                    Date and Time
-                  </th>,
-                  <th
-                    className="straight width10"
-                  >
-                    IEP Description
-                  </th>,
-                  <th
-                    className="straight width10"
-                  >
-                    Comments
-                  </th>,
-                  <th
-                    className="straight width10"
-                  >
-                    Establishment
-                  </th>,
-                  <th
-                    className="straight width10"
-                  >
-                    Staff member
-                  </th>,
-                ],
-                "className": "row-gutters",
+                "children": "Date and Time",
               },
               "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "Date and Time",
-                    "className": "straight width10",
-                  },
-                  "ref": null,
-                  "rendered": "Date and Time",
-                  "type": "th",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "IEP Description",
-                    "className": "straight width10",
-                  },
-                  "ref": null,
-                  "rendered": "IEP Description",
-                  "type": "th",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "Comments",
-                    "className": "straight width10",
-                  },
-                  "ref": null,
-                  "rendered": "Comments",
-                  "type": "th",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "Establishment",
-                    "className": "straight width10",
-                  },
-                  "ref": null,
-                  "rendered": "Establishment",
-                  "type": "th",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "Staff member",
-                    "className": "straight width10",
-                  },
-                  "ref": null,
-                  "rendered": "Staff member",
-                  "type": "th",
-                },
-              ],
-              "type": "tr",
+              "rendered": "Date and Time",
+              "type": [Function],
             },
-            "type": "thead",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <tr
-                  className="row-gutters"
-                >
-                  <td
-                    className="row-gutters"
-                  >
-                    <FormattedDateTime
-                      isoDate="2017-08-15T16:04:35"
-                    />
-                  </td>
-                  <td
-                    className="row-gutters"
-                  >
-                    Standard
-                  </td>
-                  <td
-                    className="row-gutters"
-                  />
-                  <td
-                    className="row-gutters"
-                  />
-                  <td
-                    className="row-gutters"
-                  />
-                </tr>,
-              ],
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": "2017-08-15T16:04:35",
-                "nodeType": "host",
-                "props": Object {
-                  "children": Array [
-                    <td
-                      className="row-gutters"
-                    >
-                      <FormattedDateTime
-                        isoDate="2017-08-15T16:04:35"
-                      />
-                    </td>,
-                    <td
-                      className="row-gutters"
-                    >
-                      Standard
-                    </td>,
-                    <td
-                      className="row-gutters"
-                    />,
-                    <td
-                      className="row-gutters"
-                    />,
-                    <td
-                      className="row-gutters"
-                    />,
-                  ],
-                  "className": "row-gutters",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedDateTime
-                        isoDate="2017-08-15T16:04:35"
-                      />,
-                      "className": "row-gutters",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "function",
-                      "props": Object {
-                        "isoDate": "2017-08-15T16:04:35",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "td",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": "Standard",
-                      "className": "row-gutters",
-                    },
-                    "ref": null,
-                    "rendered": "Standard",
-                    "type": "td",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": undefined,
-                      "className": "row-gutters",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": "td",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": undefined,
-                      "className": "row-gutters",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": "td",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": undefined,
-                      "className": "row-gutters",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": "td",
-                  },
-                ],
-                "type": "tr",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "IEP Description",
               },
-            ],
-            "type": "tbody",
+              "ref": null,
+              "rendered": "IEP Description",
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "Comments",
+              },
+              "ref": null,
+              "rendered": "Comments",
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "Establishment",
+              },
+              "ref": null,
+              "rendered": "Establishment",
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "Staff member",
+              },
+              "ref": null,
+              "rendered": "Staff member",
+              "type": [Function],
+            },
+          ],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-ifAKCX",
+              "isStatic": true,
+              "rules": Array [
+                "",
+              ],
+            },
+            "displayName": "styled.tr",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-ifAKCX",
+            "target": "tr",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
           },
-        ],
-        "type": "table",
-      },
-      "type": Symbol(react.fragment),
+        },
+        Object {
+          "instance": null,
+          "key": "2017-08-15T16:04:35",
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <UNDEFINED>
+                15/08/2017 - 16:04
+              </UNDEFINED>,
+              <UNDEFINED>
+                Standard
+              </UNDEFINED>,
+              <UNDEFINED />,
+              <UNDEFINED />,
+              <UNDEFINED />,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "15/08/2017 - 16:04",
+              },
+              "ref": null,
+              "rendered": "15/08/2017 - 16:04",
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bxivhb",
+                  "isStatic": false,
+                  "rules": Array [
+                    [Function],
+                    [Function],
+                    [Function],
+                  ],
+                },
+                "displayName": "styled.td",
+                "foldedComponentIds": Array [],
+                "propTypes": Object {
+                  "alignRight": [Function],
+                  "children": [Function],
+                  "isHeader": [Function],
+                  "numeric": [Function],
+                },
+                "render": [Function],
+                "styledComponentId": "sc-bxivhb",
+                "target": "td",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": "Standard",
+              },
+              "ref": null,
+              "rendered": "Standard",
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bxivhb",
+                  "isStatic": false,
+                  "rules": Array [
+                    [Function],
+                    [Function],
+                    [Function],
+                  ],
+                },
+                "displayName": "styled.td",
+                "foldedComponentIds": Array [],
+                "propTypes": Object {
+                  "alignRight": [Function],
+                  "children": [Function],
+                  "isHeader": [Function],
+                  "numeric": [Function],
+                },
+                "render": [Function],
+                "styledComponentId": "sc-bxivhb",
+                "target": "td",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": undefined,
+              },
+              "ref": null,
+              "rendered": null,
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bxivhb",
+                  "isStatic": false,
+                  "rules": Array [
+                    [Function],
+                    [Function],
+                    [Function],
+                  ],
+                },
+                "displayName": "styled.td",
+                "foldedComponentIds": Array [],
+                "propTypes": Object {
+                  "alignRight": [Function],
+                  "children": [Function],
+                  "isHeader": [Function],
+                  "numeric": [Function],
+                },
+                "render": [Function],
+                "styledComponentId": "sc-bxivhb",
+                "target": "td",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": undefined,
+              },
+              "ref": null,
+              "rendered": null,
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bxivhb",
+                  "isStatic": false,
+                  "rules": Array [
+                    [Function],
+                    [Function],
+                    [Function],
+                  ],
+                },
+                "displayName": "styled.td",
+                "foldedComponentIds": Array [],
+                "propTypes": Object {
+                  "alignRight": [Function],
+                  "children": [Function],
+                  "isHeader": [Function],
+                  "numeric": [Function],
+                },
+                "render": [Function],
+                "styledComponentId": "sc-bxivhb",
+                "target": "td",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": undefined,
+              },
+              "ref": null,
+              "rendered": null,
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bxivhb",
+                  "isStatic": false,
+                  "rules": Array [
+                    [Function],
+                    [Function],
+                    [Function],
+                  ],
+                },
+                "displayName": "styled.td",
+                "foldedComponentIds": Array [],
+                "propTypes": Object {
+                  "alignRight": [Function],
+                  "children": [Function],
+                  "isHeader": [Function],
+                  "numeric": [Function],
+                },
+                "render": [Function],
+                "styledComponentId": "sc-bxivhb",
+                "target": "td",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
+            },
+          ],
+          "type": Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-ifAKCX",
+              "isStatic": true,
+              "rules": Array [
+                "",
+              ],
+            },
+            "displayName": "styled.tr",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-ifAKCX",
+            "target": "tr",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          },
+        },
+      ],
+      "type": [Function],
     },
   ],
   Symbol(enzyme.__options__): Object {
