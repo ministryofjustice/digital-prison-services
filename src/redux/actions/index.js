@@ -127,6 +127,26 @@ export const setEstablishmentRollData = data => ({
   data,
 })
 
+export const setAdjudicationHistoryResults = results => ({
+  type: ActionTypes.SET_ADJUDICATION_HISTORY_RESULTS,
+  results,
+})
+
+export const setAdjudicationHistoryFilter = fields => ({
+  type: ActionTypes.SET_ADJUDICATION_HISTORY_FILTER,
+  fields,
+})
+
+export const setAdjudicationHistoryPageNumber = number => ({
+  type: ActionTypes.SET_ADJUDICATION_HISTORY_PAGE_NUMBER,
+  number,
+})
+
+export const setAdjudicationHistoryPageSize = size => ({
+  type: ActionTypes.SET_ADJUDICATION_HISTORY_PAGE_SIZE,
+  size,
+})
+
 export const setGlobalSearchText = searchText => ({
   type: ActionTypes.SET_GLOBAL_SEARCH_TEXT,
   searchText,

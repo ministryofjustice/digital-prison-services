@@ -450,6 +450,40 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
+    def stubAdjudicationHistory(offenderNo, response, queryParams = '') {
+        final totalRecords = String.valueOf(response.size())
+        this.stubFor(
+                get("/api/offenders/${offenderNo}/adjudications" + queryParams)
+                        .willReturn(
+                                aResponse()
+                                        .withBody(JsonOutput.toJson(response))
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withHeader('total-records', totalRecords)
+                                        .withHeader('page-limit', resultsPerPage.toString())
+                                        .withHeader('page-offset', '0')
+                                        .withStatus(200)))
+
+        this.stubFor(
+                get("/api/reference-domains/domains/OIC_FINDING")
+                        .willReturn(
+                                aResponse()
+                                        .withBody(JsonOutput.toJson([
+                                                [
+                                                    domain: 'OIC_FINDING',
+                                                    code: 'GUILTY',
+                                                    description: 'Guilty',
+                                                ],
+                                                [
+                                                    domain: 'OIC_FINDING',
+                                                    code: 'NOT_GUILTY',
+                                                    description: 'Not Guilty',
+                                                ],
+                                        ]))
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200)))
+    }
+
+
     def stubRecentMovements(movements = []) {
         this.stubFor(
                 post("/api/movements/offenders")
