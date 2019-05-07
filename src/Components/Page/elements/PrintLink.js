@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FOCUS_COLOUR, LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import { FOCUS_WIDTH, BREAKPOINTS } from '@govuk-react/constants'
@@ -33,10 +34,18 @@ const StyledPrintLink = styled.div`
   }
 `
 
-const PrintLink = () => (
-  <StyledPrintLink {...linkOnClick(() => window.print())}>
+const PrintLink = ({ bottom }) => (
+  <StyledPrintLink {...linkOnClick(() => window.print())} bottom={bottom} data-qa="print-link">
     <span>Print this page</span>
   </StyledPrintLink>
 )
+
+PrintLink.propTypes = {
+  bottom: PropTypes.bool,
+}
+
+PrintLink.defaultProps = {
+  bottom: false,
+}
 
 export default PrintLink

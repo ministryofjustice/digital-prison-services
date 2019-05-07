@@ -20,7 +20,7 @@ class ActivityPage extends DatePickerPage {
 
         form { $('form')}
         updateButton { $('#updateButton') }
-        printButton { $('#printButton') }
+        printLink { $("[data-qa='print-link']") }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
         bodyRows { $('table.row-gutters tr', 1..-1) }
         locations { bodyRows*.$('td', 1)*.text() }

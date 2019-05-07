@@ -39,8 +39,8 @@ class ActivitySpecification extends BrowserReportingSpec {
         then: 'The activity list is displayed'
         at ActivityPage
         activityTitle == 'loc2'
-        printButton[0].displayed
-        printButton[1].displayed
+        printLink[0].displayed
+        printLink[1].displayed
 
         tableRows.size() == 6
 

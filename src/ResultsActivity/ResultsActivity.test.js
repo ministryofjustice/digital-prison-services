@@ -334,35 +334,6 @@ describe('Offender activity list results component', () => {
     expect(component.find('div.font-small').text()).toEqual('No prisoners found')
   })
 
-  it('should not display print button when date is in the past', async () => {
-    const oldDate = '25/05/2018'
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        handlePrint={jest.fn()}
-        // handleLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        date={oldDate}
-        period="ED"
-        agencyId={PRISON}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
-
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
-  })
-
   it.skip('checkboxes should be read-only when date is over a week ago', async () => {
     const handleSearch = jest.fn()
     const handlePrint = jest.fn()
