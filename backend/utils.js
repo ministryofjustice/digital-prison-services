@@ -29,6 +29,12 @@ const isViewableFlag = code => ['HA', 'XEL'].includes(code)
 
 const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${item}`).join('&')
 
+const mapToQueryString = params =>
+  Object.keys(params)
+    .filter(key => params[key])
+    .map(key => `${key}=${encodeURIComponent(params[key])}`)
+    .join('&')
+
 const toMap = (key, array) =>
   array.reduce((map, current) => {
     if (map.has(current[key]) === false) {
@@ -44,5 +50,6 @@ module.exports = {
   capitalize,
   isViewableFlag,
   arrayToQueryString,
+  mapToQueryString,
   toMap,
 }

@@ -1,5 +1,5 @@
 const contextProperties = require('../contextProperties')
-const { arrayToQueryString } = require('../utils')
+const { arrayToQueryString, mapToQueryString } = require('../utils')
 
 const elite2ApiFactory = client => {
   const processResponse = context => response => {
@@ -110,6 +110,11 @@ const elite2ApiFactory = client => {
 
   const getAppointmentTypes = context => get(context, 'api/reference-domains/scheduleReasons?eventType=APP')
 
+  const getAdjudicationFindingTypes = context => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
+
+  const getAdjudications = (context, offenderNumber, params) =>
+    get(context, `api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`)
+
   const addBulkAppointments = (context, body) => post(context, 'api/appointments', body)
 
   return {
@@ -149,6 +154,8 @@ const elite2ApiFactory = client => {
     getBasicInmateDetailsForOffenders,
     getLocationsForAppointments,
     getAppointmentTypes,
+    getAdjudicationFindingTypes,
+    getAdjudications,
     addBulkAppointments,
   }
 }
