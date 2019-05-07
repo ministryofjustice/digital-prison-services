@@ -3,32 +3,36 @@ import PropTypes from 'prop-types'
 import { H4 } from '@govuk-react/heading'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import DateFormatter from '../DateFormatter'
 
-const CurrentIepLevel = ({ level, days }) => (
+const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
   <React.Fragment>
     <GridRow>
       <GridCol setWidth="one-quarter">
-        <H4>Current IEP level</H4>
+        <strong className="label">Current IEP level</strong>
+        <div>{level}</div>
       </GridCol>
       <GridCol setWidth="one-quarter">
-        <H4>Days since review</H4>
+        <strong className="label">Days since review</strong>
+        <div>{days}</div>
       </GridCol>
       <GridCol setWidth="one-quarter">
-        <H4>Date of next review</H4>
+        <strong className="label">Date of next review</strong>
+        <div>{nextReviewDate}</div>
       </GridCol>
-    </GridRow>
-    <GridRow>
-      <GridCol setWidth="one-quarter">{level}</GridCol>
-      <GridCol setWidth="one-quarter">{days}</GridCol>
-      <GridCol setWidth="one-quarter" />
     </GridRow>
   </React.Fragment>
 )
 
 CurrentIepLevel.propTypes = {
-  level: PropTypes.string.isRequired,
-  days: PropTypes.number.isRequired,
+  level: PropTypes.string,
+  days: PropTypes.number,
+  nextReviewDate: PropTypes.string,
+}
+
+CurrentIepLevel.defaultProps = {
+  level: '',
+  days: 0,
+  nextReviewDate: '',
 }
 
 export default CurrentIepLevel

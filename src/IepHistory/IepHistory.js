@@ -15,9 +15,9 @@ const IepHistory = ({ iepHistory }) => (
       <Table.Row key={row.iepTime}>
         <Table.Cell>{row.formattedTime}</Table.Cell>
         <Table.Cell>{row.iepLevel}</Table.Cell>
-        <Table.Cell>{row.comments}</Table.Cell>
+        <Table.Cell>{row.comments || '--'}</Table.Cell>
         <Table.Cell>{row.iepEstablishment}</Table.Cell>
-        <Table.Cell>{row.iepStaffMember}</Table.Cell>
+        <Table.Cell>{row.iepStaffMember || '--'}</Table.Cell>
       </Table.Row>
     ))}
   </Table>

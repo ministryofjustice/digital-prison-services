@@ -25,12 +25,16 @@ const getIepHistoryFactory = elite2Api => {
     }
 
     const currentIepEstablishment = iepHistoryDetails[0].iepEstablishment
+    const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm')
+      .add(1, 'years')
+      .format('DD/MM/YYYY')
 
     iepHistoryDetails.shift()
 
     return {
       currentIepLevel: iepSummary.iepLevel,
       daysOnIepLevel: iepSummary.daysSinceReview,
+      nextReviewDate,
       currentIepDateTime: iepSummary.iepTime,
       currentIepEstablishment,
       iepHistory: iepHistoryDetails,

@@ -63,7 +63,9 @@ ShallowWrapper {
               Test comment.
             </UNDEFINED>
             <UNDEFINED />
-            <UNDEFINED />
+            <UNDEFINED>
+              --
+            </UNDEFINED>
           </UNDEFINED>,
         ],
       ],
@@ -188,7 +190,9 @@ ShallowWrapper {
               Test comment.
             </UNDEFINED>,
             <UNDEFINED />,
-            <UNDEFINED />,
+            <UNDEFINED>
+              --
+            </UNDEFINED>,
           ],
         },
         "ref": null,
@@ -346,10 +350,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "children": undefined,
+              "children": "--",
             },
             "ref": null,
-            "rendered": null,
+            "rendered": "--",
             "type": Object {
               "$$typeof": Symbol(react.forward_ref),
               "attrs": Array [],
@@ -440,7 +444,9 @@ ShallowWrapper {
                 Test comment.
               </UNDEFINED>
               <UNDEFINED />
-              <UNDEFINED />
+              <UNDEFINED>
+                --
+              </UNDEFINED>
             </UNDEFINED>,
           ],
         ],
@@ -565,7 +571,9 @@ ShallowWrapper {
                 Test comment.
               </UNDEFINED>,
               <UNDEFINED />,
-              <UNDEFINED />,
+              <UNDEFINED>
+                --
+              </UNDEFINED>,
             ],
           },
           "ref": null,
@@ -723,10 +731,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "children": undefined,
+                "children": "--",
               },
               "ref": null,
-              "rendered": null,
+              "rendered": "--",
               "type": Object {
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],

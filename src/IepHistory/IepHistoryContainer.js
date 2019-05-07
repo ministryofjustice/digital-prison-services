@@ -44,7 +44,11 @@ class IepHistoryContainer extends Component {
 
     return (
       <Page title={location}>
-        <CurrentIepLevel level={iepSummary.currentIepLevel} days={iepSummary.daysOnIepLevel} />
+        <CurrentIepLevel
+          level={iepSummary.currentIepLevel}
+          days={iepSummary.daysOnIepLevel}
+          nextReviewDate={iepSummary.nextReviewDate}
+        />
         <IepHistory iepHistory={iepSummary.iepHistory} />
       </Page>
     )

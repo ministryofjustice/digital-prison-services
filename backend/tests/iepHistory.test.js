@@ -7,6 +7,7 @@ function createIepHistoryReponse() {
     daysOnIepLevel: 625,
     currentIepDateTime: '2017-08-15T16:04:35',
     currentIepEstablishment: 'Leeds',
+    nextReviewDate: '15/08/2018',
     iepHistory: [
       {
         bookingId: -1,
