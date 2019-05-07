@@ -13,7 +13,7 @@ import { spacing } from '@govuk-react/lib'
 
 import ButtonCancel from './ButtonCancel'
 import OffenderName from '../../OffenderName'
-import RadioGroup from './RadioGroup'
+import RadioGroup from '../../Components/RadioGroup'
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`

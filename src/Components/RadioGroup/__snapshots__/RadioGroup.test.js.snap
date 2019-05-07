@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RadioGroup /> should match the default snapshot 1`] = `
+<div
+  className="sc-bxivhb eFeFfb"
+>
+  <span
+    className="sc-bdVaJa fqDsBO"
+  >
+    Does this test pass?
+  </span>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="yes"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        Yes
+      </span>
+    </label>
+  </div>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="no"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        No
+      </span>
+    </label>
+  </div>
+</div>
+`;
+
+exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
+<div
+  className="sc-bxivhb eFeFfb"
+>
+  <span
+    className="sc-bdVaJa fqDsBO"
+  >
+    Does this test pass?
+  </span>
+  <span
+    className="sc-htpNat hZRmYe"
+  >
+    Supporting text to help
+  </span>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="yes"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        Yes
+      </span>
+    </label>
+  </div>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="no"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        No
+      </span>
+    </label>
+  </div>
+</div>
+`;
+
+exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
+<div
+  className="sc-bxivhb fiOVKe"
+>
+  <span
+    className="sc-bdVaJa fqDsBO"
+  >
+    Does this test pass?
+  </span>
+  <span
+    className="sc-bwzfXH fnIExm"
+  >
+    Select an option
+  </span>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="yes"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        Yes
+      </span>
+    </label>
+  </div>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="no"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        No
+      </span>
+    </label>
+  </div>
+</div>
+`;

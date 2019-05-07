@@ -237,7 +237,7 @@ class ResultsActivity extends Component {
             </button>
           </div>
           <hr />
-          <ResultsFilter noBorder>
+          <ResultsFilter noBorder perPage={offenders.length} totalResults={offenders.length}>
             <SortLov
               sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
               sortColumn={orderField}

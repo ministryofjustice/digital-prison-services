@@ -1,4 +1,4 @@
-// Probably a good candidate for new-nomis-shared
+// Probably a good candidate for new-nomis-shared if used elsewhere
 import React from 'react'
 import PropTypes from 'prop-types'
 
