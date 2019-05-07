@@ -12,6 +12,7 @@ function createIepHistoryReponse() {
         bookingId: -1,
         iepDate: '2017-08-13',
         iepTime: '2017-08-13T16:04:35',
+        formattedTime: '13/08/2017 - 16:04',
         iepEstablishment: 'Leeds',
         iepStaffMember: 'Staff Member',
         agencyId: 'LEI',

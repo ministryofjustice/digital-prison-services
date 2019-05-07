@@ -9,6 +9,8 @@ ShallowWrapper {
         Object {
           "agencyId": "LEI",
           "bookingId": -1,
+          "comments": "Test comment.",
+          "formattedTime": "15/08/2017 - 16:04",
           "iepDate": "2017-08-15",
           "iepLevel": "Standard",
           "iepTime": "2017-08-15T16:04:35",
@@ -57,7 +59,9 @@ ShallowWrapper {
             <UNDEFINED>
               Standard
             </UNDEFINED>
-            <UNDEFINED />
+            <UNDEFINED>
+              Test comment.
+            </UNDEFINED>
             <UNDEFINED />
             <UNDEFINED />
           </UNDEFINED>,
@@ -180,7 +184,9 @@ ShallowWrapper {
             <UNDEFINED>
               Standard
             </UNDEFINED>,
-            <UNDEFINED />,
+            <UNDEFINED>
+              Test comment.
+            </UNDEFINED>,
             <UNDEFINED />,
             <UNDEFINED />,
           ],
@@ -266,10 +272,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "children": undefined,
+              "children": "Test comment.",
             },
             "ref": null,
-            "rendered": null,
+            "rendered": "Test comment.",
             "type": Object {
               "$$typeof": Symbol(react.forward_ref),
               "attrs": Array [],
@@ -430,7 +436,9 @@ ShallowWrapper {
               <UNDEFINED>
                 Standard
               </UNDEFINED>
-              <UNDEFINED />
+              <UNDEFINED>
+                Test comment.
+              </UNDEFINED>
               <UNDEFINED />
               <UNDEFINED />
             </UNDEFINED>,
@@ -553,7 +561,9 @@ ShallowWrapper {
               <UNDEFINED>
                 Standard
               </UNDEFINED>,
-              <UNDEFINED />,
+              <UNDEFINED>
+                Test comment.
+              </UNDEFINED>,
               <UNDEFINED />,
               <UNDEFINED />,
             ],
@@ -639,10 +649,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "children": undefined,
+                "children": "Test comment.",
               },
               "ref": null,
-              "rendered": null,
+              "rendered": "Test comment.",
               "type": Object {
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],

@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 const getIepHistoryFactory = elite2Api => {
   const getIepHistory = async (context, offenderNo) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
@@ -14,7 +16,12 @@ const getIepHistoryFactory = elite2Api => {
         iepStaffMember = `${iepStaffMemberDetails.firstName} ${iepStaffMemberDetails.lastName}`
       }
 
-      iepHistoryDetails.push({ iepEstablishment: iepEstablishment.description, iepStaffMember, ...details })
+      iepHistoryDetails.push({
+        iepEstablishment: iepEstablishment.description,
+        iepStaffMember,
+        formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm'),
+        ...details,
+      })
     }
 
     const currentIepEstablishment = iepHistoryDetails[0].iepEstablishment

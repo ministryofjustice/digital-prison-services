@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Table from '@govuk-react/table'
-import moment from 'moment'
 
 const IepHistory = ({ iepHistory }) => (
   <Table caption="IEP history">
@@ -14,9 +13,9 @@ const IepHistory = ({ iepHistory }) => (
     </Table.Row>
     {iepHistory.map(row => (
       <Table.Row key={row.iepTime}>
-        <Table.Cell>{moment(row.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+        <Table.Cell>{row.formattedTime}</Table.Cell>
         <Table.Cell>{row.iepLevel}</Table.Cell>
-        <Table.Cell>{row.iepCommentText}</Table.Cell>
+        <Table.Cell>{row.comments}</Table.Cell>
         <Table.Cell>{row.iepEstablishment}</Table.Cell>
         <Table.Cell>{row.iepStaffMember}</Table.Cell>
       </Table.Row>
@@ -29,10 +28,11 @@ IepHistory.propTypes = {
     PropTypes.shape({
       iepNo: PropTypes.string,
       iepDescription: PropTypes.string,
-      iepCommentText: PropTypes.string,
+      comments: PropTypes.string,
       iepEstablishment: PropTypes.string,
       iepStaffMember: PropTypes.string,
       iepTime: PropTypes.string,
+      formattedTime: PropTypes.string,
     })
   ),
 }
