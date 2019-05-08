@@ -260,6 +260,38 @@ describe('actions', () => {
     expect(actions.setGlobalSearchTotalRecords(6)).toEqual(expectedAction)
   })
 
+  it('should create an action to update the adjudication history filter', () => {
+    const expectedAction = {
+      type: types.SET_ADJUDICATION_HISTORY_FILTER,
+      fields: { establishment: 'MDI' },
+    }
+    expect(actions.setAdjudicationHistoryFilter({ establishment: 'MDI' })).toEqual(expectedAction)
+  })
+
+  it('should create an action to update adjudication history results', () => {
+    const expectedAction = {
+      type: types.SET_ADJUDICATION_HISTORY_RESULTS,
+      results: ['result-1'],
+    }
+    expect(actions.setAdjudicationHistoryResults(['result-1'])).toEqual(expectedAction)
+  })
+
+  it('should create an action to update the current page number of the adjudication history results', () => {
+    const expectedAction = {
+      type: types.SET_ADJUDICATION_HISTORY_PAGE_NUMBER,
+      number: 6,
+    }
+    expect(actions.setAdjudicationHistoryPageNumber(6)).toEqual(expectedAction)
+  })
+
+  it('should create an action to update the number of adjudication history results to show', () => {
+    const expectedAction = {
+      type: types.SET_ADJUDICATION_HISTORY_PAGE_SIZE,
+      size: 6,
+    }
+    expect(actions.setAdjudicationHistoryPageSize(6)).toEqual(expectedAction)
+  })
+
   describe('content actions', () => {
     let store
     const getEntriesSpy = jest.spyOn(contentfulClient, 'getEntries')

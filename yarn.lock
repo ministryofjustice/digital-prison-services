@@ -1078,6 +1078,15 @@
     "@govuk-react/lib" "^0.7.0"
     govuk-colours "^1.0.3"
 
+"@govuk-react/table@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/table/-/table-0.7.0.tgz#8198b325607c3050e57f7dd1403c20c163f37779"
+  integrity sha512-codRMEjkj5iWhu5YocAikKKWBrsODskPBmxjZCmLY1xk55C3cjNF3mnYeWaTgABIOwU6B56N3AeZpXWgkRStfg==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/text-area@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/text-area/-/text-area-0.7.0.tgz#a257f82ed4eba5d19e4b361a3800e8a1497dd613"
