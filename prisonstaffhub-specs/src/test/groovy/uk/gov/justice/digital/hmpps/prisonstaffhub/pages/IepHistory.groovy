@@ -6,7 +6,7 @@ class IepHistory  extends Page {
     static url = '/offenders/A1234AC/iep-history'
 
     static at = {
-        pageTitle == 'IEP history'
+        pageTitle == 'IEP level'
     }
 
     static content = {

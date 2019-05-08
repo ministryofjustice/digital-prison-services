@@ -64,7 +64,7 @@ ShallowWrapper {
             </UNDEFINED>
             <UNDEFINED />
             <UNDEFINED>
-              --
+              —
             </UNDEFINED>
           </UNDEFINED>,
         ],
@@ -191,7 +191,7 @@ ShallowWrapper {
             </UNDEFINED>,
             <UNDEFINED />,
             <UNDEFINED>
-              --
+              —
             </UNDEFINED>,
           ],
         },
@@ -350,10 +350,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "children": "--",
+              "children": "—",
             },
             "ref": null,
-            "rendered": "--",
+            "rendered": "—",
             "type": Object {
               "$$typeof": Symbol(react.forward_ref),
               "attrs": Array [],
@@ -445,7 +445,7 @@ ShallowWrapper {
               </UNDEFINED>
               <UNDEFINED />
               <UNDEFINED>
-                --
+                —
               </UNDEFINED>
             </UNDEFINED>,
           ],
@@ -572,7 +572,7 @@ ShallowWrapper {
               </UNDEFINED>,
               <UNDEFINED />,
               <UNDEFINED>
-                --
+                —
               </UNDEFINED>,
             ],
           },
@@ -731,10 +731,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "children": "--",
+                "children": "—",
               },
               "ref": null,
-              "rendered": "--",
+              "rendered": "—",
               "type": Object {
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],

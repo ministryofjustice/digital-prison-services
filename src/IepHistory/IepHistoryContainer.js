@@ -26,7 +26,7 @@ class IepHistoryContainer extends Component {
   getIepHistory = async () => {
     const { offenderNo, handleError, resetErrorDispatch, setLoadedDispatch } = this.props
     const response = await axios.get(`/api/bookings/${offenderNo}/iepSummary`)
-    this.setState({ iepSummary: response.data, location: `IEP history` })
+    this.setState({ iepSummary: response.data, location: `IEP level` })
 
     try {
       resetErrorDispatch()
