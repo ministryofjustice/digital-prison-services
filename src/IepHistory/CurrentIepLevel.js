@@ -9,15 +9,15 @@ const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
     <GridRow>
       <GridCol setWidth="one-quarter">
         <strong className="label">Current IEP level</strong>
-        <div>{level}</div>
+        <p>{level}</p>
       </GridCol>
       <GridCol setWidth="one-quarter">
         <strong className="label">Days since review</strong>
-        <div>{days}</div>
+        <p>{days}</p>
       </GridCol>
       <GridCol setWidth="one-quarter">
         <strong className="label">Date of next review</strong>
-        <div>{nextReviewDate}</div>
+        <p>{nextReviewDate}</p>
       </GridCol>
     </GridRow>
   </CurrentIepLevelArea>
