@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 
 class AdjudicationHistoryPage extends Page {
-    static url = "/global-search-results"
 
     static at = {
         pageTitle == 'Adjudication history'

@@ -12,7 +12,7 @@ import { linkOnClick } from '../../utils'
 import {
   FullWidthSelect,
   SearchArea,
-  LargeSreenOnlyGridCol,
+  LargeScreenOnlyGridCol,
   FiltersLabel,
   DateRangeLabel,
 } from './AdjudicationHistory.style'
@@ -53,7 +53,7 @@ export const FormFields = ({ now, errors, submitting, agencies = [], values, res
           <FiltersLabel>Filters</FiltersLabel>
         </GridRow>
         <GridRow>
-          <LargeSreenOnlyGridCol>
+          <LargeScreenOnlyGridCol>
             <FieldWithError
               errors={errors}
               name="establishment"
@@ -71,7 +71,7 @@ export const FormFields = ({ now, errors, submitting, agencies = [], values, res
                 </option>
               ))}
             </FieldWithError>
-          </LargeSreenOnlyGridCol>
+          </LargeScreenOnlyGridCol>
         </GridRow>
       </GridCol>
       <GridCol setDesktopWidth="two-thirds">

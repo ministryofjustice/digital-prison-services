@@ -3,7 +3,8 @@ import Select from '@govuk-react/select'
 import GridCol from '@govuk-react/grid-col'
 import { H3 } from '@govuk-react/heading'
 import { GREY_3, WHITE } from 'govuk-colours'
-import { SPACING, FONT_SIZE, MEDIA_QUERIES } from '@govuk-react/constants'
+import { SPACING, MEDIA_QUERIES } from '@govuk-react/constants'
+import { typography } from '@govuk-react/lib'
 
 export const FullWidthSelect = styled(Select)`
   select {
@@ -18,7 +19,7 @@ export const SearchArea = styled.div`
   margin-bottom: ${SPACING.SCALE_3};
 `
 
-export const LargeSreenOnlyGridCol = styled(GridCol)`
+export const LargeScreenOnlyGridCol = styled(GridCol)`
   display: none;
   ${MEDIA_QUERIES.TABLET} {
     display: block;
@@ -31,8 +32,8 @@ export const FiltersLabel = styled(H3)`
   margin-top: -${SPACING.SCALE_2};
 `
 export const DateRangeLabel = styled.span`
-  font-weight: bold;
   padding-left: ${SPACING.SCALE_2};
-  font-size: ${FONT_SIZE.SIZE_18}
-  margin-top:  ${SPACING.SCALE_1};
+  ${typography.font({ size: 19 })};
+  font-weight: bold;
+  margin-top: ${SPACING.SCALE_1};
 `

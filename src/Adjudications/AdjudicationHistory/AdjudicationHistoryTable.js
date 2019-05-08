@@ -88,8 +88,8 @@ AdjudicationHistoryTable.propTypes = {
       establishment: PropTypes.string.isRequired,
       offenceDescription: PropTypes.string.isRequired,
       findingDescription: PropTypes.string,
-    }).isRequired
-  ),
+    })
+  ).isRequired,
   changePerPage: PropTypes.func.isRequired,
   changePage: PropTypes.func.isRequired,
 }
