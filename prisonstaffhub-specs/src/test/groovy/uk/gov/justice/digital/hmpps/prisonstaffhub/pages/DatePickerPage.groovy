@@ -7,7 +7,7 @@ abstract class DatePickerPage extends Page {
     static content = {
         date { $('input', name: 'search-date') }
         topBar { $('th.rdtSwitch') }
-        yearBox { value -> $('#from-date .rdtYears td', 'data-value': value) }
+        yearBox { value -> $('td', 'data-value': value) }
         monthBox { value -> $('td', text: value) }
         dayBox { value -> $('td.rdtDay:not(.rdtOld):not(.rdtNew)', 'data-value': value) }
     }
