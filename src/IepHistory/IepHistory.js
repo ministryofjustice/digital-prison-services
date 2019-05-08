@@ -26,13 +26,12 @@ const IepHistory = ({ iepHistory }) => (
 IepHistory.propTypes = {
   iepHistory: PropTypes.arrayOf(
     PropTypes.shape({
-      iepNo: PropTypes.string,
-      iepDescription: PropTypes.string,
+      iepDescription: PropTypes.string.isRequired,
       comments: PropTypes.string,
-      iepEstablishment: PropTypes.string,
+      iepEstablishment: PropTypes.string.isRequired,
       iepStaffMember: PropTypes.string,
-      iepTime: PropTypes.string,
-      formattedTime: PropTypes.string,
+      iepTime: PropTypes.string.isRequired,
+      formattedTime: PropTypes.string.isRequired,
     })
   ),
 }

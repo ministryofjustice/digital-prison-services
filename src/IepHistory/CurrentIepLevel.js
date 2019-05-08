@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { H4 } from '@govuk-react/heading'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
+import { CurrentIepLevelArea } from './IepHistory.styles'
 
 const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
-  <React.Fragment>
+  <CurrentIepLevelArea>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <strong className="label">Current IEP level</strong>
@@ -20,7 +20,7 @@ const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
         <div>{nextReviewDate}</div>
       </GridCol>
     </GridRow>
-  </React.Fragment>
+  </CurrentIepLevelArea>
 )
 
 CurrentIepLevel.propTypes = {
