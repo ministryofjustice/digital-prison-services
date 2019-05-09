@@ -17,7 +17,7 @@ import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG
 
 class AgencySelectionSpecification extends BrowserReportingSpec {
 
-    static final NOTM_URL = 'http://localhost:3000/'
+    static final NOTM_URL = 'http://localhost:20200/'
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -25,7 +25,7 @@ class AgencySelectionSpecification extends BrowserReportingSpec {
     OauthApi oauthApi = new OauthApi()
 
     @Rule
-    public WireMockRule notmServer = new WireMockRule(3000)
+    public WireMockRule notmServer = new WireMockRule(20200)
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 

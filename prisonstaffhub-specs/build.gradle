@@ -6,9 +6,9 @@ ext {
 
     ext {
         drivers = [
-//                'chrome'
+                'chrome'
 //                ,
-                'chromeHeadless'
+//                'chromeHeadless'
         ]
 
         groovyVersion = '2.5.5'

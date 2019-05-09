@@ -74,7 +74,7 @@ yarn-error.log*
 
 .idea
 *.iml
-
+.vscode
 # Gradle
 .gradle
 gradle

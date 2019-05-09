@@ -25,6 +25,7 @@ const { isBinaryFileSync } = require('isbinaryfile')
 const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
+const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
 const { userLocationsFactory } = require('./controllers/userLocations')
 const { userMeFactory } = require('./controllers/userMe')
 const { getConfiguration } = require('./controllers/getConfig')
@@ -117,6 +118,7 @@ const elite2Api = elite2ApiFactory(
 
 const controller = controllerFactory({
   activityListService: activityListFactory(elite2Api),
+  adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
   houseblockListService: houseblockListFactory(elite2Api),
   updateAttendanceService: updateAttendanceFactory(elite2Api),
   establishmentRollService: establishmentRollFactory(elite2Api),
@@ -195,6 +197,7 @@ app.use('/api/houseblockLocations', houseblockLocationsFactory(elite2Api).getHou
 app.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
 app.use('/api/houseblocklist', controller.getHouseblockList)
 app.use('/api/activityList', controller.getActivityList)
+app.use('/api/adjudications/:offenderNumber', controller.getAdjudications)
 app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/movements/:agencyId/in', controller.getMovementsIn)

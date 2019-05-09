@@ -38,6 +38,7 @@ import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
+import AdjudicationHistory from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
@@ -392,6 +393,20 @@ class App extends React.Component {
               <AddPrisonerContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.adjudications}
+            render={({ history, match: { params } }) => (
+              <AdjudicationHistory
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                offenderNumber={params.offenderNo}
                 history={history}
               />
             )}
