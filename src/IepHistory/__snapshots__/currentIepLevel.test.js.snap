@@ -1,0 +1,679 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Current IEP Level should render the page correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <CurrentIepLevel
+    days={20}
+    level="Basic"
+    nextReviewDate="20/09/2019"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": <GridRow>
+        <GridCol
+          columnFull={false}
+          columnOneHalf={false}
+          columnOneQuarter={false}
+          columnOneThird={false}
+          columnThreeQuarters={false}
+          columnTwoThirds={false}
+          setDesktopWidth={undefined}
+          setWidth="one-quarter"
+        >
+          <strong
+            className="label"
+          >
+            Current IEP level
+          </strong>
+          <p>
+            Basic
+          </p>
+        </GridCol>
+        <GridCol
+          columnFull={false}
+          columnOneHalf={false}
+          columnOneQuarter={false}
+          columnOneThird={false}
+          columnThreeQuarters={false}
+          columnTwoThirds={false}
+          setDesktopWidth={undefined}
+          setWidth="one-quarter"
+        >
+          <strong
+            className="label"
+          >
+            Days since review
+          </strong>
+          <p>
+            20
+          </p>
+        </GridCol>
+        <GridCol
+          columnFull={false}
+          columnOneHalf={false}
+          columnOneQuarter={false}
+          columnOneThird={false}
+          columnThreeQuarters={false}
+          columnTwoThirds={false}
+          setDesktopWidth={undefined}
+          setWidth="one-quarter"
+        >
+          <strong
+            className="label"
+          >
+            Date of next review
+          </strong>
+          <p>
+            20/09/2019
+          </p>
+        </GridCol>
+      </GridRow>,
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <GridCol
+            columnFull={false}
+            columnOneHalf={false}
+            columnOneQuarter={false}
+            columnOneThird={false}
+            columnThreeQuarters={false}
+            columnTwoThirds={false}
+            setDesktopWidth={undefined}
+            setWidth="one-quarter"
+          >
+            <strong
+              className="label"
+            >
+              Current IEP level
+            </strong>
+            <p>
+              Basic
+            </p>
+          </GridCol>,
+          <GridCol
+            columnFull={false}
+            columnOneHalf={false}
+            columnOneQuarter={false}
+            columnOneThird={false}
+            columnThreeQuarters={false}
+            columnTwoThirds={false}
+            setDesktopWidth={undefined}
+            setWidth="one-quarter"
+          >
+            <strong
+              className="label"
+            >
+              Days since review
+            </strong>
+            <p>
+              20
+            </p>
+          </GridCol>,
+          <GridCol
+            columnFull={false}
+            columnOneHalf={false}
+            columnOneQuarter={false}
+            columnOneThird={false}
+            columnThreeQuarters={false}
+            columnTwoThirds={false}
+            setDesktopWidth={undefined}
+            setWidth="one-quarter"
+          >
+            <strong
+              className="label"
+            >
+              Date of next review
+            </strong>
+            <p>
+              20/09/2019
+            </p>
+          </GridCol>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <strong
+                className="label"
+              >
+                Current IEP level
+              </strong>,
+              <p>
+                Basic
+              </p>,
+            ],
+            "columnFull": false,
+            "columnOneHalf": false,
+            "columnOneQuarter": false,
+            "columnOneThird": false,
+            "columnThreeQuarters": false,
+            "columnTwoThirds": false,
+            "setDesktopWidth": undefined,
+            "setWidth": "one-quarter",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Current IEP level",
+                "className": "label",
+              },
+              "ref": null,
+              "rendered": "Current IEP level",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Basic",
+              },
+              "ref": null,
+              "rendered": "Basic",
+              "type": "p",
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <strong
+                className="label"
+              >
+                Days since review
+              </strong>,
+              <p>
+                20
+              </p>,
+            ],
+            "columnFull": false,
+            "columnOneHalf": false,
+            "columnOneQuarter": false,
+            "columnOneThird": false,
+            "columnThreeQuarters": false,
+            "columnTwoThirds": false,
+            "setDesktopWidth": undefined,
+            "setWidth": "one-quarter",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Days since review",
+                "className": "label",
+              },
+              "ref": null,
+              "rendered": "Days since review",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": 20,
+              },
+              "ref": null,
+              "rendered": 20,
+              "type": "p",
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <strong
+                className="label"
+              >
+                Date of next review
+              </strong>,
+              <p>
+                20/09/2019
+              </p>,
+            ],
+            "columnFull": false,
+            "columnOneHalf": false,
+            "columnOneQuarter": false,
+            "columnOneThird": false,
+            "columnThreeQuarters": false,
+            "columnTwoThirds": false,
+            "setDesktopWidth": undefined,
+            "setWidth": "one-quarter",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Date of next review",
+                "className": "label",
+              },
+              "ref": null,
+              "rendered": "Date of next review",
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "20/09/2019",
+              },
+              "ref": null,
+              "rendered": "20/09/2019",
+              "type": "p",
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+    "type": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "sc-bxivhb",
+        "isStatic": true,
+        "rules": Array [
+          "
+  margin-bottom: ",
+          "20px",
+          ";
+",
+        ],
+      },
+      "displayName": "styled.div",
+      "foldedComponentIds": Array [],
+      "render": [Function],
+      "styledComponentId": "sc-bxivhb",
+      "target": "div",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    },
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": <GridRow>
+          <GridCol
+            columnFull={false}
+            columnOneHalf={false}
+            columnOneQuarter={false}
+            columnOneThird={false}
+            columnThreeQuarters={false}
+            columnTwoThirds={false}
+            setDesktopWidth={undefined}
+            setWidth="one-quarter"
+          >
+            <strong
+              className="label"
+            >
+              Current IEP level
+            </strong>
+            <p>
+              Basic
+            </p>
+          </GridCol>
+          <GridCol
+            columnFull={false}
+            columnOneHalf={false}
+            columnOneQuarter={false}
+            columnOneThird={false}
+            columnThreeQuarters={false}
+            columnTwoThirds={false}
+            setDesktopWidth={undefined}
+            setWidth="one-quarter"
+          >
+            <strong
+              className="label"
+            >
+              Days since review
+            </strong>
+            <p>
+              20
+            </p>
+          </GridCol>
+          <GridCol
+            columnFull={false}
+            columnOneHalf={false}
+            columnOneQuarter={false}
+            columnOneThird={false}
+            columnThreeQuarters={false}
+            columnTwoThirds={false}
+            setDesktopWidth={undefined}
+            setWidth="one-quarter"
+          >
+            <strong
+              className="label"
+            >
+              Date of next review
+            </strong>
+            <p>
+              20/09/2019
+            </p>
+          </GridCol>
+        </GridRow>,
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "children": Array [
+            <GridCol
+              columnFull={false}
+              columnOneHalf={false}
+              columnOneQuarter={false}
+              columnOneThird={false}
+              columnThreeQuarters={false}
+              columnTwoThirds={false}
+              setDesktopWidth={undefined}
+              setWidth="one-quarter"
+            >
+              <strong
+                className="label"
+              >
+                Current IEP level
+              </strong>
+              <p>
+                Basic
+              </p>
+            </GridCol>,
+            <GridCol
+              columnFull={false}
+              columnOneHalf={false}
+              columnOneQuarter={false}
+              columnOneThird={false}
+              columnThreeQuarters={false}
+              columnTwoThirds={false}
+              setDesktopWidth={undefined}
+              setWidth="one-quarter"
+            >
+              <strong
+                className="label"
+              >
+                Days since review
+              </strong>
+              <p>
+                20
+              </p>
+            </GridCol>,
+            <GridCol
+              columnFull={false}
+              columnOneHalf={false}
+              columnOneQuarter={false}
+              columnOneThird={false}
+              columnThreeQuarters={false}
+              columnTwoThirds={false}
+              setDesktopWidth={undefined}
+              setWidth="one-quarter"
+            >
+              <strong
+                className="label"
+              >
+                Date of next review
+              </strong>
+              <p>
+                20/09/2019
+              </p>
+            </GridCol>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": Array [
+                <strong
+                  className="label"
+                >
+                  Current IEP level
+                </strong>,
+                <p>
+                  Basic
+                </p>,
+              ],
+              "columnFull": false,
+              "columnOneHalf": false,
+              "columnOneQuarter": false,
+              "columnOneThird": false,
+              "columnThreeQuarters": false,
+              "columnTwoThirds": false,
+              "setDesktopWidth": undefined,
+              "setWidth": "one-quarter",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "Current IEP level",
+                  "className": "label",
+                },
+                "ref": null,
+                "rendered": "Current IEP level",
+                "type": "strong",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "Basic",
+                },
+                "ref": null,
+                "rendered": "Basic",
+                "type": "p",
+              },
+            ],
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": Array [
+                <strong
+                  className="label"
+                >
+                  Days since review
+                </strong>,
+                <p>
+                  20
+                </p>,
+              ],
+              "columnFull": false,
+              "columnOneHalf": false,
+              "columnOneQuarter": false,
+              "columnOneThird": false,
+              "columnThreeQuarters": false,
+              "columnTwoThirds": false,
+              "setDesktopWidth": undefined,
+              "setWidth": "one-quarter",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "Days since review",
+                  "className": "label",
+                },
+                "ref": null,
+                "rendered": "Days since review",
+                "type": "strong",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": 20,
+                },
+                "ref": null,
+                "rendered": 20,
+                "type": "p",
+              },
+            ],
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "children": Array [
+                <strong
+                  className="label"
+                >
+                  Date of next review
+                </strong>,
+                <p>
+                  20/09/2019
+                </p>,
+              ],
+              "columnFull": false,
+              "columnOneHalf": false,
+              "columnOneQuarter": false,
+              "columnOneThird": false,
+              "columnThreeQuarters": false,
+              "columnTwoThirds": false,
+              "setDesktopWidth": undefined,
+              "setWidth": "one-quarter",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "Date of next review",
+                  "className": "label",
+                },
+                "ref": null,
+                "rendered": "Date of next review",
+                "type": "strong",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "20/09/2019",
+                },
+                "ref": null,
+                "rendered": "20/09/2019",
+                "type": "p",
+              },
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      "type": Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [],
+        "componentStyle": ComponentStyle {
+          "componentId": "sc-bxivhb",
+          "isStatic": true,
+          "rules": Array [
+            "
+  margin-bottom: ",
+            "20px",
+            ";
+",
+          ],
+        },
+        "displayName": "styled.div",
+        "foldedComponentIds": Array [],
+        "render": [Function],
+        "styledComponentId": "sc-bxivhb",
+        "target": "div",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      },
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromError": true,
+          "getDerivedStateFromProps": Object {
+            "hasShouldComponentUpdateBug": true,
+          },
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
