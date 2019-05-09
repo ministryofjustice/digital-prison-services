@@ -38,7 +38,7 @@ class IepHistorySpecification extends BrowserReportingSpec {
                 agencyType: "INST"
         ]
         def userDetails = [
-                userId: "ITAG_USER",
+                username: "ITAG_USER",
                 firstName: "Staff",
                 lastName: "Member"
         ]
