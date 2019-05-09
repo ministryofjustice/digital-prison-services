@@ -5,42 +5,46 @@ import { Breadcrumb } from './Breadcrumb'
 const props = {
   breadcrumbs: [
     {
-      key: '/',
-      props: {
-        match: {
-          path: '/',
-          url: '/',
-          isExact: true,
-          params: {},
+      breadcrumb: {
+        props: {
+          children: 'Application homepage',
         },
-        location: {
-          pathname: '/test-page',
-          search: '',
-          hash: '',
-          key: '8h5b0i',
-        },
-        children: 'Application homepage',
+        type: 'span',
       },
-      type: 'span',
+      key: '/',
+      location: {
+        pathname: '/test-page',
+        search: '',
+        hash: '',
+        key: '8h5b0i',
+      },
+      match: {
+        path: '/',
+        url: '/',
+        isExact: true,
+        params: {},
+      },
     },
     {
-      key: '/test-page',
-      props: {
-        match: {
-          path: '/test-page',
-          url: '/test-page',
-          isExact: true,
-          params: {},
+      breadcrumb: {
+        props: {
+          children: 'Test page',
         },
-        location: {
-          pathname: '/test-page',
-          search: '',
-          hash: '',
-          key: '8h5b0i',
-        },
-        children: 'Test page',
+        type: 'span',
       },
-      type: 'span',
+      key: '/test-page',
+      location: {
+        pathname: '/test-page',
+        search: '',
+        hash: '',
+        key: '8h5b0i',
+      },
+      match: {
+        path: '/test-page',
+        url: '/test-page',
+        isExact: true,
+        params: {},
+      },
     },
   ],
   match: {

@@ -8,4 +8,10 @@ export default [
   { path: '/establishment-roll/en-route', breadcrumb: 'En route' },
   { path: '/establishment-roll/total-currently-out', breadcrumb: 'Total currently out' },
   { path: '/establishment-roll/:livingUnitId', breadcrumb: null },
+  // Below are temporary as latest version of react-router-breadcrumbs-hoc leaves hyphens in the breadcrumb text
+  { path: '/establishment-roll', breadcrumb: 'Establishment roll' },
+  { path: '/search-prisoner-whereabouts', breadcrumb: 'Search prisoner whereabouts' },
+  { path: '/search-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
+  { path: '/search-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
+  { path: '/add-bulk-appointments', breadcrumb: 'Add bulk appointments' },
 ]

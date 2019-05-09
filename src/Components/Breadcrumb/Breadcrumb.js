@@ -3,37 +3,38 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import { BreadcrumbContainer, BreadcrumbList, BreadcrumbListItem } from './Breadcrumb.styles'
-import { routeMatchType } from '../../types'
 import routes from '../../routes'
 
-export const Breadcrumb = ({ breadcrumbs, match, homeLink }) => (
-  <BreadcrumbContainer>
-    <BreadcrumbList>
-      <BreadcrumbListItem>
-        <a data-qa="breadcrumb-home-page-link" href={homeLink}>
-          Home
-        </a>
-      </BreadcrumbListItem>
-      {breadcrumbs.map((breadcrumb, i, arr) => {
-        const parentPageLink = arr.length - 2 === i ? 'breadcrumb-parent-page-link' : null
-        return (
-          <BreadcrumbListItem key={breadcrumb.key}>
-            {match.url !== breadcrumb.props.match.url && (
-              <Link to={breadcrumb.props.match.url} data-qa={parentPageLink}>
+export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
+  // Pick (pop) the last breadcrumd from the array (also removes it from the array)
+  const { breadcrumb: poppedBreadcrumb } = breadcrumbs.length > 0 ? breadcrumbs.pop() : breadcrumbs
+
+  return (
+    <BreadcrumbContainer>
+      <BreadcrumbList>
+        <BreadcrumbListItem>
+          <a data-qa="breadcrumb-home-page-link" href={homeLink}>
+            Home
+          </a>
+        </BreadcrumbListItem>
+        {breadcrumbs.map(({ match, breadcrumb }, i, arr) => {
+          const parentPageLink = arr.length - 1 === i ? 'breadcrumb-parent-page-link' : null
+          return (
+            <BreadcrumbListItem key={match.url}>
+              <Link to={match.url} data-qa={parentPageLink}>
                 {breadcrumb}
               </Link>
-            )}
-            {match.url === breadcrumb.props.match.url && breadcrumb}
-          </BreadcrumbListItem>
-        )
-      })}
-    </BreadcrumbList>
-  </BreadcrumbContainer>
-)
+            </BreadcrumbListItem>
+          )
+        })}
+        <BreadcrumbListItem>{poppedBreadcrumb}</BreadcrumbListItem>
+      </BreadcrumbList>
+    </BreadcrumbContainer>
+  )
+}
 
 Breadcrumb.propTypes = {
   breadcrumbs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  match: routeMatchType.isRequired,
   homeLink: PropTypes.string.isRequired,
 }
 
