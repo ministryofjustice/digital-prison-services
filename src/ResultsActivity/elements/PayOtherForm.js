@@ -42,6 +42,7 @@ const validate = values => {
   return values
 }
 
+// Use @govuk-react/panel for form success
 class PayOtherForm extends Component {
   componentDidMount() {}
 

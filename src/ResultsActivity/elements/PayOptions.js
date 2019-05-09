@@ -32,14 +32,24 @@ class PayOptions extends Component {
   }
 
   render() {
-    const { offenderNo, eventId, otherHandler, firstName, lastName } = this.props
+    const {
+      offenderNo,
+      eventId,
+      otherHandler,
+      firstName,
+      lastName,
+      payInformation: { attended, paid },
+    } = this.props
 
     if (!offenderNo || !eventId) return null
+
+    const attendedAndPaid = attended && paid
+    const other = !attendedAndPaid && (attended || paid)
 
     return (
       <Fragment>
         <Option>
-          <Radio onChange={this.payOffender} name={offenderNo} value="pay">
+          <Radio onChange={this.payOffender} name={offenderNo} value="pay" defaultChecked={attendedAndPaid}>
             <VisuallyHidden>Pay</VisuallyHidden>
           </Radio>
         </Option>
@@ -51,6 +61,7 @@ class PayOptions extends Component {
             value="other"
             data-first-name={firstName}
             data-last-name={lastName}
+            defaultChecked={other}
           >
             <VisuallyHidden>Other</VisuallyHidden>
           </Radio>
@@ -66,6 +77,7 @@ PayOptions.propTypes = {
   otherHandler: PropTypes.func.isRequired,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
+  payInformation: PropTypes.shape({ attended: PropTypes.bool, paid: PropTypes.bool }).isRequired,
 }
 
 PayOptions.defaultProps = {

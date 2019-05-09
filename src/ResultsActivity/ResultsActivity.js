@@ -165,7 +165,16 @@ class ResultsActivity extends Component {
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
-        const { offenderNo, firstName, lastName, cellLocation, alertFlags, category, eventId } = mainEvent
+        const {
+          offenderNo,
+          firstName,
+          lastName,
+          cellLocation,
+          alertFlags,
+          category,
+          eventId,
+          payInformation,
+        } = mainEvent
         const key = `${offenderNo}-${eventId}`
         return (
           <tr key={key} className="row-gutters">
@@ -206,6 +215,7 @@ class ResultsActivity extends Component {
                   otherHandler={this.openModal}
                   firstName={firstName}
                   lastName={lastName}
+                  payInformation={payInformation}
                 />
               )}
           </tr>

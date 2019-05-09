@@ -64,6 +64,20 @@ const getActivityListFactory = elite2Api => {
       offenderNumbers,
     })
 
+    const getPayInformation = bookingId => ({
+      // change for API call using bookingId
+      absentReasonId: 0,
+      attended: true,
+      bookingId: 0,
+      eventDate: 'string',
+      eventId: 0,
+      eventLocationId: 0,
+      id: 0,
+      paid: true,
+      period: 'string',
+      prisonId: 'string',
+    })
+
     const eventsElsewhere = eventsForOffenderNumbers.filter(event => event.locationId !== locationId)
     const eventsElsewhereByOffenderNumber = offenderNumberMultiMap(offenderNumbers)
 
@@ -81,6 +95,8 @@ const getActivityListFactory = elite2Api => {
         category,
       } = externalEventsForOffenders.get(event.offenderNo)
 
+      const payInformation = getPayInformation()
+
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
@@ -93,6 +109,7 @@ const getActivityListFactory = elite2Api => {
         scheduledTransfers,
         alertFlags,
         category,
+        payInformation,
       }
     })
 
