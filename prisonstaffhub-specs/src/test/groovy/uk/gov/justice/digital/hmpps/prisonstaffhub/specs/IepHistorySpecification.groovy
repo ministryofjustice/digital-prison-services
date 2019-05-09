@@ -52,7 +52,7 @@ class IepHistorySpecification extends BrowserReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I view the IEP history page"
-        go "/offenders/A1234AC/iep-history"
+        to IepHistory
 
         then: "I should be presented with results"
         at IepHistory

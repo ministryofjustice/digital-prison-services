@@ -4,27 +4,34 @@ const getIepHistoryFactory = elite2Api => {
   const getIepHistory = async (context, offenderNo) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
     const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
-    const iepHistoryDetails = []
 
-    /* eslint-disable no-restricted-syntax */
-    for (const details of iepSummary.iepDetails) {
-      /* eslint-disable no-await-in-loop */
-      const iepEstablishment = await elite2Api.getAgencyDetails(context, details.agencyId)
-      let iepStaffMember = ''
-      if (details.userId) {
-        const iepStaffMemberDetails = await elite2Api.getStaffDetails(context, details.userId)
-        iepStaffMember = `${iepStaffMemberDetails.firstName} ${iepStaffMemberDetails.lastName}`
-      }
+    // Offenders are likely to have multiple IEPs at the same agency.
+    // By getting a unique list of users and agencies, we reduce the duplicate
+    // calls to the database.
+    const uniqueUserIds = [...new Set(iepSummary.iepDetails.map(details => details.userId))]
+    const uniqueAgencyIds = [...new Set(iepSummary.iepDetails.map(details => details.agencyId))]
 
-      iepHistoryDetails.push({
-        iepEstablishment: iepEstablishment.description,
-        iepStaffMember,
+    const users = await Promise.all(
+      uniqueUserIds.filter(userId => Boolean(userId)).map(userId => elite2Api.getStaffDetails(context, userId))
+    )
+
+    const establishments = await Promise.all(
+      uniqueAgencyIds
+        .filter(agencyId => Boolean(agencyId))
+        .map(agencyId => elite2Api.getAgencyDetails(context, agencyId))
+    )
+
+    const iepHistoryDetails = iepSummary.iepDetails.map(details => {
+      const { description } = establishments.find(estb => estb.agencyId === details.agencyId)
+      const user = details.userId && users.find(u => u.username === details.userId)
+      return {
+        iepEstablishment: description,
+        iepStaffMember: user && `${user.firstName} ${user.lastName}`,
         formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm'),
         ...details,
-      })
-    }
+      }
+    })
 
-    const currentIepEstablishment = iepHistoryDetails[0].iepEstablishment
     const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm')
       .add(1, 'years')
       .format('DD/MM/YYYY')
@@ -36,7 +43,6 @@ const getIepHistoryFactory = elite2Api => {
       daysOnIepLevel: iepSummary.daysSinceReview,
       nextReviewDate,
       currentIepDateTime: iepSummary.iepTime,
-      currentIepEstablishment,
       iepHistory: iepHistoryDetails,
       offenderName: `${bookingDetails.lastName}, ${bookingDetails.firstName}`,
     }

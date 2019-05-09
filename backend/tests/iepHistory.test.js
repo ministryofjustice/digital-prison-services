@@ -6,7 +6,6 @@ function createIepHistoryReponse() {
     currentIepLevel: 'Standard',
     daysOnIepLevel: 625,
     currentIepDateTime: '2017-08-15T16:04:35',
-    currentIepEstablishment: 'Leeds',
     nextReviewDate: '15/08/2018',
     iepHistory: [
       {
@@ -18,7 +17,7 @@ function createIepHistoryReponse() {
         iepStaffMember: 'Staff Member',
         agencyId: 'LEI',
         iepLevel: 'Standard',
-        userId: 1,
+        userId: 'ITAG_USER',
       },
     ],
     offenderName: 'ANDERSON, ARTHUR',
@@ -40,11 +39,13 @@ describe('Activity list controller', async () => {
     })
 
     elite2Api.getStaffDetails.mockReturnValue({
+      username: 'ITAG_USER',
       firstName: 'Staff',
       lastName: 'Member',
     })
 
     elite2Api.getAgencyDetails.mockReturnValue({
+      agencyId: 'LEI',
       description: 'Leeds',
     })
     elite2Api.getIepSummaryWithDetails.mockReturnValue({
@@ -60,7 +61,7 @@ describe('Activity list controller', async () => {
           iepTime: '2017-08-15T16:04:35',
           agencyId: 'LEI',
           iepLevel: 'Standard',
-          userId: 1,
+          userId: 'ITAG_USER',
         },
         {
           bookingId: -1,
@@ -68,7 +69,7 @@ describe('Activity list controller', async () => {
           iepTime: '2017-08-13T16:04:35',
           agencyId: 'LEI',
           iepLevel: 'Standard',
-          userId: 1,
+          userId: 'ITAG_USER',
         },
       ],
     })
