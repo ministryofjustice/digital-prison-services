@@ -1,0 +1,213 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Adjudication History Form should render the iep history table correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Connect(IepHistoryForm)
+    reset={[MockFunction]}
+    search={[MockFunction]}
+    store={
+      Object {
+        "dispatch": [MockFunction],
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "dispatch": [MockFunction],
+      "establishments": Array [
+        Object {
+          "agencyId": "LEI",
+          "agencyType": "INST",
+          "description": "Leeds",
+        },
+      ],
+      "fieldValues": Object {
+        "establishment": undefined,
+        "fromDate": undefined,
+        "level": undefined,
+        "toDate": undefined,
+      },
+      "levels": Array [
+        "Standard",
+      ],
+      "now": "2017-03-21T00:00:00.000Z",
+      "reset": [MockFunction],
+      "search": [MockFunction],
+      "store": Object {
+        "dispatch": [MockFunction],
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      },
+      "storeSubscription": Subscription {
+        "listeners": Object {
+          "clear": [Function],
+          "get": [Function],
+          "notify": [Function],
+          "subscribe": [Function],
+        },
+        "onStateChange": [Function],
+        "parentSub": undefined,
+        "store": Object {
+          "dispatch": [MockFunction],
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "unsubscribe": undefined,
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "dispatch": [MockFunction],
+        "establishments": Array [
+          Object {
+            "agencyId": "LEI",
+            "agencyType": "INST",
+            "description": "Leeds",
+          },
+        ],
+        "fieldValues": Object {
+          "establishment": undefined,
+          "fromDate": undefined,
+          "level": undefined,
+          "toDate": undefined,
+        },
+        "levels": Array [
+          "Standard",
+        ],
+        "now": "2017-03-21T00:00:00.000Z",
+        "reset": [MockFunction],
+        "search": [MockFunction],
+        "store": Object {
+          "dispatch": [MockFunction],
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "storeSubscription": Subscription {
+          "listeners": Object {
+            "clear": [Function],
+            "get": [Function],
+            "notify": [Function],
+            "subscribe": [Function],
+          },
+          "onStateChange": [Function],
+          "parentSub": undefined,
+          "store": Object {
+            "dispatch": [MockFunction],
+            "getState": [MockFunction] {
+              "calls": Array [
+                Array [],
+                Array [],
+              ],
+            },
+            "subscribe": [MockFunction] {
+              "calls": Array [
+                Array [
+                  [Function],
+                ],
+              ],
+            },
+          },
+          "unsubscribe": undefined,
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromError": true,
+          "getDerivedStateFromProps": Object {
+            "hasShouldComponentUpdateBug": true,
+          },
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+  Symbol(enzyme.__childContext__): Object {
+    "storeSubscription": undefined,
+  },
+}
+`;

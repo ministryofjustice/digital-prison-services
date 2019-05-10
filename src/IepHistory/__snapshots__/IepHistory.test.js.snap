@@ -1,21 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IEP History should render the page correctly 1`] = `
+exports[`IEP History should render the current IEP level correctly 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <IepHistory
-    iepHistory={
-      Array [
-        Object {
-          "agencyId": "LEI",
-          "bookingId": -1,
-          "comments": "Test comment.",
-          "formattedTime": "15/08/2017 - 16:04",
-          "iepDate": "2017-08-15",
-          "iepLevel": "Standard",
-          "iepTime": "2017-08-15T16:04:35",
+  Symbol(enzyme.__unrendered__): <Connect(CurrentIepLevel)
+    store={
+      Object {
+        "dispatch": [MockFunction],
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
         },
-      ]
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      }
     }
   />,
   Symbol(enzyme.__renderer__): Object {
@@ -32,379 +37,56 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "function",
     "props": Object {
-      "body": undefined,
-      "caption": "IEP history",
-      "children": Array [
-        <UNDEFINED>
-          <CellHeader>
-            Date and Time
-          </CellHeader>
-          <CellHeader>
-            IEP Description
-          </CellHeader>
-          <CellHeader>
-            Comments
-          </CellHeader>
-          <CellHeader>
-            Establishment
-          </CellHeader>
-          <CellHeader>
-            Staff member
-          </CellHeader>
-        </UNDEFINED>,
-        Array [
-          <UNDEFINED>
-            <UNDEFINED>
-              15/08/2017 - 16:04
-            </UNDEFINED>
-            <UNDEFINED>
-              Standard
-            </UNDEFINED>
-            <UNDEFINED>
-              Test comment.
-            </UNDEFINED>
-            <UNDEFINED />
-            <UNDEFINED>
-              —
-            </UNDEFINED>
-          </UNDEFINED>,
-        ],
-      ],
-      "head": undefined,
+      "days": 625,
+      "dispatch": [MockFunction],
+      "level": "Standard",
+      "nextReviewDate": "15/08/2018",
+      "store": Object {
+        "dispatch": [MockFunction],
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      },
+      "storeSubscription": Subscription {
+        "listeners": Object {
+          "clear": [Function],
+          "get": [Function],
+          "notify": [Function],
+          "subscribe": [Function],
+        },
+        "onStateChange": [Function],
+        "parentSub": undefined,
+        "store": Object {
+          "dispatch": [MockFunction],
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "unsubscribe": undefined,
+      },
     },
     "ref": null,
-    "rendered": Array [
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "function",
-        "props": Object {
-          "children": Array [
-            <CellHeader>
-              Date and Time
-            </CellHeader>,
-            <CellHeader>
-              IEP Description
-            </CellHeader>,
-            <CellHeader>
-              Comments
-            </CellHeader>,
-            <CellHeader>
-              Establishment
-            </CellHeader>,
-            <CellHeader>
-              Staff member
-            </CellHeader>,
-          ],
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "Date and Time",
-            },
-            "ref": null,
-            "rendered": "Date and Time",
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "IEP Description",
-            },
-            "ref": null,
-            "rendered": "IEP Description",
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "Comments",
-            },
-            "ref": null,
-            "rendered": "Comments",
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "Establishment",
-            },
-            "ref": null,
-            "rendered": "Establishment",
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "Staff member",
-            },
-            "ref": null,
-            "rendered": "Staff member",
-            "type": [Function],
-          },
-        ],
-        "type": Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "attrs": Array [],
-          "componentStyle": ComponentStyle {
-            "componentId": "sc-ifAKCX",
-            "isStatic": true,
-            "rules": Array [
-              "",
-            ],
-          },
-          "displayName": "styled.tr",
-          "foldedComponentIds": Array [],
-          "render": [Function],
-          "styledComponentId": "sc-ifAKCX",
-          "target": "tr",
-          "toString": [Function],
-          "warnTooManyClasses": [Function],
-          "withComponent": [Function],
-        },
-      },
-      Object {
-        "instance": null,
-        "key": "2017-08-15T16:04:35",
-        "nodeType": "function",
-        "props": Object {
-          "children": Array [
-            <UNDEFINED>
-              15/08/2017 - 16:04
-            </UNDEFINED>,
-            <UNDEFINED>
-              Standard
-            </UNDEFINED>,
-            <UNDEFINED>
-              Test comment.
-            </UNDEFINED>,
-            <UNDEFINED />,
-            <UNDEFINED>
-              —
-            </UNDEFINED>,
-          ],
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "15/08/2017 - 16:04",
-            },
-            "ref": null,
-            "rendered": "15/08/2017 - 16:04",
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-bxivhb",
-                "isStatic": false,
-                "rules": Array [
-                  [Function],
-                  [Function],
-                  [Function],
-                ],
-              },
-              "displayName": "styled.td",
-              "foldedComponentIds": Array [],
-              "propTypes": Object {
-                "alignRight": [Function],
-                "children": [Function],
-                "isHeader": [Function],
-                "numeric": [Function],
-              },
-              "render": [Function],
-              "styledComponentId": "sc-bxivhb",
-              "target": "td",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "Standard",
-            },
-            "ref": null,
-            "rendered": "Standard",
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-bxivhb",
-                "isStatic": false,
-                "rules": Array [
-                  [Function],
-                  [Function],
-                  [Function],
-                ],
-              },
-              "displayName": "styled.td",
-              "foldedComponentIds": Array [],
-              "propTypes": Object {
-                "alignRight": [Function],
-                "children": [Function],
-                "isHeader": [Function],
-                "numeric": [Function],
-              },
-              "render": [Function],
-              "styledComponentId": "sc-bxivhb",
-              "target": "td",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "Test comment.",
-            },
-            "ref": null,
-            "rendered": "Test comment.",
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-bxivhb",
-                "isStatic": false,
-                "rules": Array [
-                  [Function],
-                  [Function],
-                  [Function],
-                ],
-              },
-              "displayName": "styled.td",
-              "foldedComponentIds": Array [],
-              "propTypes": Object {
-                "alignRight": [Function],
-                "children": [Function],
-                "isHeader": [Function],
-                "numeric": [Function],
-              },
-              "render": [Function],
-              "styledComponentId": "sc-bxivhb",
-              "target": "td",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": undefined,
-            },
-            "ref": null,
-            "rendered": null,
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-bxivhb",
-                "isStatic": false,
-                "rules": Array [
-                  [Function],
-                  [Function],
-                  [Function],
-                ],
-              },
-              "displayName": "styled.td",
-              "foldedComponentIds": Array [],
-              "propTypes": Object {
-                "alignRight": [Function],
-                "children": [Function],
-                "isHeader": [Function],
-                "numeric": [Function],
-              },
-              "render": [Function],
-              "styledComponentId": "sc-bxivhb",
-              "target": "td",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "children": "—",
-            },
-            "ref": null,
-            "rendered": "—",
-            "type": Object {
-              "$$typeof": Symbol(react.forward_ref),
-              "attrs": Array [],
-              "componentStyle": ComponentStyle {
-                "componentId": "sc-bxivhb",
-                "isStatic": false,
-                "rules": Array [
-                  [Function],
-                  [Function],
-                  [Function],
-                ],
-              },
-              "displayName": "styled.td",
-              "foldedComponentIds": Array [],
-              "propTypes": Object {
-                "alignRight": [Function],
-                "children": [Function],
-                "isHeader": [Function],
-                "numeric": [Function],
-              },
-              "render": [Function],
-              "styledComponentId": "sc-bxivhb",
-              "target": "td",
-              "toString": [Function],
-              "warnTooManyClasses": [Function],
-              "withComponent": [Function],
-            },
-          },
-        ],
-        "type": Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "attrs": Array [],
-          "componentStyle": ComponentStyle {
-            "componentId": "sc-ifAKCX",
-            "isStatic": true,
-            "rules": Array [
-              "",
-            ],
-          },
-          "displayName": "styled.tr",
-          "foldedComponentIds": Array [],
-          "render": [Function],
-          "styledComponentId": "sc-ifAKCX",
-          "target": "tr",
-          "toString": [Function],
-          "warnTooManyClasses": [Function],
-          "withComponent": [Function],
-        },
-      },
-    ],
+    "rendered": null,
     "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
@@ -413,379 +95,56 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "function",
       "props": Object {
-        "body": undefined,
-        "caption": "IEP history",
-        "children": Array [
-          <UNDEFINED>
-            <CellHeader>
-              Date and Time
-            </CellHeader>
-            <CellHeader>
-              IEP Description
-            </CellHeader>
-            <CellHeader>
-              Comments
-            </CellHeader>
-            <CellHeader>
-              Establishment
-            </CellHeader>
-            <CellHeader>
-              Staff member
-            </CellHeader>
-          </UNDEFINED>,
-          Array [
-            <UNDEFINED>
-              <UNDEFINED>
-                15/08/2017 - 16:04
-              </UNDEFINED>
-              <UNDEFINED>
-                Standard
-              </UNDEFINED>
-              <UNDEFINED>
-                Test comment.
-              </UNDEFINED>
-              <UNDEFINED />
-              <UNDEFINED>
-                —
-              </UNDEFINED>
-            </UNDEFINED>,
-          ],
-        ],
-        "head": undefined,
+        "days": 625,
+        "dispatch": [MockFunction],
+        "level": "Standard",
+        "nextReviewDate": "15/08/2018",
+        "store": Object {
+          "dispatch": [MockFunction],
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "storeSubscription": Subscription {
+          "listeners": Object {
+            "clear": [Function],
+            "get": [Function],
+            "notify": [Function],
+            "subscribe": [Function],
+          },
+          "onStateChange": [Function],
+          "parentSub": undefined,
+          "store": Object {
+            "dispatch": [MockFunction],
+            "getState": [MockFunction] {
+              "calls": Array [
+                Array [],
+                Array [],
+              ],
+            },
+            "subscribe": [MockFunction] {
+              "calls": Array [
+                Array [
+                  [Function],
+                ],
+              ],
+            },
+          },
+          "unsubscribe": undefined,
+        },
       },
       "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "function",
-          "props": Object {
-            "children": Array [
-              <CellHeader>
-                Date and Time
-              </CellHeader>,
-              <CellHeader>
-                IEP Description
-              </CellHeader>,
-              <CellHeader>
-                Comments
-              </CellHeader>,
-              <CellHeader>
-                Establishment
-              </CellHeader>,
-              <CellHeader>
-                Staff member
-              </CellHeader>,
-            ],
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "Date and Time",
-              },
-              "ref": null,
-              "rendered": "Date and Time",
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "IEP Description",
-              },
-              "ref": null,
-              "rendered": "IEP Description",
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "Comments",
-              },
-              "ref": null,
-              "rendered": "Comments",
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "Establishment",
-              },
-              "ref": null,
-              "rendered": "Establishment",
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "Staff member",
-              },
-              "ref": null,
-              "rendered": "Staff member",
-              "type": [Function],
-            },
-          ],
-          "type": Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "attrs": Array [],
-            "componentStyle": ComponentStyle {
-              "componentId": "sc-ifAKCX",
-              "isStatic": true,
-              "rules": Array [
-                "",
-              ],
-            },
-            "displayName": "styled.tr",
-            "foldedComponentIds": Array [],
-            "render": [Function],
-            "styledComponentId": "sc-ifAKCX",
-            "target": "tr",
-            "toString": [Function],
-            "warnTooManyClasses": [Function],
-            "withComponent": [Function],
-          },
-        },
-        Object {
-          "instance": null,
-          "key": "2017-08-15T16:04:35",
-          "nodeType": "function",
-          "props": Object {
-            "children": Array [
-              <UNDEFINED>
-                15/08/2017 - 16:04
-              </UNDEFINED>,
-              <UNDEFINED>
-                Standard
-              </UNDEFINED>,
-              <UNDEFINED>
-                Test comment.
-              </UNDEFINED>,
-              <UNDEFINED />,
-              <UNDEFINED>
-                —
-              </UNDEFINED>,
-            ],
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "15/08/2017 - 16:04",
-              },
-              "ref": null,
-              "rendered": "15/08/2017 - 16:04",
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-bxivhb",
-                  "isStatic": false,
-                  "rules": Array [
-                    [Function],
-                    [Function],
-                    [Function],
-                  ],
-                },
-                "displayName": "styled.td",
-                "foldedComponentIds": Array [],
-                "propTypes": Object {
-                  "alignRight": [Function],
-                  "children": [Function],
-                  "isHeader": [Function],
-                  "numeric": [Function],
-                },
-                "render": [Function],
-                "styledComponentId": "sc-bxivhb",
-                "target": "td",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              },
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "Standard",
-              },
-              "ref": null,
-              "rendered": "Standard",
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-bxivhb",
-                  "isStatic": false,
-                  "rules": Array [
-                    [Function],
-                    [Function],
-                    [Function],
-                  ],
-                },
-                "displayName": "styled.td",
-                "foldedComponentIds": Array [],
-                "propTypes": Object {
-                  "alignRight": [Function],
-                  "children": [Function],
-                  "isHeader": [Function],
-                  "numeric": [Function],
-                },
-                "render": [Function],
-                "styledComponentId": "sc-bxivhb",
-                "target": "td",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              },
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "Test comment.",
-              },
-              "ref": null,
-              "rendered": "Test comment.",
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-bxivhb",
-                  "isStatic": false,
-                  "rules": Array [
-                    [Function],
-                    [Function],
-                    [Function],
-                  ],
-                },
-                "displayName": "styled.td",
-                "foldedComponentIds": Array [],
-                "propTypes": Object {
-                  "alignRight": [Function],
-                  "children": [Function],
-                  "isHeader": [Function],
-                  "numeric": [Function],
-                },
-                "render": [Function],
-                "styledComponentId": "sc-bxivhb",
-                "target": "td",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              },
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": undefined,
-              },
-              "ref": null,
-              "rendered": null,
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-bxivhb",
-                  "isStatic": false,
-                  "rules": Array [
-                    [Function],
-                    [Function],
-                    [Function],
-                  ],
-                },
-                "displayName": "styled.td",
-                "foldedComponentIds": Array [],
-                "propTypes": Object {
-                  "alignRight": [Function],
-                  "children": [Function],
-                  "isHeader": [Function],
-                  "numeric": [Function],
-                },
-                "render": [Function],
-                "styledComponentId": "sc-bxivhb",
-                "target": "td",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              },
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "children": "—",
-              },
-              "ref": null,
-              "rendered": "—",
-              "type": Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-bxivhb",
-                  "isStatic": false,
-                  "rules": Array [
-                    [Function],
-                    [Function],
-                    [Function],
-                  ],
-                },
-                "displayName": "styled.td",
-                "foldedComponentIds": Array [],
-                "propTypes": Object {
-                  "alignRight": [Function],
-                  "children": [Function],
-                  "isHeader": [Function],
-                  "numeric": [Function],
-                },
-                "render": [Function],
-                "styledComponentId": "sc-bxivhb",
-                "target": "td",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              },
-            },
-          ],
-          "type": Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "attrs": Array [],
-            "componentStyle": ComponentStyle {
-              "componentId": "sc-ifAKCX",
-              "isStatic": true,
-              "rules": Array [
-                "",
-              ],
-            },
-            "displayName": "styled.tr",
-            "foldedComponentIds": Array [],
-            "render": [Function],
-            "styledComponentId": "sc-ifAKCX",
-            "target": "tr",
-            "toString": [Function],
-            "warnTooManyClasses": [Function],
-            "withComponent": [Function],
-          },
-        },
-      ],
+      "rendered": null,
       "type": [Function],
     },
   ],
@@ -812,6 +171,207 @@ ShallowWrapper {
         },
       },
     },
+  },
+  Symbol(enzyme.__childContext__): Object {
+    "storeSubscription": undefined,
+  },
+}
+`;
+
+exports[`IEP History should render the iep history table correctly 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Connect(IepHistory)
+    store={
+      Object {
+        "dispatch": [MockFunction],
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "dispatch": [MockFunction],
+      "results": Array [
+        Object {
+          "agencyId": "LEI",
+          "bookingId": -1,
+          "formattedTime": "13/08/2017 - 16:04",
+          "iepDate": "2017-08-13",
+          "iepEstablishment": "Leeds",
+          "iepLevel": "Standard",
+          "iepStaffMember": "Staff Member",
+          "iepTime": "2017-08-13T16:04:35",
+          "userId": "ITAG_USER",
+        },
+      ],
+      "store": Object {
+        "dispatch": [MockFunction],
+        "getState": [MockFunction] {
+          "calls": Array [
+            Array [],
+            Array [],
+          ],
+        },
+        "subscribe": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+        },
+      },
+      "storeSubscription": Subscription {
+        "listeners": Object {
+          "clear": [Function],
+          "get": [Function],
+          "notify": [Function],
+          "subscribe": [Function],
+        },
+        "onStateChange": [Function],
+        "parentSub": undefined,
+        "store": Object {
+          "dispatch": [MockFunction],
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "unsubscribe": undefined,
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "dispatch": [MockFunction],
+        "results": Array [
+          Object {
+            "agencyId": "LEI",
+            "bookingId": -1,
+            "formattedTime": "13/08/2017 - 16:04",
+            "iepDate": "2017-08-13",
+            "iepEstablishment": "Leeds",
+            "iepLevel": "Standard",
+            "iepStaffMember": "Staff Member",
+            "iepTime": "2017-08-13T16:04:35",
+            "userId": "ITAG_USER",
+          },
+        ],
+        "store": Object {
+          "dispatch": [MockFunction],
+          "getState": [MockFunction] {
+            "calls": Array [
+              Array [],
+              Array [],
+            ],
+          },
+          "subscribe": [MockFunction] {
+            "calls": Array [
+              Array [
+                [Function],
+              ],
+            ],
+          },
+        },
+        "storeSubscription": Subscription {
+          "listeners": Object {
+            "clear": [Function],
+            "get": [Function],
+            "notify": [Function],
+            "subscribe": [Function],
+          },
+          "onStateChange": [Function],
+          "parentSub": undefined,
+          "store": Object {
+            "dispatch": [MockFunction],
+            "getState": [MockFunction] {
+              "calls": Array [
+                Array [],
+                Array [],
+              ],
+            },
+            "subscribe": [MockFunction] {
+              "calls": Array [
+                Array [
+                  [Function],
+                ],
+              ],
+            },
+          },
+          "unsubscribe": undefined,
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromError": true,
+          "getDerivedStateFromProps": Object {
+            "hasShouldComponentUpdateBug": true,
+          },
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+  Symbol(enzyme.__childContext__): Object {
+    "storeSubscription": undefined,
   },
 }
 `;

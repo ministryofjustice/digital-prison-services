@@ -10,6 +10,7 @@ const getIepHistoryFactory = elite2Api => {
     // calls to the database.
     const uniqueUserIds = [...new Set(iepSummary.iepDetails.map(details => details.userId))]
     const uniqueAgencyIds = [...new Set(iepSummary.iepDetails.map(details => details.agencyId))]
+    const levels = [...new Set(iepSummary.iepDetails.map(details => details.iepLevel))]
 
     const users = await Promise.all(
       uniqueUserIds.filter(userId => Boolean(userId)).map(userId => elite2Api.getStaffDetails(context, userId))
@@ -41,9 +42,11 @@ const getIepHistoryFactory = elite2Api => {
     return {
       currentIepLevel: iepSummary.iepLevel,
       daysOnIepLevel: iepSummary.daysSinceReview,
+      establishments,
+      levels,
       nextReviewDate,
       currentIepDateTime: iepSummary.iepTime,
-      iepHistory: iepHistoryDetails,
+      results: iepHistoryDetails,
       offenderName: `${bookingDetails.lastName}, ${bookingDetails.firstName}`,
     }
   }

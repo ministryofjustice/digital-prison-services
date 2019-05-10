@@ -1,15 +1,17 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import IepHistory from './IepHistory'
-import CurrentIepLevel from './CurrentIepLevel'
+import moment from 'moment'
+
+import { shallow } from 'enzyme/build'
+import IepHistoryForm from './IepHistoryForm'
 
 const initialState = {
   iepHistory: {
+    now: moment('2017-03-21'),
     currentIepLevel: 'Standard',
     daysOnIepLevel: 625,
     currentIepDateTime: '2017-08-15T16:04:35',
     nextReviewDate: '15/08/2018',
-    establishments: [{ agencyId: 'LEI', description: 'Leeds' }],
+    establishments: [{ agencyId: 'LEI', description: 'Leeds', agencyType: 'INST' }],
     levels: ['Standard'],
     results: [
       {
@@ -28,7 +30,7 @@ const initialState = {
   },
 }
 
-describe('IEP History', () => {
+describe('Adjudication History Form', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
@@ -41,13 +43,7 @@ describe('IEP History', () => {
   })
 
   it('should render the iep history table correctly', () => {
-    const wrapper = shallow(<IepHistory store={store} />)
-
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('should render the current IEP level correctly', () => {
-    const wrapper = shallow(<CurrentIepLevel store={store} />)
+    const wrapper = shallow(<IepHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />)
 
     expect(wrapper).toMatchSnapshot()
   })
