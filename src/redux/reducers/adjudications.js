@@ -8,6 +8,7 @@ const initialState = {
   results: [],
   pageNumber: 0,
   pageSize: 20,
+  totalRecords: 0,
 }
 
 export default function adjudicationHistory(state = initialState, action) {

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { H3 } from '@govuk-react/heading'
 import { resetError, setLoaded } from '../redux/actions'
 import Page from '../Components/Page'
 import IepHistory from './IepHistory'

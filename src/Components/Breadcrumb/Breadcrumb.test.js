@@ -28,6 +28,28 @@ const props = {
     {
       breadcrumb: {
         props: {
+          children: 'Offender',
+          renderDirectly: true,
+        },
+        type: 'span',
+      },
+      key: '/offender',
+      location: {
+        pathname: '/offender',
+        search: '',
+        hash: '',
+        key: '8h5b0i',
+      },
+      match: {
+        path: '/',
+        url: '/',
+        isExact: true,
+        params: {},
+      },
+    },
+    {
+      breadcrumb: {
+        props: {
           children: 'Test page',
         },
         type: 'span',
@@ -60,7 +82,7 @@ describe('<Breadcrumb />', () => {
   const wrapper = shallow(<Breadcrumb {...props} />)
 
   it('should display the correct amount of breadcrumbs', () => {
-    expect(wrapper.find('BreadcrumbItem').length).toBe(3)
+    expect(wrapper.find('BreadcrumbItem').length).toBe(4)
   })
 
   it('should have the Home link as the first Breadcrumb ', () => {
@@ -88,6 +110,13 @@ describe('<Breadcrumb />', () => {
 
     expect(breadcrumbItem.find('Link').prop('to')).toEqual('/')
     expect(breadcrumbItem.find('span').text()).toEqual('Application homepage')
+  })
+
+  it('should not link breadcrumb that should be rendered directly', () => {
+    const breadcrumbItem = wrapper.find('BreadcrumbItem').at(2)
+
+    expect(breadcrumbItem.find('Link').exists()).toBe(false)
+    expect(breadcrumbItem.find('span').text()).toEqual('Offender')
   })
 
   it('should not apply a link to the current page breadcrumb', () => {

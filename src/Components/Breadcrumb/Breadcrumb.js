@@ -10,7 +10,7 @@ export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
   const { breadcrumb: poppedBreadcrumb } = breadcrumbs.length > 0 ? breadcrumbs.pop() : breadcrumbs
 
   return (
-    <BreadcrumbContainer>
+    <BreadcrumbContainer id="breadcrumb">
       <BreadcrumbList>
         <BreadcrumbListItem>
           <a data-qa="breadcrumb-home-page-link" href={homeLink}>
@@ -19,6 +19,9 @@ export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
         </BreadcrumbListItem>
         {breadcrumbs.map(({ match, breadcrumb }, i, arr) => {
           const parentPageLink = arr.length - 1 === i ? 'breadcrumb-parent-page-link' : null
+          if (breadcrumb.props.renderDirectly) {
+            return <BreadcrumbListItem key={match.url}>{breadcrumb}</BreadcrumbListItem>
+          }
           return (
             <BreadcrumbListItem key={match.url}>
               <Link to={match.url} data-qa={parentPageLink}>

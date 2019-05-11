@@ -11,6 +11,7 @@ class IepHistory  extends Page {
 
     static content = {
         pageTitle { $('.inner-content h1').text() }
+        breadcrumb {$('#breadcrumb li').children().collect{[it.text(), it.attr('href')]}}
         tableRows { $('tbody tr') }
         labels { $'.label' }
         currentIepLevelData { $('p')}

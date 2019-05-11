@@ -26,6 +26,7 @@ const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
 const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
+const offenderServiceFactory = require('./controllers/offenderService')
 const { userLocationsFactory } = require('./controllers/userLocations')
 const { userMeFactory } = require('./controllers/userMe')
 const { getConfiguration } = require('./controllers/getConfig')
@@ -129,6 +130,7 @@ const controller = controllerFactory({
   offenderLoader: offenderLoaderFactory(elite2Api),
   bulkAppointmentsService: bulkAppointmentsServiceFactory(elite2Api),
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
+  offenderService: offenderServiceFactory(elite2Api),
 })
 
 const oauthApi = oauthApiFactory(
@@ -201,6 +203,7 @@ app.use('/api/bookings/:offenderNo/iepSummary', controller.getIepHistory)
 app.use('/api/houseblocklist', controller.getHouseblockList)
 app.use('/api/activityList', controller.getActivityList)
 app.use('/api/adjudications/:offenderNumber', controller.getAdjudications)
+app.use('/api/offenders/:offenderNo', controller.getOffender)
 app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/movements/:agencyId/in', controller.getMovementsIn)

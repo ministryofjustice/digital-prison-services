@@ -12,6 +12,7 @@ const factory = ({
   offenderLoader,
   bulkAppointmentsService,
   csvParserService,
+  offenderService,
 }) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
@@ -99,6 +100,12 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const getOffender = asyncMiddleware(async (req, res) => {
+    const { offenderNo } = req.params
+    const viewModel = await offenderService.getOffender(res.locals, offenderNo)
+    res.json(viewModel)
+  })
+
   const uploadOffenders = asyncMiddleware(async (req, res) => {
     const { file } = req.files
     const { agencyId } = req.params
@@ -144,6 +151,7 @@ const factory = ({
     getMovementsIn,
     getMovementsOut,
     getIepHistory,
+    getOffender,
     getOffendersInReception,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,

@@ -1,4 +1,4 @@
-import { capitalize, mapToQueryString } from './utils'
+import { capitalize, properCaseName, mapToQueryString } from './utils'
 
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
@@ -22,6 +22,27 @@ describe('capitalize()', () => {
     it('should handle multiple word strings', () => {
       expect(capitalize('Segregation Unit')).toEqual('Segregation unit')
     })
+  })
+})
+
+describe('properCaseName', () => {
+  it('null string', () => {
+    expect(properCaseName(null)).toEqual('')
+  })
+  it('empty string', () => {
+    expect(properCaseName('')).toEqual('')
+  })
+  it('Lower Case', () => {
+    expect(properCaseName('bob')).toEqual('Bob')
+  })
+  it('Mixed Case', () => {
+    expect(properCaseName('GDgeHHdGr')).toEqual('Gdgehhdgr')
+  })
+  it('Multiple words', () => {
+    expect(properCaseName('BOB SMITH')).toEqual('Bob smith')
+  })
+  it('Hyphenated', () => {
+    expect(properCaseName('MONTGOMERY-FOSTER-SMYTH-WALLACE-BOB')).toEqual('Montgomery-Foster-Smyth-Wallace-Bob')
   })
 })
 
