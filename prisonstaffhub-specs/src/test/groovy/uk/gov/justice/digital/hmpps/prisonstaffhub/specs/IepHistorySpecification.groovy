@@ -7,7 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepHistory
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
-import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.getNOTM_URL
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
 class IepHistorySpecification extends BrowserReportingSpec {
 
