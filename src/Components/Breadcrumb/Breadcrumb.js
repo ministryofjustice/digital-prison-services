@@ -6,11 +6,11 @@ import { BreadcrumbContainer, BreadcrumbList, BreadcrumbListItem } from './Bread
 import routes from '../../routes'
 
 export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
-  // Pick (pop) the last breadcrumd from the array (also removes it from the array)
+  // Pick (pop) the last breadcrumb from the array (also removes it from the array)
   const { breadcrumb: poppedBreadcrumb } = breadcrumbs.length > 0 ? breadcrumbs.pop() : breadcrumbs
 
   return (
-    <BreadcrumbContainer id="breadcrumb">
+    <BreadcrumbContainer data-qa="breadcrumb">
       <BreadcrumbList>
         <BreadcrumbListItem>
           <a data-qa="breadcrumb-home-page-link" href={homeLink}>
