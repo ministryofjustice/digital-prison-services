@@ -41,10 +41,11 @@ import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './C
 import IepHistoryContainer from './IepHistory/IepHistoryContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
-import AdjudicationHistory from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
+import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
+import WithOffenderDetails from './WithOffenderDetails/WithOffenderDetails'
 
 const axios = require('axios')
 
@@ -315,13 +316,15 @@ class App extends React.Component {
             exact
             path={routePaths.iepHistory}
             render={({ history, match: { params } }) => (
-              <IepHistoryContainer
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                history={history}
-              />
+              <WithOffenderDetails handleError={this.handleError} offenderNumber={params.offenderNo}>
+                <IepHistoryContainer
+                  offenderNo={params.offenderNo}
+                  handleError={this.handleError}
+                  setLoadedDispatch={setLoadedDispatch}
+                  resetErrorDispatch={resetErrorDispatch}
+                  history={history}
+                />
+              </WithOffenderDetails>
             )}
           />
           <Route
@@ -418,13 +421,15 @@ class App extends React.Component {
             exact
             path={routePaths.adjudications}
             render={({ history, match: { params } }) => (
-              <AdjudicationHistory
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                offenderNumber={params.offenderNo}
-                history={history}
-              />
+              <WithOffenderDetails handleError={this.handleError} offenderNumber={params.offenderNo}>
+                <AdjudicationHistoryContainer
+                  handleError={this.handleError}
+                  setLoadedDispatch={setLoadedDispatch}
+                  resetErrorDispatch={resetErrorDispatch}
+                  offenderNumber={params.offenderNo}
+                  history={history}
+                />
+              </WithOffenderDetails>
             )}
           />
         </div>

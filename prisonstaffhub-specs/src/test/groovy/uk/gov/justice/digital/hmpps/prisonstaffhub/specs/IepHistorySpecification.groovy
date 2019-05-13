@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepHistory
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
 class IepHistorySpecification extends BrowserReportingSpec {
 
@@ -55,7 +56,11 @@ class IepHistorySpecification extends BrowserReportingSpec {
         to IepHistory
 
         then: "I should be presented with results"
-        at IepHistory
+
+        breadcrumb == [['Home', NOTM_URL],
+                       ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
+                       ['Iep-history', '']]
+
         tableRows.size() == 4 // Including header row
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ['12/10/2017 - 09:44','Basic',

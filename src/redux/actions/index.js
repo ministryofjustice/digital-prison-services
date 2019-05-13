@@ -228,3 +228,5 @@ export const setAppointmentPrisoners = prisoners => ({
 export const setBulkAppointmentsComplete = () => ({
   type: ActionTypes.SET_BULK_APPOINTMENTS_COMPLETE,
 })
+
+export const setOffender = offender => ({ type: ActionTypes.SET_OFFENDER, offender })

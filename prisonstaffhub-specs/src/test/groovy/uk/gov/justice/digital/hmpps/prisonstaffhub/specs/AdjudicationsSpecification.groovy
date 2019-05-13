@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
-
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -9,6 +8,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationHistoryPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
 class AdjudicationsSpecification extends BrowserReportingSpec {
     @Rule
@@ -17,19 +17,31 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
     @Rule
     OauthApi oauthApi = new OauthApi()
 
+    def setup() {
+        def offenderDetails = [
+                firstName: "HARRY",
+                lastName: "SMITH",
+        ]
+
+        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
+        elite2api.stubOffenderDetails('AA00112', offenderDetails)
+    }
+
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
     def "should present adjudication history results"() {
-        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
         when: "I do view an offenders adjudications"
-        go "/offenders/AA00112/adjudications"
+        to AdjudicationHistoryPage
 
         then: "I should be presented with results"
-        at AdjudicationHistoryPage
+
+        breadcrumb == [['Home', NOTM_URL],
+                       ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
+                       ['Adjudications', '']]
 
         tableRows.size() == 8 // Including header row
         def columns1 = tableRows[1].find('td')
@@ -41,16 +53,14 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
     }
 
     def "can filter by establishment"() {
-        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
         when: "I do view an offenders adjudications"
-        go "/offenders/AA00112/adjudications"
+        to AdjudicationHistoryPage
 
         then: "I should be presented with results"
-        at AdjudicationHistoryPage
 
         tableRows.size() == 8
 
@@ -68,16 +78,14 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
     }
 
     def "can filter by report date"(){
-        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
         when: "I do view an offenders adjudications"
-        go "/offenders/AA00112/adjudications"
+        to AdjudicationHistoryPage
 
         then: "I should be presented with results"
-        at AdjudicationHistoryPage
 
         tableRows.size() == 8
 
@@ -96,25 +104,24 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
     }
 
     def "can reset filter"() {
-        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
         when: "I do view an offenders adjudications"
-        go "/offenders/AA00112/adjudications"
+        to AdjudicationHistoryPage
 
         then: "I should be presented with results"
-        at AdjudicationHistoryPage
 
         tableRows.size() == 8
 
         elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.mdihistoryResponse, '?agencyId=MDI')
+
         when: "I filter establishment to only show moorland"
         establishmentSelect = 'MDI'
         applyFilter.click()
 
-        then: "I should be presented with filtered results"
+        then: "I should be presented with all the results"
         at AdjudicationHistoryPage
         tableRows.size() == 4 // Including header row
 

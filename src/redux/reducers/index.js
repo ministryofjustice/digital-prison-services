@@ -4,6 +4,7 @@ import * as ActionTypes from '../actions/actionTypes'
 import content from './content'
 import bulkAppointments from './bulk-appointments'
 import adjudicationHistory from './adjudications'
+import offenderDetails from './offenderDetails'
 
 export function defaultPeriod(time) {
   const midnight = moment('12:00a', 'HH:mm a')
@@ -287,6 +288,7 @@ const prisonStaffHubApp = combineReducers({
   content,
   bulkAppointments,
   adjudicationHistory,
+  offenderDetails,
 })
 
 export default prisonStaffHubApp

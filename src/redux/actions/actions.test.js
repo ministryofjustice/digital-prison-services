@@ -292,6 +292,14 @@ describe('actions', () => {
     expect(actions.setAdjudicationHistoryPageSize(6)).toEqual(expectedAction)
   })
 
+  it('should create an action to set the offender', () => {
+    const expectedAction = {
+      type: types.SET_OFFENDER,
+      offender: { firstName: 'first-name-1', lastName: 'last-name1' },
+    }
+    expect(actions.setOffender({ firstName: 'first-name-1', lastName: 'last-name1' })).toEqual(expectedAction)
+  })
+
   describe('content actions', () => {
     let store
     const getEntriesSpy = jest.spyOn(contentfulClient, 'getEntries')
