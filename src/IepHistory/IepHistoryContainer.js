@@ -7,7 +7,7 @@ import Page from '../Components/Page'
 import IepHistory from './IepHistory'
 import CurrentIepLevel from './CurrentIepLevel'
 import IepHistoryForm from './IepHistoryForm'
-import { setIepHistoryResults, setIepHistoryFilter} from '../redux/actions'
+import { setIepHistoryResults, setIepHistoryFilter } from '../redux/actions'
 
 const axios = require('axios')
 
@@ -24,7 +24,7 @@ class IepHistoryContainer extends Component {
     }
   }
 
-  getIepHistory = async ({ establishment, level, fromDate, toDate }) => {
+  getIepHistory = async () => {
     const {
       offenderNo,
       handleError,
@@ -37,7 +37,7 @@ class IepHistoryContainer extends Component {
     setLoadedDispatch(false)
 
     try {
-      const { data: results, headers } = await axios.get(`/api/bookings/${offenderNo}/iepSummary`)
+      const { data: results } = await axios.get(`/api/bookings/${offenderNo}/iepSummary`)
 
       setResults({ ...results })
     } catch (error) {
@@ -51,17 +51,52 @@ class IepHistoryContainer extends Component {
     this.updateResults({ ...formValues })
   }
 
-  updateResults = fields => {
-    const { setIepHistoryFilter: setFilter } = this.props
+  updateResults = async fields => {
+    await this.getIepHistory()
+    const {
+      setIepHistoryFilter: setFilter,
+      results,
+      resetErrorDispatch,
+      setLoadedDispatch,
+      setIepHistoryResults: setResults,
+    } = this.props
     setFilter(fields)
-    return this.getIepHistory(fields)
+
+    resetErrorDispatch()
+    setLoadedDispatch(false)
+
+    let filteredResults = results
+
+    if (fields.establishment) {
+      filteredResults = filteredResults.filter(result => result.agencyId === fields.establishment)
+    }
+
+    if (fields.level) {
+      filteredResults = filteredResults.filter(result => result.iepLevel === fields.level)
+    }
+
+    if (fields.fromDate) {
+      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrAfter(fields.fromDate))
+    }
+
+    if (fields.toDate) {
+      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrBefore(fields.toDate))
+    }
+
+    setResults({ results: filteredResults })
+    setLoadedDispatch(true)
   }
 
-  reset = () => this.updateResults({ establishment: null, level: null, fromDate: null, toDate: null })
+  reset = () => {
+    const { setIepHistoryFilter: setFilter } = this.props
+    setFilter({ establishment: null, level: null, fromDate: null, toDate: null })
+    this.getIepHistory()
+  }
 
   render() {
+    const { offenderName } = this.props
     return (
-      <Page title="">
+      <Page title={`IEP history for ${offenderName}`}>
         <CurrentIepLevel />
         <IepHistoryForm search={this.applyFilter} reset={this.reset} />
         <IepHistory />
@@ -79,6 +114,16 @@ IepHistoryContainer.propTypes = {
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
+  offenderName: PropTypes.string.isRequired,
+  results: PropTypes.arrayOf(
+    PropTypes.shape({
+      comments: PropTypes.string,
+      iepEstablishment: PropTypes.string.isRequired,
+      iepStaffMember: PropTypes.string,
+      iepTime: PropTypes.string.isRequired,
+      formattedTime: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   fieldValues: PropTypes.shape({
     establishment: PropTypes.string,
     level: PropTypes.string,
@@ -93,6 +138,8 @@ IepHistoryContainer.propTypes = {
 
 const mapStateToProps = state => ({
   error: state.app.error,
+  offenderName: state.iepHistory.offenderName,
+  results: state.iepHistory.results,
   fieldValues: {
     establishment: state.iepHistory.establishment,
     level: state.iepHistory.level,
