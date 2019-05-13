@@ -4,10 +4,13 @@ import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import Button from '@govuk-react/button'
 import moment from 'moment'
+import ErrorSummary from '@govuk-react/error-summary'
+import ErrorText from '@govuk-react/error-text'
 import { connect } from 'react-redux'
 import { Form } from 'react-final-form'
 import FormDatePicker from '../../DatePickers/FormDatePicker'
 import { linkOnClick } from '../../utils'
+import validateThenSubmit from './AdjudicationHistoryFormValidation'
 
 import {
   FullWidthSelect,
@@ -16,29 +19,41 @@ import {
   FiltersLabel,
   DateRangeLabel,
 } from './AdjudicationHistory.style'
-import { FieldWithError } from '../../final-form-govuk-helpers'
+import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 
 export const AdjudicationHistoryForm = ({ agencies, search, fieldValues, reset, now }) => (
   <Form
     initialValues={fieldValues}
     onSubmit={values => {
-      search(values)
+      const errors = validateThenSubmit({
+        fromDate: values.fromDate,
+        toDate: values.toDate,
+        submit: search,
+      })(values)
+      if (errors) window.scrollTo(0, 0)
+      return errors
     }}
-    render={({ handleSubmit, submitError, submitting, form, values }) => (
-      <form onSubmit={handleSubmit}>
-        <SearchArea>
-          <FormFields
-            now={now}
-            errors={submitError}
-            submitting={submitting}
-            agencies={agencies}
-            values={values}
-            reset={() => {
-              reset().then(() => form.reset({}))
-            }}
-          />
-        </SearchArea>
-      </form>
+    render={({ error, handleSubmit, submitError, submitting, form, values }) => (
+      <>
+        {error && <ErrorText> {error} </ErrorText>}
+        {submitError && (
+          <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={submitError} />
+        )}
+        <form onSubmit={handleSubmit}>
+          <SearchArea>
+            <FormFields
+              now={now}
+              errors={submitError}
+              submitting={submitting}
+              agencies={agencies}
+              values={values}
+              reset={() => {
+                reset().then(() => form.reset({}))
+              }}
+            />
+          </SearchArea>
+        </form>
+      </>
     )}
   />
 )
@@ -76,7 +91,7 @@ export const FormFields = ({ now, errors, submitting, agencies = [], values, res
       </GridCol>
       <GridCol setDesktopWidth="two-thirds">
         <GridRow>
-          <DateRangeLabel>Date Range</DateRangeLabel>
+          <DateRangeLabel>Reported date</DateRangeLabel>
         </GridRow>
         <GridRow>
           <GridCol id="from-date" setDesktopWidth="one-third">
