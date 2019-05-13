@@ -5,7 +5,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="sc-gqjmRU bgGhN"
+    className="sc-chPdSV bcSAZc"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -17,7 +17,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <h3
-            className="sc-jTzLTM kleBvb sc-iwsKbI eUACTV"
+            className="sc-kGXeez lkXioC sc-cSHVUG bvaxSZ"
           >
             Filters
           </h3>
@@ -26,19 +26,19 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <div
-            className="sc-VigVT cvusKc sc-bwzfXH iXLolC"
+            className="sc-kgoBCf cnFRcH sc-bwzfXH iXLolC"
           >
             <label
-              className="sc-gZMcBi jfuADF sc-EHOje fgdBqA"
+              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
               id="establishment-select"
             >
               <span
-                className="sc-ifAKCX ehHlZd"
+                className="sc-gqjmRU hMYAWR"
               >
                 Establishment
               </span>
               <select
-                className="sc-dnqmqq fIVGzI"
+                className="sc-jzJRlG jDxhCX"
                 name="establishment"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -74,9 +74,9 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <span
-            className="sc-fjdhpX DawuW"
+            className="sc-kpOJdX uKFLa"
           >
-            Date Range
+            Reported date
           </span>
         </div>
         <div
@@ -91,17 +91,17 @@ exports[`Adjudication History Form should render correctly 1`] = `
             >
               <div>
                 <label
-                  className="sc-EHOje flzXGf"
+                  className="sc-VigVT srngP"
                 >
                   <span
-                    className="sc-ifAKCX ehHlZd"
+                    className="sc-gqjmRU hMYAWR"
                   >
                      
                     From
                      
                   </span>
                   <input
-                    className="form-control sc-gzVnrw jBwZqD"
+                    className="form-control sc-jTzLTM cLpfsp"
                     name="fromDate"
                     onChange={[Function]}
                     onClick={[Function]}
@@ -489,17 +489,17 @@ exports[`Adjudication History Form should render correctly 1`] = `
             >
               <div>
                 <label
-                  className="sc-EHOje flzXGf"
+                  className="sc-VigVT srngP"
                 >
                   <span
-                    className="sc-ifAKCX ehHlZd"
+                    className="sc-gqjmRU hMYAWR"
                   >
                      
                     To
                      
                   </span>
                   <input
-                    className="form-control sc-gzVnrw jBwZqD"
+                    className="form-control sc-jTzLTM cLpfsp"
                     name="toDate"
                     onChange={[Function]}
                     onClick={[Function]}
