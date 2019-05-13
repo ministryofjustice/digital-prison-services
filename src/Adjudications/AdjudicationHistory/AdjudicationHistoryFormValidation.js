@@ -6,11 +6,11 @@ const validateThenSubmit = ({ fromDate, toDate, submit }) => values => {
       [FORM_ERROR]: [
         {
           targetName: 'fromDate',
-          text: 'The From date must be the same or before the To date',
+          text: 'The From date must be the same as or before the To date',
         },
         {
           targetName: 'toDate',
-          text: 'The To date must be the same or after the From date',
+          text: 'The To date must be the same as or after the From date',
         },
       ],
     }
