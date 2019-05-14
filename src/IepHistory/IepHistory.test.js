@@ -1,9 +1,7 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import testRenderer from 'react-test-renderer'
 import IepHistory from './IepHistory'
 import CurrentIepLevel from './CurrentIepLevel'
-import IepHistoryForm from './IepHistoryForm'
 
 const initialState = {
   iepHistory: {
@@ -26,7 +24,6 @@ const initialState = {
         userId: 'ITAG_USER',
       },
     ],
-    offenderName: 'ANDERSON, ARTHUR',
   },
 }
 

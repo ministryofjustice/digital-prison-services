@@ -26,7 +26,6 @@ const initialState = {
         userId: 'ITAG_USER',
       },
     ],
-    offenderName: 'ANDERSON, ARTHUR',
   },
 }
 

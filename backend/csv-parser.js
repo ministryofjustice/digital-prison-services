@@ -10,8 +10,8 @@ const validationMessages = {
 const csvParserService = ({ fs, isBinaryFileSync }) => {
   const parseCsvData = async data => {
     const output = []
-
-    const parser = parse(data, { trim: true, skip_empty_lines: true }).on('readable', function() {
+    // eslint-disable-next-line prefer-arrow-callback
+    const parser = parse(data, { trim: true, skip_empty_lines: true }).on('readable', function onRead() {
       let record
       // eslint-disable-next-line no-cond-assign
       while ((record = this.read())) {

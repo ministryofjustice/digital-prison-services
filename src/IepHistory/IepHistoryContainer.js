@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import Page from '../Components/Page'
 import IepHistory from './IepHistory'
 import CurrentIepLevel from './CurrentIepLevel'
 import IepHistoryForm from './IepHistoryForm'
 import { setIepHistoryResults, setIepHistoryFilter } from '../redux/actions'
+import OffenderPage from '../OffenderPage/OffenderPage'
 
 const axios = require('axios')
 
@@ -71,13 +71,18 @@ class IepHistoryContainer extends Component {
   }
 
   render() {
-    const { offenderName } = this.props
+    const { offenderNo, handleError, setLoadedDispatch } = this.props
     return (
-      <Page title={`IEP History for ${offenderName}`}>
+      <OffenderPage
+        title={({ firstName, lastName }) => `IEP History for ${firstName} ${lastName}`}
+        handleError={handleError}
+        offenderNumber={offenderNo}
+        setLoaded={setLoadedDispatch}
+      >
         <CurrentIepLevel />
         <IepHistoryForm search={this.applyFilter} reset={this.reset} />
         <IepHistory />
-      </Page>
+      </OffenderPage>
     )
   }
 }
@@ -91,7 +96,6 @@ IepHistoryContainer.propTypes = {
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
-  offenderName: PropTypes.string,
   fieldValues: PropTypes.shape({
     establishment: PropTypes.string,
     level: PropTypes.string,
@@ -104,13 +108,8 @@ IepHistoryContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
 }
 
-IepHistoryContainer.defaultProps = {
-  offenderName: '',
-}
-
 const mapStateToProps = state => ({
   error: state.app.error,
-  offenderName: state.iepHistory.offenderName,
   results: state.iepHistory.results,
   fieldValues: {
     establishment: state.iepHistory.establishment,
