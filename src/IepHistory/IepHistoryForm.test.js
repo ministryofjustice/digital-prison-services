@@ -30,7 +30,7 @@ const initialState = {
   },
 }
 
-describe('Adjudication History Form', () => {
+describe('IEP History Form', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
