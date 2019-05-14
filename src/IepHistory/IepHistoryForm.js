@@ -55,7 +55,7 @@ export const IepHistoryForm = ({ establishments, levels, search, fieldValues, re
 
 const shouldShowDay = now => date => date.isSameOrBefore(now, 'day')
 
-export const FormFields = ({ now, errors, submitting, establishments = [], levels = [], values, reset }) => (
+export const FormFields = ({ now, errors, establishments, levels, submitting, values, reset }) => (
   <>
     <GridRow>
       <GridCol setDesktopWidth="one-third">
@@ -162,6 +162,11 @@ IepHistoryForm.propTypes = {
     fromDate: PropTypes.instanceOf(moment),
     toDate: PropTypes.instanceOf(moment),
   }).isRequired,
+}
+
+FormFields.defaultProps = {
+  establishments: [],
+  levels: [],
 }
 
 const mapStateToProps = state => ({

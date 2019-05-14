@@ -1,7 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import testRenderer from 'react-test-renderer'
 import IepHistory from './IepHistory'
 import CurrentIepLevel from './CurrentIepLevel'
+import IepHistoryForm from './IepHistoryForm'
 
 const initialState = {
   iepHistory: {
@@ -41,13 +43,13 @@ describe('IEP History', () => {
   })
 
   it('should render the iep history table correctly', () => {
-    const wrapper = shallow(<IepHistory store={store} />)
+    const wrapper = testRenderer.create(<IepHistory store={store} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })
 
   it('should render the current IEP level correctly', () => {
-    const wrapper = shallow(<CurrentIepLevel store={store} />)
+    const wrapper = testRenderer.create(<CurrentIepLevel store={store} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })

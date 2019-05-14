@@ -91,7 +91,7 @@ IepHistoryContainer.propTypes = {
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
-  offenderName: PropTypes.string.isRequired,
+  offenderName: PropTypes.string,
   fieldValues: PropTypes.shape({
     establishment: PropTypes.string,
     level: PropTypes.string,
@@ -102,6 +102,10 @@ IepHistoryContainer.propTypes = {
   // redux dispatch
   resetErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
+}
+
+IepHistoryContainer.defaultProps = {
+  offenderName: '',
 }
 
 const mapStateToProps = state => ({

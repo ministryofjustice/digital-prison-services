@@ -1,377 +1,183 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`IEP History should render the current IEP level correctly 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <Connect(CurrentIepLevel)
-    store={
-      Object {
-        "dispatch": [MockFunction],
-        "getState": [MockFunction] {
-          "calls": Array [
-            Array [],
-            Array [],
-          ],
-        },
-        "subscribe": [MockFunction] {
-          "calls": Array [
-            Array [
-              [Function],
-            ],
-          ],
-        },
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "checkPropTypes": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "days": 625,
-      "dispatch": [MockFunction],
-      "level": "Standard",
-      "nextReviewDate": "15/08/2018",
-      "store": Object {
-        "dispatch": [MockFunction],
-        "getState": [MockFunction] {
-          "calls": Array [
-            Array [],
-            Array [],
-          ],
-        },
-        "subscribe": [MockFunction] {
-          "calls": Array [
-            Array [
-              [Function],
-            ],
-          ],
-        },
-      },
-      "storeSubscription": Subscription {
-        "listeners": Object {
-          "clear": [Function],
-          "get": [Function],
-          "notify": [Function],
-          "subscribe": [Function],
-        },
-        "onStateChange": [Function],
-        "parentSub": undefined,
-        "store": Object {
-          "dispatch": [MockFunction],
-          "getState": [MockFunction] {
-            "calls": Array [
-              Array [],
-              Array [],
-            ],
-          },
-          "subscribe": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-          },
-        },
-        "unsubscribe": undefined,
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "days": 625,
-        "dispatch": [MockFunction],
-        "level": "Standard",
-        "nextReviewDate": "15/08/2018",
-        "store": Object {
-          "dispatch": [MockFunction],
-          "getState": [MockFunction] {
-            "calls": Array [
-              Array [],
-              Array [],
-            ],
-          },
-          "subscribe": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-          },
-        },
-        "storeSubscription": Subscription {
-          "listeners": Object {
-            "clear": [Function],
-            "get": [Function],
-            "notify": [Function],
-            "subscribe": [Function],
-          },
-          "onStateChange": [Function],
-          "parentSub": undefined,
-          "store": Object {
-            "dispatch": [MockFunction],
-            "getState": [MockFunction] {
-              "calls": Array [
-                Array [],
-                Array [],
-              ],
-            },
-            "subscribe": [MockFunction] {
-              "calls": Array [
-                Array [
-                  [Function],
-                ],
-              ],
-            },
-          },
-          "unsubscribe": undefined,
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "legacyContextMode": "parent",
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getChildContext": Object {
-            "calledByRenderer": false,
-          },
-          "getDerivedStateFromError": true,
-          "getDerivedStateFromProps": Object {
-            "hasShouldComponentUpdateBug": true,
-          },
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-  },
-  Symbol(enzyme.__childContext__): Object {
-    "storeSubscription": undefined,
-  },
-}
+<div
+  className="current-iep sc-iwsKbI jnBmwk"
+>
+  <div
+    className="sc-htoDjs bAoqyZ"
+  >
+    <div
+      className="sc-dnqmqq kSWurI"
+    >
+      <strong
+        className="label"
+      >
+        Current IEP level
+      </strong>
+      <p>
+        Standard
+      </p>
+    </div>
+    <div
+      className="sc-dnqmqq kSWurI"
+    >
+      <strong
+        className="label"
+      >
+        Days since review
+      </strong>
+      <p>
+        625
+      </p>
+    </div>
+    <div
+      className="sc-dnqmqq kSWurI"
+    >
+      <strong
+        className="label"
+      >
+        Date of next review
+      </strong>
+      <p>
+        15/08/2018
+      </p>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`IEP History should render the iep history table correctly 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <Connect(IepHistory)
-    store={
-      Object {
-        "dispatch": [MockFunction],
-        "getState": [MockFunction] {
-          "calls": Array [
-            Array [],
-            Array [],
-          ],
-        },
-        "subscribe": [MockFunction] {
-          "calls": Array [
-            Array [
-              [Function],
-            ],
-          ],
-        },
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "checkPropTypes": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "dispatch": [MockFunction],
-      "results": Array [
-        Object {
-          "agencyId": "LEI",
-          "bookingId": -1,
-          "formattedTime": "13/08/2017 - 16:04",
-          "iepDate": "2017-08-13",
-          "iepEstablishment": "Leeds",
-          "iepLevel": "Standard",
-          "iepStaffMember": "Staff Member",
-          "iepTime": "2017-08-13T16:04:35",
-          "userId": "ITAG_USER",
-        },
-      ],
-      "store": Object {
-        "dispatch": [MockFunction],
-        "getState": [MockFunction] {
-          "calls": Array [
-            Array [],
-            Array [],
-          ],
-        },
-        "subscribe": [MockFunction] {
-          "calls": Array [
-            Array [
-              [Function],
-            ],
-          ],
-        },
-      },
-      "storeSubscription": Subscription {
-        "listeners": Object {
-          "clear": [Function],
-          "get": [Function],
-          "notify": [Function],
-          "subscribe": [Function],
-        },
-        "onStateChange": [Function],
-        "parentSub": undefined,
-        "store": Object {
-          "dispatch": [MockFunction],
-          "getState": [MockFunction] {
-            "calls": Array [
-              Array [],
-              Array [],
-            ],
-          },
-          "subscribe": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-          },
-        },
-        "unsubscribe": undefined,
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "dispatch": [MockFunction],
-        "results": Array [
-          Object {
-            "agencyId": "LEI",
-            "bookingId": -1,
-            "formattedTime": "13/08/2017 - 16:04",
-            "iepDate": "2017-08-13",
-            "iepEstablishment": "Leeds",
-            "iepLevel": "Standard",
-            "iepStaffMember": "Staff Member",
-            "iepTime": "2017-08-13T16:04:35",
-            "userId": "ITAG_USER",
-          },
-        ],
-        "store": Object {
-          "dispatch": [MockFunction],
-          "getState": [MockFunction] {
-            "calls": Array [
-              Array [],
-              Array [],
-            ],
-          },
-          "subscribe": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-          },
-        },
-        "storeSubscription": Subscription {
-          "listeners": Object {
-            "clear": [Function],
-            "get": [Function],
-            "notify": [Function],
-            "subscribe": [Function],
-          },
-          "onStateChange": [Function],
-          "parentSub": undefined,
-          "store": Object {
-            "dispatch": [MockFunction],
-            "getState": [MockFunction] {
-              "calls": Array [
-                Array [],
-                Array [],
-              ],
-            },
-            "subscribe": [MockFunction] {
-              "calls": Array [
-                Array [
-                  [Function],
-                ],
-              ],
-            },
-          },
-          "unsubscribe": undefined,
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "legacyContextMode": "parent",
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getChildContext": Object {
-            "calledByRenderer": false,
-          },
-          "getDerivedStateFromError": true,
-          "getDerivedStateFromProps": Object {
-            "hasShouldComponentUpdateBug": true,
-          },
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-  },
-  Symbol(enzyme.__childContext__): Object {
-    "storeSubscription": undefined,
-  },
-}
+Array [
+  <div
+    className="sc-gzVnrw gIvEvv"
+  >
+    <table
+      className="results sc-EHOje kCMYgv"
+    >
+      <caption
+        className="sc-htpNat iqxUVN"
+      >
+        IEP history
+      </caption>
+      <tbody
+        className="sc-bwzfXH uTxCW"
+      >
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Date and Time
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            IEP Description
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Comments
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Establishment
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Staff member
+          </th>
+        </tr>
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            13/08/2017 - 16:04
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Standard
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            —
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Leeds
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Staff Member
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>,
+  <div
+    className="sc-bZQynM iVQEAa"
+  >
+    <table
+      className="sc-EHOje kCMYgv"
+    >
+      <caption
+        className="sc-htpNat iqxUVN"
+      >
+        IEP history
+      </caption>
+      <tbody
+        className="sc-bwzfXH uTxCW"
+      >
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Date and Time
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            IEP Description
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Establishment
+          </th>
+        </tr>
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            13/08/2017 - 16:04
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Standard
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Leeds
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>,
+]
 `;

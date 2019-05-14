@@ -25,9 +25,15 @@ const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
 )
 
 CurrentIepLevel.propTypes = {
-  level: PropTypes.string.isRequired,
-  days: PropTypes.number.isRequired,
-  nextReviewDate: PropTypes.string.isRequired,
+  level: PropTypes.string,
+  days: PropTypes.number,
+  nextReviewDate: PropTypes.string,
+}
+
+CurrentIepLevel.defaultProps = {
+  level: '',
+  days: 0,
+  nextReviewDate: '',
 }
 
 const mapStateToProps = state => ({
