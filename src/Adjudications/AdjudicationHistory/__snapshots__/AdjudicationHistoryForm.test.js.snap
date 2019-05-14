@@ -17,7 +17,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <h3
-            className="sc-kGXeez lkXioC sc-cSHVUG bvaxSZ"
+            className="sc-kGXeez lkXioC sc-fjdhpX TnkYd"
           >
             Filters
           </h3>
@@ -38,7 +38,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
                 Establishment
               </span>
               <select
-                className="sc-jzJRlG jDxhCX"
+                className="sc-cSHVUG iPEkCj"
                 name="establishment"
                 onBlur={[Function]}
                 onChange={[Function]}

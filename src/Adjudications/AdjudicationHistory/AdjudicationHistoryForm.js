@@ -10,15 +10,14 @@ import { connect } from 'react-redux'
 import { Form } from 'react-final-form'
 import FormDatePicker from '../../DatePickers/FormDatePicker'
 import { linkOnClick } from '../../utils'
-import validateThenSubmit from './AdjudicationHistoryFormValidation'
-
+import validateThenSubmit from '../../Components/FilterForm/FilterFormValidation'
 import {
   FullWidthSelect,
   SearchArea,
-  LargeScreenOnlyGridCol,
   FiltersLabel,
   DateRangeLabel,
-} from './AdjudicationHistory.style'
+  LargeScreenOnlyGridCol,
+} from '../../Components/FilterForm/FilterForm.styles'
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 
 export const AdjudicationHistoryForm = ({ agencies, search, fieldValues, reset, now }) => (

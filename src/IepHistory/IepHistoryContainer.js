@@ -73,7 +73,7 @@ class IepHistoryContainer extends Component {
   render() {
     const { offenderName } = this.props
     return (
-      <Page title={`IEP history for ${offenderName}`}>
+      <Page title={`IEP History for ${offenderName}`}>
         <CurrentIepLevel />
         <IepHistoryForm search={this.applyFilter} reset={this.reset} />
         <IepHistory />
