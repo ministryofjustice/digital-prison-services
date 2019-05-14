@@ -1,6 +1,29 @@
 const moment = require('moment')
 
 const getIepHistoryFactory = elite2Api => {
+  const filterData = (data, fields) => {
+    let filteredResults = data
+    if (fields.establishment) {
+      filteredResults = filteredResults.filter(result => result.agencyId === fields.establishment)
+    }
+
+    if (fields.level) {
+      filteredResults = filteredResults.filter(result => result.iepLevel === fields.level)
+    }
+
+    if (fields.fromDate) {
+      const fromDate = moment(fields.fromDate)
+      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrAfter(fromDate))
+    }
+
+    if (fields.toDate) {
+      const toDate = moment(fields.toDate)
+      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrBefore(toDate))
+    }
+
+    return filteredResults
+  }
+
   const getIepHistory = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
     const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
@@ -39,25 +62,7 @@ const getIepHistoryFactory = elite2Api => {
       .add(1, 'years')
       .format('DD/MM/YYYY')
 
-    let filteredResults = iepDetails
-
-    if (params.establishment) {
-      filteredResults = filteredResults.filter(result => result.agencyId === params.establishment)
-    }
-
-    if (params.level) {
-      filteredResults = filteredResults.filter(result => result.iepLevel === params.level)
-    }
-
-    if (params.fromDate) {
-      const fromDate = moment(params.fromDate)
-      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrAfter(fromDate))
-    }
-
-    if (params.toDate) {
-      const toDate = moment(params.toDate)
-      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrBefore(toDate))
-    }
+    const filteredResults = filterData(iepDetails, params)
 
     return {
       currentIepLevel: iepSummary.iepLevel,
