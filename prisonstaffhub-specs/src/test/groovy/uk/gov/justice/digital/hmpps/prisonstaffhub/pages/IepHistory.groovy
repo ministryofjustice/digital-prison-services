@@ -3,7 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 
 class IepHistory  extends Page {
-    static url = '/offenders/A1234AC/iep-history'
+    static url = '/offenders/A1234AC/iep-level'
 
     static at = {
         pageTitle == 'IEP level'
