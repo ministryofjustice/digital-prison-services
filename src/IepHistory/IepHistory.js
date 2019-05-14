@@ -7,7 +7,7 @@ import { LargeScreenOnly, SmallScreenOnly } from '../Components/sizing'
 const IepHistory = ({ results }) => (
   <>
     <LargeScreenOnly>
-      <Table caption="IEP history">
+      <Table caption="IEP history" className="results">
         <Table.Row>
           <Table.CellHeader>Date and Time</Table.CellHeader>
           <Table.CellHeader>IEP Description</Table.CellHeader>

@@ -6,7 +6,7 @@ import GridCol from '@govuk-react/grid-col'
 import CurrentIepLevelArea from './IepHistory.styles'
 
 const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
-  <CurrentIepLevelArea>
+  <CurrentIepLevelArea className="current-iep">
     <GridRow>
       <GridCol setWidth="one-quarter">
         <strong className="label">Current IEP level</strong>

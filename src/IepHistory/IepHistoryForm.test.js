@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
+import testRenderer from 'react-test-renderer'
 
-import { shallow } from 'enzyme/build'
 import IepHistoryForm from './IepHistoryForm'
 
 const initialState = {
@@ -43,7 +43,7 @@ describe('IEP History Form', () => {
   })
 
   it('should render the iep history table correctly', () => {
-    const wrapper = shallow(<IepHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />)
+    const wrapper = testRenderer.create(<IepHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })
