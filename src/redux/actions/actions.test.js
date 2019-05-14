@@ -298,6 +298,7 @@ describe('actions', () => {
       offender: { firstName: 'first-name-1', lastName: 'last-name1' },
     }
     expect(actions.setOffender({ firstName: 'first-name-1', lastName: 'last-name1' })).toEqual(expectedAction)
+  })
 
   it('should create an action to update iep history results', () => {
     const expectedAction = {

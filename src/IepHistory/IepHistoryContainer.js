@@ -24,7 +24,7 @@ class IepHistoryContainer extends Component {
     }
   }
 
-  getIepHistory = async () => {
+  getIepHistory = async ({ establishment, level, fromDate, toDate }) => {
     const {
       offenderNo,
       handleError,
@@ -37,7 +37,14 @@ class IepHistoryContainer extends Component {
     setLoadedDispatch(false)
 
     try {
-      const { data: results } = await axios.get(`/api/bookings/${offenderNo}/iepSummary`)
+      const { data: results } = await axios.get(`/api/bookings/${offenderNo}/iepSummary`, {
+        params: {
+          establishment,
+          level,
+          fromDate: fromDate && fromDate.format('YYYY-MM-DD'),
+          toDate: toDate && toDate.format('YYYY-MM-DD'),
+        },
+      })
 
       setResults({ ...results })
     } catch (error) {
@@ -52,45 +59,15 @@ class IepHistoryContainer extends Component {
   }
 
   updateResults = async fields => {
-    await this.getIepHistory()
-    const {
-      setIepHistoryFilter: setFilter,
-      results,
-      resetErrorDispatch,
-      setLoadedDispatch,
-      setIepHistoryResults: setResults,
-    } = this.props
+    const { setIepHistoryFilter: setFilter } = this.props
     setFilter(fields)
-
-    resetErrorDispatch()
-    setLoadedDispatch(false)
-
-    let filteredResults = results
-
-    if (fields.establishment) {
-      filteredResults = filteredResults.filter(result => result.agencyId === fields.establishment)
-    }
-
-    if (fields.level) {
-      filteredResults = filteredResults.filter(result => result.iepLevel === fields.level)
-    }
-
-    if (fields.fromDate) {
-      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrAfter(fields.fromDate))
-    }
-
-    if (fields.toDate) {
-      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrBefore(fields.toDate))
-    }
-
-    setResults({ results: filteredResults })
-    setLoadedDispatch(true)
+    return this.getIepHistory(fields)
   }
 
   reset = () => {
     const { setIepHistoryFilter: setFilter } = this.props
     setFilter({ establishment: null, level: null, fromDate: null, toDate: null })
-    this.getIepHistory()
+    this.getIepHistory({})
   }
 
   render() {
@@ -115,15 +92,6 @@ IepHistoryContainer.propTypes = {
     replace: PropTypes.func.isRequired,
   }).isRequired,
   offenderName: PropTypes.string.isRequired,
-  results: PropTypes.arrayOf(
-    PropTypes.shape({
-      comments: PropTypes.string,
-      iepEstablishment: PropTypes.string.isRequired,
-      iepStaffMember: PropTypes.string,
-      iepTime: PropTypes.string.isRequired,
-      formattedTime: PropTypes.string.isRequired,
-    })
-  ).isRequired,
   fieldValues: PropTypes.shape({
     establishment: PropTypes.string,
     level: PropTypes.string,
