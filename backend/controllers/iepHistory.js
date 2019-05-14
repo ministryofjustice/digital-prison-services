@@ -33,13 +33,13 @@ const getIepHistoryFactory = elite2Api => {
       }
     })
 
-    const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm')
+    const [summaryDetail, ...iepDetails] = iepHistoryDetails
+
+    const nextReviewDate = moment(summaryDetail.iepTime, 'YYYY-MM-DD HH:mm')
       .add(1, 'years')
       .format('DD/MM/YYYY')
 
-    iepHistoryDetails.shift()
-
-    let filteredResults = iepHistoryDetails
+    let filteredResults = iepDetails
 
     if (params.establishment) {
       filteredResults = filteredResults.filter(result => result.agencyId === params.establishment)
