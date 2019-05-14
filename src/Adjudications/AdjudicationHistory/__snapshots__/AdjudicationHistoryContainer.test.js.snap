@@ -115,7 +115,9 @@ ShallowWrapper {
           changePerPage={[Function]}
         />,
       ],
-      "title": "Adjudication history",
+      "handleError": [MockFunction],
+      "offenderNumber": "AA123BB",
+      "title": [Function],
     },
     "ref": null,
     "rendered": Array [
@@ -162,7 +164,9 @@ ShallowWrapper {
             changePerPage={[Function]}
           />,
         ],
-        "title": "Adjudication history",
+        "handleError": [MockFunction],
+        "offenderNumber": "AA123BB",
+        "title": [Function],
       },
       "ref": null,
       "rendered": Array [

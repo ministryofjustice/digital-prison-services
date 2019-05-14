@@ -7,7 +7,7 @@ class AdjudicationHistoryPage extends Page {
     static url = "/offenders/AA00112/adjudications"
 
     static at = {
-        pageTitle == 'Adjudication history'
+        pageTitle == 'Adjudication history for Harry Smith'
         headerTitle == 'Digital Prison Services'
     }
 

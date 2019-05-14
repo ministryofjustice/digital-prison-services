@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { childrenType } from '../types'
 import { resetError, setLoaded, setOffender } from '../redux/actions'
+import Page from '../Components/Page'
 
-export class WithOffenderDetails extends React.Component {
+export class OffenderPage extends React.Component {
   async componentDidMount() {
     const {
       setLoaded: setLoadedDispatch,
@@ -26,27 +28,37 @@ export class WithOffenderDetails extends React.Component {
   }
 
   render() {
-    const { children } = this.props
-    return children
+    const { children, title, offenderDetails } = this.props
+    return <Page title={offenderDetails.firstName && title(offenderDetails)}>{children}</Page>
   }
 }
 
-WithOffenderDetails.propTypes = {
+OffenderPage.propTypes = {
   client: PropTypes.func,
+  title: PropTypes.func.isRequired,
   offenderNumber: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  children: childrenType,
   handleError: PropTypes.func.isRequired,
+  /* Map state to props */
+  offenderDetails: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+  }),
   /* Map dispatch to props */
   setLoaded: PropTypes.func.isRequired,
   setOffender: PropTypes.func.isRequired,
   resetError: PropTypes.func.isRequired,
 }
 
-WithOffenderDetails.defaultProps = {
+OffenderPage.defaultProps = {
   client: axios,
+  offenderDetails: undefined,
+  children: undefined,
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = state => ({
+  offenderDetails: state.offenderDetails,
+})
 
 const mapDispatchToProps = {
   setLoaded,
@@ -57,4 +69,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(WithOffenderDetails)
+)(OffenderPage)

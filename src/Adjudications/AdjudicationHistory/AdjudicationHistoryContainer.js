@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import moment from 'moment'
-import Page from '../../Components/Page'
 import AdjudicationHistoryForm from './AdjudicationHistoryForm'
 import AdjudicationHistoryTable from './AdjudicationHistoryTable'
 import {
@@ -12,6 +11,7 @@ import {
   setAdjudicationHistoryPageNumber,
   setAdjudicationHistoryPageSize,
 } from '../../redux/actions'
+import OffenderPage from '../../OffenderPage'
 
 export class AdjudicationHistoryContainer extends Component {
   componentDidMount = () => {
@@ -91,12 +91,19 @@ export class AdjudicationHistoryContainer extends Component {
     setLoadedDispatch(true)
   }
 
-  render = () => (
-    <Page title="Adjudication history">
-      <AdjudicationHistoryForm search={this.applyFilter} reset={this.reset} />
-      <AdjudicationHistoryTable changePage={this.changePage} changePerPage={this.changePerPage} />
-    </Page>
-  )
+  render = () => {
+    const { offenderNumber, handleError } = this.props
+    return (
+      <OffenderPage
+        title={({ firstName, lastName }) => `Adjudication history for ${firstName} ${lastName}`}
+        handleError={handleError}
+        offenderNumber={offenderNumber}
+      >
+        <AdjudicationHistoryForm search={this.applyFilter} reset={this.reset} />
+        <AdjudicationHistoryTable changePage={this.changePage} changePerPage={this.changePerPage} />
+      </OffenderPage>
+    )
+  }
 }
 
 AdjudicationHistoryContainer.propTypes = {
