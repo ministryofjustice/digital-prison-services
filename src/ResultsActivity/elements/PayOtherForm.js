@@ -24,7 +24,10 @@ const ButtonContainer = styled.div`
   }
 `
 
-const isCasenoteRequired = value => value === 'UnacceptableAbsence' || value === 'Refused'
+const commentOrCaseNote = value => {
+  if (value === 'UnacceptableAbsence' || value === 'Refused') return 'case note'
+  return 'comment'
+}
 
 const validateThenSubmit = submitHandler => values => {
   const formErrors = []
@@ -37,8 +40,8 @@ const validateThenSubmit = submitHandler => values => {
     formErrors.push({ targetName: 'reason', text: 'Select a reason' })
   }
 
-  if (isCasenoteRequired(values.reason) && !values.comment) {
-    formErrors.push({ targetName: 'comment', text: 'Enter a case note' })
+  if (!values.comment) {
+    formErrors.push({ targetName: 'comment', text: `Enter a ${commentOrCaseNote(values.reason)}` })
   }
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
@@ -77,7 +80,7 @@ function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, handl
       eventLocationId: offender.eventLocationId,
     }
 
-    updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
+    await updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
   }
 
   return (
@@ -111,7 +114,7 @@ function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, handl
                 ))}
               </FieldWithError>
               <FieldWithError errors={errors} name="comment" component={TextArea}>
-                {isCasenoteRequired(values.reason) ? 'Enter a case note' : 'Comment'}
+                Enter a {commentOrCaseNote(values.reason)}
               </FieldWithError>
             </Fieldset>
             <ButtonContainer>
