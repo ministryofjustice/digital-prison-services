@@ -43,7 +43,6 @@ import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/Ad
 import routePaths from './routePaths'
 import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
-import WithOffenderDetails from './WithOffenderDetails/WithOffenderDetails'
 
 const axios = require('axios')
 
@@ -314,15 +313,13 @@ class App extends React.Component {
             exact
             path={routePaths.iepHistory}
             render={({ history, match: { params } }) => (
-              <WithOffenderDetails handleError={this.handleError} offenderNumber={params.offenderNo}>
-                <IepHistoryContainer
-                  offenderNo={params.offenderNo}
-                  handleError={this.handleError}
-                  setLoadedDispatch={setLoadedDispatch}
-                  resetErrorDispatch={resetErrorDispatch}
-                  history={history}
-                />
-              </WithOffenderDetails>
+              <IepHistoryContainer
+                offenderNo={params.offenderNo}
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                history={history}
+              />
             )}
           />
           <Route
@@ -419,15 +416,13 @@ class App extends React.Component {
             exact
             path={routePaths.adjudications}
             render={({ history, match: { params } }) => (
-              <WithOffenderDetails handleError={this.handleError} offenderNumber={params.offenderNo}>
-                <AdjudicationHistoryContainer
-                  handleError={this.handleError}
-                  setLoadedDispatch={setLoadedDispatch}
-                  resetErrorDispatch={resetErrorDispatch}
-                  offenderNumber={params.offenderNo}
-                  history={history}
-                />
-              </WithOffenderDetails>
+              <AdjudicationHistoryContainer
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                offenderNumber={params.offenderNo}
+                history={history}
+              />
             )}
           />
         </div>

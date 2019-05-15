@@ -10,6 +10,9 @@ export const OffenderBreadcrumb = props => {
     },
   } = props
   const { firstName, lastName } = props
+  if (!firstName || !lastName) {
+    return <span>Unknown</span>
+  }
   const fullName = `${lastName}, ${firstName}`
   return <a href={getOffenderLink(offenderNo)}>{fullName}</a>
 }

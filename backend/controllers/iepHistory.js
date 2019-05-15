@@ -71,7 +71,6 @@ const getIepHistoryFactory = elite2Api => {
       nextReviewDate,
       currentIepDateTime: iepSummary.iepTime,
       results: filteredResults,
-      offenderName: `${bookingDetails.firstName} ${bookingDetails.lastName}`,
     }
   }
 

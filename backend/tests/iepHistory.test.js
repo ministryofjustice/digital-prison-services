@@ -33,7 +33,6 @@ function createIepHistoryReponse() {
         userId: 'ITAG_USER',
       },
     ],
-    offenderName: 'ARTHUR ANDERSON',
   }
 }
 
@@ -126,7 +125,6 @@ describe('IEP history controller', async () => {
           userId: 'ITAG_USER',
         },
       ],
-      offenderName: 'ARTHUR ANDERSON',
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
@@ -155,7 +153,6 @@ describe('IEP history controller', async () => {
           userId: 'ITAG_USER',
         },
       ],
-      offenderName: 'ARTHUR ANDERSON',
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
@@ -195,7 +192,6 @@ describe('IEP history controller', async () => {
           userId: 'ITAG_USER',
         },
       ],
-      offenderName: 'ARTHUR ANDERSON',
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
@@ -229,7 +225,6 @@ describe('IEP history controller', async () => {
           userId: 'ITAG_USER',
         },
       ],
-      offenderName: 'ARTHUR ANDERSON',
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)

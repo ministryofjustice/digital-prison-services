@@ -26,11 +26,10 @@ const initialState = {
         userId: 'ITAG_USER',
       },
     ],
-    offenderName: 'ANDERSON, ARTHUR',
   },
 }
 
-describe('IEP History Form', () => {
+describe('IEP history Form', () => {
   Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
   const store = {}
   const history = {}
