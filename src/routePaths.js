@@ -1,6 +1,7 @@
 export default {
   establishmentRoll: '/establishment-roll',
   inToday: '/establishment-roll/in-today',
+  iepHistory: '/offenders/:offenderNo/iep-level',
   outToday: '/establishment-roll/out-today',
   inReception: '/establishment-roll/in-reception',
   currentlyOut: '/establishment-roll/:livingUnitId/currently-out',

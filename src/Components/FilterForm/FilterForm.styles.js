@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import Select from '@govuk-react/select'
+import { GREY_3, WHITE } from 'govuk-colours'
+import { MEDIA_QUERIES, SPACING } from '@govuk-react/constants'
 import GridCol from '@govuk-react/grid-col'
 import { H3 } from '@govuk-react/heading'
-import { GREY_3, WHITE } from 'govuk-colours'
-import { SPACING, MEDIA_QUERIES } from '@govuk-react/constants'
 import { typography } from '@govuk-react/lib'
+import Select from '@govuk-react/select'
 
 export const FullWidthSelect = styled(Select)`
   select {

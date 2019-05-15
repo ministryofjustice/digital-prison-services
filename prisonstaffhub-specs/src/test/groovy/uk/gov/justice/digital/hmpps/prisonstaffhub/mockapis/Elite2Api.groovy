@@ -663,6 +663,17 @@ class Elite2Api extends WireMockRule {
         )
     }
 
+    void stubGetIepSummaryWithDetails(bookingId) {
+        this.stubFor(
+                get("/api/bookings/${bookingId}/iepSummary?withDetails=true")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(IepHistoryResponse.response1)))
+        )
+    }
+
     void stubCurrentlyOut(long livingUnitId) {
 
         this.stubFor(
@@ -755,6 +766,42 @@ class Elite2Api extends WireMockRule {
 
     void stubBookingOffenders(def response) {
         this.stubJsonPostRequest("/api/bookings/offenders", response)
+    }
+
+    void stubOffenderDetails(offenderNo, response) {
+        this.stubFor(
+                get("/api/bookings/offenderNo/${offenderNo}?fullInfo=false")
+                    .willReturn(
+                            aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                    )
+        )
+    }
+
+    void stubAgencyDetails(agencyId, response) {
+        this.stubFor(
+                get("/api/agencies/${agencyId}")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(response))
+                        )
+        )
+    }
+
+    void stubUserDetails(userId, response) {
+        this.stubFor(
+                get("/api/users/${userId}")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(response))
+                        )
+        )
     }
 
     void stubJsonGetRequest(String url, def response) {

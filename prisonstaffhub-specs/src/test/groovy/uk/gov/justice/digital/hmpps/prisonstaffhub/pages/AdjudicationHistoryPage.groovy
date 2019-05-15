@@ -4,6 +4,8 @@ import geb.Page
 
 class AdjudicationHistoryPage extends Page {
 
+    static url = "/offenders/AA00112/adjudications"
+
     static at = {
         pageTitle == 'Adjudication history'
         headerTitle == 'Digital Prison Services'
@@ -12,6 +14,7 @@ class AdjudicationHistoryPage extends Page {
     static content = {
         pageTitle { $('h1').text() }
         headerTitle { $('.page-header .title').text() }
+        breadcrumb {$('div[data-qa="breadcrumb"] li').children().collect{[it.text(), it.attr('href')]}}
         tableRows(required: false) { $('.results tr') }
         establishmentSelect { $('#establishment-select select') }
         applyFilter { $('#apply-filter') }

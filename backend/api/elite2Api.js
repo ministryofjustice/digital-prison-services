@@ -35,6 +35,8 @@ const elite2ApiFactory = client => {
     post(context, `api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(context, `api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+  const getAgencyDetails = (context, agencyId) => get(context, `api/agencies/${agencyId}`)
+  const getStaffDetails = (context, staffId) => get(context, `api/users/${staffId}`)
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) =>
     post(context, `api/schedules/${agencyId}/courtEvents?date=${date}`, offenderNumbers)
   const getExternalTransfers = (context, { agencyId, date, offenderNumbers }) =>
@@ -91,6 +93,11 @@ const elite2ApiFactory = client => {
   const getIepSummary = (context, bookings) =>
     get(context, `api/bookings/offenders/iepSummary?${arrayToQueryString(bookings, 'bookings')}`)
 
+  const getIepSummaryWithDetails = (context, bookingId) =>
+    get(context, `api/bookings/${bookingId}/iepSummary?withDetails=true`)
+
+  const getDetails = (context, offenderNo) => get(context, `api/bookings/offenderNo/${offenderNo}?fullInfo=false`)
+
   const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
     get(context, `api/movements/livingUnit/${livingUnitId}/currently-out`)
 
@@ -129,6 +136,8 @@ const elite2ApiFactory = client => {
     getVisits,
     getAppointments,
     getActivities,
+    getAgencyDetails,
+    getStaffDetails,
     getCourtEvents,
     getSentenceData,
     globalSearch,
@@ -146,6 +155,8 @@ const elite2ApiFactory = client => {
     getOffendersInReception,
     getRecentMovements,
     getIepSummary,
+    getIepSummaryWithDetails,
+    getDetails,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
     getLocation,

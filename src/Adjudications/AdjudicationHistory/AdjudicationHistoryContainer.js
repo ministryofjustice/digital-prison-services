@@ -121,14 +121,16 @@ AdjudicationHistoryContainer.propTypes = {
   }).isRequired,
 }
 
-const mapStateToProps = state => ({
-  pageNumber: state.adjudicationHistory.pageNumber,
-  pageSize: state.adjudicationHistory.pageSize,
+const mapStateToProps = ({
+  adjudicationHistory: { pageNumber, pageSize, establishment, offenceId, fromDate, toDate },
+}) => ({
+  pageNumber,
+  pageSize,
   fieldValues: {
-    establishment: state.adjudicationHistory.establishment,
-    offenceId: state.adjudicationHistory.offenceId,
-    fromDate: state.adjudicationHistory.fromDate,
-    toDate: state.adjudicationHistory.toDate,
+    establishment,
+    offenceId,
+    fromDate,
+    toDate,
   },
 })
 

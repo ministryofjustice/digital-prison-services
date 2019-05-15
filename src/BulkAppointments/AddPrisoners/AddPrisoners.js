@@ -13,7 +13,7 @@ import TimePicker from '../../Components/TimePicker/TimePicker'
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 import { appointmentType } from '../../types'
 
-import { validateThenSubmit, offenderStartTimeFieldName } from './AddPrisonerValidation'
+import { validateThenSubmit, offenderStartTimeFieldName } from './AddPrisonersValidation'
 import { ButtonContainer, Table } from './AddPrisoners.styles'
 
 export const interceptOnChange = ({ input, currentOffender, offenders, dispatchAppointmentPrisoners }) => startTime => {

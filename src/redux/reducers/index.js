@@ -5,6 +5,9 @@ import content from './content'
 import bulkAppointments from './bulk-appointments'
 import adjudicationHistory from './adjudications'
 
+import offenderDetails from './offenderDetails'
+import iepHistory from './iepHistory'
+
 export function defaultPeriod(time) {
   const midnight = moment('12:00a', 'HH:mm a')
   const midday = moment('12:00p', 'HH:mm a')
@@ -289,6 +292,8 @@ const prisonStaffHubApp = combineReducers({
   content,
   bulkAppointments,
   adjudicationHistory,
+  offenderDetails,
+  iepHistory,
 })
 
 export default prisonStaffHubApp

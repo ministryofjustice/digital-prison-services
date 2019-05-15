@@ -25,6 +25,22 @@ const capitalize = string => {
   return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
 }
 
+const isBlank = str => !str || /^\s*$/.test(str)
+
+/**
+ * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
+ * correctly (i.e. each part in a double-barreled is converted to proper case).
+ * @param name name to be converted.
+ * @returns name converted to proper case.
+ */
+const properCaseName = name =>
+  isBlank(name)
+    ? ''
+    : name
+        .split('-')
+        .map(capitalize)
+        .join('-')
+
 const isViewableFlag = code => ['HA', 'XEL'].includes(code)
 
 const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${item}`).join('&')
@@ -58,6 +74,7 @@ module.exports = {
   isViewableFlag,
   arrayToQueryString,
   mapToQueryString,
+  properCaseName,
   toMap,
   pascalToString,
 }

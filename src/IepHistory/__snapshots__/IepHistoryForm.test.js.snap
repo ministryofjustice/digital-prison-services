@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Adjudication History Form should render correctly 1`] = `
+exports[`IEP History Form should render the iep history table correctly 1`] = `
 <form
   onSubmit={[Function]}
 >
@@ -26,7 +26,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <div
-            className="sc-kgoBCf cnFRcH sc-bwzfXH iXLolC"
+            className="sc-bwzfXH iXLolC"
           >
             <label
               className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
@@ -43,7 +43,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
                 onBlur={[Function]}
                 onChange={[Function]}
                 onFocus={[Function]}
-                value="MDI"
+                value=""
               >
                 <option
                   disabled={true}
@@ -53,14 +53,44 @@ exports[`Adjudication History Form should render correctly 1`] = `
                   All
                 </option>
                 <option
-                  value="MDI"
-                >
-                  Moorland
-                </option>
-                <option
                   value="LEI"
                 >
-                  Leicester
+                  Leeds
+                </option>
+              </select>
+            </label>
+          </div>
+          <div
+            className="sc-bwzfXH iXLolC"
+          >
+            <label
+              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
+              id="iep-level-select"
+            >
+              <span
+                className="sc-gqjmRU hMYAWR"
+              >
+                IEP level
+              </span>
+              <select
+                className="sc-cSHVUG iPEkCj"
+                name="level"
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                value=""
+              >
+                <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  All
+                </option>
+                <option
+                  value="Standard"
+                >
+                  Standard
                 </option>
               </select>
             </label>
@@ -76,7 +106,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
           <span
             className="sc-kpOJdX uKFLa"
           >
-            Reported date
+            Date Range
           </span>
         </div>
         <div
@@ -110,7 +140,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
                     placeholder=""
                     readOnly={true}
                     type="text"
-                    value="29/03/2017"
+                    value=""
                   />
                 </label>
               </div>
@@ -134,10 +164,10 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         <th
                           className="rdtSwitch"
                           colSpan={5}
-                          data-value={2}
+                          data-value={0}
                           onClick={[Function]}
                         >
-                          March 2017
+                          January 2017
                         </th>
                         <th
                           className="rdtNext"
@@ -190,6 +220,13 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtOld"
+                          data-value={26}
+                          onClick={[Function]}
+                        >
+                          26
+                        </td>
+                        <td
+                          className="rdtDay rdtOld"
                           data-value={27}
                           onClick={[Function]}
                         >
@@ -203,12 +240,35 @@ exports[`Adjudication History Form should render correctly 1`] = `
                           28
                         </td>
                         <td
-                          className="rdtDay"
+                          className="rdtDay rdtOld"
+                          data-value={29}
+                          onClick={[Function]}
+                        >
+                          29
+                        </td>
+                        <td
+                          className="rdtDay rdtOld"
+                          data-value={30}
+                          onClick={[Function]}
+                        >
+                          30
+                        </td>
+                        <td
+                          className="rdtDay rdtOld"
+                          data-value={31}
+                          onClick={[Function]}
+                        >
+                          31
+                        </td>
+                        <td
+                          className="rdtDay rdtToday"
                           data-value={1}
                           onClick={[Function]}
                         >
                           1
                         </td>
+                      </tr>
+                      <tr>
                         <td
                           className="rdtDay"
                           data-value={2}
@@ -237,8 +297,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           5
                         </td>
-                      </tr>
-                      <tr>
                         <td
                           className="rdtDay"
                           data-value={6}
@@ -260,6 +318,8 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           8
                         </td>
+                      </tr>
+                      <tr>
                         <td
                           className="rdtDay"
                           data-value={9}
@@ -288,8 +348,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           12
                         </td>
-                      </tr>
-                      <tr>
                         <td
                           className="rdtDay"
                           data-value={13}
@@ -311,6 +369,8 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           15
                         </td>
+                      </tr>
+                      <tr>
                         <td
                           className="rdtDay"
                           data-value={16}
@@ -339,8 +399,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           19
                         </td>
-                      </tr>
-                      <tr>
                         <td
                           className="rdtDay"
                           data-value={20}
@@ -356,122 +414,113 @@ exports[`Adjudication History Form should render correctly 1`] = `
                           21
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={22}
+                          onClick={[Function]}
                         >
                           22
                         </td>
+                      </tr>
+                      <tr>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={23}
+                          onClick={[Function]}
                         >
                           23
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={24}
+                          onClick={[Function]}
                         >
                           24
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={25}
+                          onClick={[Function]}
                         >
                           25
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={26}
+                          onClick={[Function]}
                         >
                           26
                         </td>
-                      </tr>
-                      <tr>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={27}
+                          onClick={[Function]}
                         >
                           27
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={28}
+                          onClick={[Function]}
                         >
                           28
                         </td>
                         <td
-                          className="rdtDay rdtActive rdtDisabled"
+                          className="rdtDay"
                           data-value={29}
+                          onClick={[Function]}
                         >
                           29
-                        </td>
-                        <td
-                          className="rdtDay rdtDisabled"
-                          data-value={30}
-                        >
-                          30
-                        </td>
-                        <td
-                          className="rdtDay rdtDisabled"
-                          data-value={31}
-                        >
-                          31
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={1}
-                        >
-                          1
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={2}
-                        >
-                          2
                         </td>
                       </tr>
                       <tr>
                         <td
-                          className="rdtDay rdtNew rdtDisabled"
+                          className="rdtDay"
+                          data-value={30}
+                          onClick={[Function]}
+                        >
+                          30
+                        </td>
+                        <td
+                          className="rdtDay"
+                          data-value={31}
+                          onClick={[Function]}
+                        >
+                          31
+                        </td>
+                        <td
+                          className="rdtDay rdtNew"
+                          data-value={1}
+                          onClick={[Function]}
+                        >
+                          1
+                        </td>
+                        <td
+                          className="rdtDay rdtNew"
+                          data-value={2}
+                          onClick={[Function]}
+                        >
+                          2
+                        </td>
+                        <td
+                          className="rdtDay rdtNew"
                           data-value={3}
+                          onClick={[Function]}
                         >
                           3
                         </td>
                         <td
-                          className="rdtDay rdtNew rdtDisabled"
+                          className="rdtDay rdtNew"
                           data-value={4}
+                          onClick={[Function]}
                         >
                           4
                         </td>
                         <td
-                          className="rdtDay rdtNew rdtDisabled"
+                          className="rdtDay rdtNew"
                           data-value={5}
+                          onClick={[Function]}
                         >
                           5
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={6}
-                        >
-                          6
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={7}
-                        >
-                          7
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={8}
-                        >
-                          8
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={9}
-                        >
-                          9
                         </td>
                       </tr>
                     </tbody>
@@ -508,7 +557,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
                     placeholder=""
                     readOnly={true}
                     type="text"
-                    value="29/03/2017"
+                    value=""
                   />
                 </label>
               </div>
@@ -532,10 +581,10 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         <th
                           className="rdtSwitch"
                           colSpan={5}
-                          data-value={2}
+                          data-value={0}
                           onClick={[Function]}
                         >
-                          March 2017
+                          January 2017
                         </th>
                         <th
                           className="rdtNext"
@@ -588,6 +637,13 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtOld"
+                          data-value={26}
+                          onClick={[Function]}
+                        >
+                          26
+                        </td>
+                        <td
+                          className="rdtDay rdtOld"
                           data-value={27}
                           onClick={[Function]}
                         >
@@ -601,12 +657,35 @@ exports[`Adjudication History Form should render correctly 1`] = `
                           28
                         </td>
                         <td
-                          className="rdtDay"
+                          className="rdtDay rdtOld"
+                          data-value={29}
+                          onClick={[Function]}
+                        >
+                          29
+                        </td>
+                        <td
+                          className="rdtDay rdtOld"
+                          data-value={30}
+                          onClick={[Function]}
+                        >
+                          30
+                        </td>
+                        <td
+                          className="rdtDay rdtOld"
+                          data-value={31}
+                          onClick={[Function]}
+                        >
+                          31
+                        </td>
+                        <td
+                          className="rdtDay rdtToday"
                           data-value={1}
                           onClick={[Function]}
                         >
                           1
                         </td>
+                      </tr>
+                      <tr>
                         <td
                           className="rdtDay"
                           data-value={2}
@@ -635,8 +714,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           5
                         </td>
-                      </tr>
-                      <tr>
                         <td
                           className="rdtDay"
                           data-value={6}
@@ -658,6 +735,8 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           8
                         </td>
+                      </tr>
+                      <tr>
                         <td
                           className="rdtDay"
                           data-value={9}
@@ -686,8 +765,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           12
                         </td>
-                      </tr>
-                      <tr>
                         <td
                           className="rdtDay"
                           data-value={13}
@@ -709,6 +786,8 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           15
                         </td>
+                      </tr>
+                      <tr>
                         <td
                           className="rdtDay"
                           data-value={16}
@@ -737,8 +816,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                         >
                           19
                         </td>
-                      </tr>
-                      <tr>
                         <td
                           className="rdtDay"
                           data-value={20}
@@ -754,122 +831,113 @@ exports[`Adjudication History Form should render correctly 1`] = `
                           21
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={22}
+                          onClick={[Function]}
                         >
                           22
                         </td>
+                      </tr>
+                      <tr>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={23}
+                          onClick={[Function]}
                         >
                           23
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={24}
+                          onClick={[Function]}
                         >
                           24
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={25}
+                          onClick={[Function]}
                         >
                           25
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={26}
+                          onClick={[Function]}
                         >
                           26
                         </td>
-                      </tr>
-                      <tr>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={27}
+                          onClick={[Function]}
                         >
                           27
                         </td>
                         <td
-                          className="rdtDay rdtDisabled"
+                          className="rdtDay"
                           data-value={28}
+                          onClick={[Function]}
                         >
                           28
                         </td>
                         <td
-                          className="rdtDay rdtActive rdtDisabled"
+                          className="rdtDay"
                           data-value={29}
+                          onClick={[Function]}
                         >
                           29
-                        </td>
-                        <td
-                          className="rdtDay rdtDisabled"
-                          data-value={30}
-                        >
-                          30
-                        </td>
-                        <td
-                          className="rdtDay rdtDisabled"
-                          data-value={31}
-                        >
-                          31
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={1}
-                        >
-                          1
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={2}
-                        >
-                          2
                         </td>
                       </tr>
                       <tr>
                         <td
-                          className="rdtDay rdtNew rdtDisabled"
+                          className="rdtDay"
+                          data-value={30}
+                          onClick={[Function]}
+                        >
+                          30
+                        </td>
+                        <td
+                          className="rdtDay"
+                          data-value={31}
+                          onClick={[Function]}
+                        >
+                          31
+                        </td>
+                        <td
+                          className="rdtDay rdtNew"
+                          data-value={1}
+                          onClick={[Function]}
+                        >
+                          1
+                        </td>
+                        <td
+                          className="rdtDay rdtNew"
+                          data-value={2}
+                          onClick={[Function]}
+                        >
+                          2
+                        </td>
+                        <td
+                          className="rdtDay rdtNew"
                           data-value={3}
+                          onClick={[Function]}
                         >
                           3
                         </td>
                         <td
-                          className="rdtDay rdtNew rdtDisabled"
+                          className="rdtDay rdtNew"
                           data-value={4}
+                          onClick={[Function]}
                         >
                           4
                         </td>
                         <td
-                          className="rdtDay rdtNew rdtDisabled"
+                          className="rdtDay rdtNew"
                           data-value={5}
+                          onClick={[Function]}
                         >
                           5
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={6}
-                        >
-                          6
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={7}
-                        >
-                          7
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={8}
-                        >
-                          8
-                        </td>
-                        <td
-                          className="rdtDay rdtNew rdtDisabled"
-                          data-value={9}
-                        >
-                          9
                         </td>
                       </tr>
                     </tbody>

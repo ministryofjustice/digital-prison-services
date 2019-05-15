@@ -1,5 +1,5 @@
 import { FORM_ERROR } from 'final-form'
-import { validateThenSubmit } from './AddPrisonerValidation'
+import { validateThenSubmit } from './AddPrisonersValidation'
 
 describe('Add appointment form validation', () => {
   const stubFunc = () => {}

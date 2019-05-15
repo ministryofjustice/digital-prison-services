@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { Form } from 'react-final-form'
 import AddAppointmentForm, { FormFields, getInitialValues, interceptOnChange } from './AddPrisoners'
-import { offenderStartTimeFieldName } from './AddPrisonerValidation'
+import { offenderStartTimeFieldName } from './AddPrisonersValidation'
 
 import { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } from '../../dateHelpers'
 

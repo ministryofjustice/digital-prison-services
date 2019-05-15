@@ -26,12 +26,14 @@ const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
 const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
+const offenderServiceFactory = require('./controllers/offenderService')
 const { userLocationsFactory } = require('./controllers/userLocations')
 const { userMeFactory } = require('./controllers/userMe')
 const { getConfiguration } = require('./controllers/getConfig')
 const houseblockLocationsFactory = require('./controllers/houseblockLocations').getHouseblockLocationsFactory
 const activityLocationsFactory = require('./controllers/activityLocations').getActivityLocationsFactory
 const activityListFactory = require('./controllers/activityList').getActivityListFactory
+const iepHistoryFactory = require('./controllers/iepHistory').getIepHistoryFactory
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory
 const { healthFactory } = require('./controllers/health')
 const { attendanceFactory } = require('./controllers/attendance')
@@ -127,6 +129,7 @@ const whereaboutsApi = whereaboutsApiFactory(
 const controller = controllerFactory({
   activityListService: activityListFactory(elite2Api, whereaboutsApi),
   adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
+  iepHistoryService: iepHistoryFactory(elite2Api),
   houseblockListService: houseblockListFactory(elite2Api),
   attendanceService: attendanceFactory(elite2Api, whereaboutsApi),
   establishmentRollService: establishmentRollFactory(elite2Api),
@@ -135,6 +138,7 @@ const controller = controllerFactory({
   offenderLoader: offenderLoaderFactory(elite2Api),
   bulkAppointmentsService: bulkAppointmentsServiceFactory(elite2Api),
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
+  offenderService: offenderServiceFactory(elite2Api),
 })
 
 const oauthApi = oauthApiFactory(
@@ -203,11 +207,13 @@ app.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)
 app.use('/api/setactivecaseload', setActiveCaseLoadFactory(elite2Api).setActiveCaseload)
 app.use('/api/houseblockLocations', houseblockLocationsFactory(elite2Api).getHouseblockLocations)
 app.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
+app.use('/api/bookings/:offenderNo/iepSummary', controller.getIepHistory)
 app.use('/api/houseblocklist', controller.getHouseblockList)
 app.use('/api/activityList', controller.getActivityList)
 app.use('/api/adjudications/:offenderNumber', controller.getAdjudications)
 app.use('/api/postAttendance', controller.postAttendance)
 app.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
+app.use('/api/offenders/:offenderNo', controller.getOffender)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/movements/:agencyId/in', controller.getMovementsIn)
 app.use('/api/movements/:agencyId/out', controller.getMovementsOut)
