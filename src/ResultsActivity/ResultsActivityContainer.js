@@ -12,6 +12,7 @@ import {
   setOrderField,
   setSearchActivities,
   setSortOrder,
+  setOffenderPaymentData,
 } from '../redux/actions'
 import sortActivityData from './activityResultsSorter'
 import Page from '../Components/Page'
@@ -135,7 +136,7 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch, date } = this.props
+    const { resetErrorDispatch, date, setOffenderPaymentDataDispatch } = this.props
     const { payable } = this.state
     const activityName = this.getActivityName()
     const canPrint = isTodayOrAfter(date)
@@ -148,6 +149,8 @@ class ResultsActivityContainer extends Component {
           resetErrorDispatch={resetErrorDispatch}
           setColumnSort={this.setColumnSort}
           payable={payable}
+          handleError={this.handleError}
+          setOffenderPaymentData={setOffenderPaymentDataDispatch}
           {...this.props}
         />
       </Page>
@@ -227,6 +230,7 @@ const mapDispatchToProps = dispatch => ({
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
   activityDataDispatch: data => dispatch(setActivityData(data)),
+  setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setOffenderPaymentData(offenderIndex, data)),
 })
 
 export default withRouter(

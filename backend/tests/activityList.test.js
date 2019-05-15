@@ -1,6 +1,8 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
-const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api).getActivityList
+const whereaboutsApi = {}
+const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api, whereaboutsApi)
+  .getActivityList
 
 function createActivitiesResponse() {
   return [
@@ -102,14 +104,17 @@ beforeEach(() => {
   elite2Api.getExternalTransfers = jest.fn()
   elite2Api.getAlerts = jest.fn()
   elite2Api.getAssessments = jest.fn()
+  elite2Api.getDetailsLight = jest.fn()
+  whereaboutsApi.getAttendance = jest.fn()
+
+  elite2Api.getVisits.mockReturnValue([])
+  elite2Api.getAppointments.mockReturnValue([])
+  elite2Api.getActivities.mockReturnValue([])
 })
 
 describe('Activity list controller', async () => {
   it('Should return no results as an empty array', async () => {
     elite2Api.getActivityList.mockReturnValue([])
-    elite2Api.getVisits.mockReturnValue([])
-    elite2Api.getAppointments.mockReturnValue([])
-    elite2Api.getActivities.mockReturnValue([])
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
     expect(response).toEqual([])
@@ -147,10 +152,6 @@ describe('Activity list controller', async () => {
           throw new Error('Unexpected')
       }
     })
-
-    elite2Api.getVisits.mockReturnValue([])
-    elite2Api.getAppointments.mockReturnValue([])
-    elite2Api.getActivities.mockReturnValue([])
 
     await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
 
@@ -192,6 +193,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }],
         alertFlags: [],
         category: '',
+        payStatus: null,
       },
       {
         releaseScheduled: false,
@@ -201,6 +203,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }],
         alertFlags: [],
         category: '',
+        payStatus: null,
       },
       {
         releaseScheduled: false,
@@ -210,6 +213,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }],
         alertFlags: [],
         category: '',
+        payStatus: null,
       },
     ])
   })
@@ -240,6 +244,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         alertFlags: [],
         category: '',
+        payStatus: null,
       },
       {
         offenderNo: 'B',
@@ -249,6 +254,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         alertFlags: [],
         category: '',
+        payStatus: null,
       },
       {
         offenderNo: 'C',
@@ -258,6 +264,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         alertFlags: [],
         category: '',
+        payStatus: null,
       },
     ])
   })
@@ -327,6 +334,7 @@ describe('Activity list controller', async () => {
             endTime: '2017-10-15T17:30:00',
           },
         ],
+        payStatus: null,
       },
       {
         offenderNo: 'A1234AB',
@@ -345,6 +353,7 @@ describe('Activity list controller', async () => {
 
         releaseScheduled: false,
         scheduledTransfers: [],
+        payStatus: null,
       },
       {
         offenderNo: 'A1234AC',
@@ -375,6 +384,7 @@ describe('Activity list controller', async () => {
             endTime: '2017-10-15T18:30:00',
           },
         ],
+        payStatus: null,
       },
     ])
   })
@@ -395,10 +405,6 @@ describe('Activity list controller', async () => {
           return []
       }
     })
-
-    elite2Api.getVisits.mockReturnValue([])
-    elite2Api.getAppointments.mockReturnValue([])
-    elite2Api.getActivities.mockReturnValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -441,5 +447,136 @@ describe('Activity list controller', async () => {
       '2017-10-15T14:00:01',
       undefined,
     ])
+  })
+
+  describe('Attendance information', () => {
+    beforeEach(() => {
+      elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+        switch (usage) {
+          case 'PROG':
+            return [{ offenderNo: 'A', comment: 'aa', lastName: 'b' }]
+          default:
+            return []
+        }
+      })
+    })
+
+    it('should call getDetailsLight with offender numbers', async () => {
+      await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
+
+      expect(elite2Api.getDetailsLight).toHaveBeenCalledWith({}, 'A')
+    })
+
+    it('should call getAttendance with correct parameters', async () => {
+      await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
+
+      expect(whereaboutsApi.getAttendance).toHaveBeenCalledWith(
+        {},
+        { locationId: 1, agencyId: 'LEI', date: '2018-11-23', period: 'PM' }
+      )
+    })
+
+    it('should load attendance details', async () => {
+      elite2Api.getDetailsLight.mockImplementation((context, offenderNo) => {
+        if (offenderNo === 'A1') return { bookingId: 1, offenderNo }
+        if (offenderNo === 'B2') return { bookingId: 2, offenderNo }
+
+        return { bookingId: 3, offenderNo }
+      })
+      whereaboutsApi.getAttendance.mockReturnValue([
+        {
+          absentReason: 'Acceptable absence',
+          attended: false,
+          paid: true,
+          bookingId: 1,
+          eventDate: '2019-10-10',
+          eventId: 1,
+          eventLocationId: 1,
+          period: 'AM',
+          prisonId: 'LEI',
+        },
+        {
+          absentReason: 'Refused',
+          attended: true,
+          paid: false,
+          bookingId: 2,
+          eventDate: '2019-10-10',
+          eventId: 1,
+          eventLocationId: 1,
+          period: 'AM',
+          prisonId: 'LEI',
+        },
+        {
+          attended: true,
+          paid: true,
+          bookingId: 3,
+          eventDate: '2019-10-10',
+          eventId: 1,
+          eventLocationId: 1,
+          period: 'AM',
+          prisonId: 'LEI',
+        },
+      ])
+
+      elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+        switch (usage) {
+          case 'PROG':
+            return [
+              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A' },
+              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B' },
+              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C' },
+            ]
+          default:
+            return []
+        }
+      })
+
+      const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
+
+      expect(response).toEqual([
+        {
+          alertFlags: [],
+          category: '',
+          comment: 'Test comment',
+          courtEvents: [],
+          eventsElsewhere: [],
+          lastName: 'A',
+          offenderNo: 'A1',
+          releaseScheduled: false,
+          scheduledTransfers: [],
+          payStatus: {
+            other: true,
+          },
+        },
+        {
+          alertFlags: [],
+          category: '',
+          comment: 'Test comment',
+          courtEvents: [],
+          eventsElsewhere: [],
+          lastName: 'B',
+          offenderNo: 'B2',
+          releaseScheduled: false,
+          scheduledTransfers: [],
+          payStatus: {
+            other: true,
+          },
+        },
+        {
+          alertFlags: [],
+          category: '',
+          comment: 'Test comment',
+          courtEvents: [],
+          eventsElsewhere: [],
+          lastName: 'C',
+          offenderNo: 'C3',
+          releaseScheduled: false,
+          scheduledTransfers: [],
+          payStatus: {
+            pay: true,
+          },
+        },
+      ])
+    })
   })
 })

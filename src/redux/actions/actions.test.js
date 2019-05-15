@@ -181,6 +181,19 @@ describe('actions', () => {
     expect(actions.setActivityData([{ stuff: 'stuff' }])).toEqual(expectedAction)
   })
 
+  it('should create an action to set an offenders activity payment status', () => {
+    const expectedAction = {
+      type: types.SET_OFFENDER_PAYMENT_DATA,
+      offenderIndex: 1,
+      payStatus: {
+        other: true,
+        pay: false,
+      },
+    }
+
+    expect(actions.setOffenderPaymentData(1, { other: true, pay: false })).toEqual(expectedAction)
+  })
+
   it('should create an action to set establishment roll block data', () => {
     const data = {
       movements: null,

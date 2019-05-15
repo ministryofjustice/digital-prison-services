@@ -204,6 +204,13 @@ export function events(state = eventsInitialState, action) {
         ...state,
         activityData: action.data,
       }
+    case ActionTypes.SET_OFFENDER_PAYMENT_DATA:
+      return {
+        ...state,
+        activityData: state.activityData.map(
+          (offender, i) => (i === action.offenderIndex ? { ...offender, payStatus: action.payStatus } : offender)
+        ),
+      }
     default:
       return state
   }

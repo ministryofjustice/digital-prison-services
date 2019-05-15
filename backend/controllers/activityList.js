@@ -17,7 +17,7 @@ const sortActivitiesByEventThenByLastName = data => {
   })
 }
 
-const getActivityListFactory = elite2Api => {
+const getActivityListFactory = (elite2Api, whereaboutsApi) => {
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
@@ -51,6 +51,16 @@ const getActivityListFactory = elite2Api => {
 
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
+    const offenderBookingIds = await Promise.all(
+      offenderNumbers.map(offenderNo => elite2Api.getDetailsLight(context, offenderNo))
+    )
+
+    const attendanceInformation = await whereaboutsApi.getAttendance(context, {
+      agencyId,
+      locationId,
+      date,
+      period: timeSlot,
+    })
 
     const externalEventsForOffenders = await getExternalEventsForOffenders(elite2Api, context, {
       offenderNumbers,
@@ -62,20 +72,6 @@ const getActivityListFactory = elite2Api => {
       date,
       timeSlot,
       offenderNumbers,
-    })
-
-    const getPayInformation = bookingId => ({
-      // change for API call using bookingId
-      absentReasonId: 0,
-      attended: true,
-      bookingId: 0,
-      eventDate: 'string',
-      eventId: 0,
-      eventLocationId: 0,
-      id: 0,
-      paid: true,
-      period: 'string',
-      prisonId: 'string',
     })
 
     const eventsElsewhere = eventsForOffenderNumbers.filter(event => event.locationId !== locationId)
@@ -95,7 +91,22 @@ const getActivityListFactory = elite2Api => {
         category,
       } = externalEventsForOffenders.get(event.offenderNo)
 
-      const payInformation = getPayInformation()
+      const payStatus = () => {
+        if (attendanceInformation && attendanceInformation.length > 0) {
+          const offenderBookingId = offenderBookingIds.find(
+            offenderBooking => offenderBooking.offenderNo === event.offenderNo
+          ).bookingId
+
+          const payInfo = attendanceInformation.find(attendance => attendance.bookingId === offenderBookingId)
+
+          if (payInfo && payInfo.absentReason) return { other: true }
+
+          if (payInfo && payInfo.attended && payInfo.paid) return { pay: true }
+
+          return undefined
+        }
+        return null
+      }
 
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)
@@ -109,7 +120,7 @@ const getActivityListFactory = elite2Api => {
         scheduledTransfers,
         alertFlags,
         category,
-        payInformation,
+        payStatus: payStatus(),
       }
     })
 

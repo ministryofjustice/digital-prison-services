@@ -4,6 +4,7 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
+import axios from 'axios'
 import { getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -32,29 +33,30 @@ class ResultsActivity extends Component {
         id: undefined,
         firstName: undefined,
         lastName: undefined,
+        eventId: undefined,
+        eventLocationId: undefined,
+        offenderIndex: undefined,
       },
     }
   }
 
   openModal = e => {
-    const { firstName, lastName } = e.target.dataset
+    const { firstName, lastName, eventId, eventLocationId, offenderIndex } = e.target.dataset
     this.setState({
       activeOffender: {
         id: e.target.name,
         firstName,
         lastName,
+        eventId,
+        eventLocationId,
+        offenderIndex,
       },
       payModalOpen: true,
     })
   }
 
   closeModal = () => {
-    // TODO: Clear the previously checked other input if form input is cancelled
     this.setState({ payModalOpen: false })
-  }
-
-  onPaySubmit = () => {
-    console.log('Pay submit')
   }
 
   render() {
@@ -70,6 +72,9 @@ class ResultsActivity extends Component {
       setColumnSort,
       updateAttendanceEnabled,
       payable,
+      agencyId,
+      handleError,
+      setOffenderPaymentData,
     } = this.props
 
     const { payModalOpen, activeOffender } = this.state
@@ -162,6 +167,20 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
+    const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
+      const details = { prisonId: agencyId, period, eventDate: date }
+      const { attended, paid, absentReason } = attendenceDetails
+      const payStatus = { paid: attended && paid, other: !!absentReason }
+
+      try {
+        await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })
+        setOffenderPaymentData(offenderIndex, payStatus)
+        this.closeModal()
+      } catch (error) {
+        handleError(error)
+      }
+    }
+
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
@@ -173,7 +192,8 @@ class ResultsActivity extends Component {
           alertFlags,
           category,
           eventId,
-          payInformation,
+          payStatus,
+          locationId,
         } = mainEvent
         const key = `${offenderNo}-${eventId}`
         return (
@@ -215,7 +235,10 @@ class ResultsActivity extends Component {
                   otherHandler={this.openModal}
                   firstName={firstName}
                   lastName={lastName}
-                  payInformation={payInformation}
+                  payStatus={payStatus}
+                  eventLocationId={locationId}
+                  updateOffenderAttendance={updateOffenderAttendance}
+                  offenderIndex={index}
                 />
               )}
           </tr>
@@ -225,7 +248,12 @@ class ResultsActivity extends Component {
     return (
       <div className="results-activity">
         <ModalContainer isOpen={payModalOpen} onRequestClose={this.closeModal}>
-          <PayOtherForm offender={activeOffender} cancelHandler={this.closeModal} onSubmit={this.onPaySubmit} />
+          <PayOtherForm
+            offender={activeOffender}
+            cancelHandler={this.closeModal}
+            updateOffenderAttendance={updateOffenderAttendance}
+            handleError={handleError}
+          />
         </ModalContainer>
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
@@ -272,6 +300,7 @@ class ResultsActivity extends Component {
 }
 
 ResultsActivity.propTypes = {
+  agencyId: PropTypes.string.isRequired,
   getActivityList: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
@@ -297,6 +326,8 @@ ResultsActivity.propTypes = {
   sortOrder: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
   payable: PropTypes.bool.isRequired,
+  handleError: PropTypes.func.isRequired,
+  setOffenderPaymentData: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

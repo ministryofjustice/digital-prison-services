@@ -26,6 +26,13 @@ const searchInitialState = {
   period: '',
 }
 
+const eventsInitialState = {
+  houseBlockData: [],
+  activityData: [],
+  orderField: 'cellLocation',
+  sortOrder: 'ASC',
+}
+
 const establishmentRollInitialState = {
   movements: [],
   blocks: [],
@@ -345,6 +352,31 @@ describe('app (global) reducer', () => {
       activityData: [],
       orderField: 'cellLocation',
       sortOrder: 'DESC',
+    })
+  })
+
+  it('should handle SET_OFFENDER_PAYMENT_DATA', () => {
+    const currentEventState = {
+      ...eventsInitialState,
+      activityData: [{ offenderNo: 'A1' }, { offenderNo: 'B2' }, { offenderNo: 'C3' }],
+    }
+
+    expect(
+      events(currentEventState, {
+        type: types.SET_OFFENDER_PAYMENT_DATA,
+        offenderIndex: 1,
+        payStatus: {
+          other: true,
+          pay: false,
+        },
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      activityData: [
+        { offenderNo: 'A1' },
+        { offenderNo: 'B2', payStatus: { other: true, pay: false } },
+        { offenderNo: 'C3' },
+      ],
     })
   })
 
