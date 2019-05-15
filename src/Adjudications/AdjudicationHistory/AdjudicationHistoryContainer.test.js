@@ -37,6 +37,6 @@ describe('Adjudication History container', () => {
       />
     )
 
-    expect(wrapper.dive()).toMatchSnapshot()
+    expect(wrapper.dive().debug()).toMatchSnapshot()
   })
 })

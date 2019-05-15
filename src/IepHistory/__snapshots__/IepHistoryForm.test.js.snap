@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IEP History Form should render the iep history table correctly 1`] = `
+exports[`IEP history Form should render the iep history table correctly 1`] = `
 <form
   onSubmit={[Function]}
 >
