@@ -27,13 +27,14 @@ const getIepHistoryFactory = elite2Api => {
   const getIepHistory = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
     const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
+    const [currentDetail, ...iepHistory] = iepSummary.iepDetails
 
     // Offenders are likely to have multiple IEPs at the same agency.
     // By getting a unique list of users and agencies, we reduce the duplicate
     // calls to the database.
-    const uniqueUserIds = [...new Set(iepSummary.iepDetails.map(details => details.userId))]
-    const uniqueAgencyIds = [...new Set(iepSummary.iepDetails.map(details => details.agencyId))]
-    const levels = [...new Set(iepSummary.iepDetails.map(details => details.iepLevel))]
+    const uniqueUserIds = [...new Set(iepHistory.map(details => details.userId))]
+    const uniqueAgencyIds = [...new Set(iepHistory.map(details => details.agencyId))]
+    const levels = [...new Set(iepHistory.map(details => details.iepLevel))].sort()
 
     const users = await Promise.all(
       uniqueUserIds.filter(userId => Boolean(userId)).map(userId => elite2Api.getStaffDetails(context, userId))
@@ -45,7 +46,8 @@ const getIepHistoryFactory = elite2Api => {
         .map(agencyId => elite2Api.getAgencyDetails(context, agencyId))
     )
 
-    const iepHistoryDetails = iepSummary.iepDetails.map(details => {
+    const iepHistoryDetails = iepHistory.map(details => {
+      console.log(establishments)
       const { description } = establishments.find(estb => estb.agencyId === details.agencyId)
       const user = details.userId && users.find(u => u.username === details.userId)
       return {
@@ -56,18 +58,16 @@ const getIepHistoryFactory = elite2Api => {
       }
     })
 
-    const [summaryDetail, ...iepDetails] = iepHistoryDetails
-
-    const nextReviewDate = moment(summaryDetail.iepTime, 'YYYY-MM-DD HH:mm')
+    const nextReviewDate = moment(currentDetail.iepTime, 'YYYY-MM-DD HH:mm')
       .add(1, 'years')
       .format('DD/MM/YYYY')
 
-    const filteredResults = filterData(iepDetails, params)
+    const filteredResults = filterData(iepHistoryDetails, params)
 
     return {
       currentIepLevel: iepSummary.iepLevel,
       daysOnIepLevel: iepSummary.daysSinceReview,
-      establishments,
+      establishments: establishments.sort((a, b) => (a.description > b.description ? 1 : -1)),
       levels,
       nextReviewDate,
       currentIepDateTime: iepSummary.iepTime,

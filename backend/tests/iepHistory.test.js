@@ -7,8 +7,8 @@ function createIepHistoryReponse() {
     daysOnIepLevel: 625,
     currentIepDateTime: '2017-08-15T16:04:35',
     nextReviewDate: '15/08/2018',
-    establishments: [{ agencyId: 'LEI', description: 'Leeds' }, { agencyId: 'HEI', description: 'Hewell' }],
-    levels: ['Standard', 'Basic', 'Enhanced'],
+    establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
+    levels: ['Basic', 'Enhanced'],
     results: [
       {
         bookingId: -1,
@@ -57,15 +57,10 @@ describe('IEP history controller', async () => {
       lastName: 'Member',
     })
 
-    elite2Api.getAgencyDetails
-      .mockReturnValueOnce({
-        agencyId: 'LEI',
-        description: 'Leeds',
-      })
-      .mockReturnValueOnce({
-        agencyId: 'HEI',
-        description: 'Hewell',
-      })
+    elite2Api.getAgencyDetails.mockReturnValueOnce({
+      agencyId: 'HEI',
+      description: 'Hewell',
+    })
     elite2Api.getIepSummaryWithDetails.mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
@@ -116,8 +111,8 @@ describe('IEP history controller', async () => {
       daysOnIepLevel: 625,
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
-      establishments: [{ agencyId: 'LEI', description: 'Leeds' }, { agencyId: 'HEI', description: 'Hewell' }],
-      levels: ['Standard', 'Basic', 'Enhanced'],
+      establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
+      levels: ['Basic', 'Enhanced'],
       results: [
         {
           bookingId: -1,
@@ -145,8 +140,8 @@ describe('IEP history controller', async () => {
       daysOnIepLevel: 625,
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
-      establishments: [{ agencyId: 'LEI', description: 'Leeds' }, { agencyId: 'HEI', description: 'Hewell' }],
-      levels: ['Standard', 'Basic', 'Enhanced'],
+      establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
+      levels: ['Basic', 'Enhanced'],
       results: [
         {
           bookingId: -1,
@@ -174,8 +169,8 @@ describe('IEP history controller', async () => {
       daysOnIepLevel: 625,
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
-      establishments: [{ agencyId: 'LEI', description: 'Leeds' }, { agencyId: 'HEI', description: 'Hewell' }],
-      levels: ['Standard', 'Basic', 'Enhanced'],
+      establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
+      levels: ['Basic', 'Enhanced'],
       results: [
         {
           bookingId: -1,
@@ -219,8 +214,8 @@ describe('IEP history controller', async () => {
       daysOnIepLevel: 625,
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
-      establishments: [{ agencyId: 'LEI', description: 'Leeds' }, { agencyId: 'HEI', description: 'Hewell' }],
-      levels: ['Standard', 'Basic', 'Enhanced'],
+      establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
+      levels: ['Basic', 'Enhanced'],
       results: [
         {
           bookingId: -1,
