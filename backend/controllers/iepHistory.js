@@ -47,7 +47,6 @@ const getIepHistoryFactory = elite2Api => {
     )
 
     const iepHistoryDetails = iepHistory.map(details => {
-      console.log(establishments)
       const { description } = establishments.find(estb => estb.agencyId === details.agencyId)
       const user = details.userId && users.find(u => u.username === details.userId)
       return {
