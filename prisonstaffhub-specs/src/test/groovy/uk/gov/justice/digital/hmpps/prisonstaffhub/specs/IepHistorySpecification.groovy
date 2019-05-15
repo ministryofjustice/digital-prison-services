@@ -59,9 +59,10 @@ class IepHistorySpecification extends BrowserReportingSpec {
 
         breadcrumb == [['Home', NOTM_URL],
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
-                       ['Iep-history', '']]
+                       ['IEP level', '']]
 
         tableRows.size() == 4 // Including header row
+
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ['12/10/2017 - 09:44','Basic',
                              'Assaulted another inmate.',

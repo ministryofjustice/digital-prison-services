@@ -1,8 +1,8 @@
 import { FORM_ERROR } from 'final-form'
 import moment from 'moment'
-import validateThenSubmit from './AdjudicationHistoryFormValidation'
+import validateThenSubmit from './FilterFormValidation'
 
-describe('Adjudication History form validation', () => {
+describe('Filter form validation', () => {
   const formValues = { establishment: 'MDI' }
 
   it('should return validation messages for date validation', () => {

@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import { CurrentIepLevelArea } from './IepHistory.styles'
+import CurrentIepLevelArea from './IepHistory.styles'
 
 const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
-  <CurrentIepLevelArea>
+  <CurrentIepLevelArea className="current-iep">
     <GridRow>
       <GridCol setWidth="one-quarter">
         <strong className="label">Current IEP level</strong>
@@ -35,4 +36,10 @@ CurrentIepLevel.defaultProps = {
   nextReviewDate: '',
 }
 
-export default CurrentIepLevel
+const mapStateToProps = state => ({
+  level: state.iepHistory.currentIepLevel,
+  days: state.iepHistory.daysOnIepLevel,
+  nextReviewDate: state.iepHistory.nextReviewDate,
+})
+
+export default connect(mapStateToProps)(CurrentIepLevel)

@@ -4,23 +4,18 @@ import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import Button from '@govuk-react/button'
 import moment from 'moment'
-import ErrorSummary from '@govuk-react/error-summary'
-import ErrorText from '@govuk-react/error-text'
 import { connect } from 'react-redux'
 import { Form } from 'react-final-form'
-import FormDatePicker from '../../DatePickers/FormDatePicker'
-import { linkOnClick } from '../../utils'
-import validateThenSubmit from '../../Components/FilterForm/FilterFormValidation'
-import {
-  FullWidthSelect,
-  SearchArea,
-  FiltersLabel,
-  DateRangeLabel,
-  LargeScreenOnlyGridCol,
-} from '../../Components/FilterForm/FilterForm.styles'
-import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
+import ErrorText from '@govuk-react/error-text'
+import ErrorSummary from '@govuk-react/error-summary'
+import FormDatePicker from '../DatePickers/FormDatePicker'
+import { linkOnClick } from '../utils'
 
-export const AdjudicationHistoryForm = ({ agencies, search, fieldValues, reset, now }) => (
+import { FullWidthSelect, SearchArea, FiltersLabel, DateRangeLabel } from '../Components/FilterForm/FilterForm.styles'
+import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
+import validateThenSubmit from '../Components/FilterForm/FilterFormValidation'
+
+export const IepHistoryForm = ({ establishments, levels, search, fieldValues, reset, now }) => (
   <Form
     initialValues={fieldValues}
     onSubmit={values => {
@@ -44,7 +39,8 @@ export const AdjudicationHistoryForm = ({ agencies, search, fieldValues, reset, 
               now={now}
               errors={submitError}
               submitting={submitting}
-              agencies={agencies}
+              establishments={establishments}
+              levels={levels}
               values={values}
               reset={() => {
                 reset().then(() => form.reset({}))
@@ -59,7 +55,7 @@ export const AdjudicationHistoryForm = ({ agencies, search, fieldValues, reset, 
 
 const shouldShowDay = now => date => date.isSameOrBefore(now, 'day')
 
-export const FormFields = ({ now, errors, submitting, agencies = [], values, reset }) => (
+export const FormFields = ({ now, errors, establishments, levels, submitting, values, reset }) => (
   <>
     <GridRow>
       <GridCol setDesktopWidth="one-third">
@@ -67,30 +63,49 @@ export const FormFields = ({ now, errors, submitting, agencies = [], values, res
           <FiltersLabel>Filters</FiltersLabel>
         </GridRow>
         <GridRow>
-          <LargeScreenOnlyGridCol>
+          <GridCol>
             <FieldWithError
               errors={errors}
               name="establishment"
               component={FullWidthSelect}
               label="Establishment"
               id="establishment-select"
-              value={values.establishment}
+              value={values.iepEstablishment}
             >
               <option value="" disabled hidden>
                 All
               </option>
-              {agencies.map(agency => (
-                <option key={agency.agencyId} value={agency.agencyId}>
-                  {agency.description}
+              {establishments.map(estb => (
+                <option key={estb.agencyId} value={estb.agencyId}>
+                  {estb.description}
                 </option>
               ))}
             </FieldWithError>
-          </LargeScreenOnlyGridCol>
+          </GridCol>
+          <GridCol>
+            <FieldWithError
+              errors={errors}
+              name="level"
+              component={FullWidthSelect}
+              label="IEP level"
+              id="iep-level-select"
+              value={values.iepLevel}
+            >
+              <option value="" disabled hidden>
+                All
+              </option>
+              {levels.map(level => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
+            </FieldWithError>
+          </GridCol>
         </GridRow>
       </GridCol>
       <GridCol setDesktopWidth="two-thirds">
         <GridRow>
-          <DateRangeLabel>Reported date</DateRangeLabel>
+          <DateRangeLabel>Date Range</DateRangeLabel>
         </GridRow>
         <GridRow>
           <GridCol id="from-date" setDesktopWidth="one-third">
@@ -128,33 +143,42 @@ export const FormFields = ({ now, errors, submitting, agencies = [], values, res
   </>
 )
 
-AdjudicationHistoryForm.propTypes = {
+IepHistoryForm.propTypes = {
   now: PropTypes.instanceOf(moment).isRequired,
   search: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   // mapStateToProps
-  agencies: PropTypes.arrayOf(
+  establishments: PropTypes.arrayOf(
     PropTypes.shape({
       agencyId: PropTypes.string.isRequired,
       agencyType: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
+  levels: PropTypes.arrayOf(PropTypes.string).isRequired,
   fieldValues: PropTypes.shape({
     establishment: PropTypes.string,
+    level: PropTypes.string,
     fromDate: PropTypes.instanceOf(moment),
     toDate: PropTypes.instanceOf(moment),
   }).isRequired,
 }
 
+FormFields.defaultProps = {
+  establishments: [],
+  levels: [],
+}
+
 const mapStateToProps = state => ({
-  now: state.adjudicationHistory.now,
-  agencies: state.adjudicationHistory.agencies,
+  now: state.iepHistory.now,
+  establishments: state.iepHistory.establishments,
+  levels: state.iepHistory.levels,
   fieldValues: {
-    establishment: state.adjudicationHistory.establishment,
-    fromDate: state.adjudicationHistory.fromDate,
-    toDate: state.adjudicationHistory.toDate,
+    establishment: state.iepHistory.establishment,
+    level: state.iepHistory.level,
+    fromDate: state.iepHistory.fromDate,
+    toDate: state.iepHistory.toDate,
   },
 })
 
-export default connect(mapStateToProps)(AdjudicationHistoryForm)
+export default connect(mapStateToProps)(IepHistoryForm)

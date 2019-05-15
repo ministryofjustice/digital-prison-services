@@ -300,6 +300,14 @@ describe('actions', () => {
     expect(actions.setOffender({ firstName: 'first-name-1', lastName: 'last-name1' })).toEqual(expectedAction)
   })
 
+  it('should create an action to update iep history results', () => {
+    const expectedAction = {
+      type: types.SET_IEP_HISTORY_RESULTS,
+      results: ['result-1'],
+    }
+    expect(actions.setIepHistoryResults(['result-1'])).toEqual(expectedAction)
+  })
+
   describe('content actions', () => {
     let store
     const getEntriesSpy = jest.spyOn(contentfulClient, 'getEntries')

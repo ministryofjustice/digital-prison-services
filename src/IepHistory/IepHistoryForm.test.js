@@ -1,17 +1,17 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import moment from 'moment'
 import testRenderer from 'react-test-renderer'
-import IepHistory from './IepHistory'
-import CurrentIepLevel from './CurrentIepLevel'
+
 import IepHistoryForm from './IepHistoryForm'
 
 const initialState = {
   iepHistory: {
+    now: moment('2017-03-21'),
     currentIepLevel: 'Standard',
     daysOnIepLevel: 625,
     currentIepDateTime: '2017-08-15T16:04:35',
     nextReviewDate: '15/08/2018',
-    establishments: [{ agencyId: 'LEI', description: 'Leeds' }],
+    establishments: [{ agencyId: 'LEI', description: 'Leeds', agencyType: 'INST' }],
     levels: ['Standard'],
     results: [
       {
@@ -30,7 +30,8 @@ const initialState = {
   },
 }
 
-describe('IEP History', () => {
+describe('IEP History Form', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
   const store = {}
   const history = {}
   beforeEach(() => {
@@ -43,13 +44,7 @@ describe('IEP History', () => {
   })
 
   it('should render the iep history table correctly', () => {
-    const wrapper = testRenderer.create(<IepHistory store={store} />).toJSON()
-
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('should render the current IEP level correctly', () => {
-    const wrapper = testRenderer.create(<CurrentIepLevel store={store} />).toJSON()
+    const wrapper = testRenderer.create(<IepHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })

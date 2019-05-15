@@ -29,7 +29,7 @@ const factory = ({
 
   const getIepHistory = asyncMiddleware(async (req, res) => {
     const { offenderNo } = req.params
-    const viewModel = await iepHistoryService.getIepHistory(res.locals, offenderNo)
+    const viewModel = await iepHistoryService.getIepHistory(res.locals, offenderNo, req.query)
     res.json(viewModel)
   })
 

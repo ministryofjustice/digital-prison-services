@@ -147,6 +147,16 @@ export const setAdjudicationHistoryPageSize = size => ({
   size,
 })
 
+export const setIepHistoryResults = results => ({
+  type: ActionTypes.SET_IEP_HISTORY_RESULTS,
+  results,
+})
+
+export const setIepHistoryFilter = fields => ({
+  type: ActionTypes.SET_IEP_HISTORY_FILTER,
+  fields,
+})
+
 export const setGlobalSearchText = searchText => ({
   type: ActionTypes.SET_GLOBAL_SEARCH_TEXT,
   searchText,
