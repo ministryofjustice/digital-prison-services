@@ -127,7 +127,7 @@ const whereaboutsApi = whereaboutsApiFactory(
 )
 
 const controller = controllerFactory({
-  activityListService: activityListFactory(elite2Api, whereaboutsApi),
+  activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
   adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
   iepHistoryService: iepHistoryFactory(elite2Api),
   houseblockListService: houseblockListFactory(elite2Api),
