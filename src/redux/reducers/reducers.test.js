@@ -31,6 +31,7 @@ const eventsInitialState = {
   activityData: [],
   orderField: 'cellLocation',
   sortOrder: 'ASC',
+  absentReasons: [],
 }
 
 const establishmentRollInitialState = {
@@ -324,6 +325,7 @@ describe('app (global) reducer', () => {
       houseBlockData: ['data0', 'data1'],
       orderField: 'cellLocation',
       sortOrder: 'ASC',
+      absentReasons: [],
     })
   })
 
@@ -338,6 +340,7 @@ describe('app (global) reducer', () => {
       houseBlockData: [],
       orderField: 'field1',
       sortOrder: 'ASC',
+      absentReasons: [],
     })
   })
 
@@ -352,6 +355,24 @@ describe('app (global) reducer', () => {
       activityData: [],
       orderField: 'cellLocation',
       sortOrder: 'DESC',
+      absentReasons: [],
+    })
+  })
+
+  it('should handle SET_ABSENT_REASONS', () => {
+    const absentReasons = [
+      { value: 'AcceptableAbsence', name: 'Acceptable absence' },
+      { value: 'Refused', name: 'Refused' },
+    ]
+
+    expect(
+      events(eventsInitialState, {
+        type: types.SET_ABSENT_REASONS,
+        payload: absentReasons,
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      absentReasons,
     })
   })
 

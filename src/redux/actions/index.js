@@ -1,3 +1,4 @@
+import axios from 'axios'
 import * as ActionTypes from './actionTypes'
 import contentfulClient from '../../contentfulClient'
 
@@ -218,6 +219,22 @@ export const fetchContent = path => dispatch => {
       dispatch(setLoaded(true))
     })
 }
+
+export function setAbsentReasons(reasons) {
+  return { type: ActionTypes.SET_ABSENT_REASONS, payload: reasons }
+}
+
+export const getAbsentReasons = () => dispatch =>
+  axios
+    .get('/api/attendance/absence-reasons')
+    .then(response => {
+      if (response.error) throw response.error
+      dispatch(setAbsentReasons(response.data))
+      return response.data
+    })
+    .catch(error => {
+      dispatch(setError(error))
+    })
 
 export const setAppointmentDetails = appointmentDetails => ({
   type: ActionTypes.SET_BULK_APPOINTMENT_DETAILS,

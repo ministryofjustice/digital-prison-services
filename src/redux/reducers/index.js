@@ -49,6 +49,7 @@ const eventsInitialState = {
   activityData: [],
   orderField: 'cellLocation',
   sortOrder: 'ASC',
+  absentReasons: [],
 }
 
 const establishmentRollInitialState = {
@@ -206,6 +207,11 @@ export function events(state = eventsInitialState, action) {
       return {
         ...state,
         activityData: action.data,
+      }
+    case ActionTypes.SET_ABSENT_REASONS:
+      return {
+        ...state,
+        absentReasons: action.payload,
       }
     case ActionTypes.SET_OFFENDER_PAYMENT_DATA:
       return {

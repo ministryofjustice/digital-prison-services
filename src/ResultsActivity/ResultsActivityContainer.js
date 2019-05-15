@@ -13,6 +13,7 @@ import {
   setSearchActivities,
   setSortOrder,
   setOffenderPaymentData,
+  getAbsentReasons,
 } from '../redux/actions'
 import sortActivityData from './activityResultsSorter'
 import Page from '../Components/Page'
@@ -70,6 +71,8 @@ class ResultsActivityContainer extends Component {
       sortOrderDispatch,
       date,
       handleError,
+      updateAttendanceEnabled,
+      getAbsentReasonsDispatch,
     } = this.props
 
     try {
@@ -94,6 +97,7 @@ class ResultsActivityContainer extends Component {
 
       sortActivityData(activityData, orderField, sortOrder)
       activityDataDispatch(activityData)
+      if (updateAttendanceEnabled) getAbsentReasonsDispatch()
     } catch (error) {
       handleError(error)
     }
@@ -229,6 +233,7 @@ const mapDispatchToProps = dispatch => ({
   resetErrorDispatch: () => dispatch(resetError()),
   activityDataDispatch: data => dispatch(setActivityData(data)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setOffenderPaymentData(offenderIndex, data)),
+  getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
 })
 
 export default withRouter(
