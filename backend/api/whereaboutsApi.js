@@ -3,7 +3,6 @@ const whereaboutsApiFactory = client => {
 
   const get = (context, url) => client.get(context, url).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
-  // const put = (context, url, data) => client.put(context, url, data).then(processResponse())
 
   const getAttendance = (context, { agencyId, period, locationId, date }) =>
     get(context, `/attendance/${agencyId}/${locationId}?date=${date}&period=${period}`)

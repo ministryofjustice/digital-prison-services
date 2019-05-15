@@ -16,7 +16,6 @@ import {
 } from '../redux/actions'
 import sortActivityData from './activityResultsSorter'
 import Page from '../Components/Page'
-import { isTodayOrAfter } from '../utils'
 
 const axios = require('axios')
 
@@ -136,13 +135,12 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch, date, setOffenderPaymentDataDispatch } = this.props
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch } = this.props
     const { payable } = this.state
     const activityName = this.getActivityName()
-    const canPrint = isTodayOrAfter(date)
 
     return (
-      <Page title={activityName} alwaysRender showPrint={canPrint}>
+      <Page title={activityName} alwaysRender>
         <ResultsActivity
           handlePrint={this.handlePrint}
           getActivityList={this.getActivityList}

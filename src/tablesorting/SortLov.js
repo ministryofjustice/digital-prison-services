@@ -36,7 +36,7 @@ const invokeColumnSortWithEventData = setColumnSort => event => {
 }
 
 const SortLov = ({ sortColumns, sortColumn, sortOrder, setColumnSort }) => (
-  <div>
+  <div className="pure-u-md-1-4 margin-top-small margin-bottom-large">
     <label className="form-label" htmlFor="sort-select">
       Order the list
     </label>

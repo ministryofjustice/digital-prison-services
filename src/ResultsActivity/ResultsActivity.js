@@ -5,7 +5,7 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import axios from 'axios'
-import { getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
+import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -15,7 +15,6 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import ResultsFilter from '../Components/ResultsFilter'
 import PayOptions from './elements/PayOptions'
 import PayOtherForm from './elements/PayOtherForm'
 import ModalContainer from '../Components/ModalContainer/ModalContainer'
@@ -65,6 +64,7 @@ class ResultsActivity extends Component {
       date,
       period,
       handlePeriodChange,
+      handlePrint,
       activityData,
       getActivityList,
       sortOrder,
@@ -102,6 +102,24 @@ class ResultsActivity extends Component {
             Evening (ED)
           </option>
         </select>
+      </div>
+    )
+
+    const buttons = (
+      <div id="buttons" className="pure-u-md-12-12 padding-bottom">
+        {isTodayOrAfter(date) && (
+          <button
+            id="printButton"
+            className="button"
+            type="button"
+            onClick={() => {
+              handlePrint()
+            }}
+          >
+            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
+            Print list
+          </button>
+        )}
       </div>
     )
 
@@ -152,8 +170,6 @@ class ResultsActivity extends Component {
       </tr>
     )
 
-    // Disabled until whereabouts v2
-    // const readOnly = this.olderThan7Days(this.props.date);
     const renderMainEvent = event => {
       const mainEventDescription = `${getHoursMinutes(event.startTime)} - ${getMainEventDescription(event)}`
       if (ResultsActivity.eventCancelled(event)) {
@@ -275,24 +291,24 @@ class ResultsActivity extends Component {
             </button>
           </div>
           <hr />
-          <ResultsFilter noBorder perPage={offenders.length} totalResults={offenders.length}>
-            <SortLov
-              sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
-              sortColumn={orderField}
-              sortOrder={sortOrder}
-              setColumnSort={setColumnSort}
-            />
-          </ResultsFilter>
+          {buttons}
+          <SortLov
+            sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
+            sortColumn={orderField}
+            sortOrder={sortOrder}
+            setColumnSort={setColumnSort}
+          />
         </form>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
             <tbody>{offenders}</tbody>
           </table>
-          {!offenders ||
-            (offenders.length === 0 && (
-              <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
-            ))}
+          {!offenders || offenders.length === 0 ? (
+            <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
+          ) : (
+            <div className="padding-top"> {buttons} </div>
+          )}
         </div>
       </div>
     )
@@ -302,6 +318,7 @@ class ResultsActivity extends Component {
 ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
   getActivityList: PropTypes.func.isRequired,
+  handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
