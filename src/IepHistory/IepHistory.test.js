@@ -27,7 +27,7 @@ const initialState = {
   },
 }
 
-describe('IEP History', () => {
+describe('IEP history', () => {
   const store = {}
   const history = {}
   beforeEach(() => {

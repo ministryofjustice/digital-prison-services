@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IEP History should render the current IEP level correctly 1`] = `
+exports[`IEP history should render the current IEP level correctly 1`] = `
 <div
   className="current-iep sc-iwsKbI jnBmwk"
 >
@@ -47,7 +47,7 @@ exports[`IEP History should render the current IEP level correctly 1`] = `
 </div>
 `;
 
-exports[`IEP History should render the iep history table correctly 1`] = `
+exports[`IEP history should render the iep history table correctly 1`] = `
 Array [
   <div
     className="sc-gzVnrw gIvEvv"
