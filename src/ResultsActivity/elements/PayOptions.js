@@ -11,7 +11,7 @@ const Option = styled.td`
   }
 
   ${MEDIA_QUERIES.PRINT} {
-    transform: scale(0.4);
+    display: none;
   }
 `
 function PayOptions({

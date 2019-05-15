@@ -163,8 +163,8 @@ class ResultsActivity extends Component {
         {updateAttendanceEnabled &&
           payable && (
             <React.Fragment>
-              <th className="straight width5">Pay</th>
-              <th className="straight width5">Other</th>
+              <th className="straight width5 no-print">Pay</th>
+              <th className="straight width5 no-print">Other</th>
             </React.Fragment>
           )}
       </tr>
