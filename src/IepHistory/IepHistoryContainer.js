@@ -74,7 +74,7 @@ class IepHistoryContainer extends Component {
     const { offenderNo, handleError, setLoadedDispatch } = this.props
     return (
       <OffenderPage
-        title={({ firstName, lastName }) => `IEP history for ${firstName} ${lastName}`}
+        title={({ firstName, lastName }) => `IEP details for ${firstName} ${lastName}`}
         handleError={handleError}
         offenderNumber={offenderNo}
         setLoaded={setLoadedDispatch}

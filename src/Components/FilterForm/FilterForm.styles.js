@@ -14,9 +14,10 @@ export const FullWidthSelect = styled(Select)`
 `
 
 export const SearchArea = styled.div`
-  background: ${GREY_3};
+  background: #f2f2f2;
   padding: ${SPACING.SCALE_5};
-  margin-bottom: ${SPACING.SCALE_3};
+  padding-bottom: ${SPACING.SCALE_3};
+  margin-bottom: ${SPACING.SCALE_5};
 `
 
 export const LargeScreenOnlyGridCol = styled(GridCol)`
@@ -27,12 +28,12 @@ export const LargeScreenOnlyGridCol = styled(GridCol)`
   }
 `
 export const FiltersLabel = styled(H3)`
-  padding-left: ${SPACING.SCALE_2};
+  padding-left: ${SPACING.SCALE_3};
   margin-bottom: ${SPACING.SCALE_2};
   margin-top: -${SPACING.SCALE_2};
 `
 export const DateRangeLabel = styled.span`
-  padding-left: ${SPACING.SCALE_2};
+  padding-left: ${SPACING.SCALE_3};
   ${typography.font({ size: 19 })};
   font-weight: bold;
   margin-top: ${SPACING.SCALE_1};

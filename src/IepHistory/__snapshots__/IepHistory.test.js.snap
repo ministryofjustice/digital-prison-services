@@ -2,13 +2,13 @@
 
 exports[`IEP history should render the current IEP level correctly 1`] = `
 <div
-  className="current-iep sc-iwsKbI jnBmwk"
+  className="current-iep sc-gZMcBi bZTBmE"
 >
   <div
-    className="sc-htoDjs bAoqyZ"
+    className="sc-dnqmqq fhodxA"
   >
     <div
-      className="sc-dnqmqq kSWurI"
+      className="sc-iwsKbI kueFGx"
     >
       <strong
         className="label"
@@ -20,7 +20,7 @@ exports[`IEP history should render the current IEP level correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-dnqmqq kSWurI"
+      className="sc-iwsKbI kueFGx"
     >
       <strong
         className="label"
@@ -32,7 +32,7 @@ exports[`IEP history should render the current IEP level correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-dnqmqq kSWurI"
+      className="sc-iwsKbI kueFGx"
     >
       <strong
         className="label"
@@ -49,17 +49,17 @@ exports[`IEP history should render the current IEP level correctly 1`] = `
 
 exports[`IEP history should render the iep history table correctly 1`] = `
 Array [
+  <h2
+    className="sc-bZQynM ifeWwe"
+  >
+    IEP history
+  </h2>,
   <div
-    className="sc-gzVnrw gIvEvv"
+    className="sc-htoDjs xQRkw"
   >
     <table
       className="results sc-EHOje kCMYgv"
     >
-      <caption
-        className="sc-htpNat iqxUVN"
-      >
-        IEP history
-      </caption>
       <tbody
         className="sc-bwzfXH uTxCW"
       >
@@ -125,16 +125,11 @@ Array [
     </table>
   </div>,
   <div
-    className="sc-bZQynM iVQEAa"
+    className="sc-gzVnrw VtCIX"
   >
     <table
       className="sc-EHOje kCMYgv"
     >
-      <caption
-        className="sc-htpNat iqxUVN"
-      >
-        IEP history
-      </caption>
       <tbody
         className="sc-bwzfXH uTxCW"
       >

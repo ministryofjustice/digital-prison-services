@@ -72,9 +72,7 @@ export const FormFields = ({ now, errors, establishments, levels, submitting, va
               id="establishment-select"
               value={values.iepEstablishment}
             >
-              <option value="" disabled hidden>
-                All
-              </option>
+              <option value="">All</option>
               {establishments.map(estb => (
                 <option key={estb.agencyId} value={estb.agencyId}>
                   {estb.description}
@@ -91,9 +89,7 @@ export const FormFields = ({ now, errors, establishments, levels, submitting, va
               id="iep-level-select"
               value={values.iepLevel}
             >
-              <option value="" disabled hidden>
-                All
-              </option>
+              <option value="">All</option>
               {levels.map(level => (
                 <option key={level} value={level}>
                   {level}

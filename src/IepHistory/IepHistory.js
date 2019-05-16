@@ -2,12 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Table from '@govuk-react/table'
+import { H2 } from '@govuk-react/heading'
 import { LargeScreenOnly, SmallScreenOnly } from '../Components/sizing'
 
 const IepHistory = ({ results }) => (
   <>
+    <H2>IEP history</H2>
     <LargeScreenOnly>
-      <Table caption="IEP history" className="results">
+      <Table className="results">
         <Table.Row>
           <Table.CellHeader>Date and Time</Table.CellHeader>
           <Table.CellHeader>IEP Description</Table.CellHeader>
@@ -27,7 +29,7 @@ const IepHistory = ({ results }) => (
       </Table>
     </LargeScreenOnly>
     <SmallScreenOnly>
-      <Table caption="IEP history">
+      <Table>
         <Table.Row>
           <Table.CellHeader>Date and Time</Table.CellHeader>
           <Table.CellHeader>IEP Description</Table.CellHeader>
