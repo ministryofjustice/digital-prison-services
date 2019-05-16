@@ -59,6 +59,24 @@ const toMap = (key, array) =>
     return map
   }, new Map())
 
+/**
+ * Converts a number to a combination of years and days.
+ * This is not a date difference conversion, so it doesn't
+ * take into account leap years. Used to clearer display
+ * rather than date calculations.
+ * @param days
+ * @returns {string}
+ */
+const formatDaysInYears = days => {
+  const years = Math.floor(days / 365)
+  const remainingDays = days % 365
+  const yearString = `${years} ${years > 1 ? 'years' : 'year'}`
+  const dayString = `${remainingDays} ${remainingDays > 1 ? 'days' : 'day'}`
+  return `${years > 0 ? yearString : ''}${years > 0 && remainingDays > 0 ? ', ' : ''}${
+    remainingDays > 0 ? dayString : ''
+  }`
+}
+
 const pascalToString = value =>
   value.substring(0, 1) +
   value
@@ -75,6 +93,7 @@ module.exports = {
   arrayToQueryString,
   mapToQueryString,
   properCaseName,
+  formatDaysInYears,
   toMap,
   pascalToString,
 }

@@ -25,7 +25,7 @@ exports[`IEP history should render the current IEP level correctly 1`] = `
       <strong
         className="label"
       >
-        Days since review
+        Time since review
       </strong>
       <p>
         625
@@ -79,7 +79,7 @@ Array [
           <th
             className="sc-bxivhb kZbmwT"
           >
-            Comments
+            Reason
           </th>
           <th
             className="sc-bxivhb kZbmwT"

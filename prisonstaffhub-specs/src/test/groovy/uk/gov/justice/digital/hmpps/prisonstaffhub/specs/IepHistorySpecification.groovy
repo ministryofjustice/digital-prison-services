@@ -81,12 +81,12 @@ class IepHistorySpecification extends BrowserReportingSpec {
 
         labels.size() == 3
         labels*.text() == ['Current IEP level',
-                          'Days since review',
+                          'Time since review',
                           'Date of next review']
 
         currentIepLevelData.size() == 3
         currentIepLevelData*.text() == ['Enhanced',
-                                        '572',
+                                        '1 year, 207 days',
                                         '12/10/2018']
     }
 }

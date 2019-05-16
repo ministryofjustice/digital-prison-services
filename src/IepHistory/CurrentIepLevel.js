@@ -13,7 +13,7 @@ const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
         <p>{level}</p>
       </GridCol>
       <GridCol setWidth="one-quarter">
-        <strong className="label">Days since review</strong>
+        <strong className="label">Time since review</strong>
         <p>{days}</p>
       </GridCol>
       <GridCol setWidth="one-quarter">
@@ -26,13 +26,13 @@ const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
 
 CurrentIepLevel.propTypes = {
   level: PropTypes.string,
-  days: PropTypes.number,
+  days: PropTypes.string,
   nextReviewDate: PropTypes.string,
 }
 
 CurrentIepLevel.defaultProps = {
   level: '',
-  days: 0,
+  days: '',
   nextReviewDate: '',
 }
 
