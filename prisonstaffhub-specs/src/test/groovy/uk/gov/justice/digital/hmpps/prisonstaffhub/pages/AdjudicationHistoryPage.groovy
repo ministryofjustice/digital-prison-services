@@ -15,7 +15,7 @@ class AdjudicationHistoryPage extends Page {
         pageTitle { $('h1').text() }
         headerTitle { $('.page-header .title').text() }
         breadcrumb {$('div[data-qa="breadcrumb"] li').children().collect{[it.text(), it.attr('href')]}}
-        tableRows(required: false) { $('.results tr') }
+        tableRows(required: false) { $('.results tr').findAll{ it.displayed}  }
         establishmentSelect { $('#establishment-select select') }
         applyFilter { $('#apply-filter') }
         clearFiltersLink { $('#clear-filters') }
