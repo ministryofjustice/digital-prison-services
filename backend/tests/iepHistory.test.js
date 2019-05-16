@@ -4,7 +4,7 @@ const iepHistory = require('../controllers/iepHistory').getIepHistoryFactory(eli
 function createIepHistoryReponse() {
   return {
     currentIepLevel: 'Standard',
-    daysOnIepLevel: 625,
+    daysOnIepLevel: '1 year, 260 days',
     currentIepDateTime: '2017-08-15T16:04:35',
     nextReviewDate: '15/08/2018',
     establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
@@ -107,7 +107,7 @@ describe('IEP history controller', async () => {
     const response = await iepHistory({}, '1', { level: 'Basic' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
-      daysOnIepLevel: 625,
+      daysOnIepLevel: '1 year, 260 days',
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
@@ -135,7 +135,7 @@ describe('IEP history controller', async () => {
     const response = await iepHistory({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
-      daysOnIepLevel: 625,
+      daysOnIepLevel: '1 year, 260 days',
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
@@ -163,7 +163,7 @@ describe('IEP history controller', async () => {
     const response = await iepHistory({}, '1', { establishment: 'HEI' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
-      daysOnIepLevel: 625,
+      daysOnIepLevel: '1 year, 260 days',
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }],
@@ -207,7 +207,7 @@ describe('IEP history controller', async () => {
     })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
-      daysOnIepLevel: 625,
+      daysOnIepLevel: '1 year, 260 days',
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }],

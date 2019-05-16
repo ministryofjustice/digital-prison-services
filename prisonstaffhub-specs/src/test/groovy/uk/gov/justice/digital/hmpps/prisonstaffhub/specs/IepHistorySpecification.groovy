@@ -86,7 +86,7 @@ class IepHistorySpecification extends BrowserReportingSpec {
 
         currentIepLevelData.size() == 3
         currentIepLevelData*.text() == ['Enhanced',
-                                        '572',
+                                        '1 year, 207 days',
                                         '12/10/2018']
     }
 }

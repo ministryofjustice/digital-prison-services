@@ -1,4 +1,4 @@
-import { capitalize, properCaseName, mapToQueryString } from './utils'
+import { capitalize, properCaseName, mapToQueryString, formatDaysInYears } from './utils'
 
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
@@ -65,5 +65,23 @@ describe('mapToQueryParams', () => {
 
   it('should handle encode values', () => {
     expect(mapToQueryString({ key1: "Hi, I'm here" })).toEqual("key1=Hi%2C%20I'm%20here")
+  })
+})
+
+describe('formatDaysInYears', () => {
+  it('should return correct string when more than one days and years present', () => {
+    expect(formatDaysInYears(812)).toEqual('2 years, 82 days')
+  })
+
+  it('should return correct string when 1 year and 1 day', () => {
+    expect(formatDaysInYears(366)).toEqual('1 year, 1 day')
+  })
+
+  it('should return correct string when 0 years and multiple days', () => {
+    expect(formatDaysInYears(250)).toEqual('250 days')
+  })
+
+  it('should return correct string when multiple years and no days', () => {
+    expect(formatDaysInYears(365 * 2)).toEqual('2 years')
   })
 })

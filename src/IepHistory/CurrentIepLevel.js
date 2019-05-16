@@ -26,13 +26,13 @@ const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
 
 CurrentIepLevel.propTypes = {
   level: PropTypes.string,
-  days: PropTypes.number,
+  days: PropTypes.string,
   nextReviewDate: PropTypes.string,
 }
 
 CurrentIepLevel.defaultProps = {
   level: '',
-  days: 0,
+  days: '',
   nextReviewDate: '',
 }
 

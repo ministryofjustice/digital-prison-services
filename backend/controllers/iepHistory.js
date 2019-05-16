@@ -1,4 +1,5 @@
 const moment = require('moment')
+const { properCaseName, formatDaysInYears } = require('../utils')
 
 const getIepHistoryFactory = elite2Api => {
   const filterData = (data, fields) => {
@@ -51,7 +52,7 @@ const getIepHistoryFactory = elite2Api => {
       const user = details.userId && users.find(u => u.username === details.userId)
       return {
         iepEstablishment: description,
-        iepStaffMember: user && `${user.firstName} ${user.lastName}`,
+        iepStaffMember: user && `${properCaseName(user.firstName)} ${properCaseName(user.lastName)}`,
         formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm'),
         ...details,
       }
@@ -65,7 +66,7 @@ const getIepHistoryFactory = elite2Api => {
 
     return {
       currentIepLevel: iepSummary.iepLevel,
-      daysOnIepLevel: iepSummary.daysSinceReview,
+      daysOnIepLevel: formatDaysInYears(iepSummary.daysSinceReview),
       establishments: establishments.sort((a, b) => (a.description > b.description ? 1 : -1)),
       levels,
       nextReviewDate,
