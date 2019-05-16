@@ -46,8 +46,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                 value="MDI"
               >
                 <option
-                  disabled={true}
-                  hidden={true}
                   value=""
                 >
                   All
