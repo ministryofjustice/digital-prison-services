@@ -76,9 +76,7 @@ export const FormFields = ({ now, errors, submitting, agencies = [], values, res
               id="establishment-select"
               value={values.establishment}
             >
-              <option value="" disabled hidden>
-                All
-              </option>
+              <option value="">All</option>
               {agencies.map(agency => (
                 <option key={agency.agencyId} value={agency.agencyId}>
                   {agency.description}
