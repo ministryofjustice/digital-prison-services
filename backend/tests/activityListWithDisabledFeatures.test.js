@@ -9,8 +9,8 @@ const config = {
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api, whereaboutsApi, config)
   .getActivityList
 
-describe('Activity list with disabled features', () => {
-  it('should not call the whereaboutsApi endpoint if updateAttendanceEnabled is false', async () => {
+describe('Activity list with updateAttendanceEnabled set to false', () => {
+  beforeEach(() => {
     elite2Api.getActivityList = jest.fn()
     elite2Api.getVisits = jest.fn()
     elite2Api.getAppointments = jest.fn()
@@ -33,7 +33,15 @@ describe('Activity list with disabled features', () => {
           return []
       }
     })
+  })
 
+  it('should not call the getDetailsLight endpoint', async () => {
+    await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
+
+    expect(elite2Api.getDetailsLight).not.toHaveBeenCalled()
+  })
+
+  it('should not call the whereaboutsApi endpoint', async () => {
     await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
     expect(whereaboutsApi.getAttendance).not.toHaveBeenCalled()

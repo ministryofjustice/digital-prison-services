@@ -71,9 +71,11 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
 
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
-    const offenderBookingIds = await Promise.all(
-      offenderNumbers.map(offenderNo => elite2Api.getDetailsLight(context, offenderNo))
-    )
+    let offenderBookingIds
+    if (updateAttendanceEnabled)
+      offenderBookingIds = await Promise.all(
+        offenderNumbers.map(offenderNo => elite2Api.getDetailsLight(context, offenderNo))
+      )
 
     const attendanceInformation = updateAttendanceEnabled
       ? await whereaboutsApi.getAttendance(context, {
