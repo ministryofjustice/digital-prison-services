@@ -57,8 +57,6 @@ const elite2ApiFactory = client => {
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
   const searchGroups = (context, agencyId) => get(context, `api/agencies/${agencyId}/locations/groups`)
-  const updateAttendance = (context, offenderNo, activityId, body) =>
-    put(context, `api/bookings/offenderNo/${offenderNo}/activities/${activityId}/attendance`, body)
   const createCaseNote = (context, offenderNo, body) =>
     post(context, `api/bookings/offenderNo/${offenderNo}/caseNotes`, body)
 
@@ -124,6 +122,8 @@ const elite2ApiFactory = client => {
 
   const addBulkAppointments = (context, body) => post(context, 'api/appointments', body)
 
+  const getDetailsLight = (context, offenderNo) => get(context, `api/bookings/offenderNo/${offenderNo}?fullInfo=false`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -132,7 +132,6 @@ const elite2ApiFactory = client => {
     getActivityList,
     searchActivityLocations,
     searchGroups,
-    updateAttendance,
     createCaseNote,
     getVisits,
     getAppointments,
@@ -168,6 +167,7 @@ const elite2ApiFactory = client => {
     getAdjudicationFindingTypes,
     getAdjudications,
     addBulkAppointments,
+    getDetailsLight,
   }
 }
 

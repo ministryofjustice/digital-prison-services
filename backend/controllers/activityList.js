@@ -17,7 +17,27 @@ const sortActivitiesByEventThenByLastName = data => {
   })
 }
 
-const getActivityListFactory = elite2Api => {
+const extractPayInfo = (attendanceInformation, offenderBookingIds, event) => {
+  if (attendanceInformation && attendanceInformation.length > 0) {
+    const offenderBookingId = offenderBookingIds.find(
+      offenderBooking => offenderBooking.offenderNo === event.offenderNo
+    ).bookingId
+
+    const payInfo = attendanceInformation.find(attendance => attendance.bookingId === offenderBookingId)
+
+    if (payInfo && payInfo.absentReason) return { other: true }
+
+    if (payInfo && payInfo.attended && payInfo.paid) return { pay: true }
+  }
+
+  return null
+}
+
+const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
+  const {
+    app: { updateAttendanceEnabled },
+  } = config
+
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
@@ -51,6 +71,20 @@ const getActivityListFactory = elite2Api => {
 
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
+    let offenderBookingIds
+    if (updateAttendanceEnabled)
+      offenderBookingIds = await Promise.all(
+        offenderNumbers.map(offenderNo => elite2Api.getDetailsLight(context, offenderNo))
+      )
+
+    const attendanceInformation = updateAttendanceEnabled
+      ? await whereaboutsApi.getAttendance(context, {
+          agencyId,
+          locationId,
+          date,
+          period: timeSlot,
+        })
+      : null
 
     const externalEventsForOffenders = await getExternalEventsForOffenders(elite2Api, context, {
       offenderNumbers,
@@ -85,6 +119,8 @@ const getActivityListFactory = elite2Api => {
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
 
+      const payStatus = updateAttendanceEnabled ? extractPayInfo(attendanceInformation, offenderBookingIds, event) : {}
+
       return {
         ...event,
         eventsElsewhere: eventsElsewhereForOffender,
@@ -93,6 +129,7 @@ const getActivityListFactory = elite2Api => {
         scheduledTransfers,
         alertFlags,
         category,
+        payStatus,
       }
     })
 

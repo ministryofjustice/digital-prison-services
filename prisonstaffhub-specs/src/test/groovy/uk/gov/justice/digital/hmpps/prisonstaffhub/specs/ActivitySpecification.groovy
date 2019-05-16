@@ -4,6 +4,8 @@ import geb.module.FormElement
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ActivityPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -20,8 +22,19 @@ class ActivitySpecification extends BrowserReportingSpec {
     @Rule
     OauthApi oauthApi = new OauthApi()
 
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
     def initialPeriod
+
+    def offenders = [
+            Map.of("bookingId", 1, "offenderNo", "A1234AA" ),
+            Map.of("bookingId", 2, "offenderNo", "A1234AC" ),
+            Map.of("bookingId", 3, "offenderNo", "A1234AB" ),
+            Map.of("bookingId", 4, "offenderNo", "A1234AA" ),
+            Map.of("bookingId", 5, "offenderNo", "A1234AA" )
+    ]
 
     def "The activity list is displayed"() {
         given: 'I am on the whereabouts search page'
@@ -29,7 +42,10 @@ class ActivitySpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
+
+        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 2, 'AM', today)
         form['period-select'] = 'AM'
         waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc2'
@@ -52,13 +68,7 @@ class ActivitySpecification extends BrowserReportingSpec {
                 'A-1-1'
         ]
 
-        nomsIds == [
-                'A1234AA',
-                'A1234AC',
-                'A1234AB',
-                'A1234AA',
-                'A1234AA'
-        ]
+        nomsIds == offenders.collect { offender -> offender.offenderNo }
         flags[0]*.text() == ['ACCT','E\u2011LIST','CAT A']
         flags[1]*.text() == ['CAT A Prov']
         flags[2]*.text() == ['CAT A High']
@@ -114,7 +124,9 @@ class ActivitySpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
+        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 2, 'AM', today)
         form['period-select'] = 'AM'
         waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc2'
@@ -171,7 +183,9 @@ class ActivitySpecification extends BrowserReportingSpec {
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = getNow()
+        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', today)
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc1'
@@ -183,6 +197,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
         setDatePicker('2018', 'Aug', '1')
         updateButton.click()
 
@@ -214,7 +229,9 @@ class ActivitySpecification extends BrowserReportingSpec {
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = getNow()
+        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', today)
         oauthApi.stubGetMyRoles()
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }

@@ -174,9 +174,9 @@ class Search extends Component {
           </div>
 
           <div className="top-gutter">
-            <fieldset className="pure-u-md-5-12">{locationSelect}</fieldset>
+            <fieldset className="pure-u-md-5-12 fieldset">{locationSelect}</fieldset>
             <div className="pure-u-md-1-12" />
-            <fieldset className="pure-u-md-5-12">{activitySelect}</fieldset>
+            <fieldset className="pure-u-md-5-12 fieldset">{activitySelect}</fieldset>
           </div>
         </form>
       </Fragment>

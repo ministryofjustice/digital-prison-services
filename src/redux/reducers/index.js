@@ -49,6 +49,7 @@ const eventsInitialState = {
   activityData: [],
   orderField: 'cellLocation',
   sortOrder: 'ASC',
+  absentReasons: [],
 }
 
 const establishmentRollInitialState = {
@@ -119,11 +120,6 @@ export function app(state = appInitialState, action) {
       return {
         ...state,
         validationErrors: null,
-      }
-    case ActionTypes.SET_SHOW_MODAL:
-      return {
-        ...state,
-        showModal: action.payload,
       }
     case ActionTypes.SET_MENU_OPEN:
       return {
@@ -211,6 +207,18 @@ export function events(state = eventsInitialState, action) {
       return {
         ...state,
         activityData: action.data,
+      }
+    case ActionTypes.SET_ABSENT_REASONS:
+      return {
+        ...state,
+        absentReasons: action.payload,
+      }
+    case ActionTypes.SET_OFFENDER_PAYMENT_DATA:
+      return {
+        ...state,
+        activityData: state.activityData.map(
+          (offender, i) => (i === action.offenderIndex ? { ...offender, payStatus: action.payStatus } : offender)
+        ),
       }
     default:
       return state

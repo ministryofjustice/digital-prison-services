@@ -1,4 +1,6 @@
 import configureMockStore from 'redux-mock-store'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import thunk from 'redux-thunk'
 import * as actions from './index'
 import * as types from './actionTypes'
@@ -359,6 +361,56 @@ describe('actions', () => {
       return store.dispatch(actions.fetchContent()).then(() => {
         expect(store.getActions()).toEqual(expectedActions)
       })
+    })
+  })
+
+  it('should create an action to set an offenders activity payment status', () => {
+    const expectedAction = {
+      type: types.SET_OFFENDER_PAYMENT_DATA,
+      offenderIndex: 1,
+      payStatus: {
+        other: true,
+        pay: false,
+      },
+    }
+
+    expect(actions.setOffenderPaymentData(1, { other: true, pay: false })).toEqual(expectedAction)
+  })
+
+  describe('absent reasons actions', () => {
+    let mockAxios
+    let store
+
+    beforeEach(() => {
+      mockAxios = new MockAdapter(axios)
+      store = mockStore()
+    })
+
+    it('creates SET_ABSENT_REASONS when getting absent reasons has completed', async () => {
+      const absentReasons = [
+        { value: 'AcceptableAbsence', name: 'Acceptable absence' },
+        { value: 'Refused', name: 'Refused' },
+      ]
+      const expectedActions = [
+        {
+          payload: absentReasons,
+          type: 'SET_ABSENT_REASONS',
+        },
+      ]
+
+      mockAxios.onGet('/api/attendance/absence-reasons').reply(200, absentReasons)
+      await store.dispatch(actions.getAbsentReasons())
+
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+
+    it('creates SET_ERROR when getting absent reasons has failed', async () => {
+      const expectedActions = [{ error: Error('Network Error'), type: 'SET_ERROR' }]
+
+      mockAxios.onGet('/api/attendance/absence-reasons').networkError()
+      await store.dispatch(actions.getAbsentReasons())
+
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 })

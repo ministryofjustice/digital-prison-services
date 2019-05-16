@@ -59,6 +59,13 @@ const toMap = (key, array) =>
     return map
   }, new Map())
 
+const pascalToString = value =>
+  value.substring(0, 1) +
+  value
+    .substring(1)
+    .replace(/([A-Z])/g, ' $1')
+    .toLowerCase()
+
 module.exports = {
   switchDateFormat,
   distinct,
@@ -69,4 +76,5 @@ module.exports = {
   mapToQueryString,
   properCaseName,
   toMap,
+  pascalToString,
 }

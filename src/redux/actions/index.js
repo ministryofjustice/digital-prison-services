@@ -1,3 +1,4 @@
+import axios from 'axios'
 import * as ActionTypes from './actionTypes'
 import contentfulClient from '../../contentfulClient'
 
@@ -105,16 +106,10 @@ export const setActivityData = data => ({
   data,
 })
 
-export const showPaymentReasonModal = data => ({
-  type: ActionTypes.SET_SHOW_MODAL,
-  payload: {
-    identifier: 'payment-reason-modal',
-    data,
-  },
-})
-
-export const hideModal = () => ({
-  type: ActionTypes.SET_SHOW_MODAL,
+export const setOffenderPaymentData = (offenderIndex, payStatus) => ({
+  type: ActionTypes.SET_OFFENDER_PAYMENT_DATA,
+  offenderIndex: parseInt(offenderIndex, 0),
+  payStatus,
 })
 
 export const setMenuOpen = payload => ({
@@ -224,6 +219,22 @@ export const fetchContent = path => dispatch => {
       dispatch(setLoaded(true))
     })
 }
+
+export function setAbsentReasons(reasons) {
+  return { type: ActionTypes.SET_ABSENT_REASONS, payload: reasons }
+}
+
+export const getAbsentReasons = () => dispatch =>
+  axios
+    .get('/api/attendance/absence-reasons')
+    .then(response => {
+      if (response.error) throw response.error
+      dispatch(setAbsentReasons(response.data))
+      return response.data
+    })
+    .catch(error => {
+      dispatch(setError(error))
+    })
 
 export const setAppointmentDetails = appointmentDetails => ({
   type: ActionTypes.SET_BULK_APPOINTMENT_DETAILS,

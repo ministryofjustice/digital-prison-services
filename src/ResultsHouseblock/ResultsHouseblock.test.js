@@ -163,7 +163,6 @@ const props = {
   handleSubLocationChange: jest.fn(),
   handlePeriodChange: jest.fn(),
   handleDateChange: jest.fn(),
-  showPaymentReasonModal: jest.fn(),
   update: jest.fn(),
   resetErrorDispatch: jest.fn(),
 }
@@ -788,33 +787,5 @@ describe('Offender results component Jira NN-843', () => {
         .last()
         .getElement().props.className
     ).toBe('cancelled')
-  })
-
-  // TODO Skipped for Part 1
-  it.skip('should call showPaymentReasonModal with event and offender information', () => {
-    const component = shallow(
-      <ResultsHouseblock
-        {...props}
-        user={{}}
-        houseblockData={[response[0]]}
-        showPaymentReasonModal={props.showPaymentReasonModal}
-        orderField="cellLocation"
-        sortOrder="ASC"
-        currentLocation="BWing"
-        offenderNo="1"
-      />
-    )
-
-    const browserEvent = {
-      target: {
-        value: 'dummy',
-      },
-    }
-    component
-      .find('#col4_0')
-      .last()
-      .simulate('change', browserEvent)
-
-    expect(props.showPaymentReasonModal).toHaveBeenCalledWith(response[0].activity[0], browserEvent)
   })
 })
