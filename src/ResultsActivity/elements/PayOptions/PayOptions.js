@@ -25,7 +25,6 @@ function PayOptions({
   payStatus,
   offenderIndex,
 }) {
-  if (!offenderNo || !eventId) return null
   const [selectedOption, setSelectedOption] = useState()
 
   const payOffender = async () => {
@@ -49,25 +48,31 @@ function PayOptions({
   return (
     <Fragment>
       <Option>
-        <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
-          <VisuallyHidden>Pay</VisuallyHidden>
-        </Radio>
+        {offenderNo &&
+          eventId && (
+            <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
+              <VisuallyHidden>Pay</VisuallyHidden>
+            </Radio>
+          )}
       </Option>
 
       <Option>
-        <Radio
-          name={offenderNo}
-          onChange={otherHandler}
-          value="other"
-          data-first-name={firstName}
-          data-last-name={lastName}
-          data-event-id={eventId}
-          data-event-location-id={eventLocationId}
-          data-offender-index={offenderIndex}
-          checked={selectedOption === 'other'}
-        >
-          <VisuallyHidden>Other</VisuallyHidden>
-        </Radio>
+        {offenderNo &&
+          eventId && (
+            <Radio
+              name={offenderNo}
+              onChange={otherHandler}
+              value="other"
+              data-first-name={firstName}
+              data-last-name={lastName}
+              data-event-id={eventId}
+              data-event-location-id={eventLocationId}
+              data-offender-index={offenderIndex}
+              checked={selectedOption === 'other'}
+            >
+              <VisuallyHidden>Other</VisuallyHidden>
+            </Radio>
+          )}
       </Option>
     </Fragment>
   )

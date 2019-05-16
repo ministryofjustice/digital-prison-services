@@ -12,9 +12,9 @@ import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
 import { spacing } from '@govuk-react/lib'
 
-import ButtonCancel from './ButtonCancel'
+import ButtonCancel from './elements/ButtonCancel'
 import OffenderName from '../../OffenderName'
-import RadioGroup from '../../Components/RadioGroup'
+import RadioGroup from '../RadioGroup'
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`

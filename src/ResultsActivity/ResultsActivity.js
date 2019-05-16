@@ -16,8 +16,8 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import PayOptions from './elements/PayOptions'
-import PayOtherForm from './elements/PayOtherForm'
-import ModalContainer from '../Components/ModalContainer/ModalContainer'
+import PayOtherForm from '../Components/PayOtherForm'
+import ModalContainer from '../Components/ModalContainer'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
