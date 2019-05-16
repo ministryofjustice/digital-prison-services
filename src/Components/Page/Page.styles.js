@@ -10,3 +10,8 @@ export const Container = styled('div')`
     padding-top: 0;
   }
 `
+
+export const PageHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`

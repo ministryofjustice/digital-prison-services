@@ -5,7 +5,7 @@ const factory = ({
   adjudicationHistoryService,
   iepHistoryService,
   houseblockListService,
-  updateAttendanceService,
+  attendanceService,
   establishmentRollService,
   globalSearchService,
   movementsService,
@@ -39,10 +39,14 @@ const factory = ({
     res.json(viewModel)
   })
 
-  const updateAttendance = asyncMiddleware(async (req, res) => {
-    const { offenderNo, activityId } = req.query
-    await updateAttendanceService.updateAttendance(res.locals, offenderNo, activityId, req.body)
+  const postAttendance = asyncMiddleware(async (req, res) => {
+    await attendanceService.postAttendance(res.locals, req.body)
     res.json({})
+  })
+
+  const getAbsenceReasons = asyncMiddleware(async (req, res) => {
+    const absenceReasons = await attendanceService.getAbsenceReasons(res.locals, req.body)
+    res.json(absenceReasons)
   })
 
   const getEstablishmentRollCount = asyncMiddleware(async (req, res) => {
@@ -145,7 +149,8 @@ const factory = ({
     getActivityList,
     getAdjudications,
     getHouseblockList,
-    updateAttendance,
+    postAttendance,
+    getAbsenceReasons,
     getEstablishmentRollCount,
     globalSearch,
     getMovementsIn,

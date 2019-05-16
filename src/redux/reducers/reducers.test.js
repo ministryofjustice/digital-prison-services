@@ -26,6 +26,14 @@ const searchInitialState = {
   period: '',
 }
 
+const eventsInitialState = {
+  houseBlockData: [],
+  activityData: [],
+  orderField: 'cellLocation',
+  sortOrder: 'ASC',
+  absentReasons: [],
+}
+
 const establishmentRollInitialState = {
   movements: [],
   blocks: [],
@@ -317,6 +325,7 @@ describe('app (global) reducer', () => {
       houseBlockData: ['data0', 'data1'],
       orderField: 'cellLocation',
       sortOrder: 'ASC',
+      absentReasons: [],
     })
   })
 
@@ -331,6 +340,7 @@ describe('app (global) reducer', () => {
       houseBlockData: [],
       orderField: 'field1',
       sortOrder: 'ASC',
+      absentReasons: [],
     })
   })
 
@@ -345,6 +355,49 @@ describe('app (global) reducer', () => {
       activityData: [],
       orderField: 'cellLocation',
       sortOrder: 'DESC',
+      absentReasons: [],
+    })
+  })
+
+  it('should handle SET_ABSENT_REASONS', () => {
+    const absentReasons = [
+      { value: 'AcceptableAbsence', name: 'Acceptable absence' },
+      { value: 'Refused', name: 'Refused' },
+    ]
+
+    expect(
+      events(eventsInitialState, {
+        type: types.SET_ABSENT_REASONS,
+        payload: absentReasons,
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      absentReasons,
+    })
+  })
+
+  it('should handle SET_OFFENDER_PAYMENT_DATA', () => {
+    const currentEventState = {
+      ...eventsInitialState,
+      activityData: [{ offenderNo: 'A1' }, { offenderNo: 'B2' }, { offenderNo: 'C3' }],
+    }
+
+    expect(
+      events(currentEventState, {
+        type: types.SET_OFFENDER_PAYMENT_DATA,
+        offenderIndex: 1,
+        payStatus: {
+          other: true,
+          pay: false,
+        },
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      activityData: [
+        { offenderNo: 'A1' },
+        { offenderNo: 'B2', payStatus: { other: true, pay: false } },
+        { offenderNo: 'C3' },
+      ],
     })
   })
 

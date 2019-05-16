@@ -863,6 +863,15 @@
     "@govuk-react/lib" "^0.7.0"
     govuk-colours "^1.0.3"
 
+"@govuk-react/fieldset@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/fieldset/-/fieldset-0.7.0.tgz#75ff3c69a0c21cb842b604d506642a1fcf4e135c"
+  integrity sha512-j9LkaVC4nd7aOjOjeeDjW0La1oROmWHdadSkSlTfXDj37T6tigA1/+mIFgzfxO4MuwedzIhXR4xdWgqLu0in+g==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/grid-col@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/grid-col/-/grid-col-0.7.0.tgz#6d81d0a53fba9f99a6f6b86411a5cac42c0b2005"
@@ -1037,6 +1046,29 @@
   dependencies:
     "@govuk-react/constants" "^0.7.0"
     "@govuk-react/lib" "^0.7.0"
+
+"@govuk-react/loading-box@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/loading-box/-/loading-box-0.7.0.tgz#4b07e443fbef4ec2ef08accfa0e145b24400bbc5"
+  integrity sha512-Vs2QOF93VZmJ6aQBk9eFQLdpvxEAddaNkZ4pUeDzP8ebvyHVRAKRNhuUTWlOP5cg6z78Ie7hTGuY3kT/I2ehBQ==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/icons" "^0.7.0"
+    govuk-colours "^1.0.3"
+    hex-rgb "^1.0.0"
+    react-transition-group "^2.2.1"
+
+"@govuk-react/multi-choice@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@govuk-react/multi-choice/-/multi-choice-0.7.0.tgz#789a2744a9fefd8debf682f319574fd31fea77ab"
+  integrity sha512-/XadJFV1pZrq2Yhb+eP1v6J2JsbeHoDPqY2eRQuVQAKaFOukoXA52oWMc2dGBAze+1L1LZK76yowqTpBY4io3g==
+  dependencies:
+    "@govuk-react/constants" "^0.7.0"
+    "@govuk-react/error-text" "^0.7.0"
+    "@govuk-react/hint-text" "^0.7.0"
+    "@govuk-react/label-text" "^0.7.0"
+    "@govuk-react/lib" "^0.7.0"
+    govuk-colours "^1.0.3"
 
 "@govuk-react/ordered-list@^0.7.0":
   version "0.7.0"
@@ -3927,6 +3959,13 @@ dom-converter@~0.2:
   dependencies:
     utila "~0.4"
 
+dom-helpers@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
+  integrity sha512-LnuPJ+dwqKDIyotW1VzmOZ5TONUN7CwkCR5hrgawTUbkBGYdeoNLZo6nNfGkCrjtE1nXXaj7iMMpDa8/d9WoIA==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+
 dom-serializer@0, dom-serializer@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-0.1.0.tgz#073c697546ce0780ce23be4a28e293e40bc30c82"
@@ -4513,6 +4552,11 @@ execa@^1.0.0:
     p-finally "^1.0.0"
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
+
+exenv@^1.2.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+  integrity sha1-KueOhdmJQVhnCwPUe+wfA72Ru50=
 
 exit@^0.1.2:
   version "0.1.2"
@@ -5478,6 +5522,11 @@ helmet@^3.12.1:
     nocache "2.0.0"
     referrer-policy "1.1.0"
     x-xss-protection "1.1.0"
+
+hex-rgb@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hex-rgb/-/hex-rgb-1.0.0.tgz#532275697cb9823e052429b184c6781d46cfdf49"
+  integrity sha1-UyJ1aXy5gj4FJCmxhMZ4HUbP30k=
 
 hide-powered-by@1.0.0:
   version "1.0.0"
@@ -8885,7 +8934,7 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
-prop-types@^15.5.4, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -9120,7 +9169,7 @@ react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-react-lifecycles-compat@^3.0.0:
+react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
@@ -9133,6 +9182,16 @@ react-markdown@=3.2:
     unified "^6.1.5"
     unist-util-visit "^1.1.3"
     xtend "^4.0.1"
+
+react-modal@^3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.8.1.tgz#7300f94a6f92a2e17994de0be6ccb61734464c9e"
+  integrity sha512-aLKeZM9pgXpIKVwopRHMuvqKWiBajkqisDA8UzocdCF6S4fyKVfLWmZR5G1Q0ODBxxxxf2XIwiCP8G/11GJAuw==
+  dependencies:
+    exenv "^1.2.0"
+    prop-types "^15.5.10"
+    react-lifecycles-compat "^3.0.0"
+    warning "^3.0.0"
 
 react-onclickoutside@^6.5.0:
   version "6.7.1"
@@ -9210,6 +9269,16 @@ react-test-renderer@^16.8.6:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.13.6"
+
+react-transition-group@^2.2.1:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"
+  integrity sha512-+HzNTCHpeQyl4MJ/bdE0u6XRMe9+XG/+aL4mCxVN4DnPBQ0/5bfHWPDuOZUzYdMj94daZaZdCCc1Dzt9R/xSSg==
+  dependencies:
+    dom-helpers "^3.4.0"
+    loose-envify "^1.4.0"
+    prop-types "^15.6.2"
+    react-lifecycles-compat "^3.0.4"
 
 react@^16.8.6:
   version "16.8.6"
@@ -11128,6 +11197,13 @@ walker@~1.0.5:
   integrity sha1-L3+bj9ENZ3JisYqITijRlhjgKPs=
   dependencies:
     makeerror "1.0.x"
+
+warning@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-3.0.0.tgz#32e5377cb572de4ab04753bdf8821c01ed605b7c"
+  integrity sha1-MuU3fLVy3kqwR1O9+IIcAe1gW3w=
+  dependencies:
+    loose-envify "^1.0.0"
 
 watch@~0.18.0:
   version "0.18.0"

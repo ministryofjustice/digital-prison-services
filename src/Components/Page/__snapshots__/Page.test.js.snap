@@ -13,6 +13,7 @@ ShallowWrapper {
     homeLink="http://home/"
     loaded={false}
     showBreadcrumb={true}
+    showPrint={false}
     title="Page title"
   >
     Page content
@@ -43,12 +44,13 @@ ShallowWrapper {
           Back
         </BackLink>,
         <UNDEFINED>
-          <Heading
-            level={1}
-            size="LARGE"
-          >
-            Page title
-          </Heading>
+          <UNDEFINED>
+            <H1
+              size="LARGE"
+            >
+              Page title
+            </H1>
+          </UNDEFINED>
           
           <div
             className="page-content"
@@ -56,6 +58,7 @@ ShallowWrapper {
             Page content
           </div>
         </UNDEFINED>,
+        false,
       ],
     },
     "ref": null,
@@ -99,12 +102,13 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "children": Array [
-            <Heading
-              level={1}
-              size="LARGE"
-            >
-              Page title
-            </Heading>,
+            <UNDEFINED>
+              <H1
+                size="LARGE"
+              >
+                Page title
+              </H1>
+            </UNDEFINED>,
             "",
             <div
               className="page-content"
@@ -120,13 +124,54 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "children": "Page title",
-              "level": 1,
-              "size": "LARGE",
+              "children": Array [
+                <H1
+                  size="LARGE"
+                >
+                  Page title
+                </H1>,
+                false,
+              ],
             },
             "ref": null,
-            "rendered": "Page title",
-            "type": [Function],
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "children": "Page title",
+                  "size": "LARGE",
+                },
+                "ref": null,
+                "rendered": "Page title",
+                "type": [Function],
+              },
+              false,
+            ],
+            "type": Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "sc-ifAKCX",
+                "isStatic": true,
+                "lastClassName": "fOGIFb",
+                "rules": Array [
+                  "
+  display: flex;
+  justify-content: space-between;
+",
+                ],
+              },
+              "displayName": "styled.div",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "sc-ifAKCX",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            },
           },
           "",
           Object {
@@ -170,6 +215,7 @@ ShallowWrapper {
           "withComponent": [Function],
         },
       },
+      false,
     ],
     "type": Symbol(react.fragment),
   },
@@ -191,12 +237,13 @@ ShallowWrapper {
             Back
           </BackLink>,
           <UNDEFINED>
-            <Heading
-              level={1}
-              size="LARGE"
-            >
-              Page title
-            </Heading>
+            <UNDEFINED>
+              <H1
+                size="LARGE"
+              >
+                Page title
+              </H1>
+            </UNDEFINED>
             
             <div
               className="page-content"
@@ -204,6 +251,7 @@ ShallowWrapper {
               Page content
             </div>
           </UNDEFINED>,
+          false,
         ],
       },
       "ref": null,
@@ -247,12 +295,13 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": Array [
-              <Heading
-                level={1}
-                size="LARGE"
-              >
-                Page title
-              </Heading>,
+              <UNDEFINED>
+                <H1
+                  size="LARGE"
+                >
+                  Page title
+                </H1>
+              </UNDEFINED>,
               "",
               <div
                 className="page-content"
@@ -268,13 +317,54 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "children": "Page title",
-                "level": 1,
-                "size": "LARGE",
+                "children": Array [
+                  <H1
+                    size="LARGE"
+                  >
+                    Page title
+                  </H1>,
+                  false,
+                ],
               },
               "ref": null,
-              "rendered": "Page title",
-              "type": [Function],
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "children": "Page title",
+                    "size": "LARGE",
+                  },
+                  "ref": null,
+                  "rendered": "Page title",
+                  "type": [Function],
+                },
+                false,
+              ],
+              "type": Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-ifAKCX",
+                  "isStatic": true,
+                  "lastClassName": "fOGIFb",
+                  "rules": Array [
+                    "
+  display: flex;
+  justify-content: space-between;
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-ifAKCX",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              },
             },
             "",
             Object {
@@ -318,6 +408,7 @@ ShallowWrapper {
             "withComponent": [Function],
           },
         },
+        false,
       ],
       "type": Symbol(react.fragment),
     },

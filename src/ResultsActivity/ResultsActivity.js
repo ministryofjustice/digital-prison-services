@@ -4,6 +4,7 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
+import axios from 'axios'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -14,11 +15,47 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import PayOffender from '../Components/PayOffender'
+import PayOptions from './elements/PayOptions'
+import PayOtherForm from '../Components/PayOtherForm'
+import ModalContainer from '../Components/ModalContainer'
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      payModalOpen: false,
+      activeOffender: {
+        id: undefined,
+        firstName: undefined,
+        lastName: undefined,
+        eventId: undefined,
+        eventLocationId: undefined,
+        offenderIndex: undefined,
+      },
+    }
+  }
+
+  openModal = e => {
+    const { firstName, lastName, eventId, eventLocationId, offenderIndex } = e.target.dataset
+    this.setState({
+      activeOffender: {
+        id: e.target.name,
+        firstName,
+        lastName,
+        eventId,
+        eventLocationId,
+        offenderIndex,
+      },
+      payModalOpen: true,
+    })
+  }
+
+  closeModal = () => {
+    this.setState({ payModalOpen: false })
   }
 
   render() {
@@ -35,7 +72,12 @@ class ResultsActivity extends Component {
       setColumnSort,
       updateAttendanceEnabled,
       payable,
+      agencyId,
+      handleError,
+      setOffenderPaymentData,
     } = this.props
+
+    const { payModalOpen, activeOffender } = this.state
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -118,12 +160,16 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        {updateAttendanceEnabled && payable && <th className="straight">Pay</th>}
+        {updateAttendanceEnabled &&
+          payable && (
+            <React.Fragment>
+              <th className="straight width5 no-print">Pay</th>
+              <th className="straight width5 no-print">Other</th>
+            </React.Fragment>
+          )}
       </tr>
     )
 
-    // Disabled until whereabouts v2
-    // const readOnly = this.olderThan7Days(this.props.date);
     const renderMainEvent = event => {
       const mainEventDescription = `${getHoursMinutes(event.startTime)} - ${getMainEventDescription(event)}`
       if (ResultsActivity.eventCancelled(event)) {
@@ -137,10 +183,34 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
+    const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
+      const details = { prisonId: agencyId, period, eventDate: date }
+      const { attended, paid, absentReason } = attendenceDetails
+      const payStatus = { paid: attended && paid, other: !!absentReason }
+
+      try {
+        await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })
+        setOffenderPaymentData(offenderIndex, payStatus)
+        this.closeModal()
+      } catch (error) {
+        handleError(error)
+      }
+    }
+
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
-        const { offenderNo, firstName, lastName, cellLocation, alertFlags, category, eventId } = mainEvent
+        const {
+          offenderNo,
+          firstName,
+          lastName,
+          cellLocation,
+          alertFlags,
+          category,
+          eventId,
+          payStatus,
+          locationId,
+        } = mainEvent
         const key = `${offenderNo}-${eventId}`
         return (
           <tr key={key} className="row-gutters">
@@ -175,9 +245,17 @@ class ResultsActivity extends Component {
             </td>
             {updateAttendanceEnabled &&
               payable && (
-                <td className="no-padding checkbox-column">
-                  <PayOffender offenderNo={offenderNo} eventId={eventId} />
-                </td>
+                <PayOptions
+                  offenderNo={offenderNo}
+                  eventId={eventId}
+                  otherHandler={this.openModal}
+                  firstName={firstName}
+                  lastName={lastName}
+                  payStatus={payStatus}
+                  eventLocationId={locationId}
+                  updateOffenderAttendance={updateOffenderAttendance}
+                  offenderIndex={index}
+                />
               )}
           </tr>
         )
@@ -185,6 +263,14 @@ class ResultsActivity extends Component {
 
     return (
       <div className="results-activity">
+        <ModalContainer isOpen={payModalOpen} onRequestClose={this.closeModal}>
+          <PayOtherForm
+            offender={activeOffender}
+            cancelHandler={this.closeModal}
+            updateOffenderAttendance={updateOffenderAttendance}
+            handleError={handleError}
+          />
+        </ModalContainer>
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
         </span>
@@ -230,6 +316,7 @@ class ResultsActivity extends Component {
 }
 
 ResultsActivity.propTypes = {
+  agencyId: PropTypes.string.isRequired,
   getActivityList: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
@@ -256,6 +343,8 @@ ResultsActivity.propTypes = {
   sortOrder: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
   payable: PropTypes.bool.isRequired,
+  handleError: PropTypes.func.isRequired,
+  setOffenderPaymentData: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

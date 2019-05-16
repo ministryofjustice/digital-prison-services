@@ -36,7 +36,7 @@ const activityListFactory = require('./controllers/activityList').getActivityLis
 const iepHistoryFactory = require('./controllers/iepHistory').getIepHistoryFactory
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory
 const { healthFactory } = require('./controllers/health')
-const { updateAttendanceFactory } = require('./controllers/updateAttendance')
+const { attendanceFactory } = require('./controllers/attendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
 const { movementsServiceFactory } = require('./controllers/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
@@ -54,6 +54,7 @@ const controllerFactory = require('./controllers/controller').factory
 const clientFactory = require('./api/oauthEnabledClient')
 const { elite2ApiFactory } = require('./api/elite2Api')
 const { oauthApiFactory } = require('./api/oauthApi')
+const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const oauthClientId = require('./api/oauthClientId')
 
 const log = require('./log')
@@ -118,12 +119,19 @@ const elite2Api = elite2ApiFactory(
   })
 )
 
+const whereaboutsApi = whereaboutsApiFactory(
+  clientFactory({
+    baseUrl: config.apis.whereabouts.url,
+    timeout: config.apis.whereabouts.timeoutSeconds * 1000,
+  })
+)
+
 const controller = controllerFactory({
-  activityListService: activityListFactory(elite2Api),
+  activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
   adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
   iepHistoryService: iepHistoryFactory(elite2Api),
   houseblockListService: houseblockListFactory(elite2Api),
-  updateAttendanceService: updateAttendanceFactory(elite2Api),
+  attendanceService: attendanceFactory(elite2Api, whereaboutsApi),
   establishmentRollService: establishmentRollFactory(elite2Api),
   globalSearchService: globalSearchFactory(elite2Api),
   movementsService: movementsServiceFactory(elite2Api, oauthClientId),
@@ -203,8 +211,9 @@ app.use('/api/bookings/:offenderNo/iepSummary', controller.getIepHistory)
 app.use('/api/houseblocklist', controller.getHouseblockList)
 app.use('/api/activityList', controller.getActivityList)
 app.use('/api/adjudications/:offenderNumber', controller.getAdjudications)
+app.use('/api/postAttendance', controller.postAttendance)
+app.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
 app.use('/api/offenders/:offenderNo', controller.getOffender)
-app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
 app.use('/api/movements/:agencyId/in', controller.getMovementsIn)
 app.use('/api/movements/:agencyId/out', controller.getMovementsOut)

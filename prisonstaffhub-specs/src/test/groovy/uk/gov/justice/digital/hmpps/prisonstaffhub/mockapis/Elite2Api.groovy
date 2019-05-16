@@ -391,6 +391,15 @@ class Elite2Api extends WireMockRule {
                                 .withStatus(200)))
     }
 
+    void stubOffenderDetails(boolean fullInfo, def offender) {
+        this.stubFor(
+                get("/api/bookings/offenderNo/${offender.offenderNo}?fullInfo=${fullInfo}")
+                        .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader('Content-Type', 'application/json')
+                        .withBody(JsonOutput.toJson(offender))))
+    }
+
     def stubGlobalSearch(offenderNo, lastName, firstName, location, gender, dob, response) {
         final totalRecords = String.valueOf(response.size())
 

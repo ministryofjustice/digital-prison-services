@@ -12,9 +12,9 @@ import {
   setOrderField,
   setSearchActivities,
   setSortOrder,
-  showPaymentReasonModal,
+  setOffenderPaymentData,
+  getAbsentReasons,
 } from '../redux/actions'
-import { getActivityListReasons } from '../ModalProvider/PaymentReasonModal/reasonCodes'
 import sortActivityData from './activityResultsSorter'
 import Page from '../Components/Page'
 
@@ -71,6 +71,8 @@ class ResultsActivityContainer extends Component {
       sortOrderDispatch,
       date,
       handleError,
+      updateAttendanceEnabled,
+      getAbsentReasonsDispatch,
     } = this.props
 
     try {
@@ -95,6 +97,7 @@ class ResultsActivityContainer extends Component {
 
       sortActivityData(activityData, orderField, sortOrder)
       activityDataDispatch(activityData)
+      if (updateAttendanceEnabled) getAbsentReasonsDispatch()
     } catch (error) {
       handleError(error)
     }
@@ -136,7 +139,7 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch } = this.props
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch } = this.props
     const { payable } = this.state
     const activityName = this.getActivityName()
 
@@ -148,6 +151,8 @@ class ResultsActivityContainer extends Component {
           resetErrorDispatch={resetErrorDispatch}
           setColumnSort={this.setColumnSort}
           payable={payable}
+          handleError={this.handleError}
+          setOffenderPaymentData={setOffenderPaymentDataDispatch}
           {...this.props}
         />
       </Page>
@@ -190,7 +195,6 @@ ResultsActivityContainer.propTypes = {
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
-  showPaymentReasonModal: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
@@ -225,11 +229,11 @@ const mapDispatchToProps = dispatch => ({
   orderDispatch: field => dispatch(setOrderField(field)),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  showPaymentReasonModal: (event, browserEvent) =>
-    dispatch(showPaymentReasonModal({ event, browserEvent, reasons: getActivityListReasons() })),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
   activityDataDispatch: data => dispatch(setActivityData(data)),
+  setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setOffenderPaymentData(offenderIndex, data)),
+  getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
 })
 
 export default withRouter(

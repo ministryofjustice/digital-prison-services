@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Header from '@govuk-react/heading'
+import { H1 } from '@govuk-react/heading'
 import BackLink from '@govuk-react/back-link'
 import Error from '../../Error'
 import Spinner from '../../Spinner'
-import { Container } from './Page.styles'
+import { Container, PageHeader } from './Page.styles'
 import { childrenType } from '../../types'
 import Breadcrumb from '../Breadcrumb'
 import { setApplicationTitle } from '../../redux/actions'
+import PrintLink from './elements/PrintLink'
 
 export class Page extends Component {
   componentDidMount() {
@@ -31,7 +32,7 @@ export class Page extends Component {
   }
 
   render() {
-    const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink, backLink } = this.props
+    const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink, backLink, showPrint } = this.props
 
     if (alwaysRender || loaded || error) {
       return (
@@ -40,12 +41,18 @@ export class Page extends Component {
           {showBreadcrumb && <Breadcrumb homeLink={homeLink} />}
           {backLink && <BackLink href={backLink}>Back</BackLink>}
           <Container>
-            <Header level={1} size="LARGE">
-              {title}
-            </Header>
+            <PageHeader>
+              <H1 size="LARGE">{title}</H1>
+              {showPrint && (
+                <div>
+                  <PrintLink />
+                </div>
+              )}
+            </PageHeader>
             {error && <Error error={error} />}
             {(!error || alwaysRender) && <div className="page-content">{children}</div>}
           </Container>
+          {showPrint && <PrintLink bottom />}
         </Fragment>
       )
     }
@@ -65,6 +72,7 @@ Page.propTypes = {
   backLink: PropTypes.string,
   applicationTitle: PropTypes.string,
   dispatchApplicationTitle: PropTypes.func,
+  showPrint: PropTypes.bool,
 }
 
 Page.defaultProps = {
@@ -75,6 +83,7 @@ Page.defaultProps = {
   children: undefined,
   applicationTitle: '',
   dispatchApplicationTitle: () => {},
+  showPrint: false,
 }
 
 const mapDispatchToProps = dispatch => ({

@@ -43,7 +43,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
                        ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
                        ['Adjudications', '']]
 
-        tableRows.size() == 8 // Including header row
+        tableRows.size() == 4 // Including header row
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ["1492249", "23/02/2017 10:02", "Moorland (HMP & YOI)",	"Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission",	"Guilty"]
         def columns2 = tableRows[2].find('td')
@@ -62,7 +62,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with results"
 
-        tableRows.size() == 8
+        tableRows.size() == 4
 
         elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.mdihistoryResponse, '?agencyId=MDI')
         when: "I filter establishment to only show moorland"
@@ -71,7 +71,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with filtered results"
         at AdjudicationHistoryPage
-        tableRows.size() == 4 // Including header row
+        tableRows.size() == 2 // Including header row
 
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ["1492249", "23/02/2017 10:02", "Moorland (HMP & YOI)",	"Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission",	"Guilty"]
@@ -87,7 +87,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with results"
 
-        tableRows.size() == 8
+        tableRows.size() == 4
 
         elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.dateFilteringhistoryResponse, '?fromDate=2012-01-01&toDate=2012-02-01')
         when: "I filter establishment to only show offences in January 2012"
@@ -97,7 +97,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with filtered results"
         at AdjudicationHistoryPage
-        tableRows.size() == 4 // Including header row
+        tableRows.size() == 2 // Including header row
 
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ["554213", "05/01/2012 15:01", "Onley (HMP)", "Commits any assault - assault on prison officer", "Not Guilty"]
@@ -113,7 +113,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with results"
 
-        tableRows.size() == 8
+        tableRows.size() == 4
 
         elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.mdihistoryResponse, '?agencyId=MDI')
 
@@ -123,9 +123,9 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with all the results"
         at AdjudicationHistoryPage
-        tableRows.size() == 4 // Including header row
+        tableRows.size() == 2 // Including header row
 
         clearFiltersLink.click()
-        tableRows.size() == 8
+        tableRows.size() == 4
     }
 }

@@ -77,6 +77,13 @@ const formatDaysInYears = days => {
   }`
 }
 
+const pascalToString = value =>
+  value.substring(0, 1) +
+  value
+    .substring(1)
+    .replace(/([A-Z])/g, ' $1')
+    .toLowerCase()
+
 module.exports = {
   switchDateFormat,
   distinct,
@@ -88,4 +95,5 @@ module.exports = {
   properCaseName,
   formatDaysInYears,
   toMap,
+  pascalToString,
 }
