@@ -11,8 +11,8 @@ const IepHistory = ({ results }) => (
     <LargeScreenOnly>
       <Table className="results">
         <Table.Row>
-          <Table.CellHeader>Date and Time</Table.CellHeader>
-          <Table.CellHeader>IEP Description</Table.CellHeader>
+          <Table.CellHeader>Date and time</Table.CellHeader>
+          <Table.CellHeader>IEP description</Table.CellHeader>
           <Table.CellHeader>Reason</Table.CellHeader>
           <Table.CellHeader>Establishment</Table.CellHeader>
           <Table.CellHeader>Staff member</Table.CellHeader>
@@ -31,8 +31,8 @@ const IepHistory = ({ results }) => (
     <SmallScreenOnly>
       <Table>
         <Table.Row>
-          <Table.CellHeader>Date and Time</Table.CellHeader>
-          <Table.CellHeader>IEP Description</Table.CellHeader>
+          <Table.CellHeader>Date and time</Table.CellHeader>
+          <Table.CellHeader>IEP description</Table.CellHeader>
           <Table.CellHeader>Establishment</Table.CellHeader>
         </Table.Row>
         {results.map(row => (
