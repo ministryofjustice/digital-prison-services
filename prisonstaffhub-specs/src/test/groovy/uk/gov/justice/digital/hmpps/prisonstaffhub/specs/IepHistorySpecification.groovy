@@ -59,7 +59,7 @@ class IepHistorySpecification extends BrowserReportingSpec {
 
         breadcrumb == [['Home', NOTM_URL],
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
-                       ['IEP level', '']]
+                       ['IEP details', '']]
 
         tableRows.size() == 4 // Including header row
 
