@@ -5,7 +5,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="sc-chPdSV bcSAZc"
+    className="sc-chPdSV ddsHXB"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -17,7 +17,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <h3
-            className="sc-kGXeez lkXioC sc-fjdhpX TnkYd"
+            className="sc-kGXeez iHgsBB sc-fjdhpX TnkYd"
           >
             Filters
           </h3>
@@ -72,7 +72,7 @@ exports[`Adjudication History Form should render correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <span
-            className="sc-kpOJdX uKFLa"
+            className="sc-kpOJdX irqhhZ"
           >
             Reported date
           </span>
