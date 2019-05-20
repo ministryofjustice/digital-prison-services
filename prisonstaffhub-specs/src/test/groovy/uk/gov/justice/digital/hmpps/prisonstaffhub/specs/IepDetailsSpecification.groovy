@@ -4,12 +4,12 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepHistory
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
-class IepHistorySpecification extends BrowserReportingSpec {
+class IepDetailsSpecification extends BrowserReportingSpec {
 
     @Rule
     Elite2Api elite2api = new Elite2Api()
@@ -53,7 +53,7 @@ class IepHistorySpecification extends BrowserReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I view the IEP history page"
-        to IepHistory
+        to IepDetails
 
         then: "I should be presented with results"
 

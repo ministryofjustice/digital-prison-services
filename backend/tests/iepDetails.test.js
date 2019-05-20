@@ -1,7 +1,7 @@
 const elite2Api = {}
-const iepHistory = require('../controllers/iepHistory').getIepHistoryFactory(elite2Api).getIepHistory
+const iepDetails = require('../controllers/iepDetails').getIepDetailsFactory(elite2Api).getIepDetails
 
-function createIepHistoryReponse() {
+function createIepDetailsReponse() {
   return {
     currentIepLevel: 'Standard',
     daysOnIepLevel: '1 year, 260 days',
@@ -54,7 +54,7 @@ beforeEach(() => {
   elite2Api.getStaffDetails = jest.fn()
 })
 
-describe('IEP history controller', async () => {
+describe('IEP details controller', async () => {
   beforeEach(() => {
     elite2Api.getDetails.mockReturnValue({
       firstName: 'ARTHUR',
@@ -111,8 +111,8 @@ describe('IEP history controller', async () => {
     })
   })
   it('Should return the IEP history for offender', async () => {
-    const response = await iepHistory({}, '1', {})
-    const expected = createIepHistoryReponse()
+    const response = await iepDetails({}, '1', {})
+    const expected = createIepDetailsReponse()
     expect(response).toEqual(expected)
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
@@ -120,7 +120,7 @@ describe('IEP history controller', async () => {
   })
 
   it('Should filter by level', async () => {
-    const response = await iepHistory({}, '1', { level: 'Basic' })
+    const response = await iepDetails({}, '1', { level: 'Basic' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -148,7 +148,7 @@ describe('IEP history controller', async () => {
   })
 
   it('Should filter by date', async () => {
-    const response = await iepHistory({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
+    const response = await iepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -176,7 +176,7 @@ describe('IEP history controller', async () => {
   })
 
   it('Should filter by establishment', async () => {
-    const response = await iepHistory({}, '1', { establishment: 'HEI' })
+    const response = await iepDetails({}, '1', { establishment: 'HEI' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -215,7 +215,7 @@ describe('IEP history controller', async () => {
   })
 
   it('Should filter by all filters', async () => {
-    const response = await iepHistory({}, '1', {
+    const response = await iepDetails({}, '1', {
       establishment: 'HEI',
       level: 'Basic',
       fromDate: '2017-08-10',
@@ -281,7 +281,7 @@ describe('IEP history controller', async () => {
         },
       ],
     })
-    const response = await iepHistory({}, '1', {
+    const response = await iepDetails({}, '1', {
       establishment: 'HEI',
       level: 'Basic',
       fromDate: '2017-08-10',

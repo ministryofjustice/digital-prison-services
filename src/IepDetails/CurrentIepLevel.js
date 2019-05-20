@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import CurrentIepLevelArea from './IepHistory.styles'
+import CurrentIepLevelArea from './IepDetails.styles'
 
 const CurrentIepLevel = ({ level, days, nextReviewDate }) => (
   <CurrentIepLevelArea className="current-iep">

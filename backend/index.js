@@ -33,7 +33,7 @@ const { getConfiguration } = require('./controllers/getConfig')
 const houseblockLocationsFactory = require('./controllers/houseblockLocations').getHouseblockLocationsFactory
 const activityLocationsFactory = require('./controllers/activityLocations').getActivityLocationsFactory
 const activityListFactory = require('./controllers/activityList').getActivityListFactory
-const iepHistoryFactory = require('./controllers/iepHistory').getIepHistoryFactory
+const iepDetailsFactory = require('./controllers/iepDetails').getIepDetailsFactory
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory
 const { healthFactory } = require('./controllers/health')
 const { attendanceFactory } = require('./controllers/attendance')
@@ -129,7 +129,7 @@ const whereaboutsApi = whereaboutsApiFactory(
 const controller = controllerFactory({
   activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
   adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
-  iepHistoryService: iepHistoryFactory(elite2Api),
+  iepDetailsService: iepDetailsFactory(elite2Api),
   houseblockListService: houseblockListFactory(elite2Api),
   attendanceService: attendanceFactory(elite2Api, whereaboutsApi),
   establishmentRollService: establishmentRollFactory(elite2Api),
@@ -207,7 +207,7 @@ app.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)
 app.use('/api/setactivecaseload', setActiveCaseLoadFactory(elite2Api).setActiveCaseload)
 app.use('/api/houseblockLocations', houseblockLocationsFactory(elite2Api).getHouseblockLocations)
 app.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
-app.use('/api/bookings/:offenderNo/iepSummary', controller.getIepHistory)
+app.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
 app.use('/api/houseblocklist', controller.getHouseblockList)
 app.use('/api/activityList', controller.getActivityList)
 app.use('/api/adjudications/:offenderNumber', controller.getAdjudications)

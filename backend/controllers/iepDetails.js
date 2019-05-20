@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { properCaseName, formatDaysInYears } = require('../utils')
 
-const getIepHistoryFactory = elite2Api => {
+const getIepDetailsFactory = elite2Api => {
   const filterData = (data, fields) => {
     let filteredResults = data
     if (fields.establishment) {
@@ -25,7 +25,7 @@ const getIepHistoryFactory = elite2Api => {
     return filteredResults
   }
 
-  const getIepHistory = async (context, offenderNo, params) => {
+  const getIepDetails = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
     const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
 
@@ -75,8 +75,8 @@ const getIepHistoryFactory = elite2Api => {
   }
 
   return {
-    getIepHistory,
+    getIepDetails,
   }
 }
 
-module.exports = { getIepHistoryFactory }
+module.exports = { getIepDetailsFactory }
