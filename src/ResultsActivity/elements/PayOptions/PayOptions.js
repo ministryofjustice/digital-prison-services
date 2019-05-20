@@ -27,7 +27,7 @@ function PayOptions({
 }) {
   const [selectedOption, setSelectedOption] = useState()
 
-  const payOffender = async () => {
+  const payOffender = () => {
     const attendanceDetails = {
       offenderNo,
       attended: true,
@@ -36,8 +36,7 @@ function PayOptions({
       eventLocationId,
     }
 
-    await updateOffenderAttendance(attendanceDetails, offenderIndex)
-    setSelectedOption('pay')
+    updateOffenderAttendance(attendanceDetails, offenderIndex)
   }
 
   useEffect(() => {
@@ -47,16 +46,22 @@ function PayOptions({
 
   return (
     <Fragment>
-      <Option>
+      <Option data-qa="pay-option">
         {offenderNo &&
           eventId && (
-            <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
+            <Radio
+              onChange={payOffender}
+              name={offenderNo}
+              value="pay"
+              checked={selectedOption === 'pay'}
+              data-testid="pay"
+            >
               <VisuallyHidden>Pay</VisuallyHidden>
             </Radio>
           )}
       </Option>
 
-      <Option>
+      <Option data-qa="other-option">
         {offenderNo &&
           eventId && (
             <Radio
@@ -69,6 +74,7 @@ function PayOptions({
               data-event-location-id={eventLocationId}
               data-offender-index={offenderIndex}
               checked={selectedOption === 'other'}
+              data-testid="other"
             >
               <VisuallyHidden>Other</VisuallyHidden>
             </Radio>

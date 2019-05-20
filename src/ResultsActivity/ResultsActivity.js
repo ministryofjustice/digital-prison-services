@@ -186,7 +186,7 @@ class ResultsActivity extends Component {
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
       const details = { prisonId: agencyId, period, eventDate: date }
       const { attended, paid, absentReason } = attendenceDetails
-      const payStatus = { paid: attended && paid, other: !!absentReason }
+      const payStatus = { pay: attended && paid, other: !!absentReason }
 
       try {
         await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })

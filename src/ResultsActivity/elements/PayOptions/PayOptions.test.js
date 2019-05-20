@@ -1,31 +1,51 @@
-// Disabled temporarily while switching to PayOptions
-
 import React from 'react'
-import { shallow } from 'enzyme'
-
+import TestRenderer, { act } from 'react-test-renderer'
+import Radio from '@govuk-react/radio'
 import PayOptions from '.'
 
-// WIP as need to look into testing when using Hooks
 describe('<PayOptions />', () => {
-  let wrapper
+  const props = {
+    offenderNo: 'ABC123',
+    eventId: 123,
+    eventLocationId: 1,
+    updateOffenderAttendance: jest.fn(),
+    otherHandler: jest.fn(),
+    firstName: 'Test',
+    lastName: 'Offender',
+    offenderIndex: 1,
+  }
+  const testRenderer = TestRenderer.create(<PayOptions {...props} />)
+  const testInstance = testRenderer.root
+  const payRadio = testInstance.findByProps({ 'data-qa': 'pay-option' }).findByType(Radio)
+  const otherRadio = testInstance.findByProps({ 'data-qa': 'other-option' }).findByType(Radio)
 
-  describe.skip('without all props', () => {
-    it('should render without crashing', () => {
-      wrapper = shallow(<PayOptions />)
+  it('should not have any radio buttons checked if offender has no pay status', () => {
+    expect(payRadio.props.checked).toBe(false)
+    expect(otherRadio.props.checked).toBe(false)
+  })
 
-      expect(wrapper).toHaveLength(1)
-    })
+  it('should call updateOffenderAttendance with the correct args when selecting pay', () => {
+    payRadio.props.onChange()
+    expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
+      { attended: true, eventId: 123, eventLocationId: 1, offenderNo: 'ABC123', paid: true },
+      1
+    )
+  })
 
-    it('should not render a radio when missing an eventId', () => {
-      wrapper = shallow(<PayOptions offenderNo="A123" />)
+  it('should call otherHandler when selecting other', () => {
+    otherRadio.props.onChange()
+    expect(props.otherHandler).toHaveBeenCalled()
+  })
 
-      expect(wrapper.find('Radio')).toHaveLength(0)
-    })
+  it('should check the correct radio button when user has been marked as paid and attended', () => {
+    act(() => testRenderer.update(<PayOptions {...props} payStatus={{ pay: true }} />))
+    expect(payRadio.props.checked).toBe(true)
+    expect(otherRadio.props.checked).toBe(false)
+  })
 
-    it('should not render a radio when missing an offenderNo', () => {
-      wrapper = shallow(<PayOptions eventId={456} />)
-
-      expect(wrapper.find('Radio')).toHaveLength(0)
-    })
+  it('should check the correct radio button when user has been marked as other', () => {
+    act(() => testRenderer.update(<PayOptions {...props} payStatus={{ other: true }} />))
+    expect(payRadio.props.checked).toBe(false)
+    expect(otherRadio.props.checked).toBe(true)
   })
 })
