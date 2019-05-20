@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { GREY_3, WHITE } from 'govuk-colours'
+import { WHITE } from 'govuk-colours'
 import { MEDIA_QUERIES, SPACING } from '@govuk-react/constants'
 import GridCol from '@govuk-react/grid-col'
 import { H3 } from '@govuk-react/heading'
