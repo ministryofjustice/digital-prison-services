@@ -66,7 +66,7 @@ const getIepHistoryFactory = elite2Api => {
 
     return {
       currentIepLevel: iepSummary.iepLevel,
-      daysOnIepLevel: formatDaysInYears(iepSummary.daysSinceReview),
+      daysOnIepLevel: `${formatDaysInYears(iepSummary.daysSinceReview) || 'Changed today'}`,
       establishments: establishments.sort((a, b) => (a.description > b.description ? 1 : -1)),
       levels,
       nextReviewDate,
