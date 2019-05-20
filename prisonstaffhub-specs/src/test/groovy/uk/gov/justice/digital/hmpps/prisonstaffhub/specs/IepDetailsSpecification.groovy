@@ -4,12 +4,12 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepHistory
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
-class IepHistorySpecification extends BrowserReportingSpec {
+class IepDetailsSpecification extends BrowserReportingSpec {
 
     @Rule
     Elite2Api elite2api = new Elite2Api()
@@ -53,7 +53,7 @@ class IepHistorySpecification extends BrowserReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I view the IEP history page"
-        to IepHistory
+        to IepDetails
 
         then: "I should be presented with results"
 
@@ -61,20 +61,25 @@ class IepHistorySpecification extends BrowserReportingSpec {
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
                        ['IEP details', '']]
 
-        tableRows.size() == 4 // Including header row
+        tableRows.size() == 5 // Including header row
 
         def columns1 = tableRows[1].find('td')
-        columns1*.text() == ['12/10/2017 - 09:44','Basic',
-                             'Assaulted another inmate.',
+        columns1*.text() == ['12/10/2017 - 07:53','Enhanced',
+                             'Did not assault another inmate - data entry error.',
                              'Leeds',
                              'Staff Member',]
         def columns2 = tableRows[2].find('td')
-        columns2*.text() == ['22/08/2017 - 18:42','Standard',
-                             'He has been a very good boy.',
+        columns2*.text() == ['12/10/2017 - 09:44','Basic',
+                             'Assaulted another inmate.',
                              'Leeds',
                              'Staff Member',]
         def columns3 = tableRows[3].find('td')
-        columns3*.text() == ['04/07/2017 - 12:15','Entry',
+        columns3*.text() == ['22/08/2017 - 18:42','Standard',
+                             'He has been a very good boy.',
+                             'Leeds',
+                             'Staff Member',]
+        def columns4 = tableRows[4].find('td')
+        columns4*.text() == ['04/07/2017 - 12:15','Entry',
                              'Just came in.',
                              'Leeds',
                              'Staff Member',]

@@ -11,20 +11,20 @@ import OffenderPage from '../OffenderPage/OffenderPage'
 
 const axios = require('axios')
 
-class IepHistoryContainer extends Component {
+class IepDetailsContainer extends Component {
   componentDidMount() {
-    this.getIepHistory({})
+    this.getIepDetails({})
   }
 
   componentDidUpdate = prevProps => {
     const { offenderNo } = this.props
 
     if (offenderNo !== prevProps.offenderNo) {
-      this.getIepHistory({})
+      this.getIepDetails({})
     }
   }
 
-  getIepHistory = async ({ establishment, level, fromDate, toDate }) => {
+  getIepDetails = async ({ establishment, level, fromDate, toDate }) => {
     const {
       offenderNo,
       handleError,
@@ -61,13 +61,13 @@ class IepHistoryContainer extends Component {
   updateResults = async fields => {
     const { setIepHistoryFilter: setFilter } = this.props
     setFilter(fields)
-    return this.getIepHistory(fields)
+    return this.getIepDetails(fields)
   }
 
   reset = () => {
     const { setIepHistoryFilter: setFilter } = this.props
     setFilter({ establishment: null, level: null, fromDate: null, toDate: null })
-    this.getIepHistory({})
+    this.getIepDetails({})
   }
 
   render() {
@@ -87,7 +87,7 @@ class IepHistoryContainer extends Component {
   }
 }
 
-IepHistoryContainer.propTypes = {
+IepDetailsContainer.propTypes = {
   offenderNo: PropTypes.string.isRequired,
   handleError: PropTypes.func.isRequired,
   setIepHistoryResults: PropTypes.func.isRequired,
@@ -127,4 +127,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(IepHistoryContainer)
+)(IepDetailsContainer)

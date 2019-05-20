@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { properCaseName, formatDaysInYears } = require('../utils')
 
-const getIepHistoryFactory = elite2Api => {
+const getIepDetailsFactory = elite2Api => {
   const filterData = (data, fields) => {
     let filteredResults = data
     if (fields.establishment) {
@@ -25,17 +25,16 @@ const getIepHistoryFactory = elite2Api => {
     return filteredResults
   }
 
-  const getIepHistory = async (context, offenderNo, params) => {
+  const getIepDetails = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
     const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
-    const [currentDetail, ...iepHistory] = iepSummary.iepDetails
 
     // Offenders are likely to have multiple IEPs at the same agency.
     // By getting a unique list of users and agencies, we reduce the duplicate
     // calls to the database.
-    const uniqueUserIds = [...new Set(iepHistory.map(details => details.userId))]
-    const uniqueAgencyIds = [...new Set(iepHistory.map(details => details.agencyId))]
-    const levels = [...new Set(iepHistory.map(details => details.iepLevel))].sort()
+    const uniqueUserIds = [...new Set(iepSummary.iepDetails.map(details => details.userId))]
+    const uniqueAgencyIds = [...new Set(iepSummary.iepDetails.map(details => details.agencyId))]
+    const levels = [...new Set(iepSummary.iepDetails.map(details => details.iepLevel))].sort()
 
     const users = await Promise.all(
       uniqueUserIds.filter(userId => Boolean(userId)).map(userId => elite2Api.getStaffDetails(context, userId))
@@ -47,7 +46,7 @@ const getIepHistoryFactory = elite2Api => {
         .map(agencyId => elite2Api.getAgencyDetails(context, agencyId))
     )
 
-    const iepHistoryDetails = iepHistory.map(details => {
+    const iepHistoryDetails = iepSummary.iepDetails.map(details => {
       const { description } = establishments.find(estb => estb.agencyId === details.agencyId)
       const user = details.userId && users.find(u => u.username === details.userId)
       return {
@@ -58,7 +57,7 @@ const getIepHistoryFactory = elite2Api => {
       }
     })
 
-    const nextReviewDate = moment(currentDetail.iepTime, 'YYYY-MM-DD HH:mm')
+    const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm')
       .add(1, 'years')
       .format('DD/MM/YYYY')
 
@@ -66,7 +65,7 @@ const getIepHistoryFactory = elite2Api => {
 
     return {
       currentIepLevel: iepSummary.iepLevel,
-      daysOnIepLevel: formatDaysInYears(iepSummary.daysSinceReview),
+      daysOnIepLevel: `${formatDaysInYears(iepSummary.daysSinceReview) || 'Changed today'}`,
       establishments: establishments.sort((a, b) => (a.description > b.description ? 1 : -1)),
       levels,
       nextReviewDate,
@@ -76,8 +75,8 @@ const getIepHistoryFactory = elite2Api => {
   }
 
   return {
-    getIepHistory,
+    getIepDetails,
   }
 }
 
-module.exports = { getIepHistoryFactory }
+module.exports = { getIepDetailsFactory }
