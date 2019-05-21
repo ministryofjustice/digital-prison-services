@@ -189,9 +189,11 @@ class App extends React.Component {
 
   switchCaseLoad = async (newCaseload, location) => {
     const { switchAgencyDispatch, config } = this.props
+    const redirectToNotm =
+      location.pathname.includes('global-search-results') || location.pathname.includes('offenders')
 
     try {
-      if (location.pathname.includes('global-search-results')) {
+      if (redirectToNotm) {
         await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
         window.location.assign(config.notmEndpointUrl)
       } else {
