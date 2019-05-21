@@ -23,7 +23,7 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
         ...fields,
         establishment: establishments[result.agencyId],
         reportDate: moment(result.reportTime).format('DD/MM/YYYY'),
-        reportTime: moment(result.reportTime).format('HH:MM'),
+        reportTime: moment(result.reportTime).format('HH:mm'),
         ...charge,
         findingDescription: (finding && finding.description) || '--',
       }
