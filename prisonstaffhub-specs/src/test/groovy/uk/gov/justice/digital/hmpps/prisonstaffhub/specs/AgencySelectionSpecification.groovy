@@ -5,10 +5,13 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.AdjudicationResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.GlobalSearchResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationHistoryPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.GlobalSearchPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
@@ -45,8 +48,89 @@ class AgencySelectionSpecification extends BrowserReportingSpec {
         elite2api.stubUpdateActiveCaseload()
         notmServer.stubFor(
                 get(WireMock.urlPathMatching('/.*'))
-                .willReturn(
-                    aResponse().withStatus(200)))
+                        .willReturn(
+                                aResponse().withStatus(200)))
+
+        $('#info-wrapper').click()
+        $('#menu-option-MDI').click()
+
+        then: 'The browser goes to the new-nomis-ui url'
+        waitFor { currentUrl ==  NOTM_URL }
+        notmServer.verify(WireMock.getRequestedFor(WireMock.urlPathEqualTo('/')))
+    }
+
+    def 'Agency selection from IEP history page redirects to new-nomis-ui'() {
+        def offenderDetails = [
+                bookingId: -3,
+                bookingNo: "A00113",
+                offenderNo: "A1234AC",
+                firstName: "NORMAN",
+                middleName: "JOHN",
+                lastName: "BATES",
+                agencyId: "LEI",
+                assignedLivingUnitId: -3,
+                activeFlag: true,
+                dateOfBirth: "1999-10-27"
+        ]
+
+        def agencyDetails = [
+                agencyId: "LEI",
+                description: "Leeds",
+                agencyType: "INST"
+        ]
+        def userDetails = [
+                username: "ITAG_USER",
+                firstName: "Staff",
+                lastName: "Member"
+        ]
+
+        elite2api.stubOffenderDetails('A1234AC', offenderDetails)
+        elite2api.stubAgencyDetails('LEI', agencyDetails)
+        elite2api.stubUserDetails('ITAG_USER', userDetails)
+        elite2api.stubGetIepSummaryWithDetails('-3')
+
+        given: 'I am logged in'
+        fixture.loginAs(ITAG_USER)
+
+        and: "I view the IEP history page"
+        to IepDetails
+
+        when: 'I select another agency'
+        elite2api.stubUpdateActiveCaseload()
+        notmServer.stubFor(
+                get(WireMock.urlPathMatching('/.*'))
+                        .willReturn(
+                                aResponse().withStatus(200)))
+
+        $('#info-wrapper').click()
+        $('#menu-option-MDI').click()
+
+        then: 'The browser goes to the new-nomis-ui url'
+        waitFor { currentUrl ==  NOTM_URL }
+        notmServer.verify(WireMock.getRequestedFor(WireMock.urlPathEqualTo('/')))
+    }
+
+    def 'Agency selection from adjudications page redirects to new-nomis-ui'() {
+        def offenderDetails = [
+                firstName: "HARRY",
+                lastName: "SMITH",
+        ]
+
+        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
+        elite2api.stubOffenderDetails('AA00112', offenderDetails)
+
+        given: 'I am logged in'
+        fixture.loginAs(ITAG_USER)
+
+        and: "I do view an offenders adjudications"
+        to AdjudicationHistoryPage
+
+        when: 'I select another agency'
+        elite2api.stubUpdateActiveCaseload()
+        notmServer.stubFor(
+                get(WireMock.urlPathMatching('/.*'))
+                        .willReturn(
+                                aResponse().withStatus(200)))
 
         $('#info-wrapper').click()
         $('#menu-option-MDI').click()
