@@ -128,7 +128,7 @@ const expectedResult = {
         'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
       oicChargeId: '1492249/1',
       reportDate: '23/02/2017',
-      reportTime: '10:02',
+      reportTime: '10:29',
     },
     {
       adjudicationNumber: 554213,
@@ -141,7 +141,7 @@ const expectedResult = {
       offenceDescription: 'Commits any assault - assault on prison officer',
       oicChargeId: '554213/2',
       reportDate: '05/01/2012',
-      reportTime: '15:01',
+      reportTime: '15:42',
     },
     {
       adjudicationNumber: 529404,
@@ -155,7 +155,7 @@ const expectedResult = {
         'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
       oicChargeId: '529404/1',
       reportDate: '03/11/2011',
-      reportTime: '15:11',
+      reportTime: '15:22',
     },
   ],
 }
