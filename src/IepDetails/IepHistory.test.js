@@ -6,7 +6,7 @@ import CurrentIepLevel from './CurrentIepLevel'
 const initialState = {
   iepHistory: {
     currentIepLevel: 'Standard',
-    daysOnIepLevel: 625,
+    daysOnIepLevel: '625',
     currentIepDateTime: '2017-08-15T16:04:35',
     nextReviewDate: '15/08/2018',
     establishments: [{ agencyId: 'LEI', description: 'Leeds' }],

@@ -101,7 +101,7 @@ export const FormFields = ({ now, errors, establishments, levels, submitting, va
       </GridCol>
       <GridCol setDesktopWidth="two-thirds">
         <GridRow>
-          <DateRangeLabel>Date Range</DateRangeLabel>
+          <DateRangeLabel>Date range</DateRangeLabel>
         </GridRow>
         <GridRow>
           <GridCol id="from-date" setDesktopWidth="one-third">
