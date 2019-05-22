@@ -48,7 +48,7 @@ const validateThenSubmit = submitHandler => values => {
   return submitHandler(values)
 }
 
-function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, absentReasons }) {
+export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, absentReasons }) {
   const payOffender = async values => {
     const paid = values.pay === 'yes'
 
