@@ -782,7 +782,7 @@ class Elite2Api extends WireMockRule {
 
     void stubAgencyDetails(agencyId, response) {
         this.stubFor(
-                get("/api/agencies/${agencyId}")
+                get("/api/agencies/${agencyId}?activeOnly=false")
                         .willReturn(
                                 aResponse()
                                         .withStatus(200)

@@ -35,7 +35,7 @@ const elite2ApiFactory = client => {
     post(context, `api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(context, `api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
-  const getAgencyDetails = (context, agencyId) => get(context, `api/agencies/${agencyId}`)
+  const getAgencyDetails = (context, agencyId) => get(context, `api/agencies/${agencyId}?activeOnly=false`)
   const getStaffDetails = (context, staffId) => get(context, `api/users/${staffId}`)
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) =>
     post(context, `api/schedules/${agencyId}/courtEvents?date=${date}`, offenderNumbers)
