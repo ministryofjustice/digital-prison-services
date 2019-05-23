@@ -1,4 +1,6 @@
 const axios = require('axios')
+const Agent = require('agentkeepalive')
+const { HttpsAgent } = require('agentkeepalive')
 const logger = require('../log')
 
 const { addAuthorizationHeader, addPaginationHeaders } = require('./axios-config-decorators')
@@ -24,9 +26,18 @@ const errorLogger = error => {
  * @returns {{get: (function(*=): *), post: (function(*=, *=): *)}}
  */
 const factory = ({ baseUrl, timeout }) => {
+  const agentOptions = {
+    maxSockets: 100,
+    maxFreeSockets: 10,
+    freeSocketTimeout: 30000,
+  }
+  const keepaliveAgent = baseUrl.startsWith('https')
+    ? { httpsAgent: new HttpsAgent(agentOptions) }
+    : { httpAgent: new Agent(agentOptions) }
   const axiosInstance = axios.create({
     baseURL: baseUrl,
     timeout,
+    ...keepaliveAgent,
   })
 
   const addHeaders = (context, config) => addPaginationHeaders(context, addAuthorizationHeader(context, config))

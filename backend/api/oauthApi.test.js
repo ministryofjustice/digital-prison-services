@@ -1,13 +1,6 @@
-const chai = require('chai')
-const sinon = require('sinon')
-const sinonChai = require('sinon-chai')
-
-chai.use(sinonChai)
-const { expect } = chai
-
 const MockAdapter = require('axios-mock-adapter')
 const querystring = require('querystring')
-const { oauthApiFactory } = require('../../api/oauthApi')
+const { oauthApiFactory } = require('./oauthApi')
 
 const clientId = 'clientId'
 const url = 'http://localhost'
@@ -16,7 +9,7 @@ const clientSecret = 'clientSecret'
 const encodeClientCredentials = () =>
   Buffer.from(`${querystring.escape(clientId)}:${querystring.escape(clientSecret)}`).toString('base64')
 
-const client = sinon.stub()
+const client = jest.fn()
 const oauthApi = oauthApiFactory(client, { url, clientId, clientSecret })
 const mock = new MockAdapter(oauthApi.oauthAxios)
 
@@ -55,23 +48,23 @@ describe('oathApi tests', () => {
     describe('should save tokens', () => {
       it('should save access token', () =>
         refreshResponse.then(response => {
-          expect(response.access_token).to.equal('newAccessToken')
+          expect(response.access_token).toEqual('newAccessToken')
         }))
 
       it('should save refresh token', () =>
         refreshResponse.then(response => {
-          expect(response.refresh_token).to.equal('newRefreshToken')
+          expect(response.refresh_token).toEqual('newRefreshToken')
         }))
     })
 
     it('should have set correct request configuration', () =>
       refreshResponse.then(response => {
-        expect(requestConfig.method).to.equal('post')
-        expect(requestConfig.baseURL).to.equal(url)
-        expect(requestConfig.url).to.equal('/oauth/token')
-        expect(requestConfig.data).to.equal('refresh_token=refreshToken&grant_type=refresh_token')
-        expect(requestConfig.headers.authorization).to.equal(`Basic ${encodeClientCredentials()}`)
-        expect(requestConfig.headers['Content-Type']).to.equal('application/x-www-form-urlencoded')
+        expect(requestConfig.method).toEqual('post')
+        expect(requestConfig.baseURL).toEqual(url)
+        expect(requestConfig.url).toEqual('/oauth/token')
+        expect(requestConfig.data).toEqual('refresh_token=refreshToken&grant_type=refresh_token')
+        expect(requestConfig.headers.authorization).toEqual(`Basic ${encodeClientCredentials()}`)
+        expect(requestConfig.headers['Content-Type']).toEqual('application/x-www-form-urlencoded')
       }))
   })
 })
