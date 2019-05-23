@@ -13,8 +13,8 @@ const IepHistory = ({ results }) => (
         <Table.Row>
           <Table.CellHeader setWidth="20%">Date and time</Table.CellHeader>
           <Table.CellHeader setWidth="15%">IEP description</Table.CellHeader>
-          <Table.CellHeader setWidth="40%">Reason</Table.CellHeader>
-          <Table.CellHeader setWidth="10%">Establishment</Table.CellHeader>
+          <Table.CellHeader setWidth="30%">Reason</Table.CellHeader>
+          <Table.CellHeader setWidth="20%">Establishment</Table.CellHeader>
           <Table.CellHeader setWidth="15%">Staff member</Table.CellHeader>
         </Table.Row>
         {results.map(row => (

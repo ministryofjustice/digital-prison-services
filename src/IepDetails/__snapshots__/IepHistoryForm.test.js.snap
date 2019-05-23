@@ -102,7 +102,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
           <span
             className="sc-kpOJdX irqhhZ"
           >
-            Date Range
+            Date range
           </span>
         </div>
         <div
