@@ -298,14 +298,8 @@ tr a.link:visited {
   }
 }
 
-/* Footer modal carry over */
-.container {
-  max-width: 640px;
-  margin-top: 15px;
-  justify-content: center;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 40px;
-  margin-left: auto;
-  margin-right: auto;
+// Required to prevent background scroll when react-modal is active
+// http://reactcommunity.org/react-modal/styles/classes.html
+.ReactModal__Body--open {
+  overflow: hidden;
 }
