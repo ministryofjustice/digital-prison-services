@@ -65,6 +65,11 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
     await updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
   }
 
+  const getAbsentReasons = pay => {
+    if (!pay) return []
+    return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasons
+  }
+
   return (
     <Form
       onSubmit={values => validateThenSubmit(payOffender)(values)}
@@ -88,7 +93,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
               <option value="" disabled hidden>
                 Select
               </option>
-              {absentReasons.map(reason => (
+              {getAbsentReasons(values.pay).map(reason => (
                 <option key={reason.value} value={reason.value}>
                   {reason.name}
                 </option>
@@ -114,7 +119,10 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
 
 PayOtherForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
-  absentReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
+  absentReasons: PropTypes.shape({
+    paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
+    unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
+  }).isRequired,
   offender: PropTypes.shape({ id: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string })
     .isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,

@@ -23,8 +23,9 @@ const attendanceFactory = (elite2Api, whereaboutsApi) => {
     const details = await elite2Api.getDetailsLight(context, offenderNo)
     const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
     const body = {
+      offenderNo,
       absentReason,
-      comment,
+      comments: comment,
       bookingId: details.bookingId,
       attended,
       eventDate: switchDateFormat(date),
@@ -41,9 +42,11 @@ const attendanceFactory = (elite2Api, whereaboutsApi) => {
 
   const getAbsenceReasons = async (context, body) => {
     const absenceReasons = await whereaboutsApi.getAbsenceReasons(context, body)
-    const viewModel = absenceReasons.map(reason => ({ value: reason, name: pascalToString(reason) }))
 
-    return viewModel
+    return {
+      paidReasons: absenceReasons.paidReasons.map(reason => ({ value: reason, name: pascalToString(reason) })),
+      unpaidReasons: absenceReasons.unpaidReasons.map(reason => ({ value: reason, name: pascalToString(reason) })),
+    }
   }
 
   return {
