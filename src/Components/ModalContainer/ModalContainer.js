@@ -9,9 +9,11 @@ const modalStyles = {
     bottom: 'auto',
     width: '90%',
     maxWidth: '600px',
+    maxHeight: '95vh',
     transform: 'translate(-50%, -50%)',
     border: '5px solid black',
     padding: '30px',
+    overflowY: 'scroll',
   },
   overlay: {
     background: 'rgba(0, 0, 0, 0.75)',
