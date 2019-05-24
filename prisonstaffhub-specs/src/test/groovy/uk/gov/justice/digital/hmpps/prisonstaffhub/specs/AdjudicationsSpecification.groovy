@@ -70,8 +70,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         applyFilter.click()
 
         then: "I should be presented with filtered results"
-        at AdjudicationHistoryPage
-        tableRows.size() == 2 // Including header row
+        waitFor {tableRows.size() == 2 } // Including header row
 
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ["1492249", "23/02/2017 10:29", "Moorland (HMP & YOI)",	"Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission",	"Guilty"]
@@ -96,8 +95,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         applyFilter.click()
 
         then: "I should be presented with filtered results"
-        at AdjudicationHistoryPage
-        tableRows.size() == 2 // Including header row
+        waitFor { tableRows.size() == 2 } // Including header row
 
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ["554213", "05/01/2012 15:42", "Onley (HMP)", "Commits any assault - assault on prison officer", "Not Guilty"]
@@ -122,10 +120,9 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         applyFilter.click()
 
         then: "I should be presented with all the results"
-        at AdjudicationHistoryPage
-        tableRows.size() == 2 // Including header row
+        waitFor {tableRows.size() == 2 }// Including header row
 
         clearFiltersLink.click()
-        tableRows.size() == 4
+        waitFor { tableRows.size() == 4 }
     }
 }
