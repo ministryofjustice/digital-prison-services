@@ -1,6 +1,5 @@
-const { expect } = require('chai')
-const decorators = require('../../api/axios-config-decorators')
-const contextProperties = require('../../contextProperties')
+const decorators = require('./axios-config-decorators')
+const contextProperties = require('../contextProperties')
 
 describe('Axios request configuration decorartor tests', () => {
   it('The authorization decorartor should set the authorization header from the token store', () => {
@@ -8,7 +7,7 @@ describe('Axios request configuration decorartor tests', () => {
     contextProperties.setTokens({ access_token: 'access', refresh_token: 'refresh' }, context)
 
     const configuration = decorators.addAuthorizationHeader(context, {})
-    expect(configuration).to.deep.equal({
+    expect(configuration).toEqual({
       headers: {
         authorization: 'Bearer access',
       },

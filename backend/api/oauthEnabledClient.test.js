@@ -1,17 +1,15 @@
 const MockAdapter = require('axios-mock-adapter')
-const { expect } = require('chai')
-const clientFactory = require('../../api/oauthEnabledClient')
-const contextProperties = require('../../contextProperties')
+const clientFactory = require('./oauthEnabledClient')
+const contextProperties = require('../contextProperties')
 
 describe('Test clients built by oauthEnabledClient', () => {
   it('should build something', () => {
-    const client = clientFactory('http://localhost:8080', 2000)
-    // eslint-disable-next-line
-    expect(client).not.null
+    const client = clientFactory({ baseUrl: 'http://localhost:8080', timeout: 2000 })
+    expect(client).not.toBeNull()
   })
 
   describe('Assert client behaviour', () => {
-    const client = clientFactory('http://localhost:8080', 2000)
+    const client = clientFactory({ baseUrl: 'http://localhost:8080', timeout: 2000 })
 
     const mock = new MockAdapter(client.axiosInstance)
 
@@ -29,14 +27,13 @@ describe('Test clients built by oauthEnabledClient', () => {
 
       const response = await client.get(context, '/api/users/me')
 
-      expect(response.status).to.equal(200)
-      expect(response.config.headers.authorization).to.equal('Bearer a')
+      expect(response.status).toEqual(200)
+      expect(response.config.headers.authorization).toEqual('Bearer a')
     })
 
     it('Should succeed when there are no authorization headers', async () => {
       const response = await client.get({}, '/api/users/me')
-      // eslint-disable-next-line
-      expect(response.config.headers.authorization).to.be.undefined
+      expect(response.config.headers.authorization).toBeUndefined()
     })
   })
 })
