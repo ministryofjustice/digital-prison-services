@@ -122,6 +122,11 @@ export const setEstablishmentRollData = data => ({
   data,
 })
 
+export const setAdjudicationDetail = detail => ({
+  type: ActionTypes.SET_ADJUDICATION_DETAIL,
+  detail,
+})
+
 export const setAdjudicationHistoryResults = results => ({
   type: ActionTypes.SET_ADJUDICATION_HISTORY_RESULTS,
   results,

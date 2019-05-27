@@ -5,12 +5,15 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.AdjudicationResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationDetailPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationHistoryPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
+import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
 class AdjudicationsSpecification extends BrowserReportingSpec {
+    
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -20,7 +23,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
     def setup() {
         def offenderDetails = [
                 firstName: "HARRY",
-                lastName: "SMITH",
+                lastName : "SMITH",
         ]
 
         elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.historyResponse)
@@ -45,11 +48,11 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         tableRows.size() == 4 // Including header row
         def columns1 = tableRows[1].find('td')
-        columns1*.text() == ["1492249", "23/02/2017 10:29", "Moorland (HMP & YOI)",	"Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission",	"Guilty"]
+        columns1*.text() == ["1492249", "23/02/2017 10:29", "Moorland (HMP & YOI)", "Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission", "Guilty"]
         def columns2 = tableRows[2].find('td')
-        columns2*.text() == ["554213","05/01/2012 15:42", "Onley (HMP)", "Commits any assault - assault on prison officer",	"Not Guilty"]
+        columns2*.text() == ["554213", "05/01/2012 15:42", "Onley (HMP)", "Commits any assault - assault on prison officer", "Not Guilty"]
         def columns3 = tableRows[3].find('td')
-        columns3*.text() == ["529404", "03/11/2011 15:22",	"Onley (HMP)",	"Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline","Guilty"]
+        columns3*.text() == ["529404", "03/11/2011 15:22", "Onley (HMP)", "Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline", "Guilty"]
     }
 
     def "can filter by establishment"() {
@@ -73,10 +76,10 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         waitFor {tableRows.size() == 2 } // Including header row
 
         def columns1 = tableRows[1].find('td')
-        columns1*.text() == ["1492249", "23/02/2017 10:29", "Moorland (HMP & YOI)",	"Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission",	"Guilty"]
+        columns1*.text() == ["1492249", "23/02/2017 10:29", "Moorland (HMP & YOI)", "Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission", "Guilty"]
     }
 
-    def "can filter by report date"(){
+    def "can filter by report date"() {
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
@@ -124,5 +127,24 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         clearFiltersLink.click()
         waitFor { tableRows.size() == 4 }
+    }
+
+    def "can view adjudication details"() {
+
+        elite2api.stubAdjudicationDetails('AA00112', "123456", AdjudicationResponses.detail)
+
+        given: "I am logged in"
+        fixture.loginAs(ITAG_USER)
+
+        when: "I do view an individual adjudication"
+        to AdjudicationDetailPage
+
+        then: "I can see the details"
+        breadcrumb == [['Home', NOTM_URL],
+                       ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
+                       ['Adjudications', 'http://localhost:3006/offenders/AA00112/adjudications'],
+                       ['123456', '']]
+
+        sections == ['Adjudication Details', 'Hearing Details', 'Results', 'Awards']
     }
 }

@@ -1,4 +1,13 @@
-import { capitalize, properCaseName, mapToQueryString, formatDaysInYears } from './utils'
+import {
+  capitalize,
+  properCaseName,
+  mapToQueryString,
+  formatDaysInYears,
+  formatMonthsAndDays,
+  formatTimestampToDateTime,
+  formatTimestampToDate,
+  formatName,
+} from './utils'
 
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
@@ -83,5 +92,72 @@ describe('formatDaysInYears', () => {
 
   it('should return correct string when multiple years and no days', () => {
     expect(formatDaysInYears(365 * 2)).toEqual('2 years')
+  })
+})
+
+describe('formatMonthsAndDay', () => {
+  it('should return correct string when no years or days', () => {
+    expect(formatMonthsAndDays(null, null)).toEqual('')
+    expect(formatMonthsAndDays(0, 0)).toEqual('')
+  })
+
+  it('should return correct string when 1 month and no days', () => {
+    expect(formatMonthsAndDays(1, 0)).toEqual('1 month')
+  })
+
+  it('should return correct string when multiple month and no days', () => {
+    expect(formatMonthsAndDays(2, 0)).toEqual('2 months')
+  })
+
+  it('should return correct string when 1 day and no months', () => {
+    expect(formatMonthsAndDays(0, 1)).toEqual('1 day')
+  })
+
+  it('should return correct string when multiple days and no months', () => {
+    expect(formatMonthsAndDays(0, 2)).toEqual('2 days')
+  })
+
+  it('should return correct string when 1 month and 1 day', () => {
+    expect(formatMonthsAndDays(1, 1)).toEqual('1 month, 1 day')
+  })
+
+  it('should return correct string when multiple months and multiple days', () => {
+    expect(formatMonthsAndDays(3, 23)).toEqual('3 months, 23 days')
+  })
+})
+
+describe('formatTimestampToDate', () => {
+  it('should format timestamp to date', () => {
+    expect(formatTimestampToDate('2018-12-23T13:21')).toEqual('23/12/2018')
+  })
+  it('should not fail to parse absent timestamp', () => {
+    expect(formatTimestampToDate(undefined)).toEqual(undefined)
+  })
+})
+
+describe('formatTimestampToDateTime', () => {
+  it('should format timestamp to date time', () => {
+    expect(formatTimestampToDateTime('2018-12-23T13:21')).toEqual('23/12/2018 - 13:21')
+  })
+  it('should not fail to parse absent timestamp', () => {
+    expect(formatTimestampToDateTime(undefined)).toEqual(undefined)
+  })
+})
+
+describe('formatName', () => {
+  it('Can format name', () => {
+    expect(formatName('bob', 'smith')).toEqual('Bob Smith')
+  })
+  it('can format first name only', () => {
+    expect(formatName('BOB', '')).toEqual('Bob')
+  })
+  it('can format last name only', () => {
+    expect(formatName(undefined, 'Smith')).toEqual('Smith')
+  })
+  it('can format empty name', () => {
+    expect(formatName('', '')).toEqual('')
+  })
+  it('can format no name', () => {
+    expect(formatName(undefined, undefined)).toEqual('')
   })
 })

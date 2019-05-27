@@ -36,7 +36,7 @@ class AdjudicationResponses {
     ]
 
     static historyResponse = [
-            results: [
+            results : [
                     [
                             adjudicationNumber : 1492249,
                             reportTime         : '2017-02-23T10:29:00',
@@ -93,7 +93,7 @@ class AdjudicationResponses {
     ]
 
     static mdihistoryResponse = [
-            results: [
+            results : [
                     [
                             adjudicationNumber : 1492249,
                             reportTime         : '2017-02-23T10:29:00',
@@ -115,7 +115,7 @@ class AdjudicationResponses {
     ]
 
     static dateFilteringhistoryResponse = [
-            results: [
+            results : [
                     [
                             adjudicationNumber : 554213,
                             reportTime         : '2012-01-05T15:42:00',
@@ -140,4 +140,57 @@ class AdjudicationResponses {
             agencies: agencies,
             offences: offences,
     ]
+
+
+    static detail = [
+            adjudicationNumber: 1506763,
+            incidentTime      : '2017-03-17T08:02:00',
+            establishment     : 'HMP & YOI Moorland',
+            interiorLocation  : 'MDI-RES-MCASU-MCASU',
+            incidentDetails   : 'DXRODNrOZsacMTxDGrKMeoqRVBBkLIcFZDHSEjTjVVBGhvYrLNlwlolZZSzOVTTzvhuQCQnbNMSMkOJgOmhwxNeyVGgZDnDXRODNrOZsacMTxDGrKMeoqRVBBkLIcFZDHSEjTjVVBGhvYrLNlwlolZZSzOVTTzvhuQCQnbNMSMkOJgOmhwxNeyVGgZDn',
+            reportNumber      : 1484302,
+            reportType        : 'Governors Report',
+            reporterFirstName : 'OBDAUDA',
+            reporterLastName  : 'MIREN',
+            reportTime        : '2017-03-17T08:02:00',
+            hearings          : [
+                    [
+                            oicHearingId        : 1985937,
+                            hearingType         : 'Governors Hearing Adult',
+                            hearingTime         : '2017-03-17T08:30:00',
+                            location            : 'MDI-RES-MCASU-MCASU',
+                            otherRepresentatives: 'DUupCDUup',
+                            results             : [
+                                    [
+                                            oicOffenceCode    : '51:22',
+                                            offenceType       : 'Prison Rule 51',
+                                            offenceDescription: 'Disobeys any lawful order',
+                                            plea              : 'Guilty',
+                                            finding           : 'Charge Proved',
+                                            sanctions         : [
+                                                    [
+                                                            sanctionType      : 'Stoppage of Earnings (amount)',
+                                                            sanctionDays      : 7,
+                                                            compensationAmount: 50,
+                                                            effectiveDate     : '2017-03-22T00:00:00',
+                                                            status            : 'Immediate',
+                                                            statusDate        : '2017-03-22T00:00:00',
+                                                            sanctionSeq       : 18
+                                                    ],
+                                                    [
+                                                            sanctionType : 'Forfeiture of Privileges',
+                                                            sanctionDays : 7,
+                                                            effectiveDate: '2017-03-22T00:00:00',
+                                                            status       : 'Immediate',
+                                                            statusDate   : '2017-03-22T00:00:00',
+                                                            comment      : 'JSwVYpSHXTEsOBDezPJSwVYpSHXTEsOBDezP',
+                                                            sanctionSeq  : 19
+                                                    ]
+                                            ]
+                                    ]
+                            ]
+                    ]
+            ]
+    ]
+
 }

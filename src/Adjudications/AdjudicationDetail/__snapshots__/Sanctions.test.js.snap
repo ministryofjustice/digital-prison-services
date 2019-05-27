@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sanction should render no sanctions correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Awards
+  </h3>,
+  <p>
+    No Information Available
+  </p>,
+  <hr />,
+]
+`;
+
+exports[`Sanction should render present sanctions correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Awards
+  </h3>,
+  <div
+    className="sc-ifAKCX kQVsiI"
+  >
+    <div
+      className="sc-bdVaJa gkOpjT"
+    >
+      <div
+        className="sc-bwzfXH gDjOjU"
+      >
+        <strong
+          className="label"
+        >
+          Type
+        </strong>
+        <p>
+          No association
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Length of time
+        </strong>
+        <p>
+          10 Days
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Effective date
+        </strong>
+        <p>
+          12/03/2018 - 12:21
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Status
+        </strong>
+        <p>
+          Active
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Status date
+        </strong>
+        <p>
+          13/03/2018 - 09:00
+        </p>
+      </div>
+    </div>
+    <div
+      className="sc-bdVaJa gkOpjT"
+    >
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Comments
+        </strong>
+        <p>
+          Ongoing
+        </p>
+      </div>
+    </div>
+  </div>,
+  <div
+    className="sc-ifAKCX kQVsiI"
+  >
+    <div
+      className="sc-bdVaJa gkOpjT"
+    >
+      <div
+        className="sc-bwzfXH gDjOjU"
+      >
+        <strong
+          className="label"
+        >
+          Type
+        </strong>
+        <p>
+          Reduction of earnings
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Length of time
+        </strong>
+        <p>
+          1 Month, 10 Days
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Effective date
+        </strong>
+        <p>
+          15/03/2018 - 10:00
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Status
+        </strong>
+        <p>
+          Active
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
+      >
+        <strong
+          className="label"
+        >
+          Status date
+        </strong>
+        <p>
+          16/03/2018 - 08:00
+        </p>
+      </div>
+    </div>
+  </div>,
+  <hr />,
+]
+`;

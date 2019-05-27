@@ -1,8 +1,14 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
+
+jest.mock('shortid', () => ({
+  generate: () => '123',
+}))
+
 const adjudicationHistory = require('../controllers/adjudicationHistoryService')(elite2Api)
 
 beforeEach(() => {
+  elite2Api.getAdjudicationDetails = jest.fn()
   elite2Api.getAdjudications = jest.fn()
   elite2Api.getAdjudicationFindingTypes = jest.fn()
 })
@@ -174,12 +180,72 @@ describe('Adjudication History Service', async () => {
     expect(elite2Api.getAdjudicationFindingTypes.mock.calls[0]).toEqual([{}])
   })
 
-  it('return some results', async () => {
+  it('return adjudication history', async () => {
     elite2Api.getAdjudications.mockReturnValue(adjudications)
     elite2Api.getAdjudicationFindingTypes.mockReturnValue(findings)
 
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
     expect(response).toEqual(expectedResult)
+  })
+
+  it('return adjudication detail with hearings and sanctions', async () => {
+    elite2Api.getAdjudicationDetails.mockReturnValue({
+      reporterFirstName: 'Laurie',
+      reporterLastName: 'Jones',
+      incidentTime: '2012-11-29T14:45',
+      reportTime: '2012-11-28T12:12',
+      hearings: [
+        {
+          heardByFirstName: 'Jo',
+          heardByLastName: 'Smith',
+          hearingTime: '2012-11-30T10:45',
+          results: [
+            {
+              sanctions: [{ effectiveDate: '2012-12-23T12:00', statusDate: '2013-01-15T05:23', sanctionDays: 23 }],
+            },
+          ],
+        },
+      ],
+    })
+
+    const response = await adjudicationHistory.getAdjudicationDetails({}, 'OFF-1', 'ADJ-1')
+
+    expect(response).toEqual({
+      hearing: { heardByName: 'Jo Smith', hearingTime: '30/11/2012 - 10:45' },
+      incidentTime: '29/11/2012 - 14:45',
+      reportTime: '28/11/2012 - 12:12',
+      reporterFirstName: 'Laurie',
+      reporterLastName: 'Jones',
+      reporterName: 'Laurie Jones',
+      results: [
+        {
+          id: '123',
+          sanctions: [{ effectiveDate: '2012-12-23T12:00', sanctionDays: 23, statusDate: '2013-01-15T05:23' }],
+        },
+      ],
+      sanctions: [
+        { duration: '23 days', effectiveDate: '23/12/2012', id: '123', sanctionDays: 23, statusDate: '15/01/2013' },
+      ],
+    })
+
+    expect(elite2Api.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
+  })
+
+  it('return adjudication detail when no hearings', async () => {
+    elite2Api.getAdjudicationDetails.mockReturnValue({})
+
+    const response = await adjudicationHistory.getAdjudicationDetails({}, 'OFF-1', 'ADJ-1')
+
+    expect(response).toEqual({
+      hearing: {
+        heardByName: '',
+      },
+      reporterName: '',
+      results: [],
+      sanctions: [],
+    })
+
+    expect(elite2Api.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   /* eslint no-param-reassign: "error" */
@@ -219,7 +285,7 @@ describe('Adjudication History Service', async () => {
       },
     ])
 
-    // Pagination Headers from get adjudciations response would be set on the context for setting on the response to the frontend.
+    // Pagination Headers from get adjudications response would be set on the context for setting on the response to the frontend.
     expect(context).toEqual({
       anotherAttribute: 1,
       adjudicationResponseHeaders: true,

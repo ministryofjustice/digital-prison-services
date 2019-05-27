@@ -7,6 +7,10 @@ const switchDateFormat = displayDate => {
   return displayDate
 }
 
+const formatTimestampToDate = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY')
+
+const formatTimestampToDateTime = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY - HH:mm')
+
 const distinct = data =>
   data.reduce((accumulator, current) => (accumulator.includes(current) ? accumulator : [...accumulator, current]), [])
 
@@ -41,6 +45,9 @@ const properCaseName = name =>
         .map(capitalize)
         .join('-')
 
+const formatName = (firstName, lastName) =>
+  [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
+
 const isViewableFlag = code => ['HA', 'XEL'].includes(code)
 
 const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${item}`).join('&')
@@ -59,6 +66,13 @@ const toMap = (key, array) =>
     return map
   }, new Map())
 
+const formatValue = (quantity, label) => {
+  if (!quantity) {
+    return ''
+  }
+  return `${quantity} ${label}${quantity > 1 ? 's' : ''}`
+}
+
 /**
  * Converts a number to a combination of years and days.
  * This is not a date difference conversion, so it doesn't
@@ -70,11 +84,17 @@ const toMap = (key, array) =>
 const formatDaysInYears = days => {
   const years = Math.floor(days / 365)
   const remainingDays = days % 365
-  const yearString = `${years} ${years > 1 ? 'years' : 'year'}`
-  const dayString = `${remainingDays} ${remainingDays > 1 ? 'days' : 'day'}`
-  return `${years > 0 ? yearString : ''}${years > 0 && remainingDays > 0 ? ', ' : ''}${
-    remainingDays > 0 ? dayString : ''
-  }`
+  const yearString = formatValue(years, 'year')
+  const joinString = years > 0 && remainingDays > 0 ? ', ' : ''
+  const dayString = formatValue(remainingDays, 'day')
+  return `${yearString}${joinString}${dayString}`
+}
+
+const formatMonthsAndDays = (months, days) => {
+  const monthString = formatValue(months, 'month')
+  const joinString = months > 0 && days > 0 ? ', ' : ''
+  const dayString = formatValue(days, 'day')
+  return `${monthString}${joinString}${dayString}`
 }
 
 const pascalToString = value =>
@@ -86,6 +106,8 @@ const pascalToString = value =>
 
 module.exports = {
   switchDateFormat,
+  formatTimestampToDate,
+  formatTimestampToDateTime,
   distinct,
   sortByDateTime,
   capitalize,
@@ -93,7 +115,9 @@ module.exports = {
   arrayToQueryString,
   mapToQueryString,
   properCaseName,
+  formatName,
   formatDaysInYears,
+  formatMonthsAndDays,
   toMap,
   pascalToString,
 }

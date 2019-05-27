@@ -27,15 +27,25 @@ const factory = ({
     res.json(viewModel)
   })
 
-  const getIepDetails = asyncMiddleware(async (req, res) => {
-    const { offenderNo } = req.params
-    const viewModel = await iepDetailsService.getIepDetails(res.locals, offenderNo, req.query)
+  const getAdjudicationDetails = asyncMiddleware(async (req, res) => {
+    const { offenderNumber, adjudicationNumber } = req.params
+    const viewModel = await adjudicationHistoryService.getAdjudicationDetails(
+      res.locals,
+      offenderNumber,
+      adjudicationNumber
+    )
     res.json(viewModel)
   })
 
   const getHouseblockList = asyncMiddleware(async (req, res) => {
     const { agencyId, groupName, date, timeSlot } = req.query
     const viewModel = await houseblockListService.getHouseblockList(res.locals, agencyId, groupName, date, timeSlot)
+    res.json(viewModel)
+  })
+
+  const getIepDetails = asyncMiddleware(async (req, res) => {
+    const { offenderNo } = req.params
+    const viewModel = await iepDetailsService.getIepDetails(res.locals, offenderNo, req.query)
     res.json(viewModel)
   })
 
@@ -148,6 +158,7 @@ const factory = ({
   return {
     getActivityList,
     getAdjudications,
+    getAdjudicationDetails,
     getHouseblockList,
     postAttendance,
     getAbsenceReasons,
