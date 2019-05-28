@@ -44,12 +44,20 @@ function PayOptions({
     if (payStatus && payStatus.other) setSelectedOption('other')
   })
 
+  const attedanceRecorded = Boolean(selectedOption)
+
   return (
     <Fragment>
       <Option data-qa="pay-option">
         {offenderNo &&
           eventId && (
-            <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
+            <Radio
+              onChange={payOffender}
+              name={offenderNo}
+              value="pay"
+              checked={selectedOption === 'pay'}
+              disabled={attedanceRecorded}
+            >
               <VisuallyHidden>Pay</VisuallyHidden>
             </Radio>
           )}
@@ -68,6 +76,7 @@ function PayOptions({
               data-event-location-id={eventLocationId}
               data-offender-index={offenderIndex}
               checked={selectedOption === 'other'}
+              disabled={attedanceRecorded}
             >
               <VisuallyHidden>Other</VisuallyHidden>
             </Radio>
