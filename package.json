@@ -11,7 +11,7 @@
     "@govuk-react/checkbox": "^0.6.0",
     "@govuk-react/constants": "^0.7.0",
     "@govuk-react/date-field": "^0.7.0",
-    "@govuk-react/error-summary": "^0.7.0",
+    "@govuk-react/error-summary": "^0.7.1",
     "@govuk-react/error-text": "^0.7.0",
     "@govuk-react/fieldset": "^0.7.0",
     "@govuk-react/grid-col": "^0.7.0",
