@@ -61,7 +61,14 @@ const validateThenSubmit = ({ onSuccess, appointmentTypes, locationTypes }) => v
       numberOfTimes: values.times,
     })
 
-    if (endOfPeriod && endOfPeriod.isSameOrAfter(values.startTime.startOf('day').add(1, 'years'))) {
+    if (
+      endOfPeriod &&
+      endOfPeriod.isSameOrAfter(
+        moment(values.startTime)
+          .startOf('day')
+          .add(1, 'years')
+      )
+    ) {
       formErrors.push({
         targetName: 'times',
         text: 'Number of occurrences cannot exceed 1 year',
