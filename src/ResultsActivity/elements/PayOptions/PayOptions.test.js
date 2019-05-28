@@ -48,4 +48,10 @@ describe('<PayOptions />', () => {
     expect(payRadio.props.checked).toBe(false)
     expect(otherRadio.props.checked).toBe(true)
   })
+
+  it('should disable the pay radio element when the seletedOption has a value', () => {
+    act(() => testRenderer.update(<PayOptions {...props} payStatus={{ pay: true }} />))
+    expect(payRadio.props.disabled).toBe(true)
+    expect(otherRadio.props.disabled).toBe(true)
+  })
 })
