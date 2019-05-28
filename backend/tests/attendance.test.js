@@ -37,6 +37,7 @@ describe('Attendence and Pay controller', async () => {
 
     it('should post attendance', async () => {
       const attendenceDetails = {
+        offenderNo,
         period: 'AM',
         prisonId: 'LEI',
         eventId: 45,
@@ -63,6 +64,7 @@ describe('Attendence and Pay controller', async () => {
       const comment = 'Was absent but his reason was acceptable.'
 
       const attendenceDetails = {
+        offenderNo,
         period: 'AM',
         prisonId: 'LEI',
         eventId: 45,
@@ -81,7 +83,7 @@ describe('Attendence and Pay controller', async () => {
 
       expect(whereaboutsApi.postAttendance).toHaveBeenCalledWith(context, {
         absentReason: 'AcceptableAbsence',
-        comment,
+        comments: comment,
         bookingId: 1,
         eventDate: '2019-10-10',
         ...attendenceDetails,
@@ -92,17 +94,22 @@ describe('Attendence and Pay controller', async () => {
   describe('getAbsenceReasons', () => {
     beforeEach(() => {
       whereaboutsApi.getAbsenceReasons = jest.fn()
-      whereaboutsApi.getAbsenceReasons.mockReturnValue(['AcceptableAbsence', 'RestInCell', 'UnacceptableAbsence'])
+      whereaboutsApi.getAbsenceReasons.mockReturnValue({
+        paidReasons: ['AcceptableAbsence', 'RestInCell'],
+        unpaidReasons: ['UnacceptableAbsence'],
+      })
     })
 
     it('should call getAbsenceReasons and return formatted array of options', async () => {
       const response = await getAbsenceReasons(context)
 
-      expect(response).toEqual([
-        { name: 'Acceptable absence', value: 'AcceptableAbsence' },
-        { name: 'Rest in cell', value: 'RestInCell' },
-        { name: 'Unacceptable absence', value: 'UnacceptableAbsence' },
-      ])
+      expect(response).toEqual({
+        paidReasons: [
+          { name: 'Acceptable absence', value: 'AcceptableAbsence' },
+          { name: 'Rest in cell', value: 'RestInCell' },
+        ],
+        unpaidReasons: [{ name: 'Unacceptable absence', value: 'UnacceptableAbsence' }],
+      })
     })
   })
 })
