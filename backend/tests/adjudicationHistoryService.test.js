@@ -237,9 +237,6 @@ describe('Adjudication History Service', async () => {
     const response = await adjudicationHistory.getAdjudicationDetails({}, 'OFF-1', 'ADJ-1')
 
     expect(response).toEqual({
-      hearing: {
-        heardByName: '',
-      },
       reporterName: '',
       results: [],
       sanctions: [],

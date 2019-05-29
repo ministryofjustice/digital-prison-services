@@ -47,13 +47,28 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
     }))
   }
 
+  const extractHearingAndResults = hearings => {
+    if (hearings.length === 0) {
+      return [undefined, []]
+    }
+    const firstHearing = hearings[0]
+    const { heardByFirstName, heardByLastName, results = [], ...hearing } = firstHearing
+
+    return [
+      {
+        ...hearing,
+        hearingTime: formatTimestampToDateTime(hearing.hearingTime),
+        heardByName: formatName(heardByFirstName, heardByLastName),
+      },
+      results,
+    ]
+  }
+
   const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
     const details = await elite2Api.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
     const { hearings = [], ...otherDetails } = details
 
-    const firstHearing = hearings[0] || {}
-    const { results = [], heardByFirstName, heardByLastName, ...hearing } = firstHearing
-
+    const [hearing, results] = extractHearingAndResults(hearings)
     const sanctions = extractSanctions(results)
 
     return {
@@ -61,11 +76,7 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
       incidentTime: formatTimestampToDateTime(otherDetails.incidentTime),
       reportTime: formatTimestampToDateTime(otherDetails.reportTime),
       reporterName: formatName(details.reporterFirstName, details.reporterLastName),
-      hearing: {
-        ...hearing,
-        hearingTime: formatTimestampToDateTime(hearing.hearingTime),
-        heardByName: formatName(heardByFirstName, heardByLastName),
-      },
+      hearing,
       results: results.map(result => ({ id: shortid.generate(), ...result })),
       sanctions: sanctions.map(sanction => ({ id: shortid.generate(), ...sanction })),
     }
