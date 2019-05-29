@@ -1,4 +1,6 @@
 const moment = require('moment')
+const shortid = require('shortid')
+const { formatName, formatMonthsAndDays, formatTimestampToDateTime, formatTimestampToDate } = require('../utils')
 
 const AdjudciationHistoryServiceFactory = elite2Api => {
   const getAdjudications = async (context, offenderNumber, params) => {
@@ -34,8 +36,44 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
     }
   }
 
+  const extractSanctions = results => {
+    const [{ sanctions = [] } = {}] = results
+
+    return sanctions.map(sanction => ({
+      ...sanction,
+      duration: formatMonthsAndDays(sanction.sanctionMonths, sanction.sanctionDays),
+      effectiveDate: formatTimestampToDate(sanction.effectiveDate),
+      statusDate: formatTimestampToDate(sanction.statusDate),
+    }))
+  }
+
+  const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
+    const details = await elite2Api.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
+    const { hearings = [], ...otherDetails } = details
+
+    const firstHearing = hearings[0] || {}
+    const { results = [], heardByFirstName, heardByLastName, ...hearing } = firstHearing
+
+    const sanctions = extractSanctions(results)
+
+    return {
+      ...otherDetails,
+      incidentTime: formatTimestampToDateTime(otherDetails.incidentTime),
+      reportTime: formatTimestampToDateTime(otherDetails.reportTime),
+      reporterName: formatName(details.reporterFirstName, details.reporterLastName),
+      hearing: {
+        ...hearing,
+        hearingTime: formatTimestampToDateTime(hearing.hearingTime),
+        heardByName: formatName(heardByFirstName, heardByLastName),
+      },
+      results: results.map(result => ({ id: shortid.generate(), ...result })),
+      sanctions: sanctions.map(sanction => ({ id: shortid.generate(), ...sanction })),
+    }
+  }
+
   return {
     getAdjudications,
+    getAdjudicationDetails,
   }
 }
 

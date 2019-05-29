@@ -493,6 +493,18 @@ class Elite2Api extends WireMockRule {
     }
 
 
+    def stubAdjudicationDetails(offenderNo, adjudicationNo, response) {
+        this.stubFor(
+                get("/api/offenders/${offenderNo}/adjudications/$adjudicationNo")
+                        .willReturn(
+                                aResponse()
+                                        .withBody(JsonOutput.toJson(response))
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200)))
+
+    }
+
+
     def stubRecentMovements(movements = []) {
         this.stubFor(
                 post("/api/movements/offenders")

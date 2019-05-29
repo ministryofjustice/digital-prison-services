@@ -40,6 +40,7 @@ import IepHistoryContainer from './IepDetails/IepDetailsContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
 import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
+import AdjudicationDetailContainer from './Adjudications/AdjudicationDetail/AdjudicationDetailContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
@@ -311,19 +312,7 @@ class App extends React.Component {
               />
             )}
           />
-          <Route
-            exact
-            path={routePaths.iepHistory}
-            render={({ history, match: { params } }) => (
-              <IepHistoryContainer
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                history={history}
-              />
-            )}
-          />
+
           <Route
             exact
             path={routePaths.inToday}
@@ -416,6 +405,20 @@ class App extends React.Component {
 
           <Route
             exact
+            path={routePaths.iepHistory}
+            render={({ history, match: { params } }) => (
+              <IepHistoryContainer
+                offenderNo={params.offenderNo}
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
             path={routePaths.adjudications}
             render={({ history, match: { params } }) => (
               <AdjudicationHistoryContainer
@@ -423,6 +426,21 @@ class App extends React.Component {
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
                 offenderNumber={params.offenderNo}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.adjudication}
+            render={({ history, match: { params } }) => (
+              <AdjudicationDetailContainer
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                offenderNumber={params.offenderNo}
+                adjudicationNumber={params.adjudicationNo}
                 history={history}
               />
             )}

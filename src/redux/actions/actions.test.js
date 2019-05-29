@@ -262,6 +262,14 @@ describe('actions', () => {
     expect(actions.setGlobalSearchTotalRecords(6)).toEqual(expectedAction)
   })
 
+  it('should create an action to update the adjudication details', () => {
+    const expectedAction = {
+      type: types.SET_ADJUDICATION_DETAIL,
+      detail: { establishment: 'MDI' },
+    }
+    expect(actions.setAdjudicationDetail({ establishment: 'MDI' })).toEqual(expectedAction)
+  })
+
   it('should create an action to update the adjudication history filter', () => {
     const expectedAction = {
       type: types.SET_ADJUDICATION_HISTORY_FILTER,

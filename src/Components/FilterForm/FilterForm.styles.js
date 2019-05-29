@@ -27,11 +27,13 @@ export const LargeScreenOnlyGridCol = styled(GridCol)`
     height: 100%;
   }
 `
+
 export const FiltersLabel = styled(H3)`
   padding-left: ${SPACING.SCALE_3};
   margin-bottom: ${SPACING.SCALE_2};
   margin-top: -${SPACING.SCALE_2};
 `
+
 export const DateRangeLabel = styled.span`
   padding-left: ${SPACING.SCALE_3};
   ${typography.font({ size: 19 })};

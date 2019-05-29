@@ -120,6 +120,9 @@ const elite2ApiFactory = client => {
   const getAdjudications = (context, offenderNumber, params) =>
     get(context, `api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`)
 
+  const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
+    get(context, `api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
+
   const addBulkAppointments = (context, body) => post(context, 'api/appointments', body)
 
   const getDetailsLight = (context, offenderNo) => get(context, `api/bookings/offenderNo/${offenderNo}?fullInfo=false`)
@@ -166,6 +169,7 @@ const elite2ApiFactory = client => {
     getAppointmentTypes,
     getAdjudicationFindingTypes,
     getAdjudications,
+    getAdjudicationDetails,
     addBulkAppointments,
     getDetailsLight,
   }

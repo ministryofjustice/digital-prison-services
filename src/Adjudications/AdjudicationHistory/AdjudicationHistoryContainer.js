@@ -66,7 +66,7 @@ export class AdjudicationHistoryContainer extends Component {
     resetErrorDispatch()
     setLoadedDispatch(false)
     try {
-      const { data: adjudications, headers } = await axios.get(`/api/adjudications/${offenderNumber}`, {
+      const { data: adjudications, headers } = await axios.get(`/api/offenders/${offenderNumber}/adjudications`, {
         params: {
           offenceId,
           agencyId: establishment,

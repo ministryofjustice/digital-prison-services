@@ -1,0 +1,154 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Results should render no results correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Results
+  </h3>,
+  <p>
+    No Information Available
+  </p>,
+  <hr />,
+]
+`;
+
+exports[`Results should render present results correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Results
+  </h3>,
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Offence Paragraph
+      </strong>
+      <p>
+        12:21
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Offence Type
+      </strong>
+      <p>
+        Adult
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Offence Description
+      </strong>
+      <p>
+        Assault
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Plea
+      </strong>
+      <p>
+        Not Guilty
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Finding
+      </strong>
+      <p>
+        Guilty
+      </p>
+    </div>
+  </div>,
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Offence Paragraph
+      </strong>
+      <p>
+        23D
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Offence Type
+      </strong>
+      <p>
+        Adult
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Offence Description
+      </strong>
+      <p>
+        Stealing
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Plea
+      </strong>
+      <p>
+        Not Guilty
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Finding
+      </strong>
+      <p>
+        Not Proved
+      </p>
+    </div>
+  </div>,
+  <hr />,
+]
+`;

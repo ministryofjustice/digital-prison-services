@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Adjudication History container should render correctly 1`] = `
-"<Connect(OffenderPage) title={[Function: title]} handleError={[Function: mockConstructor]} offenderNumber=\\"AA123BB\\">
-  <Connect(AdjudicationHistoryForm) search={[Function]} reset={[Function]} />
-  <Connect(AdjudicationHistoryTable) changePage={[Function]} changePerPage={[Function]} />
-</Connect(OffenderPage)>"
-`;

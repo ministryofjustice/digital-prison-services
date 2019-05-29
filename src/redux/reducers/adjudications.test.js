@@ -8,6 +8,7 @@ describe('Adjudications reducer', () => {
     results: [],
     pageNumber: 0,
     pageSize: 20,
+    detail: {},
   }
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchObject({
@@ -16,6 +17,7 @@ describe('Adjudications reducer', () => {
       results: [],
       pageNumber: 0,
       pageSize: 20,
+      detail: {},
     })
   })
 
@@ -32,6 +34,16 @@ describe('Adjudications reducer', () => {
     expect(state).toEqual({
       ...initialState,
       results,
+    })
+  })
+
+  it('should handle SET_ADJUDICATION_DETAIL', () => {
+    const detail = { establishment: 'MDI' }
+    const state = reducer(initialState, Actions.setAdjudicationDetail(detail))
+
+    expect(state).toEqual({
+      ...initialState,
+      detail,
     })
   })
 

@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hearing should render empty data correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Hearing Details
+  </h3>,
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Type
+      </strong>
+      <p>
+        --
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Date
+      </strong>
+      <p>
+        --
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Location
+      </strong>
+      <p>
+        --
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Heard by
+      </strong>
+      <p>
+        --
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Other representatives
+      </strong>
+      <p>
+        --
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Comment
+      </strong>
+      <p>
+        --
+      </p>
+    </div>
+  </div>,
+  <hr />,
+]
+`;
+
+exports[`Hearing should render missing hearing correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Hearing Details
+  </h3>,
+  <p>
+    No Information Available
+  </p>,
+  <hr />,
+]
+`;
+
+exports[`Hearing should render present hearing correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Hearing Details
+  </h3>,
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Type
+      </strong>
+      <p>
+        Adult
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Date
+      </strong>
+      <p>
+        12/04/2017 - 12:54
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Location
+      </strong>
+      <p>
+        MDI-CR-12
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Heard by
+      </strong>
+      <p>
+        Jane Smith
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Other representatives
+      </strong>
+      <p>
+        CLLR Jones
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH iXLolC"
+    >
+      <strong
+        className="label"
+      >
+        Comment
+      </strong>
+      <p>
+        Nothing really
+      </p>
+    </div>
+  </div>,
+  <hr />,
+]
+`;

@@ -1,0 +1,275 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hearing should render empty data correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Adjudication Details
+  </h3>,
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH iPnSaj"
+    >
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH LjyEw"
+        >
+          <strong
+            className="label"
+          >
+            Incident date and time
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH LjyEw"
+        >
+          <strong
+            className="label"
+          >
+            Type
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH LjyEw"
+        >
+          <strong
+            className="label"
+          >
+            Establishment
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH iXLolC"
+        >
+          <strong
+            className="label"
+          >
+            Detail
+          </strong>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
+            --
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="sc-bwzfXH jqxiAx"
+    >
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Location
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Report number
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Reported by
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Report date and time
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>,
+  <hr />,
+]
+`;
+
+exports[`Hearing should render present detail correctly 1`] = `
+Array [
+  <h3
+    className="sc-htpNat jszPot"
+  >
+    Adjudication Details
+  </h3>,
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH iPnSaj"
+    >
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH LjyEw"
+        >
+          <strong
+            className="label"
+          >
+            Incident date and time
+          </strong>
+          <p>
+            12/04/2014 - 12:32
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH LjyEw"
+        >
+          <strong
+            className="label"
+          >
+            Type
+          </strong>
+          <p>
+            General
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH LjyEw"
+        >
+          <strong
+            className="label"
+          >
+            Establishment
+          </strong>
+          <p>
+            Moorland HMP
+          </p>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH iXLolC"
+        >
+          <strong
+            className="label"
+          >
+            Detail
+          </strong>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
+            A crime occurred
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="sc-bwzfXH jqxiAx"
+    >
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Location
+          </strong>
+          <p>
+            WING-A
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Report number
+          </strong>
+          <p>
+            123456
+          </p>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa gkOpjT"
+      >
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Reported by
+          </strong>
+          <p>
+            Jo Smith
+          </p>
+        </div>
+        <div
+          className="sc-bwzfXH iIsRPd"
+        >
+          <strong
+            className="label"
+          >
+            Report date and time
+          </strong>
+          <p>
+            --
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>,
+  <hr />,
+]
+`;

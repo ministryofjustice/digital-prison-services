@@ -9,10 +9,16 @@ const initialState = {
   pageNumber: 0,
   pageSize: 20,
   totalRecords: 0,
+  detail: {},
 }
 
 export default function adjudicationHistory(state = initialState, action) {
   switch (action.type) {
+    case ActionTypes.SET_ADJUDICATION_DETAIL:
+      return {
+        ...state,
+        detail: action.detail,
+      }
     case ActionTypes.SET_ADJUDICATION_HISTORY_RESULTS:
       return {
         ...state,
