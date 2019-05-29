@@ -198,7 +198,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }],
         alertFlags: [],
         category: '',
-        payStatus: null,
+        attendanceInfo: null,
       },
       {
         releaseScheduled: false,
@@ -208,7 +208,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }],
         alertFlags: [],
         category: '',
-        payStatus: null,
+        attendanceInfo: null,
       },
       {
         releaseScheduled: false,
@@ -218,7 +218,7 @@ describe('Activity list controller', async () => {
         eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }],
         alertFlags: [],
         category: '',
-        payStatus: null,
+        attendanceInfo: null,
       },
     ])
   })
@@ -249,7 +249,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         alertFlags: [],
         category: '',
-        payStatus: null,
+        attendanceInfo: null,
       },
       {
         offenderNo: 'B',
@@ -259,7 +259,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         alertFlags: [],
         category: '',
-        payStatus: null,
+        attendanceInfo: null,
       },
       {
         offenderNo: 'C',
@@ -269,7 +269,7 @@ describe('Activity list controller', async () => {
         scheduledTransfers: [],
         alertFlags: [],
         category: '',
-        payStatus: null,
+        attendanceInfo: null,
       },
     ])
   })
@@ -339,7 +339,7 @@ describe('Activity list controller', async () => {
             endTime: '2017-10-15T17:30:00',
           },
         ],
-        payStatus: null,
+        attendanceInfo: null,
       },
       {
         offenderNo: 'A1234AB',
@@ -358,7 +358,7 @@ describe('Activity list controller', async () => {
 
         releaseScheduled: false,
         scheduledTransfers: [],
-        payStatus: null,
+        attendanceInfo: null,
       },
       {
         offenderNo: 'A1234AC',
@@ -389,7 +389,7 @@ describe('Activity list controller', async () => {
             endTime: '2017-10-15T18:30:00',
           },
         ],
-        payStatus: null,
+        attendanceInfo: null,
       },
     ])
   })
@@ -499,6 +499,7 @@ describe('Activity list controller', async () => {
           eventLocationId: 1,
           period: 'AM',
           prisonId: 'LEI',
+          comments: 'Some comments or case note text.',
         },
         {
           absentReason: 'Refused',
@@ -549,7 +550,9 @@ describe('Activity list controller', async () => {
           offenderNo: 'A1',
           releaseScheduled: false,
           scheduledTransfers: [],
-          payStatus: {
+          attendanceInfo: {
+            absentReason: 'Acceptable absence',
+            comments: 'Some comments or case note text.',
             other: true,
           },
         },
@@ -563,7 +566,9 @@ describe('Activity list controller', async () => {
           offenderNo: 'B2',
           releaseScheduled: false,
           scheduledTransfers: [],
-          payStatus: {
+          attendanceInfo: {
+            absentReason: 'Refused',
+            comments: undefined,
             other: true,
           },
         },
@@ -577,7 +582,9 @@ describe('Activity list controller', async () => {
           offenderNo: 'C3',
           releaseScheduled: false,
           scheduledTransfers: [],
-          payStatus: {
+          attendanceInfo: {
+            absentReason: undefined,
+            comments: undefined,
             pay: true,
           },
         },

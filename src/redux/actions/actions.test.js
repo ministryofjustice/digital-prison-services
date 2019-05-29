@@ -372,17 +372,24 @@ describe('actions', () => {
     })
   })
 
-  it('should create an action to set an offenders activity payment status', () => {
+  it('should create an action to set an offenders activity attendance information', () => {
     const expectedAction = {
-      type: types.SET_OFFENDER_PAYMENT_DATA,
+      type: types.SET_OFFENDER_ATTENDANCE_DATA,
       offenderIndex: 1,
-      payStatus: {
+      attendanceInfo: {
         other: true,
-        pay: false,
+        absentReason: 'AcceptableAbsence',
+        comments: 'Comment or case note text',
       },
     }
 
-    expect(actions.setOffenderPaymentData(1, { other: true, pay: false })).toEqual(expectedAction)
+    expect(
+      actions.setOffenderAttendanceData(1, {
+        other: true,
+        absentReason: 'AcceptableAbsence',
+        comments: 'Comment or case note text',
+      })
+    ).toEqual(expectedAction)
   })
 
   describe('absent reasons actions', () => {

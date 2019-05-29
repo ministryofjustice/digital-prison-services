@@ -213,11 +213,12 @@ export function events(state = eventsInitialState, action) {
         ...state,
         absentReasons: action.payload,
       }
-    case ActionTypes.SET_OFFENDER_PAYMENT_DATA:
+    case ActionTypes.SET_OFFENDER_ATTENDANCE_DATA:
       return {
         ...state,
         activityData: state.activityData.map(
-          (offender, i) => (i === action.offenderIndex ? { ...offender, payStatus: action.payStatus } : offender)
+          (offender, i) =>
+            i === action.offenderIndex ? { ...offender, attendanceInfo: action.attendanceInfo } : offender
         ),
       }
     default:
