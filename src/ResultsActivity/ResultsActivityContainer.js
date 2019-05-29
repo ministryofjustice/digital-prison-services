@@ -12,7 +12,7 @@ import {
   setOrderField,
   setSearchActivities,
   setSortOrder,
-  setOffenderPaymentData,
+  setOffenderAttendanceData,
   getAbsentReasons,
 } from '../redux/actions'
 import sortActivityData from './activityResultsSorter'
@@ -152,7 +152,7 @@ class ResultsActivityContainer extends Component {
           setColumnSort={this.setColumnSort}
           payable={payable}
           handleError={this.handleError}
-          setOffenderPaymentData={setOffenderPaymentDataDispatch}
+          setOffenderAttendanceData={setOffenderPaymentDataDispatch}
           {...this.props}
         />
       </Page>
@@ -232,7 +232,7 @@ const mapDispatchToProps = dispatch => ({
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
   activityDataDispatch: data => dispatch(setActivityData(data)),
-  setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setOffenderPaymentData(offenderIndex, data)),
+  setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setOffenderAttendanceData(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
 })
 

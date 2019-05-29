@@ -17,17 +17,21 @@ const sortActivitiesByEventThenByLastName = data => {
   })
 }
 
-const extractPayInfo = (attendanceInformation, offenderBookingIds, event) => {
+const extractAttendanceInfo = (attendanceInformation, offenderBookingIds, event) => {
   if (attendanceInformation && attendanceInformation.length > 0) {
     const offenderBookingId = offenderBookingIds.find(
       offenderBooking => offenderBooking.offenderNo === event.offenderNo
     ).bookingId
 
-    const payInfo = attendanceInformation.find(attendance => attendance.bookingId === offenderBookingId)
+    const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === offenderBookingId)
+    const { absentReason, attended, paid, comments } = offenderAttendanceInfo || {}
+    const attendanceInfo = { absentReason, comments }
 
-    if (payInfo && payInfo.absentReason) return { other: true }
+    if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
 
-    if (payInfo && payInfo.attended && payInfo.paid) return { pay: true }
+    if (offenderAttendanceInfo && attended && paid) attendanceInfo.pay = true
+
+    return attendanceInfo
   }
 
   return null
@@ -119,7 +123,9 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
 
-      const payStatus = updateAttendanceEnabled ? extractPayInfo(attendanceInformation, offenderBookingIds, event) : {}
+      const attendanceInfo = updateAttendanceEnabled
+        ? extractAttendanceInfo(attendanceInformation, offenderBookingIds, event)
+        : {}
 
       return {
         ...event,
@@ -129,7 +135,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
         scheduledTransfers,
         alertFlags,
         category,
-        payStatus,
+        attendanceInfo,
       }
     })
 

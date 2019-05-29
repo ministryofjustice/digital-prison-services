@@ -106,10 +106,10 @@ export const setActivityData = data => ({
   data,
 })
 
-export const setOffenderPaymentData = (offenderIndex, payStatus) => ({
-  type: ActionTypes.SET_OFFENDER_PAYMENT_DATA,
+export const setOffenderAttendanceData = (offenderIndex, attendanceInfo) => ({
+  type: ActionTypes.SET_OFFENDER_ATTENDANCE_DATA,
   offenderIndex: parseInt(offenderIndex, 0),
-  payStatus,
+  attendanceInfo,
 })
 
 export const setMenuOpen = payload => ({

@@ -22,7 +22,7 @@ function PayOptions({
   otherHandler,
   firstName,
   lastName,
-  payStatus,
+  attendanceInfo,
   offenderIndex,
 }) {
   const [selectedOption, setSelectedOption] = useState()
@@ -40,8 +40,8 @@ function PayOptions({
   }
 
   useEffect(() => {
-    if (payStatus && payStatus.pay) setSelectedOption('pay')
-    if (payStatus && payStatus.other) setSelectedOption('other')
+    if (attendanceInfo && attendanceInfo.pay) setSelectedOption('pay')
+    if (attendanceInfo && attendanceInfo.other) setSelectedOption('other')
   })
 
   const attedanceRecorded = Boolean(selectedOption)
@@ -92,7 +92,7 @@ PayOptions.propTypes = {
   otherHandler: PropTypes.func.isRequired,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
-  payStatus: PropTypes.shape({ pay: PropTypes.bool, other: PropTypes.bool }),
+  attendanceInfo: PropTypes.shape({ pay: PropTypes.bool, other: PropTypes.bool }),
   eventLocationId: PropTypes.number,
   updateOffenderAttendance: PropTypes.func.isRequired,
   offenderIndex: PropTypes.number,
@@ -103,7 +103,7 @@ PayOptions.defaultProps = {
   eventId: undefined,
   firstName: undefined,
   lastName: undefined,
-  payStatus: undefined,
+  attendanceInfo: undefined,
   eventLocationId: undefined,
   offenderIndex: undefined,
 }

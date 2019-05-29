@@ -38,19 +38,19 @@ describe('<PayOptions />', () => {
   })
 
   it('should check the correct radio button when user has been marked as paid and attended', () => {
-    act(() => testRenderer.update(<PayOptions {...props} payStatus={{ pay: true }} />))
+    act(() => testRenderer.update(<PayOptions {...props} attendanceInfo={{ pay: true }} />))
     expect(payRadio.props.checked).toBe(true)
     expect(otherRadio.props.checked).toBe(false)
   })
 
   it('should check the correct radio button when user has been marked as other', () => {
-    act(() => testRenderer.update(<PayOptions {...props} payStatus={{ other: true }} />))
+    act(() => testRenderer.update(<PayOptions {...props} attendanceInfo={{ other: true }} />))
     expect(payRadio.props.checked).toBe(false)
     expect(otherRadio.props.checked).toBe(true)
   })
 
   it('should disable the pay and other radio element when the seletedOption has a value', () => {
-    act(() => testRenderer.update(<PayOptions {...props} payStatus={{ pay: true }} />))
+    act(() => testRenderer.update(<PayOptions {...props} attendanceInfo={{ pay: true }} />))
     expect(payRadio.props.disabled).toBe(true)
     expect(otherRadio.props.disabled).toBe(true)
   })

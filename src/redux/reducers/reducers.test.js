@@ -376,7 +376,7 @@ describe('app (global) reducer', () => {
     })
   })
 
-  it('should handle SET_OFFENDER_PAYMENT_DATA', () => {
+  it('should handle SET_OFFENDER_ATTENDANCE_DATA', () => {
     const currentEventState = {
       ...eventsInitialState,
       activityData: [{ offenderNo: 'A1' }, { offenderNo: 'B2' }, { offenderNo: 'C3' }],
@@ -384,18 +384,26 @@ describe('app (global) reducer', () => {
 
     expect(
       events(currentEventState, {
-        type: types.SET_OFFENDER_PAYMENT_DATA,
+        type: types.SET_OFFENDER_ATTENDANCE_DATA,
         offenderIndex: 1,
-        payStatus: {
+        attendanceInfo: {
           other: true,
-          pay: false,
+          absentReason: 'AcceptableAbsence',
+          comments: 'Comment or case note text',
         },
       })
     ).toEqual({
       ...eventsInitialState,
       activityData: [
         { offenderNo: 'A1' },
-        { offenderNo: 'B2', payStatus: { other: true, pay: false } },
+        {
+          offenderNo: 'B2',
+          attendanceInfo: {
+            other: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Comment or case note text',
+          },
+        },
         { offenderNo: 'C3' },
       ],
     })

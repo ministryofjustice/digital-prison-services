@@ -74,7 +74,7 @@ class ResultsActivity extends Component {
       payable,
       agencyId,
       handleError,
-      setOffenderPaymentData,
+      setOffenderAttendanceData,
     } = this.props
 
     const { payModalOpen, activeOffender } = this.state
@@ -186,11 +186,11 @@ class ResultsActivity extends Component {
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
       const details = { prisonId: agencyId, period, eventDate: date }
       const { attended, paid, absentReason } = attendenceDetails
-      const payStatus = { pay: attended && paid, other: !!absentReason }
+      const attendanceInfo = { ...attendenceDetails, pay: attended && paid, other: !!absentReason }
 
       try {
         await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })
-        setOffenderPaymentData(offenderIndex, payStatus)
+        setOffenderAttendanceData(offenderIndex, attendanceInfo)
         this.closeModal()
       } catch (error) {
         handleError(error)
@@ -208,7 +208,7 @@ class ResultsActivity extends Component {
           alertFlags,
           category,
           eventId,
-          payStatus,
+          attendanceInfo,
           locationId,
         } = mainEvent
         const key = `${offenderNo}-${eventId}`
@@ -251,7 +251,7 @@ class ResultsActivity extends Component {
                   otherHandler={this.openModal}
                   firstName={firstName}
                   lastName={lastName}
-                  payStatus={payStatus}
+                  attendanceInfo={attendanceInfo}
                   eventLocationId={locationId}
                   updateOffenderAttendance={updateOffenderAttendance}
                   offenderIndex={index}
@@ -344,7 +344,7 @@ ResultsActivity.propTypes = {
   updateAttendanceEnabled: PropTypes.bool.isRequired,
   payable: PropTypes.bool.isRequired,
   handleError: PropTypes.func.isRequired,
-  setOffenderPaymentData: PropTypes.func.isRequired,
+  setOffenderAttendanceData: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)
