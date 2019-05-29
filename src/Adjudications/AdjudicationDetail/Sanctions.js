@@ -39,7 +39,7 @@ export const Sanctions = ({ sanctions }) => (
         </Sanction>
       ))
     ) : (
-      <p>No Information Available</p>
+      <p>No information available</p>
     )}
     <hr />
   </>

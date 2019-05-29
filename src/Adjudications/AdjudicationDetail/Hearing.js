@@ -33,7 +33,7 @@ export const Hearing = ({ hearing }) => (
         </GridRow>
       </>
     ) : (
-      <p>No Information Available</p>
+      <p>No information available</p>
     )}
     <hr />
   </>
