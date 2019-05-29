@@ -32,7 +32,7 @@ export const Results = ({ results }) => (
         </Fragment>
       ))
     ) : (
-      <p>No Information Available</p>
+      <p>No information available</p>
     )}
     <hr />
   </>
