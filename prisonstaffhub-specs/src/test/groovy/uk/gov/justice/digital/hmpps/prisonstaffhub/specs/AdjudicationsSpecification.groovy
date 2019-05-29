@@ -10,10 +10,9 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationHistoryPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
-import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
 class AdjudicationsSpecification extends BrowserReportingSpec {
-    
+
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -73,7 +72,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         applyFilter.click()
 
         then: "I should be presented with filtered results"
-        waitFor {tableRows.size() == 2 } // Including header row
+        waitFor { tableRows.size() == 2 } // Including header row
 
         def columns1 = tableRows[1].find('td')
         columns1*.text() == ["1492249", "23/02/2017 10:29", "Moorland (HMP & YOI)", "Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission", "Guilty"]
@@ -123,7 +122,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         applyFilter.click()
 
         then: "I should be presented with all the results"
-        waitFor {tableRows.size() == 2 }// Including header row
+        waitFor { tableRows.size() == 2 }// Including header row
 
         clearFiltersLink.click()
         waitFor { tableRows.size() == 4 }
