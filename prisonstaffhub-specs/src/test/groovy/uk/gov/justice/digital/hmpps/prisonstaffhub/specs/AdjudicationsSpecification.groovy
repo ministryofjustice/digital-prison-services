@@ -142,8 +142,8 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         breadcrumb == [['Home', NOTM_URL],
                        ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
                        ['Adjudications', 'http://localhost:3006/offenders/AA00112/adjudications'],
-                       ['123456', '']]
+                       ['Details', '']]
 
-        sections == ['Adjudication Details', 'Hearing Details', 'Results', 'Awards']
+        sections == ['Report details', 'Hearing details', 'Results', 'Awards']
     }
 }

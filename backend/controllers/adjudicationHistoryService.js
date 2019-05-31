@@ -1,6 +1,12 @@
 const moment = require('moment')
 const shortid = require('shortid')
-const { formatName, formatMonthsAndDays, formatTimestampToDateTime, formatTimestampToDate } = require('../utils')
+const {
+  formatName,
+  formatMonthsAndDays,
+  formatTimestampToDateTime,
+  formatTimestampToDate,
+  sortByDateTime,
+} = require('../utils')
 
 const AdjudciationHistoryServiceFactory = elite2Api => {
   const getAdjudications = async (context, offenderNumber, params) => {
@@ -36,17 +42,6 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
     }
   }
 
-  const extractSanctions = results => {
-    const [{ sanctions = [] } = {}] = results
-
-    return sanctions.map(sanction => ({
-      ...sanction,
-      duration: formatMonthsAndDays(sanction.sanctionMonths, sanction.sanctionDays),
-      effectiveDate: formatTimestampToDate(sanction.effectiveDate),
-      statusDate: formatTimestampToDate(sanction.statusDate),
-    }))
-  }
-
   const extractHearingAndResults = hearings => {
     if (hearings.length === 0) {
       return [undefined, []]
@@ -64,6 +59,17 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
     ]
   }
 
+  const extractSanctions = results => {
+    const [{ sanctions = [] } = {}] = results
+
+    return sanctions.sort((left, right) => sortByDateTime(right.effectiveDate, left.effectiveDate)).map(sanction => ({
+      ...sanction,
+      duration: formatMonthsAndDays(sanction.sanctionMonths, sanction.sanctionDays),
+      effectiveDate: formatTimestampToDate(sanction.effectiveDate),
+      statusDate: formatTimestampToDate(sanction.statusDate),
+    }))
+  }
+
   const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
     const details = await elite2Api.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
     const { hearings = [], ...otherDetails } = details
@@ -77,7 +83,9 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
       reportTime: formatTimestampToDateTime(otherDetails.reportTime),
       reporterName: formatName(details.reporterFirstName, details.reporterLastName),
       hearing,
-      results: results.map(result => ({ id: shortid.generate(), ...result })),
+      results: results
+        .map(({ sanctions: ignored, ...rest }) => rest)
+        .map(result => ({ id: shortid.generate(), ...result })),
       sanctions: sanctions.map(sanction => ({ id: shortid.generate(), ...sanction })),
     }
   }

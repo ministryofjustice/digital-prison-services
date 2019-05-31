@@ -7,7 +7,7 @@ class AdjudicationDetailPage extends Page {
     static url = "/offenders/AA00112/adjudications/123456"
 
     static at = {
-        pageTitle == 'Adjudication no. 123456'
+        pageTitle == 'Adjudication 123456 details'
         headerTitle == 'Digital Prison Services'
     }
 

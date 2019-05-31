@@ -34,10 +34,10 @@ describe('Adjudication Detail container', () => {
     )
     const page = wrapper.dive().find(OffenderPage)
 
-    expect(page.getElement().props.title()).toBe('Adjudication no. 12345')
+    expect(page.getElement().props.title()).toBe('Adjudication 12345 details')
     expect(page.find('Connect(Detail)').length).toBe(1)
     expect(page.find('Connect(Hearing)').length).toBe(1)
     expect(page.find('Connect(Results)').length).toBe(1)
-    expect(page.find('Connect(Sanctions)').length).toBe(1)
+    expect(page.find('Connect(Awards)').length).toBe(1)
   })
 })

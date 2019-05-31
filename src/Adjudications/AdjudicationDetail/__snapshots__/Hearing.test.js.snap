@@ -1,189 +1,212 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Hearing should render empty data correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
-    Hearing Details
-  </h3>,
+    Hearing details
+  </h3>
   <div
     className="sc-bdVaJa gkOpjT"
   >
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Type
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         --
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Date
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         --
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Location
       </strong>
+      <p
+        className="sc-ifAKCX isyHfT"
+      >
+        --
+      </p>
       <p>
         --
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Heard by
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         --
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Other representatives
       </strong>
-      <p>
-        --
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+      <p
+        className="sc-bxivhb ddqgmM"
       >
-        Comment
-      </strong>
-      <p>
         --
       </p>
     </div>
-  </div>,
-  <hr />,
-]
+  </div>
+</div>
 `;
 
 exports[`Hearing should render missing hearing correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
-    Hearing Details
-  </h3>,
+    Hearing details
+  </h3>
   <p>
     No information available
-  </p>,
-  <hr />,
-]
+  </p>
+</div>
 `;
 
 exports[`Hearing should render present hearing correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
-    Hearing Details
-  </h3>,
+    Hearing details
+  </h3>
   <div
     className="sc-bdVaJa gkOpjT"
   >
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Type
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         Adult
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Date
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         12/04/2017 - 12:54
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Location
       </strong>
-      <p>
+      <p
+        className="sc-ifAKCX isyHfT"
+      >
         MDI-CR-12
+      </p>
+      <p>
+        --
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Heard by
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         Jane Smith
       </p>
     </div>
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gqOtUI"
     >
       <strong
         className="label"
       >
         Other representatives
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         CLLR Jones
       </p>
     </div>
+  </div>
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
     <div
       className="sc-bwzfXH iXLolC"
     >
       <strong
         className="label"
       >
-        Comment
+        Comments
       </strong>
-      <p>
+      <p
+        className="sc-bxivhb ddqgmM"
+      >
         Nothing really
       </p>
     </div>
-  </div>,
-  <hr />,
-]
+  </div>
+</div>
 `;

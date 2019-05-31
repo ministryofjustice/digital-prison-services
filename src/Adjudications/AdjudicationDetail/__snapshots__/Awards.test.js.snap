@@ -1,28 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sanction should render no sanctions correctly 1`] = `
-Array [
+exports[`Awards should render no award correctly 1`] = `
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
     Awards
-  </h3>,
+  </h3>
   <p>
-    No information available
-  </p>,
-  <hr />,
-]
+    No awards available
+  </p>
+</div>
 `;
 
-exports[`Sanction should render present sanctions correctly 1`] = `
-Array [
+exports[`Awards should render present award correctly 1`] = `
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
     Awards
-  </h3>,
+  </h3>
   <div
-    className="sc-ifAKCX kQVsiI"
+    className="sc-bZQynM lgWvgt"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -35,56 +38,52 @@ Array [
         >
           Type
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           No association
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gDjOjU"
       >
         <strong
           className="label"
         >
           Length of time
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           10 Days
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gDjOjU"
       >
         <strong
           className="label"
         >
           Effective date
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           12/03/2018 - 12:21
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gDjOjU"
       >
         <strong
           className="label"
         >
           Status
         </strong>
-        <p>
-          Active
-        </p>
-      </div>
-      <div
-        className="sc-bwzfXH iXLolC"
-      >
-        <strong
-          className="label"
+        <p
+          className="sc-bxivhb ddqgmM"
         >
-          Status date
-        </strong>
-        <p>
-          13/03/2018 - 09:00
+          Active
         </p>
       </div>
     </div>
@@ -99,14 +98,16 @@ Array [
         >
           Comments
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           Ongoing
         </p>
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="sc-ifAKCX kQVsiI"
+    className="sc-bZQynM ChJap"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -119,60 +120,55 @@ Array [
         >
           Type
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           Reduction of earnings
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gDjOjU"
       >
         <strong
           className="label"
         >
           Length of time
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           1 Month, 10 Days
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gDjOjU"
       >
         <strong
           className="label"
         >
           Effective date
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           15/03/2018 - 10:00
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gDjOjU"
       >
         <strong
           className="label"
         >
           Status
         </strong>
-        <p>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
           Active
         </p>
       </div>
-      <div
-        className="sc-bwzfXH iXLolC"
-      >
-        <strong
-          className="label"
-        >
-          Status date
-        </strong>
-        <p>
-          16/03/2018 - 08:00
-        </p>
-      </div>
     </div>
-  </div>,
-  <hr />,
-]
+  </div>
+</div>
 `;

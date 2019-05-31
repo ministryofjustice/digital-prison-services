@@ -1,12 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Hearing should render empty data correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
-    Adjudication Details
-  </h3>,
+    Report details
+  </h3>
   <div
     className="sc-bdVaJa gkOpjT"
   >
@@ -24,7 +26,9 @@ Array [
           >
             Incident date and time
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             --
           </p>
         </div>
@@ -36,7 +40,9 @@ Array [
           >
             Type
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             --
           </p>
         </div>
@@ -46,8 +52,13 @@ Array [
           <strong
             className="label"
           >
-            Establishment
+            Location
           </strong>
+          <p
+            className="sc-ifAKCX isyHfT"
+          >
+            --
+          </p>
           <p>
             --
           </p>
@@ -84,9 +95,11 @@ Array [
           <strong
             className="label"
           >
-            Location
+            Report number
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             --
           </p>
         </div>
@@ -96,9 +109,11 @@ Array [
           <strong
             className="label"
           >
-            Report number
+            Reported by
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             --
           </p>
         </div>
@@ -112,38 +127,29 @@ Array [
           <strong
             className="label"
           >
-            Reported by
-          </strong>
-          <p>
-            --
-          </p>
-        </div>
-        <div
-          className="sc-bwzfXH iIsRPd"
-        >
-          <strong
-            className="label"
-          >
             Report date and time
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             --
           </p>
         </div>
       </div>
     </div>
-  </div>,
-  <hr />,
-]
+  </div>
+</div>
 `;
 
 exports[`Hearing should render present detail correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
-    Adjudication Details
-  </h3>,
+    Report details
+  </h3>
   <div
     className="sc-bdVaJa gkOpjT"
   >
@@ -161,7 +167,9 @@ Array [
           >
             Incident date and time
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             12/04/2014 - 12:32
           </p>
         </div>
@@ -173,7 +181,9 @@ Array [
           >
             Type
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             General
           </p>
         </div>
@@ -183,8 +193,13 @@ Array [
           <strong
             className="label"
           >
-            Establishment
+            Location
           </strong>
+          <p
+            className="sc-ifAKCX isyHfT"
+          >
+            WING-A
+          </p>
           <p>
             Moorland HMP
           </p>
@@ -221,10 +236,12 @@ Array [
           <strong
             className="label"
           >
-            Location
+            Report number
           </strong>
-          <p>
-            WING-A
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
+            123456
           </p>
         </div>
         <div
@@ -233,10 +250,12 @@ Array [
           <strong
             className="label"
           >
-            Report number
+            Reported by
           </strong>
-          <p>
-            123456
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
+            Jo Smith
           </p>
         </div>
       </div>
@@ -249,27 +268,16 @@ Array [
           <strong
             className="label"
           >
-            Reported by
-          </strong>
-          <p>
-            Jo Smith
-          </p>
-        </div>
-        <div
-          className="sc-bwzfXH iIsRPd"
-        >
-          <strong
-            className="label"
-          >
             Report date and time
           </strong>
-          <p>
+          <p
+            className="sc-bxivhb ddqgmM"
+          >
             --
           </p>
         </div>
       </div>
     </div>
-  </div>,
-  <hr />,
-]
+  </div>
+</div>
 `;

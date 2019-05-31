@@ -1,19 +1,19 @@
 import React from 'react'
 import testRenderer from 'react-test-renderer'
 
-import { Sanctions } from './Sanctions'
+import { Awards } from './Awards'
 
-describe('Sanction', () => {
-  it('should render no sanctions correctly', () => {
-    const sanctions = []
+describe('Awards', () => {
+  it('should render no award correctly', () => {
+    const awards = []
 
-    const wrapper = testRenderer.create(<Sanctions sanctions={sanctions} />).toJSON()
+    const wrapper = testRenderer.create(<Awards awards={awards} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('should render present sanctions correctly', () => {
-    const sanctions = [
+  it('should render present award correctly', () => {
+    const awards = [
       {
         id: '1',
         sanctionType: 'No association',
@@ -33,7 +33,7 @@ describe('Sanction', () => {
       },
     ]
 
-    const wrapper = testRenderer.create(<Sanctions sanctions={sanctions} />).toJSON()
+    const wrapper = testRenderer.create(<Awards awards={awards} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })
