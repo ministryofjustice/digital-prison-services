@@ -2,7 +2,7 @@
 
 exports[`Awards should render no award correctly 1`] = `
 <div
-  className="sc-EHOje jyflZT"
+  className="sc-EHOje jZkQJN"
 >
   <h3
     className="sc-htpNat jszPot"
@@ -17,7 +17,7 @@ exports[`Awards should render no award correctly 1`] = `
 
 exports[`Awards should render present award correctly 1`] = `
 <div
-  className="sc-EHOje jyflZT"
+  className="sc-EHOje jZkQJN"
 >
   <h3
     className="sc-htpNat jszPot"
@@ -25,7 +25,7 @@ exports[`Awards should render present award correctly 1`] = `
     Awards
   </h3>
   <div
-    className="sc-bZQynM lgWvgt"
+    className="sc-bZQynM eiaTag"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -107,7 +107,7 @@ exports[`Awards should render present award correctly 1`] = `
     </div>
   </div>
   <div
-    className="sc-bZQynM ChJap"
+    className="sc-bZQynM fivOtD"
   >
     <div
       className="sc-bdVaJa gkOpjT"

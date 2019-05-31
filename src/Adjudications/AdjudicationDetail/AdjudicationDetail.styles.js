@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { spacing } from '@govuk-react/lib'
 
 const WrappedText = styled.p`
   word-break: break-word;
@@ -13,7 +14,7 @@ export const LabelAndValue = ({ label, value }) => (
 )
 
 const MarginlessPararagraph = styled.p`
-  margin: 0px;
+  margin: 0;
 `
 
 export const Location = ({ establishment, interiorLocation }) => (
@@ -26,9 +27,10 @@ export const Location = ({ establishment, interiorLocation }) => (
 
 export const Section = styled.div`
   border-bottom: 3px solid #f2f2f2;
-  margin-top: 10px;
+  margin-top: ${spacing.simple(2)};
 `
 
 export const GridContainer = styled.div`
-  ${({ includeTrailingDivider }) => includeTrailingDivider && 'border-bottom: 1px solid #f2f2f2;'} margin-top: 10px;
+  ${({ includeTrailingDivider }) => includeTrailingDivider && 'border-bottom: 1px solid #f2f2f2'};
+  margin-top: ${spacing.simple(2)};
 `
