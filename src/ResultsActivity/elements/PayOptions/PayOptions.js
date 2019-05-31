@@ -1,31 +1,15 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Radio from '@govuk-react/radio'
 import VisuallyHidden from '@govuk-react/visually-hidden'
-import { MEDIA_QUERIES } from '@govuk-react/constants'
 
-const Option = styled.td`
-  label {
-    margin-bottom: 0;
-  }
+import PayDetails from '../PayDetails'
+import PayOtherForm from '../PayOtherForm'
+import { Option, DetailsLink } from './PayOptions.styles'
 
-  ${MEDIA_QUERIES.PRINT} {
-    display: none;
-  }
-`
-function PayOptions({
-  offenderNo,
-  eventId,
-  eventLocationId,
-  updateOffenderAttendance,
-  otherHandler,
-  firstName,
-  lastName,
-  attendanceInfo,
-  offenderIndex,
-}) {
+function PayOptions({ offenderDetails, updateOffenderAttendance, openModal, closeModal }) {
   const [selectedOption, setSelectedOption] = useState()
+  const { offenderNo, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
 
   const payOffender = () => {
     const attendanceDetails = {
@@ -45,6 +29,25 @@ function PayOptions({
   })
 
   const attedanceRecorded = Boolean(selectedOption)
+
+  const renderDetails = () =>
+    openModal(
+      <PayDetails
+        paid={attendanceInfo.paid}
+        absentReason={attendanceInfo.absentReason}
+        comments={attendanceInfo.comments}
+        cancelHandler={closeModal}
+      />
+    )
+
+  const renderForm = () =>
+    openModal(
+      <PayOtherForm
+        offender={offenderDetails}
+        cancelHandler={closeModal}
+        updateOffenderAttendance={updateOffenderAttendance}
+      />
+    )
 
   return (
     <Fragment>
@@ -66,20 +69,18 @@ function PayOptions({
       <Option data-qa="other-option">
         {offenderNo &&
           eventId && (
-            <Radio
-              name={offenderNo}
-              onChange={otherHandler}
-              value="other"
-              data-first-name={firstName}
-              data-last-name={lastName}
-              data-event-id={eventId}
-              data-event-location-id={eventLocationId}
-              data-offender-index={offenderIndex}
-              checked={selectedOption === 'other'}
-              disabled={attedanceRecorded}
-            >
-              <VisuallyHidden>Other</VisuallyHidden>
-            </Radio>
+            <>
+              <Radio
+                name={offenderNo}
+                onChange={renderForm}
+                value="other"
+                checked={selectedOption === 'other'}
+                disabled={attedanceRecorded}
+              >
+                <VisuallyHidden>Other</VisuallyHidden>
+              </Radio>
+              {selectedOption === 'other' && <DetailsLink onClick={renderDetails}>Details</DetailsLink>}
+            </>
           )}
       </Option>
     </Fragment>
@@ -87,25 +88,28 @@ function PayOptions({
 }
 
 PayOptions.propTypes = {
-  offenderNo: PropTypes.string,
-  eventId: PropTypes.number,
-  otherHandler: PropTypes.func.isRequired,
-  firstName: PropTypes.string,
-  lastName: PropTypes.string,
-  attendanceInfo: PropTypes.shape({ pay: PropTypes.bool, other: PropTypes.bool }),
-  eventLocationId: PropTypes.number,
+  offenderDetails: PropTypes.shape({
+    offenderNo: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    eventId: PropTypes.number,
+    eventLocationId: PropTypes.number,
+    offenderIndex: PropTypes.number,
+    attendanceInfo: PropTypes.shape({
+      pay: PropTypes.bool,
+      other: PropTypes.bool,
+      absentReason: PropTypes.string,
+      comments: PropTypes.string,
+    }),
+  }),
+  closeModal: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+
   updateOffenderAttendance: PropTypes.func.isRequired,
-  offenderIndex: PropTypes.number,
 }
 
 PayOptions.defaultProps = {
-  offenderNo: undefined,
-  eventId: undefined,
-  firstName: undefined,
-  lastName: undefined,
-  attendanceInfo: undefined,
-  eventLocationId: undefined,
-  offenderIndex: undefined,
+  offenderDetails: undefined,
 }
 
 export default PayOptions

@@ -18,14 +18,14 @@ const attendanceFactory = (elite2Api, whereaboutsApi) => {
       period,
       prisonId,
       absentReason,
-      comment,
+      comments,
     } = attendance
     const details = await elite2Api.getDetailsLight(context, offenderNo)
     const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
     const body = {
       offenderNo,
       absentReason,
-      comments: comment,
+      comments,
       bookingId: details.bookingId,
       attended,
       eventDate: switchDateFormat(date),

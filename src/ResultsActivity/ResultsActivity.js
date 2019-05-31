@@ -16,7 +16,6 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import PayOptions from './elements/PayOptions'
-import PayOtherForm from '../Components/PayOtherForm'
 import ModalContainer from '../Components/ModalContainer'
 
 class ResultsActivity extends Component {
@@ -27,35 +26,20 @@ class ResultsActivity extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      payModalOpen: false,
-      activeOffender: {
-        id: undefined,
-        firstName: undefined,
-        lastName: undefined,
-        eventId: undefined,
-        eventLocationId: undefined,
-        offenderIndex: undefined,
-      },
+      modalContent: null,
+      modalOpen: false,
     }
   }
 
-  openModal = e => {
-    const { firstName, lastName, eventId, eventLocationId, offenderIndex } = e.target.dataset
+  openModal = modalContent => {
     this.setState({
-      activeOffender: {
-        id: e.target.name,
-        firstName,
-        lastName,
-        eventId,
-        eventLocationId,
-        offenderIndex,
-      },
-      payModalOpen: true,
+      modalContent,
+      modalOpen: true,
     })
   }
 
   closeModal = () => {
-    this.setState({ payModalOpen: false })
+    this.setState({ modalOpen: false })
   }
 
   render() {
@@ -77,7 +61,7 @@ class ResultsActivity extends Component {
       setOffenderAttendanceData,
     } = this.props
 
-    const { payModalOpen, activeOffender } = this.state
+    const { modalOpen, modalContent } = this.state
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -185,8 +169,8 @@ class ResultsActivity extends Component {
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
       const details = { prisonId: agencyId, period, eventDate: date }
-      const { attended, paid, absentReason } = attendenceDetails
-      const attendanceInfo = { ...attendenceDetails, pay: attended && paid, other: !!absentReason }
+      const { attended, paid, absentReason, comments } = attendenceDetails || {}
+      const attendanceInfo = { comments, paid, absentReason, pay: attended && paid, other: Boolean(absentReason) }
 
       try {
         await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })
@@ -212,6 +196,17 @@ class ResultsActivity extends Component {
           locationId,
         } = mainEvent
         const key = `${offenderNo}-${eventId}`
+
+        const offenderDetails = {
+          offenderNo,
+          firstName,
+          lastName,
+          eventId,
+          eventLocationId: locationId,
+          offenderIndex: index,
+          attendanceInfo,
+        }
+
         return (
           <tr key={key} className="row-gutters">
             <td className="row-gutters">
@@ -246,15 +241,10 @@ class ResultsActivity extends Component {
             {updateAttendanceEnabled &&
               payable && (
                 <PayOptions
-                  offenderNo={offenderNo}
-                  eventId={eventId}
-                  otherHandler={this.openModal}
-                  firstName={firstName}
-                  lastName={lastName}
-                  attendanceInfo={attendanceInfo}
-                  eventLocationId={locationId}
+                  offenderDetails={offenderDetails}
                   updateOffenderAttendance={updateOffenderAttendance}
-                  offenderIndex={index}
+                  openModal={this.openModal}
+                  closeModal={this.closeModal}
                 />
               )}
           </tr>
@@ -263,13 +253,8 @@ class ResultsActivity extends Component {
 
     return (
       <div className="results-activity">
-        <ModalContainer isOpen={payModalOpen} onRequestClose={this.closeModal}>
-          <PayOtherForm
-            offender={activeOffender}
-            cancelHandler={this.closeModal}
-            updateOffenderAttendance={updateOffenderAttendance}
-            handleError={handleError}
-          />
+        <ModalContainer isOpen={modalOpen} onRequestClose={this.closeModal}>
+          {modalContent}
         </ModalContainer>
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}

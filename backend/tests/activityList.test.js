@@ -554,6 +554,7 @@ describe('Activity list controller', async () => {
             absentReason: 'Acceptable absence',
             comments: 'Some comments or case note text.',
             other: true,
+            paid: true,
           },
         },
         {
@@ -570,6 +571,7 @@ describe('Activity list controller', async () => {
             absentReason: 'Refused',
             comments: undefined,
             other: true,
+            paid: false,
           },
         },
         {
@@ -586,6 +588,7 @@ describe('Activity list controller', async () => {
             absentReason: undefined,
             comments: undefined,
             pay: true,
+            paid: true,
           },
         },
       ])
