@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { getListSizeClass, getLongDateFormat } from './utils'
+import { getListSizeClass, getLongDateFormat, pascalToString } from './utils'
 
 describe('getListSizeClass()', () => {
   it('should return empty-list if no list provided', () => {
@@ -42,5 +42,11 @@ describe('getLongDateFormat()', () => {
 
   it('should return the provided date in the desired long format starting with day name', () => {
     expect(getLongDateFormat('28/11/2018')).toEqual('Wednesday 28th November')
+  })
+})
+
+describe('pascalToString()', () => {
+  it('should return a correctly formatted string', () => {
+    expect(pascalToString('PascalCasedString')).toEqual('Pascal cased string')
   })
 })

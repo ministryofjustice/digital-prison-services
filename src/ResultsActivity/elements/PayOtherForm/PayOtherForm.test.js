@@ -10,7 +10,7 @@ describe('<PayOtherForm />', () => {
   const props = {
     cancelHandler: jest.fn(),
     offender: {
-      id: 'ABC123',
+      offenderNo: 'ABC123',
       firstName: 'Test',
       lastName: 'Offender',
       eventId: 123,
@@ -39,7 +39,7 @@ describe('<PayOtherForm />', () => {
     yesRadio = wrapper.find('input[value="yes"]')
     noRadio = wrapper.find('input[value="no"]')
     reasonSelector = wrapper.find('select[name="reason"]')
-    commentInput = wrapper.find('textarea[name="comment"]')
+    commentInput = wrapper.find('textarea[name="comments"]')
   })
 
   it('should display the correct offender name', () => {
@@ -102,7 +102,7 @@ describe('<PayOtherForm />', () => {
 
       expect(errors.at(0).text()).toEqual('Select a pay option')
       expect(errors.at(1).text()).toEqual('Select a reason')
-      expect(errors.at(2).text()).toEqual('Enter a comment')
+      expect(errors.at(2).text()).toEqual('Enter comments')
     })
 
     it('should change error message if a case note is required', () => {
@@ -115,7 +115,7 @@ describe('<PayOtherForm />', () => {
       submitForm(wrapper)
 
       const errors = wrapper.find('ErrorSummary').find('li')
-      expect(errors.at(0).text()).toEqual('Enter a case note')
+      expect(errors.at(0).text()).toEqual('Enter case note')
     })
   })
 
@@ -131,7 +131,7 @@ describe('<PayOtherForm />', () => {
       const expectedPayload = {
         absentReason: 'AcceptableAbsence',
         attended: false,
-        comment: 'A supporting comment.',
+        comments: 'A supporting comment.',
         eventId: 123,
         eventLocationId: 456,
         offenderNo: 'ABC123',
@@ -153,7 +153,7 @@ describe('<PayOtherForm />', () => {
       const expectedPayload = {
         absentReason: 'UnacceptableAbsence',
         attended: false,
-        comment: 'A supporting comment.',
+        comments: 'A supporting comment.',
         eventId: 123,
         eventLocationId: 456,
         offenderNo: 'ABC123',

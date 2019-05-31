@@ -85,6 +85,13 @@ const linkOnClick = handlerFn => ({
   },
 })
 
+const pascalToString = value =>
+  value.substring(0, 1) +
+  value
+    .substring(1)
+    .replace(/([A-Z])/g, ' $1')
+    .toLowerCase()
+
 module.exports = {
   properCase,
   properCaseName,
@@ -96,4 +103,5 @@ module.exports = {
   getListSizeClass,
   getLongDateFormat,
   linkOnClick,
+  pascalToString,
 }
