@@ -13,8 +13,8 @@ import ErrorSummary from '@govuk-react/error-summary'
 import { spacing } from '@govuk-react/lib'
 
 import ButtonCancel from '../ButtonCancel'
-import OffenderName from '../../../OffenderName'
 import RadioGroup from '../../../Components/RadioGroup'
+import { properCaseName } from '../../../utils'
 import { FieldWithError, onHandleErrorClick } from '../../../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`
@@ -79,8 +79,8 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
             <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />
           )}
           <Fieldset>
-            <Fieldset.Legend size="LARGE" isPageHeading>
-              Do you want to pay <OffenderName firstName={offender.firstName} lastName={offender.lastName} />?
+            <Fieldset.Legend size="MEDIUM" isPageHeading>
+              Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
             </Fieldset.Legend>
             <FieldWithError
               name="pay"
