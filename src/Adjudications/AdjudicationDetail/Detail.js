@@ -1,14 +1,14 @@
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
+import { H3 } from '@govuk-react/heading/lib/presets'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { H3 } from '@govuk-react/heading/lib/presets'
-import { LabelAndValue, IncidentDetails } from './AdjudicationDetail.styles'
+import { LabelAndValue, Location, Section } from './AdjudicationDetail.styles'
 
 export const Detail = ({ detail }) => (
-  <>
-    <H3>Adjudication Details</H3>
+  <Section>
+    <H3>Report details</H3>
     <GridRow>
       <GridCol setWidth="60%">
         <GridRow>
@@ -19,36 +19,32 @@ export const Detail = ({ detail }) => (
             <LabelAndValue label="Type" value={detail.reportType} />
           </GridCol>
           <GridCol setWidth="one-third">
-            <LabelAndValue label="Establishment" value={detail.establishment} />
+            <Location establishment={detail.establishment} interiorLocation={detail.interiorLocation} />
           </GridCol>
         </GridRow>
         <GridRow>
           <GridCol>
-            <IncidentDetails label="Detail" value={detail.incidentDetails} />
+            <LabelAndValue label="Detail" value={detail.incidentDetails} />
           </GridCol>
         </GridRow>
       </GridCol>
       <GridCol setWidth="40%">
         <GridRow>
           <GridCol setWidth="one-half">
-            <LabelAndValue label="Location" value={detail.interiorLocation} />
-          </GridCol>
-          <GridCol setWidth="one-half">
             <LabelAndValue label="Report number" value={detail.reportNumber} />
           </GridCol>
-        </GridRow>
-        <GridRow>
           <GridCol setWidth="one-half">
             <LabelAndValue label="Reported by" value={detail.reporterName} />
           </GridCol>
+        </GridRow>
+        <GridRow>
           <GridCol setWidth="one-half">
             <LabelAndValue label="Report date and time" value={detail.reportTime} />
           </GridCol>
         </GridRow>
       </GridCol>
     </GridRow>
-    <hr />
-  </>
+  </Section>
 )
 
 Detail.propTypes = {
@@ -62,6 +58,10 @@ Detail.propTypes = {
     reporterName: PropTypes.string,
     reporterTime: PropTypes.string,
   }),
+}
+
+Detail.defaultProps = {
+  detail: {},
 }
 
 const mapStateToProps = ({ adjudicationHistory: { detail } }) => ({

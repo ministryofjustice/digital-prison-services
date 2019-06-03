@@ -201,7 +201,11 @@ describe('Adjudication History Service', async () => {
           hearingTime: '2012-11-30T10:45',
           results: [
             {
-              sanctions: [{ effectiveDate: '2012-12-23T12:00', statusDate: '2013-01-15T05:23', sanctionDays: 23 }],
+              sanctions: [
+                { effectiveDate: '2012-12-23T12:00', statusDate: '2013-01-21T05:23', sanctionDays: 3 },
+                { effectiveDate: '2012-12-21T12:00', statusDate: '2013-01-24T05:23', sanctionDays: 7 },
+                { effectiveDate: '2012-12-24T12:00', statusDate: '2013-01-23T05:23', sanctionDays: 14 },
+              ],
             },
           ],
         },
@@ -220,11 +224,12 @@ describe('Adjudication History Service', async () => {
       results: [
         {
           id: '123',
-          sanctions: [{ effectiveDate: '2012-12-23T12:00', sanctionDays: 23, statusDate: '2013-01-15T05:23' }],
         },
       ],
       sanctions: [
-        { duration: '23 days', effectiveDate: '23/12/2012', id: '123', sanctionDays: 23, statusDate: '15/01/2013' },
+        { duration: '14 days', effectiveDate: '24/12/2012', id: '123', sanctionDays: 14, statusDate: '23/01/2013' },
+        { duration: '3 days', effectiveDate: '23/12/2012', id: '123', sanctionDays: 3, statusDate: '21/01/2013' },
+        { duration: '7 days', effectiveDate: '21/12/2012', id: '123', sanctionDays: 7, statusDate: '24/01/2013' },
       ],
     })
 
