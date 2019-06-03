@@ -99,7 +99,7 @@ exports[`Hearing should render missing hearing correctly 1`] = `
     Hearing details
   </h3>
   <p>
-    No information available
+    No hearing details available
   </p>
 </div>
 `;

@@ -38,7 +38,7 @@ export const Hearing = ({ hearing }) => (
           )}
         </>
       ) : (
-        <p>No information available</p>
+        <p>No hearing details available</p>
       )}
     </Section>
   </>
