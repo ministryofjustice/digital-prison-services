@@ -245,6 +245,7 @@ class ResultsActivity extends Component {
                   updateOffenderAttendance={updateOffenderAttendance}
                   openModal={this.openModal}
                   closeModal={this.closeModal}
+                  date={date}
                 />
               )}
           </tr>

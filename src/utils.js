@@ -30,12 +30,26 @@ const getHoursMinutes = timestamp => {
   return timestamp.substr(indexOfT + 1, 5)
 }
 
+const isToday = date => {
+  if (date === 'Today') return true
+
+  return false
+}
+
 const isTodayOrAfter = date => {
-  if (date === 'Today') {
-    return true
-  }
+  if (isToday(date)) return true
+
   const searchDate = moment(date, 'DD/MM/YYYY')
   return searchDate.isSameOrAfter(moment(), 'day')
+}
+
+const isWithinLastYear = date => {
+  if (isToday(date)) return true
+
+  const oneYearAgo = moment().subtract(1, 'years')
+  const daysDifference = moment(date, 'DD/MM/YYYY').diff(oneYearAgo, 'day')
+
+  return daysDifference >= 0
 }
 
 const stripAgencyPrefix = (location, agency) => {
@@ -97,6 +111,7 @@ module.exports = {
   properCaseName,
   getHoursMinutes,
   isTodayOrAfter,
+  isWithinLastYear,
   getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,

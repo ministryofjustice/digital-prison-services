@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import Radio from '@govuk-react/radio'
 import VisuallyHidden from '@govuk-react/visually-hidden'
 
+import { isWithinLastYear } from '../../../utils'
 import PayDetails from '../PayDetails'
 import PayOtherForm from '../PayOtherForm'
 import { Option, DetailsLink } from './PayOptions.styles'
 
-function PayOptions({ offenderDetails, updateOffenderAttendance, openModal, closeModal }) {
+function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
   const [selectedOption, setSelectedOption] = useState()
   const { offenderNo, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
 
@@ -49,6 +50,11 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, openModal, clos
       />
     )
 
+  const showDetails = () => {
+    if (selectedOption === 'other' && isWithinLastYear(date)) return true
+    return false
+  }
+
   return (
     <Fragment>
       <Option data-qa="pay-option">
@@ -79,7 +85,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, openModal, clos
               >
                 <VisuallyHidden>Other</VisuallyHidden>
               </Radio>
-              {selectedOption === 'other' && <DetailsLink onClick={renderDetails}>Details</DetailsLink>}
+              {showDetails() && <DetailsLink onClick={renderDetails}>Details</DetailsLink>}
             </>
           )}
       </Option>
@@ -102,6 +108,7 @@ PayOptions.propTypes = {
       comments: PropTypes.string,
     }),
   }),
+  date: PropTypes.string.isRequired,
   closeModal: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
 
