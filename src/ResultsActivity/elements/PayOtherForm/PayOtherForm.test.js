@@ -43,7 +43,7 @@ describe('<PayOtherForm />', () => {
   })
 
   it('should display the correct offender name', () => {
-    expect(wrapper.find('legend').text()).toEqual('Do you want to pay Offender, Test?')
+    expect(wrapper.find('legend').text()).toEqual('Do you want to pay Test Offender?')
   })
 
   it('should trigger the cancel handler when clicking cancel', () => {
