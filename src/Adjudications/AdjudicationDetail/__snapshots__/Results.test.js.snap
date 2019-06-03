@@ -2,7 +2,7 @@
 
 exports[`Results should render no results correctly 1`] = `
 <div
-  className="sc-EHOje jZkQJN"
+  className="sc-EHOje jyflZT"
 >
   <h3
     className="sc-htpNat jszPot"
@@ -17,7 +17,7 @@ exports[`Results should render no results correctly 1`] = `
 
 exports[`Results should render present results correctly 1`] = `
 <div
-  className="sc-EHOje jZkQJN"
+  className="sc-EHOje jyflZT"
 >
   <h3
     className="sc-htpNat jszPot"
@@ -25,7 +25,7 @@ exports[`Results should render present results correctly 1`] = `
     Results
   </h3>
   <div
-    className="sc-bZQynM eiaTag"
+    className="sc-bZQynM eEnHqJ"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -103,7 +103,7 @@ exports[`Results should render present results correctly 1`] = `
     </div>
   </div>
   <div
-    className="sc-bZQynM fivOtD"
+    className="sc-bZQynM bGQQfc"
   >
     <div
       className="sc-bdVaJa gkOpjT"
