@@ -2,7 +2,7 @@
 
 exports[`Hearing should render empty data correctly 1`] = `
 <div
-  className="sc-EHOje jZkQJN"
+  className="sc-EHOje jyflZT"
 >
   <h3
     className="sc-htpNat jszPot"
@@ -91,7 +91,7 @@ exports[`Hearing should render empty data correctly 1`] = `
 
 exports[`Hearing should render missing hearing correctly 1`] = `
 <div
-  className="sc-EHOje jZkQJN"
+  className="sc-EHOje jyflZT"
 >
   <h3
     className="sc-htpNat jszPot"
@@ -106,7 +106,7 @@ exports[`Hearing should render missing hearing correctly 1`] = `
 
 exports[`Hearing should render present hearing correctly 1`] = `
 <div
-  className="sc-EHOje jZkQJN"
+  className="sc-EHOje jyflZT"
 >
   <h3
     className="sc-htpNat jszPot"

@@ -25,12 +25,14 @@ export const Location = ({ establishment, interiorLocation }) => (
   </>
 )
 
+const GREY = '#f2f2f2'
+
 export const Section = styled.div`
-  border-bottom: 3px solid #f2f2f2;
-  margin-top: ${spacing.simple(2)};
+  border-bottom: 3px solid ${GREY};
+  margin-top: ${spacing.simple(2)}px;
 `
 
 export const GridContainer = styled.div`
-  ${({ includeTrailingDivider }) => includeTrailingDivider && 'border-bottom: 1px solid #f2f2f2'};
-  margin-top: ${spacing.simple(2)};
+  ${({ includeTrailingDivider }) => includeTrailingDivider && `border-bottom: 1px solid ${GREY}`};
+  margin-top: ${spacing.simple(2)}px;
 `
