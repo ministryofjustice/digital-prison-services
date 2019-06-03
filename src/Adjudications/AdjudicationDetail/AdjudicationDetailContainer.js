@@ -9,7 +9,7 @@ import OffenderPage from '../../OffenderPage'
 import Detail from './Detail'
 import Hearing from './Hearing'
 import Results from './Results'
-import Sanctions from './Sanctions'
+import Awards from './Awards'
 
 export class AdjudicationDetailContainer extends Component {
   componentDidMount = () => {
@@ -54,7 +54,7 @@ export class AdjudicationDetailContainer extends Component {
     const { offenderNumber, adjudicationNumber, handleError } = this.props
     return (
       <OffenderPage
-        title={() => `Adjudication no. ${adjudicationNumber}`}
+        title={() => `Adjudication ${adjudicationNumber} details`}
         handleError={handleError}
         offenderNumber={offenderNumber}
       >
@@ -62,7 +62,7 @@ export class AdjudicationDetailContainer extends Component {
           <Detail />
           <Hearing />
           <Results />
-          <Sanctions />
+          <Awards />
         </>
       </OffenderPage>
     )
