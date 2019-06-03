@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { getListSizeClass, getLongDateFormat, pascalToString } from './utils'
+import { getListSizeClass, getLongDateFormat, pascalToString, isWithinLastYear } from './utils'
 
 describe('getListSizeClass()', () => {
   it('should return empty-list if no list provided', () => {
@@ -48,5 +48,21 @@ describe('getLongDateFormat()', () => {
 describe('pascalToString()', () => {
   it('should return a correctly formatted string', () => {
     expect(pascalToString('PascalCasedString')).toEqual('Pascal cased string')
+  })
+})
+
+describe('isWithinLastYear()', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
+
+  it('returns true if date is "Today"', () => {
+    expect(isWithinLastYear('Today')).toBe(true)
+  })
+
+  it('returns true if date is within the past year', () => {
+    expect(isWithinLastYear('13/01/2018')).toBe(true)
+  })
+
+  it('returns false if date is not within the past year', () => {
+    expect(isWithinLastYear('12/01/2018')).toBe(false)
   })
 })

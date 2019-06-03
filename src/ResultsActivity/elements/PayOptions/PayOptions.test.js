@@ -5,6 +5,8 @@ import { DetailsLink } from './PayOptions.styles'
 import PayOptions from '.'
 
 describe('<PayOptions />', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
+
   const props = {
     offenderDetails: {
       offenderNo: 'ABC123',
@@ -20,6 +22,7 @@ describe('<PayOptions />', () => {
       },
     },
     updateOffenderAttendance: jest.fn(),
+    date: 'Today',
     closeModal: jest.fn(),
     openModal: jest.fn(),
   }
@@ -73,5 +76,12 @@ describe('<PayOptions />', () => {
     const detailsLink = testInstance.findByType(DetailsLink)
     detailsLink.props.onClick()
     expect(props.openModal).toHaveBeenCalled()
+  })
+
+  it('should not display the details link select date is greater than 1 year', () => {
+    props.date = '12/01/2018'
+    act(() => testRenderer.update(<PayOptions {...props} />))
+    const detailsLink = testInstance.findAllByType(DetailsLink)
+    expect(detailsLink.length).toBe(0)
   })
 })
