@@ -1,11 +1,13 @@
 import '@babel/polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
+
 import './index.scss'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import logger from 'redux-logger'
+import { ConnectedFlagsProvider } from './flags'
 import allocationApp from './redux/reducers'
 
 // Logger with default options
@@ -16,7 +18,9 @@ const store = createStore(allocationApp, composeEnhancers(applyMiddleware(thunkM
 
 ReactDOM.render(
   <Provider store={store}>
-    <AppContainer />
+    <ConnectedFlagsProvider store={store}>
+      <AppContainer />
+    </ConnectedFlagsProvider>
   </Provider>,
   document.getElementById('root')
 )
