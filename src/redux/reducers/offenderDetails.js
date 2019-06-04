@@ -1,6 +1,7 @@
 import * as ActionTypes from '../actions/actionTypes'
 
 const initialState = {
+  offenderNo: null,
   firstName: null,
   lastName: null,
 }

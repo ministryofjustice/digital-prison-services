@@ -21,7 +21,10 @@ export class OffenderPage extends React.Component {
     try {
       const { data } = await client.get(`/api/offenders/${offenderNumber}`)
       setLoadedDispatch(true)
-      setOffenderDispatch(data)
+      setOffenderDispatch({
+        offenderNo: offenderNumber,
+        ...data,
+      })
     } catch (error) {
       handleError(error)
     }

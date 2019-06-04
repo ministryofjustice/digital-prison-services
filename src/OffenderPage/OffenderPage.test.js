@@ -50,7 +50,7 @@ describe('<OffenderPage />', () => {
 
       expect(resetError).toBeCalled()
       expect(setLoaded).toBeCalled()
-      expect(setOffender).toBeCalledWith(offenderDetails)
+      expect(setOffender).toBeCalledWith({ offenderNo: props.offenderNumber, ...offenderDetails })
       expect(handleError).not.toBeCalled()
     })
 
