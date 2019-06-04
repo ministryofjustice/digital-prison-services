@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import { setIepHistoryResults } from '../redux/actions'
 import OffenderPage from '../OffenderPage/OffenderPage'
 import IepChangeForm from './IepChangeForm'
-
-const axios = require('axios')
 
 class IepChangeContainer extends Component {
   componentDidMount() {
@@ -45,7 +44,24 @@ class IepChangeContainer extends Component {
     setLoadedDispatch(true)
   }
 
-  cancel = () => {}
+  changeIepLevel = async values => {
+    const { offenderNo, handleError, history } = this.props
+
+    try {
+      await axios.post(`/api/offenders/${offenderNo}/change-iep-level`, {
+        iepLevel: values.level,
+        comment: values.reason,
+      })
+      history.push(`/offenders/${offenderNo}/iep-details`)
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
+  cancel = () => {
+    const { offenderNo, history } = this.props
+    history.push(`/offenders/${offenderNo}/iep-details`)
+  }
 
   determineImage = (option, current) => {
     if (current === 'Basic') {
@@ -69,6 +85,16 @@ class IepChangeContainer extends Component {
       if (option === 'Basic') {
         return '/static/images/Double_red_arrow.png'
       }
+    } else if (current === 'Entry') {
+      if (option === 'Basic') {
+        return '/static/images/Green_arrow.png'
+      }
+      if (option === 'Standard') {
+        return '/static/images/Double_green_arrow.png'
+      }
+      if (option === 'Enhanced') {
+        return '/static/images/TripleGreenArrow.png'
+      }
     }
 
     return ''
@@ -78,7 +104,7 @@ class IepChangeContainer extends Component {
     const { offenderNo, handleError, setLoadedDispatch, currentIepLevel, offenderDetails } = this.props
 
     const levels = [
-      { title: 'Basic', value: 'BSC', image: this.determineImage('Basic', currentIepLevel) },
+      { title: 'Basic', value: 'BAS', image: this.determineImage('Basic', currentIepLevel) },
       { title: 'Standard', value: 'STD', image: this.determineImage('Standard', currentIepLevel) },
       { title: 'Enhanced', value: 'ENH', image: this.determineImage('Enhanced', currentIepLevel) },
     ].filter(level => level.title !== currentIepLevel)
@@ -106,7 +132,7 @@ class IepChangeContainer extends Component {
             <strong>{currentIepLevel}</strong>
           </GridCol>
         </GridRow>
-        <IepChangeForm cancelHandler={this.cancel} levels={levels} />
+        <IepChangeForm cancelHandler={this.cancel} levels={levels} changeIepLevel={this.changeIepLevel} />
       </OffenderPage>
     )
   }

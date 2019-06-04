@@ -1,5 +1,5 @@
 const elite2Api = {}
-const iepDetails = require('../controllers/iepDetails').getIepDetailsFactory(elite2Api).getIepDetails
+const { getIepDetails, changeIepLevel } = require('../controllers/iepDetails').getIepDetailsFactory(elite2Api)
 
 function createIepDetailsReponse() {
   return {
@@ -52,6 +52,7 @@ beforeEach(() => {
   elite2Api.getIepSummaryWithDetails = jest.fn()
   elite2Api.getAgencyDetails = jest.fn()
   elite2Api.getStaffDetails = jest.fn()
+  elite2Api.changeIepLevel = jest.fn()
 })
 
 describe('IEP details controller', async () => {
@@ -111,7 +112,7 @@ describe('IEP details controller', async () => {
     })
   })
   it('Should return the IEP history for offender', async () => {
-    const response = await iepDetails({}, '1', {})
+    const response = await getIepDetails({}, '1', {})
     const expected = createIepDetailsReponse()
     expect(response).toEqual(expected)
 
@@ -120,7 +121,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by level', async () => {
-    const response = await iepDetails({}, '1', { level: 'Basic' })
+    const response = await getIepDetails({}, '1', { level: 'Basic' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -148,7 +149,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by date', async () => {
-    const response = await iepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
+    const response = await getIepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -176,7 +177,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by establishment', async () => {
-    const response = await iepDetails({}, '1', { establishment: 'HEI' })
+    const response = await getIepDetails({}, '1', { establishment: 'HEI' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -215,7 +216,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by all filters', async () => {
-    const response = await iepDetails({}, '1', {
+    const response = await getIepDetails({}, '1', {
       establishment: 'HEI',
       level: 'Basic',
       fromDate: '2017-08-10',
@@ -281,7 +282,7 @@ describe('IEP details controller', async () => {
         },
       ],
     })
-    const response = await iepDetails({}, '1', {
+    const response = await getIepDetails({}, '1', {
       establishment: 'HEI',
       level: 'Basic',
       fromDate: '2017-08-10',
@@ -311,5 +312,20 @@ describe('IEP details controller', async () => {
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
     expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+  })
+
+  it('Should call the right elite2 end point for update level', async () => {
+    elite2Api.getDetails.mockReturnValue({
+      bookingId: -1,
+    })
+
+    const params = {
+      iepLevel: 'BAS',
+      comment: 'Test comment',
+    }
+    await changeIepLevel({}, '1', params)
+
+    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
   })
 })

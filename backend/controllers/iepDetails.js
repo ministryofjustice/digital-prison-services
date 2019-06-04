@@ -74,8 +74,14 @@ const getIepDetailsFactory = elite2Api => {
     }
   }
 
+  const changeIepLevel = async (context, offenderNo, params) => {
+    const bookingDetails = await elite2Api.getDetails(context, offenderNo)
+    await elite2Api.changeIepLevel(context, bookingDetails.bookingId, params)
+  }
+
   return {
     getIepDetails,
+    changeIepLevel,
   }
 }
 

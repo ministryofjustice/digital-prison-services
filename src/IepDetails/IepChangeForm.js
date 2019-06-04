@@ -22,7 +22,11 @@ const validateThenSubmit = submitHandler => values => {
   const formErrors = []
 
   if (!values.reason) {
-    formErrors.push({ targetName: 'reasopn', text: 'Enter reason for IEP level change' })
+    formErrors.push({ targetName: 'reason', text: 'Enter reason for IEP level change' })
+  }
+
+  if (values.reason && values.reason.length > 240) {
+    formErrors.push({ targetName: 'reason', text: 'Reason must be 240 characters or less' })
   }
 
   if (!values.level) {
@@ -34,16 +38,7 @@ const validateThenSubmit = submitHandler => values => {
   return submitHandler(values)
 }
 
-export function IepChangeForm({ levels, cancelHandler }) {
-  const changeIepLevel = () => {
-    // const iepDetails = {
-    //   level: values.level,
-    //   reason: values.reason,
-    //   offenderNo
-    // }
-    // await changeIepLevel(iepDetails, offenderNo)
-  }
-
+export function IepChangeForm({ levels, cancelHandler, changeIepLevel }) {
   return (
     <Form
       onSubmit={values => validateThenSubmit(changeIepLevel)(values)}
@@ -55,7 +50,7 @@ export function IepChangeForm({ levels, cancelHandler }) {
           <Fieldset>
             <Fieldset.Legend>Select new level</Fieldset.Legend>
             <FieldWithError name="level" errors={errors} component={RadioGroup} options={levels} inline />
-            <FieldWithError errors={errors} name="reason" component={TextArea}>
+            <FieldWithError errors={errors} name="reason" component={TextArea} hint="Maximum 240 characters">
               Reason for change
             </FieldWithError>
           </Fieldset>
@@ -75,6 +70,7 @@ export function IepChangeForm({ levels, cancelHandler }) {
 
 IepChangeForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
+  changeIepLevel: PropTypes.func.isRequired,
   // mapStateToProps
   levels: PropTypes.arrayOf(PropTypes.string).isRequired,
 }

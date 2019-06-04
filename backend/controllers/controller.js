@@ -155,6 +155,12 @@ const factory = ({
     res.end()
   })
 
+  const changeIepLevel = asyncMiddleware(async (req, res) => {
+    const { offenderNumber } = req.params
+    await iepDetailsService.changeIepLevel(res.locals, offenderNumber, req.body)
+    res.end()
+  })
+
   return {
     getActivityList,
     getAdjudications,
@@ -176,6 +182,7 @@ const factory = ({
     getBulkAppointmentsViewModel,
     addBulkAppointments,
     bulkAppointmentsCsvTemplate,
+    changeIepLevel,
   }
 }
 
