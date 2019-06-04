@@ -12,10 +12,10 @@ import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
 import { spacing } from '@govuk-react/lib'
 
-import ButtonCancel from './elements/ButtonCancel'
-import OffenderName from '../../OffenderName'
-import RadioGroup from '../RadioGroup'
-import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
+import ButtonCancel from '../ButtonCancel'
+import RadioGroup from '../../../Components/RadioGroup'
+import { properCaseName } from '../../../utils'
+import { FieldWithError, onHandleErrorClick } from '../../../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`
   button {
@@ -25,7 +25,7 @@ const ButtonContainer = styled.div`
 
 const commentOrCaseNote = value => {
   if (value === 'UnacceptableAbsence' || value === 'Refused') return 'case note'
-  return 'comment'
+  return 'comments'
 }
 
 const validateThenSubmit = submitHandler => values => {
@@ -39,8 +39,8 @@ const validateThenSubmit = submitHandler => values => {
     formErrors.push({ targetName: 'reason', text: 'Select a reason' })
   }
 
-  if (!values.comment) {
-    formErrors.push({ targetName: 'comment', text: `Enter a ${commentOrCaseNote(values.reason)}` })
+  if (!values.comments) {
+    formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.reason)}` })
   }
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
@@ -54,8 +54,8 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
 
     const attendanceDetails = {
       absentReason: values.reason,
-      comment: values.comment,
-      offenderNo: offender.id,
+      comments: values.comments,
+      offenderNo: offender.offenderNo,
       attended: false,
       paid,
       eventId: offender.eventId,
@@ -79,8 +79,8 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
             <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />
           )}
           <Fieldset>
-            <Fieldset.Legend size="LARGE" isPageHeading>
-              Do you want to pay <OffenderName firstName={offender.firstName} lastName={offender.lastName} />?
+            <Fieldset.Legend size="MEDIUM" isPageHeading>
+              Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
             </Fieldset.Legend>
             <FieldWithError
               name="pay"
@@ -99,8 +99,8 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
                 </option>
               ))}
             </FieldWithError>
-            <FieldWithError errors={errors} name="comment" component={TextArea}>
-              Enter a {commentOrCaseNote(values.reason)}
+            <FieldWithError errors={errors} name="comments" component={TextArea}>
+              Enter {commentOrCaseNote(values.reason)}
             </FieldWithError>
           </Fieldset>
           <ButtonContainer>

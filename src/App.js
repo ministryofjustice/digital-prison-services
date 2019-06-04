@@ -45,12 +45,13 @@ import AdjudicationDetailContainer from './Adjudications/AdjudicationDetail/Adju
 import routePaths from './routePaths'
 import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
+import { setFlagsAction } from './flags'
 
 const axios = require('axios')
 
 class App extends React.Component {
   async componentWillMount() {
-    const { configDispatch, setErrorDispatch } = this.props
+    const { configDispatch, setErrorDispatch, setFlagsDispatch } = this.props
 
     axios.interceptors.response.use(
       config => {
@@ -75,6 +76,7 @@ class App extends React.Component {
       }
 
       configDispatch(config.data)
+      setFlagsDispatch(config.data.flags)
     } catch (error) {
       setErrorDispatch(error.message)
     }
@@ -589,6 +591,7 @@ const mapDispatchToProps = dispatch => ({
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
   switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
+  setFlagsDispatch: flags => dispatch(setFlagsAction(flags)),
 })
 
 const AppContainer = connect(

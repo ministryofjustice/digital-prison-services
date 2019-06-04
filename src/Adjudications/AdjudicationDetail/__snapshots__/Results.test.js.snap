@@ -1,154 +1,184 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Results should render no results correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
     Results
-  </h3>,
+  </h3>
   <p>
-    No information available
-  </p>,
-  <hr />,
-]
+    No results available
+  </p>
+</div>
 `;
 
 exports[`Results should render present results correctly 1`] = `
-Array [
+<div
+  className="sc-EHOje jyflZT"
+>
   <h3
     className="sc-htpNat jszPot"
   >
     Results
-  </h3>,
+  </h3>
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bZQynM eEnHqJ"
   >
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bdVaJa gkOpjT"
     >
-      <strong
-        className="label"
+      <div
+        className="sc-bwzfXH gqOtUI"
       >
-        Offence Paragraph
-      </strong>
-      <p>
-        12:21
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Offence paragraph
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          12:21
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH bobXWp"
       >
-        Offence Type
-      </strong>
-      <p>
-        Adult
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Offence type
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Adult
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH jqxiAx"
       >
-        Offence Description
-      </strong>
-      <p>
-        Assault
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Offence description
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Assault
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
       >
-        Plea
-      </strong>
-      <p>
-        Not Guilty
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Plea
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Not Guilty
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
       >
-        Finding
-      </strong>
-      <p>
-        Guilty
-      </p>
+        <strong
+          className="label"
+        >
+          Finding
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Guilty
+        </p>
+      </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bZQynM bGQQfc"
   >
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bdVaJa gkOpjT"
     >
-      <strong
-        className="label"
+      <div
+        className="sc-bwzfXH gqOtUI"
       >
-        Offence Paragraph
-      </strong>
-      <p>
-        23D
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Offence paragraph
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          23D
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH bobXWp"
       >
-        Offence Type
-      </strong>
-      <p>
-        Adult
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Offence type
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Adult
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH jqxiAx"
       >
-        Offence Description
-      </strong>
-      <p>
-        Stealing
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Offence description
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Stealing
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
       >
-        Plea
-      </strong>
-      <p>
-        Not Guilty
-      </p>
-    </div>
-    <div
-      className="sc-bwzfXH iXLolC"
-    >
-      <strong
-        className="label"
+        <strong
+          className="label"
+        >
+          Plea
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Not Guilty
+        </p>
+      </div>
+      <div
+        className="sc-bwzfXH iXLolC"
       >
-        Finding
-      </strong>
-      <p>
-        Not Proved
-      </p>
+        <strong
+          className="label"
+        >
+          Finding
+        </strong>
+        <p
+          className="sc-bxivhb ddqgmM"
+        >
+          Not Proved
+        </p>
+      </div>
     </div>
-  </div>,
-  <hr />,
-]
+  </div>
+</div>
 `;

@@ -7,6 +7,7 @@ import adjudicationHistory from './adjudications'
 
 import offenderDetails from './offenderDetails'
 import iepHistory from './iepHistory'
+import { createFlagsReducer } from '../../flags'
 
 export function defaultPeriod(time) {
   const midnight = moment('12:00a', 'HH:mm a')
@@ -301,6 +302,7 @@ const prisonStaffHubApp = combineReducers({
   adjudicationHistory,
   offenderDetails,
   iepHistory,
+  flags: createFlagsReducer({}),
 })
 
 export default prisonStaffHubApp

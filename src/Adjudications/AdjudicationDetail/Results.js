@@ -1,40 +1,41 @@
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import React, { Fragment } from 'react'
+import { H3 } from '@govuk-react/heading/lib/presets'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { H3 } from '@govuk-react/heading/lib/presets'
-import { LabelAndValue } from './AdjudicationDetail.styles'
+import { LabelAndValue, GridContainer, Section } from './AdjudicationDetail.styles'
 
 export const Results = ({ results }) => (
   <>
-    <H3>Results</H3>
-    {results && results.length ? (
-      results.map(result => (
-        <Fragment key={result.id}>
-          <GridRow>
-            <GridCol>
-              <LabelAndValue label="Offence Paragraph" value={result.oicOffenceCode} />
-            </GridCol>
-            <GridCol>
-              <LabelAndValue label="Offence Type" value={result.offenceType} />
-            </GridCol>
-            <GridCol>
-              <LabelAndValue label="Offence Description" value={result.offenceDescription} />
-            </GridCol>
-            <GridCol>
-              <LabelAndValue label="Plea" value={result.plea} />
-            </GridCol>
-            <GridCol>
-              <LabelAndValue label="Finding" value={result.finding} />
-            </GridCol>
-          </GridRow>
-        </Fragment>
-      ))
-    ) : (
-      <p>No information available</p>
-    )}
-    <hr />
+    <Section>
+      <H3>Results</H3>
+      {results && results.length ? (
+        results.map((result, i) => (
+          <GridContainer i={i} key={result.id} includeTrailingDivider={results.length !== i + 1}>
+            <GridRow>
+              <GridCol setWidth="20%">
+                <LabelAndValue label="Offence paragraph" value={result.oicOffenceCode} />
+              </GridCol>
+              <GridCol setWidth="15%">
+                <LabelAndValue label="Offence type" value={result.offenceType} />
+              </GridCol>
+              <GridCol setWidth="40%">
+                <LabelAndValue label="Offence description" value={result.offenceDescription} />
+              </GridCol>
+              <GridCol>
+                <LabelAndValue label="Plea" value={result.plea} />
+              </GridCol>
+              <GridCol>
+                <LabelAndValue label="Finding" value={result.finding} />
+              </GridCol>
+            </GridRow>
+          </GridContainer>
+        ))
+      ) : (
+        <p>No results available</p>
+      )}
+    </Section>
   </>
 )
 

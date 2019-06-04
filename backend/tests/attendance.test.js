@@ -59,9 +59,9 @@ describe('Attendence and Pay controller', async () => {
       })
     })
 
-    it('should call postAttendance with the correct absent reason and comment text', async () => {
+    it('should call postAttendance with the correct absent reason and comments text', async () => {
       elite2Api.createCaseNote = jest.fn()
-      const comment = 'Was absent but his reason was acceptable.'
+      const comments = 'Was absent but his reason was acceptable.'
 
       const attendenceDetails = {
         offenderNo,
@@ -75,7 +75,7 @@ describe('Attendence and Pay controller', async () => {
 
       await postAttendance(context, {
         absentReason: 'AcceptableAbsence',
-        comment,
+        comments,
         offenderNo,
         eventDate: '10/10/2019',
         ...attendenceDetails,
@@ -83,7 +83,7 @@ describe('Attendence and Pay controller', async () => {
 
       expect(whereaboutsApi.postAttendance).toHaveBeenCalledWith(context, {
         absentReason: 'AcceptableAbsence',
-        comments: comment,
+        comments,
         bookingId: 1,
         eventDate: '2019-10-10',
         ...attendenceDetails,
