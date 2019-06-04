@@ -4,7 +4,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import { setIepHistoryResults } from '../redux/actions'
+import { setIepHistoryResults, setPossibleIepLevels } from '../redux/actions'
 import OffenderPage from '../OffenderPage/OffenderPage'
 import IepChangeForm from './IepChangeForm'
 
@@ -28,6 +28,7 @@ class IepChangeContainer extends Component {
       resetErrorDispatch,
       setLoadedDispatch,
       setIepHistoryResults: setResults,
+      setPossibleIepLevels: setLevels,
     } = this.props
 
     resetErrorDispatch()
@@ -37,6 +38,11 @@ class IepChangeContainer extends Component {
       const { data: results } = await axios.get(`/api/bookings/${offenderNo}/iepSummary`)
 
       setResults({ ...results })
+
+      const { data: levels } = await axios.get(`/api/iep-levels`, {
+        params: { currentIepLevel: results.currentIepLevel },
+      })
+      setLevels(levels)
     } catch (error) {
       handleError(error)
     }
@@ -63,43 +69,6 @@ class IepChangeContainer extends Component {
     history.push(`/offenders/${offenderNo}/iep-details`)
   }
 
-  determineImage = (option, current) => {
-    if (current === 'Basic') {
-      if (option === 'Standard') {
-        return '/static/images/Green_arrow.png'
-      }
-      if (option === 'Enhanced') {
-        return '/static/images/Double_green_arrow.png'
-      }
-    } else if (current === 'Standard') {
-      if (option === 'Basic') {
-        return '/static/images/Red_arrow.png'
-      }
-      if (option === 'Enhanced') {
-        return '/static/images/Green_arrow.png'
-      }
-    } else if (current === 'Enhanced') {
-      if (option === 'Standard') {
-        return '/static/images/Red_arrow.png'
-      }
-      if (option === 'Basic') {
-        return '/static/images/Double_red_arrow.png'
-      }
-    } else if (current === 'Entry') {
-      if (option === 'Basic') {
-        return '/static/images/Green_arrow.png'
-      }
-      if (option === 'Standard') {
-        return '/static/images/Double_green_arrow.png'
-      }
-      if (option === 'Enhanced') {
-        return '/static/images/TripleGreenArrow.png'
-      }
-    }
-
-    return ''
-  }
-
   render() {
     const {
       offenderNo,
@@ -108,14 +77,9 @@ class IepChangeContainer extends Component {
       currentIepLevel,
       offenderDetails,
       userRoles,
+      levels,
       history,
     } = this.props
-
-    const levels = [
-      { title: 'Basic', value: 'BAS', image: this.determineImage('Basic', currentIepLevel) },
-      { title: 'Standard', value: 'STD', image: this.determineImage('Standard', currentIepLevel) },
-      { title: 'Enhanced', value: 'ENH', image: this.determineImage('Enhanced', currentIepLevel) },
-    ].filter(level => level.title !== currentIepLevel)
 
     if (!userRoles.includes('MAINTAIN_IEP')) {
       history.push(`/offenders/${offenderNo}/iep-details`)
@@ -129,7 +93,7 @@ class IepChangeContainer extends Component {
         setLoaded={setLoadedDispatch}
       >
         <GridRow>
-          <GridCol setWidth="one-quarter">
+          <GridCol>
             <p className="label margin-bottom-small">Name</p>
             <p>
               <strong>
@@ -139,7 +103,7 @@ class IepChangeContainer extends Component {
           </GridCol>
         </GridRow>
         <GridRow>
-          <GridCol setWidth="one-quarter">
+          <GridCol>
             <p className="label margin-bottom-small">Current level</p>
             <strong>{currentIepLevel}</strong>
           </GridCol>
@@ -150,16 +114,29 @@ class IepChangeContainer extends Component {
   }
 }
 
+IepChangeContainer.defaultProps = {
+  currentIepLevel: '',
+  levels: [],
+}
+
 IepChangeContainer.propTypes = {
   offenderNo: PropTypes.string.isRequired,
-  currentIepLevel: PropTypes.string.isRequired,
+  currentIepLevel: PropTypes.string,
   offenderDetails: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,
-  userRoles: PropTypes.arrayOf([PropTypes.string]).isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  levels: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    })
+  ),
   handleError: PropTypes.func.isRequired,
   setIepHistoryResults: PropTypes.func.isRequired,
+  setPossibleIepLevels: PropTypes.func.isRequired,
   // history from Redux Router Route
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
@@ -175,10 +152,12 @@ const mapStateToProps = state => ({
   currentIepLevel: state.iepHistory.currentIepLevel,
   offenderDetails: state.offenderDetails,
   userRoles: state.app.user.roles,
+  levels: state.iepLevels.levels,
 })
 
 const mapDispatchToProps = {
   setIepHistoryResults,
+  setPossibleIepLevels,
 }
 
 export default connect(

@@ -1,5 +1,7 @@
 const elite2Api = {}
-const { getIepDetails, changeIepLevel } = require('../controllers/iepDetails').getIepDetailsFactory(elite2Api)
+const { getIepDetails, changeIepLevel, getPossibleLevels } = require('../controllers/iepDetails').getIepDetailsFactory(
+  elite2Api
+)
 
 function createIepDetailsReponse() {
   return {
@@ -327,5 +329,66 @@ describe('IEP details controller', async () => {
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
     expect(elite2Api.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
+  })
+
+  it('Should return the right IEP levels when current is Basic', () => {
+    const levels = getPossibleLevels({}, 'Basic')
+
+    expect(levels).toEqual([
+      {
+        title: 'Standard',
+        value: 'STD',
+        image: '/static/images/Green_arrow.png',
+      },
+      {
+        title: 'Enhanced',
+        value: 'ENH',
+        image: '/static/images/Double_green_arrow.png',
+      },
+    ])
+  })
+
+  it('Should return the right IEP levels when current is Standard', () => {
+    const levels = getPossibleLevels({}, 'Standard')
+
+    expect(levels).toEqual([
+      {
+        title: 'Basic',
+        value: 'BAS',
+        image: '/static/images/Red_arrow.png',
+      },
+      {
+        title: 'Enhanced',
+        value: 'ENH',
+        image: '/static/images/Green_arrow.png',
+      },
+    ])
+  })
+
+  it('Should return the right IEP levels when current is Enhanced', () => {
+    const levels = getPossibleLevels({}, 'Enhanced')
+
+    expect(levels).toEqual([
+      {
+        title: 'Basic',
+        value: 'BAS',
+        image: '/static/images/Double_red_arrow.png',
+      },
+      {
+        title: 'Standard',
+        value: 'STD',
+        image: '/static/images/Red_arrow.png',
+      },
+    ])
+  })
+
+  it('Should return the right IEP levels when current is Entry', () => {
+    const levels = getPossibleLevels({}, 'Entry')
+
+    expect(levels).toEqual([
+      { image: '/static/images/Green_arrow.png', title: 'Basic', value: 'BAS' },
+      { image: '/static/images/Double_green_arrow.png', title: 'Standard', value: 'STD' },
+      { image: '/static/images/TripleGreenArrow.png', title: 'Enhanced', value: 'ENH' },
+    ])
   })
 })

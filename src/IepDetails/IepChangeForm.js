@@ -68,11 +68,21 @@ export function IepChangeForm({ levels, cancelHandler, changeIepLevel }) {
   )
 }
 
+IepChangeForm.defaultProps = {
+  levels: [],
+}
+
 IepChangeForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   changeIepLevel: PropTypes.func.isRequired,
   // mapStateToProps
-  levels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  levels: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    })
+  ),
 }
 
 export default connect()(IepChangeForm)

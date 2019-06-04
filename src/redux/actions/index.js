@@ -152,6 +152,11 @@ export const setIepHistoryResults = results => ({
   results,
 })
 
+export const setPossibleIepLevels = levels => ({
+  type: ActionTypes.SET_POSSIBLE_IEP_LEVELS,
+  levels,
+})
+
 export const setIepHistoryFilter = fields => ({
   type: ActionTypes.SET_IEP_HISTORY_FILTER,
   fields,

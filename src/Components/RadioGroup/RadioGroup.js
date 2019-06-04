@@ -11,7 +11,7 @@ const RadioGroup = ({ label, hint, options, inline, input, meta }) => (
       <div key={o.value}>
         <Radio {...input} value={o.value} inline={inline} checked={o.value === input.value}>
           {o.title}
-          {o.image && <img src={o.image} style={{ width: '20px', height: '20px' }} alt="" />}
+          {o.image && <img src={o.image} style={{ width: '20px', height: '20px', margin: '0 0 0 10px' }} alt="" />}
         </Radio>
       </div>
     ))}

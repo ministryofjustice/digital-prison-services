@@ -49,6 +49,13 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const getPossibleLevels = asyncMiddleware(async (req, res) => {
+    console.log(req.query)
+    const { currentIepLevel } = req.query
+    const viewModel = await iepDetailsService.getPossibleLevels(res.locals, currentIepLevel)
+    res.json(viewModel)
+  })
+
   const postAttendance = asyncMiddleware(async (req, res) => {
     await attendanceService.postAttendance(res.locals, req.body)
     res.json({})
@@ -183,6 +190,7 @@ const factory = ({
     addBulkAppointments,
     bulkAppointmentsCsvTemplate,
     changeIepLevel,
+    getPossibleLevels,
   }
 }
 
