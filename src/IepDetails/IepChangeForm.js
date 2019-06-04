@@ -10,7 +10,7 @@ import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 import ErrorSummary from '@govuk-react/error-summary'
 import RadioGroup from '../Components/RadioGroup'
-import ButtonCancel from '../Components/PayOtherForm/elements/ButtonCancel'
+import ButtonCancel from '../ResultsActivity/elements/ButtonCancel'
 import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`

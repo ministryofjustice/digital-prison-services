@@ -30,11 +30,18 @@ class TestFixture {
         browser.to SearchPage
     }
 
-    private void stubForLogin(UserAccount currentUser) {
+    def loginAsMaintainIep(UserAccount user) {
+        currentUser = user
+        stubForLogin(currentUser, ['MAINTAIN_IEP'])
+
+        browser.to SearchPage
+    }
+
+    private void stubForLogin(UserAccount currentUser, def roles = ['ROLE']) {
         oauthApi.stubValidOAuthTokenLogin()
 
         oauthApi.stubGetMyDetails currentUser
-        oauthApi.stubGetMyRoles()
+        oauthApi.stubGetMyRoles(roles)
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
         elite2Api.stubActivityLocations()

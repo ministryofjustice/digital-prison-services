@@ -101,13 +101,25 @@ class IepChangeContainer extends Component {
   }
 
   render() {
-    const { offenderNo, handleError, setLoadedDispatch, currentIepLevel, offenderDetails } = this.props
+    const {
+      offenderNo,
+      handleError,
+      setLoadedDispatch,
+      currentIepLevel,
+      offenderDetails,
+      userRoles,
+      history,
+    } = this.props
 
     const levels = [
       { title: 'Basic', value: 'BAS', image: this.determineImage('Basic', currentIepLevel) },
       { title: 'Standard', value: 'STD', image: this.determineImage('Standard', currentIepLevel) },
       { title: 'Enhanced', value: 'ENH', image: this.determineImage('Enhanced', currentIepLevel) },
     ].filter(level => level.title !== currentIepLevel)
+
+    if (!userRoles.includes('MAINTAIN_IEP')) {
+      history.push(`/offenders/${offenderNo}/iep-details`)
+    }
 
     return (
       <OffenderPage
@@ -145,6 +157,7 @@ IepChangeContainer.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,
+  userRoles: PropTypes.arrayOf([PropTypes.string]).isRequired,
   handleError: PropTypes.func.isRequired,
   setIepHistoryResults: PropTypes.func.isRequired,
   // history from Redux Router Route
@@ -161,6 +174,7 @@ const mapStateToProps = state => ({
   error: state.app.error,
   currentIepLevel: state.iepHistory.currentIepLevel,
   offenderDetails: state.offenderDetails,
+  userRoles: state.app.user.roles,
 })
 
 const mapDispatchToProps = {

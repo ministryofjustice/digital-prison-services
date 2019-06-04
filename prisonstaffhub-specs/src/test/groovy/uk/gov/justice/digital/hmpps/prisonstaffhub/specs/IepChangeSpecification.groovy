@@ -4,13 +4,13 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepChangePage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
-class IepDetailsSpecification extends BrowserReportingSpec {
-
+class IepChangeSpecification extends BrowserReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -19,7 +19,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
-    def "should present iep history, no change IEP button without role"() {
+    def "should redirect to IEP details when no MAINTAIN_IEP role"() {
         def offenderDetails = [
                 bookingId: -3,
                 bookingNo: "A00113",
@@ -52,10 +52,11 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
-        when: "I view the IEP history page"
-        to IepDetails
+        when: "I view the IEP change page"
+        via IepChangePage
 
-        then: "I should be presented with results"
+        then: "I should be redirected to IEP details page"
+        at IepDetails
 
         breadcrumb == [['Home', NOTM_URL],
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
@@ -86,8 +87,8 @@ class IepDetailsSpecification extends BrowserReportingSpec {
 
         labels.size() == 3
         labels*.text() == ['Current IEP level',
-                          'Time since review',
-                          'Date of next review']
+                           'Time since review',
+                           'Date of next review']
 
         currentIepLevelData.size() == 3
         currentIepLevelData*.text() == ['Enhanced',
@@ -96,9 +97,10 @@ class IepDetailsSpecification extends BrowserReportingSpec {
 
 
         assert(!($('button[data-qa="change-iep"]').isDisplayed()))
+
     }
 
-    def "should present iep history with change IEP button"() {
+    def "should present the IEP change form page when role MAINTAIN_IEP"() {
         def offenderDetails = [
                 bookingId: -3,
                 bookingNo: "A00113",
@@ -131,11 +133,20 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         given: "I am logged in"
         fixture.loginAsMaintainIep(ITAG_USER)
 
-        when: "I view the IEP history page as a use with the MAINTAIN_IEP role"
-        to IepDetails
+        when: "I view the IEP change page"
+        to IepChangePage
 
-        then: "I should see the Change IEP button"
+        then: "I should be presented with the form"
 
-        assert(($('button[data-qa="change-iep"]').isDisplayed()))
+        breadcrumb == [['Home', NOTM_URL],
+                       ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
+                       ['IEP details', 'Change IEP']]
+
+        pageTitle == "Change IEP level"
+        formLabel == "Select new level"
+
+        assert(basicInput.isDisplayed())
+        assert(standardInput.isDisplayed())
+
     }
 }

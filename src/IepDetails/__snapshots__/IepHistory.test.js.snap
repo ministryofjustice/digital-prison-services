@@ -2,7 +2,7 @@
 
 exports[`IEP history should render the current IEP level correctly 1`] = `
 <div
-  className="current-iep sc-gZMcBi bZTBmE"
+  className="current-iep sc-VigVT dYPgUj"
 >
   <div
     className="sc-dnqmqq fhodxA"

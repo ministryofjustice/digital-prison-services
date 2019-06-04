@@ -156,13 +156,13 @@ class OauthApi extends WireMockRule {
                         ]))))
     }
 
-    void stubGetMyRoles() {
+    void stubGetMyRoles(roles) {
         this.stubFor(
                 get('/auth/api/user/me/roles')
                         .willReturn(
                         aResponse()
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(['ROLE']))))
+                                .withBody(JsonOutput.toJson(roles))))
     }
 }

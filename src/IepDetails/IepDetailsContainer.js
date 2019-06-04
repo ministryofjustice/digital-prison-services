@@ -71,7 +71,7 @@ class IepDetailsContainer extends Component {
   }
 
   render() {
-    const { offenderNo, handleError, setLoadedDispatch } = this.props
+    const { offenderNo, handleError, setLoadedDispatch, history } = this.props
     return (
       <OffenderPage
         title={({ firstName, lastName }) => `IEP details for ${firstName} ${lastName}`}
@@ -79,7 +79,7 @@ class IepDetailsContainer extends Component {
         offenderNumber={offenderNo}
         setLoaded={setLoadedDispatch}
       >
-        <CurrentIepLevel />
+        <CurrentIepLevel history={history} />
         <IepHistoryForm search={this.applyFilter} reset={this.reset} />
         <IepHistory />
       </OffenderPage>
