@@ -15,7 +15,7 @@ class LoginPage extends Page {
 
     static content = {
         errors { module(ErrorsModule) }
-        headingText { $('h1').text() }
+        headingText { $('h1').first().text() }
         signInButton{ $("input", type: 'submit') }
     }
 

@@ -11,7 +11,7 @@ class GlobalSearchPage extends Page {
     }
 
     static content = {
-        pageTitle { $('h1').text() }
+        pageTitle { $('h1').first().text() }
         headerTitle { $('.page-header .title').text() }
         tableRows(required: false) { $('tr') }
         nextPage(required: false) { $('#next-page')}
