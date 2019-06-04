@@ -12,7 +12,7 @@ class AdjudicationDetailPage extends Page {
     }
 
     static content = {
-        pageTitle { $('h1').text() }
+        pageTitle { $('h1').first().text() }
         headerTitle { $('.page-header .title').text() }
         breadcrumb { $('div[data-qa="breadcrumb"] li').children().collect { [it.text(), it.attr('href')] } }
         sections {$('h3').collect{it.text()}}
