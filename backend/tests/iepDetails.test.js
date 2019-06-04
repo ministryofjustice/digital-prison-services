@@ -338,12 +338,14 @@ describe('IEP details controller', async () => {
       {
         title: 'Standard',
         value: 'STD',
-        image: '/static/images/Green_arrow.png',
+        image: 'Green_arrow.png',
+        diff: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
-        image: '/static/images/Double_green_arrow.png',
+        image: 'Double_green_arrow.png',
+        diff: 2,
       },
     ])
   })
@@ -355,12 +357,14 @@ describe('IEP details controller', async () => {
       {
         title: 'Basic',
         value: 'BAS',
-        image: '/static/images/Red_arrow.png',
+        image: 'Red_arrow.png',
+        diff: -1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
-        image: '/static/images/Green_arrow.png',
+        image: 'Green_arrow.png',
+        diff: 1,
       },
     ])
   })
@@ -370,14 +374,16 @@ describe('IEP details controller', async () => {
 
     expect(levels).toEqual([
       {
-        title: 'Basic',
-        value: 'BAS',
-        image: '/static/images/Double_red_arrow.png',
-      },
-      {
         title: 'Standard',
         value: 'STD',
-        image: '/static/images/Red_arrow.png',
+        image: 'Red_arrow.png',
+        diff: -1,
+      },
+      {
+        title: 'Basic',
+        value: 'BAS',
+        image: 'Double_red_arrow.png',
+        diff: -2,
       },
     ])
   })
@@ -386,9 +392,9 @@ describe('IEP details controller', async () => {
     const levels = getPossibleLevels({}, 'Entry')
 
     expect(levels).toEqual([
-      { image: '/static/images/Green_arrow.png', title: 'Basic', value: 'BAS' },
-      { image: '/static/images/Double_green_arrow.png', title: 'Standard', value: 'STD' },
-      { image: '/static/images/TripleGreenArrow.png', title: 'Enhanced', value: 'ENH' },
+      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', diff: 1 },
+      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', diff: 2 },
+      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', diff: 3 },
     ])
   })
 })

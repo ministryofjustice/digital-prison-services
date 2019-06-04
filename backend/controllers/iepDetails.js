@@ -74,36 +74,57 @@ const getIepDetailsFactory = elite2Api => {
     }
   }
 
-  const oneLevelUp = (option, current) =>
-    (current === 'Basic' && option === 'Standard') ||
-    (current === 'Entry' && option === 'Basic') ||
-    (current === 'Standard' && option === 'Enhanced')
-
-  const twoLevelsUp = (option, current) =>
-    (current === 'Basic' && option === 'Enhanced') || (current === 'Entry' && option === 'Standard')
-
-  const threeLevelsUp = (option, current) => current === 'Entry' && option === 'Enhanced'
-
-  const oneLevelDown = (option, current) =>
-    (current === 'Standard' && option === 'Basic') || (current === 'Enhanced' && option === 'Standard')
-
-  const twoLevelsDown = (option, current) => current === 'Enhanced' && option === 'Basic'
-
-  const determineIcon = (option, current) => {
-    if (oneLevelUp(option, current)) return '/static/images/Green_arrow.png'
-    if (twoLevelsUp(option, current)) return '/static/images/Double_green_arrow.png'
-    if (threeLevelsUp(option, current)) return '/static/images/TripleGreenArrow.png'
-    if (oneLevelDown(option, current)) return '/static/images/Red_arrow.png'
-    if (twoLevelsDown(option, current)) return '/static/images/Double_red_arrow.png'
-    return ''
+  const iconForDifference = {
+    '1': 'Green_arrow.png',
+    '2': 'Double_green_arrow.png',
+    '3': 'TripleGreenArrow.png',
+    '-1': 'Red_arrow.png',
+    '-2': 'Double_red_arrow.png',
   }
 
-  const getPossibleLevels = (context, currentIepLevel) =>
-    [
-      { title: 'Basic', value: 'BAS', image: determineIcon('Basic', currentIepLevel) },
-      { title: 'Standard', value: 'STD', image: determineIcon('Standard', currentIepLevel) },
-      { title: 'Enhanced', value: 'ENH', image: determineIcon('Enhanced', currentIepLevel) },
-    ].filter(level => level.title !== currentIepLevel)
+  const levelToIntMap = {
+    Entry: 1,
+    Basic: 2,
+    Standard: 3,
+    Enhanced: 4,
+  }
+
+  const getPossibleLevels = (context, currentIepLevel) => {
+    // TODO: Get these from the database as agencies could have entered their own
+    const levels = [
+      {
+        title: 'Basic',
+        value: 'BAS',
+      },
+      {
+        title: 'Standard',
+        value: 'STD',
+      },
+      {
+        title: 'Enhanced',
+        value: 'ENH',
+      },
+    ]
+
+    return levels
+      .filter(level => level.title !== currentIepLevel)
+      .map(level => {
+        let diff
+        if (levelToIntMap[level.title] && levelToIntMap[currentIepLevel]) {
+          diff = levelToIntMap[level.title] - levelToIntMap[currentIepLevel]
+        } else {
+          // This is a custom level for which we do not have an icon. Always show it last.
+          diff = 1000
+        }
+        return {
+          title: level.title,
+          value: level.value,
+          image: iconForDifference[diff.toString()] ? iconForDifference[diff.toString()] : '',
+          diff,
+        }
+      })
+      .sort((a, b) => (Math.abs(a.diff) > Math.abs(b.diff) ? 1 : -1))
+  }
 
   const changeIepLevel = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
