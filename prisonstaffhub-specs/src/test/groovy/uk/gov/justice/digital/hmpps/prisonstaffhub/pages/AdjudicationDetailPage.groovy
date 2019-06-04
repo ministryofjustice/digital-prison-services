@@ -4,10 +4,10 @@ import geb.Page
 
 class AdjudicationDetailPage extends Page {
 
-    static url = "/offenders/AA00112/adjudications/123456"
+    String adjudicationNumber
 
     static at = {
-        pageTitle == 'Adjudication 123456 details'
+        pageTitle == "Adjudication ${adjudicationNumber} details"
         headerTitle == 'Digital Prison Services'
     }
 
@@ -18,3 +18,5 @@ class AdjudicationDetailPage extends Page {
         sections {$('h3').collect{it.text()}}
     }
 }
+
+

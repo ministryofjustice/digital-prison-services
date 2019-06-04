@@ -130,15 +130,19 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
     def "can view adjudication details"() {
 
-        elite2api.stubAdjudicationDetails('AA00112', "123456", AdjudicationResponses.detail)
+        elite2api.stubAdjudicationDetails('AA00112', "1492249", AdjudicationResponses.detail)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
         when: "I do view an individual adjudication"
-        to AdjudicationDetailPage
+        to AdjudicationHistoryPage
+
+        clickAdjudicationDetail('1492249')
 
         then: "I can see the details"
+        at new AdjudicationDetailPage(adjudicationNumber: '1492249')
+
         breadcrumb == [['Home', NOTM_URL],
                        ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
                        ['Adjudications', 'http://localhost:3006/offenders/AA00112/adjudications'],

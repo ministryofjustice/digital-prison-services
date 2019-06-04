@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Adjudication History Table should render correctly 1`] = `
+exports[`Adjudication History Table should render correctly with feature toggle disabled 1`] = `
 Array [
   <div
     className="sc-jzJRlG lmnqDl"
@@ -266,6 +266,363 @@ Array [
             className="sc-bxivhb jMmQxS"
           >
             3333333
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            01/03/2017
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            --
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>,
+  <div>
+    <nav
+      className="sc-htoDjs kGbKV"
+    >
+      <ul
+        className="sc-dnqmqq gfICuL"
+      >
+        <li
+          className="sc-iwsKbI dBJiGn"
+        />
+        <li
+          className="sc-gqjmRU fcaAIL"
+          id="next-page"
+          onClick={[Function]}
+          role="button"
+        >
+          <div
+            className="sc-gZMcBi ckrsaC"
+          >
+            Next
+            <span
+              className="sc-VigVT fTVswn"
+            >
+              page
+            </span>
+            <span
+              className="sc-jTzLTM gFPDJc"
+            >
+              2
+               of 
+              5
+            </span>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>,
+]
+`;
+
+exports[`Adjudication History Table should render correctly with feature toggle enabled 1`] = `
+Array [
+  <div
+    className="sc-jzJRlG lmnqDl"
+  >
+    <div
+      className="sc-fjdhpX iqqeZF"
+    >
+      1
+       - 
+      20
+       of
+       
+      100
+       results
+    </div>
+    <div
+      className="sc-kpOJdX gBCKOX"
+    >
+      <label
+        htmlFor="perPage"
+      >
+        <span
+          className="sc-cSHVUG kfwhPi"
+        >
+          Results per page
+        </span>
+      </label>
+      <select
+        className="sc-kGXeez dJFLNq"
+        id="perPage"
+        onChange={[Function]}
+        value={20}
+      >
+        <option
+          value="10"
+        >
+          10
+        </option>
+        <option
+          value="20"
+        >
+          20
+        </option>
+        <option
+          value="50"
+        >
+          50
+        </option>
+        <option
+          value={100}
+        >
+          All
+        </option>
+      </select>
+    </div>
+  </div>,
+  <div
+    className="sc-gzVnrw gIvEvv"
+  >
+    <table
+      className="results sc-EHOje kCMYgv"
+    >
+      <thead
+        className="sc-bdVaJa bDWFJH"
+      >
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <th
+            className="sc-bxivhb jXRJcT"
+          >
+            Adjudication number
+          </th>
+          <th
+            className="sc-bxivhb crGQu"
+          >
+            Report date and time
+          </th>
+          <th
+            className="sc-bxivhb kJKBjd"
+          >
+            Establishment
+          </th>
+          <th
+            className="sc-bxivhb gMJBBW"
+          >
+            Offence description
+          </th>
+          <th
+            className="sc-bxivhb jXRJcT"
+          >
+            Finding
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="sc-bwzfXH uTxCW"
+      >
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            <a
+              className="link"
+              href="/offenders/AAA123/adjudications/1111111"
+              onClick={[Function]}
+            >
+              1111111
+            </a>
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            12/03/2018 12:20
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Moorland
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Arson
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Guilty
+          </td>
+        </tr>
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            <a
+              className="link"
+              href="/offenders/AAA123/adjudications/2222222"
+              onClick={[Function]}
+            >
+              2222222
+            </a>
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            17/02/2017 10:20
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Leeds
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Assault
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+             Not Guilty
+          </td>
+        </tr>
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            <a
+              className="link"
+              href="/offenders/AAA123/adjudications/3333333"
+              onClick={[Function]}
+            >
+              3333333
+            </a>
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            01/03/2017 04:20
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Moorland
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Theft
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            --
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>,
+  <div
+    className="sc-bZQynM iVQEAa"
+  >
+    <table
+      className="results sc-EHOje kCMYgv"
+    >
+      <thead
+        className="sc-bdVaJa bDWFJH"
+      >
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Adjudication Number
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Report date
+          </th>
+          <th
+            className="sc-bxivhb kZbmwT"
+          >
+            Finding
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="sc-bwzfXH uTxCW"
+      >
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            <a
+              className="link"
+              href="/offenders/AAA123/adjudications/1111111"
+              onClick={[Function]}
+            >
+              1111111
+            </a>
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            12/03/2018
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            Guilty
+          </td>
+        </tr>
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            <a
+              className="link"
+              href="/offenders/AAA123/adjudications/2222222"
+              onClick={[Function]}
+            >
+              2222222
+            </a>
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            17/02/2017
+          </td>
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+             Not Guilty
+          </td>
+        </tr>
+        <tr
+          className="sc-ifAKCX cFlEyZ"
+        >
+          <td
+            className="sc-bxivhb jMmQxS"
+          >
+            <a
+              className="link"
+              href="/offenders/AAA123/adjudications/3333333"
+              onClick={[Function]}
+            >
+              3333333
+            </a>
           </td>
           <td
             className="sc-bxivhb jMmQxS"
