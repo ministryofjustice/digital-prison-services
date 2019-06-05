@@ -39,7 +39,7 @@ CurrentIepLevel.propTypes = {
   level: PropTypes.string,
   days: PropTypes.string,
   nextReviewDate: PropTypes.string,
-  userRoles: PropTypes.arrayOf([PropTypes.string]).isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,

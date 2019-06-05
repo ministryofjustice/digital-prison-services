@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { notify } from 'react-notify-toast'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import { setIepHistoryResults, setPossibleIepLevels } from '../redux/actions'
@@ -51,22 +52,24 @@ class IepChangeContainer extends Component {
   }
 
   changeIepLevel = async values => {
-    const { offenderNo, handleError, history } = this.props
+    const { offenderNo, handleError, levels, history } = this.props
+    const level = levels.find(l => l.value === values.level)
 
     try {
       await axios.post(`/api/offenders/${offenderNo}/change-iep-level`, {
         iepLevel: values.level,
         comment: values.reason,
       })
-      history.push(`/offenders/${offenderNo}/iep-details`)
+      history.goBack()
+      notify.show(`IEP Level successfully changed to ${level.title}`, 'success')
     } catch (error) {
       handleError(error)
     }
   }
 
   cancel = () => {
-    const { offenderNo, history } = this.props
-    history.push(`/offenders/${offenderNo}/iep-details`)
+    const { history } = this.props
+    history.goBack()
   }
 
   render() {

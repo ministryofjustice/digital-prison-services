@@ -3,6 +3,7 @@ import moment from 'moment'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
 import { Header, FooterContainer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
@@ -486,6 +487,7 @@ class App extends React.Component {
       <Router>
         <div className="content">
           <ScrollToTop>
+            <Notifications />
             <Route
               render={({ location, history }) => {
                 if (config && config.googleAnalyticsId) {
