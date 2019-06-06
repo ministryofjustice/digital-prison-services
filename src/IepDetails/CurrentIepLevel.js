@@ -5,6 +5,7 @@ import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import Button from '@govuk-react/button'
 import { BLUE } from 'govuk-colours'
+import { Flag } from '../flags'
 import CurrentIepLevelArea from './IepDetails.styles'
 
 const CurrentIepLevel = ({ level, days, nextReviewDate, userRoles, history }) => (
@@ -23,13 +24,19 @@ const CurrentIepLevel = ({ level, days, nextReviewDate, userRoles, history }) =>
         <p>{nextReviewDate}</p>
       </GridCol>
       {userRoles.includes('MAINTAIN_IEP') && (
-        <GridCol setWidth="one-quarter">
-          <div>
-            <Button buttonColour={BLUE} onClick={() => history.push(`iep-details/change-iep`)} data-qa="change-iep">
-              Change IEP level
-            </Button>
-          </div>
-        </GridCol>
+        <Flag
+          name={['iepChangeLinkEnabled']}
+          render={() => (
+            <GridCol setWidth="one-quarter">
+              <div>
+                <Button buttonColour={BLUE} onClick={() => history.push(`iep-details/change-iep`)} data-qa="change-iep">
+                  Change IEP level
+                </Button>
+              </div>
+            </GridCol>
+          )}
+          fallbackRender={() => <></>}
+        />
       )}
     </GridRow>
   </CurrentIepLevelArea>
