@@ -44,10 +44,30 @@ class IepChangeSpecification extends BrowserReportingSpec {
                 lastName: "Member"
         ]
 
+        def iepLevels = [
+                [
+                        iepLevel: "BAS",
+                        iepDescription: "Basic"
+                ],
+                [
+                        iepLevel: "STD",
+                        iepDescription: "Standard"
+                ],
+                [
+                        iepLevel: "ENH",
+                        iepDescription: "Enhanced"
+                ],
+                [
+                        iepLevel: "ENT",
+                        iepDescription: "Entry"
+                ],
+        ]
+
         elite2api.stubOffenderDetails('A1234AC', offenderDetails)
         elite2api.stubAgencyDetails('LEI', agencyDetails)
         elite2api.stubUserDetails('ITAG_USER', userDetails)
         elite2api.stubGetIepSummaryWithDetails('-3')
+        elite2api.stubGetAgencyIepLevels('LEI', iepLevels)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
@@ -125,10 +145,30 @@ class IepChangeSpecification extends BrowserReportingSpec {
                 lastName: "Member"
         ]
 
+        def iepLevels = [
+                [
+                    iepLevel: "BAS",
+                    iepDescription: "Basic"
+                ],
+                [
+                    iepLevel: "STD",
+                    iepDescription: "Standard"
+                ],
+                [
+                    iepLevel: "ENH",
+                    iepDescription: "Enhanced"
+                ],
+                [
+                    iepLevel: "ENT",
+                    iepDescription: "Entry"
+                ],
+        ]
+
         elite2api.stubOffenderDetails('A1234AC', offenderDetails)
         elite2api.stubAgencyDetails('LEI', agencyDetails)
         elite2api.stubUserDetails('ITAG_USER', userDetails)
         elite2api.stubGetIepSummaryWithDetails('-3')
+        elite2api.stubGetAgencyIepLevels('LEI', iepLevels)
 
         given: "I am logged in"
         fixture.loginAsMaintainIep(ITAG_USER)

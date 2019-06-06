@@ -50,9 +50,8 @@ const factory = ({
   })
 
   const getPossibleLevels = asyncMiddleware(async (req, res) => {
-    console.log(req.query)
-    const { currentIepLevel } = req.query
-    const viewModel = await iepDetailsService.getPossibleLevels(res.locals, currentIepLevel)
+    const { currentIepLevel, agencyId } = req.query
+    const viewModel = await iepDetailsService.getPossibleLevels(res.locals, currentIepLevel, agencyId)
     res.json(viewModel)
   })
 

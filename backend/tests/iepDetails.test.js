@@ -55,6 +55,7 @@ beforeEach(() => {
   elite2Api.getAgencyDetails = jest.fn()
   elite2Api.getStaffDetails = jest.fn()
   elite2Api.changeIepLevel = jest.fn()
+  elite2Api.getAgencyIepLevels = jest.fn()
 })
 
 describe('IEP details controller', async () => {
@@ -112,6 +113,12 @@ describe('IEP details controller', async () => {
         },
       ],
     })
+    elite2Api.getAgencyIepLevels.mockReturnValue([
+      { iepLevel: 'ENT', iepDescription: 'Entry' },
+      { iepLevel: 'BAS', iepDescription: 'Basic' },
+      { iepLevel: 'STD', iepDescription: 'Standard' },
+      { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+    ])
   })
   it('Should return the IEP history for offender', async () => {
     const response = await getIepDetails({}, '1', {})
@@ -331,8 +338,8 @@ describe('IEP details controller', async () => {
     expect(elite2Api.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
   })
 
-  it('Should return the right IEP levels when current is Basic', () => {
-    const levels = getPossibleLevels({}, 'Basic')
+  it('Should return the right IEP levels when current is Basic', async () => {
+    const levels = await getPossibleLevels({}, 'Basic', 'HEI')
 
     expect(levels).toEqual([
       {
@@ -350,8 +357,8 @@ describe('IEP details controller', async () => {
     ])
   })
 
-  it('Should return the right IEP levels when current is Standard', () => {
-    const levels = getPossibleLevels({}, 'Standard')
+  it('Should return the right IEP levels when current is Standard', async () => {
+    const levels = await getPossibleLevels({}, 'Standard', 'HEI')
 
     expect(levels).toEqual([
       {
@@ -369,8 +376,8 @@ describe('IEP details controller', async () => {
     ])
   })
 
-  it('Should return the right IEP levels when current is Enhanced', () => {
-    const levels = getPossibleLevels({}, 'Enhanced')
+  it('Should return the right IEP levels when current is Enhanced', async () => {
+    const levels = await getPossibleLevels({}, 'Enhanced', 'HEI')
 
     expect(levels).toEqual([
       {
@@ -388,8 +395,8 @@ describe('IEP details controller', async () => {
     ])
   })
 
-  it('Should return the right IEP levels when current is Entry', () => {
-    const levels = getPossibleLevels({}, 'Entry')
+  it('Should return the right IEP levels when current is Entry', async () => {
+    const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([
       { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', diff: 1 },

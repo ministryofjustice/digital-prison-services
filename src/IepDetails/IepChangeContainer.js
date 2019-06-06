@@ -25,6 +25,7 @@ class IepChangeContainer extends Component {
   getIepDetails = async () => {
     const {
       offenderNo,
+      activeCaseLoadId,
       handleError,
       resetErrorDispatch,
       setLoadedDispatch,
@@ -32,6 +33,7 @@ class IepChangeContainer extends Component {
       setPossibleIepLevels: setLevels,
     } = this.props
 
+    console.log(activeCaseLoadId)
     resetErrorDispatch()
     setLoadedDispatch(false)
 
@@ -41,7 +43,7 @@ class IepChangeContainer extends Component {
       setResults({ ...results })
 
       const { data: levels } = await axios.get(`/api/iep-levels`, {
-        params: { currentIepLevel: results.currentIepLevel },
+        params: { currentIepLevel: results.currentIepLevel, agencyId: activeCaseLoadId },
       })
       setLevels(levels)
     } catch (error) {
@@ -155,6 +157,7 @@ const mapStateToProps = state => ({
   currentIepLevel: state.iepHistory.currentIepLevel,
   offenderDetails: state.offenderDetails,
   userRoles: state.app.user.roles,
+  activeCaseLoadId: state.app.user.activeCaseLoadId,
   levels: state.iepLevels.levels,
 })
 

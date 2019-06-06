@@ -89,36 +89,23 @@ const getIepDetailsFactory = elite2Api => {
     Enhanced: 4,
   }
 
-  const getPossibleLevels = (context, currentIepLevel) => {
-    // TODO: Get these from the database as agencies could have entered their own
-    const levels = [
-      {
-        title: 'Basic',
-        value: 'BAS',
-      },
-      {
-        title: 'Standard',
-        value: 'STD',
-      },
-      {
-        title: 'Enhanced',
-        value: 'ENH',
-      },
-    ]
+  const getPossibleLevels = async (context, currentIepLevel, agencyId) => {
+    const levels = await elite2Api.getAgencyIepLevels(context, agencyId)
 
     return levels
-      .filter(level => level.title !== currentIepLevel)
+      .filter(level => level.iepDescription !== currentIepLevel)
+      .filter(level => level.iepDescription !== 'Entry')
       .map(level => {
         let diff
-        if (levelToIntMap[level.title] && levelToIntMap[currentIepLevel]) {
-          diff = levelToIntMap[level.title] - levelToIntMap[currentIepLevel]
+        if (levelToIntMap[level.iepDescription] && levelToIntMap[currentIepLevel]) {
+          diff = levelToIntMap[level.iepDescription] - levelToIntMap[currentIepLevel]
         } else {
           // This is a custom level for which we do not have an icon. Always show it last.
           diff = 1000
         }
         return {
-          title: level.title,
-          value: level.value,
+          title: level.iepDescription,
+          value: level.iepLevel,
           image: iconForDifference[diff.toString()] ? iconForDifference[diff.toString()] : '',
           diff,
         }
