@@ -45,6 +45,7 @@
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
+    "enzyme-to-json": "^3.3.5",
     "express": "^4.16.3",
     "express-form-data": "^2.0.7",
     "final-form": "^4.11.0",
@@ -62,7 +63,7 @@
     "moment": "^2.24.0",
     "moment-business-days": "^1.1.3",
     "moment-timezone": "^0.5.21",
-    "new-nomis-shared-components": "^1.12.0",
+    "new-nomis-shared-components": "^1.14.0",
     "passport": "^0.4.0",
     "passport-oauth2": "^1.4.0",
     "path-to-regexp": "^2.4.0",
@@ -145,7 +146,7 @@
   },
   "scripts": {
     "start": "node $NODE_DEBUG_OPTION backend/index.js",
-    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ node $NODE_DEBUG_OPTION backend/index.js",
+    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ ATTENDANCE_DETAIL_LINK_ENABLED=true node $NODE_DEBUG_OPTION backend/index.js",
     "build": "webpack --mode=production",
     "build:analyse": "BUNDLE_ANALYSE=true yarn build",
     "test": "jest --env=jsdom",
@@ -164,6 +165,7 @@
       "<rootDir>/config/polyfills.js"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setupTests.js",
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/(src|backend)/**/?(*.)(spec|test).{js,jsx,mjs}"

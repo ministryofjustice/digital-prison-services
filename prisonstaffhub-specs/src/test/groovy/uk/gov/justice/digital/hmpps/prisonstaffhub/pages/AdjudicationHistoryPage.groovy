@@ -12,7 +12,7 @@ class AdjudicationHistoryPage extends Page {
     }
 
     static content = {
-        pageTitle { $('h1').text() }
+        pageTitle { $('h1').first().text() }
         headerTitle { $('.page-header .title').text() }
         breadcrumb {$('div[data-qa="breadcrumb"] li').children().collect{[it.text(), it.attr('href')]}}
         tableRows(required: false) { $('.results tr').findAll{ it.displayed}  }
@@ -31,6 +31,12 @@ class AdjudicationHistoryPage extends Page {
         toDateYearBox { value -> $("#to-date .rdtYears td[data-value='${value}']") }
         toDateMonthBox { value -> $("#to-date .rdtMonths td[data-value='${value}']") }
         toDateDayBox { value -> $("#to-date td.rdtDay:not(.rdtOld):not(.rdtNew)[data-value='${value}']") }
+
+        detailLink { adjudicationNo -> $("a.link", text: contains(adjudicationNo)).findAll{it.displayed} }
+    }
+
+    void clickAdjudicationDetail(adjudicationNo) {
+        detailLink(adjudicationNo).click()
     }
 
     void setFromDate(year, month, day) {

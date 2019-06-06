@@ -13,7 +13,7 @@ class ActivityPage extends DatePickerPage {
     }
 
     static content = {
-        activityTitle { $('h1').text() }
+        activityTitle { $('h1').first().text() }
         header(required: false) { module(HeaderModule) }
         period { $('#period-select') }
         sortSelect { $('#sort-select') }

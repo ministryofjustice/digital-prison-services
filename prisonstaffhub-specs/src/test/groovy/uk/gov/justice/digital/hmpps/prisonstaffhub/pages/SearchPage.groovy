@@ -13,7 +13,7 @@ class SearchPage extends DatePickerPage {
     }
 
     static content = {
-        headingText { $('h1').text() }
+        headingText { $('h1').first().text() }
         header(required: false) { module(HeaderModule) }
         validationMessage(required: false) { $('#validation-message') }
         location { $('#housing-location-select') }

@@ -13,7 +13,7 @@ class AddBulkAppointmentsPage extends Page {
     }
 
     static content = {
-        pageTitle { $('h1').text() }
+        pageTitle { $('h1').first().text() }
         header(required: false) { module(HeaderModule) }
         form { $('form')}
         appointmentTypesLoaded { $(name: 'appointmentType').find('option').size() > 1 }
