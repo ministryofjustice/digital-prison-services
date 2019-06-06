@@ -140,13 +140,15 @@ class IepChangeSpecification extends BrowserReportingSpec {
 
         breadcrumb == [['Home', NOTM_URL],
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
-                       ['IEP details', 'Change IEP']]
+                       ['IEP details', 'http://localhost:3006/offenders/A1234AC/iep-details'],
+                       ['Change IEP', '']]
 
         pageTitle == "Change IEP level"
         formLabel == "Select new level"
 
-        assert(basicInput.isDisplayed())
-        assert(standardInput.isDisplayed())
+        waitFor { basicInput }
+        waitFor { standardInput }
+        waitFor { reasonInput }
 
     }
 }

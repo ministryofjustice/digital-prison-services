@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 import geb.Browser
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.AccessRoles
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -32,7 +33,7 @@ class TestFixture {
 
     def loginAsMaintainIep(UserAccount user) {
         currentUser = user
-        stubForLogin(currentUser, ['MAINTAIN_IEP'])
+        stubForLogin(currentUser, [AccessRoles.maintain_iep])
 
         browser.to SearchPage
     }
