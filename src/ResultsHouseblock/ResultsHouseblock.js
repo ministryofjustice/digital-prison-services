@@ -5,6 +5,7 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
+import styled from 'styled-components'
 import { getHoursMinutes, isTodayOrAfter, getMainEventDescription, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -15,6 +16,17 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
+import TotalResults from '../Components/ResultsTable/elements/TotalResults'
+
+const ManageResults = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  @media print {
+    justify-content: flex-end;
+  }
+`
 
 class ResultsHouseblock extends Component {
   olderThan7Days = () => {
@@ -245,13 +257,16 @@ class ResultsHouseblock extends Component {
           </div>
           <hr />
           {buttons}
+        </form>
+        <ManageResults>
           <SortLov
             sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
             sortColumn={orderField}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
           />
-        </form>
+          <TotalResults totalResults={houseblockData.length} />
+        </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
@@ -260,7 +275,7 @@ class ResultsHouseblock extends Component {
           {!offenders || offenders.length === 0 ? (
             <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
           ) : (
-            <div className="padding-top"> {buttons} </div>
+            <div className="padding-top">{buttons}</div>
           )}
         </div>
       </div>

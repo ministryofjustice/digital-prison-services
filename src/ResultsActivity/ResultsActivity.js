@@ -5,6 +5,7 @@ import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import axios from 'axios'
+import styled from 'styled-components'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -17,6 +18,17 @@ import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import PayOptions from './elements/PayOptions'
 import ModalContainer from '../Components/ModalContainer'
+import TotalResults from '../Components/ResultsTable/elements/TotalResults'
+
+const ManageResults = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  @media print {
+    justify-content: flex-end;
+  }
+`
 
 class ResultsActivity extends Component {
   static eventCancelled(event) {
@@ -278,13 +290,17 @@ class ResultsActivity extends Component {
           </div>
           <hr />
           {buttons}
+        </form>
+        <ManageResults>
           <SortLov
             sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
             sortColumn={orderField}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
           />
-        </form>
+
+          <TotalResults totalResults={activityData.length} />
+        </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
             <thead>{headings()}</thead>
@@ -293,7 +309,7 @@ class ResultsActivity extends Component {
           {!offenders || offenders.length === 0 ? (
             <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
           ) : (
-            <div className="padding-top"> {buttons} </div>
+            <div className="padding-top">{buttons}</div>
           )}
         </div>
       </div>
