@@ -430,6 +430,7 @@ class App extends React.Component {
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
               />
             )}

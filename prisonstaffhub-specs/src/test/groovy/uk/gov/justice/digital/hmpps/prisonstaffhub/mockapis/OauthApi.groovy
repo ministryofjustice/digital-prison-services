@@ -156,7 +156,7 @@ class OauthApi extends WireMockRule {
                         ]))))
     }
 
-    void stubGetMyRoles(roles) {
+    void stubGetMyRoles(def roles = ['ROLE']) {
         this.stubFor(
                 get('/auth/api/user/me/roles')
                         .willReturn(

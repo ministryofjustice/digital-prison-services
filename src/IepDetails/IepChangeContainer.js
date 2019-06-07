@@ -8,6 +8,7 @@ import GridCol from '@govuk-react/grid-col'
 import { setIepHistoryResults, setPossibleIepLevels } from '../redux/actions'
 import OffenderPage from '../OffenderPage/OffenderPage'
 import IepChangeForm from './IepChangeForm'
+import { ChangeAbandonment, LevelSelected } from './IepChangeGaEvents'
 
 class IepChangeContainer extends Component {
   componentDidMount() {
@@ -33,7 +34,6 @@ class IepChangeContainer extends Component {
       setPossibleIepLevels: setLevels,
     } = this.props
 
-    console.log(activeCaseLoadId)
     resetErrorDispatch()
     setLoadedDispatch(false)
 
@@ -54,7 +54,7 @@ class IepChangeContainer extends Component {
   }
 
   changeIepLevel = async values => {
-    const { offenderNo, handleError, levels, history } = this.props
+    const { offenderNo, handleError, levels, history, raiseAnalyticsEvent } = this.props
     const level = levels.find(l => l.value === values.level)
 
     try {
@@ -62,6 +62,7 @@ class IepChangeContainer extends Component {
         iepLevel: values.level,
         comment: values.reason,
       })
+      raiseAnalyticsEvent(LevelSelected(level.title, values.reason))
       history.goBack()
       notify.show(`IEP Level successfully changed to ${level.title}`, 'success')
     } catch (error) {
@@ -70,7 +71,8 @@ class IepChangeContainer extends Component {
   }
 
   cancel = () => {
-    const { history } = this.props
+    const { raiseAnalyticsEvent, history } = this.props
+    raiseAnalyticsEvent(ChangeAbandonment())
     history.goBack()
   }
 
@@ -142,6 +144,7 @@ IepChangeContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
   setIepHistoryResults: PropTypes.func.isRequired,
   setPossibleIepLevels: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
   // history from Redux Router Route
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,

@@ -10,7 +10,7 @@ import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 import ErrorSummary from '@govuk-react/error-summary'
 import RadioGroup from '../Components/RadioGroup'
-import ButtonCancel from '../ResultsActivity/elements/ButtonCancel'
+import ButtonCancel from './elements/ButtonCancel'
 import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`
@@ -50,7 +50,13 @@ export function IepChangeForm({ levels, cancelHandler, changeIepLevel }) {
           <Fieldset>
             <Fieldset.Legend>Select new level</Fieldset.Legend>
             <FieldWithError name="level" errors={errors} component={RadioGroup} options={levels} inline />
-            <FieldWithError errors={errors} name="reason" component={TextArea} hint="Maximum 240 characters">
+            <FieldWithError
+              errors={errors}
+              name="reason"
+              component={TextArea}
+              className="width70"
+              hint="Maximum 240 characters"
+            >
               Reason for change
             </FieldWithError>
           </Fieldset>
