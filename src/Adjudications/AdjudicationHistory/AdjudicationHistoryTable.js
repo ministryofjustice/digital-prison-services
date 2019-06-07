@@ -123,10 +123,6 @@ AdjudicationHistoryTable.propTypes = {
   changePage: PropTypes.func.isRequired,
 }
 
-AdjudicationHistoryTable.defaultProps = {
-  offenderNo: null,
-}
-
 const mapStateToProps = state => ({
   results: state.adjudicationHistory.results,
   totalRecords: state.adjudicationHistory.totalRecords,

@@ -259,7 +259,7 @@ AppointmentDetailsForm.propTypes = {
   onSuccess: PropTypes.func.isRequired,
   error: PropTypes.string,
   now: PropTypes.instanceOf(moment).isRequired,
-  initialValues: PropTypes.shape(PropTypes.object),
+  initialValues: PropTypes.shape({}),
   onCancel: PropTypes.func.isRequired,
 }
 
