@@ -136,36 +136,34 @@ const mockHistory = {
   replace: jest.fn(),
 }
 
+const props = {
+  history: mockHistory,
+  activities,
+  activity,
+  handlePrint: jest.fn(),
+  handlePeriodChange: jest.fn(),
+  handleDateChange: jest.fn(),
+  getActivityList: jest.fn(),
+  handleError: jest.fn(),
+  setOffenderAttendanceData: jest.fn(),
+  resetErrorDispatch: jest.fn(),
+  setColumnSort: jest.fn(),
+  showPaymentReasonModal: jest.fn(),
+  updateAttendanceEnabled: false,
+  payable: true,
+  orderField: 'lastName',
+  sortOrder: 'ASC',
+  agencyId: PRISON,
+  user,
+}
+
 describe('Offender activity list results component', () => {
   it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days')
     const date = aFewDaysAgo.format('DD/MM/YYYY')
     const longDateFormat = aFewDaysAgo.format('dddd Do MMMM')
 
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        handlePrint={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        date={date}
-        period="ED"
-        agencyId={PRISON}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
+    const component = shallow(<ResultsActivity {...props} activityData={response} date={date} period="ED" />)
     expect(component.find('.whereabouts-date').text()).toEqual(`${longDateFormat} - ED`)
 
     // Dig into the DatePicker component
@@ -224,26 +222,6 @@ describe('Offender activity list results component', () => {
         .at(2)
         .text()
     ).toEqual('11:40 - Medical - Dentist - Appt details')
-    // Reinstate with checkboxes in V2
-    // expect(
-    //   row1Tds
-    //     .at(ATTEND_COLUMN)
-    //     .find('input')
-    //     .some('[type="checkbox"]')
-    // ).toEqual(true)
-    // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
-    // expect(
-    //   row1Tds
-    //     .at(ATTEND_COLUMN)
-    //     .find('input')
-    //     .debug()
-    // ).toEqual(expect.stringContaining('disabled={false}'))
-    // expect(
-    //   row1Tds
-    //     .at(DONT_ATTEND_COLUMN)
-    //     .find('input')
-    //     .some('[type="checkbox"]')
-    // ).toEqual(true)
 
     const row2Tds = tr.at(2).find('td')
     expect(
@@ -308,140 +286,39 @@ describe('Offender activity list results component', () => {
   })
 
   it('should render empty results list correctly', async () => {
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={[]}
-        handlePrint={jest.fn()}
-        // handleLocationChange={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        period="PM"
-        agencyId={PRISON}
-        user={user}
-        date=""
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
+    const component = shallow(<ResultsActivity {...props} activityData={[]} period="PM" date="" />)
     const tr = component.find('tr')
     expect(tr.length).toEqual(1) // table header tr only
     expect(component.find('div.font-small').text()).toEqual('No prisoners found')
   })
 
   it('should handle buttons correctly', async () => {
-    const getActivityList = jest.fn()
-
-    const handlePrint = jest.fn()
     const today = moment().format('DD/MM/YYYY')
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        getActivityList={getActivityList}
-        handlePrint={handlePrint}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        date={today}
-        period="AM"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
+    const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
 
     component.find('#updateButton').simulate('click')
-    expect(getActivityList).toHaveBeenCalled()
-    expect(handlePrint).not.toHaveBeenCalled()
-    expect(handlePrint).not.toHaveBeenCalled()
+    expect(props.getActivityList).toHaveBeenCalled()
+    expect(props.handlePrint).not.toHaveBeenCalled()
+    expect(props.handlePrint).not.toHaveBeenCalled()
     component
       .find('#printButton')
       .at(0)
       .simulate('click')
-    expect(handlePrint).toHaveBeenCalled()
+    expect(props.handlePrint).toHaveBeenCalled()
   })
 
   it('should recognise "Today"', async () => {
-    const getActivityList = jest.fn()
-    const handlePrint = jest.fn()
     const today = 'Today'
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        getActivityList={getActivityList}
-        handlePrint={handlePrint}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        date={today}
-        period="AM"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
+    const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
     // If today, print button is present
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it('should not display print button when date is in the past', async () => {
     const oldDate = '25/05/2018'
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        handlePrint={jest.fn()}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        date={oldDate}
-        period="ED"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
+    const component = shallow(<ResultsActivity {...props} activityData={response} date={oldDate} period="ED" />)
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
   })
@@ -451,64 +328,15 @@ describe('Offender activity list results component', () => {
       .add(1, 'days')
       .format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        handleSearch={jest.fn()}
-        handlePrint={jest.fn()}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        date={futureDate}
-        period="ED"
-        agencyId={PRISON}
-        showPaymentReasonModal={jest.fn()}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
+      <ResultsActivity {...props} activityData={response} handleSearch={jest.fn()} date={futureDate} period="ED" />
     )
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
   })
 
   it.skip('checkboxes should be read-only when date is over a week ago', async () => {
-    const handleSearch = jest.fn()
-    const handlePrint = jest.fn()
     const oldDate = '23/05/2018'
-    const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={activities}
-        activity={activity}
-        activityData={response}
-        handleSearch={handleSearch}
-        handlePrint={handlePrint}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        date={oldDate}
-        period="ED"
-        agencyId={PRISON}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
-    )
+    const component = shallow(<ResultsActivity {...props} activityData={response} date={oldDate} period="ED" />)
 
     const tr = component.find('tr')
     expect(
@@ -552,33 +380,9 @@ describe('Offender activity list results component', () => {
       },
     ]
 
-    const handleSearch = jest.fn()
-    const handlePrint = jest.fn()
     const oldDate = '23/05/2018'
     const component = shallow(
-      <ResultsActivity
-        history={mockHistory}
-        activities={data}
-        activity="1"
-        activityData={data}
-        handleSearch={handleSearch}
-        handlePrint={handlePrint}
-        handlePeriodChange={jest.fn()}
-        handleDateChange={jest.fn()}
-        getActivityList={jest.fn()}
-        handleError={jest.fn()}
-        setOffenderAttendanceData={jest.fn()}
-        date={oldDate}
-        period="ED"
-        agencyId={PRISON}
-        user={user}
-        resetErrorDispatch={jest.fn()}
-        setColumnSort={jest.fn()}
-        orderField="lastName"
-        sortOrder="ASC"
-        updateAttendanceEnabled={false}
-        payable
-      />
+      <ResultsActivity {...props} activities={data} activity="1" activityData={data} date={oldDate} period="ED" />
     )
 
     const tr = component.find('tr')
@@ -598,5 +402,11 @@ describe('Offender activity list results component', () => {
     // TODO: Find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Gym - Workout')
+  })
+
+  it('should display the correct total number of offenders', () => {
+    const component = shallow(<ResultsActivity {...props} activityData={response} date="07/06/2019" period="AM" />)
+
+    expect(component.find('TotalResults').props().totalResults).toEqual(response.length)
   })
 })
