@@ -353,7 +353,6 @@ describe('Offender results component Jira NN-843', () => {
       <ResultsHouseblock
         {...props}
         houseblockData={response}
-        handlePrint={props.handlePrint}
         date={today}
         period="PM"
         currentLocation="BWing"
@@ -421,7 +420,6 @@ describe('Offender results component Jira NN-843', () => {
       <ResultsHouseblock
         {...props}
         houseblockData={response}
-        handlePrint={props.handlePrint}
         date={oldDate}
         period="ED"
         currentLocation="BWing"
@@ -457,7 +455,6 @@ describe('Offender results component Jira NN-843', () => {
       <ResultsHouseblock
         {...props}
         houseblockData={response}
-        handlePrint={props.handlePrint}
         date={today}
         period="ED"
         orderField="cellLocation"
@@ -507,7 +504,6 @@ describe('Offender results component Jira NN-843', () => {
       <ResultsHouseblock
         {...props}
         houseblockData={response}
-        handlePrint={props.handlePrint}
         date={today}
         period="ED"
         orderField="lastName"
@@ -557,7 +553,6 @@ describe('Offender results component Jira NN-843', () => {
       <ResultsHouseblock
         {...props}
         houseblockData={response}
-        handlePrint={props.handlePrint}
         setColumnSort={props.setColumnSort}
         date={today}
         period="ED"
