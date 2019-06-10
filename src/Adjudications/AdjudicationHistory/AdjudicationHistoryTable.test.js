@@ -36,9 +36,6 @@ const initialState = {
       },
     ],
   },
-  offenderDetails: {
-    offenderNo: 'AAA123',
-  },
 }
 
 describe('Adjudication History Table', () => {
@@ -64,7 +61,12 @@ describe('Adjudication History Table', () => {
       .create(
         <MemoryRouter>
           <ConnectedFlagsProvider store={store}>
-            <AdjudicationHistoryTable store={store} changePerPage={jest.fn()} changePage={jest.fn()} />
+            <AdjudicationHistoryTable
+              offenderNo="AAA123"
+              store={store}
+              changePerPage={jest.fn()}
+              changePage={jest.fn()}
+            />
           </ConnectedFlagsProvider>
         </MemoryRouter>
       )
@@ -84,7 +86,12 @@ describe('Adjudication History Table', () => {
       .create(
         <MemoryRouter>
           <ConnectedFlagsProvider store={store}>
-            <AdjudicationHistoryTable store={store} changePerPage={jest.fn()} changePage={jest.fn()} />
+            <AdjudicationHistoryTable
+              offenderNo="AAA123"
+              store={store}
+              changePerPage={jest.fn()}
+              changePage={jest.fn()}
+            />
           </ConnectedFlagsProvider>
         </MemoryRouter>
       )

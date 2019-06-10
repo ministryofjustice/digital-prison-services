@@ -100,7 +100,11 @@ export class AdjudicationHistoryContainer extends Component {
         offenderNumber={offenderNumber}
       >
         <AdjudicationHistoryForm search={this.applyFilter} reset={this.reset} />
-        <AdjudicationHistoryTable changePage={this.changePage} changePerPage={this.changePerPage} />
+        <AdjudicationHistoryTable
+          offenderNo={offenderNumber}
+          changePage={this.changePage}
+          changePerPage={this.changePerPage}
+        />
       </OffenderPage>
     )
   }
