@@ -180,13 +180,20 @@ class ResultsActivity extends Component {
     }
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
-      const details = { prisonId: agencyId, period, eventDate: date }
-      const { attended, paid, absentReason, comments } = attendenceDetails || {}
-      const attendanceInfo = { comments, paid, absentReason, pay: attended && paid, other: Boolean(absentReason) }
+      const eventDetails = { prisonId: agencyId, period, eventDate: date }
+      const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
+      const offenderAttendanceData = {
+        comments,
+        paid,
+        absentReason,
+        pay: attended && paid,
+        other: Boolean(absentReason),
+      }
 
       try {
-        await axios.post('/api/attendance', { ...details, ...attendenceDetails })
-        setOffenderAttendanceData(offenderIndex, attendanceInfo)
+        const response = await axios.post('/api/attendance', { ...eventDetails, ...attendenceDetails })
+        offenderAttendanceData.id = response.data.id || id
+        setOffenderAttendanceData(offenderIndex, offenderAttendanceData)
         this.closeModal()
       } catch (error) {
         handleError(error)

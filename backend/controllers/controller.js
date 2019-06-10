@@ -56,8 +56,8 @@ const factory = ({
   })
 
   const updateAttendance = asyncMiddleware(async (req, res) => {
-    await attendanceService.updateAttendance(res.locals, req.body)
-    res.json({})
+    const attendanceRecord = await attendanceService.updateAttendance(res.locals, req.body)
+    res.json(attendanceRecord)
   })
 
   const getAbsenceReasons = asyncMiddleware(async (req, res) => {

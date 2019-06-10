@@ -8,17 +8,20 @@ const attendanceFactory = whereaboutsApi => {
       throw new Error('Booking ID is missing')
     }
 
+    let response
     const { id, eventDate, ...rest } = attendance
     const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
     const body = { ...rest, eventDate: switchDateFormat(date) }
 
     if (id) {
-      await whereaboutsApi.putAttendance(context, body, id)
+      response = await whereaboutsApi.putAttendance(context, body, id)
       log.info({}, 'putAttendance success')
     } else {
-      await whereaboutsApi.postAttendance(context, body)
+      response = await whereaboutsApi.postAttendance(context, body)
       log.info({}, 'postAttendance success')
     }
+
+    return response
   }
 
   const getAbsenceReasons = async (context, body) => {
