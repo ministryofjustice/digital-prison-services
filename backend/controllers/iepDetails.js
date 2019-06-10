@@ -97,23 +97,29 @@ const getIepDetailsFactory = elite2Api => {
     return 1000
   }
 
+  const sortPossibleIepLevelsByDelta = levels =>
+    levels.sort((a, b) => (Math.abs(a.levelDifference) > Math.abs(b.levelDifference) ? 1 : -1))
+
   const getPossibleLevels = async (context, currentIepLevel, agencyId) => {
     const levels = await elite2Api.getAgencyIepLevels(context, agencyId)
 
-    return levels
-      .filter(level => level.iepDescription !== currentIepLevel)
-      .filter(level => level.iepDescription !== 'Entry')
-      .map(level => {
-        const diff = calculateIepLevelDifference(levelToIntMap[currentIepLevel], levelToIntMap[level.iepDescription])
-        return {
-          title: level.iepDescription,
-          value: level.iepLevel,
-          image: iconForDifference[diff.toString()] || '',
-          delta: Math.abs(diff), // Used for ordering so the biggest change is shown last regardless of up or down.
-          diff,
-        }
-      })
-      .sort((a, b) => (a.delta > b.delta ? 1 : -1))
+    return sortPossibleIepLevelsByDelta(
+      levels
+        .filter(level => level.iepDescription !== currentIepLevel)
+        .filter(level => level.iepDescription !== 'Entry')
+        .map(level => {
+          const levelDifference = calculateIepLevelDifference(
+            levelToIntMap[currentIepLevel],
+            levelToIntMap[level.iepDescription]
+          )
+          return {
+            title: level.iepDescription,
+            value: level.iepLevel,
+            image: iconForDifference[levelDifference.toString()] || '',
+            levelDifference, // Used for ordering so the biggest change is shown last regardless of up or down.
+          }
+        })
+    )
   }
 
   const changeIepLevel = async (context, offenderNo, params) => {

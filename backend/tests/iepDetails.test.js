@@ -347,22 +347,19 @@ describe('IEP details controller', async () => {
         title: 'Standard',
         value: 'STD',
         image: 'Green_arrow.png',
-        diff: 1,
-        delta: 1,
+        levelDifference: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
         image: 'Double_green_arrow.png',
-        diff: 2,
-        delta: 2,
+        levelDifference: 2,
       },
       {
         title: 'New level',
         value: 'NEW',
         image: '',
-        diff: 1000,
-        delta: 1000,
+        levelDifference: 1000,
       },
     ])
   })
@@ -375,22 +372,19 @@ describe('IEP details controller', async () => {
         title: 'Basic',
         value: 'BAS',
         image: 'Red_arrow.png',
-        diff: -1,
-        delta: 1,
+        levelDifference: -1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
         image: 'Green_arrow.png',
-        diff: 1,
-        delta: 1,
+        levelDifference: 1,
       },
       {
         title: 'New level',
         value: 'NEW',
         image: '',
-        diff: 1000,
-        delta: 1000,
+        levelDifference: 1000,
       },
     ])
   })
@@ -403,22 +397,19 @@ describe('IEP details controller', async () => {
         title: 'Standard',
         value: 'STD',
         image: 'Red_arrow.png',
-        diff: -1,
-        delta: 1,
+        levelDifference: -1,
       },
       {
         title: 'Basic',
         value: 'BAS',
         image: 'Double_red_arrow.png',
-        diff: -2,
-        delta: 2,
+        levelDifference: -2,
       },
       {
         title: 'New level',
         value: 'NEW',
         image: '',
-        diff: 1000,
-        delta: 1000,
+        levelDifference: 1000,
       },
     ])
   })
@@ -427,10 +418,10 @@ describe('IEP details controller', async () => {
     const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([
-      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', diff: 1, delta: 1 },
-      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', diff: 2, delta: 2 },
-      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', diff: 3, delta: 3 },
-      { image: '', title: 'New level', value: 'NEW', diff: 1000, delta: 1000 },
+      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', levelDifference: 1 },
+      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', levelDifference: 2 },
+      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', levelDifference: 3 },
+      { image: '', title: 'New level', value: 'NEW', levelDifference: 1000 },
     ])
   })
 })
