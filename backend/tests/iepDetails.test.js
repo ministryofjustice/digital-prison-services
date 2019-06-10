@@ -118,6 +118,7 @@ describe('IEP details controller', async () => {
       { iepLevel: 'BAS', iepDescription: 'Basic' },
       { iepLevel: 'STD', iepDescription: 'Standard' },
       { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+      { iepLevel: 'NEW', iepDescription: 'New level' },
     ])
   })
   it('Should return the IEP history for offender', async () => {
@@ -356,6 +357,13 @@ describe('IEP details controller', async () => {
         diff: 2,
         delta: 2,
       },
+      {
+        title: 'New level',
+        value: 'NEW',
+        image: '',
+        diff: 1000,
+        delta: 1000,
+      },
     ])
   })
 
@@ -376,6 +384,13 @@ describe('IEP details controller', async () => {
         image: 'Green_arrow.png',
         diff: 1,
         delta: 1,
+      },
+      {
+        title: 'New level',
+        value: 'NEW',
+        image: '',
+        diff: 1000,
+        delta: 1000,
       },
     ])
   })
@@ -398,6 +413,13 @@ describe('IEP details controller', async () => {
         diff: -2,
         delta: 2,
       },
+      {
+        title: 'New level',
+        value: 'NEW',
+        image: '',
+        diff: 1000,
+        delta: 1000,
+      },
     ])
   })
 
@@ -408,6 +430,7 @@ describe('IEP details controller', async () => {
       { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', diff: 1, delta: 1 },
       { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', diff: 2, delta: 2 },
       { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', diff: 3, delta: 3 },
+      { image: '', title: 'New level', value: 'NEW', diff: 1000, delta: 1000 },
     ])
   })
 })

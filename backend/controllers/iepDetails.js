@@ -89,6 +89,14 @@ const getIepDetailsFactory = elite2Api => {
     Enhanced: 4,
   }
 
+  const calculateIepLevelDifference = (currentLevel, change) => {
+    if (change && currentLevel) {
+      return change - currentLevel
+    }
+    // This is a custom level, always show it last.
+    return 1000
+  }
+
   const getPossibleLevels = async (context, currentIepLevel, agencyId) => {
     const levels = await elite2Api.getAgencyIepLevels(context, agencyId)
 
@@ -96,13 +104,7 @@ const getIepDetailsFactory = elite2Api => {
       .filter(level => level.iepDescription !== currentIepLevel)
       .filter(level => level.iepDescription !== 'Entry')
       .map(level => {
-        let diff
-        if (levelToIntMap[level.iepDescription] && levelToIntMap[currentIepLevel]) {
-          diff = levelToIntMap[level.iepDescription] - levelToIntMap[currentIepLevel]
-        } else {
-          // This is a custom level for which we do not have an icon. Always show it last.
-          diff = 1000
-        }
+        const diff = calculateIepLevelDifference(levelToIntMap[currentIepLevel], levelToIntMap[level.iepDescription])
         return {
           title: level.iepDescription,
           value: level.iepLevel,
@@ -111,7 +113,7 @@ const getIepDetailsFactory = elite2Api => {
           diff,
         }
       })
-      .sort((a, b) => (Math.abs(a.delta) > Math.abs(b.delta) ? 1 : -1))
+      .sort((a, b) => (a.delta > b.delta ? 1 : -1))
   }
 
   const changeIepLevel = async (context, offenderNo, params) => {
