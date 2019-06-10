@@ -1,93 +1,65 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
-const elite2Api = {}
 const whereaboutsApi = {}
-const { postAttendance, getAbsenceReasons } = require('../controllers/attendance').attendanceFactory(
-  elite2Api,
-  whereaboutsApi
-)
+const { updateAttendance, getAbsenceReasons } = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
 
 describe('Attendence and Pay controller', async () => {
-  describe('postAttendance', () => {
-    const offenderNo = 'ABC123'
+  const attendenceDetails = {
+    offenderNo: 'ABC123',
+    bookingId: 1,
+    period: 'AM',
+    prisonId: 'LEI',
+    eventId: 45,
+    eventLocationId: 1,
+    attended: true,
+    paid: true,
+  }
 
+  describe('updateAttendance', () => {
     it('should throw an error when offenderNo is null', async done => {
       try {
-        await postAttendance(context)
+        await updateAttendance(context)
       } catch (e) {
-        expect(e).toEqual(new Error('Offender number missing'))
+        expect(e).toEqual(new Error('Booking ID is missing'))
         done()
       }
     })
 
     beforeEach(() => {
       whereaboutsApi.postAttendance = jest.fn()
-      elite2Api.getDetailsLight = jest.fn()
-      elite2Api.getDetailsLight.mockReturnValue({
-        bookingId: 1,
-      })
+      whereaboutsApi.putAttendance = jest.fn()
     })
 
-    it('should call getDetailsLight with the correct offenderNo', async () => {
-      await postAttendance(context, { offenderNo })
-
-      expect(elite2Api.getDetailsLight).toHaveBeenCalledWith(context, 'ABC123')
-    })
-
-    it('should post attendance', async () => {
-      const attendenceDetails = {
-        offenderNo,
-        period: 'AM',
-        prisonId: 'LEI',
-        eventId: 45,
-        eventLocationId: 1,
-        attended: true,
-        paid: true,
-      }
-
-      await postAttendance(context, {
-        offenderNo,
+    it('should postAttendance when there is no attendance ID', async () => {
+      await updateAttendance(context, {
         eventDate: '10/10/2019',
         ...attendenceDetails,
       })
 
       expect(whereaboutsApi.postAttendance).toHaveBeenCalledWith(context, {
-        bookingId: 1,
         eventDate: '2019-10-10',
         ...attendenceDetails,
       })
     })
 
-    it('should call postAttendance with the correct absent reason and comments text', async () => {
-      elite2Api.createCaseNote = jest.fn()
-      const comments = 'Was absent but his reason was acceptable.'
+    it('should call putAttendance when there is an attendance ID', async () => {
+      const id = 1
 
-      const attendenceDetails = {
-        offenderNo,
-        period: 'AM',
-        prisonId: 'LEI',
-        eventId: 45,
-        eventLocationId: 1,
-        attended: false,
-        paid: true,
-      }
-
-      await postAttendance(context, {
-        absentReason: 'AcceptableAbsence',
-        comments,
-        offenderNo,
+      await updateAttendance(context, {
+        id,
         eventDate: '10/10/2019',
         ...attendenceDetails,
       })
 
-      expect(whereaboutsApi.postAttendance).toHaveBeenCalledWith(context, {
-        absentReason: 'AcceptableAbsence',
-        comments,
-        bookingId: 1,
-        eventDate: '2019-10-10',
-        ...attendenceDetails,
-      })
+      expect(whereaboutsApi.putAttendance).toHaveBeenCalledWith(
+        context,
+        {
+          eventDate: '2019-10-10',
+          ...attendenceDetails,
+        },
+        id
+      )
     })
   })
 

@@ -2,42 +2,26 @@ const moment = require('moment')
 const { switchDateFormat, pascalToString } = require('../utils')
 const log = require('../log')
 
-const attendanceFactory = (elite2Api, whereaboutsApi) => {
-  const postAttendance = async (context, attendance) => {
-    if (!attendance || !attendance.offenderNo) {
-      throw new Error('Offender number missing')
+const attendanceFactory = whereaboutsApi => {
+  const updateAttendance = async (context, attendance) => {
+    if (!attendance || !attendance.bookingId) {
+      throw new Error('Booking ID is missing')
     }
 
-    const {
-      attended,
-      offenderNo,
-      eventDate,
-      eventId,
-      eventLocationId,
-      paid,
-      period,
-      prisonId,
-      absentReason,
-      comments,
-    } = attendance
-    const details = await elite2Api.getDetailsLight(context, offenderNo)
+    let response
+    const { id, eventDate, ...rest } = attendance
     const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
-    const body = {
-      offenderNo,
-      absentReason,
-      comments,
-      bookingId: details.bookingId,
-      attended,
-      eventDate: switchDateFormat(date),
-      eventId,
-      eventLocationId,
-      paid,
-      period,
-      prisonId,
+    const body = { ...rest, eventDate: switchDateFormat(date) }
+
+    if (id) {
+      response = await whereaboutsApi.putAttendance(context, body, id)
+      log.info({}, 'putAttendance success')
+    } else {
+      response = await whereaboutsApi.postAttendance(context, body)
+      log.info({}, 'postAttendance success')
     }
 
-    await whereaboutsApi.postAttendance(context, body)
-    log.info({}, 'postAttendance success')
+    return response
   }
 
   const getAbsenceReasons = async (context, body) => {
@@ -50,7 +34,7 @@ const attendanceFactory = (elite2Api, whereaboutsApi) => {
   }
 
   return {
-    postAttendance,
+    updateAttendance,
     getAbsenceReasons,
   }
 }

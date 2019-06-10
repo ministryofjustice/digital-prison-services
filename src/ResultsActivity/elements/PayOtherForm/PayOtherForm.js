@@ -51,15 +51,19 @@ const validateThenSubmit = submitHandler => values => {
 export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, absentReasons }) {
   const payOffender = async values => {
     const paid = values.pay === 'yes'
+    const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
+    const { id } = attendanceInfo || {}
 
     const attendanceDetails = {
-      absentReason: values.reason,
-      comments: values.comments,
-      offenderNo: offender.offenderNo,
-      attended: false,
+      id,
+      offenderNo,
+      bookingId,
       paid,
-      eventId: offender.eventId,
-      eventLocationId: offender.eventLocationId,
+      eventId,
+      eventLocationId,
+      absentReason: values.reason,
+      attended: false,
+      comments: values.comments,
     }
 
     await updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
