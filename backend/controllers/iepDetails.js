@@ -106,11 +106,12 @@ const getIepDetailsFactory = elite2Api => {
         return {
           title: level.iepDescription,
           value: level.iepLevel,
-          image: iconForDifference[diff.toString()] ? iconForDifference[diff.toString()] : '',
+          image: iconForDifference[diff.toString()] || '',
+          delta: Math.abs(diff), // Used for ordering so the biggest change is shown last regardless of up or down.
           diff,
         }
       })
-      .sort((a, b) => (Math.abs(a.diff) > Math.abs(b.diff) ? 1 : -1))
+      .sort((a, b) => (Math.abs(a.delta) > Math.abs(b.delta) ? 1 : -1))
   }
 
   const changeIepLevel = async (context, offenderNo, params) => {

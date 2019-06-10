@@ -347,12 +347,14 @@ describe('IEP details controller', async () => {
         value: 'STD',
         image: 'Green_arrow.png',
         diff: 1,
+        delta: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
         image: 'Double_green_arrow.png',
         diff: 2,
+        delta: 2,
       },
     ])
   })
@@ -366,12 +368,14 @@ describe('IEP details controller', async () => {
         value: 'BAS',
         image: 'Red_arrow.png',
         diff: -1,
+        delta: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
         image: 'Green_arrow.png',
         diff: 1,
+        delta: 1,
       },
     ])
   })
@@ -385,12 +389,14 @@ describe('IEP details controller', async () => {
         value: 'STD',
         image: 'Red_arrow.png',
         diff: -1,
+        delta: 1,
       },
       {
         title: 'Basic',
         value: 'BAS',
         image: 'Double_red_arrow.png',
         diff: -2,
+        delta: 2,
       },
     ])
   })
@@ -399,9 +405,9 @@ describe('IEP details controller', async () => {
     const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([
-      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', diff: 1 },
-      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', diff: 2 },
-      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', diff: 3 },
+      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', diff: 1, delta: 1 },
+      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', diff: 2, delta: 2 },
+      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', diff: 3, delta: 3 },
     ])
   })
 })
