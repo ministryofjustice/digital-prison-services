@@ -43,6 +43,11 @@ class ResultsActivity extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { resetErrorDispatch } = this.props
+    resetErrorDispatch()
+  }
+
   openModal = modalContent => {
     this.setState({
       modalContent,
@@ -180,6 +185,7 @@ class ResultsActivity extends Component {
     }
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
+      const { resetErrorDispatch } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
       const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
       const offenderAttendanceData = {
@@ -189,6 +195,8 @@ class ResultsActivity extends Component {
         pay: attended && paid,
         other: Boolean(absentReason),
       }
+
+      resetErrorDispatch()
 
       try {
         const response = await axios.post('/api/attendance', { ...eventDetails, ...attendenceDetails })
@@ -356,6 +364,7 @@ ResultsActivity.propTypes = {
   payable: PropTypes.bool.isRequired,
   handleError: PropTypes.func.isRequired,
   setOffenderAttendanceData: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)
