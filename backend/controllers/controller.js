@@ -55,14 +55,8 @@ const factory = ({
     res.json(viewModel)
   })
 
-  const postAttendance = asyncMiddleware(async (req, res) => {
-    await attendanceService.postAttendance(res.locals, req.body)
-    res.json({})
-  })
-
-  const putAttendance = asyncMiddleware(async (req, res) => {
-    const { id } = req.params
-    await attendanceService.putAttendance(res.locals, req.body, id)
+  const updateAttendance = asyncMiddleware(async (req, res) => {
+    await attendanceService.updateAttendance(res.locals, req.body)
     res.json({})
   })
 
@@ -178,8 +172,7 @@ const factory = ({
     getAdjudications,
     getAdjudicationDetails,
     getHouseblockList,
-    postAttendance,
-    putAttendance,
+    updateAttendance,
     getAbsenceReasons,
     getEstablishmentRollCount,
     globalSearch,

@@ -181,13 +181,11 @@ class ResultsActivity extends Component {
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
       const details = { prisonId: agencyId, period, eventDate: date }
-      const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
+      const { attended, paid, absentReason, comments } = attendenceDetails || {}
       const attendanceInfo = { comments, paid, absentReason, pay: attended && paid, other: Boolean(absentReason) }
 
       try {
-        // What about when it's only just been entered and has no ID incase we want to update straight away?
-        if (id) await axios.put(`/api/putAttendance/${id}`, attendenceDetails)
-        else await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })
+        await axios.post('/api/updateAttendance', { ...details, ...attendenceDetails })
         setOffenderAttendanceData(offenderIndex, attendanceInfo)
         this.closeModal()
       } catch (error) {
@@ -208,11 +206,13 @@ class ResultsActivity extends Component {
           eventId,
           attendanceInfo,
           locationId,
+          bookingId,
         } = mainEvent
         const key = `${offenderNo}-${eventId}`
 
         const offenderDetails = {
           offenderNo,
+          bookingId,
           firstName,
           lastName,
           eventId,

@@ -466,12 +466,6 @@ describe('Activity list controller', async () => {
       })
     })
 
-    it('should call getDetailsLight with offender numbers', async () => {
-      await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
-
-      expect(elite2Api.getDetailsLight).toHaveBeenCalledWith({}, 'A')
-    })
-
     it('should call getAttendance with correct parameters', async () => {
       await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -482,12 +476,6 @@ describe('Activity list controller', async () => {
     })
 
     it('should load attendance details', async () => {
-      elite2Api.getDetailsLight.mockImplementation((context, offenderNo) => {
-        if (offenderNo === 'A1') return { bookingId: 1, offenderNo }
-        if (offenderNo === 'B2') return { bookingId: 2, offenderNo }
-
-        return { bookingId: 3, offenderNo }
-      })
       whereaboutsApi.getAttendance.mockReturnValue([
         {
           absentReason: 'Acceptable absence',
@@ -528,9 +516,9 @@ describe('Activity list controller', async () => {
         switch (usage) {
           case 'PROG':
             return [
-              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A' },
-              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B' },
-              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C' },
+              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1 },
+              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2 },
+              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3 },
             ]
           default:
             return []
@@ -541,6 +529,7 @@ describe('Activity list controller', async () => {
 
       expect(response).toEqual([
         {
+          bookingId: 1,
           alertFlags: [],
           category: '',
           comment: 'Test comment',
@@ -558,6 +547,7 @@ describe('Activity list controller', async () => {
           },
         },
         {
+          bookingId: 2,
           alertFlags: [],
           category: '',
           comment: 'Test comment',
@@ -575,6 +565,7 @@ describe('Activity list controller', async () => {
           },
         },
         {
+          bookingId: 3,
           alertFlags: [],
           category: '',
           comment: 'Test comment',

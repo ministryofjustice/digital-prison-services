@@ -131,7 +131,7 @@ const controller = controllerFactory({
   adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
   iepDetailsService: iepDetailsFactory(elite2Api),
   houseblockListService: houseblockListFactory(elite2Api),
-  attendanceService: attendanceFactory(elite2Api, whereaboutsApi),
+  attendanceService: attendanceFactory(whereaboutsApi),
   establishmentRollService: establishmentRollFactory(elite2Api),
   globalSearchService: globalSearchFactory(elite2Api),
   movementsService: movementsServiceFactory(elite2Api, oauthClientId),
@@ -215,8 +215,7 @@ app.use('/api/offenders/:offenderNumber/adjudications', controller.getAdjudicati
 app.use('/api/offenders/:offenderNumber/iep-details', controller.getIepDetails)
 app.use('/api/iep-levels', controller.getPossibleLevels)
 app.post('/api/offenders/:offenderNumber/change-iep-level', controller.changeIepLevel)
-app.use('/api/postAttendance', controller.postAttendance)
-app.use('/api/putAttendance/:id', controller.putAttendance)
+app.use('/api/updateAttendance', controller.updateAttendance)
 app.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
 app.use('/api/offenders/:offenderNo', controller.getOffender)
 app.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)

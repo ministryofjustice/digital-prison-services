@@ -10,13 +10,14 @@ import { Option, DetailsLink } from './PayOptions.styles'
 
 function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
   const [selectedOption, setSelectedOption] = useState()
-  const { offenderNo, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
-  const { id } = attendanceInfo || {}
+  const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
+  const { id, pay, other, paid, absentReason, comments } = attendanceInfo || {}
 
   const payOffender = () => {
     const attendanceDetails = {
       id,
       offenderNo,
+      bookingId,
       eventId,
       eventLocationId,
       attended: true,
@@ -27,19 +28,12 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
   }
 
   useEffect(() => {
-    if (attendanceInfo && attendanceInfo.pay) setSelectedOption('pay')
-    if (attendanceInfo && attendanceInfo.other) setSelectedOption('other')
+    if (attendanceInfo && pay) setSelectedOption('pay')
+    if (attendanceInfo && other) setSelectedOption('other')
   })
 
   const renderDetails = () =>
-    openModal(
-      <PayDetails
-        paid={attendanceInfo.paid}
-        absentReason={attendanceInfo.absentReason}
-        comments={attendanceInfo.comments}
-        cancelHandler={closeModal}
-      />
-    )
+    openModal(<PayDetails paid={paid} absentReason={absentReason} comments={comments} cancelHandler={closeModal} />)
 
   const renderForm = () =>
     openModal(
