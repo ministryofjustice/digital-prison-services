@@ -30,7 +30,8 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
         Yes
         <img
           alt=""
-          className="sc-dnqmqq eLdWgu"
+          className="sc-dnqmqq hLiMD"
+          height="25px"
           src="/static/images/image.png"
         />
       </span>
@@ -52,7 +53,8 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
         No
         <img
           alt=""
-          className="sc-dnqmqq eLdWgu"
+          className="sc-dnqmqq hLiMD"
+          height="25px"
           src="/static/images/image1.png"
         />
       </span>
