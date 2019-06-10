@@ -1,5 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<RadioGroup /> should display image if one is provided 1`] = `
+<div
+  className="sc-bxivhb fiOVKe"
+>
+  <span
+    className="sc-bdVaJa fqDsBO"
+  >
+    Does this test pass?
+  </span>
+  <span
+    className="sc-bwzfXH fnIExm"
+  >
+    Select an option
+  </span>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="yes"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        Yes
+        <img
+          alt=""
+          className="sc-dnqmqq eLdWgu"
+          src="/static/images/image.png"
+        />
+      </span>
+    </label>
+  </div>
+  <div>
+    <label
+      className="sc-EHOje jSaNgA"
+    >
+      <input
+        checked={false}
+        className="sc-bZQynM gypGCt"
+        type="radio"
+        value="no"
+      />
+      <span
+        className="sc-gzVnrw iYaYOP"
+      >
+        No
+        <img
+          alt=""
+          className="sc-dnqmqq eLdWgu"
+          src="/static/images/image1.png"
+        />
+      </span>
+    </label>
+  </div>
+</div>
+`;
+
 exports[`<RadioGroup /> should match the default snapshot 1`] = `
 <div
   className="sc-bxivhb eFeFfb"

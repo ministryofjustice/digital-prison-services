@@ -81,6 +81,7 @@
     "react-router-breadcrumbs-hoc": "^3.2.0",
     "react-router-dom": "^5.0.0",
     "react-router-prop-types": "^1.0.4",
+    "react-notify-toast": "0.5.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
@@ -145,7 +146,7 @@
   },
   "scripts": {
     "start": "node $NODE_DEBUG_OPTION backend/index.js",
-    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ ATTENDANCE_DETAIL_LINK_ENABLED=true node $NODE_DEBUG_OPTION backend/index.js",
+    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ ATTENDANCE_DETAIL_LINK_ENABLED=true IEP_CHANGE_LINK_ENABLED=true node $NODE_DEBUG_OPTION backend/index.js",
     "build": "webpack --mode=production",
     "build:analyse": "BUNDLE_ANALYSE=true yarn build",
     "test": "jest --env=jsdom",

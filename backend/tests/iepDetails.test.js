@@ -1,5 +1,7 @@
 const elite2Api = {}
-const iepDetails = require('../controllers/iepDetails').getIepDetailsFactory(elite2Api).getIepDetails
+const { getIepDetails, changeIepLevel, getPossibleLevels } = require('../controllers/iepDetails').getIepDetailsFactory(
+  elite2Api
+)
 
 function createIepDetailsReponse() {
   return {
@@ -52,6 +54,8 @@ beforeEach(() => {
   elite2Api.getIepSummaryWithDetails = jest.fn()
   elite2Api.getAgencyDetails = jest.fn()
   elite2Api.getStaffDetails = jest.fn()
+  elite2Api.changeIepLevel = jest.fn()
+  elite2Api.getAgencyIepLevels = jest.fn()
 })
 
 describe('IEP details controller', async () => {
@@ -109,9 +113,16 @@ describe('IEP details controller', async () => {
         },
       ],
     })
+    elite2Api.getAgencyIepLevels.mockReturnValue([
+      { iepLevel: 'ENT', iepDescription: 'Entry' },
+      { iepLevel: 'BAS', iepDescription: 'Basic' },
+      { iepLevel: 'STD', iepDescription: 'Standard' },
+      { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+      { iepLevel: 'NEW', iepDescription: 'New level' },
+    ])
   })
   it('Should return the IEP history for offender', async () => {
-    const response = await iepDetails({}, '1', {})
+    const response = await getIepDetails({}, '1', {})
     const expected = createIepDetailsReponse()
     expect(response).toEqual(expected)
 
@@ -120,7 +131,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by level', async () => {
-    const response = await iepDetails({}, '1', { level: 'Basic' })
+    const response = await getIepDetails({}, '1', { level: 'Basic' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -148,7 +159,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by date', async () => {
-    const response = await iepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
+    const response = await getIepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-11' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -176,7 +187,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by establishment', async () => {
-    const response = await iepDetails({}, '1', { establishment: 'HEI' })
+    const response = await getIepDetails({}, '1', { establishment: 'HEI' })
     expect(response).toEqual({
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
@@ -215,7 +226,7 @@ describe('IEP details controller', async () => {
   })
 
   it('Should filter by all filters', async () => {
-    const response = await iepDetails({}, '1', {
+    const response = await getIepDetails({}, '1', {
       establishment: 'HEI',
       level: 'Basic',
       fromDate: '2017-08-10',
@@ -281,7 +292,7 @@ describe('IEP details controller', async () => {
         },
       ],
     })
-    const response = await iepDetails({}, '1', {
+    const response = await getIepDetails({}, '1', {
       establishment: 'HEI',
       level: 'Basic',
       fromDate: '2017-08-10',
@@ -311,5 +322,106 @@ describe('IEP details controller', async () => {
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
     expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+  })
+
+  it('Should call the right elite2 end point for update level', async () => {
+    elite2Api.getDetails.mockReturnValue({
+      bookingId: -1,
+    })
+
+    const params = {
+      iepLevel: 'BAS',
+      comment: 'Test comment',
+    }
+    await changeIepLevel({}, '1', params)
+
+    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
+  })
+
+  it('Should return the right IEP levels when current is Basic', async () => {
+    const levels = await getPossibleLevels({}, 'Basic', 'HEI')
+
+    expect(levels).toEqual([
+      {
+        title: 'Standard',
+        value: 'STD',
+        image: 'Green_arrow.png',
+        levelDifference: 1,
+      },
+      {
+        title: 'Enhanced',
+        value: 'ENH',
+        image: 'Double_green_arrow.png',
+        levelDifference: 2,
+      },
+      {
+        title: 'New level',
+        value: 'NEW',
+        image: '',
+        levelDifference: 1000,
+      },
+    ])
+  })
+
+  it('Should return the right IEP levels when current is Standard', async () => {
+    const levels = await getPossibleLevels({}, 'Standard', 'HEI')
+
+    expect(levels).toEqual([
+      {
+        title: 'Basic',
+        value: 'BAS',
+        image: 'Red_arrow.png',
+        levelDifference: -1,
+      },
+      {
+        title: 'Enhanced',
+        value: 'ENH',
+        image: 'Green_arrow.png',
+        levelDifference: 1,
+      },
+      {
+        title: 'New level',
+        value: 'NEW',
+        image: '',
+        levelDifference: 1000,
+      },
+    ])
+  })
+
+  it('Should return the right IEP levels when current is Enhanced', async () => {
+    const levels = await getPossibleLevels({}, 'Enhanced', 'HEI')
+
+    expect(levels).toEqual([
+      {
+        title: 'Standard',
+        value: 'STD',
+        image: 'Red_arrow.png',
+        levelDifference: -1,
+      },
+      {
+        title: 'Basic',
+        value: 'BAS',
+        image: 'Double_red_arrow.png',
+        levelDifference: -2,
+      },
+      {
+        title: 'New level',
+        value: 'NEW',
+        image: '',
+        levelDifference: 1000,
+      },
+    ])
+  })
+
+  it('Should return the right IEP levels when current is Entry', async () => {
+    const levels = await getPossibleLevels({}, 'Entry', 'HEI')
+
+    expect(levels).toEqual([
+      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', levelDifference: 1 },
+      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', levelDifference: 2 },
+      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', levelDifference: 3 },
+      { image: '', title: 'New level', value: 'NEW', levelDifference: 1000 },
+    ])
   })
 })

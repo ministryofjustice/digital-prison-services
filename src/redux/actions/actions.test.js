@@ -318,6 +318,14 @@ describe('actions', () => {
     expect(actions.setIepHistoryResults(['result-1'])).toEqual(expectedAction)
   })
 
+  it('should create an action to update possible iep levels', () => {
+    const expectedAction = {
+      type: types.SET_POSSIBLE_IEP_LEVELS,
+      levels: ['level-1'],
+    }
+    expect(actions.setPossibleIepLevels(['level-1'])).toEqual(expectedAction)
+  })
+
   describe('content actions', () => {
     let store
     const getEntriesSpy = jest.spyOn(contentfulClient, 'getEntries')
