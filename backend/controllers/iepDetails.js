@@ -74,14 +74,6 @@ const getIepDetailsFactory = elite2Api => {
     }
   }
 
-  const iconForDifference = {
-    '1': 'Green_arrow.png',
-    '2': 'Double_green_arrow.png',
-    '3': 'TripleGreenArrow.png',
-    '-1': 'Red_arrow.png',
-    '-2': 'Double_red_arrow.png',
-  }
-
   const levelToIntMap = {
     Entry: 1,
     Basic: 2,
@@ -91,14 +83,13 @@ const getIepDetailsFactory = elite2Api => {
 
   const calculateIepLevelDifference = (currentLevel, change) => {
     if (change && currentLevel) {
-      return change - currentLevel
+      return Math.abs(change - currentLevel)
     }
     // This is a custom level, always show it last.
     return 1000
   }
 
-  const sortPossibleIepLevelsByDelta = levels =>
-    levels.sort((a, b) => (Math.abs(a.levelDifference) > Math.abs(b.levelDifference) ? 1 : -1))
+  const sortPossibleIepLevelsByDelta = levels => levels.sort((a, b) => (a.levelDifference > b.levelDifference ? 1 : -1))
 
   const getPossibleLevels = async (context, currentIepLevel, agencyId) => {
     const levels = await elite2Api.getAgencyIepLevels(context, agencyId)
@@ -112,7 +103,6 @@ const getIepDetailsFactory = elite2Api => {
         return {
           title: level.iepDescription,
           value: level.iepLevel,
-          image: iconForDifference[levelDifference.toString()] || '',
           levelDifference, // Used for ordering so the biggest change is shown last regardless of up or down.
         }
       })

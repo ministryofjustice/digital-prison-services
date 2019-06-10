@@ -4,16 +4,6 @@ import PropTypes from 'prop-types'
 
 import MultiChoice from '@govuk-react/multi-choice'
 import Radio from '@govuk-react/radio'
-import styled from 'styled-components'
-import { SPACING } from '@govuk-react/constants'
-
-const ImageContainer = styled.img`
-  margin-left: ${SPACING.SCALE_2};
-  vertical-align: top;
-  height: ${props => props.height};
-`
-
-const determineImageContainerHeight = difference => (difference === 1 || difference === -1 ? '20px' : '25px')
 
 const RadioGroup = ({ label, hint, options, inline, input, meta }) => (
   <MultiChoice label={label} hint={hint} meta={meta} mb={6}>
@@ -21,13 +11,6 @@ const RadioGroup = ({ label, hint, options, inline, input, meta }) => (
       <div key={o.value}>
         <Radio {...input} value={o.value} inline={inline} checked={o.value === input.value}>
           {o.title}
-          {o.image && (
-            <ImageContainer
-              height={determineImageContainerHeight(o.levelDifference)}
-              src={`/static/images/${o.image}`}
-              alt=""
-            />
-          )}
         </Radio>
       </div>
     ))}
