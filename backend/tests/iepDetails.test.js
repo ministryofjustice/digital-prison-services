@@ -344,6 +344,12 @@ describe('IEP details controller', async () => {
 
     expect(levels).toEqual([
       {
+        title: 'Entry',
+        value: 'ENT',
+        image: 'Red_arrow.png',
+        levelDifference: -1,
+      },
+      {
         title: 'Standard',
         value: 'STD',
         image: 'Green_arrow.png',
@@ -381,6 +387,12 @@ describe('IEP details controller', async () => {
         levelDifference: 1,
       },
       {
+        title: 'Entry',
+        value: 'ENT',
+        image: 'Double_red_arrow.png',
+        levelDifference: -2,
+      },
+      {
         title: 'New level',
         value: 'NEW',
         image: '',
@@ -404,6 +416,12 @@ describe('IEP details controller', async () => {
         value: 'BAS',
         image: 'Double_red_arrow.png',
         levelDifference: -2,
+      },
+      {
+        title: 'Entry',
+        value: 'ENT',
+        image: '',
+        levelDifference: -3,
       },
       {
         title: 'New level',
