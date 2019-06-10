@@ -173,11 +173,7 @@ const elite2ApiFactory = client => {
     getAdjudications,
     getAdjudicationDetails,
     addBulkAppointments,
-<<<<<<< HEAD
-    getDetailsLight,
     changeIepLevel,
-=======
->>>>>>> NN-1900 Make updateAttendance deal with new and existing attendances
   }
 }
 

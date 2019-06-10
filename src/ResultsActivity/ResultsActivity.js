@@ -185,7 +185,7 @@ class ResultsActivity extends Component {
       const attendanceInfo = { comments, paid, absentReason, pay: attended && paid, other: Boolean(absentReason) }
 
       try {
-        await axios.post('/api/updateAttendance', { ...details, ...attendenceDetails })
+        await axios.post('/api/attendance', { ...details, ...attendenceDetails })
         setOffenderAttendanceData(offenderIndex, attendanceInfo)
         this.closeModal()
       } catch (error) {
