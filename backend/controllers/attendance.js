@@ -40,6 +40,15 @@ const attendanceFactory = (elite2Api, whereaboutsApi) => {
     log.info({}, 'postAttendance success')
   }
 
+  const putAttendance = async (context, attendance, id) => {
+    if (!attendance || !id) {
+      throw new Error('Attendance or ID is missing')
+    }
+
+    await whereaboutsApi.putAttendance(context, attendance, id)
+    log.info({}, 'putAttendance success')
+  }
+
   const getAbsenceReasons = async (context, body) => {
     const absenceReasons = await whereaboutsApi.getAbsenceReasons(context, body)
 
@@ -51,6 +60,7 @@ const attendanceFactory = (elite2Api, whereaboutsApi) => {
 
   return {
     postAttendance,
+    putAttendance,
     getAbsenceReasons,
   }
 }

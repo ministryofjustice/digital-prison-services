@@ -3,7 +3,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const context = {}
 const elite2Api = {}
 const whereaboutsApi = {}
-const { postAttendance, getAbsenceReasons } = require('../controllers/attendance').attendanceFactory(
+const { postAttendance, putAttendance, getAbsenceReasons } = require('../controllers/attendance').attendanceFactory(
   elite2Api,
   whereaboutsApi
 )
@@ -88,6 +88,34 @@ describe('Attendence and Pay controller', async () => {
         eventDate: '2019-10-10',
         ...attendenceDetails,
       })
+    })
+  })
+
+  describe('putAttendance', () => {
+    it('should throw an error when id is null', async done => {
+      try {
+        await putAttendance(context)
+      } catch (e) {
+        expect(e).toEqual(new Error('Attendance or ID is missing'))
+        done()
+      }
+    })
+
+    beforeEach(() => {
+      whereaboutsApi.putAttendance = jest.fn()
+    })
+
+    it('should call putAttendance with the correct details and ID', async () => {
+      const updatedAttendanceDetails = {
+        absentReason: 'AcceptableAbsence',
+        attended: true,
+        comments: 'string',
+        paid: true,
+      }
+
+      await putAttendance(context, updatedAttendanceDetails, 1)
+
+      expect(whereaboutsApi.putAttendance).toBeCalledWith(context, updatedAttendanceDetails, 1)
     })
   })
 

@@ -24,8 +24,8 @@ const extractAttendanceInfo = (attendanceInformation, offenderBookingIds, event)
     ).bookingId
 
     const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === offenderBookingId)
-    const { absentReason, attended, paid, comments } = offenderAttendanceInfo || {}
-    const attendanceInfo = { absentReason, comments, paid }
+    const { id, absentReason, attended, paid, comments } = offenderAttendanceInfo || {}
+    const attendanceInfo = { id, absentReason, comments, paid }
 
     if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
 

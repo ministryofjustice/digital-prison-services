@@ -11,14 +11,16 @@ import { Option, DetailsLink } from './PayOptions.styles'
 function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
   const [selectedOption, setSelectedOption] = useState()
   const { offenderNo, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
+  const { id } = attendanceInfo || {}
 
   const payOffender = () => {
     const attendanceDetails = {
+      id,
       offenderNo,
-      attended: true,
-      paid: true,
       eventId,
       eventLocationId,
+      attended: true,
+      paid: true,
     }
 
     updateOffenderAttendance(attendanceDetails, offenderIndex)
@@ -28,8 +30,6 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
     if (attendanceInfo && attendanceInfo.pay) setSelectedOption('pay')
     if (attendanceInfo && attendanceInfo.other) setSelectedOption('other')
   })
-
-  const attedanceRecorded = Boolean(selectedOption)
 
   const renderDetails = () =>
     openModal(
@@ -60,13 +60,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       <Option data-qa="pay-option">
         {offenderNo &&
           eventId && (
-            <Radio
-              onChange={payOffender}
-              name={offenderNo}
-              value="pay"
-              checked={selectedOption === 'pay'}
-              disabled={attedanceRecorded}
-            >
+            <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
               <VisuallyHidden>Pay</VisuallyHidden>
             </Radio>
           )}
@@ -76,13 +70,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
         {offenderNo &&
           eventId && (
             <>
-              <Radio
-                name={offenderNo}
-                onChange={renderForm}
-                value="other"
-                checked={selectedOption === 'other'}
-                disabled={attedanceRecorded}
-              >
+              <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
                 <VisuallyHidden>Other</VisuallyHidden>
               </Radio>
               {showDetails() && <DetailsLink onClick={renderDetails}>Details</DetailsLink>}

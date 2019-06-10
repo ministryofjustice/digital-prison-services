@@ -60,6 +60,12 @@ const factory = ({
     res.json({})
   })
 
+  const putAttendance = asyncMiddleware(async (req, res) => {
+    const { id } = req.params
+    await attendanceService.putAttendance(res.locals, req.body, id)
+    res.json({})
+  })
+
   const getAbsenceReasons = asyncMiddleware(async (req, res) => {
     const absenceReasons = await attendanceService.getAbsenceReasons(res.locals, req.body)
     res.json(absenceReasons)
@@ -173,6 +179,7 @@ const factory = ({
     getAdjudicationDetails,
     getHouseblockList,
     postAttendance,
+    putAttendance,
     getAbsenceReasons,
     getEstablishmentRollCount,
     globalSearch,
