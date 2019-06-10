@@ -346,25 +346,21 @@ describe('IEP details controller', async () => {
       {
         title: 'Entry',
         value: 'ENT',
-        image: 'Red_arrow.png',
-        levelDifference: -1,
+        levelDifference: 1,
       },
       {
         title: 'Standard',
         value: 'STD',
-        image: 'Green_arrow.png',
         levelDifference: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
-        image: 'Double_green_arrow.png',
         levelDifference: 2,
       },
       {
         title: 'New level',
         value: 'NEW',
-        image: '',
         levelDifference: 1000,
       },
     ])
@@ -377,25 +373,21 @@ describe('IEP details controller', async () => {
       {
         title: 'Basic',
         value: 'BAS',
-        image: 'Red_arrow.png',
-        levelDifference: -1,
+        levelDifference: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
-        image: 'Green_arrow.png',
         levelDifference: 1,
       },
       {
         title: 'Entry',
         value: 'ENT',
-        image: 'Double_red_arrow.png',
-        levelDifference: -2,
+        levelDifference: 2,
       },
       {
         title: 'New level',
         value: 'NEW',
-        image: '',
         levelDifference: 1000,
       },
     ])
@@ -408,25 +400,21 @@ describe('IEP details controller', async () => {
       {
         title: 'Standard',
         value: 'STD',
-        image: 'Red_arrow.png',
-        levelDifference: -1,
+        levelDifference: 1,
       },
       {
         title: 'Basic',
         value: 'BAS',
-        image: 'Double_red_arrow.png',
-        levelDifference: -2,
+        levelDifference: 2,
       },
       {
         title: 'Entry',
         value: 'ENT',
-        image: '',
-        levelDifference: -3,
+        levelDifference: 3,
       },
       {
         title: 'New level',
         value: 'NEW',
-        image: '',
         levelDifference: 1000,
       },
     ])
@@ -436,10 +424,10 @@ describe('IEP details controller', async () => {
     const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([
-      { image: 'Green_arrow.png', title: 'Basic', value: 'BAS', levelDifference: 1 },
-      { image: 'Double_green_arrow.png', title: 'Standard', value: 'STD', levelDifference: 2 },
-      { image: 'TripleGreenArrow.png', title: 'Enhanced', value: 'ENH', levelDifference: 3 },
-      { image: '', title: 'New level', value: 'NEW', levelDifference: 1000 },
+      { title: 'Basic', value: 'BAS', levelDifference: 1 },
+      { title: 'Standard', value: 'STD', levelDifference: 2 },
+      { title: 'Enhanced', value: 'ENH', levelDifference: 3 },
+      { title: 'New level', value: 'NEW', levelDifference: 1000 },
     ])
   })
 })

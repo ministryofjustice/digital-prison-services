@@ -138,7 +138,6 @@ IepChangeContainer.propTypes = {
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
     })
   ),
   handleError: PropTypes.func.isRequired,
