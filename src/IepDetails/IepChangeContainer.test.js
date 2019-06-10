@@ -1,8 +1,6 @@
 import React from 'react'
-import testRenderer from 'react-test-renderer'
 import { shallow } from 'enzyme/build'
 import IepChangeContainer from './IepChangeContainer'
-import AdjudicationHistoryContainer from '../Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
 import OffenderPage from '../OffenderPage'
 
 const initialState = {
@@ -37,13 +35,11 @@ const initialState = {
     levels: [
       {
         diff: -1,
-        image: 'Red_arrow.png',
         title: 'Basic',
         value: 'BAS',
       },
       {
         diff: 1,
-        image: 'Green_arrow.png',
         title: 'Enhanced',
         value: 'ENH',
       },
