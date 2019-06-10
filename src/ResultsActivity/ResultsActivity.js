@@ -43,6 +43,11 @@ class ResultsActivity extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { resetErrorDispatch } = this.props
+    resetErrorDispatch()
+  }
+
   openModal = modalContent => {
     this.setState({
       modalContent,
@@ -180,13 +185,23 @@ class ResultsActivity extends Component {
     }
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
-      const details = { prisonId: agencyId, period, eventDate: date }
-      const { attended, paid, absentReason, comments } = attendenceDetails || {}
-      const attendanceInfo = { comments, paid, absentReason, pay: attended && paid, other: Boolean(absentReason) }
+      const { resetErrorDispatch } = this.props
+      const eventDetails = { prisonId: agencyId, period, eventDate: date }
+      const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
+      const offenderAttendanceData = {
+        comments,
+        paid,
+        absentReason,
+        pay: attended && paid,
+        other: Boolean(absentReason),
+      }
+
+      resetErrorDispatch()
 
       try {
-        await axios.post('/api/postAttendance', { ...details, ...attendenceDetails })
-        setOffenderAttendanceData(offenderIndex, attendanceInfo)
+        const response = await axios.post('/api/attendance', { ...eventDetails, ...attendenceDetails })
+        offenderAttendanceData.id = response.data.id || id
+        setOffenderAttendanceData(offenderIndex, offenderAttendanceData)
         this.closeModal()
       } catch (error) {
         handleError(error)
@@ -206,11 +221,13 @@ class ResultsActivity extends Component {
           eventId,
           attendanceInfo,
           locationId,
+          bookingId,
         } = mainEvent
         const key = `${offenderNo}-${eventId}`
 
         const offenderDetails = {
           offenderNo,
+          bookingId,
           firstName,
           lastName,
           eventId,
@@ -347,6 +364,7 @@ ResultsActivity.propTypes = {
   payable: PropTypes.bool.isRequired,
   handleError: PropTypes.func.isRequired,
   setOffenderAttendanceData: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

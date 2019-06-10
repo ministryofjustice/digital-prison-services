@@ -63,13 +63,6 @@ describe('<PayOptions />', () => {
     expect(otherRadio.props.checked).toBe(true)
   })
 
-  it('should disable the pay and other radio element when the seletedOption has a value', () => {
-    props.offenderDetails.attendanceInfo.pay = true
-    act(() => testRenderer.update(<PayOptions {...props} />))
-    expect(payRadio.props.disabled).toBe(true)
-    expect(otherRadio.props.disabled).toBe(true)
-  })
-
   it('should call openModal when clicking on details link', () => {
     props.offenderDetails.attendanceInfo.other = true
     act(() => testRenderer.update(<PayOptions {...props} />))

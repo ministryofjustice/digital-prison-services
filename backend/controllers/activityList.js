@@ -17,15 +17,11 @@ const sortActivitiesByEventThenByLastName = data => {
   })
 }
 
-const extractAttendanceInfo = (attendanceInformation, offenderBookingIds, event) => {
+const extractAttendanceInfo = (attendanceInformation, event) => {
   if (attendanceInformation && attendanceInformation.length > 0) {
-    const offenderBookingId = offenderBookingIds.find(
-      offenderBooking => offenderBooking.offenderNo === event.offenderNo
-    ).bookingId
-
-    const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === offenderBookingId)
-    const { absentReason, attended, paid, comments } = offenderAttendanceInfo || {}
-    const attendanceInfo = { absentReason, comments, paid }
+    const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === event.bookingId)
+    const { id, absentReason, attended, paid, comments } = offenderAttendanceInfo || {}
+    const attendanceInfo = { id, absentReason, comments, paid }
 
     if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
 
@@ -75,11 +71,6 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
 
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
-    let offenderBookingIds
-    if (updateAttendanceEnabled)
-      offenderBookingIds = await Promise.all(
-        offenderNumbers.map(offenderNo => elite2Api.getDetailsLight(context, offenderNo))
-      )
 
     const attendanceInformation = updateAttendanceEnabled
       ? await whereaboutsApi.getAttendance(context, {
@@ -123,9 +114,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
 
-      const attendanceInfo = updateAttendanceEnabled
-        ? extractAttendanceInfo(attendanceInformation, offenderBookingIds, event)
-        : {}
+      const attendanceInfo = updateAttendanceEnabled ? extractAttendanceInfo(attendanceInformation, event) : {}
 
       return {
         ...event,

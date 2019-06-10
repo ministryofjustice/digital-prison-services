@@ -126,8 +126,6 @@ const elite2ApiFactory = client => {
 
   const addBulkAppointments = (context, body) => post(context, 'api/appointments', body)
 
-  const getDetailsLight = (context, offenderNo) => get(context, `api/bookings/offenderNo/${offenderNo}?fullInfo=false`)
-
   const changeIepLevel = (context, bookingId, body) => post(context, `api/bookings/${bookingId}/iepLevels`, body)
 
   return {
@@ -175,7 +173,6 @@ const elite2ApiFactory = client => {
     getAdjudications,
     getAdjudicationDetails,
     addBulkAppointments,
-    getDetailsLight,
     changeIepLevel,
   }
 }
