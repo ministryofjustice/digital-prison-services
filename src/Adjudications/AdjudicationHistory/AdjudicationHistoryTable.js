@@ -108,7 +108,7 @@ AdjudicationHistoryTable.propTypes = {
   totalRecords: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   pageNumber: PropTypes.number.isRequired,
-  offenderNo: PropTypes.string,
+  offenderNo: PropTypes.string.isRequired,
   results: PropTypes.arrayOf(
     PropTypes.shape({
       adjudicationNumber: PropTypes.number.isRequired,
@@ -123,16 +123,11 @@ AdjudicationHistoryTable.propTypes = {
   changePage: PropTypes.func.isRequired,
 }
 
-AdjudicationHistoryTable.defaultProps = {
-  offenderNo: '',
-}
-
 const mapStateToProps = state => ({
   results: state.adjudicationHistory.results,
   totalRecords: state.adjudicationHistory.totalRecords,
   pageSize: state.adjudicationHistory.pageSize,
   pageNumber: state.adjudicationHistory.pageNumber,
-  offenderNo: state.offenderDetails.offenderNo,
 })
 
 export default connect(mapStateToProps)(AdjudicationHistoryTable)
