@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 import geb.Browser
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.AccessRoles
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -30,11 +31,18 @@ class TestFixture {
         browser.to SearchPage
     }
 
-    private void stubForLogin(UserAccount currentUser) {
+    def loginAsMaintainIep(UserAccount user) {
+        currentUser = user
+        stubForLogin(currentUser, [AccessRoles.maintain_iep])
+
+        browser.to SearchPage
+    }
+
+    private void stubForLogin(UserAccount currentUser, def roles = ['ROLE']) {
         oauthApi.stubValidOAuthTokenLogin()
 
         oauthApi.stubGetMyDetails currentUser
-        oauthApi.stubGetMyRoles()
+        oauthApi.stubGetMyRoles(roles)
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         elite2Api.stubGroups currentUser.workingCaseload
         elite2Api.stubActivityLocations()

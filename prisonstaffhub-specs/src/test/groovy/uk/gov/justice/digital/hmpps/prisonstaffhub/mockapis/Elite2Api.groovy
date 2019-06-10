@@ -852,4 +852,16 @@ class Elite2Api extends WireMockRule {
         )
     }
 
+    void stubGetAgencyIepLevels(agencyId, response) {
+        this.stubFor(
+                get("/api/agencies/${agencyId}/iepLevels")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(response))
+                        )
+        )
+    }
+
 }

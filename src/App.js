@@ -3,6 +3,7 @@ import moment from 'moment'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
 import { Header, FooterContainer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
@@ -37,6 +38,7 @@ import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import IepHistoryContainer from './IepDetails/IepDetailsContainer'
+import IepChangeContainer from './IepDetails/IepChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
 import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
@@ -421,6 +423,21 @@ class App extends React.Component {
 
           <Route
             exact
+            path={routePaths.iepChange}
+            render={({ history, match: { params } }) => (
+              <IepChangeContainer
+                offenderNo={params.offenderNo}
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
             path={routePaths.adjudications}
             render={({ history, match: { params } }) => (
               <AdjudicationHistoryContainer
@@ -471,6 +488,7 @@ class App extends React.Component {
       <Router>
         <div className="content">
           <ScrollToTop>
+            <Notifications />
             <Route
               render={({ location, history }) => {
                 if (config && config.googleAnalyticsId) {

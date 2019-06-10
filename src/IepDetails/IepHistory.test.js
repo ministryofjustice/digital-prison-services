@@ -25,6 +25,11 @@ const initialState = {
       },
     ],
   },
+  app: {
+    user: {
+      roles: ['ROLE'],
+    },
+  },
 }
 
 describe('IEP history', () => {

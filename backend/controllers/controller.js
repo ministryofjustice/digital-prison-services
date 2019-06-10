@@ -49,6 +49,12 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const getPossibleLevels = asyncMiddleware(async (req, res) => {
+    const { currentIepLevel, agencyId } = req.query
+    const viewModel = await iepDetailsService.getPossibleLevels(res.locals, currentIepLevel, agencyId)
+    res.json(viewModel)
+  })
+
   const postAttendance = asyncMiddleware(async (req, res) => {
     await attendanceService.postAttendance(res.locals, req.body)
     res.json({})
@@ -155,6 +161,12 @@ const factory = ({
     res.end()
   })
 
+  const changeIepLevel = asyncMiddleware(async (req, res) => {
+    const { offenderNumber } = req.params
+    await iepDetailsService.changeIepLevel(res.locals, offenderNumber, req.body)
+    res.end()
+  })
+
   return {
     getActivityList,
     getAdjudications,
@@ -176,6 +188,8 @@ const factory = ({
     getBulkAppointmentsViewModel,
     addBulkAppointments,
     bulkAppointmentsCsvTemplate,
+    changeIepLevel,
+    getPossibleLevels,
   }
 }
 
