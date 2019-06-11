@@ -69,6 +69,7 @@ describe('IEP change container', () => {
         handleError={jest.fn()}
         setLoadedDispatch={jest.fn()}
         resetErrorDispatch={jest.fn()}
+        raiseAnalyticsEvent={jest.fn()}
         history={history}
       />
     )
