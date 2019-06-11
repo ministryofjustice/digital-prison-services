@@ -186,6 +186,34 @@ describe('IEP details controller', async () => {
     expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
   })
 
+  it('Should return records if same From and To dates', async () => {
+    const response = await getIepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-10' })
+    expect(response).toEqual({
+      currentIepLevel: 'Standard',
+      daysOnIepLevel: '1 year, 260 days',
+      currentIepDateTime: '2017-08-15T16:04:35',
+      nextReviewDate: '15/08/2018',
+      establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
+      levels: ['Basic', 'Enhanced', 'Standard'],
+      results: [
+        {
+          bookingId: -1,
+          iepDate: '2017-08-10',
+          iepTime: '2017-08-10T16:04:35',
+          formattedTime: '10/08/2017 - 16:04',
+          iepEstablishment: 'Hewell',
+          iepStaffMember: 'Staff Member',
+          agencyId: 'HEI',
+          iepLevel: 'Basic',
+          userId: 'ITAG_USER',
+        },
+      ],
+    })
+
+    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+  })
+
   it('Should filter by establishment', async () => {
     const response = await getIepDetails({}, '1', { establishment: 'HEI' })
     expect(response).toEqual({

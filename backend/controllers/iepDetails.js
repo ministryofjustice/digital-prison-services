@@ -14,12 +14,12 @@ const getIepDetailsFactory = elite2Api => {
 
     if (fields.fromDate) {
       const fromDate = moment(fields.fromDate)
-      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrAfter(fromDate))
+      filteredResults = filteredResults.filter(result => moment(result.iepDate).isSameOrAfter(fromDate))
     }
 
     if (fields.toDate) {
       const toDate = moment(fields.toDate)
-      filteredResults = filteredResults.filter(result => moment(result.iepTime).isSameOrBefore(toDate))
+      filteredResults = filteredResults.filter(result => moment(result.iepDate).isSameOrBefore(toDate))
     }
 
     return filteredResults
