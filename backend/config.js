@@ -10,7 +10,6 @@ module.exports = {
     maximumFileUploadSizeInMb: process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB || 200,
     updateAttendanceEnabled: process.env.UPDATE_ATTENDANCE_ENABLED === 'true',
     featureFlags: {
-      adjudicationDetailsLinkEnabled: process.env.ATTENDANCE_DETAIL_LINK_ENABLED === 'true',
       iepChangeLinkEnabled: process.env.IEP_CHANGE_LINK_ENABLED === 'true',
     },
   },
