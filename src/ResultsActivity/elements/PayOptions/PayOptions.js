@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Radio from '@govuk-react/radio'
 import VisuallyHidden from '@govuk-react/visually-hidden'
+import { Spinner } from '@govuk-react/icons'
 
 import { isWithinLastYear } from '../../../utils'
 import PayDetails from '../PayDetails'
@@ -10,10 +11,11 @@ import { Option, DetailsLink } from './PayOptions.styles'
 
 function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
   const [selectedOption, setSelectedOption] = useState()
+  const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
   const { id, pay, other, paid, absentReason, comments } = attendanceInfo || {}
 
-  const payOffender = () => {
+  const payOffender = async () => {
     const attendanceDetails = {
       id,
       offenderNo,
@@ -24,7 +26,9 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       paid: true,
     }
 
-    updateOffenderAttendance(attendanceDetails, offenderIndex)
+    setIsPaying(true)
+    await updateOffenderAttendance(attendanceDetails, offenderIndex)
+    setIsPaying(false)
   }
 
   useEffect(() => {
@@ -52,12 +56,14 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
   return (
     <Fragment>
       <Option data-qa="pay-option">
-        {offenderNo &&
+        {!isPaying &&
+          offenderNo &&
           eventId && (
             <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
               <VisuallyHidden>Pay</VisuallyHidden>
             </Radio>
           )}
+        {isPaying && <Spinner title="Paying" height="40px" width="40px" />}
       </Option>
 
       <Option data-qa="other-option">
@@ -93,7 +99,6 @@ PayOptions.propTypes = {
   date: PropTypes.string.isRequired,
   closeModal: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-
   updateOffenderAttendance: PropTypes.func.isRequired,
 }
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { MEDIA_QUERIES, FOCUS_WIDTH } from '@govuk-react/constants'
 import { FOCUS_COLOUR, LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
-import { typography } from '@govuk-react/lib'
+import { spacing, typography } from '@govuk-react/lib'
 
 export const Option = styled.td`
   vertical-align: top;
@@ -17,7 +17,7 @@ export const Option = styled.td`
 
 export const DetailsLink = styled.span`
   display: block;
-  margin-top: 5px;
+  margin-top: ${spacing.simple(2)}px;
   ${typography.font({ size: 16 })};
   text-decoration: underline;
   color: ${LINK_COLOUR};
