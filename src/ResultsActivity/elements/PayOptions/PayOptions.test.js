@@ -1,6 +1,9 @@
 import React from 'react'
+// We need to eventually use the async version of act, which is currently in 16.9.0-alpha.0 to avoid the test console errors
+// https://github.com/facebook/react/issues/14769
 import TestRenderer, { act } from 'react-test-renderer'
 import Radio from '@govuk-react/radio'
+import { Spinner } from '@govuk-react/icons'
 import { DetailsLink } from './PayOptions.styles'
 import PayOptions from '.'
 
@@ -26,10 +29,18 @@ describe('<PayOptions />', () => {
     closeModal: jest.fn(),
     openModal: jest.fn(),
   }
-  const testRenderer = TestRenderer.create(<PayOptions {...props} />)
-  const testInstance = testRenderer.root
-  const payRadio = testInstance.findByProps({ 'data-qa': 'pay-option' }).findByType(Radio)
-  const otherRadio = testInstance.findByProps({ 'data-qa': 'other-option' }).findByType(Radio)
+
+  let testRenderer
+  let testInstance
+  let payRadio
+  let otherRadio
+
+  beforeEach(() => {
+    testRenderer = TestRenderer.create(<PayOptions {...props} />)
+    testInstance = testRenderer.root
+    payRadio = testInstance.findByProps({ 'data-qa': 'pay-option' }).findByType(Radio)
+    otherRadio = testInstance.findByProps({ 'data-qa': 'other-option' }).findByType(Radio)
+  })
 
   it('should not have any radio buttons checked if offender has no pay status', () => {
     expect(payRadio.props.checked).toBe(false)
@@ -37,15 +48,20 @@ describe('<PayOptions />', () => {
   })
 
   it('should call updateOffenderAttendance with the correct args when selecting pay', () => {
-    payRadio.props.onChange()
+    act(() => payRadio.props.onChange())
     expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
       { attended: true, eventId: 123, eventLocationId: 1, offenderNo: 'ABC123', paid: true },
       1
     )
   })
 
+  it('should load the paying spinner when selecting pay', () => {
+    act(() => payRadio.props.onChange())
+    expect(testInstance.findByType(Spinner).props.title).toEqual('Paying')
+  })
+
   it('should call openModal when selecting other', () => {
-    otherRadio.props.onChange()
+    act(() => otherRadio.props.onChange())
     expect(props.openModal).toHaveBeenCalled()
   })
 
