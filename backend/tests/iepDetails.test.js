@@ -186,6 +186,34 @@ describe('IEP details controller', async () => {
     expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
   })
 
+  it('Should return records if same From and To dates', async () => {
+    const response = await getIepDetails({}, '1', { fromDate: '2017-08-10', toDate: '2017-08-10' })
+    expect(response).toEqual({
+      currentIepLevel: 'Standard',
+      daysOnIepLevel: '1 year, 260 days',
+      currentIepDateTime: '2017-08-15T16:04:35',
+      nextReviewDate: '15/08/2018',
+      establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
+      levels: ['Basic', 'Enhanced', 'Standard'],
+      results: [
+        {
+          bookingId: -1,
+          iepDate: '2017-08-10',
+          iepTime: '2017-08-10T16:04:35',
+          formattedTime: '10/08/2017 - 16:04',
+          iepEstablishment: 'Hewell',
+          iepStaffMember: 'Staff Member',
+          agencyId: 'HEI',
+          iepLevel: 'Basic',
+          userId: 'ITAG_USER',
+        },
+      ],
+    })
+
+    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+  })
+
   it('Should filter by establishment', async () => {
     const response = await getIepDetails({}, '1', { establishment: 'HEI' })
     expect(response).toEqual({
@@ -344,24 +372,20 @@ describe('IEP details controller', async () => {
 
     expect(levels).toEqual([
       {
-        title: 'Entry',
-        value: 'ENT',
-        levelDifference: 1,
-      },
-      {
-        title: 'Standard',
-        value: 'STD',
-        levelDifference: 1,
-      },
-      {
         title: 'Enhanced',
         value: 'ENH',
-        levelDifference: 2,
+      },
+      {
+        title: 'Entry',
+        value: 'ENT',
       },
       {
         title: 'New level',
         value: 'NEW',
-        levelDifference: 1000,
+      },
+      {
+        title: 'Standard',
+        value: 'STD',
       },
     ])
   })
@@ -373,22 +397,18 @@ describe('IEP details controller', async () => {
       {
         title: 'Basic',
         value: 'BAS',
-        levelDifference: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
-        levelDifference: 1,
       },
       {
         title: 'Entry',
         value: 'ENT',
-        levelDifference: 2,
       },
       {
         title: 'New level',
         value: 'NEW',
-        levelDifference: 1000,
       },
     ])
   })
@@ -398,24 +418,20 @@ describe('IEP details controller', async () => {
 
     expect(levels).toEqual([
       {
-        title: 'Standard',
-        value: 'STD',
-        levelDifference: 1,
-      },
-      {
         title: 'Basic',
         value: 'BAS',
-        levelDifference: 2,
       },
       {
         title: 'Entry',
         value: 'ENT',
-        levelDifference: 3,
       },
       {
         title: 'New level',
         value: 'NEW',
-        levelDifference: 1000,
+      },
+      {
+        title: 'Standard',
+        value: 'STD',
       },
     ])
   })
@@ -424,10 +440,10 @@ describe('IEP details controller', async () => {
     const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([
-      { title: 'Basic', value: 'BAS', levelDifference: 1 },
-      { title: 'Standard', value: 'STD', levelDifference: 2 },
-      { title: 'Enhanced', value: 'ENH', levelDifference: 3 },
-      { title: 'New level', value: 'NEW', levelDifference: 1000 },
+      { title: 'Basic', value: 'BAS' },
+      { title: 'Enhanced', value: 'ENH' },
+      { title: 'New level', value: 'NEW' },
+      { title: 'Standard', value: 'STD' },
     ])
   })
 })

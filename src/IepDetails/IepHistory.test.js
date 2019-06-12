@@ -51,7 +51,7 @@ describe('IEP history', () => {
   })
 
   it('should render the current IEP level correctly', () => {
-    const wrapper = testRenderer.create(<CurrentIepLevel store={store} />).toJSON()
+    const wrapper = testRenderer.create(<CurrentIepLevel history={history} store={store} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })

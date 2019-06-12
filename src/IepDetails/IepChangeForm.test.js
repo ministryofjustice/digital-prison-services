@@ -16,13 +16,11 @@ describe('<IepChangeForm />', () => {
 
   let wrapper = {}
   let basicRadio = {}
-  let enhancedRadio = {}
   let reasonInput = {}
 
   beforeEach(() => {
     wrapper = mount(<IepChangeForm {...props} />)
     basicRadio = wrapper.find('input[value="BAS"]')
-    enhancedRadio = wrapper.find('input[value="ENH"]')
     reasonInput = wrapper.find('textarea[name="reason"]')
   })
 
