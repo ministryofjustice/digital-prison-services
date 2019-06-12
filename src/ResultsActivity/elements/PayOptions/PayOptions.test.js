@@ -3,6 +3,7 @@ import React from 'react'
 // https://github.com/facebook/react/issues/14769
 import TestRenderer, { act } from 'react-test-renderer'
 import Radio from '@govuk-react/radio'
+import { Spinner } from '@govuk-react/icons'
 import { DetailsLink } from './PayOptions.styles'
 import PayOptions from '.'
 
@@ -52,6 +53,11 @@ describe('<PayOptions />', () => {
       { attended: true, eventId: 123, eventLocationId: 1, offenderNo: 'ABC123', paid: true },
       1
     )
+  })
+
+  it('should load the paying spinner when selecting pay', () => {
+    act(() => payRadio.props.onChange())
+    expect(testInstance.findByType(Spinner).props.title).toEqual('Paying')
   })
 
   it('should call openModal when selecting other', () => {
