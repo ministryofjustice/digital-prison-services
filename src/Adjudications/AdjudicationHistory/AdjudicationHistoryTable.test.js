@@ -2,7 +2,6 @@ import React from 'react'
 import testRenderer from 'react-test-renderer'
 import { MemoryRouter } from 'react-router'
 import AdjudicationHistoryTable from './AdjudicationHistoryTable'
-import { ConnectedFlagsProvider } from '../../flags'
 
 const initialState = {
   adjudicationHistory: {
@@ -49,50 +48,18 @@ describe('Adjudication History Table', () => {
     history.replace = jest.fn()
   })
 
-  it('should render correctly with feature toggle enabled', () => {
-    store.getState.mockReturnValue({
-      ...initialState,
-      flags: {
-        adjudicationDetailsLinkEnabled: true,
-      },
-    })
+  it('should render correctly', () => {
+    store.getState.mockReturnValue(initialState)
 
     const wrapper = testRenderer
       .create(
         <MemoryRouter>
-          <ConnectedFlagsProvider store={store}>
-            <AdjudicationHistoryTable
-              offenderNo="AAA123"
-              store={store}
-              changePerPage={jest.fn()}
-              changePage={jest.fn()}
-            />
-          </ConnectedFlagsProvider>
-        </MemoryRouter>
-      )
-      .toJSON()
-
-    expect(wrapper).toMatchSnapshot()
-  })
-  it('should render correctly with feature toggle disabled', () => {
-    store.getState.mockReturnValue({
-      ...initialState,
-      flags: {
-        adjudicationDetailsLinkEnabled: false,
-      },
-    })
-
-    const wrapper = testRenderer
-      .create(
-        <MemoryRouter>
-          <ConnectedFlagsProvider store={store}>
-            <AdjudicationHistoryTable
-              offenderNo="AAA123"
-              store={store}
-              changePerPage={jest.fn()}
-              changePage={jest.fn()}
-            />
-          </ConnectedFlagsProvider>
+          <AdjudicationHistoryTable
+            offenderNo="AAA123"
+            store={store}
+            changePerPage={jest.fn()}
+            changePage={jest.fn()}
+          />
         </MemoryRouter>
       )
       .toJSON()

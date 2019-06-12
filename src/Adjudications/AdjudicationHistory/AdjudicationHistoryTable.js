@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import routePaths from '../../routePaths'
-import { Flag } from '../../flags'
 
 import { LargeScreenOnly, SmallScreenOnly } from '../../Components/sizing'
 
@@ -15,15 +14,9 @@ import ResultsFilter from '../../Components/ResultsFilter'
 const adjudicationPath = pathToRegexp.compile(routePaths.adjudication)
 
 const AdjudicationLink = ({ offenderNo, adjudicationNo }) => (
-  <Flag
-    name={['adjudicationDetailsLinkEnabled']}
-    render={() => (
-      <Link to={adjudicationPath({ offenderNo, adjudicationNo })} className="link">
-        {adjudicationNo}
-      </Link>
-    )}
-    fallbackRender={() => <>{adjudicationNo}</>}
-  />
+  <Link to={adjudicationPath({ offenderNo, adjudicationNo })} className="link">
+    {adjudicationNo}
+  </Link>
 )
 
 AdjudicationLink.propTypes = {
