@@ -372,24 +372,20 @@ describe('IEP details controller', async () => {
 
     expect(levels).toEqual([
       {
-        title: 'Entry',
-        value: 'ENT',
-        levelDifference: 1,
-      },
-      {
-        title: 'Standard',
-        value: 'STD',
-        levelDifference: 1,
-      },
-      {
         title: 'Enhanced',
         value: 'ENH',
-        levelDifference: 2,
+      },
+      {
+        title: 'Entry',
+        value: 'ENT',
       },
       {
         title: 'New level',
         value: 'NEW',
-        levelDifference: 1000,
+      },
+      {
+        title: 'Standard',
+        value: 'STD',
       },
     ])
   })
@@ -401,22 +397,18 @@ describe('IEP details controller', async () => {
       {
         title: 'Basic',
         value: 'BAS',
-        levelDifference: 1,
       },
       {
         title: 'Enhanced',
         value: 'ENH',
-        levelDifference: 1,
       },
       {
         title: 'Entry',
         value: 'ENT',
-        levelDifference: 2,
       },
       {
         title: 'New level',
         value: 'NEW',
-        levelDifference: 1000,
       },
     ])
   })
@@ -426,24 +418,20 @@ describe('IEP details controller', async () => {
 
     expect(levels).toEqual([
       {
-        title: 'Standard',
-        value: 'STD',
-        levelDifference: 1,
-      },
-      {
         title: 'Basic',
         value: 'BAS',
-        levelDifference: 2,
       },
       {
         title: 'Entry',
         value: 'ENT',
-        levelDifference: 3,
       },
       {
         title: 'New level',
         value: 'NEW',
-        levelDifference: 1000,
+      },
+      {
+        title: 'Standard',
+        value: 'STD',
       },
     ])
   })
@@ -452,10 +440,10 @@ describe('IEP details controller', async () => {
     const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([
-      { title: 'Basic', value: 'BAS', levelDifference: 1 },
-      { title: 'Standard', value: 'STD', levelDifference: 2 },
-      { title: 'Enhanced', value: 'ENH', levelDifference: 3 },
-      { title: 'New level', value: 'NEW', levelDifference: 1000 },
+      { title: 'Basic', value: 'BAS' },
+      { title: 'Enhanced', value: 'ENH' },
+      { title: 'New level', value: 'NEW' },
+      { title: 'Standard', value: 'STD' },
     ])
   })
 })

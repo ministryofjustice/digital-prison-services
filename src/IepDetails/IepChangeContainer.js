@@ -124,10 +124,11 @@ class IepChangeContainer extends Component {
 IepChangeContainer.defaultProps = {
   currentIepLevel: '',
   levels: [],
+  offenderNo: null,
 }
 
 IepChangeContainer.propTypes = {
-  offenderNo: PropTypes.string.isRequired,
+  offenderNo: PropTypes.string,
   currentIepLevel: PropTypes.string,
   offenderDetails: PropTypes.shape({
     firstName: PropTypes.string,
