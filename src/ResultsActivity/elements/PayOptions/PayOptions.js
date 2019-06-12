@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Radio from '@govuk-react/radio'
 import VisuallyHidden from '@govuk-react/visually-hidden'
 import { Spinner } from '@govuk-react/icons'
+import { spacing } from '@govuk-react/lib'
 
 import { isWithinLastYear } from '../../../utils'
 import PayDetails from '../PayDetails'
@@ -10,6 +11,7 @@ import PayOtherForm from '../PayOtherForm'
 import { Option, DetailsLink } from './PayOptions.styles'
 
 function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
+  const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
@@ -63,7 +65,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
               <VisuallyHidden>Pay</VisuallyHidden>
             </Radio>
           )}
-        {isPaying && <Spinner title="Paying" height="40px" width="40px" />}
+        {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
       </Option>
 
       <Option data-qa="other-option">
