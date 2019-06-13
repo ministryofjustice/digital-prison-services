@@ -67,7 +67,7 @@ describe('app (global) reducer', () => {
   it('should return the initial state', () => {
     expect(app(undefined, {})).toEqual({
       caseChangeRedirect: true,
-      config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '', updateAttendanceEnabled: false },
+      config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '', updateAttendancePrisons: [] },
       user: { activeCaseLoadId: null, roles: [] },
       shouldShowTerms: false,
       error: '',

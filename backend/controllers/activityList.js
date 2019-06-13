@@ -34,10 +34,8 @@ const extractAttendanceInfo = (attendanceInformation, event) => {
 }
 
 const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
-  const {
-    app: { updateAttendanceEnabled },
-  } = config
-
+  const { updateAttendancePrisons } = config
+  const updateAttendanceEnabled = agencyId => updateAttendancePrisons.includes(agencyId)
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
@@ -72,7 +70,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
 
-    const attendanceInformation = updateAttendanceEnabled
+    const attendanceInformation = updateAttendanceEnabled(agencyId)
       ? await whereaboutsApi.getAttendance(context, {
           agencyId,
           locationId,
@@ -113,8 +111,9 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-
-      const attendanceInfo = updateAttendanceEnabled ? extractAttendanceInfo(attendanceInformation, event) : {}
+      const attendanceInfo = updateAttendanceEnabled(agencyId)
+        ? extractAttendanceInfo(attendanceInformation, event)
+        : {}
 
       return {
         ...event,

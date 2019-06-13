@@ -222,7 +222,7 @@ const mapStateToProps = state => ({
   error: state.app.error,
   orderField: state.events.orderField,
   sortOrder: state.events.sortOrder,
-  updateAttendanceEnabled: state.app.config.updateAttendanceEnabled,
+  updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
 })
 
 const mapDispatchToProps = dispatch => ({

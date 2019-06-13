@@ -2,14 +2,12 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const whereaboutsApi = {}
 const config = {
-  app: {
-    updateAttendanceEnabled: false,
-  },
+  updateAttendancePrisons: ['ABC'],
 }
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api, whereaboutsApi, config)
   .getActivityList
 
-describe('Activity list with updateAttendanceEnabled set to false', () => {
+describe('Activity list update attendance when agencyId is not in list of enabled prisons', () => {
   beforeEach(() => {
     elite2Api.getActivityList = jest.fn()
     elite2Api.getVisits = jest.fn()
@@ -20,7 +18,6 @@ describe('Activity list with updateAttendanceEnabled set to false', () => {
     elite2Api.getExternalTransfers = jest.fn()
     elite2Api.getAlerts = jest.fn()
     elite2Api.getAssessments = jest.fn()
-    elite2Api.getDetailsLight = jest.fn()
     whereaboutsApi.getAttendance = jest.fn()
     elite2Api.getVisits.mockReturnValue([])
     elite2Api.getAppointments.mockReturnValue([])
@@ -33,12 +30,6 @@ describe('Activity list with updateAttendanceEnabled set to false', () => {
           return []
       }
     })
-  })
-
-  it('should not call the getDetailsLight endpoint', async () => {
-    await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
-
-    expect(elite2Api.getDetailsLight).not.toHaveBeenCalled()
   })
 
   it('should not call the whereaboutsApi endpoint', async () => {

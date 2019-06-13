@@ -52,7 +52,7 @@ const axios = require('axios')
 
 class App extends React.Component {
   async componentWillMount() {
-    const { configDispatch, setErrorDispatch, setFlagsDispatch } = this.props
+    const { configDispatch, setErrorDispatch } = this.props
 
     axios.interceptors.response.use(
       config => {
@@ -77,10 +77,24 @@ class App extends React.Component {
       }
 
       configDispatch(config.data)
-      setFlagsDispatch(config.data.flags)
     } catch (error) {
       setErrorDispatch(error.message)
     }
+  }
+
+  componentDidUpdate() {
+    const { config } = this.props
+    this.updateFeatureFlags(config.flags)
+  }
+
+  updateFeatureFlags = flags => {
+    const { config, user, setFlagsDispatch } = this.props
+    const featureFlags = {
+      ...flags,
+      updateAttendanceEnabled: config.updateAttendancePrisons.includes(user.activeCaseLoadId),
+    }
+
+    setFlagsDispatch(featureFlags)
   }
 
   getActivityLocations = async (day, time) => {
@@ -560,6 +574,7 @@ App.propTypes = {
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
   switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
+  setFlagsDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

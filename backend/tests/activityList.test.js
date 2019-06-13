@@ -2,9 +2,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const whereaboutsApi = {}
 const config = {
-  app: {
-    updateAttendanceEnabled: true,
-  },
+  updateAttendancePrisons: ['LEI'],
 }
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api, whereaboutsApi, config)
   .getActivityList
