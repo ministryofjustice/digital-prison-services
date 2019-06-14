@@ -19,6 +19,7 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import PayOptions from './elements/PayOptions'
 import ModalContainer from '../Components/ModalContainer'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
+import { Flag } from '../flags'
 
 const ManageResults = styled.div`
   display: flex;
@@ -71,7 +72,6 @@ class ResultsActivity extends Component {
       sortOrder,
       orderField,
       setColumnSort,
-      updateAttendanceEnabled,
       payable,
       agencyId,
       handleError,
@@ -161,13 +161,18 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        {updateAttendanceEnabled &&
-          payable && (
-            <React.Fragment>
-              <th className="straight width5 no-print">Pay</th>
-              <th className="straight width5 no-print">Other</th>
-            </React.Fragment>
-          )}
+        {payable && (
+          <Flag
+            name={['updateAttendanceEnabled']}
+            render={() => (
+              <React.Fragment>
+                <th className="straight width5 no-print">Pay</th>
+                <th className="straight width5 no-print">Other</th>
+              </React.Fragment>
+            )}
+            fallbackRender={() => <></>}
+          />
+        )}
       </tr>
     )
 
@@ -267,16 +272,21 @@ class ResultsActivity extends Component {
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
               </div>
             </td>
-            {updateAttendanceEnabled &&
-              payable && (
-                <PayOptions
-                  offenderDetails={offenderDetails}
-                  updateOffenderAttendance={updateOffenderAttendance}
-                  openModal={this.openModal}
-                  closeModal={this.closeModal}
-                  date={date}
-                />
-              )}
+            {payable && (
+              <Flag
+                name={['updateAttendanceEnabled']}
+                render={() => (
+                  <PayOptions
+                    offenderDetails={offenderDetails}
+                    updateOffenderAttendance={updateOffenderAttendance}
+                    openModal={this.openModal}
+                    closeModal={this.closeModal}
+                    date={date}
+                  />
+                )}
+                fallbackRender={() => <></>}
+              />
+            )}
           </tr>
         )
       })
@@ -360,7 +370,6 @@ ResultsActivity.propTypes = {
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
-  updateAttendanceEnabled: PropTypes.bool.isRequired,
   payable: PropTypes.bool.isRequired,
   handleError: PropTypes.func.isRequired,
   setOffenderAttendanceData: PropTypes.func.isRequired,
