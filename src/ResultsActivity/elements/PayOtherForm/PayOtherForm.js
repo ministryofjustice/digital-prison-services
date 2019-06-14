@@ -129,7 +129,6 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
               Cancel
             </ButtonCancel>
           </ButtonContainer>
-          <pre>{JSON.stringify(values, 0, 2)}</pre>
         </form>
       )}
     />
