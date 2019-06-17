@@ -20,8 +20,8 @@ const sortActivitiesByEventThenByLastName = data => {
 const extractAttendanceInfo = (attendanceInformation, event) => {
   if (attendanceInformation && attendanceInformation.length > 0) {
     const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === event.bookingId)
-    const { id, absentReason, attended, paid, comments } = offenderAttendanceInfo || {}
-    const attendanceInfo = { id, absentReason, comments, paid }
+    const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
+    const attendanceInfo = { id, absentReason, comments, paid, locked }
 
     if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
 
