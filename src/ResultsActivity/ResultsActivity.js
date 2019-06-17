@@ -187,7 +187,7 @@ class ResultsActivity extends Component {
     }
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
-      const { resetErrorDispatch } = this.props
+      const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
       const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
       const offenderAttendanceData = {
@@ -208,6 +208,12 @@ class ResultsActivity extends Component {
       } catch (error) {
         handleError(error)
       }
+
+      raiseAnalyticsEvent({
+        category: 'Pay and attendance',
+        action: `Offender ${offenderAttendanceData.paid ? 'paid' : 'not paid'}`,
+        label: offenderAttendanceData.other ? `Other - ${absentReason}` : 'Pay',
+      })
     }
 
     const offenders =
@@ -368,6 +374,7 @@ ResultsActivity.propTypes = {
   handleError: PropTypes.func.isRequired,
   setOffenderAttendanceData: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)
