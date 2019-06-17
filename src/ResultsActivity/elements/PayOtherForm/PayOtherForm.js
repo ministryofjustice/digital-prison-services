@@ -15,7 +15,7 @@ import { spacing } from '@govuk-react/lib'
 import ButtonCancel from '../ButtonCancel'
 import RadioGroup from '../../../Components/RadioGroup'
 import { properCaseName } from '../../../utils'
-import { FieldWithError, onHandleErrorClick } from '../../../final-form-govuk-helpers'
+import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
 
 const ButtonContainer = styled.div`
   button {
@@ -35,12 +35,12 @@ const validateThenSubmit = submitHandler => values => {
     formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
   }
 
-  if (!values.reason) {
-    formErrors.push({ targetName: 'reason', text: 'Select a reason' })
+  if (!values.absentReason) {
+    formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
   }
 
   if (!values.comments) {
-    formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.reason)}` })
+    formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
   }
 
   if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
@@ -49,10 +49,11 @@ const validateThenSubmit = submitHandler => values => {
 }
 
 export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, absentReasons }) {
+  const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
+  const { id, absentReason, comments } = attendanceInfo || {}
+
   const payOffender = async values => {
     const paid = values.pay === 'yes'
-    const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
-    const { id } = attendanceInfo || {}
 
     const attendanceDetails = {
       id,
@@ -61,9 +62,9 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
       paid,
       eventId,
       eventLocationId,
-      absentReason: values.reason,
-      attended: false,
+      absentReason: values.absentReason,
       comments: values.comments,
+      attended: false,
     }
 
     await updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
@@ -74,14 +75,27 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
     return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasons
   }
 
+  const getPreviousPayStatus = () => {
+    if (id) return attendanceInfo.paid ? 'yes' : 'no'
+    return undefined
+  }
+
+  const initialValues = {
+    pay: getPreviousPayStatus(),
+    absentReason,
+    comments,
+  }
+
   return (
     <Form
+      initialValues={initialValues}
       onSubmit={values => validateThenSubmit(payOffender)(values)}
       render={({ handleSubmit, submitting, pristine, submitError: errors, values }) => (
         <form onSubmit={handleSubmit}>
           {errors && (
             <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />
           )}
+          <WhenFieldChanges field="pay" becomes={values.pay} set="absentReason" to="" />
           <Fieldset>
             <Fieldset.Legend size="MEDIUM" isPageHeading>
               Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
@@ -93,8 +107,8 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
               options={[{ title: 'Yes', value: 'yes' }, { title: 'No', value: 'no' }]}
               inline
             />
-            <FieldWithError errors={errors} name="reason" component={Select} label="Select a reason">
-              <option value="" disabled hidden>
+            <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
+              <option value="" disabled>
                 Select
               </option>
               {getAbsentReasons(values.pay).map(reason => (
@@ -104,7 +118,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
               ))}
             </FieldWithError>
             <FieldWithError errors={errors} name="comments" component={TextArea}>
-              Enter {commentOrCaseNote(values.reason)}
+              Enter {commentOrCaseNote(values.absentReason)}
             </FieldWithError>
           </Fieldset>
           <ButtonContainer>

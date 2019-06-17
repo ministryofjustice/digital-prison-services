@@ -6,16 +6,15 @@ import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
 import { isWithinLastYear } from '../../../utils'
-import PayDetails from '../PayDetails'
 import PayOtherForm from '../PayOtherForm'
-import { Option, DetailsLink } from './PayOptions.styles'
+import { Option, UpdateLink } from './PayOptions.styles'
 
 function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
   const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
-  const { id, pay, other, paid, absentReason, comments } = attendanceInfo || {}
+  const { id, pay, other } = attendanceInfo || {}
 
   const payOffender = async () => {
     const attendanceDetails = {
@@ -38,9 +37,6 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
     if (attendanceInfo && other) setSelectedOption('other')
   })
 
-  const renderDetails = () =>
-    openModal(<PayDetails paid={paid} absentReason={absentReason} comments={comments} cancelHandler={closeModal} />)
-
   const renderForm = () =>
     openModal(
       <PayOtherForm
@@ -50,7 +46,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       />
     )
 
-  const showDetails = () => {
+  const allowUpdate = () => {
     if (selectedOption === 'other' && isWithinLastYear(date)) return true
     return false
   }
@@ -75,7 +71,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
               <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
                 <VisuallyHidden>Other</VisuallyHidden>
               </Radio>
-              {showDetails() && <DetailsLink onClick={renderDetails}>Details</DetailsLink>}
+              {allowUpdate() && <UpdateLink onClick={renderForm}>Update</UpdateLink>}
             </>
           )}
       </Option>
@@ -92,10 +88,9 @@ PayOptions.propTypes = {
     eventLocationId: PropTypes.number,
     offenderIndex: PropTypes.number,
     attendanceInfo: PropTypes.shape({
+      id: PropTypes.number,
       pay: PropTypes.bool,
       other: PropTypes.bool,
-      absentReason: PropTypes.string,
-      comments: PropTypes.string,
     }),
   }),
   date: PropTypes.string.isRequired,

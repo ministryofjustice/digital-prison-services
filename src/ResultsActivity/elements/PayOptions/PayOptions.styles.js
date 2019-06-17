@@ -15,7 +15,7 @@ export const Option = styled.td`
   }
 `
 
-export const DetailsLink = styled.span`
+export const UpdateLink = styled.span`
   display: block;
   margin-top: ${spacing.simple(2)}px;
   ${typography.font({ size: 16 })};

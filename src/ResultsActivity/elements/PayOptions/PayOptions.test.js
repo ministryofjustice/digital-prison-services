@@ -4,7 +4,7 @@ import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 import Radio from '@govuk-react/radio'
 import { Spinner } from '@govuk-react/icons'
-import { DetailsLink } from './PayOptions.styles'
+import { UpdateLink } from './PayOptions.styles'
 import PayOptions from '.'
 
 describe('<PayOptions />', () => {
@@ -79,10 +79,10 @@ describe('<PayOptions />', () => {
     expect(otherRadio.props.checked).toBe(true)
   })
 
-  it('should call openModal when clicking on details link', () => {
+  it('should call openModal when clicking on update link', () => {
     props.offenderDetails.attendanceInfo.other = true
     act(() => testRenderer.update(<PayOptions {...props} />))
-    const detailsLink = testInstance.findByType(DetailsLink)
+    const detailsLink = testInstance.findByType(UpdateLink)
     detailsLink.props.onClick()
     expect(props.openModal).toHaveBeenCalled()
   })
@@ -90,7 +90,7 @@ describe('<PayOptions />', () => {
   it('should not display the details link select date is greater than 1 year', () => {
     props.date = '12/01/2018'
     act(() => testRenderer.update(<PayOptions {...props} />))
-    const detailsLink = testInstance.findAllByType(DetailsLink)
+    const detailsLink = testInstance.findAllByType(UpdateLink)
     expect(detailsLink.length).toBe(0)
   })
 })

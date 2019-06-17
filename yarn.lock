@@ -9395,6 +9395,13 @@ react-dom@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
+react-final-form-listeners@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-final-form-listeners/-/react-final-form-listeners-1.0.2.tgz#b52da984300281cf1f69a6412e86df6249e2bf1c"
+  integrity sha512-AaUUHcXRhD3esC80yUfYPI8FJ3TUiMu0f4hk18QL8NMCWjokg6NWS32WkRJsH3bLWDoiy7+uNVOAAyO/XoupyA==
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+
 react-final-form@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-4.0.2.tgz#fa829d7fb60dcc168804bf2edda58f3d62c4607b"

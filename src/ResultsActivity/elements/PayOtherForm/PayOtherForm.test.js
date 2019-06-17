@@ -7,7 +7,8 @@ describe('<PayOtherForm />', () => {
     formWrapper.find('form').simulate('submit')
     formWrapper.update()
   }
-  const props = {
+
+  const sharedProps = {
     cancelHandler: jest.fn(),
     offender: {
       offenderNo: 'ABC123',
@@ -25,7 +26,6 @@ describe('<PayOtherForm />', () => {
         { value: 'Refused', name: 'Refused' },
       ],
     },
-    initialValues: {},
   }
 
   let wrapper = {}
@@ -34,141 +34,178 @@ describe('<PayOtherForm />', () => {
   let reasonSelector = {}
   let commentInput = {}
 
-  beforeEach(() => {
-    wrapper = mount(<PayOtherForm {...props} />)
-    yesRadio = wrapper.find('input[value="yes"]')
-    noRadio = wrapper.find('input[value="no"]')
-    reasonSelector = wrapper.find('select[name="reason"]')
-    commentInput = wrapper.find('textarea[name="comments"]')
-  })
+  const buildWrapper = wrappedComponent => {
+    wrapper = wrappedComponent
+    yesRadio = wrappedComponent.find('input[value="yes"]')
+    noRadio = wrappedComponent.find('input[value="no"]')
+    reasonSelector = wrappedComponent.find('select[name="absentReason"]')
+    commentInput = wrappedComponent.find('textarea[name="comments"]')
+  }
 
-  it('should display the correct offender name', () => {
-    expect(wrapper.find('legend').text()).toEqual('Do you want to pay Test Offender?')
-  })
+  describe('with no initial values', () => {
+    const props = { ...sharedProps }
+    beforeEach(() => buildWrapper(mount(<PayOtherForm {...props} />)))
 
-  it('should trigger the cancel handler when clicking cancel', () => {
-    const cancelButton = wrapper.find('ButtonCancel')
-
-    cancelButton.props().onClick()
-    expect(props.cancelHandler).toHaveBeenCalled()
-  })
-
-  it('should display paid reasons when "pay" is selected', () => {
-    noRadio.instance().checked = true
-    noRadio.simulate('change', noRadio)
-    wrapper.update()
-
-    const skipDefaultEntry = 1
-    const reasons = wrapper
-      .find('select[name="reason"]')
-      .getElement()
-      .props.children[skipDefaultEntry].map(reason => reason.props)
-
-    expect(reasons).toEqual([
-      { value: 'UnacceptableAbsence', children: 'Unacceptable absence' },
-      { value: 'Refused', children: 'Refused' },
-    ])
-  })
-
-  it('should not display any absent reasons by default', () => {
-    const skipDefaultEntry = 1
-    const reasons = wrapper
-      .find('select[name="reason"]')
-      .getElement()
-      .props.children[skipDefaultEntry].map(reason => reason.props)
-
-    expect(reasons).toEqual([])
-  })
-
-  it('should display paid reasons when "other" is selected', () => {
-    yesRadio.instance().checked = true
-    yesRadio.simulate('change', noRadio)
-    wrapper.update()
-
-    const skipDefaultEntry = 1
-    const reasons = wrapper
-      .find('select[name="reason"]')
-      .getElement()
-      .props.children[skipDefaultEntry].map(reason => reason.props)
-
-    expect(reasons).toEqual([{ value: 'AcceptableAbsence', children: 'Acceptable absence' }])
-  })
-
-  describe('on error', () => {
-    it('should display correct errors for missing values', () => {
-      submitForm(wrapper)
-
-      const errors = wrapper.find('ErrorSummary').find('li')
-
-      expect(errors.at(0).text()).toEqual('Select a pay option')
-      expect(errors.at(1).text()).toEqual('Select a reason')
-      expect(errors.at(2).text()).toEqual('Enter comments')
+    it('should display the correct offender name', () => {
+      expect(wrapper.find('legend').text()).toEqual('Do you want to pay Test Offender?')
     })
 
-    it('should change error message if a case note is required', () => {
+    it('should trigger the cancel handler when clicking cancel', () => {
+      const cancelButton = wrapper.find('ButtonCancel')
+
+      cancelButton.props().onClick()
+      expect(props.cancelHandler).toHaveBeenCalled()
+    })
+
+    it('should display paid reasons when "pay" is selected', () => {
       noRadio.instance().checked = true
       noRadio.simulate('change', noRadio)
       wrapper.update()
-      reasonSelector.instance().value = 'UnacceptableAbsence'
-      reasonSelector.simulate('change', reasonSelector)
 
-      submitForm(wrapper)
+      const skipDefaultEntry = 1
+      const reasons = wrapper
+        .find('select[name="absentReason"]')
+        .getElement()
+        .props.children[skipDefaultEntry].map(reason => reason.props)
 
-      const errors = wrapper.find('ErrorSummary').find('li')
-      expect(errors.at(0).text()).toEqual('Enter case note')
-    })
-  })
-
-  describe('on success', () => {
-    beforeEach(() => {
-      commentInput.instance().value = 'A supporting comment.'
-      commentInput.simulate('change', commentInput)
-
-      submitForm(wrapper)
+      expect(reasons).toEqual([
+        { value: 'UnacceptableAbsence', children: 'Unacceptable absence' },
+        { value: 'Refused', children: 'Refused' },
+      ])
     })
 
-    it('should submit with the correct, paid information', () => {
-      const expectedPayload = {
-        absentReason: 'AcceptableAbsence',
-        attended: false,
-        comments: 'A supporting comment.',
-        eventId: 123,
-        eventLocationId: 456,
-        offenderNo: 'ABC123',
-      }
+    it('should not display any absent reasons by default', () => {
+      const skipDefaultEntry = 1
+      const reasons = wrapper
+        .find('select[name="absentReason"]')
+        .getElement()
+        .props.children[skipDefaultEntry].map(reason => reason.props)
 
+      expect(reasons).toEqual([])
+    })
+
+    it('should display paid reasons when "other" is selected', () => {
       yesRadio.instance().checked = true
       yesRadio.simulate('change', noRadio)
       wrapper.update()
 
-      reasonSelector.instance().value = 'AcceptableAbsence'
-      reasonSelector.simulate('change', reasonSelector)
+      const skipDefaultEntry = 1
+      const reasons = wrapper
+        .find('select[name="absentReason"]')
+        .getElement()
+        .props.children[skipDefaultEntry].map(reason => reason.props)
 
-      submitForm(wrapper)
-
-      expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: true }, 1)
+      expect(reasons).toEqual([{ value: 'AcceptableAbsence', children: 'Acceptable absence' }])
     })
 
-    it('should submit with the correct, unpaid information', () => {
-      const expectedPayload = {
-        absentReason: 'UnacceptableAbsence',
-        attended: false,
-        comments: 'A supporting comment.',
-        eventId: 123,
-        eventLocationId: 456,
-        offenderNo: 'ABC123',
+    describe('on error', () => {
+      it('should display correct errors for missing values', () => {
+        submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+
+        expect(errors.at(0).text()).toEqual('Select a pay option')
+        expect(errors.at(1).text()).toEqual('Select a reason')
+        expect(errors.at(2).text()).toEqual('Enter comments')
+      })
+
+      it('should change error message if a case note is required', () => {
+        noRadio.instance().checked = true
+        noRadio.simulate('change', noRadio)
+        wrapper.update()
+        reasonSelector.instance().value = 'UnacceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+        expect(errors.at(0).text()).toEqual('Enter case note')
+      })
+    })
+
+    describe('on success', () => {
+      beforeEach(() => {
+        commentInput.instance().value = 'A supporting comment.'
+        commentInput.simulate('change', commentInput)
+
+        submitForm(wrapper)
+      })
+
+      it('should submit with the correct, paid information', () => {
+        const expectedPayload = {
+          absentReason: 'AcceptableAbsence',
+          attended: false,
+          comments: 'A supporting comment.',
+          eventId: 123,
+          eventLocationId: 456,
+          offenderNo: 'ABC123',
+        }
+
+        yesRadio.instance().checked = true
+        yesRadio.simulate('change', noRadio)
+        wrapper.update()
+
+        reasonSelector.instance().value = 'AcceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        submitForm(wrapper)
+
+        expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: true }, 1)
+      })
+
+      it('should submit with the correct, unpaid information', () => {
+        const expectedPayload = {
+          absentReason: 'UnacceptableAbsence',
+          attended: false,
+          comments: 'A supporting comment.',
+          eventId: 123,
+          eventLocationId: 456,
+          offenderNo: 'ABC123',
+        }
+
+        noRadio.instance().checked = true
+        noRadio.simulate('change', noRadio)
+        wrapper.update()
+
+        reasonSelector.instance().value = 'UnacceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        submitForm(wrapper)
+
+        expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: false }, 1)
+      })
+    })
+  })
+
+  describe('with initial values', () => {
+    const props = { ...sharedProps }
+
+    it('should have the correct initial values if user has been paid', () => {
+      props.offender.attendanceInfo = {
+        id: 1,
+        paid: true,
+        absentReason: 'AcceptableAbsence',
+        comments: 'Acceptable reason comment',
       }
+      buildWrapper(mount(<PayOtherForm {...props} />))
+      expect(yesRadio.props().checked).toBe(true)
+      expect(noRadio.props().checked).toBe(false)
+      expect(reasonSelector.props().value).toBe('AcceptableAbsence')
+      expect(commentInput.props().value).toBe('Acceptable reason comment')
+    })
 
-      noRadio.instance().checked = true
-      noRadio.simulate('change', noRadio)
-      wrapper.update()
-
-      reasonSelector.instance().value = 'UnacceptableAbsence'
-      reasonSelector.simulate('change', reasonSelector)
-
-      submitForm(wrapper)
-
-      expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: false }, 1)
+    it('should have the correct initial values if user has not been paid', () => {
+      props.offender.attendanceInfo = {
+        id: 2,
+        paid: false,
+        absentReason: 'UncceptableAbsence',
+        comments: 'Uncceptable reason comment',
+      }
+      buildWrapper(mount(<PayOtherForm {...props} />))
+      expect(yesRadio.props().checked).toBe(false)
+      expect(noRadio.props().checked).toBe(true)
+      expect(reasonSelector.props().value).toBe('UncceptableAbsence')
+      expect(commentInput.props().value).toBe('Uncceptable reason comment')
     })
   })
 })
