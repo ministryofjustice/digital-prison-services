@@ -476,6 +476,7 @@ describe('Activity list controller', async () => {
     it('should load attendance details', async () => {
       whereaboutsApi.getAttendance.mockReturnValue([
         {
+          id: 1,
           absentReason: 'Acceptable absence',
           attended: false,
           paid: true,
@@ -486,8 +487,10 @@ describe('Activity list controller', async () => {
           period: 'AM',
           prisonId: 'LEI',
           comments: 'Some comments or case note text.',
+          locked: true,
         },
         {
+          id: 2,
           absentReason: 'Refused',
           attended: true,
           paid: false,
@@ -497,8 +500,10 @@ describe('Activity list controller', async () => {
           eventLocationId: 1,
           period: 'AM',
           prisonId: 'LEI',
+          locked: false,
         },
         {
+          id: 3,
           attended: true,
           paid: true,
           bookingId: 3,
@@ -507,6 +512,7 @@ describe('Activity list controller', async () => {
           eventLocationId: 1,
           period: 'AM',
           prisonId: 'LEI',
+          locked: true,
         },
       ])
 
@@ -542,6 +548,8 @@ describe('Activity list controller', async () => {
             comments: 'Some comments or case note text.',
             other: true,
             paid: true,
+            locked: true,
+            id: 1,
           },
         },
         {
@@ -560,6 +568,8 @@ describe('Activity list controller', async () => {
             comments: undefined,
             other: true,
             paid: false,
+            locked: false,
+            id: 2,
           },
         },
         {
@@ -578,6 +588,8 @@ describe('Activity list controller', async () => {
             comments: undefined,
             pay: true,
             paid: true,
+            locked: true,
+            id: 3,
           },
         },
       ])
