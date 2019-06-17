@@ -14,7 +14,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
-  const { id, pay, other } = attendanceInfo || {}
+  const { id, pay, other, locked } = attendanceInfo || {}
 
   const payOffender = async () => {
     const attendanceDetails = {
@@ -55,6 +55,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
     <Fragment>
       <Option data-qa="pay-option">
         {!isPaying &&
+          !locked &&
           offenderNo &&
           eventId && (
             <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
@@ -65,7 +66,8 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       </Option>
 
       <Option data-qa="other-option">
-        {offenderNo &&
+        {!locked &&
+          offenderNo &&
           eventId && (
             <>
               <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>

@@ -72,7 +72,6 @@ class ResultsActivity extends Component {
       sortOrder,
       orderField,
       setColumnSort,
-      payable,
       agencyId,
       handleError,
       setOffenderAttendanceData,
@@ -161,18 +160,16 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        {payable && (
-          <Flag
-            name={['updateAttendanceEnabled']}
-            render={() => (
-              <React.Fragment>
-                <th className="straight width5 no-print">Pay</th>
-                <th className="straight width5 no-print">Other</th>
-              </React.Fragment>
-            )}
-            fallbackRender={() => <></>}
-          />
-        )}
+        <Flag
+          name={['updateAttendanceEnabled']}
+          render={() => (
+            <React.Fragment>
+              <th className="straight width5 no-print">Pay</th>
+              <th className="straight width5 no-print">Other</th>
+            </React.Fragment>
+          )}
+          fallbackRender={() => <></>}
+        />
       </tr>
     )
 
@@ -272,21 +269,19 @@ class ResultsActivity extends Component {
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
               </div>
             </td>
-            {payable && (
-              <Flag
-                name={['updateAttendanceEnabled']}
-                render={() => (
-                  <PayOptions
-                    offenderDetails={offenderDetails}
-                    updateOffenderAttendance={updateOffenderAttendance}
-                    openModal={this.openModal}
-                    closeModal={this.closeModal}
-                    date={date}
-                  />
-                )}
-                fallbackRender={() => <></>}
-              />
-            )}
+            <Flag
+              name={['updateAttendanceEnabled']}
+              render={() => (
+                <PayOptions
+                  offenderDetails={offenderDetails}
+                  updateOffenderAttendance={updateOffenderAttendance}
+                  openModal={this.openModal}
+                  closeModal={this.closeModal}
+                  date={date}
+                />
+              )}
+              fallbackRender={() => <></>}
+            />
           </tr>
         )
       })
@@ -370,7 +365,6 @@ ResultsActivity.propTypes = {
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
-  payable: PropTypes.bool.isRequired,
   handleError: PropTypes.func.isRequired,
   setOffenderAttendanceData: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,

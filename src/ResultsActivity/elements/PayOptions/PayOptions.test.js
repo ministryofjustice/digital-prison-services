@@ -93,4 +93,13 @@ describe('<PayOptions />', () => {
     const detailsLink = testInstance.findAllByType(UpdateLink)
     expect(detailsLink.length).toBe(0)
   })
+
+  it('should not display radio buttons when attendance is locked', () => {
+    props.offenderDetails.attendanceInfo.locked = true
+    act(() => testRenderer.update(<PayOptions {...props} />))
+    const payOption = testInstance.findByProps({ 'data-qa': 'pay-option' }).findAllByType(Radio)
+    const otherOption = testInstance.findByProps({ 'data-qa': 'other-option' }).findAllByType(Radio)
+    expect(payOption.length).toBe(0)
+    expect(otherOption.length).toBe(0)
+  })
 })
