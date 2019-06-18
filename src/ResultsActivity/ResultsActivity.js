@@ -20,6 +20,7 @@ import PayOptions from './elements/PayOptions'
 import ModalContainer from '../Components/ModalContainer'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
+import { attendanceUpdated } from './resultsActivityGAEvents'
 
 const ManageResults = styled.div`
   display: flex;
@@ -209,11 +210,7 @@ class ResultsActivity extends Component {
         handleError(error)
       }
 
-      raiseAnalyticsEvent({
-        category: 'Pay and attendance',
-        action: `Offender ${offenderAttendanceData.paid ? 'paid' : 'not paid'}`,
-        label: offenderAttendanceData.other ? `Other - ${absentReason}` : 'Pay',
-      })
+      raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
     }
 
     const offenders =

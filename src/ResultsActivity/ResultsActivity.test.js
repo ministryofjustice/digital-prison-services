@@ -155,6 +155,7 @@ const props = {
   sortOrder: 'ASC',
   agencyId: PRISON,
   user,
+  raiseAnalyticsEvent: jest.fn(),
 }
 
 describe('Offender activity list results component', () => {
