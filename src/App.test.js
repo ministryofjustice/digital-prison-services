@@ -73,6 +73,7 @@ const props = {
   switchAgencyDispatch: fn,
   userDetailsDispatch: fn,
   fetchContentLinksDispatch: fn,
+  setFlagsDispatch: fn,
 }
 
 describe('App component', () => {

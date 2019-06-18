@@ -20,6 +20,7 @@ import PayOptions from './elements/PayOptions'
 import ModalContainer from '../Components/ModalContainer'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
+import { attendanceUpdated } from './resultsActivityGAEvents'
 
 const ManageResults = styled.div`
   display: flex;
@@ -187,7 +188,7 @@ class ResultsActivity extends Component {
     }
 
     const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
-      const { resetErrorDispatch } = this.props
+      const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
       const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
       const offenderAttendanceData = {
@@ -208,6 +209,8 @@ class ResultsActivity extends Component {
       } catch (error) {
         handleError(error)
       }
+
+      raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
     }
 
     const offenders =
@@ -368,6 +371,7 @@ ResultsActivity.propTypes = {
   handleError: PropTypes.func.isRequired,
   setOffenderAttendanceData: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

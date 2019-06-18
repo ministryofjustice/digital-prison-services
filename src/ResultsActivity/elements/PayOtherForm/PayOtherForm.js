@@ -95,7 +95,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
           {errors && (
             <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />
           )}
-          <WhenFieldChanges field="pay" becomes={values.pay} set="absentReason" to="" />
+          <WhenFieldChanges field="pay" becomes={values.pay || ''} set="absentReason" to="" />
           <Fieldset>
             <Fieldset.Legend size="MEDIUM" isPageHeading>
               Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
