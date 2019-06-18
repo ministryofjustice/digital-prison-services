@@ -2,12 +2,13 @@ import { iepChangeGaEvent, LevelSelected, ChangeAbandonment } from './IepChangeG
 
 describe('Bulk IEP level change ga events', () => {
   it('should create an ga event of type of level changed', () => {
-    const level = 'Basic'
-    const reason = 'Some reason'
+    const toLevel = 'Basic'
+    const fromLevel = 'Enhanced'
+    const agencyId = 'LEI'
 
-    expect(LevelSelected(level, reason)).toEqual({
+    expect(LevelSelected(toLevel, fromLevel, agencyId)).toEqual({
       ...iepChangeGaEvent,
-      action: `level changed to ${level} with reason: ${reason}`,
+      action: `level changed from ${fromLevel} to ${toLevel} at ${agencyId}`,
     })
   })
 

@@ -54,7 +54,15 @@ class IepChangeContainer extends Component {
   }
 
   changeIepLevel = async values => {
-    const { offenderNo, handleError, levels, history, raiseAnalyticsEvent } = this.props
+    const {
+      offenderNo,
+      handleError,
+      levels,
+      history,
+      raiseAnalyticsEvent,
+      currentIepLevel,
+      activeCaseLoadId,
+    } = this.props
     const level = levels.find(l => l.value === values.level)
 
     try {
@@ -62,7 +70,7 @@ class IepChangeContainer extends Component {
         iepLevel: values.level,
         comment: values.reason,
       })
-      raiseAnalyticsEvent(LevelSelected(level.title, values.reason))
+      raiseAnalyticsEvent(LevelSelected(level.title, currentIepLevel, activeCaseLoadId))
       history.goBack()
       notify.show(`IEP Level successfully changed to ${level.title}`, 'success')
     } catch (error) {

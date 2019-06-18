@@ -3,9 +3,9 @@ export const iepChangeGaEvent = {
   label: 'IEP change',
 }
 
-export const LevelSelected = (level, reason) => ({
+export const LevelSelected = (toLevel, fromLevel, agencyId) => ({
   ...iepChangeGaEvent,
-  action: `level changed to ${level} with reason: ${reason}`,
+  action: `level changed from ${fromLevel} to ${toLevel} at ${agencyId}`,
 })
 
 export const ChangeAbandonment = () => ({
