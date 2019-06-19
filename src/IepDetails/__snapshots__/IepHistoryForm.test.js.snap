@@ -5,7 +5,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="sc-kgoBCf hNqWyG"
+    className="sc-chPdSV ddsHXB"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -17,7 +17,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <h3
-            className="sc-kpOJdX jmiqVd sc-jzJRlG jslWVk"
+            className="sc-kGXeez iHgsBB sc-fjdhpX TnkYd"
           >
             Filters
           </h3>
@@ -29,16 +29,16 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
             className="sc-bwzfXH iXLolC"
           >
             <label
-              className="sc-chPdSV bZWJhx sc-jTzLTM chExuY"
+              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
               id="establishment-select"
             >
               <span
-                className="sc-VigVT bXITLn"
+                className="sc-gqjmRU hMYAWR"
               >
                 Establishment
               </span>
               <select
-                className="sc-kAzzGY fdeKIf"
+                className="sc-cSHVUG iPEkCj"
                 name="establishment"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -62,16 +62,16 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
             className="sc-bwzfXH iXLolC"
           >
             <label
-              className="sc-chPdSV bZWJhx sc-jTzLTM chExuY"
+              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
               id="iep-level-select"
             >
               <span
-                className="sc-VigVT bXITLn"
+                className="sc-gqjmRU hMYAWR"
               >
                 IEP level
               </span>
               <select
-                className="sc-kAzzGY fdeKIf"
+                className="sc-cSHVUG iPEkCj"
                 name="level"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -100,7 +100,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <span
-            className="sc-dxgOiQ ihVthS"
+            className="sc-kpOJdX irqhhZ"
           >
             Date range
           </span>
@@ -117,17 +117,17 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
             >
               <div>
                 <label
-                  className="sc-jTzLTM gzbVjD"
+                  className="sc-VigVT srngP"
                 >
                   <span
-                    className="sc-VigVT bXITLn"
+                    className="sc-gqjmRU hMYAWR"
                   >
                      
                     From
                      
                   </span>
                   <input
-                    className="form-control sc-fjdhpX bdqmyp"
+                    className="form-control sc-jTzLTM cLpfsp"
                     name="fromDate"
                     onChange={[Function]}
                     onClick={[Function]}
@@ -534,17 +534,17 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
             >
               <div>
                 <label
-                  className="sc-jTzLTM gzbVjD"
+                  className="sc-VigVT srngP"
                 >
                   <span
-                    className="sc-VigVT bXITLn"
+                    className="sc-gqjmRU hMYAWR"
                   >
                      
                     To
                      
                   </span>
                   <input
-                    className="form-control sc-fjdhpX bdqmyp"
+                    className="form-control sc-jTzLTM cLpfsp"
                     name="toDate"
                     onChange={[Function]}
                     onClick={[Function]}
