@@ -62,7 +62,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
   }
 
   const otherMsg = () => {
-    const msg = (other || (!isWithinLastWeek(date) && !paid && !other)) && 'View/ Update'
+    const msg = (other || (!isWithinLastWeek(date) && !paid)) && 'View/ Update'
     return msg
   }
 
@@ -85,11 +85,12 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
             <VisuallyHidden>Other</VisuallyHidden>
           </Radio>
         )}
-        {allowUpdate() && (
-          <UpdateLink onClick={renderForm}>
-            {<OtherMessage data-qa="other-message">{otherMsg()}</OtherMessage>}
-          </UpdateLink>
-        )}
+        {allowUpdate() &&
+          otherMsg() && (
+            <UpdateLink onClick={renderForm}>
+              <OtherMessage data-qa="other-message">{otherMsg()}</OtherMessage>
+            </UpdateLink>
+          )}
       </Option>
     </Fragment>
   )
