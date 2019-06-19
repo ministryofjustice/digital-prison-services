@@ -5,7 +5,7 @@ import VisuallyHidden from '@govuk-react/visually-hidden'
 import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
-import { isWithinLastYear, isWithinLastWeek } from '../../../utils'
+import { isWithinLastWeek } from '../../../utils'
 import PayOtherForm from '../PayOtherForm'
 import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
 
@@ -47,21 +47,22 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
     )
 
   const allowUpdate = () => {
-    if (selectedOption === 'other' && isWithinLastYear(date)) return true
+    if (selectedOption === 'other' && isWithinLastWeek(date)) return true
     return false
   }
   const showRadioButton = () => {
-    if (!locked && !paid && offenderNo && eventId && isWithinLastWeek(date)) return true
+    if (!locked && offenderNo && eventId && isWithinLastWeek(date)) return true
     return false
   }
 
   const payMsg = () => {
-    const msg = paid ? 'Paid' : !isWithinLastWeek(date) && !paid && 'Not Paid'
+    const msg =
+      isWithinLastWeek(date) && paid && locked ? 'Paid' : !isWithinLastWeek(date) && !paid && locked && 'Not Paid'
     return msg
   }
 
   const otherMsg = () => {
-    const msg = ((paid && other) || (!isWithinLastWeek(date) && !paid && !other)) && 'View/ Update'
+    const msg = (other || (!isWithinLastWeek(date) && !paid && !other)) && 'View/ Update'
     return msg
   }
 

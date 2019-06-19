@@ -22,6 +22,8 @@ describe('<PayOptions />', () => {
         paid: false,
         comments: undefined,
         absentReason: undefined,
+        other: false,
+        locked: false,
       },
     },
     updateOffenderAttendance: jest.fn(),
@@ -86,20 +88,21 @@ describe('<PayOptions />', () => {
   })
 
   it('should call openModal when clicking on update link', () => {
+    // props.offenderDetails.attendanceInfo.other = true
     act(() => testRenderer.update(<PayOptions {...props} />))
     const detailsLink = testInstance.findByType(UpdateLink)
     detailsLink.props.onClick()
     expect(props.openModal).toHaveBeenCalled()
   })
 
-  it('should display the view/update if the offender has OTHER options assigned', () => {
-    act(() => testRenderer.update(<PayOptions {...props} other />))
+  it('should display the view/update if the offender has been marked as other', () => {
+    act(() => testRenderer.update(<PayOptions {...props} />))
     const detailsLink = testInstance.findAllByType(UpdateLink)
     expect(detailsLink.length).toBe(1)
   })
 
-  it('should not display the view/update link select date is greater than 1 year', () => {
-    act(() => testRenderer.update(<PayOptions {...props} date="12/01/2018" />))
+  it('should not display the view/update link if select date is greater than 1 week', () => {
+    act(() => testRenderer.update(<PayOptions {...props} date="03/01/2019" />))
     const detailsLink = testInstance.findAllByType(UpdateLink)
     expect(detailsLink.length).toBe(0)
   })

@@ -16,7 +16,10 @@ export const Option = styled.td`
 `
 
 export const PayMessage = styled.span`
+  display: block;
   margin-bottom: 0;
+  width: 45%;
+  text-align: center;
 
   ${MEDIA_QUERIES.PRINT} {
     display: none;
@@ -24,8 +27,6 @@ export const PayMessage = styled.span`
 `
 
 export const OtherMessage = styled.span`
-  margin-bottom: 0;
-
   ${MEDIA_QUERIES.PRINT} {
     display: none;
   }
