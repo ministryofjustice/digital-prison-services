@@ -3,7 +3,7 @@
 exports[`Add appointment form Form should pass correct props to all fields 1`] = `
 Array [
   <div
-    className="sc-htoDjs ktXyoQ"
+    className="sc-dnqmqq clFpjS"
     tabIndex={-1}
   >
     <h2
@@ -19,7 +19,7 @@ Array [
         className="sc-EHOje cxhhxd"
       >
         <a
-          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          className="sc-gzVnrw sc-htoDjs dzdkmR"
           muted={false}
           onClick={[Function]}
           tabIndex={1}
@@ -31,7 +31,7 @@ Array [
         className="sc-EHOje cxhhxd"
       >
         <a
-          className="sc-bxivhb sc-gzVnrw gdRiKK"
+          className="sc-gzVnrw sc-htoDjs dzdkmR"
           muted={false}
           onClick={[Function]}
           tabIndex={2}
@@ -42,7 +42,7 @@ Array [
     </ul>
   </div>,
   <table
-    className="row-gutters sc-ckVGcZ fUmfyi"
+    className="row-gutters sc-jKJlTe gEzPVl"
   >
     <thead>
       <tr>
@@ -92,31 +92,31 @@ Array [
         >
           <div>
             <label
-              className="sc-gZMcBi jYAMvP"
+              className="sc-gqjmRU cLvpfp"
               htmlFor="hours"
             >
               
               <span
-                className="sc-dnqmqq bUFnck"
+                className="sc-iwsKbI cXXGGh"
               >
                 Start test message
               </span>
               <div
-                className="sc-fjdhpX gpoCJK"
+                className="sc-jzJRlG NAri"
                 name="start-time-offenderNo1"
               >
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   id="hours"
                   name="hours"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="undefined"
                   >
@@ -135,16 +135,16 @@ Array [
                   </select>
                 </label>
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   name="minutes"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="undefined"
                   >
@@ -217,31 +217,31 @@ Array [
         >
           <div>
             <label
-              className="sc-gZMcBi jYAMvP"
+              className="sc-gqjmRU cLvpfp"
               htmlFor="hours"
             >
               
               <span
-                className="sc-dnqmqq bUFnck"
+                className="sc-iwsKbI cXXGGh"
               >
                 Start test message
               </span>
               <div
-                className="sc-fjdhpX gpoCJK"
+                className="sc-jzJRlG NAri"
                 name="start-time-offenderNo2"
               >
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   id="hours"
                   name="hours"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="undefined"
                   >
@@ -260,16 +260,16 @@ Array [
                   </select>
                 </label>
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   name="minutes"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="undefined"
                   >
@@ -329,19 +329,19 @@ exports[`Add appointment form Form should render correctly 1`] = `
   onSubmit={[Function]}
 >
   <h3
-    className="sc-iwsKbI eUACTV"
+    className="sc-gZMcBi gFbOsO"
   >
      Selected prisoners 
   </h3>
   <span
-    className="sc-dnqmqq bUFnck"
+    className="sc-iwsKbI cXXGGh"
   >
      
     network error
      
   </span>
   <table
-    className="row-gutters sc-ckVGcZ fUmfyi"
+    className="row-gutters sc-jKJlTe gEzPVl"
   >
     <thead>
       <tr>
@@ -391,26 +391,26 @@ exports[`Add appointment form Form should render correctly 1`] = `
         >
           <div>
             <label
-              className="sc-gZMcBi dbUOKw"
+              className="sc-gqjmRU FpJsg"
               htmlFor="hours"
             >
               
               <div
-                className="sc-fjdhpX bromYg"
+                className="sc-jzJRlG cyWbih"
                 name="start-time-offenderNo1"
               >
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   id="hours"
                   name="hours"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="21"
                   >
@@ -429,16 +429,16 @@ exports[`Add appointment form Form should render correctly 1`] = `
                   </select>
                 </label>
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   name="minutes"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="00"
                   >
@@ -511,26 +511,26 @@ exports[`Add appointment form Form should render correctly 1`] = `
         >
           <div>
             <label
-              className="sc-gZMcBi dbUOKw"
+              className="sc-gqjmRU FpJsg"
               htmlFor="hours"
             >
               
               <div
-                className="sc-fjdhpX bromYg"
+                className="sc-jzJRlG cyWbih"
                 name="start-time-offenderNo2"
               >
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   id="hours"
                   name="hours"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="21"
                   >
@@ -549,16 +549,16 @@ exports[`Add appointment form Form should render correctly 1`] = `
                   </select>
                 </label>
                 <label
-                  className="sc-gZMcBi dbUOKw"
+                  className="sc-gqjmRU FpJsg"
                   defaultValue="--"
                   disabled={false}
                   name="minutes"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-VigVT bXITLn"
                   />
                   <select
-                    className="sc-jTzLTM iQtMCx"
+                    className="sc-fjdhpX pbsIw"
                     onChange={[Function]}
                     value="00"
                   >
@@ -611,7 +611,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
     </tbody>
   </table>
   <div
-    className="sc-kGXeez jbxvBs"
+    className="sc-kpOJdX eMoMhc"
   >
     <button
       className="sc-bdVaJa jyfNnr"
