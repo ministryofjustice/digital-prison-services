@@ -88,14 +88,13 @@ describe('<PayOptions />', () => {
   })
 
   it('should call openModal when clicking on update link', () => {
-    // props.offenderDetails.attendanceInfo.other = true
     act(() => testRenderer.update(<PayOptions {...props} />))
     const detailsLink = testInstance.findByType(UpdateLink)
     detailsLink.props.onClick()
     expect(props.openModal).toHaveBeenCalled()
   })
 
-  it('should display the view/update if the offender has been marked as other', () => {
+  it('should display the view/update link if the offender has been marked as other', () => {
     act(() => testRenderer.update(<PayOptions {...props} />))
     const detailsLink = testInstance.findAllByType(UpdateLink)
     expect(detailsLink.length).toBe(1)
