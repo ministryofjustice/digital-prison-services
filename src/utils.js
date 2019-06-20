@@ -52,6 +52,14 @@ const isWithinLastYear = date => {
   return daysDifference >= 0
 }
 
+const isWithinLastWeek = date => {
+  if (isToday(date)) return true
+
+  const oneWeekAgo = moment().subtract(1, 'week')
+  const daysDifference = moment(date, 'DD/MM/YYYY').diff(oneWeekAgo, 'day')
+  return daysDifference >= 0
+}
+
 const stripAgencyPrefix = (location, agency) => {
   const parts = location && location.split('-')
   if (parts && parts.length > 0) {
@@ -112,6 +120,7 @@ module.exports = {
   getHoursMinutes,
   isTodayOrAfter,
   isWithinLastYear,
+  isWithinLastWeek,
   getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,

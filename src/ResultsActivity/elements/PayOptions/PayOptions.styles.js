@@ -15,9 +15,25 @@ export const Option = styled.td`
   }
 `
 
+export const PayMessage = styled.span`
+  display: block;
+  margin-bottom: 0;
+  width: 45%;
+  text-align: center;
+
+  ${MEDIA_QUERIES.PRINT} {
+    display: none;
+  }
+`
+
+export const OtherMessage = styled.span`
+  ${MEDIA_QUERIES.PRINT} {
+    display: none;
+  }
+`
+
 export const UpdateLink = styled.span`
   display: block;
-  margin-top: ${spacing.simple(2)}px;
   ${typography.font({ size: 16 })};
   text-decoration: underline;
   color: ${LINK_COLOUR};
