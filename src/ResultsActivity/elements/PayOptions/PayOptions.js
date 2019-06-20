@@ -46,32 +46,28 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       />
     )
 
-  const allowUpdate = () => {
-    if (selectedOption === 'other' && isWithinLastWeek(date)) return true
-    return false
-  }
-  const showRadioButton = () => {
-    if (!locked && offenderNo && eventId && isWithinLastWeek(date)) return true
-    return false
+  const allowUpdate = selectedOption === 'other'
+
+  const showRadioButton = !locked && offenderNo && eventId && isWithinLastWeek(date)
+
+  const payMessage = () => {
+    if (paid && locked) return 'Paid'
+    if (!paid && locked) return 'Not paid'
+    if (!paid && !other && !isWithinLastWeek(date)) return 'Not Recorded'
+    return null
   }
 
-  const payMsg = () => {
-    const msg =
-      isWithinLastWeek(date) && paid && locked ? 'Paid' : !isWithinLastWeek(date) && !paid && locked && 'Not Paid'
-    return msg
-  }
-
-  const otherMsg = () => {
-    const msg = (other || (!isWithinLastWeek(date) && !paid)) && 'View/ Update'
-    return msg
+  const otherMessage = () => {
+    if (other) return 'View/ Update'
+    return null
   }
 
   return (
     <Fragment>
       <Option data-qa="pay-option" className="row-gutters">
-        <PayMessage data-qa="pay-message">{payMsg()}</PayMessage>
+        {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
         {!isPaying &&
-          showRadioButton() && (
+          showRadioButton && (
             <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
               <VisuallyHidden>Pay</VisuallyHidden>
             </Radio>
@@ -80,15 +76,15 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       </Option>
 
       <Option data-qa="other-option" className="row-gutters">
-        {showRadioButton() && (
+        {showRadioButton && (
           <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
             <VisuallyHidden>Other</VisuallyHidden>
           </Radio>
         )}
-        {allowUpdate() &&
-          otherMsg() && (
+        {allowUpdate &&
+          otherMessage() && (
             <UpdateLink onClick={renderForm}>
-              <OtherMessage data-qa="other-message">{otherMsg()}</OtherMessage>
+              <OtherMessage data-qa="other-message">{otherMessage()}</OtherMessage>
             </UpdateLink>
           )}
       </Option>

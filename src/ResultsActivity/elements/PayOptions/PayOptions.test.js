@@ -19,11 +19,12 @@ describe('<PayOptions />', () => {
       lastName: 'Offender',
       offenderIndex: 1,
       attendanceInfo: {
+        pay: false,
         paid: false,
         comments: undefined,
         absentReason: undefined,
-        other: false,
         locked: false,
+        other: false,
       },
     },
     updateOffenderAttendance: jest.fn(),
@@ -81,10 +82,10 @@ describe('<PayOptions />', () => {
     expect(otherRadio.props.checked).toBe(true)
   })
 
-  it('should display paid message when offender has been paid', () => {
-    act(() => testRenderer.update(<PayOptions {...props} paid />))
-    const PayConfirm = testInstance.findAllByType(PayMessage)
-    expect(PayConfirm.length).toBe(1)
+  it('should display the view/update link if the offender has been marked as other', () => {
+    act(() => testRenderer.update(<PayOptions {...props} />))
+    const detailsLink = testInstance.findAllByType(UpdateLink)
+    expect(detailsLink.length).toBe(1)
   })
 
   it('should call openModal when clicking on update link', () => {
@@ -94,24 +95,29 @@ describe('<PayOptions />', () => {
     expect(props.openModal).toHaveBeenCalled()
   })
 
-  it('should display the view/update link if the offender has been marked as other', () => {
-    act(() => testRenderer.update(<PayOptions {...props} />))
-    const detailsLink = testInstance.findAllByType(UpdateLink)
-    expect(detailsLink.length).toBe(1)
-  })
-
-  it('should not display the view/update link if select date is greater than 1 week', () => {
-    act(() => testRenderer.update(<PayOptions {...props} date="03/01/2019" />))
-    const detailsLink = testInstance.findAllByType(UpdateLink)
-    expect(detailsLink.length).toBe(0)
-  })
-
-  it('should not display radio buttons when attendance is locked', () => {
-    props.offenderDetails.attendanceInfo.locked = true
+  it('should display radio buttons when attendance is not locked', () => {
     act(() => testRenderer.update(<PayOptions {...props} />))
     const payOption = testInstance.findByProps({ 'data-qa': 'pay-option' }).findAllByType(Radio)
     const otherOption = testInstance.findByProps({ 'data-qa': 'other-option' }).findAllByType(Radio)
-    expect(payOption.length).toBe(0)
-    expect(otherOption.length).toBe(0)
+    expect(payOption.length).toBe(1)
+    expect(otherOption.length).toBe(1)
+  })
+
+  it('should not display paid message when offender has been paid and the instance is not locked', () => {
+    props.offenderDetails.attendanceInfo.paid = true
+    props.offenderDetails.attendanceInfo.locked = false
+
+    act(() => testRenderer.update(<PayOptions {...props} />))
+    const PayConfirm = testInstance.findAllByType(PayMessage)
+    expect(PayConfirm.length).toBe(0)
+  })
+
+  it('should display paid message when offender has been paid and the instance is locked', () => {
+    props.offenderDetails.attendanceInfo.paid = true
+    props.offenderDetails.attendanceInfo.locked = true
+
+    act(() => testRenderer.update(<PayOptions {...props} />))
+    const PayConfirm = testInstance.findAllByType(PayMessage)
+    expect(PayConfirm.length).toBe(1)
   })
 })
