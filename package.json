@@ -120,7 +120,6 @@
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.0",
     "file-loader": "^1.1.11",
-    "fs": "^0.0.1-security",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^1.1.2",
     "jest": "^22.4.3",
