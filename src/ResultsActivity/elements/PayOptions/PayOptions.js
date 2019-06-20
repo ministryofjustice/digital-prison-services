@@ -57,11 +57,6 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
     return null
   }
 
-  const otherMessage = () => {
-    if (other) return 'View/ Update'
-    return null
-  }
-
   return (
     <Fragment>
       <Option data-qa="pay-option" className="row-gutters">
@@ -82,9 +77,9 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
           </Radio>
         )}
         {allowUpdate &&
-          otherMessage() && (
+          other && (
             <UpdateLink onClick={renderForm}>
-              <OtherMessage data-qa="other-message">{otherMessage()}</OtherMessage>
+              <OtherMessage data-qa="other-message">View/ Update</OtherMessage>
             </UpdateLink>
           )}
       </Option>
