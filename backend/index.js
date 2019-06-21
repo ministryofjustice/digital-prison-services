@@ -12,6 +12,7 @@ const passport = require('passport')
 const bodyParser = require('body-parser')
 const bunyanMiddleware = require('bunyan-middleware')
 const hsts = require('hsts')
+const appInsights = require('applicationinsights')
 const helmet = require('helmet')
 const webpack = require('webpack')
 const middleware = require('webpack-dev-middleware')
@@ -67,6 +68,16 @@ const sixtyDaysInSeconds = 5184000
 app.set('trust proxy', 1) // trust first proxy
 
 app.set('view engine', 'ejs')
+
+if (config.app.production && config.analytics.appInsightsKey) {
+  const packageData = JSON.parse(fs.readFileSync('./package.json'))
+
+  appInsights
+    .setup(config.analytics.appInsightsKey)
+    .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+    .start()
+  appInsights.defaultClient.context.tags['ai.cloud.role'] = `${packageData.name}`
+}
 
 app.use(helmet())
 

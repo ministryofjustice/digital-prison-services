@@ -14,6 +14,7 @@ module.exports = {
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || '',
   },
   hmppsCookie: {
     name: process.env.HMPPS_COOKIE_NAME || 'hmpps-session-dev',
