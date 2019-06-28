@@ -241,6 +241,8 @@ class ResultsActivity extends Component {
           attendanceInfo,
         }
 
+        const { absentReason } = attendanceInfo || {}
+
         return (
           <tr key={key} className="row-gutters">
             <td className="row-gutters">
@@ -264,14 +266,16 @@ class ResultsActivity extends Component {
                 />
               }
             </td>
-            <td className="no-padding checkbox-column no-display">
-              <div className="multiple-choice whereaboutsCheckbox">
-                <label className="whereabouts-label" htmlFor={`col1_${index}`}>
-                  Received
-                </label>
-                <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
-              </div>
-            </td>
+            {!absentReason && (
+              <td className="no-padding checkbox-column no-display">
+                <div className="multiple-choice whereaboutsCheckbox">
+                  <label className="whereabouts-label" htmlFor={`col1_${index}`}>
+                    Received
+                  </label>
+                  <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
+                </div>
+              </td>
+            )}
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (

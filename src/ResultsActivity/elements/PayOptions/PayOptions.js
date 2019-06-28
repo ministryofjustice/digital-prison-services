@@ -5,7 +5,7 @@ import VisuallyHidden from '@govuk-react/visually-hidden'
 import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
-import { isWithinLastWeek } from '../../../utils'
+import { isWithinLastWeek, pascalToString } from '../../../utils'
 import PayOtherForm from '../PayOtherForm'
 import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
 
@@ -14,7 +14,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
-  const { id, pay, other, locked, paid } = attendanceInfo || {}
+  const { id, pay, other, locked, paid, absentReason } = attendanceInfo || {}
 
   const payOffender = async () => {
     const attendanceDetails = {
@@ -59,6 +59,11 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
 
   return (
     <Fragment>
+      {absentReason && (
+        <Option data-qa="absent-reason" printOnly>
+          {pascalToString(absentReason)}
+        </Option>
+      )}
       <Option data-qa="pay-option" className="row-gutters">
         {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
         {!isPaying &&
