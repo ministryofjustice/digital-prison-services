@@ -264,14 +264,17 @@ class ResultsActivity extends Component {
                 />
               }
             </td>
-            <td className="no-padding checkbox-column no-display">
-              <div className="multiple-choice whereaboutsCheckbox">
-                <label className="whereabouts-label" htmlFor={`col1_${index}`}>
-                  Received
-                </label>
-                <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
-              </div>
-            </td>
+            {attendanceInfo &&
+              !attendanceInfo.absentReason && (
+                <td className="no-padding checkbox-column no-display">
+                  <div className="multiple-choice whereaboutsCheckbox">
+                    <label className="whereabouts-label" htmlFor={`col1_${index}`}>
+                      Received
+                    </label>
+                    <input id={`col1_${index}`} type="checkbox" name="ch1" disabled />
+                  </div>
+                </td>
+              )}
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (

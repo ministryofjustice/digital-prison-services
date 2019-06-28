@@ -37,17 +37,20 @@ describe('<PayOptions />', () => {
   let testInstance
   let payRadio
   let otherRadio
+  let absentReason
 
   beforeEach(() => {
     testRenderer = TestRenderer.create(<PayOptions {...props} />)
     testInstance = testRenderer.root
     payRadio = testInstance.findByProps({ 'data-qa': 'pay-option' }).findByType(Radio)
     otherRadio = testInstance.findByProps({ 'data-qa': 'other-option' }).findByType(Radio)
+    absentReason = testInstance.findAllByProps({ 'data-qa': 'absent-reason' })
   })
 
   it('should not have any radio buttons checked if offender has no pay status', () => {
     expect(payRadio.props.checked).toBe(false)
     expect(otherRadio.props.checked).toBe(false)
+    expect(absentReason.length).toBe(0)
   })
 
   it('should call updateOffenderAttendance with the correct args when selecting pay', () => {
@@ -75,28 +78,34 @@ describe('<PayOptions />', () => {
     expect(otherRadio.props.checked).toBe(false)
   })
 
-  it('should check the correct radio button when user has been marked as other', () => {
-    props.offenderDetails.attendanceInfo.other = true
-    act(() => testRenderer.update(<PayOptions {...props} />))
-    expect(payRadio.props.checked).toBe(false)
-    expect(otherRadio.props.checked).toBe(true)
-  })
+  describe('when offender has been marked as other', () => {
+    it('should check the other radio button', () => {
+      props.offenderDetails.attendanceInfo.other = true
+      props.offenderDetails.attendanceInfo.absentReason = 'AcceptableAbsence'
+      act(() => testRenderer.update(<PayOptions {...props} />))
+      expect(payRadio.props.checked).toBe(false)
+      expect(otherRadio.props.checked).toBe(true)
+    })
 
-  it('should display the view/update link if the offender has been marked as other', () => {
-    act(() => testRenderer.update(<PayOptions {...props} />))
-    const detailsLink = testInstance.findAllByType(UpdateLink)
-    expect(detailsLink.length).toBe(1)
-  })
+    it('should display the absent reason cell used for printed lists', () => {
+      expect(absentReason[0].props.printOnly).toBe(true)
+      expect(absentReason[0].props.children).toEqual('Acceptable absence')
+    })
 
-  it('should call openModal when clicking on update link', () => {
-    act(() => testRenderer.update(<PayOptions {...props} />))
-    const detailsLink = testInstance.findByType(UpdateLink)
-    detailsLink.props.onClick()
-    expect(props.openModal).toHaveBeenCalled()
+    it('should display the view/update link', () => {
+      const detailsLink = testInstance.findAllByType(UpdateLink)
+      expect(detailsLink.length).toBe(1)
+    })
+
+    it('should call openModal when clicking on update link', () => {
+      act(() => testRenderer.update(<PayOptions {...props} />))
+      const detailsLink = testInstance.findByType(UpdateLink)
+      detailsLink.props.onClick()
+      expect(props.openModal).toHaveBeenCalled()
+    })
   })
 
   it('should display radio buttons when attendance is not locked', () => {
-    act(() => testRenderer.update(<PayOptions {...props} />))
     const payOption = testInstance.findByProps({ 'data-qa': 'pay-option' }).findAllByType(Radio)
     const otherOption = testInstance.findByProps({ 'data-qa': 'other-option' }).findAllByType(Radio)
     expect(payOption.length).toBe(1)
@@ -104,10 +113,6 @@ describe('<PayOptions />', () => {
   })
 
   it('should not display paid message when offender has been paid and the instance is not locked', () => {
-    props.offenderDetails.attendanceInfo.paid = true
-    props.offenderDetails.attendanceInfo.locked = false
-
-    act(() => testRenderer.update(<PayOptions {...props} />))
     const PayConfirm = testInstance.findAllByType(PayMessage)
     expect(PayConfirm.length).toBe(0)
   })
