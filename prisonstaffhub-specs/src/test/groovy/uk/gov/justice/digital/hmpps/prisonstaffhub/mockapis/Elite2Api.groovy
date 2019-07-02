@@ -54,31 +54,22 @@ class Elite2Api extends WireMockRule {
 
     void stubHealth() {
         this.stubFor(
-                get('/health')
+                get('/ping')
                         .willReturn(
                         aResponse()
                                 .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody('''
-                {
-                    "status": "UP",
-                    "healthInfo": {
-                        "status": "UP",
-                        "version": "version not available"
-                    },
-                    "diskSpace": {
-                        "status": "UP",
-                        "total": 510923390976,
-                        "free": 143828922368,
-                        "threshold": 10485760
-                    },
-                    "db": {
-                        "status": "UP",
-                        "database": "HSQL Database Engine",
-                        "hello": 1
-                    }
-                }'''.stripIndent())
-                ))
+                                .withHeader('Content-Type', 'plain/text')
+                                .withBody('ping')))
+    }
+
+
+    void stubDelayedError(url, status) {
+        this.stubFor(
+                get(url)
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(status)
+                                        .withFixedDelay(3000)))
     }
 
     void stubActivityLocations() {
