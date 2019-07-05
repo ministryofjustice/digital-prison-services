@@ -69,6 +69,7 @@ describe('Attendence and Pay controller', async () => {
       whereaboutsApi.getAbsenceReasons.mockReturnValue({
         paidReasons: ['AcceptableAbsence', 'RestInCell'],
         unpaidReasons: ['UnacceptableAbsence'],
+        triggersIEPWarning: ['UnacceptableAbsence'],
       })
     })
 
@@ -80,7 +81,7 @@ describe('Attendence and Pay controller', async () => {
           { name: 'Acceptable absence', value: 'AcceptableAbsence' },
           { name: 'Rest in cell', value: 'RestInCell' },
         ],
-        unpaidReasons: [{ name: 'Unacceptable absence', value: 'UnacceptableAbsence' }],
+        unpaidReasons: [{ name: 'Unacceptable absence - IEP', value: 'UnacceptableAbsence' }],
       })
     })
   })
