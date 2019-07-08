@@ -41,6 +41,6 @@ module.exports = {
     },
   },
   updateAttendancePrisons: process.env.UPDATE_ATTENDANCE_PRISONS
-    ? process.env.UPDATE_ATTENDANCE_PRISONS.trim().split(',')
+    ? process.env.UPDATE_ATTENDANCE_PRISONS.split(',').map(agency => agency.trim())
     : [],
 }
