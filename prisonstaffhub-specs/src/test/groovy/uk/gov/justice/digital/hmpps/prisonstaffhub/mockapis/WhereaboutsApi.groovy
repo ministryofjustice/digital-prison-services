@@ -50,4 +50,15 @@ public class WhereaboutsApi extends WireMockRule  {
                         .withHeader('Content-Type', 'application/json')
                         .withBody(JsonOutput.toJson(attendance))))
     }
+
+
+    void stubHealth() {
+        this.stubFor(
+                get('/ping')
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'text/plain')
+                                        .withBody('ping')))
+    }
 }

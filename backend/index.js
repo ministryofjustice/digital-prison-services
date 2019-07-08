@@ -35,7 +35,7 @@ const activityLocationsFactory = require('./controllers/activityLocations').getA
 const activityListFactory = require('./controllers/activityList').getActivityListFactory
 const iepDetailsFactory = require('./controllers/iepDetails').getIepDetailsFactory
 const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory
-const { healthFactory } = require('./controllers/health')
+const healthFactory = require('./services/healthCheck')
 const { attendanceFactory } = require('./controllers/attendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
 const { movementsServiceFactory } = require('./controllers/movementsService')
@@ -92,9 +92,20 @@ app.use(
   })
 )
 
-const { health } = healthFactory(config.apis.elite2.url)
-app.use('/health', health)
-app.use('/info', health)
+const health = healthFactory(config.apis.oauth2.url, config.apis.elite2.url, config.apis.whereabouts.url)
+
+app.get('/health', (req, res, next) => {
+  health((err, result) => {
+    if (err) {
+      return next(err)
+    }
+    if (!(result.status === 'UP')) {
+      res.status(503)
+    }
+    res.json(result)
+    return result
+  })
+})
 
 if (config.app.production) {
   app.use(ensureHttps)

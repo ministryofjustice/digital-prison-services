@@ -165,4 +165,15 @@ class OauthApi extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson(roles))))
     }
+
+
+    void stubHealth() {
+        this.stubFor(
+                get('/auth/ping')
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'text/plain')
+                                        .withBody('ping')))
+    }
 }
