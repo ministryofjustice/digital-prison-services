@@ -62,7 +62,6 @@ class Elite2Api extends WireMockRule {
                                 .withBody('ping')))
     }
 
-
     void stubDelayedError(url, status) {
         this.stubFor(
                 get(url)
