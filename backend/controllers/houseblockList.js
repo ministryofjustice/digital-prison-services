@@ -45,7 +45,27 @@ const addToOtherActivities = (offender, activity) => ({
   others: [...offender.others, activity],
 })
 
-const getHouseblockListFactory = elite2Api => {
+const extractAttendanceInfo = (attendanceInformation, offender) => {
+  if (attendanceInformation && attendanceInformation.length > 0) {
+    const offenderAttendanceInfo = attendanceInformation.find(
+      attendance => attendance.bookingId === offender.activity.bookingId
+    )
+    const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
+    const attendanceInfo = { id, absentReason, comments, paid, locked }
+
+    if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
+
+    if (offenderAttendanceInfo && attended && paid) attendanceInfo.pay = true
+
+    return attendanceInfo
+  }
+
+  return null
+}
+
+const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
+  const { updateAttendancePrisons } = config
+  const updateAttendanceEnabled = agencyId => updateAttendancePrisons.includes(agencyId)
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
@@ -60,7 +80,12 @@ const getHouseblockListFactory = elite2Api => {
 
     log.info(data, 'getHouseblockList data received')
 
+    const bookingIds = new Set()
+
     const offendersMap = data.reduce((offenders, event) => {
+      // Collate Booking IDs
+      bookingIds.add(event.bookingId)
+
       const {
         releaseScheduled,
         courtEvents,
@@ -91,9 +116,23 @@ const getHouseblockListFactory = elite2Api => {
       }
     }, {})
 
+    const bookings = [...bookingIds]
+
+    const attendanceInformation = updateAttendanceEnabled(agencyId)
+      ? await whereaboutsApi.getAttendanceForBookings(context, {
+          agencyId,
+          bookings,
+          date: formattedDate,
+          period: timeSlot,
+        })
+      : null
+
     return Object.keys(offendersMap).map(offenderNo => ({
       offenderNo,
       ...offendersMap[offenderNo],
+      attendanceInfo: updateAttendanceEnabled(agencyId)
+        ? extractAttendanceInfo(attendanceInformation, offendersMap[offenderNo])
+        : {},
     }))
   }
 

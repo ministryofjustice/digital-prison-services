@@ -3,7 +3,15 @@ const moment = require('moment')
 const { elite2ApiFactory } = require('../api/elite2Api')
 
 const elite2Api = elite2ApiFactory(null)
-const houseblockList = require('../controllers/houseblockList').getHouseblockListFactory(elite2Api).getHouseblockList
+const whereaboutsApi = {}
+const config = {
+  updateAttendancePrisons: ['LEI'],
+}
+const houseblockList = require('../controllers/houseblockList').getHouseblockListFactory(
+  elite2Api,
+  whereaboutsApi,
+  config
+).getHouseblockList
 
 const { distinct, switchDateFormat } = require('../utils')
 
@@ -11,6 +19,9 @@ const { distinct, switchDateFormat } = require('../utils')
 function createResponse() {
   return [
     {
+      bookingId: 1,
+      eventId: 10,
+      eventLocationId: 100,
       offenderNo: 'A1234AA',
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
@@ -22,6 +33,9 @@ function createResponse() {
       endTime: '2017-10-15T18:30:00',
     },
     {
+      bookingId: 2,
+      eventId: 20,
+      eventLocationId: 200,
       offenderNo: 'A1234AA',
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
@@ -34,6 +48,7 @@ function createResponse() {
       endTime: '2017-10-15T20:30:00',
     },
     {
+      bookingId: 3,
       offenderNo: 'A1234AA',
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
@@ -47,6 +62,7 @@ function createResponse() {
       endTime: '2017-10-15T18:30:00',
     },
     {
+      bookingId: 4,
       offenderNo: 'A1234AA',
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
@@ -59,6 +75,7 @@ function createResponse() {
       endTime: '2017-10-15T17:30:00',
     },
     {
+      bookingId: 5,
       offenderNo: 'A1234AB',
       firstName: 'MICHAEL',
       lastName: 'SMITH',
@@ -71,6 +88,7 @@ function createResponse() {
       endTime: '2017-10-15T18:30:00',
     },
     {
+      bookingId: 6,
       offenderNo: 'A1234AC',
       firstName: 'FRED',
       lastName: 'QUIMBY',
@@ -84,6 +102,7 @@ function createResponse() {
       endTime: '2017-10-15T18:30:00',
     },
     {
+      bookingId: 7,
       offenderNo: 'A1234AC',
       firstName: 'FRED',
       lastName: 'QUIMBY',
@@ -96,6 +115,7 @@ function createResponse() {
       endTime: '2017-10-15T18:30:00',
     },
     {
+      bookingId: 8,
       offenderNo: 'A1234AD',
       firstName: 'ONLY',
       lastName: 'Visits',
@@ -166,6 +186,7 @@ describe('Houseblock list controller', async () => {
     elite2Api.getCourtEvents = jest.fn()
     elite2Api.getAlerts = jest.fn()
     elite2Api.getAssessments = jest.fn()
+    whereaboutsApi.getAttendanceForBookings = jest.fn()
   })
 
   it('Should add visit and appointment details to array', async () => {
@@ -345,5 +366,156 @@ describe('Houseblock list controller', async () => {
         complete: true,
       },
     ])
+  })
+
+  describe('Attendance information', () => {
+    it('should call getAttendance with correct parameters', async () => {
+      elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+
+      await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+
+      expect(whereaboutsApi.getAttendanceForBookings).toHaveBeenCalledWith(
+        {},
+        { agencyId: 'LEI', period: 'PM', bookings: [1, 2, 3, 4, 5, 6, 7, 8], date: '2017-10-15' }
+      )
+    })
+
+    it('should load attendance details for a list of booking ids', async () => {
+      elite2Api.getHouseblockList.mockImplementationOnce(() => [
+        {
+          bookingId: 1,
+          eventId: 10,
+          eventLocationId: 100,
+          offenderNo: 'A1234AA',
+          firstName: 'ARTHUR',
+          lastName: 'ANDERSON',
+          cellLocation: 'LEI-A-1-1',
+          event: 'CHAP',
+          eventType: 'PRISON_ACT',
+          eventDescription: 'Chapel',
+          comment: 'comment1',
+          endTime: '2017-10-15T18:30:00',
+        },
+        {
+          bookingId: 2,
+          eventId: 20,
+          eventLocationId: 200,
+          offenderNo: 'A1234AB',
+          firstName: 'MICHAEL',
+          lastName: 'SMITH',
+          cellLocation: 'LEI-A-1-1',
+          event: 'CHAP',
+          eventType: 'PRISON_ACT',
+          eventDescription: 'Chapel',
+          comment: 'comment12',
+          startTime: '2017-10-15T18:00:00',
+          endTime: '2017-10-15T18:30:00',
+        },
+      ])
+      whereaboutsApi.getAttendanceForBookings.mockReturnValue([
+        {
+          attended: true,
+          bookingId: 1,
+          caseNoteId: 0,
+          createDateTime: '2019-07-08T07:57:12.358Z',
+          createUserId: 'string',
+          eventDate: 'string',
+          eventId: 10,
+          eventLocationId: 100,
+          id: 1,
+          locked: true,
+          modifyDateTime: '2019-07-08T07:57:12.358Z',
+          modifyUserId: 'string',
+          paid: true,
+          period: 'AM',
+          prisonId: 'string',
+        },
+        {
+          absentReason: 'AcceptableAbsence',
+          attended: true,
+          bookingId: 2,
+          caseNoteId: 0,
+          comments: 'string',
+          createDateTime: '2019-07-08T07:57:12.358Z',
+          createUserId: 'string',
+          eventDate: 'string',
+          eventId: 20,
+          eventLocationId: 200,
+          id: 2,
+          locked: true,
+          modifyDateTime: '2019-07-08T07:57:12.358Z',
+          modifyUserId: 'string',
+          paid: false,
+          period: 'AM',
+          prisonId: 'string',
+        },
+      ])
+
+      const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+
+      expect(response).toEqual([
+        {
+          activity: {
+            bookingId: 1,
+            cellLocation: 'LEI-A-1-1',
+            comment: 'comment1',
+            endTime: '2017-10-15T18:30:00',
+            event: 'CHAP',
+            eventDescription: 'Chapel',
+            eventId: 10,
+            eventLocationId: 100,
+            eventType: 'PRISON_ACT',
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            offenderNo: 'A1234AA',
+          },
+          alertFlags: [],
+          attendanceInfo: {
+            id: 1,
+            locked: true,
+            paid: true,
+            pay: true,
+          },
+          category: '',
+          courtEvents: [],
+          offenderNo: 'A1234AA',
+          others: [],
+          releaseScheduled: false,
+          scheduledTransfers: [],
+        },
+        {
+          activity: {
+            bookingId: 2,
+            cellLocation: 'LEI-A-1-1',
+            comment: 'comment12',
+            endTime: '2017-10-15T18:30:00',
+            event: 'CHAP',
+            eventDescription: 'Chapel',
+            eventId: 20,
+            eventLocationId: 200,
+            eventType: 'PRISON_ACT',
+            firstName: 'MICHAEL',
+            lastName: 'SMITH',
+            offenderNo: 'A1234AB',
+            startTime: '2017-10-15T18:00:00',
+          },
+          alertFlags: [],
+          attendanceInfo: {
+            absentReason: 'AcceptableAbsence',
+            comments: 'string',
+            id: 2,
+            locked: true,
+            other: true,
+            paid: false,
+          },
+          category: '',
+          courtEvents: [],
+          offenderNo: 'A1234AB',
+          others: [],
+          releaseScheduled: false,
+          scheduledTransfers: [],
+        },
+      ])
+    })
   })
 })
