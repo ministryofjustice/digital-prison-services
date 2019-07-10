@@ -167,7 +167,7 @@ class ResultsHouseblock extends Component {
         <th className="straight width10">Info</th>
         <th className="straight width20">
           <SortableColumn
-            heading="Activity"
+            heading="Activities"
             column={ACTIVITY}
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
@@ -193,9 +193,12 @@ class ResultsHouseblock extends Component {
     const offenders =
       houseblockData &&
       houseblockData.map((row, index) => {
-        const anyActivity = row.activity || row.others[0]
+        // const anyActivity = row.activity || row.others[0]
+        // const anyActivity = row.activities[0]
 
-        const { offenderNo, firstName, lastName, cellLocation } = anyActivity
+        const mainActivity = row.activities.find(activity => activity.mainActivity)
+        const otherActivities = row.activities.filter(activity => !activity.mainActivity)
+        const { offenderNo, firstName, lastName, cellLocation } = mainActivity || otherActivities[0]
 
         return (
           <tr key={offenderNo} className="row-gutters">
@@ -210,7 +213,7 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">{offenderNo}</td>
             <td>{Flags.AlertFlags(row.alertFlags, row.category, 'flags')}</td>
             <td className="row-gutters">
-              {row.activity && `${getHoursMinutes(row.activity.startTime)} - ${getMainEventDescription(row.activity)}`}
+              {mainActivity && `${getHoursMinutes(mainActivity.startTime)} - ${getMainEventDescription(mainActivity)}`}
             </td>
             <td className="row-gutters">
               <OtherActivitiesView offenderMainEvent={row} />
@@ -293,20 +296,7 @@ ResultsHouseblock.propTypes = {
   period: PropTypes.string.isRequired,
   houseblockData: PropTypes.arrayOf(
     PropTypes.shape({
-      activity: PropTypes.shape({
-        offenderNo: PropTypes.string.isRequired,
-        firstName: PropTypes.string.isRequired,
-        lastName: PropTypes.string.isRequired,
-        eventId: PropTypes.number,
-        cellLocation: PropTypes.string.isRequired,
-        others: PropTypes.array,
-        event: PropTypes.string.isRequired,
-        eventType: PropTypes.string,
-        eventDescription: PropTypes.string.isRequired,
-        eventStatus: PropTypes.string,
-        comment: PropTypes.string.isRequired,
-      }),
-      others: PropTypes.arrayOf(
+      activities: PropTypes.arrayOf(
         PropTypes.shape({
           offenderNo: PropTypes.string.isRequired,
           firstName: PropTypes.string.isRequired,

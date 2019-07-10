@@ -5,7 +5,8 @@ import { getHoursMinutes, getEventDescription } from '../utils'
 const shouldShowOtherActivities = offenderMainEvent =>
   Boolean(
     offenderMainEvent &&
-      (offenderMainEvent.others ||
+      ((offenderMainEvent.activities && offenderMainEvent.activities.length > 1) ||
+        offenderMainEvent.others ||
         offenderMainEvent.releaseScheduled ||
         offenderMainEvent.courtEvents ||
         offenderMainEvent.scheduledTransfers)
@@ -31,36 +32,37 @@ const renderOtherEvent = (event, index) => {
 
   return <li key={key}>{text}</li>
 }
-const renderEvent = (event, type, index) => {
-  const expired = <span className="cancelled">(expired)</span>
-  const cancelled = <span className="cancelled">(cancelled)</span>
-  const complete = <span className="complete">(complete)</span>
-  const key = `${type}_${index}`
+const renderEvent = (event, type, index) => (
+  <li className="transfer" key={`${type}_${index}`}>
+    <strong className="other-activity">** {event.eventDescription} ** </strong>
+    {event.expired && <span className="cancelled">(expired)</span>}
+    {event.complete && <span className="complete">(complete)</span>}
+    {event.cancelled && <span className="cancelled">(cancelled)</span>}
+  </li>
+)
+
+const OtherActivityListView = ({ offenderMainEvent }) => {
+  const otherActivities = offenderMainEvent.activities
+    ? offenderMainEvent.activities.filter(activity => !activity.mainActivity)
+    : offenderMainEvent.others
+
   return (
-    <li className="transfer" key={key}>
-      <strong className="other-activity">** {event.eventDescription} ** </strong>
-      {event.expired && expired}
-      {event.complete && complete}
-      {event.cancelled && cancelled}
-    </li>
+    shouldShowOtherActivities(offenderMainEvent) && (
+      <ul>
+        {offenderMainEvent.releaseScheduled && (
+          <li key="release">
+            <strong className="other-activity">** Release scheduled **</strong>
+          </li>
+        )}
+        {offenderMainEvent.courtEvents &&
+          offenderMainEvent.courtEvents.map((event, index) => renderEvent(event, 'court', index))}
+        {offenderMainEvent.scheduledTransfers &&
+          offenderMainEvent.scheduledTransfers.map((event, index) => renderEvent(event, 'transfer', index))}
+        {otherActivities && otherActivities.map((event, index) => renderOtherEvent(event, index))}
+      </ul>
+    )
   )
 }
-
-const OtherActivityListView = ({ offenderMainEvent }) =>
-  shouldShowOtherActivities(offenderMainEvent) && (
-    <ul>
-      {offenderMainEvent.releaseScheduled && (
-        <li key="release">
-          <strong className="other-activity">** Release scheduled **</strong>
-        </li>
-      )}
-      {offenderMainEvent.courtEvents &&
-        offenderMainEvent.courtEvents.map((event, index) => renderEvent(event, 'court', index))}
-      {offenderMainEvent.scheduledTransfers &&
-        offenderMainEvent.scheduledTransfers.map((event, index) => renderEvent(event, 'transfer', index))}
-      {offenderMainEvent.others && offenderMainEvent.others.map((event, index) => renderOtherEvent(event, index))}
-    </ul>
-  )
 
 OtherActivityListView.propTypes = {
   offenderNo: PropTypes.string,

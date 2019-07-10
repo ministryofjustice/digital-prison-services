@@ -3,7 +3,8 @@ import { getEventDescription } from '../utils'
 import { DESC } from '../tablesorting/sortOrder'
 import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 
-const anyHouseBlockActivity = obj => obj.activity || obj.others[0]
+const mainActivity = activities => activities.find(activity => activity.mainActivity)
+const anyHouseBlockActivity = obj => mainActivity(obj.activities) || obj.activities[0]
 
 const houseBlockLastNameComparator = thenComparing(
   thenComparing(
@@ -19,7 +20,7 @@ const houseBlockComparators = {
     houseBlockLastNameComparator
   ),
   [ACTIVITY]: thenComparing(
-    fieldComparator(obj => (obj.activity ? getEventDescription(obj.activity) : '')),
+    fieldComparator(obj => (mainActivity(obj.activities) ? getEventDescription(mainActivity(obj.activities)) : '')),
     houseBlockLastNameComparator
   ),
 }

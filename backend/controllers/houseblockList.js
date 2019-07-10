@@ -11,57 +11,41 @@ function safeTimeCompare(a, b) {
 
 const shouldPromoteToMainActivity = (offender, newActivity) => {
   if (newActivity.eventType !== 'PRISON_ACT') return false
-  if (!offender.activity) return true
+  const mainActivity = offender.activities.find(act => act.mainActivity)
+  if (!mainActivity) return true
 
-  if (offender.activity.payRate && !newActivity.payRate) {
+  if (mainActivity.payRate && !newActivity.payRate) {
     return false
   }
 
-  if (!offender.activity.payRate && newActivity.payRate) {
+  if (!mainActivity.payRate && newActivity.payRate) {
     return true
   }
   // Multiple paid activities, or neither paid - make the earliest starting one the main one
-  return Boolean(safeTimeCompare(offender.activity.startTime, newActivity.startTime))
+  return Boolean(safeTimeCompare(mainActivity.startTime, newActivity.startTime))
 }
 
 const promoteToMainActivity = (offender, activity) => {
-  if (offender.activity) {
-    const oldMainActivity = offender.activity
-    return {
-      ...offender,
-      activity,
-      others: [...offender.others, oldMainActivity],
-    }
-  }
+  const newMainActivity = { ...activity, mainActivity: true }
+  const oldMainActivity = offender.activities.find(act => act.mainActivity)
+  const otherActivities = offender.activities.filter(ac => Boolean(ac) && !ac.mainActivity)
+
+  if (oldMainActivity) oldMainActivity.mainActivity = false
+
+  const activities = oldMainActivity
+    ? [newMainActivity, ...otherActivities, oldMainActivity]
+    : [newMainActivity, ...otherActivities]
 
   return {
     ...offender,
-    activity,
+    activities,
   }
 }
 
-const addToOtherActivities = (offender, activity) => ({
+const addToActivities = (offender, activity) => ({
   ...offender,
-  others: [...offender.others, activity],
+  activities: [...offender.activities, activity],
 })
-
-const extractAttendanceInfo = (attendanceInformation, offender) => {
-  if (attendanceInformation && attendanceInformation.length > 0) {
-    const offenderAttendanceInfo = attendanceInformation.find(
-      attendance => attendance.bookingId === offender.activity.bookingId
-    )
-    const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
-    const attendanceInfo = { id, absentReason, comments, paid, locked }
-
-    if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
-
-    if (offenderAttendanceInfo && attended && paid) attendanceInfo.pay = true
-
-    return attendanceInfo
-  }
-
-  return null
-}
 
 const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
   const { updateAttendancePrisons } = config
@@ -80,12 +64,17 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
 
     log.info(data, 'getHouseblockList data received')
 
-    const bookingIds = new Set()
+    const bookings = Array.from(new Set(data.map(event => event.bookingId)))
+    const attendanceInformation = updateAttendanceEnabled(agencyId)
+      ? await whereaboutsApi.getAttendanceForBookings(context, {
+          agencyId,
+          bookings,
+          date: formattedDate,
+          period: timeSlot,
+        })
+      : []
 
     const offendersMap = data.reduce((offenders, event) => {
-      // Collate Booking IDs
-      bookingIds.add(event.bookingId)
-
       const {
         releaseScheduled,
         courtEvents,
@@ -96,7 +85,10 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
 
       const offenderData = offenders[event.offenderNo] || {
         offenderNo: event.offenderNo,
-        others: [],
+        bookingId: event.bookingId,
+        eventId: event.eventId,
+        eventLocationId: event.eventLocationId,
+        activities: [],
         releaseScheduled,
         courtEvents,
         scheduledTransfers,
@@ -104,10 +96,27 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
         category,
       }
 
+      const attendanceInfo = attendanceInformation.find(
+        att =>
+          event.bookingId === att.bookingId &&
+          event.eventId === att.eventId &&
+          event.eventLocationId === att.eventLocationId
+      )
+
+      const { id, absentReason, comments, locked, paid } = attendanceInfo || {}
+
+      // if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
+      // if (offenderAttendanceInfo && attended && paid) attendanceInfo.pay = true
+
+      const eventWithAttendance = {
+        ...event,
+        attendanceInfo: { id, absentReason, comments, locked, paid },
+      }
+
       const updatedEntry = {
-        [event.offenderNo]: shouldPromoteToMainActivity(offenderData, event)
-          ? promoteToMainActivity(offenderData, event)
-          : addToOtherActivities(offenderData, event),
+        [event.offenderNo]: shouldPromoteToMainActivity(offenderData, eventWithAttendance)
+          ? promoteToMainActivity(offenderData, eventWithAttendance)
+          : addToActivities(offenderData, eventWithAttendance),
       }
 
       return {
@@ -116,23 +125,9 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
       }
     }, {})
 
-    const bookings = [...bookingIds]
-
-    const attendanceInformation = updateAttendanceEnabled(agencyId)
-      ? await whereaboutsApi.getAttendanceForBookings(context, {
-          agencyId,
-          bookings,
-          date: formattedDate,
-          period: timeSlot,
-        })
-      : null
-
     return Object.keys(offendersMap).map(offenderNo => ({
       offenderNo,
       ...offendersMap[offenderNo],
-      attendanceInfo: updateAttendanceEnabled(agencyId)
-        ? extractAttendanceInfo(attendanceInformation, offendersMap[offenderNo])
-        : {},
     }))
   }
 

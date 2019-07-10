@@ -9,67 +9,79 @@ describe('Houseblock data sorter tests', () => {
 
   describe('sort by last name', () => {
     describe('activity', () => {
-      const data = [{ activity: { lastName: 'B' } }, { activity: { lastName: 'A' } }, { activity: { lastName: 'C' } }]
+      const data = [
+        { activities: [{ lastName: 'B' }] },
+        { activities: [{ lastName: 'A' }] },
+        { activities: [{ lastName: 'C' }] },
+      ]
 
       it('ascending', () => {
         sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
-          { activity: { lastName: 'A' } },
-          { activity: { lastName: 'B' } },
-          { activity: { lastName: 'C' } },
+          { activities: [{ lastName: 'A' }] },
+          { activities: [{ lastName: 'B' }] },
+          { activities: [{ lastName: 'C' }] },
         ])
       })
 
       it('descending', () => {
         sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
-          { activity: { lastName: 'C' } },
-          { activity: { lastName: 'B' } },
-          { activity: { lastName: 'A' } },
+          { activities: [{ lastName: 'C' }] },
+          { activities: [{ lastName: 'B' }] },
+          { activities: [{ lastName: 'A' }] },
         ])
       })
     })
 
-    describe('others[0]', () => {
-      const data = [{ others: [{ lastName: 'B' }] }, { others: [{ lastName: 'A' }] }, { others: [{ lastName: 'C' }] }]
+    describe('activities[0]', () => {
+      const data = [
+        { activities: [{ lastName: 'B' }] },
+        { activities: [{ lastName: 'A' }] },
+        { activities: [{ lastName: 'C' }] },
+      ]
 
       it('ascending', () => {
         sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
-          { others: [{ lastName: 'A' }] },
-          { others: [{ lastName: 'B' }] },
-          { others: [{ lastName: 'C' }] },
+          { activities: [{ lastName: 'A' }] },
+          { activities: [{ lastName: 'B' }] },
+          { activities: [{ lastName: 'C' }] },
         ])
       })
 
       it('descending', () => {
         sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
-          { others: [{ lastName: 'C' }] },
-          { others: [{ lastName: 'B' }] },
-          { others: [{ lastName: 'A' }] },
+          { activities: [{ lastName: 'C' }] },
+          { activities: [{ lastName: 'B' }] },
+          { activities: [{ lastName: 'A' }] },
         ])
       })
     })
 
     describe('mixed', () => {
-      const data = [{ others: [{ lastName: 'B' }] }, { activity: { lastName: 'A' } }, { others: [{ lastName: 'C' }] }]
+      const data = [
+        { activities: [{ lastName: 'B' }] },
+        { activities: [{ lastName: 'A' }] },
+        { activities: [{ lastName: 'C' }] },
+      ]
 
       it('ascending', () => {
         sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
-          { activity: { lastName: 'A' } },
-          { others: [{ lastName: 'B' }] },
-          { others: [{ lastName: 'C' }] },
+          { activities: [{ lastName: 'A' }] },
+          { activities: [{ lastName: 'B' }] },
+          { activities: [{ lastName: 'C' }] },
         ])
       })
 
       it('descending', () => {
         sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
-          { others: [{ lastName: 'C' }] },
-          { others: [{ lastName: 'B' }] },
-          { activity: { lastName: 'A' } },
+          { activities: [{ lastName: 'C' }] },
+          { activities: [{ lastName: 'B' }] },
+          { activities: [{ lastName: 'A' }] },
         ])
       })
     })
@@ -78,29 +90,29 @@ describe('Houseblock data sorter tests', () => {
   describe('sort by last name, then firstName', () => {
     describe('activity', () => {
       const data = [
-        { activity: { lastName: 'B', firstName: 'P' } },
-        { activity: { lastName: 'A', firstName: 'Q' } },
-        { activity: { lastName: 'A', firstName: 'P' } },
-        { activity: { lastName: 'B', firstName: 'Q' } },
+        { activities: [{ lastName: 'B', firstName: 'P' }] },
+        { activities: [{ lastName: 'A', firstName: 'Q' }] },
+        { activities: [{ lastName: 'A', firstName: 'P' }] },
+        { activities: [{ lastName: 'B', firstName: 'Q' }] },
       ]
 
       it('ascending', () => {
         sortHouseBlockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
-          { activity: { lastName: 'A', firstName: 'P' } },
-          { activity: { lastName: 'A', firstName: 'Q' } },
-          { activity: { lastName: 'B', firstName: 'P' } },
-          { activity: { lastName: 'B', firstName: 'Q' } },
+          { activities: [{ lastName: 'A', firstName: 'P' }] },
+          { activities: [{ lastName: 'A', firstName: 'Q' }] },
+          { activities: [{ lastName: 'B', firstName: 'P' }] },
+          { activities: [{ lastName: 'B', firstName: 'Q' }] },
         ])
       })
 
       it('descending', () => {
         sortHouseBlockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
-          { activity: { lastName: 'B', firstName: 'Q' } },
-          { activity: { lastName: 'B', firstName: 'P' } },
-          { activity: { lastName: 'A', firstName: 'Q' } },
-          { activity: { lastName: 'A', firstName: 'P' } },
+          { activities: [{ lastName: 'B', firstName: 'Q' }] },
+          { activities: [{ lastName: 'B', firstName: 'P' }] },
+          { activities: [{ lastName: 'A', firstName: 'Q' }] },
+          { activities: [{ lastName: 'A', firstName: 'P' }] },
         ])
       })
     })
@@ -108,45 +120,45 @@ describe('Houseblock data sorter tests', () => {
 
   describe('Sort by cellLocation', () => {
     const data = [
-      { activity: { cellLocation: 'MDI-1-2-007' } },
-      { others: [{ cellLocation: 'MDI-1-2-006' }] },
-      { activity: { cellLocation: 'MDI-1-1-007' } },
+      { activities: [{ cellLocation: 'MDI-1-2-007' }] },
+      { activities: [{ cellLocation: 'MDI-1-2-006' }] },
+      { activities: [{ cellLocation: 'MDI-1-1-007' }] },
     ]
 
     it('ascending', () => {
       sortHouseBlockData(data, CELL_LOCATION, ASC)
       expect(data).toEqual([
-        { activity: { cellLocation: 'MDI-1-1-007' } },
-        { others: [{ cellLocation: 'MDI-1-2-006' }] },
-        { activity: { cellLocation: 'MDI-1-2-007' } },
+        { activities: [{ cellLocation: 'MDI-1-1-007' }] },
+        { activities: [{ cellLocation: 'MDI-1-2-006' }] },
+        { activities: [{ cellLocation: 'MDI-1-2-007' }] },
       ])
     })
   })
 
   describe('Sort by activity (eventDescription), then lastName, then firstName', () => {
     const data = [
-      { activity: { event: 'PA', comment: 'B' } },
-      { activity: { eventType: 'PRISON_ACT', comment: 'A' } },
-      { activity: { comment: 'D', eventDescription: 'F' } },
-      { activity: { comment: 'D', eventDescription: 'E' } },
-      { activity: { eventDescription: 'C' } },
-      { activity: { eventDescription: 'C', lastName: 'B', firstName: 'P' } },
-      { activity: { eventDescription: 'C', lastName: 'A', firstName: 'Q' } },
-      { activity: { eventDescription: 'C', lastName: 'A', firstName: 'P' } },
-      { activity: { eventDescription: 'C', lastName: 'B', firstName: 'Q' } },
+      { activities: [{ event: 'PA', comment: 'B', mainActivity: true }] },
+      { activities: [{ eventType: 'PRISON_ACT', comment: 'A', mainActivity: true }] },
+      { activities: [{ comment: 'D', eventDescription: 'F', mainActivity: true }] },
+      { activities: [{ comment: 'D', eventDescription: 'E', mainActivity: true }] },
+      { activities: [{ eventDescription: 'C', mainActivity: true }] },
+      { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'P', mainActivity: true }] },
+      { activities: [{ eventDescription: 'C', lastName: 'A', firstName: 'Q', mainActivity: true }] },
+      { activities: [{ eventDescription: 'C', lastName: 'A', firstName: 'P', mainActivity: true }] },
+      { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'Q', mainActivity: true }] },
     ]
     it('sorts ascending', () => {
       sortHouseBlockData(data, ACTIVITY, ASC)
       expect(data).toEqual([
-        { activity: { eventType: 'PRISON_ACT', comment: 'A' } },
-        { activity: { event: 'PA', comment: 'B' } },
-        { activity: { eventDescription: 'C', lastName: 'A', firstName: 'P' } },
-        { activity: { eventDescription: 'C', lastName: 'A', firstName: 'Q' } },
-        { activity: { eventDescription: 'C', lastName: 'B', firstName: 'P' } },
-        { activity: { eventDescription: 'C', lastName: 'B', firstName: 'Q' } },
-        { activity: { eventDescription: 'C' } },
-        { activity: { comment: 'D', eventDescription: 'E' } },
-        { activity: { comment: 'D', eventDescription: 'F' } },
+        { activities: [{ eventType: 'PRISON_ACT', comment: 'A', mainActivity: true }] },
+        { activities: [{ event: 'PA', comment: 'B', mainActivity: true }] },
+        { activities: [{ eventDescription: 'C', lastName: 'A', firstName: 'P', mainActivity: true }] },
+        { activities: [{ eventDescription: 'C', lastName: 'A', firstName: 'Q', mainActivity: true }] },
+        { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'P', mainActivity: true }] },
+        { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'Q', mainActivity: true }] },
+        { activities: [{ eventDescription: 'C', mainActivity: true }] },
+        { activities: [{ comment: 'D', eventDescription: 'E', mainActivity: true }] },
+        { activities: [{ comment: 'D', eventDescription: 'F', mainActivity: true }] },
       ])
     })
   })
