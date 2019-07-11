@@ -27,7 +27,7 @@ const searchInitialState = {
 }
 
 const eventsInitialState = {
-  houseBlockData: [],
+  houseblockData: [],
   activityData: [],
   orderField: 'cellLocation',
   sortOrder: 'ASC',
@@ -322,7 +322,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       activityData: [],
-      houseBlockData: ['data0', 'data1'],
+      houseblockData: ['data0', 'data1'],
       orderField: 'cellLocation',
       sortOrder: 'ASC',
       absentReasons: [],
@@ -337,7 +337,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       activityData: [],
-      houseBlockData: [],
+      houseblockData: [],
       orderField: 'field1',
       sortOrder: 'ASC',
       absentReasons: [],
@@ -351,7 +351,7 @@ describe('app (global) reducer', () => {
         sortOrder: 'DESC',
       })
     ).toEqual({
-      houseBlockData: [],
+      houseblockData: [],
       activityData: [],
       orderField: 'cellLocation',
       sortOrder: 'DESC',
@@ -376,7 +376,7 @@ describe('app (global) reducer', () => {
     })
   })
 
-  it('should handle SET_OFFENDER_ATTENDANCE_DATA', () => {
+  it('should handle SET_ACTIVITY_OFFENDER_ATTENDANCE', () => {
     const currentEventState = {
       ...eventsInitialState,
       activityData: [{ offenderNo: 'A1' }, { offenderNo: 'B2' }, { offenderNo: 'C3' }],
@@ -384,7 +384,7 @@ describe('app (global) reducer', () => {
 
     expect(
       events(currentEventState, {
-        type: types.SET_OFFENDER_ATTENDANCE_DATA,
+        type: types.SET_ACTIVITY_OFFENDER_ATTENDANCE,
         offenderIndex: 1,
         attendanceInfo: {
           other: true,
@@ -403,6 +403,48 @@ describe('app (global) reducer', () => {
             absentReason: 'AcceptableAbsence',
             comments: 'Comment or case note text',
           },
+        },
+        { offenderNo: 'C3' },
+      ],
+    })
+  })
+
+  it('should handle SET_HOUSEBLOCK_OFFENDER_ATTENDANCE', () => {
+    const currentEventState = {
+      ...eventsInitialState,
+      houseblockData: [
+        { offenderNo: 'A1' },
+        { offenderNo: 'B2', activities: [{ mainActivity: true }] },
+        { offenderNo: 'C3' },
+      ],
+    }
+
+    expect(
+      events(currentEventState, {
+        type: types.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE,
+        offenderIndex: 1,
+        attendanceInfo: {
+          other: true,
+          absentReason: 'AcceptableAbsence',
+          comments: 'Comment or case note text',
+        },
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      houseblockData: [
+        { offenderNo: 'A1' },
+        {
+          offenderNo: 'B2',
+          activities: [
+            {
+              mainActivity: true,
+              attendanceInfo: {
+                other: true,
+                absentReason: 'AcceptableAbsence',
+                comments: 'Comment or case note text',
+              },
+            },
+          ],
         },
         { offenderNo: 'C3' },
       ],

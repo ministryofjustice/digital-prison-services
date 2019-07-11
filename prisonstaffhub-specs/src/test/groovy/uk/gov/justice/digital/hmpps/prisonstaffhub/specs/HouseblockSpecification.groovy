@@ -260,7 +260,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: 'I select and display a location'
         def today = getNow()
 
-        elite2api.stubGetHouseBlockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         location = '1'
         period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }

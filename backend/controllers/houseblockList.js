@@ -28,7 +28,7 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
 const promoteToMainActivity = (offender, activity) => {
   const newMainActivity = { ...activity, mainActivity: true }
   const oldMainActivity = offender.activities.find(act => act.mainActivity)
-  const otherActivities = offender.activities.filter(ac => Boolean(ac) && !ac.mainActivity)
+  const otherActivities = offender.activities.filter(ac => ac && !ac.mainActivity)
 
   if (oldMainActivity) oldMainActivity.mainActivity = false
 
@@ -86,6 +86,9 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
       const offenderData = offenders[event.offenderNo] || {
         offenderNo: event.offenderNo,
         bookingId: event.bookingId,
+        firstName: event.firstName,
+        lastName: event.lastName,
+        cellLocation: event.cellLocation,
         eventId: event.eventId,
         eventLocationId: event.eventLocationId,
         activities: [],
@@ -97,20 +100,22 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
       }
 
       const attendanceInfo = attendanceInformation.find(
-        att =>
-          event.bookingId === att.bookingId &&
-          event.eventId === att.eventId &&
-          event.eventLocationId === att.eventLocationId
+        attendedActivity =>
+          event.bookingId === attendedActivity.bookingId &&
+          event.eventId === attendedActivity.eventId &&
+          event.eventLocationId === attendedActivity.eventLocationId
       )
 
-      const { id, absentReason, comments, locked, paid } = attendanceInfo || {}
-
-      // if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
-      // if (offenderAttendanceInfo && attended && paid) attendanceInfo.pay = true
+      const { id, absentReason, comments, locked, paid, attended } = attendanceInfo || {}
 
       const eventWithAttendance = {
         ...event,
         attendanceInfo: { id, absentReason, comments, locked, paid },
+      }
+
+      if (attendanceInfo) {
+        if (absentReason) eventWithAttendance.attendanceInfo.other = true
+        if (attended && paid) eventWithAttendance.attendanceInfo.pay = true
       }
 
       const updatedEntry = {

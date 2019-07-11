@@ -187,7 +187,7 @@ class Elite2Api extends WireMockRule {
         stubAssessments(offenderNumbers)
     }
 
-    void stubGetHouseBlockListWithAllCourtEvents(Caseload caseload, String groupName, String timeSlot, String date) {
+    void stubGetHouseblockListWithAllCourtEvents(Caseload caseload, String groupName, String timeSlot, String date) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(

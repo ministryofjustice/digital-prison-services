@@ -1,10 +1,10 @@
-import sortHouseBlockData from './houseBlockResultsSorter'
+import sortHouseblockData from './houseblockResultsSorter'
 import { ASC, DESC } from '../tablesorting/sortOrder'
 import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 
 describe('Houseblock data sorter tests', () => {
   it('sorts an empty array', () => {
-    sortHouseBlockData([], 'lastName', 'ASC')
+    sortHouseblockData([], 'lastName', 'ASC')
   })
 
   describe('sort by last name', () => {
@@ -16,7 +16,7 @@ describe('Houseblock data sorter tests', () => {
       ]
 
       it('ascending', () => {
-        sortHouseBlockData(data, LAST_NAME, ASC)
+        sortHouseblockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activities: [{ lastName: 'A' }] },
           { activities: [{ lastName: 'B' }] },
@@ -25,7 +25,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, LAST_NAME, DESC)
+        sortHouseblockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { activities: [{ lastName: 'C' }] },
           { activities: [{ lastName: 'B' }] },
@@ -42,7 +42,7 @@ describe('Houseblock data sorter tests', () => {
       ]
 
       it('ascending', () => {
-        sortHouseBlockData(data, LAST_NAME, ASC)
+        sortHouseblockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activities: [{ lastName: 'A' }] },
           { activities: [{ lastName: 'B' }] },
@@ -51,7 +51,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, LAST_NAME, DESC)
+        sortHouseblockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { activities: [{ lastName: 'C' }] },
           { activities: [{ lastName: 'B' }] },
@@ -68,7 +68,7 @@ describe('Houseblock data sorter tests', () => {
       ]
 
       it('ascending', () => {
-        sortHouseBlockData(data, LAST_NAME, ASC)
+        sortHouseblockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activities: [{ lastName: 'A' }] },
           { activities: [{ lastName: 'B' }] },
@@ -77,7 +77,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, LAST_NAME, DESC)
+        sortHouseblockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { activities: [{ lastName: 'C' }] },
           { activities: [{ lastName: 'B' }] },
@@ -97,7 +97,7 @@ describe('Houseblock data sorter tests', () => {
       ]
 
       it('ascending', () => {
-        sortHouseBlockData(data, LAST_NAME, ASC)
+        sortHouseblockData(data, LAST_NAME, ASC)
         expect(data).toEqual([
           { activities: [{ lastName: 'A', firstName: 'P' }] },
           { activities: [{ lastName: 'A', firstName: 'Q' }] },
@@ -107,7 +107,7 @@ describe('Houseblock data sorter tests', () => {
       })
 
       it('descending', () => {
-        sortHouseBlockData(data, LAST_NAME, DESC)
+        sortHouseblockData(data, LAST_NAME, DESC)
         expect(data).toEqual([
           { activities: [{ lastName: 'B', firstName: 'Q' }] },
           { activities: [{ lastName: 'B', firstName: 'P' }] },
@@ -126,7 +126,7 @@ describe('Houseblock data sorter tests', () => {
     ]
 
     it('ascending', () => {
-      sortHouseBlockData(data, CELL_LOCATION, ASC)
+      sortHouseblockData(data, CELL_LOCATION, ASC)
       expect(data).toEqual([
         { activities: [{ cellLocation: 'MDI-1-1-007' }] },
         { activities: [{ cellLocation: 'MDI-1-2-006' }] },
@@ -148,7 +148,7 @@ describe('Houseblock data sorter tests', () => {
       { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'Q', mainActivity: true }] },
     ]
     it('sorts ascending', () => {
-      sortHouseBlockData(data, ACTIVITY, ASC)
+      sortHouseblockData(data, ACTIVITY, ASC)
       expect(data).toEqual([
         { activities: [{ eventType: 'PRISON_ACT', comment: 'A', mainActivity: true }] },
         { activities: [{ event: 'PA', comment: 'B', mainActivity: true }] },

@@ -16,6 +16,10 @@ const DONT_ATTEND_COLUMN = 7
 
 const response = [
   {
+    offenderNo: 'A1234AA',
+    firstName: 'ARTHUR',
+    lastName: 'ANDERSON',
+    cellLocation: `${PRISON}-A-1-1`,
     releaseScheduled: true,
     category: 'A',
     alertFlags: ['HA'],
@@ -69,6 +73,10 @@ const response = [
     ],
   },
   {
+    offenderNo: 'A1234AB',
+    firstName: 'MICHAEL',
+    lastName: 'SMITH',
+    cellLocation: `${PRISON}-A-1-2`,
     category: 'B',
     activities: [
       {
@@ -87,6 +95,10 @@ const response = [
     ],
   },
   {
+    offenderNo: 'A1234AC',
+    firstName: 'FRED',
+    lastName: 'QUIMBY',
+    cellLocation: `${PRISON}-A-1-3`,
     category: 'H',
     endTime: '2017-10-15T18:30:00',
     activities: [
@@ -117,6 +129,10 @@ const response = [
     ],
   },
   {
+    offenderNo: 'A1234AD',
+    firstName: 'John',
+    lastName: 'DOE',
+    cellLocation: `${PRISON}-A-1-4`,
     category: 'P',
     activities: [
       {
@@ -173,6 +189,8 @@ const props = {
   handleDateChange: jest.fn(),
   update: jest.fn(),
   resetErrorDispatch: jest.fn(),
+  handleError: jest.fn(),
+  setHouseblockOffenderAttendance: jest.fn(),
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -608,6 +626,7 @@ describe('Offender results component Jira NN-843', () => {
             comment: 'Chapel',
             startTime: '2017-10-15T18:00:00',
             endTime: '2017-10-15T18:30:00',
+            mainActivity: true,
           },
         ],
       },

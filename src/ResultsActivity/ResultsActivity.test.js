@@ -145,7 +145,7 @@ const props = {
   handleDateChange: jest.fn(),
   getActivityList: jest.fn(),
   handleError: jest.fn(),
-  setOffenderAttendanceData: jest.fn(),
+  setActivityOffenderAttendance: jest.fn(),
   resetErrorDispatch: jest.fn(),
   setColumnSort: jest.fn(),
   showPaymentReasonModal: jest.fn(),
