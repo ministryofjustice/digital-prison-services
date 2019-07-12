@@ -583,5 +583,12 @@ describe('Houseblock list controller', async () => {
         },
       ])
     })
+
+    it('should not call getAttendanceForBookings if there are no offenders', async () => {
+      elite2Api.getHouseblockList.mockImplementationOnce(() => [])
+      await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+
+      expect(whereaboutsApi.getAttendanceForBookings).not.toHaveBeenCalled()
+    })
   })
 })
