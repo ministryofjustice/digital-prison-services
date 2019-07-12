@@ -65,7 +65,8 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
     log.info(data, 'getHouseblockList data received')
 
     const bookings = Array.from(new Set(data.map(event => event.bookingId)))
-    const attendanceInformation = updateAttendanceEnabled(agencyId)
+    const shouldGetAttendanceForBookings = updateAttendanceEnabled(agencyId) && bookings.length > 0
+    const attendanceInformation = shouldGetAttendanceForBookings
       ? await whereaboutsApi.getAttendanceForBookings(context, {
           agencyId,
           bookings,
