@@ -9,7 +9,7 @@ import { isWithinLastWeek, pascalToString } from '../../../utils'
 import PayOtherForm from '../PayOtherForm'
 import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
 
-function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal }) {
+function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal, noPay }) {
   const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
@@ -59,21 +59,26 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
 
   return (
     <Fragment>
-      {absentReason && (
-        <Option data-qa="absent-reason" printOnly>
-          {pascalToString(absentReason)}
-        </Option>
-      )}
-      <Option data-qa="pay-option" className="row-gutters">
-        {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
-        {!isPaying &&
-          showRadioButton && (
-            <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
-              <VisuallyHidden>Pay</VisuallyHidden>
-            </Radio>
+      {!noPay && (
+        <Fragment>
+          {absentReason && (
+            <Option data-qa="absent-reason" printOnly>
+              {pascalToString(absentReason)}
+            </Option>
           )}
-        {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
-      </Option>
+
+          <Option data-qa="pay-option" className="row-gutters">
+            {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
+            {!isPaying &&
+              showRadioButton && (
+                <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
+                  <VisuallyHidden>Pay</VisuallyHidden>
+                </Radio>
+              )}
+            {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
+          </Option>
+        </Fragment>
+      )}
 
       <Option data-qa="other-option" className="row-gutters">
         {showRadioButton && (
@@ -110,10 +115,12 @@ PayOptions.propTypes = {
   closeModal: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,
+  noPay: PropTypes.bool,
 }
 
 PayOptions.defaultProps = {
   offenderDetails: undefined,
+  noPay: false,
 }
 
 export default PayOptions

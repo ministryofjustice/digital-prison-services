@@ -24,8 +24,8 @@ const attendanceFactory = whereaboutsApi => {
     return response
   }
 
-  const getAbsenceReasons = async (context, body) => {
-    const absenceReasons = await whereaboutsApi.getAbsenceReasons(context, body)
+  const getAbsenceReasons = async context => {
+    const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
 
     const unpaidReasonName = reason => {
       const name = pascalToString(reason)

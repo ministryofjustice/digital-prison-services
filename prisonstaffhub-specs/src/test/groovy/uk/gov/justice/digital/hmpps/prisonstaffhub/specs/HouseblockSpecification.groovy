@@ -1,9 +1,11 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import geb.module.FormElement
+import geb.module.RadioButtons
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.HouseblockPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -17,12 +19,16 @@ class HouseblockSpecification extends BrowserReportingSpec {
     static final flagsColumn = 3
     static final activityColumn = 4
     static final otherActivityColumn = 5
+    static final attendanceColumn = 8
 
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
     @Rule
     OauthApi oauthApi = new OauthApi()
+
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
     def initialPeriod
@@ -33,8 +39,11 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         String today = getNow()
+        def bookings = 'bookings=1&bookings=2&bookings=4&bookings=3&bookings=8'
 
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
 
         location = '1'
         period = 'AM'
@@ -98,11 +107,14 @@ class HouseblockSpecification extends BrowserReportingSpec {
     }
 
     def "The updated houseblock list is displayed"() {
+        def bookings = 'bookings=1&bookings=2&bookings=4&bookings=3&bookings=8'
         given: 'I am on the houseblock list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'PM', today)
         location = '1'
         period = 'PM'
         waitFor { continueButton.module(FormElement).enabled }
@@ -113,6 +125,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1_B', 'PM', firstOfMonthApiFormat)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'PM', firstOfMonthApiFormat)
         location = 'B'
         setDatePicker('2018', 'Aug', '1')
         updateButton.click()
@@ -142,11 +156,14 @@ class HouseblockSpecification extends BrowserReportingSpec {
     }
 
     def "should navigate to the whereabouts search on a page refresh"() {
+        def bookings = 'bookings=1&bookings=2&bookings=4&bookings=3&bookings=8'
         given: 'I am on the houseblock list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'PM', today)
 
         location = '1'
         period = 'PM'
@@ -171,8 +188,11 @@ class HouseblockSpecification extends BrowserReportingSpec {
         String pattern = "YYYY-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         def today = simpleDateFormat.format(new Date());
+        def bookings = 'bookings=1&bookings=5'
 
         elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
 
         location = '1'
         period = 'AM'
@@ -197,7 +217,10 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
 
         location = '1'
         period = 'AM'
@@ -218,8 +241,11 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
         location = '1'
         period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
@@ -239,8 +265,11 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
         location = '1'
         period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
@@ -259,8 +288,11 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
 
-        elite2api.stubGetHouseBlockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
         location = '1'
         period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
@@ -273,6 +305,34 @@ class HouseblockSpecification extends BrowserReportingSpec {
         texts[1].contains("** Court visit scheduled **")
         texts[1].contains("** Court visit scheduled ** (complete)")
         texts[1].contains("** Court visit scheduled ** (expired)")
+    }
+
+    def "should show correct attendance data"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: 'I select and display a location'
+        def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
+        location = '1'
+        period = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
+        continueButton.click()
+
+        then: 'I should see the correct attendance information for each offender'
+        at HouseblockPage
+
+        tableRows[1].find('td')[attendanceColumn].text() == 'Received'
+        tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
+
+        def payRadios = $(name: "pay").module(RadioButtons)
+        payRadios.checked == 'no'
+        $('form').absentReason == 'UnacceptableAbsence'
+        $('form').comments == 'Never turned up.'
     }
 
     private static String getNow() {

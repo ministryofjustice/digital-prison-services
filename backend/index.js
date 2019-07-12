@@ -141,7 +141,7 @@ const controller = controllerFactory({
   activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
   adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
   iepDetailsService: iepDetailsFactory(elite2Api),
-  houseblockListService: houseblockListFactory(elite2Api),
+  houseblockListService: houseblockListFactory(elite2Api, whereaboutsApi, config),
   attendanceService: attendanceFactory(whereaboutsApi),
   establishmentRollService: establishmentRollFactory(elite2Api),
   globalSearchService: globalSearchFactory(elite2Api),

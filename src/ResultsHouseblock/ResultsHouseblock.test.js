@@ -16,23 +16,28 @@ const DONT_ATTEND_COLUMN = 7
 
 const response = [
   {
+    offenderNo: 'A1234AA',
+    firstName: 'ARTHUR',
+    lastName: 'ANDERSON',
+    cellLocation: `${PRISON}-A-1-1`,
     releaseScheduled: true,
     category: 'A',
     alertFlags: ['HA'],
-    activity: {
-      offenderNo: 'A1234AA',
-      firstName: 'ARTHUR',
-      lastName: 'ANDERSON',
-      cellLocation: `${PRISON}-A-1-1`,
-      event: 'PA',
-      eventId: 56,
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Prison Activities',
-      comment: 'Chapel',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    others: [
+    activities: [
+      {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'PA',
+        eventId: 56,
+        eventType: 'PRISON_ACT',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        mainActivity: true,
+      },
       {
         offenderNo: 'A1234AA',
         firstName: 'ARTHUR',
@@ -68,35 +73,47 @@ const response = [
     ],
   },
   {
+    offenderNo: 'A1234AB',
+    firstName: 'MICHAEL',
+    lastName: 'SMITH',
+    cellLocation: `${PRISON}-A-1-2`,
     category: 'B',
-    activity: {
-      offenderNo: 'A1234AB',
-      firstName: 'MICHAEL',
-      lastName: 'SMITH',
-      cellLocation: `${PRISON}-A-1-2`,
-      event: 'PA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Prison Activities',
-      comment: 'Chapel Act',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
+    activities: [
+      {
+        offenderNo: 'A1234AB',
+        firstName: 'MICHAEL',
+        lastName: 'SMITH',
+        cellLocation: `${PRISON}-A-1-2`,
+        event: 'PA',
+        eventType: 'PRISON_ACT',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel Act',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        mainActivity: true,
+      },
+    ],
   },
   {
+    offenderNo: 'A1234AC',
+    firstName: 'FRED',
+    lastName: 'QUIMBY',
+    cellLocation: `${PRISON}-A-1-3`,
     category: 'H',
-    activity: {
-      offenderNo: 'A1234AC',
-      firstName: 'FRED',
-      lastName: 'QUIMBY',
-      cellLocation: `${PRISON}-A-1-3`,
-      event: 'PA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Prison Activities',
-      comment: 'Chapel Activity',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
-    others: [
+    endTime: '2017-10-15T18:30:00',
+    activities: [
+      {
+        offenderNo: 'A1234AC',
+        firstName: 'FRED',
+        lastName: 'QUIMBY',
+        cellLocation: `${PRISON}-A-1-3`,
+        event: 'PA',
+        eventType: 'PRISON_ACT',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel Activity',
+        startTime: '2017-10-15T18:00:00',
+        mainActivity: true,
+      },
       {
         offenderNo: 'A1234AC',
         firstName: 'FRED',
@@ -112,19 +129,26 @@ const response = [
     ],
   },
   {
+    offenderNo: 'A1234AD',
+    firstName: 'John',
+    lastName: 'DOE',
+    cellLocation: `${PRISON}-A-1-4`,
     category: 'P',
-    activity: {
-      offenderNo: 'A1234AD',
-      firstName: 'John',
-      lastName: 'DOE',
-      cellLocation: `${PRISON}-A-1-4`,
-      event: 'PA',
-      eventType: 'PRISON_ACT',
-      eventDescription: 'Prison Activities',
-      comment: 'Chapel Act',
-      startTime: '2017-10-15T18:00:00',
-      endTime: '2017-10-15T18:30:00',
-    },
+    activities: [
+      {
+        offenderNo: 'A1234AD',
+        firstName: 'John',
+        lastName: 'DOE',
+        cellLocation: `${PRISON}-A-1-4`,
+        event: 'PA',
+        eventType: 'PRISON_ACT',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel Act',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        mainActivity: true,
+      },
+    ],
   },
 ]
 
@@ -165,6 +189,8 @@ const props = {
   handleDateChange: jest.fn(),
   update: jest.fn(),
   resetErrorDispatch: jest.fn(),
+  handleError: jest.fn(),
+  setHouseblockOffenderAttendance: jest.fn(),
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -586,20 +612,27 @@ describe('Offender results component Jira NN-843', () => {
   it('should show released today when there are no other activity', () => {
     const data = [
       {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
         releaseScheduled: true,
-        activity: {
-          offenderNo: 'A1234AA',
-          firstName: 'ARTHUR',
-          lastName: 'ANDERSON',
-          cellLocation: `${PRISON}-A-1-1`,
-          event: 'PA',
-          eventId: 56,
-          eventType: 'PRISON_ACT',
-          eventDescription: 'Prison Activities',
-          comment: 'Chapel',
-          startTime: '2017-10-15T18:00:00',
-          endTime: '2017-10-15T18:30:00',
-        },
+        activities: [
+          {
+            offenderNo: 'A1234AA',
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            cellLocation: `${PRISON}-A-1-1`,
+            event: 'PA',
+            eventId: 56,
+            eventType: 'PRISON_ACT',
+            eventDescription: 'Prison Activities',
+            comment: 'Chapel',
+            startTime: '2017-10-15T18:00:00',
+            endTime: '2017-10-15T18:30:00',
+            mainActivity: true,
+          },
+        ],
       },
     ]
     const aFewDaysAgo = moment().subtract(3, 'days')
@@ -658,21 +691,28 @@ describe('Offender results component Jira NN-843', () => {
   it('should show transfer scheduled in the other activities column', () => {
     const data = [
       {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
         releasedToday: false,
         scheduledTransfers: [{ eventId: 100, eventDescription: 'Transfer scheduled', scheduled: true }],
-        activity: {
-          offenderNo: 'A1234AA',
-          firstName: 'ARTHUR',
-          lastName: 'ANDERSON',
-          cellLocation: `${PRISON}-A-1-1`,
-          event: 'PA',
-          eventId: 56,
-          eventType: 'PRISON_ACT',
-          eventDescription: 'Prison Activities',
-          comment: 'Chapel',
-          startTime: '2017-10-15T18:00:00',
-          endTime: '2017-10-15T18:30:00',
-        },
+        activities: [
+          {
+            offenderNo: 'A1234AA',
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            cellLocation: `${PRISON}-A-1-1`,
+            event: 'PA',
+            eventId: 56,
+            eventType: 'PRISON_ACT',
+            eventDescription: 'Prison Activities',
+            comment: 'Chapel',
+            startTime: '2017-10-15T18:00:00',
+            endTime: '2017-10-15T18:30:00',
+            mainActivity: true,
+          },
+        ],
       },
     ]
     const aFewDaysAgo = moment().subtract(3, 'days')
@@ -710,6 +750,10 @@ describe('Offender results component Jira NN-843', () => {
   it('should show multiple scheduled transfers along with status description', () => {
     const data = [
       {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
         releasedToday: false,
         scheduledTransfers: [
           { eventId: 100, eventDescription: 'Transfer scheduled', scheduled: true },
@@ -717,19 +761,22 @@ describe('Offender results component Jira NN-843', () => {
           { eventId: 102, eventDescription: 'Transfer scheduled', complete: true },
           { eventId: 103, eventDescription: 'Transfer scheduled', expired: true },
         ],
-        activity: {
-          offenderNo: 'A1234AA',
-          firstName: 'ARTHUR',
-          lastName: 'ANDERSON',
-          cellLocation: `${PRISON}-A-1-1`,
-          event: 'PA',
-          eventId: 56,
-          eventType: 'PRISON_ACT',
-          eventDescription: 'Prison Activities',
-          comment: 'Chapel',
-          startTime: '2017-10-15T18:00:00',
-          endTime: '2017-10-15T18:30:00',
-        },
+        activities: [
+          {
+            offenderNo: 'A1234AA',
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            cellLocation: `${PRISON}-A-1-1`,
+            event: 'PA',
+            eventId: 56,
+            eventType: 'PRISON_ACT',
+            eventDescription: 'Prison Activities',
+            comment: 'Chapel',
+            startTime: '2017-10-15T18:00:00',
+            endTime: '2017-10-15T18:30:00',
+            mainActivity: true,
+          },
+        ],
       },
     ]
     const aFewDaysAgo = moment().subtract(3, 'days')

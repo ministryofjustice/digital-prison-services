@@ -382,7 +382,7 @@ describe('actions', () => {
 
   it('should create an action to set an offenders activity attendance information', () => {
     const expectedAction = {
-      type: types.SET_OFFENDER_ATTENDANCE_DATA,
+      type: types.SET_ACTIVITY_OFFENDER_ATTENDANCE,
       offenderIndex: 1,
       attendanceInfo: {
         other: true,
@@ -392,7 +392,27 @@ describe('actions', () => {
     }
 
     expect(
-      actions.setOffenderAttendanceData(1, {
+      actions.setActivityOffenderAttendance(1, {
+        other: true,
+        absentReason: 'AcceptableAbsence',
+        comments: 'Comment or case note text',
+      })
+    ).toEqual(expectedAction)
+  })
+
+  it('should create an action to set an offenders houseblock attendance information', () => {
+    const expectedAction = {
+      type: types.SET_ACTIVITY_OFFENDER_ATTENDANCE,
+      offenderIndex: 1,
+      attendanceInfo: {
+        other: true,
+        absentReason: 'AcceptableAbsence',
+        comments: 'Comment or case note text',
+      },
+    }
+
+    expect(
+      actions.setActivityOffenderAttendance(1, {
         other: true,
         absentReason: 'AcceptableAbsence',
         comments: 'Comment or case note text',

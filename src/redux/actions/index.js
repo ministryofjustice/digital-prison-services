@@ -106,8 +106,14 @@ export const setActivityData = data => ({
   data,
 })
 
-export const setOffenderAttendanceData = (offenderIndex, attendanceInfo) => ({
-  type: ActionTypes.SET_OFFENDER_ATTENDANCE_DATA,
+export const setActivityOffenderAttendance = (offenderIndex, attendanceInfo) => ({
+  type: ActionTypes.SET_ACTIVITY_OFFENDER_ATTENDANCE,
+  offenderIndex: parseInt(offenderIndex, 0),
+  attendanceInfo,
+})
+
+export const setHouseblockOffenderAttendance = (offenderIndex, attendanceInfo) => ({
+  type: ActionTypes.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE,
   offenderIndex: parseInt(offenderIndex, 0),
   attendanceInfo,
 })
