@@ -612,6 +612,10 @@ describe('Offender results component Jira NN-843', () => {
   it('should show released today when there are no other activity', () => {
     const data = [
       {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
         releaseScheduled: true,
         activities: [
           {
@@ -687,6 +691,10 @@ describe('Offender results component Jira NN-843', () => {
   it('should show transfer scheduled in the other activities column', () => {
     const data = [
       {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
         releasedToday: false,
         scheduledTransfers: [{ eventId: 100, eventDescription: 'Transfer scheduled', scheduled: true }],
         activities: [
@@ -742,6 +750,10 @@ describe('Offender results component Jira NN-843', () => {
   it('should show multiple scheduled transfers along with status description', () => {
     const data = [
       {
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
         releasedToday: false,
         scheduledTransfers: [
           { eventId: 100, eventDescription: 'Transfer scheduled', scheduled: true },

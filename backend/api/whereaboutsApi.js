@@ -10,7 +10,6 @@ const whereaboutsApiFactory = client => {
   const getAttendance = (context, { agencyId, period, locationId, date }) =>
     get(context, `/attendance/${agencyId}/${locationId}?date=${date}&period=${period}`)
 
-  // New endpoint for NN-2041
   const getAttendanceForBookings = (context, { agencyId, period, bookings, date }) =>
     get(context, `/attendance/${agencyId}?${arrayToQueryString(bookings, 'bookings')}&date=${date}&period=${period}`)
 

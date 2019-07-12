@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
@@ -303,7 +303,7 @@ class ResultsHouseblock extends Component {
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (
-                <>
+                <Fragment>
                   {isReceived && <td className="no-print">Received</td>}
                   {!isReceived && (
                     <PayOptions
@@ -315,7 +315,7 @@ class ResultsHouseblock extends Component {
                       noPay
                     />
                   )}
-                </>
+                </Fragment>
               )}
               fallbackRender={() => <></>}
             />

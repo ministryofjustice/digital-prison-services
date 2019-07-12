@@ -59,23 +59,25 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
 
   return (
     <Fragment>
-      {absentReason &&
-        !noPay && (
-          <Option data-qa="absent-reason" printOnly>
-            {pascalToString(absentReason)}
-          </Option>
-        )}
       {!noPay && (
-        <Option data-qa="pay-option" className="row-gutters">
-          {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
-          {!isPaying &&
-            showRadioButton && (
-              <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
-                <VisuallyHidden>Pay</VisuallyHidden>
-              </Radio>
-            )}
-          {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
-        </Option>
+        <Fragment>
+          {absentReason && (
+            <Option data-qa="absent-reason" printOnly>
+              {pascalToString(absentReason)}
+            </Option>
+          )}
+
+          <Option data-qa="pay-option" className="row-gutters">
+            {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
+            {!isPaying &&
+              showRadioButton && (
+                <Radio onChange={payOffender} name={offenderNo} value="pay" checked={selectedOption === 'pay'}>
+                  <VisuallyHidden>Pay</VisuallyHidden>
+                </Radio>
+              )}
+            {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
+          </Option>
+        </Fragment>
       )}
 
       <Option data-qa="other-option" className="row-gutters">

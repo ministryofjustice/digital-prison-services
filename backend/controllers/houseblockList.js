@@ -28,7 +28,7 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
 const promoteToMainActivity = (offender, activity) => {
   const newMainActivity = { ...activity, mainActivity: true }
   const oldMainActivity = offender.activities.find(act => act.mainActivity)
-  const otherActivities = offender.activities.filter(ac => ac && !ac.mainActivity)
+  const otherActivities = offender.activities.filter(act => act && !act.mainActivity)
 
   if (oldMainActivity) oldMainActivity.mainActivity = false
 
@@ -100,10 +100,10 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
       }
 
       const attendanceInfo = attendanceInformation.find(
-        attendedActivity =>
-          event.bookingId === attendedActivity.bookingId &&
-          event.eventId === attendedActivity.eventId &&
-          event.eventLocationId === attendedActivity.eventLocationId
+        activityWithAttendance =>
+          event.bookingId === activityWithAttendance.bookingId &&
+          event.eventId === activityWithAttendance.eventId &&
+          event.eventLocationId === activityWithAttendance.eventLocationId
       )
 
       const { id, absentReason, comments, locked, paid, attended } = attendanceInfo || {}
