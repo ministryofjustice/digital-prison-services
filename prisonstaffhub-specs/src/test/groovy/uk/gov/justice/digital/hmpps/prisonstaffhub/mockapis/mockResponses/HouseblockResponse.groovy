@@ -15,6 +15,8 @@ class HouseblockResponse {
             event           : "PA",
             eventType       : "PRISON_ACT",
             eventDescription: "Prison Activities",
+            eventId         : 10,
+            eventLocationId : 100,
             comment         : "Woodwork",
             startTime       : "2017-10-15T17:00:00",
             payRate         : 1.30,
@@ -56,6 +58,8 @@ class HouseblockResponse {
             event           : "PA",
             eventDescription: "Prison Activities",
             eventType       : "PRISON_ACT",
+            eventId         : 20,
+            eventLocationId : 200,
             comment         : "TV Repairs",
             startTime       : "2017-10-15T17:45:00",
             endTime         : "2017-10-15T18:30:00"
@@ -69,6 +73,8 @@ class HouseblockResponse {
             event           : "PA",
             eventDescription: "Prison Activities",
             eventType       : "PRISON_ACT",
+            eventId         : 40,
+            eventLocationId : 400,
             comment         : "Chapel",
             startTime       : "2017-10-15T11:45:00",
             endTime         : "2017-10-15T13:30:00"

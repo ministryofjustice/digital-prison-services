@@ -214,7 +214,7 @@ class ResultsHouseblock extends Component {
         </th>
         <Flag
           name={['updateAttendanceEnabled']}
-          render={() => <th className="no-print">Non attendance</th>}
+          render={() => <th className="no-print">Attended</th>}
           fallbackRender={() => <></>}
         />
       </tr>

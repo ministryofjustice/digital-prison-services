@@ -438,7 +438,7 @@ describe('Houseblock list controller', async () => {
         },
         {
           absentReason: 'AcceptableAbsence',
-          attended: true,
+          attended: false,
           bookingId: 2,
           caseNoteId: 0,
           comments: 'string',
@@ -451,13 +451,13 @@ describe('Houseblock list controller', async () => {
           locked: true,
           modifyDateTime: '2019-07-08T07:57:12.358Z',
           modifyUserId: 'string',
-          paid: false,
+          paid: true,
           period: 'AM',
           prisonId: 'string',
         },
         {
-          absentReason: 'AcceptableAbsence',
-          attended: true,
+          absentReason: 'UnacceptableAbsence',
+          attended: false,
           bookingId: 2,
           caseNoteId: 0,
           comments: 'string',
@@ -527,7 +527,7 @@ describe('Houseblock list controller', async () => {
                 id: 2,
                 locked: true,
                 other: true,
-                paid: false,
+                paid: true,
               },
               bookingId: 2,
               cellLocation: 'LEI-A-1-1',
@@ -546,7 +546,7 @@ describe('Houseblock list controller', async () => {
             },
             {
               attendanceInfo: {
-                absentReason: 'AcceptableAbsence',
+                absentReason: 'UnacceptableAbsence',
                 comments: 'string',
                 id: 2,
                 locked: true,

@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import geb.module.FormElement
+import geb.module.RadioButtons
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -18,6 +19,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
     static final flagsColumn = 3
     static final activityColumn = 4
     static final otherActivityColumn = 5
+    static final attendanceColumn = 8
 
     @Rule
     Elite2Api elite2api = new Elite2Api()
@@ -303,6 +305,34 @@ class HouseblockSpecification extends BrowserReportingSpec {
         texts[1].contains("** Court visit scheduled **")
         texts[1].contains("** Court visit scheduled ** (complete)")
         texts[1].contains("** Court visit scheduled ** (expired)")
+    }
+
+    def "should show correct attendance data"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: 'I select and display a location'
+        def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
+        location = '1'
+        period = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
+        continueButton.click()
+
+        then: 'I should see the correct attendance information for each offender'
+        at HouseblockPage
+
+        tableRows[1].find('td')[attendanceColumn].text() == 'Received'
+        tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
+
+        def payRadios = $(name: "pay").module(RadioButtons)
+        payRadios.checked == 'no'
+        $('form').absentReason == 'UnacceptableAbsence'
+        $('form').comments == 'Never turned up.'
     }
 
     private static String getNow() {
