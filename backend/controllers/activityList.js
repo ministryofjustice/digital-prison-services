@@ -1,6 +1,7 @@
 const { switchDateFormat, sortByDateTime } = require('../utils')
 const log = require('../log')
 const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders')
+const { absentReasonMapper } = require('../mappers')
 
 const offenderNumberMultiMap = offenderNumbers =>
   offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())
@@ -17,11 +18,16 @@ const sortActivitiesByEventThenByLastName = data => {
   })
 }
 
-const extractAttendanceInfo = (attendanceInformation, event) => {
+const extractAttendanceInfo = (attendanceInformation, event, absentReasons = []) => {
   if (attendanceInformation && attendanceInformation.length > 0) {
     const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === event.bookingId)
     const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
-    const attendanceInfo = { id, absentReason, comments, paid, locked }
+
+    const mapToAbsentReason = absentReasonMapper(absentReasons)
+
+    const attendanceInfo = absentReason
+      ? { id, absentReason: mapToAbsentReason(absentReason), comments, paid, locked }
+      : { id, comments, paid, locked }
 
     if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
 
@@ -49,6 +55,9 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
   const getActivityList = async (context, agencyId, locationIdString, frontEndDate, timeSlot) => {
     const locationId = Number.parseInt(locationIdString, 10)
     const date = switchDateFormat(frontEndDate)
+
+    const absenceReasons =
+      (updateAttendanceEnabled(agencyId) && (await whereaboutsApi.getAbsenceReasons(context))) || []
 
     const getEventsAtLocation = usage =>
       elite2Api.getActivityList(context, { agencyId, locationId, usage, date, timeSlot })
@@ -112,7 +121,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
       const attendanceInfo = updateAttendanceEnabled(agencyId)
-        ? extractAttendanceInfo(attendanceInformation, event)
+        ? extractAttendanceInfo(attendanceInformation, event, absenceReasons)
         : {}
 
       return {

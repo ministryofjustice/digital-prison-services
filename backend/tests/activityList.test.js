@@ -109,7 +109,11 @@ beforeEach(() => {
   elite2Api.getAssessments = jest.fn()
   elite2Api.getDetailsLight = jest.fn()
   whereaboutsApi.getAttendance = jest.fn()
+  whereaboutsApi.getAbsenceReasons = jest.fn()
 
+  whereaboutsApi.getAbsenceReasons.mockReturnValue({
+    triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+  })
   elite2Api.getVisits.mockReturnValue([])
   elite2Api.getAppointments.mockReturnValue([])
   elite2Api.getActivities.mockReturnValue([])
@@ -477,7 +481,7 @@ describe('Activity list controller', async () => {
       whereaboutsApi.getAttendance.mockReturnValue([
         {
           id: 1,
-          absentReason: 'Acceptable absence',
+          absentReason: 'AcceptableAbsence',
           attended: false,
           paid: true,
           bookingId: 1,
@@ -544,7 +548,10 @@ describe('Activity list controller', async () => {
           releaseScheduled: false,
           scheduledTransfers: [],
           attendanceInfo: {
-            absentReason: 'Acceptable absence',
+            absentReason: {
+              value: 'AcceptableAbsence',
+              name: 'Acceptable',
+            },
             comments: 'Some comments or case note text.',
             other: true,
             paid: true,
@@ -564,7 +571,10 @@ describe('Activity list controller', async () => {
           releaseScheduled: false,
           scheduledTransfers: [],
           attendanceInfo: {
-            absentReason: 'Refused',
+            absentReason: {
+              value: 'Refused',
+              name: 'Refused - IEP',
+            },
             comments: undefined,
             other: true,
             paid: false,
@@ -584,7 +594,6 @@ describe('Activity list controller', async () => {
           releaseScheduled: false,
           scheduledTransfers: [],
           attendanceInfo: {
-            absentReason: undefined,
             comments: undefined,
             pay: true,
             paid: true,
@@ -593,6 +602,54 @@ describe('Activity list controller', async () => {
           },
         },
       ])
+    })
+
+    it('should format absent reasons', async () => {
+      whereaboutsApi.getAttendance.mockReturnValue([
+        {
+          id: 1,
+          absentReason: 'UnacceptableAbsence',
+          bookingId: 1,
+        },
+        {
+          id: 2,
+          absentReason: 'Refused',
+          bookingId: 2,
+        },
+        {
+          id: 3,
+          absentReason: 'AcceptableAbsence',
+          bookingId: 3,
+        },
+      ])
+
+      whereaboutsApi.getAbsenceReasons.mockReturnValue({
+        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+      })
+
+      elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+        switch (usage) {
+          case 'PROG':
+            return [
+              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1 },
+              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2 },
+              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3 },
+            ]
+          default:
+            return []
+        }
+      })
+
+      const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
+
+      expect(response[0].attendanceInfo.absentReason.value).toBe('UnacceptableAbsence')
+      expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable - IEP')
+
+      expect(response[1].attendanceInfo.absentReason.value).toBe('Refused')
+      expect(response[1].attendanceInfo.absentReason.name).toBe('Refused - IEP')
+
+      expect(response[2].attendanceInfo.absentReason.value).toBe('AcceptableAbsence')
+      expect(response[2].attendanceInfo.absentReason.name).toBe('Acceptable')
     })
   })
 })

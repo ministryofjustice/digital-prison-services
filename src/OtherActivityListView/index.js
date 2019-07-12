@@ -17,14 +17,15 @@ const renderOtherEvent = (event, index) => {
     event.event !== 'VISIT' && event.endTime && getHoursMinutes(event.endTime),
     getEventDescription(event),
   ]
-  const text = parts.filter(part => !!part).join(' - ')
+  const text = parts.filter(part => Boolean(part)).join(' - ')
   const key = `${event.offenderNo}_others_${index}`
   const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC'
 
   if (cancelled) {
     return (
       <li key={key}>
-        {text} <span className="cancelled">(cancelled)</span>
+        {text}
+        <span className="cancelled">{`${' (cancelled)'}`}</span>
       </li>
     )
   }
@@ -32,13 +33,13 @@ const renderOtherEvent = (event, index) => {
   return <li key={key}>{text}</li>
 }
 const renderEvent = (event, type, index) => {
-  const expired = <span className="cancelled">(expired)</span>
-  const cancelled = <span className="cancelled">(cancelled)</span>
-  const complete = <span className="complete">(complete)</span>
+  const expired = <span className="cancelled">{`${' (expired)'}`}</span>
+  const cancelled = <span className="cancelled">{`${' (cancelled)'}`}</span>
+  const complete = <span className="complete">{`${' (complete)'}`}</span>
   const key = `${type}_${index}`
   return (
     <li className="transfer" key={key}>
-      <strong className="other-activity">** {event.eventDescription} ** </strong>
+      <strong className="other-activity">{event.eventDescription}</strong>
       {event.expired && expired}
       {event.complete && complete}
       {event.cancelled && cancelled}
@@ -51,7 +52,7 @@ const OtherActivityListView = ({ offenderMainEvent }) =>
     <ul>
       {offenderMainEvent.releaseScheduled && (
         <li key="release">
-          <strong className="other-activity">** Release scheduled **</strong>
+          <strong className="other-activity">Release scheduled</strong>
         </li>
       )}
       {offenderMainEvent.courtEvents &&

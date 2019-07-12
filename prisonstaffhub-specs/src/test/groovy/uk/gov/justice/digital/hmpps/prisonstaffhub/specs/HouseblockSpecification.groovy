@@ -57,7 +57,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         def reorderedRow1 = tableRows[1].find('td')
         reorderedRow1[flagsColumn]*.$('span')[0]*.text() == ['ACCT', 'E\u2011LIST', 'CAT A']
         reorderedRow1[activityColumn].text() == '17:00 - Woodwork'
-        reorderedRow1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
+        reorderedRow1[otherActivityColumn].find('li')*.text() == ['Court visit scheduled', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
 
         // Check order is by name
         texts2[2].contains("Baa, Fred A-1-3 A1234AC")
@@ -84,7 +84,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def row1 = tableRows[1].find('td')
         row1[activityColumn].text() == '17:00 - Woodwork'
-        row1[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
+        row1[otherActivityColumn].find('li')*.text() == ['Court visit scheduled', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
 
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
         def row2 = tableRows[2].find('td')
@@ -126,7 +126,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         headingText.contains('1 - B')
         waitFor { tableRows[1].find('td')[activityColumn].text() == '17:00 - Woodwork' }
         waitFor { tableRows[2].find('td')[activityColumn].text() == '17:45 - TV Repairs' }
-        tableRows[1].find('td')[otherActivityColumn].find('li')*.text() == ['** Court visit scheduled **', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
+        tableRows[1].find('td')[otherActivityColumn].find('li')*.text() == ['Court visit scheduled', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
@@ -230,7 +230,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         def texts = tableRows*.text()
         texts[4].contains("James, John A-1-12 A1234AH")
         texts[4].contains("17:10 - 18:30 - docs - non paid act 1")
-        texts[4].contains("** Release scheduled **")
+        texts[4].contains("Release scheduled")
     }
 
     def "should indicate that an offender is going to be transferred"() {
@@ -250,7 +250,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         at HouseblockPage
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[1].contains("** Transfer scheduled **")
+        texts[1].contains("Transfer scheduled")
     }
 
     def "should show all court events with the relevant status descriptions"() {
@@ -270,9 +270,9 @@ class HouseblockSpecification extends BrowserReportingSpec {
         at HouseblockPage
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[1].contains("** Court visit scheduled **")
-        texts[1].contains("** Court visit scheduled ** (complete)")
-        texts[1].contains("** Court visit scheduled ** (expired)")
+        texts[1].contains("Court visit scheduled")
+        texts[1].contains("Court visit scheduled (complete)")
+        texts[1].contains("Court visit scheduled (expired)")
     }
 
     private static String getNow() {

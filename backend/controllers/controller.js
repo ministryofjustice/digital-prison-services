@@ -61,7 +61,7 @@ const factory = ({
   })
 
   const getAbsenceReasons = asyncMiddleware(async (req, res) => {
-    const absenceReasons = await attendanceService.getAbsenceReasons(res.locals, req.body)
+    const absenceReasons = await attendanceService.getAbsenceReasons(res.locals)
     res.json(absenceReasons)
   })
 

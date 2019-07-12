@@ -202,7 +202,7 @@ describe('Offender activity list results component', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('** Release scheduled **')
+    ).toEqual('Release scheduled')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -283,7 +283,7 @@ describe('Offender activity list results component', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('** Court visit scheduled ** ')
+    ).toEqual('Court visit scheduled')
   })
 
   it('should render empty results list correctly', async () => {

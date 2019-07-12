@@ -1,6 +1,8 @@
 const moment = require('moment')
-const { switchDateFormat, pascalToString } = require('../utils')
+const { switchDateFormat } = require('../utils')
 const log = require('../log')
+
+const { absentReasonMapper } = require('../mappers')
 
 const attendanceFactory = whereaboutsApi => {
   const updateAttendance = async (context, attendance) => {
@@ -24,20 +26,15 @@ const attendanceFactory = whereaboutsApi => {
     return response
   }
 
-  const getAbsenceReasons = async (context, body) => {
-    const absenceReasons = await whereaboutsApi.getAbsenceReasons(context, body)
+  const getAbsenceReasons = async context => {
+    const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
 
-    const unpaidReasonName = reason => {
-      const name = pascalToString(reason)
-      if (absenceReasons.triggersIEPWarning.includes(reason)) {
-        return `${name} - IEP`
-      }
-      return name
-    }
+    const { paidReasons, unpaidReasons } = absentReasons
+    const mapToAbsentReason = absentReasonMapper(absentReasons)
 
     return {
-      paidReasons: absenceReasons.paidReasons.map(reason => ({ value: reason, name: pascalToString(reason) })),
-      unpaidReasons: absenceReasons.unpaidReasons.map(reason => ({ value: reason, name: unpaidReasonName(reason) })),
+      paidReasons: paidReasons.map(mapToAbsentReason),
+      unpaidReasons: unpaidReasons.map(mapToAbsentReason),
     }
   }
 

@@ -43,9 +43,11 @@ class ActivitySpecification extends BrowserReportingSpec {
         when: "I select and display a location"
         def today = getNow()
 
-        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
+        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender)
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 2, 'AM', today)
+        whereaboutsApi.stubAbsentReasons()
+
         form['period-select'] = 'AM'
         waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc2'
@@ -82,37 +84,37 @@ class ActivitySpecification extends BrowserReportingSpec {
 
         eventsElsewhere == [
                 [
-                        '** Court visit scheduled **',
-                        '** Court visit scheduled ** (expired)',
-                        '** Court visit scheduled ** (complete)',
-                        '** Transfer scheduled **',
-                        '** Transfer scheduled ** (complete)',
-                        '** Transfer scheduled ** (cancelled)',
-                        '** Transfer scheduled ** (expired)',
+                        'Court visit scheduled',
+                        'Court visit scheduled (expired)',
+                        'Court visit scheduled (complete)',
+                        'Transfer scheduled',
+                        'Transfer scheduled (complete)',
+                        'Transfer scheduled (cancelled)',
+                        'Transfer scheduled (expired)',
                         '15:30 - Medical - Dentist - Medical Room1 - Appt details',
                         '18:00 - Visits - Friends'],
                 [
                         '** Release scheduled **'],
                 [],
                 [
-                        '** Court visit scheduled **',
-                        '** Court visit scheduled ** (expired)',
-                        '** Court visit scheduled ** (complete)',
-                        '** Transfer scheduled **',
-                        '** Transfer scheduled ** (complete)',
-                        '** Transfer scheduled ** (cancelled)',
-                        '** Transfer scheduled ** (expired)',
+                        'Court visit scheduled',
+                        'Court visit scheduled (expired)',
+                        'Court visit scheduled (complete)',
+                        'Transfer scheduled',
+                        'Transfer scheduled (complete)',
+                        'Transfer scheduled (cancelled)',
+                        'Transfer scheduled (expired)',
                         '15:30 - Medical - Dentist - Medical Room1 - Appt details',
                         '18:00 - Visits - Friends'
                 ],
                 [
-                        '** Court visit scheduled **',
-                        '** Court visit scheduled ** (expired)',
-                        '** Court visit scheduled ** (complete)',
-                        '** Transfer scheduled **',
-                        '** Transfer scheduled ** (complete)',
-                        '** Transfer scheduled ** (cancelled)',
-                        '** Transfer scheduled ** (expired)',
+                        'Court visit scheduled',
+                        'Court visit scheduled (expired)',
+                        'Court visit scheduled (complete)',
+                        'Transfer scheduled',
+                        'Transfer scheduled (complete)',
+                        'Transfer scheduled (cancelled)',
+                        'Transfer scheduled (expired)',
                         '15:30 - Medical - Dentist - Medical Room1 - Appt details',
                         '18:00 - Visits - Friends']
         ]

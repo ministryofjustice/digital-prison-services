@@ -5,7 +5,7 @@ import VisuallyHidden from '@govuk-react/visually-hidden'
 import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
-import { isWithinLastWeek, pascalToString } from '../../../utils'
+import { isWithinLastWeek } from '../../../utils'
 import PayOtherForm from '../PayOtherForm'
 import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
 
@@ -61,7 +61,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
     <Fragment>
       {absentReason && (
         <Option data-qa="absent-reason" printOnly>
-          {pascalToString(absentReason)}
+          {absentReason.name}
         </Option>
       )}
       <Option data-qa="pay-option" className="row-gutters">
@@ -76,15 +76,17 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       </Option>
 
       <Option data-qa="other-option" className="row-gutters">
-        {showRadioButton && (
-          <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
-            <VisuallyHidden>Other</VisuallyHidden>
-          </Radio>
-        )}
+        {showRadioButton &&
+          !absentReason && (
+            <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
+              <VisuallyHidden>Other</VisuallyHidden>
+            </Radio>
+          )}
         {allowUpdate &&
-          other && (
-            <UpdateLink onClick={renderForm}>
-              <OtherMessage data-qa="other-message">View/ Update</OtherMessage>
+          other &&
+          absentReason && (
+            <UpdateLink role="link" onClick={renderForm}>
+              <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
             </UpdateLink>
           )}
       </Option>

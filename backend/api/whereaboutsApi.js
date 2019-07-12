@@ -12,7 +12,7 @@ const whereaboutsApiFactory = client => {
 
   const putAttendance = (context, body, id) => put(context, `/attendance/${id}`, body)
 
-  const getAbsenceReasons = (context, body) => get(context, '/attendance/absence-reasons', body)
+  const getAbsenceReasons = context => get(context, '/attendance/absence-reasons')
 
   return {
     getAttendance,

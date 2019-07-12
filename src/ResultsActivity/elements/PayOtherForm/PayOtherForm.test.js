@@ -20,11 +20,8 @@ describe('<PayOtherForm />', () => {
     },
     updateOffenderAttendance: jest.fn(),
     absentReasons: {
-      paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable absence' }],
-      unpaidReasons: [
-        { value: 'UnacceptableAbsence', name: 'Unacceptable absence' },
-        { value: 'Refused', name: 'Refused' },
-      ],
+      paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable' }],
+      unpaidReasons: [{ value: 'UnacceptableAbsence', name: 'Unacceptable' }, { value: 'Refused', name: 'Refused' }],
     },
   }
 
@@ -69,7 +66,7 @@ describe('<PayOtherForm />', () => {
         .props.children[skipDefaultEntry].map(reason => reason.props)
 
       expect(reasons).toEqual([
-        { value: 'UnacceptableAbsence', children: 'Unacceptable absence' },
+        { value: 'UnacceptableAbsence', children: 'Unacceptable' },
         { value: 'Refused', children: 'Refused' },
       ])
     })
@@ -95,7 +92,7 @@ describe('<PayOtherForm />', () => {
         .getElement()
         .props.children[skipDefaultEntry].map(reason => reason.props)
 
-      expect(reasons).toEqual([{ value: 'AcceptableAbsence', children: 'Acceptable absence' }])
+      expect(reasons).toEqual([{ value: 'AcceptableAbsence', children: 'Acceptable' }])
     })
 
     describe('on error', () => {
@@ -133,7 +130,10 @@ describe('<PayOtherForm />', () => {
 
       it('should submit with the correct, paid information', () => {
         const expectedPayload = {
-          absentReason: 'AcceptableAbsence',
+          absentReason: {
+            name: 'Acceptable',
+            value: 'AcceptableAbsence',
+          },
           attended: false,
           comments: 'A supporting comment.',
           eventId: 123,
@@ -155,7 +155,10 @@ describe('<PayOtherForm />', () => {
 
       it('should submit with the correct, unpaid information', () => {
         const expectedPayload = {
-          absentReason: 'UnacceptableAbsence',
+          absentReason: {
+            value: 'UnacceptableAbsence',
+            name: 'Unacceptable',
+          },
           attended: false,
           comments: 'A supporting comment.',
           eventId: 123,
@@ -184,7 +187,10 @@ describe('<PayOtherForm />', () => {
       props.offender.attendanceInfo = {
         id: 1,
         paid: true,
-        absentReason: 'AcceptableAbsence',
+        absentReason: {
+          value: 'AcceptableAbsence',
+          name: 'Acceptable',
+        },
         comments: 'Acceptable reason comment',
       }
       buildWrapper(mount(<PayOtherForm {...props} />))
@@ -198,7 +204,10 @@ describe('<PayOtherForm />', () => {
       props.offender.attendanceInfo = {
         id: 2,
         paid: false,
-        absentReason: 'UncceptableAbsence',
+        absentReason: {
+          value: 'UncceptableAbsence',
+          name: 'Unacceptable',
+        },
         comments: 'Uncceptable reason comment',
       }
       buildWrapper(mount(<PayOtherForm {...props} />))
