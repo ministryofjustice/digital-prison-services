@@ -8,6 +8,7 @@ class HouseblockResponse {
 
     static response1 = [
             offenderNo      : "A1234AA",
+            bookingId       : 1,
             firstName       : "ARTHUR",
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
@@ -21,6 +22,7 @@ class HouseblockResponse {
     ]
     static response2 = [
             offenderNo      : "A1234AA",
+            bookingId       : 2,
             firstName       : "ARTHUR",
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
@@ -33,6 +35,7 @@ class HouseblockResponse {
     ]
     static response2_2 = [
             offenderNo      : "A1234AA",
+            bookingId       : 2,
             firstName       : "ARTHUR",
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
@@ -46,6 +49,7 @@ class HouseblockResponse {
     ]
     static response3 = [
             offenderNo      : "A1234AB",
+            bookingId       : 3,
             firstName       : "EUGENE",
             lastName        : "BALOG",
             cellLocation    : "LEI-A-1-2",
@@ -58,6 +62,7 @@ class HouseblockResponse {
     ]
     static response4 = [
             offenderNo      : "A1234AC",
+            bookingId       : 4,
             firstName       : "FRED",
             lastName        : "BAA",
             cellLocation    : "LEI-A-1-3",
@@ -70,6 +75,7 @@ class HouseblockResponse {
     ]
     static response5 = [
             offenderNo      : "A1234AA",
+            bookingId       : 5,
             firstName       : "ARTHUR",
             lastName        : "ANDERSON",
             cellLocation    : "LEI-A-1-1",
@@ -82,6 +88,7 @@ class HouseblockResponse {
     ]
     static response6 = [
             offenderNo      : "A1234AH",
+            bookingId       : 6,
             firstName       : "JOHN",
             lastName        : "JAMES",
             cellLocation    : "LEI-A-1-12",
@@ -94,6 +101,7 @@ class HouseblockResponse {
     ]
     static response7 = [
             offenderNo      : "A1234AH",
+            bookingId       : 7,
             firstName       : "JOHN",
             lastName        : "JAMES",
             cellLocation    : "LEI-A-1-12",
@@ -107,6 +115,7 @@ class HouseblockResponse {
 
     static response8 = [
             offenderNo      : "A1234AA",
+            bookingId       : 8,
             firstName       : "JOHN",
             lastName        : "JAMES",
             cellLocation    : "LEI-A-1-12",
