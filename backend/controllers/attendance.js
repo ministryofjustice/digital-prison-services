@@ -27,10 +27,10 @@ const attendanceFactory = whereaboutsApi => {
   }
 
   const getAbsenceReasons = async context => {
-    const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
+    const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
 
-    const { paidReasons, unpaidReasons } = absentReasons
-    const mapToAbsentReason = absentReasonMapper(absentReasons)
+    const { paidReasons, unpaidReasons } = absenceReasons
+    const mapToAbsentReason = absentReasonMapper(absenceReasons)
 
     return {
       paidReasons: paidReasons.map(mapToAbsentReason),

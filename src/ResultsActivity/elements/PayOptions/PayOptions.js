@@ -46,8 +46,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
       />
     )
 
-  const allowUpdate = selectedOption === 'other'
-
+  const allowUpdate = selectedOption === 'other' && absentReason
   const showRadioButton = !locked && offenderNo && eventId && isWithinLastWeek(date)
 
   const payMessage = () => {
@@ -79,19 +78,16 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
         </Fragment>
       )}
       <Option data-qa="other-option" className="row-gutters">
-        {showRadioButton &&
-          !absentReason && (
-            <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
-              <VisuallyHidden>Other</VisuallyHidden>
-            </Radio>
-          )}
-        {allowUpdate &&
-          other &&
-          absentReason && (
-            <UpdateLink role="link" onClick={renderForm}>
-              <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
-            </UpdateLink>
-          )}
+        {showRadioButton && (
+          <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
+            <VisuallyHidden>Other</VisuallyHidden>
+          </Radio>
+        )}
+        {allowUpdate && (
+          <UpdateLink role="link" onClick={renderForm}>
+            <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
+          </UpdateLink>
+        )}
       </Option>
     </Fragment>
   )
