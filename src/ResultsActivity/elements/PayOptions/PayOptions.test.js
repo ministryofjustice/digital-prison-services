@@ -147,5 +147,18 @@ describe('<PayOptions />', () => {
       const PayConfirm = testInstance.findAllByType(PayMessage)
       expect(PayConfirm.length).toBe(1)
     })
+
+    it('should not display radio button for non attendance when one has previously been recorded', () => {
+      props.offenderDetails.attendanceInfo.paid = false
+      props.offenderDetails.attendanceInfo.locked = false
+      props.offenderDetails.attendanceInfo.other = true
+      props.offenderDetails.attendanceInfo.absentReason = {
+        value: 'AcceptableAbsence',
+        name: 'Acceptable',
+      }
+
+      act(() => testRenderer.update(<PayOptions {...props} />))
+      expect(getOtherRadio).toThrow(new Error('No instances found with node type: "Radio"'))
+    })
   })
 })

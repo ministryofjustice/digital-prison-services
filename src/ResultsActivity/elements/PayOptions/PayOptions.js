@@ -78,11 +78,12 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal
         </Fragment>
       )}
       <Option data-qa="other-option" className="row-gutters">
-        {showRadioButton && (
-          <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
-            <VisuallyHidden>Other</VisuallyHidden>
-          </Radio>
-        )}
+        {showRadioButton &&
+          !absentReason && (
+            <Radio name={offenderNo} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
+              <VisuallyHidden>Other</VisuallyHidden>
+            </Radio>
+          )}
         {allowUpdate && (
           <UpdateLink role="link" onClick={renderForm}>
             <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
