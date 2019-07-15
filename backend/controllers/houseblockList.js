@@ -3,6 +3,7 @@ const moment = require('moment')
 const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders')
 const log = require('../log')
 const { switchDateFormat, distinct } = require('../utils')
+const { absentReasonMapper } = require('../mappers')
 
 function safeTimeCompare(a, b) {
   if (a && b) return moment(b).isBefore(a)
@@ -66,6 +67,9 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
 
     const bookings = Array.from(new Set(data.map(event => event.bookingId)))
     const shouldGetAttendanceForBookings = updateAttendanceEnabled(agencyId) && bookings.length > 0
+    const absentReasons = updateAttendanceEnabled(agencyId) ? await whereaboutsApi.getAbsenceReasons(context) : {}
+    const toAbsentReason = updateAttendanceEnabled(agencyId) && absentReasonMapper(absentReasons)
+
     const attendanceInformation = shouldGetAttendanceForBookings
       ? await whereaboutsApi.getAttendanceForBookings(context, {
           agencyId,
@@ -111,7 +115,13 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
 
       const eventWithAttendance = {
         ...event,
-        attendanceInfo: { id, absentReason, comments, locked, paid },
+        attendanceInfo: {
+          id,
+          absentReason: toAbsentReason && toAbsentReason(absentReason),
+          comments,
+          locked,
+          paid,
+        },
       }
 
       if (attendanceInfo) {

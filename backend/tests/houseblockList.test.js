@@ -186,8 +186,12 @@ describe('Houseblock list controller', async () => {
     elite2Api.getCourtEvents = jest.fn()
     elite2Api.getAlerts = jest.fn()
     elite2Api.getAssessments = jest.fn()
+    whereaboutsApi.getAbsenceReasons = jest.fn()
     whereaboutsApi.getAttendanceForBookings = jest.fn()
     whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
+    whereaboutsApi.getAbsenceReasons.mockReturnValue({
+      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+    })
   })
 
   it('Should add visit and appointment details to array', async () => {
@@ -522,7 +526,10 @@ describe('Houseblock list controller', async () => {
           activities: [
             {
               attendanceInfo: {
-                absentReason: 'AcceptableAbsence',
+                absentReason: {
+                  value: 'AcceptableAbsence',
+                  name: 'Acceptable',
+                },
                 comments: 'string',
                 id: 2,
                 locked: true,
@@ -546,7 +553,10 @@ describe('Houseblock list controller', async () => {
             },
             {
               attendanceInfo: {
-                absentReason: 'UnacceptableAbsence',
+                absentReason: {
+                  value: 'UnacceptableAbsence',
+                  name: 'Unacceptable - IEP',
+                },
                 comments: 'string',
                 id: 2,
                 locked: true,

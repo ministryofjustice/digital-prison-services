@@ -78,10 +78,10 @@ describe('Attendence and Pay controller', async () => {
 
       expect(response).toEqual({
         paidReasons: [
-          { name: 'Acceptable absence', value: 'AcceptableAbsence' },
+          { name: 'Acceptable', value: 'AcceptableAbsence' },
           { name: 'Rest in cell', value: 'RestInCell' },
         ],
-        unpaidReasons: [{ name: 'Unacceptable absence - IEP', value: 'UnacceptableAbsence' }],
+        unpaidReasons: [{ name: 'Unacceptable - IEP', value: 'UnacceptableAbsence' }],
       })
     })
   })

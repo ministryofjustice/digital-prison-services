@@ -222,10 +222,10 @@ class ResultsHouseblock extends Component {
 
     const readOnly = this.olderThan7Days()
 
-    const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
+    const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
       const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
-      const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
+      const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
       const offenderAttendanceData = {
         comments,
         paid,
@@ -237,7 +237,11 @@ class ResultsHouseblock extends Component {
       resetErrorDispatch()
 
       try {
-        const response = await axios.post('/api/attendance', { ...eventDetails, ...attendenceDetails })
+        const response = await axios.post('/api/attendance', {
+          ...eventDetails,
+          ...attendanceDetails,
+          absentReason: attendanceDetails.absentReason && attendanceDetails.absentReason.value,
+        })
         offenderAttendanceData.id = response.data.id || id
         setHouseblockOffenderAttendance(offenderIndex, offenderAttendanceData)
         this.closeModal()

@@ -54,6 +54,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
 
   const payOffender = async values => {
     const paid = values.pay === 'yes'
+    const reasons = [...absentReasons.paidReasons, ...absentReasons.unpaidReasons]
 
     const attendanceDetails = {
       id,
@@ -62,7 +63,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
       paid,
       eventId,
       eventLocationId,
-      absentReason: values.absentReason,
+      absentReason: reasons.find(ar => ar.value === values.absentReason),
       comments: values.comments,
       attended: false,
     }
@@ -82,7 +83,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
 
   const initialValues = {
     pay: getPreviousPayStatus(),
-    absentReason,
+    absentReason: absentReason && absentReason.value,
     comments,
   }
 

@@ -34,10 +34,10 @@ const renderOtherEvent = (event, index) => {
 }
 const renderEvent = (event, type, index) => (
   <li className="transfer" key={`${type}_${index}`}>
-    <strong className="other-activity">** {event.eventDescription} ** </strong>
-    {event.expired && <span className="cancelled">(expired)</span>}
-    {event.complete && <span className="complete">(complete)</span>}
-    {event.cancelled && <span className="cancelled">(cancelled)</span>}
+    <strong className="other-activity">{event.eventDescription}</strong>
+    {event.expired && <span className="cancelled">{`${' (expired)'}`}</span>}
+    {event.complete && <span className="complete">{`${' (complete)'}`}</span>}
+    {event.cancelled && <span className="cancelled">{`${' (cancelled)'}`}</span>}
   </li>
 )
 
@@ -51,7 +51,7 @@ const OtherActivityListView = ({ offenderMainEvent }) => {
       <ul>
         {offenderMainEvent.releaseScheduled && (
           <li key="release">
-            <strong className="other-activity">** Release scheduled **</strong>
+            <strong className="other-activity">Release scheduled</strong>
           </li>
         )}
         {offenderMainEvent.courtEvents &&

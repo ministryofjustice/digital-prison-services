@@ -165,8 +165,8 @@ class ResultsActivity extends Component {
           name={['updateAttendanceEnabled']}
           render={() => (
             <React.Fragment>
-              <th className="straight width5 no-print">Pay</th>
-              <th className="straight width5 no-print">Other</th>
+              <th className="straight width4 no-print">Attended</th>
+              <th className="straight width6 no-print">Not attended</th>
             </React.Fragment>
           )}
           fallbackRender={() => <></>}
@@ -187,10 +187,11 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
-    const updateOffenderAttendance = async (attendenceDetails, offenderIndex) => {
+    const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
       const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
-      const { id, attended, paid, absentReason, comments } = attendenceDetails || {}
+      const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
+
       const offenderAttendanceData = {
         comments,
         paid,
@@ -202,7 +203,11 @@ class ResultsActivity extends Component {
       resetErrorDispatch()
 
       try {
-        const response = await axios.post('/api/attendance', { ...eventDetails, ...attendenceDetails })
+        const response = await axios.post('/api/attendance', {
+          ...eventDetails,
+          ...attendanceDetails,
+          absentReason: attendanceDetails.absentReason && attendanceDetails.absentReason.value,
+        })
         offenderAttendanceData.id = response.data.id || id
         setActivityOffenderAttendance(offenderIndex, offenderAttendanceData)
         this.closeModal()

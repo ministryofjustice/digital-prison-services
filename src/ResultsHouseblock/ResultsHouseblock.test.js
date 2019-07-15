@@ -252,7 +252,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('** Release scheduled **')
+    ).toEqual('Release scheduled')
     expect(
       row1Tds
         .at(OTHER_COLUMN)
@@ -663,7 +663,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('** Release scheduled **')
+    ).toEqual('Release scheduled')
   })
 
   it('Should render sub-locations in drop-down', () => {
@@ -744,7 +744,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('li')
         .at(0)
         .text()
-    ).toEqual('** Transfer scheduled ** ')
+    ).toEqual('Transfer scheduled')
   })
 
   it('should show multiple scheduled transfers along with status description', () => {
@@ -801,9 +801,8 @@ describe('Offender results component Jira NN-843', () => {
       .dive()
       .find('.transfer')
 
-    expect(transfers.at(0).text()).toBe('** Transfer scheduled ** ')
-
-    expect(transfers.at(1).text()).toBe('** Transfer scheduled ** (cancelled)')
+    expect(transfers.at(0).text()).toBe('Transfer scheduled')
+    expect(transfers.at(1).text()).toBe('Transfer scheduled (cancelled)')
     expect(
       transfers
         .at(1)
@@ -812,7 +811,7 @@ describe('Offender results component Jira NN-843', () => {
         .getElement().props.className
     ).toBe('cancelled')
 
-    expect(transfers.at(2).text()).toBe('** Transfer scheduled ** (complete)')
+    expect(transfers.at(2).text()).toBe('Transfer scheduled (complete)')
     expect(
       transfers
         .at(2)
@@ -821,7 +820,7 @@ describe('Offender results component Jira NN-843', () => {
         .getElement().props.className
     ).toBe('complete')
 
-    expect(transfers.at(3).text()).toBe('** Transfer scheduled ** (expired)')
+    expect(transfers.at(3).text()).toBe('Transfer scheduled (expired)')
     expect(
       transfers
         .at(3)
