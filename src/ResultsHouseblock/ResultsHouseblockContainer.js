@@ -4,7 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
-import sortHouseBlockData from './houseBlockResultsSorter'
+import sortHouseblockData from './houseblockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
 import {
   resetError,
@@ -13,6 +13,8 @@ import {
   setOrderField,
   setSearchSubLocation,
   setSortOrder,
+  getAbsentReasons,
+  setHouseblockOffenderAttendance,
 } from '../redux/actions'
 import Page from '../Components/Page'
 
@@ -56,7 +58,7 @@ class ResultsHouseblockContainer extends Component {
     orderDispatch(sortColumn)
     sortOrderDispatch(sortOrder)
     const copy = houseblockData.slice()
-    sortHouseBlockData(copy, sortColumn, sortOrder)
+    sortHouseblockData(copy, sortColumn, sortOrder)
     houseblockDataDispatch(copy)
   }
 
@@ -73,6 +75,8 @@ class ResultsHouseblockContainer extends Component {
       sortOrderDispatch,
       houseblockDataDispatch,
       handleError,
+      updateAttendanceEnabled,
+      getAbsentReasonsDispatch,
     } = this.props
 
     try {
@@ -108,9 +112,10 @@ class ResultsHouseblockContainer extends Component {
       }
 
       const response = await axios.get('/api/houseblocklist', config)
-      const houseBlockData = response.data
-      sortHouseBlockData(houseBlockData, orderField, sortOrder)
-      houseblockDataDispatch(houseBlockData)
+      const houseblockData = response.data
+      sortHouseblockData(houseblockData, orderField, sortOrder)
+      houseblockDataDispatch(houseblockData)
+      if (updateAttendanceEnabled) getAbsentReasonsDispatch()
     } catch (error) {
       handleError(error)
     }
@@ -162,6 +167,7 @@ class ResultsHouseblockContainer extends Component {
 
   render() {
     const title = this.titleString()
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch } = this.props
     return (
       <Page title={title} alwaysRender>
         <ResultsHouseblock
@@ -169,6 +175,9 @@ class ResultsHouseblockContainer extends Component {
           handleSubLocationChange={this.handleSubLocationChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
+          resetErrorDispatch={resetErrorDispatch}
+          handleError={this.handleError}
+          setHouseblockOffenderAttendance={setOffenderPaymentDataDispatch}
           {...this.props}
         />
       </Page>
@@ -224,7 +233,7 @@ const mapStateToProps = state => ({
   currentSubLocation: state.search.subLocation,
   date: state.search.date,
   period: state.search.period,
-  houseblockData: state.events.houseBlockData,
+  houseblockData: state.events.houseblockData,
   loaded: state.app.loaded,
   orderField: state.events.orderField,
   paymentReasonReasons: state.events.paymentReasonReasons,
@@ -232,6 +241,7 @@ const mapStateToProps = state => ({
   locations: state.search.locations,
   subLocations: extractSubLocations(state.search.locations, state.search.location),
   error: state.app.error,
+  updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -241,6 +251,9 @@ const mapDispatchToProps = dispatch => ({
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
+  setOffenderPaymentDataDispatch: (offenderIndex, data) =>
+    dispatch(setHouseblockOffenderAttendance(offenderIndex, data)),
+  getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
 })
 
 export { extractSubLocations }

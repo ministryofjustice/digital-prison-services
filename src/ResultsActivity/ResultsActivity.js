@@ -75,7 +75,7 @@ class ResultsActivity extends Component {
       setColumnSort,
       agencyId,
       handleError,
-      setOffenderAttendanceData,
+      setActivityOffenderAttendance,
     } = this.props
 
     const { modalOpen, modalContent } = this.state
@@ -209,7 +209,7 @@ class ResultsActivity extends Component {
           absentReason: attendanceDetails.absentReason && attendanceDetails.absentReason.value,
         })
         offenderAttendanceData.id = response.data.id || id
-        setOffenderAttendanceData(offenderIndex, offenderAttendanceData)
+        setActivityOffenderAttendance(offenderIndex, offenderAttendanceData)
         this.closeModal()
       } catch (error) {
         handleError(error)
@@ -378,7 +378,7 @@ ResultsActivity.propTypes = {
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   handleError: PropTypes.func.isRequired,
-  setOffenderAttendanceData: PropTypes.func.isRequired,
+  setActivityOffenderAttendance: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
 }

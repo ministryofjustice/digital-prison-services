@@ -45,6 +45,7 @@ class ActivitySpecification extends BrowserReportingSpec {
 
         offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender)
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 2, 'AM', today)
         whereaboutsApi.stubAbsentReasons()
 
@@ -128,6 +129,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         def today = getNow()
         offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 2, 'AM', today)
         form['period-select'] = 'AM'
         waitFor { activity.module(FormElement).enabled }
@@ -187,6 +189,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         def today = getNow()
         offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', today)
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
@@ -199,6 +202,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
+        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
         setDatePicker('2018', 'Aug', '1')
         updateButton.click()
@@ -233,6 +237,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         def today = getNow()
         offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', today)
         oauthApi.stubGetMyRoles()
         form['period-select'] = 'PM'

@@ -47,7 +47,7 @@ const searchInitialState = {
 }
 
 const eventsInitialState = {
-  houseBlockData: [],
+  houseblockData: [],
   activityData: [],
   orderField: 'cellLocation',
   sortOrder: 'ASC',
@@ -193,7 +193,7 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_HOUSEBLOCK_DATA:
       return {
         ...state,
-        houseBlockData: action.data,
+        houseblockData: action.data,
       }
     case ActionTypes.SET_ORDER_FIELD:
       return {
@@ -215,14 +215,39 @@ export function events(state = eventsInitialState, action) {
         ...state,
         absentReasons: action.payload,
       }
-    case ActionTypes.SET_OFFENDER_ATTENDANCE_DATA:
+    case ActionTypes.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE: {
+      const houseblockData = state.houseblockData.map((offender, i) => {
+        if (i === action.offenderIndex) {
+          const mainActivity = offender.activities.find(activity => activity.mainActivity)
+          mainActivity.attendanceInfo = action.attendanceInfo
+
+          const otherActivities =
+            offender.activities && offender.activities.filter(activity => activity !== mainActivity)
+
+          return { ...offender, activities: [mainActivity, ...otherActivities] }
+        }
+        return offender
+      })
+
       return {
         ...state,
-        activityData: state.activityData.map(
-          (offender, i) =>
-            i === action.offenderIndex ? { ...offender, attendanceInfo: action.attendanceInfo } : offender
-        ),
+        houseblockData,
       }
+    }
+    case ActionTypes.SET_ACTIVITY_OFFENDER_ATTENDANCE: {
+      const activityData = state.activityData.map((offender, i) => {
+        if (i === action.offenderIndex) {
+          return { ...offender, attendanceInfo: action.attendanceInfo }
+        }
+
+        return offender
+      })
+
+      return {
+        ...state,
+        activityData,
+      }
+    }
     default:
       return state
   }
