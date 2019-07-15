@@ -1,15 +1,11 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.*
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
-import java.time.format.DateTimeFormatter
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.get
 
 public class WhereaboutsApi extends WireMockRule {
 

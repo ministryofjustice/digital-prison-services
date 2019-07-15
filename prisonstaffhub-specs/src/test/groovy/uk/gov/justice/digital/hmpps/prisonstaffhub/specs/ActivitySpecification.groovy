@@ -43,11 +43,10 @@ class ActivitySpecification extends BrowserReportingSpec {
         when: "I select and display a location"
         def today = getNow()
 
-        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender)
+        offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender)}
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 2, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 2, 'AM', today)
-        whereaboutsApi.stubAbsentReasons()
 
         form['period-select'] = 'AM'
         waitFor { activity.module(FormElement).enabled }
@@ -95,7 +94,7 @@ class ActivitySpecification extends BrowserReportingSpec {
                         '15:30 - Medical - Dentist - Medical Room1 - Appt details',
                         '18:00 - Visits - Friends'],
                 [
-                        '** Release scheduled **'],
+                        'Release scheduled'],
                 [],
                 [
                         'Court visit scheduled',
@@ -189,8 +188,9 @@ class ActivitySpecification extends BrowserReportingSpec {
         def today = getNow()
         offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
-        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
         form['activity-select'] = 'loc1'
@@ -202,8 +202,8 @@ class ActivitySpecification extends BrowserReportingSpec {
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
-        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
+        whereaboutsApi.stubGetAbsenceReasons()
         setDatePicker('2018', 'Aug', '1')
         updateButton.click()
 
@@ -237,8 +237,8 @@ class ActivitySpecification extends BrowserReportingSpec {
         def today = getNow()
         offenders.collect{ offender -> elite2api.stubOffenderDetails(false, offender) }
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', today)
-        whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
         oauthApi.stubGetMyRoles()
         form['period-select'] = 'PM'
         waitFor { activity.module(FormElement).enabled }
