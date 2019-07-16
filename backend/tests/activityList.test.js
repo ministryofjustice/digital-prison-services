@@ -500,7 +500,7 @@ describe('Activity list controller', async () => {
           paid: false,
           bookingId: 2,
           eventDate: '2019-10-10',
-          eventId: 1,
+          eventId: 2,
           eventLocationId: 1,
           period: 'AM',
           prisonId: 'LEI',
@@ -512,7 +512,7 @@ describe('Activity list controller', async () => {
           paid: true,
           bookingId: 3,
           eventDate: '2019-10-10',
-          eventId: 1,
+          eventId: 3,
           eventLocationId: 1,
           period: 'AM',
           prisonId: 'LEI',
@@ -524,9 +524,9 @@ describe('Activity list controller', async () => {
         switch (usage) {
           case 'PROG':
             return [
-              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1 },
-              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2 },
-              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3 },
+              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventId: 1 },
+              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2, eventId: 2 },
+              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3, eventId: 3 },
             ]
           default:
             return []
@@ -540,6 +540,7 @@ describe('Activity list controller', async () => {
           bookingId: 1,
           alertFlags: [],
           category: '',
+          eventId: 1,
           comment: 'Test comment',
           courtEvents: [],
           eventsElsewhere: [],
@@ -563,6 +564,7 @@ describe('Activity list controller', async () => {
           bookingId: 2,
           alertFlags: [],
           category: '',
+          eventId: 2,
           comment: 'Test comment',
           courtEvents: [],
           eventsElsewhere: [],
@@ -586,6 +588,7 @@ describe('Activity list controller', async () => {
           bookingId: 3,
           alertFlags: [],
           category: '',
+          eventId: 3,
           comment: 'Test comment',
           courtEvents: [],
           eventsElsewhere: [],
@@ -650,6 +653,51 @@ describe('Activity list controller', async () => {
 
       expect(response[2].attendanceInfo.absentReason.value).toBe('AcceptableAbsence')
       expect(response[2].attendanceInfo.absentReason.name).toBe('Acceptable')
+    })
+  })
+
+  it('should attach attendance to the correct activity', async () => {
+    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
+      switch (usage) {
+        case 'PROG':
+          return [
+            { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
+            { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 1, eventLocationId: 2, eventId: 2 },
+          ]
+        default:
+          return []
+      }
+    })
+    whereaboutsApi.getAttendance.mockReturnValue([
+      {
+        id: 1,
+        absentReason: 'UnacceptableAbsence',
+        bookingId: 1,
+        eventId: 2,
+        eventLocationId: 2,
+      },
+    ])
+
+    whereaboutsApi.getAbsenceReasons.mockReturnValue({
+      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+    })
+
+    const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
+
+    expect(response[0].eventId).toBe(1)
+    expect(response[0].attendanceInfo).toBe(null)
+
+    expect(response[1].eventId).toBe(2)
+    expect(response[1].attendanceInfo).toEqual({
+      id: 1,
+      absentReason: {
+        name: 'Unacceptable - IEP',
+        value: 'UnacceptableAbsence',
+      },
+      comments: undefined,
+      paid: undefined,
+      locked: undefined,
+      other: true,
     })
   })
 })
