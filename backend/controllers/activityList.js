@@ -20,18 +20,20 @@ const sortActivitiesByEventThenByLastName = data => {
 
 const extractAttendanceInfo = (attendanceInformation, event, absentReasons = []) => {
   if (attendanceInformation && attendanceInformation.length > 0) {
-    const offenderAttendanceInfo = attendanceInformation.find(attendance => attendance.bookingId === event.bookingId)
-    const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
+    const offenderAttendanceInfo = attendanceInformation.find(
+      attendance => attendance.bookingId === event.bookingId && attendance.eventId === event.eventId
+    )
+    if (!offenderAttendanceInfo) return null
 
+    const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
     const mapToAbsentReason = absentReasonMapper(absentReasons)
 
     const attendanceInfo = absentReason
       ? { id, absentReason: mapToAbsentReason(absentReason), comments, paid, locked }
       : { id, comments, paid, locked }
 
-    if (offenderAttendanceInfo && absentReason) attendanceInfo.other = true
-
-    if (offenderAttendanceInfo && attended && paid) attendanceInfo.pay = true
+    if (absentReason) attendanceInfo.other = true
+    if (attended && paid) attendanceInfo.pay = true
 
     return attendanceInfo
   }
