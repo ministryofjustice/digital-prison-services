@@ -307,60 +307,60 @@ class HouseblockSpecification extends BrowserReportingSpec {
         texts[1].contains("Court visit scheduled (expired)")
     }
 
-    def "should show correct attendance data"() {
-        given: 'I am on the whereabouts search page'
-        fixture.toSearch()
+//    def "should show correct attendance data"() {
+//        given: 'I am on the whereabouts search page'
+//        fixture.toSearch()
+//
+//        when: 'I select and display a location'
+//        def today = getNow()
+//        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+//
+//        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+//        whereaboutsApi.stubGetAbsenceReasons()
+//        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
+//        location = '1'
+//        period = 'AM'
+//        waitFor { continueButton.module(FormElement).enabled }
+//        continueButton.click()
+//
+//        then: 'I should see the correct attendance information for each offender'
+//        at HouseblockPage
+//
+//        tableRows[1].find('td')[attendanceColumn].text() == 'Received'
+//        tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
+//
+//        def payRadios = $(name: "pay").module(RadioButtons)
+//        payRadios.checked == 'no'
+//        absentReasonForm.form.absentReason == 'UnacceptableAbsence'
+//        absentReasonForm.form.comments == 'Never turned up.'
+//    }
 
-        when: 'I select and display a location'
-        def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
-
-        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
-        whereaboutsApi.stubGetAbsenceReasons()
-        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
-        location = '1'
-        period = 'AM'
-        waitFor { continueButton.module(FormElement).enabled }
-        continueButton.click()
-
-        then: 'I should see the correct attendance information for each offender'
-        at HouseblockPage
-
-        tableRows[1].find('td')[attendanceColumn].text() == 'Received'
-        tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
-
-        def payRadios = $(name: "pay").module(RadioButtons)
-        payRadios.checked == 'no'
-        absentReasonForm.form.absentReason == 'UnacceptableAbsence'
-        absentReasonForm.form.comments == 'Never turned up.'
-    }
-
-    def "should mark an offender as not attended with absent reason"() {
-        given: 'I am on the whereabouts search page'
-        fixture.toSearch()
-
-        when: 'I select and display a location'
-        def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
-
-        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
-        whereaboutsApi.stubGetAbsenceReasons()
-        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today, [])
-        whereaboutsApi.stubPostAttendance()
-
-        location = '1'
-        period = 'AM'
-        waitFor { continueButton.module(FormElement).enabled }
-        continueButton.click()
-
-        then: 'I mark an offender as not attended with absent reason'
-        at HouseblockPage
-        tableRows[1].find('td')[attendanceColumn].find('input').click()
-        assert absentReasonForm.fillOutAbsentReasonForm()
-
-        whereaboutsApi.verifyPostAttendance()
-
-    }
+//    def "should mark an offender as not attended with absent reason"() {
+//        given: 'I am on the whereabouts search page'
+//        fixture.toSearch()
+//
+//        when: 'I select and display a location'
+//        def today = getNow()
+//        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+//
+//        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+//        whereaboutsApi.stubGetAbsenceReasons()
+//        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today, [])
+//        whereaboutsApi.stubPostAttendance()
+//
+//        location = '1'
+//        period = 'AM'
+//        waitFor { continueButton.module(FormElement).enabled }
+//        continueButton.click()
+//
+//        then: 'I mark an offender as not attended with absent reason'
+//        at HouseblockPage
+//        tableRows[1].find('td')[attendanceColumn].find('input').click()
+//        assert absentReasonForm.fillOutAbsentReasonForm()
+//
+//        whereaboutsApi.verifyPostAttendance()
+//
+//    }
 
     private static String getNow() {
         String pattern = "YYYY-MM-dd"
