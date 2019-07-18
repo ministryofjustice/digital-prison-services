@@ -123,7 +123,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
             </FieldWithError>
           </Fieldset>
           <ButtonContainer>
-            <Button type="submit" disabled={submitting || pristine} mb={0}>
+            <Button name="confirm" type="submit" disabled={submitting || pristine} mb={0}>
               Confirm
             </Button>
             <ButtonCancel mb={0} onClick={cancelHandler} type="button">

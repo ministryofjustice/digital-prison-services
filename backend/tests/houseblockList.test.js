@@ -1,11 +1,15 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 const { elite2ApiFactory } = require('../api/elite2Api')
+const factory = require('../controllers/houseblockList').getHouseblockListFactory
 
 const elite2Api = elite2ApiFactory(null)
 const whereaboutsApi = {}
 const config = {
   updateAttendancePrisons: ['LEI'],
+  app: {
+    production: true,
+  },
 }
 const houseblockList = require('../controllers/houseblockList').getHouseblockListFactory(
   elite2Api,
@@ -599,6 +603,70 @@ describe('Houseblock list controller', async () => {
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
 
       expect(whereaboutsApi.getAttendanceForBookings).not.toHaveBeenCalled()
+    })
+
+    it('should only request attendance for prison that have been enabled', async () => {
+      elite2Api.getHouseblockList.mockReturnValue([
+        {
+          bookingId: 1,
+          eventId: 10,
+          eventLocationId: 100,
+          offenderNo: 'A1234AA',
+          firstName: 'ARTHUR',
+          lastName: 'ANDERSON',
+          cellLocation: 'LEI-A-1-1',
+          event: 'CHAP',
+          eventType: 'PRISON_ACT',
+          eventDescription: 'Chapel',
+          comment: 'comment1',
+          endTime: '2017-10-15T18:30:00',
+        },
+      ])
+      whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
+      const { getHouseblockList: service } = factory(elite2Api, whereaboutsApi, {
+        updateAttendancePrisons: ['LEI'],
+        app: {
+          production: true,
+        },
+      })
+
+      await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+      await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
+
+      expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(1)
+      expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(1)
+    })
+
+    it('should enable attendance for everyone in dev', async () => {
+      elite2Api.getHouseblockList.mockReturnValue([
+        {
+          bookingId: 1,
+          eventId: 10,
+          eventLocationId: 100,
+          offenderNo: 'A1234AA',
+          firstName: 'ARTHUR',
+          lastName: 'ANDERSON',
+          cellLocation: 'LEI-A-1-1',
+          event: 'CHAP',
+          eventType: 'PRISON_ACT',
+          eventDescription: 'Chapel',
+          comment: 'comment1',
+          endTime: '2017-10-15T18:30:00',
+        },
+      ])
+      whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
+      const { getHouseblockList: service } = factory(elite2Api, whereaboutsApi, {
+        updateAttendancePrisons: ['LEI'],
+        app: {
+          production: false,
+        },
+      })
+
+      await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+      await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
+
+      expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
+      expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
     })
   })
 })

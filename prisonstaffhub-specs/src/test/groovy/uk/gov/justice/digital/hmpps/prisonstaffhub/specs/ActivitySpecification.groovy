@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import geb.module.FormElement
+import groovy.json.JsonOutput
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -11,7 +12,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ActivityPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import java.text.SimpleDateFormat
-
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class ActivitySpecification extends BrowserReportingSpec {
@@ -251,6 +251,171 @@ class ActivitySpecification extends BrowserReportingSpec {
 
         then: "I should be redirected to the search page"
         at SearchPage
+    }
+
+    def "should display absent reason link and show attended as checked"() {
+        given: "I am on the activity list page"
+        fixture.toSearch()
+
+        String date = getNow()
+        Caseload caseload = ITAG_USER.workingCaseload
+        int locationId = 1
+        String timeSlot = 'AM'
+
+        def offenders = [
+                [ offenderNo: 'A1234AA', bookingId: 1],
+                [ offenderNo: 'A1234AC', bookingId: 2]
+        ]
+
+        def activities = [
+                [
+                        offenderNo: "A1234AA",
+                        bookingId: 1,
+                        event: "PA",
+                        eventId: 100,
+                        eventDescription: "Prison Activities",
+                        locationId: 1,
+                        eventLocationId: 1,
+                        firstName: "ARTHUR",
+                        lastName: "ANDERSON",
+                        cellLocation: "LEI-A-1-1",
+                        comment: "Activity 3",
+                        startTime: "2017-10-15T17:00:00",
+                        endTime: "2017-10-15T18:30:00",
+                ],
+                [
+                        offenderNo: "A1234AC",
+                        bookingId: 2,
+                        event: "PA",
+                        eventId: 101,
+                        eventDescription: "Prison Activities",
+                        locationId: 1,
+                        eventLocationId: 1,
+                        firstName: "JOHN",
+                        lastName: "DOE",
+                        cellLocation: "LEI-A-1-1",
+                        comment: "Activity 3",
+                        startTime: "2017-10-15T17:00:00",
+                        endTime: "2017-10-15T18:30:00",
+                ]
+        ]
+
+        def attendance = [
+                [
+                        id: 1,
+                        bookingId: 2,
+                        eventId: 101,
+                        eventLocationId: 1,
+                        period: 'AM',
+                        prisonId: 'LEI',
+                        attended: false,
+                        paid: false,
+                        absentReason: 'UnacceptableAbsence',
+                        eventDate: '2019-05-15'
+                ],
+                [
+                        id: 2,
+                        bookingId: 1,
+                        eventId: 100,
+                        eventLocationId: 1,
+                        period: 'AM',
+                        prisonId: 'LEI',
+                        attended: true,
+                        paid: true,
+                        eventDate: '2019-05-15'
+                ]
+        ]
+
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, attendance)
+        elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, JsonOutput.toJson(activities))
+        stubForAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, offenders)
+
+        when: "I select a period and activity location"
+        form['period-select'] = 'AM'
+        waitFor { activity.module(FormElement).enabled }
+        form['activity-select'] = 'loc1'
+        continueButton.click()
+        at ActivityPage
+
+        then: "The the absent reason should be visible"
+
+        assert attendedValues == ['pay', null]
+        assert absenseReasons == [null, 'Unacceptable - IEP']
+    }
+
+
+    def "create new non attendance with absent reason then update to attended"() {
+        given: "I am on the activity list page"
+        fixture.toSearch()
+
+        String date = getNow()
+        Caseload caseload = ITAG_USER.workingCaseload
+        int locationId = 1
+        String timeSlot = 'AM'
+
+        def offenders = [
+            [ offenderNo: 'A1234AA', bookingId: 1],
+        ]
+
+        def activities = [
+            [
+                offenderNo: "A1234AA",
+                bookingId: 1,
+                event: "PA",
+                eventId: 100,
+                eventDescription: "Prison Activities",
+                locationId: 1,
+                eventLocationId: 1,
+                firstName: "ARTHUR",
+                lastName: "ANDERSON",
+                cellLocation: "LEI-A-1-1",
+                comment: "Activity 3",
+                startTime: "2017-10-15T17:00:00",
+                endTime: "2017-10-15T18:30:00",
+             ]
+        ]
+        def attendanceToReturn = [
+                id: 1,
+                bookingId: 1,
+                eventId: 100,
+                eventLocationId: 1,
+        ]
+
+        whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, [])
+        elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, JsonOutput.toJson(activities))
+        whereaboutsApi.stubPostAttendance(attendanceToReturn)
+        whereaboutsApi.stubPutAttendance(attendanceToReturn)
+
+        stubForAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, offenders)
+
+        when: "I select a period and activity location"
+        form['period-select'] = 'AM'
+        waitFor { activity.module(FormElement).enabled }
+        form['activity-select'] = 'loc1'
+        continueButton.click()
+        at ActivityPage
+
+        then: "Clicking the not attend radio button should open the absent reason modal"
+        notAttendedRadioElements.getAt(0).click()
+
+        then: "Fill put the absent reason form as an acceptable absence"
+        assert absentReasonForm.fillOutAbsentReasonForm()
+
+        then: "Mark as attended"
+        attendRadioElements.getAt(0).click()
+
+        then: "An attendance record should of been created then updated"
+        whereaboutsApi.verifyPostAttendance()
+        whereaboutsApi.verifyPutAttendance(attendanceToReturn.id)
+    }
+
+    void stubForAttendance(caseload, locationId, timeSlot, date, offenders) {
+        offenders.each{ it -> elite2api.stubOffenderDetails(false, it) }
+        whereaboutsApi.stubGetAbsenceReasons()
+        oauthApi.stubGetMyRoles()
+        elite2api.stubVisitsAtLocation(caseload, locationId, timeSlot, date)
+        elite2api.stubAppointmentsAtLocation(caseload, locationId, timeSlot, date)
+        elite2api.stubAllOtherEventsOnActivityLists(caseload, timeSlot, date, offenders.collect{ it -> it.offenderNo})
     }
 
     private static String getNow() {

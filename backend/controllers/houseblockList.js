@@ -49,8 +49,11 @@ const addToActivities = (offender, activity) => ({
 })
 
 const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
-  const { updateAttendancePrisons } = config
-  const updateAttendanceEnabled = agencyId => updateAttendancePrisons.includes(agencyId)
+  const {
+    updateAttendancePrisons,
+    app: { production },
+  } = config
+  const updateAttendanceEnabled = agencyId => !production || updateAttendancePrisons.includes(agencyId)
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
