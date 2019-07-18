@@ -42,7 +42,7 @@ class HealthSpecification extends Specification {
         response.uptime > 0.0
         response.name == "prisonstaffhub"
         !response.version.isEmpty()
-        response.api == [auth:'UP', elite2:'UP', whereabouts:'UP']
+        response.api == [auth:'UP', elite2:'UP']
     }
 
     def "Health page reports API down"() {
@@ -63,6 +63,6 @@ class HealthSpecification extends Specification {
         then:
         response.name == "prisonstaffhub"
         !response.version.isEmpty()
-        response.api == [auth:'UP', elite2:[timeout:1000, code:'ECONNABORTED', errno:'ETIMEDOUT', retries:2], whereabouts:'UP']
+        response.api == [auth:'UP', elite2:[timeout:1000, code:'ECONNABORTED', errno:'ETIMEDOUT', retries:2]]
     }
 }
