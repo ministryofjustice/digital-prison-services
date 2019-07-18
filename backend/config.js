@@ -40,8 +40,7 @@ module.exports = {
       timeoutSeconds: process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
   },
-  updateAttendancePrisons: [],
-  // updateAttendancePrisons: process.env.UPDATE_ATTENDANCE_PRISONS
-  //   ? process.env.UPDATE_ATTENDANCE_PRISONS.split(',').map(agency => agency.trim())
-  //   : [],
+  updateAttendancePrisons: process.env.UPDATE_ATTENDANCE_PRISONS
+    ? process.env.UPDATE_ATTENDANCE_PRISONS.split(',').map(agency => agency.trim())
+    : [],
 }
