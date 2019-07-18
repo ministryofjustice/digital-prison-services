@@ -1,9 +1,13 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+const factory = require('../controllers/activityList').getActivityListFactory
+
 const elite2Api = {}
 const whereaboutsApi = {}
 const config = {
   updateAttendancePrisons: ['LEI'],
+  app: { production: true },
 }
+
 const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api, whereaboutsApi, config)
   .getActivityList
 
@@ -699,5 +703,50 @@ describe('Activity list controller', async () => {
       locked: undefined,
       other: true,
     })
+  })
+
+  it('should only request attendance for prison that have been enabled', async () => {
+    elite2Api.getActivityList.mockImplementation(
+      (context, { usage }) =>
+        usage === 'PROG'
+          ? [{ offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 }]
+          : []
+    )
+
+    whereaboutsApi.getAttendance.mockReturnValue([])
+    whereaboutsApi.getAbsenceReasons.mockReturnValue([])
+
+    const { getActivityList: service } = factory(elite2Api, whereaboutsApi, {
+      updateAttendancePrisons: ['LEI'],
+      app: { production: true },
+    })
+
+    await service({}, 'LEI', 1, '23/11/2018', 'PM')
+    await service({}, 'MDI', 1, '23/11/2018', 'PM')
+
+    expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(1)
+    expect(whereaboutsApi.getAttendance.mock.calls.length).toBe(1)
+  })
+
+  it('should enable attendance for everyone in dev', async () => {
+    elite2Api.getActivityList.mockImplementation(
+      (context, { usage }) =>
+        usage === 'PROG'
+          ? [{ offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 }]
+          : []
+    )
+    whereaboutsApi.getAttendance.mockReturnValue([])
+    whereaboutsApi.getAbsenceReasons.mockReturnValue([])
+
+    const { getActivityList: service } = factory(elite2Api, whereaboutsApi, {
+      updateAttendancePrisons: ['LEI'],
+      app: { production: false },
+    })
+
+    await service({}, 'LEI', 1, '23/11/2018', 'PM')
+    await service({}, 'MDI', 1, '23/11/2018', 'PM')
+
+    expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
+    expect(whereaboutsApi.getAttendance.mock.calls.length).toBe(2)
   })
 })

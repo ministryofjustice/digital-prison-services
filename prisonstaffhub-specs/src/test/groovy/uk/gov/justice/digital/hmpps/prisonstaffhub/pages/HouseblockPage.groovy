@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
+import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.AbsentFormModalModule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class HouseblockPage extends DatePickerPage {
@@ -22,5 +23,6 @@ class HouseblockPage extends DatePickerPage {
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
         nameOrderLink { $('th #Name-sortable-column') }
         locationOrderLink { $('th #Location-sortable-column') }
+        absentReasonForm { module(AbsentFormModalModule) }
     }
 }

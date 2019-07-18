@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import jodd.lagarto.dom.LagartoHtmlRendererNodeVisitor.Case
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.*
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
@@ -214,31 +215,91 @@ class Elite2Api extends WireMockRule {
 
     }
 
-    void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
+    void stubProgEventsAtLocation(Caseload caseload, int locationId, String timeSlot, String date, def data = JsonOutput.toJson([])) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/PROG?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
-                        aResponse()
-                                .withBody(ActivityResponse.activities)
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
+                                aResponse()
+                                        .withBody(data)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
         )
+    }
+
+    void stubVisitsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
-                        aResponse()
-                                .withBody('[]')
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
+                                aResponse()
+                                        .withBody('[]')
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
         )
+    }
+
+    void stubAppointmentsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/APP?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
-                        aResponse()
-                                .withBody('[]')
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
+                                aResponse()
+                                        .withBody('[]')
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
         )
+    }
+
+    void stubVisits(Caseload caseload, String timeSlot, String date, def offenderNumbers,  data = JsonOutput.toJson([])) {
+        this.stubFor(
+                post("/api/schedules/${caseload.id}/visits?timeSlot=${timeSlot}&date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                                aResponse()
+                                        .withBody(data)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
+        )
+    }
+
+    void stubAppointments(Caseload caseload, String timeSlot, String date, def offenderNumbers, data = JsonOutput.toJson([])) {
+        this.stubFor(
+                post("/api/schedules/${caseload.id}/appointments?timeSlot=${timeSlot}&date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                                aResponse()
+                                        .withBody(data)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
+        )
+    }
+
+    void stubActivities(Caseload caseload, String timeSlot, String date, def offenderNumbers,data = JsonOutput.toJson([])) {
+        this.stubFor(
+                post("/api/schedules/${caseload.id}/activities?timeSlot=${timeSlot}&date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
+                        .willReturn(
+                                aResponse()
+                                        .withBody(data)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
+        )
+    }
+
+    void stubCourtEvents(def offenderNumbers, String date,  data = JsonOutput.toJson([])) {
+        this.stubFor(
+                post("/api/schedules/LEI/courtEvents?date=${date}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
+                        .willReturn(
+                                aResponse()
+                                        .withBody(data)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200)))
+    }
+
+    void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
+
+        stubProgEventsAtLocation(caseload, locationId, timeSlot, date,  ActivityResponse.activities)
+        stubVisitsAtLocation(caseload, locationId, timeSlot, date)
+        stubAppointmentsAtLocation(caseload, locationId, timeSlot, date)
 
         def offenderNumbers = [
                 ActivityResponse.activity1_1.offenderNo,
@@ -246,59 +307,27 @@ class Elite2Api extends WireMockRule {
                 ActivityResponse.activity3.offenderNo
         ]
 
-        this.stubFor(
-                post("/api/schedules/${caseload.id}/visits?timeSlot=${timeSlot}&date=${date}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
-                        .willReturn(
-                        aResponse()
-                                .withBody(ActivityResponse.visits)
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
-        )
-
-        this.stubFor(
-                post("/api/schedules/${caseload.id}/appointments?timeSlot=${timeSlot}&date=${date}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
-                        .willReturn(
-                        aResponse()
-                                .withBody(ActivityResponse.appointments)
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
-        )
-
-        this.stubFor(
-                post("/api/schedules/${caseload.id}/activities?timeSlot=${timeSlot}&date=${date}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
-                        .willReturn(
-                        aResponse()
-                                .withBody(ActivityResponse.activities)
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
-        )
+        stubVisits(caseload, timeSlot, date, offenderNumbers, ActivityResponse.visits)
+        stubAppointments(caseload, timeSlot, date, offenderNumbers, ActivityResponse.appointments)
+        stubActivities(caseload, timeSlot, date, offenderNumbers, ActivityResponse.activities)
+        stubCourtEvents(offenderNumbers, date, HouseblockResponse.courtEventsWithDifferentStatuesResponse)
+        stubExternalTransfers(offenderNumbers, date)
+        stubAlerts(offenderNumbers)
+        stubAssessments(offenderNumbers)
 
         this.stubFor(
                 post("/api/offender-sentences")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
-                        aResponse()
-                                .withBody(JsonOutput.toJson([[
-                                                                     "offenderNo"    : ActivityResponse.activity3.offenderNo,
-                                                                     "sentenceDetail": ["releaseDate": date]
-                                                             ]]))
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200))
+                                aResponse()
+                                        .withBody(JsonOutput.toJson([[
+                                                                             "offenderNo"    : ActivityResponse.activity3.offenderNo,
+                                                                             "sentenceDetail": ["releaseDate": date]
+                                                                     ]]))
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
         )
-        this.stubFor(
-                post("/api/schedules/LEI/courtEvents?date=${date}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
-                        .willReturn(
-                        aResponse()
-                                .withBody(HouseblockResponse.courtEventsWithDifferentStatuesResponse)
-                                .withHeader('Content-Type', 'application/json')
-                                .withStatus(200)))
-        stubExternalTransfers(offenderNumbers, date)
-        stubAlerts(offenderNumbers)
-        stubAssessments(offenderNumbers)
+
     }
 
     def stubSentenceData(List offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
@@ -552,6 +581,18 @@ class Elite2Api extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200))
         )
+    }
+
+    void stubAllOtherEventsOnActivityLists(caseload, timeSlot, date, offenders) {
+        stubVisits(caseload, timeSlot, date, offenders)
+        stubAppointments(caseload, timeSlot, date, offenders)
+        stubActivities(caseload, timeSlot, date, offenders)
+        stubSentenceData(offenders, date)
+        stubCourtEvents(offenders, date)
+
+        stubExternalTransfers(offenders, date)
+        stubAlerts(offenders)
+        stubAssessments(offenders)
     }
 
     void stubImage() {

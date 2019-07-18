@@ -331,8 +331,35 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         def payRadios = $(name: "pay").module(RadioButtons)
         payRadios.checked == 'no'
-        $('form').absentReason == 'UnacceptableAbsence'
-        $('form').comments == 'Never turned up.'
+        absentReasonForm.form.absentReason == 'UnacceptableAbsence'
+        absentReasonForm.form.comments == 'Never turned up.'
+    }
+
+    def "should mark an offender as not attended with absent reason"() {
+        given: 'I am on the whereabouts search page'
+        fixture.toSearch()
+
+        when: 'I select and display a location'
+        def today = getNow()
+        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAbsenceReasons()
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today, [])
+        whereaboutsApi.stubPostAttendance()
+
+        location = '1'
+        period = 'AM'
+        waitFor { continueButton.module(FormElement).enabled }
+        continueButton.click()
+
+        then: 'I mark an offender as not attended with absent reason'
+        at HouseblockPage
+        tableRows[1].find('td')[attendanceColumn].find('input').click()
+        assert absentReasonForm.fillOutAbsentReasonForm()
+
+        whereaboutsApi.verifyPostAttendance()
+
     }
 
     private static String getNow() {

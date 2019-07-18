@@ -6,6 +6,11 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.put
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 
 public class WhereaboutsApi extends WireMockRule {
 
@@ -16,30 +21,43 @@ public class WhereaboutsApi extends WireMockRule {
     def attendance = [
             {
                 id: 1
-                bookingId: 123
-                eventId: 370398900
-                eventLocationId: 26149
+                bookingId: 3
+                eventId: 102
+                eventLocationId: 1
                 period: 'PM'
-                prisonId: 'MDI'
+                prisonId: 'LEI'
                 attended: true
                 paid: true
                 eventDate: '2019-05-15'
             },
             {
                 id: 2
-                bookingId: 456
-                eventId: 370405219
-                eventLocationId: 26149
+                bookingId: 2
+                eventId: 101
+                eventLocationId: 1
                 period: 'PM'
-                prisonId: 'MDI'
+                prisonId: 'LEI'
                 attended: true
                 paid: false
+                eventDate: '2019-05-15'
+            },
+            {
+                id: 3
+                bookingId: 1
+                eventId: 100
+                eventLocationId: 2
+                period: 'PM'
+                prisonId: 'LEI'
+                attended: false
+                paid: false
+                absenceReasons: 'UnacceptableAbsence'
                 eventDate: '2019-05-15'
             },
     ]
 
     def attendanceForBookingsResponse = [
             [
+                id: 1,
                 attended: true,
                 bookingId: 1,
                 caseNoteId: 0,
@@ -47,13 +65,13 @@ public class WhereaboutsApi extends WireMockRule {
                 eventDate: 'string',
                 eventId: 10,
                 eventLocationId: 100,
-                id: 1,
                 modifyUserId: 'string',
                 paid: true,
                 period: 'AM',
                 prisonId: 'string',
             ],
             [
+                id: 2,
                 absentReason: 'UnacceptableAbsence',
                 attended: true,
                 bookingId: 3,
@@ -63,7 +81,6 @@ public class WhereaboutsApi extends WireMockRule {
                 eventDate: 'string',
                 eventId: 20,
                 eventLocationId: 200,
-                id: 2,
                 modifyUserId: 'string',
                 paid: false,
                 period: 'AM',
@@ -83,22 +100,22 @@ public class WhereaboutsApi extends WireMockRule {
             triggersIEPWarning: [ 'Refused', 'UnacceptableAbsence' ]
     ]
 
-    void stubGetAttendance(Caseload caseload, int locationId, String timeSlot, String date) {
+    void stubGetAttendance(Caseload caseload, int locationId, String timeSlot, String date, data = attendance) {
         this.stubFor(
                 get("/attendance/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson(attendance))))
+                        .withBody(JsonOutput.toJson(data))))
     }
 
-    void stubGetAttendanceForBookings(Caseload caseload, String bookings, String timeSlot, String date) {
+    void stubGetAttendanceForBookings(Caseload caseload, String bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
         this.stubFor(
                 get("/attendance/${caseload.id}?${bookings}&date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson(attendanceForBookingsResponse))))
+                        .withBody(JsonOutput.toJson(data))))
     }
 
 
@@ -121,5 +138,33 @@ public class WhereaboutsApi extends WireMockRule {
                                         .withStatus(200)
                                         .withHeader('Content-Type', 'text/plain')
                                         .withBody('ping')))
+    }
+
+    void stubPostAttendance(attendanceToReturn = []) {
+        this.stubFor(
+                post('/attendance')
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(attendanceToReturn)))
+        )
+    }
+
+    void stubPutAttendance(attendanceToReturn) {
+        this.stubFor(
+                put("/attendance/${attendanceToReturn.id}")
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(attendanceToReturn)))
+        )
+    }
+
+    void verifyPostAttendance() {
+        this.verify(postRequestedFor(urlEqualTo('/attendance')))
+    }
+
+    void verifyPutAttendance(int id) {
+        this.verify(putRequestedFor(urlEqualTo("/attendance/${id}")))
     }
 }

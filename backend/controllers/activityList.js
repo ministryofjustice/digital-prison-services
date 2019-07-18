@@ -1,5 +1,4 @@
 const { switchDateFormat, sortByDateTime } = require('../utils')
-const log = require('../log')
 const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders')
 const { absentReasonMapper } = require('../mappers')
 
@@ -42,8 +41,11 @@ const extractAttendanceInfo = (attendanceInformation, event, absentReasons = [])
 }
 
 const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
-  const { updateAttendancePrisons } = config
-  const updateAttendanceEnabled = agencyId => updateAttendancePrisons.includes(agencyId)
+  const {
+    updateAttendancePrisons,
+    app: { production },
+  } = config
+  const updateAttendanceEnabled = agencyId => !production || updateAttendancePrisons.includes(agencyId)
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
@@ -75,8 +77,6 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
       ...eventsAtLocationByUsage[1],
       ...eventsAtLocationByUsage[2],
     ] // Meh. No flatMap or flat.
-
-    log.info(eventsAtLocation, 'events at location')
 
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
