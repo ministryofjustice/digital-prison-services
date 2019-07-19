@@ -69,7 +69,6 @@ class ResultsActivity extends Component {
       handlePeriodChange,
       handlePrint,
       activityData,
-      getActivityList,
       sortOrder,
       orderField,
       setColumnSort,
@@ -313,14 +312,6 @@ class ResultsActivity extends Component {
               <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
             </div>
             {periodSelect}
-            <button
-              id="updateButton"
-              className="button greyButton margin-left margin-top"
-              type="button"
-              onClick={getActivityList}
-            >
-              Update
-            </button>
           </div>
           <hr />
           {buttons}
@@ -353,7 +344,6 @@ class ResultsActivity extends Component {
 
 ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
-  getActivityList: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,

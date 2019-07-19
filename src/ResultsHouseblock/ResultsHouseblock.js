@@ -343,14 +343,6 @@ class ResultsHouseblock extends Component {
             {locationSelect}
             {dateSelect}
             {periodSelect}
-            <button
-              id="updateButton"
-              className="button greyButton margin-left margin-top"
-              type="button"
-              onClick={update}
-            >
-              Update
-            </button>
           </div>
           <hr />
           {buttons}

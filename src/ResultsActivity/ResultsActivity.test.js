@@ -299,10 +299,6 @@ describe('Offender activity list results component', () => {
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
 
-    component.find('#updateButton').simulate('click')
-    expect(props.getActivityList).toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
     component
       .find('#printButton')
       .at(0)

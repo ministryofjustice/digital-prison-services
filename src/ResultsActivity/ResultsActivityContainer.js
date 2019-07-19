@@ -42,6 +42,18 @@ class ResultsActivityContainer extends Component {
     }
   }
 
+  async componentDidUpdate(prevProps) {
+    const { date, period } = this.props
+
+    if (prevProps.date && prevProps.date !== date) {
+      await this.getActivityList()
+    }
+
+    if (prevProps.period && prevProps.period !== period) {
+      await this.getActivityList()
+    }
+  }
+
   componentWillUnmount() {
     const { activityDataDispatch } = this.props
     activityDataDispatch([])
