@@ -67,21 +67,25 @@ describe('Attendence and Pay controller', async () => {
     beforeEach(() => {
       whereaboutsApi.getAbsenceReasons = jest.fn()
       whereaboutsApi.getAbsenceReasons.mockReturnValue({
-        paidReasons: ['AcceptableAbsence', 'RestInCell'],
-        unpaidReasons: ['UnacceptableAbsence'],
-        triggersIEPWarning: ['UnacceptableAbsence'],
+        paidReasons: ['AcceptableAbsence', 'RestInCell', 'ApprovedCourse'],
+        unpaidReasons: ['Refused', 'UnacceptableAbsence'],
+        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
       })
     })
 
-    it('should call getAbsenceReasons and return formatted array of options', async () => {
+    it('should call getAbsenceReasons and return formatted array of options alphabetically', async () => {
       const response = await getAbsenceReasons(context)
 
       expect(response).toEqual({
         paidReasons: [
+          { name: 'Approved course', value: 'ApprovedCourse' },
           { name: 'Acceptable', value: 'AcceptableAbsence' },
           { name: 'Rest in cell', value: 'RestInCell' },
         ],
-        unpaidReasons: [{ name: 'Unacceptable - IEP', value: 'UnacceptableAbsence' }],
+        unpaidReasons: [
+          { name: 'Refused - IEP', value: 'Refused' },
+          { name: 'Unacceptable - IEP', value: 'UnacceptableAbsence' },
+        ],
       })
     })
   })
