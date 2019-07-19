@@ -391,10 +391,6 @@ describe('Offender results component Jira NN-843', () => {
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
 
-    component.find('#updateButton').simulate('click')
-    expect(props.update).toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
-
     component
       .find('#printButton')
       .at(0)
