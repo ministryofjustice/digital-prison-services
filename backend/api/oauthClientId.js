@@ -15,7 +15,7 @@ const getClientCredentialsTokens = async () => {
         timeout: config.apis.oauth2.timeoutSeconds * 1000,
       }),
       {
-        clientId: config.apis.oauth2,
+        clientId: config.apis.oauth2.systemClientId,
         clientSecret: config.apis.oauth2.systemClientSecret,
         url: config.apis.oauth2.url,
       }
