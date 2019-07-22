@@ -3,7 +3,6 @@ import { shallow } from 'enzyme'
 import PrintLink from './PrintLink'
 
 describe('<PrintLink />', () => {
-  global.print = jest.fn()
   const wrapper = shallow(<PrintLink />)
 
   it('should render the correct text', () => {
