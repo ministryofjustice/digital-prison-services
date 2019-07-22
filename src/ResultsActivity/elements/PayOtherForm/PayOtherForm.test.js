@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { PayOtherForm } from './PayOtherForm'
+import IEPCreated from '../../../IEPCreated'
 
 describe('<PayOtherForm />', () => {
   const submitForm = async formWrapper => {
@@ -157,7 +158,7 @@ describe('<PayOtherForm />', () => {
         expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: true }, 1)
       })
 
-      it('should submit with the correct, unpaid information', () => {
+      it('should submit with the correct, unpaid information and trigger the IEP created modal', async () => {
         const expectedPayload = {
           absentReason: {
             value: 'UnacceptableAbsence',
@@ -177,9 +178,23 @@ describe('<PayOtherForm />', () => {
         reasonSelector.instance().value = 'UnacceptableAbsence'
         reasonSelector.simulate('change', reasonSelector)
 
-        submitForm(wrapper)
+        await submitForm(wrapper)
 
         expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: false }, 1)
+        expect(props.showModal).toHaveBeenCalledWith(
+          true,
+          <IEPCreated
+            activityName={props.activityName}
+            iepValues={{
+              absentReason: expectedPayload.absentReason.value,
+              comments: expectedPayload.comments,
+              pay: 'no',
+            }}
+            offender={props.offender}
+            showModal={props.showModal}
+            user={props.user}
+          />
+        )
       })
     })
   })
