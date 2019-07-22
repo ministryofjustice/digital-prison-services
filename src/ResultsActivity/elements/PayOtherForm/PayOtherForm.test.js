@@ -3,13 +3,12 @@ import { mount } from 'enzyme'
 import { PayOtherForm } from './PayOtherForm'
 
 describe('<PayOtherForm />', () => {
-  const submitForm = formWrapper => {
-    formWrapper.find('form').simulate('submit')
+  const submitForm = async formWrapper => {
+    await formWrapper.find('form').simulate('submit')
     formWrapper.update()
   }
 
   const sharedProps = {
-    cancelHandler: jest.fn(),
     offender: {
       offenderNo: 'ABC123',
       firstName: 'Test',
@@ -22,6 +21,11 @@ describe('<PayOtherForm />', () => {
     absentReasons: {
       paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable' }],
       unpaidReasons: [{ value: 'UnacceptableAbsence', name: 'Unacceptable' }, { value: 'Refused', name: 'Refused' }],
+    },
+    showModal: jest.fn(),
+    activityName: 'Activity name',
+    user: {
+      name: 'Test User',
     },
   }
 
@@ -51,7 +55,7 @@ describe('<PayOtherForm />', () => {
       const cancelButton = wrapper.find('ButtonCancel')
 
       cancelButton.props().onClick()
-      expect(props.cancelHandler).toHaveBeenCalled()
+      expect(props.showModal).toHaveBeenCalledWith(false)
     })
 
     it('should display paid reasons when "pay" is selected', () => {
@@ -96,8 +100,8 @@ describe('<PayOtherForm />', () => {
     })
 
     describe('on error', () => {
-      it('should display correct errors for missing values', () => {
-        submitForm(wrapper)
+      it('should display correct errors for missing values', async () => {
+        await submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
 
@@ -106,14 +110,14 @@ describe('<PayOtherForm />', () => {
         expect(errors.at(2).text()).toEqual('Enter comments')
       })
 
-      it('should change error message if a case note is required', () => {
+      it('should change error message if a case note is required', async () => {
         noRadio.instance().checked = true
         noRadio.simulate('change', noRadio)
         wrapper.update()
         reasonSelector.instance().value = 'UnacceptableAbsence'
         reasonSelector.simulate('change', reasonSelector)
 
-        submitForm(wrapper)
+        await submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
         expect(errors.at(0).text()).toEqual('Enter case note')

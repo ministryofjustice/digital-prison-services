@@ -103,6 +103,7 @@ class ResultsActivityContainer extends Component {
 
   getActivityName() {
     const { activities, activity } = this.props
+    if (!activities || !activity) return ''
     return (
       activities
         .filter(a => a.locationId === Number(activity))
@@ -122,7 +123,7 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch, setOffenderPaymentDataDispatch } = this.props
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
     const activityName = this.getActivityName()
 
     return (
@@ -134,6 +135,8 @@ class ResultsActivityContainer extends Component {
           setColumnSort={this.setColumnSort}
           handleError={this.handleError}
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
+          showModal={showModal}
+          activityName={activityName}
           {...this.props}
         />
       </Page>
@@ -147,6 +150,7 @@ ResultsActivityContainer.propTypes = {
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
 
   // mapStateToProps
   activity: PropTypes.string.isRequired,

@@ -27,6 +27,7 @@ import {
   setTermsVisibility,
   setUserDetails,
   switchAgency,
+  setShowModal,
 } from './redux/actions/index'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
@@ -47,6 +48,7 @@ import routePaths from './routePaths'
 import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
 import { setFlagsAction } from './flags'
+import ModalContainer from './Components/ModalContainer'
 
 const axios = require('axios')
 
@@ -253,6 +255,9 @@ class App extends React.Component {
       user,
       title,
       agencyId,
+      modalActive,
+      modalContent,
+      setShowModalDispatch,
     } = this.props
 
     const routes = (
@@ -303,6 +308,7 @@ class App extends React.Component {
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                showModal={setShowModalDispatch}
               />
             )}
           />
@@ -315,6 +321,7 @@ class App extends React.Component {
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                showModal={setShowModalDispatch}
               />
             )}
           />
@@ -534,6 +541,9 @@ class App extends React.Component {
             <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
           </ScrollToTop>
         </div>
+        <ModalContainer isOpen={modalActive} showModal={setShowModalDispatch}>
+          {modalContent}
+        </ModalContainer>
       </Router>
     )
   }
@@ -560,6 +570,8 @@ App.propTypes = {
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   title: PropTypes.string.isRequired,
+  modalActive: PropTypes.bool.isRequired,
+  modalContent: PropTypes.node,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -575,6 +587,7 @@ App.propTypes = {
   switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
   setFlagsDispatch: PropTypes.func.isRequired,
+  setShowModalDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -588,12 +601,15 @@ const mapStateToProps = state => ({
   shouldShowTerms: state.app.shouldShowTerms,
   user: state.app.user,
   title: state.app.title,
+  modalActive: state.app.modalActive,
+  modalContent: state.app.modalContent,
 })
 
 App.defaultProps = {
   agencyId: '',
   error: null,
   user: {},
+  modalContent: undefined,
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -610,6 +626,7 @@ const mapDispatchToProps = dispatch => ({
   switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
   setFlagsDispatch: flags => dispatch(setFlagsAction(flags)),
+  setShowModalDispatch: (modalActive, modalContent) => dispatch(setShowModal(modalActive, modalContent)),
 })
 
 const AppContainer = connect(

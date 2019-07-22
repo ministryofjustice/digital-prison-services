@@ -16,6 +16,7 @@ import ButtonCancel from '../ButtonCancel'
 import RadioGroup from '../../../Components/RadioGroup'
 import { properCaseName } from '../../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
+import IEPCreated from '../../../IEPCreated'
 
 const ButtonContainer = styled.div`
   button {
@@ -28,29 +29,44 @@ const commentOrCaseNote = value => {
   return 'comments'
 }
 
-const validateThenSubmit = submitHandler => values => {
-  const formErrors = []
-
-  if (!values.pay) {
-    formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
-  }
-
-  if (!values.absentReason) {
-    formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
-  }
-
-  if (!values.comments) {
-    formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
-  }
-
-  if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
-
-  return submitHandler(values)
-}
-
-export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, absentReasons }) {
+export function PayOtherForm({ user, offender, updateOffenderAttendance, absentReasons, showModal, activityName }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
+
+  const validateThenSubmit = submitHandler => async values => {
+    const formErrors = []
+    const shouldCreateIEP = values.absentReason === 'Refused' || values.absentReason === 'UnacceptableAbsence'
+
+    if (!values.pay) {
+      formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
+    }
+
+    if (!values.absentReason) {
+      formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
+    }
+
+    if (!values.comments) {
+      formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
+    }
+
+    if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
+
+    if (shouldCreateIEP) {
+      await submitHandler(values)
+      return showModal(
+        true,
+        <IEPCreated
+          showModal={showModal}
+          offender={offender}
+          iepValues={values}
+          activityName={activityName}
+          user={user}
+        />
+      )
+    }
+
+    return submitHandler(values)
+  }
 
   const payOffender = async values => {
     const paid = values.pay === 'yes'
@@ -87,10 +103,12 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
     comments,
   }
 
+  const cancelHandler = () => showModal(false)
+
   return (
     <Form
       initialValues={initialValues}
-      onSubmit={values => validateThenSubmit(payOffender)(values)}
+      onSubmit={values => validateThenSubmit(payOffender, showModal)(values)}
       render={({ handleSubmit, submitting, pristine, submitError: errors, values }) => (
         <form onSubmit={handleSubmit}>
           {errors && (
@@ -137,17 +155,23 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
 }
 
 PayOtherForm.propTypes = {
-  cancelHandler: PropTypes.func.isRequired,
+  // mapStateToProps
+  user: PropTypes.shape({}).isRequired,
   absentReasons: PropTypes.shape({
     paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
   }).isRequired,
+
+  // Passed down props
   offender: PropTypes.shape({ id: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string })
     .isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
+  activityName: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
+  user: state.app.user,
   absentReasons: state.events.absentReasons,
 })
 

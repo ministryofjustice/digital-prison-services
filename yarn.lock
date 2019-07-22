@@ -1191,6 +1191,14 @@
     "@govuk-react/lib" "^0.7.0"
     govuk-colours "^1.0.3"
 
+"@govuk-react/section-break@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/section-break/-/section-break-0.7.1.tgz#d9063cb2cdb5868bc285df525cc2830607a338b3"
+  integrity sha512-49NkrfGngVcciA81V8T1nXf9V2/j0tzTCK3UOpn683Mij2LTIPUvyZ0oGWmhdrkL1fN+Q1uX2+BHzax2dRcPkg==
+  dependencies:
+    "@govuk-react/lib" "^0.7.1"
+    govuk-colours "^1.0.3"
+
 "@govuk-react/select@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/select/-/select-0.7.0.tgz#35727e84ffea1c83ce7ec4bc3203a9856e9a8b2a"
