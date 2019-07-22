@@ -27,7 +27,6 @@
     "@govuk-react/multi-choice": "^0.7.0",
     "@govuk-react/paragraph": "^0.7.1",
     "@govuk-react/radio": "^0.7.0",
-    "@govuk-react/section-break": "^0.7.1",
     "@govuk-react/select": "^0.7.0",
     "@govuk-react/table": "^0.7.0",
     "@govuk-react/text-area": "^0.7.0",

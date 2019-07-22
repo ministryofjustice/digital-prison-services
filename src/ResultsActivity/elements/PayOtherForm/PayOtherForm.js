@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 
@@ -10,19 +9,12 @@ import TextArea from '@govuk-react/text-area'
 import Button from '@govuk-react/button'
 import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
-import { spacing } from '@govuk-react/lib'
 
-import ButtonCancel from '../ButtonCancel'
+import { ButtonContainer, ButtonCancel } from '../../../Components/Buttons'
 import RadioGroup from '../../../Components/RadioGroup'
 import { properCaseName } from '../../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
 import IEPCreated from '../../../IEPCreated'
-
-const ButtonContainer = styled.div`
-  button {
-    ${spacing.responsiveMargin({ size: 3, direction: 'right' })};
-  }
-`
 
 const commentOrCaseNote = value => {
   if (value === 'UnacceptableAbsence' || value === 'Refused') return 'case note'

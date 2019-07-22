@@ -94,7 +94,7 @@ Array [
   >
     <div>
       <label
-        className="sc-kkGfuU duMHLV sc-fjdhpX ecXZFL"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX ecXZFL"
         placeholder="Select"
       >
         <span
@@ -676,7 +676,7 @@ Array [
       className="sc-hMqMXs iKFKuc"
     >
       <label
-        className="sc-kkGfuU duMHLV sc-fjdhpX TlFPV"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
         placeholder="Select"
       >
         <span
@@ -815,7 +815,7 @@ Array [
         </label>
       </div>
       <label
-        className="sc-iAyFgw geROAo sc-fjdhpX ecXZFL"
+        className="sc-kkGfuU jeqVra sc-fjdhpX ecXZFL"
       >
         <span
           className="sc-jzJRlG fYwhH"
@@ -849,7 +849,7 @@ exports[`Appointment form should render correctly 1`] = `
   >
     <div>
       <label
-        className="sc-kkGfuU duMHLV sc-fjdhpX TlFPV"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
         placeholder="Select"
       >
         <span
@@ -1474,7 +1474,7 @@ exports[`Appointment form should render correctly 1`] = `
       className="sc-hMqMXs iKFKuc"
     >
       <label
-        className="sc-kkGfuU duMHLV sc-fjdhpX TlFPV"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
         placeholder="Select"
       >
         <span
@@ -1666,7 +1666,7 @@ exports[`Appointment form should render correctly 1`] = `
         </label>
       </div>
       <label
-        className="sc-iAyFgw geROAo sc-fjdhpX TlFPV"
+        className="sc-kkGfuU jeqVra sc-fjdhpX TlFPV"
       >
         <span
           className="sc-jzJRlG fYwhH"
@@ -1687,7 +1687,7 @@ exports[`Appointment form should render correctly 1`] = `
     </div>
   </div>
   <div
-    className="sc-kEYyzF gUCfqp"
+    className="sc-eHgmQL fHefaK"
   >
     <button
       className="sc-bdVaJa jyfNnr"
@@ -1697,7 +1697,7 @@ exports[`Appointment form should render correctly 1`] = `
       Continue
     </button>
     <button
-      className="sc-bdVaJa hdRJwX"
+      className="sc-bdVaJa kKTxVs"
       disabled={false}
       onClick={[Function]}
     >

@@ -3,21 +3,11 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { H1 } from '@govuk-react/heading'
 import Paragraph from '@govuk-react/paragraph'
-// import HintText from '@govuk-react/hint-text'
+import HintText from '@govuk-react/hint-text'
 import Button from '@govuk-react/button'
-import { spacing } from '@govuk-react/lib'
 
-import ButtonCancel from '../IepDetails/elements/ButtonCancel'
+import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
 import IEPSlip from '../IEPSlip'
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  button {
-    margin-right: ${spacing.simple(2)}px;
-  }
-`
 
 const IEPCreatedMessage = styled.div`
   @media print {
@@ -36,7 +26,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
       <IEPCreatedMessage>
         <H1 size="MEDIUM">An IEP has been created</H1>
         <Paragraph>Do you want to print an IEP warning slip?</Paragraph>
-        {/* <HintText>You can also print this later from their case notes and IEP history pages</HintText> */}
+        <HintText>You can also print this later from their case notes.</HintText>
         <ButtonContainer>
           <Button mb={0} onClick={print}>
             Yes - print slip

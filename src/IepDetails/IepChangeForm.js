@@ -1,23 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Fieldset from '@govuk-react/fieldset'
 import Button from '@govuk-react/button'
 import TextArea from '@govuk-react/text-area'
-import { spacing } from '@govuk-react/lib'
 import { connect } from 'react-redux'
 import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 import ErrorSummary from '@govuk-react/error-summary'
 import RadioGroup from '../Components/RadioGroup'
-import ButtonCancel from './elements/ButtonCancel'
+import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
 import { FieldWithError, onHandleErrorClick } from '../final-form-govuk-helpers'
 
-const ButtonContainer = styled.div`
-  button {
-    ${spacing.responsiveMargin({ size: 3, direction: 'right' })};
-  }
-`
 const validateThenSubmit = submitHandler => values => {
   const formErrors = []
 
