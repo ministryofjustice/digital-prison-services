@@ -18,7 +18,6 @@ const IEPSlipDetails = styled.div`
   }
 `
 
-// govuk-react grid puts everything into mobile view for print
 const Row = styled.div`
   display: flex;
   border-bottom: ${props => (props.noBorder ? 'none' : `1px solid ${BORDER_COLOUR}`)};
@@ -28,6 +27,7 @@ const Row = styled.div`
 
 const Column = styled.div`
   flex: 1 0 0;
+  padding-right: ${spacing.simple(3)}px;
 `
 
 const Value = styled.span`

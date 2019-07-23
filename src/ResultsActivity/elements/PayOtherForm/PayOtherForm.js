@@ -154,7 +154,7 @@ PayOtherForm.propTypes = {
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
   }).isRequired,
 
-  // Passed down props
+  // props
   offender: PropTypes.shape({ id: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string })
     .isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,

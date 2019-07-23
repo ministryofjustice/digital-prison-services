@@ -22,7 +22,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
   window.onafterprint = () => cancelPrint()
 
   return (
-    <div>
+    <div data-qa="iep-created">
       <IEPCreatedMessage>
         <H1 size="MEDIUM">An IEP has been created</H1>
         <Paragraph>Do you want to print an IEP warning slip?</Paragraph>
