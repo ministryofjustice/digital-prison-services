@@ -8,6 +8,7 @@ import moment from 'moment'
 
 import { properCaseName, pascalToString, forenameToInitial } from '../utils'
 import { Location } from '../Location'
+import { userType } from '../types'
 
 const IEPSlipDetails = styled.div`
   display: none;
@@ -95,8 +96,8 @@ const IEPSlip = ({ offender, iepValues, raisedDate, activityName, user }) => {
 }
 
 IEPSlip.propTypes = {
-  user: PropTypes.shape({}).isRequired,
-  raisedDate: PropTypes.shape({}), // moment object
+  user: userType.isRequired,
+  raisedDate: PropTypes.instanceOf(moment),
   activityName: PropTypes.string.isRequired,
   offender: PropTypes.shape({}).isRequired,
   iepValues: PropTypes.shape({

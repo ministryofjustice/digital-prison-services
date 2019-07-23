@@ -49,6 +49,7 @@ import Content from './Components/Content'
 import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
 import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
+import { userType } from './types'
 
 const axios = require('axios')
 
@@ -563,12 +564,7 @@ App.propTypes = {
   menuOpen: PropTypes.bool.isRequired,
   period: PropTypes.string.isRequired,
   shouldShowTerms: PropTypes.bool.isRequired,
-  user: PropTypes.shape({
-    firstName: PropTypes.string,
-    activeCaseLoadId: PropTypes.string,
-    isOpen: PropTypes.bool,
-    roles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }),
+  user: userType,
   title: PropTypes.string.isRequired,
   modalActive: PropTypes.bool.isRequired,
   modalContent: PropTypes.node,

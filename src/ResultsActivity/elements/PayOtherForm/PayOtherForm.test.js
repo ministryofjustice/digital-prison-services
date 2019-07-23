@@ -22,6 +22,7 @@ describe('<PayOtherForm />', () => {
     absentReasons: {
       paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable' }],
       unpaidReasons: [{ value: 'UnacceptableAbsence', name: 'Unacceptable' }, { value: 'Refused', name: 'Refused' }],
+      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     },
     showModal: jest.fn(),
     activityName: 'Activity name',

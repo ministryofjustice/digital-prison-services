@@ -8,6 +8,7 @@ import Button from '@govuk-react/button'
 
 import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
 import IEPSlip from '../IEPSlip'
+import { userType } from '../types'
 
 const IEPCreatedMessage = styled.div`
   @media print {
@@ -42,7 +43,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
 }
 
 IEPCreated.propTypes = {
-  user: PropTypes.shape({}).isRequired,
+  user: userType.isRequired,
   showModal: PropTypes.func.isRequired,
   offender: PropTypes.shape({}).isRequired,
   activityName: PropTypes.string.isRequired,

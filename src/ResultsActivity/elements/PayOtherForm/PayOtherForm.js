@@ -15,19 +15,24 @@ import RadioGroup from '../../../Components/RadioGroup'
 import { properCaseName } from '../../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
 import IEPCreated from '../../../IEPCreated'
+import { userType } from '../../../types'
 
-const commentOrCaseNote = value => {
-  if (value === 'UnacceptableAbsence' || value === 'Refused') return 'case note'
-  return 'comments'
-}
-
-export function PayOtherForm({ user, offender, updateOffenderAttendance, absentReasons, showModal, activityName }) {
+export function PayOtherForm({
+  user,
+  offender,
+  updateOffenderAttendance,
+  absentReasons,
+  absentReasons: { triggersIEPWarning },
+  showModal,
+  activityName,
+}) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
+  const shouldTriggerIEP = selectedReason => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
+  const commentOrCaseNote = selectedReason => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comments')
 
   const validateThenSubmit = submitHandler => async values => {
     const formErrors = []
-    const shouldCreateIEP = values.absentReason === 'Refused' || values.absentReason === 'UnacceptableAbsence'
 
     if (!values.pay) {
       formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
@@ -43,7 +48,7 @@ export function PayOtherForm({ user, offender, updateOffenderAttendance, absentR
 
     if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
-    if (shouldCreateIEP) {
+    if (shouldTriggerIEP(values.absentReason)) {
       await submitHandler(values)
       return showModal(
         true,
@@ -148,7 +153,7 @@ export function PayOtherForm({ user, offender, updateOffenderAttendance, absentR
 
 PayOtherForm.propTypes = {
   // mapStateToProps
-  user: PropTypes.shape({}).isRequired,
+  user: userType.isRequired,
   absentReasons: PropTypes.shape({
     paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
