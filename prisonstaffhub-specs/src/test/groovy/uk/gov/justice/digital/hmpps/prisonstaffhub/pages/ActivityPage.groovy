@@ -8,7 +8,6 @@ class ActivityPage extends DatePickerPage {
     static url = "/search-prisoner-whereabouts/activity-results"
 
     static at = {
-        updateButton.displayed
         tableRows.size() > 1
     }
 
@@ -19,7 +18,6 @@ class ActivityPage extends DatePickerPage {
         sortSelect { $('#sort-select') }
 
         form { $('form')}
-        updateButton { $('#updateButton') }
         printButton { $('#printButton') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
         bodyRows { $('table.row-gutters tr', 1..-1) }

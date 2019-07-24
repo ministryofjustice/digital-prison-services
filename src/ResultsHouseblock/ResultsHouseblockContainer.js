@@ -6,6 +6,7 @@ import { withRouter } from 'react-router'
 import moment from 'moment'
 import sortHouseblockData from './houseblockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
+
 import {
   resetError,
   setLoaded,
@@ -49,13 +50,17 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { date, period, currentSubLocation } = this.props
+    const { date, period, currentLocation, currentSubLocation } = this.props
 
     if (prevProps.date && prevProps.date !== date) {
       await this.update()
     }
 
     if (prevProps.period && prevProps.period !== period) {
+      await this.update()
+    }
+
+    if (prevProps.currentLocation && prevProps.currentLocation !== currentLocation) {
       await this.update()
     }
 

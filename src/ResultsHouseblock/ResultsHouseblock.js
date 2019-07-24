@@ -1,4 +1,7 @@
 import React, { Component, Fragment } from 'react'
+import Link from '@govuk-react/link'
+import { Link as RouterLink } from 'react-router-dom'
+
 import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
@@ -22,6 +25,7 @@ import ModalContainer from '../Components/ModalContainer'
 import PayOptions from '../ResultsActivity/elements/PayOptions'
 import { Flag } from '../flags'
 import { attendanceUpdated } from '../ResultsActivity/resultsActivityGAEvents'
+import { linkOnClick } from '../helpers'
 
 const ManageResults = styled.div`
   display: flex;
@@ -343,6 +347,11 @@ class ResultsHouseblock extends Component {
             {locationSelect}
             {dateSelect}
             {periodSelect}
+          </div>
+          <div>
+            <Link as={RouterLink} {...linkOnClick(update)}>
+              Reload page
+            </Link>
           </div>
           <hr />
           {buttons}
