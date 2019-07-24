@@ -127,7 +127,6 @@
     "husky": "^1.1.2",
     "jest": "^22.4.3",
     "jest-styled-components": "^6.3.1",
-    "jest-useragent-mock": "^0.0.3",
     "jsdom": "^13.0.0",
     "lint-staged": "^7.3.0",
     "mkdirp": "^0.5.1",
@@ -166,8 +165,7 @@
       "backend/**/*.{js,jsx,mjs}"
     ],
     "setupFiles": [
-      "<rootDir>/config/polyfills.js",
-      "jest-useragent-mock"
+      "<rootDir>/config/polyfills.js"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setupTests.js",
     "snapshotSerializers": [
