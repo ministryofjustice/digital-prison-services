@@ -38,8 +38,7 @@ const attendanceFactory = whereaboutsApi => {
 
   const getAbsenceReasons = async context => {
     const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
-
-    const { paidReasons, unpaidReasons } = absenceReasons
+    const { paidReasons, unpaidReasons, triggersIEPWarning } = absenceReasons
     const mapToAbsentReason = absentReasonMapper(absenceReasons)
 
     const approvedCourse = {
@@ -56,6 +55,7 @@ const attendanceFactory = whereaboutsApi => {
     return {
       paidReasons: [approvedCourse, ...paidReasonsExcluding(approvedCourse.value)],
       unpaidReasons: unpaidReasons.map(mapToAbsentReason).sort(sortByName),
+      triggersIEPWarning,
     }
   }
 

@@ -22,6 +22,11 @@ const properCaseName = name =>
         .map(properCase)
         .join('-')
 
+const forenameToInitial = name => {
+  if (!name) return null
+  return `${name.charAt()} ${name.split(' ').pop()}`
+}
+
 const getHoursMinutes = timestamp => {
   const indexOfT = timestamp.indexOf('T')
   if (indexOfT < 0) {
@@ -117,6 +122,7 @@ const pascalToString = value =>
 module.exports = {
   properCase,
   properCaseName,
+  forenameToInitial,
   getHoursMinutes,
   isTodayOrAfter,
   isWithinLastYear,

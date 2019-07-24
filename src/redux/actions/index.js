@@ -267,3 +267,9 @@ export const setBulkAppointmentsComplete = () => ({
 })
 
 export const setOffender = offender => ({ type: ActionTypes.SET_OFFENDER, offender })
+
+export const setShowModal = (modalActive, modalContent) => ({
+  type: ActionTypes.SET_SHOW_MODAL,
+  modalActive,
+  modalContent,
+})

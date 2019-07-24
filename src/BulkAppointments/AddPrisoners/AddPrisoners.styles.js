@@ -33,14 +33,6 @@ export const RightSection = styled('div')`
   }
 `
 
-export const ButtonContainer = styled('div')`
-  display: flex;
-  flex-direction: row;
-  button {
-    margin-right: ${SPACING.SCALE_2};
-  }
-`
-
 export const FullWidthSelect = styled(Select)`
   select {
     width: 100% !important;

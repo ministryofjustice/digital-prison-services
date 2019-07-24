@@ -191,6 +191,8 @@ const props = {
   resetErrorDispatch: jest.fn(),
   handleError: jest.fn(),
   setHouseblockOffenderAttendance: jest.fn(),
+  showModal: jest.fn(),
+  activityName: 'Activity name',
 }
 
 describe('Offender results component Jira NN-843', () => {
