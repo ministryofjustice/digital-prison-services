@@ -23,11 +23,11 @@ import {
   HorizontallyStacked,
   RightSection,
   Container,
-  ButtonContainer,
   FullWidthTextArea,
   FullWidthSelect,
   IndentedContent,
 } from '../AddPrisoners/AddPrisoners.styles'
+import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
 
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 
@@ -234,9 +234,7 @@ const AppointmentDetailsForm = ({
           <Button type="submit" disabled={!initialValues && pristine}>
             Continue
           </Button>
-          <Button buttonColour={GREY_3} buttonTextColour={BLACK} onClick={e => onCancel(e)}>
-            Cancel
-          </Button>
+          <ButtonCancel onClick={e => onCancel(e)}>Cancel</ButtonCancel>
         </ButtonContainer>
       </form>
     )}
