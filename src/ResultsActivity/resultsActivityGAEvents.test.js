@@ -16,7 +16,10 @@ describe('Pay and attendance GA events', () => {
   it('should create a GA event when an offender is paid via other', () => {
     const offenderAttendanceData = {
       paid: true,
-      absentReason: 'AcceptableAbsence',
+      absentReason: {
+        value: 'AcceptableAbsence',
+        name: 'Acceptable',
+      },
       other: true,
     }
 
@@ -30,7 +33,10 @@ describe('Pay and attendance GA events', () => {
   it('hould create a GA event when an offender is not paid', () => {
     const offenderAttendanceData = {
       paid: false,
-      absentReason: 'UnacceptableAbsence',
+      absentReason: {
+        value: 'UnacceptableAbsence',
+        name: 'Unacceptable',
+      },
       other: true,
     }
 
