@@ -18,7 +18,7 @@ describe('<PayOtherForm />', () => {
       eventLocationId: 456,
       offenderIndex: 1,
     },
-    updateOffenderAttendance: jest.fn(),
+    updateOffenderAttendance: jest.fn().mockReturnValue(true),
     absentReasons: {
       paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable' }],
       unpaidReasons: [{ value: 'UnacceptableAbsence', name: 'Unacceptable' }, { value: 'Refused', name: 'Refused' }],

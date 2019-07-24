@@ -205,6 +205,7 @@ class ResultsHouseblock extends Component {
     const readOnly = this.olderThan7Days()
 
     const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
+      let updateSuccess = false
       const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
       const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
@@ -226,12 +227,16 @@ class ResultsHouseblock extends Component {
         })
         offenderAttendanceData.id = response.data.id || id
         setHouseblockOffenderAttendance(offenderIndex, offenderAttendanceData)
-        showModal(false)
+        updateSuccess = true
       } catch (error) {
         handleError(error)
+        updateSuccess = false
       }
 
+      showModal(false)
       raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
+
+      return updateSuccess
     }
 
     const offenders =
