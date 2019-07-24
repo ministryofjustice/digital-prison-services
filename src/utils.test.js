@@ -1,12 +1,5 @@
 import moment from 'moment'
-import {
-  getListSizeClass,
-  getLongDateFormat,
-  pascalToString,
-  isWithinLastYear,
-  isWithinLastWeek,
-  forenameToInitial,
-} from './utils'
+import { getListSizeClass, getLongDateFormat, pascalToString, isWithinLastYear, isWithinLastWeek } from './utils'
 
 describe('getListSizeClass()', () => {
   it('should return empty-list if no list provided', () => {
@@ -87,11 +80,5 @@ describe('isWithinLastWeek()', () => {
 
   it('returns false if date is not within the past week', () => {
     expect(isWithinLastWeek('2/01/2019')).toBe(false)
-  })
-})
-
-describe('forenameToInitial()', () => {
-  it('should return a correctly formatted name', () => {
-    expect(forenameToInitial('Test User')).toEqual('T User')
   })
 })

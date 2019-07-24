@@ -1,15 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { PayOtherForm } from './PayOtherForm'
-import IEPCreated from '../../../IEPCreated'
 
 describe('<PayOtherForm />', () => {
-  const submitForm = async formWrapper => {
-    await formWrapper.find('form').simulate('submit')
+  const submitForm = formWrapper => {
+    formWrapper.find('form').simulate('submit')
     formWrapper.update()
   }
 
   const sharedProps = {
+    cancelHandler: jest.fn(),
     offender: {
       offenderNo: 'ABC123',
       firstName: 'Test',
@@ -22,12 +22,6 @@ describe('<PayOtherForm />', () => {
     absentReasons: {
       paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable' }],
       unpaidReasons: [{ value: 'UnacceptableAbsence', name: 'Unacceptable' }, { value: 'Refused', name: 'Refused' }],
-      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
-    },
-    showModal: jest.fn(),
-    activityName: 'Activity name',
-    user: {
-      name: 'Test User',
     },
   }
 
@@ -57,7 +51,7 @@ describe('<PayOtherForm />', () => {
       const cancelButton = wrapper.find('ButtonCancel')
 
       cancelButton.props().onClick()
-      expect(props.showModal).toHaveBeenCalledWith(false)
+      expect(props.cancelHandler).toHaveBeenCalled()
     })
 
     it('should display paid reasons when "pay" is selected', () => {
@@ -102,8 +96,8 @@ describe('<PayOtherForm />', () => {
     })
 
     describe('on error', () => {
-      it('should display correct errors for missing values', async () => {
-        await submitForm(wrapper)
+      it('should display correct errors for missing values', () => {
+        submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
 
@@ -112,14 +106,14 @@ describe('<PayOtherForm />', () => {
         expect(errors.at(2).text()).toEqual('Enter comments')
       })
 
-      it('should change error message if a case note is required', async () => {
+      it('should change error message if a case note is required', () => {
         noRadio.instance().checked = true
         noRadio.simulate('change', noRadio)
         wrapper.update()
         reasonSelector.instance().value = 'UnacceptableAbsence'
         reasonSelector.simulate('change', reasonSelector)
 
-        await submitForm(wrapper)
+        submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
         expect(errors.at(0).text()).toEqual('Enter case note')
@@ -159,7 +153,7 @@ describe('<PayOtherForm />', () => {
         expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: true }, 1)
       })
 
-      it('should submit with the correct, unpaid information and trigger the IEP created modal', async () => {
+      it('should submit with the correct, unpaid information', () => {
         const expectedPayload = {
           absentReason: {
             value: 'UnacceptableAbsence',
@@ -179,23 +173,9 @@ describe('<PayOtherForm />', () => {
         reasonSelector.instance().value = 'UnacceptableAbsence'
         reasonSelector.simulate('change', reasonSelector)
 
-        await submitForm(wrapper)
+        submitForm(wrapper)
 
         expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: false }, 1)
-        expect(props.showModal).toHaveBeenCalledWith(
-          true,
-          <IEPCreated
-            activityName={props.activityName}
-            iepValues={{
-              absentReason: expectedPayload.absentReason.value,
-              comments: expectedPayload.comments,
-              pay: 'no',
-            }}
-            offender={props.offender}
-            showModal={props.showModal}
-            user={props.user}
-          />
-        )
       })
     })
   })

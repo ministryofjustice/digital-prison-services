@@ -15,3 +15,10 @@ export const Divider = styled('div')`
   margin-bottom: ${SPACING.SCALE_5};
   margin-top: ${SPACING.SCALE_2};
 `
+export const ButtonContainer = styled('div')`
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-right: ${SPACING.SCALE_2};
+  }
+`

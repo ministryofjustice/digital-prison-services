@@ -17,6 +17,7 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import PayOptions from './elements/PayOptions'
+import ModalContainer from '../Components/ModalContainer'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
 import { attendanceUpdated } from './resultsActivityGAEvents'
@@ -36,9 +37,28 @@ class ResultsActivity extends Component {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      modalContent: null,
+      modalOpen: false,
+    }
+  }
+
   componentWillUnmount() {
     const { resetErrorDispatch } = this.props
     resetErrorDispatch()
+  }
+
+  openModal = modalContent => {
+    this.setState({
+      modalContent,
+      modalOpen: true,
+    })
+  }
+
+  closeModal = () => {
+    this.setState({ modalOpen: false })
   }
 
   render() {
@@ -56,9 +76,9 @@ class ResultsActivity extends Component {
       agencyId,
       handleError,
       setActivityOffenderAttendance,
-      showModal,
-      activityName,
     } = this.props
+
+    const { modalOpen, modalContent } = this.state
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -190,7 +210,7 @@ class ResultsActivity extends Component {
         })
         offenderAttendanceData.id = response.data.id || id
         setActivityOffenderAttendance(offenderIndex, offenderAttendanceData)
-        showModal(false)
+        this.closeModal()
       } catch (error) {
         handleError(error)
       }
@@ -223,7 +243,6 @@ class ResultsActivity extends Component {
           eventId,
           eventLocationId: locationId,
           offenderIndex: index,
-          cellLocation,
           attendanceInfo,
         }
 
@@ -268,8 +287,8 @@ class ResultsActivity extends Component {
                 <PayOptions
                   offenderDetails={offenderDetails}
                   updateOffenderAttendance={updateOffenderAttendance}
-                  showModal={showModal}
-                  activityName={activityName}
+                  openModal={this.openModal}
+                  closeModal={this.closeModal}
                   date={date}
                 />
               )}
@@ -281,6 +300,9 @@ class ResultsActivity extends Component {
 
     return (
       <div className="results-activity">
+        <ModalContainer isOpen={modalOpen} onRequestClose={this.closeModal}>
+          {modalContent}
+        </ModalContainer>
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
         </span>
@@ -359,8 +381,6 @@ ResultsActivity.propTypes = {
   setActivityOffenderAttendance: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
-  showModal: PropTypes.func.isRequired,
-  activityName: PropTypes.string.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

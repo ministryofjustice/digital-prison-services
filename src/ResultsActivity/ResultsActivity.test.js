@@ -156,8 +156,6 @@ const props = {
   agencyId: PRISON,
   user,
   raiseAnalyticsEvent: jest.fn(),
-  showModal: jest.fn(),
-  activityName: 'Activity name',
 }
 
 describe('Offender activity list results component', () => {

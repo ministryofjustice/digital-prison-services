@@ -9,7 +9,7 @@ import { isWithinLastWeek } from '../../../utils'
 import PayOtherForm from '../PayOtherForm'
 import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
 
-function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, showModal, activityName }) {
+function PayOptions({ offenderDetails, updateOffenderAttendance, date, openModal, closeModal, noPay }) {
   const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
@@ -38,13 +38,11 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
   })
 
   const renderForm = () =>
-    showModal(
-      true,
+    openModal(
       <PayOtherForm
         offender={offenderDetails}
+        cancelHandler={closeModal}
         updateOffenderAttendance={updateOffenderAttendance}
-        showModal={showModal}
-        activityName={activityName}
       />
     )
 
@@ -111,10 +109,10 @@ PayOptions.propTypes = {
     }),
   }),
   date: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,
   noPay: PropTypes.bool,
-  showModal: PropTypes.func.isRequired,
-  activityName: PropTypes.string.isRequired,
 }
 
 PayOptions.defaultProps = {
