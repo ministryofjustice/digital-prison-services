@@ -86,7 +86,6 @@ describe('Attendence and Pay controller', async () => {
           { name: 'Refused - IEP', value: 'Refused' },
           { name: 'Unacceptable - IEP', value: 'UnacceptableAbsence' },
         ],
-        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
       })
     })
   })

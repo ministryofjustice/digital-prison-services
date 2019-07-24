@@ -29,8 +29,8 @@ describe('<PayOptions />', () => {
     },
     updateOffenderAttendance: jest.fn(),
     date: 'Today',
-    showModal: jest.fn(),
-    activityName: 'Activity name',
+    closeModal: jest.fn(),
+    openModal: jest.fn(),
   }
 
   let testRenderer
@@ -71,7 +71,7 @@ describe('<PayOptions />', () => {
 
   it('should call openModal when selecting other', () => {
     act(() => getOtherRadio().props.onChange())
-    expect(props.showModal).toHaveBeenCalled()
+    expect(props.openModal).toHaveBeenCalled()
   })
 
   it('should check the correct radio button when user has been marked as paid and attended', () => {
@@ -131,7 +131,7 @@ describe('<PayOptions />', () => {
       act(() => testRenderer.update(<PayOptions {...props} />))
       const detailsLink = testInstance.findByType(UpdateLink)
       detailsLink.props.onClick()
-      expect(props.showModal).toHaveBeenCalled()
+      expect(props.openModal).toHaveBeenCalled()
     })
 
     it('should not display paid message when offender has been paid and the instance is not locked', () => {

@@ -98,11 +98,15 @@ exports[`Add prisoners container should render completed view 1`] = `
       >
         Add another appointment
       </ForwardRef>
-      <ButtonCancel
+      <ForwardRef
+        buttonColour="#dee0e2"
+        buttonTextColour="#0b0c0c"
+        disabled={false}
         onClick={[Function]}
+        start={false}
       >
         Back to home page
-      </ButtonCancel>
+      </ForwardRef>
     </styled.div>
   </withRouter(ScrollToTop)>
 </Connect(Page)>
@@ -142,11 +146,15 @@ exports[`Add prisoners container should render completed view for recurring 1`] 
       >
         Add another appointment
       </ForwardRef>
-      <ButtonCancel
+      <ForwardRef
+        buttonColour="#dee0e2"
+        buttonTextColour="#0b0c0c"
+        disabled={false}
         onClick={[Function]}
+        start={false}
       >
         Back to home page
-      </ButtonCancel>
+      </ForwardRef>
     </styled.div>
   </withRouter(ScrollToTop)>
 </Connect(Page)>

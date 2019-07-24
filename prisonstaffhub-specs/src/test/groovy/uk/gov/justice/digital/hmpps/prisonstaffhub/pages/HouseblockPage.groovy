@@ -24,6 +24,5 @@ class HouseblockPage extends DatePickerPage {
         nameOrderLink { $('th #Name-sortable-column') }
         locationOrderLink { $('th #Location-sortable-column') }
         absentReasonForm { module(AbsentFormModalModule) }
-        iepCreated(required: false) {$('[data-qa="iep-created"]') }
     }
 }

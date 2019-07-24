@@ -42,7 +42,7 @@ Array [
     </ul>
   </div>,
   <table
-    className="row-gutters sc-dxgOiQ bQjqZo"
+    className="row-gutters sc-ckVGcZ fUmfyi"
   >
     <thead>
       <tr>
@@ -341,7 +341,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
      
   </span>
   <table
-    className="row-gutters sc-dxgOiQ bQjqZo"
+    className="row-gutters sc-ckVGcZ fUmfyi"
   >
     <thead>
       <tr>
@@ -611,7 +611,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
     </tbody>
   </table>
   <div
-    className="sc-jKJlTe hcxpRe"
+    className="sc-kGXeez jbxvBs"
   >
     <button
       className="sc-bdVaJa jyfNnr"
@@ -621,7 +621,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
       Add appointment
     </button>
     <button
-      className="sc-bdVaJa kKTxVs"
+      className="sc-bdVaJa hdRJwX"
       disabled={false}
       onClick={[Function]}
     >

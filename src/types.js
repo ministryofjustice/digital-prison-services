@@ -18,25 +18,3 @@ export const appointmentType = shape({
   endTime: string,
   comments: string,
 })
-
-const caseLoadOptions = shape({
-  caseLoadId: string,
-  caseloadFunction: string,
-  description: string,
-  type: string,
-})
-
-export const userType = shape({
-  activeCaseLoadId: string,
-  caseLoadOptions: arrayOf(caseLoadOptions),
-  expiredFlag: bool,
-  firstName: string,
-  lastName: string,
-  lockedFlag: bool,
-  maintainAccess: bool,
-  maintainAccessAdmin: bool,
-  migration: bool,
-  staffId: number,
-  username: string,
-  writeAccess: bool,
-})

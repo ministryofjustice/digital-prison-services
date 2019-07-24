@@ -6,6 +6,7 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Form } from 'react-final-form'
+import { BLACK, GREY_3 } from 'govuk-colours'
 
 import { H3 } from '@govuk-react/heading'
 import TimePicker from '../../Components/TimePicker/TimePicker'
@@ -13,8 +14,7 @@ import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpe
 import { appointmentType } from '../../types'
 
 import { validateThenSubmit, offenderStartTimeFieldName } from './AddPrisonersValidation'
-import { Table } from './AddPrisoners.styles'
-import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
+import { ButtonContainer, Table } from './AddPrisoners.styles'
 
 export const interceptOnChange = ({ input, currentOffender, offenders, dispatchAppointmentPrisoners }) => startTime => {
   const offendersIncludingUpdatedStartTime = [
@@ -182,7 +182,9 @@ const AddPrisoners = ({
             <Button disabled={submitting || offenders.length === 0} type="submit">
               Add appointment
             </Button>
-            <ButtonCancel onClick={e => onCancel(e)}>Cancel</ButtonCancel>
+            <Button buttonColour={GREY_3} buttonTextColour={BLACK} onClick={e => onCancel(e)}>
+              Cancel
+            </Button>
           </ButtonContainer>
         </form>
       )}
