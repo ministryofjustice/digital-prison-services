@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Button from '@govuk-react/button'
-import { mockUserAgent } from 'jest-useragent-mock'
 import IEPCreated from '.'
 
 const props = {
@@ -24,10 +23,8 @@ const props = {
   showModal: jest.fn(),
 }
 
-let wrapper
-
 describe('<IEPCreated />', () => {
-  wrapper = shallow(<IEPCreated {...props} />)
+  const wrapper = shallow(<IEPCreated {...props} />)
 
   it('should print when clicking print', () => {
     wrapper
@@ -47,18 +44,6 @@ describe('<IEPCreated />', () => {
 
   it('close the IEP created modal when print dialog has been closed', () => {
     global.afterPrint()
-    expect(props.showModal).toHaveBeenCalledWith(false)
-  })
-
-  it('should display a close button on mobile devices', () => {
-    mockUserAgent('Android')
-    wrapper = shallow(<IEPCreated {...props} />)
-    expect(window.navigator.userAgent).toEqual('Android')
-
-    const closeButton = wrapper.find(Button)
-    closeButton.props().onClick()
-
-    expect(closeButton.text()).toEqual('Close')
     expect(props.showModal).toHaveBeenCalledWith(false)
   })
 })
