@@ -6148,6 +6148,11 @@ jest-styled-components@^6.3.1:
   dependencies:
     css "^2.2.4"
 
+jest-useragent-mock@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/jest-useragent-mock/-/jest-useragent-mock-0.0.3.tgz#befb493bb7d7d3d92d6a48cbf5053bec7eddc944"
+  integrity sha512-1C2boQOeOfxLVS0HsPgkSENW/ybzbwx86gBBNz4fEylMlnYwUc9LzCT9Gsk7WDLlaiFIPMhi+gAs3PiiEihNrQ==
+
 jest-util@^22.4.1, jest-util@^22.4.3:
   version "22.4.3"
   resolved "https://registry.yarnpkg.com/jest-util/-/jest-util-22.4.3.tgz#c70fec8eec487c37b10b0809dc064a7ecf6aafac"
