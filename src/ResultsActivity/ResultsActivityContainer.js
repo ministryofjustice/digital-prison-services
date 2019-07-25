@@ -131,7 +131,7 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal, updateAttendanceEnabled } = this.props
     const activityName = this.getActivityName()
 
     return (
@@ -145,6 +145,7 @@ class ResultsActivityContainer extends Component {
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           showModal={showModal}
           activityName={activityName}
+          updateAttendanceEnabled={updateAttendanceEnabled}
           {...this.props}
         />
       </Page>

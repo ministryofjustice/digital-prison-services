@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import axios from 'axios'
 import styled from 'styled-components'
+import classNames from 'classnames'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -57,6 +58,7 @@ class ResultsActivity extends Component {
       setActivityOffenderAttendance,
       showModal,
       activityName,
+      updateAttendanceEnabled,
     } = this.props
 
     const periodSelect = (
@@ -232,6 +234,10 @@ class ResultsActivity extends Component {
         }
 
         const { absentReason } = attendanceInfo || {}
+        const otherActivitiesClasses = classNames({
+          'row-gutters': true,
+          'last-text-column-padding': !updateAttendanceEnabled,
+        })
 
         return (
           <tr key={key} className="row-gutters">
@@ -246,7 +252,7 @@ class ResultsActivity extends Component {
             <td className="row-gutters">{offenderNo}</td>
             <td>{Flags.AlertFlags(alertFlags, category, 'flags')}</td>
             {renderMainEvent(mainEvent)}
-            <td className="row-gutters last-text-column-padding">
+            <td className={otherActivitiesClasses}>
               {
                 <OtherActivitiesView
                   offenderMainEvent={{
@@ -356,6 +362,7 @@ ResultsActivity.propTypes = {
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)
