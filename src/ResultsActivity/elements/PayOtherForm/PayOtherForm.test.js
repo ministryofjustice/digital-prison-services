@@ -47,7 +47,10 @@ describe('<PayOtherForm />', () => {
 
   describe('with no initial values', () => {
     const props = { ...sharedProps }
-    beforeEach(() => buildWrapper(mount(<PayOtherForm {...props} />)))
+    beforeEach(() => {
+      props.updateOffenderAttendance.mockReturnValue(true)
+      buildWrapper(mount(<PayOtherForm {...props} />))
+    })
 
     it('should display the correct offender name', () => {
       expect(wrapper.find('legend').text()).toEqual('Do you want to pay Test Offender?')
@@ -197,6 +200,28 @@ describe('<PayOtherForm />', () => {
           />
         )
       })
+    })
+  })
+
+  describe('on error', () => {
+    const props = { ...sharedProps }
+    beforeEach(() => {
+      props.showModal.mockClear()
+      props.updateOffenderAttendance.mockReturnValue(false)
+      buildWrapper(mount(<PayOtherForm {...props} />))
+    })
+
+    it('should not trigger the IEP created modal', async () => {
+      noRadio.instance().checked = true
+      noRadio.simulate('change', noRadio)
+      wrapper.update()
+
+      reasonSelector.instance().value = 'UnacceptableAbsence'
+      reasonSelector.simulate('change', reasonSelector)
+
+      await submitForm(wrapper)
+
+      expect(props.showModal).not.toHaveBeenCalled()
     })
   })
 

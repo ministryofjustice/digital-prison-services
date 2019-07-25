@@ -566,7 +566,7 @@ App.propTypes = {
   shouldShowTerms: PropTypes.bool.isRequired,
   user: userType,
   title: PropTypes.string.isRequired,
-  modalActive: PropTypes.bool.isRequired,
+  modalActive: PropTypes.bool,
   modalContent: PropTypes.node,
 
   // mapDispatchToProps
@@ -605,6 +605,7 @@ App.defaultProps = {
   agencyId: '',
   error: null,
   user: {},
+  modalActive: false,
   modalContent: undefined,
 }
 
