@@ -205,7 +205,6 @@ class ActivitySpecification extends BrowserReportingSpec {
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
         whereaboutsApi.stubGetAbsenceReasons()
         setDatePicker('2018', 'Aug', '1')
-        updateButton.click()
 
         then: 'The new activity list results are displayed'
         at ActivityPage

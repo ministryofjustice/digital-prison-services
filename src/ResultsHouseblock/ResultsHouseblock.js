@@ -1,4 +1,7 @@
 import React, { Component, Fragment } from 'react'
+import Link from '@govuk-react/link'
+import { Link as RouterLink } from 'react-router-dom'
+import Button from '@govuk-react/button'
 import '../index.scss'
 import '../lists.scss'
 import '../App.scss'
@@ -7,6 +10,7 @@ import { withRouter } from 'react-router'
 import moment from 'moment'
 import styled from 'styled-components'
 import axios from 'axios'
+import { FONT_SIZE } from '@govuk-react/constants'
 import { getHoursMinutes, isTodayOrAfter, getMainEventDescription, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -21,6 +25,7 @@ import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import PayOptions from '../ResultsActivity/elements/PayOptions'
 import { Flag } from '../flags'
 import { attendanceUpdated } from '../ResultsActivity/resultsActivityGAEvents'
+import { linkOnClick } from '../helpers'
 
 const ManageResults = styled.div`
   display: flex;
@@ -30,6 +35,17 @@ const ManageResults = styled.div`
   @media print {
     justify-content: flex-end;
   }
+`
+
+export const PrintButton = styled(Button)`
+  min-width: 8em;
+  img {
+    margin-right: 0.5em;
+  }
+`
+
+const LargeLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_24};
 `
 
 class ResultsHouseblock extends Component {
@@ -134,22 +150,18 @@ class ResultsHouseblock extends Component {
       </div>
     )
 
-    const buttons = (
-      <div id="buttons" className="pure-u-md-12-12 padding-bottom">
-        {isTodayOrAfter(date) && (
-          <button
-            id="printButton"
-            className="button"
-            type="button"
-            onClick={() => {
-              handlePrint()
-            }}
-          >
-            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
-            Print list
-          </button>
-        )}
-      </div>
+    const printButton = isTodayOrAfter(date) && (
+      <PrintButton
+        id="printButton"
+        className="margin-left margin-top pull-right"
+        onClick={e => {
+          if (e) e.preventDefault()
+          handlePrint()
+        }}
+      >
+        <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
+        Print list
+      </PrintButton>
     )
 
     const headings = () => (
@@ -326,17 +338,14 @@ class ResultsHouseblock extends Component {
             {locationSelect}
             {dateSelect}
             {periodSelect}
-            <button
-              id="updateButton"
-              className="button greyButton margin-left margin-top"
-              type="button"
-              onClick={update}
-            >
-              Update
-            </button>
+            {printButton}
           </div>
           <hr />
-          {buttons}
+          <div className="margin-bottom">
+            <LargeLink as={RouterLink} {...linkOnClick(update)}>
+              Reload page
+            </LargeLink>
+          </div>
         </form>
         <ManageResults>
           <SortLov
@@ -355,7 +364,11 @@ class ResultsHouseblock extends Component {
           {!offenders || offenders.length === 0 ? (
             <div className="font-small padding-top-large padding-bottom padding-left">No prisoners found</div>
           ) : (
-            <div className="padding-top">{buttons}</div>
+            <div className="padding-top">
+              <div id="buttons" className="pure-u-md-12-12 padding-bottom">
+                {printButton}
+              </div>
+            </div>
           )}
         </div>
       </div>

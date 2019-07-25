@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsHouseblock } from './ResultsHouseblock'
+import { ResultsHouseblock, PrintButton } from './ResultsHouseblock'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'LEI'
@@ -391,14 +391,10 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
-
-    component.find('#updateButton').simulate('click')
-    expect(props.update).toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
+    expect(component.find(PrintButton).length).toEqual(2)
 
     component
-      .find('#printButton')
+      .find(PrintButton)
       .at(0)
       .simulate('click')
     expect(props.handlePrint).toHaveBeenCalled()
@@ -439,7 +435,7 @@ describe('Offender results component Jira NN-843', () => {
         offenderNo="1"
       />
     )
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find(PrintButton).length).toEqual(2)
   })
 
   it('checkboxes should be read-only when date is over a week ago', async () => {
