@@ -52,19 +52,12 @@ class ResultsHouseblockContainer extends Component {
   async componentDidUpdate(prevProps) {
     const { date, period, currentLocation, currentSubLocation } = this.props
 
-    if (prevProps.date && prevProps.date !== date) {
-      await this.update()
-    }
-
-    if (prevProps.period && prevProps.period !== period) {
-      await this.update()
-    }
-
-    if (prevProps.currentLocation && prevProps.currentLocation !== currentLocation) {
-      await this.update()
-    }
-
-    if (prevProps.currentSubLocation && prevProps.currentSubLocation !== currentSubLocation) {
+    if (
+      (prevProps.date && prevProps.date !== date) ||
+      (prevProps.period && prevProps.period !== period) ||
+      (prevProps.currentLocation && prevProps.currentLocation !== currentLocation) ||
+      (prevProps.currentSubLocation && prevProps.currentSubLocation !== currentSubLocation)
+    ) {
       await this.update()
     }
   }
