@@ -188,7 +188,8 @@ class ResultsHouseblockContainer extends Component {
 
   render() {
     const title = this.titleString()
-    const { resetErrorDispatch, setOffenderPaymentDataDispatch } = this.props
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
+
     return (
       <Page title={title} alwaysRender>
         <ResultsHouseblock
@@ -199,6 +200,8 @@ class ResultsHouseblockContainer extends Component {
           resetErrorDispatch={resetErrorDispatch}
           handleError={this.handleError}
           setHouseblockOffenderAttendance={setOffenderPaymentDataDispatch}
+          showModal={showModal}
+          activityName={title}
           {...this.props}
         />
       </Page>
@@ -212,6 +215,7 @@ ResultsHouseblockContainer.propTypes = {
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
 
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,

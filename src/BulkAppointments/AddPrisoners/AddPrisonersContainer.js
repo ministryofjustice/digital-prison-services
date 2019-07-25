@@ -5,9 +5,9 @@ import moment from 'moment'
 
 import { H3 } from '@govuk-react/heading'
 import Button from '@govuk-react/button'
-import { BLACK, GREY_3 } from 'govuk-colours'
 import Page from '../../Components/Page'
-import { Container, Divider, ButtonContainer } from './AddPrisonersContainer.styles'
+import { Container, Divider } from './AddPrisonersContainer.styles'
+import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
 
 import {
   AppointmentTypeUsed,
@@ -120,9 +120,7 @@ class AddPrisonerContainer extends Component {
             <Divider />
             <ButtonContainer>
               <Button onClick={() => history.push(routePaths.bulkAppointments)}>Add another appointment</Button>
-              <Button buttonColour={GREY_3} buttonTextColour={BLACK} onClick={e => this.onCancel(e)}>
-                Back to home page
-              </Button>
+              <ButtonCancel onClick={e => this.onCancel(e)}>Back to home page</ButtonCancel>
             </ButtonContainer>
           </ScrollToTop>
         )}

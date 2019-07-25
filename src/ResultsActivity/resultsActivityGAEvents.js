@@ -4,7 +4,7 @@ const attendanceUpdated = (offenderAttendanceData, agencyId) => {
   return {
     category: 'Pay and attendance',
     action: `Offender ${paid ? 'paid' : 'not paid'} at ${agencyId}`,
-    label: other ? `Other - ${absentReason}` : 'Pay',
+    label: other ? `Other - ${absentReason.value}` : 'Pay',
   }
 }
 

@@ -1,7 +1,5 @@
-// put in new-nomis-shared
-import Button from '@govuk-react/button'
-
 import React from 'react'
+import Button from '@govuk-react/button'
 import { GREY_2, GREY_3, TEXT_COLOUR } from 'govuk-colours'
 
 const ButtonCancel = props => (

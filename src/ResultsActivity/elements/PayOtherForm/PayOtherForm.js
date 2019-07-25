@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 
@@ -10,49 +9,64 @@ import TextArea from '@govuk-react/text-area'
 import Button from '@govuk-react/button'
 import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
-import { spacing } from '@govuk-react/lib'
 
-import ButtonCancel from '../ButtonCancel'
+import { ButtonContainer, ButtonCancel } from '../../../Components/Buttons'
 import RadioGroup from '../../../Components/RadioGroup'
 import { properCaseName } from '../../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
+import IEPCreated from '../../../IEPCreated'
+import { userType } from '../../../types'
 
-const ButtonContainer = styled.div`
-  button {
-    ${spacing.responsiveMargin({ size: 3, direction: 'right' })};
-  }
-`
-
-const commentOrCaseNote = value => {
-  if (value === 'UnacceptableAbsence' || value === 'Refused') return 'case note'
-  return 'comments'
-}
-
-const validateThenSubmit = submitHandler => values => {
-  const formErrors = []
-
-  if (!values.pay) {
-    formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
-  }
-
-  if (!values.absentReason) {
-    formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
-  }
-
-  if (!values.comments) {
-    formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
-  }
-
-  if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
-
-  return submitHandler(values)
-}
-
-export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance, absentReasons }) {
+export function PayOtherForm({
+  user,
+  offender,
+  updateOffenderAttendance,
+  absentReasons,
+  absentReasons: { triggersIEPWarning },
+  showModal,
+  activityName,
+}) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
+  const shouldTriggerIEP = selectedReason => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
+  const commentOrCaseNote = selectedReason => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comments')
 
-  const payOffender = async values => {
+  const validateThenSubmit = submitHandler => async values => {
+    const formErrors = []
+
+    if (!values.pay) {
+      formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
+    }
+
+    if (!values.absentReason) {
+      formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
+    }
+
+    if (!values.comments) {
+      formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
+    }
+
+    if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
+
+    const attendanceUpdated = await submitHandler(values)
+
+    if (attendanceUpdated && shouldTriggerIEP(values.absentReason)) {
+      showModal(
+        true,
+        <IEPCreated
+          showModal={showModal}
+          offender={offender}
+          iepValues={values}
+          activityName={activityName}
+          user={user}
+        />
+      )
+    }
+
+    return attendanceUpdated
+  }
+
+  const payOffender = values => {
     const paid = values.pay === 'yes'
     const reasons = [...absentReasons.paidReasons, ...absentReasons.unpaidReasons]
 
@@ -68,7 +82,7 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
       attended: false,
     }
 
-    await updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
+    return updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
   }
 
   const getAbsentReasons = pay => {
@@ -87,10 +101,12 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
     comments,
   }
 
+  const cancelHandler = () => showModal(false)
+
   return (
     <Form
       initialValues={initialValues}
-      onSubmit={values => validateThenSubmit(payOffender)(values)}
+      onSubmit={values => validateThenSubmit(payOffender, showModal)(values)}
       render={({ handleSubmit, submitting, pristine, submitError: errors, values }) => (
         <form onSubmit={handleSubmit}>
           {errors && (
@@ -137,17 +153,23 @@ export function PayOtherForm({ cancelHandler, offender, updateOffenderAttendance
 }
 
 PayOtherForm.propTypes = {
-  cancelHandler: PropTypes.func.isRequired,
+  // mapStateToProps
+  user: userType.isRequired,
   absentReasons: PropTypes.shape({
     paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
   }).isRequired,
+
+  // props
   offender: PropTypes.shape({ id: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string })
     .isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
+  activityName: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
+  user: state.app.user,
   absentReasons: state.events.absentReasons,
 })
 

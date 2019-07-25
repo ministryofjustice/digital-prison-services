@@ -31,7 +31,8 @@ const appInitialState = {
   message: null,
   loaded: false,
   menuOpen: false,
-  showModal: {},
+  modalActive: false,
+  modalContent: undefined,
   title: 'Digital Prison Services',
   caseChangeRedirect: true,
 }
@@ -132,6 +133,12 @@ export function app(state = appInitialState, action) {
       return {
         ...state,
         title: action.title,
+      }
+    case ActionTypes.SET_SHOW_MODAL:
+      return {
+        ...state,
+        modalActive: action.modalActive,
+        modalContent: action.modalContent,
       }
     default:
       return state

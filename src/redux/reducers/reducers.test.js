@@ -74,7 +74,8 @@ describe('app (global) reducer', () => {
       message: null,
       loaded: false,
       menuOpen: false,
-      showModal: {},
+      modalActive: false,
+      modalContent: undefined,
       title: 'Digital Prison Services',
     })
   })

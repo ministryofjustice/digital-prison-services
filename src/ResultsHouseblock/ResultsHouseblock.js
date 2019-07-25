@@ -21,7 +21,6 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
-import ModalContainer from '../Components/ModalContainer'
 import PayOptions from '../ResultsActivity/elements/PayOptions'
 import { Flag } from '../flags'
 import { attendanceUpdated } from '../ResultsActivity/resultsActivityGAEvents'
@@ -38,31 +37,12 @@ const ManageResults = styled.div`
 `
 
 class ResultsHouseblock extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      modalContent: null,
-      modalOpen: false,
-    }
-  }
-
   olderThan7Days = () => {
     const { date } = this.props
     const searchDate = moment(date, 'DD/MM/YYYY')
     const days = moment().diff(searchDate, 'day')
 
     return days > 7
-  }
-
-  openModal = modalContent => {
-    this.setState({
-      modalContent,
-      modalOpen: true,
-    })
-  }
-
-  closeModal = () => {
-    this.setState({ modalOpen: false })
   }
 
   render() {
@@ -83,6 +63,8 @@ class ResultsHouseblock extends Component {
       agencyId,
       setHouseblockOffenderAttendance,
       handleError,
+      showModal,
+      activityName,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -227,6 +209,7 @@ class ResultsHouseblock extends Component {
     const readOnly = this.olderThan7Days()
 
     const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
+      let updateSuccess = false
       const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
       const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
@@ -248,12 +231,16 @@ class ResultsHouseblock extends Component {
         })
         offenderAttendanceData.id = response.data.id || id
         setHouseblockOffenderAttendance(offenderIndex, offenderAttendanceData)
-        this.closeModal()
+        updateSuccess = true
       } catch (error) {
         handleError(error)
+        updateSuccess = false
       }
 
+      showModal(false)
       raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
+
+      return updateSuccess
     }
 
     const offenders =
@@ -270,6 +257,7 @@ class ResultsHouseblock extends Component {
           eventId,
           eventLocationId,
           offenderIndex: index,
+          cellLocation,
           attendanceInfo,
         }
         const isReceived = attendanceInfo && attendanceInfo.pay
@@ -317,9 +305,9 @@ class ResultsHouseblock extends Component {
                     <PayOptions
                       offenderDetails={offenderDetails}
                       updateOffenderAttendance={updateOffenderAttendance}
-                      openModal={this.openModal}
-                      closeModal={this.closeModal}
+                      showModal={showModal}
                       date={date}
+                      activityName={activityName}
                       noPay
                     />
                   )}
@@ -331,13 +319,8 @@ class ResultsHouseblock extends Component {
         )
       })
 
-    const { modalOpen, modalContent } = this.state
-
     return (
       <div className="results-houseblock">
-        <ModalContainer isOpen={modalOpen} onRequestClose={this.closeModal}>
-          {modalContent}
-        </ModalContainer>
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
         </span>
@@ -415,6 +398,8 @@ ResultsHouseblock.propTypes = {
   update: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
   setHouseblockOffenderAttendance: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
+  activityName: PropTypes.string.isRequired,
 }
 
 const ResultsHouseblockWithRouter = withRouter(ResultsHouseblock)

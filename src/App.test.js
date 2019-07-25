@@ -53,6 +53,7 @@ const props = {
   period: '1',
   shouldShowTerms: true,
   sortOrder: 'ASC',
+  modalActive: false,
   user: { roles: [] },
   activitiesDispatch: fn,
   activityDataDispatch: fn,
@@ -74,6 +75,7 @@ const props = {
   userDetailsDispatch: fn,
   fetchContentLinksDispatch: fn,
   setFlagsDispatch: fn,
+  setShowModalDispatch: fn,
 }
 
 describe('App component', () => {
