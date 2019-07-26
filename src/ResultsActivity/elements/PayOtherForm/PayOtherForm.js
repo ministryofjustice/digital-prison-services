@@ -46,6 +46,10 @@ export function PayOtherForm({
       formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
     }
 
+    if (values.comments && values.comments.length > 240) {
+      formErrors.push({ targetName: 'comments', text: 'Maximum length should not exceed 240 characters' })
+    }
+
     if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
     const attendanceUpdated = await submitHandler(values)

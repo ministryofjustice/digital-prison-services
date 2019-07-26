@@ -127,6 +127,23 @@ describe('<PayOtherForm />', () => {
         const errors = wrapper.find('ErrorSummary').find('li')
         expect(errors.at(0).text()).toEqual('Enter case note')
       })
+
+      it('should show correct maximum length validation message for the comments text', async () => {
+        yesRadio.instance().checked = true
+        yesRadio.simulate('change', noRadio)
+        reasonSelector.instance().value = 'AcceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        commentInput.instance().value = 'A'.repeat(241)
+
+        commentInput.simulate('change', commentInput)
+        wrapper.update()
+
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+        expect(errors.at(0).text()).toEqual('Maximum length should not exceed 240 characters')
+      })
     })
 
     describe('on success', () => {
