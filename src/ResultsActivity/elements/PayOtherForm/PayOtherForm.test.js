@@ -133,7 +133,7 @@ describe('<PayOtherForm />', () => {
         expect(errors.at(0).text()).toEqual('Enter case note')
       })
 
-      it('should show correct maximum length validation message for the event out come text', async () => {
+      it('should show correct maximum length validation message for the comments text', async () => {
         yesRadio.instance().checked = true
         yesRadio.simulate('change', noRadio)
         reasonSelector.instance().value = 'AcceptableAbsence'
