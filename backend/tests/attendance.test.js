@@ -2,7 +2,11 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
 const whereaboutsApi = {}
-const { updateAttendance, getAbsenceReasons } = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
+const {
+  updateAttendance,
+  getAbsenceReasons,
+  batchUpdateAttendance,
+} = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
 
 describe('Attendence and Pay controller', async () => {
   const attendenceDetails = {
@@ -88,6 +92,52 @@ describe('Attendence and Pay controller', async () => {
         ],
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
       })
+    })
+  })
+
+  describe('batchUpdateAttendance', () => {
+    beforeEach(() => {
+      whereaboutsApi.postAttendance = jest.fn()
+    })
+
+    const offenders = [
+      {
+        offenderNo: 123,
+        bookingId: 1,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+      },
+      {
+        offenderNo: 123,
+        bookingId: 2,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+      },
+      {
+        offenderNo: 123,
+        bookingId: 1,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+      },
+    ]
+
+    it('should call postAttendance for each offender', async () => {
+      await batchUpdateAttendance(context, { offenders })
+
+      expect(whereaboutsApi.postAttendance).toHaveBeenCalledTimes(3)
+      // expect(whereaboutsApi.postAttendance.mock.calls[1]).toHaveBeenCalledWith(context, { offenderNo: 123, bookingId: 2, eventId: 123, eventLocationId: 123, attended: true, paid: true, period: 'AM', prisonId: 'LEI' })
     })
   })
 })

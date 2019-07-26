@@ -167,6 +167,15 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
+    const unpaidOffenders = new Set()
+
+    const attendAllNonAssigned = async () => {
+      const offenders = [...unpaidOffenders]
+      const response = await axios.post('/api/attendance/batch', {
+        offenders,
+      })
+    }
+
     const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
       const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
@@ -227,6 +236,19 @@ class ResultsActivity extends Component {
           attendanceInfo,
         }
 
+        if (!attendanceInfo)
+          unpaidOffenders.add({
+            offenderNo,
+            bookingId,
+            eventId,
+            eventLocationId: locationId,
+            attended: true,
+            paid: true,
+            period,
+            prisonId: agencyId,
+            eventDate: date,
+          })
+
         const { absentReason } = attendanceInfo || {}
 
         return (
@@ -271,6 +293,7 @@ class ResultsActivity extends Component {
                   showModal={showModal}
                   activityName={activityName}
                   date={date}
+                  payAll={false}
                 />
               )}
               fallbackRender={() => <></>}
@@ -303,6 +326,15 @@ class ResultsActivity extends Component {
           <hr />
           {buttons}
         </form>
+
+        <button
+          id="allAttendedButton"
+          className="button greyButton margin-bottom"
+          type="button"
+          onClick={attendAllNonAssigned}
+        >
+          Select all as attended
+        </button>
         <ManageResults>
           <SortLov
             sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
