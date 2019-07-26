@@ -3,11 +3,6 @@ import { mount } from 'enzyme'
 import { PayOtherForm } from './PayOtherForm'
 import IEPCreated from '../../../IEPCreated'
 
-const buildLargeText = length =>
-  Array.from([...Array(length).keys()])
-    .map(_ => 'A')
-    .join('')
-
 describe('<PayOtherForm />', () => {
   const submitForm = async formWrapper => {
     await formWrapper.find('form').simulate('submit')
@@ -139,7 +134,7 @@ describe('<PayOtherForm />', () => {
         reasonSelector.instance().value = 'AcceptableAbsence'
         reasonSelector.simulate('change', reasonSelector)
 
-        commentInput.instance().value = buildLargeText(241)
+        commentInput.instance().value = 'A'.repeat(241)
 
         commentInput.simulate('change', commentInput)
         wrapper.update()
