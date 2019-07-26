@@ -3,6 +3,11 @@ import { mount } from 'enzyme'
 import { PayOtherForm } from './PayOtherForm'
 import IEPCreated from '../../../IEPCreated'
 
+const buildLargeText = length =>
+  Array.from([...Array(length).keys()])
+    .map(_ => 'A')
+    .join('')
+
 describe('<PayOtherForm />', () => {
   const submitForm = async formWrapper => {
     await formWrapper.find('form').simulate('submit')
@@ -126,6 +131,23 @@ describe('<PayOtherForm />', () => {
 
         const errors = wrapper.find('ErrorSummary').find('li')
         expect(errors.at(0).text()).toEqual('Enter case note')
+      })
+
+      it('should show correct maximum length validation message for the event out come text', async () => {
+        yesRadio.instance().checked = true
+        yesRadio.simulate('change', noRadio)
+        reasonSelector.instance().value = 'AcceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        commentInput.instance().value = buildLargeText(241)
+
+        commentInput.simulate('change', commentInput)
+        wrapper.update()
+
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+        expect(errors.at(0).text()).toEqual('Maximum length should not exceed 240 characters')
       })
     })
 
