@@ -49,12 +49,13 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
     )
 
   const allowUpdate = selectedOption === 'other' && absentReason
+  const notRecorded = !paid && !other && !isWithinLastWeek(date)
   const showRadioButton = !locked && offenderNo && eventId && isWithinLastWeek(date)
 
   const payMessage = () => {
     if (paid && locked) return 'Paid'
     if (!paid && locked) return 'Not paid'
-    if (!paid && !other && !isWithinLastWeek(date)) return 'Not Recorded'
+    if (notRecorded) return 'Not Recorded'
     return null
   }
 
@@ -87,10 +88,16 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
             </Radio>
           )}
         {allowUpdate && (
-          <UpdateLink role="link" onClick={renderForm}>
-            <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
-          </UpdateLink>
+          <Fragment>
+            {noPay && <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>}
+            {!noPay && (
+              <UpdateLink role="link" onClick={renderForm}>
+                <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
+              </UpdateLink>
+            )}
+          </Fragment>
         )}
+        {!allowUpdate && notRecorded && noPay && <OtherMessage data-qa="other-message">Not Recorded</OtherMessage>}
       </Option>
     </Fragment>
   )
