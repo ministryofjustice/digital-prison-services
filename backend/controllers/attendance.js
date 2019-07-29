@@ -37,20 +37,18 @@ const attendanceFactory = whereaboutsApi => {
   }
 
   const batchUpdateAttendance = async (context, body) => {
-    body.offenders.map(async offender => {
-      const { eventDate, ...rest } = offender
-      const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
-      const offenderDetails = { ...rest, eventDate: switchDateFormat(date) }
+    const offenderCount = body.offenders.length
+    log.info(`Number of offenders to be paid ${offenderCount}`)
 
-      try {
-        await whereaboutsApi.postAttendance(context, offenderDetails)
-        log.info({}, 'postAttendance success')
-      } catch (error) {
-        log.info({}, 'postAttendance error')
-      }
-    })
+    return Promise.all(
+      body.offenders.map(offender => {
+        const { eventDate, ...rest } = offender
+        const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
+        const offenderDetails = { ...rest, eventDate: switchDateFormat(date) }
 
-    return true
+        return whereaboutsApi.postAttendance(context, offenderDetails)
+      })
+    )
   }
 
   const getAbsenceReasons = async context => {

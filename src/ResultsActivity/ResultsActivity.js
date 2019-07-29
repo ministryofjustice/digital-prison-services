@@ -174,6 +174,22 @@ class ResultsActivity extends Component {
       const response = await axios.post('/api/attendance/batch', {
         offenders,
       })
+
+      const findOffenderIndexByBookingId = bookingId => {
+        const offender = offenders.find(off => off.bookingId === bookingId)
+        return offender.offenderIndex
+      }
+
+      response.data.map(offender => {
+        const { paid, attended } = offender
+        const offenderAttendanceData = { paid, attended, pay: attended && paid }
+        try {
+          setActivityOffenderAttendance(findOffenderIndexByBookingId(offender.bookingId), offenderAttendanceData)
+        } catch (error) {
+          handleError(error)
+        }
+        return offender
+      })
     }
 
     const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
@@ -242,6 +258,7 @@ class ResultsActivity extends Component {
             bookingId,
             eventId,
             eventLocationId: locationId,
+            offenderIndex: index,
             attended: true,
             paid: true,
             period,

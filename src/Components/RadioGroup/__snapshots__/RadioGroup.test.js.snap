@@ -16,16 +16,16 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
   </span>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         Yes
       </span>
@@ -33,16 +33,16 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
   </div>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="no"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         No
       </span>
@@ -62,16 +62,16 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
   </span>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         Yes
       </span>
@@ -79,16 +79,16 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
   </div>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="no"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         No
       </span>
@@ -113,16 +113,16 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
   </span>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         Yes
       </span>
@@ -130,16 +130,16 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
   </div>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="no"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         No
       </span>
@@ -164,16 +164,16 @@ exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
   </span>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         Yes
       </span>
@@ -181,16 +181,16 @@ exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
   </div>
   <div>
     <label
-      className="sc-EHOje jSaNgA"
+      className="sc-ifAKCX dYaoPs"
     >
       <input
         checked={false}
-        className="sc-bZQynM gypGCt"
+        className="sc-EHOje cYRqjH"
         type="radio"
         value="no"
       />
       <span
-        className="sc-gzVnrw iYaYOP"
+        className="sc-bZQynM jAsCcR"
       >
         No
       </span>
