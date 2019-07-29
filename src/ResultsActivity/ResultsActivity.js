@@ -181,10 +181,10 @@ class ResultsActivity extends Component {
       }
 
       response.data.map(offender => {
-        const { paid, attended } = offender
+        const { paid, attended, bookingId } = offender
         const offenderAttendanceData = { paid, attended, pay: attended && paid }
         try {
-          setActivityOffenderAttendance(findOffenderIndexByBookingId(offender.bookingId), offenderAttendanceData)
+          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
         } catch (error) {
           handleError(error)
         }
