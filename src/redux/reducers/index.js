@@ -28,6 +28,12 @@ const countPaid = data =>
     .map(event => (event && event.attendanceInfo && event.attendanceInfo.paid ? 1 : 0))
     .reduce((acc, current) => acc + current, 0)
 
+const getHouseBlockMainActivities = houseBlockData =>
+  houseBlockData
+    .map(data => data.activities)
+    .reduce((acc, current) => acc.concat(current), [])
+    .filter(activity => activity && activity.mainActivity)
+
 const appInitialState = {
   config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '', updateAttendancePrisons: [] },
   user: { activeCaseLoadId: null, roles: [] },
@@ -205,9 +211,7 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_HOUSEBLOCK_DATA:
       return {
         ...state,
-        totalPaid: countPaid(
-          action.data.map(data => data.activities).reduce((acc, current) => acc.concat(current), [])
-        ),
+        totalPaid: countPaid(getHouseBlockMainActivities(action.data)),
         houseblockData: action.data,
       }
     case ActionTypes.SET_ORDER_FIELD:
@@ -247,9 +251,7 @@ export function events(state = eventsInitialState, action) {
 
       return {
         ...state,
-        totalPaid: countPaid(
-          houseblockData.map(data => data.activities).reduce((acc, current) => acc.concat(current), [])
-        ),
+        totalPaid: countPaid(getHouseBlockMainActivities(houseblockData)),
         houseblockData,
       }
     }

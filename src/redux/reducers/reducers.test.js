@@ -455,6 +455,39 @@ describe('app (global) reducer', () => {
     })
   })
 
+  it('should handle SET_HOUSEBLOCK_OFFENDER_ATTENDANCE when counting paid', () => {
+    const currentEventState = {
+      ...eventsInitialState,
+      houseblockData: [{ offenderNo: 'B2', activities: [{ mainActivity: true }] }],
+    }
+
+    expect(
+      events(currentEventState, {
+        type: types.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE,
+        offenderIndex: 0,
+        attendanceInfo: {
+          paid: true,
+        },
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      totalPaid: 1,
+      houseblockData: [
+        {
+          offenderNo: 'B2',
+          activities: [
+            {
+              mainActivity: true,
+              attendanceInfo: {
+                paid: true,
+              },
+            },
+          ],
+        },
+      ],
+    })
+  })
+
   it('should calculate current time period', () => {
     expect(defaultPeriod(moment('12:00 am', 'HH:mm a'))).toEqual('AM')
     expect(defaultPeriod(moment('12:01 am', 'HH:mm a'))).toEqual('AM')
