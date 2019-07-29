@@ -37,6 +37,11 @@ const ManageResults = styled.div`
   }
 `
 
+const StackedTotals = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 export const PrintButton = styled(Button)`
   min-width: 8em;
   img {
@@ -77,6 +82,7 @@ class ResultsHouseblock extends Component {
       handleError,
       showModal,
       activityName,
+      totalPaid,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -354,7 +360,10 @@ class ResultsHouseblock extends Component {
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
           />
-          <TotalResults totalResults={houseblockData.length} />
+          <StackedTotals>
+            <TotalResults label="Prisoners listed:" totalResults={houseblockData.length} />
+            <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+          </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
@@ -404,6 +413,7 @@ ResultsHouseblock.propTypes = {
       ),
     }).isRequired
   ).isRequired,
+  totalPaid: PropTypes.number.isRequired,
   subLocations: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,

@@ -327,6 +327,7 @@ describe('app (global) reducer', () => {
       orderField: 'cellLocation',
       sortOrder: 'ASC',
       absentReasons: [],
+      totalPaid: 0,
     })
   })
 
@@ -395,6 +396,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       ...eventsInitialState,
+      totalPaid: 0,
       activityData: [
         { offenderNo: 'A1' },
         {
@@ -432,6 +434,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       ...eventsInitialState,
+      totalPaid: 0,
       houseblockData: [
         { offenderNo: 'A1' },
         {

@@ -32,6 +32,11 @@ const ManageResults = styled.div`
   }
 `
 
+const StackedTotals = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
@@ -59,6 +64,7 @@ class ResultsActivity extends Component {
       showModal,
       activityName,
       updateAttendanceEnabled,
+      totalPaid,
     } = this.props
 
     const periodSelect = (
@@ -312,8 +318,10 @@ class ResultsActivity extends Component {
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
           />
-
-          <TotalResults totalResults={activityData.length} />
+          <StackedTotals>
+            <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
+            <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+          </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
@@ -353,6 +361,7 @@ ResultsActivity.propTypes = {
       comment: PropTypes.string.isRequired,
     })
   ).isRequired,
+  totalPaid: PropTypes.number.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,

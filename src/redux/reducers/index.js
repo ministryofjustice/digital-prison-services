@@ -23,6 +23,11 @@ export function defaultPeriod(time) {
   return 'ED'
 }
 
+const countPaid = data =>
+  data
+    .map(event => (event && event.attendanceInfo && event.attendanceInfo.paid ? 1 : 0))
+    .reduce((acc, current) => acc + current, 0)
+
 const appInitialState = {
   config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '', updateAttendancePrisons: [] },
   user: { activeCaseLoadId: null, roles: [] },
@@ -200,6 +205,9 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_HOUSEBLOCK_DATA:
       return {
         ...state,
+        totalPaid: countPaid(
+          action.data.map(data => data.activities).reduce((acc, current) => acc.concat(current), [])
+        ),
         houseblockData: action.data,
       }
     case ActionTypes.SET_ORDER_FIELD:
@@ -215,6 +223,7 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_ACTIVITY_DATA:
       return {
         ...state,
+        totalPaid: countPaid(action.data),
         activityData: action.data,
       }
     case ActionTypes.SET_ABSENT_REASONS:
@@ -238,6 +247,9 @@ export function events(state = eventsInitialState, action) {
 
       return {
         ...state,
+        totalPaid: countPaid(
+          houseblockData.map(data => data.activities).reduce((acc, current) => acc.concat(current), [])
+        ),
         houseblockData,
       }
     }
@@ -252,6 +264,7 @@ export function events(state = eventsInitialState, action) {
 
       return {
         ...state,
+        totalPaid: countPaid(activityData),
         activityData,
       }
     }
