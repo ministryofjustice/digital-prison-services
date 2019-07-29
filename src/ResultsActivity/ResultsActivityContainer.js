@@ -217,6 +217,7 @@ const mapStateToProps = state => ({
   orderField: state.events.orderField,
   sortOrder: state.events.sortOrder,
   updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
+  totalPaid: state.events.totalPaid,
 })
 
 const mapDispatchToProps = dispatch => ({

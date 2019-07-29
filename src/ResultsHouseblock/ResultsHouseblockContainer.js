@@ -260,6 +260,7 @@ const mapStateToProps = state => ({
   subLocations: extractSubLocations(state.search.locations, state.search.location),
   error: state.app.error,
   updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
+  totalPaid: state.events.totalPaid,
 })
 
 const mapDispatchToProps = dispatch => ({

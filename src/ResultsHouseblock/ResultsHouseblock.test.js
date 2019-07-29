@@ -827,4 +827,57 @@ describe('Offender results component Jira NN-843', () => {
         .getElement().props.className
     ).toBe('cancelled')
   })
+
+  it('should display the correct total number of offenders', () => {
+    const aFewDaysAgo = moment().subtract(3, 'days')
+    const date = aFewDaysAgo.format('DD/MM/YYYY')
+
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={date}
+        period="ED"
+        currentLocation="BWing"
+        user={user}
+        orderField="cellLocation"
+        sortOrder="ASC"
+        offenderNo="1"
+      />
+    )
+
+    expect(
+      component
+        .find('TotalResults')
+        .first()
+        .props()
+    ).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
+  })
+
+  it('should display the correct total number of paid offenders', () => {
+    const aFewDaysAgo = moment().subtract(3, 'days')
+    const date = aFewDaysAgo.format('DD/MM/YYYY')
+
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={date}
+        period="ED"
+        currentLocation="BWing"
+        user={user}
+        orderField="cellLocation"
+        sortOrder="ASC"
+        offenderNo="1"
+        totalPaid={1}
+      />
+    )
+
+    expect(
+      component
+        .find('TotalResults')
+        .at(1)
+        .props()
+    ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
+  })
 })
