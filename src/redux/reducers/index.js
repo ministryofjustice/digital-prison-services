@@ -28,7 +28,7 @@ const countPaid = data =>
     .map(event => (event && event.attendanceInfo && event.attendanceInfo.paid ? 1 : 0))
     .reduce((acc, current) => acc + current, 0)
 
-const getHouseBlockMainActivity = houseBlockData =>
+const getHouseBlockMainActivities = houseBlockData =>
   houseBlockData
     .map(data => data.activities)
     .reduce((acc, current) => acc.concat(current), [])
@@ -211,7 +211,7 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_HOUSEBLOCK_DATA:
       return {
         ...state,
-        totalPaid: countPaid(getHouseBlockMainActivity(action.data)),
+        totalPaid: countPaid(getHouseBlockMainActivities(action.data)),
         houseblockData: action.data,
       }
     case ActionTypes.SET_ORDER_FIELD:
@@ -251,7 +251,7 @@ export function events(state = eventsInitialState, action) {
 
       return {
         ...state,
-        totalPaid: countPaid(getHouseBlockMainActivity(houseblockData)),
+        totalPaid: countPaid(getHouseBlockMainActivities(houseblockData)),
         houseblockData,
       }
     }
