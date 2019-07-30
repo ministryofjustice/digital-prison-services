@@ -15,14 +15,15 @@ const TotalNumber = styled.span`
   font-weight: bold;
 `
 
-const TotalResults = ({ totalResults }) => (
+const TotalResults = ({ label, totalResults }) => (
   <StyledTotalResults>
-    Prisoners listed: <TotalNumber>{totalResults}</TotalNumber>
+    {label} <TotalNumber>{totalResults}</TotalNumber>
   </StyledTotalResults>
 )
 
 TotalResults.propTypes = {
   totalResults: PropTypes.number,
+  label: PropTypes.string.isRequired,
 }
 
 TotalResults.defaultProps = {

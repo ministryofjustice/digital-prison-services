@@ -113,6 +113,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         this.initialPeriod = period.value()
         def today = getNow()
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1_B', 'PM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'PM', today)
         location = '1'
@@ -129,7 +130,6 @@ class HouseblockSpecification extends BrowserReportingSpec {
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'PM', firstOfMonthApiFormat)
         location = 'B'
         setDatePicker('2018', 'Aug', '1')
-        updateButton.click()
 
         then: 'The new houseblock list results are displayed'
         at HouseblockPage

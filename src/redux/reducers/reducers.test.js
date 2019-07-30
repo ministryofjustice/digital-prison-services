@@ -327,6 +327,7 @@ describe('app (global) reducer', () => {
       orderField: 'cellLocation',
       sortOrder: 'ASC',
       absentReasons: [],
+      totalPaid: 0,
     })
   })
 
@@ -395,6 +396,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       ...eventsInitialState,
+      totalPaid: 0,
       activityData: [
         { offenderNo: 'A1' },
         {
@@ -432,6 +434,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       ...eventsInitialState,
+      totalPaid: 0,
       houseblockData: [
         { offenderNo: 'A1' },
         {
@@ -448,6 +451,39 @@ describe('app (global) reducer', () => {
           ],
         },
         { offenderNo: 'C3' },
+      ],
+    })
+  })
+
+  it('should handle SET_HOUSEBLOCK_OFFENDER_ATTENDANCE when counting paid', () => {
+    const currentEventState = {
+      ...eventsInitialState,
+      houseblockData: [{ offenderNo: 'B2', activities: [{ mainActivity: true }] }],
+    }
+
+    expect(
+      events(currentEventState, {
+        type: types.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE,
+        offenderIndex: 0,
+        attendanceInfo: {
+          paid: true,
+        },
+      })
+    ).toEqual({
+      ...eventsInitialState,
+      totalPaid: 1,
+      houseblockData: [
+        {
+          offenderNo: 'B2',
+          activities: [
+            {
+              mainActivity: true,
+              attendanceInfo: {
+                paid: true,
+              },
+            },
+          ],
+        },
       ],
     })
   })

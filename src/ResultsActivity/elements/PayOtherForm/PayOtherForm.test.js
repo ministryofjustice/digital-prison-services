@@ -47,7 +47,10 @@ describe('<PayOtherForm />', () => {
 
   describe('with no initial values', () => {
     const props = { ...sharedProps }
-    beforeEach(() => buildWrapper(mount(<PayOtherForm {...props} />)))
+    beforeEach(() => {
+      props.updateOffenderAttendance.mockReturnValue(true)
+      buildWrapper(mount(<PayOtherForm {...props} />))
+    })
 
     it('should display the correct offender name', () => {
       expect(wrapper.find('legend').text()).toEqual('Do you want to pay Test Offender?')
@@ -124,6 +127,23 @@ describe('<PayOtherForm />', () => {
         const errors = wrapper.find('ErrorSummary').find('li')
         expect(errors.at(0).text()).toEqual('Enter case note')
       })
+
+      it('should show correct maximum length validation message for the comments text', async () => {
+        yesRadio.instance().checked = true
+        yesRadio.simulate('change', noRadio)
+        reasonSelector.instance().value = 'AcceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        commentInput.instance().value = 'A'.repeat(241)
+
+        commentInput.simulate('change', commentInput)
+        wrapper.update()
+
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+        expect(errors.at(0).text()).toEqual('Maximum length should not exceed 240 characters')
+      })
     })
 
     describe('on success', () => {
@@ -197,6 +217,28 @@ describe('<PayOtherForm />', () => {
           />
         )
       })
+    })
+  })
+
+  describe('on error', () => {
+    const props = { ...sharedProps }
+    beforeEach(() => {
+      props.showModal.mockClear()
+      props.updateOffenderAttendance.mockReturnValue(false)
+      buildWrapper(mount(<PayOtherForm {...props} />))
+    })
+
+    it('should not trigger the IEP created modal', async () => {
+      noRadio.instance().checked = true
+      noRadio.simulate('change', noRadio)
+      wrapper.update()
+
+      reasonSelector.instance().value = 'UnacceptableAbsence'
+      reasonSelector.simulate('change', reasonSelector)
+
+      await submitForm(wrapper)
+
+      expect(props.showModal).not.toHaveBeenCalled()
     })
   })
 

@@ -303,10 +303,6 @@ describe('Offender activity list results component', () => {
 
     expect(component.find('#batchControls > button').some('#allAttendedButton')).toEqual(true)
 
-    component.find('#updateButton').simulate('click')
-    expect(props.getActivityList).toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
     component
       .find('#printButton')
       .at(0)
@@ -412,6 +408,24 @@ describe('Offender activity list results component', () => {
   it('should display the correct total number of offenders', () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date="07/06/2019" period="AM" />)
 
-    expect(component.find('TotalResults').props().totalResults).toEqual(response.length)
+    expect(
+      component
+        .find('TotalResults')
+        .first()
+        .props()
+    ).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
+  })
+
+  it('should display current total number of paid offenders', () => {
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={1} activityData={response} date="07/06/2019" period="AM" />
+    )
+
+    expect(
+      component
+        .find('TotalResults')
+        .at(1)
+        .props()
+    ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
   })
 })

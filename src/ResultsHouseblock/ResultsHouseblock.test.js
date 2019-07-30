@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsHouseblock } from './ResultsHouseblock'
+import { ResultsHouseblock, PrintButton } from './ResultsHouseblock'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'LEI'
@@ -391,14 +391,10 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
-
-    component.find('#updateButton').simulate('click')
-    expect(props.update).toHaveBeenCalled()
-    expect(props.handlePrint).not.toHaveBeenCalled()
+    expect(component.find(PrintButton).length).toEqual(2)
 
     component
-      .find('#printButton')
+      .find(PrintButton)
       .at(0)
       .simulate('click')
     expect(props.handlePrint).toHaveBeenCalled()
@@ -439,7 +435,7 @@ describe('Offender results component Jira NN-843', () => {
         offenderNo="1"
       />
     )
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find(PrintButton).length).toEqual(2)
   })
 
   it('checkboxes should be read-only when date is over a week ago', async () => {
@@ -830,5 +826,58 @@ describe('Offender results component Jira NN-843', () => {
         .last()
         .getElement().props.className
     ).toBe('cancelled')
+  })
+
+  it('should display the correct total number of offenders', () => {
+    const aFewDaysAgo = moment().subtract(3, 'days')
+    const date = aFewDaysAgo.format('DD/MM/YYYY')
+
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={date}
+        period="ED"
+        currentLocation="BWing"
+        user={user}
+        orderField="cellLocation"
+        sortOrder="ASC"
+        offenderNo="1"
+      />
+    )
+
+    expect(
+      component
+        .find('TotalResults')
+        .first()
+        .props()
+    ).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
+  })
+
+  it('should display the correct total number of paid offenders', () => {
+    const aFewDaysAgo = moment().subtract(3, 'days')
+    const date = aFewDaysAgo.format('DD/MM/YYYY')
+
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={date}
+        period="ED"
+        currentLocation="BWing"
+        user={user}
+        orderField="cellLocation"
+        sortOrder="ASC"
+        offenderNo="1"
+        totalPaid={1}
+      />
+    )
+
+    expect(
+      component
+        .find('TotalResults')
+        .at(1)
+        .props()
+    ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
   })
 })

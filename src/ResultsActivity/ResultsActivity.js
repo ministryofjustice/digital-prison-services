@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import axios from 'axios'
 import styled from 'styled-components'
+import classNames from 'classnames'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -31,6 +32,11 @@ const ManageResults = styled.div`
   }
 `
 
+const StackedTotals = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
@@ -49,7 +55,6 @@ class ResultsActivity extends Component {
       handlePeriodChange,
       handlePrint,
       activityData,
-      getActivityList,
       sortOrder,
       orderField,
       setColumnSort,
@@ -58,6 +63,8 @@ class ResultsActivity extends Component {
       setActivityOffenderAttendance,
       showModal,
       activityName,
+      updateAttendanceEnabled,
+      totalPaid,
     } = this.props
 
     const periodSelect = (
@@ -208,6 +215,7 @@ class ResultsActivity extends Component {
     }
 
     const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
+      let updateSuccess = false
       const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
       const eventDetails = { prisonId: agencyId, period, eventDate: date }
       const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
@@ -230,12 +238,16 @@ class ResultsActivity extends Component {
         })
         offenderAttendanceData.id = response.data.id || id
         setActivityOffenderAttendance(offenderIndex, offenderAttendanceData)
-        showModal(false)
+        updateSuccess = true
       } catch (error) {
         handleError(error)
+        updateSuccess = false
       }
 
+      showModal(false)
       raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
+
+      return updateSuccess
     }
 
     const offenders =
@@ -282,6 +294,10 @@ class ResultsActivity extends Component {
           })
 
         const { absentReason } = attendanceInfo || {}
+        const otherActivitiesClasses = classNames({
+          'row-gutters': true,
+          'last-text-column-padding': !updateAttendanceEnabled,
+        })
 
         return (
           <tr key={key} className="row-gutters">
@@ -296,7 +312,7 @@ class ResultsActivity extends Component {
             <td className="row-gutters">{offenderNo}</td>
             <td>{Flags.AlertFlags(alertFlags, category, 'flags')}</td>
             {renderMainEvent(mainEvent)}
-            <td className="row-gutters last-text-column-padding">
+            <td className={otherActivitiesClasses}>
               {
                 <OtherActivitiesView
                   offenderMainEvent={{
@@ -346,14 +362,6 @@ class ResultsActivity extends Component {
               <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
             </div>
             {periodSelect}
-            <button
-              id="updateButton"
-              className="button greyButton margin-left margin-top"
-              type="button"
-              onClick={getActivityList}
-            >
-              Update
-            </button>
           </div>
           <hr />
           {buttons}
@@ -367,8 +375,10 @@ class ResultsActivity extends Component {
             sortOrder={sortOrder}
             setColumnSort={setColumnSort}
           />
-
-          <TotalResults totalResults={activityData.length} />
+          <StackedTotals>
+            <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
+            <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+          </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">
@@ -388,7 +398,6 @@ class ResultsActivity extends Component {
 
 ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
-  getActivityList: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
@@ -409,6 +418,7 @@ ResultsActivity.propTypes = {
       comment: PropTypes.string.isRequired,
     })
   ).isRequired,
+  totalPaid: PropTypes.number.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
@@ -418,6 +428,7 @@ ResultsActivity.propTypes = {
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

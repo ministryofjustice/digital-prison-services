@@ -46,11 +46,16 @@ export function PayOtherForm({
       formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
     }
 
+    if (values.comments && values.comments.length > 240) {
+      formErrors.push({ targetName: 'comments', text: 'Maximum length should not exceed 240 characters' })
+    }
+
     if (formErrors.length > 0) return { [FORM_ERROR]: formErrors }
 
-    if (shouldTriggerIEP(values.absentReason)) {
-      await submitHandler(values)
-      return showModal(
+    const attendanceUpdated = await submitHandler(values)
+
+    if (attendanceUpdated && shouldTriggerIEP(values.absentReason)) {
+      showModal(
         true,
         <IEPCreated
           showModal={showModal}
@@ -62,10 +67,10 @@ export function PayOtherForm({
       )
     }
 
-    return submitHandler(values)
+    return attendanceUpdated
   }
 
-  const payOffender = async values => {
+  const payOffender = values => {
     const paid = values.pay === 'yes'
     const reasons = [...absentReasons.paidReasons, ...absentReasons.unpaidReasons]
 
@@ -81,7 +86,7 @@ export function PayOtherForm({
       attended: false,
     }
 
-    await updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
+    return updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
   }
 
   const getAbsentReasons = pay => {

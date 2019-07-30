@@ -42,6 +42,14 @@ class ResultsActivityContainer extends Component {
     }
   }
 
+  async componentDidUpdate(prevProps) {
+    const { date, period } = this.props
+
+    if ((prevProps.date && prevProps.date !== date) || (prevProps.period && prevProps.period !== period)) {
+      await this.getActivityList()
+    }
+  }
+
   componentWillUnmount() {
     const { activityDataDispatch } = this.props
     activityDataDispatch([])
@@ -123,7 +131,7 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
+    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal, updateAttendanceEnabled } = this.props
     const activityName = this.getActivityName()
 
     return (
@@ -137,6 +145,7 @@ class ResultsActivityContainer extends Component {
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           showModal={showModal}
           activityName={activityName}
+          updateAttendanceEnabled={updateAttendanceEnabled}
           {...this.props}
         />
       </Page>
@@ -208,6 +217,7 @@ const mapStateToProps = state => ({
   orderField: state.events.orderField,
   sortOrder: state.events.sortOrder,
   updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
+  totalPaid: state.events.totalPaid,
 })
 
 const mapDispatchToProps = dispatch => ({

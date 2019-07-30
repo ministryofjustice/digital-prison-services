@@ -6,6 +6,7 @@ import { withRouter } from 'react-router'
 import moment from 'moment'
 import sortHouseblockData from './houseblockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
+
 import {
   resetError,
   setLoaded,
@@ -45,6 +46,19 @@ class ResultsHouseblockContainer extends Component {
       }
     } catch (error) {
       this.handleError(error)
+    }
+  }
+
+  async componentDidUpdate(prevProps) {
+    const { date, period, currentLocation, currentSubLocation } = this.props
+
+    if (
+      (prevProps.date && prevProps.date !== date) ||
+      (prevProps.period && prevProps.period !== period) ||
+      (prevProps.currentLocation && prevProps.currentLocation !== currentLocation) ||
+      (prevProps.currentSubLocation && prevProps.currentSubLocation !== currentSubLocation)
+    ) {
+      await this.update()
     }
   }
 
@@ -246,6 +260,7 @@ const mapStateToProps = state => ({
   subLocations: extractSubLocations(state.search.locations, state.search.location),
   error: state.app.error,
   updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
+  totalPaid: state.events.totalPaid,
 })
 
 const mapDispatchToProps = dispatch => ({
