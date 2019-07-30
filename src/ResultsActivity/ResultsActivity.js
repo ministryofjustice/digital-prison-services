@@ -144,13 +144,22 @@ class ResultsActivity extends Component {
       })
     }
 
+    const checkAllLockedStatus = () => {
+      let lockedCases = []
+      const filtered = activityData.filter(x => x.attendanceInfo)
+      lockedCases = filtered.filter(off => off.attendanceInfo.locked === true)
+      if (lockedCases.length === activityData.length) return true
+      return false
+    }
+
     const batchControls = (
       <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {activityData.length !== totalPaid && (
-          <BatchLink as={RouterLink} {...linkOnClick(attendAllNonAssigned)} id="allAttendedButton">
-            All non-selected prisoners have attended
-          </BatchLink>
-        )}
+        {!checkAllLockedStatus() &&
+          activityData.length !== totalPaid && (
+            <BatchLink as={RouterLink} {...linkOnClick(attendAllNonAssigned)} id="allAttendedButton">
+              All non-selected prisoners have attended
+            </BatchLink>
+          )}
       </div>
     )
 
