@@ -37,6 +37,12 @@ const StackedTotals = styled.div`
   flex-direction: column;
 `
 
+const HideForPrint = styled.span`
+  @media print {
+    display: none;
+  }
+`
+
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
@@ -320,7 +326,9 @@ class ResultsActivity extends Component {
           />
           <StackedTotals>
             <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
-            <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+            <HideForPrint>
+              <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+            </HideForPrint>
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
