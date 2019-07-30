@@ -135,9 +135,20 @@ describe('Attendence and Pay controller', async () => {
 
     it('should call postAttendance for each offender', async () => {
       await batchUpdateAttendance(context, { offenders })
-
       expect(whereaboutsApi.postAttendance).toHaveBeenCalledTimes(3)
-      // expect(whereaboutsApi.postAttendance.mock.calls[1]).toHaveBeenCalledWith(context, { offenderNo: 345, bookingId: 2, eventId: 123, eventLocationId: 123, attended: true, paid: true, period: 'AM', prisonId: 'LEI' })
+      expect(whereaboutsApi.postAttendance.mock.calls[1]).toEqual([
+        context,
+        {
+          offenderNo: 345,
+          bookingId: 2,
+          eventId: 123,
+          eventLocationId: 123,
+          attended: true,
+          paid: true,
+          period: 'AM',
+          prisonId: 'LEI',
+        },
+      ])
     })
   })
 })

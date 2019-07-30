@@ -426,4 +426,24 @@ describe('Offender activity list results component', () => {
         .props()
     ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
   })
+
+  it('should display pay all button if there are outstanding prisoners to pay', () => {
+    const today = 'Today'
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={3} activityData={response} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+  })
+
+  it('should not display pay all button if all prisoners are paid', () => {
+    const today = 'Today'
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={4} activityData={response} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(0)
+  })
 })
