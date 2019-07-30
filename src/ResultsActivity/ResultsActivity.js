@@ -7,6 +7,10 @@ import { withRouter } from 'react-router'
 import axios from 'axios'
 import styled from 'styled-components'
 import classNames from 'classnames'
+import Link from '@govuk-react/link'
+import { Link as RouterLink } from 'react-router-dom'
+import { FONT_SIZE } from '@govuk-react/constants'
+import { linkOnClick } from '../helpers'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -35,6 +39,10 @@ const ManageResults = styled.div`
 const StackedTotals = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: right;
+`
+const BatchLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
 `
 
 class ResultsActivity extends Component {
@@ -138,15 +146,10 @@ class ResultsActivity extends Component {
 
     const batchControls = (
       <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {isTodayOrAfter(date) && (
-          <button
-            id="allAttendedButton"
-            className="button greyButton margin-bottom"
-            type="button"
-            onClick={attendAllNonAssigned}
-          >
+        {activityData.length !== totalPaid && (
+          <BatchLink as={RouterLink} {...linkOnClick(attendAllNonAssigned)} id="allAttendedButton">
             All non-selected prisoners have attended
-          </button>
+          </BatchLink>
         )}
       </div>
     )
@@ -367,7 +370,6 @@ class ResultsActivity extends Component {
           {buttons}
         </form>
 
-        {batchControls}
         <ManageResults>
           <SortLov
             sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
@@ -378,6 +380,7 @@ class ResultsActivity extends Component {
           <StackedTotals>
             <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
             <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+            {batchControls}
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>

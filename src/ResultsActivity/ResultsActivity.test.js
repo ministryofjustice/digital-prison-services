@@ -301,8 +301,6 @@ describe('Offender activity list results component', () => {
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
 
-    expect(component.find('#batchControls > button').some('#allAttendedButton')).toEqual(true)
-
     component
       .find('#printButton')
       .at(0)
