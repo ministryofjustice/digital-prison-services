@@ -112,7 +112,7 @@ describe('Attendence and Pay controller', async () => {
         prisonId: 'LEI',
       },
       {
-        offenderNo: 123,
+        offenderNo: 345,
         bookingId: 2,
         eventId: 123,
         eventLocationId: 123,
@@ -122,7 +122,7 @@ describe('Attendence and Pay controller', async () => {
         prisonId: 'LEI',
       },
       {
-        offenderNo: 123,
+        offenderNo: 678,
         bookingId: 1,
         eventId: 123,
         eventLocationId: 123,
@@ -137,7 +137,7 @@ describe('Attendence and Pay controller', async () => {
       await batchUpdateAttendance(context, { offenders })
 
       expect(whereaboutsApi.postAttendance).toHaveBeenCalledTimes(3)
-      // expect(whereaboutsApi.postAttendance.mock.calls[1]).toHaveBeenCalledWith(context, { offenderNo: 123, bookingId: 2, eventId: 123, eventLocationId: 123, attended: true, paid: true, period: 'AM', prisonId: 'LEI' })
+      // expect(whereaboutsApi.postAttendance.mock.calls[1]).toHaveBeenCalledWith(context, { offenderNo: 345, bookingId: 2, eventId: 123, eventLocationId: 123, attended: true, paid: true, period: 'AM', prisonId: 'LEI' })
     })
   })
 })

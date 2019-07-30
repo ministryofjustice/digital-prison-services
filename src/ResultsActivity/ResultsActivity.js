@@ -104,6 +104,46 @@ class ResultsActivity extends Component {
       </div>
     )
 
+    const unpaidOffenders = new Set()
+
+    const attendAllNonAssigned = async () => {
+      const offenders = [...unpaidOffenders]
+      const response = await axios.post('/api/attendance/batch', {
+        offenders,
+      })
+
+      const findOffenderIndexByBookingId = bookingId => {
+        const offender = offenders.find(off => off.bookingId === bookingId)
+        return offender.offenderIndex
+      }
+
+      response.data.map(offender => {
+        const { paid, attended, bookingId } = offender
+        const offenderAttendanceData = { paid, attended, pay: attended && paid }
+        try {
+          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
+        } catch (error) {
+          handleError(error)
+        }
+        return offender
+      })
+    }
+
+    const batchControls = (
+      <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
+        {isTodayOrAfter(date) && (
+          <button
+            id="allAttendedButton"
+            className="button greyButton margin-bottom"
+            type="button"
+            onClick={attendAllNonAssigned}
+          >
+            All non-selected prisoners have attended
+          </button>
+        )}
+      </div>
+    )
+
     const headings = () => (
       <tr>
         <th className="straight width15">
@@ -165,31 +205,6 @@ class ResultsActivity extends Component {
         )
       }
       return <td className="row-gutters">{mainEventDescription}</td>
-    }
-
-    const unpaidOffenders = new Set()
-
-    const attendAllNonAssigned = async () => {
-      const offenders = [...unpaidOffenders]
-      const response = await axios.post('/api/attendance/batch', {
-        offenders,
-      })
-
-      const findOffenderIndexByBookingId = bookingId => {
-        const offender = offenders.find(off => off.bookingId === bookingId)
-        return offender.offenderIndex
-      }
-
-      response.data.map(offender => {
-        const { paid, attended, bookingId } = offender
-        const offenderAttendanceData = { paid, attended, pay: attended && paid }
-        try {
-          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
-        } catch (error) {
-          handleError(error)
-        }
-        return offender
-      })
     }
 
     const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
@@ -344,14 +359,7 @@ class ResultsActivity extends Component {
           {buttons}
         </form>
 
-        <button
-          id="allAttendedButton"
-          className="button greyButton margin-bottom"
-          type="button"
-          onClick={attendAllNonAssigned}
-        >
-          Select all as attended
-        </button>
+        {batchControls}
         <ManageResults>
           <SortLov
             sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
