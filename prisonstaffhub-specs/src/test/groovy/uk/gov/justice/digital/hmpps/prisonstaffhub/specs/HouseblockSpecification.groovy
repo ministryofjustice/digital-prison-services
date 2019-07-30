@@ -144,6 +144,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         def texts = tableRows*.text()
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         texts[2].contains("Balog, Eugene A-1-2 A1234AB")
+        texts[3].contains("Not Recorded")
 
         when: "I go to the search page afresh"
         browser.to SearchPage
@@ -327,12 +328,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         at HouseblockPage
 
         tableRows[1].find('td')[attendanceColumn].text() == 'Received'
-        tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
-
-        def payRadios = $(name: "pay").module(RadioButtons)
-        payRadios.checked == 'no'
-        absentReasonForm.form.absentReason == 'UnacceptableAbsence'
-        absentReasonForm.form.comments == 'Never turned up.'
+        tableRows[3].find('td')[attendanceColumn].text() == 'Unacceptable - IEP'
     }
 
     def "should mark an offender as not attended with absent reason"() {
