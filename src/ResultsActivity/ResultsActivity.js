@@ -8,9 +8,8 @@ import axios from 'axios'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import Link from '@govuk-react/link'
-import { Link as RouterLink } from 'react-router-dom'
 import { FONT_SIZE } from '@govuk-react/constants'
-import { linkOnClick } from '../helpers'
+import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
@@ -43,6 +42,13 @@ const StackedTotals = styled.div`
 `
 const BatchLink = styled(Link)`
   font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
+  }
 `
 
 class ResultsActivity extends Component {
@@ -144,19 +150,21 @@ class ResultsActivity extends Component {
       })
     }
 
-    const checkAllLockedStatus = () => {
+    const checkAllLockedStatus = activities => {
       let lockedCases = []
-      const filtered = activityData.filter(x => x.attendanceInfo)
-      lockedCases = filtered.filter(off => off.attendanceInfo.locked === true)
-      if (lockedCases.length === activityData.length) return true
+      // check if they have attendance info
+      const filtered = activities.filter(activity => activity.attendanceInfo)
+      // if they do filter out the locked ones
+      lockedCases = filtered.filter(activity => activity.attendanceInfo.locked === true)
+      if (lockedCases.length === activities.length) return true
       return false
     }
 
     const batchControls = (
       <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {!checkAllLockedStatus() &&
+        {!checkAllLockedStatus(activityData) &&
           activityData.length !== totalPaid && (
-            <BatchLink as={RouterLink} {...linkOnClick(attendAllNonAssigned)} id="allAttendedButton">
+            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
               All non-selected prisoners have attended
             </BatchLink>
           )}
