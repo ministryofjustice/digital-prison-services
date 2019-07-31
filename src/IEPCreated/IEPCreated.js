@@ -8,7 +8,7 @@ import Button from '@govuk-react/button'
 
 import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
 import { userType } from '../types'
-import { properCaseName, pascalToString } from '../utils'
+import { properCaseName, pascalToString, stripAgencyPrefix } from '../utils'
 
 const IEPCreatedMessage = styled.div`
   @media print {
@@ -24,7 +24,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
       offenderNo: offender.offenderNo,
       offenderName: `${properCaseName(offender.firstName)} ${properCaseName(offender.lastName)}`,
       caseNote: `${pascalToString(iepValues.absentReason)}: ${iepValues.comments}`,
-      cellLocation: offender.cellLocation,
+      cellLocation: stripAgencyPrefix(offender.cellLocation, user.activeCaseLoadId),
       activityName,
     }
 
