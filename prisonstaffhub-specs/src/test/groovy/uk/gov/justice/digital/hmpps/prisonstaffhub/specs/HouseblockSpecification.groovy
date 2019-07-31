@@ -329,6 +329,12 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         tableRows[1].find('td')[attendanceColumn].text() == 'Received'
         tableRows[3].find('td')[attendanceColumn].text() == 'Unacceptable - IEP'
+        tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
+
+        def payRadios = $(name: "pay").module(RadioButtons)
+        payRadios.checked == 'no'
+        absentReasonForm.form.absentReason == 'UnacceptableAbsence'
+        absentReasonForm.form.comments == 'Never turned up.'
     }
 
     def "should mark an offender as not attended with absent reason"() {
