@@ -7,8 +7,8 @@ import HintText from '@govuk-react/hint-text'
 import Button from '@govuk-react/button'
 
 import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
-import IEPSlip from '../IEPSlip'
 import { userType } from '../types'
+import { properCaseName, pascalToString } from '../utils'
 
 const IEPCreatedMessage = styled.div`
   @media print {
@@ -17,11 +17,27 @@ const IEPCreatedMessage = styled.div`
 `
 
 const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
-  const print = () => window.print()
-  const cancelPrint = () => showModal(false)
-  const isMobile = /Mobi|Android/i.test(navigator.userAgent)
+  const setPrintIepData = () => {
+    const iepSlipData = {
+      raisedBy: user.name,
+      issuedBy: user.name,
+      offenderNo: offender.offenderNo,
+      offenderName: `${properCaseName(offender.firstName)} ${properCaseName(offender.lastName)}`,
+      caseNote: `${pascalToString(iepValues.absentReason)}: ${iepValues.comments}`,
+      cellLocation: offender.cellLocation,
+      activityName,
+    }
 
-  window.onafterprint = () => cancelPrint()
+    localStorage.setItem('iepSlip', JSON.stringify(iepSlipData))
+  }
+
+  const handlePrint = () => {
+    setPrintIepData()
+    window.open('/iep-slip', '_blank')
+    showModal(false)
+  }
+
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent)
 
   return (
     <div data-qa="iep-created">
@@ -32,22 +48,21 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
             <Fragment>
               <Paragraph>Do you want to print an IEP warning slip?</Paragraph>
               <HintText>You can also print this later from their case notes.</HintText>
-              <Button mb={0} onClick={print}>
+              <Button onClick={handlePrint} mb={0}>
                 Yes - print slip
               </Button>
-              <ButtonCancel mb={0} onClick={cancelPrint}>
+              <ButtonCancel mb={0} onClick={() => showModal(false)}>
                 No
               </ButtonCancel>
             </Fragment>
           )}
           {isMobile && (
-            <Button mb={0} onClick={cancelPrint}>
+            <Button mb={0} onClick={() => showModal(false)}>
               Close
             </Button>
           )}
         </ButtonContainer>
       </IEPCreatedMessage>
-      <IEPSlip offender={offender} iepValues={iepValues} activityName={activityName} user={user} />
     </div>
   )
 }
