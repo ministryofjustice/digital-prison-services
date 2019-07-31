@@ -27,14 +27,17 @@ const props = {
 let wrapper
 
 describe('<IEPCreated />', () => {
+  const setStorageSpy = jest.spyOn(Storage.prototype, 'setItem')
   wrapper = shallow(<IEPCreated {...props} />)
 
-  it('should print when clicking print', () => {
+  it('should handle clicking print', () => {
     wrapper
       .find(Button)
       .props()
       .onClick()
-    expect(global.print).toHaveBeenCalled()
+    expect(global.open).toHaveBeenCalled()
+    expect(props.showModal).toHaveBeenCalledWith(false)
+    expect(setStorageSpy).toHaveBeenCalled()
   })
 
   it('should close the IEP created modal when cancelled', () => {

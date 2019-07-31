@@ -2,7 +2,8 @@ import 'babel-jest'
 import React from 'react'
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { FooterContainer } from 'new-nomis-shared-components'
 import App from './App'
 
 jest.mock('./Spinner/index', () => '')
@@ -130,8 +131,11 @@ describe('App component', () => {
   })
 
   it('should pass through correct props to the footer container', () => {
-    const component = shallow(<App {...props} store={store} />)
+    const component = mount(<App {...props} store={store} />)
 
-    expect(component.find({ feedbackEmail: props.config.mailTo }).prop('prisonStaffHubUrl')).toEqual('/')
+    expect(component.find(FooterContainer).props()).toEqual({
+      feedbackEmail: props.config.mailTo,
+      prisonStaffHubUrl: '/',
+    })
   })
 })
