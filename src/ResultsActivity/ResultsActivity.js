@@ -45,12 +45,12 @@ const BatchLink = styled(Link)`
   color: ${LINK_COLOUR};
   cursor: pointer;
   text-decoration: underline;
+  text-align: right;
 
   &:hover {
     color: ${LINK_HOVER_COLOUR};
   }
 `
-
 const HideForPrint = styled.span`
   @media print {
     display: none;
@@ -60,6 +60,11 @@ const HideForPrint = styled.span`
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = { payingAll: false }
   }
 
   componentWillUnmount() {
@@ -134,6 +139,7 @@ class ResultsActivity extends Component {
     const unpaidOffenders = new Set()
 
     const attendAllNonAssigned = async () => {
+      this.setState({ payingAll: true })
       const offenders = [...unpaidOffenders]
       const response = await axios.post('/api/attendance/batch', {
         offenders,
@@ -154,26 +160,34 @@ class ResultsActivity extends Component {
         }
         return offender
       })
+      this.setState({ payingAll: false })
     }
 
-    const checkAllLockedStatus = activities => {
-      let lockedCases = []
-      // check if they have attendance info
-      const filtered = activities.filter(activity => activity.attendanceInfo)
-      // if they do filter out the locked ones
-      lockedCases = filtered.filter(activity => activity.attendanceInfo.locked === true)
-      if (lockedCases.length === activities.length) return true
-      return false
+    const showAttendAllControl = (activities, paidList) => {
+      let showControls = true
+      if (activityData.length === paidList) showControls = false
+
+      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
+      if (attendanceInfo.length === activities.length) showControls = false
+
+      const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
+      if (lockedCases.length === activities.length) showControls = false
+
+      return showControls
     }
+
+    const { payingAll } = this.state
 
     const batchControls = (
       <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {!checkAllLockedStatus(activityData) &&
-          activityData.length !== totalPaid && (
+        {showAttendAllControl(activityData, totalPaid) &&
+          (payingAll ? (
+            'Marking all as attended...'
+          ) : (
             <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
               All non-selected prisoners have attended
             </BatchLink>
-          )}
+          ))}
       </div>
     )
 
