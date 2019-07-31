@@ -42,6 +42,12 @@ const StackedTotals = styled.div`
   flex-direction: column;
 `
 
+const HideForPrint = styled.span`
+  @media print {
+    display: none;
+  }
+`
+
 export const PrintButton = styled(Button)`
   min-width: 8em;
   img {
@@ -362,7 +368,9 @@ class ResultsHouseblock extends Component {
           />
           <StackedTotals>
             <TotalResults label="Prisoners listed:" totalResults={houseblockData.length} />
-            <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+            <HideForPrint>
+              <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+            </HideForPrint>
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
