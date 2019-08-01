@@ -188,7 +188,7 @@ class ResultsActivity extends Component {
             'Marking all as attended...'
           ) : (
             <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-              Attend remaining prisoners
+              {`Attend all ${totalPaid !== 0 ? 'remaining' : ''} prisoners`}
             </BatchLink>
           ))}
       </div>
@@ -474,7 +474,7 @@ ResultsActivity.propTypes = {
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
-  userRoles: PropTypes.string.isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 
 const mapStateToProps = state => ({
