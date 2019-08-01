@@ -280,7 +280,8 @@ class ResultsHouseblock extends Component {
           cellLocation,
           attendanceInfo,
         }
-        const isReceived = attendanceInfo && attendanceInfo.pay
+        const isReceived = attendanceInfo && attendanceInfo.pay && !attendanceInfo.locked
+        const isPaid = attendanceInfo && attendanceInfo.pay && attendanceInfo.locked
 
         return (
           <tr key={offenderNo} className="row-gutters">
@@ -321,16 +322,18 @@ class ResultsHouseblock extends Component {
               render={() => (
                 <Fragment>
                   {isReceived && <td className="no-print">Received</td>}
-                  {!isReceived && (
-                    <PayOptions
-                      offenderDetails={offenderDetails}
-                      updateOffenderAttendance={updateOffenderAttendance}
-                      showModal={showModal}
-                      date={date}
-                      activityName={activityName}
-                      noPay
-                    />
-                  )}
+                  {isPaid && <td className="no-print">Paid</td>}
+                  {!isReceived &&
+                    !isPaid && (
+                      <PayOptions
+                        offenderDetails={offenderDetails}
+                        updateOffenderAttendance={updateOffenderAttendance}
+                        showModal={showModal}
+                        date={date}
+                        activityName={activityName}
+                        noPay
+                      />
+                    )}
                 </Fragment>
               )}
               fallbackRender={() => <></>}

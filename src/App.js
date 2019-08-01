@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
@@ -50,6 +50,7 @@ import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersCo
 import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
+import IEPSlipContainer from './IEPSlipContainer'
 
 const axios = require('axios')
 
@@ -508,40 +509,56 @@ class App extends React.Component {
 
     return (
       <Router>
-        <div className="content">
-          <ScrollToTop>
-            <Notifications />
-            <Route
-              render={({ location, history }) => {
-                if (config && config.googleAnalyticsId) {
-                  ReactGA.pageview(location.pathname)
-                }
-                const locationRequiresRedirectWhenCaseloadChanges = !(
-                  location.pathname.includes('global-search-results') ||
-                  location.pathname.includes('establishment-roll') ||
-                  location.pathname.includes('content')
-                )
+        <Switch>
+          <Route
+            exact
+            path="/iep-slip"
+            render={({ location }) => {
+              if (config && config.googleAnalyticsId) {
+                ReactGA.pageview(location.pathname)
+              }
+              return <IEPSlipContainer />
+            }}
+          />
+          <Route
+            render={() => (
+              <div className="content">
+                <ScrollToTop>
+                  <Notifications />
+                  <Route
+                    render={({ location, history }) => {
+                      if (config && config.googleAnalyticsId) {
+                        ReactGA.pageview(location.pathname)
+                      }
+                      const locationRequiresRedirectWhenCaseloadChanges = !(
+                        location.pathname.includes('global-search-results') ||
+                        location.pathname.includes('establishment-roll') ||
+                        location.pathname.includes('content')
+                      )
 
-                return (
-                  <Header
-                    homeLink={config.notmEndpointUrl}
-                    title={title}
-                    logoText="HMPPS"
-                    user={user}
-                    switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
-                    menuOpen={menuOpen}
-                    setMenuOpen={boundSetMenuOpen}
-                    caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
-                    history={history}
+                      return (
+                        <Header
+                          homeLink={config.notmEndpointUrl}
+                          title={title}
+                          logoText="HMPPS"
+                          user={user}
+                          switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
+                          menuOpen={menuOpen}
+                          setMenuOpen={boundSetMenuOpen}
+                          caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
+                          history={history}
+                        />
+                      )
+                    }}
                   />
-                )
-              }}
-            />
-            {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
-            {innerContent}
-            <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
-          </ScrollToTop>
-        </div>
+                  {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
+                  {innerContent}
+                  <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
+                </ScrollToTop>
+              </div>
+            )}
+          />
+        </Switch>
         <ModalContainer isOpen={modalActive} showModal={setShowModalDispatch}>
           {modalContent}
         </ModalContainer>
