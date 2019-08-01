@@ -144,7 +144,9 @@ class ResultsActivity extends Component {
     const attendAllNonAssigned = async () => {
       try {
         this.setState({ payingAll: true })
+
         const offenders = [...unpaidOffenders]
+
         const response = await axios.post('/api/attendance/batch', {
           offenders,
         })
@@ -154,12 +156,15 @@ class ResultsActivity extends Component {
           return offender.offenderIndex
         }
 
-        response.data.map(offender => {
+        const paidOffenders = response.data.map(offender => {
           const { paid, attended, bookingId } = offender
           const offenderAttendanceData = { paid, attended, pay: attended && paid }
+
           setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
+
           return offender
         })
+
         this.setState({ payingAll: false })
       } catch (error) {
         handleError(error)
@@ -188,7 +193,7 @@ class ResultsActivity extends Component {
             'Marking all as attended...'
           ) : (
             <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-              {`Attend all ${totalPaid !== 0 ? 'remaining' : ''} prisoners`}
+              {`Attend all${totalPaid !== 0 ? ' remaining ' : ' '}prisoners`}
             </BatchLink>
           ))}
       </div>
