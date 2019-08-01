@@ -40,15 +40,23 @@ const attendanceFactory = whereaboutsApi => {
     const offenderCount = body.offenders.length
     log.info(`Number of offenders to be paid ${offenderCount}`)
 
-    return Promise.all(
-      body.offenders.map(offender => {
-        const { eventDate, ...rest } = offender
-        const date = eventDate === 'Today' ? moment().format('DD/MM/YYYY') : eventDate
-        const offenderDetails = { ...rest, eventDate: switchDateFormat(date) }
+    const { eventLocationId, period, eventDate, prisonId } = body.offenders[0]
+    const bookingActivities = body.offenders.map(offender => ({
+      bookingId: offender.bookingId,
+      activityId: offender.eventId,
+    }))
 
-        return whereaboutsApi.postAttendance(context, offenderDetails)
-      })
-    )
+    const payload = {
+      bookingActivities,
+      eventLocationId,
+      period,
+      eventDate: eventDate === 'Today' ? moment().format('YYYY-MM-DD') : switchDateFormat(eventDate),
+      prisonId,
+    }
+
+    const response = await whereaboutsApi.attendAll(context, payload)
+    console.error(response)
+    return response
   }
 
   const getAbsenceReasons = async context => {

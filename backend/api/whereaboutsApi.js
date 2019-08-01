@@ -19,12 +19,15 @@ const whereaboutsApiFactory = client => {
 
   const getAbsenceReasons = context => get(context, '/attendance/absence-reasons')
 
+  const attendAll = (context, body) => post(context, '/attendance/attend-all', body)
+
   return {
     getAttendance,
     getAttendanceForBookings,
     postAttendance,
     putAttendance,
     getAbsenceReasons,
+    attendAll,
   }
 }
 

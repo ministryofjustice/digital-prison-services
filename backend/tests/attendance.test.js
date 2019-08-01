@@ -97,7 +97,7 @@ describe('Attendence and Pay controller', async () => {
 
   describe('batchUpdateAttendance', () => {
     beforeEach(() => {
-      whereaboutsApi.postAttendance = jest.fn()
+      whereaboutsApi.attendAll = jest.fn()
     })
 
     const offenders = [
@@ -110,6 +110,7 @@ describe('Attendence and Pay controller', async () => {
         paid: true,
         period: 'AM',
         prisonId: 'LEI',
+        eventDate: '29/06/2019',
       },
       {
         offenderNo: 345,
@@ -120,31 +121,43 @@ describe('Attendence and Pay controller', async () => {
         paid: true,
         period: 'AM',
         prisonId: 'LEI',
+        eventDate: '29/06/2019',
       },
       {
         offenderNo: 678,
-        bookingId: 1,
+        bookingId: 3,
         eventId: 123,
         eventLocationId: 123,
         attended: true,
         paid: true,
         period: 'AM',
         prisonId: 'LEI',
+        eventDate: '29/06/2019',
       },
     ]
 
-    it('should call postAttendance for each offender', async () => {
+    it('should call attendAll with list of valid offenders', async () => {
       await batchUpdateAttendance(context, { offenders })
-      expect(whereaboutsApi.postAttendance).toHaveBeenCalledTimes(3)
-      expect(whereaboutsApi.postAttendance.mock.calls[1]).toEqual([
+      expect(whereaboutsApi.attendAll).toHaveBeenCalledTimes(1)
+      expect(whereaboutsApi.attendAll.mock.calls[0]).toEqual([
         context,
         {
-          offenderNo: 345,
-          bookingId: 2,
-          eventId: 123,
+          bookingActivities: [
+            {
+              activityId: 123,
+              bookingId: 1,
+            },
+            {
+              activityId: 123,
+              bookingId: 2,
+            },
+            {
+              activityId: 123,
+              bookingId: 3,
+            },
+          ],
+          eventDate: '2019-06-29',
           eventLocationId: 123,
-          attended: true,
-          paid: true,
           period: 'AM',
           prisonId: 'LEI',
         },
