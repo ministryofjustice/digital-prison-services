@@ -55,7 +55,6 @@ const attendanceFactory = whereaboutsApi => {
     }
 
     const response = await whereaboutsApi.attendAll(context, payload)
-    console.error(response)
     return response
   }
 

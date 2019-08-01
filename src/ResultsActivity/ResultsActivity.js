@@ -142,28 +142,28 @@ class ResultsActivity extends Component {
     const unpaidOffenders = new Set()
 
     const attendAllNonAssigned = async () => {
-      this.setState({ payingAll: true })
-      const offenders = [...unpaidOffenders]
-      const response = await axios.post('/api/attendance/batch', {
-        offenders,
-      })
+      try {
+        this.setState({ payingAll: true })
+        const offenders = [...unpaidOffenders]
+        const response = await axios.post('/api/attendance/batch', {
+          offenders,
+        })
 
-      const findOffenderIndexByBookingId = bookingId => {
-        const offender = offenders.find(off => off.bookingId === bookingId)
-        return offender.offenderIndex
-      }
-
-      response.data.map(offender => {
-        const { paid, attended, bookingId } = offender
-        const offenderAttendanceData = { paid, attended, pay: attended && paid }
-        try {
-          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
-        } catch (error) {
-          handleError(error)
+        const findOffenderIndexByBookingId = bookingId => {
+          const offender = offenders.find(off => off.bookingId === bookingId)
+          return offender.offenderIndex
         }
-        return offender
-      })
-      this.setState({ payingAll: false })
+
+        response.data.map(offender => {
+          const { paid, attended, bookingId } = offender
+          const offenderAttendanceData = { paid, attended, pay: attended && paid }
+          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
+          return offender
+        })
+        this.setState({ payingAll: false })
+      } catch (error) {
+        handleError(error)
+      }
     }
 
     const showAttendAllControl = (activities, paidList) => {

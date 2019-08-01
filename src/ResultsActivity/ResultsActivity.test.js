@@ -143,6 +143,7 @@ const props = {
   handlePrint: jest.fn(),
   handlePeriodChange: jest.fn(),
   handleDateChange: jest.fn(),
+  attendAllNonAssigned: jest.fn(),
   getActivityList: jest.fn(),
   handleError: jest.fn(),
   setActivityOffenderAttendance: jest.fn(),
@@ -428,7 +429,7 @@ describe('Offender activity list results component', () => {
   })
 
   it('should display pay all button if there are outstanding prisoners to pay', () => {
-    const today = 'Today'
+    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalPaid={3} activityData={response} date={today} period="AM" />
     )
@@ -438,12 +439,12 @@ describe('Offender activity list results component', () => {
   })
 
   it('should not display pay all button if all prisoners are paid', () => {
-    const today = 'Today'
+    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalPaid={4} activityData={response} date={today} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
-    expect(button.length).toEqual(0)
+    const attendAllButton = component.find('#allAttendedButton')
+    expect(attendAllButton.length).toEqual(0)
   })
 })
