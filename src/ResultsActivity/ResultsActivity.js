@@ -4,6 +4,7 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
+import { connect } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import classNames from 'classnames'
@@ -34,7 +35,6 @@ const ManageResults = styled.div`
     justify-content: flex-end;
   }
 `
-
 const StackedTotals = styled.div`
   display: flex;
   flex-direction: column;
@@ -90,7 +90,10 @@ class ResultsActivity extends Component {
       activityName,
       updateAttendanceEnabled,
       totalPaid,
+      userRoles,
     } = this.props
+
+    const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -185,7 +188,7 @@ class ResultsActivity extends Component {
             'Marking all as attended...'
           ) : (
             <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-              All non-selected prisoners have attended
+              Attend remaining prisoners
             </BatchLink>
           ))}
       </div>
@@ -419,7 +422,7 @@ class ResultsActivity extends Component {
             <HideForPrint>
               <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
             </HideForPrint>
-            {batchControls}
+            {activityHubUser && batchControls}
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
@@ -471,9 +474,14 @@ ResultsActivity.propTypes = {
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
+  userRoles: PropTypes.string.isRequired,
 }
+
+const mapStateToProps = state => ({
+  userRoles: state.app.user.roles,
+})
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)
 
 export { ResultsActivity }
-export default ResultsActivityWithRouter
+export default connect(mapStateToProps)(ResultsActivityWithRouter)

@@ -158,6 +158,7 @@ const props = {
   raiseAnalyticsEvent: jest.fn(),
   showModal: jest.fn(),
   activityName: 'Activity name',
+  userRoles: ['ACTIVITY_HUB'],
 }
 
 describe('Offender activity list results component', () => {
@@ -418,7 +419,6 @@ describe('Offender activity list results component', () => {
     const component = shallow(
       <ResultsActivity {...props} totalPaid={1} activityData={response} date="07/06/2019" period="AM" />
     )
-
     expect(
       component
         .find('TotalResults')
