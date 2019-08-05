@@ -36,6 +36,28 @@ const attendanceFactory = whereaboutsApi => {
     return response
   }
 
+  const batchUpdateAttendance = async (context, body) => {
+    const offenderCount = body.offenders.length
+    log.info(`Number of offenders to be paid ${offenderCount}`)
+
+    const { eventLocationId, period, eventDate, prisonId } = body.offenders[0]
+    const bookingActivities = body.offenders.map(offender => ({
+      bookingId: offender.bookingId,
+      activityId: offender.eventId,
+    }))
+
+    const payload = {
+      bookingActivities,
+      eventLocationId,
+      period,
+      eventDate: eventDate === 'Today' ? moment().format('YYYY-MM-DD') : switchDateFormat(eventDate),
+      prisonId,
+    }
+
+    const response = await whereaboutsApi.attendAll(context, payload)
+    return response
+  }
+
   const getAbsenceReasons = async context => {
     const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
     const { paidReasons, unpaidReasons, triggersIEPWarning } = absenceReasons
@@ -61,6 +83,7 @@ const attendanceFactory = whereaboutsApi => {
 
   return {
     updateAttendance,
+    batchUpdateAttendance,
     getAbsenceReasons,
   }
 }
