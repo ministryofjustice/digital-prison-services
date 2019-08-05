@@ -42,7 +42,7 @@ Array [
     </ul>
   </div>,
   <table
-    className="row-gutters sc-kpOJdX gddiGV"
+    className="row-gutters sc-dxgOiQ bQjqZo"
   >
     <thead>
       <tr>
@@ -341,7 +341,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
      
   </span>
   <table
-    className="row-gutters sc-kpOJdX gddiGV"
+    className="row-gutters sc-dxgOiQ bQjqZo"
   >
     <thead>
       <tr>
@@ -611,7 +611,7 @@ exports[`Add appointment form Form should render correctly 1`] = `
     </tbody>
   </table>
   <div
-    className="sc-ckVGcZ iRIxbk"
+    className="sc-jKJlTe hcxpRe"
   >
     <button
       className="sc-bdVaJa jyfNnr"

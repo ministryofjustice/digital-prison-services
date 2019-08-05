@@ -173,13 +173,15 @@ class ResultsActivity extends Component {
 
     const showAttendAllControl = (activities, paidList) => {
       let showControls = true
-      if (activityData.length === paidList) showControls = false
-
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
-      if (attendanceInfo.length === activities.length) showControls = false
-
       const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
-      if (lockedCases.length === activities.length) showControls = false
+
+      if (
+        activityData.length === paidList ||
+        attendanceInfo.length === activities.length ||
+        lockedCases.length === activities.length
+      )
+        showControls = false
 
       return showControls
     }
