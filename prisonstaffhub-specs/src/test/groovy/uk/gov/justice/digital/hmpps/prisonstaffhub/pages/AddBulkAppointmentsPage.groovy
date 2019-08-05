@@ -3,9 +3,6 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
-import java.time.LocalDate
-import java.time.format.TextStyle
-
 class AddBulkAppointmentsPage extends Page {
 
     static url = "/add-bulk-appointments"
@@ -47,12 +44,12 @@ class AddBulkAppointmentsPage extends Page {
         form.click()
     }
 
-    void enterAppointmentDetails(LocalDate date) {
+    void enterAppointmentDetails(year) {
         form.appointmentType = "ACTI"
         form.location = 1
         form.comments = "test comment"
 
-        setDatePicker(date.getYear().toString(), date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH), date.getDayOfMonth().toString())
+        setDatePicker(year, 'Aug', '1')
 
         setStartTime("10", "10")
 

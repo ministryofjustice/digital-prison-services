@@ -48,7 +48,7 @@ class AddBulkAppointmentsSpecification extends BrowserReportingSpec {
 
         when: "I fill out the appointments details"
         at AddBulkAppointmentsPage
-        enterAppointmentDetails(LocalDate.now().plusDays(10))
+        enterAppointmentDetails(LocalDate.now().year.toString())
 
         and: "I import offenders via csv file"
         selectFile()
