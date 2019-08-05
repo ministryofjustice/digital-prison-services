@@ -484,11 +484,7 @@ ResultsActivity.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 
-const mapStateToProps = state => ({
-  userRoles: state.app.user.roles,
-})
-
 const ResultsActivityWithRouter = withRouter(ResultsActivity)
 
 export { ResultsActivity }
-export default connect(mapStateToProps)(ResultsActivityWithRouter)
+export default ResultsActivityWithRouter
