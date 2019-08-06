@@ -13,6 +13,7 @@ const factory = ({
   bulkAppointmentsService,
   csvParserService,
   offenderService,
+  offenderActivitesService,
 }) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
@@ -167,6 +168,12 @@ const factory = ({
     res.end()
   })
 
+  const getMissingPrisoners = asyncMiddleware(async (req, res) => {
+    const { agencyId, date, timeSlot } = req.query
+    const viewModel = await offenderActivitesService.getMissingPrisoners(res.locals, agencyId, date, timeSlot)
+    res.json(viewModel)
+  })
+
   return {
     getActivityList,
     getAdjudications,
@@ -190,6 +197,7 @@ const factory = ({
     bulkAppointmentsCsvTemplate,
     changeIepLevel,
     getPossibleLevels,
+    getMissingPrisoners,
   }
 }
 
