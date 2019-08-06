@@ -1,6 +1,6 @@
 import React from 'react'
 import testRenderer from 'react-test-renderer'
-import IepHistory from './IepHistory'
+import CurrentIepLevel from './CurrentIepLevel'
 
 const initialState = {
   iepHistory: {
@@ -10,6 +10,7 @@ const initialState = {
     nextReviewDate: '15/08/2018',
     establishments: [{ agencyId: 'LEI', description: 'Leeds' }],
     levels: ['Standard'],
+    userCanMaintainIep: false,
     results: [
       {
         bookingId: -1,
@@ -26,7 +27,7 @@ const initialState = {
   },
 }
 
-describe('IEP history', () => {
+describe('Current IEP level', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
@@ -35,12 +36,24 @@ describe('IEP history', () => {
     store.dispatch = jest.fn()
     history.push = jest.fn()
     history.replace = jest.fn()
-    store.getState.mockReturnValue(initialState)
   })
 
-  it('should render the iep history table correctly', () => {
-    const wrapper = testRenderer.create(<IepHistory store={store} />).toJSON()
+  describe('should render the current IEP level correctly', () => {
+    it("when user can't maintain IEP", () => {
+      store.getState.mockReturnValue(initialState)
+      const wrapper = testRenderer.create(<CurrentIepLevel history={history} store={store} />).toJSON()
 
-    expect(wrapper).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
+    })
+
+    it('when user can maintain IEP', () => {
+      store.getState.mockReturnValue({
+        ...initialState,
+        iepHistory: { ...initialState.iepHistory, userCanMaintainIep: true },
+      })
+      const wrapper = testRenderer.create(<CurrentIepLevel history={history} store={store} />).toJSON()
+
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 })

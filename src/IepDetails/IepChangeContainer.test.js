@@ -11,6 +11,7 @@ const initialState = {
     nextReviewDate: '15/08/2018',
     establishments: [{ agencyId: 'LEI', description: 'Leeds' }],
     levels: ['Standard'],
+    userCanMaintainIep: true,
     results: [
       {
         bookingId: -1,
@@ -27,7 +28,6 @@ const initialState = {
   },
   app: {
     user: {
-      roles: ['MAINTAIN_IEP'],
       currentCaseLoadId: 'LEI',
     },
   },
@@ -59,10 +59,11 @@ describe('IEP change container', () => {
     store.dispatch = jest.fn()
     history.push = jest.fn()
     history.replace = jest.fn()
-    store.getState.mockReturnValue(initialState)
   })
 
   it('should render the iep history table correctly', () => {
+    store.getState.mockReturnValue(initialState)
+
     const wrapper = shallow(
       <IepChangeContainer
         store={store}
@@ -76,7 +77,31 @@ describe('IEP change container', () => {
 
     const page = wrapper.dive().find(OffenderPage)
 
+    expect(page.length).toBe(1)
     expect(page.getElement().props.title()).toBe('Change IEP level')
     expect(page.find('Connect(IepChangeForm)').length).toBe(1)
+  })
+
+  it('should take the user back to iep history if no privileges', () => {
+    store.getState.mockReturnValue({
+      ...initialState,
+      iepHistory: { ...initialState.iepHistory, userCanMaintainIep: false },
+    })
+
+    const wrapper = shallow(
+      <IepChangeContainer
+        store={store}
+        handleError={jest.fn()}
+        setLoadedDispatch={jest.fn()}
+        resetErrorDispatch={jest.fn()}
+        raiseAnalyticsEvent={jest.fn()}
+        history={history}
+      />
+    )
+
+    const page = wrapper.dive().find(OffenderPage)
+
+    expect(page.length).toBe(0)
+    expect(page.find('Connect(IepChangeForm)').length).toBe(0)
   })
 })
