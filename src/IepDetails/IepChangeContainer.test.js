@@ -11,7 +11,6 @@ const initialState = {
     nextReviewDate: '15/08/2018',
     establishments: [{ agencyId: 'LEI', description: 'Leeds' }],
     levels: ['Standard'],
-    userCanMaintainIep: true,
     results: [
       {
         bookingId: -1,
@@ -80,28 +79,5 @@ describe('IEP change container', () => {
     expect(page.length).toBe(1)
     expect(page.getElement().props.title()).toBe('Change IEP level')
     expect(page.find('Connect(IepChangeForm)').length).toBe(1)
-  })
-
-  it('should take the user back to iep history if no privileges', () => {
-    store.getState.mockReturnValue({
-      ...initialState,
-      iepHistory: { ...initialState.iepHistory, userCanMaintainIep: false },
-    })
-
-    const wrapper = shallow(
-      <IepChangeContainer
-        store={store}
-        handleError={jest.fn()}
-        setLoadedDispatch={jest.fn()}
-        resetErrorDispatch={jest.fn()}
-        raiseAnalyticsEvent={jest.fn()}
-        history={history}
-      />
-    )
-
-    const page = wrapper.dive().find(OffenderPage)
-
-    expect(page.length).toBe(0)
-    expect(page.find('Connect(IepChangeForm)').length).toBe(0)
   })
 })

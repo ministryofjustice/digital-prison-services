@@ -85,21 +85,7 @@ class IepChangeContainer extends Component {
   }
 
   render() {
-    const {
-      offenderNo,
-      handleError,
-      setLoadedDispatch,
-      currentIepLevel,
-      offenderDetails,
-      userCanMaintainIep,
-      levels,
-      history,
-    } = this.props
-
-    if (!userCanMaintainIep) {
-      history.push(`/offenders/${offenderNo}/iep-details`)
-      return <div />
-    }
+    const { offenderNo, handleError, setLoadedDispatch, currentIepLevel, offenderDetails, levels } = this.props
 
     return (
       <OffenderPage
@@ -143,7 +129,6 @@ IepChangeContainer.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,
-  userCanMaintainIep: PropTypes.bool.isRequired,
   levels: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -168,7 +153,6 @@ const mapStateToProps = state => ({
   error: state.app.error,
   currentIepLevel: state.iepHistory.currentIepLevel,
   offenderDetails: state.offenderDetails,
-  userCanMaintainIep: state.iepHistory.userCanMaintainIep,
   activeCaseLoadId: state.app.user.activeCaseLoadId,
   levels: state.iepLevels.levels,
 })
