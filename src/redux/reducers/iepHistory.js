@@ -22,7 +22,7 @@ export default function iepHistory(state = initialState, action) {
       return {
         ...state,
         ...action.results,
-        userCanMaintainIep: caseLoad !== undefined && roles.includes('MAINTAIN_IEP'),
+        userCanMaintainIep: Boolean(caseLoad && roles.includes('MAINTAIN_IEP')),
       }
     }
     case ActionTypes.SET_IEP_HISTORY_FILTER:
