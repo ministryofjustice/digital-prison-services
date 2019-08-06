@@ -5,6 +5,7 @@ import {
   pascalToString,
   isWithinLastYear,
   isWithinLastWeek,
+  isAfterToday,
   forenameToInitial,
 } from './utils'
 
@@ -87,6 +88,26 @@ describe('isWithinLastWeek()', () => {
 
   it('returns false if date is not within the past week', () => {
     expect(isWithinLastWeek('2/01/2019')).toBe(false)
+  })
+})
+
+describe('isAfterToday()', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
+
+  it('returns false if date is "Today"', () => {
+    expect(isAfterToday('Today')).toBe(false)
+  })
+
+  it('returns false if date is within the past week', () => {
+    expect(isAfterToday('2/01/2019')).toBe(false)
+  })
+
+  it('returns true if date is AFTER day', () => {
+    expect(isAfterToday('14/01/2019')).toBe(true)
+  })
+
+  it('returns true if date is within the next week', () => {
+    expect(isAfterToday('19/01/2019')).toBe(true)
   })
 })
 
