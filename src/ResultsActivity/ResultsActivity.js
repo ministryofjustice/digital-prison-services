@@ -14,6 +14,7 @@ import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
   isTodayOrAfter,
   isAfterToday,
+  isWithinLastWeek,
   getMainEventDescription,
   getHoursMinutes,
   getListSizeClass,
@@ -184,6 +185,7 @@ class ResultsActivity extends Component {
       const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
 
       if (
+        !isWithinLastWeek(date) ||
         isAfterToday(date) ||
         activityData.length === paidList ||
         attendanceInfo.length === activities.length ||
