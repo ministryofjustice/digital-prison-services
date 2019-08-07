@@ -198,8 +198,7 @@ class ResultsActivity extends Component {
 
     const showRemainingButton = activities => {
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
-      if (totalPaid !== 0 || attendanceInfo.length) return true
-      return false
+      return totalPaid !== 0 || attendanceInfo.length
     }
 
     const { payingAll } = this.state
