@@ -11,7 +11,15 @@ import classNames from 'classnames'
 import Link from '@govuk-react/link'
 import { FONT_SIZE } from '@govuk-react/constants'
 import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
-import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
+import {
+  isTodayOrAfter,
+  isAfterToday,
+  isWithinLastWeek,
+  getMainEventDescription,
+  getHoursMinutes,
+  getListSizeClass,
+  getLongDateFormat,
+} from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -177,6 +185,8 @@ class ResultsActivity extends Component {
       const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
 
       if (
+        !isWithinLastWeek(date) ||
+        isAfterToday(date) ||
         activityData.length === paidList ||
         attendanceInfo.length === activities.length ||
         lockedCases.length === activities.length

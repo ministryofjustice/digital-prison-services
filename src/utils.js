@@ -48,6 +48,12 @@ const isTodayOrAfter = date => {
   return searchDate.isSameOrAfter(moment(), 'day')
 }
 
+const isAfterToday = date => {
+  const dayAfter = moment().add(1, 'day')
+  const daysDifference = moment(date, 'DD/MM/YYYY').diff(dayAfter, 'day')
+  return daysDifference >= 0
+}
+
 const isWithinLastYear = date => {
   if (isToday(date)) return true
 
@@ -125,6 +131,7 @@ module.exports = {
   forenameToInitial,
   getHoursMinutes,
   isTodayOrAfter,
+  isAfterToday,
   isWithinLastYear,
   isWithinLastWeek,
   getMainEventDescription,

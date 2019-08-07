@@ -452,6 +452,36 @@ describe('Offender activity list results component', () => {
     expect(attendAllButton.length).toEqual(0)
   })
 
+  it('should not display "Attend all prisoners" button if the date is more than a week in the past', () => {
+    const isMoreThanAWeekOld = moment(new Date()).subtract(8, 'days')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(0)
+  })
+
+  it('should display "Attend all prisoners" button if the date is less than 8 days old', () => {
+    const isInTheLastWeek = moment(new Date()).subtract(6, 'days')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={isInTheLastWeek} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+  })
+
+  it('should not display "Attend all prisoners" button if the date is in the future', () => {
+    const tomorrow = moment(new Date()).add(1, 'days')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={tomorrow} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(0)
+  })
+
   it('should display "Attend all prisoners" button if no prisoners have been paid', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
