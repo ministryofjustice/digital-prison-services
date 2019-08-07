@@ -71,6 +71,7 @@ const getIepDetailsFactory = elite2Api => {
       nextReviewDate,
       currentIepDateTime: iepSummary.iepTime,
       results: filteredResults,
+      offenderAgencyId: bookingDetails.agencyId,
     }
   }
 

@@ -11,6 +11,7 @@ function createIepDetailsReponse() {
     nextReviewDate: '15/08/2018',
     establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
     levels: ['Basic', 'Enhanced', 'Standard'],
+    offenderAgencyId: 'HEI',
     results: [
       {
         bookingId: -1,
@@ -63,6 +64,7 @@ describe('IEP details controller', async () => {
     elite2Api.getDetails.mockReturnValue({
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
+      agencyId: 'HEI',
     })
 
     elite2Api.getStaffDetails.mockReturnValue({
@@ -139,6 +141,7 @@ describe('IEP details controller', async () => {
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
       levels: ['Basic', 'Enhanced', 'Standard'],
+      offenderAgencyId: 'HEI',
       results: [
         {
           bookingId: -1,
@@ -167,6 +170,7 @@ describe('IEP details controller', async () => {
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
       levels: ['Basic', 'Enhanced', 'Standard'],
+      offenderAgencyId: 'HEI',
       results: [
         {
           bookingId: -1,
@@ -195,6 +199,7 @@ describe('IEP details controller', async () => {
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
       levels: ['Basic', 'Enhanced', 'Standard'],
+      offenderAgencyId: 'HEI',
       results: [
         {
           bookingId: -1,
@@ -223,6 +228,7 @@ describe('IEP details controller', async () => {
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
       levels: ['Basic', 'Enhanced', 'Standard'],
+      offenderAgencyId: 'HEI',
       results: [
         {
           bookingId: -1,
@@ -267,6 +273,7 @@ describe('IEP details controller', async () => {
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
       levels: ['Basic', 'Enhanced', 'Standard'],
+      offenderAgencyId: 'HEI',
       results: [
         {
           bookingId: -1,
@@ -333,6 +340,7 @@ describe('IEP details controller', async () => {
       nextReviewDate: '15/08/2018',
       establishments: [{ agencyId: 'HEI', description: 'Hewell' }, { agencyId: 'LEI', description: 'Leeds' }],
       levels: ['Basic', 'Enhanced', 'Standard'],
+      offenderAgencyId: 'HEI',
       results: [
         {
           bookingId: -1,
