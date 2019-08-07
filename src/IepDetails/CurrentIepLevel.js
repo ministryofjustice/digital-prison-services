@@ -5,10 +5,9 @@ import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import Button from '@govuk-react/button'
 import { BLUE } from 'govuk-colours'
-import { Flag } from '../flags'
 import CurrentIepLevelArea from './IepDetails.styles'
 
-const CurrentIepLevel = ({ level, days, nextReviewDate, userRoles, history }) => (
+const CurrentIepLevel = ({ level, days, nextReviewDate, userCanMaintainIep, history }) => (
   <CurrentIepLevelArea className="current-iep">
     <GridRow>
       <GridCol setWidth="one-quarter">
@@ -23,20 +22,14 @@ const CurrentIepLevel = ({ level, days, nextReviewDate, userRoles, history }) =>
         <strong className="label">Date of next review</strong>
         <p>{nextReviewDate}</p>
       </GridCol>
-      {userRoles.includes('MAINTAIN_IEP') && (
-        <Flag
-          name={['iepChangeLinkEnabled']}
-          render={() => (
-            <GridCol setWidth="one-quarter">
-              <div>
-                <Button buttonColour={BLUE} onClick={() => history.push(`iep-details/change-iep`)} data-qa="change-iep">
-                  Change IEP level
-                </Button>
-              </div>
-            </GridCol>
-          )}
-          fallbackRender={() => <></>}
-        />
+      {userCanMaintainIep && (
+        <GridCol setWidth="one-quarter">
+          <div>
+            <Button buttonColour={BLUE} onClick={() => history.push(`iep-details/change-iep`)} data-qa="change-iep">
+              Change IEP level
+            </Button>
+          </div>
+        </GridCol>
       )}
     </GridRow>
   </CurrentIepLevelArea>
@@ -46,10 +39,10 @@ CurrentIepLevel.propTypes = {
   level: PropTypes.string,
   days: PropTypes.string,
   nextReviewDate: PropTypes.string,
-  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
+  userCanMaintainIep: PropTypes.bool.isRequired,
 }
 
 CurrentIepLevel.defaultProps = {
@@ -62,7 +55,7 @@ const mapStateToProps = state => ({
   level: state.iepHistory.currentIepLevel,
   days: state.iepHistory.daysOnIepLevel,
   nextReviewDate: state.iepHistory.nextReviewDate,
-  userRoles: state.app.user.roles,
+  userCanMaintainIep: state.iepHistory.userCanMaintainIep,
 })
 
 export default connect(mapStateToProps)(CurrentIepLevel)

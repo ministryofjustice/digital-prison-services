@@ -1,52 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IEP history should render the current IEP level correctly 1`] = `
-<div
-  className="current-iep sc-VigVT dYPgUj"
->
-  <div
-    className="sc-dnqmqq fhodxA"
-  >
-    <div
-      className="sc-iwsKbI kueFGx"
-    >
-      <strong
-        className="label"
-      >
-        Current IEP level
-      </strong>
-      <p>
-        Standard
-      </p>
-    </div>
-    <div
-      className="sc-iwsKbI kueFGx"
-    >
-      <strong
-        className="label"
-      >
-        Time since review
-      </strong>
-      <p>
-        625
-      </p>
-    </div>
-    <div
-      className="sc-iwsKbI kueFGx"
-    >
-      <strong
-        className="label"
-      >
-        Date of next review
-      </strong>
-      <p>
-        15/08/2018
-      </p>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`IEP history should render the iep history table correctly 1`] = `
 Array [
   <h2
