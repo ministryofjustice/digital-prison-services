@@ -504,6 +504,95 @@ describe('Offender activity list results component', () => {
     expect(button.text()).toEqual('Attend all remaining prisoners')
   })
 
+  it('should display "Attend all remaining prisoners" button if some prisoners have other attendance info but none are paid', () => {
+    const otherAttendanceData = [
+      {
+        bookingId: 1,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        attendanceInfo: {
+          absentReasons: {
+            value: 'RestDay',
+            name: 'Rest Day',
+          },
+          other: true,
+          paid: false,
+        },
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+      {
+        bookingId: 3,
+        offenderNo: 'A1234AC',
+        firstName: 'FRED',
+        lastName: 'QUIMBY',
+        cellLocation: `${PRISON}-A-1-3`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+    ]
+
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={otherAttendanceData} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+    expect(button.text()).toEqual('Attend all remaining prisoners')
+  })
+
+  it('should display "Attend all prisoners" button if no prisoners have other attendance info and none are paid', () => {
+    const otherAttendanceNull = [
+      {
+        bookingId: 1,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        attendanceInfo: null,
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+      {
+        bookingId: 3,
+        offenderNo: 'A1234AC',
+        firstName: 'FRED',
+        lastName: 'QUIMBY',
+        cellLocation: `${PRISON}-A-1-3`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+    ]
+
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={otherAttendanceNull} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+    expect(button.text()).toEqual('Attend all prisoners')
+  })
+
   it('should call the attendAll function when the link is clicked', async () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(

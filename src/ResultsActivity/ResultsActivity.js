@@ -196,6 +196,12 @@ class ResultsActivity extends Component {
       return showControls
     }
 
+    const showRemainingButton = activities => {
+      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
+      if (totalPaid !== 0 || attendanceInfo.length) return true
+      return false
+    }
+
     const { payingAll } = this.state
 
     const batchControls = (
@@ -205,7 +211,7 @@ class ResultsActivity extends Component {
             'Marking all as attended...'
           ) : (
             <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-              {`Attend all${totalPaid !== 0 ? ' remaining ' : ' '}prisoners`}
+              {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
             </BatchLink>
           ))}
       </div>
