@@ -13,4 +13,5 @@ export default {
   bulkAppointmentsAddPrisoners: '/add-bulk-appointments/add-prisoners',
   adjudications: '/offenders/:offenderNo/adjudications',
   adjudication: '/offenders/:offenderNo/adjudications/:adjudicationNo',
+  missingPrisoners: '/missing-prisoners',
 }

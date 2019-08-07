@@ -51,6 +51,7 @@ import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IEPSlipContainer from './IEPSlipContainer'
+import MissingPrisonersContainer from './MissingPrisoners/MissingPrisonersContainer'
 
 const axios = require('axios')
 
@@ -483,6 +484,21 @@ class App extends React.Component {
                 resetErrorDispatch={resetErrorDispatch}
                 offenderNumber={params.offenderNo}
                 adjudicationNumber={params.adjudicationNo}
+                history={history}
+              />
+            )}
+          />
+
+          <Route
+            exact
+            path={routePaths.missingPrisoners}
+            render={({ history, match: { params } }) => (
+              <MissingPrisonersContainer
+                handleDateChange={event => this.handleDateChange(event)}
+                handlePeriodChange={event => this.handlePeriodChange(event)}
+                handleError={this.handleError}
+                setLoadedDispatch={setLoadedDispatch}
+                resetErrorDispatch={resetErrorDispatch}
                 history={history}
               />
             )}
