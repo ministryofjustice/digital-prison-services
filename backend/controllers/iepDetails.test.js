@@ -384,6 +384,10 @@ describe('IEP details controller', async () => {
         value: 'ENH',
       },
       {
+        title: 'Entry',
+        value: 'ENT',
+      },
+      {
         title: 'New level',
         value: 'NEW',
       },
@@ -407,6 +411,10 @@ describe('IEP details controller', async () => {
         value: 'ENH',
       },
       {
+        title: 'Entry',
+        value: 'ENT',
+      },
+      {
         title: 'New level',
         value: 'NEW',
       },
@@ -420,6 +428,10 @@ describe('IEP details controller', async () => {
       {
         title: 'Basic',
         value: 'BAS',
+      },
+      {
+        title: 'Entry',
+        value: 'ENT',
       },
       {
         title: 'New level',
