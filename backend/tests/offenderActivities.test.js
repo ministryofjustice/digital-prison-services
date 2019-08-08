@@ -70,6 +70,7 @@ const scheduledActivitiesResponse = [
     paid: false,
   },
 ]
+
 describe('offender activities', () => {
   describe('getMissingPrisoners()', () => {
     beforeEach(() => {

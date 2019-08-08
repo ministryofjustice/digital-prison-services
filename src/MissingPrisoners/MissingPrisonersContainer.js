@@ -8,7 +8,7 @@ import Page from '../Components/Page'
 import MissingPrisonersSearch from './MissingPrisonersSearch'
 import MissingPrisoners from './MissingPrisoners'
 import { LAST_NAME } from '../tablesorting/sortColumns'
-import sortActivityData from '../ResultsActivity/activityResultsSorter'
+import sortResults from '../ResultsActivity/activityResultsSorter'
 
 function MissingPrisonersContainer({
   setLoadedDispatch,
@@ -28,9 +28,8 @@ function MissingPrisonersContainer({
 
   const setColumnSort = (orderColumn, orderDirection) => {
     setSortOrder({ orderColumn, orderDirection })
-    const copy = [...missingPrisoners]
-    sortActivityData(copy, orderColumn, orderDirection)
-    setMissingPrisoners(copy)
+    sortResults(missingPrisoners, orderColumn, orderDirection)
+    setMissingPrisoners(missingPrisoners)
   }
 
   useEffect(
@@ -92,5 +91,7 @@ const mapStateToProps = state => ({
   period: state.search.period,
   agencyId: state.app.user.activeCaseLoadId,
 })
+
+export { MissingPrisonersContainer }
 
 export default connect(mapStateToProps)(MissingPrisonersContainer)
