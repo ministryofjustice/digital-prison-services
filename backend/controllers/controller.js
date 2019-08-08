@@ -61,6 +61,11 @@ const factory = ({
     res.json(attendanceRecord)
   })
 
+  const batchUpdateAttendance = asyncMiddleware(async (req, res) => {
+    const batchAttendanceRecord = await attendanceService.batchUpdateAttendance(res.locals, req.body)
+    res.json(batchAttendanceRecord)
+  })
+
   const getAbsenceReasons = asyncMiddleware(async (req, res) => {
     const absenceReasons = await attendanceService.getAbsenceReasons(res.locals)
     res.json(absenceReasons)
@@ -180,6 +185,7 @@ const factory = ({
     getAdjudicationDetails,
     getHouseblockList,
     updateAttendance,
+    batchUpdateAttendance,
     getAbsenceReasons,
     getEstablishmentRollCount,
     globalSearch,

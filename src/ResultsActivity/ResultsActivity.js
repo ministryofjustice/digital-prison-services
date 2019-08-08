@@ -4,10 +4,22 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
+import { connect } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import { isTodayOrAfter, getMainEventDescription, getHoursMinutes, getListSizeClass, getLongDateFormat } from '../utils'
+import Link from '@govuk-react/link'
+import { FONT_SIZE } from '@govuk-react/constants'
+import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
+import {
+  isTodayOrAfter,
+  isAfterToday,
+  isWithinLastWeek,
+  getMainEventDescription,
+  getHoursMinutes,
+  getListSizeClass,
+  getLongDateFormat,
+} from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import Flags from '../Flags/Flags'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -31,12 +43,22 @@ const ManageResults = styled.div`
     justify-content: flex-end;
   }
 `
-
 const StackedTotals = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: right;
 `
+const BatchLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: right;
 
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
+  }
+`
 const HideForPrint = styled.span`
   @media print {
     display: none;
@@ -46,6 +68,11 @@ const HideForPrint = styled.span`
 class ResultsActivity extends Component {
   static eventCancelled(event) {
     return event.event === 'VISIT' && event.eventStatus === 'CANC'
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = { payingAll: false }
   }
 
   componentWillUnmount() {
@@ -71,7 +98,10 @@ class ResultsActivity extends Component {
       activityName,
       updateAttendanceEnabled,
       totalPaid,
+      userRoles,
     } = this.props
+
+    const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -114,6 +144,75 @@ class ResultsActivity extends Component {
             Print list
           </button>
         )}
+      </div>
+    )
+
+    const unpaidOffenders = new Set()
+
+    const attendAllNonAssigned = async () => {
+      try {
+        this.setState({ payingAll: true })
+
+        const offenders = [...unpaidOffenders]
+
+        const response = await axios.post('/api/attendance/batch', {
+          offenders,
+        })
+
+        const findOffenderIndexByBookingId = bookingId => {
+          const offender = offenders.find(off => off.bookingId === bookingId)
+          return offender.offenderIndex
+        }
+
+        const paidOffenders = response.data.map(offender => {
+          const { paid, attended, bookingId } = offender
+          const offenderAttendanceData = { paid, attended, pay: attended && paid }
+
+          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
+
+          return offender
+        })
+
+        this.setState({ payingAll: false })
+      } catch (error) {
+        handleError(error)
+      }
+    }
+
+    const showAttendAllControl = (activities, paidList) => {
+      let showControls = true
+      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
+      const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
+
+      if (
+        !isWithinLastWeek(date) ||
+        isAfterToday(date) ||
+        activityData.length === paidList ||
+        attendanceInfo.length === activities.length ||
+        lockedCases.length === activities.length
+      )
+        showControls = false
+
+      return showControls
+    }
+
+    const showRemainingButton = activities => {
+      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
+      return totalPaid !== 0 || attendanceInfo.length
+    }
+
+    const { payingAll } = this.state
+
+    const batchControls = (
+      <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
+        {showAttendAllControl(activityData, totalPaid) &&
+          (payingAll ? (
+            'Marking all as attended...'
+          ) : (
+            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
+              {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
+            </BatchLink>
+          ))}
       </div>
     )
 
@@ -245,6 +344,20 @@ class ResultsActivity extends Component {
           attendanceInfo,
         }
 
+        if (!attendanceInfo)
+          unpaidOffenders.add({
+            offenderNo,
+            bookingId,
+            eventId,
+            eventLocationId: locationId,
+            offenderIndex: index,
+            attended: true,
+            paid: true,
+            period,
+            prisonId: agencyId,
+            eventDate: date,
+          })
+
         const { absentReason } = attendanceInfo || {}
         const otherActivitiesClasses = classNames({
           'row-gutters': true,
@@ -293,6 +406,7 @@ class ResultsActivity extends Component {
                   showModal={showModal}
                   activityName={activityName}
                   date={date}
+                  payAll={false}
                 />
               )}
               fallbackRender={() => <></>}
@@ -317,6 +431,7 @@ class ResultsActivity extends Component {
           <hr />
           {buttons}
         </form>
+
         <ManageResults>
           <SortLov
             sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
@@ -329,6 +444,7 @@ class ResultsActivity extends Component {
             <HideForPrint>
               <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
             </HideForPrint>
+            {activityHubUser && batchControls}
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
@@ -380,6 +496,7 @@ ResultsActivity.propTypes = {
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

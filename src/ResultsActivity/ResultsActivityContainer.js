@@ -131,7 +131,13 @@ class ResultsActivityContainer extends Component {
   }
 
   render() {
-    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal, updateAttendanceEnabled } = this.props
+    const {
+      resetErrorDispatch,
+      setOffenderPaymentDataDispatch,
+      showModal,
+      updateAttendanceEnabled,
+      userRoles,
+    } = this.props
     const activityName = this.getActivityName()
 
     return (
@@ -186,6 +192,7 @@ ResultsActivityContainer.propTypes = {
   ),
   loaded: PropTypes.bool.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
+  userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -218,6 +225,7 @@ const mapStateToProps = state => ({
   sortOrder: state.events.sortOrder,
   updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
   totalPaid: state.events.totalPaid,
+  userRoles: state.app.user.roles,
 })
 
 const mapDispatchToProps = dispatch => ({

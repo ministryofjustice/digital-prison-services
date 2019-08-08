@@ -1,6 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import { ResultsActivity } from './ResultsActivity'
 import OtherActivitiesView from '../OtherActivityListView'
 
@@ -13,8 +15,11 @@ const OTHER_COLUMN = 5
 const ATTEND_COLUMN = 6
 const DONT_ATTEND_COLUMN = 7
 
+const waitForAsync = () => new Promise(resolve => setImmediate(resolve))
+
 const response = [
   {
+    bookingId: 1,
     offenderNo: 'A1234AA',
     firstName: 'ARTHUR',
     lastName: 'ANDERSON',
@@ -54,6 +59,7 @@ const response = [
     ],
   },
   {
+    bookingId: 2,
     offenderNo: 'A1234AB',
     firstName: 'MICHAEL',
     lastName: 'SMITH',
@@ -66,6 +72,7 @@ const response = [
     endTime: '2017-10-15T18:30:00',
   },
   {
+    bookingId: 3,
     offenderNo: 'A1234AC',
     firstName: 'FRED',
     lastName: 'QUIMBY',
@@ -143,6 +150,7 @@ const props = {
   handlePrint: jest.fn(),
   handlePeriodChange: jest.fn(),
   handleDateChange: jest.fn(),
+  attendAllNonAssigned: jest.fn(),
   getActivityList: jest.fn(),
   handleError: jest.fn(),
   setActivityOffenderAttendance: jest.fn(),
@@ -158,9 +166,17 @@ const props = {
   raiseAnalyticsEvent: jest.fn(),
   showModal: jest.fn(),
   activityName: 'Activity name',
+  userRoles: ['ACTIVITY_HUB'],
+  totalPaid: 0,
 }
 
 describe('Offender activity list results component', () => {
+  let mockAxios
+
+  beforeEach(() => {
+    mockAxios = new MockAdapter(axios)
+  })
+
   it('should render initial offender results form correctly', async () => {
     const aFewDaysAgo = moment().subtract(3, 'days')
     const date = aFewDaysAgo.format('DD/MM/YYYY')
@@ -418,12 +434,215 @@ describe('Offender activity list results component', () => {
     const component = shallow(
       <ResultsActivity {...props} totalPaid={1} activityData={response} date="07/06/2019" period="AM" />
     )
-
     expect(
       component
         .find('TotalResults')
         .at(1)
         .props()
     ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
+  })
+
+  it('should not display pay all button if all prisoners are paid', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={4} activityData={response} date={today} period="AM" />
+    )
+
+    const attendAllButton = component.find('#allAttendedButton')
+    expect(attendAllButton.length).toEqual(0)
+  })
+
+  it('should not display "Attend all prisoners" button if the date is more than a week in the past', () => {
+    const isMoreThanAWeekOld = moment(new Date()).subtract(8, 'days')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(0)
+  })
+
+  it('should display "Attend all prisoners" button if the date is less than 8 days old', () => {
+    const isInTheLastWeek = moment(new Date()).subtract(6, 'days')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={isInTheLastWeek} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+  })
+
+  it('should not display "Attend all prisoners" button if the date is in the future', () => {
+    const tomorrow = moment(new Date()).add(1, 'days')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={tomorrow} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(0)
+  })
+
+  it('should display "Attend all prisoners" button if no prisoners have been paid', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+    expect(button.text()).toEqual('Attend all prisoners')
+  })
+
+  it('should display "Attend all remaining prisoners" button if there are outstanding prisoners to pay', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={3} activityData={response} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+    expect(button.text()).toEqual('Attend all remaining prisoners')
+  })
+
+  it('should display "Attend all remaining prisoners" button if some prisoners have other attendance info but none are paid', () => {
+    const otherAttendanceData = [
+      {
+        bookingId: 1,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        attendanceInfo: {
+          absentReasons: {
+            value: 'RestDay',
+            name: 'Rest Day',
+          },
+          other: true,
+          paid: false,
+        },
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+      {
+        bookingId: 3,
+        offenderNo: 'A1234AC',
+        firstName: 'FRED',
+        lastName: 'QUIMBY',
+        cellLocation: `${PRISON}-A-1-3`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+    ]
+
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={otherAttendanceData} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+    expect(button.text()).toEqual('Attend all remaining prisoners')
+  })
+
+  it('should display "Attend all prisoners" button if no prisoners have other attendance info and none are paid', () => {
+    const otherAttendanceNull = [
+      {
+        bookingId: 1,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        attendanceInfo: null,
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+      {
+        bookingId: 3,
+        offenderNo: 'A1234AC',
+        firstName: 'FRED',
+        lastName: 'QUIMBY',
+        cellLocation: `${PRISON}-A-1-3`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        eventsElsewhere: [],
+      },
+    ]
+
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={otherAttendanceNull} date={today} period="AM" />
+    )
+
+    const button = component.find('#allAttendedButton')
+    expect(button.length).toEqual(1)
+    expect(button.text()).toEqual('Attend all prisoners')
+  })
+
+  it('should call the attendAll function when the link is clicked', async () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={3} activityData={response} date={today} period="AM" />
+    )
+
+    const attendAllButton = component.find('#allAttendedButton')
+    attendAllButton.props().onClick()
+
+    mockAxios.onPost('/api/attendance/batch').reply(200, [
+      {
+        offenderNo: 'A1234AA',
+        bookingId: 1,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+        eventDate: '29/06/2019',
+      },
+      {
+        offenderNo: 'A1234AB',
+        bookingId: 2,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+        eventDate: '29/06/2019',
+      },
+      {
+        offenderNo: 'A1234AC',
+        bookingId: 3,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+        eventDate: '29/06/2019',
+      },
+    ])
+
+    expect(component.state().payingAll).toBe(true)
+
+    await waitForAsync()
+
+    expect(props.setActivityOffenderAttendance).toHaveBeenCalledTimes(3)
+    expect(component.state().payingAll).toBe(false)
   })
 })

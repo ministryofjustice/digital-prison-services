@@ -19,6 +19,7 @@ const GlobalSearchResultList = ({
   licencesUrl,
   searchPerformed,
   viewInactivePrisoner,
+  caseLoads,
   handleResultsPerPageChange,
 }) => {
   const headings = (
@@ -41,7 +42,8 @@ const GlobalSearchResultList = ({
     data &&
     data.map(prisoner => {
       const shouldAddLink =
-        (viewInactivePrisoner && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y'
+        (viewInactivePrisoner && prisoner.currentlyInPrison === 'N') ||
+        caseLoads.find(cl => cl === prisoner.latestLocationId)
       return (
         <tr key={`${prisoner.offenderNo}-${prisoner.uiId}`} className="row-gutters">
           <td className="row-gutters">
@@ -158,6 +160,7 @@ GlobalSearchResultList.propTypes = {
   viewInactivePrisoner: PropTypes.bool.isRequired,
   licencesUrl: PropTypes.string.isRequired,
   searchPerformed: PropTypes.bool.isRequired,
+  caseLoads: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   handleResultsPerPageChange: PropTypes.func.isRequired,
 }
 

@@ -2,7 +2,11 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
 const whereaboutsApi = {}
-const { updateAttendance, getAbsenceReasons } = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
+const {
+  updateAttendance,
+  getAbsenceReasons,
+  batchUpdateAttendance,
+} = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
 
 describe('Attendence and Pay controller', async () => {
   const attendenceDetails = {
@@ -88,6 +92,76 @@ describe('Attendence and Pay controller', async () => {
         ],
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
       })
+    })
+  })
+
+  describe('batchUpdateAttendance', () => {
+    beforeEach(() => {
+      whereaboutsApi.attendAll = jest.fn()
+    })
+
+    const offenders = [
+      {
+        offenderNo: 123,
+        bookingId: 1,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+        eventDate: '29/06/2019',
+      },
+      {
+        offenderNo: 345,
+        bookingId: 2,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+        eventDate: '29/06/2019',
+      },
+      {
+        offenderNo: 678,
+        bookingId: 3,
+        eventId: 123,
+        eventLocationId: 123,
+        attended: true,
+        paid: true,
+        period: 'AM',
+        prisonId: 'LEI',
+        eventDate: '29/06/2019',
+      },
+    ]
+
+    it('should call attendAll with list of valid offenders', async () => {
+      await batchUpdateAttendance(context, { offenders })
+      expect(whereaboutsApi.attendAll).toHaveBeenCalledTimes(1)
+      expect(whereaboutsApi.attendAll.mock.calls[0]).toEqual([
+        context,
+        {
+          bookingActivities: [
+            {
+              activityId: 123,
+              bookingId: 1,
+            },
+            {
+              activityId: 123,
+              bookingId: 2,
+            },
+            {
+              activityId: 123,
+              bookingId: 3,
+            },
+          ],
+          eventDate: '2019-06-29',
+          eventLocationId: 123,
+          period: 'AM',
+          prisonId: 'LEI',
+        },
+      ])
     })
   })
 })

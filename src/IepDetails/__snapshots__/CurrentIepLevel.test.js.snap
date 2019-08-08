@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Current IEP level should render the current IEP level correctly when user can maintain IEP 1`] = `
+<div
+  className="current-iep sc-ifAKCX kQggjh"
+>
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <strong
+        className="label"
+      >
+        Current IEP level
+      </strong>
+      <p>
+        Standard
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <strong
+        className="label"
+      >
+        Time since review
+      </strong>
+      <p>
+        625
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <strong
+        className="label"
+      >
+        Date of next review
+      </strong>
+      <p>
+        15/08/2018
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <div>
+        <button
+          className="sc-htpNat dZoydM"
+          data-qa="change-iep"
+          disabled={false}
+          onClick={[Function]}
+        >
+          Change IEP level
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Current IEP level should render the current IEP level correctly when user can't maintain IEP 1`] = `
+<div
+  className="current-iep sc-ifAKCX kQggjh"
+>
+  <div
+    className="sc-bdVaJa gkOpjT"
+  >
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <strong
+        className="label"
+      >
+        Current IEP level
+      </strong>
+      <p>
+        Standard
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <strong
+        className="label"
+      >
+        Time since review
+      </strong>
+      <p>
+        625
+      </p>
+    </div>
+    <div
+      className="sc-bwzfXH gDjOjU"
+    >
+      <strong
+        className="label"
+      >
+        Date of next review
+      </strong>
+      <p>
+        15/08/2018
+      </p>
+    </div>
+  </div>
+</div>
+`;
