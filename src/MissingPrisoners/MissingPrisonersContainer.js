@@ -7,29 +7,52 @@ import moment from 'moment'
 import Page from '../Components/Page'
 import MissingPrisonersSearch from './MissingPrisonersSearch'
 import MissingPrisoners from './MissingPrisoners'
+import { LAST_NAME } from '../tablesorting/sortColumns'
+import sortActivityData from '../ResultsActivity/activityResultsSorter'
 
 function MissingPrisonersContainer({
   setLoadedDispatch,
+  resetErrorDispatch,
   handlePeriodChange,
   handleDateChange,
+  handleError,
   period,
   date,
   agencyId,
 }) {
   const [missingPrisoners, setMissingPrisoners] = useState()
+  const [sortOrder, setSortOrder] = useState({
+    orderColumn: LAST_NAME,
+    orderDirection: 'ASC',
+  })
+
+  const setColumnSort = (orderColumn, orderDirection) => {
+    setSortOrder({ orderColumn, orderDirection })
+    const copy = [...missingPrisoners]
+    sortActivityData(copy, orderColumn, orderDirection)
+    setMissingPrisoners(copy)
+  }
 
   useEffect(
     () => {
       const getMissingPrisoners = async () => {
+        resetErrorDispatch()
         setLoadedDispatch(false)
-        const response = await axios.get('/api/missing-prisoners', {
-          params: {
-            agencyId,
-            timeSlot: period,
-            date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
-          },
-        })
-        setMissingPrisoners(response.data)
+
+        try {
+          const response = await axios.get('/api/missing-prisoners', {
+            params: {
+              agencyId,
+              timeSlot: period,
+              date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
+            },
+          })
+
+          setMissingPrisoners(response.data)
+        } catch (error) {
+          handleError(error)
+        }
+
         setLoadedDispatch(true)
       }
 
@@ -39,22 +62,26 @@ function MissingPrisonersContainer({
   )
 
   return (
-    <Page title="Missing prisoners">
+    <Page title="Missing prisoners" alwaysRender>
       <MissingPrisonersSearch
         handleDateChange={handleDateChange}
         handlePeriodChange={handlePeriodChange}
         date={date}
         period={period}
+        sortOrder={sortOrder}
+        setColumnSort={setColumnSort}
       />
-      <MissingPrisoners missingPrisoners={missingPrisoners} />
+      <MissingPrisoners missingPrisoners={missingPrisoners} sortOrder={sortOrder} setColumnSort={setColumnSort} />
     </Page>
   )
 }
 
 MissingPrisonersContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   agencyId: PropTypes.string.isRequired,

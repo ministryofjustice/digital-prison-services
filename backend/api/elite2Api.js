@@ -128,8 +128,8 @@ const elite2ApiFactory = client => {
 
   const changeIepLevel = (context, bookingId, body) => post(context, `api/bookings/${bookingId}/iepLevels`, body)
 
-  const getOffenderActivities = (context, agencyId, date, timeSlot) =>
-    get(context, `api/schedules/${agencyId}/activities?date=${date}&timeSlot=${timeSlot}`)
+  const getOffenderActivities = (context, { agencyId, date, period }) =>
+    get(context, `api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
 
   return {
     userLocations,

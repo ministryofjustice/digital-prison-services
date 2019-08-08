@@ -6,23 +6,41 @@ import Table from '@govuk-react/table'
 import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
+import OtherActivityListView from '../OtherActivityListView'
+import SortableColumn from '../tablesorting/SortableColumn'
+import { CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
+import { getHoursMinutes, getMainEventDescription } from '../utils'
 
 const TableContainer = styled.div`
   overflow-y: scroll;
 `
 
-const MissingPrisoners = ({ missingPrisoners }) => (
+const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
   <TableContainer>
     <Table
       head={
         <Table.Row>
-          <Table.CellHeader setWidth="20%">Name</Table.CellHeader>
-          <Table.CellHeader setWidth="10%">Location</Table.CellHeader>
-          <Table.CellHeader setWidth="20%">Prison no.</Table.CellHeader>
-          <Table.CellHeader setWidth="20%">Activities</Table.CellHeader>
-          <Table.CellHeader setWidth="20%">Other activities</Table.CellHeader>
-          <Table.CellHeader setWidth="5%">Attended</Table.CellHeader>
-          <Table.CellHeader setWidth="5%">Not attended</Table.CellHeader>
+          <Table.CellHeader setWidth="20%">
+            <SortableColumn
+              heading="Name"
+              column={LAST_NAME}
+              sortOrder={sortOrder.orderDirection}
+              setColumnSort={setColumnSort}
+              sortColumn={sortOrder.orderColumn}
+            />
+          </Table.CellHeader>
+          <Table.CellHeader setWidth="15%">
+            <SortableColumn
+              heading="Location"
+              column={CELL_LOCATION}
+              sortOrder={sortOrder.orderDirection}
+              setColumnSort={setColumnSort}
+              sortColumn={sortOrder.orderColumn}
+            />
+          </Table.CellHeader>
+          <Table.CellHeader setWidth="15%">Prison no.</Table.CellHeader>
+          <Table.CellHeader setWidth="25%">Activities</Table.CellHeader>
+          <Table.CellHeader setWidth="25%">Other activities</Table.CellHeader>
         </Table.Row>
       }
     >
@@ -31,21 +49,28 @@ const MissingPrisoners = ({ missingPrisoners }) => (
           <Table.Cell colSpan="7">No missing prisoners</Table.Cell>
         </Table.Row>
       )}
-      {missingPrisoners.map(prisoner => (
-        <Table.Row>
+      {missingPrisoners.map(prisonerActivity => (
+        <Table.Row key={prisonerActivity.eventId}>
           <Table.Cell>
-            <OffenderLink offenderNo={prisoner.offenderNo}>
-              <OffenderName firstName={prisoner.firstName} lastName={prisoner.lastName} />
+            <OffenderLink offenderNo={prisonerActivity.offenderNo}>
+              <OffenderName firstName={prisonerActivity.firstName} lastName={prisonerActivity.lastName} />
             </OffenderLink>
           </Table.Cell>
           <Table.Cell>
-            <Location location={prisoner.cellLocation} />
+            <Location location={prisonerActivity.cellLocation} />
           </Table.Cell>
-          <Table.Cell>{prisoner.offenderNo}</Table.Cell>
-          <Table.Cell>{prisoner.activites}</Table.Cell>
-          <Table.Cell>{prisoner.otherActivities}</Table.Cell>
-          <Table.Cell>{prisoner.attended}</Table.Cell>
-          <Table.Cell>{prisoner.notAttended}</Table.Cell>
+          <Table.Cell>{prisonerActivity.offenderNo}</Table.Cell>
+          <Table.Cell>{`${getHoursMinutes(prisonerActivity.startTime)} - ${getMainEventDescription(
+            prisonerActivity
+          )}`}</Table.Cell>
+          <Table.Cell>
+            <OtherActivityListView
+              offenderMainEvent={{
+                ...prisonerActivity,
+                others: prisonerActivity.eventsElsewhere,
+              }}
+            />
+          </Table.Cell>
         </Table.Row>
       ))}
     </Table>
@@ -54,6 +79,8 @@ const MissingPrisoners = ({ missingPrisoners }) => (
 
 MissingPrisoners.propTypes = {
   missingPrisoners: PropTypes.arrayOf(PropTypes.shape({})),
+  setColumnSort: PropTypes.func.isRequired,
+  sortOrder: PropTypes.shape({ orderColumn: PropTypes.string, orderDirection: PropTypes.string }).isRequired,
 }
 
 MissingPrisoners.defaultProps = {

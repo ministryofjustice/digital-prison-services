@@ -8,6 +8,8 @@ import { spacing } from '@govuk-react/lib'
 import { BORDER_COLOUR } from 'govuk-colours'
 
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
+import { CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
+import SortLov from '../tablesorting/SortLov'
 
 const Container = styled.div`
   ${spacing.withWhiteSpace({ margin: { size: 3, direction: 'bottom' } })};
@@ -28,7 +30,7 @@ const FullWidthSelect = styled(Select)`
   }
 `
 
-const MissingPrisonersSearch = ({ handleDateChange, date, handlePeriodChange, period }) => (
+const MissingPrisonersSearch = ({ handleDateChange, date, handlePeriodChange, period, sortOrder, setColumnSort }) => (
   <Container>
     <SearchContainer>
       <GridRow>
@@ -57,22 +59,13 @@ const MissingPrisonersSearch = ({ handleDateChange, date, handlePeriodChange, pe
         </GridCol>
       </GridRow>
     </SearchContainer>
-    <GridRow>
-      <GridCol setWidth="one-quarter">
-        <FullWidthSelect
-          name="order"
-          label="Order the list"
-          input={
-            {
-              // value: period,
-              // onChange: handlePeriodChange,
-            }
-          }
-        >
-          <option value="lastName">Last name, first name</option>
-        </FullWidthSelect>
-      </GridCol>
-    </GridRow>
+
+    <SortLov
+      sortColumns={[LAST_NAME, CELL_LOCATION]}
+      sortColumn={sortOrder.orderColumn}
+      sortOrder={sortOrder.orderDirection}
+      setColumnSort={setColumnSort}
+    />
   </Container>
 )
 
@@ -81,6 +74,8 @@ MissingPrisonersSearch.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
+  setColumnSort: PropTypes.func.isRequired,
+  sortOrder: PropTypes.shape({ orderColumn: PropTypes.string, orderDirection: PropTypes.string }).isRequired,
 }
 
 export default MissingPrisonersSearch
