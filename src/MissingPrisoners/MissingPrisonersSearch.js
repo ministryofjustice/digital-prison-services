@@ -1,42 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+
 import moment from 'moment'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
-import Select from '@govuk-react/select'
-import { spacing } from '@govuk-react/lib'
+
 import Button from '@govuk-react/button'
 import LeadParagraph from '@govuk-react/lead-paragraph'
-import { BORDER_COLOUR } from 'govuk-colours'
 
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
-
-const Container = styled.div`
-  @media print {
-    display: none;
-  }
-`
-
-const SearchContainer = styled.div`
-  border-bottom: 1px solid ${BORDER_COLOUR};
-  ${spacing.withWhiteSpace({ margin: { size: 3, direction: 'bottom' } })};
-`
-
-const FullWidthSelect = styled(Select)`
-  select {
-    width: 100%;
-  }
-`
-
-const RightAlignContainer = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  height: 100%;
-`
+import { linkOnClick } from '../utils'
+import {
+  Container,
+  SearchContainer,
+  FullWidthSelect,
+  RightAlignContainer,
+  DummyLink,
+} from './MissingPrisonersSearch.style'
 
 const pastAndPresentDay = date =>
   date.isBefore(
@@ -53,6 +35,7 @@ const MissingPrisonersSearch = ({
   sortOrder,
   setColumnSort,
   numberOfPrisoners,
+  reloadPage,
 }) => (
   <Container>
     <SearchContainer>
@@ -88,6 +71,9 @@ const MissingPrisonersSearch = ({
         </GridCol>
       </GridRow>
     </SearchContainer>
+    <LeadParagraph mb={3}>
+      <DummyLink {...linkOnClick(() => reloadPage(true))}>Reload page</DummyLink>
+    </LeadParagraph>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov

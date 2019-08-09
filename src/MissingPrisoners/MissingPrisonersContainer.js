@@ -20,6 +20,7 @@ function MissingPrisonersContainer({
   date,
   agencyId,
 }) {
+  const [reloadPage, setReloadPage] = useState(false)
   const [missingPrisoners, setMissingPrisoners] = useState([])
   const [sortOrder, setSortOrder] = useState({
     orderColumn: LAST_NAME,
@@ -56,8 +57,9 @@ function MissingPrisonersContainer({
       }
 
       getMissingPrisoners()
+      setReloadPage(false)
     },
-    [period, date]
+    [period, date, reloadPage]
   )
 
   return (
@@ -70,6 +72,7 @@ function MissingPrisonersContainer({
         sortOrder={sortOrder}
         setColumnSort={setColumnSort}
         numberOfPrisoners={missingPrisoners.length}
+        reloadPage={setReloadPage}
       />
       <MissingPrisoners missingPrisoners={missingPrisoners} sortOrder={sortOrder} setColumnSort={setColumnSort} />
     </Page>
