@@ -13,6 +13,12 @@ import { getHoursMinutes, getMainEventDescription } from '../utils'
 
 const TableContainer = styled.div`
   overflow-y: scroll;
+
+  @media print {
+    th {
+      width: auto !important;
+    }
+  }
 `
 
 const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
