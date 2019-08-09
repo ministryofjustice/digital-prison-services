@@ -46,7 +46,7 @@ const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
     >
       {missingPrisoners.length === 0 && (
         <Table.Row>
-          <Table.Cell colSpan="7">No missing prisoners</Table.Cell>
+          <Table.Cell colSpan="7">No results found</Table.Cell>
         </Table.Row>
       )}
       {missingPrisoners.map(prisonerActivity => (
