@@ -22,4 +22,5 @@ export default [
   { path: '/search-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
   { path: '/search-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
   { path: '/add-bulk-appointments', breadcrumb: 'Add bulk appointments' },
+  { path: '/missing-prisoners', breadcrumb: 'Missing prisoners' },
 ]
