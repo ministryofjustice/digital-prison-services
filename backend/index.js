@@ -27,6 +27,7 @@ const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseload
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
 const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
 const offenderServiceFactory = require('./controllers/offenderService')
+const { offenderActivitesFactory } = require('./controllers/offenderActivities')
 const { userLocationsFactory } = require('./controllers/userLocations')
 const { userMeFactory } = require('./controllers/userMe')
 const { getConfiguration } = require('./controllers/getConfig')
@@ -150,6 +151,7 @@ const controller = controllerFactory({
   bulkAppointmentsService: bulkAppointmentsServiceFactory(elite2Api),
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
   offenderService: offenderServiceFactory(elite2Api),
+  offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
 })
 
 const oauthApi = oauthApiFactory(
@@ -243,6 +245,7 @@ app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisoner
 app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewModel)
 app.post('/api/bulk-appointments', controller.addBulkAppointments)
 app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
+app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))

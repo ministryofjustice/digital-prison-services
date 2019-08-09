@@ -81,12 +81,10 @@ const getIepDetailsFactory = elite2Api => {
     const levels = await elite2Api.getAgencyIepLevels(context, agencyId)
 
     return sortPossibleIepLevelsAlphabetically(
-      levels
-        .filter(level => level.iepDescription !== currentIepLevel && level.iepDescription !== 'Entry')
-        .map(level => ({
-          title: level.iepDescription,
-          value: level.iepLevel,
-        }))
+      levels.filter(level => level.iepDescription !== currentIepLevel).map(level => ({
+        title: level.iepDescription,
+        value: level.iepLevel,
+      }))
     )
   }
 
