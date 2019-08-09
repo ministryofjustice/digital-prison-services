@@ -433,12 +433,14 @@ class ResultsActivity extends Component {
         </form>
 
         <ManageResults>
-          <SortLov
-            sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
-            sortColumn={orderField}
-            sortOrder={sortOrder}
-            setColumnSort={setColumnSort}
-          />
+          <div className="pure-u-md-1-4 margin-top-small">
+            <SortLov
+              sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
+              sortColumn={orderField}
+              sortOrder={sortOrder}
+              setColumnSort={setColumnSort}
+            />
+          </div>
           <StackedTotals>
             <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
             <HideForPrint>

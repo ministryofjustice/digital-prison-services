@@ -2,18 +2,30 @@
 
 exports[`Currently out should display toCity when toAgencyDescription is not set  1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder=""
-  />
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder=""
+      />
+    </GridCol>
+  </GridRow>
   <table
-    className="row-gutters currently-out"
+    className="currently-out"
   >
     <thead>
       <tr>
@@ -157,18 +169,30 @@ exports[`Currently out should display toCity when toAgencyDescription is not set
 
 exports[`Currently out should render the page 1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder=""
-  />
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder=""
+      />
+    </GridCol>
+  </GridRow>
   <table
-    className="row-gutters currently-out"
+    className="currently-out"
   >
     <thead>
       <tr>

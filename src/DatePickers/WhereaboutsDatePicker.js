@@ -18,7 +18,7 @@ class WhereaboutsDatePicker extends Component {
   }
 
   render() {
-    const { handleDateChange, date } = this.props
+    const { handleDateChange, date, shouldShowDay } = this.props
 
     return (
       <FormDatePicker
@@ -26,7 +26,7 @@ class WhereaboutsDatePicker extends Component {
         input={{ onChange: handleDateChange, value: date, name: 'search-date' }}
         label="Date"
         placeholder="Select"
-        shouldShowDay={this.daysToShow}
+        shouldShowDay={shouldShowDay || this.daysToShow}
       />
     )
   }
@@ -35,6 +35,11 @@ class WhereaboutsDatePicker extends Component {
 WhereaboutsDatePicker.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
+  shouldShowDay: PropTypes.func,
+}
+
+WhereaboutsDatePicker.defaultProps = {
+  shouldShowDay: undefined,
 }
 
 export default WhereaboutsDatePicker

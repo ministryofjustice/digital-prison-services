@@ -20,7 +20,7 @@ function MissingPrisonersContainer({
   date,
   agencyId,
 }) {
-  const [missingPrisoners, setMissingPrisoners] = useState()
+  const [missingPrisoners, setMissingPrisoners] = useState([])
   const [sortOrder, setSortOrder] = useState({
     orderColumn: LAST_NAME,
     orderDirection: 'ASC',
@@ -69,6 +69,7 @@ function MissingPrisonersContainer({
         period={period}
         sortOrder={sortOrder}
         setColumnSort={setColumnSort}
+        numberOfPrisoners={missingPrisoners.length}
       />
       <MissingPrisoners missingPrisoners={missingPrisoners} sortOrder={sortOrder} setColumnSort={setColumnSort} />
     </Page>

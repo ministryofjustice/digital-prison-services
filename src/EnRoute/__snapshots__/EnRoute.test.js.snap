@@ -2,19 +2,29 @@
 
 exports[`En route should render page correctly 1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
-  <table
-    className="row-gutters"
-  >
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
+  <table>
     <thead>
       <tr>
         <th

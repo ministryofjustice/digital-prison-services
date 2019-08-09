@@ -1096,6 +1096,13 @@
     "@govuk-react/lib" "^0.7.1"
     govuk-colours "^1.0.3"
 
+"@govuk-react/lead-paragraph@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@govuk-react/lead-paragraph/-/lead-paragraph-0.7.1.tgz#33513c9ff585be11f4009b5a744eabfa8fa5ad74"
+  integrity sha512-JhR4tjOnV1LZB/X2uloOGHIWeWuwdAeKPebKk/jo0xGjpTSH0NVUqGrhFnBYtWMNhUhHjLVZlg43rS4eker/cg==
+  dependencies:
+    "@govuk-react/lib" "^0.7.1"
+
 "@govuk-react/lib@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/lib/-/lib-0.6.0.tgz#c66d8a085ee9f018d7419e8f4520f30f1633b55f"

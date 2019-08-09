@@ -8,7 +8,8 @@ describe('<WhereaboutsDatePicker />', () => {
     handleDateChange: jest.fn(),
     date: '01/04/2019',
   }
-  const wrapper = shallow(<WhereaboutsDatePicker {...props} />)
+
+  let wrapper = shallow(<WhereaboutsDatePicker {...props} />)
 
   it('should render <FormDatePicker /> with the correct props', () => {
     const formDatePickerInputProps = wrapper.find('FormDatePicker').props().input
@@ -47,6 +48,27 @@ describe('<WhereaboutsDatePicker />', () => {
 
       expect(wrapper.instance().daysToShow(tomorrow)).toEqual(true)
       expect(wrapper.instance().daysToShow(dayAfterTomorrow)).toEqual(false)
+    })
+
+    it('should use the shouldShowDay prop if present', () => {
+      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 1553774400000) // "Thu Mar 28 2019 12:00:00 GMT+0000"
+
+      const pastAndPresentDay = date =>
+        date.isBefore(
+          moment()
+            .add(1, 'days')
+            .startOf('day')
+        )
+
+      wrapper = shallow(<WhereaboutsDatePicker {...props} shouldShowDay={pastAndPresentDay} />)
+
+      const tomorrow = moment()
+        .add(1, 'day')
+        .startOf('day')
+
+      const daysToShowSpy = jest.spyOn(wrapper.instance(), 'daysToShow')
+      expect(daysToShowSpy).not.toBeCalled()
+      expect(wrapper.props().shouldShowDay(tomorrow)).toEqual(false)
     })
   })
 })
