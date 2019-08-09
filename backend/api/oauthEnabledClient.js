@@ -1,20 +1,25 @@
-const axios = require('axios')
+const superagent = require('superagent')
+const { Readable } = require('stream')
 const Agent = require('agentkeepalive')
 const { HttpsAgent } = require('agentkeepalive')
 const logger = require('../log')
 
-const { addAuthorizationHeader, addPaginationHeaders } = require('./axios-config-decorators')
+const { getHeaders } = require('./axios-config-decorators')
 
 const resultLogger = result => {
-  logger.debug(`${result.config.method} ${result.config.url} ${result.status} ${result.statusText}`)
+  logger.debug(`${result.req.method} ${result.req.path} ${result.status}`)
   return result
 }
 
 const errorLogger = error => {
   const status = error.response ? error.response.status : '-'
-  const responseData = error.response ? error.response.data : '-'
-  logger.warn(`API error in ${error.config.method} ${error.config.url} ${status} ${error.message} ${responseData}`)
-  throw error
+  const responseData = error.response ? error.response.body : '-'
+  if (error.response && error.response.req) {
+    logger.warn(
+      `API error in ${error.response.req.method} ${error.response.req.path} ${status} ${error.message} ${responseData}`
+    )
+  } else logger.warn(`API error with message ${error.message}`)
+  return error
 }
 
 /**
@@ -26,86 +31,102 @@ const errorLogger = error => {
  * @returns {{get: (function(*=): *), post: (function(*=, *=): *)}}
  */
 const factory = ({ baseUrl, timeout }) => {
+  // strip off any excess / from the required url
+  const remoteUrl = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl
+
   const agentOptions = {
     maxSockets: 100,
     maxFreeSockets: 10,
     freeSocketTimeout: 30000,
   }
-  const keepaliveAgent = baseUrl.startsWith('https')
-    ? { httpsAgent: new HttpsAgent(agentOptions) }
-    : { httpAgent: new Agent(agentOptions) }
-  const axiosInstance = axios.create({
-    baseURL: baseUrl,
-    timeout,
-    ...keepaliveAgent,
-  })
-
-  const addHeaders = (context, config) => addPaginationHeaders(context, addAuthorizationHeader(context, config))
+  const keepaliveAgent = remoteUrl.startsWith('https') ? new HttpsAgent(agentOptions) : new Agent(agentOptions)
 
   /**
-   * An Axios GET request with Oauth token
+   * A superagent GET request with Oauth token
    *
    * @param context A request scoped context. Holds OAuth tokens and pagination information for the request
-   * @param url if url is relative then baseURL will be prepended. If the url is absolute the baseURL is ignored.
+   * @param path relative path to get, starting with /
    * @param resultLimit - the maximum number of results that a Get request should return.  Becomes the value of the 'page-limit' request header.
    *        The header isn't set if resultLimit is falsy.
-   * @returns A Promise which settles to the Axios result object if the promise is resolved, otherwise to the 'error' object.
+   * @returns A Promise which settles to the superagent result object if the promise is resolved, otherwise to the 'error' object.
    */
-  const get = (context, url, resultLimit) =>
-    axiosInstance(
-      addHeaders(context, {
-        method: 'get',
-        url,
-        headers: resultLimit ? { 'Page-Limit': resultLimit } : {},
-      })
-    )
-      .then(resultLogger)
-      .catch(errorLogger)
+  const get = (context, path, resultLimit) =>
+    new Promise((resolve, reject) => {
+      superagent
+        .get(remoteUrl + path)
+        .agent(keepaliveAgent)
+        .set(getHeaders(context, resultLimit))
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .timeout({ deadline: timeout / 3 })
+        .end((error, response) => {
+          if (error) reject(errorLogger(error))
+          else if (response) resolve(resultLogger(response))
+        })
+    })
 
   /**
-   * An Axios POST with Oauth token refresh and retry behaviour
+   * An superagent POST with Oauth token refresh and retry behaviour
    * @param context A request scoped context. Holds OAuth tokens and pagination information for the request
-   * @param url if url is relative then the baseURL will be prepended. If the url is absolute then baseURL is ignored.
+   * @param path relative path to post to, starting with /
    * @param body
-   * @returns A Promise which resolves to the Axios result object, or the Axios error object if it is rejected
+   * @returns A Promise which resolves to the superagent result object, or the superagent error object if it is rejected
    */
-  const post = (context, url, body) =>
-    axiosInstance(
-      addHeaders(context, {
-        method: 'post',
-        url,
-        data: body,
-      })
-    )
-      .then(resultLogger)
-      .catch(errorLogger)
+  const post = (context, path, body) =>
+    new Promise((resolve, reject) => {
+      superagent
+        .post(remoteUrl + path)
+        .send(body)
+        .set(getHeaders(context))
+        .end((error, response) => {
+          if (error) reject(errorLogger(error))
+          else if (response) resolve(resultLogger(response))
+        })
+    })
+  const put = (context, path, body) =>
+    new Promise((resolve, reject) => {
+      superagent
+        .put(remoteUrl + path)
+        .send(body)
+        .set(getHeaders(context))
+        .end((error, response) => {
+          if (error) reject(errorLogger(error))
+          else if (response) resolve(resultLogger(response))
+        })
+    })
 
-  const put = (context, url, body) =>
-    axiosInstance(
-      addHeaders(context, {
-        method: 'put',
-        url,
-        data: body,
-      })
-    )
-      .then(resultLogger)
-      .catch(errorLogger)
-
-  const getStream = (context, url) =>
-    axiosInstance(
-      addHeaders(context, {
-        method: 'get',
-        url,
-        responseType: 'stream',
-      })
-    ).catch(errorLogger)
+  const getStream = (context, path) =>
+    new Promise((resolve, reject) => {
+      superagent
+        .get(remoteUrl + path)
+        .agent(keepaliveAgent)
+        .set(getHeaders(context))
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .timeout({ deadline: timeout / 3 })
+        .end((error, response) => {
+          if (error) reject(errorLogger(error))
+          else if (response) {
+            resultLogger(response)
+            const s = new Readable()
+            // eslint-disable-next-line no-underscore-dangle
+            s._read = () => {}
+            s.push(response.body)
+            s.push(null)
+            resolve(s)
+          }
+        })
+    })
 
   return {
     get,
     getStream,
     post,
     put,
-    axiosInstance, // exposed for testing...
   }
 }
 

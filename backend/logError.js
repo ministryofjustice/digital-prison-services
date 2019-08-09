@@ -10,7 +10,7 @@ const logError = (url, error, msg) => {
         headers: error.response.headers,
         config: error.response.config,
         stack: error.stack,
-        data: error.response.data,
+        data: error.response.body,
         message: error.message,
       },
       msg
