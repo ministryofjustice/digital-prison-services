@@ -2,16 +2,28 @@
 
 exports[`In Reception should display fromCity when fromAgencyDescription is not set  1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
   <table>
     <thead>
       <tr>
@@ -135,16 +147,28 @@ exports[`In Reception should display fromCity when fromAgencyDescription is not 
 
 exports[`In Reception should render the page correctly 1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
   <table>
     <thead>
       <tr>

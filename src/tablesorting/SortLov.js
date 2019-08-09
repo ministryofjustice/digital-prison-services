@@ -1,7 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Select from '@govuk-react/select'
+import styled from 'styled-components'
 import { ASC, DESC } from './sortOrder'
 import { ACTIVITY, CELL_LOCATION, LAST_NAME } from './sortColumns'
+
+export const FullWidthSelect = styled(Select)`
+  select {
+    width: 100%;
+  }
+
+  @media print {
+    display: none;
+  }
+`
 
 const SORT_OPTIONS = {
   [LAST_NAME]: { [ASC]: 'Name (A-Z)', [DESC]: 'Name (Z-A)' },
@@ -36,21 +48,18 @@ const invokeColumnSortWithEventData = setColumnSort => event => {
 }
 
 const SortLov = ({ sortColumns, sortColumn, sortOrder, setColumnSort }) => (
-  // Needs to use @govuk-react/select and remove containing grid classes
-  <div className="pure-u-md-1-4 margin-top-small margin-bottom-large no-print">
-    <label className="form-label" htmlFor="sort-select">
-      Order the list
-    </label>
-    <select
-      id="sort-select"
-      name="sort-select"
-      className="form-control"
-      onChange={invokeColumnSortWithEventData(setColumnSort)}
-      value={keyOrValue(sortColumn, sortOrder)}
-    >
-      {sortOptions(sortColumns)}
-    </select>
-  </div>
+  <FullWidthSelect
+    name="sort-select"
+    label="Order the list"
+    input={{
+      id: 'sort-select',
+      value: keyOrValue(sortColumn, sortOrder),
+      onChange: invokeColumnSortWithEventData(setColumnSort),
+    }}
+    mb={6}
+  >
+    {sortOptions(sortColumns)}
+  </FullWidthSelect>
 )
 
 SortLov.propTypes = {

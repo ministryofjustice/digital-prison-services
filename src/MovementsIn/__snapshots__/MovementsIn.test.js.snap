@@ -2,19 +2,29 @@
 
 exports[`Movements in should display fromCity when fromAgencyDescription is not set  1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
-  <table
-    className="row-gutters"
-  >
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
+  <table>
     <thead>
       <tr>
         <th
@@ -141,19 +151,29 @@ exports[`Movements in should display fromCity when fromAgencyDescription is not 
 
 exports[`Movements in should remove the offender link when the location is not set 1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
-  <table
-    className="row-gutters"
-  >
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
+  <table>
     <thead>
       <tr>
         <th
@@ -278,19 +298,29 @@ exports[`Movements in should remove the offender link when the location is not s
 
 exports[`Movements in should remove the offender link when the toAgencyId does not match the current agencyId/active case load 1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
-  <table
-    className="row-gutters"
-  >
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
+  <table>
     <thead>
       <tr>
         <th
@@ -417,19 +447,29 @@ exports[`Movements in should remove the offender link when the toAgencyId does n
 
 exports[`Movements in should render page correctly 1`] = `
 <Fragment>
-  <SortLov
-    setColumnSort={[MockFunction]}
-    sortColumn="lastName"
-    sortColumns={
-      Array [
-        "lastName",
-      ]
-    }
-    sortOrder="ASC"
-  />
-  <table
-    className="row-gutters"
-  >
+  <GridRow>
+    <GridCol
+      columnFull={false}
+      columnOneHalf={false}
+      columnOneQuarter={false}
+      columnOneThird={false}
+      columnThreeQuarters={false}
+      columnTwoThirds={false}
+      setWidth="one-quarter"
+    >
+      <SortLov
+        setColumnSort={[MockFunction]}
+        sortColumn="lastName"
+        sortColumns={
+          Array [
+            "lastName",
+          ]
+        }
+        sortOrder="ASC"
+      />
+    </GridCol>
+  </GridRow>
+  <table>
     <thead>
       <tr>
         <th
