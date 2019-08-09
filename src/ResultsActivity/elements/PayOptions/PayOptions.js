@@ -71,7 +71,12 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
             {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
             {!isPaying &&
               showRadioButton && (
-                <Radio onChange={payOffender} name={offenderNo + id} value="pay" checked={selectedOption === 'pay'}>
+                <Radio
+                  onChange={payOffender}
+                  name={offenderNo + eventId}
+                  value="pay"
+                  checked={selectedOption === 'pay'}
+                >
                   <VisuallyHidden>Pay</VisuallyHidden>
                 </Radio>
               )}
@@ -82,7 +87,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
       <Option data-qa="other-option" className="row-gutters">
         {showRadioButton &&
           !absentReason && (
-            <Radio name={offenderNo + id} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
+            <Radio name={offenderNo + eventId} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
               <VisuallyHidden>Other</VisuallyHidden>
             </Radio>
           )}

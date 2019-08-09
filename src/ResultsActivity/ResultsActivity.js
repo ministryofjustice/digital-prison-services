@@ -159,16 +159,16 @@ class ResultsActivity extends Component {
           offenders,
         })
 
-        const findOffenderIndexByBookingId = bookingId => {
-          const offender = offenders.find(off => off.bookingId === bookingId)
+        const findOffenderIndexByEventId = eventId => {
+          const offender = offenders.find(off => off.eventId === eventId)
           return offender.offenderIndex
         }
 
-        const paidOffenders = response.data.map(offender => {
-          const { paid, attended, bookingId } = offender
+        response.data.map(offender => {
+          const { paid, attended, eventId } = offender
           const offenderAttendanceData = { paid, attended, pay: attended && paid }
 
-          setActivityOffenderAttendance(findOffenderIndexByBookingId(bookingId), offenderAttendanceData)
+          setActivityOffenderAttendance(findOffenderIndexByEventId(eventId), offenderAttendanceData)
 
           return offender
         })
