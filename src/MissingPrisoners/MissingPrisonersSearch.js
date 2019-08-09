@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import moment from 'moment'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import Select from '@govuk-react/select'
@@ -37,6 +38,13 @@ const RightAlignContainer = styled.div`
   height: 100%;
 `
 
+const pastAndPresentDay = date =>
+  date.isBefore(
+    moment()
+      .add(1, 'days')
+      .startOf('day')
+  )
+
 const MissingPrisonersSearch = ({
   handleDateChange,
   date,
@@ -50,7 +58,7 @@ const MissingPrisonersSearch = ({
     <SearchContainer>
       <GridRow>
         <GridCol setWidth="one-quarter">
-          <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
+          <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} shouldShowDay={pastAndPresentDay} />
         </GridCol>
         <GridCol setWidth="one-quarter">
           <FullWidthSelect
