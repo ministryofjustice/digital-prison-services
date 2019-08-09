@@ -20,6 +20,7 @@ const waitForAsync = () => new Promise(resolve => setImmediate(resolve))
 const response = [
   {
     bookingId: 1,
+    eventId: 123,
     offenderNo: 'A1234AA',
     firstName: 'ARTHUR',
     lastName: 'ANDERSON',
@@ -60,6 +61,7 @@ const response = [
   },
   {
     bookingId: 2,
+    eventId: 456,
     offenderNo: 'A1234AB',
     firstName: 'MICHAEL',
     lastName: 'SMITH',
@@ -73,6 +75,7 @@ const response = [
   },
   {
     bookingId: 3,
+    eventId: 789,
     offenderNo: 'A1234AC',
     firstName: 'FRED',
     lastName: 'QUIMBY',
@@ -602,7 +605,7 @@ describe('Offender activity list results component', () => {
   it('should call the attendAll function when the link is clicked', async () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={3} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
     )
 
     const attendAllButton = component.find('#allAttendedButton')
@@ -623,7 +626,7 @@ describe('Offender activity list results component', () => {
       {
         offenderNo: 'A1234AB',
         bookingId: 2,
-        eventId: 123,
+        eventId: 456,
         eventLocationId: 123,
         attended: true,
         paid: true,
@@ -634,7 +637,7 @@ describe('Offender activity list results component', () => {
       {
         offenderNo: 'A1234AC',
         bookingId: 3,
-        eventId: 123,
+        eventId: 789,
         eventLocationId: 123,
         attended: true,
         paid: true,
