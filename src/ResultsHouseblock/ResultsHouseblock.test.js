@@ -193,6 +193,7 @@ const props = {
   setHouseblockOffenderAttendance: jest.fn(),
   showModal: jest.fn(),
   activityName: 'Activity name',
+  totalPaid: 0,
 }
 
 describe('Offender results component Jira NN-843', () => {

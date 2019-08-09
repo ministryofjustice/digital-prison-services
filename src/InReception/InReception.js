@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import GridRow from '@govuk-react/grid-row'
+import GridCol from '@govuk-react/grid-col'
 import SortableColumn from '../tablesorting/SortableColumn'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 import OffenderLink from '../OffenderLink'
@@ -11,7 +13,11 @@ import SortLov from '../tablesorting/SortLov'
 
 const InReception = ({ sortOrder, setColumnSort, rows }) => (
   <React.Fragment>
-    <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+    <GridRow>
+      <GridCol setWidth="one-quarter">
+        <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+      </GridCol>
+    </GridRow>
     <table>
       <thead>
         <tr>

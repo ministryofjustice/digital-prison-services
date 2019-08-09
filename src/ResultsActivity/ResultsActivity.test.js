@@ -453,7 +453,9 @@ describe('Offender activity list results component', () => {
   })
 
   it('should not display "Attend all prisoners" button if the date is more than a week in the past', () => {
-    const isMoreThanAWeekOld = moment(new Date()).subtract(8, 'days')
+    const isMoreThanAWeekOld = moment(new Date())
+      .subtract(8, 'days')
+      .format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalPaid={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
     )
@@ -463,7 +465,9 @@ describe('Offender activity list results component', () => {
   })
 
   it('should display "Attend all prisoners" button if the date is less than 8 days old', () => {
-    const isInTheLastWeek = moment(new Date()).subtract(6, 'days')
+    const isInTheLastWeek = moment(new Date())
+      .subtract(6, 'days')
+      .format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalPaid={0} activityData={response} date={isInTheLastWeek} period="AM" />
     )
@@ -473,7 +477,9 @@ describe('Offender activity list results component', () => {
   })
 
   it('should not display "Attend all prisoners" button if the date is in the future', () => {
-    const tomorrow = moment(new Date()).add(1, 'days')
+    const tomorrow = moment(new Date())
+      .add(1, 'days')
+      .format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalPaid={0} activityData={response} date={tomorrow} period="AM" />
     )

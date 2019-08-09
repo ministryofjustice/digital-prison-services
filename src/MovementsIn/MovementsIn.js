@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import GridRow from '@govuk-react/grid-row'
+import GridCol from '@govuk-react/grid-col'
 import SortableColumn from '../tablesorting/SortableColumn'
 import OffenderName from '../OffenderName'
 import DateFormatter from '../DateFormatter'
@@ -22,8 +24,12 @@ const withLink = (row, activeCaseLoadId, element) => {
 
 const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
   <React.Fragment>
-    <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
-    <table className="row-gutters">
+    <GridRow>
+      <GridCol setWidth="one-quarter">
+        <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+      </GridCol>
+    </GridRow>
+    <table>
       <thead>
         <tr>
           <th className="straight width10" />
