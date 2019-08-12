@@ -21,7 +21,7 @@ module.exports = {
   },
   apis: {
     oauth2: {
-      url: process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
+      url: process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth',
       ui_url: process.env.OAUTH_ENDPOINT_UI_URL || process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 10,
       clientId: process.env.API_CLIENT_ID || 'elite2apiclient',
@@ -30,11 +30,11 @@ module.exports = {
       systemClientSecret: process.env.API_SYSTEM_CLIENT_SECRET || 'clientsecret',
     },
     elite2: {
-      url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
+      url: process.env.API_ENDPOINT_URL || 'http://localhost:8080',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
     whereabouts: {
-      url: process.env.API_WHEREABOUTS_ENDPOINT_URL || 'http://localhost:8082/',
+      url: process.env.API_WHEREABOUTS_ENDPOINT_URL || 'http://localhost:8082',
       timeoutSeconds: process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
   },

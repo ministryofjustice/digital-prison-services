@@ -1,7 +1,7 @@
 const { arrayToQueryString } = require('../utils')
 
 const whereaboutsApiFactory = client => {
-  const processResponse = () => response => response.data
+  const processResponse = () => response => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())

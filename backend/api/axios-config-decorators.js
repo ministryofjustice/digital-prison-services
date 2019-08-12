@@ -1,31 +1,18 @@
 const contextProperties = require('../contextProperties')
 
-const addAuthorizationHeader = (context, config) => {
-  const accessToken = contextProperties.getAccessToken(context)
-  if (accessToken) {
-    return {
-      ...config,
-      headers: {
-        ...config.headers,
-        authorization: `Bearer ${accessToken}`,
-      },
-    }
-  }
-  return config
-}
-
-const addPaginationHeaders = (context, config) => {
+const getHeaders = (context, resultsLimit) => {
   const paginationHeaders = contextProperties.getRequestPagination(context)
-  return {
-    ...config,
-    headers: {
-      ...config.headers,
-      ...paginationHeaders,
-    },
-  }
+
+  const paginationHeadersWithResultsLimit = resultsLimit
+    ? { ...paginationHeaders, 'page-limit': resultsLimit.toString() }
+    : paginationHeaders
+
+  const accessToken = contextProperties.getAccessToken(context)
+  return accessToken
+    ? { authorization: `Bearer ${accessToken}`, ...paginationHeadersWithResultsLimit }
+    : paginationHeadersWithResultsLimit
 }
 
 module.exports = {
-  addAuthorizationHeader,
-  addPaginationHeaders,
+  getHeaders,
 }

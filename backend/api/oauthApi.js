@@ -17,9 +17,9 @@ const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId
  * @returns a configured oauthApi instance
  */
 const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
-  const get = (context, path) => client.get(context, path).then(response => response.data)
-  const currentUser = context => get(context, 'api/user/me')
-  const userRoles = context => get(context, 'api/user/me/roles')
+  const get = (context, path) => client.get(context, path).then(response => response.body)
+  const currentUser = context => get(context, '/api/user/me')
+  const userRoles = context => get(context, '/api/user/me/roles')
 
   const oauthAxios = axios.create({
     baseURL: url,
