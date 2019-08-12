@@ -43,7 +43,6 @@ const MissingPrisonersSearch = ({
 }) => (
   <Container>
     <SearchContainer>
-      {date}
       <GridRow>
         <GridCol setWidth="one-quarter">
           <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} shouldShowDay={pastAndPresentDay} />
