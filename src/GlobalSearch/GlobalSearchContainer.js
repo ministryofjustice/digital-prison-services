@@ -175,12 +175,11 @@ export class GlobalSearchContainer extends Component {
 
   render() {
     const { validForm } = this.state
-    const { searchPerformed, licencesUrl, userRoles, caseLoadOptions } = this.props
+    const { searchPerformed, licencesUrl, userRoles } = this.props
     const pageTitle = searchPerformed ? 'Global search results' : 'Global search'
     const licencesUser = userRoles.includes('LICENCE_RO')
     const licencesVaryUser = userRoles.includes('LICENCE_VARY')
     const viewInactivePrisoner = userRoles.includes('INACTIVE_BOOKINGS')
-    const caseLoads = caseLoadOptions.map(caseload => caseload.caseLoadId)
     const backWhiteList = { licences: licencesUrl }
     const backLink = backWhiteList[this.referrer]
 
@@ -199,7 +198,6 @@ export class GlobalSearchContainer extends Component {
           licencesUrl={licencesUrl}
           licencesUser={licencesUser}
           licencesVaryUser={licencesVaryUser}
-          caseLoads={caseLoads}
           viewInactivePrisoner={viewInactivePrisoner}
           handleResultsPerPageChange={this.handleResultsPerPageChange}
           {...this.props}
@@ -217,7 +215,6 @@ GlobalSearchContainer.propTypes = {
 
   // mapStateToProps
   loaded: PropTypes.bool.isRequired,
-  caseLoadOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   searchText: PropTypes.string,
   searchPerformed: PropTypes.bool.isRequired,
   genderFilter: PropTypes.string.isRequired,
@@ -265,7 +262,6 @@ GlobalSearchContainer.defaultProps = {
 
 const mapStateToProps = state => ({
   loaded: state.app.loaded,
-  caseLoadOptions: state.app.user.caseLoadOptions,
   data: state.globalSearch.data,
   pageNumber: state.globalSearch.pageNumber,
   pageSize: state.globalSearch.pageSize,
