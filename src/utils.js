@@ -42,17 +42,13 @@ const isToday = date => {
 }
 
 const getCurrentShift = date => {
-  let timeOfDay
-
   const afternoonSplit = 12
   const eveningSplit = 17
   const currentHour = moment(date).format('H')
 
-  if (currentHour < afternoonSplit) timeOfDay = 'AM'
-  if (currentHour >= afternoonSplit && currentHour < eveningSplit) timeOfDay = 'PM'
-  if (currentHour >= eveningSplit) timeOfDay = 'ED'
-
-  return timeOfDay
+  if (currentHour < afternoonSplit) return 'AM'
+  if (currentHour < eveningSplit) return 'PM'
+  return 'ED'
 }
 
 const isTodayOrAfter = date => {
