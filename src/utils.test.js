@@ -5,6 +5,7 @@ import {
   pascalToString,
   isWithinLastYear,
   isWithinLastWeek,
+  getCurrentShift,
   isAfterToday,
   forenameToInitial,
 } from './utils'
@@ -88,6 +89,24 @@ describe('isWithinLastWeek()', () => {
 
   it('returns false if date is not within the past week', () => {
     expect(isWithinLastWeek('2/01/2019')).toBe(false)
+  })
+})
+
+describe('getCurrentShift()', () => {
+  it('returns AM if time is post midnight', () => {
+    expect(getCurrentShift('2019-08-11T00:00:01.000')).toEqual('AM')
+  })
+
+  it('returns AM if time is pre 12 noon', () => {
+    expect(getCurrentShift('2019-08-11T11:59:59.000')).toEqual('AM')
+  })
+
+  it('returns PM if time is post 12 noon and before 5PM', () => {
+    expect(getCurrentShift('2019-08-11T16:59:59.000')).toEqual('PM')
+  })
+
+  it('returns ED if time is post 5pm and before midnight', () => {
+    expect(getCurrentShift('2019-08-11T23:59:59.000')).toEqual('ED')
   })
 })
 

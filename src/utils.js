@@ -41,6 +41,16 @@ const isToday = date => {
   return false
 }
 
+const getCurrentShift = date => {
+  const afternoonSplit = 12
+  const eveningSplit = 17
+  const currentHour = moment(date).format('H')
+
+  if (currentHour < afternoonSplit) return 'AM'
+  if (currentHour < eveningSplit) return 'PM'
+  return 'ED'
+}
+
 const isTodayOrAfter = date => {
   if (isToday(date)) return true
 
@@ -131,6 +141,7 @@ module.exports = {
   forenameToInitial,
   getHoursMinutes,
   isTodayOrAfter,
+  getCurrentShift,
   isAfterToday,
   isWithinLastYear,
   isWithinLastWeek,
