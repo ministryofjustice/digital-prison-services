@@ -8,9 +8,11 @@ class GlobalSearchPage extends Page {
     static at = {
         pageTitle == 'Global search results'
         headerTitle == 'Global search'
+        !spinner.displayed
     }
 
     static content = {
+        spinner(required: false) { $('.spinner-component') }
         pageTitle { $('h1').first().text() }
         headerTitle { $('.page-header .title').text() }
         tableRows(required: false) { $('tr') }
