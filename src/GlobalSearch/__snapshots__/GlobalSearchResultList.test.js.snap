@@ -144,20 +144,36 @@ exports[`Global search results component should render results correctly 1`] = `
         <td
           className="row-gutters"
         >
-          <img
-            alt="prisoner A1234AA"
-            height="100"
-            id="image-A1234AA"
-            src="/app/images/A1234AA/data"
-            width="80"
-          />
+          <a
+            className="link"
+            href="offenders/A1234AA/quick-look"
+            id="imageLink-A1234AA"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img
+              alt="prisoner A1234AA"
+              className="clickable"
+              height="100"
+              id="image-A1234AA"
+              src="/app/images/A1234AA/data"
+              width="80"
+            />
+          </a>
         </td>
         <td
           className="row-gutters"
         >
-          Anderson
-          , 
-          Arthur
+          <a
+            className="link"
+            href="offenders/A1234AA/quick-look"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Anderson
+            , 
+            Arthur
+          </a>
         </td>
         <td
           className="row-gutters"

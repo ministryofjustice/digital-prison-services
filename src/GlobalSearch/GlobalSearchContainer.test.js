@@ -79,17 +79,6 @@ describe('Global search container', () => {
     expect(component.find('GlobalSearch').props().viewInactivePrisoner).toEqual(true)
   })
 
-  it('should map user caseloads to a list of caseload Ids', async () => {
-    const caseloadProps = {
-      ...standardProps,
-      caseLoadOptions: [{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }, { caseLoadId: 'BXI' }],
-    }
-    const component = shallow(<GlobalSearchContainer {...caseloadProps} />)
-
-    expect(component.find('GlobalSearch').props().caseLoads).toHaveLength(3)
-    expect(component.find('GlobalSearch').props().caseLoads).toEqual(['MDI', 'LEI', 'BXI'])
-  })
-
   it('should pass Global search as page title if serchPerformed is false', async () => {
     const noSearchTextProps = { ...standardProps, searchPerformed: false }
     const component = shallow(<GlobalSearchContainer {...noSearchTextProps} />)
