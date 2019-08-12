@@ -11,7 +11,7 @@ import LeadParagraph from '@govuk-react/lead-paragraph'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
-import { linkOnClick } from '../utils'
+import { linkOnClick, getCurrentShift, isTodayOrAfter } from '../utils'
 import {
   Container,
   SearchContainer,
@@ -19,6 +19,10 @@ import {
   RightAlignContainer,
   DummyLink,
 } from './MissingPrisonersSearch.style'
+
+const showPMPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || (timeOfDay === 'PM' || timeOfDay === 'ED')
+
+const showEDPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || timeOfDay === 'ED'
 
 const pastAndPresentDay = date =>
   date.isBefore(
@@ -39,6 +43,7 @@ const MissingPrisonersSearch = ({
 }) => (
   <Container>
     <SearchContainer>
+      {date}
       <GridRow>
         <GridCol setWidth="one-quarter">
           <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} shouldShowDay={pastAndPresentDay} />
@@ -56,12 +61,17 @@ const MissingPrisonersSearch = ({
             <option key="MORNING" value="AM">
               Morning (AM)
             </option>
-            <option key="AFTERNOON" value="PM">
-              Afternoon (PM)
-            </option>
-            <option key="EVENING" value="ED">
-              Evening (ED)
-            </option>
+
+            {showPMPrisonerOption(getCurrentShift(), date) && (
+              <option key="AFTERNOON" value="PM">
+                Afternoon (PM)
+              </option>
+            )}
+            {showEDPrisonerOption(getCurrentShift(), date) && (
+              <option key="EVENING" value="ED">
+                Evening (ED)
+              </option>
+            )}
           </FullWidthSelect>
         </GridCol>
         <GridCol>
