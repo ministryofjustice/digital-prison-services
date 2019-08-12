@@ -120,6 +120,7 @@ class GlobalSearchSpecification extends BrowserReportingSpec {
 
         elite2api.stubGlobalSearch('', 'common', '', 'OUT', 'F', '1970-01-01', GlobalSearchResponses.response1)
         searchAgainButton.click()
+        at GlobalSearchPage
 
         then: "the filters retain their values"
         locationSelect == 'OUT'

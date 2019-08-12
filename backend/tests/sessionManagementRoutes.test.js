@@ -6,13 +6,6 @@ const cookieSession = require('cookie-session')
 const passport = require('passport')
 const flash = require('connect-flash')
 const setCookie = require('set-cookie-parser')
-const chai = require('chai')
-
-const { expect } = chai
-const sinon = require('sinon')
-const sinonChai = require('sinon-chai')
-
-chai.use(sinonChai)
 
 const sessionManagementRoutes = require('../sessionManagementRoutes')
 const auth = require('../auth')
@@ -22,7 +15,7 @@ const hmppsCookieName = 'testCookie'
 
 const hasCookies = expectedNames => res => {
   const cookieNames = setCookie.parse(res).map(cookie => cookie.name)
-  expect(cookieNames).to.have.members(expectedNames)
+  expect(cookieNames).toEqual(expect.arrayContaining(expectedNames))
 }
 
 const newNomisEndpointUrl = 'https://newnomis.url/'
@@ -53,7 +46,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
    * A Token refresher that does nothing.
    * @returns {Promise<void>}
    */
-  const tokenRefresher = sinon.stub()
+  const tokenRefresher = jest.fn()
 
   sessionManagementRoutes.configureRoutes({
     app,
@@ -70,23 +63,17 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   // because the outcome of each test depends upon the successful completion of the previous tests.
   const agent = request.agent(app)
 
-  it('GET "/" with no cooke (not authenticated) redirects to /login', () => {
-    tokenRefresher.resolves()
-
-    return agent
+  it('GET "/" with no cooke (not authenticated) redirects to /login', () =>
+    agent
       .get('/')
       .expect(302)
-      .expect('location', '/login?returnTo=%2F')
-  })
+      .expect('location', '/login?returnTo=%2F'))
 
-  it('GET "/some-page" with no cooke (not authenticated) redirects to /login?returnTo=some-page', () => {
-    tokenRefresher.resolves()
-
-    return agent
+  it('GET "/some-page" with no cooke (not authenticated) redirects to /login?returnTo=some-page', () =>
+    agent
       .get('/some-page')
       .expect(302)
-      .expect('location', '/login?returnTo=%2Fsome-page')
-  })
+      .expect('location', '/login?returnTo=%2Fsome-page'))
 
   it('GET "/login" when not authenticated returns login page', () => agent.get('/login').expect(302))
 
@@ -96,22 +83,17 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .set('Accept', 'application/json')
       .expect(401))
 
-  it('GET "/logout" clears the cookie', () => {
-    tokenRefresher.resolves()
-
-    return (
-      agent
-        .get('/auth/logout')
-        .expect(302)
-        .expect(
-          'location',
-          'http://localhost:9090/auth/logout?client_id=elite2apiclient&redirect_uri=https://newnomis.url/'
-        )
-        // The server sends a set cookie header to clear the cookie.
-        // The next test shows that the cookie was cleared because of the redirect to '/'
-        .expect(hasCookies(['testCookie']))
-    )
-  })
+  it('GET "/logout" clears the cookie', () =>
+    agent
+      .get('/auth/logout')
+      .expect(302)
+      .expect(
+        'location',
+        'http://localhost:9090/auth/logout?client_id=elite2apiclient&redirect_uri=https://newnomis.url/'
+      )
+      // The server sends a set cookie header to clear the cookie.
+      // The next test shows that the cookie was cleared because of the redirect to '/'
+      .expect(hasCookies(['testCookie'])))
 
   it('After logout get "/" should redirect to "/login"', () =>
     agent

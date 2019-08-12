@@ -9,7 +9,7 @@ const elite2ApiFactory = client => {
 
   const get = (context, url, resultsLimit) => client.get(context, url, resultsLimit).then(processResponse(context))
 
-  const getStream = (context, url) => client.getStream(context, url).then(processResponse(context))
+  const getStream = (context, url) => client.getStream(context, url)
 
   const post = (context, url, data) => client.post(context, url, data).then(processResponse(context))
 

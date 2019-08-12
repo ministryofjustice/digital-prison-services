@@ -9,14 +9,16 @@ const prisonerImageFactory = elite2Api => {
     if (!offenderNo || offenderNo === 'placeholder') {
       res.sendFile(placeHolder)
     } else {
-      res.type('image/jpeg')
-      try {
-        const data = await elite2Api.getPrisonerImage(res.locals, offenderNo)
-        data.pipe(res)
-      } catch (error) {
-        log.error(error)
-        res.sendFile(placeHolder)
-      }
+      elite2Api
+        .getPrisonerImage(res.locals, offenderNo)
+        .then(data => {
+          res.type('image/jpeg')
+          data.pipe(res)
+        })
+        .catch(error => {
+          log.error(error)
+          res.sendFile(placeHolder)
+        })
     }
   })
 
