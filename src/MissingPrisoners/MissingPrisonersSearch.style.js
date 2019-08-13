@@ -6,7 +6,7 @@ import { BORDER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 
 export const Container = styled.div`
   @media print {
-    display: none;
+    display: block;
   }
 `
 

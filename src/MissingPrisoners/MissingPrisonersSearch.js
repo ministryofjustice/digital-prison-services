@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import '../lists.scss'
 
 import moment from 'moment'
 import GridRow from '@govuk-react/grid-row'
@@ -11,7 +12,8 @@ import LeadParagraph from '@govuk-react/lead-paragraph'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
-import { linkOnClick, getCurrentShift, isTodayOrAfter } from '../utils'
+import { linkOnClick, getCurrentShift, isTodayOrAfter, getLongDateFormat } from '../utils'
+
 import {
   Container,
   SearchContainer,
@@ -44,11 +46,12 @@ const MissingPrisonersSearch = ({
   <Container>
     <SearchContainer>
       <GridRow>
-        <GridCol setWidth="one-quarter">
+        <GridCol setWidth="one-quarter" className="no-print">
           <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} shouldShowDay={pastAndPresentDay} />
         </GridCol>
         <GridCol setWidth="one-quarter">
           <FullWidthSelect
+            className="no-print"
             name="period"
             label="Period"
             input={{
@@ -75,13 +78,20 @@ const MissingPrisonersSearch = ({
         </GridCol>
         <GridCol>
           <RightAlignContainer>
-            <Button onClick={() => window.print()}>Print list</Button>
+            <Button className="no-print" onClick={() => window.print()}>
+              Print list
+            </Button>
           </RightAlignContainer>
         </GridCol>
       </GridRow>
     </SearchContainer>
     <LeadParagraph mb={3}>
-      <DummyLink {...linkOnClick(() => reloadPage(true))}>Reload page</DummyLink>
+      <span className="print-only">
+        {getLongDateFormat(date)} - {period}
+      </span>
+      <DummyLink className="no-print" {...linkOnClick(() => reloadPage(true))}>
+        Reload page
+      </DummyLink>
     </LeadParagraph>
     <GridRow>
       <GridCol setWidth="one-quarter">
