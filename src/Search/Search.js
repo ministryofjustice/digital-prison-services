@@ -185,7 +185,7 @@ class Search extends Component {
                     data-qa="missing-prisoners"
                     margin={{ size: 5, direction: ['top', 'left'] }}
                   >
-                    Missing prisoners
+                    View missing prisoners
                   </Button>
                 </div>
               )}
