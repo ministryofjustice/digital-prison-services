@@ -1,6 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { MemoryRouter } from 'react-router'
+import testRenderer from 'react-test-renderer'
 import { Search } from './Search'
+import { ConnectedFlagsProvider } from '../flags'
 
 const locations = [{ name: '1', key: 'K1' }, { name: '2', key: 'K2' }]
 const activities = [{ locationId: 123456, userDescription: 'little room' }]
@@ -88,5 +91,82 @@ describe('Search component', () => {
     component.find('#continue-housing').simulate('click')
     component.find('#continue-activity').simulate('click')
     expect(handleSearch.mock.calls.length).toBe(2)
+  })
+
+  it('should render correctly with feature toggle enabled', () => {
+    const store = {}
+    store.getState = jest.fn()
+    store.subscribe = jest.fn()
+    store.dispatch = jest.fn()
+    store.getState.mockReturnValue({
+      flags: {
+        updateAttendanceEnabled: true,
+      },
+    })
+
+    const wrapper = testRenderer
+      .create(
+        <MemoryRouter>
+          <ConnectedFlagsProvider store={store}>
+            <Search
+              history={mockHistory}
+              locations={locations}
+              activities={activities}
+              onSearch={jest.fn()}
+              onActivityChange={jest.fn()}
+              onLocationChange={jest.fn()}
+              handlePeriodChange={jest.fn()}
+              validationErrors={{ text: 'test' }}
+              handleDateChange={jest.fn()}
+              date="today"
+              period="AM"
+              loaded={false}
+              currentLocation="cellLocation"
+              activity="bob"
+            />
+          </ConnectedFlagsProvider>
+        </MemoryRouter>
+      )
+      .toJSON()
+
+    expect(wrapper).toMatchSnapshot()
+  })
+  it('should render correctly with feature toggle disabled', () => {
+    const store = {}
+    store.getState = jest.fn()
+    store.subscribe = jest.fn()
+    store.dispatch = jest.fn()
+    store.getState.mockReturnValue({
+      flags: {
+        updateAttendanceEnabled: false,
+      },
+    })
+
+    const wrapper = testRenderer
+      .create(
+        <MemoryRouter>
+          <ConnectedFlagsProvider store={store}>
+            <Search
+              history={mockHistory}
+              locations={locations}
+              activities={activities}
+              onSearch={jest.fn()}
+              onActivityChange={jest.fn()}
+              onLocationChange={jest.fn()}
+              handlePeriodChange={jest.fn()}
+              validationErrors={{ text: 'test' }}
+              handleDateChange={jest.fn()}
+              date="today"
+              period="AM"
+              loaded={false}
+              currentLocation="cellLocation"
+              activity="bob"
+            />
+          </ConnectedFlagsProvider>
+        </MemoryRouter>
+      )
+      .toJSON()
+
+    expect(wrapper).toMatchSnapshot()
   })
 })

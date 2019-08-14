@@ -4,6 +4,10 @@ import './search.scss'
 import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
+import Button from '@govuk-react/button'
+import { BLUE } from 'govuk-colours'
+import { SPACING } from '@govuk-react/constants'
+import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 
@@ -171,6 +175,22 @@ class Search extends Component {
               </div>
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
+            <Flag
+              name={['updateAttendanceEnabled']}
+              render={() => (
+                <div className="pure-u-md-1-3 pull-right">
+                  <Button
+                    buttonColour={BLUE}
+                    onClick={() => history.push(`missing-prisoners`)}
+                    data-qa="missing-prisoners"
+                    margin={{ size: 5, direction: ['top', 'left'] }}
+                  >
+                    View missing prisoners
+                  </Button>
+                </div>
+              )}
+              fallbackRender={() => <></>}
+            />
           </div>
 
           <div className="top-gutter">
