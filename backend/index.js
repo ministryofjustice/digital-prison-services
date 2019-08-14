@@ -265,7 +265,7 @@ app.use(
   })
 )
 ;['../static', '../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
-  app.use('/public', express.static(path.join(__dirname, dir)))
+  app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
 app.get('/whereabouts', (req, res) => {

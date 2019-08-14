@@ -11,9 +11,13 @@
   {% include "./header.njk" %}
 {% endblock %}
 
+{% block footer %}
+  {% include "./footer.njk" %}
+{% endblock %}
+
 {% block bodyEnd %}
 {# Run JavaScript at end of the
 <body>, to avoid blocking the initial render. #}
-<script src="/public/govuk/all.js"></script>
+<script src="/assets/govuk/all.js"></script>
 <script>window.GOVUKFrontend.initAll();</script>
 {% endblock %}

@@ -15,22 +15,25 @@
       </a>
     </div>
     
-    {% if user %}
+    {# {% if user %} #}
       <div class="user-block">
         <ul >
           <li>
-            {{ user.displayName }}
+            {# {{ user.displayName }} #}
+            Rob Cooper
           </li>
-          {% if user.activeCaseLoad %}
+          {# {% if user.activeCaseLoad %} #}
+          Caseload
           <li>
-            {{ user.activeCaseLoad.description }}
+            {# {{ user.activeCaseLoad.description }} #}
+            Description
           </li>
-          {% endif %}
+          {# {% endif %} #}
           <li>
             <a href="/logout">Sign out</a>
           </li>
         </ul>
       </div>
-    {% endif %}
+    {# {% endif %} #}
   </div>
 </header>
