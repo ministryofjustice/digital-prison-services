@@ -1,0 +1,76 @@
+@import 'colours/_palette';
+
+.page-header {
+  font-family: "nta", Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background-color: $text-colour;
+  color: white;
+  z-index: 999;
+  height: 60px;
+  width: 100%;
+
+  justify-content: center;
+}
+
+.header-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.left-content {
+  float: left;
+}
+
+.right-content {
+  float: right;
+  height: 100%;
+}
+
+.right-menu {
+  display: initial;
+  height: 100%;
+}
+
+.logo {
+  margin-left: 0px;
+  margin-right: 5px;
+  float: left;
+}
+
+.logo-text {
+  color: white;
+  font-size: 26px;
+  padding: 3px 15px 0 10px;
+  font-weight: bold;
+  border-right: solid white 1px;
+  margin-right: 15px;
+  text-decoration: none;
+      
+  display: inline-block;
+}
+
+.title {
+  text-align: left;
+  font-size: 26px;
+  flex-grow: 1;
+  text-decoration: none;
+
+  padding-left: 0px;
+}
+
+.unstyled-link {
+   text-decoration: none;
+   color: white;
+}
