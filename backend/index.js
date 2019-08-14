@@ -18,6 +18,7 @@ const middleware = require('webpack-dev-middleware')
 const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
+const nunjucks = require('nunjucks')
 
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
@@ -68,6 +69,7 @@ const sixtyDaysInSeconds = 5184000
 app.set('trust proxy', 1) // trust first proxy
 
 app.set('view engine', 'ejs')
+app.set('view engine', 'njk')
 
 app.use(helmet())
 
@@ -246,6 +248,29 @@ app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewM
 app.post('/api/bulk-appointments', controller.addBulkAppointments)
 app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
+
+nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
+  autoescape: true,
+  express: app,
+})
+
+// app.use(express.static(path.join(__dirname, 'static')));
+// app.use('/public', express.static(path.join(__dirname, '/static/styles')))
+// app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')))
+// app.use('/govuk-frontend', express.static(path.join(__dirname, '/node_modules/govuk-frontend')))
+;[
+  '../static',
+  '../static/styles',
+  '../node_modules/govuk-frontend/govuk/assets',
+  '../node_modules/govuk-frontend',
+].forEach(dir => {
+  app.use('/public', express.static(path.join(__dirname, dir)))
+  // console.log('DIRECTORY----------', path.join(__dirname, dir))
+})
+
+app.get('/whereabouts', (req, res) => {
+  res.render('whereabouts.njk')
+})
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))

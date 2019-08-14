@@ -17,7 +17,7 @@ exports[`Global search results component should render results correctly 1`] = `
        results
     </div>
     <div
-      className="sc-jTzLTM dwYLEN"
+      className="sc-fjdhpX cwGcGh"
     >
       <label
         htmlFor="perPage"
@@ -29,7 +29,7 @@ exports[`Global search results component should render results correctly 1`] = `
         </span>
       </label>
       <select
-        className="sc-VigVT egqawv"
+        className="sc-jTzLTM iQtMCx"
         id="perPage"
         onChange={[Function]}
         value={4}
@@ -301,7 +301,7 @@ exports[`Global search results component should render results when has inactive
        results
     </div>
     <div
-      className="sc-jTzLTM dwYLEN"
+      className="sc-fjdhpX cwGcGh"
     >
       <label
         htmlFor="perPage"
@@ -313,7 +313,7 @@ exports[`Global search results component should render results when has inactive
         </span>
       </label>
       <select
-        className="sc-VigVT egqawv"
+        className="sc-jTzLTM iQtMCx"
         id="perPage"
         onChange={[Function]}
         value={4}

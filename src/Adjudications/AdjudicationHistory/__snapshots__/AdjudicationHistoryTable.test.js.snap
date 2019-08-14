@@ -17,7 +17,7 @@ Array [
        results
     </div>
     <div
-      className="sc-kpOJdX gBCKOX"
+      className="sc-dxgOiQ goxert"
     >
       <label
         htmlFor="perPage"
@@ -29,7 +29,7 @@ Array [
         </span>
       </label>
       <select
-        className="sc-kGXeez dJFLNq"
+        className="sc-kpOJdX kfEGHZ"
         id="perPage"
         onChange={[Function]}
         value={20}
