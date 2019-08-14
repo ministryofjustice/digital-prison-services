@@ -256,24 +256,16 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
 })
 
 app.use(
-  '/assets',
   sassMiddleware({
-    src: path.join(__dirname, '../static/styles'),
-    dest: path.join(__dirname, '../static/stylesheets'),
+    src: path.join(__dirname, '../static/sass'),
+    dest: path.join(__dirname, '../static/styles'),
     debug: true,
     outputStyle: 'compressed',
-    prefix: '/stylesheets/',
-    includePaths: ['node_modules/govuk-frontend'],
+    prefix: '/styles',
   })
 )
-;[
-  '../static',
-  '../static/stylesheets',
-  '../node_modules/govuk-frontend/govuk/assets',
-  '../node_modules/govuk-frontend',
-].forEach(dir => {
+;['../static', '../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
   app.use('/public', express.static(path.join(__dirname, dir)))
-  // console.log('DIRECTORY----------', path.join(__dirname, dir))
 })
 
 app.get('/whereabouts', (req, res) => {
