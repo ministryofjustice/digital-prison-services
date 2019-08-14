@@ -2,7 +2,7 @@
 
 {% block head %}
 <!--[if !IE 8]><!-->
-<link href="/static/styles/application.css" rel="stylesheet"/>
+<link href="/static/styles/application.css{{version}}" rel="stylesheet"/>
 <!--<![endif]-->
 
 {% endblock %}
@@ -14,6 +14,6 @@
 {% block bodyEnd %}
 {# Run JavaScript at end of the
 <body>, to avoid blocking the initial render. #}
-<script src="/assets/govuk/all.js"></script>
+<script src="/public/govuk/all.js"></script>
 <script>window.GOVUKFrontend.initAll();</script>
 {% endblock %}

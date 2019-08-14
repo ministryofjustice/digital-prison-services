@@ -103,6 +103,7 @@ module.exports = {
                     'node_modules/govuk-elements-sass/public/sass',
                     'node_modules/govuk-frontend',
                     'node_modules/govuk-frontend/govuk/assets',
+                    'static/styles',
                   ],
                 },
               },
