@@ -19,7 +19,6 @@ const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
 const nunjucks = require('nunjucks')
-const sassMiddleware = require('node-sass-middleware')
 
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
@@ -254,16 +253,6 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
   autoescape: true,
   express: app,
 })
-
-app.use(
-  sassMiddleware({
-    src: path.join(__dirname, '../static/sass'),
-    dest: path.join(__dirname, '../static/styles'),
-    debug: true,
-    outputStyle: 'compressed',
-    prefix: '/styles',
-  })
-)
 ;['../static', '../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
