@@ -1,0 +1,1161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search component should render correctly with feature toggle disabled 1`] = `
+Array [
+  "",
+  <form
+    className="searchForm"
+    id="searchForm"
+    name="searchForm"
+  >
+    <div
+      className="padding-top padding-bottom-large"
+    >
+      <div
+        className="pure-u-md-1-6"
+      >
+        <div
+          className="padding-right"
+        >
+          <div
+            className="rdt"
+          >
+            <div>
+              <label
+                className="sc-bxivhb fjqhoB"
+              >
+                <span
+                  className="sc-htpNat eCRQZP"
+                >
+                   
+                  Date
+                   
+                </span>
+                <input
+                  className="form-control sc-EHOje jAaYY"
+                  name="search-date"
+                  onChange={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  placeholder="Select"
+                  readOnly={true}
+                  type="text"
+                  value="today"
+                />
+              </label>
+            </div>
+            <div
+              className="rdtPicker"
+            >
+              <div
+                className="rdtDays"
+              >
+                <table>
+                  <thead>
+                    <tr>
+                      <th
+                        className="rdtPrev"
+                        onClick={[Function]}
+                      >
+                        <span>
+                          ‹
+                        </span>
+                      </th>
+                      <th
+                        className="rdtSwitch"
+                        colSpan={5}
+                        data-value={7}
+                        onClick={[Function]}
+                      >
+                        August 2019
+                      </th>
+                      <th
+                        className="rdtNext"
+                        onClick={[Function]}
+                      >
+                        <span>
+                          ›
+                        </span>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th
+                        className="dow"
+                      >
+                        Mo
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Tu
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        We
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Th
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Fr
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Sa
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Su
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td
+                        className="rdtDay rdtOld"
+                        data-value={29}
+                        onClick={[Function]}
+                      >
+                        29
+                      </td>
+                      <td
+                        className="rdtDay rdtOld"
+                        data-value={30}
+                        onClick={[Function]}
+                      >
+                        30
+                      </td>
+                      <td
+                        className="rdtDay rdtOld"
+                        data-value={31}
+                        onClick={[Function]}
+                      >
+                        31
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={1}
+                        onClick={[Function]}
+                      >
+                        1
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={2}
+                        onClick={[Function]}
+                      >
+                        2
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={3}
+                        onClick={[Function]}
+                      >
+                        3
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={4}
+                        onClick={[Function]}
+                      >
+                        4
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay"
+                        data-value={5}
+                        onClick={[Function]}
+                      >
+                        5
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={6}
+                        onClick={[Function]}
+                      >
+                        6
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={7}
+                        onClick={[Function]}
+                      >
+                        7
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={8}
+                        onClick={[Function]}
+                      >
+                        8
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={9}
+                        onClick={[Function]}
+                      >
+                        9
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={10}
+                        onClick={[Function]}
+                      >
+                        10
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={11}
+                        onClick={[Function]}
+                      >
+                        11
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay"
+                        data-value={12}
+                        onClick={[Function]}
+                      >
+                        12
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={13}
+                        onClick={[Function]}
+                      >
+                        13
+                      </td>
+                      <td
+                        className="rdtDay rdtToday"
+                        data-value={14}
+                        onClick={[Function]}
+                      >
+                        14
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={15}
+                        onClick={[Function]}
+                      >
+                        15
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={16}
+                      >
+                        16
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={17}
+                      >
+                        17
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={18}
+                      >
+                        18
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={19}
+                      >
+                        19
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={20}
+                      >
+                        20
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={21}
+                      >
+                        21
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={22}
+                      >
+                        22
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={23}
+                      >
+                        23
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={24}
+                      >
+                        24
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={25}
+                      >
+                        25
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={26}
+                      >
+                        26
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={27}
+                      >
+                        27
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={28}
+                      >
+                        28
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={29}
+                      >
+                        29
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={30}
+                      >
+                        30
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={31}
+                      >
+                        31
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={1}
+                      >
+                        1
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={2}
+                      >
+                        2
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={3}
+                      >
+                        3
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={4}
+                      >
+                        4
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={5}
+                      >
+                        5
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={6}
+                      >
+                        6
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={7}
+                      >
+                        7
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={8}
+                      >
+                        8
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="pure-u-md-1-6"
+      >
+        <label
+          className="form-label"
+          htmlFor="period-select"
+        >
+          Period
+        </label>
+        <select
+          className="form-control"
+          id="period-select"
+          name="period-select"
+          onChange={[MockFunction]}
+          value="AM"
+        >
+          <option
+            value="AM"
+          >
+            Morning (AM)
+          </option>
+          <option
+            value="PM"
+          >
+            Afternoon (PM)
+          </option>
+          <option
+            value="ED"
+          >
+            Evening (ED)
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      className="top-gutter"
+    >
+      <fieldset
+        className="pure-u-md-5-12 fieldset"
+      >
+        <div
+          className="pure-g padding-bottom-large"
+        >
+          <div
+            className="pure-u-md-4-5"
+          >
+            <div
+              className="padding-left-large"
+            >
+              <legend
+                className="heading-medium"
+              >
+                Search by housing
+              </legend>
+              <label
+                className="form-label padding-top"
+                htmlFor="housing-location-select"
+              >
+                Housing
+              </label>
+              <select
+                className="form-control"
+                id="housing-location-select"
+                name="housing-location-select"
+                onChange={[MockFunction]}
+                value="cellLocation"
+              >
+                <option
+                  value="--"
+                >
+                  — Select —
+                </option>
+                <option
+                  value="K1"
+                >
+                  1
+                </option>
+                <option
+                  value="K2"
+                >
+                  2
+                </option>
+              </select>
+              <div
+                className="padding-top-large padding-bottom-40"
+              >
+                <button
+                  className="button width50"
+                  disabled={true}
+                  id="continue-housing"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div
+        className="pure-u-md-1-12"
+      />
+      <fieldset
+        className="pure-u-md-5-12 fieldset"
+      >
+        <div
+          className="pure-g padding-bottom-large"
+        >
+          <div
+            className="pure-u-md-4-5"
+          >
+            <div
+              className="padding-left-large"
+            >
+              <legend
+                className="heading-medium"
+              >
+                Search by activity
+              </legend>
+              <label
+                className="form-label padding-top"
+                htmlFor="activity-select"
+              >
+                Activity
+              </label>
+              <select
+                className="form-control"
+                disabled={true}
+                id="activity-select"
+                name="activity-select"
+                onChange={[MockFunction]}
+                value="bob"
+              >
+                <option
+                  value="--"
+                >
+                  — Select —
+                </option>
+                <option
+                  value={123456}
+                >
+                  little room
+                </option>
+              </select>
+              <div
+                className="padding-top-large padding-bottom-40"
+              >
+                <button
+                  className="button width50"
+                  disabled={true}
+                  id="continue-activity"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </form>,
+]
+`;
+
+exports[`Search component should render correctly with feature toggle enabled 1`] = `
+Array [
+  "",
+  <form
+    className="searchForm"
+    id="searchForm"
+    name="searchForm"
+  >
+    <div
+      className="padding-top padding-bottom-large"
+    >
+      <div
+        className="pure-u-md-1-6"
+      >
+        <div
+          className="padding-right"
+        >
+          <div
+            className="rdt"
+          >
+            <div>
+              <label
+                className="sc-bxivhb fjqhoB"
+              >
+                <span
+                  className="sc-htpNat eCRQZP"
+                >
+                   
+                  Date
+                   
+                </span>
+                <input
+                  className="form-control sc-EHOje jAaYY"
+                  name="search-date"
+                  onChange={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  placeholder="Select"
+                  readOnly={true}
+                  type="text"
+                  value="today"
+                />
+              </label>
+            </div>
+            <div
+              className="rdtPicker"
+            >
+              <div
+                className="rdtDays"
+              >
+                <table>
+                  <thead>
+                    <tr>
+                      <th
+                        className="rdtPrev"
+                        onClick={[Function]}
+                      >
+                        <span>
+                          ‹
+                        </span>
+                      </th>
+                      <th
+                        className="rdtSwitch"
+                        colSpan={5}
+                        data-value={7}
+                        onClick={[Function]}
+                      >
+                        August 2019
+                      </th>
+                      <th
+                        className="rdtNext"
+                        onClick={[Function]}
+                      >
+                        <span>
+                          ›
+                        </span>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th
+                        className="dow"
+                      >
+                        Mo
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Tu
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        We
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Th
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Fr
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Sa
+                      </th>
+                      <th
+                        className="dow"
+                      >
+                        Su
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td
+                        className="rdtDay rdtOld"
+                        data-value={29}
+                        onClick={[Function]}
+                      >
+                        29
+                      </td>
+                      <td
+                        className="rdtDay rdtOld"
+                        data-value={30}
+                        onClick={[Function]}
+                      >
+                        30
+                      </td>
+                      <td
+                        className="rdtDay rdtOld"
+                        data-value={31}
+                        onClick={[Function]}
+                      >
+                        31
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={1}
+                        onClick={[Function]}
+                      >
+                        1
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={2}
+                        onClick={[Function]}
+                      >
+                        2
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={3}
+                        onClick={[Function]}
+                      >
+                        3
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={4}
+                        onClick={[Function]}
+                      >
+                        4
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay"
+                        data-value={5}
+                        onClick={[Function]}
+                      >
+                        5
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={6}
+                        onClick={[Function]}
+                      >
+                        6
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={7}
+                        onClick={[Function]}
+                      >
+                        7
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={8}
+                        onClick={[Function]}
+                      >
+                        8
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={9}
+                        onClick={[Function]}
+                      >
+                        9
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={10}
+                        onClick={[Function]}
+                      >
+                        10
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={11}
+                        onClick={[Function]}
+                      >
+                        11
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay"
+                        data-value={12}
+                        onClick={[Function]}
+                      >
+                        12
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={13}
+                        onClick={[Function]}
+                      >
+                        13
+                      </td>
+                      <td
+                        className="rdtDay rdtToday"
+                        data-value={14}
+                        onClick={[Function]}
+                      >
+                        14
+                      </td>
+                      <td
+                        className="rdtDay"
+                        data-value={15}
+                        onClick={[Function]}
+                      >
+                        15
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={16}
+                      >
+                        16
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={17}
+                      >
+                        17
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={18}
+                      >
+                        18
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={19}
+                      >
+                        19
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={20}
+                      >
+                        20
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={21}
+                      >
+                        21
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={22}
+                      >
+                        22
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={23}
+                      >
+                        23
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={24}
+                      >
+                        24
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={25}
+                      >
+                        25
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={26}
+                      >
+                        26
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={27}
+                      >
+                        27
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={28}
+                      >
+                        28
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={29}
+                      >
+                        29
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={30}
+                      >
+                        30
+                      </td>
+                      <td
+                        className="rdtDay rdtDisabled"
+                        data-value={31}
+                      >
+                        31
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={1}
+                      >
+                        1
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={2}
+                      >
+                        2
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={3}
+                      >
+                        3
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={4}
+                      >
+                        4
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={5}
+                      >
+                        5
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={6}
+                      >
+                        6
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={7}
+                      >
+                        7
+                      </td>
+                      <td
+                        className="rdtDay rdtNew rdtDisabled"
+                        data-value={8}
+                      >
+                        8
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="pure-u-md-1-6"
+      >
+        <label
+          className="form-label"
+          htmlFor="period-select"
+        >
+          Period
+        </label>
+        <select
+          className="form-control"
+          id="period-select"
+          name="period-select"
+          onChange={[MockFunction]}
+          value="AM"
+        >
+          <option
+            value="AM"
+          >
+            Morning (AM)
+          </option>
+          <option
+            value="PM"
+          >
+            Afternoon (PM)
+          </option>
+          <option
+            value="ED"
+          >
+            Evening (ED)
+          </option>
+        </select>
+      </div>
+      <div
+        className="pure-u-md-1-3 pull-right"
+      >
+        <button
+          className="sc-bdVaJa hbNYzW"
+          data-qa="missing-prisoners"
+          disabled={false}
+          onClick={[Function]}
+        >
+          View missing prisoners
+        </button>
+      </div>
+    </div>
+    <div
+      className="top-gutter"
+    >
+      <fieldset
+        className="pure-u-md-5-12 fieldset"
+      >
+        <div
+          className="pure-g padding-bottom-large"
+        >
+          <div
+            className="pure-u-md-4-5"
+          >
+            <div
+              className="padding-left-large"
+            >
+              <legend
+                className="heading-medium"
+              >
+                Search by housing
+              </legend>
+              <label
+                className="form-label padding-top"
+                htmlFor="housing-location-select"
+              >
+                Housing
+              </label>
+              <select
+                className="form-control"
+                id="housing-location-select"
+                name="housing-location-select"
+                onChange={[MockFunction]}
+                value="cellLocation"
+              >
+                <option
+                  value="--"
+                >
+                  — Select —
+                </option>
+                <option
+                  value="K1"
+                >
+                  1
+                </option>
+                <option
+                  value="K2"
+                >
+                  2
+                </option>
+              </select>
+              <div
+                className="padding-top-large padding-bottom-40"
+              >
+                <button
+                  className="button width50"
+                  disabled={true}
+                  id="continue-housing"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div
+        className="pure-u-md-1-12"
+      />
+      <fieldset
+        className="pure-u-md-5-12 fieldset"
+      >
+        <div
+          className="pure-g padding-bottom-large"
+        >
+          <div
+            className="pure-u-md-4-5"
+          >
+            <div
+              className="padding-left-large"
+            >
+              <legend
+                className="heading-medium"
+              >
+                Search by activity
+              </legend>
+              <label
+                className="form-label padding-top"
+                htmlFor="activity-select"
+              >
+                Activity
+              </label>
+              <select
+                className="form-control"
+                disabled={true}
+                id="activity-select"
+                name="activity-select"
+                onChange={[MockFunction]}
+                value="bob"
+              >
+                <option
+                  value="--"
+                >
+                  — Select —
+                </option>
+                <option
+                  value={123456}
+                >
+                  little room
+                </option>
+              </select>
+              <div
+                className="padding-top-large padding-bottom-40"
+              >
+                <button
+                  className="button width50"
+                  disabled={true}
+                  id="continue-activity"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </form>,
+]
+`;
