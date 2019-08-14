@@ -5,7 +5,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="sc-kpOJdX jjfhSm"
+    className="sc-chPdSV ddsHXB"
   >
     <div
       className="sc-bdVaJa gkOpjT"
@@ -17,7 +17,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <h3
-            className="sc-ckVGcZ kDPFFn sc-fjdhpX TnkYd"
+            className="sc-kGXeez iHgsBB sc-fjdhpX TnkYd"
           >
             Filters
           </h3>
@@ -29,16 +29,16 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
             className="sc-bwzfXH iXLolC"
           >
             <label
-              className="sc-kGXeez fqkuMN sc-jzJRlG RTQda"
+              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
               id="establishment-select"
             >
               <span
-                className="sc-cSHVUG kfwhPi"
+                className="sc-gqjmRU hMYAWR"
               >
                 Establishment
               </span>
               <select
-                className="sc-kgoBCf kIBVnR"
+                className="sc-cSHVUG iPEkCj"
                 name="establishment"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -62,16 +62,16 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
             className="sc-bwzfXH iXLolC"
           >
             <label
-              className="sc-kGXeez fqkuMN sc-jzJRlG RTQda"
+              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
               id="iep-level-select"
             >
               <span
-                className="sc-cSHVUG kfwhPi"
+                className="sc-gqjmRU hMYAWR"
               >
                 IEP level
               </span>
               <select
-                className="sc-kgoBCf kIBVnR"
+                className="sc-cSHVUG iPEkCj"
                 name="level"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -100,7 +100,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
           className="sc-bdVaJa gkOpjT"
         >
           <span
-            className="sc-jKJlTe haAGcp"
+            className="sc-kpOJdX irqhhZ"
           >
             Date range
           </span>

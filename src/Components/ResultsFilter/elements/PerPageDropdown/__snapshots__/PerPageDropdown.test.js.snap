@@ -2,7 +2,7 @@
 
 exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
 <div
-  className="sc-bZQynM HPJOd"
+  className="sc-EHOje KqnQa"
 >
   <label
     htmlFor="perPage"
@@ -14,7 +14,7 @@ exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
     </span>
   </label>
   <select
-    className="sc-EHOje cXNwfO"
+    className="sc-ifAKCX kDzsBS"
     id="perPage"
     onChange={[Function]}
     value={10}
@@ -30,7 +30,7 @@ exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
 <div
-  className="sc-bZQynM HPJOd"
+  className="sc-EHOje KqnQa"
 >
   <label
     htmlFor="perPage"
@@ -42,7 +42,7 @@ exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
     </span>
   </label>
   <select
-    className="sc-EHOje cXNwfO"
+    className="sc-ifAKCX kDzsBS"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -63,7 +63,7 @@ exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
 <div
-  className="sc-bZQynM HPJOd"
+  className="sc-EHOje KqnQa"
 >
   <label
     htmlFor="perPage"
@@ -75,7 +75,7 @@ exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
     </span>
   </label>
   <select
-    className="sc-EHOje cXNwfO"
+    className="sc-ifAKCX kDzsBS"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -101,7 +101,7 @@ exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
 <div
-  className="sc-bZQynM HPJOd"
+  className="sc-EHOje KqnQa"
 >
   <label
     htmlFor="perPage"
@@ -113,7 +113,7 @@ exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
     </span>
   </label>
   <select
-    className="sc-EHOje cXNwfO"
+    className="sc-ifAKCX kDzsBS"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -144,7 +144,7 @@ exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match the default snapshot 1`] = `
 <div
-  className="sc-bZQynM HPJOd"
+  className="sc-EHOje KqnQa"
 >
   <label
     htmlFor="perPage"
@@ -156,7 +156,7 @@ exports[`<PerPageDropdown /> should match the default snapshot 1`] = `
     </span>
   </label>
   <select
-    className="sc-EHOje cXNwfO"
+    className="sc-ifAKCX kDzsBS"
     id="perPage"
     onChange={[Function]}
     value={20}

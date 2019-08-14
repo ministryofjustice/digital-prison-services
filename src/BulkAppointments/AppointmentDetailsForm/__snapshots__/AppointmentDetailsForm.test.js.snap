@@ -90,25 +90,25 @@ Array [
     </ul>
   </div>,
   <div
-    className="sc-eHgmQL epnRwl"
+    className="sc-eNQAEJ gCZcPD"
   >
     <div>
       <label
-        className="sc-jWBwVP ehpxti sc-kgoBCf fEvdIb"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX ecXZFL"
         placeholder="Select"
       >
         <span
-          className="sc-kGXeez fmtdbL"
+          className="sc-jzJRlG fYwhH"
         >
           Appointment type
         </span>
         <span
-          className="sc-kpOJdX dwdWBG"
+          className="sc-dnqmqq bUFnck"
         >
           appointment type test message
         </span>
         <select
-          className="sc-ckVGcZ kylVOt"
+          className="sc-kGXeez fwRonn"
           name="appointmentType"
           onBlur={[Function]}
           onChange={[Function]}
@@ -130,7 +130,7 @@ Array [
         </select>
       </label>
       <div
-        className="sc-hSdWYo jUvrHG"
+        className="sc-jKJlTe ibxrgd"
       >
         <div
           className="rdt"
@@ -561,21 +561,21 @@ Array [
               Start test message
             </span>
             <div
-              className="sc-jKJlTe jRcriK"
+              className="sc-kpOJdX eQNXoo"
               name="startTime"
             >
               <label
-                className="sc-kgoBCf kZSnei"
+                className="sc-fjdhpX bMZnoP"
                 defaultValue="--"
                 disabled={false}
                 id="hours"
                 name="hours"
               >
                 <span
-                  className="sc-kGXeez fmtdbL"
+                  className="sc-jzJRlG fYwhH"
                 />
                 <select
-                  className="sc-ckVGcZ sIgWo"
+                  className="sc-kGXeez dJFLNq"
                   onChange={[Function]}
                   value="undefined"
                 >
@@ -594,16 +594,16 @@ Array [
                 </select>
               </label>
               <label
-                className="sc-kgoBCf kZSnei"
+                className="sc-fjdhpX bMZnoP"
                 defaultValue="--"
                 disabled={false}
                 name="minutes"
               >
                 <span
-                  className="sc-kGXeez fmtdbL"
+                  className="sc-jzJRlG fYwhH"
                 />
                 <select
-                  className="sc-ckVGcZ sIgWo"
+                  className="sc-kGXeez dJFLNq"
                   onChange={[Function]}
                   value="undefined"
                 >
@@ -673,19 +673,19 @@ Array [
       </label>
     </div>
     <div
-      className="sc-cvbbAY iEnSAK"
+      className="sc-hMqMXs iKFKuc"
     >
       <label
-        className="sc-jWBwVP ehpxti sc-kgoBCf hxITgT"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
         placeholder="Select"
       >
         <span
-          className="sc-kGXeez fmtdbL"
+          className="sc-jzJRlG fYwhH"
         >
           Location
         </span>
         <select
-          className="sc-ckVGcZ sIgWo"
+          className="sc-kGXeez dJFLNq"
           name="location"
           onBlur={[Function]}
           onChange={[Function]}
@@ -724,21 +724,21 @@ Array [
             End time test message
           </span>
           <div
-            className="sc-jKJlTe jRcriK"
+            className="sc-kpOJdX eQNXoo"
             name="endTime"
           >
             <label
-              className="sc-kgoBCf kZSnei"
+              className="sc-fjdhpX bMZnoP"
               defaultValue="--"
               disabled={false}
               id="hours"
               name="hours"
             >
               <span
-                className="sc-kGXeez fmtdbL"
+                className="sc-jzJRlG fYwhH"
               />
               <select
-                className="sc-ckVGcZ sIgWo"
+                className="sc-kGXeez dJFLNq"
                 onChange={[Function]}
                 value="undefined"
               >
@@ -757,16 +757,16 @@ Array [
               </select>
             </label>
             <label
-              className="sc-kgoBCf kZSnei"
+              className="sc-fjdhpX bMZnoP"
               defaultValue="--"
               disabled={false}
               name="minutes"
             >
               <span
-                className="sc-kGXeez fmtdbL"
+                className="sc-jzJRlG fYwhH"
               />
               <select
-                className="sc-ckVGcZ sIgWo"
+                className="sc-kGXeez dJFLNq"
                 onChange={[Function]}
                 value="undefined"
               >
@@ -815,15 +815,15 @@ Array [
         </label>
       </div>
       <label
-        className="sc-brqgnP jJssVh sc-eNQAEJ hqhhEO"
+        className="sc-kkGfuU jeqVra sc-fjdhpX ecXZFL"
       >
         <span
-          className="sc-hMqMXs kjtFQg"
+          className="sc-jzJRlG fYwhH"
         >
           Comments (optional)
         </span>
         <textarea
-          className="sc-iAyFgw eANhPM"
+          className="sc-ckVGcZ gOZpqx"
           name="comments"
           onBlur={[Function]}
           onChange={[Function]}
@@ -845,20 +845,20 @@ exports[`Appointment form should render correctly 1`] = `
 >
   
   <div
-    className="sc-eHgmQL epnRwl"
+    className="sc-eNQAEJ gCZcPD"
   >
     <div>
       <label
-        className="sc-jWBwVP ehpxti sc-kgoBCf hxITgT"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
         placeholder="Select"
       >
         <span
-          className="sc-kGXeez fmtdbL"
+          className="sc-jzJRlG fYwhH"
         >
           Appointment type
         </span>
         <select
-          className="sc-ckVGcZ sIgWo"
+          className="sc-kGXeez dJFLNq"
           name="appointmentType"
           onBlur={[Function]}
           onChange={[Function]}
@@ -875,7 +875,7 @@ exports[`Appointment form should render correctly 1`] = `
         </select>
       </label>
       <div
-        className="sc-hSdWYo jUvrHG"
+        className="sc-jKJlTe ibxrgd"
       >
         <div
           className="rdt"
@@ -1296,21 +1296,21 @@ exports[`Appointment form should render correctly 1`] = `
                
             </span>
             <div
-              className="sc-jKJlTe eBrFcx"
+              className="sc-kpOJdX ibzRwQ"
               name="startTime"
             >
               <label
-                className="sc-kgoBCf kZSnei"
+                className="sc-fjdhpX bMZnoP"
                 defaultValue="--"
                 disabled={true}
                 id="hours"
                 name="hours"
               >
                 <span
-                  className="sc-kGXeez fmtdbL"
+                  className="sc-jzJRlG fYwhH"
                 />
                 <select
-                  className="sc-ckVGcZ sIgWo"
+                  className="sc-kGXeez dJFLNq"
                   onChange={[Function]}
                   value="undefined"
                 >
@@ -1392,16 +1392,16 @@ exports[`Appointment form should render correctly 1`] = `
                 </select>
               </label>
               <label
-                className="sc-kgoBCf kZSnei"
+                className="sc-fjdhpX bMZnoP"
                 defaultValue="--"
                 disabled={true}
                 name="minutes"
               >
                 <span
-                  className="sc-kGXeez fmtdbL"
+                  className="sc-jzJRlG fYwhH"
                 />
                 <select
-                  className="sc-ckVGcZ sIgWo"
+                  className="sc-kGXeez dJFLNq"
                   onChange={[Function]}
                   value="undefined"
                 >
@@ -1471,19 +1471,19 @@ exports[`Appointment form should render correctly 1`] = `
       </label>
     </div>
     <div
-      className="sc-cvbbAY iEnSAK"
+      className="sc-hMqMXs iKFKuc"
     >
       <label
-        className="sc-jWBwVP ehpxti sc-kgoBCf hxITgT"
+        className="sc-kEYyzF hqMHpG sc-fjdhpX TlFPV"
         placeholder="Select"
       >
         <span
-          className="sc-kGXeez fmtdbL"
+          className="sc-jzJRlG fYwhH"
         >
           Location
         </span>
         <select
-          className="sc-ckVGcZ sIgWo"
+          className="sc-kGXeez dJFLNq"
           name="location"
           onBlur={[Function]}
           onChange={[Function]}
@@ -1512,21 +1512,21 @@ exports[`Appointment form should render correctly 1`] = `
              
           </span>
           <div
-            className="sc-jKJlTe eBrFcx"
+            className="sc-kpOJdX ibzRwQ"
             name="endTime"
           >
             <label
-              className="sc-kgoBCf kZSnei"
+              className="sc-fjdhpX bMZnoP"
               defaultValue="--"
               disabled={true}
               id="hours"
               name="hours"
             >
               <span
-                className="sc-kGXeez fmtdbL"
+                className="sc-jzJRlG fYwhH"
               />
               <select
-                className="sc-ckVGcZ sIgWo"
+                className="sc-kGXeez dJFLNq"
                 onChange={[Function]}
                 value="undefined"
               >
@@ -1608,16 +1608,16 @@ exports[`Appointment form should render correctly 1`] = `
               </select>
             </label>
             <label
-              className="sc-kgoBCf kZSnei"
+              className="sc-fjdhpX bMZnoP"
               defaultValue="--"
               disabled={true}
               name="minutes"
             >
               <span
-                className="sc-kGXeez fmtdbL"
+                className="sc-jzJRlG fYwhH"
               />
               <select
-                className="sc-ckVGcZ sIgWo"
+                className="sc-kGXeez dJFLNq"
                 onChange={[Function]}
                 value="undefined"
               >
@@ -1666,15 +1666,15 @@ exports[`Appointment form should render correctly 1`] = `
         </label>
       </div>
       <label
-        className="sc-brqgnP jJssVh sc-eNQAEJ kHYzGw"
+        className="sc-kkGfuU jeqVra sc-fjdhpX TlFPV"
       >
         <span
-          className="sc-hMqMXs kjtFQg"
+          className="sc-jzJRlG fYwhH"
         >
           Comments (optional)
         </span>
         <textarea
-          className="sc-iAyFgw eANhPM"
+          className="sc-ckVGcZ gOZpqx"
           name="comments"
           onBlur={[Function]}
           onChange={[Function]}
@@ -1687,7 +1687,7 @@ exports[`Appointment form should render correctly 1`] = `
     </div>
   </div>
   <div
-    className="sc-jDwBTQ DQjvG"
+    className="sc-eHgmQL fHefaK"
   >
     <button
       className="sc-bdVaJa jyfNnr"
