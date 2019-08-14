@@ -1,12 +1,10 @@
-@import 'colours/_palette';
-
 .page-header {
   font-family: "nta", Arial, sans-serif;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
-  background-color: $text-colour;
+  background-color: black;
   color: white;
   z-index: 999;
   height: 60px;
