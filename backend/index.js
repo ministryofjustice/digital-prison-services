@@ -258,7 +258,7 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
 })
 
 app.get('/whereabouts', (req, res) => {
-  res.render('whereabouts.njk')
+  res.render('whereabouts.njk', { title: 'Whereabouts Dashboard' })
 })
 
 app.get('*', (req, res) => {
