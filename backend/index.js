@@ -258,7 +258,10 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
 })
 
 app.get('/whereabouts', (req, res) => {
-  res.render('whereabouts.njk', { title: 'Whereabouts Dashboard' })
+  res.render('whereabouts.njk', {
+    title: 'Whereabouts Dashboard',
+    user: { displayName: 'Rob Cooper', activeCaseLoad: { description: 'Moorland Closed (HMP & YOI)', id: 'MOI' } },
+  })
 })
 
 app.get('*', (req, res) => {

@@ -4,16 +4,28 @@
             <a title="Home link" class="link" href="/">
                 <div class="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"></div>
             </a><a title="Home link" class="unstyled-link" href="/"><span class="logo-text">HMPPS</span><span class="title">Digital Prison Services </span></a></div>
-        <div class="right-content">
-            <div class="right-menu">
-                <div class="right-menu-content">
-                    <div id="info-wrapper" class="info-wrapper right-menu-info-wrap" role="menu" tabindex="0">
-                    <strong class="user-name right-menu-content-primary">Nevelina Aleksandrova</strong>
-                    <span class="case-load right-menu-content-secondary">Moorland Closed (HMP &amp; YOI)</span></div>
-                    <div class="right-menu-dropdown-menu"></div>
+       
+       {% set dropdownClass = "show-dropdown" %}
+       {% set showMenu = false %}
+       {% if user %}
+            <div class="right-content">
+                <div class="right-menu">
+                    <div class="right-menu-content {{ dropdownClass }}">
+                        <div id="info-wrapper" class="info-wrapper right-menu-info-wrap" role="menu" tabindex="0">
+                        <strong class="user-name right-menu-content-primary">{{ user.displayName }}</strong>
+                        <span class="case-load right-menu-content-secondary">{{ user.activeCaseLoad.description }}</span></div>
+                        {%if showMenu %}
+                        <div class="right-menu-dropdown-menu">
+                            <div>
+                                <button type="button" class="right-menu-dropdown-menu-option" id="menu-option-HLI">Hull (HMP)</button>
+                                <a class="right-menu-dropdown-menu-option" href="/auth/logout">Sign out</a>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 </header>
     

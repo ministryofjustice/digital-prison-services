@@ -46,6 +46,30 @@
         box-shadow: 0 1px 0 rgba(0,0,0,0.06);
         box-sizing: border-box;
         z-index: 1000;
+
+        &-option {
+            box-sizing: border-box;
+            color: rgba(51,51,51,0.8);
+            cursor: pointer;
+            display: block;
+            padding: 16px 10px;
+            background: #005ea5;
+            color: white;
+            font-size: 19px;
+            font-family: "nta",Arial,sans-serif;
+            -webkit-align-items: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            text-align: left;
+            border-width: 1px 0 0;
+            border-style: solid;
+            border-color: lightblue;
+            height: 60px;
+            -webkit-text-decoration: none;
+            text-decoration: none;
+            width: 100%;
+        }
     }
 
     &-info-wrap {
