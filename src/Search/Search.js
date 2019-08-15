@@ -6,10 +6,16 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
 import Button from '@govuk-react/button'
 import { BLUE } from 'govuk-colours'
-import { SPACING } from '@govuk-react/constants'
+import styled from 'styled-components'
 import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
+
+const MissingButtonContainer = styled('div')`
+  margin-right: 5em;
+  margin-top: 1.4em;
+  float: right;
+`
 
 class Search extends Component {
   render() {
@@ -178,16 +184,15 @@ class Search extends Component {
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (
-                <div className="pure-u-md-1-3 pull-right">
+                <MissingButtonContainer>
                   <Button
                     buttonColour={BLUE}
                     onClick={() => history.push(`missing-prisoners`)}
                     data-qa="missing-prisoners"
-                    margin={{ size: 5, direction: ['top', 'left'] }}
                   >
                     View missing prisoners
                   </Button>
-                </div>
+                </MissingButtonContainer>
               )}
               fallbackRender={() => <></>}
             />
