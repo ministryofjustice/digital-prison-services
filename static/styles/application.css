@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .govuk-link {
   font-family: 'GDS Transport', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -5852,7 +5853,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
+  max-width: 1170px;
   padding-left: 15px;
   padding-right: 15px;
   margin-left: 0;
@@ -5903,6 +5904,78 @@
   color: white;
 }
 
+/*HEADER STYLES */
+.right-content {
+  float: right;
+  height: 100%;
+}
+
+.right-menu {
+  display: initial;
+  height: 100%;
+}
+.right-menu-content {
+  position: relative;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  min-width: 320px;
+  background: #005ea5;
+}
+.right-menu-content-primary {
+  position: relative;
+  margin-left: auto;
+  padding: 0 10px 0 0;
+  font-size: 19px;
+}
+.right-menu-content-secondary {
+  margin-right: auto;
+  padding: 0 18px 0 10px;
+  font-size: 19px;
+  border-left: solid white 1px;
+}
+.right-menu-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  z-index: 1000;
+}
+.right-menu-info-wrap {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 0 20px;
+  width: 100%;
+  padding: 2px 20px 2px 0;
+}
+.right-menu-info-wrap:before {
+  content: '';
+  position: absolute;
+  right: 0;
+  height: 20px;
+  width: 20px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAACNklEQ…br6C2D9Joy+uFycHcC+yoe1VhcGRqLK+vnj9C6BSO0bv8Dn8Y5yRpsLpgAAAAASUVORK5CYII=);
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: contain;
+}
+
 .clickable {
   cursor: pointer;
+}
+
+.govuk-width-container {
+  max-width: 1170px !important;
 }
