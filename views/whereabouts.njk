@@ -1,6 +1,24 @@
-{% extends "./partials/layout.njk" %} 
-<div class="content">
+{% extends "./partials/layout.njk" %}
+
+ {% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "/"
+    },
+    {
+      text: "Search prisoner whereabouts",
+      href: "/search-prisoner-whereabouts"
+    },
+    {
+      text: "Dashboard"
+    }
+  ]
+}) 
+}}
+{% endblock %}
+
 {% block content %}
 HEYYYYYY
 {% endblock %}
-</div>
