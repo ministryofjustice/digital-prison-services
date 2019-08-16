@@ -19,10 +19,12 @@ const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
 const nunjucks = require('nunjucks')
+const axios = require('axios')
 
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
 
+const asyncMiddleware = require('./middleware/asyncHandler')
 const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
@@ -256,6 +258,25 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
 ;['../static', '../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
+
+app.use(
+  asyncMiddleware(async (req, res, next) => {
+    const [user, caseloads, roles] = await [
+      axios.get('/api/me'),
+      axios.get('/api/usercaseloads'),
+      axios.get('/api/userroles'),
+    ]
+
+    // const { user, caseloads, roles } = res.locals
+
+    // res.locals.user = user
+    // res.locals.caseload = caseloads
+    // res.locals.roles = roles
+
+    // console.log('FIRING MEEEEEEE ===== ', res.locals.user)
+    next()
+  })
+)
 
 app.get('/whereabouts', (req, res) => {
   res.render('whereabouts.njk', {
