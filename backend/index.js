@@ -253,7 +253,7 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
   autoescape: true,
   express: app,
 })
-;['../static', '../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
+;['../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
