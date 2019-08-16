@@ -259,30 +259,37 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
-app.use(
-  asyncMiddleware(async (req, res, next) => {
-    const [user, caseloads, roles] = await [
-      axios.get('/api/me'),
-      axios.get('/api/usercaseloads'),
-      axios.get('/api/userroles'),
-    ]
+app.get('/whereabouts', async (req, res) => {
+  try {
+    const [user, caseloads, roles] = await Promise.all([
+      oauthApi.currentUser(res.locals),
+      elite2Api.userCaseLoads(res.locals),
+      oauthApi.userRoles(res.locals),
+    ])
 
-    // const { user, caseloads, roles } = res.locals
+    const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
+    const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
+    const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
-    // res.locals.user = user
-    // res.locals.caseload = caseloads
-    // res.locals.roles = roles
-
-    // console.log('FIRING MEEEEEEE ===== ', res.locals.user)
-    next()
-  })
-)
-
-app.get('/whereabouts', (req, res) => {
-  res.render('whereabouts.njk', {
-    title: 'Whereabouts Dashboard',
-    user: { displayName: 'Rob Cooper', activeCaseLoad: { description: 'Moorland Closed (HMP & YOI)', id: 'MOI' } },
-  })
+    res.render('whereabouts.njk', {
+      title: 'Whereabouts Dashboard',
+      user: {
+        displayName: user.name,
+        activeCaseLoad: {
+          description: activeCaseLoad.description,
+          id: activeCaseLoadId,
+        },
+      },
+      allCaseloads: caseloads,
+      inactiveCaseLoads,
+      userRoles: roles,
+    })
+  } catch (error) {
+    res.render('error.njk', {
+      title: 'Whereabouts Dashboard',
+      message: error.message,
+    })
+  }
 })
 
 app.get('*', (req, res) => {
