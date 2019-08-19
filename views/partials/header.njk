@@ -9,35 +9,27 @@
                 <span class="title">Digital Prison Services</span>
             </a>
         </div>
-       
-       {% set dropdownClass = "show-dropdown" %}
-       {% set showMenu = true %}
+
        {% if user %}
             <div class="right-content">
-                <div class="right-menu">
-                    <div class="right-menu-content {{ dropdownClass }}">
+                <div class="right-menu no-select">
+                    <label class="right-menu-content clickable" for="menuToggle">
+                        <input id="menuToggle" type=checkbox>
                         <div id="info-wrapper" class="info-wrapper right-menu-info-wrap" role="menu" tabindex="0">
-                        <strong class="user-name right-menu-content-primary">{{ user.displayName }}</strong>
-                        <span class="case-load right-menu-content-secondary">{{ user.activeCaseLoad.description }}</span></div>
-                        {%if showMenu %}
-                        <div class="right-menu-dropdown-menu">
+                            <strong class="user-name right-menu-content-primary">{{ user.displayName }}</strong>
+                            <span class="case-load right-menu-content-secondary">{{ user.activeCaseLoad.description }}</span>
+                        </div>
+                        <div class="right-menu-dropdown-menu" id="menuItems">
                             <div>
                             {% for caseload in inactiveCaseLoads %}
-                                <button type="button" class="right-menu-dropdown-menu-option" id="menu-option-{{caseload.caseLoadId}}">{{caseload.description}}</button>
+                                <button type="button" class="clickable right-menu-dropdown-menu-option" id="menu-option-{{caseload.caseLoadId}}">{{caseload.description}}</button>
                             {% endfor %}
                             <a class="right-menu-dropdown-menu-option" href="/auth/logout">Sign out</a>
                             </div>
                         </div>
-                        {%endif%}
-                    </div>
+                    </label>
                 </div>
             </div>
         {% endif %}
     </div>
 </header>
-    
-
-
-
-
-  

@@ -3,10 +3,12 @@
 {% extends "govuk/template.njk" %}
 
 {% block head %}
+
 <!--[if !IE 8]><!-->
 <link href="/static/styles/application.css" rel="stylesheet" />
 <title>{% block pageTitle %}{{title}}{% endblock %}</title>
 <!--<![endif]-->
+
 {% block headIcons %}
     <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/favicon.ico" type="image/x-icon" />
 {% endblock %}
