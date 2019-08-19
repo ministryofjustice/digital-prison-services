@@ -19,12 +19,10 @@ const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
 const nunjucks = require('nunjucks')
-const axios = require('axios')
 
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
 
-const asyncMiddleware = require('./middleware/asyncHandler')
 const ensureHttps = require('./middleware/ensureHttps')
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory

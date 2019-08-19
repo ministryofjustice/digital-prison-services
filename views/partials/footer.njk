@@ -1,39 +1,41 @@
 {% from "govuk/components/footer/macro.njk" import govukFooter %}
 
-{{ govukFooter({
-  navigation: [
-    {
-      title: "Useful links",
+{{ 
+  govukFooter({
+    navigation: [
+      {
+        title: "Useful links",
+        items: [
+          {
+            href: "/content/features",
+            text: "Features"
+          },
+          {
+            href: "/content/roadmap",
+            text: "Roadmap"
+          },
+          {
+            href: "/content/support",
+            text: "Support"
+          },
+          {
+            href: "/content/whats-new",
+            text: "What's new"
+          }
+        ]
+      }
+    ],
+    meta: {
       items: [
         {
-          href: "/content/features",
-          text: "Features"
+          href: "mailto:feedback@digital.justice.gov.uk",
+          text: "Contact"
         },
         {
-          href: "/content/roadmap",
-          text: "Roadmap"
-        },
-        {
-          href: "/content/support",
-          text: "Support"
-        },
-        {
-          href: "/content/whats-new",
-          text: "What's new"
+          href: "/content/terms-conditions",
+          text: "Terms and conditions"
         }
       ]
     }
-  ],
-  meta: {
-    items: [
-      {
-        href: "mailto:feedback@digital.justice.gov.uk",
-        text: "Contact"
-      },
-      {
-        href: "/content/terms-conditions",
-        text: "Terms and conditions"
-      }
-    ]
-  }
-}) }}
+  }) 
+}}
