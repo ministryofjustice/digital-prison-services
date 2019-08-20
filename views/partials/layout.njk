@@ -1,0 +1,31 @@
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+
+<!--[if !IE 8]><!-->
+<link href="/static/stylesheets/application.css" rel="stylesheet" />
+<title>{% block pageTitle %}{{title}}{% endblock %}</title>
+<!--<![endif]-->
+
+{% block headIcons %}
+    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/favicon.ico" type="image/x-icon" />
+{% endblock %}
+
+{% endblock %}
+
+{% block header %}
+  {% include "./header.njk" %}
+{% endblock %}
+
+{% block footer %}
+  {% include "./footer.njk" %}
+{% endblock %}
+
+{% block bodyEnd %}
+{# Run JavaScript at end of the
+<body>, to avoid blocking the initial render. #}
+<script src="/assets/govuk/all.js"></script>
+<script>window.GOVUKFrontend.initAll();</script>
+{% endblock %}
