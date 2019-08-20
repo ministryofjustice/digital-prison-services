@@ -1,5 +1,7 @@
 {% extends "./partials/layout.njk" %}
 
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
  {% block beforeContent %}
   {{ govukBreadcrumbs({
   items: [
@@ -21,5 +23,15 @@
 
 {% block content %}
 
-ERROR PAGE
+{% if message.length > 0 %}
+{{ govukErrorSummary({
+  "titleText": "There is a problem",
+  "errorList": [
+    {
+      "text": message
+    }
+  ]
+}) 
+}}
+  {% endif %}
 {% endblock %}
