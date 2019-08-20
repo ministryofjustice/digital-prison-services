@@ -158,7 +158,6 @@
     "build": "webpack --mode=production",
     "build:analyse": "BUNDLE_ANALYSE=true yarn build",
     "build-css": "yarn run ./bin/build-css",
-    "css-build": "./bin/build-css",
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
     "record-build-info": "node scripts/record-build-info",
