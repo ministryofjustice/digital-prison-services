@@ -18,6 +18,7 @@ const middleware = require('webpack-dev-middleware')
 const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
+const nunjucks = require('nunjucks')
 
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
@@ -68,6 +69,7 @@ const sixtyDaysInSeconds = 5184000
 app.set('trust proxy', 1) // trust first proxy
 
 app.set('view engine', 'ejs')
+app.set('view engine', 'njk')
 
 app.use(helmet())
 
@@ -246,6 +248,47 @@ app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewM
 app.post('/api/bulk-appointments', controller.addBulkAppointments)
 app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
+
+nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
+  autoescape: true,
+  express: app,
+})
+;['../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
+  app.use('/assets', express.static(path.join(__dirname, dir)))
+})
+
+app.get('/whereabouts', async (req, res) => {
+  try {
+    const [user, caseloads, roles] = await Promise.all([
+      oauthApi.currentUser(res.locals),
+      elite2Api.userCaseLoads(res.locals),
+      oauthApi.userRoles(res.locals),
+    ])
+
+    const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
+    const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
+    const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+
+    res.render('whereabouts.njk', {
+      title: 'Whereabouts Dashboard',
+      user: {
+        displayName: user.name,
+        activeCaseLoad: {
+          description: activeCaseLoad.description,
+          id: activeCaseLoadId,
+        },
+      },
+      allCaseloads: caseloads,
+      inactiveCaseLoads,
+      userRoles: roles,
+    })
+  } catch (error) {
+    res.render('error.njk', {
+      title: 'Whereabouts Dashboard',
+      message: error.message,
+    })
+  }
+})
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))

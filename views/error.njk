@@ -1,0 +1,37 @@
+{% extends "./partials/layout.njk" %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+ {% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "/"
+    },
+    {
+      text: "Search prisoner whereabouts",
+      href: "/search-prisoner-whereabouts"
+    },
+    {
+      text: "Dashboard"
+    }
+  ]
+}) 
+}}
+{% endblock %}
+
+{% block content %}
+
+{% if message.length > 0 %}
+{{ govukErrorSummary({
+  "titleText": "There is a problem",
+  "errorList": [
+    {
+      "text": message
+    }
+  ]
+}) 
+}}
+  {% endif %}
+{% endblock %}
