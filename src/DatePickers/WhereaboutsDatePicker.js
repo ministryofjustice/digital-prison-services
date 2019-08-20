@@ -5,15 +5,15 @@ import FormDatePicker from './FormDatePicker'
 
 class WhereaboutsDatePicker extends Component {
   daysToShow = date => {
-    let daysInAdvance = 2
+    const daysInAdvance = 7
 
     // If Friday, show Monday
-    if (moment().isoWeekday() === 5) daysInAdvance = 4
+    // if (moment().isoWeekday() === 5) daysInAdvance = 4
 
     return date.isBefore(
       moment()
         .add(daysInAdvance, 'days')
-        .startOf('day')
+        .endOf('day')
     )
   }
 

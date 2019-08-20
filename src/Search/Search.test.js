@@ -21,6 +21,8 @@ const mockHistory = {
 }
 
 describe('Search component', () => {
+  Date.now = jest.fn(() => new Date(Date.UTC(2019, 7, 20)).setHours(12, 0, 0).valueOf())
+
   it('should render initial search page correctly', async () => {
     const component = shallow(
       <Search
