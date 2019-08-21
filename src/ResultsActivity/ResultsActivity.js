@@ -329,7 +329,7 @@ class ResultsActivity extends Component {
           locationId,
           bookingId,
         } = mainEvent
-        const key = `${offenderNo}-${eventId}`
+        const key = `${offenderNo}-${eventId || index}`
 
         const offenderDetails = {
           offenderNo,
