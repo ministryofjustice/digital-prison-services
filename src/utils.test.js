@@ -8,6 +8,7 @@ import {
   getCurrentShift,
   isAfterToday,
   forenameToInitial,
+  isWithinNextTwoWorkingDays,
 } from './utils'
 
 describe('getListSizeClass()', () => {
@@ -61,7 +62,13 @@ describe('pascalToString()', () => {
 })
 
 describe('isWithinLastYear()', () => {
-  Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
 
   it('returns true if date is "Today"', () => {
     expect(isWithinLastYear('Today')).toBe(true)
@@ -77,7 +84,13 @@ describe('isWithinLastYear()', () => {
 })
 
 describe('isWithinLastWeek()', () => {
-  Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
 
   it('returns true if date is "Today"', () => {
     expect(isWithinLastWeek('Today')).toBe(true)
@@ -111,7 +124,13 @@ describe('getCurrentShift()', () => {
 })
 
 describe('isAfterToday()', () => {
-  Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
 
   it('returns false if date is "Today"', () => {
     expect(isAfterToday('Today')).toBe(false)
@@ -127,6 +146,51 @@ describe('isAfterToday()', () => {
 
   it('returns true if date is within the next week', () => {
     expect(isAfterToday('19/01/2019')).toBe(true)
+  })
+})
+
+describe.only('isWithinNextTwoWorkingDays()', () => {
+  afterEach(() => {
+    Date.now.mockRestore()
+  })
+
+  it('does not allow previous days', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Monday 2019-01-14T00:00:00.000Z
+    expect(isWithinNextTwoWorkingDays('13/01/2019')).toBe(false)
+  })
+
+  it('allows Today', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Monday 2019-01-14T00:00:00.000Z
+    expect(isWithinNextTwoWorkingDays('Today')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('14/01/2019')).toBe(true)
+  })
+
+  it('allow only the next 2 days if Today is a weekday', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Monday 2019-01-14T00:00:00.000Z
+    expect(isWithinNextTwoWorkingDays('15/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('16/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('17/01/2019')).toBe(false)
+  })
+
+  it('allows only Friday and Monday if today is Thursday', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547683200000) // Thursday 2019-01-17T00:00:00.000Z
+    expect(isWithinNextTwoWorkingDays('18/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('21/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('22/01/2019')).toBe(false)
+  })
+
+  it('allows only Monday and Tuesday if today is Friday', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547769600000) // Friday 2019-01-18T00:00:00.000Z
+    expect(isWithinNextTwoWorkingDays('21/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('22/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('23/01/2019')).toBe(false)
+  })
+
+  it('allows only Monday and Tuesday if today is Saturday', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547856000000) // Saturday 2019-01-19T00:00:00.000Z
+    expect(isWithinNextTwoWorkingDays('21/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('22/01/2019')).toBe(true)
+    expect(isWithinNextTwoWorkingDays('23/01/2019')).toBe(false)
   })
 })
 

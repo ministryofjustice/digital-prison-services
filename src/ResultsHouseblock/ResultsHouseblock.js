@@ -11,7 +11,13 @@ import moment from 'moment'
 import styled from 'styled-components'
 import axios from 'axios'
 import { FONT_SIZE } from '@govuk-react/constants'
-import { getHoursMinutes, isTodayOrAfter, getMainEventDescription, getListSizeClass, getLongDateFormat } from '../utils'
+import {
+  getHoursMinutes,
+  isWithinNextTwoWorkingDays,
+  getMainEventDescription,
+  getListSizeClass,
+  getLongDateFormat,
+} from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
 import Flags from '../Flags/Flags'
@@ -162,7 +168,7 @@ class ResultsHouseblock extends Component {
       </div>
     )
 
-    const printButton = isTodayOrAfter(date) && (
+    const printButton = isWithinNextTwoWorkingDays(date) && (
       <PrintButton
         id="printButton"
         className="margin-left margin-top pull-right"

@@ -4,7 +4,6 @@ import '../lists.scss'
 import '../App.scss'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
-import { connect } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import classNames from 'classnames'
@@ -12,7 +11,7 @@ import Link from '@govuk-react/link'
 import { FONT_SIZE } from '@govuk-react/constants'
 import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
-  isTodayOrAfter,
+  isWithinNextTwoWorkingDays,
   isAfterToday,
   isWithinLastWeek,
   getMainEventDescription,
@@ -131,7 +130,7 @@ class ResultsActivity extends Component {
 
     const buttons = (
       <div id="buttons" className="pure-u-md-12-12 padding-bottom">
-        {isTodayOrAfter(date) && (
+        {isWithinNextTwoWorkingDays(date) && (
           <button
             id="printButton"
             className="button"
