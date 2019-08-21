@@ -45,6 +45,7 @@ const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
+const { whereaboutsDashboardFactory } = require('./controllers/whereabouts')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -154,6 +155,7 @@ const controller = controllerFactory({
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
   offenderService: offenderServiceFactory(elite2Api),
   offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
+  whereaboutsDashboardService: whereaboutsDashboardFactory(elite2Api, whereaboutsApi),
 })
 
 const oauthApi = oauthApiFactory(
@@ -249,6 +251,8 @@ app.post('/api/bulk-appointments', controller.addBulkAppointments)
 app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 
+app.get('/whereabouts', whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi).whereaboutsDashboard)
+
 nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
   autoescape: true,
   express: app,
@@ -257,38 +261,42 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
-app.get('/whereabouts', async (req, res) => {
-  try {
-    const [user, caseloads, roles] = await Promise.all([
-      oauthApi.currentUser(res.locals),
-      elite2Api.userCaseLoads(res.locals),
-      oauthApi.userRoles(res.locals),
-    ])
+// app.get('/whereabouts', async (req, res) => {
+//   try {
+//     const [user, caseloads, roles, absenceReasons] = await Promise.all([
+//       oauthApi.currentUser(res.locals),
+//       elite2Api.userCaseLoads(res.locals),
+//       oauthApi.userRoles(res.locals),
+//       whereaboutsApi.getAbsenceReasons(res.locals)
+//     ])
 
-    const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
-    const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
-    const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+//     console.log('REASONS === ', absenceReasons)
 
-    res.render('whereabouts.njk', {
-      title: 'Whereabouts Dashboard',
-      user: {
-        displayName: user.name,
-        activeCaseLoad: {
-          description: activeCaseLoad.description,
-          id: activeCaseLoadId,
-        },
-      },
-      allCaseloads: caseloads,
-      inactiveCaseLoads,
-      userRoles: roles,
-    })
-  } catch (error) {
-    res.render('error.njk', {
-      title: 'Whereabouts Dashboard',
-      message: error.message,
-    })
-  }
-})
+//     const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
+//     const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
+//     const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+
+//     res.render('whereabouts.njk', {
+//       title: 'Whereabouts Dashboard',
+//       absenceReasons: absenceReasons,
+//       user: {
+//         displayName: user.name,
+//         activeCaseLoad: {
+//           description: activeCaseLoad.description,
+//           id: activeCaseLoadId,
+//         },
+//       },
+//       allCaseloads: caseloads,
+//       inactiveCaseLoads,
+//       userRoles: roles,
+//     })
+//   } catch (error) {
+//     res.render('error.njk', {
+//       title: 'Whereabouts Dashboard',
+//       message: error.message,
+//     })
+//   }
+// })
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))

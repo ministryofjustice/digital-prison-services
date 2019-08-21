@@ -12,13 +12,54 @@
       href: "/search-prisoner-whereabouts"
     },
     {
-      text: "Dashboard"
+      text: "Statictics: Attendance Reasons"
     }
   ]
 }) 
 }}
 {% endblock %}
 
-{% block content %}
-Whereabouts Dashboard goes here...
+{% block content %} 
+<h1 class="govuk-heading-l mainHeading">Statistics: Attendance Reasons</h1>
+<hr>
+  {% include "./components/datePicker.njk" %}
+  {% include "./components/periodSelect.njk" %}
+<hr>
+<h2 class="govuk-heading-m">Paid reasons</h2>
+<div class="govuk-grid-row govuk-section-break--l">
+  <div class="govuk-grid-column-one-quarter">
+    <p class="govuk-body">Attended</p>
+    <h2 class="govuk-fieldset__legend--l">456</h2>
+  </div>
+  {% for reason in absenceReasons.paidReasons %}
+    <div class="govuk-grid-column-one-quarter">
+      <p class="govuk-body">{{reason}}</p>
+      <span class="govuk-heading-l">354</span>
+    </div>
+   {% endfor %}
+</div>
+
+<hr>
+<h2 class="govuk-heading-m">Not paid reasons</h2>
+
+<div class="govuk-grid-row govuk-section-break--l">
+  {% for reason in absenceReasons.unpaidReasons %}
+    <div class="govuk-grid-column-one-quarter">
+      <p class="govuk-body">{{reason}}</p>
+      <h2 class="govuk-fieldset__legend--l">0</h2>
+    </div>
+  {% endfor %}
+</div>
+
+<hr>
+<h2 class="govuk-heading-m">Not recorded</h2>
+
+<div class="govuk-grid-row govuk-section-break--l">
+  <div class="govuk-grid-column-one-quarter">
+    <p class="govuk-body">Missing</p>
+    <h2 class="govuk-fieldset__legend--l">3</h2>
+  </div>
+</div>
+
+
 {% endblock %}
