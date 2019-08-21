@@ -21,7 +21,15 @@ const mockHistory = {
 }
 
 describe('Search component', () => {
-  Date.now = jest.fn(() => new Date(Date.UTC(2019, 7, 20)).setHours(12, 0, 0).valueOf())
+  // Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
+
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
 
   it('should render initial search page correctly', async () => {
     const component = shallow(
