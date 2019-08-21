@@ -4,18 +4,12 @@ import moment from 'moment'
 import FormDatePicker from './FormDatePicker'
 
 class WhereaboutsDatePicker extends Component {
-  daysToShow = date => {
-    const daysInAdvance = 7
-
-    // If Friday, show Monday
-    // if (moment().isoWeekday() === 5) daysInAdvance = 4
-
-    return date.isBefore(
+  daysToShow = date =>
+    date.isBefore(
       moment()
-        .add(daysInAdvance, 'days')
+        .add(7, 'days')
         .endOf('day')
     )
-  }
 
   render() {
     const { handleDateChange, date, shouldShowDay } = this.props
