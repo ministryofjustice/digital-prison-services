@@ -11,6 +11,14 @@ describe('<WhereaboutsDatePicker />', () => {
 
   let wrapper = shallow(<WhereaboutsDatePicker {...props} />)
 
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
   it('should render <FormDatePicker /> with the correct props', () => {
     const formDatePickerInputProps = wrapper.find('FormDatePicker').props().input
 
@@ -20,7 +28,6 @@ describe('<WhereaboutsDatePicker />', () => {
 
   describe('daysToShow() future dates', () => {
     it('should only return the following 7 days from today', () => {
-      Date.now = jest.fn(() => new Date(Date.UTC(2019, 2, 29)).setHours(12, 0, 0).valueOf())
       const seventhDay = moment()
         .add(7, 'day')
         .startOf('day')
@@ -34,8 +41,6 @@ describe('<WhereaboutsDatePicker />', () => {
     })
 
     it('should use the shouldShowDay prop if present', () => {
-      Date.now = jest.fn(() => new Date(Date.UTC(2019, 2, 28)).setHours(12, 0, 0).valueOf())
-
       const pastAndPresentDay = date =>
         date.isBefore(
           moment()

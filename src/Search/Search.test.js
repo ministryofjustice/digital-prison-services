@@ -21,8 +21,6 @@ const mockHistory = {
 }
 
 describe('Search component', () => {
-  // Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
-
   beforeAll(() => {
     jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
   })
