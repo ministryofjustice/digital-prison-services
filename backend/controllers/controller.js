@@ -14,6 +14,8 @@ const factory = ({
   csvParserService,
   offenderService,
   offenderActivitesService,
+  referenceCodesService,
+  elite2Api,
 }) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
@@ -179,6 +181,32 @@ const factory = ({
     res.json(viewModel)
   })
 
+  const getAlertTypes = asyncMiddleware(async (req, res) => {
+    const types = await referenceCodesService.getAlertTypes(res.locals)
+    res.json(types)
+  })
+
+  const createAlert = async (req, res) => {
+    const { bookingId } = req.params
+    const { body } = req
+
+    if (!body) {
+      res.status(400)
+      res.end()
+      return
+    }
+
+    await elite2Api.createAlert(res.locals, bookingId, {
+      alertType: body.alertType,
+      alertCode: body.alertSubType,
+      comment: body.comment,
+      alertDate: body.effectiveDate,
+    })
+
+    res.status(201)
+    res.end()
+  }
+
   return {
     getActivityList,
     getAdjudications,
@@ -204,6 +232,8 @@ const factory = ({
     changeIepLevel,
     getPossibleLevels,
     getMissingPrisoners,
+    getAlertTypes,
+    createAlert,
   }
 }
 
