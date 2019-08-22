@@ -31,8 +31,12 @@ export class OffenderPage extends React.Component {
   }
 
   render() {
-    const { children, title, offenderDetails } = this.props
-    return <Page title={offenderDetails.firstName && title(offenderDetails)}>{children}</Page>
+    const { children, title, offenderDetails, alwaysRender } = this.props
+    return (
+      <Page alwaysRender={alwaysRender} title={offenderDetails.firstName && title(offenderDetails)}>
+        {children}
+      </Page>
+    )
   }
 }
 
@@ -51,12 +55,14 @@ OffenderPage.propTypes = {
   setLoaded: PropTypes.func.isRequired,
   setOffender: PropTypes.func.isRequired,
   resetError: PropTypes.func.isRequired,
+  alwaysRender: PropTypes.bool,
 }
 
 OffenderPage.defaultProps = {
   client: axios,
   offenderDetails: undefined,
   children: undefined,
+  alwaysRender: false,
 }
 
 const mapStateToProps = state => ({
