@@ -101,6 +101,8 @@ const isWithinLastWeek = date => {
   return daysDifference >= 0
 }
 
+const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
+
 const stripAgencyPrefix = (location, agency) => {
   const parts = location && location.split('-')
   if (parts && parts.length > 0) {
@@ -165,6 +167,7 @@ module.exports = {
   isAfterToday,
   isWithinLastYear,
   isWithinLastWeek,
+  isBeforeToday,
   getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,
