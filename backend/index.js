@@ -256,8 +256,7 @@ app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplat
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
-
-app.get('/whereabouts', whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi).whereaboutsDashboard)
+app.get('/whereabouts', handleErrors(whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi).whereaboutsDashboard))
 
 nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
   autoescape: true,
