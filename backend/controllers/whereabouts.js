@@ -1,17 +1,28 @@
-const { switchDateFormat } = require('../utils')
+const asyncMiddleware = require('../middleware/asyncHandler')
+// const { switchDateFormat } = require('../utils')
 
 const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
-  const whereaboutsDashboard = async (req, res) => {
+  const whereaboutsDashboard = asyncMiddleware(async (req, res) => {
+    console.log('=====', req.query)
+
+    const { agencyId, period, date } = req.query
+    // const formattedDate = switchDateFormat(date)
+    const params = {
+      agencyId,
+      date,
+      period,
+    }
     try {
-      const [user, caseloads, roles, absenceReasons, prisonAttendance] = await Promise.all([
+      const [user, caseloads, roles, absenceReasons, activities, prisonAttendance] = await Promise.all([
         oauthApi.currentUser(res.locals),
         elite2Api.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
         whereaboutsApi.getAbsenceReasons(res.locals),
-        // whereaboutsApi.getPrisonAttendance(res.locals, params),
+        elite2Api.getOffenderActivities(res.locals, params),
+        whereaboutsApi.getPrisonAttendance(res.locals, params),
       ])
 
-      // console.log('REASONS === ', prisonAttendance)
+      console.log({ activities })
 
       const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
       const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
@@ -37,7 +48,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         message: error.message,
       })
     }
-  }
+  })
 
   return {
     whereaboutsDashboard,

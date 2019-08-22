@@ -1,12 +1,25 @@
 @import "node_modules/govuk-frontend/govuk/all";
 @import "./header.scss";
 
-.padding-right {
-    padding-right: 17px;
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-.margin-bottom {
-    margin-bottom: 30px;
+.clickable {
+    cursor: pointer;
+}
+
+.govuk-width-container {
+    max-width: 1170px !important;
+}
+
+.govuk-grid-column-one-quarter {
+    padding: 0 15px 15px !important;
 }
 
 /*HEADER STYLES */
@@ -106,26 +119,6 @@
         }
     }
 }
-.no-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.govuk-width-container {
-    max-width: 1170px !important;
-}
-
-.govuk-grid-column-one-quarter {
-    padding: 0 15px 15px !important;
-}
 
 #menuToggle, #menuItems {
     display:none;
@@ -138,42 +131,6 @@
 #menuToggle:checked~.right-menu-info-wrap {
     &:before{
         transform: rotate(180deg)
-    }
-}
-
-.pure-u-md-1,
-.pure-u-md-1-1,
-.pure-u-md-1-2,
-.pure-u-md-1-3,
-.pure-u-md-2-3,
-.pure-u-md-1-4,
-.pure-u-md-3-4,
-.pure-u-md-1-6,
-.pure-u-md-5-6,
-.pure-u-md-1-12,
-.pure-u-md-2-12,
-.pure-u-md-3-12,
-.pure-u-md-4-12,
-.pure-u-md-5-12,
-.pure-u-md-6-12,
-.pure-u-md-7-12,
-.pure-u-md-8-12,
-.pure-u-md-9-12,
-.pure-u-md-10-12,
-.pure-u-md-11-12,
-.pure-u-md-12-12 {
-    display: inline-block;
-    *display: inline;
-    zoom: 1;
-    letter-spacing: normal;
-    word-spacing: normal;
-    vertical-align: top;
-    text-rendering: auto;
-}
-
-@media screen and (min-width: 48em) {
-    .pure-u-md-1-6, .pure-u-md-4-24 {
-        width: 16.6667%;
     }
 }
 
@@ -220,3 +177,57 @@ select.form-control {
         line-height: 1.31579;
     }
 }
+
+.ui-widget-header {
+    border: 0 !important;
+    background: #fff !important;
+    color: black !important;
+    font-weight: bold;
+}
+
+.ui-datepicker {
+    margin-top: 20px;
+}
+
+.ui-datepicker table {
+    background: white !important;
+}
+
+.ui-widget-content {
+    border: 1px solid #000000 !important;
+    background: #fff !important;
+}
+
+.ui-state-default {
+    border: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-weight: normal !important;
+    text-align: center !important;
+}
+
+.ui-state-active {
+    background: #015DA5 !important;
+    color: #fff !important;
+    border-radius: 15px !important;
+    padding: 2px !important;
+    width: 25px !important;
+    margin: 0 auto !important;
+}
+
+.ui-state-highlight {
+    border: 1px solid #80a9ca !important;
+    border-radius: 15px !important;
+    padding: 2px !important;
+    width: 25px !important;
+    margin: 0 auto !important;
+}
+
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary {
+    opacity: .2 !important;
+}
+
+.ui-widget-header .ui-icon {
+    background-image: url(https://code.jquery.com/ui/1.10.4/themes/ui-lightness/images/ui-icons_222222_256x240.png) !important;
+}
+

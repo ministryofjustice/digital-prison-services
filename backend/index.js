@@ -267,43 +267,6 @@ nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-fronte
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
-// app.get('/whereabouts', async (req, res) => {
-//   try {
-//     const [user, caseloads, roles, absenceReasons] = await Promise.all([
-//       oauthApi.currentUser(res.locals),
-//       elite2Api.userCaseLoads(res.locals),
-//       oauthApi.userRoles(res.locals),
-//       whereaboutsApi.getAbsenceReasons(res.locals)
-//     ])
-
-//     console.log('REASONS === ', absenceReasons)
-
-//     const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
-//     const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
-//     const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
-
-//     res.render('whereabouts.njk', {
-//       title: 'Whereabouts Dashboard',
-//       absenceReasons: absenceReasons,
-//       user: {
-//         displayName: user.name,
-//         activeCaseLoad: {
-//           description: activeCaseLoad.description,
-//           id: activeCaseLoadId,
-//         },
-//       },
-//       allCaseloads: caseloads,
-//       inactiveCaseLoads,
-//       userRoles: roles,
-//     })
-//   } catch (error) {
-//     res.render('error.njk', {
-//       title: 'Whereabouts Dashboard',
-//       message: error.message,
-//     })
-//   }
-// })
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
 })

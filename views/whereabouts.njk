@@ -1,4 +1,5 @@
 {% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %} 
 
  {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -12,7 +13,7 @@
       href: "/search-prisoner-whereabouts"
     },
     {
-      text: "Statictics: Attendance Reasons"
+      text: "Statistics: Attendance Reasons"
     }
   ]
 }) 
@@ -21,9 +22,26 @@
 
 {% block content %} 
 <h1 class="govuk-heading-l mainHeading">Statistics: Attendance Reasons</h1>
-<hr>
-  {% include "./components/datePicker.njk" %}
-  {% include "./components/periodSelect.njk" %}
+<div class="govuk-grid-row govuk-section-break--l">
+  <div class="govuk-grid-column-one-quarter">
+    {% include "./components/datePicker.njk" %}
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    {% include "./components/periodSelect.njk" %}
+  </div>
+</div>
+<div class="govuk-grid-row govuk-section-break--l">
+  <div class="govuk-grid-column-one-quarter">
+    {{
+        govukButton({
+          text: 'Update',
+          classes: 'govuk-button',
+          href: '/whereabouts?agencyId=MOI',
+          attributes: { 'data-submit': true }
+        })
+      }}
+  </div>
+</div>
 <hr>
 <h2 class="govuk-heading-m">Paid reasons</h2>
 <div class="govuk-grid-row govuk-section-break--l">
