@@ -26,9 +26,8 @@ class Search extends Component {
     if (isBeforeToday(date)) return true
     if (isAfterToday(date)) return false
     if (selectedPeriod === 'AM') return true
-    if (selectedPeriod === 'PM' && (actualPeriod === 'PM' || actualPeriod === 'ED')) return true
-    if (selectedPeriod === 'ED' && actualPeriod === 'ED') return true
-    return false
+    if (selectedPeriod === 'PM') return actualPeriod === 'PM' || actualPeriod === 'ED'
+    return actualPeriod === 'ED'
   }
 
   render() {

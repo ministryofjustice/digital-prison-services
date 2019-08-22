@@ -101,11 +101,7 @@ const isWithinLastWeek = date => {
   return daysDifference >= 0
 }
 
-const isBeforeToday = date => {
-  if (isToday(date)) return false
-
-  return moment(date, 'DD/MM/YYYY').isBefore(moment().startOf('day'))
-}
+const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
 
 const stripAgencyPrefix = (location, agency) => {
   const parts = location && location.split('-')
