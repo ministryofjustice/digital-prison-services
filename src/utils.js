@@ -64,6 +64,26 @@ const isAfterToday = date => {
   return daysDifference >= 0
 }
 
+const isWithinNextTwoWorkingDays = date => {
+  if (isToday(date)) return true
+  if (moment(date, 'DD/MM/YYYY').isBefore(moment().startOf('day'))) return false
+
+  let daysInAdvance = 2
+  const currentDay = moment().isoWeekday()
+  const isThursday = currentDay === 4
+  const isFriday = currentDay === 5
+  const isSaturday = currentDay === 6
+
+  if (isThursday || isFriday) daysInAdvance += 2
+  if (isSaturday) daysInAdvance += 1
+
+  return moment(date, 'DD/MM/YYYY').isBefore(
+    moment()
+      .add(daysInAdvance, 'days')
+      .endOf('day')
+  )
+}
+
 const isWithinLastYear = date => {
   if (isToday(date)) return true
 
@@ -152,4 +172,5 @@ module.exports = {
   getLongDateFormat,
   linkOnClick,
   pascalToString,
+  isWithinNextTwoWorkingDays,
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { MemoryRouter } from 'react-router'
 import testRenderer from 'react-test-renderer'
-import { Search } from './Search'
+import { Search, MissingButtonContainer } from './Search'
 import { ConnectedFlagsProvider } from '../flags'
 
 const locations = [{ name: '1', key: 'K1' }, { name: '2', key: 'K2' }]
@@ -21,7 +21,14 @@ const mockHistory = {
 }
 
 describe('Search component', () => {
-  Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
   it('should render initial search page correctly', async () => {
     const component = shallow(
       <Search
@@ -169,5 +176,69 @@ describe('Search component', () => {
       .toJSON()
 
     expect(wrapper).toMatchSnapshot()
+  })
+
+  describe('missing prisoners button', () => {
+    const store = {}
+    store.getState = jest.fn()
+    store.subscribe = jest.fn()
+    store.dispatch = jest.fn()
+    store.getState.mockReturnValue({
+      flags: {
+        updateAttendanceEnabled: true,
+      },
+    })
+
+    it('should show the missing prisoners button for today', async () => {
+      const component = mount(
+        <MemoryRouter>
+          <ConnectedFlagsProvider store={store}>
+            <Search
+              history={mockHistory}
+              activities={[]}
+              locations={locations}
+              onSearch={jest.fn()}
+              onActivityChange={jest.fn()}
+              onLocationChange={jest.fn()}
+              handlePeriodChange={jest.fn()}
+              handleDateChange={jest.fn()}
+              date="Today"
+              period="ED"
+              currentLocation="BWing"
+              loaded={false}
+              activity="bob"
+            />
+          </ConnectedFlagsProvider>
+        </MemoryRouter>
+      )
+
+      expect(component.find(MissingButtonContainer).length).toBe(1)
+    })
+
+    it('should hide the missing prisoners button for future dates', async () => {
+      const component = mount(
+        <MemoryRouter>
+          <ConnectedFlagsProvider store={store}>
+            <Search
+              history={mockHistory}
+              activities={[]}
+              locations={locations}
+              onSearch={jest.fn()}
+              onActivityChange={jest.fn()}
+              onLocationChange={jest.fn()}
+              handlePeriodChange={jest.fn()}
+              handleDateChange={jest.fn()}
+              date="2/1/2017"
+              period="ED"
+              currentLocation="BWing"
+              loaded={false}
+              activity="bob"
+            />
+          </ConnectedFlagsProvider>
+        </MemoryRouter>
+      )
+
+      expect(component.find(MissingButtonContainer).length).toBe(0)
+    })
   })
 })

@@ -11,6 +11,14 @@ describe('<WhereaboutsDatePicker />', () => {
 
   let wrapper = shallow(<WhereaboutsDatePicker {...props} />)
 
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
   it('should render <FormDatePicker /> with the correct props', () => {
     const formDatePickerInputProps = wrapper.find('FormDatePicker').props().input
 
@@ -19,40 +27,20 @@ describe('<WhereaboutsDatePicker />', () => {
   })
 
   describe('daysToShow() future dates', () => {
-    let dateNowSpy
-
-    afterEach(() => dateNowSpy.mockRestore())
-
-    it('should return the following Monday if Friday', () => {
-      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // "Fri Mar 29 2019 12:00:00 GMT+0000"
-      const followingMonday = moment()
-        .add(3, 'day')
+    it('should only return the following 7 days from today', () => {
+      const seventhDay = moment()
+        .add(7, 'day')
         .startOf('day')
 
-      const dayAfterMonday = moment(followingMonday)
+      const eigthDay = moment(seventhDay)
         .add(1, 'day')
         .startOf('day')
 
-      expect(wrapper.instance().daysToShow(followingMonday)).toEqual(true)
-      expect(wrapper.instance().daysToShow(dayAfterMonday)).toEqual(false)
-    })
-
-    it('should return just Tomorrow if not Friday', () => {
-      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 1553774400000) // "Thu Mar 28 2019 12:00:00 GMT+0000"
-      const tomorrow = moment()
-        .add(1, 'day')
-        .startOf('day')
-      const dayAfterTomorrow = moment(tomorrow)
-        .add(1, 'days')
-        .startOf('day')
-
-      expect(wrapper.instance().daysToShow(tomorrow)).toEqual(true)
-      expect(wrapper.instance().daysToShow(dayAfterTomorrow)).toEqual(false)
+      expect(wrapper.instance().daysToShow(seventhDay)).toEqual(true)
+      expect(wrapper.instance().daysToShow(eigthDay)).toEqual(false)
     })
 
     it('should use the shouldShowDay prop if present', () => {
-      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 1553774400000) // "Thu Mar 28 2019 12:00:00 GMT+0000"
-
       const pastAndPresentDay = date =>
         date.isBefore(
           moment()
