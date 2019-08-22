@@ -216,7 +216,7 @@ describe('Search component', () => {
         expect(component.find(MissingButtonContainer).length).toBe(1)
       })
 
-      it('should hide the missing prisoners button for this afternoon', async () => {
+      it('should hide the missing prisoners button for "Today" afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -228,11 +228,35 @@ describe('Search component', () => {
         expect(component.find(MissingButtonContainer).length).toBe(0)
       })
 
-      it('should hide the missing prisoners button for todays evening', async () => {
+      it('should hide the missing prisoners button for todays date afternoon', async () => {
+        const component = mount(
+          <MemoryRouter>
+            <ConnectedFlagsProvider store={store}>
+              <Search {...props} date="01/01/2017" period="PM" />
+            </ConnectedFlagsProvider>
+          </MemoryRouter>
+        )
+
+        expect(component.find(MissingButtonContainer).length).toBe(0)
+      })
+
+      it('should hide the missing prisoners button for "Today" evening', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
               <Search {...props} date="Today" period="ED" />
+            </ConnectedFlagsProvider>
+          </MemoryRouter>
+        )
+
+        expect(component.find(MissingButtonContainer).length).toBe(0)
+      })
+
+      it('should hide the missing prisoners button for todays date evening', async () => {
+        const component = mount(
+          <MemoryRouter>
+            <ConnectedFlagsProvider store={store}>
+              <Search {...props} date="01/01/2017" period="ED" />
             </ConnectedFlagsProvider>
           </MemoryRouter>
         )
