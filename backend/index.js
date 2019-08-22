@@ -45,6 +45,7 @@ const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
+const referenceCodesService = require('./controllers/reference-codes-service')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -62,6 +63,7 @@ const oauthClientId = require('./api/oauthClientId')
 const log = require('./log')
 const config = require('./config')
 const { csvParserService } = require('./csv-parser')
+const handleErrors = require('./middleware/asyncHandler')
 
 const app = express()
 const sixtyDaysInSeconds = 5184000
@@ -154,6 +156,8 @@ const controller = controllerFactory({
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
   offenderService: offenderServiceFactory(elite2Api),
   offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
+  referenceCodesService: referenceCodesService(elite2Api),
+  elite2Api,
 })
 
 const oauthApi = oauthApiFactory(
@@ -248,6 +252,8 @@ app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewM
 app.post('/api/bulk-appointments', controller.addBulkAppointments)
 app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
+app.get('/api/get-alert-types', controller.getAlertTypes)
+app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 
 nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
   autoescape: true,

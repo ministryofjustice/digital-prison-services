@@ -14,4 +14,5 @@ export default {
   adjudications: '/offenders/:offenderNo/adjudications',
   adjudication: '/offenders/:offenderNo/adjudications/:adjudicationNo',
   missingPrisoners: '/missing-prisoners',
+  createAlert: '/offenders/:offenderNo/create-alert',
 }

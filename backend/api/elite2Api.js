@@ -132,6 +132,10 @@ const elite2ApiFactory = client => {
   const getOffenderActivities = (context, { agencyId, date, period }) =>
     get(context, `/api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
 
+  const getAlertTypes = context => get(context, '/api/reference-domains/alertTypes')
+
+  const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
+
   return {
     userLocations,
     userCaseLoads,
@@ -179,6 +183,8 @@ const elite2ApiFactory = client => {
     addBulkAppointments,
     changeIepLevel,
     getOffenderActivities,
+    getAlertTypes,
+    createAlert,
   }
 }
 
