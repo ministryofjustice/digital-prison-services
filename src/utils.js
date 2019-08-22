@@ -38,9 +38,12 @@ const getHoursMinutes = timestamp => {
 const isToday = date => {
   if (date === 'Today') return true
 
-  return false
+  return (
+    moment(date, 'DD/MM/YYYY')
+      .startOf('day')
+      .diff(moment().startOf('day'), 'day') === 0
+  )
 }
-
 const getCurrentShift = date => {
   const afternoonSplit = 12
   const eveningSplit = 17
