@@ -333,20 +333,65 @@ describe('Search component', () => {
       })
     })
 
+    describe('when the search date is in the past and the current period is in the morning', () => {
+      beforeEach(() => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+      })
+
+      const pastDate = '31/12/2016'
+
+      it('should show the missing prisoners button for the afternoon', async () => {
+        const component = mount(
+          <MemoryRouter>
+            <ConnectedFlagsProvider store={store}>
+              <Search {...props} date={pastDate} period="AM" />
+            </ConnectedFlagsProvider>
+          </MemoryRouter>
+        )
+        expect(component.find(MissingButtonContainer).length).toBe(1)
+      })
+
+      it('should show the missing prisoners button for the afternoon', async () => {
+        const component = mount(
+          <MemoryRouter>
+            <ConnectedFlagsProvider store={store}>
+              <Search {...props} date={pastDate} period="PM" />
+            </ConnectedFlagsProvider>
+          </MemoryRouter>
+        )
+
+        expect(component.find(MissingButtonContainer).length).toBe(1)
+      })
+
+      it('should show the missing prisoners button for the evening', async () => {
+        const component = mount(
+          <MemoryRouter>
+            <ConnectedFlagsProvider store={store}>
+              <Search {...props} date={pastDate} period="ED" />
+            </ConnectedFlagsProvider>
+          </MemoryRouter>
+        )
+
+        expect(component.find(MissingButtonContainer).length).toBe(1)
+      })
+    })
+
     describe('when the search date is in the future', () => {
       beforeEach(() => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000)
+        jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
       })
+
+      const futureDate = '2/1/2017'
 
       it('should hide the missing prisoners button', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
-              <Search {...props} date="2/1/2017" period="AM" />
+              <Search {...props} date={futureDate} period="AM" />
             </ConnectedFlagsProvider>
           </MemoryRouter>
         )
-        console.log(new Date(Date.now()))
+
         expect(component.find(MissingButtonContainer).length).toBe(0)
       })
     })

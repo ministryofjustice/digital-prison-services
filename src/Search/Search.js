@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import { isAfterToday, getCurrentShift } from '../utils'
+import { isBeforeToday, isAfterToday, getCurrentShift } from '../utils'
 
 export const MissingButtonContainer = styled('div')`
   margin-right: 5em;
@@ -23,6 +23,7 @@ class Search extends Component {
     const { period: selectedPeriod, date } = this.props
     const actualPeriod = getCurrentShift()
 
+    if (isBeforeToday(date)) return true
     if (isAfterToday(date)) return false
     if (selectedPeriod === 'AM') return true
     if (selectedPeriod === 'PM' && (actualPeriod === 'PM' || actualPeriod === 'ED')) return true
