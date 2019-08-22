@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<OffenderPage /> with all props it does not render title if offender details are absent 1`] = `
-"<Connect(Page) alwaysRender={false} title={[undefined]}>
+"<Connect(Page) title={[undefined]}>
   <h1>
     Hello
   </h1>
@@ -9,7 +9,7 @@ exports[`<OffenderPage /> with all props it does not render title if offender de
 `;
 
 exports[`<OffenderPage /> with all props it renders page title 1`] = `
-"<Connect(Page) alwaysRender={false} title=\\"A Page for Bob Smith\\">
+"<Connect(Page) title=\\"A Page for Bob Smith\\">
   <h1>
     Hello
   </h1>

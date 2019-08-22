@@ -23,5 +23,4 @@ export default [
   { path: '/search-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
   { path: '/add-bulk-appointments', breadcrumb: 'Add bulk appointments' },
   { path: '/missing-prisoners', breadcrumb: 'Missing prisoners' },
-  { path: '/offenders/:offenderNo/create-alert', breadcrumb: 'Create alert' },
 ]

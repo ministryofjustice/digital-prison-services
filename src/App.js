@@ -13,6 +13,22 @@ import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollCon
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
 import ScrollToTop from './Components/ScrollToTop'
+
+import {
+  resetError,
+  setConfig,
+  setError,
+  setLoaded,
+  setMenuOpen,
+  setSearchActivities,
+  setSearchActivity,
+  setSearchDate,
+  setSearchPeriod,
+  setTermsVisibility,
+  setUserDetails,
+  switchAgency,
+  setShowModal,
+} from './redux/actions/index'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
 import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
@@ -36,23 +52,6 @@ import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IEPSlipContainer from './IEPSlipContainer'
 import MissingPrisonersContainer from './MissingPrisoners/MissingPrisonersContainer'
-import CreateAlertContainer from './CreateAlert/CreateAlertContainer'
-
-import {
-  resetError,
-  setConfig,
-  setError,
-  setLoaded,
-  setMenuOpen,
-  setSearchActivities,
-  setSearchActivity,
-  setSearchDate,
-  setSearchPeriod,
-  setTermsVisibility,
-  setUserDetails,
-  switchAgency,
-  setShowModal,
-} from './redux/actions/index'
 
 const axios = require('axios')
 
@@ -501,21 +500,6 @@ class App extends React.Component {
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
                 history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.createAlert}
-            render={({ history, match: { params } }) => (
-              <CreateAlertContainer
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                history={history}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
               />
             )}
           />
