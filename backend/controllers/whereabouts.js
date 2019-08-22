@@ -1,21 +1,19 @@
 // const { switchDateFormat } = require('../utils')
 
 const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
+  const service = async ({ agencyId, period, date }) => {
+    const data = await whereaboutsApi.getPrisonAttendance(res.locals, params)
+    const attended = data.filter(attendance => attendance.attended === true).length
+    const notRequired = data.filter(nr => nr.absentReason === 'NotRequired').length
+    const acceptableAbsence = data.filter(aa => aa.absentReason === 'AcceptableAbsence').length
+    const approvedCourse = data.filter(ac => ac.absentReason === 'ApprovedCourse').length
 
-  const service = async ({agencyId, period, date}) => {
-    
-      const data = await whereaboutsApi.getPrisonAttendance(res.locals, params)
-      const attended = data.filter(attendance => attendance.attended === true).length
-      const notRequired = data.filter(nr => nr.absentReason === 'NotRequired').length
-      const acceptableAbsence = data.filter(aa => aa.absentReason === 'AcceptableAbsence').length
-      const approvedCourse = data.filter(ac => ac.absentReason === 'ApprovedCourse').length
-
-      return {
-        attended,
-        notRequired,
-        acceptableAbsence,
-        approvedCourse
-      }
+    return {
+      attended,
+      notRequired,
+      acceptableAbsence,
+      approvedCourse,
+    }
   }
   const whereaboutsDashboard = async (req, res) => {
     console.log('=====', req.query)
@@ -69,7 +67,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
 
   return {
     whereaboutsDashboard,
-    service
+    service,
   }
 }
 

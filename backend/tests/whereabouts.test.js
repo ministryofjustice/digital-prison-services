@@ -17,14 +17,14 @@ describe('Whereabouts dashbaord', () => {
     })
 
     it('should call getPrisonAttendance with the correct parameters', async () => {
-        const { service } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
-        const agencyId = 'LEI'
-        const date = '2019-10-10'
-        const period = 'AM'
+      const { service } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const agencyId = 'LEI'
+      const date = '2019-10-10'
+      const period = 'AM'
 
-        await service.getCountsOfPaidReasons(context, {agencyId, date, period})
-        
-        expect(whereaboutsApi.getPrisonAttendance).toHaveBeenCalledWith(agencyId, date, period)
+      await service.getCountsOfPaidReasons(context, { agencyId, date, period })
+
+      expect(whereaboutsApi.getPrisonAttendance).toHaveBeenCalledWith(agencyId, date, period)
     })
     it('should count paid reasons', async () => {
       const { service } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
@@ -38,20 +38,20 @@ describe('Whereabouts dashbaord', () => {
           paid: true,
         },
         {
-            attended: false,
-            paid: true,
-            absentReason: 'NotRequired'
+          attended: false,
+          paid: true,
+          absentReason: 'NotRequired',
         },
         {
-            attended: false,
-            paid: true,
-            absentReason: 'AcceptableAbsence'
+          attended: false,
+          paid: true,
+          absentReason: 'AcceptableAbsence',
         },
         {
-            attended: false,
-            paid: true,
-            absentReason: 'ApprovedCourse'
-        }
+          attended: false,
+          paid: true,
+          absentReason: 'ApprovedCourse',
+        },
       ])
 
       const paidCounts = await service.getCountsOfPaidReasons(context, { agencyId, date, period })
@@ -60,7 +60,7 @@ describe('Whereabouts dashbaord', () => {
         attended: 1,
         notRequired: 1,
         acceptableAbsence: 1,
-        approvedCourse: 1
+        approvedCourse: 1,
       })
     })
   })
