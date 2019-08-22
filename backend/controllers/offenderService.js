@@ -4,11 +4,12 @@ const OffenderServiceFactory = elite2Api => {
   const getOffender = async (context, offenderNo) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
 
-    return {
-      bookingId: bookingDetails.bookingId,
+    const offender = {
       firstName: properCaseName(bookingDetails.firstName),
       lastName: properCaseName(bookingDetails.lastName),
     }
+
+    return offender
   }
 
   return {
