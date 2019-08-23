@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('.date-input')
     .datepicker({
-      dateFormat: 'dd/mm/yy',
+      dateFormat: 'dd-mm-yy',
       showOtherMonths: true,
       selectOtherMonths: true,
     })

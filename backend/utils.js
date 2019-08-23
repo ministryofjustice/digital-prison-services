@@ -1,8 +1,8 @@
 const moment = require('moment')
 
-const switchDateFormat = displayDate => {
+const switchDateFormat = (displayDate, format) => {
   if (displayDate) {
-    return moment(displayDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
+    return moment(displayDate, format || 'DD/MM/YYYY').format('YYYY-MM-DD')
   }
   return displayDate
 }
@@ -104,6 +104,11 @@ const pascalToString = value =>
     .replace(/([A-Z])/g, ' $1')
     .toLowerCase()
 
+const merge = (left, right) => ({
+  ...left,
+  ...right,
+})
+
 module.exports = {
   switchDateFormat,
   formatTimestampToDate,
@@ -120,4 +125,5 @@ module.exports = {
   formatMonthsAndDays,
   toMap,
   pascalToString,
+  merge,
 }

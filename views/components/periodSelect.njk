@@ -1,15 +1,14 @@
-
 <div class="pure-u-md-1-6">
-<label class="form-label" for="period-select">
-    Period
+<label class="form-label" for="period">
+    Period - {{ selectedPeriod }}
 </label>
 
 <select
-    id="period-select"
-    name="period-select"
+    id="period"
+    name="period"
     class="form-control"
-    value={period}
-    onChange={handlePeriodChange}
+    value={{ selectedPeriod }}
+    onChange={} 
 >
     <option key="MORNING" value="AM">
     Morning (AM)

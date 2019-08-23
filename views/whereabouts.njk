@@ -1,4 +1,5 @@
 {% extends "./partials/layout.njk" %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %} 
 
  {% block beforeContent %}
@@ -20,9 +21,14 @@
 }}
 {% endblock %}
 
-{% block content %} 
-<h1 class="govuk-heading-l mainHeading">Statistics: Attendance Reasons</h1>
+{% block content %}
+
+{% set urlParams = '/whereabouts?agencyId=' + caseLoadId + '&period=AM&date=2019-08-23'%}
+
+<h1 class="govuk-heading-l mainHeading">Statistics: Attendance Reasons</h1> - {{newValue}}
+<form action="/whereabouts">
 <div class="govuk-grid-row govuk-section-break--l">
+  <input type="hidden" name="agencyId" value="{{caseLoadId}}" />
   <div class="govuk-grid-column-one-quarter">
     {% include "./components/datePicker.njk" %}
   </div>
@@ -34,25 +40,25 @@
   <div class="govuk-grid-column-one-quarter">
     {{
         govukButton({
+          type: submit,
           text: 'Update',
-          classes: 'govuk-button',
-          href: '/whereabouts?agencyId=MOI',
-          attributes: { 'data-submit': true }
+          classes: 'govuk-button'
         })
       }}
   </div>
 </div>
+</form>
 <hr>
 <h2 class="govuk-heading-m">Paid reasons</h2>
 <div class="govuk-grid-row govuk-section-break--l">
   <div class="govuk-grid-column-one-quarter">
     <p class="govuk-body">Attended</p>
-    <h2 class="govuk-fieldset__legend--l">456</h2>
+    <h2 class="govuk-fieldset__legend--l">{{data.attended}}</h2>
   </div>
   {% for reason in absenceReasons.paidReasons %}
     <div class="govuk-grid-column-one-quarter">
       <p class="govuk-body">{{reason}}</p>
-      <span class="govuk-heading-l">354</span>
+      <span class="govuk-heading-l">{{data[reason.toLowerCase()]}}</span>
     </div>
    {% endfor %}
 </div>
@@ -64,7 +70,7 @@
   {% for reason in absenceReasons.unpaidReasons %}
     <div class="govuk-grid-column-one-quarter">
       <p class="govuk-body">{{reason}}</p>
-      <h2 class="govuk-fieldset__legend--l">0</h2>
+      <h2 class="govuk-fieldset__legend--l">{{data[reason.toLowerCase()]}}</h2>
     </div>
   {% endfor %}
 </div>
@@ -75,7 +81,7 @@
 <div class="govuk-grid-row govuk-section-break--l">
   <div class="govuk-grid-column-one-quarter">
     <p class="govuk-body">Missing</p>
-    <h2 class="govuk-fieldset__legend--l">3</h2>
+    <h2 class="govuk-fieldset__legend--l">{{data.missing}}</h2>
   </div>
 </div>
 

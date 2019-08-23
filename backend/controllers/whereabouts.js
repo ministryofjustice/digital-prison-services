@@ -1,42 +1,76 @@
-// const { switchDateFormat } = require('../utils')
+const { merge, switchDateFormat } = require('../utils')
+
+const mapToReasonsModel = (data, reasons) => {
+  const filterAttendance = reason =>
+    data.filter(
+      attendance =>
+        attendance && attendance.absentReason && attendance.absentReason.toLowerCase() === reason.toLowerCase()
+    ).length
+
+  return Object.values(reasons)
+    .map(absentReason => ({
+      [absentReason.toLowerCase()]: filterAttendance(absentReason),
+    }))
+    .reduce(merge, {})
+}
+
+const getCountsOfPaidReasons = attendances => {
+  const attended = attendances.filter(attendance => attendance && attendance.attended === true).length
+  const paidReasonCodes = ['notRequired', 'acceptableAbsence', 'approvedCourse']
+
+  // console.error(attended)
+
+  return {
+    attended,
+    ...mapToReasonsModel(attendances, paidReasonCodes),
+  }
+}
+
+const getCountsOfNotPaidReasons = attendances => {
+  const notPaidReasonCodes = ['sick', 'refused', 'sessionCancelled', 'unacceptableAbsence', 'restDay', 'restInCell']
+
+  return mapToReasonsModel(attendances, notPaidReasonCodes)
+}
+
+const getCountOfMissing = (attendances, scheduledActivities) => {
+  const attendedBookings = attendances.map(activity => activity.bookingId)
+  const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
+
+  return {
+    missing,
+  }
+}
 
 const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
-  const service = async ({ agencyId, period, date }) => {
-    const data = await whereaboutsApi.getPrisonAttendance(res.locals, params)
-    const attended = data.filter(attendance => attendance.attended === true).length
-    const notRequired = data.filter(nr => nr.absentReason === 'NotRequired').length
-    const acceptableAbsence = data.filter(aa => aa.absentReason === 'AcceptableAbsence').length
-    const approvedCourse = data.filter(ac => ac.absentReason === 'ApprovedCourse').length
+  const getDashboardViewModel = async (context, { agencyId, period, date }) => {
+    const attendances = await whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date })
+    const scheduledActivities = await elite2Api.getOffenderActivities(context, { agencyId, period, date })
 
     return {
-      attended,
-      notRequired,
-      acceptableAbsence,
-      approvedCourse,
+      ...getCountsOfPaidReasons(attendances),
+      ...getCountsOfNotPaidReasons(attendances),
+      ...getCountOfMissing(attendances, scheduledActivities || []),
     }
   }
+
   const whereaboutsDashboard = async (req, res) => {
-    console.log('=====', req.query)
+    // console.log('=====', req.query)
 
     const { agencyId, period, date } = req.query
-    // const formattedDate = switchDateFormat(date)
-    const params = {
-      agencyId,
-      date,
-      period,
-    }
+
+    const formattedDate = switchDateFormat(date, 'DD-MM-YYYY')
+
     try {
-      const [user, caseloads, roles, absenceReasons, prisonAttendance] = await Promise.all([
+      const [user, caseloads, roles, absenceReasons] = await Promise.all([
         oauthApi.currentUser(res.locals),
         elite2Api.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
         whereaboutsApi.getAbsenceReasons(res.locals),
-        whereaboutsApi.getPrisonAttendance(res.locals, params),
       ])
 
-      const getAttendedPrisoners = prisonAttendance.filter(prisoner => prisoner.attended === true)
+      const viewModel = await getDashboardViewModel(res.locals, { agencyId, date: formattedDate, period })
 
-      console.log({ getAttendedPrisoners })
+      // console.log('VIEW MODEL ====== ', viewModel)
 
       const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
       const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
@@ -52,10 +86,12 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
             id: activeCaseLoadId,
           },
         },
+        caseLoadId: activeCaseLoad.caseLoadId,
         allCaseloads: caseloads,
         inactiveCaseLoads,
         userRoles: roles,
-        attendedPrisoners: getAttendedPrisoners.length,
+        data: viewModel,
+        currentPeriod: 'PM',
       })
     } catch (error) {
       res.render('error.njk', {
@@ -67,7 +103,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
 
   return {
     whereaboutsDashboard,
-    service,
+    getDashboardViewModel,
   }
 }
 
