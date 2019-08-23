@@ -1,4 +1,5 @@
-const { merge, switchDateFormat } = require('../utils')
+const moment = require('moment')
+const { merge, switchDateFormat, getCurrentShift } = require('../utils')
 
 const mapToReasonsModel = (data, reasons) => {
   const filterAttendance = reason =>
@@ -55,8 +56,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
 
   const whereaboutsDashboard = async (req, res) => {
     // console.log('=====', req.query)
-
-    const { agencyId, period, date } = req.query
+    const { agencyId, period, date } = req.query || {}
 
     const formattedDate = switchDateFormat(date, 'DD-MM-YYYY')
 
@@ -68,13 +68,22 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         whereaboutsApi.getAbsenceReasons(res.locals),
       ])
 
-      const viewModel = await getDashboardViewModel(res.locals, { agencyId, date: formattedDate, period })
-
-      // console.log('VIEW MODEL ====== ', viewModel)
-
       const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
       const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+
+      if (!period || !date) {
+        const currentPeriod = getCurrentShift(moment().format())
+        const today = moment().format('DD-MM-YYYY')
+
+        res.redirect(`/whereabouts?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
+
+        return
+      }
+
+      const viewModel = await getDashboardViewModel(res.locals, { agencyId, date: formattedDate, period })
+
+      // console.log('VIEW MODEL ====== ', viewModel)
 
       res.render('whereabouts.njk', {
         title: 'Whereabouts Dashboard',
@@ -91,9 +100,11 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         inactiveCaseLoads,
         userRoles: roles,
         data: viewModel,
-        currentPeriod: 'PM',
+        date,
+        period,
       })
     } catch (error) {
+      // console.error(error)
       res.render('error.njk', {
         title: 'Whereabouts Dashboard',
         message: error.message,

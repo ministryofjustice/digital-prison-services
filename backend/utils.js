@@ -109,6 +109,16 @@ const merge = (left, right) => ({
   ...right,
 })
 
+const getCurrentShift = date => {
+  const afternoonSplit = 12
+  const eveningSplit = 17
+  const currentHour = moment(date).format('H')
+
+  if (currentHour < afternoonSplit) return 'AM'
+  if (currentHour < eveningSplit) return 'PM'
+  return 'ED'
+}
+
 module.exports = {
   switchDateFormat,
   formatTimestampToDate,
@@ -126,4 +136,5 @@ module.exports = {
   toMap,
   pascalToString,
   merge,
+  getCurrentShift,
 }

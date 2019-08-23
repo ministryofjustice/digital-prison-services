@@ -1,13 +1,48 @@
+import moment from 'moment'
 import { whereaboutsDashboardFactory } from '../controllers/whereabouts'
 
 describe('Whereabouts dashbaord', () => {
   const context = {}
+  const oauthApi = {}
+  const elite2Api = {}
+  const whereaboutsApi = {}
+
+  beforeEach(() => {
+    oauthApi.currentUser = jest.fn()
+    elite2Api.userCaseLoads = jest.fn()
+    elite2Api.getOffenderActivities = jest.fn()
+    oauthApi.userRoles = jest.fn()
+    whereaboutsApi.getAbsenceReasons = jest.fn()
+    whereaboutsApi.getPrisonAttendance = jest.fn()
+  })
+
+  it('should redirect to /whereabouts with default parameters when none was present', async () => {
+    const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+
+    jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+    elite2Api.userCaseLoads.mockReturnValue([
+      {
+        currentlyActive: true,
+        caseLoadId: 'LEI',
+      },
+    ])
+
+    const date = '2017-01-01'
+    const period = 'AM'
+    const agencyId = 'LEI'
+    const req = {}
+    const res = {
+      redirect: jest.fn(),
+    }
+
+    await whereaboutsDashboard(req, res)
+
+    expect(res.redirect(`/whereabouts?agencyId=${agencyId}&date=${date}&period=${period}`))
+
+    Date.now.mockRestore()
+  })
 
   describe('service', () => {
-    const oauthApi = {}
-    const elite2Api = {}
-    const whereaboutsApi = {}
-
     const agencyId = 'LEI'
     const date = '2019-10-10'
     const period = 'AM'

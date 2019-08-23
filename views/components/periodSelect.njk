@@ -1,22 +1,21 @@
 <div class="pure-u-md-1-6">
 <label class="form-label" for="period">
-    Period - {{ selectedPeriod }}
+    Period
 </label>
 
 <select
     id="period"
     name="period"
     class="form-control"
-    value={{ selectedPeriod }}
-    onChange={} 
+    value={{ period }}
 >
-    <option key="MORNING" value="AM">
+    <option key="MORNING" value="AM" {% if period === "AM" %} selected {%endif%}>
     Morning (AM)
     </option>
-    <option key="AFTERNOON" value="PM">
+    <option key="AFTERNOON" value="PM" {% if period === "PM" %} selected {%endif%}>
     Afternoon (PM)
     </option>
-    <option key="EVENING" value="ED">
+    <option key="EVENING" value="ED" {% if period === "ED" %} selected {%endif%}>
     Evening (ED)
     </option>
 </select>
