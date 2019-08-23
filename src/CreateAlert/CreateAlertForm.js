@@ -73,6 +73,7 @@ export class CreateAlertForm extends Component {
       pristine,
       selectedAlertType,
       effectiveDate,
+      disableSubmit,
     } = this.props
 
     const { editDate } = this.state
@@ -83,7 +84,7 @@ export class CreateAlertForm extends Component {
           <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />
         )}
 
-        <WhenFieldChanges field="alertType" becomes={selectedAlertType} set="alertSubType" to={undefined} />
+        <WhenFieldChanges field="alertType" becomes={selectedAlertType} set="alertSubType" to="" />
 
         <Fieldset>
           <Fieldset.Legend>Type of alert</Fieldset.Legend>
@@ -155,7 +156,7 @@ export class CreateAlertForm extends Component {
         </Fieldset>
 
         <ButtonContainer className="margin-top-30">
-          <Button type="submit" disabled={submitting || pristine} mb={0}>
+          <Button type="submit" disabled={disableSubmit || submitting || pristine} mb={0}>
             Save and continue
           </Button>
           <ButtonCancel mb={0} onClick={cancelHandler} type="button">
@@ -188,6 +189,7 @@ CreateAlertForm.propTypes = {
   ),
   selectedAlertType: PropTypes.string,
   effectiveDate: PropTypes.string,
+  disableSubmit: PropTypes.bool,
 }
 
 CreateAlertForm.defaultProps = {
@@ -198,9 +200,10 @@ CreateAlertForm.defaultProps = {
   errors: [],
   selectedAlertType: '',
   effectiveDate: '',
+  disableSubmit: false,
 }
 
-function CreateAlertFinalForm({ alertTypes, alertSubTypes, cancelHandler, createAlertHandler }) {
+function CreateAlertFinalForm({ alertTypes, alertSubTypes, cancelHandler, createAlertHandler, disableSubmit }) {
   return (
     <Form
       initialValues={{
@@ -218,6 +221,7 @@ function CreateAlertFinalForm({ alertTypes, alertSubTypes, cancelHandler, create
           errors={errors}
           selectedAlertType={values.alertType}
           effectiveDate={values.effectiveDate}
+          disableSubmit={disableSubmit}
         />
       )}
     />
@@ -240,11 +244,13 @@ CreateAlertFinalForm.propTypes = {
       parentValue: PropTypes.string.isRequired,
     })
   ),
+  disableSubmit: PropTypes.bool,
 }
 
 CreateAlertFinalForm.defaultProps = {
   alertTypes: [],
   alertSubTypes: [],
+  disableSubmit: false,
 }
 
 export default connect()(CreateAlertFinalForm)
