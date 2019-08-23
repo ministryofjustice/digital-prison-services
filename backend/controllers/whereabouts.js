@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { merge, switchDateFormat, getCurrentShift } = require('../utils')
 
-const mapToReasonsModel = (data, reasons) => {
+const getReasonCountMap = (data, reasons) => {
   const filterAttendance = reason =>
     data.filter(
       attendance =>
@@ -15,50 +15,29 @@ const mapToReasonsModel = (data, reasons) => {
     .reduce(merge, {})
 }
 
-const getCountsOfPaidReasons = attendances => {
-  const attended = attendances.filter(attendance => attendance && attendance.attended === true).length
-  const paidReasonCodes = ['notRequired', 'acceptableAbsence', 'approvedCourse']
-
-  // console.error(attended)
-
-  return {
-    attended,
-    ...mapToReasonsModel(attendances, paidReasonCodes),
-  }
-}
-
-const getCountsOfNotPaidReasons = attendances => {
-  const notPaidReasonCodes = ['sick', 'refused', 'sessionCancelled', 'unacceptableAbsence', 'restDay', 'restInCell']
-
-  return mapToReasonsModel(attendances, notPaidReasonCodes)
-}
-
-const getCountOfMissing = (attendances, scheduledActivities) => {
-  const attendedBookings = attendances.map(activity => activity.bookingId)
-  const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
-
-  return {
-    missing,
-  }
-}
-
 const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
-  const getDashboardViewModel = async (context, { agencyId, period, date }) => {
+  const getDashboardStats = async (context, { agencyId, period, date }) => {
     const attendances = await whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date })
     const scheduledActivities = await elite2Api.getOffenderActivities(context, { agencyId, period, date })
+    const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
+
+    const attended = attendances.filter(attendance => attendance && attendance.attended).length
+    const attendedBookings = attendances.map(activity => activity.bookingId)
+    const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
+
+    const formattedAbsentReasons = absentReasons.map(
+      reason => `${reason[0].toLowerCase()}${reason.slice(1, reason.length)}`
+    )
 
     return {
-      ...getCountsOfPaidReasons(attendances),
-      ...getCountsOfNotPaidReasons(attendances),
-      ...getCountOfMissing(attendances, scheduledActivities || []),
+      attended,
+      missing,
+      ...getReasonCountMap(attendances, formattedAbsentReasons),
     }
   }
 
   const whereaboutsDashboard = async (req, res) => {
-    // console.log('=====', req.query)
     const { agencyId, period, date } = req.query || {}
-
-    const formattedDate = switchDateFormat(date, 'DD-MM-YYYY')
 
     try {
       const [user, caseloads, roles, absenceReasons] = await Promise.all([
@@ -72,6 +51,8 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
       const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
+      const formattedDate = switchDateFormat(date, 'DD-MM-YYYY')
+
       if (!period || !date) {
         const currentPeriod = getCurrentShift(moment().format())
         const today = moment().format('DD-MM-YYYY')
@@ -81,9 +62,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         return
       }
 
-      const viewModel = await getDashboardViewModel(res.locals, { agencyId, date: formattedDate, period })
-
-      // console.log('VIEW MODEL ====== ', viewModel)
+      const dashboardStats = await getDashboardStats(res.locals, { agencyId, date: formattedDate, period })
 
       res.render('whereabouts.njk', {
         title: 'Whereabouts Dashboard',
@@ -99,12 +78,11 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         allCaseloads: caseloads,
         inactiveCaseLoads,
         userRoles: roles,
-        data: viewModel,
+        data: dashboardStats,
         date,
         period,
       })
     } catch (error) {
-      // console.error(error)
       res.render('error.njk', {
         title: 'Whereabouts Dashboard',
         message: error.message,
@@ -114,7 +92,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
 
   return {
     whereaboutsDashboard,
-    getDashboardViewModel,
+    getDashboardStats,
   }
 }
 

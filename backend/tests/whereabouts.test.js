@@ -1,52 +1,15 @@
-import moment from 'moment'
 import { whereaboutsDashboardFactory } from '../controllers/whereabouts'
 
-describe('Whereabouts dashbaord', () => {
+describe('Whereabouts dashboard', () => {
   const context = {}
   const oauthApi = {}
   const elite2Api = {}
   const whereaboutsApi = {}
+  const agencyId = 'LEI'
+  const date = '2019-10-10'
+  const period = 'AM'
 
-  beforeEach(() => {
-    oauthApi.currentUser = jest.fn()
-    elite2Api.userCaseLoads = jest.fn()
-    elite2Api.getOffenderActivities = jest.fn()
-    oauthApi.userRoles = jest.fn()
-    whereaboutsApi.getAbsenceReasons = jest.fn()
-    whereaboutsApi.getPrisonAttendance = jest.fn()
-  })
-
-  it('should redirect to /whereabouts with default parameters when none was present', async () => {
-    const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
-
-    jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
-    elite2Api.userCaseLoads.mockReturnValue([
-      {
-        currentlyActive: true,
-        caseLoadId: 'LEI',
-      },
-    ])
-
-    const date = '2017-01-01'
-    const period = 'AM'
-    const agencyId = 'LEI'
-    const req = {}
-    const res = {
-      redirect: jest.fn(),
-    }
-
-    await whereaboutsDashboard(req, res)
-
-    expect(res.redirect(`/whereabouts?agencyId=${agencyId}&date=${date}&period=${period}`))
-
-    Date.now.mockRestore()
-  })
-
-  describe('service', () => {
-    const agencyId = 'LEI'
-    const date = '2019-10-10'
-    const period = 'AM'
-
+  describe('Controller', () => {
     beforeEach(() => {
       oauthApi.currentUser = jest.fn()
       elite2Api.userCaseLoads = jest.fn()
@@ -55,7 +18,84 @@ describe('Whereabouts dashbaord', () => {
       whereaboutsApi.getAbsenceReasons = jest.fn()
       whereaboutsApi.getPrisonAttendance = jest.fn()
     })
+
+    it('should redirect to /whereabouts with default parameters when none was present', async () => {
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+
+      jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          currentlyActive: true,
+          caseLoadId: 'LEI',
+        },
+      ])
+
+      const req = {}
+      const res = {
+        redirect: jest.fn(),
+      }
+
+      await whereaboutsDashboard(req, res)
+
+      expect(res.redirect(`/whereabouts?agencyId=${agencyId}&date=${date}&period=${period}`))
+
+      Date.now.mockRestore()
+    })
+
+    it('should try render the error template on error', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
+      elite2Api.userCaseLoads.mockReturnValue([])
+      oauthApi.currentUser.mockReturnValue({})
+
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const res = {
+        render: jest.fn(),
+      }
+
+      whereaboutsApi.getPrisonAttendance.mockImplementation(() => new Error('something is wrong'))
+
+      await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
+
+      expect(res.render).toHaveBeenCalled() // todo check params
+    })
+  })
+
+  describe('Dashboard stats ', () => {
+    beforeEach(() => {
+      oauthApi.currentUser = jest.fn()
+      elite2Api.userCaseLoads = jest.fn()
+      elite2Api.getOffenderActivities = jest.fn()
+      oauthApi.userRoles = jest.fn()
+      whereaboutsApi.getAbsenceReasons = jest.fn()
+      whereaboutsApi.getPrisonAttendance = jest.fn()
+      whereaboutsApi.getAbsenceReasons.mockReturnValue([
+        'NotRequired',
+        'AcceptableAbsence',
+        'ApprovedCourse',
+        'Sick',
+        'Refused',
+        'SessionCancelled',
+        'UnacceptableAbsence',
+        'RestDay',
+        'RestInCell',
+      ])
+    })
+
+    it('should call eliteApi and whereaboutsApi with the correct parameters', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
+
+      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      await getDashboardStats(context, { agencyId, date, period })
+
+      expect(elite2Api.getOffenderActivities).toHaveBeenCalledWith(context, { agencyId, date, period })
+      expect(whereaboutsApi.getPrisonAttendance).toHaveBeenCalledWith(context, { agencyId, date, period })
+      expect(whereaboutsApi.getAbsenceReasons).toHaveBeenCalledWith(context)
+    })
+
     it('should count paid reasons', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([])
       whereaboutsApi.getPrisonAttendance.mockReturnValue([
         {
           attended: true,
@@ -78,9 +118,9 @@ describe('Whereabouts dashbaord', () => {
         },
       ])
 
-      const { getDashboardViewModel } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
 
-      const { attended, notrequired, acceptableabsence, approvedcourse } = await getDashboardViewModel(context, {
+      const { attended, notrequired, acceptableabsence, approvedcourse } = await getDashboardStats(context, {
         agencyId,
         date,
         period,
@@ -93,8 +133,9 @@ describe('Whereabouts dashbaord', () => {
     })
 
     it('should count not paid reasons', async () => {
-      const { getDashboardViewModel } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
 
+      elite2Api.getOffenderActivities.mockReturnValue([])
       whereaboutsApi.getPrisonAttendance.mockReturnValue([
         {
           attended: false,
@@ -128,7 +169,7 @@ describe('Whereabouts dashbaord', () => {
         },
       ])
 
-      const { sessioncancelled, sick, unacceptableabsence, restday, refused, restincell } = await getDashboardViewModel(
+      const { sessioncancelled, sick, unacceptableabsence, restday, refused, restincell } = await getDashboardStats(
         context,
         { agencyId, date, period }
       )
@@ -150,20 +191,8 @@ describe('Whereabouts dashbaord', () => {
       })
     })
 
-    it('should call elite2Api.getOffenderActivities with the correct params', async () => {
-      const { getDashboardViewModel } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
-
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
-      elite2Api.getOffenderActivities.mockReturnValue([])
-
-      await getDashboardViewModel(context, { agencyId, date, period })
-
-      expect(elite2Api.getOffenderActivities).toHaveBeenCalledWith(context, { agencyId, date, period })
-      expect(whereaboutsApi.getPrisonAttendance).toHaveBeenCalledWith(context, { agencyId, date, period })
-    })
-
     it('should count unaccounted for prisoners', async () => {
-      const { getDashboardViewModel } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
 
       whereaboutsApi.getPrisonAttendance.mockReturnValue([
         {
@@ -186,24 +215,13 @@ describe('Whereabouts dashbaord', () => {
         },
       ])
 
-      const { missing } = await getDashboardViewModel(context, { agencyId, date, period })
+      const { missing } = await getDashboardStats(context, { agencyId, date, period })
 
       expect({
         missing,
       }).toEqual({
         missing: 2,
       })
-    })
-
-    it('should call eliteApi and whereaboutsApi with the correct parameters', async () => {
-      elite2Api.getOffenderActivities.mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
-      const { getDashboardViewModel } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
-
-      await getDashboardViewModel(context, { agencyId, date, period })
-
-      expect(elite2Api.getOffenderActivities).toHaveBeenCalledWith(context, { agencyId, date, period })
-      expect(whereaboutsApi.getPrisonAttendance).toHaveBeenCalledWith(context, { agencyId, date, period })
     })
   })
 })
