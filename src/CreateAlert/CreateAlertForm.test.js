@@ -111,4 +111,12 @@ describe('Create alert form', () => {
 
     expect(cancelHandler).toHaveBeenCalled()
   })
+
+  it('should disable submit button when disableSubmit has been passed in', () => {
+    const wrapper = shallow(
+      <CreateAlertForm cancelHandler={() => {}} handleSubmit={() => {}} effectiveDate="2019-10-10" disableSubmit />
+    )
+
+    expect(wrapper.find({ type: 'submit' }).getElement().props.disabled).toBe(true)
+  })
 })

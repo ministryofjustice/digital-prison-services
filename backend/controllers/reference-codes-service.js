@@ -15,6 +15,19 @@ const referenceCodesServiceFactory = elite2Api => {
         description: type.description,
       }))
 
+    const alphaSortOnDescription = (a, b) => {
+      if (a.description < b.description) {
+        return -1
+      }
+      if (a.description > b.description) {
+        return 1
+      }
+      return 0
+    }
+
+    alertTypes.sort(alphaSortOnDescription)
+    alertSubTypes.sort(alphaSortOnDescription)
+
     return {
       alertTypes,
       alertSubTypes,

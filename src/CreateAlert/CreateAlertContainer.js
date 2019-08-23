@@ -15,6 +15,7 @@ export class CreateAlertContainer extends Component {
     this.state = {
       alertTypes: [],
       alertSubTypes: [],
+      disableSubmit: false,
     }
 
     this.createAlertHandler = this.createAlertHandler.bind(this)
@@ -42,13 +43,20 @@ export class CreateAlertContainer extends Component {
         comment,
         effectiveDate,
       })
+
+      this.setState(state => ({
+        ...state,
+        disableSubmit: true,
+      }))
+
       raiseAnalyticsEvent({
         category: 'alert created',
         label: 'Alerts',
         value: { alertType, alertSubType, comment, effectiveDate },
       })
+
       notify.show('Alert has been created', 'success')
-      history.goBack()
+      setTimeout(() => history.goBack(), 3000)
     } catch (error) {
       handleError(error)
     }
@@ -62,7 +70,7 @@ export class CreateAlertContainer extends Component {
 
   render() {
     const { offenderNo, handleError, setLoadedDispatch, offenderDetails } = this.props
-    const { alertTypes, alertSubTypes } = this.state
+    const { alertTypes, alertSubTypes, disableSubmit } = this.state
     return (
       <>
         <GridRow>
@@ -93,6 +101,7 @@ export class CreateAlertContainer extends Component {
               createAlertHandler={this.createAlertHandler}
               alertTypes={alertTypes}
               alertSubTypes={alertSubTypes}
+              disableSubmit={disableSubmit}
             />
           </GridCol>
         </GridRow>

@@ -29,6 +29,7 @@ exports[`Create alert form should display required fields errors 1`] = `
     becomes=""
     field="alertType"
     set="alertSubType"
+    to=""
   />
   <styled.fieldset>
     <Legend
