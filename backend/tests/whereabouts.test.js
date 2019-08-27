@@ -57,7 +57,10 @@ describe('Whereabouts dashboard', () => {
 
       await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
 
-      expect(res.render).toHaveBeenCalled() // todo check params
+      expect(res.render).toHaveBeenCalledWith('error.njk', {
+        message: 'attendances.filter is not a function',
+        title: 'Whereabouts Dashboard',
+      })
     })
   })
 

@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { merge, switchDateFormat, getCurrentShift, pascalToString } = require('../utils')
+const { merge, switchDateFormat, getCurrentShift } = require('../utils')
 
 const getReasonCountMap = (data, reasons) => {
   const filterAttendance = reason =>
@@ -17,14 +17,15 @@ const getReasonCountMap = (data, reasons) => {
 
 const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
   const getDashboardStats = async (context, { agencyId, period, date }) => {
-    const attendances = await whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date })
-    const scheduledActivities = await elite2Api.getOffenderActivities(context, { agencyId, period, date })
-    const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
+    const [attendances, scheduledActivities, absentReasons] = await Promise.all([
+      whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date }),
+      elite2Api.getOffenderActivities(context, { agencyId, period, date }),
+      whereaboutsApi.getAbsenceReasons(context),
+    ])
 
     const attended = attendances.filter(attendance => attendance && attendance.attended).length
     const attendedBookings = attendances.map(activity => activity.bookingId)
     const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
-
     const mergedAbsentReasons = Object.values(absentReasons).reduce((a, b) => a.concat(b), [])
 
     return {
@@ -74,7 +75,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         allCaseloads: caseloads,
         inactiveCaseLoads,
         userRoles: roles,
-        data: dashboardStats,
+        dashboardStats,
         date,
         period,
       })

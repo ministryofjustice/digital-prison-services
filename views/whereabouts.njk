@@ -44,46 +44,46 @@
         govukButton({
           type: submit,
           text: 'Update',
-          classes: 'govuk-button'
+          classes: 'govuk-button govuk-!-margin-bottom-0'
         })
       }}
   </div>
 </div>
 </form>
-<hr>
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <h2 class="govuk-heading-m">Paid reasons</h2>
-<div class="govuk-grid-row govuk-section-break--m">
+<div class="govuk-grid-row ">
   <div class="govuk-grid-column-one-quarter">
     <p class="govuk-body">Attended</p>
-    <span class="govuk-fieldset__legend--xl">{{data.attended}}</span>
+    <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.attended}}</span>
   </div>
   {% for reason in absenceReasons.paidReasons %}
-    <div class="govuk-grid-column-one-quarter">
+    <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
       <p class="govuk-body">{{helpers.pascalToString(reason)}}</p>
-      <span class="govuk-fieldset__legend--xl">{{data[reason.toLowerCase()]}}</span>
+      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[reason.toLowerCase()]}}</span>
     </div>
    {% endfor %}
 </div>
 
-<hr>
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <h2 class="govuk-heading-m">Not paid reasons</h2>
 
-<div class="govuk-grid-row govuk-section-break--m">
+<div class="govuk-grid-row">
   {% for reason in absenceReasons.unpaidReasons %}
-    <div class="govuk-grid-column-one-quarter">
+    <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
       <p class="govuk-body">{{helpers.pascalToString(reason)}}</p>
-      <span class="govuk-fieldset__legend--xl">{{data[reason.toLowerCase()]}}</span>
+      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[reason.toLowerCase()]}}</span>
     </div>
   {% endfor %}
 </div>
 
-<hr>
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <h2 class="govuk-heading-m">Not recorded</h2>
 
-<div class="govuk-grid-row govuk-section-break--m">
+<div class="govuk-grid-row">
   <div class="govuk-grid-column-one-quarter">
     <p class="govuk-body">Missing</p>
-    <span class="govuk-fieldset__legend--xl">{{data.missing}}</span>
+    <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.missing}}</span>
   </div>
 </div>
 

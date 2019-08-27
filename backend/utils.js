@@ -1,8 +1,8 @@
 const moment = require('moment')
 
-const switchDateFormat = (displayDate, format) => {
+const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, format || 'DD/MM/YYYY').format('YYYY-MM-DD')
+    return moment(displayDate, format).format('YYYY-MM-DD')
   }
   return displayDate
 }

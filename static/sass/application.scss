@@ -1,3 +1,4 @@
+$govuk-page-width: 1170px;
 @import "node_modules/govuk-frontend/govuk/all";
 @import "./header.scss";
 
@@ -12,14 +13,6 @@
 
 .clickable {
     cursor: pointer;
-}
-
-.govuk-width-container {
-    max-width: 1170px !important;
-}
-
-.govuk-grid-column-one-quarter {
-    padding: 0 15px 20px !important;
 }
 
 /*HEADER STYLES */
@@ -131,50 +124,6 @@
 #menuToggle:checked~.right-menu-info-wrap {
     &:before{
         transform: rotate(180deg)
-    }
-}
-
-select.form-control {
-    width: 100%;
-    height: 2em;
-}
-
-.form-control {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-family: "nta", Arial, sans-serif;
-    font-weight: 400;
-    text-transform: none;
-    font-size: 16px;
-    line-height: 1.25;
-    width: 100%;
-    padding: 5px 4px 4px;
-    border: 2px solid #0b0c0c;
-}
-
-@media (min-width: 641px) {
-    .form-control {
-        font-size: 19px;
-        line-height: 1.31579;
-    }
-}
-
-.form-label {
-    font-family: "nta", Arial, sans-serif;
-    font-weight: 400;
-    text-transform: none;
-    font-size: 16px;
-    line-height: 1.25;
-    display: block;
-    color: #0b0c0c;
-    padding-bottom: 2px;
-}
-
-@media (min-width: 641px){
-    .form-label {
-        font-size: 19px;
-        line-height: 1.31579;
     }
 }
 
