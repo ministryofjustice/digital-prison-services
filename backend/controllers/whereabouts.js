@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { merge, switchDateFormat, getCurrentShift } = require('../utils')
+const { merge, switchDateFormat, getCurrentShift, pascalToString } = require('../utils')
 
 const getReasonCountMap = (data, reasons) => {
   const filterAttendance = reason =>
@@ -25,14 +25,12 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
     const attendedBookings = attendances.map(activity => activity.bookingId)
     const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
 
-    const formattedAbsentReasons = absentReasons.map(
-      reason => `${reason[0].toLowerCase()}${reason.slice(1, reason.length)}`
-    )
+    const mergedAbsentReasons = Object.values(absentReasons).reduce((a, b) => a.concat(b), [])
 
     return {
       attended,
       missing,
-      ...getReasonCountMap(attendances, formattedAbsentReasons),
+      ...getReasonCountMap(attendances, mergedAbsentReasons),
     }
   }
 
@@ -56,9 +54,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
       if (!period || !date) {
         const currentPeriod = getCurrentShift(moment().format())
         const today = moment().format('DD-MM-YYYY')
-
         res.redirect(`/whereabouts?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
-
         return
       }
 

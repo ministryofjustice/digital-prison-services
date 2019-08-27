@@ -1,9 +1,8 @@
 $(document).ready(function() {
-  //const date =
   $('.date-input').datepicker({
     dateFormat: 'dd-mm-yy',
     showOtherMonths: true,
     selectOtherMonths: true,
+    maxDate: '0',
   })
-  //    .datepicker('setDate', new Date())
 })

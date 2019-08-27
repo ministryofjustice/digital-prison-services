@@ -19,7 +19,7 @@
 }
 
 .govuk-grid-column-one-quarter {
-    padding: 0 15px 15px !important;
+    padding: 0 15px 20px !important;
 }
 
 /*HEADER STYLES */
@@ -178,6 +178,7 @@ select.form-control {
     }
 }
 
+/*Datepicker overrides*/
 .ui-widget-header {
     border: 0 !important;
     background: #fff !important;
