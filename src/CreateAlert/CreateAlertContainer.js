@@ -31,7 +31,7 @@ export class CreateAlertContainer extends Component {
   }
 
   async createAlertHandler(values) {
-    const { offenderDetails, handleError, history, raiseAnalyticsEvent, resetErrorDispatch } = this.props
+    const { offenderDetails, handleError, history, raiseAnalyticsEvent, resetErrorDispatch, agencyId } = this.props
     const { bookingId } = offenderDetails
     const { alertType, alertSubType, comment, effectiveDate } = values
 
@@ -50,7 +50,7 @@ export class CreateAlertContainer extends Component {
       }))
 
       raiseAnalyticsEvent({
-        category: 'alert created',
+        category: `alert created for ${agencyId}`,
         label: 'Alerts',
         value: { alertType, alertSubType, comment, effectiveDate },
       })
@@ -123,6 +123,7 @@ CreateAlertContainer.propTypes = {
   }).isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
+  agencyId: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
