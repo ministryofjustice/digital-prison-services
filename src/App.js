@@ -510,6 +510,7 @@ class App extends React.Component {
             path={routePaths.createAlert}
             render={({ history, match: { params } }) => (
               <CreateAlertContainer
+                agencyId={agencyId}
                 offenderNo={params.offenderNo}
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
