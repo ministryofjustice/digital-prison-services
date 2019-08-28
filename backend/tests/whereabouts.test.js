@@ -96,19 +96,7 @@ describe('Whereabouts dashboard', () => {
       elite2Api.userCaseLoads = jest.fn()
       elite2Api.getOffenderActivities = jest.fn()
       oauthApi.userRoles = jest.fn()
-      whereaboutsApi.getAbsenceReasons = jest.fn()
       whereaboutsApi.getPrisonAttendance = jest.fn()
-      whereaboutsApi.getAbsenceReasons.mockReturnValue([
-        'NotRequired',
-        'AcceptableAbsence',
-        'ApprovedCourse',
-        'Sick',
-        'Refused',
-        'SessionCancelled',
-        'UnacceptableAbsence',
-        'RestDay',
-        'RestInCell',
-      ])
     })
 
     it('should call eliteApi and whereaboutsApi with the correct parameters', async () => {
