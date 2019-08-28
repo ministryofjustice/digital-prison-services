@@ -1,9 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { PayOtherForm } from './PayOtherForm'
+import { AttendanceOtherForm } from './AttendanceOtherForm'
 import IEPCreated from '../../../IEPCreated'
 
-describe('<PayOtherForm />', () => {
+describe('<AttendanceOtherForm />', () => {
   const submitForm = async formWrapper => {
     await formWrapper.find('form').simulate('submit')
     formWrapper.update()
@@ -49,7 +49,7 @@ describe('<PayOtherForm />', () => {
     const props = { ...sharedProps }
     beforeEach(() => {
       props.updateOffenderAttendance.mockReturnValue(true)
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
     })
 
     it('should display the correct offender name', () => {
@@ -225,7 +225,7 @@ describe('<PayOtherForm />', () => {
     beforeEach(() => {
       props.showModal.mockClear()
       props.updateOffenderAttendance.mockReturnValue(false)
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
     })
 
     it('should not trigger the IEP created modal', async () => {
@@ -255,7 +255,7 @@ describe('<PayOtherForm />', () => {
         },
         comments: 'Acceptable reason comment',
       }
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(true)
       expect(noRadio.props().checked).toBe(false)
       expect(reasonSelector.props().value).toBe('AcceptableAbsence')
@@ -272,7 +272,7 @@ describe('<PayOtherForm />', () => {
         },
         comments: 'Uncceptable reason comment',
       }
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(false)
       expect(noRadio.props().checked).toBe(true)
       expect(reasonSelector.props().value).toBe('UncceptableAbsence')

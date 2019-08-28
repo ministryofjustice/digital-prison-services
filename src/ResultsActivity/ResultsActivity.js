@@ -28,7 +28,7 @@ import OffenderName from '../OffenderName'
 import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import PayOptions from './elements/PayOptions'
+import AttendanceOptions from './elements/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
 import { attendanceUpdated } from './resultsActivityGAEvents'
@@ -399,7 +399,7 @@ class ResultsActivity extends Component {
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (
-                <PayOptions
+                <AttendanceOptions
                   offenderDetails={offenderDetails}
                   updateOffenderAttendance={updateOffenderAttendance}
                   showModal={showModal}

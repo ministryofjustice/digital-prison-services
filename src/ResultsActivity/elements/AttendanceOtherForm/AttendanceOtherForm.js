@@ -17,7 +17,7 @@ import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../f
 import IEPCreated from '../../../IEPCreated'
 import { userType } from '../../../types'
 
-export function PayOtherForm({
+export function AttendanceOtherForm({
   user,
   offender,
   updateOffenderAttendance,
@@ -156,7 +156,7 @@ export function PayOtherForm({
   )
 }
 
-PayOtherForm.propTypes = {
+AttendanceOtherForm.propTypes = {
   // mapStateToProps
   user: userType.isRequired,
   absentReasons: PropTypes.shape({
@@ -177,4 +177,4 @@ const mapStateToProps = state => ({
   absentReasons: state.events.absentReasons,
 })
 
-export default connect(mapStateToProps)(PayOtherForm)
+export default connect(mapStateToProps)(AttendanceOtherForm)

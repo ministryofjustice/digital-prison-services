@@ -4,10 +4,10 @@ import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 import Radio from '@govuk-react/radio'
 import { Spinner } from '@govuk-react/icons'
-import { UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
-import PayOptions from '.'
+import { UpdateLink, PayMessage, OtherMessage } from './AttendanceOptions.styles'
+import AttendanceOptions from '.'
 
-describe('<PayOptions />', () => {
+describe('<AttendanceOptions />', () => {
   Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
 
   const props = {
@@ -42,7 +42,7 @@ describe('<PayOptions />', () => {
   let getOtherMessage
 
   beforeEach(() => {
-    testRenderer = TestRenderer.create(<PayOptions {...props} />)
+    testRenderer = TestRenderer.create(<AttendanceOptions {...props} />)
     testInstance = testRenderer.root
     getAbsentReason = () => testInstance.findAllByProps({ 'data-qa': 'absent-reason' })
     getPayRadio = () => testInstance.findByProps({ 'data-qa': 'pay-option' }).findByType(Radio)
@@ -76,7 +76,7 @@ describe('<PayOptions />', () => {
 
   it('should check the correct radio button when user has been marked as paid and attended', () => {
     props.offenderDetails.attendanceInfo.pay = true
-    act(() => testRenderer.update(<PayOptions {...props} />))
+    act(() => testRenderer.update(<AttendanceOptions {...props} />))
     expect(getPayRadio().props.checked).toBe(true)
     expect(getOtherRadio().props.checked).toBe(false)
   })
@@ -94,7 +94,7 @@ describe('<PayOptions />', () => {
         value: 'AcceptableAbsence',
         name: 'Acceptable',
       }
-      act(() => testRenderer.update(<PayOptions {...props} />))
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
 
       expect(getPayRadio().props.checked).toBe(false)
       expect(getOtherMessage().props.children).toBe('Acceptable')
@@ -105,7 +105,7 @@ describe('<PayOptions />', () => {
         value: 'AcceptableAbsence',
         name: 'Acceptable',
       }
-      act(() => testRenderer.update(<PayOptions {...props} />))
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
       const absentReason = getAbsentReason()
       expect(absentReason[0].props.printOnly).toBe(true)
       expect(absentReason[0].props.children).toEqual('Acceptable')
@@ -117,7 +117,7 @@ describe('<PayOptions />', () => {
         value: 'AcceptableAbsence',
         name: 'Acceptable',
       }
-      act(() => testRenderer.update(<PayOptions {...props} />))
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
       const detailsLink = testInstance.findAllByType(UpdateLink)
       expect(detailsLink.length).toBe(1)
     })
@@ -128,7 +128,7 @@ describe('<PayOptions />', () => {
         value: 'AcceptableAbsence',
         name: 'Acceptable',
       }
-      act(() => testRenderer.update(<PayOptions {...props} />))
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
       const detailsLink = testInstance.findByType(UpdateLink)
       detailsLink.props.onClick()
       expect(props.showModal).toHaveBeenCalled()
@@ -143,7 +143,7 @@ describe('<PayOptions />', () => {
       props.offenderDetails.attendanceInfo.paid = true
       props.offenderDetails.attendanceInfo.locked = true
 
-      act(() => testRenderer.update(<PayOptions {...props} />))
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
       const PayConfirm = testInstance.findAllByType(PayMessage)
       expect(PayConfirm.length).toBe(1)
     })
@@ -157,7 +157,7 @@ describe('<PayOptions />', () => {
         name: 'Acceptable',
       }
 
-      act(() => testRenderer.update(<PayOptions {...props} />))
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
       expect(getOtherRadio).toThrow(new Error('No instances found with node type: "Radio"'))
     })
   })

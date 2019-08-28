@@ -28,7 +28,7 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
-import PayOptions from '../ResultsActivity/elements/PayOptions'
+import AttendanceOptions from '../ResultsActivity/elements/AttendanceOptions'
 import { Flag } from '../flags'
 import { attendanceUpdated } from '../ResultsActivity/resultsActivityGAEvents'
 import { linkOnClick } from '../helpers'
@@ -331,7 +331,7 @@ class ResultsHouseblock extends Component {
                   {isPaid && <td className="no-print">Paid</td>}
                   {!isReceived &&
                     !isPaid && (
-                      <PayOptions
+                      <AttendanceOptions
                         offenderDetails={offenderDetails}
                         updateOffenderAttendance={updateOffenderAttendance}
                         showModal={showModal}

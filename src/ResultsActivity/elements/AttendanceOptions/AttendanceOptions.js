@@ -6,10 +6,10 @@ import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
 import { isWithinLastWeek } from '../../../utils'
-import PayOtherForm from '../PayOtherForm'
-import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
+import AttendanceOtherForm from '../AttendanceOtherForm'
+import { Option, UpdateLink, PayMessage, OtherMessage } from './AttendanceOptions.styles'
 
-function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, showModal, activityName }) {
+function AttendanceOptions({ offenderDetails, updateOffenderAttendance, date, noPay, showModal, activityName }) {
   const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
@@ -40,7 +40,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
   const renderForm = () =>
     showModal(
       true,
-      <PayOtherForm
+      <AttendanceOtherForm
         offender={offenderDetails}
         updateOffenderAttendance={updateOffenderAttendance}
         showModal={showModal}
@@ -104,7 +104,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
   )
 }
 
-PayOptions.propTypes = {
+AttendanceOptions.propTypes = {
   offenderDetails: PropTypes.shape({
     offenderNo: PropTypes.string,
     firstName: PropTypes.string,
@@ -125,9 +125,9 @@ PayOptions.propTypes = {
   activityName: PropTypes.string.isRequired,
 }
 
-PayOptions.defaultProps = {
+AttendanceOptions.defaultProps = {
   offenderDetails: undefined,
   noPay: false,
 }
 
-export default PayOptions
+export default AttendanceOptions
