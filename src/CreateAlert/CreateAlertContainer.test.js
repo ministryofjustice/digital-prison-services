@@ -36,7 +36,6 @@ const alerts = {
   alertTypes: [{ title: 'alert 1', value: 'alert-type-1' }],
   alertSubTypes: [{ title: 'alert sub 1', value: 'alert-sub-1', parentValue: 'alert-type-1' }],
 }
-
 const findGetRequests = url => axiosMock.history.get.find(request => request.url === url)
 
 describe('Create Alert container', () => {
@@ -44,6 +43,7 @@ describe('Create Alert container', () => {
     axiosMock.reset()
     axiosMock.onGet(apiCalls.getAlertTypes).reply(200, alerts)
     notify.show = jest.fn()
+    window.setTimeout = f => f()
   })
 
   describe('Initial load', () => {
@@ -63,7 +63,10 @@ describe('Create Alert container', () => {
 
       await instance.componentDidMount()
 
-      expect(wrapper.state()).toEqual(alerts)
+      expect(wrapper.state()).toEqual({
+        ...alerts,
+        disableSubmit: false,
+      })
     })
 
     it('should pass the correct props to the CreateForm component', async () => {
@@ -130,7 +133,7 @@ describe('Create Alert container', () => {
       const raiseAnalyticsEvent = jest.fn()
 
       const wrapper = shallow(
-        <CreateAlertContainer {...defaultProps} {...alerts} raiseAnalyticsEvent={raiseAnalyticsEvent} />
+        <CreateAlertContainer {...defaultProps} {...alerts} raiseAnalyticsEvent={raiseAnalyticsEvent} agencyId="LEI" />
       )
       const instance = wrapper.instance()
       await instance.createAlertHandler({
@@ -141,7 +144,7 @@ describe('Create Alert container', () => {
       })
 
       expect(raiseAnalyticsEvent).toHaveBeenCalledWith({
-        category: 'alert created',
+        category: 'alert created for LEI',
         label: 'Alerts',
         value: { alertType: 'P', comment: 'sdf', alertSubType: 'PL1', effectiveDate: '2019-10-10' },
       })
@@ -171,6 +174,17 @@ describe('Create Alert container', () => {
       instance.cancel()
 
       expect(history.goBack).toHaveBeenCalled()
+    })
+
+    it('should pass disable button submit prop into CreateAlertForm on success', async () => {
+      axiosMock.onPost(apiCalls.createAlert).reply(201)
+      const wrapper = shallow(<CreateAlertContainer {...defaultProps} {...alerts} />)
+      const instance = wrapper.instance()
+
+      await instance.createAlertHandler({ alertType: 'P', comment: 'sdf', alertSubType: 'PL1' })
+      await wrapper.update()
+
+      expect(wrapper.find('Connect(CreateAlertFinalForm)').getElement().props.disableSubmit).toBe(true)
     })
   })
 })

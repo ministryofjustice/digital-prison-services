@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import { isAfterToday } from '../utils'
+import { isBeforeToday, isAfterToday, getCurrentShift } from '../utils'
 
 export const MissingButtonContainer = styled('div')`
   margin-right: 5em;
@@ -19,6 +19,17 @@ export const MissingButtonContainer = styled('div')`
 `
 
 class Search extends Component {
+  showMissingPrisonersButton = () => {
+    const { period: selectedPeriod, date } = this.props
+    const actualPeriod = getCurrentShift()
+
+    if (isBeforeToday(date)) return true
+    if (isAfterToday(date)) return false
+    if (selectedPeriod === 'AM') return true
+    if (selectedPeriod === 'PM') return actualPeriod === 'PM' || actualPeriod === 'ED'
+    return actualPeriod === 'ED'
+  }
+
   render() {
     const {
       loaded,
@@ -182,7 +193,7 @@ class Search extends Component {
               </div>
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
-            {!isAfterToday(date) && (
+            {this.showMissingPrisonersButton() && (
               <Flag
                 name={['updateAttendanceEnabled']}
                 render={() => (

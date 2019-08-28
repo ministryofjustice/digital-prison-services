@@ -38,9 +38,10 @@ const getHoursMinutes = timestamp => {
 const isToday = date => {
   if (date === 'Today') return true
 
-  return false
+  return moment(date, 'DD/MM/YYYY')
+    .startOf('day')
+    .isSame(moment().startOf('day'))
 }
-
 const getCurrentShift = date => {
   const afternoonSplit = 12
   const eveningSplit = 17
@@ -100,6 +101,8 @@ const isWithinLastWeek = date => {
   const daysDifference = moment(date, 'DD/MM/YYYY').diff(oneWeekAgo, 'day')
   return daysDifference >= 0
 }
+
+const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
 
 const stripAgencyPrefix = (location, agency) => {
   const parts = location && location.split('-')
@@ -165,6 +168,7 @@ module.exports = {
   isAfterToday,
   isWithinLastYear,
   isWithinLastWeek,
+  isBeforeToday,
   getMainEventDescription,
   getEventDescription,
   stripAgencyPrefix,

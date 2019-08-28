@@ -60,6 +60,7 @@ exports[`Create Alert container Initial load should pass the correct props to th
         alertTypes={Array []}
         cancelHandler={[Function]}
         createAlertHandler={[Function]}
+        disableSubmit={false}
       />
     </GridCol>
   </GridRow>

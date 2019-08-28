@@ -132,7 +132,7 @@ const elite2ApiFactory = client => {
   const getOffenderActivities = (context, { agencyId, date, period }) =>
     get(context, `/api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
 
-  const getAlertTypes = context => get(context, '/api/reference-domains/alertTypes')
+  const getAlertTypes = context => get(context, '/api/reference-domains/alertTypes', 1000)
 
   const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
 
