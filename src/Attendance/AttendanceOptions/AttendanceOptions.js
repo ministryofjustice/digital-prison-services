@@ -5,7 +5,7 @@ import VisuallyHidden from '@govuk-react/visually-hidden'
 import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
-import { isWithinLastWeek } from '../../../utils'
+import { isWithinLastWeek } from '../../utils'
 import AttendanceOtherForm from '../AttendanceOtherForm'
 import { Option, UpdateLink, PayMessage, OtherMessage } from './AttendanceOptions.styles'
 

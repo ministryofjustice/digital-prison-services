@@ -10,12 +10,12 @@ import Button from '@govuk-react/button'
 import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
 
-import { ButtonContainer, ButtonCancel } from '../../../Components/Buttons'
-import RadioGroup from '../../../Components/RadioGroup'
-import { properCaseName } from '../../../utils'
-import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
-import IEPCreated from '../../../IEPCreated'
-import { userType } from '../../../types'
+import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
+import RadioGroup from '../../Components/RadioGroup'
+import { properCaseName } from '../../utils'
+import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../final-form-govuk-helpers'
+import IEPCreated from '../../IEPCreated'
+import { userType } from '../../types'
 
 export function AttendanceOtherForm({
   user,

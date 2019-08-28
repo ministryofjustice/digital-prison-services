@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { AttendanceOtherForm } from './AttendanceOtherForm'
-import IEPCreated from '../../../IEPCreated'
+import IEPCreated from '../../IEPCreated'
 
 describe('<AttendanceOtherForm />', () => {
   const submitForm = async formWrapper => {
