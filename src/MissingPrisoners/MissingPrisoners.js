@@ -8,7 +8,7 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import OtherActivityListView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
-import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
+import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import { getHoursMinutes, getMainEventDescription } from '../utils'
 
 const TableContainer = styled.div`
@@ -35,7 +35,15 @@ const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
               sortColumn={sortOrder.orderColumn}
             />
           </Table.CellHeader>
-          <Table.CellHeader setWidth="15%">Location</Table.CellHeader>
+          <Table.CellHeader setWidth="15%">
+            <SortableColumn
+              heading="Location"
+              column={CELL_LOCATION}
+              sortOrder={sortOrder.orderDirection}
+              setColumnSort={setColumnSort}
+              sortColumn={sortOrder.orderColumn}
+            />
+          </Table.CellHeader>
           <Table.CellHeader setWidth="15%">Prison no.</Table.CellHeader>
           <Table.CellHeader setWidth="25%">
             <SortableColumn
