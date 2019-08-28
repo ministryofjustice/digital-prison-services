@@ -15,18 +15,17 @@ const getReasonCountMap = (data, reasons) => {
     .reduce(merge, {})
 }
 
-const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
-  const getDashboardStats = async (context, { agencyId, period, date }) => {
-    const [attendances, scheduledActivities, absentReasons] = await Promise.all([
+const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, logerrror) => {
+  const getDashboardStats = async (context, { agencyId, period, date, absenceReasons }) => {
+    const [attendances, scheduledActivities] = await Promise.all([
       whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date }),
       elite2Api.getOffenderActivities(context, { agencyId, period, date }),
-      whereaboutsApi.getAbsenceReasons(context),
     ])
 
     const attended = attendances.filter(attendance => attendance && attendance.attended).length
     const attendedBookings = attendances.map(activity => activity.bookingId)
     const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
-    const mergedAbsentReasons = Object.values(absentReasons).reduce((a, b) => a.concat(b), [])
+    const mergedAbsentReasons = Object.values(absenceReasons).reduce((a, b) => a.concat(b), [])
 
     return {
       attended,
@@ -59,7 +58,12 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         return
       }
 
-      const dashboardStats = await getDashboardStats(res.locals, { agencyId, date: formattedDate, period })
+      const dashboardStats = await getDashboardStats(res.locals, {
+        agencyId,
+        date: formattedDate,
+        period,
+        absenceReasons,
+      })
 
       res.render('whereabouts.njk', {
         title: 'Whereabouts Dashboard',
@@ -80,9 +84,10 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi) => {
         period,
       })
     } catch (error) {
+      logerrror('/whereabouts', error, 'There has been an error')
       res.render('error.njk', {
         title: 'Whereabouts Dashboard',
-        message: error.message,
+        message: 'There has been an error',
       })
     }
   }

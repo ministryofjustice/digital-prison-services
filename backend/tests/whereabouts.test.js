@@ -8,6 +8,17 @@ describe('Whereabouts dashboard', () => {
   const agencyId = 'LEI'
   const date = '2019-10-10'
   const period = 'AM'
+  const absenceReasons = [
+    'NotRequired',
+    'AcceptableAbsence',
+    'ApprovedCourse',
+    'Sick',
+    'Refused',
+    'SessionCancelled',
+    'UnacceptableAbsence',
+    'RestDay',
+    'RestInCell',
+  ]
 
   describe('Controller', () => {
     beforeEach(() => {
@@ -43,24 +54,39 @@ describe('Whereabouts dashboard', () => {
     })
 
     it('should try render the error template on error', async () => {
-      elite2Api.getOffenderActivities.mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
-      elite2Api.userCaseLoads.mockReturnValue([])
-      oauthApi.currentUser.mockReturnValue({})
-
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const logerror = jest.fn()
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logerror)
       const res = {
         render: jest.fn(),
       }
 
-      whereaboutsApi.getPrisonAttendance.mockImplementation(() => new Error('something is wrong'))
-
       await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
-        message: 'attendances.filter is not a function',
+        message: 'There has been an error',
         title: 'Whereabouts Dashboard',
       })
+    })
+
+    it('should log the correct error', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
+      elite2Api.userCaseLoads.mockReturnValue([])
+      oauthApi.currentUser.mockReturnValue({})
+      const logerror = jest.fn()
+
+      whereaboutsApi.getPrisonAttendance.mockImplementation(() => {
+        throw new Error('something is wrong')
+      })
+
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logerror)
+      const res = {
+        render: jest.fn(),
+      }
+
+      await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
+
+      expect(logerror).toHaveBeenCalledWith('/whereabouts', new Error('something is wrong'), 'There has been an error')
     })
   })
 
@@ -90,11 +116,10 @@ describe('Whereabouts dashboard', () => {
       whereaboutsApi.getPrisonAttendance.mockReturnValue([])
 
       const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
-      await getDashboardStats(context, { agencyId, date, period })
+      await getDashboardStats(context, { agencyId, date, period, absenceReasons })
 
       expect(elite2Api.getOffenderActivities).toHaveBeenCalledWith(context, { agencyId, date, period })
       expect(whereaboutsApi.getPrisonAttendance).toHaveBeenCalledWith(context, { agencyId, date, period })
-      expect(whereaboutsApi.getAbsenceReasons).toHaveBeenCalledWith(context)
     })
 
     it('should count paid reasons', async () => {
@@ -127,6 +152,7 @@ describe('Whereabouts dashboard', () => {
         agencyId,
         date,
         period,
+        absenceReasons,
       })
 
       expect(attended).toBe(1)
@@ -174,7 +200,7 @@ describe('Whereabouts dashboard', () => {
 
       const { sessioncancelled, sick, unacceptableabsence, restday, refused, restincell } = await getDashboardStats(
         context,
-        { agencyId, date, period }
+        { agencyId, date, period, absenceReasons }
       )
 
       expect({
@@ -218,7 +244,7 @@ describe('Whereabouts dashboard', () => {
         },
       ])
 
-      const { missing } = await getDashboardStats(context, { agencyId, date, period })
+      const { missing } = await getDashboardStats(context, { agencyId, date, period, absenceReasons })
 
       expect({
         missing,
