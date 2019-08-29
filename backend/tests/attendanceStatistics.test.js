@@ -53,7 +53,7 @@ describe('Attendance reason statistics', () => {
       Date.now.mockRestore()
     })
 
-    it('should try render the whereabouts...', async () => {
+    it('should render the attendance reasons statistics view with the correctly formatted parameters', async () => {
       elite2Api.getOffenderActivities.mockReturnValue([
         {
           offenderNo: 'G8974UK',
