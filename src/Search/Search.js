@@ -5,17 +5,37 @@ import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
 import Button from '@govuk-react/button'
-import { BLUE } from 'govuk-colours'
+import { BLUE, LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import styled from 'styled-components'
+import Link from '@govuk-react/link'
+import { FONT_SIZE } from '@govuk-react/constants'
 import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { isBeforeToday, isAfterToday, getCurrentShift } from '../utils'
 
-export const MissingButtonContainer = styled('div')`
+const StatsLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: right;
+  display: inline-block;
+
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
+  }
+`
+const ButtonsContainer = styled('div')`
   margin-right: 5em;
   margin-top: 1.4em;
   float: right;
+  width: 35%;
+  text-align: right;
+`
+
+export const MissingButtonContainer = styled('div')`
+  display: inline-block;
 `
 
 class Search extends Component {
@@ -193,23 +213,28 @@ class Search extends Component {
               </div>
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
-            {this.showMissingPrisonersButton() && (
-              <Flag
-                name={['updateAttendanceEnabled']}
-                render={() => (
-                  <MissingButtonContainer>
-                    <Button
-                      buttonColour={BLUE}
-                      onClick={() => history.push(`missing-prisoners`)}
-                      data-qa="missing-prisoners"
-                    >
-                      View missing prisoners
-                    </Button>
-                  </MissingButtonContainer>
-                )}
-                fallbackRender={() => <></>}
-              />
-            )}
+            <ButtonsContainer>
+              {this.showMissingPrisonersButton() && (
+                <Flag
+                  name={['updateAttendanceEnabled']}
+                  render={() => (
+                    <MissingButtonContainer>
+                      <Button
+                        buttonColour={BLUE}
+                        onClick={() => history.push(`missing-prisoners`)}
+                        data-qa="missing-prisoners"
+                      >
+                        View missing prisoners
+                      </Button>
+                    </MissingButtonContainer>
+                  )}
+                  fallbackRender={() => <></>}
+                />
+              )}
+              <StatsLink href="/attendance-reason-statistics" id="attendanceStatsButton">
+                View attendance reason statistics
+              </StatsLink>
+            </ButtonsContainer>
           </div>
 
           <div className="top-gutter">
