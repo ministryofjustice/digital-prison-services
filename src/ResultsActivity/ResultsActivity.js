@@ -31,7 +31,7 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
-import { attendanceUpdated } from './resultsActivityGAEvents'
+import { attendanceUpdated } from '../Attendance/attendanceGAEvents'
 
 const ManageResults = styled.div`
   display: flex;
