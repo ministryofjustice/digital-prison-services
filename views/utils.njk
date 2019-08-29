@@ -1,9 +1,0 @@
-{% macro pascalToString(value) %}
-{{
-  value.substring(0, 1) +
-  value
-    .substring(1)
-    .replace(r/([A-Z])/g, ' $1')
-    .toLowerCase()
-}}
-{%endmacro%}

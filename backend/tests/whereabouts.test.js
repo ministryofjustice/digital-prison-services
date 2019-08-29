@@ -53,6 +53,105 @@ describe('Whereabouts dashboard', () => {
       Date.now.mockRestore()
     })
 
+    it('should try render the whereabouts...', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([
+        {
+          offenderNo: 'G8974UK',
+          eventId: 3,
+          locationId: 27219,
+        },
+      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue([
+        {
+          id: 5812,
+          bookingId: 1133341,
+          eventId: 3,
+          eventLocationId: 26149,
+          period: 'AM',
+          prisonId: 'MDI',
+          attended: true,
+          paid: true,
+        },
+      ])
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+          currentlyActive: true,
+        },
+      ])
+      oauthApi.currentUser.mockReturnValue({
+        username: 'USER_ADM',
+        active: true,
+        name: 'User Name',
+        activeCaseLoadId: 'LEI',
+      })
+      whereaboutsApi.getAbsenceReasons.mockReturnValue({
+        paidReasons: ['AcceptableAbsence', 'ApprovedCourse', 'NotRequired'],
+        unpaidReasons: ['Refused', 'SessionCancelled', 'RestInCell', 'RestDay', 'UnacceptableAbsence', 'Sick'],
+      })
+      const logError = jest.fn()
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)
+      const res = {
+        render: jest.fn(),
+      }
+
+      await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
+
+      expect(res.render).toHaveBeenCalledWith('whereabouts.njk', {
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        caseLoadId: 'LEI',
+        dashboardStats: {
+          acceptableabsence: 0,
+          approvedcourse: 0,
+          attended: 1,
+          missing: 1,
+          notrequired: 0,
+          refused: 0,
+          restday: 0,
+          restincell: 0,
+          sessioncancelled: 0,
+          sick: 0,
+          unacceptableabsence: 0,
+        },
+        date: '2019-10-10',
+        formattedReasons: {
+          paidReasons: [
+            { acceptableabsence: 'Acceptable absence' },
+            { approvedcourse: 'Approved course' },
+            {
+              notrequired: 'Not required',
+            },
+          ],
+          unpaidReasons: [
+            { refused: 'Refused' },
+            { sessioncancelled: 'Session cancelled' },
+            { restincell: 'Rest in cell' },
+            { restday: 'Rest day' },
+            { unacceptableabsence: 'Unacceptable absence' },
+            { sick: 'Sick' },
+          ],
+        },
+        inactiveCaseLoads: [],
+        period: 'AM',
+        title: 'Whereabouts Dashboard',
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        userRoles: undefined,
+      })
+    })
+
     it('should try render the error template on error', async () => {
       const logError = jest.fn()
       const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)

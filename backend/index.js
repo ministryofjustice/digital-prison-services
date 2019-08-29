@@ -157,7 +157,6 @@ const controller = controllerFactory({
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
   offenderService: offenderServiceFactory(elite2Api),
   offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
-  whereaboutsDashboardService: whereaboutsDashboardFactory(elite2Api, whereaboutsApi),
   referenceCodesService: referenceCodesService(elite2Api),
   elite2Api,
 })
@@ -258,7 +257,7 @@ app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get(
   '/whereabouts',
-  handleErrors(whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi).whereaboutsDashboard)
+  handleErrors(whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, log).whereaboutsDashboard)
 )
 
 nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
