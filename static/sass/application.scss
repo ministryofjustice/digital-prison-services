@@ -34,7 +34,7 @@ $govuk-page-width: 1170px;
         align-items: center;
         height: 100%;
         min-width: 320px;
-        background: #005ea5;
+        background:  $govuk-brand-colour;
 
         &-primary {
             position: relative;
@@ -47,7 +47,7 @@ $govuk-page-width: 1170px;
             margin-right: auto;
             padding: 0 18px 0 10px;
             font-size: 19px;
-            border-left: solid white 1px;
+            border-left: solid govuk-colour("white") 1px;
         }
     }
 
@@ -56,18 +56,18 @@ $govuk-page-width: 1170px;
         top: 100%;
         left: 0;
         width: 100%;
-        box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+        box-shadow: 0 1px 0 govuk-colour("black");
         box-sizing: border-box;
         z-index: 1000;
 
         &-option {
             box-sizing: border-box;
-            color: rgba(51,51,51,0.8);
+            color: $govuk-text-colour;
             cursor: pointer;
             display: block;
             padding: 16px 10px;
-            background: #005ea5;
-            color: white;
+            background:  $govuk-brand-colour;
+            color: govuk-colour("white");
             font-size: 19px;
             font-family: "GDS Transport",Arial,sans-serif;
             -webkit-align-items: center;
@@ -77,7 +77,7 @@ $govuk-page-width: 1170px;
             text-align: left;
             border-width: 1px 0 0;
             border-style: solid;
-            border-color: lightblue;
+            border-color: govuk-colour("light-blue");
             height: 60px;
             -webkit-text-decoration: none;
             text-decoration: none;
@@ -130,8 +130,8 @@ $govuk-page-width: 1170px;
 /*Datepicker overrides*/
 .ui-widget-header {
     border: 0 !important;
-    background: #fff !important;
-    color: black !important;
+    background:govuk-colour("white") !important;
+    color: govuk-colour("black") !important;
     font-weight: bold;
 }
 
@@ -140,25 +140,25 @@ $govuk-page-width: 1170px;
 }
 
 .ui-datepicker table {
-    background: white !important;
+    background: govuk-colour("white") !important;
 }
 
 .ui-widget-content {
-    border: 1px solid #000000 !important;
-    background: #fff !important;
+    border: 1px solid govuk-colour("black") !important;
+    background: govuk-colour("white") !important;
 }
 
 .ui-state-default {
     border: 0 !important;
-    background: #fff !important;
-    color: #000 !important;
+    background: govuk-colour("white") !important;
+    color: govuk-colour("black") !important;
     font-weight: normal !important;
     text-align: center !important;
 }
 
 .ui-state-active {
-    background: #015DA5 !important;
-    color: #fff !important;
+    background:  $govuk-brand-colour !important;
+    color: govuk-colour("white") !important;
     border-radius: 15px !important;
     padding: 2px !important;
     width: 25px !important;

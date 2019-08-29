@@ -2,7 +2,7 @@ const moment = require('moment')
 const { merge, switchDateFormat, getCurrentShift, pascalToString } = require('../utils')
 
 const getReasonCountMap = (data, reasons) => {
-  const filterAttendance = reason =>
+  const countAttendancesForReason = reason =>
     data.filter(
       attendance =>
         attendance && attendance.absentReason && attendance.absentReason.toLowerCase() === reason.toLowerCase()
@@ -10,7 +10,7 @@ const getReasonCountMap = (data, reasons) => {
 
   return Object.values(reasons)
     .map(absentReason => ({
-      [absentReason.toLowerCase()]: filterAttendance(absentReason),
+      [absentReason.toLowerCase()]: countAttendancesForReason(absentReason),
     }))
     .reduce(merge, {})
 }
