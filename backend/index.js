@@ -157,7 +157,7 @@ const controller = controllerFactory({
   csvParserService: csvParserService({ fs, isBinaryFileSync }),
   offenderService: offenderServiceFactory(elite2Api),
   offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
-  whereaboutsDashboardService: whereaboutsDashboardFactory(elite2Api, whereaboutsApi, log),
+  whereaboutsDashboardService: whereaboutsDashboardFactory(elite2Api, whereaboutsApi),
   referenceCodesService: referenceCodesService(elite2Api),
   elite2Api,
 })

@@ -54,8 +54,8 @@ describe('Whereabouts dashboard', () => {
     })
 
     it('should try render the error template on error', async () => {
-      const logerror = jest.fn()
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logerror)
+      const logError = jest.fn()
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)
       const res = {
         render: jest.fn(),
       }
@@ -63,7 +63,7 @@ describe('Whereabouts dashboard', () => {
       await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
-        message: 'There has been an error',
+        message: 'We have encountered a problem loading this page.  Please try again.',
         title: 'Whereabouts Dashboard',
       })
     })
@@ -73,20 +73,20 @@ describe('Whereabouts dashboard', () => {
       whereaboutsApi.getPrisonAttendance.mockReturnValue([])
       elite2Api.userCaseLoads.mockReturnValue([])
       oauthApi.currentUser.mockReturnValue({})
-      const logerror = jest.fn()
+      const logError = jest.fn()
 
       whereaboutsApi.getPrisonAttendance.mockImplementation(() => {
         throw new Error('something is wrong')
       })
 
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logerror)
+      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)
       const res = {
         render: jest.fn(),
       }
 
       await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
 
-      expect(logerror).toHaveBeenCalledWith('/whereabouts', new Error('something is wrong'), 'There has been an error')
+      expect(logError).toHaveBeenCalledWith('/whereabouts', new Error('something is wrong'), 'There has been an error')
     })
   })
 

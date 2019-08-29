@@ -1,7 +1,5 @@
 {% extends "./partials/layout.njk" %}
 
-{%import 'utils.njk' as helpers %}
-
 {% from "govuk/components/button/macro.njk" import govukButton %} 
 
  {% block beforeContent %}
@@ -24,8 +22,6 @@
 {% endblock %}
 
 {% block content %}
-
-{% set urlParams = '/whereabouts?agencyId=' + caseLoadId + '&period=AM&date=2019-08-23'%}
 
 <h1 class="govuk-heading-l">Statistics: attendance reasons</h1>
 <form action="/whereabouts">
@@ -57,23 +53,27 @@
     <p class="govuk-body">Attended</p>
     <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.attended}}</span>
   </div>
-  {% for reason in absenceReasons.paidReasons %}
+  {% for paidReasons in formattedReasons.paidReasons %}
+    {% for value, name in paidReasons %}
     <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
-      <p class="govuk-body">{{helpers.pascalToString(reason)}}</p>
-      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[reason.toLowerCase()]}}</span>
+      <p class="govuk-body">{{name}}</p>
+      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[value]}}</span>
     </div>
    {% endfor %}
+  {% endfor %}
 </div>
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <h2 class="govuk-heading-m">Not paid reasons</h2>
 
 <div class="govuk-grid-row">
-  {% for reason in absenceReasons.unpaidReasons %}
-    <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
-      <p class="govuk-body">{{helpers.pascalToString(reason)}}</p>
-      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[reason.toLowerCase()]}}</span>
-    </div>
+  {% for unpaidReasons in formattedReasons.unpaidReasons %}
+    {% for value, name in unpaidReasons %}
+      <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
+        <p class="govuk-body">{{name}}</p>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[value]}}</span>
+      </div>
+    {% endfor %}
   {% endfor %}
 </div>
 

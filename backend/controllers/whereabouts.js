@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { merge, switchDateFormat, getCurrentShift } = require('../utils')
+const { merge, switchDateFormat, getCurrentShift, pascalToString } = require('../utils')
 
 const getReasonCountMap = (data, reasons) => {
   const filterAttendance = reason =>
@@ -15,7 +15,7 @@ const getReasonCountMap = (data, reasons) => {
     .reduce(merge, {})
 }
 
-const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, logerrror) => {
+const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
   const getDashboardStats = async (context, { agencyId, period, date, absenceReasons }) => {
     const [attendances, scheduledActivities] = await Promise.all([
       whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date }),
@@ -65,9 +65,14 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, logerr
         absenceReasons,
       })
 
+      const formattedReasons = {}
+      Object.entries(absenceReasons).forEach(([key, values]) => {
+        formattedReasons[key] = values.map(reason => ({ [reason.toLowerCase()]: pascalToString(reason) }))
+      })
+
       res.render('whereabouts.njk', {
         title: 'Whereabouts Dashboard',
-        absenceReasons,
+        formattedReasons,
         user: {
           displayName: user.name,
           activeCaseLoad: {
@@ -84,10 +89,10 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, logerr
         period,
       })
     } catch (error) {
-      logerrror('/whereabouts', error, 'There has been an error')
+      logError('/whereabouts', error, 'There has been an error')
       res.render('error.njk', {
         title: 'Whereabouts Dashboard',
-        message: 'There has been an error',
+        message: 'We have encountered a problem loading this page.  Please try again.',
       })
     }
   }
