@@ -5,7 +5,7 @@ import TestRenderer, { act } from 'react-test-renderer'
 import Radio from '@govuk-react/radio'
 import { Spinner } from '@govuk-react/icons'
 import { UpdateLink, PayMessage, OtherMessage } from './AttendanceOptions.styles'
-import AttendanceOptions from '.'
+import AttendanceOptions, { updateOffenderAttendance } from './AttendanceOptions'
 
 describe('<AttendanceOptions />', () => {
   Date.now = jest.fn(() => new Date(Date.UTC(2019, 0, 13)).valueOf())
@@ -27,9 +27,14 @@ describe('<AttendanceOptions />', () => {
         other: false,
       },
     },
-    updateOffenderAttendance: jest.fn(),
     date: 'Today',
+    agencyId: 'LEI',
+    period: 'PM',
     showModal: jest.fn(),
+    setOffenderAttendance: jest.fn(),
+    resetErrorDispatch: jest.fn(),
+    raiseAnalyticsEvent: jest.fn(),
+    handleError: jest.fn(),
     activityName: 'Activity name',
   }
 
@@ -56,12 +61,21 @@ describe('<AttendanceOptions />', () => {
     expect(getAbsentReason().length).toBe(0)
   })
 
-  it('should call updateOffenderAttendance with the correct args when selecting pay', () => {
+  it('should successfully call updateOffenderAttendance', () => {
     act(() => getPayRadio().props.onChange())
-    expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
+    const paid = updateOffenderAttendance(
       { attended: true, eventId: 123, eventLocationId: 1, offenderNo: 'ABC123', paid: true },
-      1
+      1,
+      'LEI',
+      'PM',
+      'Today',
+      props.setOffenderAttendance,
+      props.handleError,
+      props.showModal,
+      props.resetErrorDispatch,
+      props.raiseAnalyticsEvent
     )
+    expect(paid).toBeTruthy()
   })
 
   it('should load the paying spinner when selecting pay', () => {

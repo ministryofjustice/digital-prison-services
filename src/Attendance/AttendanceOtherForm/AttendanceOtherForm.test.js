@@ -29,6 +29,13 @@ describe('<AttendanceOtherForm />', () => {
     user: {
       name: 'Test User',
     },
+    date: 'Today',
+    period: 'PM',
+    agencyId: 'LEI',
+    setOffenderAttendance: jest.fn(),
+    resetErrorDispatch: jest.fn(),
+    raiseAnalyticsEvent: jest.fn(),
+    handleError: jest.fn(),
   }
 
   let wrapper = {}
@@ -176,7 +183,18 @@ describe('<AttendanceOtherForm />', () => {
 
         submitForm(wrapper)
 
-        expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: true }, 1)
+        expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
+          { ...expectedPayload, paid: true },
+          1,
+          'LEI',
+          'PM',
+          'Today',
+          props.setOffenderAttendance,
+          props.handleError,
+          props.showModal,
+          props.resetErrorDispatch,
+          props.raiseAnalyticsEvent
+        )
       })
 
       it('should submit with the correct, unpaid information and trigger the IEP created modal', async () => {
@@ -201,7 +219,18 @@ describe('<AttendanceOtherForm />', () => {
 
         await submitForm(wrapper)
 
-        expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: false }, 1)
+        expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
+          { ...expectedPayload, paid: false },
+          1,
+          'LEI',
+          'PM',
+          'Today',
+          props.setOffenderAttendance,
+          props.handleError,
+          props.showModal,
+          props.resetErrorDispatch,
+          props.raiseAnalyticsEvent
+        )
         expect(props.showModal).toHaveBeenCalledWith(
           true,
           <IEPCreated

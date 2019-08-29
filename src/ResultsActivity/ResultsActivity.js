@@ -31,7 +31,6 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
-import { attendanceUpdated } from '../Attendance/attendanceGAEvents'
 
 const ManageResults = styled.div`
   display: flex;
@@ -93,6 +92,8 @@ class ResultsActivity extends Component {
       agencyId,
       handleError,
       setActivityOffenderAttendance,
+      resetErrorDispatch,
+      raiseAnalyticsEvent,
       showModal,
       activityName,
       updateAttendanceEnabled,
@@ -278,42 +279,6 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
-    const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
-      let updateSuccess = false
-      const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
-      const eventDetails = { prisonId: agencyId, period, eventDate: date }
-      const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
-
-      const offenderAttendanceData = {
-        comments,
-        paid,
-        absentReason,
-        pay: attended && paid,
-        other: Boolean(absentReason),
-      }
-
-      resetErrorDispatch()
-
-      try {
-        const response = await axios.post('/api/attendance', {
-          ...eventDetails,
-          ...attendanceDetails,
-          absentReason: attendanceDetails.absentReason && attendanceDetails.absentReason.value,
-        })
-        offenderAttendanceData.id = response.data.id || id
-        setActivityOffenderAttendance(offenderIndex, offenderAttendanceData)
-        updateSuccess = true
-      } catch (error) {
-        handleError(error)
-        updateSuccess = false
-      }
-
-      showModal(false)
-      raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
-
-      return updateSuccess
-    }
-
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
@@ -401,9 +366,14 @@ class ResultsActivity extends Component {
               render={() => (
                 <AttendanceOptions
                   offenderDetails={offenderDetails}
-                  updateOffenderAttendance={updateOffenderAttendance}
+                  raiseAnalyticsEvent={raiseAnalyticsEvent}
+                  resetErrorDispatch={resetErrorDispatch}
+                  handleError={handleError}
+                  agencyId={agencyId}
+                  period={period}
                   showModal={showModal}
                   activityName={activityName}
+                  setOffenderAttendance={setActivityOffenderAttendance}
                   date={date}
                   payAll={false}
                 />

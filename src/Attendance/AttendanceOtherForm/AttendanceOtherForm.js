@@ -25,6 +25,13 @@ export function AttendanceOtherForm({
   absentReasons: { triggersIEPWarning },
   showModal,
   activityName,
+  resetErrorDispatch,
+  raiseAnalyticsEvent,
+  handleError,
+  setOffenderAttendance,
+  agencyId,
+  period,
+  date,
 }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
@@ -86,7 +93,18 @@ export function AttendanceOtherForm({
       attended: false,
     }
 
-    return updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
+    return updateOffenderAttendance(
+      attendanceDetails,
+      offender.offenderIndex,
+      agencyId,
+      period,
+      date,
+      setOffenderAttendance,
+      handleError,
+      showModal,
+      resetErrorDispatch,
+      raiseAnalyticsEvent
+    )
   }
 
   const getAbsentReasons = pay => {
@@ -170,6 +188,13 @@ AttendanceOtherForm.propTypes = {
   updateOffenderAttendance: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
+  agencyId: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  setOffenderAttendance: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

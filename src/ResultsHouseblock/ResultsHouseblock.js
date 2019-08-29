@@ -91,6 +91,8 @@ class ResultsHouseblock extends Component {
       setColumnSort,
       agencyId,
       setHouseblockOffenderAttendance,
+      resetErrorDispatch,
+      raiseAnalyticsEvent,
       handleError,
       showModal,
       activityName,
@@ -234,41 +236,6 @@ class ResultsHouseblock extends Component {
 
     const readOnly = this.olderThan7Days()
 
-    const updateOffenderAttendance = async (attendanceDetails, offenderIndex) => {
-      let updateSuccess = false
-      const { resetErrorDispatch, raiseAnalyticsEvent } = this.props
-      const eventDetails = { prisonId: agencyId, period, eventDate: date }
-      const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
-      const offenderAttendanceData = {
-        comments,
-        paid,
-        absentReason,
-        pay: attended && paid,
-        other: Boolean(absentReason),
-      }
-
-      resetErrorDispatch()
-
-      try {
-        const response = await axios.post('/api/attendance', {
-          ...eventDetails,
-          ...attendanceDetails,
-          absentReason: attendanceDetails.absentReason && attendanceDetails.absentReason.value,
-        })
-        offenderAttendanceData.id = response.data.id || id
-        setHouseblockOffenderAttendance(offenderIndex, offenderAttendanceData)
-        updateSuccess = true
-      } catch (error) {
-        handleError(error)
-        updateSuccess = false
-      }
-
-      showModal(false)
-      raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
-
-      return updateSuccess
-    }
-
     const offenders =
       houseblockData &&
       houseblockData.map((offender, index) => {
@@ -333,10 +300,15 @@ class ResultsHouseblock extends Component {
                     !isPaid && (
                       <AttendanceOptions
                         offenderDetails={offenderDetails}
-                        updateOffenderAttendance={updateOffenderAttendance}
+                        raiseAnalyticsEvent={raiseAnalyticsEvent}
+                        resetErrorDispatch={resetErrorDispatch}
+                        handleError={handleError}
+                        agencyId={agencyId}
+                        period={period}
                         showModal={showModal}
-                        date={date}
                         activityName={activityName}
+                        setOffenderAttendance={setHouseblockOffenderAttendance}
+                        date={date}
                         noPay
                       />
                     )}
