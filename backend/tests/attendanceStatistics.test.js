@@ -1,6 +1,6 @@
-import { whereaboutsDashboardFactory } from '../controllers/whereabouts'
+import { attendanceStatisticsFactory } from '../controllers/attendanceStatistics'
 
-describe('Whereabouts dashboard', () => {
+describe('Attendance reason statistics', () => {
   const context = {}
   const oauthApi = {}
   const elite2Api = {}
@@ -30,8 +30,8 @@ describe('Whereabouts dashboard', () => {
       whereaboutsApi.getPrisonAttendance = jest.fn()
     })
 
-    it('should redirect to /whereabouts with default parameters when none was present', async () => {
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+    it('should redirect to /attendance-reason-statistics with default parameters when none was present', async () => {
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
       jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
       elite2Api.userCaseLoads.mockReturnValue([
@@ -46,9 +46,9 @@ describe('Whereabouts dashboard', () => {
         redirect: jest.fn(),
       }
 
-      await whereaboutsDashboard(req, res)
+      await attendanceStatistics(req, res)
 
-      expect(res.redirect(`/whereabouts?agencyId=${agencyId}&date=${date}&period=${period}`))
+      expect(res.redirect(`/attendance-reason-statistics?agencyId=${agencyId}&date=${date}&period=${period}`))
 
       Date.now.mockRestore()
     })
@@ -91,14 +91,14 @@ describe('Whereabouts dashboard', () => {
         unpaidReasons: ['Refused', 'SessionCancelled', 'RestInCell', 'RestDay', 'UnacceptableAbsence', 'Sick'],
       })
       const logError = jest.fn()
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError)
       const res = {
         render: jest.fn(),
       }
 
-      await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
+      await attendanceStatistics({ query: { agencyId, date, period } }, res)
 
-      expect(res.render).toHaveBeenCalledWith('whereabouts.njk', {
+      expect(res.render).toHaveBeenCalledWith('attendanceStatistics.njk', {
         allCaseloads: [
           {
             caseLoadId: 'LEI',
@@ -140,7 +140,7 @@ describe('Whereabouts dashboard', () => {
         },
         inactiveCaseLoads: [],
         period: 'AM',
-        title: 'Whereabouts Dashboard',
+        title: 'Attendance reason statistics',
         user: {
           activeCaseLoad: {
             description: 'Leeds (HMP)',
@@ -154,16 +154,16 @@ describe('Whereabouts dashboard', () => {
 
     it('should try render the error template on error', async () => {
       const logError = jest.fn()
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError)
       const res = {
         render: jest.fn(),
       }
 
-      await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
+      await attendanceStatistics({ query: { agencyId, date, period } }, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
         message: 'We have encountered a problem loading this page.  Please try again.',
-        title: 'Whereabouts Dashboard',
+        title: 'Attendance reason statistics',
       })
     })
 
@@ -178,14 +178,18 @@ describe('Whereabouts dashboard', () => {
         throw new Error('something is wrong')
       })
 
-      const { whereaboutsDashboard } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, logError)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError)
       const res = {
         render: jest.fn(),
       }
 
-      await whereaboutsDashboard({ query: { agencyId, date, period } }, res)
+      await attendanceStatistics({ query: { agencyId, date, period } }, res)
 
-      expect(logError).toHaveBeenCalledWith('/whereabouts', new Error('something is wrong'), 'There has been an error')
+      expect(logError).toHaveBeenCalledWith(
+        '/attendance-reason-statistics',
+        new Error('something is wrong'),
+        'There has been an error'
+      )
     })
   })
 
@@ -202,7 +206,7 @@ describe('Whereabouts dashboard', () => {
       elite2Api.getOffenderActivities.mockReturnValue([])
       whereaboutsApi.getPrisonAttendance.mockReturnValue([])
 
-      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
       await getDashboardStats(context, { agencyId, date, period, absenceReasons })
 
       expect(elite2Api.getOffenderActivities).toHaveBeenCalledWith(context, { agencyId, date, period })
@@ -233,7 +237,7 @@ describe('Whereabouts dashboard', () => {
         },
       ])
 
-      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
       const { attended, notrequired, acceptableabsence, approvedcourse } = await getDashboardStats(context, {
         agencyId,
@@ -249,7 +253,7 @@ describe('Whereabouts dashboard', () => {
     })
 
     it('should count not paid reasons', async () => {
-      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
       elite2Api.getOffenderActivities.mockReturnValue([])
       whereaboutsApi.getPrisonAttendance.mockReturnValue([
@@ -308,7 +312,7 @@ describe('Whereabouts dashboard', () => {
     })
 
     it('should count unaccounted for prisoners', async () => {
-      const { getDashboardStats } = whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
       whereaboutsApi.getPrisonAttendance.mockReturnValue([
         {

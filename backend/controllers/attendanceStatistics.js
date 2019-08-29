@@ -15,7 +15,7 @@ const getReasonCountMap = (data, reasons) => {
     .reduce(merge, {})
 }
 
-const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, log) => {
+const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, log) => {
   const getDashboardStats = async (context, { agencyId, period, date, absenceReasons }) => {
     const [attendances, scheduledActivities] = await Promise.all([
       whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date }),
@@ -34,7 +34,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, log) =
     }
   }
 
-  const whereaboutsDashboard = async (req, res) => {
+  const attendanceStatistics = async (req, res) => {
     const { agencyId, period, date } = req.query || {}
 
     try {
@@ -54,7 +54,7 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, log) =
       if (!period || !date) {
         const currentPeriod = getCurrentShift(moment().format())
         const today = moment().format('DD-MM-YYYY')
-        res.redirect(`/whereabouts?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
+        res.redirect(`/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
         return
       }
 
@@ -70,8 +70,8 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, log) =
         formattedReasons[key] = values.map(reason => ({ [reason.toLowerCase()]: pascalToString(reason) }))
       })
 
-      res.render('whereabouts.njk', {
-        title: 'Whereabouts Dashboard',
+      res.render('attendanceStatistics.njk', {
+        title: 'Attendance reason statistics',
         formattedReasons,
         user: {
           displayName: user.name,
@@ -89,18 +89,18 @@ const whereaboutsDashboardFactory = (oauthApi, elite2Api, whereaboutsApi, log) =
         period,
       })
     } catch (error) {
-      log('/whereabouts', error, 'There has been an error')
+      log('/attendance-reason-statistics', error, 'There has been an error')
       res.render('error.njk', {
-        title: 'Whereabouts Dashboard',
+        title: 'Attendance reason statistics',
         message: 'We have encountered a problem loading this page.  Please try again.',
       })
     }
   }
 
   return {
-    whereaboutsDashboard,
+    attendanceStatistics,
     getDashboardStats,
   }
 }
 
-module.exports = { whereaboutsDashboardFactory }
+module.exports = { attendanceStatisticsFactory }

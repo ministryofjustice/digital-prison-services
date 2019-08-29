@@ -45,7 +45,7 @@ const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
-const { whereaboutsDashboardFactory } = require('./controllers/whereabouts')
+const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
@@ -256,8 +256,8 @@ app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get(
-  '/whereabouts',
-  handleErrors(whereaboutsDashboardFactory(oauthApi, elite2Api, whereaboutsApi, log).whereaboutsDashboard)
+  '/attendance-reason-statistics',
+  handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, log).attendanceStatistics)
 )
 
 nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
