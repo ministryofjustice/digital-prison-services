@@ -1,4 +1,6 @@
 FROM node:10.15-slim
+LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
+
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_DATE
