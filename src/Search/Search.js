@@ -25,7 +25,7 @@ const StatsLink = styled(Link)`
     color: ${LINK_HOVER_COLOUR};
   }
 `
-const ButtonsContainer = styled('div')`
+export const AttendanceButtonsContainer = styled('div')`
   margin-right: 5em;
   margin-top: 1.4em;
   width: 50%;
@@ -221,11 +221,11 @@ class Search extends Component {
               </div>
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
-            <ButtonsContainer>
-              {this.showMissingPrisonersButton() && (
-                <Flag
-                  name={['updateAttendanceEnabled']}
-                  render={() => (
+            <Flag
+              name={['updateAttendanceEnabled']}
+              render={() => (
+                <AttendanceButtonsContainer>
+                  {this.showMissingPrisonersButton() && (
                     <MissingButtonContainer>
                       <StatsLink
                         buttonColour={BLUE}
@@ -236,11 +236,13 @@ class Search extends Component {
                       </StatsLink>
                     </MissingButtonContainer>
                   )}
-                  fallbackRender={() => <></>}
-                />
+                  <StatsLink href="/attendance-reason-statistics" buttonColour={BLUE}>
+                    View attendance reason statistics
+                  </StatsLink>
+                </AttendanceButtonsContainer>
               )}
-              <StatsLink href="/attendance-reason-statistics">View attendance reason statistics</StatsLink>
-            </ButtonsContainer>
+              fallbackRender={() => <></>}
+            />
           </div>
 
           <div className="top-gutter">

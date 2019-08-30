@@ -436,17 +436,6 @@ Array [
           </option>
         </select>
       </div>
-      <div
-        className="sc-bZQynM hLyEZh"
-      >
-        <a
-          className="sc-bdVaJa sc-EHOje heZRwM"
-          href="/attendance-reason-statistics"
-          muted={false}
-        >
-          View attendance reason statistics
-        </a>
-      </div>
     </div>
     <div
       className="top-gutter"
