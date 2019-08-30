@@ -6,7 +6,7 @@
 
 <!--[if !IE 8]><!-->
 <link href="/static/stylesheets/application.css" rel="stylesheet" />
-<title>{% block pageTitle %}{{title}}{% endblock %}</title>
+<title>{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}}{% endblock %}</title>
 <!--<![endif]-->
 
 {% block headIcons %}
