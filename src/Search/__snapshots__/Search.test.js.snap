@@ -22,17 +22,17 @@ Array [
           >
             <div>
               <label
-                className="sc-ifAKCX kvCcNh"
+                className="sc-htpNat ccHZSo"
               >
                 <span
-                  className="sc-bxivhb ihTEnD"
+                  className="sc-bwzfXH lbxcXc"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-bZQynM dVmSDQ"
+                  className="form-control sc-ifAKCX gXzDEH"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -437,10 +437,10 @@ Array [
         </select>
       </div>
       <div
-        className="sc-htoDjs iBDxlQ"
+        className="sc-bZQynM hLyEZh"
       >
         <a
-          className="sc-htpNat sc-gzVnrw hpdXZQ"
+          className="sc-bdVaJa sc-EHOje heZRwM"
           href="/attendance-reason-statistics"
           id="attendanceStatsButton"
           muted={false}
@@ -604,17 +604,17 @@ Array [
           >
             <div>
               <label
-                className="sc-ifAKCX kvCcNh"
+                className="sc-htpNat ccHZSo"
               >
                 <span
-                  className="sc-bxivhb ihTEnD"
+                  className="sc-bwzfXH lbxcXc"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-bZQynM dVmSDQ"
+                  className="form-control sc-ifAKCX gXzDEH"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -1019,22 +1019,22 @@ Array [
         </select>
       </div>
       <div
-        className="sc-htoDjs iBDxlQ"
+        className="sc-bZQynM hLyEZh"
       >
         <div
-          className="sc-dnqmqq fSJNbt"
+          className="sc-gzVnrw fXIzxI"
         >
-          <button
-            className="sc-bdVaJa itVtfZ"
+          <a
+            className="sc-bdVaJa sc-EHOje heZRwM"
             data-qa="missing-prisoners"
-            disabled={false}
+            muted={false}
             onClick={[Function]}
           >
             View missing prisoners
-          </button>
+          </a>
         </div>
         <a
-          className="sc-htpNat sc-gzVnrw hpdXZQ"
+          className="sc-bdVaJa sc-EHOje heZRwM"
           href="/attendance-reason-statistics"
           id="attendanceStatsButton"
           muted={false}
