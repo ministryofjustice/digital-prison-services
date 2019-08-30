@@ -15,7 +15,7 @@ const getReasonCountMap = (data, reasons) => {
     .reduce(merge, {})
 }
 
-const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, log) => {
+const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
   const getDashboardStats = async (context, { agencyId, period, date, absenceReasons }) => {
     const [attendances, scheduledActivities] = await Promise.all([
       whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date }),
@@ -89,7 +89,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, log) =
         period,
       })
     } catch (error) {
-      log('/attendance-reason-statistics', error, 'There has been an error')
+      logError('/attendance-reason-statistics', error, 'There has been an error')
       res.render('error.njk', {
         title: 'Attendance reason statistics',
         message: 'We have encountered a problem loading this page.  Please try again.',

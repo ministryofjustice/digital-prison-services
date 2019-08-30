@@ -62,6 +62,7 @@ const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const oauthClientId = require('./api/oauthClientId')
 
 const log = require('./log')
+const { logError } = require('./logError')
 const config = require('./config')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
@@ -257,7 +258,7 @@ app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get(
   '/attendance-reason-statistics',
-  handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, log).attendanceStatistics)
+  handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
 )
 
 nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
