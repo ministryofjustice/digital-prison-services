@@ -6,7 +6,7 @@
 
 {% extends "./partials/layout.njk" %}
 
-{% set formAction = '/api/close-alert/' + offenderNo + '/' + alertId %}
+{% set formAction = '/api/close-alert/' + offenderNo + '/' + alert.alertId %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({

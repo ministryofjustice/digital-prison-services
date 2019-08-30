@@ -16,7 +16,6 @@ const alertFactory = elite2Api => {
       title: 'Close alert',
       alert,
       offenderNo,
-      alertId,
       errors: req.flash('errors'),
     })
   }
@@ -53,4 +52,4 @@ const alertFactory = elite2Api => {
   return { displayCloseAlertForm, handleCloseAlertForm }
 }
 
-module.exports = alertFactory
+module.exports = { alertFactory }
