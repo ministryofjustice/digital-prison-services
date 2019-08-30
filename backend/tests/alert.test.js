@@ -9,6 +9,16 @@ describe('alert management', () => {
   const res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
   const mockReq = { flash: jest.fn(), body: {} }
   const bookingId = '1234'
+  const alert = {
+    alertId: 1,
+    alertType: 'L',
+    alertTypeDescription: 'Care Leaver',
+    alertCode: 'LFC21',
+    alertCodeDescription: 'Former Relevant Child (under 21)',
+    comment: 'A comment',
+    dateCreated: '2019-08-23',
+    active: false,
+  }
 
   beforeEach(() => {
     elite2api.getDetails = jest.fn().mockReturnValue({ bookingId })
@@ -19,21 +29,33 @@ describe('alert management', () => {
   })
 
   describe('displayCloseAlertForm()', () => {
-    beforeEach(() => {
-      elite2api.getAlert = jest.fn().mockReturnValue({
-        alertId: 1,
-        alertType: 'L',
-        alertTypeDescription: 'Care Leaver',
-        alertCode: 'LFC21',
-        alertCodeDescription: 'Former Relevant Child (under 21)',
-        comment: 'A comment',
-        dateCreated: '2019-08-23',
-        expired: false,
-        active: false,
+    describe('when there are errors', () => {
+      it('should return an error when there is a problem retrieving the alert', async () => {
+        elite2api.getAlert = jest.fn().mockImplementationOnce(() => {
+          throw new Error('There has been an error')
+        })
+
+        const req = { ...mockReq, query: { offenderNo: 'ABC123', alertId: 1 } }
+
+        await displayCloseAlertForm(req, res)
+
+        expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
+      })
+
+      it('should return an error when the alert has already expired', async () => {
+        elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: true })
+
+        const req = { ...mockReq, query: { offenderNo: 'ABC123', alertId: 1 } }
+
+        await displayCloseAlertForm(req, res)
+
+        expect(req.flash).toBeCalledWith('errors', [{ text: 'This alert has already expired' }])
       })
     })
 
     it('should render the closeAlertForm with the correctly formatted information', async () => {
+      elite2api.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
+
       const req = { ...mockReq, query: { offenderNo: 'ABC123', alertId: 1 } }
 
       await displayCloseAlertForm(req, res)
@@ -62,10 +84,20 @@ describe('alert management', () => {
       elite2api.updateAlert = jest.fn()
     })
 
-    describe('when an option IS NOT selected', () => {
+    describe('when there are errors', () => {
       const req = { ...mockReq, params: { offenderNo: 'ABC123', alertId: 1 } }
+      it('should return an error when there is a problem updating the alert', async () => {
+        elite2api.updateAlert = jest.fn().mockImplementationOnce(() => {
+          throw new Error('There has been an error')
+        })
 
-      it('should display an error if no option is selected', async () => {
+        await handleCloseAlertForm(req, res)
+
+        expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
+        expect(res.redirect).toBeCalledWith('back')
+      })
+
+      it('should return an error if no option is selected', async () => {
         await handleCloseAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [

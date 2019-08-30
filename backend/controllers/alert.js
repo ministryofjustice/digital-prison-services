@@ -2,15 +2,29 @@ const moment = require('moment')
 const { formatTimestampToDate } = require('../utils')
 const config = require('../config')
 
+const serviceUnavailableMessage = 'Sorry, the service is unavailable'
+
 const alertFactory = elite2Api => {
   const displayCloseAlertForm = async (req, res) => {
     const { offenderNo, alertId } = req.query
-    const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
-    const response = await elite2Api.getAlert(res.locals, bookingId, alertId)
-    const alert = {
-      ...response,
-      dateCreated: formatTimestampToDate(response.dateCreated),
+    const errors = []
+    let alert
+
+    try {
+      const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const response = await elite2Api.getAlert(res.locals, bookingId, alertId)
+      alert = {
+        ...response,
+        dateCreated: formatTimestampToDate(response.dateCreated),
+      }
+    } catch (error) {
+      // log the actual error
+      errors.push({ text: serviceUnavailableMessage })
     }
+
+    if (alert && alert.expired) errors.push({ text: 'This alert has already expired' })
+
+    if (errors.length > 0) req.flash('errors', errors)
 
     res.render('closeAlertForm.njk', {
       title: 'Close alert',
@@ -32,18 +46,25 @@ const alertFactory = elite2Api => {
       })
     }
 
+    if (alertStatus === 'yes') {
+      try {
+        const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+
+        await elite2Api.updateAlert(res.locals, bookingId, alertId, {
+          alertStatus: 'INACTIVE',
+          expiryDate: moment().format('YYYY-MM-DD'),
+        })
+      } catch (error) {
+        // Log error.message
+        errors.push({
+          text: serviceUnavailableMessage,
+        })
+      }
+    }
+
     if (errors.length > 0) {
       req.flash('errors', errors)
       return res.redirect('back')
-    }
-
-    if (alertStatus === 'yes') {
-      const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
-
-      await elite2Api.updateAlert(res.locals, bookingId, alertId, {
-        alertStatus: 'INACTIVE',
-        expiryDate: moment().format('YYYY-MM-DD'),
-      })
     }
 
     return res.redirect(`${config.app.notmEndpointUrl}offenders/${offenderNo}/alerts`)

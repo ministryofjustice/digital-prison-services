@@ -33,7 +33,7 @@
     }}
   {% endif %}
 
-  {% if not alert.expired or alert.active %}
+  {% if alert and not alert.expired %}
     <form action={{formAction}} method="POST">
       {% call govukFieldset({
                 legend: {
@@ -59,7 +59,7 @@
               text: "Date added"
             },
             {
-              text: "Added by / location"
+              text: "Created by / location"
             }
           ],
           rows: [
