@@ -442,7 +442,6 @@ Array [
         <a
           className="sc-bdVaJa sc-EHOje heZRwM"
           href="/attendance-reason-statistics"
-          id="attendanceStatsButton"
           muted={false}
         >
           View attendance reason statistics
@@ -1036,7 +1035,6 @@ Array [
         <a
           className="sc-bdVaJa sc-EHOje heZRwM"
           href="/attendance-reason-statistics"
-          id="attendanceStatsButton"
           muted={false}
         >
           View attendance reason statistics

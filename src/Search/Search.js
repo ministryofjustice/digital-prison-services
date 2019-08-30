@@ -239,9 +239,7 @@ class Search extends Component {
                   fallbackRender={() => <></>}
                 />
               )}
-              <StatsLink href="/attendance-reason-statistics" id="attendanceStatsButton">
-                View attendance reason statistics
-              </StatsLink>
+              <StatsLink href="/attendance-reason-statistics">View attendance reason statistics</StatsLink>
             </ButtonsContainer>
           </div>
 
