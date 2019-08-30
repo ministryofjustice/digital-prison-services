@@ -145,11 +145,9 @@ class ResultsActivityContainer extends Component {
         <ResultsActivity
           handlePrint={this.handlePrint}
           getActivityList={this.getActivityList}
-          resetErrorDispatch={resetErrorDispatch}
           setColumnSort={this.setColumnSort}
           handleError={this.handleError}
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
-          showModal={showModal}
           activityName={activityName}
           updateAttendanceEnabled={updateAttendanceEnabled}
           {...this.props}

@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import styled from 'styled-components'
-import axios from 'axios'
 import { FONT_SIZE } from '@govuk-react/constants'
 import {
   getHoursMinutes,
@@ -30,7 +29,6 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import { Flag } from '../flags'
-import { attendanceUpdated } from '../Attendance/attendanceGAEvents'
 import { linkOnClick } from '../helpers'
 
 const ManageResults = styled.div`

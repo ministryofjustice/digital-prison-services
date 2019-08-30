@@ -13,12 +13,16 @@ import sortResults from '../ResultsActivity/activityResultsSorter'
 function MissingPrisonersContainer({
   setLoadedDispatch,
   resetErrorDispatch,
+  raiseAnalyticsEvent,
+  showModal,
+  setActivityOffenderAttendance,
   handlePeriodChange,
   handleDateChange,
   handleError,
   period,
   date,
   agencyId,
+  userRoles,
 }) {
   const [reloadPage, setReloadPage] = useState(false)
   const [missingPrisoners, setMissingPrisoners] = useState([])
@@ -32,6 +36,8 @@ function MissingPrisonersContainer({
     sortResults(missingPrisoners, orderColumn, orderDirection)
     setMissingPrisoners(missingPrisoners)
   }
+
+  const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
   useEffect(
     () => {
@@ -48,7 +54,12 @@ function MissingPrisonersContainer({
             },
           })
 
-          setMissingPrisoners(response.data)
+          const offenders = response.data.map(offender => ({
+            eventLocationId: offender.locationId,
+            ...offender,
+          }))
+
+          setMissingPrisoners(offenders)
         } catch (error) {
           handleError(error)
         }
@@ -74,7 +85,20 @@ function MissingPrisonersContainer({
         numberOfPrisoners={missingPrisoners.length}
         reloadPage={setReloadPage}
       />
-      <MissingPrisoners missingPrisoners={missingPrisoners} sortOrder={sortOrder} setColumnSort={setColumnSort} />
+      <MissingPrisoners
+        missingPrisoners={missingPrisoners}
+        sortOrder={sortOrder}
+        setColumnSort={setColumnSort}
+        date={date}
+        period={period}
+        agencyId={agencyId}
+        resetErrorDispatch={resetErrorDispatch}
+        raiseAnalyticsEvent={raiseAnalyticsEvent}
+        setActivityOffenderAttendance={setActivityOffenderAttendance}
+        showModal={showModal}
+        handleError={handleError}
+        activityHubUser={activityHubUser}
+      />
     </Page>
   )
 }
@@ -82,18 +106,23 @@ function MissingPrisonersContainer({
 MissingPrisonersContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  setActivityOffenderAttendance: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   agencyId: PropTypes.string.isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 
 const mapStateToProps = state => ({
   date: state.search.date,
   period: state.search.period,
   agencyId: state.app.user.activeCaseLoadId,
+  userRoles: state.app.user.roles,
 })
 
 export { MissingPrisonersContainer }

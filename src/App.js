@@ -52,6 +52,7 @@ import {
   setUserDetails,
   switchAgency,
   setShowModal,
+  setActivityOffenderAttendance,
 } from './redux/actions/index'
 
 const axios = require('axios')
@@ -500,6 +501,9 @@ class App extends React.Component {
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
+                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                showModal={setShowModalDispatch}
+                setActivityOffenderAttendance={setActivityOffenderAttendance}
                 history={history}
               />
             )}
