@@ -4,11 +4,10 @@ import './search.scss'
 import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router'
-import Button from '@govuk-react/button'
 import { BLUE, LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import styled from 'styled-components'
 import Link from '@govuk-react/link'
-import { FONT_SIZE } from '@govuk-react/constants'
+import { FONT_SIZE, BREAKPOINTS } from '@govuk-react/constants'
 import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
@@ -19,8 +18,8 @@ const StatsLink = styled(Link)`
   color: ${LINK_COLOUR};
   cursor: pointer;
   text-decoration: underline;
-  text-align: right;
   display: inline-block;
+  margin-bottom: 10px;
 
   &:hover {
     color: ${LINK_HOVER_COLOUR};
@@ -29,9 +28,18 @@ const StatsLink = styled(Link)`
 const ButtonsContainer = styled('div')`
   margin-right: 5em;
   margin-top: 1.4em;
-  float: right;
-  width: 35%;
-  text-align: right;
+  width: 50%;
+  text-align: left;
+
+  @media (max-width: ${BREAKPOINTS.LARGESCREEN}) {
+    width: 75%;
+  }
+
+  @media screen and (min-width: ${BREAKPOINTS.DESKTOP}) {
+    width: 35%;
+    float: right;
+    text-align: right;
+  }
 `
 
 export const MissingButtonContainer = styled('div')`
@@ -219,13 +227,13 @@ class Search extends Component {
                   name={['updateAttendanceEnabled']}
                   render={() => (
                     <MissingButtonContainer>
-                      <Button
+                      <StatsLink
                         buttonColour={BLUE}
                         onClick={() => history.push(`missing-prisoners`)}
                         data-qa="missing-prisoners"
                       >
                         View missing prisoners
-                      </Button>
+                      </StatsLink>
                     </MissingButtonContainer>
                   )}
                   fallbackRender={() => <></>}
