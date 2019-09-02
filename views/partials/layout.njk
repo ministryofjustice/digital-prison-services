@@ -5,6 +5,15 @@
 {% block head %}
 
 <!--[if !IE 8]><!-->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+  
+<link href = "https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
 <link href="/static/stylesheets/application.css" rel="stylesheet" />
 <title>{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}}{% endblock %}</title>
 <!--<![endif]-->
@@ -27,5 +36,6 @@
 {# Run JavaScript at end of the
 <body>, to avoid blocking the initial render. #}
 <script src="/assets/govuk/all.js"></script>
+<script src="/static/js/main.js"></script>
 <script>window.GOVUKFrontend.initAll();</script>
 {% endblock %}

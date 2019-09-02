@@ -45,6 +45,7 @@ const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
 const { alertFactory } = require('./controllers/alert')
+const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
@@ -61,6 +62,7 @@ const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const oauthClientId = require('./api/oauthClientId')
 
 const log = require('./log')
+const { logError } = require('./logError')
 const config = require('./config')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
@@ -257,43 +259,14 @@ app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get('/close-alert', handleErrors(alertFactory(elite2Api).displayCloseAlertForm))
 app.post('/api/close-alert/:offenderNo/:alertId', handleErrors(alertFactory(elite2Api).handleCloseAlertForm))
+app.get(
+  '/attendance-reason-statistics',
+  handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
+)
 
 nunjucksSetup(app, path)
 ;[('../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend')].forEach(dir => {
   app.use('/assets', express.static(path.join(__dirname, dir)))
-})
-
-app.get('/whereabouts', async (req, res) => {
-  try {
-    const [user, caseloads, roles] = await Promise.all([
-      oauthApi.currentUser(res.locals),
-      elite2Api.userCaseLoads(res.locals),
-      oauthApi.userRoles(res.locals),
-    ])
-
-    const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
-    const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
-    const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
-
-    res.render('whereabouts.njk', {
-      title: 'Whereabouts Dashboard',
-      user: {
-        displayName: user.name,
-        activeCaseLoad: {
-          description: activeCaseLoad.description,
-          id: activeCaseLoadId,
-        },
-      },
-      allCaseloads: caseloads,
-      inactiveCaseLoads,
-      userRoles: roles,
-    })
-  } catch (error) {
-    res.render('error.njk', {
-      title: 'Whereabouts Dashboard',
-      message: error.message,
-    })
-  }
 })
 
 app.get('*', (req, res) => {
