@@ -154,7 +154,9 @@ describe('alert management', () => {
           alertStatus: 'INACTIVE',
           expiryDate: '2019-03-29',
         })
-        expect(res.redirect).toBeCalledWith(`//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts`)
+        expect(res.redirect).toBeCalledWith(
+          `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=closed`
+        )
 
         Date.now.mockRestore()
       })
@@ -171,7 +173,9 @@ describe('alert management', () => {
         await handleCloseAlertForm(req, res)
 
         expect(elite2api.updateAlert).not.toBeCalled()
-        expect(res.redirect).toBeCalledWith(`//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts`)
+        expect(res.redirect).toBeCalledWith(
+          `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=open`
+        )
       })
     })
   })

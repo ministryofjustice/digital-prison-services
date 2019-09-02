@@ -73,6 +73,7 @@ const alertFactory = (oauthApi, elite2Api) => {
   const handleCloseAlertForm = async (req, res) => {
     const { bookingId, alertId } = req.params
     const { alertStatus, offenderNo } = req.body
+    const closeAlert = alertStatus === 'yes'
     const errors = []
 
     if (!alertStatus) {
@@ -82,7 +83,7 @@ const alertFactory = (oauthApi, elite2Api) => {
       })
     }
 
-    if (alertStatus === 'yes') {
+    if (closeAlert) {
       try {
         await elite2Api.updateAlert(res.locals, bookingId, alertId, {
           alertStatus: 'INACTIVE',
@@ -101,7 +102,7 @@ const alertFactory = (oauthApi, elite2Api) => {
       return res.redirect('back')
     }
 
-    return res.redirect(`${getOffenderUrl(offenderNo)}/alerts`)
+    return res.redirect(`${getOffenderUrl(offenderNo)}/alerts?alertStatus=${closeAlert ? 'closed' : 'open'}`)
   }
 
   return { displayCloseAlertForm, handleCloseAlertForm }
