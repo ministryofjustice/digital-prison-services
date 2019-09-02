@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { MemoryRouter } from 'react-router'
 import testRenderer from 'react-test-renderer'
-import { Search, MissingButtonContainer } from './Search'
+import { Search, MissingButtonContainer, AttendanceButtonsContainer } from './Search'
 import { ConnectedFlagsProvider } from '../flags'
 
 const locations = [{ name: '1', key: 'K1' }, { name: '2', key: 'K2' }]
@@ -177,7 +177,6 @@ describe('Search component', () => {
 
     expect(wrapper).toMatchSnapshot()
   })
-
   describe('missing prisoners button', () => {
     const store = {}
     store.getState = jest.fn()
@@ -202,6 +201,38 @@ describe('Search component', () => {
       loaded: false,
       activity: 'bob',
     }
+
+    it('should not render attendance links if caseload does not have pay enabled', () => {
+      store.getState.mockReturnValue({
+        flags: {
+          updateAttendanceEnabled: false,
+        },
+      })
+      const component = mount(
+        <MemoryRouter>
+          <ConnectedFlagsProvider store={store}>
+            <Search {...props} date="Today" period="AM" />
+          </ConnectedFlagsProvider>
+        </MemoryRouter>
+      )
+      expect(component.find(AttendanceButtonsContainer).length).toBe(0)
+    })
+
+    it('should render attendance links if caseload does have pay enabled', () => {
+      store.getState.mockReturnValue({
+        flags: {
+          updateAttendanceEnabled: true,
+        },
+      })
+      const component = mount(
+        <MemoryRouter>
+          <ConnectedFlagsProvider store={store}>
+            <Search {...props} date="Today" period="AM" />
+          </ConnectedFlagsProvider>
+        </MemoryRouter>
+      )
+      expect(component.find(AttendanceButtonsContainer).length).toBe(1)
+    })
 
     describe('when current period is AM', () => {
       it('should show the missing prisoners button for this morning', async () => {
