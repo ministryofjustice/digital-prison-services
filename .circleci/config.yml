@@ -39,7 +39,6 @@ jobs:
             - node_modules
             - build
             - build-info.json
-            - static/stylesheets
 
   integration_tests:
     working_directory: ~/app
