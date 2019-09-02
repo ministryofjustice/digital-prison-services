@@ -7,7 +7,7 @@ config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('alert management', () => {
   const res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-  const mockReq = { flash: jest.fn(), get: jest.fn(), headers: { referer: '//offenderAlertsPagePath' }, body: {} }
+  const mockReq = { flash: jest.fn(), get: jest.fn(), body: {} }
   const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
   const alert = {
     alertId: 1,
@@ -19,6 +19,7 @@ describe('alert management', () => {
     dateCreated: '2019-08-23',
     active: false,
   }
+  const offenderNo = 'ABC123'
 
   beforeEach(() => {
     elite2api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
@@ -35,7 +36,7 @@ describe('alert management', () => {
           throw new Error('There has been an error')
         })
 
-        const req = { ...mockReq, query: { offenderNo: 'ABC123', alertId: 1 } }
+        const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
         await displayCloseAlertForm(req, res)
 
@@ -45,7 +46,7 @@ describe('alert management', () => {
       it('should return an error when the alert has already expired', async () => {
         elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: true })
 
-        const req = { ...mockReq, query: { offenderNo: 'ABC123', alertId: 1 } }
+        const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
         await displayCloseAlertForm(req, res)
 
@@ -56,7 +57,7 @@ describe('alert management', () => {
     it('should render the closeAlertForm with the correctly formatted information', async () => {
       elite2api.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
 
-      const req = { ...mockReq, query: { offenderNo: 'ABC123', alertId: 1 } }
+      const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
       await displayCloseAlertForm(req, res)
 
@@ -73,13 +74,14 @@ describe('alert management', () => {
           expired: false,
         },
         errors: undefined,
+        formAction: `/api/close-alert/${getDetailsResponse.bookingId}/${req.query.alertId}`,
         offenderDetails: {
+          bookingId: getDetailsResponse.bookingId,
           name: 'User, Test',
-          offenderNo: 'ABC123',
-          profileUrl: '//newNomisEndPointUrl/offenders/ABC123',
+          offenderNo: req.query.offenderNo,
+          profileUrl: `//newNomisEndPointUrl/offenders/${req.query.offenderNo}`,
         },
-        title: 'Close alert',
-        formAction: `/api/close-alert/ABC123/1`,
+        title: 'Close alert - Digital Prison Services',
       })
     })
   })
@@ -90,7 +92,7 @@ describe('alert management', () => {
     })
 
     describe('when there are errors', () => {
-      const req = { ...mockReq, params: { offenderNo: 'ABC123', alertId: 1 } }
+      const req = { ...mockReq, params: { offenderNo, alertId: 1 } }
       it('should return an error when there is a problem updating the alert', async () => {
         elite2api.updateAlert = jest.fn().mockImplementationOnce(() => {
           throw new Error('There has been an error')
@@ -113,32 +115,38 @@ describe('alert management', () => {
     })
 
     describe('when yes is selected', () => {
-      const req = { ...mockReq, params: { offenderNo: 'ABC123', alertId: 1 }, body: { alertStatus: 'yes' } }
+      const req = {
+        ...mockReq,
+        params: { bookingId: 1234, alertId: 1 },
+        body: { alertStatus: 'yes', offenderNo },
+      }
 
       it('should update the alert to INACTIVE and set the expiry date to the current date, then redirect back to the offender alerts page', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
         await handleCloseAlertForm(req, res)
 
-        expect(elite2api.getDetails).toBeCalledWith(res.locals, req.params.offenderNo)
         expect(elite2api.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
           alertStatus: 'INACTIVE',
           expiryDate: '2019-03-29',
         })
-        expect(res.redirect).toBeCalledWith(`//newNomisEndPointUrl/offenders/${req.params.offenderNo}/alerts`)
+        expect(res.redirect).toBeCalledWith(`//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts`)
 
         Date.now.mockRestore()
       })
     })
 
     describe('when no is selected', () => {
-      const req = { ...mockReq, params: { offenderNo: 'ABC123', alertId: 1 }, body: { alertStatus: 'no' } }
+      const req = {
+        ...mockReq,
+        params: { bookingId: '1234', alertId: 1 },
+        body: { alertStatus: 'no', offenderNo },
+      }
 
       it('should not update the alert, then redirect back to the offender alerts page', async () => {
         await handleCloseAlertForm(req, res)
 
-        expect(elite2api.getDetails).not.toBeCalled()
         expect(elite2api.updateAlert).not.toBeCalled()
-        expect(res.redirect).toBeCalledWith(`//newNomisEndPointUrl/offenders/${req.params.offenderNo}/alerts`)
+        expect(res.redirect).toBeCalledWith(`//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts`)
       })
     })
   })

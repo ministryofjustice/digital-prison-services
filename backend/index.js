@@ -258,7 +258,7 @@ app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get('/close-alert', handleErrors(alertFactory(elite2Api).displayCloseAlertForm))
-app.post('/api/close-alert/:offenderNo/:alertId', handleErrors(alertFactory(elite2Api).handleCloseAlertForm))
+app.post('/api/close-alert/:bookingId/:alertId', handleErrors(alertFactory(elite2Api).handleCloseAlertForm))
 app.get(
   '/attendance-reason-statistics',
   handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)

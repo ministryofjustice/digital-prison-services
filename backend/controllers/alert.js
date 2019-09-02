@@ -8,8 +8,8 @@ const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${o
 
 const alertFactory = elite2Api => {
   const displayCloseAlertForm = async (req, res) => {
-    let alert
     const { offenderNo, alertId } = req.query
+    let alert
     const offenderDetails = { offenderNo, profileUrl: getOffenderUrl(offenderNo) }
     const errors = []
 
@@ -17,6 +17,7 @@ const alertFactory = elite2Api => {
       const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
       const response = await elite2Api.getAlert(res.locals, bookingId, alertId)
 
+      offenderDetails.bookingId = bookingId
       offenderDetails.name = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
       alert = {
         ...response,
@@ -32,17 +33,17 @@ const alertFactory = elite2Api => {
     if (errors.length > 0) req.flash('errors', errors)
 
     res.render('closeAlertForm.njk', {
-      title: 'Close alert',
+      title: 'Close alert - Digital Prison Services',
       alert,
       offenderDetails,
       errors: req.flash('errors'),
-      formAction: `/api/close-alert/${offenderNo}/${alert && alert.alertId}`,
+      formAction: `/api/close-alert/${offenderDetails.bookingId}/${alertId}`,
     })
   }
 
   const handleCloseAlertForm = async (req, res) => {
-    const { offenderNo, alertId } = req.params
-    const { alertStatus } = req.body
+    const { bookingId, alertId } = req.params
+    const { alertStatus, offenderNo } = req.body
     const errors = []
 
     if (!alertStatus) {
@@ -54,8 +55,6 @@ const alertFactory = elite2Api => {
 
     if (alertStatus === 'yes') {
       try {
-        const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
-
         await elite2Api.updateAlert(res.locals, bookingId, alertId, {
           alertStatus: 'INACTIVE',
           expiryDate: moment().format('YYYY-MM-DD'),
