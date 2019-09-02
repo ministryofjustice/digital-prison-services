@@ -77,7 +77,7 @@ function AttendanceOptions({
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
-  const { id, other, locked, paid, absentReason } = attendanceInfo || {}
+  const { id, pay, other, locked, paid, absentReason } = attendanceInfo || {}
 
   const payOffender = async () => {
     const attendanceDetails = {
@@ -106,6 +106,11 @@ function AttendanceOptions({
     )
     setIsPaying(false)
   }
+
+  useEffect(() => {
+    if (attendanceInfo && pay) setSelectedOption('pay')
+    if (attendanceInfo && other) setSelectedOption('other')
+  })
 
   const renderForm = () =>
     showModal(
