@@ -1,7 +1,11 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2api = {}
+const oauthApi = {}
 const config = require('../config')
-const { displayCloseAlertForm, handleCloseAlertForm } = require('../controllers/alert').alertFactory(elite2api)
+const { displayCloseAlertForm, handleCloseAlertForm } = require('../controllers/alert').alertFactory(
+  oauthApi,
+  elite2api
+)
 
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
@@ -23,6 +27,24 @@ describe('alert management', () => {
 
   beforeEach(() => {
     elite2api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
+    oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
+    elite2api.userCaseLoads = jest.fn().mockReturnValue([
+      {
+        caseLoadId: 'AKI',
+        description: 'Acklington (HMP)',
+        type: 'INST',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: false,
+      },
+      {
+        caseLoadId: 'ALI',
+        description: 'Albany (HMP)',
+        type: 'INST',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+      },
+    ])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
   })
 
   afterEach(() => {
@@ -55,7 +77,7 @@ describe('alert management', () => {
     })
 
     it('should render the closeAlertForm with the correctly formatted information', async () => {
-      elite2api.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
+      elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
 
       const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
@@ -73,15 +95,18 @@ describe('alert management', () => {
           dateCreated: '23/08/2019',
           expired: false,
         },
+        caseLoadId: 'ALI',
         errors: undefined,
-        formAction: `/api/close-alert/${getDetailsResponse.bookingId}/${req.query.alertId}`,
+        formAction: '/api/close-alert/1234/1',
         offenderDetails: {
-          bookingId: getDetailsResponse.bookingId,
+          bookingId: 1234,
           name: 'User, Test',
-          offenderNo: req.query.offenderNo,
-          profileUrl: `//newNomisEndPointUrl/offenders/${req.query.offenderNo}`,
+          offenderNo: 'ABC123',
+          profileUrl: '//newNomisEndPointUrl/offenders/ABC123',
         },
         title: 'Close alert - Digital Prison Services',
+        user: { activeCaseLoad: { description: 'Albany (HMP)' }, displayName: 'Test User' },
+        userRoles: [],
       })
     })
   })

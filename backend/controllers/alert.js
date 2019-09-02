@@ -3,26 +3,43 @@ const { formatTimestampToDate, properCaseName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
 
+// Temporary until we sort out a more permanent solution
+let userRoles
+let displayName
+let activeCaseLoad
+
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
 
-const alertFactory = elite2Api => {
+const alertFactory = (oauthApi, elite2Api) => {
   const displayCloseAlertForm = async (req, res) => {
-    const { offenderNo, alertId } = req.query
     let alert
+    const { offenderNo, alertId } = req.query
     const offenderDetails = { offenderNo, profileUrl: getOffenderUrl(offenderNo) }
     const errors = []
 
     try {
       const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
-      const response = await elite2Api.getAlert(res.locals, bookingId, alertId)
+
+      const [alertResponse, user, caseLoads, roles] = await Promise.all([
+        elite2Api.getAlert(res.locals, bookingId, alertId),
+
+        // Temporary until we sort out a more permanent solution
+        oauthApi.currentUser(res.locals),
+        elite2Api.userCaseLoads(res.locals),
+        oauthApi.userRoles(res.locals),
+      ])
+      console.log('====caseLoads', caseLoads)
+
+      alert = alertResponse
+
+      // Temporary until we sort out a more permanent solution
+      activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
+      userRoles = roles
+      displayName = user.name
 
       offenderDetails.bookingId = bookingId
       offenderDetails.name = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-      alert = {
-        ...response,
-        dateCreated: formatTimestampToDate(response.dateCreated),
-      }
     } catch (error) {
       logError(req.originalUrl, error)
       errors.push({ text: serviceUnavailableMessage })
@@ -34,10 +51,23 @@ const alertFactory = elite2Api => {
 
     res.render('closeAlertForm.njk', {
       title: 'Close alert - Digital Prison Services',
-      alert,
+      alert: {
+        ...alert,
+        dateCreated: alert && formatTimestampToDate(alert.dateCreated),
+      },
       offenderDetails,
       errors: req.flash('errors'),
       formAction: `/api/close-alert/${offenderDetails.bookingId}/${alertId}`,
+
+      // Temporary until we sort out a more permanent solution
+      user: {
+        displayName,
+        activeCaseLoad: {
+          description: activeCaseLoad && activeCaseLoad.description,
+        },
+      },
+      caseLoadId: activeCaseLoad && activeCaseLoad.caseLoadId,
+      userRoles,
     })
   }
 
