@@ -36,6 +36,7 @@ describe('<AttendanceOtherForm />', () => {
     resetErrorDispatch: jest.fn(),
     raiseAnalyticsEvent: jest.fn(),
     handleError: jest.fn(),
+    setSelectedOption: jest.fn(),
   }
 
   let wrapper = {}
@@ -193,6 +194,7 @@ describe('<AttendanceOtherForm />', () => {
           props.handleError,
           props.showModal,
           props.resetErrorDispatch,
+          props.setSelectedOption,
           props.raiseAnalyticsEvent
         )
       })
@@ -229,6 +231,7 @@ describe('<AttendanceOtherForm />', () => {
           props.handleError,
           props.showModal,
           props.resetErrorDispatch,
+          props.setSelectedOption,
           props.raiseAnalyticsEvent
         )
         expect(props.showModal).toHaveBeenCalledWith(

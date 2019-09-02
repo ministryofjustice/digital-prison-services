@@ -29,6 +29,7 @@ export function AttendanceOtherForm({
   raiseAnalyticsEvent,
   handleError,
   setOffenderAttendance,
+  setSelectedOption,
   agencyId,
   period,
   date,
@@ -103,6 +104,7 @@ export function AttendanceOtherForm({
       handleError,
       showModal,
       resetErrorDispatch,
+      setSelectedOption,
       raiseAnalyticsEvent
     )
   }
@@ -195,6 +197,7 @@ AttendanceOtherForm.propTypes = {
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
+  setSelectedOption: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

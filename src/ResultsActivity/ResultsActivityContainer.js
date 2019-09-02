@@ -150,6 +150,9 @@ class ResultsActivityContainer extends Component {
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           activityName={activityName}
           updateAttendanceEnabled={updateAttendanceEnabled}
+          resetErrorDispatch={resetErrorDispatch}
+          showModal={showModal}
+          userRoles={userRoles}
           {...this.props}
         />
       </Page>

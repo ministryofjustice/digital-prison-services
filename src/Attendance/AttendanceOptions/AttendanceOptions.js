@@ -21,6 +21,7 @@ export const updateOffenderAttendance = async (
   handleError,
   showModal,
   resetErrorDispatch,
+  setSelectedOption,
   raiseAnalyticsEvent
 ) => {
   let updateSuccess = false
@@ -52,6 +53,8 @@ export const updateOffenderAttendance = async (
   }
 
   showModal(false)
+  if (offenderAttendanceData.pay) setSelectedOption('pay')
+  if (offenderAttendanceData.other) setSelectedOption('other')
   raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
 
   return updateSuccess
@@ -74,7 +77,7 @@ function AttendanceOptions({
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
   const { offenderNo, bookingId, eventId, eventLocationId, offenderIndex, attendanceInfo } = offenderDetails
-  const { id, pay, other, locked, paid, absentReason } = attendanceInfo || {}
+  const { id, other, locked, paid, absentReason } = attendanceInfo || {}
 
   const payOffender = async () => {
     const attendanceDetails = {
@@ -98,15 +101,11 @@ function AttendanceOptions({
       handleError,
       showModal,
       resetErrorDispatch,
+      setSelectedOption,
       raiseAnalyticsEvent
     )
     setIsPaying(false)
   }
-
-  useEffect(() => {
-    if (attendanceInfo && pay) setSelectedOption('pay')
-    if (attendanceInfo && other) setSelectedOption('other')
-  })
 
   const renderForm = () =>
     showModal(
@@ -122,6 +121,7 @@ function AttendanceOptions({
         showModal={showModal}
         activityName={activityName}
         setOffenderAttendance={setOffenderAttendance}
+        setSelectedOption={setSelectedOption}
         date={date}
       />
     )

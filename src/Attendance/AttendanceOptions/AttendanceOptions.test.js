@@ -88,13 +88,6 @@ describe('<AttendanceOptions />', () => {
     expect(props.showModal).toHaveBeenCalled()
   })
 
-  it('should check the correct radio button when user has been marked as paid and attended', () => {
-    props.offenderDetails.attendanceInfo.pay = true
-    act(() => testRenderer.update(<AttendanceOptions {...props} />))
-    expect(getPayRadio().props.checked).toBe(true)
-    expect(getOtherRadio().props.checked).toBe(false)
-  })
-
   it('should display radio buttons when attendance is not locked', () => {
     expect(getPayRadio().props.checked).toBe(false)
     expect(getOtherRadio().props.checked).toBe(false)

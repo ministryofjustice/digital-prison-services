@@ -53,6 +53,7 @@ import {
   switchAgency,
   setShowModal,
   setActivityOffenderAttendance,
+  getAbsentReasons,
 } from './redux/actions/index'
 
 const axios = require('axios')
@@ -263,6 +264,8 @@ class App extends React.Component {
       modalActive,
       modalContent,
       setShowModalDispatch,
+      getAbsentReasonsDispatch,
+      setOffenderPaymentDataDispatch,
     } = this.props
 
     const routes = (
@@ -503,7 +506,8 @@ class App extends React.Component {
                 resetErrorDispatch={resetErrorDispatch}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 showModal={setShowModalDispatch}
-                setActivityOffenderAttendance={setActivityOffenderAttendance}
+                setOffenderPaymentDataDispatch={setOffenderPaymentDataDispatch}
+                getAbsentReasonsDispatch={getAbsentReasonsDispatch}
                 history={history}
               />
             )}
@@ -638,6 +642,8 @@ App.propTypes = {
   userDetailsDispatch: PropTypes.func.isRequired,
   setFlagsDispatch: PropTypes.func.isRequired,
   setShowModalDispatch: PropTypes.func.isRequired,
+  getAbsentReasonsDispatch: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -678,6 +684,8 @@ const mapDispatchToProps = dispatch => ({
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
   setFlagsDispatch: flags => dispatch(setFlagsAction(flags)),
   setShowModalDispatch: (modalActive, modalContent) => dispatch(setShowModal(modalActive, modalContent)),
+  getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
+  setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
 })
 
 const AppContainer = connect(

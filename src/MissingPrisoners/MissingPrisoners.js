@@ -30,7 +30,7 @@ const MissingPrisoners = ({
   date,
   period,
   agencyId,
-  setActivityOffenderAttendance,
+  setOffenderPaymentDataDispatch,
   resetErrorDispatch,
   raiseAnalyticsEvent,
   handleError,
@@ -124,8 +124,8 @@ const MissingPrisoners = ({
                   agencyId={agencyId}
                   period={period}
                   showModal={showModal}
-                  activityName={prisonerActivity.eventDescription}
-                  setOffenderAttendance={setActivityOffenderAttendance}
+                  activityName={getMainEventDescription(prisonerActivity)}
+                  setOffenderAttendance={setOffenderPaymentDataDispatch}
                   date={date}
                   payAll={false}
                 />
@@ -149,7 +149,7 @@ MissingPrisoners.propTypes = {
   agencyId: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
-  setActivityOffenderAttendance: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityHubUser: PropTypes.bool.isRequired,
 }

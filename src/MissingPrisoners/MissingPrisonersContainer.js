@@ -15,7 +15,8 @@ function MissingPrisonersContainer({
   resetErrorDispatch,
   raiseAnalyticsEvent,
   showModal,
-  setActivityOffenderAttendance,
+  setOffenderPaymentDataDispatch,
+  getAbsentReasonsDispatch,
   handlePeriodChange,
   handleDateChange,
   handleError,
@@ -54,12 +55,14 @@ function MissingPrisonersContainer({
             },
           })
 
-          const offenders = response.data.map(offender => ({
+          const offenders = response.data.map((offender, index) => ({
             eventLocationId: offender.locationId,
+            offenderIndex: index,
             ...offender,
           }))
 
           setMissingPrisoners(offenders)
+          getAbsentReasonsDispatch()
         } catch (error) {
           handleError(error)
         }
@@ -94,7 +97,7 @@ function MissingPrisonersContainer({
         agencyId={agencyId}
         resetErrorDispatch={resetErrorDispatch}
         raiseAnalyticsEvent={raiseAnalyticsEvent}
-        setActivityOffenderAttendance={setActivityOffenderAttendance}
+        setOffenderPaymentDataDispatch={setOffenderPaymentDataDispatch}
         showModal={showModal}
         handleError={handleError}
         activityHubUser={activityHubUser}
@@ -107,7 +110,8 @@ MissingPrisonersContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
-  setActivityOffenderAttendance: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
+  getAbsentReasonsDispatch: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
