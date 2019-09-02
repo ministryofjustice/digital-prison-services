@@ -29,7 +29,6 @@ const alertFactory = (oauthApi, elite2Api) => {
         elite2Api.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
-      console.log('====caseLoads', caseLoads)
 
       alert = alertResponse
 
