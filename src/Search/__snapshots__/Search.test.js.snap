@@ -22,17 +22,17 @@ Array [
           >
             <div>
               <label
-                className="sc-bxivhb fjqhoB"
+                className="sc-htpNat ccHZSo"
               >
                 <span
-                  className="sc-htpNat eCRQZP"
+                  className="sc-bwzfXH lbxcXc"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-EHOje jAaYY"
+                  className="form-control sc-ifAKCX gXzDEH"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -592,17 +592,17 @@ Array [
           >
             <div>
               <label
-                className="sc-bxivhb fjqhoB"
+                className="sc-htpNat ccHZSo"
               >
                 <span
-                  className="sc-htpNat eCRQZP"
+                  className="sc-bwzfXH lbxcXc"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-EHOje jAaYY"
+                  className="form-control sc-ifAKCX gXzDEH"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -1007,16 +1007,27 @@ Array [
         </select>
       </div>
       <div
-        className="sc-bZQynM gGXwlJ"
+        className="sc-bZQynM hLyEZh"
       >
-        <button
-          className="sc-bdVaJa itVtfZ"
-          data-qa="missing-prisoners"
-          disabled={false}
-          onClick={[Function]}
+        <div
+          className="sc-gzVnrw fXIzxI"
         >
-          View missing prisoners
-        </button>
+          <a
+            className="sc-bdVaJa sc-EHOje heZRwM"
+            data-qa="missing-prisoners"
+            muted={false}
+            onClick={[Function]}
+          >
+            View missing prisoners
+          </a>
+        </div>
+        <a
+          className="sc-bdVaJa sc-EHOje heZRwM"
+          href="/attendance-reason-statistics"
+          muted={false}
+        >
+          View attendance reason statistics
+        </a>
       </div>
     </div>
     <div

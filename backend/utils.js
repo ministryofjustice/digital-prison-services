@@ -1,8 +1,8 @@
 const moment = require('moment')
 
-const switchDateFormat = displayDate => {
+const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
+    return moment(displayDate, format).format('YYYY-MM-DD')
   }
   return displayDate
 }
@@ -104,6 +104,21 @@ const pascalToString = value =>
     .replace(/([A-Z])/g, ' $1')
     .toLowerCase()
 
+const merge = (left, right) => ({
+  ...left,
+  ...right,
+})
+
+const getCurrentShift = date => {
+  const afternoonSplit = 12
+  const eveningSplit = 17
+  const currentHour = moment(date).format('H')
+
+  if (currentHour < afternoonSplit) return 'AM'
+  if (currentHour < eveningSplit) return 'PM'
+  return 'ED'
+}
+
 module.exports = {
   switchDateFormat,
   formatTimestampToDate,
@@ -120,4 +135,6 @@ module.exports = {
   formatMonthsAndDays,
   toMap,
   pascalToString,
+  merge,
+  getCurrentShift,
 }

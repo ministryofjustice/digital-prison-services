@@ -1,0 +1,22 @@
+<div class="govuk-form-group">
+<label class="govuk-label" for="period">
+    Period
+</label>
+
+<select
+    class="govuk-select govuk-!-width-full" 
+    id="period"
+    name="period"
+    value={{ period }}
+>
+    <option key="MORNING" value="AM" {% if period === "AM" %} selected {%endif%}>
+    Morning (AM)
+    </option>
+    <option key="AFTERNOON" value="PM" {% if period === "PM" %} selected {%endif%}>
+    Afternoon (PM)
+    </option>
+    <option key="EVENING" value="ED" {% if period === "ED" %} selected {%endif%}>
+    Evening (ED)
+    </option>
+</select>
+</div>
