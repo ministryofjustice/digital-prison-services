@@ -7,8 +7,8 @@ config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('alert management', () => {
   const res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-  const mockReq = { flash: jest.fn(), body: {} }
-  const bookingId = '1234'
+  const mockReq = { flash: jest.fn(), get: jest.fn(), headers: { referer: '//offenderAlertsPagePath' }, body: {} }
+  const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
   const alert = {
     alertId: 1,
     alertType: 'L',
@@ -21,7 +21,7 @@ describe('alert management', () => {
   }
 
   beforeEach(() => {
-    elite2api.getDetails = jest.fn().mockReturnValue({ bookingId })
+    elite2api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
   })
 
   afterEach(() => {
@@ -73,8 +73,13 @@ describe('alert management', () => {
           expired: false,
         },
         errors: undefined,
-        offenderNo: 'ABC123',
+        offenderDetails: {
+          name: 'User, Test',
+          offenderNo: 'ABC123',
+          profileUrl: '//newNomisEndPointUrl/offenders/ABC123',
+        },
         title: 'Close alert',
+        formAction: `/api/close-alert/ABC123/1`,
       })
     })
   })
@@ -115,7 +120,7 @@ describe('alert management', () => {
         await handleCloseAlertForm(req, res)
 
         expect(elite2api.getDetails).toBeCalledWith(res.locals, req.params.offenderNo)
-        expect(elite2api.updateAlert).toBeCalledWith(res.locals, bookingId, req.params.alertId, {
+        expect(elite2api.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
           alertStatus: 'INACTIVE',
           expiryDate: '2019-03-29',
         })

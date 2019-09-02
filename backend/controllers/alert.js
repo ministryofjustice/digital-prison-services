@@ -1,24 +1,29 @@
 const moment = require('moment')
-const { formatTimestampToDate } = require('../utils')
+const { formatTimestampToDate, properCaseName } = require('../utils')
 const config = require('../config')
+const { logError } = require('../logError')
 
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
+const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
 
 const alertFactory = elite2Api => {
   const displayCloseAlertForm = async (req, res) => {
-    const { offenderNo, alertId } = req.query
-    const errors = []
     let alert
+    const { offenderNo, alertId } = req.query
+    const offenderDetails = { offenderNo, profileUrl: getOffenderUrl(offenderNo) }
+    const errors = []
 
     try {
-      const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
       const response = await elite2Api.getAlert(res.locals, bookingId, alertId)
+
+      offenderDetails.name = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
       alert = {
         ...response,
         dateCreated: formatTimestampToDate(response.dateCreated),
       }
     } catch (error) {
-      // log the actual error
+      logError(req.originalUrl, error)
       errors.push({ text: serviceUnavailableMessage })
     }
 
@@ -29,8 +34,9 @@ const alertFactory = elite2Api => {
     res.render('closeAlertForm.njk', {
       title: 'Close alert',
       alert,
-      offenderNo,
+      offenderDetails,
       errors: req.flash('errors'),
+      formAction: `/api/close-alert/${offenderNo}/${alert && alert.alertId}`,
     })
   }
 
@@ -55,7 +61,7 @@ const alertFactory = elite2Api => {
           expiryDate: moment().format('YYYY-MM-DD'),
         })
       } catch (error) {
-        // Log error.message
+        logError(req.originalUrl, error)
         errors.push({
           text: serviceUnavailableMessage,
         })
@@ -67,7 +73,7 @@ const alertFactory = elite2Api => {
       return res.redirect('back')
     }
 
-    return res.redirect(`${config.app.notmEndpointUrl}offenders/${offenderNo}/alerts`)
+    return res.redirect(`${getOffenderUrl(offenderNo)}/alerts`)
   }
 
   return { displayCloseAlertForm, handleCloseAlertForm }
