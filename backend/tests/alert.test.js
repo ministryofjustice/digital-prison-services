@@ -11,7 +11,7 @@ config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('alert management', () => {
   const res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-  const mockReq = { flash: jest.fn(), get: jest.fn(), body: {} }
+  const mockReq = { flash: jest.fn().mockReturnValue([]), get: jest.fn(), body: {} }
   const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
   const alert = {
     alertId: 1,
@@ -49,6 +49,7 @@ describe('alert management', () => {
 
   afterEach(() => {
     elite2api.getDetails.mockRestore()
+    mockReq.flash.mockRestore()
   })
 
   describe('displayCloseAlertPage()', () => {
@@ -62,7 +63,10 @@ describe('alert management', () => {
 
         await displayCloseAlertPage(req, res)
 
-        expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
+        expect(res.render).toBeCalledWith('closeAlertForm.njk', {
+          title: 'Close alert - Digital Prison Services',
+          errors: [{ text: 'Sorry, the service is unavailable' }],
+        })
       })
 
       it('should return an error when the alert has already expired', async () => {
@@ -72,7 +76,12 @@ describe('alert management', () => {
 
         await displayCloseAlertPage(req, res)
 
-        expect(req.flash).toBeCalledWith('errors', [{ text: 'This alert has already expired' }])
+        expect(res.render).toBeCalledWith(
+          'closeAlertForm.njk',
+          expect.objectContaining({
+            errors: [{ text: 'This alert has already expired' }],
+          })
+        )
       })
     })
 
@@ -96,7 +105,7 @@ describe('alert management', () => {
           expired: false,
         },
         caseLoadId: 'ALI',
-        errors: undefined,
+        errors: [],
         formAction: '/api/close-alert/1234/1',
         offenderDetails: {
           bookingId: 1234,
@@ -117,8 +126,13 @@ describe('alert management', () => {
     })
 
     describe('when there are errors', () => {
-      const req = { ...mockReq, params: { offenderNo, alertId: 1 } }
       it('should return an error when there is a problem updating the alert', async () => {
+        const req = {
+          ...mockReq,
+          params: { offenderNo, alertId: 1 },
+          body: { alertStatus: 'yes', offenderNo },
+        }
+
         elite2api.updateAlert = jest.fn().mockImplementationOnce(() => {
           throw new Error('There has been an error')
         })
@@ -130,6 +144,12 @@ describe('alert management', () => {
       })
 
       it('should return an error if no option is selected', async () => {
+        const req = {
+          ...mockReq,
+          params: { offenderNo, alertId: 1 },
+          body: { offenderNo },
+        }
+
         await handleCloseAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [

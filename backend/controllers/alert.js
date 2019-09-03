@@ -9,12 +9,11 @@ const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${o
 const alertFactory = (oauthApi, elite2Api) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
-    const formAction =
-      offenderDetails && alert ? `/api/close-alert/${offenderDetails.bookingId}/${alert.alertId}` : undefined
+    const formAction = offenderDetails && alert && `/api/close-alert/${offenderDetails.bookingId}/${alert.alertId}`
 
     res.render('closeAlertForm.njk', {
       title: 'Close alert - Digital Prison Services',
-      errors: req.flash('errors'),
+      errors: [...req.flash('errors'), ...pageErrors],
       offenderDetails,
       formAction,
       alert: alert && {
@@ -23,8 +22,6 @@ const alertFactory = (oauthApi, elite2Api) => {
       },
       ...rest,
     })
-
-    if (pageErrors.length > 0) req.flash('errors', pageErrors)
   }
 
   const displayCloseAlertPage = async (req, res) => {
