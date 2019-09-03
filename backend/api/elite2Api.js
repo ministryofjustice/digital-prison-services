@@ -134,6 +134,11 @@ const elite2ApiFactory = client => {
 
   const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
 
+  const getAlert = (context, bookingId, alertId) => get(context, `/api/bookings/${bookingId}/alerts/${alertId}`)
+
+  const updateAlert = (context, bookingId, alertId, body) =>
+    put(context, `/api/bookings/${bookingId}/alert/${alertId}`, body)
+
   return {
     userLocations,
     userCaseLoads,
@@ -182,6 +187,8 @@ const elite2ApiFactory = client => {
     getOffenderActivities,
     getAlertTypes,
     createAlert,
+    getAlert,
+    updateAlert,
   }
 }
 
