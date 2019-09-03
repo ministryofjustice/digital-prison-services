@@ -3,71 +3,72 @@ const { formatTimestampToDate, properCaseName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
 
-// Temporary until we sort out a more permanent solution
-let userRoles
-let displayName
-let activeCaseLoad
-
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
 
 const alertFactory = (oauthApi, elite2Api) => {
-  const displayCloseAlertForm = async (req, res) => {
-    let alert
-    const { offenderNo, alertId } = req.query
-    const offenderDetails = { offenderNo, profileUrl: getOffenderUrl(offenderNo) }
-    const errors = []
+  const renderTemplate = (req, res, pageData) => {
+    const { alert, pageErrors, offenderDetails, ...rest } = pageData
+    const formAction =
+      offenderDetails && alert ? `/api/close-alert/${offenderDetails.bookingId}/${alert.alertId}` : undefined
+
+    res.render('closeAlertForm.njk', {
+      title: 'Close alert - Digital Prison Services',
+      errors: req.flash('errors'),
+      offenderDetails,
+      formAction,
+      alert: alert && {
+        ...alert,
+        dateCreated: formatTimestampToDate(alert.dateCreated),
+      },
+      ...rest,
+    })
+
+    if (pageErrors.length > 0) req.flash('errors', pageErrors)
+  }
+
+  const displayCloseAlertPage = async (req, res) => {
+    const pageErrors = []
 
     try {
+      const { offenderNo, alertId } = req.query
       const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
 
-      const [alertResponse, user, caseLoads, roles] = await Promise.all([
+      const [alert, user, caseLoads, userRoles] = await Promise.all([
         elite2Api.getAlert(res.locals, bookingId, alertId),
-
-        // Temporary until we sort out a more permanent solution
         oauthApi.currentUser(res.locals),
         elite2Api.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
 
-      alert = alertResponse
+      const offenderDetails = {
+        bookingId,
+        offenderNo,
+        profileUrl: getOffenderUrl(offenderNo),
+        name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
+      }
+      const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
 
-      // Temporary until we sort out a more permanent solution
-      activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
-      userRoles = roles
-      displayName = user.name
+      if (alert && alert.expired) pageErrors.push({ text: 'This alert has already expired' })
 
-      offenderDetails.bookingId = bookingId
-      offenderDetails.name = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
+      renderTemplate(req, res, {
+        alert,
+        offenderDetails,
+        pageErrors,
+        user: {
+          displayName: user.name,
+          activeCaseLoad: {
+            description: activeCaseLoad && activeCaseLoad.description,
+          },
+        },
+        caseLoadId: activeCaseLoad && activeCaseLoad.caseLoadId,
+        userRoles,
+      })
     } catch (error) {
       logError(req.originalUrl, error)
-      errors.push({ text: serviceUnavailableMessage })
+      pageErrors.push({ text: serviceUnavailableMessage })
+      renderTemplate(req, res, { pageErrors })
     }
-
-    if (alert && alert.expired) errors.push({ text: 'This alert has already expired' })
-
-    if (errors.length > 0) req.flash('errors', errors)
-
-    res.render('closeAlertForm.njk', {
-      title: 'Close alert - Digital Prison Services',
-      alert: {
-        ...alert,
-        dateCreated: alert && formatTimestampToDate(alert.dateCreated),
-      },
-      offenderDetails,
-      errors: req.flash('errors'),
-      formAction: `/api/close-alert/${offenderDetails.bookingId}/${alertId}`,
-
-      // Temporary until we sort out a more permanent solution
-      user: {
-        displayName,
-        activeCaseLoad: {
-          description: activeCaseLoad && activeCaseLoad.description,
-        },
-      },
-      caseLoadId: activeCaseLoad && activeCaseLoad.caseLoadId,
-      userRoles,
-    })
   }
 
   const handleCloseAlertForm = async (req, res) => {
@@ -105,7 +106,7 @@ const alertFactory = (oauthApi, elite2Api) => {
     return res.redirect(`${getOffenderUrl(offenderNo)}/alerts?alertStatus=${closeAlert ? 'closed' : 'open'}`)
   }
 
-  return { displayCloseAlertForm, handleCloseAlertForm }
+  return { displayCloseAlertPage, handleCloseAlertForm }
 }
 
 module.exports = { alertFactory }

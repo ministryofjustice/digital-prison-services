@@ -2,7 +2,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2api = {}
 const oauthApi = {}
 const config = require('../config')
-const { displayCloseAlertForm, handleCloseAlertForm } = require('../controllers/alert').alertFactory(
+const { displayCloseAlertPage, handleCloseAlertForm } = require('../controllers/alert').alertFactory(
   oauthApi,
   elite2api
 )
@@ -51,7 +51,7 @@ describe('alert management', () => {
     elite2api.getDetails.mockRestore()
   })
 
-  describe('displayCloseAlertForm()', () => {
+  describe('displayCloseAlertPage()', () => {
     describe('when there are errors', () => {
       it('should return an error when there is a problem retrieving the alert', async () => {
         elite2api.getAlert = jest.fn().mockImplementationOnce(() => {
@@ -60,7 +60,7 @@ describe('alert management', () => {
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
-        await displayCloseAlertForm(req, res)
+        await displayCloseAlertPage(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
       })
@@ -70,7 +70,7 @@ describe('alert management', () => {
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
-        await displayCloseAlertForm(req, res)
+        await displayCloseAlertPage(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [{ text: 'This alert has already expired' }])
       })
@@ -81,7 +81,7 @@ describe('alert management', () => {
 
       const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
-      await displayCloseAlertForm(req, res)
+      await displayCloseAlertPage(req, res)
 
       expect(res.render).toBeCalledWith('closeAlertForm.njk', {
         alert: {

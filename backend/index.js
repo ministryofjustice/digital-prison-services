@@ -257,7 +257,7 @@ app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplat
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
-app.get('/close-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertForm))
+app.get('/close-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertPage))
 app.post('/api/close-alert/:bookingId/:alertId', handleErrors(alertFactory(oauthApi, elite2Api).handleCloseAlertForm))
 app.get(
   '/attendance-reason-statistics',
