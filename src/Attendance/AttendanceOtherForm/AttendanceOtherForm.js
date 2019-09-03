@@ -10,14 +10,14 @@ import Button from '@govuk-react/button'
 import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
 
-import { ButtonContainer, ButtonCancel } from '../../../Components/Buttons'
-import RadioGroup from '../../../Components/RadioGroup'
-import { properCaseName } from '../../../utils'
-import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../../final-form-govuk-helpers'
-import IEPCreated from '../../../IEPCreated'
-import { userType } from '../../../types'
+import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
+import RadioGroup from '../../Components/RadioGroup'
+import { properCaseName } from '../../utils'
+import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../final-form-govuk-helpers'
+import IEPCreated from '../../IEPCreated'
+import { userType } from '../../types'
 
-export function PayOtherForm({
+export function AttendanceOtherForm({
   user,
   offender,
   updateOffenderAttendance,
@@ -25,6 +25,14 @@ export function PayOtherForm({
   absentReasons: { triggersIEPWarning },
   showModal,
   activityName,
+  resetErrorDispatch,
+  raiseAnalyticsEvent,
+  handleError,
+  setOffenderAttendance,
+  setSelectedOption,
+  agencyId,
+  period,
+  date,
 }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
@@ -86,7 +94,19 @@ export function PayOtherForm({
       attended: false,
     }
 
-    return updateOffenderAttendance(attendanceDetails, offender.offenderIndex)
+    return updateOffenderAttendance(
+      attendanceDetails,
+      offender.offenderIndex,
+      agencyId,
+      period,
+      date,
+      setOffenderAttendance,
+      handleError,
+      showModal,
+      resetErrorDispatch,
+      setSelectedOption,
+      raiseAnalyticsEvent
+    )
   }
 
   const getAbsentReasons = pay => {
@@ -156,7 +176,7 @@ export function PayOtherForm({
   )
 }
 
-PayOtherForm.propTypes = {
+AttendanceOtherForm.propTypes = {
   // mapStateToProps
   user: userType.isRequired,
   absentReasons: PropTypes.shape({
@@ -170,6 +190,14 @@ PayOtherForm.propTypes = {
   updateOffenderAttendance: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
+  agencyId: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  setOffenderAttendance: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
+  setSelectedOption: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -177,4 +205,4 @@ const mapStateToProps = state => ({
   absentReasons: state.events.absentReasons,
 })
 
-export default connect(mapStateToProps)(PayOtherForm)
+export default connect(mapStateToProps)(AttendanceOtherForm)
