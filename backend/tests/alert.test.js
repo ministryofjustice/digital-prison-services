@@ -2,16 +2,20 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2api = {}
 const oauthApi = {}
 const config = require('../config')
+const { logError } = require('../logError')
 const { displayCloseAlertPage, handleCloseAlertForm } = require('../controllers/alert').alertFactory(
   oauthApi,
   elite2api
 )
 
+jest.mock('../logError', () => ({
+  logError: jest.fn(),
+}))
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('alert management', () => {
   const res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-  const mockReq = { flash: jest.fn().mockReturnValue([]), get: jest.fn(), body: {} }
+  const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/close-alert/', get: jest.fn(), body: {} }
   const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
   const alert = {
     alertId: 1,
@@ -67,6 +71,11 @@ describe('alert management', () => {
           title: 'Close alert - Digital Prison Services',
           errors: [{ text: 'Sorry, the service is unavailable' }],
         })
+        expect(logError).toBeCalledWith(
+          '/close-alert/',
+          new Error('There has been an error'),
+          'Sorry, the service is unavailable'
+        )
       })
 
       it('should return an error when the alert has already expired', async () => {

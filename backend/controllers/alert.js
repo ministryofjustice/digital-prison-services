@@ -62,7 +62,7 @@ const alertFactory = (oauthApi, elite2Api) => {
         userRoles,
       })
     } catch (error) {
-      logError(req.originalUrl, error)
+      logError(req.originalUrl, error, serviceUnavailableMessage)
       pageErrors.push({ text: serviceUnavailableMessage })
       renderTemplate(req, res, { pageErrors })
     }
@@ -88,7 +88,7 @@ const alertFactory = (oauthApi, elite2Api) => {
           expiryDate: moment().format('YYYY-MM-DD'),
         })
       } catch (error) {
-        logError(req.originalUrl, error)
+        logError(req.originalUrl, error, serviceUnavailableMessage)
         errors.push({
           text: serviceUnavailableMessage,
         })
