@@ -18,7 +18,6 @@ const middleware = require('webpack-dev-middleware')
 const hrm = require('webpack-hot-middleware')
 const flash = require('connect-flash')
 const formData = require('express-form-data')
-const nunjucks = require('nunjucks')
 
 const fs = require('fs')
 const { isBinaryFileSync } = require('isbinaryfile')
@@ -45,6 +44,7 @@ const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
+const { alertFactory } = require('./controllers/alert')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
@@ -66,6 +66,7 @@ const { logError } = require('./logError')
 const config = require('./config')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
+const nunjucksSetup = require('./utils/nunjucksSetup')
 
 const app = express()
 const sixtyDaysInSeconds = 5184000
@@ -256,16 +257,15 @@ app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplat
 app.get('/api/missing-prisoners', controller.getMissingPrisoners)
 app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
+app.get('/close-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertPage))
+app.post('/api/close-alert/:bookingId/:alertId', handleErrors(alertFactory(oauthApi, elite2Api).handleCloseAlertForm))
 app.get(
   '/attendance-reason-statistics',
   handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
 )
 
-nunjucks.configure([path.join(__dirname, '../views'), 'node_modules/govuk-frontend/'], {
-  autoescape: true,
-  express: app,
-})
-;['../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend'].forEach(dir => {
+nunjucksSetup(app, path)
+;[('../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend')].forEach(dir => {
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
