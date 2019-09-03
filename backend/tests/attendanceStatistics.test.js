@@ -21,6 +21,7 @@ describe('Attendance reason statistics', () => {
   ]
 
   describe('Controller', () => {
+    const mockReq = { originalUrl: '/attendance-reason-statistics' }
     beforeEach(() => {
       oauthApi.currentUser = jest.fn()
       elite2Api.userCaseLoads = jest.fn()
@@ -162,8 +163,8 @@ describe('Attendance reason statistics', () => {
       await attendanceStatistics({ query: { agencyId, date, period } }, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
-        message: 'We have encountered a problem loading this page.  Please try again.',
         title: 'Attendance reason statistics',
+        url: '/attendance-reason-statistics',
       })
     })
 
@@ -183,12 +184,14 @@ describe('Attendance reason statistics', () => {
         render: jest.fn(),
       }
 
-      await attendanceStatistics({ query: { agencyId, date, period } }, res)
+      const req = { ...mockReq, query: { agencyId, date, period } }
+
+      await attendanceStatistics(req, res)
 
       expect(logError).toHaveBeenCalledWith(
         '/attendance-reason-statistics',
         new Error('something is wrong'),
-        'There has been an error'
+        'Sorry, the service is unavailable'
       )
     })
   })

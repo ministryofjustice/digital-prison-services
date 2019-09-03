@@ -49,11 +49,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
-      const formattedDate = switchDateFormat(date, 'DD-MM-YYYY')
+      const formattedDate = switchDateFormat(date, 'DD/MM/YYYY')
 
       if (!period || !date) {
         const currentPeriod = getCurrentShift(moment().format())
-        const today = moment().format('DD-MM-YYYY')
+        const today = moment().format('DD/MM/YYYY')
         res.redirect(`/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
         return
       }
@@ -89,10 +89,10 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         period,
       })
     } catch (error) {
-      logError('/attendance-reason-statistics', error, 'There has been an error')
+      logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
         title: 'Attendance reason statistics',
-        message: 'We have encountered a problem loading this page.  Please try again.',
+        url: '/attendance-reason-statistics',
       })
     }
   }
