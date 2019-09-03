@@ -1,15 +1,78 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 import Radio from '@govuk-react/radio'
 import VisuallyHidden from '@govuk-react/visually-hidden'
 import { Spinner } from '@govuk-react/icons'
 import { spacing } from '@govuk-react/lib'
 
-import { isWithinLastWeek } from '../../../utils'
-import PayOtherForm from '../PayOtherForm'
-import { Option, UpdateLink, PayMessage, OtherMessage } from './PayOptions.styles'
+import { isWithinLastWeek } from '../../utils'
+import AttendanceOtherForm from '../AttendanceOtherForm'
+import { Option, UpdateLink, PayMessage, OtherMessage } from './AttendanceOptions.styles'
+import { attendanceUpdated } from '../attendanceGAEvents'
 
-function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, showModal, activityName }) {
+export const updateOffenderAttendance = async (
+  attendanceDetails,
+  offenderIndex,
+  agencyId,
+  period,
+  date,
+  setOffenderAttendance,
+  handleError,
+  showModal,
+  resetErrorDispatch,
+  setSelectedOption,
+  raiseAnalyticsEvent
+) => {
+  let updateSuccess = false
+  const eventDetails = { prisonId: agencyId, period, eventDate: date }
+  const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
+
+  const offenderAttendanceData = {
+    comments,
+    paid,
+    absentReason,
+    pay: attended && paid,
+    other: Boolean(absentReason),
+  }
+
+  resetErrorDispatch()
+
+  try {
+    const response = await axios.post('/api/attendance', {
+      ...eventDetails,
+      ...attendanceDetails,
+      absentReason: attendanceDetails.absentReason && attendanceDetails.absentReason.value,
+    })
+    offenderAttendanceData.id = response.data.id || id
+    setOffenderAttendance(offenderIndex, offenderAttendanceData)
+    updateSuccess = true
+  } catch (error) {
+    handleError(error)
+    updateSuccess = false
+  }
+
+  showModal(false)
+  if (offenderAttendanceData.pay) setSelectedOption('pay')
+  if (offenderAttendanceData.other) setSelectedOption('other')
+  raiseAnalyticsEvent(attendanceUpdated(offenderAttendanceData, agencyId))
+
+  return updateSuccess
+}
+
+function AttendanceOptions({
+  offenderDetails,
+  date,
+  noPay,
+  showModal,
+  activityName,
+  resetErrorDispatch,
+  raiseAnalyticsEvent,
+  handleError,
+  setOffenderAttendance,
+  agencyId,
+  period,
+}) {
   const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
   const [isPaying, setIsPaying] = useState()
@@ -28,7 +91,19 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
     }
 
     setIsPaying(true)
-    await updateOffenderAttendance(attendanceDetails, offenderIndex)
+    await updateOffenderAttendance(
+      attendanceDetails,
+      offenderIndex,
+      agencyId,
+      period,
+      date,
+      setOffenderAttendance,
+      handleError,
+      showModal,
+      resetErrorDispatch,
+      setSelectedOption,
+      raiseAnalyticsEvent
+    )
     setIsPaying(false)
   }
 
@@ -40,11 +115,19 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
   const renderForm = () =>
     showModal(
       true,
-      <PayOtherForm
+      <AttendanceOtherForm
         offender={offenderDetails}
         updateOffenderAttendance={updateOffenderAttendance}
+        raiseAnalyticsEvent={raiseAnalyticsEvent}
+        resetErrorDispatch={resetErrorDispatch}
+        handleError={handleError}
+        agencyId={agencyId}
+        period={period}
         showModal={showModal}
         activityName={activityName}
+        setOffenderAttendance={setOffenderAttendance}
+        setSelectedOption={setSelectedOption}
+        date={date}
       />
     )
 
@@ -104,7 +187,7 @@ function PayOptions({ offenderDetails, updateOffenderAttendance, date, noPay, sh
   )
 }
 
-PayOptions.propTypes = {
+AttendanceOptions.propTypes = {
   offenderDetails: PropTypes.shape({
     offenderNo: PropTypes.string,
     firstName: PropTypes.string,
@@ -118,16 +201,21 @@ PayOptions.propTypes = {
       other: PropTypes.bool,
     }),
   }),
+  agencyId: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  updateOffenderAttendance: PropTypes.func.isRequired,
+  setOffenderAttendance: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
   noPay: PropTypes.bool,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
 }
 
-PayOptions.defaultProps = {
+AttendanceOptions.defaultProps = {
   offenderDetails: undefined,
   noPay: false,
 }
 
-export default PayOptions
+export default AttendanceOptions

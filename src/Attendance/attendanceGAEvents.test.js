@@ -1,4 +1,4 @@
-import { attendanceUpdated } from './resultsActivityGAEvents'
+import { attendanceUpdated } from './attendanceGAEvents'
 
 describe('Pay and attendance GA events', () => {
   it('should create a GA event when an offender is paid without an issue', () => {

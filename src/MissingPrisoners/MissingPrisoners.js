@@ -8,8 +8,10 @@ import OffenderLink from '../OffenderLink'
 import Location from '../Location'
 import OtherActivityListView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
-import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
+import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import { getHoursMinutes, getMainEventDescription } from '../utils'
+import { Flag } from '../flags'
+import AttendanceOptions from '../Attendance/AttendanceOptions'
 
 const TableContainer = styled.div`
   overflow-y: scroll;
@@ -21,7 +23,20 @@ const TableContainer = styled.div`
   }
 `
 
-const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
+const MissingPrisoners = ({
+  missingPrisoners,
+  sortOrder,
+  setColumnSort,
+  date,
+  period,
+  agencyId,
+  setOffenderPaymentDataDispatch,
+  resetErrorDispatch,
+  raiseAnalyticsEvent,
+  handleError,
+  showModal,
+  activityHubUser,
+}) => (
   <TableContainer>
     <Table
       head={
@@ -35,7 +50,15 @@ const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
               sortColumn={sortOrder.orderColumn}
             />
           </Table.CellHeader>
-          <Table.CellHeader setWidth="15%">Location</Table.CellHeader>
+          <Table.CellHeader setWidth="15%">
+            <SortableColumn
+              heading="Location"
+              column={CELL_LOCATION}
+              sortOrder={sortOrder.orderDirection}
+              setColumnSort={setColumnSort}
+              sortColumn={sortOrder.orderColumn}
+            />
+          </Table.CellHeader>
           <Table.CellHeader setWidth="15%">Prison no.</Table.CellHeader>
           <Table.CellHeader setWidth="25%">
             <SortableColumn
@@ -47,6 +70,18 @@ const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
             />
           </Table.CellHeader>
           <Table.CellHeader setWidth="25%">Other activities</Table.CellHeader>
+          {activityHubUser && (
+            <Flag
+              name={['updateAttendanceEnabled']}
+              render={() => (
+                <React.Fragment>
+                  <Table.CellHeader setWidth="15%">Attended</Table.CellHeader>
+                  <Table.CellHeader setWidth="15%">Not attended</Table.CellHeader>
+                </React.Fragment>
+              )}
+              fallbackRender={() => <></>}
+            />
+          )}
         </Table.Row>
       }
     >
@@ -77,6 +112,27 @@ const MissingPrisoners = ({ missingPrisoners, sortOrder, setColumnSort }) => (
               }}
             />
           </Table.Cell>
+          {activityHubUser && (
+            <Flag
+              name={['updateAttendanceEnabled']}
+              render={() => (
+                <AttendanceOptions
+                  offenderDetails={prisonerActivity}
+                  raiseAnalyticsEvent={raiseAnalyticsEvent}
+                  resetErrorDispatch={resetErrorDispatch}
+                  handleError={handleError}
+                  agencyId={agencyId}
+                  period={period}
+                  showModal={showModal}
+                  activityName={getMainEventDescription(prisonerActivity)}
+                  setOffenderAttendance={setOffenderPaymentDataDispatch}
+                  date={date}
+                  payAll={false}
+                />
+              )}
+              fallbackRender={() => <></>}
+            />
+          )}
         </Table.Row>
       ))}
     </Table>
@@ -87,6 +143,15 @@ MissingPrisoners.propTypes = {
   missingPrisoners: PropTypes.arrayOf(PropTypes.shape({})),
   setColumnSort: PropTypes.func.isRequired,
   sortOrder: PropTypes.shape({ orderColumn: PropTypes.string, orderDirection: PropTypes.string }).isRequired,
+  handleError: PropTypes.func.isRequired,
+  date: PropTypes.string.isRequired,
+  period: PropTypes.string.isRequired,
+  agencyId: PropTypes.string.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
+  activityHubUser: PropTypes.bool.isRequired,
 }
 
 MissingPrisoners.defaultProps = {

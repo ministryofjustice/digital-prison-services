@@ -1,9 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { PayOtherForm } from './PayOtherForm'
-import IEPCreated from '../../../IEPCreated'
+import { AttendanceOtherForm } from './AttendanceOtherForm'
+import IEPCreated from '../../IEPCreated'
 
-describe('<PayOtherForm />', () => {
+describe('<AttendanceOtherForm />', () => {
   const submitForm = async formWrapper => {
     await formWrapper.find('form').simulate('submit')
     formWrapper.update()
@@ -29,6 +29,14 @@ describe('<PayOtherForm />', () => {
     user: {
       name: 'Test User',
     },
+    date: 'Today',
+    period: 'PM',
+    agencyId: 'LEI',
+    setOffenderAttendance: jest.fn(),
+    resetErrorDispatch: jest.fn(),
+    raiseAnalyticsEvent: jest.fn(),
+    handleError: jest.fn(),
+    setSelectedOption: jest.fn(),
   }
 
   let wrapper = {}
@@ -49,7 +57,7 @@ describe('<PayOtherForm />', () => {
     const props = { ...sharedProps }
     beforeEach(() => {
       props.updateOffenderAttendance.mockReturnValue(true)
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
     })
 
     it('should display the correct offender name', () => {
@@ -176,7 +184,19 @@ describe('<PayOtherForm />', () => {
 
         submitForm(wrapper)
 
-        expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: true }, 1)
+        expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
+          { ...expectedPayload, paid: true },
+          1,
+          'LEI',
+          'PM',
+          'Today',
+          props.setOffenderAttendance,
+          props.handleError,
+          props.showModal,
+          props.resetErrorDispatch,
+          props.setSelectedOption,
+          props.raiseAnalyticsEvent
+        )
       })
 
       it('should submit with the correct, unpaid information and trigger the IEP created modal', async () => {
@@ -201,7 +221,19 @@ describe('<PayOtherForm />', () => {
 
         await submitForm(wrapper)
 
-        expect(props.updateOffenderAttendance).toHaveBeenCalledWith({ ...expectedPayload, paid: false }, 1)
+        expect(props.updateOffenderAttendance).toHaveBeenCalledWith(
+          { ...expectedPayload, paid: false },
+          1,
+          'LEI',
+          'PM',
+          'Today',
+          props.setOffenderAttendance,
+          props.handleError,
+          props.showModal,
+          props.resetErrorDispatch,
+          props.setSelectedOption,
+          props.raiseAnalyticsEvent
+        )
         expect(props.showModal).toHaveBeenCalledWith(
           true,
           <IEPCreated
@@ -225,7 +257,7 @@ describe('<PayOtherForm />', () => {
     beforeEach(() => {
       props.showModal.mockClear()
       props.updateOffenderAttendance.mockReturnValue(false)
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
     })
 
     it('should not trigger the IEP created modal', async () => {
@@ -255,7 +287,7 @@ describe('<PayOtherForm />', () => {
         },
         comments: 'Acceptable reason comment',
       }
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(true)
       expect(noRadio.props().checked).toBe(false)
       expect(reasonSelector.props().value).toBe('AcceptableAbsence')
@@ -272,7 +304,7 @@ describe('<PayOtherForm />', () => {
         },
         comments: 'Uncceptable reason comment',
       }
-      buildWrapper(mount(<PayOtherForm {...props} />))
+      buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(false)
       expect(noRadio.props().checked).toBe(true)
       expect(reasonSelector.props().value).toBe('UncceptableAbsence')
