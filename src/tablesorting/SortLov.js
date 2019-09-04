@@ -17,7 +17,7 @@ export const FullWidthSelect = styled(Select)`
 
 const SORT_OPTIONS = {
   [LAST_NAME]: { [ASC]: 'Name (A-Z)', [DESC]: 'Name (Z-A)' },
-  [CELL_LOCATION]: { [ASC]: 'Location (1-X)', [DESC]: 'Location (X-1)' },
+  [CELL_LOCATION]: { [ASC]: 'Location (ascending)', [DESC]: 'Location (descending)' },
   [ACTIVITY]: { [ASC]: 'Activity name (A-Z)', [DESC]: 'Activity name (Z-A)' },
 }
 
