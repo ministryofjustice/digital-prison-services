@@ -1,4 +1,5 @@
 const nunjucks = require('nunjucks')
+const config = require('../config')
 
 module.exports = (app, path) => {
   const njkEnv = nunjucks.configure([path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/'], {
@@ -15,4 +16,6 @@ module.exports = (app, path) => {
     }
     return null
   })
+
+  njkEnv.addGlobal('notmUrl', config.app.notmEndpointUrl)
 }
