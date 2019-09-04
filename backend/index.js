@@ -265,7 +265,9 @@ app.get(
 )
 
 nunjucksSetup(app, path)
-;[('../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend')].forEach(dir => {
+
+const assetPaths = ['../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend']
+assetPaths.forEach(dir => {
   app.use('/assets', express.static(path.join(__dirname, dir)))
 })
 
