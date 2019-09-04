@@ -10,7 +10,7 @@ import Button from '@govuk-react/button'
 import LeadParagraph from '@govuk-react/lead-paragraph'
 
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
+import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
 import { linkOnClick, getCurrentShift, isTodayOrAfter, getLongDateFormat } from '../utils'
 
@@ -96,7 +96,7 @@ const MissingPrisonersSearch = ({
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov
-          sortColumns={[LAST_NAME, ACTIVITY]}
+          sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
           sortColumn={sortOrder.orderColumn}
           sortOrder={sortOrder.orderDirection}
           setColumnSort={setColumnSort}
