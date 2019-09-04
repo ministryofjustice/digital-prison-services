@@ -54,7 +54,7 @@ describe('SortLov', () => {
     expect(
       component.contains(
         <option key="cellLocation_ASC" value="cellLocation_ASC">
-          Location (1-X)
+          Location (ascending)
         </option>
       )
     ).toEqual(true)
@@ -62,7 +62,7 @@ describe('SortLov', () => {
     expect(
       component.contains(
         <option key="cellLocation_DESC" value="cellLocation_DESC">
-          Location (X-1)
+          Location (descending)
         </option>
       )
     ).toEqual(true)
