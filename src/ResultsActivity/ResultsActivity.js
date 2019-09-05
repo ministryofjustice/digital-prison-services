@@ -85,6 +85,7 @@ class ResultsActivity extends Component {
       period,
       handlePeriodChange,
       handlePrint,
+      getActivityList,
       activityData,
       sortOrder,
       orderField,
@@ -155,24 +156,11 @@ class ResultsActivity extends Component {
 
         const offenders = [...unpaidOffenders]
 
-        const response = await axios.post('/api/attendance/batch', {
+        await axios.post('/api/attendance/batch', {
           offenders,
         })
 
-        const findOffenderIndexByEventId = eventId => {
-          const offender = offenders.find(off => off.eventId === eventId)
-          return offender.offenderIndex
-        }
-
-        response.data.map(offender => {
-          const { paid, attended, eventId } = offender
-          const offenderAttendanceData = { paid, attended, pay: attended && paid }
-
-          setActivityOffenderAttendance(findOffenderIndexByEventId(eventId), offenderAttendanceData)
-
-          return offender
-        })
-
+        getActivityList()
         this.setState({ payingAll: false })
       } catch (error) {
         handleError(error)
@@ -439,6 +427,7 @@ ResultsActivity.propTypes = {
   handlePrint: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
+  getActivityList: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   activityData: PropTypes.arrayOf(
