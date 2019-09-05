@@ -193,7 +193,6 @@ describe('alert management', () => {
         )
 
         expect(raiseAnalyticsEvent).toBeCalledWith('Alerts', 'Alert closed - 1', 'Alert Closure', 1)
-
         Date.now.mockRestore()
       })
     })
