@@ -3,10 +3,15 @@ const elite2api = {}
 const oauthApi = {}
 const config = require('../config')
 const { logError } = require('../logError')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { displayCloseAlertPage, handleCloseAlertForm } = require('../controllers/alert').alertFactory(
   oauthApi,
   elite2api
 )
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -186,6 +191,8 @@ describe('alert management', () => {
         expect(res.redirect).toBeCalledWith(
           `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=closed`
         )
+
+        expect(raiseAnalyticsEvent).toBeCalledWith('Alerts', 'Alert closed - 1', 'Alert Closure', 1)
 
         Date.now.mockRestore()
       })
