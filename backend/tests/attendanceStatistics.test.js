@@ -6,7 +6,7 @@ describe('Attendance reason statistics', () => {
   const elite2Api = {}
   const whereaboutsApi = {}
   const agencyId = 'LEI'
-  const date = '2019-10-10'
+  const date = '10/10/2019'
   const period = 'AM'
   const absenceReasons = [
     'NotRequired',
@@ -121,26 +121,54 @@ describe('Attendance reason statistics', () => {
           sick: 0,
           unacceptableabsence: 0,
         },
-        date: '2019-10-10',
+        date: '10/10/2019',
+        displayDate: '10 October 2019',
         formattedReasons: {
           paidReasons: [
-            { acceptableabsence: 'Acceptable absence' },
-            { approvedcourse: 'Approved course' },
             {
-              notrequired: 'Not required',
+              name: 'Acceptable absence',
+              value: 'acceptableabsence',
+            },
+            {
+              name: 'Approved course',
+              value: 'approvedcourse',
+            },
+            {
+              name: 'Not required',
+              value: 'notrequired',
             },
           ],
           unpaidReasons: [
-            { refused: 'Refused' },
-            { sessioncancelled: 'Session cancelled' },
-            { restincell: 'Rest in cell' },
-            { restday: 'Rest day' },
-            { unacceptableabsence: 'Unacceptable absence' },
-            { sick: 'Sick' },
+            {
+              name: 'Refused',
+              value: 'refused',
+            },
+            {
+              name: 'Session cancelled',
+              value: 'sessioncancelled',
+            },
+            {
+              name: 'Rest in cell',
+              value: 'restincell',
+            },
+            {
+              name: 'Rest day',
+              value: 'restday',
+            },
+            {
+              name: 'Unacceptable absence',
+              value: 'unacceptableabsence',
+            },
+            {
+              name: 'Sick',
+              value: 'sick',
+            },
           ],
         },
         inactiveCaseLoads: [],
+        isFuturePeriod: false,
         period: 'AM',
+        periodString: 'Morning',
         title: 'Attendance reason statistics',
         user: {
           activeCaseLoad: {

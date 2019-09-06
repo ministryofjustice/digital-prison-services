@@ -7,6 +7,13 @@ const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
   return displayDate
 }
 
+const readableDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
+  if (displayDate) {
+    return moment(displayDate, format).format('DD MMMM YYYY')
+  }
+  return displayDate
+}
+
 const formatTimestampToDate = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY')
 
 const formatTimestampToDateTime = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY - HH:mm')
@@ -109,7 +116,22 @@ const merge = (left, right) => ({
   ...right,
 })
 
-const getCurrentShift = date => {
+const isToday = date => {
+  if (date === 'Today') return true
+
+  return moment(date, 'DD/MM/YYYY')
+    .startOf('day')
+    .isSame(moment().startOf('day'))
+}
+
+const isTodayOrAfter = date => {
+  if (isToday(date)) return true
+
+  const searchDate = moment(date, 'DD/MM/YYYY')
+  return searchDate.isSameOrAfter(moment(), 'day')
+}
+
+const getCurrentPeriod = date => {
   const afternoonSplit = 12
   const eveningSplit = 17
   const currentHour = moment(date).format('H')
@@ -119,7 +141,24 @@ const getCurrentShift = date => {
   return 'ED'
 }
 
+const readablePeriod = period => {
+  if (period === 'AM') return 'Morning'
+  if (period === 'PM') return 'Afternoon'
+  return 'Evening'
+}
+
+const flagFuturePeriodSelected = (date, period, currentPeriod) => {
+  if (isTodayOrAfter(date)) {
+    return (
+      (currentPeriod === 'AM' && (period === 'PM' || period === 'ED')) || (currentPeriod === 'PM' && period === 'ED')
+    )
+  }
+  return false
+}
+
 module.exports = {
+  isToday,
+  isTodayOrAfter,
   switchDateFormat,
   formatTimestampToDate,
   formatTimestampToDateTime,
@@ -136,5 +175,8 @@ module.exports = {
   toMap,
   pascalToString,
   merge,
-  getCurrentShift,
+  getCurrentPeriod,
+  flagFuturePeriodSelected,
+  readablePeriod,
+  readableDateFormat,
 }

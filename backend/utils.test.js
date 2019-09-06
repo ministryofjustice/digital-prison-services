@@ -7,7 +7,11 @@ import {
   formatTimestampToDateTime,
   formatTimestampToDate,
   formatName,
-  getCurrentShift,
+  getCurrentPeriod,
+  isToday,
+  isTodayOrAfter,
+  flagFuturePeriodSelected,
+  readablePeriod,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -163,20 +167,97 @@ describe('formatName', () => {
   })
 })
 
-describe('getCurrentShift()', () => {
+describe('getCurrentPeriod()', () => {
   it('returns AM if time is post midnight', () => {
-    expect(getCurrentShift('2019-08-11T00:00:01.000')).toEqual('AM')
+    expect(getCurrentPeriod('2019-08-11T00:00:01.000')).toEqual('AM')
   })
 
   it('returns AM if time is pre 12 noon', () => {
-    expect(getCurrentShift('2019-08-11T11:59:59.000')).toEqual('AM')
+    expect(getCurrentPeriod('2019-08-11T11:59:59.000')).toEqual('AM')
   })
 
   it('returns PM if time is post 12 noon and before 5PM', () => {
-    expect(getCurrentShift('2019-08-11T16:59:59.000')).toEqual('PM')
+    expect(getCurrentPeriod('2019-08-11T16:59:59.000')).toEqual('PM')
   })
 
   it('returns ED if time is post 5pm and before midnight', () => {
-    expect(getCurrentShift('2019-08-11T23:59:59.000')).toEqual('ED')
+    expect(getCurrentPeriod('2019-08-11T23:59:59.000')).toEqual('ED')
+  })
+})
+
+describe('readablePeriod()', () => {
+  it('returns Morning if selected period is AM', () => {
+    expect(readablePeriod('AM')).toEqual('Morning')
+  })
+  it('returns Afternoon if selected period is PM', () => {
+    expect(readablePeriod('PM')).toEqual('Afternoon')
+  })
+  it('returns Evening if selected period is ED', () => {
+    expect(readablePeriod('ED')).toEqual('Evening')
+  })
+})
+
+describe('isToday()', () => {
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
+  it('returns true if date is "Today"', () => {
+    expect(isToday('Today')).toBe(true)
+  })
+
+  it('returns false if date is before today', () => {
+    expect(isToday('2/01/2019')).toBe(false)
+  })
+
+  it('returns false if date is after today', () => {
+    expect(isToday('19/01/2019')).toBe(false)
+  })
+})
+
+describe('isTodayOrAfter()', () => {
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
+  it('returns true if date is "Today"', () => {
+    expect(isTodayOrAfter('Today')).toBe(true)
+  })
+
+  it('returns false if date is within the past week', () => {
+    expect(isTodayOrAfter('2/01/2019')).toBe(false)
+  })
+
+  it('returns true if date is AFTER today', () => {
+    expect(isTodayOrAfter('14/01/2019')).toBe(true)
+  })
+
+  it('returns true if date is within the next week', () => {
+    expect(isTodayOrAfter('19/01/2019')).toBe(true)
+  })
+})
+
+describe('flagFuturePeriodSelected()', () => {
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
+  it('returns true if selected period is in the future', () => {
+    expect(flagFuturePeriodSelected('14/01/2019', 'ED', 'AM')).toEqual(true)
+  })
+  it('returns false if selected period is not in the future', () => {
+    expect(flagFuturePeriodSelected('14/01/2019', 'PM', 'ED')).toEqual(false)
   })
 })

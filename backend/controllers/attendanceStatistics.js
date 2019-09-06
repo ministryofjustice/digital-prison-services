@@ -1,5 +1,13 @@
 const moment = require('moment')
-const { merge, switchDateFormat, getCurrentShift, pascalToString } = require('../utils')
+const {
+  merge,
+  switchDateFormat,
+  getCurrentPeriod,
+  pascalToString,
+  flagFuturePeriodSelected,
+  readablePeriod,
+  readableDateFormat,
+} = require('../utils')
 
 const getReasonCountMap = (data, reasons) => {
   const countAttendancesForReason = reason =>
@@ -50,13 +58,20 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
       const formattedDate = switchDateFormat(date, 'DD/MM/YYYY')
+      const displayDate = readableDateFormat(date, 'DD/MM/YYYY')
+
+      console.log('------', displayDate)
+
+      const currentPeriod = getCurrentPeriod(moment().format())
+      const today = moment().format('DD/MM/YYYY')
+      const isFuturePeriod = flagFuturePeriodSelected(date, period, currentPeriod)
 
       if (!period || !date) {
-        const currentPeriod = getCurrentShift(moment().format())
-        const today = moment().format('DD/MM/YYYY')
         res.redirect(`/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
         return
       }
+
+      const periodString = readablePeriod(period)
 
       const dashboardStats = await getDashboardStats(res.locals, {
         agencyId,
@@ -67,11 +82,14 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       const formattedReasons = {}
       Object.entries(absenceReasons).forEach(([key, values]) => {
-        formattedReasons[key] = values.map(reason => ({ [reason.toLowerCase()]: pascalToString(reason) }))
+        formattedReasons[key] = values.map(reason => ({ value: reason.toLowerCase(), name: pascalToString(reason) }))
       })
 
       res.render('attendanceStatistics.njk', {
         title: 'Attendance reason statistics',
+        displayDate,
+        periodString,
+        isFuturePeriod,
         formattedReasons,
         user: {
           displayName: user.name,
