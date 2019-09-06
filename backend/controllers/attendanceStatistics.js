@@ -63,6 +63,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const currentPeriod = getCurrentPeriod(moment().format())
       const today = moment().format('DD/MM/YYYY')
       const isFuturePeriod = flagFuturePeriodSelected(date, period, currentPeriod)
+      const periodString = readablePeriod(period)
 
       if (!period || !date) {
         res.redirect(
@@ -70,8 +71,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         )
         return
       }
-
-      const periodString = readablePeriod(period)
 
       const dashboardStats = await getDashboardStats(res.locals, {
         agencyId,
