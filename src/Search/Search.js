@@ -42,12 +42,12 @@ export const AttendanceButtonsContainer = styled('div')`
   }
 `
 
-export const MissingButtonContainer = styled('div')`
+export const PrisonersUnaccountedForCTA = styled('div')`
   display: inline-block;
 `
 
 class Search extends Component {
-  showMissingPrisonersButton = () => {
+  showPrisonersUnaccountedForCTA = () => {
     const { period: selectedPeriod, date } = this.props
     const actualPeriod = getCurrentShift()
 
@@ -225,16 +225,16 @@ class Search extends Component {
               name={['updateAttendanceEnabled']}
               render={() => (
                 <AttendanceButtonsContainer>
-                  {this.showMissingPrisonersButton() && (
-                    <MissingButtonContainer>
+                  {this.showPrisonersUnaccountedForCTA() && (
+                    <PrisonersUnaccountedForCTA>
                       <StatsLink
                         buttonColour={BLUE}
-                        onClick={() => history.push(`missing-prisoners`)}
-                        data-qa="missing-prisoners"
+                        onClick={() => history.push(`prisoners-unaccounted-for`)}
+                        data-qa="prisoners-unaccounted-for"
                       >
-                        View missing prisoners
+                        View prisoners unaccounted for
                       </StatsLink>
-                    </MissingButtonContainer>
+                    </PrisonersUnaccountedForCTA>
                   )}
                   <StatsLink href="/attendance-reason-statistics" buttonColour={BLUE}>
                     View attendance reason statistics

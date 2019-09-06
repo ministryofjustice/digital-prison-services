@@ -35,7 +35,7 @@ import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IEPSlipContainer from './IEPSlipContainer'
-import MissingPrisonersContainer from './MissingPrisoners/MissingPrisonersContainer'
+import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
 import CreateAlertContainer from './CreateAlert/CreateAlertContainer'
 
 import {
@@ -496,9 +496,9 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.missingPrisoners}
+            path={routePaths.prisonersUnaccountedFor}
             render={({ history, match: { params } }) => (
-              <MissingPrisonersContainer
+              <PrisonersUnaccountedForContainer
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
                 handleError={this.handleError}

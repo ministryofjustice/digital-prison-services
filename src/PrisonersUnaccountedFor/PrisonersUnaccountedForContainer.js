@@ -5,12 +5,12 @@ import axios from 'axios'
 import moment from 'moment'
 
 import Page from '../Components/Page'
-import MissingPrisonersSearch from './MissingPrisonersSearch'
-import MissingPrisoners from './MissingPrisoners'
+import PrisonersUnaccountedForSearch from './PrisonersUnaccountedForSearch'
+import PrisonersUnaccountedFor from './PrisonersUnaccountedFor'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 import sortResults from '../ResultsActivity/activityResultsSorter'
 
-function MissingPrisonersContainer({
+function PrisonersUnaccountedForContainer({
   setLoadedDispatch,
   resetErrorDispatch,
   raiseAnalyticsEvent,
@@ -26,7 +26,7 @@ function MissingPrisonersContainer({
   userRoles,
 }) {
   const [reloadPage, setReloadPage] = useState(false)
-  const [missingPrisoners, setMissingPrisoners] = useState([])
+  const [prisonersUnaccountedFor, setPrisonersUnaccountedFor] = useState([])
   const [sortOrder, setSortOrder] = useState({
     orderColumn: LAST_NAME,
     orderDirection: 'ASC',
@@ -34,20 +34,20 @@ function MissingPrisonersContainer({
 
   const setColumnSort = (orderColumn, orderDirection) => {
     setSortOrder({ orderColumn, orderDirection })
-    sortResults(missingPrisoners, orderColumn, orderDirection)
-    setMissingPrisoners(missingPrisoners)
+    sortResults(prisonersUnaccountedFor, orderColumn, orderDirection)
+    setPrisonersUnaccountedFor(prisonersUnaccountedFor)
   }
 
   const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
   useEffect(
     () => {
-      const getMissingPrisoners = async () => {
+      const getPrisonersUnaccountedFor = async () => {
         resetErrorDispatch()
         setLoadedDispatch(false)
 
         try {
-          const response = await axios.get('/api/missing-prisoners', {
+          const response = await axios.get('/api/prisoners-unaccounted-for', {
             params: {
               agencyId,
               timeSlot: period,
@@ -61,7 +61,7 @@ function MissingPrisonersContainer({
             ...offender,
           }))
 
-          setMissingPrisoners(offenders)
+          setPrisonersUnaccountedFor(offenders)
           getAbsentReasonsDispatch()
         } catch (error) {
           handleError(error)
@@ -70,26 +70,26 @@ function MissingPrisonersContainer({
         setLoadedDispatch(true)
       }
 
-      getMissingPrisoners()
+      getPrisonersUnaccountedFor()
       setReloadPage(false)
     },
     [period, date, reloadPage]
   )
 
   return (
-    <Page title="Missing prisoners" alwaysRender>
-      <MissingPrisonersSearch
+    <Page title="Prisoners unaccounted for" alwaysRender>
+      <PrisonersUnaccountedForSearch
         handleDateChange={handleDateChange}
         handlePeriodChange={handlePeriodChange}
         date={date}
         period={period}
         sortOrder={sortOrder}
         setColumnSort={setColumnSort}
-        numberOfPrisoners={missingPrisoners.length}
+        numberOfPrisoners={prisonersUnaccountedFor.length}
         reloadPage={setReloadPage}
       />
-      <MissingPrisoners
-        missingPrisoners={missingPrisoners}
+      <PrisonersUnaccountedFor
+        prisonersUnaccountedFor={prisonersUnaccountedFor}
         sortOrder={sortOrder}
         setColumnSort={setColumnSort}
         date={date}
@@ -106,7 +106,7 @@ function MissingPrisonersContainer({
   )
 }
 
-MissingPrisonersContainer.propTypes = {
+PrisonersUnaccountedForContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
@@ -129,6 +129,6 @@ const mapStateToProps = state => ({
   userRoles: state.app.user.roles,
 })
 
-export { MissingPrisonersContainer }
+export { PrisonersUnaccountedForContainer }
 
-export default connect(mapStateToProps)(MissingPrisonersContainer)
+export default connect(mapStateToProps)(PrisonersUnaccountedForContainer)
