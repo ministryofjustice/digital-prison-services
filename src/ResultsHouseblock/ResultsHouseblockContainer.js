@@ -42,7 +42,7 @@ class ResultsHouseblockContainer extends Component {
       if (currentLocation) {
         this.getHouseblockList('lastName', 'ASC')
       } else {
-        history.push('/search-prisoner-whereabouts')
+        history.push('/manage-prisoner-whereabouts')
       }
     } catch (error) {
       this.handleError(error)

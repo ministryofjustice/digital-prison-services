@@ -12,6 +12,7 @@ import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { isBeforeToday, isAfterToday, getCurrentShift } from '../utils'
+import routePaths from '../routePaths'
 
 const StatsLink = styled(Link)`
   font-size: ${FONT_SIZE.SIZE_22};
@@ -229,14 +230,14 @@ class Search extends Component {
                     <PrisonersUnaccountedForCTA>
                       <StatsLink
                         buttonColour={BLUE}
-                        onClick={() => history.push(`prisoners-unaccounted-for`)}
+                        onClick={() => history.push(routePaths.prisonersUnaccountedFor)}
                         data-qa="prisoners-unaccounted-for"
                       >
                         View prisoners unaccounted for
                       </StatsLink>
                     </PrisonersUnaccountedForCTA>
                   )}
-                  <StatsLink href="/attendance-reason-statistics" buttonColour={BLUE}>
+                  <StatsLink href="/manage-prisoner-whereabouts/attendance-reason-statistics" buttonColour={BLUE}>
                     View attendance reason statistics
                   </StatsLink>
                 </AttendanceButtonsContainer>

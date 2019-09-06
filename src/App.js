@@ -281,11 +281,11 @@ class App extends React.Component {
         <div className="pure-g">
           <Route
             path="(/)"
-            render={() => <Route exact path="/" render={() => <Redirect to="/search-prisoner-whereabouts" />} />}
+            render={() => <Route exact path="/" render={() => <Redirect to="/manage-prisoner-whereabouts" />} />}
           />
           <Route
             exact
-            path="(/search-prisoner-whereabouts)"
+            path="(/manage-prisoner-whereabouts)"
             render={() => (
               <SearchContainer
                 handleError={this.handleError}
@@ -309,7 +309,7 @@ class App extends React.Component {
           />
           <Route
             exact
-            path="/search-prisoner-whereabouts/housing-block-results"
+            path="/manage-prisoner-whereabouts/housing-block-results"
             render={() => (
               <ResultsHouseblockContainer
                 handleError={this.handleError}
@@ -322,7 +322,7 @@ class App extends React.Component {
           />
           <Route
             exact
-            path="/search-prisoner-whereabouts/activity-results"
+            path="/manage-prisoner-whereabouts/activity-results"
             render={() => (
               <ResultsActivityContainer
                 handleError={this.handleError}
