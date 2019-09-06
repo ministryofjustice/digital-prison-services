@@ -16,6 +16,10 @@ $govuk-page-width: 1170px;
 }
 
 /*HEADER STYLES */
+.page-header {
+    font-family: $govuk-font-family-gds-transport; // Only needed while we're importing header.scss
+}
+
 .right-content {
     float: right;
     height: 102%;
