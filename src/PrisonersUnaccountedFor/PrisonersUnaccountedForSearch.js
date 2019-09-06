@@ -20,7 +20,7 @@ import {
   FullWidthSelect,
   RightAlignContainer,
   DummyLink,
-} from './MissingPrisonersSearch.style'
+} from './PrisonersUnaccountedForSearch.style'
 
 const showPMPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || (timeOfDay === 'PM' || timeOfDay === 'ED')
 
@@ -33,7 +33,7 @@ const pastAndPresentDay = date =>
       .startOf('day')
   )
 
-const MissingPrisonersSearch = ({
+const PrisonersUnaccountedForSearch = ({
   handleDateChange,
   date,
   handlePeriodChange,
@@ -113,7 +113,7 @@ const MissingPrisonersSearch = ({
   </Container>
 )
 
-MissingPrisonersSearch.propTypes = {
+PrisonersUnaccountedForSearch.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
@@ -123,4 +123,4 @@ MissingPrisonersSearch.propTypes = {
   numberOfPrisoners: PropTypes.number.isRequired,
 }
 
-export default MissingPrisonersSearch
+export default PrisonersUnaccountedForSearch

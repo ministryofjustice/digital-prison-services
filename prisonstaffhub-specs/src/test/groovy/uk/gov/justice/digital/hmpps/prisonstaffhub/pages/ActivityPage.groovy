@@ -5,7 +5,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class ActivityPage extends DatePickerPage {
 
-    static url = "/search-prisoner-whereabouts/activity-results"
+    static url = "/manage-prisoner-whereabouts/activity-results"
 
     static at = {
         tableRows.size() > 1

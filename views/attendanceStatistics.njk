@@ -12,8 +12,8 @@
       href: notmUrl
     },
     {
-      text: "Search prisoner whereabouts",
-      href: "/search-prisoner-whereabouts"
+      text: "Manage prisoner whereabouts",
+      href: "/manage-prisoner-whereabouts"
     },
     {
       text: "Attendance reason statistics"
@@ -27,7 +27,7 @@
 
 <h1 class="govuk-heading-l govuk-!-margin-bottom-1">Attendance reason statistics</h1>
 <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{periodString}}</p>
-<form action="/attendance-reason-statistics">
+<form action="/manage-prisoner-whereabouts/attendance-reason-statistics">
   <div class="govuk-grid-row">
     <input type="hidden" name="agencyId" value="{{caseLoadId}}" />
     <div class="govuk-grid-column-one-quarter">

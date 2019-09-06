@@ -23,8 +23,8 @@ const TableContainer = styled.div`
   }
 `
 
-const MissingPrisoners = ({
-  missingPrisoners,
+const PrisonersUnaccountedFor = ({
+  prisonersUnaccountedFor,
   sortOrder,
   setColumnSort,
   date,
@@ -85,12 +85,12 @@ const MissingPrisoners = ({
         </Table.Row>
       }
     >
-      {missingPrisoners.length === 0 && (
+      {prisonersUnaccountedFor.length === 0 && (
         <Table.Row>
           <Table.Cell colSpan="7">No results found</Table.Cell>
         </Table.Row>
       )}
-      {missingPrisoners.map(prisonerActivity => (
+      {prisonersUnaccountedFor.map(prisonerActivity => (
         <Table.Row key={prisonerActivity.eventId}>
           <Table.Cell>
             <OffenderLink offenderNo={prisonerActivity.offenderNo}>
@@ -139,8 +139,8 @@ const MissingPrisoners = ({
   </TableContainer>
 )
 
-MissingPrisoners.propTypes = {
-  missingPrisoners: PropTypes.arrayOf(PropTypes.shape({})),
+PrisonersUnaccountedFor.propTypes = {
+  prisonersUnaccountedFor: PropTypes.arrayOf(PropTypes.shape({})),
   setColumnSort: PropTypes.func.isRequired,
   sortOrder: PropTypes.shape({ orderColumn: PropTypes.string, orderDirection: PropTypes.string }).isRequired,
   handleError: PropTypes.func.isRequired,
@@ -154,8 +154,8 @@ MissingPrisoners.propTypes = {
   activityHubUser: PropTypes.bool.isRequired,
 }
 
-MissingPrisoners.defaultProps = {
-  missingPrisoners: [],
+PrisonersUnaccountedFor.defaultProps = {
+  prisonersUnaccountedFor: [],
 }
 
-export default MissingPrisoners
+export default PrisonersUnaccountedFor
