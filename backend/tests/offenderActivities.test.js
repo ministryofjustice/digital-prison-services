@@ -3,7 +3,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const context = {}
 const elite2api = {}
 const whereaboutsApi = {}
-const { getMissingPrisoners } = require('../controllers/offenderActivities').offenderActivitesFactory(
+const { getPrisonersUnaccountedFor } = require('../controllers/offenderActivities').offenderActivitesFactory(
   elite2api,
   whereaboutsApi
 )
@@ -72,7 +72,7 @@ const scheduledActivitiesResponse = [
 ]
 
 describe('offender activities', () => {
-  describe('getMissingPrisoners()', () => {
+  describe('getPrisonersUnaccountedFor()', () => {
     beforeEach(() => {
       elite2api.getOffenderActivities = jest.fn().mockReturnValue(scheduledActivitiesResponse)
       elite2api.getVisits = jest.fn().mockReturnValue([])
@@ -81,7 +81,7 @@ describe('offender activities', () => {
     })
 
     it('should return the correct number of separate offender activities when there are is no matching attendance record', async () => {
-      const response = await getMissingPrisoners(context, 'LEI', '2019-08-07', 'PM')
+      const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
       expect(response.length).toBe(4)
       expect(response).toEqual(scheduledActivitiesResponse.map(activity => ({ ...activity, eventsElsewhere: [] })))
@@ -107,7 +107,7 @@ describe('offender activities', () => {
         },
       ])
 
-      const response = await getMissingPrisoners(context, 'LEI', '2019-08-07', 'PM')
+      const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
       expect(response).toEqual([
         {
@@ -176,7 +176,7 @@ describe('offender activities', () => {
         },
       ])
 
-      const response = await getMissingPrisoners(context, 'LEI', '2019-08-07', 'PM')
+      const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
       expect(response).toEqual([
         {

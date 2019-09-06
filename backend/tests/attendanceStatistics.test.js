@@ -112,7 +112,7 @@ describe('Attendance reason statistics', () => {
           acceptableabsence: 0,
           approvedcourse: 0,
           attended: 1,
-          missing: 1,
+          unaccountedFor: 1,
           notrequired: 0,
           refused: 0,
           restday: 0,
@@ -338,12 +338,12 @@ describe('Attendance reason statistics', () => {
         },
       ])
 
-      const { missing } = await getDashboardStats(context, { agencyId, date, period, absenceReasons })
+      const { unaccountedFor } = await getDashboardStats(context, { agencyId, date, period, absenceReasons })
 
       expect({
-        missing,
+        unaccountedFor,
       }).toEqual({
-        missing: 2,
+        unaccountedFor: 2,
       })
     })
   })

@@ -13,6 +13,6 @@ export default {
   bulkAppointmentsAddPrisoners: '/add-bulk-appointments/add-prisoners',
   adjudications: '/offenders/:offenderNo/adjudications',
   adjudication: '/offenders/:offenderNo/adjudications/:adjudicationNo',
-  missingPrisoners: '/missing-prisoners',
+  prisonersUnaccountedFor: '/prisoners-unaccounted-for',
   createAlert: '/offenders/:offenderNo/create-alert',
 }
