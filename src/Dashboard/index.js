@@ -21,7 +21,7 @@ const Dashboard = () => (
         <a href="https://omic-dev.hmpps.dsd.io">Key worker Management</a>
       </li>
       <li>
-        <Link id="whereabouts_link" title="Whereabouts link" className="link" to="/search-prisoner-whereabouts">
+        <Link id="whereabouts_link" title="Whereabouts link" className="link" to="/manage-prisoner-whereabouts">
           Whereabouts
         </Link>
       </li>

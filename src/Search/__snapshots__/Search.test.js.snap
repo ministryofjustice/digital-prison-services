@@ -1023,7 +1023,7 @@ Array [
         </div>
         <a
           className="sc-bdVaJa sc-EHOje heZRwM"
-          href="/attendance-reason-statistics"
+          href="/manage-prisoner-whereabouts/attendance-reason-statistics"
           muted={false}
         >
           View attendance reason statistics

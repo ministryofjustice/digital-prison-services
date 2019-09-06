@@ -4,10 +4,10 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.modules.HeaderModule
 
 class SearchPage extends DatePickerPage {
 
-    static url = "/search-prisoner-whereabouts"
+    static url = "/manage-prisoner-whereabouts"
 
     static at = {
-        headingText == 'Search prisoner whereabouts'
+        headingText == 'Manage prisoner whereabouts'
         continueButton.displayed
         location.find('option')[1].text() == '1'
     }

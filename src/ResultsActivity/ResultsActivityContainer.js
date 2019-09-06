@@ -35,7 +35,7 @@ class ResultsActivityContainer extends Component {
       if (activity) {
         this.getActivityList()
       } else {
-        history.push('/search-prisoner-whereabouts')
+        history.push('/manage-prisoner-whereabouts')
       }
     } catch (error) {
       this.handleError(error)

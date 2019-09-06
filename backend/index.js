@@ -260,7 +260,7 @@ app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get('/close-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertPage))
 app.post('/api/close-alert/:bookingId/:alertId', handleErrors(alertFactory(oauthApi, elite2Api).handleCloseAlertForm))
 app.get(
-  '/attendance-reason-statistics',
+  '/manage-prisoner-whereabouts/attendance-reason-statistics',
   handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
 )
 
