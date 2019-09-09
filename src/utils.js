@@ -42,7 +42,7 @@ const isToday = date => {
     .startOf('day')
     .isSame(moment().startOf('day'))
 }
-const getCurrentShift = date => {
+const getCurrentPeriod = date => {
   const afternoonSplit = 12
   const eveningSplit = 17
   const currentHour = moment(date).format('H')
@@ -164,7 +164,7 @@ module.exports = {
   forenameToInitial,
   getHoursMinutes,
   isTodayOrAfter,
-  getCurrentShift,
+  getCurrentPeriod,
   isAfterToday,
   isWithinLastYear,
   isWithinLastWeek,
