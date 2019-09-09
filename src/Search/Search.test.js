@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { MemoryRouter } from 'react-router'
 import testRenderer from 'react-test-renderer'
-import { Search, MissingButtonContainer, AttendanceButtonsContainer } from './Search'
+import { Search, PrisonersUnaccountedForCTA, AttendanceButtonsContainer } from './Search'
 import { ConnectedFlagsProvider } from '../flags'
 
 const locations = [{ name: '1', key: 'K1' }, { name: '2', key: 'K2' }]
@@ -177,7 +177,7 @@ describe('Search component', () => {
 
     expect(wrapper).toMatchSnapshot()
   })
-  describe('missing prisoners button', () => {
+  describe('prisoners unaccounted for button', () => {
     const store = {}
     store.getState = jest.fn()
     store.subscribe = jest.fn()
@@ -235,7 +235,7 @@ describe('Search component', () => {
     })
 
     describe('when current period is AM', () => {
-      it('should show the missing prisoners button for this morning', async () => {
+      it('should show the prisoners unaccounted for button for this morning', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -244,10 +244,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should hide the missing prisoners button for "Today" afternoon', async () => {
+      it('should hide the prisoners unaccounted for button for "Today" afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -256,10 +256,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(0)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(0)
       })
 
-      it('should hide the missing prisoners button for todays date afternoon', async () => {
+      it('should hide the prisoners unaccounted for button for todays date afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -268,10 +268,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(0)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(0)
       })
 
-      it('should hide the missing prisoners button for "Today" evening', async () => {
+      it('should hide the prisoners unaccounted for button for "Today" evening', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -280,10 +280,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(0)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(0)
       })
 
-      it('should hide the missing prisoners button for todays date evening', async () => {
+      it('should hide the prisoners unaccounted for button for todays date evening', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -292,7 +292,7 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(0)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(0)
       })
     })
 
@@ -305,7 +305,7 @@ describe('Search component', () => {
         Date.now.mockRestore()
       })
 
-      it('should show the missing prisoners button for this morning', async () => {
+      it('should show the prisoners unaccounted for button for this morning', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -314,10 +314,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should show the missing prisoners button for this afternoon', async () => {
+      it('should show the prisoners unaccounted for button for this afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -326,10 +326,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should hide the missing prisoners button for this evening', async () => {
+      it('should hide the prisoners unaccounted for button for this evening', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -338,7 +338,7 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(0)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(0)
       })
     })
 
@@ -351,7 +351,7 @@ describe('Search component', () => {
         Date.now.mockRestore()
       })
 
-      it('should show the missing prisoners button for this morning', async () => {
+      it('should show the prisoners unaccounted for button for this morning', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -360,10 +360,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should show the missing prisoners button for this afternoon', async () => {
+      it('should show the prisoners unaccounted for button for this afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -372,10 +372,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should show the missing prisoners button for this evening', async () => {
+      it('should show the prisoners unaccounted for button for this evening', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -384,7 +384,7 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
     })
 
@@ -395,7 +395,7 @@ describe('Search component', () => {
 
       const pastDate = '31/12/2016'
 
-      it('should show the missing prisoners button for the afternoon', async () => {
+      it('should show the prisoners unaccounted for button for the afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -403,10 +403,10 @@ describe('Search component', () => {
             </ConnectedFlagsProvider>
           </MemoryRouter>
         )
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should show the missing prisoners button for the afternoon', async () => {
+      it('should show the prisoners unaccounted for button for the afternoon', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -415,10 +415,10 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
 
-      it('should show the missing prisoners button for the evening', async () => {
+      it('should show the prisoners unaccounted for button for the evening', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -427,7 +427,7 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(1)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(1)
       })
     })
 
@@ -438,7 +438,7 @@ describe('Search component', () => {
 
       const futureDate = '2/1/2017'
 
-      it('should hide the missing prisoners button', async () => {
+      it('should hide the prisoners unaccounted for button', async () => {
         const component = mount(
           <MemoryRouter>
             <ConnectedFlagsProvider store={store}>
@@ -447,7 +447,7 @@ describe('Search component', () => {
           </MemoryRouter>
         )
 
-        expect(component.find(MissingButtonContainer).length).toBe(0)
+        expect(component.find(PrisonersUnaccountedForCTA).length).toBe(0)
       })
     })
   })

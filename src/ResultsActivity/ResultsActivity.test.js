@@ -650,8 +650,6 @@ describe('Offender activity list results component', () => {
     expect(component.state().payingAll).toBe(true)
 
     await waitForAsync()
-
-    expect(props.setActivityOffenderAttendance).toHaveBeenCalledTimes(3)
     expect(component.state().payingAll).toBe(false)
   })
 })

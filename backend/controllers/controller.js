@@ -175,9 +175,9 @@ const factory = ({
     res.end()
   })
 
-  const getMissingPrisoners = asyncMiddleware(async (req, res) => {
+  const getPrisonersUnaccountedFor = asyncMiddleware(async (req, res) => {
     const { agencyId, date, timeSlot } = req.query
-    const viewModel = await offenderActivitesService.getMissingPrisoners(res.locals, agencyId, date, timeSlot)
+    const viewModel = await offenderActivitesService.getPrisonersUnaccountedFor(res.locals, agencyId, date, timeSlot)
     res.json(viewModel)
   })
 
@@ -231,7 +231,7 @@ const factory = ({
     bulkAppointmentsCsvTemplate,
     changeIepLevel,
     getPossibleLevels,
-    getMissingPrisoners,
+    getPrisonersUnaccountedFor,
     getAlertTypes,
     createAlert,
   }

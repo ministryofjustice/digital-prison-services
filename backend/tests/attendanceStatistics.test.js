@@ -21,7 +21,7 @@ describe('Attendance reason statistics', () => {
   ]
 
   describe('Controller', () => {
-    const mockReq = { originalUrl: '/attendance-reason-statistics' }
+    const mockReq = { originalUrl: '/manage-prisoner-whereabouts/attendance-reason-statistics' }
     beforeEach(() => {
       oauthApi.currentUser = jest.fn()
       elite2Api.userCaseLoads = jest.fn()
@@ -31,7 +31,7 @@ describe('Attendance reason statistics', () => {
       whereaboutsApi.getPrisonAttendance = jest.fn()
     })
 
-    it('should redirect to /attendance-reason-statistics with default parameters when none was present', async () => {
+    it('should redirect to /manage-prisoner-whereabouts/attendance-reason-statistics with default parameters when none was present', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
       jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
@@ -49,7 +49,11 @@ describe('Attendance reason statistics', () => {
 
       await attendanceStatistics(req, res)
 
-      expect(res.redirect(`/attendance-reason-statistics?agencyId=${agencyId}&date=${date}&period=${period}`))
+      expect(
+        res.redirect(
+          `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&date=${date}&period=${period}`
+        )
+      )
 
       Date.now.mockRestore()
     })
@@ -112,7 +116,7 @@ describe('Attendance reason statistics', () => {
           acceptableabsence: 0,
           approvedcourse: 0,
           attended: 1,
-          missing: 1,
+          unaccountedFor: 1,
           notrequired: 0,
           refused: 0,
           restday: 0,
@@ -164,7 +168,7 @@ describe('Attendance reason statistics', () => {
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
         title: 'Attendance reason statistics',
-        url: '/attendance-reason-statistics',
+        url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     })
 
@@ -189,7 +193,7 @@ describe('Attendance reason statistics', () => {
       await attendanceStatistics(req, res)
 
       expect(logError).toHaveBeenCalledWith(
-        '/attendance-reason-statistics',
+        '/manage-prisoner-whereabouts/attendance-reason-statistics',
         new Error('something is wrong'),
         'Sorry, the service is unavailable'
       )
@@ -338,12 +342,12 @@ describe('Attendance reason statistics', () => {
         },
       ])
 
-      const { missing } = await getDashboardStats(context, { agencyId, date, period, absenceReasons })
+      const { unaccountedFor } = await getDashboardStats(context, { agencyId, date, period, absenceReasons })
 
       expect({
-        missing,
+        unaccountedFor,
       }).toEqual({
-        missing: 2,
+        unaccountedFor: 2,
       })
     })
   })

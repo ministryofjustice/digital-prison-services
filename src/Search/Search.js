@@ -12,6 +12,7 @@ import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { isBeforeToday, isAfterToday, getCurrentShift } from '../utils'
+import routePaths from '../routePaths'
 
 const StatsLink = styled(Link)`
   font-size: ${FONT_SIZE.SIZE_22};
@@ -42,12 +43,12 @@ export const AttendanceButtonsContainer = styled('div')`
   }
 `
 
-export const MissingButtonContainer = styled('div')`
+export const PrisonersUnaccountedForCTA = styled('div')`
   display: inline-block;
 `
 
 class Search extends Component {
-  showMissingPrisonersButton = () => {
+  showPrisonersUnaccountedForCTA = () => {
     const { period: selectedPeriod, date } = this.props
     const actualPeriod = getCurrentShift()
 
@@ -225,18 +226,18 @@ class Search extends Component {
               name={['updateAttendanceEnabled']}
               render={() => (
                 <AttendanceButtonsContainer>
-                  {this.showMissingPrisonersButton() && (
-                    <MissingButtonContainer>
+                  {this.showPrisonersUnaccountedForCTA() && (
+                    <PrisonersUnaccountedForCTA>
                       <StatsLink
                         buttonColour={BLUE}
-                        onClick={() => history.push(`missing-prisoners`)}
-                        data-qa="missing-prisoners"
+                        onClick={() => history.push(routePaths.prisonersUnaccountedFor)}
+                        data-qa="prisoners-unaccounted-for"
                       >
-                        View missing prisoners
+                        View prisoners unaccounted for
                       </StatsLink>
-                    </MissingButtonContainer>
+                    </PrisonersUnaccountedForCTA>
                   )}
-                  <StatsLink href="/attendance-reason-statistics" buttonColour={BLUE}>
+                  <StatsLink href="/manage-prisoner-whereabouts/attendance-reason-statistics" buttonColour={BLUE}>
                     View attendance reason statistics
                   </StatsLink>
                 </AttendanceButtonsContainer>

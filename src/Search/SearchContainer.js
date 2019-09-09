@@ -82,9 +82,9 @@ class SearchContainer extends Component {
     const { activity, location } = this.props
 
     if (location && location !== '--') {
-      history.push('/search-prisoner-whereabouts/housing-block-results')
+      history.push('/manage-prisoner-whereabouts/housing-block-results')
     } else if (activity) {
-      history.push('/search-prisoner-whereabouts/activity-results')
+      history.push('/manage-prisoner-whereabouts/activity-results')
     }
   }
 
@@ -103,7 +103,7 @@ class SearchContainer extends Component {
     const { location } = this.props
 
     return (
-      <Page title="Search prisoner whereabouts">
+      <Page title="Manage prisoner whereabouts">
         <Search
           onSearch={this.onSearch}
           onLocationChange={this.onLocationChange}

@@ -10,7 +10,7 @@ import Button from '@govuk-react/button'
 import LeadParagraph from '@govuk-react/lead-paragraph'
 
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import { LAST_NAME, ACTIVITY } from '../tablesorting/sortColumns'
+import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
 import { linkOnClick, getCurrentShift, isTodayOrAfter, getLongDateFormat } from '../utils'
 
@@ -20,7 +20,7 @@ import {
   FullWidthSelect,
   RightAlignContainer,
   DummyLink,
-} from './MissingPrisonersSearch.style'
+} from './PrisonersUnaccountedForSearch.style'
 
 const showPMPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || (timeOfDay === 'PM' || timeOfDay === 'ED')
 
@@ -33,7 +33,7 @@ const pastAndPresentDay = date =>
       .startOf('day')
   )
 
-const MissingPrisonersSearch = ({
+const PrisonersUnaccountedForSearch = ({
   handleDateChange,
   date,
   handlePeriodChange,
@@ -96,7 +96,7 @@ const MissingPrisonersSearch = ({
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov
-          sortColumns={[LAST_NAME, ACTIVITY]}
+          sortColumns={[LAST_NAME, CELL_LOCATION, ACTIVITY]}
           sortColumn={sortOrder.orderColumn}
           sortOrder={sortOrder.orderDirection}
           setColumnSort={setColumnSort}
@@ -113,7 +113,7 @@ const MissingPrisonersSearch = ({
   </Container>
 )
 
-MissingPrisonersSearch.propTypes = {
+PrisonersUnaccountedForSearch.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
@@ -123,4 +123,4 @@ MissingPrisonersSearch.propTypes = {
   numberOfPrisoners: PropTypes.number.isRequired,
 }
 
-export default MissingPrisonersSearch
+export default PrisonersUnaccountedForSearch

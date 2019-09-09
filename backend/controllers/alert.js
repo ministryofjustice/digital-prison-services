@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { formatTimestampToDate, properCaseName } = require('../utils')
+const { formatTimestampToDate, properCaseName, formatName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
@@ -12,14 +12,36 @@ const alertFactory = (oauthApi, elite2Api) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
     const formAction = offenderDetails && alert && `/api/close-alert/${offenderDetails.bookingId}/${alert.alertId}`
 
+    const {
+      active,
+      alertCode,
+      alertCodeDescription,
+      alertId,
+      alertType,
+      alertTypeDescription,
+      comment,
+      dateCreated,
+      expired,
+      addedByFirstName,
+      addedByLastName,
+    } = alert || {}
+
     res.render('closeAlertForm.njk', {
       title: 'Close alert - Digital Prison Services',
       errors: [...req.flash('errors'), ...pageErrors],
       offenderDetails,
       formAction,
       alert: alert && {
-        ...alert,
-        dateCreated: formatTimestampToDate(alert.dateCreated),
+        active,
+        alertCode,
+        alertCodeDescription,
+        alertId,
+        alertType,
+        alertTypeDescription,
+        comment,
+        expired,
+        dateCreated: formatTimestampToDate(dateCreated),
+        createdBy: formatName(addedByFirstName, addedByLastName),
       },
       ...rest,
     })

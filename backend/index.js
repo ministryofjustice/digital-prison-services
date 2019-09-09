@@ -254,13 +254,13 @@ app.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisoner
 app.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewModel)
 app.post('/api/bulk-appointments', controller.addBulkAppointments)
 app.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
-app.get('/api/missing-prisoners', controller.getMissingPrisoners)
+app.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
 app.get('/api/get-alert-types', controller.getAlertTypes)
 app.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
 app.get('/close-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertPage))
 app.post('/api/close-alert/:bookingId/:alertId', handleErrors(alertFactory(oauthApi, elite2Api).handleCloseAlertForm))
 app.get(
-  '/attendance-reason-statistics',
+  '/manage-prisoner-whereabouts/attendance-reason-statistics',
   handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
 )
 

@@ -24,12 +24,12 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
     const attended = attendances.filter(attendance => attendance && attendance.attended).length
     const attendedBookings = attendances.map(activity => activity.bookingId)
-    const missing = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
+    const unaccountedFor = scheduledActivities.filter(activity => !attendedBookings.includes(activity.bookingId)).length
     const mergedAbsentReasons = Object.values(absenceReasons).reduce((a, b) => a.concat(b), [])
 
     return {
       attended,
-      missing,
+      unaccountedFor,
       ...getReasonCountMap(attendances, mergedAbsentReasons),
     }
   }
@@ -54,7 +54,9 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       if (!period || !date) {
         const currentPeriod = getCurrentShift(moment().format())
         const today = moment().format('DD/MM/YYYY')
-        res.redirect(`/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`)
+        res.redirect(
+          `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`
+        )
         return
       }
 
@@ -92,7 +94,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
         title: 'Attendance reason statistics',
-        url: '/attendance-reason-statistics',
+        url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     }
   }

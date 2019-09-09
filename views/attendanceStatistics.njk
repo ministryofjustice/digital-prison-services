@@ -10,8 +10,8 @@
       href: notmUrl
     },
     {
-      text: "Search prisoner whereabouts",
-      href: "/search-prisoner-whereabouts"
+      text: "Manage prisoner whereabouts",
+      href: "/manage-prisoner-whereabouts"
     },
     {
       text: "Attendance reason statistics"
@@ -24,7 +24,7 @@
 {% block content %}
 
 <h1 class="govuk-heading-l">Attendance reason statistics</h1>
-<form action="/attendance-reason-statistics">
+<form action="/manage-prisoner-whereabouts/attendance-reason-statistics">
 <div class="govuk-grid-row">
   <input type="hidden" name="agencyId" value="{{caseLoadId}}" />
   <div class="govuk-grid-column-one-quarter">
@@ -82,8 +82,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-quarter">
-    <p class="govuk-body">Missing</p>
-    <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.missing}}</span>
+    <p class="govuk-body">Unaccounted for</p>
+    <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.unaccountedFor}}</span>
   </div>
 </div>
 

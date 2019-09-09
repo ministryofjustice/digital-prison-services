@@ -1014,16 +1014,16 @@ Array [
         >
           <a
             className="sc-bdVaJa sc-EHOje heZRwM"
-            data-qa="missing-prisoners"
+            data-qa="prisoners-unaccounted-for"
             muted={false}
             onClick={[Function]}
           >
-            View missing prisoners
+            View prisoners unaccounted for
           </a>
         </div>
         <a
           className="sc-bdVaJa sc-EHOje heZRwM"
-          href="/attendance-reason-statistics"
+          href="/manage-prisoner-whereabouts/attendance-reason-statistics"
           muted={false}
         >
           View attendance reason statistics

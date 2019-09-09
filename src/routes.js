@@ -18,10 +18,10 @@ export default [
   { path: '/offenders/:offenderNo/adjudications/:adjudicationNo', breadcrumb: 'Details' },
   // Below are temporary as latest version of react-router-breadcrumbs-hoc leaves hyphens in the breadcrumb text
   { path: '/establishment-roll', breadcrumb: 'Establishment roll' },
-  { path: '/search-prisoner-whereabouts', breadcrumb: 'Search prisoner whereabouts' },
-  { path: '/search-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
-  { path: '/search-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
+  { path: '/manage-prisoner-whereabouts', breadcrumb: 'Manage prisoner whereabouts' },
+  { path: '/manage-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
+  { path: '/manage-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
   { path: '/add-bulk-appointments', breadcrumb: 'Add bulk appointments' },
-  { path: '/missing-prisoners', breadcrumb: 'Missing prisoners' },
+  { path: '/manage-prisoner-whereabouts/prisoners-unaccounted-for', breadcrumb: 'Prisoners unaccounted for' },
   { path: '/offenders/:offenderNo/create-alert', breadcrumb: 'Create alert' },
 ]
