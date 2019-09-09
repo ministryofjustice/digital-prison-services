@@ -2,6 +2,7 @@ const moment = require('moment')
 const { formatTimestampToDate, properCaseName, formatName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
@@ -109,6 +110,8 @@ const alertFactory = (oauthApi, elite2Api) => {
           alertStatus: 'INACTIVE',
           expiryDate: moment().format('YYYY-MM-DD'),
         })
+
+        await raiseAnalyticsEvent('Alerts', `Alert closed - ${alertId}`, 'Alert Closure', alertId)
       } catch (error) {
         logError(req.originalUrl, error, serviceUnavailableMessage)
         errors.push({
