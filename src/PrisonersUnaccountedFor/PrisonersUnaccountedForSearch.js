@@ -12,7 +12,7 @@ import LeadParagraph from '@govuk-react/lead-paragraph'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
-import { linkOnClick, getCurrentShift, isTodayOrAfter, getLongDateFormat } from '../utils'
+import { linkOnClick, getCurrentPeriod, isTodayOrAfter, getLongDateFormat } from '../utils'
 
 import {
   Container,
@@ -64,12 +64,12 @@ const PrisonersUnaccountedForSearch = ({
               Morning (AM)
             </option>
 
-            {showPMPrisonerOption(getCurrentShift(), date) && (
+            {showPMPrisonerOption(getCurrentPeriod(), date) && (
               <option key="AFTERNOON" value="PM">
                 Afternoon (PM)
               </option>
             )}
-            {showEDPrisonerOption(getCurrentShift(), date) && (
+            {showEDPrisonerOption(getCurrentPeriod(), date) && (
               <option key="EVENING" value="ED">
                 Evening (ED)
               </option>
