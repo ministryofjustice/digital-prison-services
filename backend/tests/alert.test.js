@@ -26,6 +26,8 @@ describe('alert management', () => {
     comment: 'A comment',
     dateCreated: '2019-08-23',
     active: false,
+    addedByFirstName: 'first name',
+    addedByLastName: 'last name',
   }
   const offenderNo = 'ABC123'
 
@@ -112,6 +114,7 @@ describe('alert management', () => {
           comment: 'A comment',
           dateCreated: '23/08/2019',
           expired: false,
+          createdBy: 'First name Last name',
         },
         caseLoadId: 'ALI',
         errors: [],

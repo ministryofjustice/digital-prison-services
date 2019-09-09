@@ -21,7 +21,7 @@
       text: "Close alert"
     }
   ]
-}) 
+})
 }}
 {% endblock %}
 
@@ -31,7 +31,7 @@
         titleText: "There is a problem",
         errorList: errors,
         attributes: { 'data-qa-errors': true }
-      }) 
+      })
     }}
   {% endif %}
 
@@ -43,7 +43,7 @@
                   classes: "govuk-fieldset__legend--l",
                   isPageHeading: true
                 }
-              }) 
+              })
       %}
 
       {{ govukTable({
@@ -61,7 +61,7 @@
               text: "Date added"
             },
             {
-              text: "Created by / location"
+              text: "Created by"
             }
           ],
           rows: [
@@ -79,7 +79,7 @@
                 text: alert.dateCreated
               },
               {
-                text: "unknown"
+                text: alert.createdBy
               }
             ]
           ]
