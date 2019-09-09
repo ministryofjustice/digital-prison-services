@@ -72,4 +72,10 @@
     color: #00437B;
     border-color: #00437B;
   }
+
+  .disability-status {
+    @extend %status-style;
+    color: #2b88c8;
+    border-color: #2b88c8;
+  }
 }

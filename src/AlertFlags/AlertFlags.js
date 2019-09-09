@@ -1,8 +1,8 @@
 import React from 'react'
-import { linkOnClick } from '../helpers'
-import './flags.scss'
+import PropTypes from 'prop-types'
+import './AlertFlags.scss'
 
-const AlertFlags = (alerts, category, divClassName, onAlertFlagClick) => {
+const AlertFlags = ({ alerts, category }) => {
   function isShown(code) {
     if (alerts) {
       return alerts.some(alert => {
@@ -17,18 +17,13 @@ const AlertFlags = (alerts, category, divClassName, onAlertFlagClick) => {
     return false
   }
 
+  if (!alerts.length && !category) return null
+
   return (
-    <div className={divClassName}>
-      {isShown('HA') && (
-        <span className="acct-status" {...linkOnClick(onAlertFlagClick)}>
-          ACCT
-        </span>
-      )}
-      {isShown('XEL') && (
-        <span className="elist-status" {...linkOnClick(onAlertFlagClick)}>
-          E&#x2011;LIST
-        </span>
-      )}
+    <div className="alerts">
+      {isShown('PEEP') && <span className="disability-status">PEEP</span>}
+      {isShown('HA') && <span className="acct-status">ACCT</span>}
+      {isShown('XEL') && <span className="elist-status">E&#x2011;LIST</span>}
       {(category === 'A' || category === 'E') && <span className="cata-status">CAT&nbsp;A</span>}
       {category === 'H' && <span className="cata-high-status">CAT&nbsp;A&nbsp;High</span>}
       {category === 'P' && <span className="cata-prov-status">CAT&nbsp;A&nbsp;Prov</span>}
@@ -36,5 +31,14 @@ const AlertFlags = (alerts, category, divClassName, onAlertFlagClick) => {
   )
 }
 
-const flags = { AlertFlags }
-export default flags
+AlertFlags.propTypes = {
+  alerts: PropTypes.arrayOf(PropTypes.string),
+  category: PropTypes.string,
+}
+
+AlertFlags.defaultProps = {
+  alerts: [],
+  category: undefined,
+}
+
+export default AlertFlags

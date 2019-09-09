@@ -8,6 +8,7 @@ import {
   formatTimestampToDate,
   formatName,
   getCurrentShift,
+  isViewableFlag,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -178,5 +179,23 @@ describe('getCurrentShift()', () => {
 
   it('returns ED if time is post 5pm and before midnight', () => {
     expect(getCurrentShift('2019-08-11T23:59:59.000')).toEqual('ED')
+  })
+})
+
+describe('isViewableFlag', () => {
+  it('should allow HA to be a viewable flag', () => {
+    expect(isViewableFlag('HA')).toBe(true)
+  })
+
+  it('should allow XEL to be a viewable flag', () => {
+    expect(isViewableFlag('XEL')).toBe(true)
+  })
+
+  it('should allow PEEP to be a viewable flag', () => {
+    expect(isViewableFlag('PEEP')).toBe(true)
+  })
+
+  it('should not allow any non specified alerts to be a viewable flag', () => {
+    expect(isViewableFlag('ROH')).toBe(false)
   })
 })

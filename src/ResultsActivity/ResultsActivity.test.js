@@ -200,6 +200,7 @@ describe('Offender activity list results component', () => {
     const tr = component.find('tr')
     expect(tr.length).toEqual(5) // 4 plus table header tr
     const row1Tds = tr.at(1).find('td')
+
     expect(
       row1Tds
         .at(OFFENDER_NAME_COLUMN)
@@ -210,7 +211,14 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
-    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
+
+    expect(
+      row1Tds
+        .at(FLAGS_COLUMN)
+        .find('AlertFlags')
+        .shallow()
+        .text()
+    ).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
     // TODO: find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
@@ -406,6 +414,7 @@ describe('Offender activity list results component', () => {
     const tr = component.find('tr')
     expect(tr.at(0).contains('Prison no.'))
     const row1Tds = tr.at(1).find('td')
+
     expect(
       row1Tds
         .at(OFFENDER_NAME_COLUMN)
@@ -416,7 +425,14 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
-    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
+    expect(
+      row1Tds
+        .at(FLAGS_COLUMN)
+        .find('AlertFlags')
+        .shallow()
+        .text()
+    ).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
+    // expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
     // TODO: Find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Gym - Workout')

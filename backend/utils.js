@@ -48,7 +48,7 @@ const properCaseName = name =>
 const formatName = (firstName, lastName) =>
   [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
 
-const isViewableFlag = code => ['HA', 'XEL'].includes(code)
+const isViewableFlag = code => ['HA', 'XEL', 'PEEP'].includes(code)
 
 const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${item}`).join('&')
 
