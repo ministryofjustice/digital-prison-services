@@ -1,0 +1,174 @@
+.page-header {
+  font-family: $govuk-font-family-gds-transport;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: black;
+  color: white;
+  z-index: 999;
+  height: 60px;
+  width: 100%;
+  justify-content: center;
+}
+
+.header-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1170px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.left-content {
+  float: left;
+}
+
+.right-content {
+  float: right;
+  height: 100%;
+}
+
+.right-menu {
+  display: initial;
+  height: 100%;
+
+  &-content {
+    position: relative;
+    display: flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 100%;
+    min-width: 320px;
+    background: $govuk-brand-colour;
+
+    &-primary {
+      position: relative;
+      margin-left: auto;
+      padding: 0 10px 0 0;
+      font-size: 19px;
+    }
+
+    &-secondary {
+      margin-right: auto;
+      padding: 0 18px 0 10px;
+      font-size: 19px;
+      border-left: solid govuk-colour('white') 1px;
+    }
+  }
+
+  &-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 1px 0 govuk-colour('black');
+    box-sizing: border-box;
+    z-index: 1000;
+
+    &-option {
+      box-sizing: border-box;
+      color: $govuk-text-colour;
+      cursor: pointer;
+      display: block;
+      padding: 16px 10px;
+      background: $govuk-brand-colour;
+      color: govuk-colour('white');
+      font-size: 19px;
+      font-family: 'GDS Transport', Arial, sans-serif;
+      -webkit-align-items: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      text-align: left;
+      border-width: 1px 0 0;
+      border-style: solid;
+      border-color: govuk-colour('light-blue');
+      height: 60px;
+      -webkit-text-decoration: none;
+      text-decoration: none;
+      width: 100%;
+    }
+  }
+
+  &-info-wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin: 0 20px;
+    width: 100%;
+    padding: 2px 20px 2px 0;
+
+    &:before {
+      content: '';
+      position: absolute;
+      right: 0;
+      height: 20px;
+      width: 20px;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAACNklEQVR4AdVZgcYbQRCecICL9hl+RH8UgFNw4fIYyRtEAChAAKhQkEBJBGj7CiGp6itEHyAoFxKAY/thsMZYuX+yye3HR7iduS97u7MzO2SBc64HFuAc3II78AhewQv/3vGzOY/tUWwoQitwCZ5ce5zYtqLY4BnauzuBfRUxhL6AP1wksO+Xe37+GlTBzzbgBCzBAZiDff5d8rPNDX4qq9gp2DgdP8EhmLXwl7ENbFU04PStYhdOxy/wExnh4IN9aVi0n1n9388i7I8Z+5aYtlmz0sEZHEWMPiPwrExQdUs0qBWxrw8Ima+K6DoYPZTQ1egzG3WmGxnyAoeCgGHNGte0RKENPMhoQE+CEj0OykYTsIYue8iTqPwBK3ko0JOhHC5LP0WUWdewA4KHSpbX0zZbDWYdEJwpIbYgTqx9rKkj4ITJx5y4GvAxDlQX38C/gt/B/o0CPiv2v8H3pICzPB9b4hLGRxl4Yc7hT+IP+I7CYr8odv/AjwGbUozfEdddPgYE2ETbxbLdQNgciQtGHzkBFtFGsfI9Pq7E1a0HXo9G0VaxbN8XtpfAkjCL/moRG1gS+qaziraKDW06GdYmBFhE28WGw5p+cNhF62LtB4d+NNtF62LtR7M9+dFF62LtyU+M9JJFf4iSXiaZwPOgfYdLpH36RWhyZX6SFynJXVUleRmY4nVrAhfa9pbBGhyLlkEuWgbr6C2D9Joy+uFycHcC+yoe1VhcGRqLK+vnj9C6BSO0bv8Dn8Y5yRpsLpgAAAAASUVORK5CYII=);
+      background-repeat: no-repeat;
+      background-position: right;
+      background-size: contain;
+    }
+  }
+}
+
+#menuToggle,
+#menuItems {
+  display: none;
+}
+
+#menuToggle:checked ~ #menuItems {
+  display: block;
+}
+
+#menuToggle:checked ~ .right-menu-info-wrap {
+  &:before {
+    transform: rotate(180deg);
+  }
+}
+
+.logo {
+  margin-left: 0px;
+  margin-right: 5px;
+  float: left;
+}
+
+.logo-text {
+  color: white;
+  font-size: 26px;
+  padding: 3px 15px 0 10px;
+  font-weight: bold;
+  border-right: solid white 1px;
+  margin-right: 15px;
+  text-decoration: none;
+
+  display: inline-block;
+}
+
+.title {
+  text-align: left;
+  font-size: 26px;
+  flex-grow: 1;
+  text-decoration: none;
+
+  padding-left: 0px;
+}
+
+.unstyled-link {
+  text-decoration: none;
+  color: white;
+}
