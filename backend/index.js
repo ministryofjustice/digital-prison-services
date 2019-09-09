@@ -5,6 +5,7 @@ require('dotenv').config()
 require('./azure-appinsights')
 
 const path = require('path')
+const sass = require('node-sass-middleware')
 const os = require('os')
 const express = require('express')
 const cookieSession = require('cookie-session')
@@ -124,6 +125,15 @@ app.use(helmet.noCache())
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+app.use(
+  sass({
+    src: path.join(__dirname, '../sass'),
+    dest: path.join(__dirname, '../build/static/stylesheets'),
+    outputStyle: 'compressed',
+    prefix: '/stylesheets',
+  })
+)
 
 app.use(express.static(path.join(__dirname, '../build/static')))
 
