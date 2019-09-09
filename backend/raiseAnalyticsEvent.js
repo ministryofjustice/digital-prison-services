@@ -2,6 +2,8 @@ const superagent = require('superagent')
 const config = require('./config')
 
 const raiseAnalyticsEvent = (category, action, label, value) => {
+  if (!config.analytics.googleAnalyticsId) return Promise.resolve()
+
   const data = {
     tid: config.analytics.googleAnalyticsId,
     t: 'event',

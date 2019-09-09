@@ -111,7 +111,7 @@ const alertFactory = (oauthApi, elite2Api) => {
           expiryDate: moment().format('YYYY-MM-DD'),
         })
 
-        raiseAnalyticsEvent('Alerts', `Alert closed - ${alertId}`, 'Alert Closure', alertId)
+        await raiseAnalyticsEvent('Alerts', `Alert closed - ${alertId}`, 'Alert Closure', alertId)
       } catch (error) {
         logError(req.originalUrl, error, serviceUnavailableMessage)
         errors.push({
