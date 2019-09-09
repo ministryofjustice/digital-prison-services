@@ -11,7 +11,7 @@ import { FONT_SIZE, BREAKPOINTS } from '@govuk-react/constants'
 import { Flag } from '../flags'
 import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
-import { isBeforeToday, isAfterToday, getCurrentShift } from '../utils'
+import { isBeforeToday, isAfterToday, getCurrentPeriod } from '../utils'
 import routePaths from '../routePaths'
 
 const StatsLink = styled(Link)`
@@ -50,7 +50,7 @@ export const PrisonersUnaccountedForCTA = styled('div')`
 class Search extends Component {
   showPrisonersUnaccountedForCTA = () => {
     const { period: selectedPeriod, date } = this.props
-    const actualPeriod = getCurrentShift()
+    const actualPeriod = getCurrentPeriod()
 
     if (isBeforeToday(date)) return true
     if (isAfterToday(date)) return false
