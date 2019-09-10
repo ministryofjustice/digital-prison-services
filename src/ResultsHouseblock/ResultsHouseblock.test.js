@@ -248,7 +248,7 @@ describe('Offender results component Jira NN-843', () => {
       .at(FLAGS_COLUMN)
       .find('AlertFlags')
       .dive()
-      .find('Flag')
+      .find('AlertFlag')
 
     expect(row1Flags.length).toEqual(2)
     expect(
@@ -363,7 +363,7 @@ describe('Offender results component Jira NN-843', () => {
       .at(FLAGS_COLUMN)
       .find('AlertFlags')
       .dive()
-      .find('Flag')
+      .find('AlertFlag')
 
     expect(row3Flags.length).toEqual(1)
     expect(
@@ -390,7 +390,7 @@ describe('Offender results component Jira NN-843', () => {
       .at(FLAGS_COLUMN)
       .find('AlertFlags')
       .dive()
-      .find('Flag')
+      .find('AlertFlag')
 
     expect(row4Flags.length).toEqual(1)
     expect(

@@ -2,13 +2,13 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import './AlertFlags.scss'
 
-const Flag = ({ children, ...props }) => (
+const AlertFlag = ({ children, ...props }) => (
   <Fragment>
     <span {...props}>{children}</span>{' '}
   </Fragment>
 )
 
-Flag.propTypes = {
+AlertFlag.propTypes = {
   children: PropTypes.string.isRequired,
 }
 
@@ -31,12 +31,12 @@ const AlertFlags = ({ alerts, category }) => {
 
   return (
     <div className="alerts">
-      {isShown('PEEP') && <Flag className="disability-status">PEEP</Flag>}
-      {isShown('HA') && <Flag className="acct-status">ACCT</Flag>}
-      {isShown('XEL') && <Flag className="elist-status">E-LIST</Flag>}
-      {(category === 'A' || category === 'E') && <Flag className="cata-status">CAT A</Flag>}
-      {category === 'H' && <Flag className="cata-high-status">CAT A High</Flag>}
-      {category === 'P' && <Flag className="cata-prov-status">CAT A Prov</Flag>}
+      {isShown('PEEP') && <AlertFlag className="disability-status">PEEP</AlertFlag>}
+      {isShown('HA') && <AlertFlag className="acct-status">ACCT</AlertFlag>}
+      {isShown('XEL') && <AlertFlag className="elist-status">E-LIST</AlertFlag>}
+      {(category === 'A' || category === 'E') && <AlertFlag className="cata-status">CAT A</AlertFlag>}
+      {category === 'H' && <AlertFlag className="cata-high-status">CAT A High</AlertFlag>}
+      {category === 'P' && <AlertFlag className="cata-prov-status">CAT A Prov</AlertFlag>}
     </div>
   )
 }

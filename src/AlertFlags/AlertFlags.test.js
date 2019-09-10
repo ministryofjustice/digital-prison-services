@@ -12,7 +12,7 @@ describe('<AlertFlags />', () => {
   it('should display the DISABILITY (PEEP) flag', () => {
     const wrapper = shallow(<AlertFlags alerts={['PEEP']} />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.disability-status')
 
@@ -22,7 +22,7 @@ describe('<AlertFlags />', () => {
   it('should display the ACCT (HA) flag', () => {
     const wrapper = shallow(<AlertFlags alerts={['HA']} />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.acct-status')
 
@@ -32,7 +32,7 @@ describe('<AlertFlags />', () => {
   it('should display the E-LIST (XEL) flag', () => {
     const wrapper = shallow(<AlertFlags alerts={['XEL']} />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.elist-status')
 
@@ -42,7 +42,7 @@ describe('<AlertFlags />', () => {
   it('should show CAT A flag for category A', () => {
     const wrapper = shallow(<AlertFlags category="A" />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.cata-status')
 
@@ -52,7 +52,7 @@ describe('<AlertFlags />', () => {
   it('should show CAT A flag for category E', () => {
     const wrapper = shallow(<AlertFlags category="E" />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.cata-status')
 
@@ -62,7 +62,7 @@ describe('<AlertFlags />', () => {
   it('should show CAT A High flag for category H', () => {
     const wrapper = shallow(<AlertFlags category="H" />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.cata-high-status')
 
@@ -72,7 +72,7 @@ describe('<AlertFlags />', () => {
   it('should show CAT A Prov flag for category P', () => {
     const wrapper = shallow(<AlertFlags category="P" />)
     const flag = wrapper
-      .find('Flag')
+      .find('AlertFlag')
       .shallow()
       .find('.cata-prov-status')
 
