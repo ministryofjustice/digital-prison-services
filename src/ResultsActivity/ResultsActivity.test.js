@@ -212,13 +212,26 @@ describe('Offender activity list results component', () => {
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
 
+    const row1Flags = row1Tds
+      .at(FLAGS_COLUMN)
+      .find('AlertFlags')
+      .dive()
+      .find('Flag')
+
+    expect(row1Flags.length).toEqual(2)
     expect(
-      row1Tds
-        .at(FLAGS_COLUMN)
-        .find('AlertFlags')
+      row1Flags
+        .at(0)
         .shallow()
         .text()
-    ).toEqual('E-LIST CAT A ')
+    ).toEqual('E-LIST ')
+    expect(
+      row1Flags
+        .at(1)
+        .shallow()
+        .text()
+    ).toEqual('CAT A ')
+
     // TODO: find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
@@ -425,13 +438,6 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
-    expect(
-      row1Tds
-        .at(FLAGS_COLUMN)
-        .find('AlertFlags')
-        .shallow()
-        .text()
-    ).toEqual('E-LIST CAT A ')
     // TODO: Find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Gym - Workout')

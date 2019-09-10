@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import './AlertFlags.scss'
+
+const Flag = ({ children, ...props }) => (
+  <Fragment>
+    <span {...props}>{children}</span>{' '}
+  </Fragment>
+)
+
+Flag.propTypes = {
+  children: PropTypes.string.isRequired,
+}
 
 const AlertFlags = ({ alerts, category }) => {
   function isShown(code) {
@@ -21,36 +31,12 @@ const AlertFlags = ({ alerts, category }) => {
 
   return (
     <div className="alerts">
-      {isShown('PEEP') && (
-        <>
-          <span className="disability-status">PEEP</span>{' '}
-        </>
-      )}
-      {isShown('HA') && (
-        <>
-          <span className="acct-status">ACCT</span>{' '}
-        </>
-      )}
-      {isShown('XEL') && (
-        <>
-          <span className="elist-status">E-LIST</span>{' '}
-        </>
-      )}
-      {(category === 'A' || category === 'E') && (
-        <>
-          <span className="cata-status">CAT A</span>{' '}
-        </>
-      )}
-      {category === 'H' && (
-        <>
-          <span className="cata-high-status">CAT A High</span>{' '}
-        </>
-      )}
-      {category === 'P' && (
-        <>
-          <span className="cata-prov-status">CAT A Prov</span>{' '}
-        </>
-      )}
+      {isShown('PEEP') && <Flag className="disability-status">PEEP</Flag>}
+      {isShown('HA') && <Flag className="acct-status">ACCT</Flag>}
+      {isShown('XEL') && <Flag className="elist-status">E-LIST</Flag>}
+      {(category === 'A' || category === 'E') && <Flag className="cata-status">CAT A</Flag>}
+      {category === 'H' && <Flag className="cata-high-status">CAT A High</Flag>}
+      {category === 'P' && <Flag className="cata-prov-status">CAT A Prov</Flag>}
     </div>
   )
 }
