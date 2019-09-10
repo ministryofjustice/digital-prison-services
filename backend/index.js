@@ -46,6 +46,7 @@ const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
 const { alertFactory } = require('./controllers/alert')
+const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
@@ -61,6 +62,7 @@ const { elite2ApiFactory } = require('./api/elite2Api')
 const { oauthApiFactory } = require('./api/oauthApi')
 const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const oauthClientId = require('./api/oauthClientId')
+const { communityApiFactory } = require('./api/communityApi')
 
 const log = require('./log')
 const { logError } = require('./logError')
@@ -152,6 +154,13 @@ const whereaboutsApi = whereaboutsApiFactory(
   clientFactory({
     baseUrl: config.apis.whereabouts.url,
     timeout: config.apis.whereabouts.timeoutSeconds * 1000,
+  })
+)
+
+const communityApi = communityApiFactory(
+  clientFactory({
+    baseUrl: config.apis.community.url,
+    timeout: config.apis.community.timeoutSeconds * 1000,
   })
 )
 
@@ -272,6 +281,12 @@ app.post('/api/close-alert/:bookingId/:alertId', handleErrors(alertFactory(oauth
 app.get(
   '/manage-prisoner-whereabouts/attendance-reason-statistics',
   handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
+)
+app.get(
+  '/offenders/:offenderNo/probation-documents',
+  handleErrors(
+    probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
+  )
 )
 
 nunjucksSetup(app, path)
