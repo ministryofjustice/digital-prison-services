@@ -16,6 +16,7 @@ describe('<AttendanceOtherForm />', () => {
       lastName: 'Offender',
       eventId: 123,
       eventLocationId: 456,
+      startTime: '2019-09-10T08:30:00',
       offenderIndex: 1,
     },
     updateOffenderAttendance: jest.fn(),
@@ -172,6 +173,7 @@ describe('<AttendanceOtherForm />', () => {
           comments: 'A supporting comment.',
           eventId: 123,
           eventLocationId: 456,
+          eventDateTime: '2019-09-10T08:30:00',
           offenderNo: 'ABC123',
         }
 
@@ -209,6 +211,7 @@ describe('<AttendanceOtherForm />', () => {
           comments: 'A supporting comment.',
           eventId: 123,
           eventLocationId: 456,
+          eventDateTime: '2019-09-10T08:30:00',
           offenderNo: 'ABC123',
         }
 

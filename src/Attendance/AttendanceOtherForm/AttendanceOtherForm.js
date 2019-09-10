@@ -34,7 +34,7 @@ export function AttendanceOtherForm({
   period,
   date,
 }) {
-  const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
+  const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo, startTime } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
   const shouldTriggerIEP = selectedReason => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
   const commentOrCaseNote = selectedReason => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comments')
@@ -89,6 +89,7 @@ export function AttendanceOtherForm({
       paid,
       eventId,
       eventLocationId,
+      eventDateTime: startTime,
       absentReason: reasons.find(ar => ar.value === values.absentReason),
       comments: values.comments,
       attended: false,

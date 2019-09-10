@@ -239,7 +239,7 @@ class ResultsHouseblock extends Component {
       houseblockData.map((offender, index) => {
         const { offenderNo, bookingId, firstName, lastName, cellLocation } = offender
         const mainActivity = offender.activities.find(activity => activity.mainActivity)
-        const { eventId, attendanceInfo, eventLocationId } = mainActivity || {}
+        const { eventId, attendanceInfo, eventLocationId, startTime } = mainActivity || {}
         const offenderDetails = {
           offenderNo,
           bookingId,
@@ -247,6 +247,7 @@ class ResultsHouseblock extends Component {
           lastName,
           eventId,
           eventLocationId,
+          startTime,
           offenderIndex: index,
           cellLocation,
           attendanceInfo,

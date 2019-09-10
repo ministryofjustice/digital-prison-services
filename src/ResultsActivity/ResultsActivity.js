@@ -279,6 +279,7 @@ class ResultsActivity extends Component {
           category,
           eventId,
           attendanceInfo,
+          startTime,
           locationId,
           bookingId,
         } = mainEvent
@@ -290,6 +291,7 @@ class ResultsActivity extends Component {
           firstName,
           lastName,
           eventId,
+          startTime,
           eventLocationId: locationId,
           offenderIndex: index,
           cellLocation,
