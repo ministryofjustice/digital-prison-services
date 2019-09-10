@@ -34,7 +34,7 @@
 {% endmacro %}
 
 
-{%  macro title(conviction) %}
+{%  macro summaryTitle(conviction) %}
   {{ conviction.title}} {% if conviction.institutionName %} at {{conviction.institutionName}} {% endif %}
 {% endmacro %}
 
@@ -64,6 +64,8 @@
 {% endblock %}
 
 {% block content %}
+  <h1 class="govuk-heading-l">Documents held by probation</h1>
+
   {% if errors.length > 0 %}
     {{ govukErrorSummary({
         titleText: "There is a problem",
@@ -73,20 +75,25 @@
     }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">Documents held by probation</h1>
+  {% if probationDetails %}
+    {{ govukDetails({
+      summaryText: "These details don't look correct",
+      html: incorrectDetails(probationDetails)
+    }) }}
+  {% else %}
+    {{ govukDetails({
+      summaryText: "What can I do to find the probation documents",
+      text: "If something does not look right you should ask a Community offender manager to check the details in Delius. It is possible that the offender record does exist in Delius, but the Delius NOMS number has not been set correctly to the prison number. Ask a someone to update the Delius the record and try again."
+    }) }}
+  {% endif %}
 
-
-  {{ govukDetails({
-    summaryText: "These details don't look correct",
-    html: incorrectDetails(probationDetails)
-  }) }}
   {% set rows = [] %}
 
   {% for conviction in documents.convictions %}
     {% set rows = (rows.push(
         {
           heading: {
-            text: title(conviction)
+            text: summaryTitle(conviction)
           },
           summary: {
             html: summary(conviction)

@@ -96,6 +96,12 @@ function documentsWithMultipleConvictionMatching(convictions) {
   })
 }
 
+function error(message, status) {
+  const theError = new Error(message)
+  theError.status = status
+  return theError
+}
+
 describe('Probation documents', () => {
   const oauthApi = {}
   const elite2Api = {}
@@ -115,6 +121,20 @@ describe('Probation documents', () => {
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
+      oauthApi.currentUser.mockReturnValue({
+        username: 'USER_ADM',
+        active: true,
+        name: 'User Name',
+        activeCaseLoadId: 'LEI',
+      })
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          currentlyActive: true,
+          caseLoadId: 'LEI',
+          description: 'Description',
+        },
+      ])
     })
 
     describe('when rendering page', () => {
@@ -123,20 +143,6 @@ describe('Probation documents', () => {
       let page
 
       beforeEach(() => {
-        oauthApi.currentUser.mockReturnValue({
-          username: 'USER_ADM',
-          active: true,
-          name: 'User Name',
-          activeCaseLoadId: 'LEI',
-        })
-        oauthApi.userRoles.mockReturnValue([{ roleCode: 'OMIC_ADMIN' }])
-        elite2Api.userCaseLoads.mockReturnValue([
-          {
-            currentlyActive: true,
-            caseLoadId: 'LEI',
-            description: 'Description',
-          },
-        ])
         communityApi.getOffenderConvictions.mockReturnValue([])
         communityApi.getOffenderDetails.mockReturnValue({
           firstName: 'John',
@@ -381,20 +387,13 @@ describe('Probation documents', () => {
         expect(communityApi.getOffenderConvictions).toHaveBeenCalledWith({ token: 'ABC' }, { offenderNo: 'G9542VP' })
       })
     })
-    describe('when rendering page', () => {
+    describe('when rendering page with errors', () => {
       const res = {}
       let req
       let page
 
       beforeEach(() => {
-        oauthApi.currentUser.mockReturnValue({
-          username: 'USER_ADM',
-          active: true,
-          name: 'User Name',
-          activeCaseLoadId: 'LEI',
-        })
-        oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
-        elite2Api.userCaseLoads.mockReturnValue([])
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
         communityApi.getOffenderConvictions.mockReturnValue([])
         communityApi.getOffenderDetails.mockReturnValue({})
         page = probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient)
@@ -404,19 +403,65 @@ describe('Probation documents', () => {
         req = { ...mockReq, params: { offenderNo: 'G9542VP' } }
       })
 
-      it('should render the probation documents page with unavailable message', async () => {
-        await page(req, res)
+      describe('when missing role', () => {
+        beforeEach(() => {
+          oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
+        })
+        it('should render page with unavailable message with missing role', async () => {
+          await page(req, res)
 
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          expect.objectContaining({
-            errors: [
-              {
-                text: 'Sorry, the service is unavailable',
-              },
-            ],
-          })
-        )
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [
+                {
+                  text: 'Sorry, the service is unavailable',
+                },
+              ],
+            })
+          )
+        })
+      })
+      describe('when offender not found in probation', () => {
+        beforeEach(() => {
+          communityApi.getOffenderConvictions.mockReturnValue([])
+          communityApi.getOffenderDetails.mockRejectedValue(error('Not found', 404))
+        })
+        it('should render page with offender not found message', async () => {
+          await page(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [
+                {
+                  text:
+                    'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system',
+                },
+              ],
+            })
+          )
+        })
+      })
+      describe('when offender find results in error', () => {
+        beforeEach(() => {
+          communityApi.getOffenderConvictions.mockReturnValue([])
+          communityApi.getOffenderDetails.mockRejectedValue(error('Server error', 503))
+        })
+        it('should render page with system error message', async () => {
+          await page(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [
+                {
+                  text: 'Sorry, the service is unavailable',
+                },
+              ],
+            })
+          )
+        })
       })
     })
   })

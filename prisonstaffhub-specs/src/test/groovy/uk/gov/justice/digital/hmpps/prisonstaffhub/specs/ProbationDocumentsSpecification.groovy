@@ -64,7 +64,7 @@ class ProbationDocumentsSpecification extends BrowserReportingSpec {
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
         oauthApi.stubGetMyRoles([
-                [roleCode: 'OMIC_ADMIN']
+                [roleCode: 'VIEW_PROBATION_DOCUMENTS']
         ])
 
         when: "I view the probation documents page"
