@@ -71,7 +71,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         ]
 
         nomsIds == offenders.collect { offender -> offender.offenderNo }
-        flags[0]*.text() == ['ACCT','E\u2011LIST','CAT A']
+        flags[0]*.text() == ['ACCT','E-LIST','CAT A']
         flags[1]*.text() == ['CAT A Prov']
         flags[2]*.text() == ['CAT A High']
         events == [
