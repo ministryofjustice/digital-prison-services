@@ -39,6 +39,20 @@ describe('<AlertFlags />', () => {
     expect(flag.text()).toEqual('E-LIST')
   })
 
+  it('should display the alert flags in the correct order', () => {
+    const wrapper = shallow(<AlertFlags alerts={['PEEP', 'HA', 'XEL']} category="A" />)
+    const flags = wrapper.find('AlertFlag')
+    const firstFlag = flags.at(0).shallow()
+    const secondFlag = flags.at(1).shallow()
+    const thirdFlag = flags.at(2).shallow()
+    const fourthFlag = flags.at(3).shallow()
+
+    expect(firstFlag.text()).toEqual('ACCT ')
+    expect(secondFlag.text()).toEqual('E-LIST ')
+    expect(thirdFlag.text()).toEqual('PEEP ')
+    expect(fourthFlag.text()).toEqual('CAT A ')
+  })
+
   it('should show CAT A flag for category A', () => {
     const wrapper = shallow(<AlertFlags category="A" />)
     const flag = wrapper
