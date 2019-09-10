@@ -30,11 +30,12 @@ const addAppInfo = result => {
   return Object.assign({}, result, buildInfo)
 }
 
-module.exports = function healthcheckFactory(authUrl, elite2Url, whereaboutsUrl) {
+module.exports = function healthcheckFactory(authUrl, elite2Url, whereaboutsUrl, communityUrl) {
   const checks = [
     service('auth', `${authUrl}ping`),
     service('elite2', `${elite2Url}ping`),
     service('whereabouts', `${whereaboutsUrl}ping`),
+    service('community', `${communityUrl}ping`),
   ]
 
   return callback =>

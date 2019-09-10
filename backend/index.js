@@ -103,7 +103,12 @@ app.use(
   })
 )
 
-const health = healthFactory(config.apis.oauth2.url, config.apis.elite2.url, config.apis.whereabouts.url)
+const health = healthFactory(
+  config.apis.oauth2.url,
+  config.apis.elite2.url,
+  config.apis.whereabouts.url,
+  config.apis.community.url
+)
 
 app.get('/health', (req, res, next) => {
   health((err, result) => {
