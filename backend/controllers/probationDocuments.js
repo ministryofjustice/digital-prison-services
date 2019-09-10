@@ -32,7 +32,7 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
 
     const getCommunityDocuments = async offenderNo => {
       const sentenceLength = sentence => {
-        if (typeof sentence.originalLength === 'undefined' || typeof sentence.originalLengthUnits === 'undefined') {
+        if (!sentence.originalLength || !sentence.originalLengthUnits) {
           return ''
         }
         return ` (${sentence.originalLength} ${sentence.originalLengthUnits})`

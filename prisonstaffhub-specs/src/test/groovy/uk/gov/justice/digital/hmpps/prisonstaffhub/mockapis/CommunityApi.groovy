@@ -30,5 +30,14 @@ class CommunityApi extends WireMockRule {
                                 .withBody(JsonOutput.toJson(details))))
     }
 
+    void stubHealth() {
+        this.stubFor(
+                get('/ping')
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'text/plain')
+                                        .withBody('ping')))
+    }
 
 }
