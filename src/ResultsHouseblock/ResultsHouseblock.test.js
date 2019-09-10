@@ -244,7 +244,25 @@ describe('Offender results component Jira NN-843', () => {
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
     // TODO: find out how to fix the following line...
     //     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
-    expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('ACCTCAT\u00a0A') // non-breaking space!
+    const row1Flags = row1Tds
+      .at(FLAGS_COLUMN)
+      .find('AlertFlags')
+      .dive()
+      .find('AlertFlag')
+
+    expect(row1Flags.length).toEqual(2)
+    expect(
+      row1Flags
+        .at(0)
+        .shallow()
+        .text()
+    ).toEqual('ACCT ')
+    expect(
+      row1Flags
+        .at(1)
+        .shallow()
+        .text()
+    ).toEqual('CAT A ')
     expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel')
     expect(
       row1Tds
@@ -312,7 +330,13 @@ describe('Offender results component Jira NN-843', () => {
     ).toEqual('Smith, Michael')
     // TODO: find out how to fix the following line
     // expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
-    expect(row2Tds.at(FLAGS_COLUMN).text()).toEqual('')
+    expect(
+      row2Tds
+        .at(FLAGS_COLUMN)
+        .find('AlertFlags')
+        .shallow()
+        .text()
+    ).toEqual('')
     expect(row2Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Act')
     expect(
       row2Tds
@@ -335,7 +359,19 @@ describe('Offender results component Jira NN-843', () => {
     ).toEqual('Quimby, Fred')
     // TODO: find out how to fix the following line
     // expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
-    expect(row3Tds.at(FLAGS_COLUMN).text()).toEqual('CAT\u00a0A\u00a0High')
+    const row3Flags = row3Tds
+      .at(FLAGS_COLUMN)
+      .find('AlertFlags')
+      .dive()
+      .find('AlertFlag')
+
+    expect(row3Flags.length).toEqual(1)
+    expect(
+      row3Flags
+        .at(0)
+        .shallow()
+        .text()
+    ).toEqual('CAT A High ')
     expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Activity')
     expect(
       row3Tds
@@ -348,13 +384,21 @@ describe('Offender results component Jira NN-843', () => {
         .text()
     ).toEqual('11:11 - Visits - Family Visit (cancelled)')
 
+    const row4Flags = tr
+      .at(4)
+      .find('td')
+      .at(FLAGS_COLUMN)
+      .find('AlertFlags')
+      .dive()
+      .find('AlertFlag')
+
+    expect(row4Flags.length).toEqual(1)
     expect(
-      tr
-        .at(4)
-        .find('td')
-        .at(FLAGS_COLUMN)
+      row4Flags
+        .at(0)
+        .shallow()
         .text()
-    ).toEqual('CAT\u00a0A\u00a0Prov')
+    ).toEqual('CAT A Prov ')
   })
 
   it('should render empty results list correctly', async () => {

@@ -19,7 +19,7 @@ import {
 } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
-import Flags from '../Flags/Flags'
+import AlertFlags from '../AlertFlags'
 import SortLov from '../tablesorting/SortLov'
 import { LAST_NAME, CELL_LOCATION, ACTIVITY } from '../tablesorting/sortColumns'
 import OffenderName from '../OffenderName'
@@ -265,7 +265,9 @@ class ResultsHouseblock extends Component {
               <Location location={cellLocation} />
             </td>
             <td className="row-gutters">{offenderNo}</td>
-            <td>{Flags.AlertFlags(offender.alertFlags, offender.category, 'flags')}</td>
+            <td>
+              <AlertFlags alerts={offender.alertFlags} category={offender.category} />
+            </td>
             <td className="row-gutters">
               {mainActivity && `${getHoursMinutes(mainActivity.startTime)} - ${getMainEventDescription(mainActivity)}`}
             </td>

@@ -20,7 +20,7 @@ import {
   getLongDateFormat,
 } from '../utils'
 import OtherActivitiesView from '../OtherActivityListView'
-import Flags from '../Flags/Flags'
+import AlertFlags from '../AlertFlags'
 import SortableColumn from '../tablesorting/SortableColumn'
 import SortLov from '../tablesorting/SortLov'
 import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
@@ -327,7 +327,9 @@ class ResultsActivity extends Component {
               <Location location={cellLocation} />
             </td>
             <td className="row-gutters">{offenderNo}</td>
-            <td>{Flags.AlertFlags(alertFlags, category, 'flags')}</td>
+            <td>
+              <AlertFlags alerts={alertFlags} category={category} />
+            </td>
             {renderMainEvent(mainEvent)}
             <td className={otherActivitiesClasses}>
               {

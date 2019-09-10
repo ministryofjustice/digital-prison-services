@@ -8,6 +8,7 @@
     font-weight: bold;
     text-align: center;
     display: inline-block;
+    white-space: nowrap;
   }
 
   @media screen {
@@ -71,5 +72,11 @@
     border: 1px dashed;
     color: #00437B;
     border-color: #00437B;
+  }
+
+  .disability-status {
+    @extend %status-style;
+    color: #2b88c8;
+    border-color: #2b88c8;
   }
 }

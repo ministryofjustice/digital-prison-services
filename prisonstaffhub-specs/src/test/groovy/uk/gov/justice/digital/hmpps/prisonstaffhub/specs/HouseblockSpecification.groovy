@@ -64,7 +64,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         texts2[1].contains("Anderson, Arthur A-1-1 A1234AA")
         def reorderedRow1 = tableRows[1].find('td')
-        reorderedRow1[flagsColumn]*.$('span')[0]*.text() == ['ACCT', 'E\u2011LIST', 'CAT A']
+        reorderedRow1[flagsColumn]*.$('span')[0]*.text() == ['ACCT', 'E-LIST', 'CAT A']
         reorderedRow1[activityColumn].text() == '17:00 - Woodwork'
         reorderedRow1[otherActivityColumn].find('li')*.text() == ['Court visit scheduled', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)', '19:10 - 20:30 - hair cut - room 1 - crew cut' ]
 

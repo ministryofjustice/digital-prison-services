@@ -12,6 +12,7 @@ import {
   isTodayOrAfter,
   flagFuturePeriodSelected,
   readablePeriod,
+  isViewableFlag,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -259,5 +260,23 @@ describe('flagFuturePeriodSelected()', () => {
   })
   it('returns false if selected period is not in the future', () => {
     expect(flagFuturePeriodSelected('14/01/2019', 'PM', 'ED')).toEqual(false)
+  })
+})
+
+describe('isViewableFlag', () => {
+  it('should allow HA to be a viewable flag', () => {
+    expect(isViewableFlag('HA')).toBe(true)
+  })
+
+  it('should allow XEL to be a viewable flag', () => {
+    expect(isViewableFlag('XEL')).toBe(true)
+  })
+
+  it('should allow PEEP to be a viewable flag', () => {
+    expect(isViewableFlag('PEEP')).toBe(true)
+  })
+
+  it('should not allow any non specified alerts to be a viewable flag', () => {
+    expect(isViewableFlag('ROH')).toBe(false)
   })
 })
