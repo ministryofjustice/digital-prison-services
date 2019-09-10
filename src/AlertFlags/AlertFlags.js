@@ -21,12 +21,36 @@ const AlertFlags = ({ alerts, category }) => {
 
   return (
     <div className="alerts">
-      {isShown('PEEP') && <span className="disability-status">PEEP</span>}
-      {isShown('HA') && <span className="acct-status">ACCT</span>}
-      {isShown('XEL') && <span className="elist-status">E&#x2011;LIST</span>}
-      {(category === 'A' || category === 'E') && <span className="cata-status">CAT&nbsp;A</span>}
-      {category === 'H' && <span className="cata-high-status">CAT&nbsp;A&nbsp;High</span>}
-      {category === 'P' && <span className="cata-prov-status">CAT&nbsp;A&nbsp;Prov</span>}
+      {isShown('PEEP') && (
+        <>
+          <span className="disability-status">PEEP</span>{' '}
+        </>
+      )}
+      {isShown('HA') && (
+        <>
+          <span className="acct-status">ACCT</span>{' '}
+        </>
+      )}
+      {isShown('XEL') && (
+        <>
+          <span className="elist-status">E-LIST</span>{' '}
+        </>
+      )}
+      {(category === 'A' || category === 'E') && (
+        <>
+          <span className="cata-status">CAT A</span>{' '}
+        </>
+      )}
+      {category === 'H' && (
+        <>
+          <span className="cata-high-status">CAT A High</span>{' '}
+        </>
+      )}
+      {category === 'P' && (
+        <>
+          <span className="cata-prov-status">CAT A Prov</span>{' '}
+        </>
+      )}
     </div>
   )
 }

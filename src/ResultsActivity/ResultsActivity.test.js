@@ -218,7 +218,7 @@ describe('Offender activity list results component', () => {
         .find('AlertFlags')
         .shallow()
         .text()
-    ).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
+    ).toEqual('E-LIST CAT A ')
     // TODO: find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
@@ -431,8 +431,7 @@ describe('Offender activity list results component', () => {
         .find('AlertFlags')
         .shallow()
         .text()
-    ).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
-    // expect(row1Tds.at(FLAGS_COLUMN).text()).toEqual('E\u2011LISTCAT\u00a0A') // non-breaking hyphen and space!
+    ).toEqual('E-LIST CAT A ')
     // TODO: Find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Gym - Workout')

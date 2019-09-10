@@ -250,7 +250,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('AlertFlags')
         .shallow()
         .text()
-    ).toEqual('ACCTCAT\u00a0A') // non-breaking space!
+    ).toEqual('ACCT CAT A ')
     expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel')
     expect(
       row1Tds
@@ -353,7 +353,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('AlertFlags')
         .shallow()
         .text()
-    ).toEqual('CAT\u00a0A\u00a0High')
+    ).toEqual('CAT A High ')
     expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Activity')
     expect(
       row3Tds
@@ -374,7 +374,7 @@ describe('Offender results component Jira NN-843', () => {
         .find('AlertFlags')
         .shallow()
         .text()
-    ).toEqual('CAT\u00a0A\u00a0Prov')
+    ).toEqual('CAT A Prov ')
   })
 
   it('should render empty results list correctly', async () => {
