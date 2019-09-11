@@ -149,6 +149,7 @@ class ResultsActivity extends Component {
     )
 
     const unpaidOffenders = new Set()
+    const totalOffenders = new Set()
 
     const attendAllNonAssigned = async () => {
       try {
@@ -309,6 +310,7 @@ class ResultsActivity extends Component {
             prisonId: agencyId,
             eventDate: date,
           })
+        totalOffenders.add(offenderNo)
 
         const { absentReason } = attendanceInfo || {}
         const otherActivitiesClasses = classNames({
@@ -401,7 +403,7 @@ class ResultsActivity extends Component {
             />
           </div>
           <StackedTotals>
-            <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
+            <TotalResults label="Prisoners listed:" totalResults={totalOffenders.size} />
             <HideForPrint>
               <TotalResults label="Sessions attended:" totalResults={totalAttended} />
             </HideForPrint>
