@@ -98,7 +98,7 @@ class ResultsActivity extends Component {
       showModal,
       activityName,
       updateAttendanceEnabled,
-      totalPaid,
+      totalAttended,
       userRoles,
     } = this.props
 
@@ -186,14 +186,14 @@ class ResultsActivity extends Component {
 
     const showRemainingButton = activities => {
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
-      return totalPaid !== 0 || attendanceInfo.length
+      return totalAttended !== 0 || attendanceInfo.length
     }
 
     const { payingAll } = this.state
 
     const batchControls = (
       <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {showAttendAllControl(activityData, totalPaid) &&
+        {showAttendAllControl(activityData, totalAttended) &&
           (payingAll ? (
             'Marking all as attended...'
           ) : (
@@ -403,7 +403,7 @@ class ResultsActivity extends Component {
           <StackedTotals>
             <TotalResults label="Prisoners listed:" totalResults={activityData.length} />
             <HideForPrint>
-              <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+              <TotalResults label="Sessions attended:" totalResults={totalAttended} />
             </HideForPrint>
             {activityHubUser && batchControls}
           </StackedTotals>
@@ -447,7 +447,7 @@ ResultsActivity.propTypes = {
       comment: PropTypes.string.isRequired,
     })
   ).isRequired,
-  totalPaid: PropTypes.number.isRequired,
+  totalAttended: PropTypes.number.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,

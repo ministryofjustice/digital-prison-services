@@ -28,6 +28,14 @@ const countPaid = data =>
     .map(event => (event && event.attendanceInfo && event.attendanceInfo.paid ? 1 : 0))
     .reduce((acc, current) => acc + current, 0)
 
+const countAttended = data =>
+  data
+    .map(
+      event =>
+        event && event.attendanceInfo && event.attendanceInfo.paid && !event.attendanceInfo.absentReason ? 1 : 0
+    )
+    .reduce((acc, current) => acc + current, 0)
+
 const getHouseBlockMainActivities = houseBlockData =>
   houseBlockData
     .map(data => data.activities)
@@ -227,7 +235,7 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_ACTIVITY_DATA:
       return {
         ...state,
-        totalPaid: countPaid(action.data),
+        totalAttended: countAttended(action.data),
         activityData: action.data,
       }
     case ActionTypes.SET_ABSENT_REASONS:
@@ -266,7 +274,7 @@ export function events(state = eventsInitialState, action) {
 
       return {
         ...state,
-        totalPaid: countPaid(activityData),
+        totalAttended: countAttended(activityData),
         activityData,
       }
     }
