@@ -396,7 +396,7 @@ describe('app (global) reducer', () => {
       })
     ).toEqual({
       ...eventsInitialState,
-      totalPaid: 0,
+      totalAttended: 0,
       activityData: [
         { offenderNo: 'A1' },
         {
