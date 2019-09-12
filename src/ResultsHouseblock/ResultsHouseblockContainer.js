@@ -31,6 +31,7 @@ class ResultsHouseblockContainer extends Component {
     this.update = this.update.bind(this)
     this.state = {
       activeSubLocation: null,
+      redactedPrint: false,
     }
   }
 
@@ -153,13 +154,23 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  handlePrint() {
+  handlePrint(version) {
     const { raiseAnalyticsEvent } = this.props
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false })
+    }
+
     raiseAnalyticsEvent({
       category: 'House block list',
       action: 'Print list',
     })
-    window.print()
+
+    setTimeout(() => window.print(), 1000)
   }
 
   handleSubLocationChange(event) {
@@ -182,6 +193,7 @@ class ResultsHouseblockContainer extends Component {
   render() {
     const title = this.titleString()
     const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
+    const { redactedPrint } = this.state
 
     return (
       <Page title={title} alwaysRender>
@@ -195,6 +207,7 @@ class ResultsHouseblockContainer extends Component {
           setHouseblockOffenderAttendance={setOffenderPaymentDataDispatch}
           showModal={showModal}
           activityName={title}
+          redactedPrint={redactedPrint}
           {...this.props}
         />
       </Page>

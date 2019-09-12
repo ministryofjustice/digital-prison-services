@@ -171,11 +171,12 @@ class ResultsActivity extends Component {
             </button>
           </div>
         )}
-        {isAfterToday(date) && (
-          <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
-            Print list for general view
-          </PrintLink>
-        )}
+        {isWithinNextTwoWorkingDays(date) &&
+          isAfterToday(date) && (
+            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+              Print list for general view
+            </PrintLink>
+          )}
       </div>
     )
 

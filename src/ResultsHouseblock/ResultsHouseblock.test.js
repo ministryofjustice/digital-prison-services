@@ -7,12 +7,12 @@ import OtherActivitiesView from '../OtherActivityListView'
 const PRISON = 'LEI'
 
 const OFFENDER_NAME_COLUMN = 0
-const NOMS_ID_COLUMN = 2
-const FLAGS_COLUMN = 3
-const MAIN_COLUMN = 4
-const OTHER_COLUMN = 5
-const ATTEND_COLUMN = 6
-const DONT_ATTEND_COLUMN = 7
+const NOMS_ID_COLUMN = 3
+const FLAGS_COLUMN = 5
+const MAIN_COLUMN = 6
+const OTHER_COLUMN = 7
+const ATTEND_COLUMN = 8
+const DONT_ATTEND_COLUMN = 9
 
 const response = [
   {
@@ -481,6 +481,22 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
     expect(component.find(PrintButton).length).toEqual(2)
+  })
+
+  it('should not display "Print list for general view" links if date is today', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(<ResultsHouseblock {...props} houseblockData={response} date={today} period="AM" />)
+
+    const printRedactedButton = component.find('#redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(0)
+  })
+
+  it('should display "Print list for general view" links if date is after today', () => {
+    const date = moment().add(1, 'day')
+    const component = shallow(<ResultsHouseblock {...props} houseblockData={response} date={date} period="AM" />)
+
+    const printRedactedButton = component.find('.redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(2)
   })
 
   it('checkboxes should be read-only when date is over a week ago', async () => {

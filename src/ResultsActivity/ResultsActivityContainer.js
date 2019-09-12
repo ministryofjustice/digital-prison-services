@@ -138,6 +138,7 @@ class ResultsActivityContainer extends Component {
       category: 'Activity list',
       action: 'Print list',
     })
+
     setTimeout(() => window.print(), 1000)
   }
 

@@ -10,7 +10,9 @@ import { withRouter } from 'react-router'
 import moment from 'moment'
 import styled from 'styled-components'
 import { FONT_SIZE } from '@govuk-react/constants'
+import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
+  isAfterToday,
   getHoursMinutes,
   isWithinNextTwoWorkingDays,
   getMainEventDescription,
@@ -54,8 +56,21 @@ const HideForPrint = styled.span`
 
 export const PrintButton = styled(Button)`
   min-width: 8em;
+  margin-bottom: 20px;
   img {
     margin-right: 0.5em;
+  }
+`
+
+const PrintLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  display: block;
+  text-decoration: underline;
+
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
   }
 `
 
@@ -82,6 +97,7 @@ class ResultsHouseblock extends Component {
       period,
       handlePeriodChange,
       handlePrint,
+      redactedPrint,
       houseblockData,
       update,
       sortOrder,
@@ -137,13 +153,13 @@ class ResultsHouseblock extends Component {
     )
 
     const dateSelect = (
-      <div className="pure-u-md-1-6 padding-left padding-right">
+      <div className="pure-u-md-1-5 padding-left padding-right">
         <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
       </div>
     )
 
     const periodSelect = (
-      <div className="pure-u-md-1-6">
+      <div className="pure-u-md-1-5">
         <label className="form-label" htmlFor="period-select">
           Choose period
         </label>
@@ -168,18 +184,28 @@ class ResultsHouseblock extends Component {
       </div>
     )
 
-    const printButton = isWithinNextTwoWorkingDays(date) && (
-      <PrintButton
-        id="printButton"
-        className="margin-left margin-top pull-right"
-        onClick={e => {
-          if (e) e.preventDefault()
-          handlePrint()
-        }}
-      >
-        <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
-        Print list
-      </PrintButton>
+    const printButton = (
+      <div id="buttons" className="buttons">
+        {isWithinNextTwoWorkingDays(date) && (
+          <PrintButton
+            id="printButton"
+            className=""
+            onClick={e => {
+              if (e) e.preventDefault()
+              handlePrint()
+            }}
+          >
+            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
+            Print list
+          </PrintButton>
+        )}
+        {isWithinNextTwoWorkingDays(date) &&
+          isAfterToday(date) && (
+            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+              Print list for general view
+            </PrintLink>
+          )}
+      </div>
     )
 
     const headings = () => (
@@ -203,7 +229,7 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight width10">Prison&nbsp;no.</th>
-        <th className="straight width10">Info</th>
+        <th className={`straight width10 ${redactedPrint ? 'no-print' : 'straightPrint'}`}>Info</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activities"
@@ -214,12 +240,12 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className="straightPrint no-display">
+        <th className={redactedPrint ? 'no-print no-display' : 'straightPrint no-display'}>
           <div>
             <span>Unlocked</span>
           </div>
         </th>
-        <th className="straightPrint no-display">
+        <th className={redactedPrint ? 'no-print no-display' : 'straightPrint no-display'}>
           <div>
             <span>Gone</span>
           </div>
@@ -256,16 +282,24 @@ class ResultsHouseblock extends Component {
 
         return (
           <tr key={offenderNo} className="row-gutters">
-            <td className="row-gutters">
+            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName} lastName={lastName} />
+              </OffenderLink>
+            </td>
+            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName.charAt(0)} lastName={lastName} />
               </OffenderLink>
             </td>
             <td className="row-gutters">
               <Location location={cellLocation} />
             </td>
-            <td className="row-gutters">{offenderNo}</td>
-            <td>
+            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>{offenderNo}</td>
+            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
+              {offenderNo.replace(/^.{3}/g, '***')}
+            </td>
+            <td className={redactedPrint ? 'no-print' : 'straightPrint'}>
               <AlertFlags alerts={offender.alertFlags} category={offender.category} />
             </td>
             <td className="row-gutters">
@@ -274,7 +308,7 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">
               <OtherActivitiesView offenderMainEvent={offender} />
             </td>
-            <td className="no-padding checkbox-column no-display">
+            <td className={`no-padding checkbox-column no-display ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
               <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                   Unlocked
@@ -282,7 +316,7 @@ class ResultsHouseblock extends Component {
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled={readOnly} />
               </div>
             </td>
-            <td className="no-padding checkbox-column no-display">
+            <td className={`no-padding checkbox-column no-display ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
               <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col2_${index}`}>
                   Gone
@@ -327,7 +361,7 @@ class ResultsHouseblock extends Component {
         </span>
         <hr className="print-only" />
         <form className="no-print">
-          <div>
+          <div className="whereabouts-controls">
             {locationSelect}
             {dateSelect}
             {periodSelect}
@@ -380,6 +414,7 @@ ResultsHouseblock.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
+  redactedPrint: PropTypes.bool.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
