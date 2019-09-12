@@ -40,6 +40,8 @@ function PrisonersUnaccountedForContainer({
 
   const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
+  const uniqueOffenderNos = new Set(prisonersUnaccountedFor.map(prisoner => prisoner.offenderNo))
+
   useEffect(
     () => {
       const getPrisonersUnaccountedFor = async () => {
@@ -85,7 +87,7 @@ function PrisonersUnaccountedForContainer({
         period={period}
         sortOrder={sortOrder}
         setColumnSort={setColumnSort}
-        numberOfPrisoners={prisonersUnaccountedFor.length}
+        numberOfPrisoners={uniqueOffenderNos.size}
         reloadPage={setReloadPage}
       />
       <PrisonersUnaccountedFor
