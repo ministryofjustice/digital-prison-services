@@ -37,6 +37,10 @@ module.exports = {
       url: process.env.API_WHEREABOUTS_ENDPOINT_URL || 'http://localhost:8082',
       timeoutSeconds: process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
+    community: {
+      url: process.env.API_COMMUNITY_ENDPOINT_URL || 'http://localhost:8083/communityapi/',
+      timeoutSeconds: process.env.API_COMMUNITY_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
   },
   updateAttendancePrisons: process.env.UPDATE_ATTENDANCE_PRISONS
     ? process.env.UPDATE_ATTENDANCE_PRISONS.split(',').map(agency => agency.trim())

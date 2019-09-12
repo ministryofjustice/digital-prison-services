@@ -193,7 +193,7 @@ const props = {
   setHouseblockOffenderAttendance: jest.fn(),
   showModal: jest.fn(),
   activityName: 'Activity name',
-  totalPaid: 0,
+  totalAttended: 0,
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -914,7 +914,7 @@ describe('Offender results component Jira NN-843', () => {
         orderField="cellLocation"
         sortOrder="ASC"
         offenderNo="1"
-        totalPaid={1}
+        totalAttended={1}
       />
     )
 
@@ -923,6 +923,6 @@ describe('Offender results component Jira NN-843', () => {
         .find('TotalResults')
         .at(1)
         .props()
-    ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
+    ).toEqual({ label: 'Sessions attended:', totalResults: 1 })
   })
 })

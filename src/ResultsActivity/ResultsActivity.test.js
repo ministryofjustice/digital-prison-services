@@ -170,7 +170,7 @@ const props = {
   showModal: jest.fn(),
   activityName: 'Activity name',
   userRoles: ['ACTIVITY_HUB'],
-  totalPaid: 0,
+  totalAttended: 0,
 }
 
 describe('Offender activity list results component', () => {
@@ -456,20 +456,20 @@ describe('Offender activity list results component', () => {
 
   it('should display current total number of paid offenders', () => {
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={1} activityData={response} date="07/06/2019" period="AM" />
+      <ResultsActivity {...props} totalAttended={1} activityData={response} date="07/06/2019" period="AM" />
     )
     expect(
       component
         .find('TotalResults')
         .at(1)
         .props()
-    ).toEqual({ label: 'Prisoners paid:', totalResults: 1 })
+    ).toEqual({ label: 'Sessions attended:', totalResults: 1 })
   })
 
   it('should not display pay all button if all prisoners are paid', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={4} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={4} activityData={response} date={today} period="AM" />
     )
 
     const attendAllButton = component.find('#allAttendedButton')
@@ -481,7 +481,7 @@ describe('Offender activity list results component', () => {
       .subtract(8, 'days')
       .format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -493,7 +493,7 @@ describe('Offender activity list results component', () => {
       .subtract(6, 'days')
       .format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={response} date={isInTheLastWeek} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={response} date={isInTheLastWeek} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -505,7 +505,7 @@ describe('Offender activity list results component', () => {
       .add(1, 'days')
       .format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={response} date={tomorrow} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={response} date={tomorrow} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -515,7 +515,7 @@ describe('Offender activity list results component', () => {
   it('should display "Attend all prisoners" button if no prisoners have been paid', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={response} date={today} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -526,7 +526,7 @@ describe('Offender activity list results component', () => {
   it('should display "Attend all remaining prisoners" button if there are outstanding prisoners to pay', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={3} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={3} activityData={response} date={today} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -574,7 +574,7 @@ describe('Offender activity list results component', () => {
 
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={otherAttendanceData} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={otherAttendanceData} date={today} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -615,7 +615,7 @@ describe('Offender activity list results component', () => {
 
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={otherAttendanceNull} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={otherAttendanceNull} date={today} period="AM" />
     )
 
     const button = component.find('#allAttendedButton')
@@ -626,7 +626,7 @@ describe('Offender activity list results component', () => {
   it('should call the attendAll function when the link is clicked', async () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} activityData={response} date={today} period="AM" />
     )
 
     const attendAllButton = component.find('#allAttendedButton')
