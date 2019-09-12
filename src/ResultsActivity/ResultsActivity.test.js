@@ -215,7 +215,7 @@ describe('Offender activity list results component', () => {
     const row1Flags = row1Tds
       .at(FLAGS_COLUMN)
       .find('AlertFlags')
-      .dive(0)
+      .dive()
       .find('AlertFlag')
 
     expect(row1Flags.length).toEqual(2)

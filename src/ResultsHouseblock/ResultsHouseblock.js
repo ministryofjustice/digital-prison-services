@@ -153,13 +153,13 @@ class ResultsHouseblock extends Component {
     )
 
     const dateSelect = (
-      <div className="pure-u-md-1-5 padding-left padding-right">
+      <div className="pure-u-md-1-6 padding-left padding-right">
         <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
       </div>
     )
 
     const periodSelect = (
-      <div className="pure-u-md-1-5">
+      <div className="pure-u-md-1-6">
         <label className="form-label" htmlFor="period-select">
           Choose period
         </label>
@@ -361,7 +361,7 @@ class ResultsHouseblock extends Component {
         </span>
         <hr className="print-only" />
         <form className="no-print">
-          <div className="whereabouts-controls">
+          <div>
             {locationSelect}
             {dateSelect}
             {periodSelect}
