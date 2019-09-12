@@ -349,9 +349,14 @@ class ResultsActivity extends Component {
 
         return (
           <tr key={key} className="row-gutters">
-            <td className="row-gutters">
+            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
               <OffenderLink offenderNo={offenderNo}>
-                <OffenderName firstName={redactedPrint ? firstName.charAt(0) : firstName} lastName={lastName} />
+                <OffenderName firstName={firstName} lastName={lastName} />
+              </OffenderLink>
+            </td>
+            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName.charAt(0)} lastName={lastName} />
               </OffenderLink>
             </td>
             <td className="row-gutters">

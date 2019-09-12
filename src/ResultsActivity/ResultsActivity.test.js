@@ -8,12 +8,12 @@ import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'SYI'
 const OFFENDER_NAME_COLUMN = 0
-const NOMS_ID_COLUMN = 2
-const FLAGS_COLUMN = 4
-const ACTIVITY_COLUMN = 5
-const OTHER_COLUMN = 6
-const ATTEND_COLUMN = 7
-const DONT_ATTEND_COLUMN = 8
+const NOMS_ID_COLUMN = 3
+const FLAGS_COLUMN = 5
+const ACTIVITY_COLUMN = 6
+const OTHER_COLUMN = 7
+const ATTEND_COLUMN = 8
+const DONT_ATTEND_COLUMN = 9
 
 const waitForAsync = () => new Promise(resolve => setImmediate(resolve))
 
