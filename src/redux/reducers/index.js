@@ -23,11 +23,6 @@ export function defaultPeriod(time) {
   return 'ED'
 }
 
-const countPaid = data =>
-  data
-    .map(event => (event && event.attendanceInfo && event.attendanceInfo.paid ? 1 : 0))
-    .reduce((acc, current) => acc + current, 0)
-
 const countAttended = data =>
   data
     .map(
@@ -219,7 +214,7 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_HOUSEBLOCK_DATA:
       return {
         ...state,
-        totalPaid: countPaid(getHouseBlockMainActivities(action.data)),
+        totalAttended: countAttended(getHouseBlockMainActivities(action.data)),
         houseblockData: action.data,
       }
     case ActionTypes.SET_ORDER_FIELD:
@@ -259,7 +254,7 @@ export function events(state = eventsInitialState, action) {
 
       return {
         ...state,
-        totalPaid: countPaid(getHouseBlockMainActivities(houseblockData)),
+        totalAttended: countAttended(getHouseBlockMainActivities(houseblockData)),
         houseblockData,
       }
     }

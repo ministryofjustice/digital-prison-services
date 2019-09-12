@@ -94,7 +94,7 @@ class ResultsHouseblock extends Component {
       handleError,
       showModal,
       activityName,
-      totalPaid,
+      totalAttended,
     } = this.props
 
     const renderLocationOptions = locationOptions => {
@@ -352,7 +352,7 @@ class ResultsHouseblock extends Component {
           <StackedTotals>
             <TotalResults label="Prisoners listed:" totalResults={houseblockData.length} />
             <HideForPrint>
-              <TotalResults label="Prisoners paid:" totalResults={totalPaid} />
+              <TotalResults label="Sessions attended:" totalResults={totalAttended} />
             </HideForPrint>
           </StackedTotals>
         </ManageResults>
@@ -404,7 +404,7 @@ ResultsHouseblock.propTypes = {
       ),
     }).isRequired
   ).isRequired,
-  totalPaid: PropTypes.number.isRequired,
+  totalAttended: PropTypes.number.isRequired,
   subLocations: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
