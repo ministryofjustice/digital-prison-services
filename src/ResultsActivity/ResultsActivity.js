@@ -31,6 +31,7 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
+import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
 
 const ManageResults = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ const StackedTotals = styled.div`
   text-align: right;
 `
 const BatchLink = styled(Link)`
+  display: block;
   font-size: ${FONT_SIZE.SIZE_22};
   color: ${LINK_COLOUR};
   cursor: pointer;
@@ -102,7 +104,7 @@ class ResultsActivity extends Component {
       userRoles,
     } = this.props
 
-    const activityHubUser = userRoles.includes('ACTIVITY_HUB')
+    const activityHubUser = true //userRoles.includes('ACTIVITY_HUB')
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -167,6 +169,10 @@ class ResultsActivity extends Component {
       }
     }
 
+    const markRemaningAsNotRequired = () => {
+      showModal(true, <AttendanceNotRequiredForm showModal={showModal} />)
+    }
+
     const showAttendAllControl = (activities, paidList) => {
       let showControls = true
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
@@ -181,7 +187,7 @@ class ResultsActivity extends Component {
       )
         showControls = false
 
-      return showControls
+      return true
     }
 
     const showRemainingButton = activities => {
@@ -197,9 +203,12 @@ class ResultsActivity extends Component {
           (payingAll ? (
             'Marking all as attended...'
           ) : (
-            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-              {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
-            </BatchLink>
+            <React.Fragment>
+              <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
+                {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
+              </BatchLink>
+              <BatchLink onClick={() => markRemaningAsNotRequired()}>All prisoners are not required</BatchLink>
+            </React.Fragment>
           ))}
       </div>
     )
