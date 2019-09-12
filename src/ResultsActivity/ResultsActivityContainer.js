@@ -26,6 +26,9 @@ class ResultsActivityContainer extends Component {
     this.handlePrint = this.handlePrint.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
     this.getActivityList = this.getActivityList.bind(this)
+    this.state = {
+      redactedPrint: false,
+    }
   }
 
   async componentDidMount() {
@@ -120,14 +123,22 @@ class ResultsActivityContainer extends Component {
     )
   }
 
-  handlePrint() {
+  handlePrint(version) {
     const { raiseAnalyticsEvent } = this.props
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false })
+    }
 
     raiseAnalyticsEvent({
       category: 'Activity list',
       action: 'Print list',
     })
-    window.print()
+    setTimeout(() => window.print(), 1000)
   }
 
   render() {
@@ -138,6 +149,8 @@ class ResultsActivityContainer extends Component {
       updateAttendanceEnabled,
       userRoles,
     } = this.props
+
+    const { redactedPrint } = this.state
     const activityName = this.getActivityName()
 
     return (
@@ -153,6 +166,7 @@ class ResultsActivityContainer extends Component {
           resetErrorDispatch={resetErrorDispatch}
           showModal={showModal}
           userRoles={userRoles}
+          redactedPrint={redactedPrint}
           {...this.props}
         />
       </Page>

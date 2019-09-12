@@ -57,6 +57,21 @@ const BatchLink = styled(Link)`
     color: ${LINK_HOVER_COLOUR};
   }
 `
+
+const PrintLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  display: block;
+  margin-top: 20px;
+  text-decoration: underline;
+  text-align: left;
+
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
+  }
+`
+
 const HideForPrint = styled.span`
   @media print {
     display: none;
@@ -70,7 +85,9 @@ class ResultsActivity extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { payingAll: false }
+    this.state = {
+      payingAll: false,
+    }
   }
 
   componentWillUnmount() {
@@ -85,6 +102,7 @@ class ResultsActivity extends Component {
       period,
       handlePeriodChange,
       handlePrint,
+      redactedPrint,
       getActivityList,
       activityData,
       sortOrder,
@@ -133,17 +151,30 @@ class ResultsActivity extends Component {
     const buttons = (
       <div id="buttons" className="pure-u-md-12-12 padding-bottom">
         {isWithinNextTwoWorkingDays(date) && (
-          <button
-            id="printButton"
-            className="button"
-            type="button"
-            onClick={() => {
-              handlePrint()
-            }}
-          >
-            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
-            Print list
-          </button>
+          <div className="printButton">
+            <button
+              id="printButton"
+              className="button"
+              type="button"
+              onClick={() => {
+                handlePrint()
+              }}
+            >
+              <img
+                className="print-icon"
+                src="/images/Printer_icon_white.png"
+                height="23"
+                width="20"
+                alt="Print icon"
+              />{' '}
+              Print list
+            </button>
+          </div>
+        )}
+        {isAfterToday(date) && (
+          <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+            Print list for general view
+          </PrintLink>
         )}
       </div>
     )
@@ -197,7 +228,7 @@ class ResultsActivity extends Component {
           (payingAll ? (
             'Marking all as attended...'
           ) : (
-            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
+            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton" className="no-print">
               {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
             </BatchLink>
           ))}
@@ -225,7 +256,7 @@ class ResultsActivity extends Component {
           />
         </th>
         <th className="straight width10">Prison&nbsp;no.</th>
-        <th className="straight width10">Info</th>
+        <th className={`straight width10 ${redactedPrint ? 'no-print' : 'straightPrint'}`}>Info</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activity"
@@ -236,7 +267,7 @@ class ResultsActivity extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className="straightPrint checkbox-header no-display">
+        <th className={redactedPrint ? 'no-print no-display' : 'checkbox-header straightPrint no-display'}>
           <div>
             <span>Received</span>
           </div>
@@ -320,14 +351,17 @@ class ResultsActivity extends Component {
           <tr key={key} className="row-gutters">
             <td className="row-gutters">
               <OffenderLink offenderNo={offenderNo}>
-                <OffenderName firstName={firstName} lastName={lastName} />
+                <OffenderName firstName={redactedPrint ? firstName.charAt(0) : firstName} lastName={lastName} />
               </OffenderLink>
             </td>
             <td className="row-gutters">
               <Location location={cellLocation} />
             </td>
-            <td className="row-gutters">{offenderNo}</td>
-            <td>
+            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>{offenderNo}</td>
+            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
+              {offenderNo.replace(/^.{3}/g, '***')}
+            </td>
+            <td className={redactedPrint ? 'no-print' : 'straightPrint'}>
               <AlertFlags alerts={alertFlags} category={category} />
             </td>
             {renderMainEvent(mainEvent)}
@@ -342,7 +376,7 @@ class ResultsActivity extends Component {
               }
             </td>
             {!absentReason && (
-              <td className="no-padding checkbox-column no-display">
+              <td className={`checkbox-header no-display ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
                 <div className="multiple-choice whereaboutsCheckbox">
                   <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                     Received
@@ -427,6 +461,7 @@ class ResultsActivity extends Component {
 ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
   handlePrint: PropTypes.func.isRequired,
+  redactedPrint: PropTypes.bool.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   getActivityList: PropTypes.func.isRequired,

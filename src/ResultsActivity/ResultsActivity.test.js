@@ -9,11 +9,11 @@ import OtherActivitiesView from '../OtherActivityListView'
 const PRISON = 'SYI'
 const OFFENDER_NAME_COLUMN = 0
 const NOMS_ID_COLUMN = 2
-const FLAGS_COLUMN = 3
-const ACTIVITY_COLUMN = 4
-const OTHER_COLUMN = 5
-const ATTEND_COLUMN = 6
-const DONT_ATTEND_COLUMN = 7
+const FLAGS_COLUMN = 4
+const ACTIVITY_COLUMN = 5
+const OTHER_COLUMN = 6
+const ATTEND_COLUMN = 7
+const DONT_ATTEND_COLUMN = 8
 
 const waitForAsync = () => new Promise(resolve => setImmediate(resolve))
 
@@ -215,7 +215,7 @@ describe('Offender activity list results component', () => {
     const row1Flags = row1Tds
       .at(FLAGS_COLUMN)
       .find('AlertFlags')
-      .dive()
+      .dive(0)
       .find('AlertFlag')
 
     expect(row1Flags.length).toEqual(2)
@@ -339,7 +339,7 @@ describe('Offender activity list results component', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
 
     component
       .find('#printButton')
@@ -352,7 +352,7 @@ describe('Offender activity list results component', () => {
     const today = 'Today'
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
     // If today, print button is present
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
   })
 
   it('should not display print button when date is in the past', async () => {
@@ -370,7 +370,27 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} activityData={response} handleSearch={jest.fn()} date={futureDate} period="ED" />
     )
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
+  })
+
+  it('should not display "Print list for general view" links if date is today', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
+    )
+
+    const printRedactedButton = component.find('#redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(0)
+  })
+
+  it('should display "Print list for general view" links if date is after today', () => {
+    const date = moment().add(1, 'day')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={date} period="AM" />
+    )
+
+    const printRedactedButton = component.find('.redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(2)
   })
 
   it.skip('checkboxes should be read-only when date is over a week ago', async () => {
