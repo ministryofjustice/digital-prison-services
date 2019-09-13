@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsHouseblock, PrintButton } from './ResultsHouseblock'
+import { ResultsHouseblock, PrintButton, PrintLink } from './ResultsHouseblock'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'LEI'
@@ -440,6 +440,7 @@ describe('Offender results component Jira NN-843', () => {
     )
 
     expect(component.find(PrintButton).length).toEqual(2)
+    expect(component.find(PrintLink).length).toEqual(0)
 
     component
       .find(PrintButton)
@@ -484,6 +485,7 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
     expect(component.find(PrintButton).length).toEqual(2)
+    expect(component.find(PrintLink).length).toEqual(2)
   })
 
   it('should not display "Print list for general view" links if date is today', () => {

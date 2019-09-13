@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import moment from 'moment'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { ResultsActivity } from './ResultsActivity'
+import { ResultsActivity, PrintLink } from './ResultsActivity'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'SYI'
@@ -342,6 +342,7 @@ describe('Offender activity list results component', () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
 
     expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
+    expect(component.find(PrintLink).length).toEqual(0)
 
     component
       .find('#printButton')
@@ -362,6 +363,7 @@ describe('Offender activity list results component', () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date={oldDate} period="ED" />)
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
+    expect(component.find(PrintLink).length).toEqual(0)
   })
 
   it('should display print button when date is in the future', async () => {
@@ -373,6 +375,7 @@ describe('Offender activity list results component', () => {
     )
 
     expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
+    expect(component.find(PrintLink).length).toEqual(2)
   })
 
   it('should not display "Print list for general view" links if date is today', () => {

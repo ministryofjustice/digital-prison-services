@@ -178,8 +178,6 @@ class ResultsHouseblockContainer extends Component {
         action: 'Print list',
       })
     }
-
-    // setTimeout(() => window.print(), 1000)
   }
 
   handleSubLocationChange(event) {

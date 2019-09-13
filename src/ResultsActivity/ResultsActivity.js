@@ -58,11 +58,11 @@ const BatchLink = styled(Link)`
   }
 `
 
-const PrintLink = styled(Link)`
+export const PrintLink = styled(Link)`
   font-size: ${FONT_SIZE.SIZE_22};
   color: ${LINK_COLOUR};
   cursor: pointer;
-  display: block;
+  display: inline-block;
   margin-top: 20px;
   text-decoration: underline;
   text-align: left;

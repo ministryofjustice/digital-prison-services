@@ -62,7 +62,7 @@ export const PrintButton = styled(Button)`
   }
 `
 
-const PrintLink = styled(Link)`
+export const PrintLink = styled(Link)`
   font-size: ${FONT_SIZE.SIZE_22};
   color: ${LINK_COLOUR};
   cursor: pointer;
@@ -187,13 +187,7 @@ class ResultsHouseblock extends Component {
     const printButton = (
       <div id="buttons" className="buttons">
         {isWithinNextTwoWorkingDays(date) && (
-          <PrintButton
-            id="printButton"
-            onClick={e => {
-              if (e) e.preventDefault()
-              handlePrint()
-            }}
-          >
+          <PrintButton type="button" id="printButton" onClick={() => handlePrint()}>
             <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
             Print list
           </PrintButton>
