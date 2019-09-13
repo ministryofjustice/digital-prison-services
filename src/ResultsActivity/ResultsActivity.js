@@ -104,7 +104,7 @@ class ResultsActivity extends Component {
       userRoles,
     } = this.props
 
-    const activityHubUser = true //userRoles.includes('ACTIVITY_HUB')
+    const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
     const periodSelect = (
       <div className="pure-u-md-1-6">
@@ -150,14 +150,14 @@ class ResultsActivity extends Component {
       </div>
     )
 
-    const unpaidOffenders = new Set()
+    const unattendedOffenders = new Set()
     const totalOffenders = new Set()
 
     const attendAllNonAssigned = async () => {
       try {
         this.setState({ payingAll: true })
 
-        const offenders = [...unpaidOffenders]
+        const offenders = [...unattendedOffenders]
 
         await axios.post('/api/attendance/batch', {
           offenders,
@@ -170,8 +170,21 @@ class ResultsActivity extends Component {
       }
     }
 
+    const markAsNotRequired = async values => {
+      const { comments } = values
+      console.log('not requiring all of the following', [...unattendedOffenders])
+      console.log(comments)
+      // pass comments and NotRequired absentReason to /api/attendance/batch
+      // try {
+      //   this.setState({ notRequiringRemaining: true })
+      // } catch (error) {
+      //   handleError(error)
+      // }
+      showModal(false)
+    }
+
     const markRemaningAsNotRequired = () => {
-      showModal(true, <AttendanceNotRequiredForm showModal={showModal} />)
+      showModal(true, <AttendanceNotRequiredForm showModal={showModal} submitHandler={markAsNotRequired} />)
     }
 
     const showAttendAllControl = (activities, paidList) => {
@@ -188,13 +201,15 @@ class ResultsActivity extends Component {
       )
         showControls = false
 
-      return true
+      return showControls
     }
 
-    const showRemainingButton = activities => {
+    const hasRemaining = activities => {
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
       return totalAttended !== 0 || attendanceInfo.length
     }
+
+    const remainingString = hasRemaining(activityData) ? ' remaining ' : ' '
 
     const { payingAll } = this.state
 
@@ -204,13 +219,13 @@ class ResultsActivity extends Component {
           (payingAll ? (
             'Marking all as attended...'
           ) : (
-            <React.Fragment>
-              <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-                {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
-              </BatchLink>
-              <BatchLink onClick={() => markRemaningAsNotRequired()}>All prisoners are not required</BatchLink>
-            </React.Fragment>
+            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
+              {`Attend all${remainingString}prisoners`}
+            </BatchLink>
           ))}
+        <BatchLink
+          onClick={() => markRemaningAsNotRequired()}
+        >{`All ${remainingString} prisoners are not required`}</BatchLink>
       </div>
     )
 
@@ -307,7 +322,7 @@ class ResultsActivity extends Component {
         }
 
         if (!attendanceInfo)
-          unpaidOffenders.add({
+          unattendedOffenders.add({
             offenderNo,
             bookingId,
             eventId,
