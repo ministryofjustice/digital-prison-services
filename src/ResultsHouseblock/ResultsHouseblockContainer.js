@@ -159,16 +159,21 @@ class ResultsHouseblockContainer extends Component {
 
     if (version === 'redacted') {
       this.setState({ redactedPrint: true })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Residential list',
+        action: 'Print list',
+      })
     }
 
     if (!version) {
       this.setState({ redactedPrint: false })
-    }
 
-    raiseAnalyticsEvent({
-      category: 'House block list',
-      action: 'Print list',
-    })
+      raiseAnalyticsEvent({
+        category: 'House block list',
+        action: 'Print list',
+      })
+    }
 
     setTimeout(() => window.print(), 1000)
   }
@@ -207,7 +212,7 @@ class ResultsHouseblockContainer extends Component {
           setHouseblockOffenderAttendance={setOffenderPaymentDataDispatch}
           showModal={showModal}
           activityName={title}
-          redactedPrint={redactedPrint}
+          redactedPrintState={redactedPrint}
           {...this.props}
         />
       </Page>

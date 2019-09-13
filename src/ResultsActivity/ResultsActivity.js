@@ -102,7 +102,7 @@ class ResultsActivity extends Component {
       period,
       handlePeriodChange,
       handlePrint,
-      redactedPrint,
+      redactedPrintState,
       getActivityList,
       activityData,
       sortOrder,
@@ -237,6 +237,9 @@ class ResultsActivity extends Component {
       </div>
     )
 
+    const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
+    const redactedPrint = redactedPrintState ? 'straightPrint' : 'no-print'
+
     const headings = () => (
       <tr>
         <th className="straight width15">
@@ -258,7 +261,7 @@ class ResultsActivity extends Component {
           />
         </th>
         <th className="straight width10">Prison&nbsp;no.</th>
-        <th className={`straight width10 ${redactedPrint ? 'no-print' : 'straightPrint'}`}>Info</th>
+        <th className={`straight width10 ${redactedHide}`}>Info</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activity"
@@ -269,7 +272,7 @@ class ResultsActivity extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className={redactedPrint ? 'no-print no-display' : 'checkbox-header straightPrint no-display'}>
+        <th className={redactedPrintState ? 'no-print no-display' : 'checkbox-header straightPrint no-display'}>
           <div>
             <span>Received</span>
           </div>
@@ -352,12 +355,12 @@ class ResultsActivity extends Component {
 
         return (
           <tr key={key} className="row-gutters">
-            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
+            <td className={`row-gutters ${redactedHide}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName} lastName={lastName} />
               </OffenderLink>
             </td>
-            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
+            <td className={`no-display ${redactedPrint}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName.charAt(0)} lastName={lastName} />
               </OffenderLink>
@@ -365,11 +368,9 @@ class ResultsActivity extends Component {
             <td className="row-gutters">
               <Location location={cellLocation} />
             </td>
-            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>{offenderNo}</td>
-            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
-              {offenderNo.replace(/^.{3}/g, '***')}
-            </td>
-            <td className={redactedPrint ? 'no-print' : 'straightPrint'}>
+            <td className={`row-gutters ${redactedHide}`}>{offenderNo}</td>
+            <td className={`no-display ${redactedPrint}`}>{offenderNo.replace(/^.{3}/g, '***')}</td>
+            <td className={redactedHide}>
               <AlertFlags alerts={alertFlags} category={category} />
             </td>
             {renderMainEvent(mainEvent)}
@@ -384,7 +385,7 @@ class ResultsActivity extends Component {
               }
             </td>
             {!absentReason && (
-              <td className={`checkbox-header no-display ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
+              <td className={`checkbox-header no-display ${redactedHide}`}>
                 <div className="multiple-choice whereaboutsCheckbox">
                   <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                     Received
@@ -469,7 +470,7 @@ class ResultsActivity extends Component {
 ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
   handlePrint: PropTypes.func.isRequired,
-  redactedPrint: PropTypes.bool.isRequired,
+  redactedPrintState: PropTypes.bool.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   getActivityList: PropTypes.func.isRequired,

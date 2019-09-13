@@ -128,16 +128,21 @@ class ResultsActivityContainer extends Component {
 
     if (version === 'redacted') {
       this.setState({ redactedPrint: true })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Activity list',
+        action: 'Print list',
+      })
     }
 
     if (!version) {
       this.setState({ redactedPrint: false })
-    }
 
-    raiseAnalyticsEvent({
-      category: 'Activity list',
-      action: 'Print list',
-    })
+      raiseAnalyticsEvent({
+        category: 'Activity list',
+        action: 'Print list',
+      })
+    }
 
     setTimeout(() => window.print(), 1000)
   }
@@ -167,7 +172,7 @@ class ResultsActivityContainer extends Component {
           resetErrorDispatch={resetErrorDispatch}
           showModal={showModal}
           userRoles={userRoles}
-          redactedPrint={redactedPrint}
+          redactedPrintState={redactedPrint}
           {...this.props}
         />
       </Page>

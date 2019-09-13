@@ -97,7 +97,7 @@ class ResultsHouseblock extends Component {
       period,
       handlePeriodChange,
       handlePrint,
-      redactedPrint,
+      redactedPrintState,
       houseblockData,
       update,
       sortOrder,
@@ -207,6 +207,8 @@ class ResultsHouseblock extends Component {
           )}
       </div>
     )
+    const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
+    const redactedPrint = redactedPrintState ? 'straightPrint' : 'no-print'
 
     const headings = () => (
       <tr>
@@ -229,7 +231,7 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight width10">Prison&nbsp;no.</th>
-        <th className={`straight width10 ${redactedPrint ? 'no-print' : 'straightPrint'}`}>Info</th>
+        <th className={`straight width10 ${redactedHide}`}>Info</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activities"
@@ -240,12 +242,12 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className={redactedPrint ? 'no-print no-display' : 'straightPrint no-display'}>
+        <th className={redactedPrintState ? 'no-print no-display' : 'straightPrint no-display'}>
           <div>
             <span>Unlocked</span>
           </div>
         </th>
-        <th className={redactedPrint ? 'no-print no-display' : 'straightPrint no-display'}>
+        <th className={redactedPrintState ? 'no-print no-display' : 'straightPrint no-display'}>
           <div>
             <span>Gone</span>
           </div>
@@ -282,12 +284,12 @@ class ResultsHouseblock extends Component {
 
         return (
           <tr key={offenderNo} className="row-gutters">
-            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
+            <td className={`row-gutters ${redactedHide}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName} lastName={lastName} />
               </OffenderLink>
             </td>
-            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
+            <td className={`no-display ${redactedPrint}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName.charAt(0)} lastName={lastName} />
               </OffenderLink>
@@ -295,11 +297,9 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">
               <Location location={cellLocation} />
             </td>
-            <td className={`row-gutters ${redactedPrint ? 'no-print' : 'straightPrint'}`}>{offenderNo}</td>
-            <td className={`no-display ${redactedPrint ? 'straightPrint' : 'no-print'}`}>
-              {offenderNo.replace(/^.{3}/g, '***')}
-            </td>
-            <td className={redactedPrint ? 'no-print' : 'straightPrint'}>
+            <td className={`row-gutters ${redactedHide}`}>{offenderNo}</td>
+            <td className={`no-display ${redactedPrint}`}>{offenderNo.replace(/^.{3}/g, '***')}</td>
+            <td className={redactedHide}>
               <AlertFlags alerts={offender.alertFlags} category={offender.category} />
             </td>
             <td className="row-gutters">
@@ -308,7 +308,7 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">
               <OtherActivitiesView offenderMainEvent={offender} />
             </td>
-            <td className={`no-padding checkbox-column no-display ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
+            <td className={`no-padding checkbox-column no-display ${redactedHide}`}>
               <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                   Unlocked
@@ -316,7 +316,7 @@ class ResultsHouseblock extends Component {
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled={readOnly} />
               </div>
             </td>
-            <td className={`no-padding checkbox-column no-display ${redactedPrint ? 'no-print' : 'straightPrint'}`}>
+            <td className={`no-padding checkbox-column no-display ${redactedHide}`}>
               <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col2_${index}`}>
                   Gone
@@ -414,7 +414,7 @@ ResultsHouseblock.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
-  redactedPrint: PropTypes.bool.isRequired,
+  redactedPrintState: PropTypes.bool.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
