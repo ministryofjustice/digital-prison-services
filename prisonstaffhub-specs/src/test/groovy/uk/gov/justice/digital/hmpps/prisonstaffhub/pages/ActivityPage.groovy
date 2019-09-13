@@ -21,11 +21,11 @@ class ActivityPage extends DatePickerPage {
         printButton { $('#printButton') }
         tableRows { $('table.row-gutters tr') } // Avoid the calendar table rows
         bodyRows { $('table.row-gutters tr', 1..-1) }
-        locations { bodyRows*.$('td', 1)*.text() }
-        nomsIds { bodyRows*.$('td', 2)*.text()  }
-        flags { bodyRows*.$('td', 3)*.$('span') }
-        events { bodyRows*.$('td', 4)*.text() }
-        eventsElsewhere { bodyRows*.$('td', 5).collect { it.$('ul li')*.text() } }
+        locations { bodyRows*.$('td', 2)*.text() }
+        nomsIds { bodyRows*.$('td', 3)*.text()  }
+        flags { bodyRows*.$('td', 5)*.$('span') }
+        events { bodyRows*.$('td', 6)*.text() }
+        eventsElsewhere { bodyRows*.$('td', 7).collect { it.$('ul li')*.text() } }
 
         attendRadioElements(required: false) { bodyRows*.$('td[data-qa="pay-option"]')*.$('input') }
         notAttendedRadioElements(required: false) { bodyRows*.$('td[data-qa="other-option"]')*.$('input') }
