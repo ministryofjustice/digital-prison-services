@@ -189,7 +189,6 @@ class ResultsHouseblock extends Component {
         {isWithinNextTwoWorkingDays(date) && (
           <PrintButton
             id="printButton"
-            className=""
             onClick={e => {
               if (e) e.preventDefault()
               handlePrint()
@@ -242,12 +241,12 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className={redactedPrintState ? 'no-print no-display' : 'straightPrint no-display'}>
+        <th className={`no-display ${redactedHide}`}>
           <div>
             <span>Unlocked</span>
           </div>
         </th>
-        <th className={redactedPrintState ? 'no-print no-display' : 'straightPrint no-display'}>
+        <th className={`no-display ${redactedHide}`}>
           <div>
             <span>Gone</span>
           </div>

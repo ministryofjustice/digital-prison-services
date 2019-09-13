@@ -8,6 +8,7 @@ const PRISON = 'LEI'
 
 const OFFENDER_NAME_COLUMN = 0
 const NOMS_ID_COLUMN = 3
+const REDACTED_NOMS_ID_COLUMN = 4
 const FLAGS_COLUMN = 5
 const MAIN_COLUMN = 6
 const OTHER_COLUMN = 7
@@ -242,6 +243,8 @@ describe('Offender results component Jira NN-843', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(REDACTED_NOMS_ID_COLUMN).text()).toEqual('***34AA')
+
     // TODO: find out how to fix the following line...
     //     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     const row1Flags = row1Tds

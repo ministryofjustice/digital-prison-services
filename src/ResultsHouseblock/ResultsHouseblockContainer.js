@@ -158,7 +158,9 @@ class ResultsHouseblockContainer extends Component {
     const { raiseAnalyticsEvent } = this.props
 
     if (version === 'redacted') {
-      this.setState({ redactedPrint: true })
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
 
       raiseAnalyticsEvent({
         category: 'Redacted Residential list',
@@ -167,7 +169,9 @@ class ResultsHouseblockContainer extends Component {
     }
 
     if (!version) {
-      this.setState({ redactedPrint: false })
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
 
       raiseAnalyticsEvent({
         category: 'House block list',
@@ -175,7 +179,7 @@ class ResultsHouseblockContainer extends Component {
       })
     }
 
-    setTimeout(() => window.print(), 1000)
+    // setTimeout(() => window.print(), 1000)
   }
 
   handleSubLocationChange(event) {

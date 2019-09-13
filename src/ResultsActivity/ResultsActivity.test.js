@@ -9,6 +9,7 @@ import OtherActivitiesView from '../OtherActivityListView'
 const PRISON = 'SYI'
 const OFFENDER_NAME_COLUMN = 0
 const NOMS_ID_COLUMN = 3
+const REDACTED_NOMS_ID_COLUMN = 4
 const FLAGS_COLUMN = 5
 const ACTIVITY_COLUMN = 6
 const OTHER_COLUMN = 7
@@ -211,6 +212,7 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(REDACTED_NOMS_ID_COLUMN).text()).toEqual('***34AA')
 
     const row1Flags = row1Tds
       .at(FLAGS_COLUMN)

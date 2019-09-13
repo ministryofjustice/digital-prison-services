@@ -152,14 +152,7 @@ class ResultsActivity extends Component {
       <div id="buttons" className="pure-u-md-12-12 padding-bottom">
         {isWithinNextTwoWorkingDays(date) && (
           <div className="printButton">
-            <button
-              id="printButton"
-              className="button"
-              type="button"
-              onClick={() => {
-                handlePrint()
-              }}
-            >
+            <button id="printButton" className="button" type="button" onClick={() => handlePrint()}>
               <img
                 className="print-icon"
                 src="/images/Printer_icon_white.png"

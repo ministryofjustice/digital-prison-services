@@ -127,7 +127,9 @@ class ResultsActivityContainer extends Component {
     const { raiseAnalyticsEvent } = this.props
 
     if (version === 'redacted') {
-      this.setState({ redactedPrint: true })
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
 
       raiseAnalyticsEvent({
         category: 'Redacted Activity list',
@@ -136,15 +138,15 @@ class ResultsActivityContainer extends Component {
     }
 
     if (!version) {
-      this.setState({ redactedPrint: false })
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
 
       raiseAnalyticsEvent({
         category: 'Activity list',
         action: 'Print list',
       })
     }
-
-    setTimeout(() => window.print(), 1000)
   }
 
   render() {
