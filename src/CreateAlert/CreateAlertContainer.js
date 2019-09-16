@@ -74,7 +74,7 @@ export class CreateAlertContainer extends Component {
     return (
       <>
         <GridRow>
-          <GridCol columnOneHalf>
+          <GridCol setWidth="one-half">
             <OffenderPage
               alwaysRender
               title={() => `Create alert`}
@@ -95,7 +95,7 @@ export class CreateAlertContainer extends Component {
           </GridCol>
         </GridRow>
         <GridRow>
-          <GridCol columnOneHalf>
+          <GridCol setWidth="one-half">
             <CreateAlertForm
               cancelHandler={this.cancel}
               createAlertHandler={this.createAlertHandler}
