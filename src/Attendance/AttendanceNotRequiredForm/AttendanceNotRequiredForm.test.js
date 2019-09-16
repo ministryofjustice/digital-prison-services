@@ -25,7 +25,8 @@ describe('<AttendanceNotRequiredForm />', () => {
 
   describe('with form values', () => {
     const wrapper = mount(<AttendanceNotRequiredForm {...props} />)
-    wrapper.find('textarea[name="comments"]').simulate('change', { target: { value: 'A supporting comment.' } })
+    const comments = 'A supporting comment.'
+    wrapper.find('textarea[name="comments"]').simulate('change', { target: { value: comments } })
     const confirmButton = wrapper.find('button[name="confirm"]')
 
     it('should NOT have a disabled confirm/form submit button', () => {
@@ -35,7 +36,7 @@ describe('<AttendanceNotRequiredForm />', () => {
     it('should trigger the submit handler when submitted', () => {
       confirmButton.simulate('submit')
 
-      expect(props.submitHandler).toHaveBeenCalled()
+      expect(props.submitHandler).toHaveBeenCalledWith({ comments })
     })
   })
 })
