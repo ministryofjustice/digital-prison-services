@@ -4,6 +4,7 @@ const referenceCodesServiceFactory = elite2Api => {
     const alertTypes = types.map(type => ({
       value: type.code,
       description: type.description,
+      activeFlag: type.activeFlag,
     }))
 
     const alertSubTypes = types
@@ -13,6 +14,7 @@ const referenceCodesServiceFactory = elite2Api => {
         value: type.code,
         parentValue: type.parentCode,
         description: type.description,
+        activeFlag: type.activeFlag,
       }))
 
     const alphaSortOnDescription = (a, b) => a.description.localeCompare(b.description)
