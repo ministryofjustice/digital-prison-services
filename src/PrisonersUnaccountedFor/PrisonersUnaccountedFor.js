@@ -74,10 +74,10 @@ const PrisonersUnaccountedFor = ({
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (
-                <React.Fragment>
+                <>
                   <Table.CellHeader setWidth="15%">Attended</Table.CellHeader>
                   <Table.CellHeader setWidth="15%">Not attended</Table.CellHeader>
-                </React.Fragment>
+                </>
               )}
               fallbackRender={() => <></>}
             />

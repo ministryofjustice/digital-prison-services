@@ -320,7 +320,7 @@ class ResultsHouseblock extends Component {
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (
-                <Fragment>
+                <>
                   {isReceived && <td className="no-print">Received</td>}
                   {isPaid && <td className="no-print">Paid</td>}
                   {!isReceived &&
@@ -339,7 +339,7 @@ class ResultsHouseblock extends Component {
                         noPay
                       />
                     )}
-                </Fragment>
+                </>
               )}
               fallbackRender={() => <></>}
             />

@@ -12,7 +12,7 @@ import { LAST_NAME } from '../tablesorting/sortColumns'
 import Flags from '../FullFlags/Flags'
 
 const EnRoute = ({ rows, sortOrder, setColumnSort }) => (
-  <React.Fragment>
+  <>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
@@ -70,7 +70,7 @@ const EnRoute = ({ rows, sortOrder, setColumnSort }) => (
         ))}
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 EnRoute.propTypes = {

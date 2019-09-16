@@ -125,7 +125,7 @@ class AddPrisonerContainer extends Component {
           </ScrollToTop>
         )}
         {!complete && (
-          <React.Fragment>
+          <>
             <p> Upload the prison numbers for all prisoners attending the below appointment. </p>
             <Container>
               <Divider />
@@ -155,7 +155,7 @@ class AddPrisonerContainer extends Component {
                 dispatchAppointmentPrisoners={dispatchAppointmentPrisoners}
               />
             </Container>
-          </React.Fragment>
+          </>
         )}
       </Page>
     )

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import './AlertFlags.scss'
 
 const AlertFlag = ({ children, ...props }) => (
-  <Fragment>
+  <>
     <span {...props}>{children}</span>{' '}
-  </Fragment>
+  </>
 )
 
 AlertFlag.propTypes = {
