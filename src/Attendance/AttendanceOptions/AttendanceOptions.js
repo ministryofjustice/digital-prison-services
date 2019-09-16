@@ -142,9 +142,9 @@ function AttendanceOptions({
   }
 
   return (
-    <Fragment>
+    <>
       {!noPay && (
-        <Fragment>
+        <>
           {absentReason && (
             <Option data-qa="absent-reason" printOnly>
               {absentReason.name}
@@ -165,7 +165,7 @@ function AttendanceOptions({
               )}
             {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
           </Option>
-        </Fragment>
+        </>
       )}
       <Option data-qa="other-option" className="row-gutters">
         {showRadioButton &&
@@ -183,7 +183,7 @@ function AttendanceOptions({
         {absentReason && locked && <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>}
         {noPay && notRecorded && <OtherMessage data-qa="other-message">Not Recorded</OtherMessage>}
       </Option>
-    </Fragment>
+    </>
   )
 }
 

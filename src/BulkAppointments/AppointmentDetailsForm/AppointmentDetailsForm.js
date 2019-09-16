@@ -37,7 +37,7 @@ const endDateCalculator = createDecorator({
   },
 })
 export const FormFields = ({ errors, values, appointmentTypes, locationTypes, now }) => (
-  <React.Fragment>
+  <>
     {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
     <Container>
       <div>
@@ -173,7 +173,7 @@ export const FormFields = ({ errors, values, appointmentTypes, locationTypes, no
         />
       </RightSection>
     </Container>
-  </React.Fragment>
+  </>
 )
 
 FormFields.propTypes = {

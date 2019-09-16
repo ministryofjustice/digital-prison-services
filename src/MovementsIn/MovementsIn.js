@@ -23,7 +23,7 @@ const withLink = (row, activeCaseLoadId, element) => {
 }
 
 const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
-  <React.Fragment>
+  <>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
@@ -80,7 +80,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
         ))}
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 MovementsIn.propTypes = {

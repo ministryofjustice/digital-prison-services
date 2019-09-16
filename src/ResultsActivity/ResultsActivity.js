@@ -273,10 +273,10 @@ class ResultsActivity extends Component {
         <Flag
           name={['updateAttendanceEnabled']}
           render={() => (
-            <React.Fragment>
+            <>
               <th className="straight width4 no-print">Attended</th>
               <th className="straight width6 no-print">Not attended</th>
-            </React.Fragment>
+            </>
           )}
           fallbackRender={() => <></>}
         />

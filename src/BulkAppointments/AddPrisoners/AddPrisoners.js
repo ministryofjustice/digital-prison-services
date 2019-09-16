@@ -29,7 +29,7 @@ export const interceptOnChange = ({ input, currentOffender, offenders, dispatchA
 }
 
 export const FormFields = ({ errors, error, offenders, date, now, dispatchAppointmentPrisoners }) => (
-  <React.Fragment>
+  <>
     {error && <ErrorText> {error} </ErrorText>}
     {errors && <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />}
     <Table className="row-gutters">
@@ -75,7 +75,7 @@ export const FormFields = ({ errors, error, offenders, date, now, dispatchAppoin
         ))}
       </tbody>
     </Table>
-  </React.Fragment>
+  </>
 )
 
 FormFields.propTypes = {

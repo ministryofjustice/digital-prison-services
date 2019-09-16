@@ -45,7 +45,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
         <H1 size="MEDIUM">An IEP has been created</H1>
         <ButtonContainer>
           {!isMobile && (
-            <Fragment>
+            <>
               <Paragraph>Do you want to print an IEP warning slip?</Paragraph>
               <HintText>You can also print this later from their case notes.</HintText>
               <Button onClick={handlePrint} mb={0}>
@@ -54,7 +54,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
               <ButtonCancel mb={0} onClick={() => showModal(false)}>
                 No
               </ButtonCancel>
-            </Fragment>
+            </>
           )}
           {isMobile && (
             <Button mb={0} onClick={() => showModal(false)}>

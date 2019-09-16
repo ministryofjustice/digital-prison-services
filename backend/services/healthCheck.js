@@ -8,7 +8,7 @@ const service = (name, url) => {
       .catch(err => ({ name, status: 'ERROR', message: err }))
 }
 
-const gatherCheckInfo = (total, currentValue) => Object.assign({}, total, { [currentValue.name]: currentValue.message })
+const gatherCheckInfo = (total, currentValue) => ({ ...total, [currentValue.name]: currentValue.message })
 
 const getBuild = () => {
   try {
@@ -27,7 +27,7 @@ const addAppInfo = result => {
     version: (buildInformation && buildInformation.buildNumber) || 'Not available',
   }
 
-  return Object.assign({}, result, buildInfo)
+  return { ...result, ...buildInfo }
 }
 
 module.exports = function healthcheckFactory(authUrl, elite2Url, whereaboutsUrl, communityUrl) {
