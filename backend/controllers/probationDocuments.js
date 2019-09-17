@@ -48,12 +48,25 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
       const convictionSorter = (first, second) =>
         moment(second.referralDate, 'YYYY-MM-DD').diff(moment(first.referralDate, 'YYYY-MM-DD'))
 
+      const documentSorter = (first, second) =>
+        moment(second.createdAt, 'YYYY-MM-DD').diff(moment(first.createdAt, 'YYYY-MM-DD'))
+
+      const documentMapper = document => ({
+        id: document.id,
+        documentName: document.documentName,
+        author: document.author,
+        type: document.type.description,
+        description: document.extendedDescription || '',
+        date: formatTimestampToDate(document.createdAt),
+      })
+
       const convictionMapper = conviction => {
         const convictionSummary = {
           title: convictionDescription(conviction),
           offence: mainOffenceDescription(conviction),
           date: formatTimestampToDate(conviction.referralDate),
           active: conviction.active,
+          documents: conviction.documents.sort(documentSorter).map(documentMapper),
         }
 
         if (conviction.custody) {
@@ -65,15 +78,30 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
 
       try {
         const systemContext = await systemOauthClient.getClientCredentialsTokens()
-        const [convictions, probationOffenderDetails] = await Promise.all([
+        const [convictions, probationOffenderDetails, allDocuments] = await Promise.all([
           communityApi.getOffenderConvictions(systemContext, { offenderNo }),
           communityApi.getOffenderDetails(systemContext, { offenderNo }),
+          communityApi.getOffenderDocuments(systemContext, { offenderNo }),
         ])
 
-        const convictionSummaries = convictions.sort(convictionSorter).map(convictionMapper)
+        const convictionsWithDocuments = convictions.map(conviction => {
+          const relatedConviction = allDocuments.convictions.find(
+            // community api mixes types for convictionId so use string
+            documentConviction => documentConviction.convictionId.toString() === conviction.convictionId.toString()
+          )
+          return {
+            ...conviction,
+            documents: (relatedConviction && relatedConviction.documents) || [],
+          }
+        })
+        const convictionSummaries = convictionsWithDocuments.sort(convictionSorter).map(convictionMapper)
+        const offenderDocuments = allDocuments.documents.sort(documentSorter).map(documentMapper)
 
         return {
-          documents: { convictions: convictionSummaries },
+          documents: {
+            offenderDocuments,
+            convictions: convictionSummaries,
+          },
           probationDetails: {
             name: `${probationOffenderDetails.firstName} ${probationOffenderDetails.surname}`,
             crn: probationOffenderDetails.otherIds.crn,
