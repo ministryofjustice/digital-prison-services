@@ -36,7 +36,7 @@ export class Page extends Component {
 
     if (alwaysRender || loaded || error) {
       return (
-        <Fragment>
+        <>
           {alwaysRender && !loaded && <Spinner />}
           {showBreadcrumb && <Breadcrumb homeLink={homeLink} />}
           {backLink && <BackLink href={backLink}>Back</BackLink>}
@@ -53,7 +53,7 @@ export class Page extends Component {
             {(!error || alwaysRender) && <div className="page-content">{children}</div>}
           </Container>
           {showPrint && <PrintLink bottom />}
-        </Fragment>
+        </>
       )
     }
 

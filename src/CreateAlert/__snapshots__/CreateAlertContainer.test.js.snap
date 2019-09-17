@@ -5,11 +5,12 @@ exports[`Create Alert container Initial load should pass the correct props to th
   <GridRow>
     <GridCol
       columnFull={false}
-      columnOneHalf={true}
+      columnOneHalf={false}
       columnOneQuarter={false}
       columnOneThird={false}
       columnThreeQuarters={false}
       columnTwoThirds={false}
+      setWidth="one-half"
     >
       <Connect(OffenderPage)
         alwaysRender={true}
@@ -49,11 +50,12 @@ exports[`Create Alert container Initial load should pass the correct props to th
   <GridRow>
     <GridCol
       columnFull={false}
-      columnOneHalf={true}
+      columnOneHalf={false}
       columnOneQuarter={false}
       columnOneThird={false}
       columnThreeQuarters={false}
       columnTwoThirds={false}
+      setWidth="one-half"
     >
       <Connect(CreateAlertFinalForm)
         alertSubTypes={Array []}

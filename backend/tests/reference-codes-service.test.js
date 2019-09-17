@@ -60,12 +60,12 @@ describe('Reference codes service', () => {
 
     expect(model).toEqual({
       alertSubTypes: [
-        { description: 'L1 Restriction No contact with any child', parentValue: 'C', value: 'C1' },
-        { description: 'Social Care', parentValue: 'A', value: 'AS' },
+        { activeFlag: 'N', description: 'L1 Restriction No contact with any child', parentValue: 'C', value: 'C1' },
+        { activeFlag: 'Y', description: 'Social Care', parentValue: 'A', value: 'AS' },
       ],
       alertTypes: [
-        { description: 'Child Communication Measures', value: 'C' },
-        { description: 'Social Care', value: 'A' },
+        { activeFlag: 'Y', description: 'Child Communication Measures', value: 'C' },
+        { activeFlag: 'Y', description: 'Social Care', value: 'A' },
       ],
     })
   })

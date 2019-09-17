@@ -1,83 +1,81 @@
 import { probationDocumentsFactory } from '../controllers/probationDocuments'
 
 function aConviction(overrides = {}) {
-  return Object.assign(
-    {
-      convictionId: 2500295345,
-      index: '1',
-      active: true,
-      inBreach: false,
-      convictionDate: '2019-09-03',
-      referralDate: '2018-09-04',
-      offences: [
-        {
-          offenceId: 'M2500295343',
-          mainOffence: true,
-          detail: {
-            code: '00102',
-            description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
-            mainCategoryCode: '001',
-            mainCategoryDescription: 'Murder',
-            mainCategoryAbbreviation: 'Murder',
-            ogrsOffenceCategory: 'Violence',
-            subCategoryCode: '02',
-            subCategoryDescription: 'Murder of infants under 1 year of age',
-            form20Code: '20',
-          },
-          offenceDate: '2018-08-04T00:00:00',
-          offenceCount: 1,
-          offenderId: 2500343964,
-          createdDatetime: '2019-09-04T12:13:48',
-          lastUpdatedDatetime: '2019-09-04T12:13:48',
+  return {
+    convictionId: 2500295345,
+    index: '1',
+    active: true,
+    inBreach: false,
+    convictionDate: '2019-09-03',
+    referralDate: '2018-09-04',
+    offences: [
+      {
+        offenceId: 'M2500295343',
+        mainOffence: true,
+        detail: {
+          code: '00102',
+          description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
+          mainCategoryCode: '001',
+          mainCategoryDescription: 'Murder',
+          mainCategoryAbbreviation: 'Murder',
+          ogrsOffenceCategory: 'Violence',
+          subCategoryCode: '02',
+          subCategoryDescription: 'Murder of infants under 1 year of age',
+          form20Code: '20',
         },
-        {
-          offenceId: 'A2500108084',
-          mainOffence: false,
-          detail: {
-            code: '02801',
-            description:
-              'Burglary (dwelling) with intent to commit, or the commission of an offence triable only on indictment - 02801',
-            mainCategoryCode: '028',
-            mainCategoryDescription: 'Burglary in a dwelling',
-            mainCategoryAbbreviation: 'Burglary in a dwelling',
-            ogrsOffenceCategory: 'Burglary (Domestic)',
-            subCategoryCode: '01',
-            subCategoryDescription:
-              'Burglary (dwelling) with intent to commit, or the commission of, an offence triable only on indictment',
-            form20Code: '40',
-          },
-          offenceDate: '2019-09-02T00:00:00',
-          offenceCount: 3,
-          createdDatetime: '2019-09-04T12:23:01',
-          lastUpdatedDatetime: '2019-09-04T12:23:01',
-        },
-      ],
-      sentence: {
-        description: 'CJA - Indeterminate Public Prot.',
-        originalLength: 5,
-        originalLengthUnits: 'Years',
-        secondLength: 5,
-        secondLengthUnits: 'Years',
-        defaultLength: 60,
-        lengthInDays: 1826,
+        offenceDate: '2018-08-04T00:00:00',
+        offenceCount: 1,
+        offenderId: 2500343964,
+        createdDatetime: '2019-09-04T12:13:48',
+        lastUpdatedDatetime: '2019-09-04T12:13:48',
       },
-      latestCourtAppearanceOutcome: {
-        code: '303',
-        description: 'CJA - Indeterminate Public Prot.',
-      },
-      custody: {
-        bookingNumber: 'V74111',
-        institution: {
-          institutionId: 2500004521,
-          isEstablishment: true,
-          code: 'BWIHMP',
-          description: 'Berwyn (HMP)',
-          institutionName: 'Berwyn (HMP)',
+      {
+        offenceId: 'A2500108084',
+        mainOffence: false,
+        detail: {
+          code: '02801',
+          description:
+            'Burglary (dwelling) with intent to commit, or the commission of an offence triable only on indictment - 02801',
+          mainCategoryCode: '028',
+          mainCategoryDescription: 'Burglary in a dwelling',
+          mainCategoryAbbreviation: 'Burglary in a dwelling',
+          ogrsOffenceCategory: 'Burglary (Domestic)',
+          subCategoryCode: '01',
+          subCategoryDescription:
+            'Burglary (dwelling) with intent to commit, or the commission of, an offence triable only on indictment',
+          form20Code: '40',
         },
+        offenceDate: '2019-09-02T00:00:00',
+        offenceCount: 3,
+        createdDatetime: '2019-09-04T12:23:01',
+        lastUpdatedDatetime: '2019-09-04T12:23:01',
+      },
+    ],
+    sentence: {
+      description: 'CJA - Indeterminate Public Prot.',
+      originalLength: 5,
+      originalLengthUnits: 'Years',
+      secondLength: 5,
+      secondLengthUnits: 'Years',
+      defaultLength: 60,
+      lengthInDays: 1826,
+    },
+    latestCourtAppearanceOutcome: {
+      code: '303',
+      description: 'CJA - Indeterminate Public Prot.',
+    },
+    custody: {
+      bookingNumber: 'V74111',
+      institution: {
+        institutionId: 2500004521,
+        isEstablishment: true,
+        code: 'BWIHMP',
+        description: 'Berwyn (HMP)',
+        institutionName: 'Berwyn (HMP)',
       },
     },
-    overrides
-  )
+    ...overrides,
+  }
 }
 
 function documentsWithSingleConvictionMatching(conviction) {

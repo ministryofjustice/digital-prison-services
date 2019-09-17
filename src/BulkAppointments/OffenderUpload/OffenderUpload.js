@@ -38,7 +38,7 @@ const onFileInputChanged = async ({ event, onError, onSuccess, agencyId }) => {
 }
 
 const OffenderUpload = ({ onError, onSuccess, onCancel, showCancelButton, agencyId }) => (
-  <React.Fragment>
+  <>
     <Container>
       <a href="/bulk-appointments/csv-template" className="link">
         Download CSV template
@@ -59,7 +59,7 @@ const OffenderUpload = ({ onError, onSuccess, onCancel, showCancelButton, agency
         Cancel
       </Button>
     )}
-  </React.Fragment>
+  </>
 )
 
 OffenderUpload.propTypes = {

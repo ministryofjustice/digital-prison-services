@@ -6,8 +6,14 @@ import { CreateAlertForm } from './CreateAlertForm'
 import { DATE_ONLY_FORMAT_SPEC } from '../dateHelpers'
 
 const alerts = {
-  alertTypes: [{ title: 'alert 1', value: 'alert-type-1' }],
-  alertSubTypes: [{ title: 'alert sub 1', value: 'alert-sub-1', parentValue: 'alert-type-1' }],
+  alertTypes: [
+    { activeFlag: 'Y', title: 'alert 1', value: 'alert-type-1' },
+    { activeFlag: 'N', title: 'alert 2', value: 'alert-type-2' },
+  ],
+  alertSubTypes: [
+    { activeFlag: 'Y', title: 'alert sub 1', value: 'alert-sub-1', parentValue: 'alert-type-1' },
+    { activeFlag: 'N', title: 'alert sub 2', value: 'alert-sub-2', parentValue: 'alert-type-1' },
+  ],
 }
 
 describe('Create alert form', () => {
@@ -35,7 +41,18 @@ describe('Create alert form', () => {
     ).toBe(0)
   })
 
-  it('should populate the alert sub types based off the selected alertType', () => {
+  it('should populate the alert types with active alert types', () => {
+    const wrapper = shallow(
+      <CreateAlertForm cancelHandler={() => {}} handleSubmit={() => {}} alertTypes={alerts.alertTypes} />
+    )
+
+    const alertTypeOptions = wrapper.find({ name: 'alertType' }).getElement().props.children
+
+    expect(alertTypeOptions[1].length).toBe(1)
+    expect(alertTypeOptions[1][0].props.value).toBe('alert-type-1')
+  })
+
+  it('should populate the alert sub types with active alert sub types and based off the selected parent alert type', () => {
     const wrapper = shallow(
       <CreateAlertForm
         cancelHandler={() => {}}
@@ -48,6 +65,7 @@ describe('Create alert form', () => {
 
     const alertSubTypeOptions = wrapper.find({ name: 'alertSubType' }).getElement().props.children
 
+    expect(alertSubTypeOptions[1].length).toBe(1)
     expect(alertSubTypeOptions[1][0].props.value).toBe('alert-sub-1')
   })
 
