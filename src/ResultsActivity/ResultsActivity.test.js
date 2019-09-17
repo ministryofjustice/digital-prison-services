@@ -172,6 +172,7 @@ const props = {
   activityName: 'Activity name',
   userRoles: ['ACTIVITY_HUB'],
   totalAttended: 0,
+  redactedPrintState: false,
 }
 
 describe('Offender activity list results component', () => {
