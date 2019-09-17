@@ -18,7 +18,8 @@ public class WhereaboutsApi extends WireMockRule {
         super(18082)
     }
 
-    def attendance = [
+    def attendance = {
+        attendances:[
             {
                 id: 1
                 bookingId: 3
@@ -53,9 +54,11 @@ public class WhereaboutsApi extends WireMockRule {
                 absenceReasons: 'UnacceptableAbsence'
                 eventDate: '2019-05-15'
             },
-    ]
+        ]
+    }
 
-    def attendanceForBookingsResponse = [
+    def attendanceForBookingsResponse = {
+        attendances: [
             [
                 id: 1,
                 attended: true,
@@ -86,7 +89,8 @@ public class WhereaboutsApi extends WireMockRule {
                 period: 'AM',
                 prisonId: 'string',
             ],
-    ]
+        ]
+    }
 
     def absenceReasons = [
             paidReasons: [ 'AcceptableAbsence', 'NotRequired' ],
