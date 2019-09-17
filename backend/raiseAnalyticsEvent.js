@@ -9,8 +9,7 @@ const raiseAnalyticsEvent = (category, action, label) => {
     ea: action,
     el: label,
   }
-  const res = ga.event(data).send()
-  return res
+  return ga.event(data).send()
 }
 
 module.exports = {
