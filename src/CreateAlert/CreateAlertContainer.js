@@ -50,9 +50,9 @@ export class CreateAlertContainer extends Component {
       }))
 
       raiseAnalyticsEvent({
-        category: `alert created for ${agencyId}`,
-        label: 'Alerts',
-        value: { alertType, alertSubType, comment, effectiveDate },
+        category: 'Alert Created',
+        label: `Alert type - ${alertSubType}`,
+        action: `Alert created for ${agencyId}`,
       })
 
       notify.show('Alert has been created', 'success')
