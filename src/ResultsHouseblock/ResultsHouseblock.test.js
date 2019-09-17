@@ -195,6 +195,7 @@ const props = {
   showModal: jest.fn(),
   activityName: 'Activity name',
   totalAttended: 0,
+  redactedPrintState: false,
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -490,7 +491,19 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should not display "Print list for general view" links if date is today', () => {
     const today = moment().format('DD/MM/YYYY')
-    const component = shallow(<ResultsHouseblock {...props} houseblockData={response} date={today} period="AM" />)
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={today}
+        period="ED"
+        orderField="cellLocation"
+        sortOrder="ASC"
+        currentLocation="BWing"
+        user={user}
+        offenderNo="1"
+      />
+    )
 
     const printRedactedButton = component.find('#redactedPrintButton')
     expect(printRedactedButton.length).toEqual(0)
@@ -498,8 +511,19 @@ describe('Offender results component Jira NN-843', () => {
 
   it('should display "Print list for general view" links if date is after today', () => {
     const date = moment().add(1, 'day')
-    const component = shallow(<ResultsHouseblock {...props} houseblockData={response} date={date} period="AM" />)
-
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={date}
+        period="ED"
+        orderField="cellLocation"
+        sortOrder="ASC"
+        currentLocation="BWing"
+        user={user}
+        offenderNo="1"
+      />
+    )
     const printRedactedButton = component.find('.redactedPrintButton')
     expect(printRedactedButton.length).toEqual(2)
   })
