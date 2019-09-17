@@ -616,6 +616,8 @@ App.propTypes = {
     mailTo: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
     licencesUrl: PropTypes.string,
+    flags: PropTypes.objectOf(PropTypes.string),
+    updateAttendancePrisons: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),

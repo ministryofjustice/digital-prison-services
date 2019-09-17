@@ -71,6 +71,7 @@ EnRouteContainer.propTypes = {
   agencyId: PropTypes.string.isRequired,
   caseLoadOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

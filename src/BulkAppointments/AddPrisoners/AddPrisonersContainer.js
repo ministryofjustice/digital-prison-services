@@ -172,6 +172,7 @@ AddPrisonerContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   }).isRequired,
   dispatchAppointmentPrisoners: PropTypes.func.isRequired,
   dispatchBulkAppointmentsComplete: PropTypes.func.isRequired,

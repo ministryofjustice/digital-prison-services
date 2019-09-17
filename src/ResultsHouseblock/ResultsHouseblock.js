@@ -438,6 +438,8 @@ ResultsHouseblock.propTypes = {
   sortOrder: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
   setHouseblockOffenderAttendance: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,

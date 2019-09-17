@@ -64,8 +64,10 @@ MovementsOutContainer.propTypes = {
   handleError: PropTypes.func.isRequired,
   agencyId: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   }).isRequired,
 }
 

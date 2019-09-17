@@ -190,6 +190,7 @@ function AttendanceOptions({
 AttendanceOptions.propTypes = {
   offenderDetails: PropTypes.shape({
     offenderNo: PropTypes.string,
+    bookingId: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     eventId: PropTypes.number,

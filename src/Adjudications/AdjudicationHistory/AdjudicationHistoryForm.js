@@ -145,6 +145,29 @@ AdjudicationHistoryForm.propTypes = {
   }).isRequired,
 }
 
+FormFields.propTypes = {
+  now: PropTypes.instanceOf(moment).isRequired,
+  errors: PropTypes.arrayOf(PropTypes.shape({})),
+  submitting: PropTypes.bool.isRequired,
+  agencies: PropTypes.arrayOf(
+    PropTypes.shape({
+      agencyId: PropTypes.string.isRequired,
+      agencyType: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  values: PropTypes.shape({
+    establishment: PropTypes.string,
+    fromDate: PropTypes.instanceOf(moment),
+    toDate: PropTypes.instanceOf(moment),
+  }).isRequired,
+  reset: PropTypes.func.isRequired,
+}
+
+FormFields.defaultProps = {
+  errors: [],
+}
+
 const mapStateToProps = state => ({
   now: state.adjudicationHistory.now,
   agencies: state.adjudicationHistory.agencies,

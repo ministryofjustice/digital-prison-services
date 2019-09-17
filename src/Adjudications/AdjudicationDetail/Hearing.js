@@ -57,7 +57,7 @@ Hearing.propTypes = {
 }
 
 Hearing.defaultProps = {
-  hearing: null,
+  hearing: undefined,
 }
 
 const mapStateToProps = ({

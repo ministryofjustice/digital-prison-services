@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
+import PropTypes from 'prop-types'
 
 const StyledModal = styled(Modal)`
   background: rgb(255, 255, 255);
@@ -48,6 +49,11 @@ const ModalContainer = ({ isOpen, showModal, ...props }) => {
       {...props}
     />
   )
+}
+
+ModalContainer.propTypes = {
+  isOpen: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
 }
 
 export default ModalContainer

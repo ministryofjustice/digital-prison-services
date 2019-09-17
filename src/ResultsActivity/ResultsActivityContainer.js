@@ -189,6 +189,9 @@ ResultsActivityContainer.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
+  getAbsentReasonsDispatch: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
 
   // mapStateToProps
   activity: PropTypes.string.isRequired,

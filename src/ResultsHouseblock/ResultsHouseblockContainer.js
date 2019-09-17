@@ -229,11 +229,14 @@ ResultsHouseblockContainer.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
 
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
+  houseblockData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   loaded: PropTypes.bool.isRequired,
@@ -249,6 +252,8 @@ ResultsHouseblockContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
+  getAbsentReasonsDispatch: PropTypes.func.isRequired,
 
   // special
   history: ReactRouterPropTypes.history.isRequired,

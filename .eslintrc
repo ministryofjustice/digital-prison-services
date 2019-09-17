@@ -25,7 +25,6 @@
     "prettier/prettier": ["error"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-props-no-spreading": 1,
-    "react/prop-types": 1,
     "jsx-a11y/control-has-associated-label": 1,
     "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] }],
     "no-param-reassign": [2, { "props": true }],

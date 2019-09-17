@@ -125,6 +125,7 @@ IepChangeContainer.defaultProps = {
 IepChangeContainer.propTypes = {
   offenderNo: PropTypes.string,
   currentIepLevel: PropTypes.string,
+  activeCaseLoadId: PropTypes.string.isRequired,
   offenderDetails: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
@@ -142,6 +143,7 @@ IepChangeContainer.propTypes = {
   // history from Redux Router Route
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
   }).isRequired,
 
   // redux dispatch
