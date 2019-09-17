@@ -497,7 +497,7 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.prisonersUnaccountedFor}
-            render={({ history, match: { params } }) => (
+            render={({ history }) => (
               <PrisonersUnaccountedForContainer
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
