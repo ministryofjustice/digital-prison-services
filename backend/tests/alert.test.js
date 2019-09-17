@@ -189,10 +189,7 @@ describe('alert management', () => {
         elite2api.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
         elite2api.userCaseLoads = jest.fn().mockReturnValue([
           {
-            caseLoadId: 'AKI',
-            description: 'Acklington (HMP)',
-            type: 'INST',
-            caseloadFunction: 'GENERAL',
+            caseLoadId: 'LEI',
             currentlyActive: true,
           },
         ])
@@ -204,7 +201,7 @@ describe('alert management', () => {
           expiryDate: '2019-03-29',
         })
 
-        expect(raiseAnalyticsEvent).toBeCalledWith('Alert Closed', `Alert closed for AKI`, `Alert type - LFC21`)
+        expect(raiseAnalyticsEvent).toBeCalledWith('Alert Closed', 'Alert closed for LEI', 'Alert type - LFC21')
 
         expect(res.redirect).toBeCalledWith('//newNomisEndPointUrl/offenders/ABC123/alerts?alertStatus=closed')
 
