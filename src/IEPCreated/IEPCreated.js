@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { H1 } from '@govuk-react/heading'
@@ -70,7 +70,12 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
 IEPCreated.propTypes = {
   user: userType.isRequired,
   showModal: PropTypes.func.isRequired,
-  offender: PropTypes.shape({}).isRequired,
+  offender: PropTypes.shape({
+    offenderNo: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    cellLocation: PropTypes.string,
+  }).isRequired,
   activityName: PropTypes.string.isRequired,
   iepValues: PropTypes.shape({
     pay: PropTypes.string,

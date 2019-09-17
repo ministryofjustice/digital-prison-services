@@ -41,6 +41,7 @@ CurrentIepLevel.propTypes = {
   nextReviewDate: PropTypes.string,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   }).isRequired,
   userCanMaintainIep: PropTypes.bool.isRequired,
 }

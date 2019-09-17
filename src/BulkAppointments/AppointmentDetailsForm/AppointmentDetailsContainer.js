@@ -55,6 +55,7 @@ AppointmentDetailsFormContainer.propTypes = {
   dispatchAppointmentDetails: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   }).isRequired,
 }
 

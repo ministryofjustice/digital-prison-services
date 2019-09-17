@@ -32,6 +32,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
     <table>
       <thead>
         <tr>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <th className="straight width10" />
           <th className="straight width10">
             <SortableColumn

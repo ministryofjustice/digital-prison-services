@@ -52,6 +52,10 @@ Results.propTypes = {
   ),
 }
 
+Results.defaultProps = {
+  results: [],
+}
+
 const mapStateToProps = ({
   adjudicationHistory: {
     detail: { results },

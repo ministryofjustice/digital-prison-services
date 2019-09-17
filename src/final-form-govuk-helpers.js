@@ -44,6 +44,15 @@ WhenFieldChanges.propTypes = {
   to: PropTypes.string.isRequired,
 }
 
+FieldWithError.propTypes = {
+  name: PropTypes.string.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.shape({})),
+}
+
+FieldWithError.defaultProps = {
+  errors: [],
+}
+
 export { WhenFieldChanges }
 
 export const onHandleErrorClick = targetName => {

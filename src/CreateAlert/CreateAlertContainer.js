@@ -115,11 +115,13 @@ CreateAlertContainer.propTypes = {
   offenderDetails: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    bookingId: PropTypes.number,
   }).isRequired,
   handleError: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
   }).isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,

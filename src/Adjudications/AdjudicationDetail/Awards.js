@@ -56,6 +56,10 @@ Awards.propTypes = {
   ),
 }
 
+Awards.defaultProps = {
+  awards: [],
+}
+
 const mapStateToProps = ({
   adjudicationHistory: {
     detail: { sanctions },

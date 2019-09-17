@@ -66,7 +66,11 @@ InReceptionContainer.propTypes = {
   agencyId: PropTypes.string.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   }).isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

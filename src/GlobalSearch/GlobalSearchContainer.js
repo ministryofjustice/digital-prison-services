@@ -233,6 +233,7 @@ GlobalSearchContainer.propTypes = {
       latestLocation: PropTypes.string.isRequired,
     })
   ).isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   pageNumber: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
