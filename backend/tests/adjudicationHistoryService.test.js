@@ -165,7 +165,7 @@ const expectedResult = {
     },
   ],
 }
-describe('Adjudication History Service', async () => {
+describe('Adjudication History Service', () => {
   it('handles no results', async () => {
     elite2Api.getAdjudications.mockReturnValue(noAdjudications)
     elite2Api.getAdjudicationFindingTypes.mockReturnValue(findings)

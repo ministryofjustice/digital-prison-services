@@ -300,28 +300,30 @@ class ActivitySpecification extends BrowserReportingSpec {
         ]
 
         def attendance = [
-                [
-                        id: 1,
-                        bookingId: 2,
-                        eventId: 101,
-                        eventLocationId: 1,
-                        period: 'AM',
-                        prisonId: 'LEI',
-                        attended: false,
-                        paid: false,
-                        absentReason: 'UnacceptableAbsence',
-                        eventDate: '2019-05-15'
-                ],
-                [
-                        id: 2,
-                        bookingId: 1,
-                        eventId: 100,
-                        eventLocationId: 1,
-                        period: 'AM',
-                        prisonId: 'LEI',
-                        attended: true,
-                        paid: true,
-                        eventDate: '2019-05-15'
+                attendances: [
+                        [
+                                id: 1,
+                                bookingId: 2,
+                                eventId: 101,
+                                eventLocationId: 1,
+                                period: 'AM',
+                                prisonId: 'LEI',
+                                attended: false,
+                                paid: false,
+                                absentReason: 'UnacceptableAbsence',
+                                eventDate: '2019-05-15'
+                        ],
+                        [
+                                id: 2,
+                                bookingId: 1,
+                                eventId: 100,
+                                eventLocationId: 1,
+                                period: 'AM',
+                                prisonId: 'LEI',
+                                attended: true,
+                                paid: true,
+                                eventDate: '2019-05-15'
+                        ]
                 ]
         ]
 

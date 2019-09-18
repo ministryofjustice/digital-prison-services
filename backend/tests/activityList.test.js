@@ -123,7 +123,7 @@ beforeEach(() => {
   elite2Api.getActivities.mockReturnValue([])
 })
 
-describe('Activity list controller', async () => {
+describe('Activity list controller', () => {
   it('Should return no results as an empty array', async () => {
     elite2Api.getActivityList.mockReturnValue([])
 
@@ -482,47 +482,49 @@ describe('Activity list controller', async () => {
     })
 
     it('should load attendance details', async () => {
-      whereaboutsApi.getAttendance.mockReturnValue([
-        {
-          id: 1,
-          absentReason: 'AcceptableAbsence',
-          attended: false,
-          paid: true,
-          bookingId: 1,
-          eventDate: '2019-10-10',
-          eventId: 1,
-          eventLocationId: 1,
-          period: 'AM',
-          prisonId: 'LEI',
-          comments: 'Some comments or case note text.',
-          locked: true,
-        },
-        {
-          id: 2,
-          absentReason: 'Refused',
-          attended: true,
-          paid: false,
-          bookingId: 2,
-          eventDate: '2019-10-10',
-          eventId: 2,
-          eventLocationId: 1,
-          period: 'AM',
-          prisonId: 'LEI',
-          locked: false,
-        },
-        {
-          id: 3,
-          attended: true,
-          paid: true,
-          bookingId: 3,
-          eventDate: '2019-10-10',
-          eventId: 3,
-          eventLocationId: 1,
-          period: 'AM',
-          prisonId: 'LEI',
-          locked: true,
-        },
-      ])
+      whereaboutsApi.getAttendance.mockReturnValue({
+        attendances: [
+          {
+            id: 1,
+            absentReason: 'AcceptableAbsence',
+            attended: false,
+            paid: true,
+            bookingId: 1,
+            eventDate: '2019-10-10',
+            eventId: 1,
+            eventLocationId: 1,
+            period: 'AM',
+            prisonId: 'LEI',
+            comments: 'Some comments or case note text.',
+            locked: true,
+          },
+          {
+            id: 2,
+            absentReason: 'Refused',
+            attended: true,
+            paid: false,
+            bookingId: 2,
+            eventDate: '2019-10-10',
+            eventId: 2,
+            eventLocationId: 1,
+            period: 'AM',
+            prisonId: 'LEI',
+            locked: false,
+          },
+          {
+            id: 3,
+            attended: true,
+            paid: true,
+            bookingId: 3,
+            eventDate: '2019-10-10',
+            eventId: 3,
+            eventLocationId: 1,
+            period: 'AM',
+            prisonId: 'LEI',
+            locked: true,
+          },
+        ],
+      })
 
       elite2Api.getActivityList.mockImplementation((context, { usage }) => {
         switch (usage) {
@@ -612,23 +614,25 @@ describe('Activity list controller', async () => {
     })
 
     it('should format absent reasons', async () => {
-      whereaboutsApi.getAttendance.mockReturnValue([
-        {
-          id: 1,
-          absentReason: 'UnacceptableAbsence',
-          bookingId: 1,
-        },
-        {
-          id: 2,
-          absentReason: 'Refused',
-          bookingId: 2,
-        },
-        {
-          id: 3,
-          absentReason: 'AcceptableAbsence',
-          bookingId: 3,
-        },
-      ])
+      whereaboutsApi.getAttendance.mockReturnValue({
+        attendances: [
+          {
+            id: 1,
+            absentReason: 'UnacceptableAbsence',
+            bookingId: 1,
+          },
+          {
+            id: 2,
+            absentReason: 'Refused',
+            bookingId: 2,
+          },
+          {
+            id: 3,
+            absentReason: 'AcceptableAbsence',
+            bookingId: 3,
+          },
+        ],
+      })
 
       whereaboutsApi.getAbsenceReasons.mockReturnValue({
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
@@ -672,15 +676,17 @@ describe('Activity list controller', async () => {
           return []
       }
     })
-    whereaboutsApi.getAttendance.mockReturnValue([
-      {
-        id: 1,
-        absentReason: 'UnacceptableAbsence',
-        bookingId: 1,
-        eventId: 2,
-        eventLocationId: 2,
-      },
-    ])
+    whereaboutsApi.getAttendance.mockReturnValue({
+      attendances: [
+        {
+          id: 1,
+          absentReason: 'UnacceptableAbsence',
+          bookingId: 1,
+          eventId: 2,
+          eventLocationId: 2,
+        },
+      ],
+    })
 
     whereaboutsApi.getAbsenceReasons.mockReturnValue({
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
@@ -713,7 +719,7 @@ describe('Activity list controller', async () => {
           : []
     )
 
-    whereaboutsApi.getAttendance.mockReturnValue([])
+    whereaboutsApi.getAttendance.mockReturnValue({ attendances: [] })
     whereaboutsApi.getAbsenceReasons.mockReturnValue([])
 
     const { getActivityList: service } = factory(elite2Api, whereaboutsApi, {
@@ -735,7 +741,7 @@ describe('Activity list controller', async () => {
           ? [{ offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 }]
           : []
     )
-    whereaboutsApi.getAttendance.mockReturnValue([])
+    whereaboutsApi.getAttendance.mockReturnValue({ attendances: [] })
     whereaboutsApi.getAbsenceReasons.mockReturnValue([])
 
     const { getActivityList: service } = factory(elite2Api, whereaboutsApi, {

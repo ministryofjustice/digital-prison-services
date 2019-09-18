@@ -107,12 +107,14 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
         category,
       }
 
-      const attendanceInfo = attendanceInformation.find(
-        activityWithAttendance =>
-          event.bookingId === activityWithAttendance.bookingId &&
-          event.eventId === activityWithAttendance.eventId &&
-          event.eventLocationId === activityWithAttendance.eventLocationId
-      )
+      const attendanceInfo =
+        attendanceInformation.attendances &&
+        attendanceInformation.attendances.find(
+          activityWithAttendance =>
+            event.bookingId === activityWithAttendance.bookingId &&
+            event.eventId === activityWithAttendance.eventId &&
+            event.eventLocationId === activityWithAttendance.eventLocationId
+        )
 
       const { id, absentReason, comments, locked, paid, attended } = attendanceInfo || {}
 
