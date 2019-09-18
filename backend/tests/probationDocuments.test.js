@@ -1,5 +1,20 @@
 import { probationDocumentsFactory } from '../controllers/probationDocuments'
 
+function aDocument(overrides = {}) {
+  return {
+    id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
+    documentName: 'PRE-CONS.pdf',
+    author: 'Andy Marke',
+    type: {
+      code: 'PRECONS_DOCUMENT',
+      description: 'PNC previous convictions',
+    },
+    extendedDescription: 'Previous convictions as of 01/09/2019',
+    createdAt: '2019-09-10T00:00:00',
+    ...overrides,
+  }
+}
+
 function aConviction(overrides = {}) {
   return {
     convictionId: 2500295345,
@@ -81,6 +96,7 @@ function aConviction(overrides = {}) {
 function documentsWithSingleConvictionMatching(conviction) {
   return expect.objectContaining({
     documents: {
+      offenderDocuments: [],
       convictions: expect.objectContaining([expect.objectContaining(conviction)]),
     },
   })
@@ -89,6 +105,7 @@ function documentsWithSingleConvictionMatching(conviction) {
 function documentsWithMultipleConvictionMatching(convictions) {
   return expect.objectContaining({
     documents: {
+      offenderDocuments: [],
       convictions: expect.objectContaining(convictions.map(conviction => expect.objectContaining(conviction))),
     },
   })
@@ -116,6 +133,7 @@ describe('Probation documents', () => {
       oauthApi.userRoles = jest.fn()
       communityApi.getOffenderConvictions = jest.fn()
       communityApi.getOffenderDetails = jest.fn()
+      communityApi.getOffenderDocuments = jest.fn()
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
@@ -148,6 +166,10 @@ describe('Probation documents', () => {
           otherIds: {
             crn: 'X123456',
           },
+        })
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [],
         })
         page = probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient)
           .displayProbationDocumentsPage
@@ -196,6 +218,218 @@ describe('Probation documents', () => {
                 id: 'LEI',
               },
               displayName: 'User Name',
+            },
+          })
+        )
+      })
+
+      it('should supply page with offender related document', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
+          convictions: [],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [expect.objectContaining({ id: '1' }), expect.objectContaining({ id: '2' })],
+              convictions: [],
+            },
+          })
+        )
+      })
+
+      it('should sort offender related documents by createdAt', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [
+            aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
+            aDocument({ id: '2', createdAt: '2019-09-10T00:00:00' }),
+            aDocument({ id: '3', createdAt: '2019-09-08T00:00:00' }),
+          ],
+          convictions: [],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [
+                expect.objectContaining({ id: '2' }),
+                expect.objectContaining({ id: '1' }),
+                expect.objectContaining({ id: '3' }),
+              ],
+              convictions: [],
+            },
+          })
+        )
+      })
+
+      it('should supply page with mapped offender related document', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [
+            aDocument({
+              documentName: 'PRE-CONS.pdf',
+              author: 'Kate Bracket',
+              type: {
+                code: 'PRECONS_DOCUMENT',
+                description: 'PNC previous convictions',
+              },
+              extendedDescription: 'Previous convictions as of 01/09/2019',
+              createdAt: '2019-09-10T00:00:00',
+            }),
+          ],
+          convictions: [],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [
+                {
+                  author: 'Kate Bracket',
+                  date: '10/09/2019',
+                  description: 'Previous convictions as of 01/09/2019',
+                  documentName: 'PRE-CONS.pdf',
+                  id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
+                  type: 'PNC previous convictions',
+                },
+              ],
+              convictions: [],
+            },
+          })
+        )
+      })
+
+      it('should supply page with conviction related document', async () => {
+        communityApi.getOffenderConvictions.mockReturnValue([
+          aConviction({ convictionId: 1 }),
+          aConviction({ convictionId: 2 }),
+        ])
+
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [
+            {
+              convictionId: '1',
+              documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
+            },
+            {
+              convictionId: '2',
+              documents: [aDocument({ id: '3' }), aDocument({ id: '4' })],
+            },
+          ],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: expect.objectContaining([
+                expect.objectContaining({
+                  documents: [expect.objectContaining({ id: '1' }), expect.objectContaining({ id: '2' })],
+                }),
+                expect.objectContaining({
+                  documents: [expect.objectContaining({ id: '3' }), expect.objectContaining({ id: '4' })],
+                }),
+              ]),
+            },
+          })
+        )
+      })
+      it('should supply page with conviction related documents sorted by createdAt', async () => {
+        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
+
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [
+            {
+              convictionId: '1',
+              documents: [
+                aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
+                aDocument({ id: '2', createdAt: '2019-09-10T00:00:00' }),
+                aDocument({ id: '3', createdAt: '2019-09-08T00:00:00' }),
+              ],
+            },
+          ],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: expect.objectContaining([
+                expect.objectContaining({
+                  documents: [
+                    expect.objectContaining({ id: '2' }),
+                    expect.objectContaining({ id: '1' }),
+                    expect.objectContaining({ id: '3' }),
+                  ],
+                }),
+              ]),
+            },
+          })
+        )
+      })
+
+      it('should supply page with mapped document for conviction', async () => {
+        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
+
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [
+            {
+              convictionId: '1',
+              documents: [
+                aDocument({
+                  documentName: 'PRE-CONS.pdf',
+                  author: 'Kate Bracket',
+                  type: {
+                    code: 'PRECONS_DOCUMENT',
+                    description: 'PNC previous convictions',
+                  },
+                  extendedDescription: 'Previous convictions as of 01/09/2019',
+                  createdAt: '2019-09-10T00:00:00',
+                }),
+              ],
+            },
+          ],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: expect.objectContaining([
+                expect.objectContaining({
+                  documents: [
+                    {
+                      author: 'Kate Bracket',
+                      date: '10/09/2019',
+                      description: 'Previous convictions as of 01/09/2019',
+                      documentName: 'PRE-CONS.pdf',
+                      id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
+                      type: 'PNC previous convictions',
+                    },
+                  ],
+                }),
+              ]),
             },
           })
         )
@@ -445,6 +679,7 @@ describe('Probation documents', () => {
         beforeEach(() => {
           communityApi.getOffenderConvictions.mockReturnValue([])
           communityApi.getOffenderDetails.mockRejectedValue(error('Server error', 503))
+          communityApi.getOffenderDocuments.mockReturnValue([])
         })
         it('should render page with system error message', async () => {
           await page(req, res)
