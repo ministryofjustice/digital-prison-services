@@ -694,9 +694,9 @@ describe('Offender activity list results component', () => {
       },
     ])
 
-    expect(component.state().payingAll).toBe(true)
+    expect(component.state().attendingAll).toBe(true)
 
     await waitForAsync()
-    expect(component.state().payingAll).toBe(false)
+    expect(component.state().attendingAll).toBe(false)
   })
 })

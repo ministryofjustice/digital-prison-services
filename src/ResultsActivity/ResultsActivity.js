@@ -88,7 +88,7 @@ class ResultsActivity extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      payingAll: false,
+      attendingAll: false,
     }
   }
 
@@ -178,38 +178,48 @@ class ResultsActivity extends Component {
     const unattendedOffenders = new Set()
     const totalOffenders = new Set()
 
+    const updateMultipleAttendances = ({ paid, attended, reason, comments, offenders }) =>
+      axios.post('/api/attendance/batch', {
+        attended,
+        paid,
+        reason,
+        comments,
+        offenders,
+      })
+
     const attendAllNonAssigned = async () => {
       try {
-        this.setState({ payingAll: true })
-
-        const offenders = [...unattendedOffenders]
-
-        await axios.post('/api/attendance/batch', {
-          offenders,
-        })
-
+        this.setState({ attendingAll: true })
+        await updateMultipleAttendances({ paid: true, attended: true, offenders: [...unattendedOffenders] })
         getActivityList()
-        this.setState({ payingAll: false })
+        this.setState({ attendingAll: false })
       } catch (error) {
         handleError(error)
       }
     }
 
-    const markAsNotRequired = async values => {
+    const notRequireAllNonAssigned = async values => {
       const { comments } = values
-      console.log('not requiring all of the following', [...unattendedOffenders])
-      console.log(comments)
-      // pass comments and NotRequired absentReason to /api/attendance/batch
-      // try {
-      //   this.setState({ notRequiringRemaining: true })
-      // } catch (error) {
-      //   handleError(error)
-      // }
+
+      try {
+        this.setState({ notRequiringRemaining: true })
+        await updateMultipleAttendances({
+          paid: true,
+          attended: false,
+          offenders: [...unattendedOffenders],
+          reason: 'NotRequired',
+          comments,
+        })
+        getActivityList()
+        this.setState({ notRequiringRemaining: false })
+      } catch (error) {
+        handleError(error)
+      }
       showModal(false)
     }
 
     const markRemaningAsNotRequired = () => {
-      showModal(true, <AttendanceNotRequiredForm showModal={showModal} submitHandler={markAsNotRequired} />)
+      showModal(true, <AttendanceNotRequiredForm showModal={showModal} submitHandler={notRequireAllNonAssigned} />)
     }
 
     const showAttendAllControl = (activities, paidList) => {
@@ -236,26 +246,28 @@ class ResultsActivity extends Component {
 
     const remainingString = hasRemaining(activityData) ? ' remaining ' : ' '
 
-    const { payingAll } = this.state
+    const { attendingAll, notRequiringRemaining } = this.state
 
     const batchControls = (
       <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {showAttendAllControl(activityData, totalAttended) &&
-          (payingAll ? (
-            'Marking all as attended...'
-          ) : (
-<<<<<<< HEAD
-            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
-              {`Attend all${remainingString}prisoners`}
-=======
-            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton" className="no-print">
-              {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
->>>>>>> 9e237b43d560c6e2300284eb8edda4acc85b9341
-            </BatchLink>
-          ))}
-        <BatchLink
-          onClick={() => markRemaningAsNotRequired()}
-        >{`All ${remainingString} prisoners are not required`}</BatchLink>
+        {showAttendAllControl(activityData, totalAttended) && (
+          <>
+            {attendingAll ? (
+              'Marking all as attended...'
+            ) : (
+              <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton" className="no-print">
+                {`Attend all${remainingString}prisoners`}
+              </BatchLink>
+            )}
+            {notRequiringRemaining ? (
+              'Marking all as not required...'
+            ) : (
+              <BatchLink
+                onClick={() => markRemaningAsNotRequired()}
+              >{`All ${remainingString} prisoners are not required`}</BatchLink>
+            )}
+          </>
+        )}
       </div>
     )
 

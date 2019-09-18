@@ -37,18 +37,21 @@ const attendanceFactory = whereaboutsApi => {
   }
 
   const batchUpdateAttendance = async (context, body) => {
-    const offenderCount = body.offenders.length
+    const { attended, paid, reason, comments, offenders } = body
+    const offenderCount = offenders.length
     log.info(`Number of offenders to be paid ${offenderCount}`)
 
-    const { eventLocationId, period, eventDate, prisonId } = body.offenders[0]
-    const bookingActivities = body.offenders.map(offender => ({
+    const { eventLocationId, period, eventDate, prisonId } = offenders[0]
+    const bookingActivities = offenders.map(offender => ({
       bookingId: offender.bookingId,
       activityId: offender.eventId,
     }))
 
     const payload = {
-      attended: true,
-      paid: true,
+      attended,
+      paid,
+      reason,
+      comments,
       bookingActivities,
       eventLocationId,
       period,
