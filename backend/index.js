@@ -293,6 +293,9 @@ app.get(
     probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
   )
 )
+app.get('/need-to-upload-file', async (req, res) => {
+  res.render('bulkUploadFile.njk', { title: 'You need to upload a CSV file' })
+})
 
 nunjucksSetup(app, path)
 
