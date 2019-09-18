@@ -160,6 +160,8 @@ describe('Attendence and Pay controller', () => {
           eventLocationId: 123,
           period: 'AM',
           prisonId: 'LEI',
+          attended: true,
+          paid: true,
         },
       ])
     })

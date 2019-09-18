@@ -47,6 +47,8 @@ const attendanceFactory = whereaboutsApi => {
     }))
 
     const payload = {
+      attended: true,
+      paid: true,
       bookingActivities,
       eventLocationId,
       period,
