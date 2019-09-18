@@ -182,11 +182,25 @@ AttendanceOtherForm.propTypes = {
   absentReasons: PropTypes.shape({
     paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
+    triggersIEPWarning: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
 
   // props
-  offender: PropTypes.shape({ id: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string })
-    .isRequired,
+  offender: PropTypes.shape({
+    offenderIndex: PropTypes.number,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    bookingId: PropTypes.string,
+    offenderNo: PropTypes.string,
+    eventId: PropTypes.string,
+    eventLocationId: PropTypes.string,
+    attendanceInfo: PropTypes.shape({
+      paid: PropTypes.bool,
+      absentReason: PropTypes.string,
+      id: PropTypes.number,
+      comments: PropTypes.string,
+    }),
+  }).isRequired,
   updateOffenderAttendance: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,

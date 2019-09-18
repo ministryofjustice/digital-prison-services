@@ -3,17 +3,18 @@ import { shallow } from 'enzyme'
 import moment from 'moment'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { ResultsActivity } from './ResultsActivity'
+import { ResultsActivity, PrintLink } from './ResultsActivity'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'SYI'
 const OFFENDER_NAME_COLUMN = 0
-const NOMS_ID_COLUMN = 2
-const FLAGS_COLUMN = 3
-const ACTIVITY_COLUMN = 4
-const OTHER_COLUMN = 5
-const ATTEND_COLUMN = 6
-const DONT_ATTEND_COLUMN = 7
+const NOMS_ID_COLUMN = 3
+const REDACTED_NOMS_ID_COLUMN = 4
+const FLAGS_COLUMN = 5
+const ACTIVITY_COLUMN = 6
+const OTHER_COLUMN = 7
+const ATTEND_COLUMN = 8
+const DONT_ATTEND_COLUMN = 9
 
 const waitForAsync = () => new Promise(resolve => setImmediate(resolve))
 
@@ -171,6 +172,7 @@ const props = {
   activityName: 'Activity name',
   userRoles: ['ACTIVITY_HUB'],
   totalAttended: 0,
+  redactedPrintState: false,
 }
 
 describe('Offender activity list results component', () => {
@@ -211,6 +213,7 @@ describe('Offender activity list results component', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(REDACTED_NOMS_ID_COLUMN).text()).toEqual('***34AA')
 
     const row1Flags = row1Tds
       .at(FLAGS_COLUMN)
@@ -339,7 +342,8 @@ describe('Offender activity list results component', () => {
     const today = moment().format('DD/MM/YYYY')
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
+    expect(component.find(PrintLink).length).toEqual(0)
 
     component
       .find('#printButton')
@@ -352,7 +356,7 @@ describe('Offender activity list results component', () => {
     const today = 'Today'
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
     // If today, print button is present
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
   })
 
   it('should not display print button when date is in the past', async () => {
@@ -360,6 +364,7 @@ describe('Offender activity list results component', () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date={oldDate} period="ED" />)
 
     expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
+    expect(component.find(PrintLink).length).toEqual(0)
   })
 
   it('should display print button when date is in the future', async () => {
@@ -370,7 +375,28 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} activityData={response} handleSearch={jest.fn()} date={futureDate} period="ED" />
     )
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(true)
+    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
+    expect(component.find(PrintLink).length).toEqual(2)
+  })
+
+  it('should not display "Print list for general view" links if date is today', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
+    )
+
+    const printRedactedButton = component.find('#redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(0)
+  })
+
+  it('should display "Print list for general view" links if date is after today', () => {
+    const date = moment().add(1, 'day')
+    const component = shallow(
+      <ResultsActivity {...props} totalPaid={0} activityData={response} date={date} period="AM" />
+    )
+
+    const printRedactedButton = component.find('.redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(2)
   })
 
   it.skip('checkboxes should be read-only when date is over a week ago', async () => {

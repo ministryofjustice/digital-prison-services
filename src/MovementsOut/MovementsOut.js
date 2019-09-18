@@ -12,7 +12,7 @@ import HoursAndMinutes from '../HoursAndMinutes'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 
 const MovementsOut = ({ rows, sortOrder, setColumnSort }) => (
-  <React.Fragment>
+  <>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
@@ -21,6 +21,7 @@ const MovementsOut = ({ rows, sortOrder, setColumnSort }) => (
     <table>
       <thead>
         <tr>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <th className="straight width5" />
           <th className="straight width15">
             <SortableColumn
@@ -62,7 +63,7 @@ const MovementsOut = ({ rows, sortOrder, setColumnSort }) => (
         ))}
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 MovementsOut.propTypes = {

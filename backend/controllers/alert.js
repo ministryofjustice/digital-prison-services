@@ -97,6 +97,13 @@ const alertFactory = (oauthApi, elite2Api) => {
     const closeAlert = alertStatus === 'yes'
     const errors = []
 
+    const [alert, caseLoads] = await Promise.all([
+      elite2Api.getAlert(res.locals, bookingId, alertId),
+      elite2Api.userCaseLoads(res.locals),
+    ])
+
+    const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
+
     if (!alertStatus) {
       errors.push({
         text: 'Select yes if you want to close this alert',
@@ -111,7 +118,11 @@ const alertFactory = (oauthApi, elite2Api) => {
           expiryDate: moment().format('YYYY-MM-DD'),
         })
 
-        await raiseAnalyticsEvent('Alerts', `Alert closed - ${alertId}`, 'Alert Closure', alertId)
+        raiseAnalyticsEvent(
+          'Alert Closed',
+          `Alert closed for ${activeCaseLoad.caseLoadId}`,
+          `Alert type - ${alert.alertCode}`
+        )
       } catch (error) {
         logError(req.originalUrl, error, serviceUnavailableMessage)
         errors.push({

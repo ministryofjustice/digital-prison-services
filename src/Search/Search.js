@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import '../index.scss'
 import './search.scss'
 import PropTypes from 'prop-types'
@@ -116,7 +116,7 @@ class Search extends Component {
         : []
 
     const periodSelect = (
-      <Fragment>
+      <>
         <label className="form-label" htmlFor="period-select">
           Period
         </label>
@@ -137,7 +137,7 @@ class Search extends Component {
             Evening (ED)
           </option>
         </select>
-      </Fragment>
+      </>
     )
 
     const locationSelect = (
@@ -212,7 +212,7 @@ class Search extends Component {
     )
 
     return (
-      <Fragment>
+      <>
         <ValidationErrors validationErrors={validationErrors} fieldName="searchForm" />
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">
@@ -252,7 +252,7 @@ class Search extends Component {
             <fieldset className="pure-u-md-5-12 fieldset">{activitySelect}</fieldset>
           </div>
         </form>
-      </Fragment>
+      </>
     )
   }
 }

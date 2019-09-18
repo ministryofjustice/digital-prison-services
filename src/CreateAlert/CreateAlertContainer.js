@@ -50,9 +50,9 @@ export class CreateAlertContainer extends Component {
       }))
 
       raiseAnalyticsEvent({
-        category: `alert created for ${agencyId}`,
-        label: 'Alerts',
-        value: { alertType, alertSubType, comment, effectiveDate },
+        category: 'Alert Created',
+        label: `Alert type - ${alertSubType}`,
+        action: `Alert created for ${agencyId}`,
       })
 
       notify.show('Alert has been created', 'success')
@@ -74,7 +74,7 @@ export class CreateAlertContainer extends Component {
     return (
       <>
         <GridRow>
-          <GridCol columnOneHalf>
+          <GridCol setWidth="one-half">
             <OffenderPage
               alwaysRender
               title={() => `Create alert`}
@@ -95,7 +95,7 @@ export class CreateAlertContainer extends Component {
           </GridCol>
         </GridRow>
         <GridRow>
-          <GridCol columnOneHalf>
+          <GridCol setWidth="one-half">
             <CreateAlertForm
               cancelHandler={this.cancel}
               createAlertHandler={this.createAlertHandler}
@@ -115,11 +115,13 @@ CreateAlertContainer.propTypes = {
   offenderDetails: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    bookingId: PropTypes.number,
   }).isRequired,
   handleError: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
   }).isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,

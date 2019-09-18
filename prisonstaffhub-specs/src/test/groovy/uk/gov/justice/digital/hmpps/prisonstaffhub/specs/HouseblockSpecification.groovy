@@ -16,10 +16,10 @@ import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG
 
 class HouseblockSpecification extends BrowserReportingSpec {
 
-    static final flagsColumn = 3
-    static final activityColumn = 4
-    static final otherActivityColumn = 5
-    static final attendanceColumn = 8
+    static final flagsColumn = 5
+    static final activityColumn = 6
+    static final otherActivityColumn = 7
+    static final attendanceColumn = 10
 
     @Rule
     Elite2Api elite2api = new Elite2Api()

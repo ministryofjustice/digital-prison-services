@@ -160,9 +160,29 @@ IepHistoryForm.propTypes = {
   }).isRequired,
 }
 
+FormFields.propTypes = {
+  now: PropTypes.instanceOf(moment).isRequired,
+  reset: PropTypes.func.isRequired,
+  establishments: PropTypes.arrayOf(
+    PropTypes.shape({
+      agencyId: PropTypes.string.isRequired,
+      agencyType: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  values: PropTypes.shape({
+    iepEstablishment: PropTypes.string,
+    iepLevel: PropTypes.string,
+    fromDate: PropTypes.instanceOf(moment),
+    toDate: PropTypes.instanceOf(moment),
+  }).isRequired,
+  levels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  submitting: PropTypes.bool.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.shape({})),
+}
+
 FormFields.defaultProps = {
-  establishments: [],
-  levels: [],
+  errors: [],
 }
 
 const mapStateToProps = state => ({

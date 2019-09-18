@@ -7,9 +7,13 @@ const communityApiFactory = client => {
 
   const getOffenderDetails = (context, { offenderNo }) => get(context, `/api/offenders/nomsNumber/${offenderNo}`)
 
+  const getOffenderDocuments = (context, { offenderNo }) =>
+    get(context, `/api/offenders/nomsNumber/${offenderNo}/documents/grouped`)
+
   return {
     getOffenderConvictions,
     getOffenderDetails,
+    getOffenderDocuments,
   }
 }
 

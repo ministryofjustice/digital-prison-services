@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { spacing } from '@govuk-react/lib'
 
@@ -36,3 +37,18 @@ export const GridContainer = styled.div`
   ${({ includeTrailingDivider }) => includeTrailingDivider && `border-bottom: 1px solid ${GREY}`};
   margin-top: ${spacing.simple(2)}px;
 `
+
+LabelAndValue.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
+}
+
+Location.propTypes = {
+  establishment: PropTypes.string,
+  interiorLocation: PropTypes.string,
+}
+
+Location.defaultProps = {
+  interiorLocation: '',
+  establishment: '',
+}

@@ -147,7 +147,7 @@ function getLastPrisonResponseCourtVisit() {
   ]
 }
 
-describe('Global Search controller', async () => {
+describe('Global Search controller', () => {
   it('Should return no results as an empty array', async () => {
     elite2Api.globalSearch.mockReturnValue([])
 

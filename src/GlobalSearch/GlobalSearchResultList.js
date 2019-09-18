@@ -23,12 +23,14 @@ const GlobalSearchResultList = ({
 }) => {
   const headings = (
     <tr>
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <th className="straight" />
       <th className="straight">Name</th>
       <th className="straight">Prison&nbsp;no.</th>
       <th className="straight">Date of birth</th>
       <th className="straight">Location</th>
       <th className="straight">Actual working name</th>
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       {licencesUser && <th className="straight" />}
     </tr>
   )

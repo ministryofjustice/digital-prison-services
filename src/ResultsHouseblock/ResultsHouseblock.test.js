@@ -1,18 +1,19 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsHouseblock, PrintButton } from './ResultsHouseblock'
+import { ResultsHouseblock, PrintButton, PrintLink } from './ResultsHouseblock'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'LEI'
 
 const OFFENDER_NAME_COLUMN = 0
-const NOMS_ID_COLUMN = 2
-const FLAGS_COLUMN = 3
-const MAIN_COLUMN = 4
-const OTHER_COLUMN = 5
-const ATTEND_COLUMN = 6
-const DONT_ATTEND_COLUMN = 7
+const NOMS_ID_COLUMN = 3
+const REDACTED_NOMS_ID_COLUMN = 4
+const FLAGS_COLUMN = 5
+const MAIN_COLUMN = 6
+const OTHER_COLUMN = 7
+const ATTEND_COLUMN = 8
+const DONT_ATTEND_COLUMN = 9
 
 const response = [
   {
@@ -194,6 +195,7 @@ const props = {
   showModal: jest.fn(),
   activityName: 'Activity name',
   totalAttended: 0,
+  redactedPrintState: false,
 }
 
 describe('Offender results component Jira NN-843', () => {
@@ -242,6 +244,8 @@ describe('Offender results component Jira NN-843', () => {
         .text()
     ).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
+    expect(row1Tds.at(REDACTED_NOMS_ID_COLUMN).text()).toEqual('***34AA')
+
     // TODO: find out how to fix the following line...
     //     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     const row1Flags = row1Tds
@@ -437,6 +441,7 @@ describe('Offender results component Jira NN-843', () => {
     )
 
     expect(component.find(PrintButton).length).toEqual(2)
+    expect(component.find(PrintLink).length).toEqual(0)
 
     component
       .find(PrintButton)
@@ -481,6 +486,46 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
     expect(component.find(PrintButton).length).toEqual(2)
+    expect(component.find(PrintLink).length).toEqual(2)
+  })
+
+  it('should not display "Print list for general view" links if date is today', () => {
+    const today = moment().format('DD/MM/YYYY')
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={today}
+        period="ED"
+        orderField="cellLocation"
+        sortOrder="ASC"
+        currentLocation="BWing"
+        user={user}
+        offenderNo="1"
+      />
+    )
+
+    const printRedactedButton = component.find('#redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(0)
+  })
+
+  it('should display "Print list for general view" links if date is after today', () => {
+    const date = moment().add(1, 'day')
+    const component = shallow(
+      <ResultsHouseblock
+        {...props}
+        houseblockData={response}
+        date={date}
+        period="ED"
+        orderField="cellLocation"
+        sortOrder="ASC"
+        currentLocation="BWing"
+        user={user}
+        offenderNo="1"
+      />
+    )
+    const printRedactedButton = component.find('.redactedPrintButton')
+    expect(printRedactedButton.length).toEqual(2)
   })
 
   it('checkboxes should be read-only when date is over a week ago', async () => {

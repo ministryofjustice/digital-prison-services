@@ -59,7 +59,7 @@ beforeEach(() => {
   elite2Api.getAgencyIepLevels = jest.fn()
 })
 
-describe('IEP details controller', async () => {
+describe('IEP details controller', () => {
   beforeEach(() => {
     elite2Api.getDetails.mockReturnValue({
       firstName: 'ARTHUR',

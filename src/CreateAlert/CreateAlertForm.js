@@ -92,7 +92,7 @@ export class CreateAlertForm extends Component {
             <option value="" disabled hidden>
               Select
             </option>
-            {alertTypes.map(type => (
+            {alertTypes.filter(type => type.activeFlag === 'Y').map(type => (
               <option key={`alert_type_${type.value}`} value={type.value}>
                 {type.description}
               </option>
@@ -106,7 +106,7 @@ export class CreateAlertForm extends Component {
             <option value="" disabled hidden>
               Select
             </option>
-            {alertSubTypes.filter(sub => sub.parentValue === selectedAlertType).map(type => (
+            {alertSubTypes.filter(sub => sub.parentValue === selectedAlertType && sub.activeFlag === 'Y').map(type => (
               <option key={`alert_sub_type_${type.value}`} value={type.value}>
                 {type.description}
               </option>

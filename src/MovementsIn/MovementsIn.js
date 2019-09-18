@@ -23,7 +23,7 @@ const withLink = (row, activeCaseLoadId, element) => {
 }
 
 const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
-  <React.Fragment>
+  <>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
@@ -32,6 +32,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
     <table>
       <thead>
         <tr>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <th className="straight width10" />
           <th className="straight width10">
             <SortableColumn
@@ -80,7 +81,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
         ))}
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 MovementsIn.propTypes = {

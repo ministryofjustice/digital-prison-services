@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import Link from '@govuk-react/link'
 import { Link as RouterLink } from 'react-router-dom'
 import Button from '@govuk-react/button'
@@ -10,7 +10,9 @@ import { withRouter } from 'react-router'
 import moment from 'moment'
 import styled from 'styled-components'
 import { FONT_SIZE } from '@govuk-react/constants'
+import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
+  isAfterToday,
   getHoursMinutes,
   isWithinNextTwoWorkingDays,
   getMainEventDescription,
@@ -54,8 +56,21 @@ const HideForPrint = styled.span`
 
 export const PrintButton = styled(Button)`
   min-width: 8em;
+  margin-bottom: 20px;
   img {
     margin-right: 0.5em;
+  }
+`
+
+export const PrintLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  display: block;
+  text-decoration: underline;
+
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
   }
 `
 
@@ -82,6 +97,7 @@ class ResultsHouseblock extends Component {
       period,
       handlePeriodChange,
       handlePrint,
+      redactedPrintState,
       houseblockData,
       update,
       sortOrder,
@@ -168,19 +184,24 @@ class ResultsHouseblock extends Component {
       </div>
     )
 
-    const printButton = isWithinNextTwoWorkingDays(date) && (
-      <PrintButton
-        id="printButton"
-        className="margin-left margin-top pull-right"
-        onClick={e => {
-          if (e) e.preventDefault()
-          handlePrint()
-        }}
-      >
-        <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
-        Print list
-      </PrintButton>
+    const printButton = (
+      <div id="buttons" className="buttons">
+        {isWithinNextTwoWorkingDays(date) && (
+          <PrintButton type="button" id="printButton" onClick={() => handlePrint()}>
+            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
+            Print list
+          </PrintButton>
+        )}
+        {isWithinNextTwoWorkingDays(date) &&
+          isAfterToday(date) && (
+            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+              Print list for general view
+            </PrintLink>
+          )}
+      </div>
     )
+    const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
+    const redactedPrint = redactedPrintState ? 'straightPrint' : 'no-print'
 
     const headings = () => (
       <tr>
@@ -203,7 +224,7 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight width10">Prison&nbsp;no.</th>
-        <th className="straight width10">Info</th>
+        <th className={`straight width10 ${redactedHide}`}>Info</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activities"
@@ -214,12 +235,12 @@ class ResultsHouseblock extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className="straightPrint no-display">
+        <th className={`no-display ${redactedHide}`}>
           <div>
             <span>Unlocked</span>
           </div>
         </th>
-        <th className="straightPrint no-display">
+        <th className={`no-display ${redactedHide}`}>
           <div>
             <span>Gone</span>
           </div>
@@ -256,16 +277,22 @@ class ResultsHouseblock extends Component {
 
         return (
           <tr key={offenderNo} className="row-gutters">
-            <td className="row-gutters">
+            <td className={`row-gutters ${redactedHide}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName} lastName={lastName} />
+              </OffenderLink>
+            </td>
+            <td className={`no-display ${redactedPrint}`}>
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName.charAt(0)} lastName={lastName} />
               </OffenderLink>
             </td>
             <td className="row-gutters">
               <Location location={cellLocation} />
             </td>
-            <td className="row-gutters">{offenderNo}</td>
-            <td>
+            <td className={`row-gutters ${redactedHide}`}>{offenderNo}</td>
+            <td className={`no-display ${redactedPrint}`}>{offenderNo.replace(/^.{3}/g, '***')}</td>
+            <td className={redactedHide}>
               <AlertFlags alerts={offender.alertFlags} category={offender.category} />
             </td>
             <td className="row-gutters">
@@ -274,7 +301,7 @@ class ResultsHouseblock extends Component {
             <td className="row-gutters">
               <OtherActivitiesView offenderMainEvent={offender} />
             </td>
-            <td className="no-padding checkbox-column no-display">
+            <td className={`no-padding checkbox-column no-display ${redactedHide}`}>
               <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                   Unlocked
@@ -282,7 +309,7 @@ class ResultsHouseblock extends Component {
                 <input id={`col1_${index}`} type="checkbox" name="ch1" disabled={readOnly} />
               </div>
             </td>
-            <td className="no-padding checkbox-column no-display">
+            <td className={`no-padding checkbox-column no-display ${redactedHide}`}>
               <div className="multiple-choice whereaboutsCheckbox">
                 <label className="whereabouts-label" htmlFor={`col2_${index}`}>
                   Gone
@@ -293,7 +320,7 @@ class ResultsHouseblock extends Component {
             <Flag
               name={['updateAttendanceEnabled']}
               render={() => (
-                <Fragment>
+                <>
                   {isReceived && <td className="no-print">Received</td>}
                   {isPaid && <td className="no-print">Paid</td>}
                   {!isReceived &&
@@ -312,7 +339,7 @@ class ResultsHouseblock extends Component {
                         noPay
                       />
                     )}
-                </Fragment>
+                </>
               )}
               fallbackRender={() => <></>}
             />
@@ -380,6 +407,7 @@ ResultsHouseblock.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
+  redactedPrintState: PropTypes.bool.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,
@@ -410,6 +438,8 @@ ResultsHouseblock.propTypes = {
   sortOrder: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
+  resetErrorDispatch: PropTypes.func.isRequired,
+  raiseAnalyticsEvent: PropTypes.func.isRequired,
   setHouseblockOffenderAttendance: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,

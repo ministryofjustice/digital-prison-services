@@ -14,7 +14,7 @@ import Flags from '../FullFlags/Flags'
 import './CurrentlyOut.scss'
 
 const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
-  <React.Fragment>
+  <>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
@@ -23,6 +23,7 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
     <table className="currently-out">
       <thead>
         <tr>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <th className="straight width10" />
           <th className="straight width10">
             <SortableColumn
@@ -72,7 +73,7 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
         ))}
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 CurrentlyOut.propTypes = {

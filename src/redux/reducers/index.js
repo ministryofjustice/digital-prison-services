@@ -89,7 +89,7 @@ const globalSearchInitialState = {
 }
 
 function updateObject(oldObject, newValues) {
-  return Object.assign({}, oldObject, newValues)
+  return { ...oldObject, ...newValues }
 }
 
 export function app(state = appInitialState, action) {

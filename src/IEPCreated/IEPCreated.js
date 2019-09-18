@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { H1 } from '@govuk-react/heading'
@@ -45,7 +45,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
         <H1 size="MEDIUM">An IEP has been created</H1>
         <ButtonContainer>
           {!isMobile && (
-            <Fragment>
+            <>
               <Paragraph>Do you want to print an IEP warning slip?</Paragraph>
               <HintText>You can also print this later from their case notes.</HintText>
               <Button onClick={handlePrint} mb={0}>
@@ -54,7 +54,7 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
               <ButtonCancel mb={0} onClick={() => showModal(false)}>
                 No
               </ButtonCancel>
-            </Fragment>
+            </>
           )}
           {isMobile && (
             <Button mb={0} onClick={() => showModal(false)}>
@@ -70,7 +70,12 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
 IEPCreated.propTypes = {
   user: userType.isRequired,
   showModal: PropTypes.func.isRequired,
-  offender: PropTypes.shape({}).isRequired,
+  offender: PropTypes.shape({
+    offenderNo: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    cellLocation: PropTypes.string,
+  }).isRequired,
   activityName: PropTypes.string.isRequired,
   iepValues: PropTypes.shape({
     pay: PropTypes.string,

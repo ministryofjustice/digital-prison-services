@@ -125,7 +125,7 @@ class AddPrisonerContainer extends Component {
           </ScrollToTop>
         )}
         {!complete && (
-          <React.Fragment>
+          <>
             <p> Upload the prison numbers for all prisoners attending the below appointment. </p>
             <Container>
               <Divider />
@@ -155,7 +155,7 @@ class AddPrisonerContainer extends Component {
                 dispatchAppointmentPrisoners={dispatchAppointmentPrisoners}
               />
             </Container>
-          </React.Fragment>
+          </>
         )}
       </Page>
     )
@@ -172,6 +172,7 @@ AddPrisonerContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   }).isRequired,
   dispatchAppointmentPrisoners: PropTypes.func.isRequired,
   dispatchBulkAppointmentsComplete: PropTypes.func.isRequired,

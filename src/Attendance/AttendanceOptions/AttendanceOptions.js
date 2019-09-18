@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import Radio from '@govuk-react/radio'
@@ -142,9 +142,9 @@ function AttendanceOptions({
   }
 
   return (
-    <Fragment>
+    <>
       {!noPay && (
-        <Fragment>
+        <>
           {absentReason && (
             <Option data-qa="absent-reason" printOnly>
               {absentReason.name}
@@ -165,7 +165,7 @@ function AttendanceOptions({
               )}
             {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
           </Option>
-        </Fragment>
+        </>
       )}
       <Option data-qa="other-option" className="row-gutters">
         {showRadioButton &&
@@ -183,13 +183,14 @@ function AttendanceOptions({
         {absentReason && locked && <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>}
         {noPay && notRecorded && <OtherMessage data-qa="other-message">Not Recorded</OtherMessage>}
       </Option>
-    </Fragment>
+    </>
   )
 }
 
 AttendanceOptions.propTypes = {
   offenderDetails: PropTypes.shape({
     offenderNo: PropTypes.string,
+    bookingId: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     eventId: PropTypes.number,

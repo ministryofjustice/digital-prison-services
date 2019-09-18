@@ -1,88 +1,102 @@
 import { probationDocumentsFactory } from '../controllers/probationDocuments'
 
+function aDocument(overrides = {}) {
+  return {
+    id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
+    documentName: 'PRE-CONS.pdf',
+    author: 'Andy Marke',
+    type: {
+      code: 'PRECONS_DOCUMENT',
+      description: 'PNC previous convictions',
+    },
+    extendedDescription: 'Previous convictions as of 01/09/2019',
+    createdAt: '2019-09-10T00:00:00',
+    ...overrides,
+  }
+}
+
 function aConviction(overrides = {}) {
-  return Object.assign(
-    {
-      convictionId: 2500295345,
-      index: '1',
-      active: true,
-      inBreach: false,
-      convictionDate: '2019-09-03',
-      referralDate: '2018-09-04',
-      offences: [
-        {
-          offenceId: 'M2500295343',
-          mainOffence: true,
-          detail: {
-            code: '00102',
-            description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
-            mainCategoryCode: '001',
-            mainCategoryDescription: 'Murder',
-            mainCategoryAbbreviation: 'Murder',
-            ogrsOffenceCategory: 'Violence',
-            subCategoryCode: '02',
-            subCategoryDescription: 'Murder of infants under 1 year of age',
-            form20Code: '20',
-          },
-          offenceDate: '2018-08-04T00:00:00',
-          offenceCount: 1,
-          offenderId: 2500343964,
-          createdDatetime: '2019-09-04T12:13:48',
-          lastUpdatedDatetime: '2019-09-04T12:13:48',
+  return {
+    convictionId: 2500295345,
+    index: '1',
+    active: true,
+    inBreach: false,
+    convictionDate: '2019-09-03',
+    referralDate: '2018-09-04',
+    offences: [
+      {
+        offenceId: 'M2500295343',
+        mainOffence: true,
+        detail: {
+          code: '00102',
+          description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
+          mainCategoryCode: '001',
+          mainCategoryDescription: 'Murder',
+          mainCategoryAbbreviation: 'Murder',
+          ogrsOffenceCategory: 'Violence',
+          subCategoryCode: '02',
+          subCategoryDescription: 'Murder of infants under 1 year of age',
+          form20Code: '20',
         },
-        {
-          offenceId: 'A2500108084',
-          mainOffence: false,
-          detail: {
-            code: '02801',
-            description:
-              'Burglary (dwelling) with intent to commit, or the commission of an offence triable only on indictment - 02801',
-            mainCategoryCode: '028',
-            mainCategoryDescription: 'Burglary in a dwelling',
-            mainCategoryAbbreviation: 'Burglary in a dwelling',
-            ogrsOffenceCategory: 'Burglary (Domestic)',
-            subCategoryCode: '01',
-            subCategoryDescription:
-              'Burglary (dwelling) with intent to commit, or the commission of, an offence triable only on indictment',
-            form20Code: '40',
-          },
-          offenceDate: '2019-09-02T00:00:00',
-          offenceCount: 3,
-          createdDatetime: '2019-09-04T12:23:01',
-          lastUpdatedDatetime: '2019-09-04T12:23:01',
-        },
-      ],
-      sentence: {
-        description: 'CJA - Indeterminate Public Prot.',
-        originalLength: 5,
-        originalLengthUnits: 'Years',
-        secondLength: 5,
-        secondLengthUnits: 'Years',
-        defaultLength: 60,
-        lengthInDays: 1826,
+        offenceDate: '2018-08-04T00:00:00',
+        offenceCount: 1,
+        offenderId: 2500343964,
+        createdDatetime: '2019-09-04T12:13:48',
+        lastUpdatedDatetime: '2019-09-04T12:13:48',
       },
-      latestCourtAppearanceOutcome: {
-        code: '303',
-        description: 'CJA - Indeterminate Public Prot.',
-      },
-      custody: {
-        bookingNumber: 'V74111',
-        institution: {
-          institutionId: 2500004521,
-          isEstablishment: true,
-          code: 'BWIHMP',
-          description: 'Berwyn (HMP)',
-          institutionName: 'Berwyn (HMP)',
+      {
+        offenceId: 'A2500108084',
+        mainOffence: false,
+        detail: {
+          code: '02801',
+          description:
+            'Burglary (dwelling) with intent to commit, or the commission of an offence triable only on indictment - 02801',
+          mainCategoryCode: '028',
+          mainCategoryDescription: 'Burglary in a dwelling',
+          mainCategoryAbbreviation: 'Burglary in a dwelling',
+          ogrsOffenceCategory: 'Burglary (Domestic)',
+          subCategoryCode: '01',
+          subCategoryDescription:
+            'Burglary (dwelling) with intent to commit, or the commission of, an offence triable only on indictment',
+          form20Code: '40',
         },
+        offenceDate: '2019-09-02T00:00:00',
+        offenceCount: 3,
+        createdDatetime: '2019-09-04T12:23:01',
+        lastUpdatedDatetime: '2019-09-04T12:23:01',
+      },
+    ],
+    sentence: {
+      description: 'CJA - Indeterminate Public Prot.',
+      originalLength: 5,
+      originalLengthUnits: 'Years',
+      secondLength: 5,
+      secondLengthUnits: 'Years',
+      defaultLength: 60,
+      lengthInDays: 1826,
+    },
+    latestCourtAppearanceOutcome: {
+      code: '303',
+      description: 'CJA - Indeterminate Public Prot.',
+    },
+    custody: {
+      bookingNumber: 'V74111',
+      institution: {
+        institutionId: 2500004521,
+        isEstablishment: true,
+        code: 'BWIHMP',
+        description: 'Berwyn (HMP)',
+        institutionName: 'Berwyn (HMP)',
       },
     },
-    overrides
-  )
+    ...overrides,
+  }
 }
 
 function documentsWithSingleConvictionMatching(conviction) {
   return expect.objectContaining({
     documents: {
+      offenderDocuments: [],
       convictions: expect.objectContaining([expect.objectContaining(conviction)]),
     },
   })
@@ -91,6 +105,7 @@ function documentsWithSingleConvictionMatching(conviction) {
 function documentsWithMultipleConvictionMatching(convictions) {
   return expect.objectContaining({
     documents: {
+      offenderDocuments: [],
       convictions: expect.objectContaining(convictions.map(conviction => expect.objectContaining(conviction))),
     },
   })
@@ -118,6 +133,7 @@ describe('Probation documents', () => {
       oauthApi.userRoles = jest.fn()
       communityApi.getOffenderConvictions = jest.fn()
       communityApi.getOffenderDetails = jest.fn()
+      communityApi.getOffenderDocuments = jest.fn()
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
@@ -150,6 +166,10 @@ describe('Probation documents', () => {
           otherIds: {
             crn: 'X123456',
           },
+        })
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [],
         })
         page = probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient)
           .displayProbationDocumentsPage
@@ -198,6 +218,218 @@ describe('Probation documents', () => {
                 id: 'LEI',
               },
               displayName: 'User Name',
+            },
+          })
+        )
+      })
+
+      it('should supply page with offender related document', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
+          convictions: [],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [expect.objectContaining({ id: '1' }), expect.objectContaining({ id: '2' })],
+              convictions: [],
+            },
+          })
+        )
+      })
+
+      it('should sort offender related documents by createdAt', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [
+            aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
+            aDocument({ id: '2', createdAt: '2019-09-10T00:00:00' }),
+            aDocument({ id: '3', createdAt: '2019-09-08T00:00:00' }),
+          ],
+          convictions: [],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [
+                expect.objectContaining({ id: '2' }),
+                expect.objectContaining({ id: '1' }),
+                expect.objectContaining({ id: '3' }),
+              ],
+              convictions: [],
+            },
+          })
+        )
+      })
+
+      it('should supply page with mapped offender related document', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [
+            aDocument({
+              documentName: 'PRE-CONS.pdf',
+              author: 'Kate Bracket',
+              type: {
+                code: 'PRECONS_DOCUMENT',
+                description: 'PNC previous convictions',
+              },
+              extendedDescription: 'Previous convictions as of 01/09/2019',
+              createdAt: '2019-09-10T00:00:00',
+            }),
+          ],
+          convictions: [],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [
+                {
+                  author: 'Kate Bracket',
+                  date: '10/09/2019',
+                  description: 'Previous convictions as of 01/09/2019',
+                  documentName: 'PRE-CONS.pdf',
+                  id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
+                  type: 'PNC previous convictions',
+                },
+              ],
+              convictions: [],
+            },
+          })
+        )
+      })
+
+      it('should supply page with conviction related document', async () => {
+        communityApi.getOffenderConvictions.mockReturnValue([
+          aConviction({ convictionId: 1 }),
+          aConviction({ convictionId: 2 }),
+        ])
+
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [
+            {
+              convictionId: '1',
+              documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
+            },
+            {
+              convictionId: '2',
+              documents: [aDocument({ id: '3' }), aDocument({ id: '4' })],
+            },
+          ],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: expect.objectContaining([
+                expect.objectContaining({
+                  documents: [expect.objectContaining({ id: '1' }), expect.objectContaining({ id: '2' })],
+                }),
+                expect.objectContaining({
+                  documents: [expect.objectContaining({ id: '3' }), expect.objectContaining({ id: '4' })],
+                }),
+              ]),
+            },
+          })
+        )
+      })
+      it('should supply page with conviction related documents sorted by createdAt', async () => {
+        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
+
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [
+            {
+              convictionId: '1',
+              documents: [
+                aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
+                aDocument({ id: '2', createdAt: '2019-09-10T00:00:00' }),
+                aDocument({ id: '3', createdAt: '2019-09-08T00:00:00' }),
+              ],
+            },
+          ],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: expect.objectContaining([
+                expect.objectContaining({
+                  documents: [
+                    expect.objectContaining({ id: '2' }),
+                    expect.objectContaining({ id: '1' }),
+                    expect.objectContaining({ id: '3' }),
+                  ],
+                }),
+              ]),
+            },
+          })
+        )
+      })
+
+      it('should supply page with mapped document for conviction', async () => {
+        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
+
+        communityApi.getOffenderDocuments.mockReturnValue({
+          documents: [],
+          convictions: [
+            {
+              convictionId: '1',
+              documents: [
+                aDocument({
+                  documentName: 'PRE-CONS.pdf',
+                  author: 'Kate Bracket',
+                  type: {
+                    code: 'PRECONS_DOCUMENT',
+                    description: 'PNC previous convictions',
+                  },
+                  extendedDescription: 'Previous convictions as of 01/09/2019',
+                  createdAt: '2019-09-10T00:00:00',
+                }),
+              ],
+            },
+          ],
+        })
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: expect.objectContaining([
+                expect.objectContaining({
+                  documents: [
+                    {
+                      author: 'Kate Bracket',
+                      date: '10/09/2019',
+                      description: 'Previous convictions as of 01/09/2019',
+                      documentName: 'PRE-CONS.pdf',
+                      id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
+                      type: 'PNC previous convictions',
+                    },
+                  ],
+                }),
+              ]),
             },
           })
         )
@@ -447,6 +679,7 @@ describe('Probation documents', () => {
         beforeEach(() => {
           communityApi.getOffenderConvictions.mockReturnValue([])
           communityApi.getOffenderDetails.mockRejectedValue(error('Server error', 503))
+          communityApi.getOffenderDocuments.mockReturnValue([])
         })
         it('should render page with system error message', async () => {
           await page(req, res)

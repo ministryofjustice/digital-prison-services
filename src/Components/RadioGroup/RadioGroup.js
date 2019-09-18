@@ -27,7 +27,9 @@ RadioGroup.defaultProps = {
 }
 
 RadioGroup.propTypes = {
-  input: PropTypes.shape({}),
+  input: PropTypes.shape({
+    value: PropTypes.string,
+  }),
   meta: PropTypes.shape({}),
   label: PropTypes.string,
   hint: PropTypes.string,

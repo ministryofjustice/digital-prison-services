@@ -12,7 +12,7 @@ import Flags from '../FullFlags/Flags'
 import SortLov from '../tablesorting/SortLov'
 
 const InReception = ({ sortOrder, setColumnSort, rows }) => (
-  <React.Fragment>
+  <>
     <GridRow>
       <GridCol setWidth="one-quarter">
         <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={sortOrder} setColumnSort={setColumnSort} />
@@ -21,6 +21,7 @@ const InReception = ({ sortOrder, setColumnSort, rows }) => (
     <table>
       <thead>
         <tr>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <th className="straight width10" />
           <th className="straight width15">
             <SortableColumn
@@ -64,7 +65,7 @@ const InReception = ({ sortOrder, setColumnSort, rows }) => (
         ))}
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 InReception.defaultProps = {

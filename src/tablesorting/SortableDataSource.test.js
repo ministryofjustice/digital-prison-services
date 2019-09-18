@@ -9,7 +9,7 @@ import { lastNameComparator } from './comparatorComposition'
 import SortableColumn from './SortableColumn'
 
 const ExampleComponent = ({ rows, sortOrder, setColumnSort }) => (
-  <React.Fragment>
+  <>
     <SortableColumn
       heading="Name"
       column={LAST_NAME}
@@ -23,7 +23,7 @@ const ExampleComponent = ({ rows, sortOrder, setColumnSort }) => (
         <span>{row.lastName}</span>
       </div>
     ))}
-  </React.Fragment>
+  </>
 )
 ExampleComponent.defaultProps = {
   rows: [],

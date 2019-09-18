@@ -30,6 +30,7 @@ const defaultProps = {
     replace: () => {},
     goBack: () => {},
   },
+  agencyId: 'LEI',
 }
 
 const alerts = {
@@ -133,7 +134,7 @@ describe('Create Alert container', () => {
       const raiseAnalyticsEvent = jest.fn()
 
       const wrapper = shallow(
-        <CreateAlertContainer {...defaultProps} {...alerts} raiseAnalyticsEvent={raiseAnalyticsEvent} agencyId="LEI" />
+        <CreateAlertContainer {...defaultProps} {...alerts} raiseAnalyticsEvent={raiseAnalyticsEvent} />
       )
       const instance = wrapper.instance()
       await instance.createAlertHandler({
@@ -144,9 +145,9 @@ describe('Create Alert container', () => {
       })
 
       expect(raiseAnalyticsEvent).toHaveBeenCalledWith({
-        category: 'alert created for LEI',
-        label: 'Alerts',
-        value: { alertType: 'P', comment: 'sdf', alertSubType: 'PL1', effectiveDate: '2019-10-10' },
+        action: 'Alert created for LEI',
+        category: 'Alert Created',
+        label: `Alert type - PL1`,
       })
     })
 

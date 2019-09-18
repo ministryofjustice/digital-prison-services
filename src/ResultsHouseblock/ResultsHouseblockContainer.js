@@ -31,6 +31,7 @@ class ResultsHouseblockContainer extends Component {
     this.update = this.update.bind(this)
     this.state = {
       activeSubLocation: null,
+      redactedPrint: false,
     }
   }
 
@@ -153,13 +154,30 @@ class ResultsHouseblockContainer extends Component {
     }
   }
 
-  handlePrint() {
+  handlePrint(version) {
     const { raiseAnalyticsEvent } = this.props
-    raiseAnalyticsEvent({
-      category: 'House block list',
-      action: 'Print list',
-    })
-    window.print()
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Residential list',
+        action: 'Print list',
+      })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'House block list',
+        action: 'Print list',
+      })
+    }
   }
 
   handleSubLocationChange(event) {
@@ -182,6 +200,7 @@ class ResultsHouseblockContainer extends Component {
   render() {
     const title = this.titleString()
     const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
+    const { redactedPrint } = this.state
 
     return (
       <Page title={title} alwaysRender>
@@ -195,6 +214,7 @@ class ResultsHouseblockContainer extends Component {
           setHouseblockOffenderAttendance={setOffenderPaymentDataDispatch}
           showModal={showModal}
           activityName={title}
+          redactedPrintState={redactedPrint}
           {...this.props}
         />
       </Page>
@@ -209,11 +229,14 @@ ResultsHouseblockContainer.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
 
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
+  houseblockData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   loaded: PropTypes.bool.isRequired,
@@ -229,6 +252,8 @@ ResultsHouseblockContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
+  getAbsentReasonsDispatch: PropTypes.func.isRequired,
 
   // special
   history: ReactRouterPropTypes.history.isRequired,

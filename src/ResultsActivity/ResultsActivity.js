@@ -59,6 +59,21 @@ const BatchLink = styled(Link)`
     color: ${LINK_HOVER_COLOUR};
   }
 `
+
+export const PrintLink = styled(Link)`
+  font-size: ${FONT_SIZE.SIZE_22};
+  color: ${LINK_COLOUR};
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: underline;
+  text-align: left;
+
+  &:hover {
+    color: ${LINK_HOVER_COLOUR};
+  }
+`
+
 const HideForPrint = styled.span`
   @media print {
     display: none;
@@ -72,7 +87,9 @@ class ResultsActivity extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { payingAll: false }
+    this.state = {
+      payingAll: false,
+    }
   }
 
   componentWillUnmount() {
@@ -87,6 +104,7 @@ class ResultsActivity extends Component {
       period,
       handlePeriodChange,
       handlePrint,
+      redactedPrintState,
       getActivityList,
       activityData,
       sortOrder,
@@ -135,18 +153,25 @@ class ResultsActivity extends Component {
     const buttons = (
       <div id="buttons" className="pure-u-md-12-12 padding-bottom">
         {isWithinNextTwoWorkingDays(date) && (
-          <button
-            id="printButton"
-            className="button"
-            type="button"
-            onClick={() => {
-              handlePrint()
-            }}
-          >
-            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />{' '}
-            Print list
-          </button>
+          <div className="printButton">
+            <button id="printButton" className="button" type="button" onClick={() => handlePrint()}>
+              <img
+                className="print-icon"
+                src="/images/Printer_icon_white.png"
+                height="23"
+                width="20"
+                alt="Print icon"
+              />{' '}
+              Print list
+            </button>
+          </div>
         )}
+        {isWithinNextTwoWorkingDays(date) &&
+          isAfterToday(date) && (
+            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+              Print list for general view
+            </PrintLink>
+          )}
       </div>
     )
 
@@ -219,8 +244,13 @@ class ResultsActivity extends Component {
           (payingAll ? (
             'Marking all as attended...'
           ) : (
+<<<<<<< HEAD
             <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton">
               {`Attend all${remainingString}prisoners`}
+=======
+            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton" className="no-print">
+              {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
+>>>>>>> 9e237b43d560c6e2300284eb8edda4acc85b9341
             </BatchLink>
           ))}
         <BatchLink
@@ -228,6 +258,9 @@ class ResultsActivity extends Component {
         >{`All ${remainingString} prisoners are not required`}</BatchLink>
       </div>
     )
+
+    const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
+    const redactedPrint = redactedPrintState ? 'straightPrint' : 'no-print'
 
     const headings = () => (
       <tr>
@@ -250,7 +283,7 @@ class ResultsActivity extends Component {
           />
         </th>
         <th className="straight width10">Prison&nbsp;no.</th>
-        <th className="straight width10">Info</th>
+        <th className={`straight width10 ${redactedHide}`}>Info</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activity"
@@ -261,7 +294,7 @@ class ResultsActivity extends Component {
           />
         </th>
         <th className="straight">Other activities</th>
-        <th className="straightPrint checkbox-header no-display">
+        <th className={redactedPrintState ? 'no-print no-display' : 'checkbox-header straightPrint no-display'}>
           <div>
             <span>Received</span>
           </div>
@@ -269,10 +302,10 @@ class ResultsActivity extends Component {
         <Flag
           name={['updateAttendanceEnabled']}
           render={() => (
-            <React.Fragment>
+            <>
               <th className="straight width4 no-print">Attended</th>
               <th className="straight width6 no-print">Not attended</th>
-            </React.Fragment>
+            </>
           )}
           fallbackRender={() => <></>}
         />
@@ -344,16 +377,22 @@ class ResultsActivity extends Component {
 
         return (
           <tr key={key} className="row-gutters">
-            <td className="row-gutters">
+            <td className={`row-gutters ${redactedHide}`}>
               <OffenderLink offenderNo={offenderNo}>
                 <OffenderName firstName={firstName} lastName={lastName} />
+              </OffenderLink>
+            </td>
+            <td className={`no-display ${redactedPrint}`}>
+              <OffenderLink offenderNo={offenderNo}>
+                <OffenderName firstName={firstName.charAt(0)} lastName={lastName} />
               </OffenderLink>
             </td>
             <td className="row-gutters">
               <Location location={cellLocation} />
             </td>
-            <td className="row-gutters">{offenderNo}</td>
-            <td>
+            <td className={`row-gutters ${redactedHide}`}>{offenderNo}</td>
+            <td className={`no-display ${redactedPrint}`}>{offenderNo.replace(/^.{3}/g, '***')}</td>
+            <td className={redactedHide}>
               <AlertFlags alerts={alertFlags} category={category} />
             </td>
             {renderMainEvent(mainEvent)}
@@ -368,7 +407,7 @@ class ResultsActivity extends Component {
               }
             </td>
             {!absentReason && (
-              <td className="no-padding checkbox-column no-display">
+              <td className={`checkbox-header no-display ${redactedHide}`}>
                 <div className="multiple-choice whereaboutsCheckbox">
                   <label className="whereabouts-label" htmlFor={`col1_${index}`}>
                     Received
@@ -453,6 +492,7 @@ class ResultsActivity extends Component {
 ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
   handlePrint: PropTypes.func.isRequired,
+  redactedPrintState: PropTypes.bool.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   getActivityList: PropTypes.func.isRequired,
