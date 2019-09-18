@@ -175,7 +175,7 @@
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setupTests.js",
+    "setupFilesAfterEnv": ["<rootDir>/config/jest/setupTests.js"],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
