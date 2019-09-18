@@ -18,8 +18,8 @@ const sortActivitiesByEventThenByLastName = data => {
 }
 
 const extractAttendanceInfo = (attendanceInformation, event, absentReasons = []) => {
-  if (attendanceInformation && attendanceInformation.length > 0) {
-    const offenderAttendanceInfo = attendanceInformation.find(
+  if (attendanceInformation && attendanceInformation.attendances && attendanceInformation.attendances.length > 0) {
+    const offenderAttendanceInfo = attendanceInformation.attendances.find(
       attendance => attendance.bookingId === event.bookingId && attendance.eventId === event.eventId
     )
     if (!offenderAttendanceInfo) return null

@@ -47,6 +47,8 @@ const attendanceFactory = whereaboutsApi => {
     }))
 
     const payload = {
+      attended: true,
+      paid: true,
       bookingActivities,
       eventLocationId,
       period,
@@ -54,7 +56,7 @@ const attendanceFactory = whereaboutsApi => {
       prisonId,
     }
 
-    const response = await whereaboutsApi.attendAll(context, payload)
+    const response = await whereaboutsApi.postAttendances(context, payload)
     return response
   }
 

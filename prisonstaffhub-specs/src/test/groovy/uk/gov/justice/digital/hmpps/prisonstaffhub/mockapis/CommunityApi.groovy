@@ -21,6 +21,15 @@ class CommunityApi extends WireMockRule {
                                 .withBody(JsonOutput.toJson(convictions))))
     }
 
+    void stubDocuments(offenderNo, documents) {
+        this.stubFor(
+                get("/api/offenders/nomsNumber/${offenderNo}/documents/grouped")
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(documents))))
+    }
+
     void stubOffenderDetails(offenderNo, details) {
         this.stubFor(
                 get("/api/offenders/nomsNumber/${offenderNo}")
