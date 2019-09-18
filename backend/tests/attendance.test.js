@@ -97,7 +97,7 @@ describe('Attendence and Pay controller', async () => {
 
   describe('batchUpdateAttendance', () => {
     beforeEach(() => {
-      whereaboutsApi.attendAll = jest.fn()
+      whereaboutsApi.postAttendances = jest.fn()
     })
 
     const offenders = [
@@ -136,10 +136,10 @@ describe('Attendence and Pay controller', async () => {
       },
     ]
 
-    it('should call attendAll with list of valid offenders', async () => {
+    it('should call postAttendances with list of valid offenders', async () => {
       await batchUpdateAttendance(context, { offenders })
-      expect(whereaboutsApi.attendAll).toHaveBeenCalledTimes(1)
-      expect(whereaboutsApi.attendAll.mock.calls[0]).toEqual([
+      expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
+      expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
         context,
         {
           bookingActivities: [

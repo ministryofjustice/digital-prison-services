@@ -18,7 +18,7 @@ public class WhereaboutsApi extends WireMockRule {
         super(18082)
     }
 
-    def attendance = {
+    def attendance = [
         attendances:[
             {
                 id: 1
@@ -55,9 +55,9 @@ public class WhereaboutsApi extends WireMockRule {
                 eventDate: '2019-05-15'
             },
         ]
-    }
+    ]
 
-    def attendanceForBookingsResponse = {
+    def attendanceForBookingsResponse = [
         attendances: [
             [
                 id: 1,
@@ -90,7 +90,7 @@ public class WhereaboutsApi extends WireMockRule {
                 prisonId: 'string',
             ],
         ]
-    }
+    ]
 
     def absenceReasons = [
             paidReasons: [ 'AcceptableAbsence', 'NotRequired' ],
@@ -106,7 +106,7 @@ public class WhereaboutsApi extends WireMockRule {
 
     void stubGetAttendance(Caseload caseload, int locationId, String timeSlot, String date, data = attendance) {
         this.stubFor(
-                get("/attendance/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
+                get("/attendances/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
@@ -115,7 +115,7 @@ public class WhereaboutsApi extends WireMockRule {
 
     void stubGetAttendanceForBookings(Caseload caseload, String bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
         this.stubFor(
-                get("/attendance/${caseload.id}?${bookings}&date=${date}&period=${timeSlot}")
+                get("/attendances/${caseload.id}?${bookings}&date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
@@ -126,7 +126,7 @@ public class WhereaboutsApi extends WireMockRule {
 
     void stubGetAbsenceReasons() {
         this.stubFor(
-                get('/attendance/absence-reasons')
+                get('/absence-reasons')
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')

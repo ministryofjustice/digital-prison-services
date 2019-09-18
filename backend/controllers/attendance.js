@@ -54,7 +54,7 @@ const attendanceFactory = whereaboutsApi => {
       prisonId,
     }
 
-    const response = await whereaboutsApi.attendAll(context, payload)
+    const response = await whereaboutsApi.postAttendances(context, payload)
     return response
   }
 
