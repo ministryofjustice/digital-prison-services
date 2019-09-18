@@ -8,7 +8,7 @@ const {
   batchUpdateAttendance,
 } = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
 
-describe('Attendence and Pay controller', async () => {
+describe('Attendence and Pay controller', () => {
   const attendenceDetails = {
     offenderNo: 'ABC123',
     bookingId: 1,

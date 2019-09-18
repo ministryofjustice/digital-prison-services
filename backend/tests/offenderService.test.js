@@ -12,7 +12,7 @@ const offender = {
   age: 18,
 }
 
-describe('Offender Service', async () => {
+describe('Offender Service', () => {
   it('Retrieve offender details', async () => {
     elite2Api.getDetails.mockReturnValue(offender)
 
