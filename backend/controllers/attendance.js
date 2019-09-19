@@ -36,7 +36,7 @@ const attendanceFactory = whereaboutsApi => {
     return response
   }
 
-  const batchUpdateAttendance = async (context, body) => {
+  const batchUpdateAttendance = (context, body) => {
     const { attended, paid, reason, comments, offenders } = body
     const offenderCount = offenders.length
     log.info(`Number of offenders to be paid ${offenderCount}`)
@@ -59,8 +59,7 @@ const attendanceFactory = whereaboutsApi => {
       prisonId,
     }
 
-    const response = await whereaboutsApi.postAttendances(context, payload)
-    return response
+    return whereaboutsApi.postAttendances(context, payload)
   }
 
   const getAbsenceReasons = async context => {

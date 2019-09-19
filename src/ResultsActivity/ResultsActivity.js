@@ -90,11 +90,45 @@ class ResultsActivity extends Component {
     this.state = {
       attendingAll: false,
     }
+    this.unattendedOffenders = new Set()
+    this.totalOffenders = new Set()
   }
 
   componentWillUnmount() {
     const { resetErrorDispatch } = this.props
     resetErrorDispatch()
+  }
+
+  updateMultipleAttendances = ({ paid, attended, reason, comments, offenders }) =>
+    axios.post('/api/attendance/batch', {
+      attended,
+      paid,
+      reason,
+      comments,
+      offenders,
+    })
+
+  notRequireAll = async values => {
+    const { showModal, getActivityList, handleError } = this.props
+    const { comments } = values
+    const offenders = [...this.unattendedOffenders]
+
+    try {
+      this.setState({ notRequiringAll: true })
+      await this.updateMultipleAttendances({
+        paid: true,
+        attended: false,
+        offenders,
+        reason: 'NotRequired',
+        comments,
+      })
+      getActivityList()
+      this.setState({ notRequiringAll: false })
+    } catch (error) {
+      handleError(error)
+    }
+
+    showModal(false)
   }
 
   render() {
@@ -119,6 +153,7 @@ class ResultsActivity extends Component {
       activityName,
       updateAttendanceEnabled,
       totalAttended,
+      totalAbsent,
       userRoles,
     } = this.props
 
@@ -175,22 +210,10 @@ class ResultsActivity extends Component {
       </div>
     )
 
-    const unattendedOffenders = new Set()
-    const totalOffenders = new Set()
-
-    const updateMultipleAttendances = ({ paid, attended, reason, comments, offenders }) =>
-      axios.post('/api/attendance/batch', {
-        attended,
-        paid,
-        reason,
-        comments,
-        offenders,
-      })
-
     const attendAllNonAssigned = async () => {
       try {
         this.setState({ attendingAll: true })
-        await updateMultipleAttendances({ paid: true, attended: true, offenders: [...unattendedOffenders] })
+        await this.updateMultipleAttendances({ paid: true, attended: true, offenders: [...this.unattendedOffenders] })
         getActivityList()
         this.setState({ attendingAll: false })
       } catch (error) {
@@ -198,31 +221,7 @@ class ResultsActivity extends Component {
       }
     }
 
-    const notRequireAllNonAssigned = async values => {
-      const { comments } = values
-
-      try {
-        this.setState({ notRequiringRemaining: true })
-        await updateMultipleAttendances({
-          paid: true,
-          attended: false,
-          offenders: [...unattendedOffenders],
-          reason: 'NotRequired',
-          comments,
-        })
-        getActivityList()
-        this.setState({ notRequiringRemaining: false })
-      } catch (error) {
-        handleError(error)
-      }
-      showModal(false)
-    }
-
-    const markRemaningAsNotRequired = () => {
-      showModal(true, <AttendanceNotRequiredForm showModal={showModal} submitHandler={notRequireAllNonAssigned} />)
-    }
-
-    const showAttendAllControl = (activities, paidList) => {
+    const showUpdateAllControls = (activities, paidList) => {
       let showControls = true
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
       const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
@@ -239,37 +238,47 @@ class ResultsActivity extends Component {
       return showControls
     }
 
-    const hasRemaining = activities => {
-      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
-      return totalAttended !== 0 || attendanceInfo.length
+    const { attendingAll, notRequiringAll } = this.state
+
+    const BatchControls = () => {
+      const totalMarked = totalAttended + totalAbsent
+      const anyRemaining = totalMarked !== 0 && totalMarked !== this.totalOffenders.size ? ' remaining ' : ' '
+
+      return (
+        <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
+          {showUpdateAllControls(activityData, totalMarked) && (
+            <>
+              {attendingAll ? (
+                'Marking all as attended...'
+              ) : (
+                <BatchLink onClick={() => attendAllNonAssigned()} id="attendAllLink" className="no-print">
+                  Attend all
+                  {anyRemaining}
+                  prisoners
+                </BatchLink>
+              )}
+              {notRequiringAll ? (
+                'Marking all as not required...'
+              ) : (
+                <BatchLink
+                  onClick={() =>
+                    showModal(
+                      true,
+                      <AttendanceNotRequiredForm showModal={showModal} submitHandler={this.notRequireAll} />
+                    )
+                  }
+                  id="notRequireAllLink"
+                >
+                  All
+                  {anyRemaining}
+                  prisoners are not required
+                </BatchLink>
+              )}
+            </>
+          )}
+        </div>
+      )
     }
-
-    const remainingString = hasRemaining(activityData) ? ' remaining ' : ' '
-
-    const { attendingAll, notRequiringRemaining } = this.state
-
-    const batchControls = (
-      <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {showAttendAllControl(activityData, totalAttended) && (
-          <>
-            {attendingAll ? (
-              'Marking all as attended...'
-            ) : (
-              <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton" className="no-print">
-                {`Attend all${remainingString}prisoners`}
-              </BatchLink>
-            )}
-            {notRequiringRemaining ? (
-              'Marking all as not required...'
-            ) : (
-              <BatchLink
-                onClick={() => markRemaningAsNotRequired()}
-              >{`All ${remainingString} prisoners are not required`}</BatchLink>
-            )}
-          </>
-        )}
-      </div>
-    )
 
     const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
     const redactedPrint = redactedPrintState ? 'straightPrint' : 'no-print'
@@ -366,20 +375,19 @@ class ResultsActivity extends Component {
           attendanceInfo,
         }
 
-        if (!attendanceInfo)
-          unattendedOffenders.add({
+        if (!attendanceInfo) {
+          this.unattendedOffenders.add({
             offenderNo,
             bookingId,
             eventId,
             eventLocationId: locationId,
             offenderIndex: index,
-            attended: true,
-            paid: true,
             period,
             prisonId: agencyId,
             eventDate: date,
           })
-        totalOffenders.add(offenderNo)
+        }
+        this.totalOffenders.add(offenderNo)
 
         const { absentReason } = attendanceInfo || {}
         const otherActivitiesClasses = classNames({
@@ -478,11 +486,11 @@ class ResultsActivity extends Component {
             />
           </div>
           <StackedTotals>
-            <TotalResults label="Prisoners listed:" totalResults={totalOffenders.size} />
+            <TotalResults label="Prisoners listed:" totalResults={this.totalOffenders.size} />
             <HideForPrint>
               <TotalResults label="Sessions attended:" totalResults={totalAttended} />
             </HideForPrint>
-            {activityHubUser && batchControls}
+            {activityHubUser && <BatchControls />}
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
@@ -526,6 +534,7 @@ ResultsActivity.propTypes = {
     })
   ).isRequired,
   totalAttended: PropTypes.number.isRequired,
+  totalAbsent: PropTypes.number.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
