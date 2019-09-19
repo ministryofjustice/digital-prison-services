@@ -242,7 +242,7 @@ class ResultsActivity extends Component {
 
     const BatchControls = () => {
       const totalMarked = totalAttended + totalAbsent
-      const anyRemaining = totalMarked !== 0 && totalMarked !== this.totalOffenders.size ? ' remaining ' : ' '
+      const anyRemaining = totalMarked % this.totalOffenders.size > 0 ? ' remaining ' : ' '
 
       return (
         <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
