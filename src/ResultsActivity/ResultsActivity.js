@@ -111,14 +111,13 @@ class ResultsActivity extends Component {
   notRequireAll = async values => {
     const { showModal, getActivityList, handleError } = this.props
     const { comments } = values
-    const offenders = [...this.unattendedOffenders]
 
     try {
       this.setState({ notRequiringAll: true })
       await this.updateMultipleAttendances({
         paid: true,
         attended: false,
-        offenders,
+        offenders: [...this.unattendedOffenders],
         reason: 'NotRequired',
         comments,
       })
@@ -346,6 +345,8 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
+    const unattendedOffenders = new Set()
+
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
@@ -376,7 +377,7 @@ class ResultsActivity extends Component {
         }
 
         if (!attendanceInfo) {
-          this.unattendedOffenders.add({
+          unattendedOffenders.add({
             offenderNo,
             bookingId,
             eventId,
@@ -458,6 +459,8 @@ class ResultsActivity extends Component {
           </tr>
         )
       })
+
+    this.unattendedOffenders = unattendedOffenders
 
     return (
       <div className="results-activity">
