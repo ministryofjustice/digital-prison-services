@@ -39,7 +39,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         String today = getNow()
-        def bookings = 'bookings=1&bookings=2&bookings=4&bookings=3&bookings=8'
+        def bookings = Set.of(1,2,4,3,8)
 
         elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -107,7 +107,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
     }
 
     def "The updated houseblock list is displayed"() {
-        def bookings = 'bookings=1&bookings=2&bookings=4&bookings=3&bookings=8'
+        def bookings = Set.of(1,2,4,3,8)
         given: 'I am on the houseblock list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
@@ -157,7 +157,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
     }
 
     def "should navigate to the whereabouts search on a page refresh"() {
-        def bookings = 'bookings=1&bookings=2&bookings=4&bookings=3&bookings=8'
+        def bookings = Set.of(1,2,4,3,8)
         given: 'I am on the houseblock list page'
         fixture.toSearch()
         this.initialPeriod = period.value()
@@ -189,7 +189,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         String pattern = "YYYY-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         def today = simpleDateFormat.format(new Date());
-        def bookings = 'bookings=1&bookings=5'
+        def bookings = Set.of(1,5)
 
         elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -218,7 +218,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
@@ -242,7 +242,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -266,7 +266,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
 
         elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -289,7 +289,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
 
         elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -314,7 +314,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
 
         elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -343,7 +343,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
 
         elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
@@ -369,7 +369,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = 'bookings=6&bookings=7&bookings=1&bookings=2&bookings=3&bookings=4'
+        def bookings = Set.of(6,7,1,2,3,4)
 
         elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
