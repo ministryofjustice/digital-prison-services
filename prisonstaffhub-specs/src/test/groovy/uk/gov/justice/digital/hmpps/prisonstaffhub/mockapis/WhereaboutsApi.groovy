@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import java.util.stream.Collectors
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static com.github.tomakehurst.wiremock.client.WireMock.post
 import static com.github.tomakehurst.wiremock.client.WireMock.put
@@ -115,14 +116,24 @@ public class WhereaboutsApi extends WireMockRule {
                         .withBody(JsonOutput.toJson(data))))
     }
 
-    void stubGetAttendanceForBookings(Caseload caseload, Set<String> bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
+    void stubGetAttendanceForBookings(Caseload caseload, String timeSlot, String date, data = attendanceForBookingsResponse) {
         this.stubFor(
-                post("/attendances/${caseload.id}?&date=${date}&period=${timeSlot}")
-                        .withRequestBody(JsonOutput.toJson(bookings.stream().collect(Collectors.toList())))
+                post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
                         .withBody(JsonOutput.toJson(data))))
+    }
+
+
+    void stubGetAttendanceForBookings(Caseload caseload, Set<String> bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
+        this.stubFor(
+                post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
+                        .withRequestBody(equalToJson(JsonOutput.toJson(bookings)))
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(data))))
     }
 
 
