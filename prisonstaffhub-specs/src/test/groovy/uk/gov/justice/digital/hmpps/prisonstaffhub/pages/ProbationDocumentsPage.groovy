@@ -14,6 +14,7 @@ class ProbationDocumentsPage extends Page {
         breadcrumb {$('.govuk-breadcrumbs li').collect{[it.text(), it.find('a').attr('href')]}}
         convictionTitles {$('.govuk-accordion__section-heading').collect{it.text()}}
         documentTitles {$('.qa-document-link').collect{it.text()}}
+        firstDocumentLink {$('.qa-document-link').first().attr('href')}
         accordionButtons {$('.govuk-accordion__section-button')}
     }
 }
