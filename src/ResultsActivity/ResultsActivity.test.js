@@ -178,9 +178,8 @@ const props = {
   redactedPrintState: false,
 }
 
-const today = moment().format('DD/MM/YYYY')
-
 describe('Offender activity list results component', () => {
+  const today = moment().format('DD/MM/YYYY')
   let mockAxios
 
   beforeEach(() => {
@@ -782,7 +781,11 @@ describe('Offender activity list results component', () => {
 
     describe('attendance not required submit handler', () => {
       it('notRequireAll should batch update attendance with correct values', () => {
-        const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
+        jest.spyOn(Date, 'now').mockImplementationOnce(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+
+        const component = shallow(
+          <ResultsActivity {...props} activityData={response} date={moment().format('DD/MM/YYYY')} period="AM" />
+        )
         const mockAxiosPost = jest.spyOn(axios, 'post')
 
         component.instance().notRequireAll({ comments: 'Offenders no longer required.' })
@@ -799,7 +802,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 0,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
             {
               offenderNo: 'A1234AB',
@@ -809,7 +812,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 1,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
             {
               offenderNo: 'A1234AC',
@@ -819,7 +822,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 2,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
             {
               offenderNo: 'A1234AD',
@@ -829,7 +832,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 3,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
           ],
           paid: true,
