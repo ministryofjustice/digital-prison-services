@@ -77,7 +77,7 @@ describe('offender activities', () => {
       elite2api.getOffenderActivities = jest.fn().mockReturnValue(scheduledActivitiesResponse)
       elite2api.getVisits = jest.fn().mockReturnValue([])
       elite2api.getAppointments = jest.fn().mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance = jest.fn().mockReturnValue([])
+      whereaboutsApi.getPrisonAttendance = jest.fn().mockReturnValue({ attendances: [] })
     })
 
     it('should return the correct number of separate offender activities when there are is no matching attendance record', async () => {
@@ -88,24 +88,26 @@ describe('offender activities', () => {
     })
 
     it('should only return unaccounted for offender activities', async () => {
-      whereaboutsApi.getPrisonAttendance.mockReturnValueOnce([
-        {
-          id: 4896,
-          bookingId: 1044681,
-          eventId: 378088468,
-          eventLocationId: 721763,
-          period: 'PM',
-          prisonId: 'MDI',
-          attended: true,
-          paid: true,
-          eventDate: '2019-08-07',
-          createDateTime: '2019-08-07T10:06:13.58809',
-          createUserId: 'RCOOPER_ADM',
-          modifyDateTime: '2019-08-07T10:06:13.58809',
-          modifyUserId: 'RCOOPER_ADM',
-          locked: false,
-        },
-      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValueOnce({
+        attendances: [
+          {
+            id: 4896,
+            bookingId: 1044681,
+            eventId: 378088468,
+            eventLocationId: 721763,
+            period: 'PM',
+            prisonId: 'MDI',
+            attended: true,
+            paid: true,
+            eventDate: '2019-08-07',
+            createDateTime: '2019-08-07T10:06:13.58809',
+            createUserId: 'RCOOPER_ADM',
+            modifyDateTime: '2019-08-07T10:06:13.58809',
+            modifyUserId: 'RCOOPER_ADM',
+            locked: false,
+          },
+        ],
+      })
 
       const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
@@ -130,24 +132,26 @@ describe('offender activities', () => {
     })
 
     it('should return activites populated with events and appointments', async () => {
-      whereaboutsApi.getPrisonAttendance.mockReturnValueOnce([
-        {
-          id: 4896,
-          bookingId: 1044681,
-          eventId: 378088468,
-          eventLocationId: 721763,
-          period: 'PM',
-          prisonId: 'MDI',
-          attended: true,
-          paid: true,
-          eventDate: '2019-08-07',
-          createDateTime: '2019-08-07T10:06:13.58809',
-          createUserId: 'RCOOPER_ADM',
-          modifyDateTime: '2019-08-07T10:06:13.58809',
-          modifyUserId: 'RCOOPER_ADM',
-          locked: false,
-        },
-      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValueOnce({
+        attendances: [
+          {
+            id: 4896,
+            bookingId: 1044681,
+            eventId: 378088468,
+            eventLocationId: 721763,
+            period: 'PM',
+            prisonId: 'MDI',
+            attended: true,
+            paid: true,
+            eventDate: '2019-08-07',
+            createDateTime: '2019-08-07T10:06:13.58809',
+            createUserId: 'RCOOPER_ADM',
+            modifyDateTime: '2019-08-07T10:06:13.58809',
+            modifyUserId: 'RCOOPER_ADM',
+            locked: false,
+          },
+        ],
+      })
       elite2api.getVisits = jest.fn().mockReturnValueOnce([
         {
           offenderNo: 'G7179GP',

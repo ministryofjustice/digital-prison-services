@@ -251,9 +251,9 @@ class ResultsActivity extends Component {
                 'Marking all as attended...'
               ) : (
                 <BatchLink onClick={() => attendAllNonAssigned()} id="attendAllLink" className="no-print">
-                  Attend all
+                  All
                   {anyRemaining}
-                  prisoners
+                  prisoners have attended
                 </BatchLink>
               )}
               {notRequiringAll ? (

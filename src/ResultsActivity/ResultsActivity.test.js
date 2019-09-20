@@ -178,9 +178,8 @@ const props = {
   redactedPrintState: false,
 }
 
-const today = moment().format('DD/MM/YYYY')
-
 describe('Offender activity list results component', () => {
+  const today = moment().format('DD/MM/YYYY')
   let mockAxios
 
   beforeEach(() => {
@@ -506,7 +505,7 @@ describe('Offender activity list results component', () => {
     expect(attendAllLink.length).toEqual(0)
   })
 
-  it('should not display "Attend all prisoners" button if the date is more than a week in the past', () => {
+  it('should not display "All prisoners have attended" button if the date is more than a week in the past', () => {
     const isMoreThanAWeekOld = moment(new Date())
       .subtract(8, 'days')
       .format('DD/MM/YYYY')
@@ -521,7 +520,7 @@ describe('Offender activity list results component', () => {
     expect(button.length).toEqual(0)
   })
 
-  it('should display "Attend all prisoners" button if the date is less than 8 days old', () => {
+  it('should display "All prisoners have attended" button if the date is less than 8 days old', () => {
     const isInTheLastWeek = moment(new Date())
       .subtract(6, 'days')
       .format('DD/MM/YYYY')
@@ -536,7 +535,7 @@ describe('Offender activity list results component', () => {
     expect(button.length).toEqual(1)
   })
 
-  it('should not display "Attend all prisoners" button if the date is in the future', () => {
+  it('should not display "All prisoners have attended" button if the date is in the future', () => {
     const tomorrow = moment(new Date())
       .add(1, 'days')
       .format('DD/MM/YYYY')
@@ -551,7 +550,7 @@ describe('Offender activity list results component', () => {
     expect(button.length).toEqual(0)
   })
 
-  it('should display "Attend all prisoners" button if no prisoners have been paid', () => {
+  it('should display "All prisoners have attended" button if no prisoners have been paid', () => {
     const component = shallow(
       <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
     )
@@ -561,10 +560,10 @@ describe('Offender activity list results component', () => {
       .shallow()
       .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all prisoners')
+    expect(button.text()).toEqual('All prisoners have attended')
   })
 
-  it('should display "Attend all remaining prisoners" button if there are outstanding prisoners to pay', () => {
+  it('should display "All remaining prisoners have attended" button if there are outstanding prisoners to pay', () => {
     const component = shallow(
       <ResultsActivity {...props} totalAttended={3} totalAbsent={3} activityData={response} date={today} period="AM" />
     )
@@ -574,10 +573,10 @@ describe('Offender activity list results component', () => {
       .shallow()
       .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all remaining prisoners')
+    expect(button.text()).toEqual('All remaining prisoners have attended')
   })
 
-  it('should display "Attend all remaining prisoners" button if some prisoners have other attendance info but none are paid', () => {
+  it('should display "All remaining prisoners have attended" button if some prisoners have other attendance info but none are paid', () => {
     const otherAttendanceData = [
       {
         bookingId: 1,
@@ -631,10 +630,10 @@ describe('Offender activity list results component', () => {
       .shallow()
       .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all remaining prisoners')
+    expect(button.text()).toEqual('All remaining prisoners have attended')
   })
 
-  it('should display "Attend all prisoners" button if no prisoners have other attendance info and none are paid', () => {
+  it('should display "All prisoners have attended" button if no prisoners have other attendance info and none are paid', () => {
     const otherAttendanceNull = [
       {
         bookingId: 1,
@@ -674,7 +673,7 @@ describe('Offender activity list results component', () => {
       .shallow()
       .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all prisoners')
+    expect(button.text()).toEqual('All prisoners have attended')
   })
 
   it('should call the attendAll function when the link is clicked', async () => {
@@ -782,7 +781,11 @@ describe('Offender activity list results component', () => {
 
     describe('attendance not required submit handler', () => {
       it('notRequireAll should batch update attendance with correct values', () => {
-        const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
+        jest.spyOn(Date, 'now').mockImplementationOnce(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+
+        const component = shallow(
+          <ResultsActivity {...props} activityData={response} date={moment().format('DD/MM/YYYY')} period="AM" />
+        )
         const mockAxiosPost = jest.spyOn(axios, 'post')
 
         component.instance().notRequireAll({ comments: 'Offenders no longer required.' })
@@ -799,7 +802,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 0,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
             {
               offenderNo: 'A1234AB',
@@ -809,7 +812,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 1,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
             {
               offenderNo: 'A1234AC',
@@ -819,7 +822,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 2,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
             {
               offenderNo: 'A1234AD',
@@ -829,7 +832,7 @@ describe('Offender activity list results component', () => {
               offenderIndex: 3,
               period: 'AM',
               prisonId: 'SYI',
-              eventDate: '19/09/2019',
+              eventDate: '01/01/2017',
             },
           ],
           paid: true,
