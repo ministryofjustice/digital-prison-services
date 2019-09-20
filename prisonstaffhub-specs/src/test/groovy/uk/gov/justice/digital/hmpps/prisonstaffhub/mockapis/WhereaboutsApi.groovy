@@ -4,6 +4,8 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonOutput
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
+import java.util.stream.Collectors
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static com.github.tomakehurst.wiremock.client.WireMock.post
@@ -116,7 +118,7 @@ public class WhereaboutsApi extends WireMockRule {
     void stubGetAttendanceForBookings(Caseload caseload, Set<String> bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
         this.stubFor(
                 post("/attendances/${caseload.id}?&date=${date}&period=${timeSlot}")
-                        .withRequestBody(JsonOutput.toJson([bookings]))
+                        .withRequestBody(JsonOutput.toJson(bookings.stream().collect(Collectors.toList())))
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
