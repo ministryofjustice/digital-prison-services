@@ -125,19 +125,6 @@ public class WhereaboutsApi extends WireMockRule {
                         .withBody(JsonOutput.toJson(data))))
     }
 
-
-    void stubGetAttendanceForBookings(Caseload caseload, Set<String> bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
-        this.stubFor(
-                post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(bookings)))
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(data))))
-    }
-
-
-
     void stubGetAbsenceReasons() {
         this.stubFor(
                 get('/absence-reasons')

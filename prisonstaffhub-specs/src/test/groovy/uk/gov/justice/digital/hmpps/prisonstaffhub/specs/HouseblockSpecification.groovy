@@ -306,11 +306,9 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = Set.of( 1, 2, 3, 4, 6, 7)
-
         elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
-        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today)
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
         location = '1'
         period = 'AM'
         waitFor { continueButton.module(FormElement).enabled }
@@ -335,11 +333,10 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        def bookings = Set.of(1,2,3,4,6,7)
 
         elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
-        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, bookings, 'AM', today, [])
+        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today, [])
         whereaboutsApi.stubPostAttendance()
 
         location = '1'
