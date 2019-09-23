@@ -34,12 +34,6 @@ class CommunityApi extends WireMockRule {
 
     void stubDocument(offenderNo, documentId, content) {
         this.stubFor(
-                head(urlEqualTo("/api/offenders/nomsNumber/${offenderNo}/documents/${documentId}"))
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/pdf')))
-
-        this.stubFor(
                 get("/api/offenders/nomsNumber/${offenderNo}/documents/${documentId}")
                         .willReturn(aResponse()
                                 .withStatus(200)
