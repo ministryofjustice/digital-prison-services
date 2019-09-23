@@ -130,22 +130,15 @@ const factory = ({ baseUrl, timeout }) => {
     }
     const deadline = { deadline: timeout / 3 }
     return superagent
-      .head(url)
+      .get(url)
       .agent(keepaliveAgent)
       .set(getHeaders(context))
       .retry(2, retryHandler)
       .timeout(deadline)
-      .then(res => {
-        // copy headers since superagent can't do this in the pipe operation
+      .on('response', res => {
         pipeTo.header(res.header)
-        superagent
-          .get(url)
-          .agent(keepaliveAgent)
-          .set(getHeaders(context))
-          .retry(2, retryHandler)
-          .timeout(deadline)
-          .pipe(pipeTo)
       })
+      .pipe(pipeTo)
   }
 
   return {
