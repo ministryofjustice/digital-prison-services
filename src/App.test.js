@@ -95,7 +95,7 @@ describe('App component', () => {
   describe('session timeouts', () => {
     const component = shallow(<App {...props} store={store} />)
 
-    describe('should handle session timeout error response', async () => {
+    describe('should handle session timeout error response', () => {
       const appInstance = component.instance()
 
       beforeEach(() => {

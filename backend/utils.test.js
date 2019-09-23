@@ -13,6 +13,8 @@ import {
   flagFuturePeriodSelected,
   readablePeriod,
   isViewableFlag,
+  getDate,
+  getTime,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -278,5 +280,33 @@ describe('isViewableFlag', () => {
 
   it('should not allow any non specified alerts to be a viewable flag', () => {
     expect(isViewableFlag('ROH')).toBe(false)
+  })
+})
+
+describe('getDate()', () => {
+  it('should return the correctly formatted date only', () => {
+    expect(getDate('2019-09-23T15:30:00')).toEqual('Monday 23 September 2019')
+  })
+
+  it('should return Invalid date if invalid string is used', () => {
+    expect(getDate('2019-13-23')).toEqual('Invalid date')
+  })
+
+  it('should return Invalid date if no date time string is used', () => {
+    expect(getDate()).toEqual('Invalid date')
+  })
+})
+
+describe('getTime()', () => {
+  it('should return the correctly formatted time only', () => {
+    expect(getTime('2019-09-23T15:30:00')).toEqual('15:30')
+  })
+
+  it('should return Invalid time if invalid string is used', () => {
+    expect(getTime('2019-13-23')).toEqual('Invalid time')
+  })
+
+  it('should return Invalid time if no date time string is used', () => {
+    expect(getTime()).toEqual('Invalid time')
   })
 })
