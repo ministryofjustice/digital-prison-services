@@ -1,6 +1,8 @@
 $govuk-page-width: 1170px;
 @import "node_modules/govuk-frontend/govuk/all";
 @import "components/_header.scss";
+@import "views/components/datePicker/datePicker.scss";
+@import "views/components/timePicker/timePicker.scss";
 
 .no-select {
     -webkit-touch-callout: none;
@@ -13,22 +15,6 @@ $govuk-page-width: 1170px;
 
 .clickable {
     cursor: pointer;
-}
-
-/*Datepicker overrides*/
-.ui-widget-header {
-    border: 0 !important;
-    background:govuk-colour("white") !important;
-    color: govuk-colour("black") !important;
-    font-weight: bold;
-}
-
-.ui-datepicker {
-    margin-top: 20px;
-}
-
-.ui-datepicker table {
-    background: govuk-colour("white") !important;
 }
 
 .ui-widget-content {

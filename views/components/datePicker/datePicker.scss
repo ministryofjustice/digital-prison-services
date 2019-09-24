@@ -1,0 +1,20 @@
+/*Datepicker overrides*/
+.ui-widget-header {
+  border: 0 !important;
+  background:govuk-colour("white") !important;
+  color: govuk-colour("black") !important;
+  font-weight: bold;
+}
+
+.ui-datepicker {
+  margin-top: 20px;
+}
+
+.date-picker-container {
+    width: 150px;
+    margin-bottom: 32px;
+}
+
+.ui-datepicker table {
+  background: govuk-colour("white") !important;
+}

@@ -50,6 +50,8 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
+const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
+
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
 const contextProperties = require('./contextProperties')
@@ -136,6 +138,14 @@ app.use(bodyParser.json())
 app.use(
   sass({
     src: path.join(__dirname, '../sass'),
+    dest: path.join(__dirname, '../build/static/stylesheets'),
+    outputStyle: 'compressed',
+    prefix: '/stylesheets',
+  })
+)
+app.use(
+  sass({
+    src: path.join(__dirname, '../views/components'),
     dest: path.join(__dirname, '../build/static/stylesheets'),
     outputStyle: 'compressed',
     prefix: '/stylesheets',
@@ -245,6 +255,15 @@ app.use('/api', (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '../build')))
 
+app.use(async (req, res, next) => {
+  const { user } = req.session
+  if (!user) {
+    // eslint-disable-next-line no-param-reassign
+    req.session.user = await oauthApi.currentUser(res.locals)
+  }
+  next()
+})
+
 app.use('/api/config', getConfiguration)
 app.use('/api/userroles', userMeFactory(oauthApi).userRoles)
 app.use('/api/me', userMeFactory(oauthApi).userMe)
@@ -293,6 +312,8 @@ app.get(
     probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
   )
 )
+
+app.use('/add-appointment-details', addAppointmentDetailsController({ elite2Api, oauthApi, logError }))
 
 nunjucksSetup(app, path)
 
