@@ -160,13 +160,13 @@ const flagFuturePeriodSelected = (date, period, currentPeriod) => {
 const isValidDateTimeFormat = dateTimeString => moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
 const getDate = dateTimeString => {
-  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date'
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
 
   return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY')
 }
 
 const getTime = dateTimeString => {
-  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid time'
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
 
   return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 }

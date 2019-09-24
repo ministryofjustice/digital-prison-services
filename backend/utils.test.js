@@ -288,12 +288,12 @@ describe('getDate()', () => {
     expect(getDate('2019-09-23T15:30:00')).toEqual('Monday 23 September 2019')
   })
 
-  it('should return Invalid date if invalid string is used', () => {
-    expect(getDate('2019-13-23')).toEqual('Invalid date')
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getDate('2019-13-23')).toEqual('Invalid date or time')
   })
 
-  it('should return Invalid date if no date time string is used', () => {
-    expect(getDate()).toEqual('Invalid date')
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getDate()).toEqual('Invalid date or time')
   })
 })
 
@@ -302,11 +302,11 @@ describe('getTime()', () => {
     expect(getTime('2019-09-23T15:30:00')).toEqual('15:30')
   })
 
-  it('should return Invalid time if invalid string is used', () => {
-    expect(getTime('2019-13-23')).toEqual('Invalid time')
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getTime('2019-13-23')).toEqual('Invalid date or time')
   })
 
-  it('should return Invalid time if no date time string is used', () => {
-    expect(getTime()).toEqual('Invalid time')
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getTime()).toEqual('Invalid date or time')
   })
 })
