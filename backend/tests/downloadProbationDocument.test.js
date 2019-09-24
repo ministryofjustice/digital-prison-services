@@ -16,7 +16,7 @@ describe('Download probation documents', () => {
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
-      oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'POM' }])
     })
 
     describe('when downloading document', () => {
