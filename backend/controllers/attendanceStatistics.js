@@ -109,7 +109,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
-        title: 'Attendance reason statistics',
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     }

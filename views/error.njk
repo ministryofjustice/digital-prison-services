@@ -2,6 +2,9 @@
 {% set mainClasses = "govuk-main-wrapper--l" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+
+{% set title = 'Sorry, there is a problem with the service' %}
+
  {% block beforeContent %}
   {{ govukBreadcrumbs({
   items: [
@@ -14,8 +17,7 @@
       href: "/manage-prisoner-whereabouts"
     },
     {
-      text: title,
-      href: url
+      text: title
     }
   ]
 }) 
@@ -23,10 +25,9 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">Sorry, there is a problem with the service</h1>
+      <h1 class="govuk-heading-xl">{{title}}</h1>
       <p class="govuk-body">
         You can try again.
       </p>

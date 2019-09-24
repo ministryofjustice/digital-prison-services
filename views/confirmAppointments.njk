@@ -1,0 +1,141 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set title = 'Confirm appointments' %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "#"
+}) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">{{title}}</h1>
+
+  <h2 class="govuk-heading-m">
+    Appointment details
+  </h2>
+
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+          text: "Appointment type"
+        },
+        value: {
+          text: appointmentDetails.appointmentType
+        }
+      },
+      {
+        key: {
+          text: "Location"
+        },
+        value: {
+          text: appointmentDetails.location
+        }
+      },
+      {
+        key: {
+          text: "Start date"
+        },
+        value: {
+          text: appointmentDetails.startTime | getDate()
+        }
+      },
+      {
+        key: {
+          text: "Time"
+        },
+        value: {
+          text: appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()
+        }
+      },
+      {
+        key: {
+          text: "End date"
+        },
+        value: {
+          text: appointmentDetails.endTime | getDate()
+        }
+      }
+    ]
+  }) }}
+
+  {% if appointmentDetails.prisonersNotFound.length > 0 %}
+    <h2 class="govuk-heading-m">
+      Unable to find prisoners on the CSV file
+    </h2>
+
+    <p class="govuk-body">
+      Some prisoners could not be found. This might be because the prison number and the name do not match, or the prison number does not exist in this location.
+    </p>
+
+    <p class="govuk-body">
+      You should check these numbers. No appointments will be created for these prison numbers.
+    </p>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Prison number</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for prisonNumber in appointmentDetails.prisonersNotFound %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{prisonNumber}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  <h2 class="govuk-heading-m">
+    Prisoners listed on CSV file
+  </h2>
+
+  <p class="govuk-body">
+    Appointments will be created for these prisoners.
+  </p>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Last name</th>
+        <th scope="col" class="govuk-table__header">First name</th>
+        <th scope="col" class="govuk-table__header">Prison number</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for prisoner in appointmentDetails.prisonersListed %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{prisoner.lastName}}</td>
+          <td class="govuk-table__cell">{{prisoner.firstName}}</td>
+          <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ govukInsetText({
+    text: "You cannot delete the CSV file once you have confirmed these details. If you want to delete any appointments, you will need to delete it through the individual prisoner’s activity page."
+  }) }}
+
+  <form method="POST" id="confirmBulkAppointments">
+    {{ govukButton({ 
+      text: "Confirm",
+      preventDoubleClick: true,
+      classes: "govuk-!-margin-right-3"
+    }) }}
+
+    {{ govukButton({
+      text: "Cancel",
+      classes: "govuk-button--secondary"
+    }) }}
+  </form>
+
+{% endblock %}

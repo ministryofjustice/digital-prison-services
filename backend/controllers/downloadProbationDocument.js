@@ -17,7 +17,6 @@ const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthCli
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
-        title: 'Probation documents',
         url: `/offenders/${offenderNo}/probation-documents`,
       })
     }
