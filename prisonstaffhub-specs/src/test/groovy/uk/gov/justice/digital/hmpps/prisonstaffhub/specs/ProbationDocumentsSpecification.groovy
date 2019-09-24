@@ -198,6 +198,8 @@ class ProbationDocumentsSpecification extends BrowserReportingSpec {
         communityApi.stubConvictions('A1234AC', convictions)
         communityApi.stubOffenderDetails('A1234AC', probationOffenderDetails)
         communityApi.stubDocuments('A1234AC', documents)
+        def pdf = [1, 2, 3] as byte[]
+        communityApi.stubDocument('A1234AC', '1e593ff6-d5d6-4048-a671-cdeb8f65608b', pdf)
 
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
@@ -226,5 +228,12 @@ class ProbationDocumentsSpecification extends BrowserReportingSpec {
                 'PRE-CONS.pdf',
                 'CPSPack1.txt',
                 'CPSPack2.txt']
+
+        when: "I click on the first document"
+        def content = downloadBytes(firstDocumentLink)
+
+        then: "the document should be downloaded"
+        content == [1, 2, 3]
+
     }
 }

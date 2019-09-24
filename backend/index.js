@@ -47,6 +47,7 @@ const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
 const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
+const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const { bulkAppointmentsFactory } = require('./controllers/bulkAppointments')
 const referenceCodesService = require('./controllers/reference-codes-service')
@@ -293,6 +294,10 @@ app.get(
   handleErrors(
     probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
   )
+)
+app.get(
+  '/offenders/:offenderNo/probation-documents/:documentId/download',
+  handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, oauthClientId).downloadDocument)
 )
 app.get('/need-to-upload-file', (req, res) => {
   res.render('bulkInformation.njk', { title: 'You need to upload a CSV file' })

@@ -137,7 +137,7 @@ describe('Attendence and Pay controller', () => {
     ]
 
     it('should call postAttendances with list of valid offenders', async () => {
-      await batchUpdateAttendance(context, { offenders })
+      await batchUpdateAttendance(context, { attended: true, paid: true, offenders })
       expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
       expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
         context,
@@ -162,6 +162,41 @@ describe('Attendence and Pay controller', () => {
           prisonId: 'LEI',
           attended: true,
           paid: true,
+        },
+      ])
+    })
+
+    it('should call postAttendances with list of valid offenders and additional comments and absent reason', async () => {
+      const comments = 'Supporting comments.'
+      const reason = 'NotRequired'
+
+      await batchUpdateAttendance(context, { attended: true, paid: true, offenders, comments, reason })
+      expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
+      expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
+        context,
+        {
+          bookingActivities: [
+            {
+              activityId: 123,
+              bookingId: 1,
+            },
+            {
+              activityId: 123,
+              bookingId: 2,
+            },
+            {
+              activityId: 123,
+              bookingId: 3,
+            },
+          ],
+          eventDate: '2019-06-29',
+          eventLocationId: 123,
+          period: 'AM',
+          prisonId: 'LEI',
+          attended: true,
+          paid: true,
+          comments,
+          reason,
         },
       ])
     })

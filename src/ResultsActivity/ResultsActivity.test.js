@@ -5,6 +5,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { ResultsActivity, PrintLink } from './ResultsActivity'
 import OtherActivitiesView from '../OtherActivityListView'
+import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
 
 const PRISON = 'SYI'
 const OFFENDER_NAME_COLUMN = 0
@@ -102,6 +103,7 @@ const response = [
     ],
   },
   {
+    bookingId: 4,
     courtEvents: [
       {
         eventId: 100,
@@ -172,10 +174,12 @@ const props = {
   activityName: 'Activity name',
   userRoles: ['ACTIVITY_HUB'],
   totalAttended: 0,
+  totalAbsent: 0,
   redactedPrintState: false,
 }
 
 describe('Offender activity list results component', () => {
+  const today = moment().format('DD/MM/YYYY')
   let mockAxios
 
   beforeEach(() => {
@@ -339,7 +343,6 @@ describe('Offender activity list results component', () => {
   })
 
   it('should handle buttons correctly', async () => {
-    const today = moment().format('DD/MM/YYYY')
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
 
     expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
@@ -353,8 +356,7 @@ describe('Offender activity list results component', () => {
   })
 
   it('should recognise "Today"', async () => {
-    const today = 'Today'
-    const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
+    const component = shallow(<ResultsActivity {...props} activityData={response} date="Today" period="AM" />)
     // If today, print button is present
     expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
   })
@@ -380,7 +382,6 @@ describe('Offender activity list results component', () => {
   })
 
   it('should not display "Print list for general view" links if date is today', () => {
-    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalPaid={0} activityData={response} date={today} period="AM" />
     )
@@ -493,16 +494,18 @@ describe('Offender activity list results component', () => {
   })
 
   it('should not display pay all button if all prisoners are paid', () => {
-    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalAttended={4} activityData={response} date={today} period="AM" />
     )
 
-    const attendAllButton = component.find('#allAttendedButton')
-    expect(attendAllButton.length).toEqual(0)
+    const attendAllLink = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
+    expect(attendAllLink.length).toEqual(0)
   })
 
-  it('should not display "Attend all prisoners" button if the date is more than a week in the past', () => {
+  it('should not display "All prisoners have attended" button if the date is more than a week in the past', () => {
     const isMoreThanAWeekOld = moment(new Date())
       .subtract(8, 'days')
       .format('DD/MM/YYYY')
@@ -510,11 +513,14 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(0)
   })
 
-  it('should display "Attend all prisoners" button if the date is less than 8 days old', () => {
+  it('should display "All prisoners have attended" button if the date is less than 8 days old', () => {
     const isInTheLastWeek = moment(new Date())
       .subtract(6, 'days')
       .format('DD/MM/YYYY')
@@ -522,11 +528,14 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={0} activityData={response} date={isInTheLastWeek} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(1)
   })
 
-  it('should not display "Attend all prisoners" button if the date is in the future', () => {
+  it('should not display "All prisoners have attended" button if the date is in the future', () => {
     const tomorrow = moment(new Date())
       .add(1, 'days')
       .format('DD/MM/YYYY')
@@ -534,33 +543,40 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={0} activityData={response} date={tomorrow} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(0)
   })
 
-  it('should display "Attend all prisoners" button if no prisoners have been paid', () => {
-    const today = moment().format('DD/MM/YYYY')
+  it('should display "All prisoners have attended" button if no prisoners have been paid', () => {
     const component = shallow(
-      <ResultsActivity {...props} totalAttended={0} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all prisoners')
+    expect(button.text()).toEqual('All prisoners have attended')
   })
 
-  it('should display "Attend all remaining prisoners" button if there are outstanding prisoners to pay', () => {
-    const today = moment().format('DD/MM/YYYY')
+  it('should display "All remaining prisoners have attended" button if there are outstanding prisoners to pay', () => {
     const component = shallow(
-      <ResultsActivity {...props} totalAttended={3} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={3} totalAbsent={3} activityData={response} date={today} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all remaining prisoners')
+    expect(button.text()).toEqual('All remaining prisoners have attended')
   })
 
-  it('should display "Attend all remaining prisoners" button if some prisoners have other attendance info but none are paid', () => {
+  it('should display "All remaining prisoners have attended" button if some prisoners have other attendance info but none are paid', () => {
     const otherAttendanceData = [
       {
         bookingId: 1,
@@ -598,17 +614,26 @@ describe('Offender activity list results component', () => {
       },
     ]
 
-    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalAttended={0} activityData={otherAttendanceData} date={today} period="AM" />
+      <ResultsActivity
+        {...props}
+        totalAttended={0}
+        totalAbsent={1}
+        activityData={otherAttendanceData}
+        date={today}
+        period="AM"
+      />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all remaining prisoners')
+    expect(button.text()).toEqual('All remaining prisoners have attended')
   })
 
-  it('should display "Attend all prisoners" button if no prisoners have other attendance info and none are paid', () => {
+  it('should display "All prisoners have attended" button if no prisoners have other attendance info and none are paid', () => {
     const otherAttendanceNull = [
       {
         bookingId: 1,
@@ -639,24 +664,28 @@ describe('Offender activity list results component', () => {
       },
     ]
 
-    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalAttended={0} activityData={otherAttendanceNull} date={today} period="AM" />
+      <ResultsActivity {...props} activityData={otherAttendanceNull} date={today} period="AM" />
     )
 
-    const button = component.find('#allAttendedButton')
+    const button = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
     expect(button.length).toEqual(1)
-    expect(button.text()).toEqual('Attend all prisoners')
+    expect(button.text()).toEqual('All prisoners have attended')
   })
 
   it('should call the attendAll function when the link is clicked', async () => {
-    const today = moment().format('DD/MM/YYYY')
     const component = shallow(
-      <ResultsActivity {...props} totalAttended={0} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
     )
 
-    const attendAllButton = component.find('#allAttendedButton')
-    attendAllButton.props().onClick()
+    const attendAllLink = component
+      .find('BatchControls')
+      .shallow()
+      .find('#attendAllLink')
+    attendAllLink.props().onClick()
 
     mockAxios.onPost('/api/attendance/batch').reply(200, [
       {
@@ -694,9 +723,122 @@ describe('Offender activity list results component', () => {
       },
     ])
 
-    expect(component.state().payingAll).toBe(true)
+    expect(component.state().attendingAll).toBe(true)
 
     await waitForAsync()
-    expect(component.state().payingAll).toBe(false)
+    expect(component.state().attendingAll).toBe(false)
+  })
+
+  describe('not require all', () => {
+    describe('not require all link', () => {
+      it('should display not require all text', () => {
+        const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
+        const batchControls = component.find('BatchControls').shallow()
+        const notRequireAllLink = batchControls.find('#notRequireAllLink')
+
+        expect(notRequireAllLink.text()).toEqual('All prisoners are not required')
+      })
+
+      it('should display not require all remaining text if there are offenders with records', () => {
+        const component = shallow(
+          <ResultsActivity {...props} totalAttended={1} activityData={response} date={today} period="AM" />
+        )
+        const batchControls = component.find('BatchControls').shallow()
+        const notRequireAllLink = batchControls.find('#notRequireAllLink')
+
+        expect(notRequireAllLink.text()).toEqual('All remaining prisoners are not required')
+      })
+
+      it('should show the attendance not required form when clicked', () => {
+        const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
+        const batchControls = component.find('BatchControls').shallow()
+        const notRequireAllLink = batchControls.find('#notRequireAllLink')
+        notRequireAllLink.props().onClick()
+
+        expect(props.showModal).toBeCalledWith(
+          true,
+          <AttendanceNotRequiredForm showModal={props.showModal} submitHandler={component.instance().notRequireAll} />
+        )
+      })
+
+      it('should not display when all prisoners have an attendance record', () => {
+        const component = shallow(
+          <ResultsActivity
+            {...props}
+            totalAttended={2}
+            totalAbsent={2}
+            activityData={response}
+            date={today}
+            period="AM"
+          />
+        )
+        const batchControls = component.find('BatchControls').shallow()
+        const notRequireAllLink = batchControls.find('#notRequireAllLink')
+
+        expect(notRequireAllLink.length).toEqual(0)
+      })
+    })
+
+    describe('attendance not required submit handler', () => {
+      it('notRequireAll should batch update attendance with correct values', () => {
+        jest.spyOn(Date, 'now').mockImplementationOnce(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
+
+        const component = shallow(
+          <ResultsActivity {...props} activityData={response} date={moment().format('DD/MM/YYYY')} period="AM" />
+        )
+        const mockAxiosPost = jest.spyOn(axios, 'post')
+
+        component.instance().notRequireAll({ comments: 'Offenders no longer required.' })
+
+        expect(mockAxiosPost).toHaveBeenCalledWith('/api/attendance/batch', {
+          attended: false,
+          comments: 'Offenders no longer required.',
+          offenders: [
+            {
+              offenderNo: 'A1234AA',
+              bookingId: 1,
+              eventId: 123,
+              eventLocationId: undefined,
+              offenderIndex: 0,
+              period: 'AM',
+              prisonId: 'SYI',
+              eventDate: '01/01/2017',
+            },
+            {
+              offenderNo: 'A1234AB',
+              bookingId: 2,
+              eventId: 456,
+              eventLocationId: undefined,
+              offenderIndex: 1,
+              period: 'AM',
+              prisonId: 'SYI',
+              eventDate: '01/01/2017',
+            },
+            {
+              offenderNo: 'A1234AC',
+              bookingId: 3,
+              eventId: 789,
+              eventLocationId: undefined,
+              offenderIndex: 2,
+              period: 'AM',
+              prisonId: 'SYI',
+              eventDate: '01/01/2017',
+            },
+            {
+              offenderNo: 'A1234AD',
+              bookingId: 4,
+              eventId: undefined,
+              eventLocationId: undefined,
+              offenderIndex: 3,
+              period: 'AM',
+              prisonId: 'SYI',
+              eventDate: '01/01/2017',
+            },
+          ],
+          paid: true,
+          reason: 'NotRequired',
+        })
+      })
+    })
   })
 })

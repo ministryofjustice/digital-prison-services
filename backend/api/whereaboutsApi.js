@@ -11,7 +11,7 @@ const whereaboutsApiFactory = client => {
     get(context, `/attendances/${agencyId}/${locationId}?date=${date}&period=${period}`)
 
   const getAttendanceForBookings = (context, { agencyId, period, bookings, date }) =>
-    get(context, `/attendances/${agencyId}?${arrayToQueryString(bookings, 'bookings')}&date=${date}&period=${period}`)
+    post(context, `/attendances/${agencyId}?date=${date}&period=${period}`, bookings)
 
   const postAttendance = (context, body) => post(context, '/attendance', body)
 
