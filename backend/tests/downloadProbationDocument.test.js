@@ -52,7 +52,6 @@ describe('Download probation documents', () => {
         await page(req, res)
 
         expect(res.render).toHaveBeenCalledWith('error.njk', {
-          title: 'Probation documents',
           url: '/offenders/G9542VP/probation-documents',
         })
       })
