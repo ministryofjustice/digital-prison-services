@@ -1,4 +1,5 @@
 const moment = require('moment')
+const { DATE_TIME_FORMAT_SPEC } = require('../src/dateHelpers')
 
 const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
   if (displayDate) {
@@ -156,6 +157,20 @@ const flagFuturePeriodSelected = (date, period, currentPeriod) => {
   return false
 }
 
+const isValidDateTimeFormat = dateTimeString => moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
+
+const getDate = dateTimeString => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY')
+}
+
+const getTime = dateTimeString => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -179,4 +194,6 @@ module.exports = {
   flagFuturePeriodSelected,
   readablePeriod,
   readableDateFormat,
+  getDate,
+  getTime,
 }
