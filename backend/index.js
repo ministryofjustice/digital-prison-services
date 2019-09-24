@@ -48,6 +48,7 @@ const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-
 const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
+const { bulkAppointmentsFactory } = require('./controllers/bulkAppointments')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
@@ -293,9 +294,12 @@ app.get(
     probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
   )
 )
-app.get('/need-to-upload-file', async (req, res) => {
-  res.render('bulkUploadFile.njk', { title: 'You need to upload a CSV file' })
+app.get('/need-to-upload-file', (req, res) => {
+  res.render('bulkInformation.njk', { title: 'You need to upload a CSV file' })
 })
+
+app.get('/upload-file', handleErrors(bulkAppointmentsFactory(logError).index))
+app.post('/upload-file', handleErrors(controller.getOffenderListfromCsvValues))
 
 nunjucksSetup(app, path)
 
