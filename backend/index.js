@@ -52,6 +52,7 @@ const { attendanceStatisticsFactory } = require('./controllers/attendanceStatist
 const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
 const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
+const { bulkAppointmentsCreatedFactory } = require('./controllers/bulkAppointmentsCreated')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 
@@ -338,6 +339,7 @@ app.post(
 
 app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
 app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
+app.get('/bulk-appointments/appointments-created', handleErrors(bulkAppointmentsCreatedFactory().index))
 
 app.use(
   '/bulk-appointments/add-appointment-details',
