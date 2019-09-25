@@ -7,7 +7,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
- {% block beforeContent %}
+{% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
     href: "#"
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if errors.length > 0 %}
+  {% if errors and errors.length > 0 %}
     {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: errors,
@@ -39,7 +39,7 @@
             text: "Appointment type"
           },
           value: {
-            text: appointmentDetails.type
+            text: appointmentDetails.appointmentType
           }
         },
         {
@@ -81,7 +81,7 @@
         text: "You can only include each prison number once on a CSV file. If you need to add appointments for different times for the same prisoner, you must do this using different CSV files."
       }) }}
       
-      <form action="/upload-file" method="POST" enctype="multipart/form-data">
+      <form action="/bulk-appointments/upload-file" method="POST" enctype="multipart/form-data">
 
         {{ govukFileUpload({
           id: "file",
@@ -90,7 +90,7 @@
           errorMessage: errors | findError('file')
         }) }}
 
-        {% for key, detail in appointmentDetails %}
+        {% for key, detail in data %}
           <input type="hidden" value="{{detail}}" name="{{key}}" />
         {% endfor %}
 
@@ -107,7 +107,6 @@
           text: "Cancel",
           classes: "govuk-button--secondary"
         }) }}
-
       </form>
   </div>
 {% endblock %}

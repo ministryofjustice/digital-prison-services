@@ -151,30 +151,6 @@ const factory = ({
       })
   })
 
-  const getOffenderListfromCsvValues = asyncMiddleware(async (req, res) => {
-    const { file } = req.files
-    const { location } = req.body
-
-    csvParserService
-      .loadAndParseCsvFile(file)
-      .then(async fileContent => {
-        const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, location)
-        const prisonerList = prisonersDetails.map(prisoner => ({
-          bookingId: prisoner.bookingNo,
-          offenderNo: prisoner.offenderNo,
-          firstName: prisoner.firstName,
-          lastName: prisoner.lastName,
-        }))
-
-        req.flash('prisonersListed', prisonerList)
-        // return res.redirect('/johnspage')
-      })
-      .catch(error => {
-        req.flash('errors', { text: error.message, href: '#file' })
-        return res.redirect('back')
-      })
-  })
-
   const bulkAppointmentsCsvTemplate = asyncMiddleware(async (req, res) => {
     res.setHeader('Content-disposition', 'attachment; filename=offenders-for-appointments.csv')
     res.set('Content-Type', 'text/csv')
@@ -250,7 +226,6 @@ const factory = ({
     getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
     uploadOffenders,
-    getOffenderListfromCsvValues,
     getBulkAppointmentsViewModel,
     addBulkAppointments,
     bulkAppointmentsCsvTemplate,

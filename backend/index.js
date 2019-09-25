@@ -49,7 +49,7 @@ const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
-const { bulkAppointmentsFactory } = require('./controllers/bulkAppointments')
+const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
@@ -303,8 +303,17 @@ app.get('/need-to-upload-file', (req, res) => {
   res.render('bulkInformation.njk', { title: 'You need to upload a CSV file' })
 })
 
-app.get('/upload-file', handleErrors(bulkAppointmentsFactory(logError).index))
-app.post('/upload-file', handleErrors(controller.getOffenderListfromCsvValues))
+app.get('/bulk-appointments/upload-file', handleErrors(bulkAppointmentsUploadFactory(logError).index))
+app.post(
+  '/bulk-appointments/upload-file',
+  handleErrors(
+    bulkAppointmentsUploadFactory(
+      csvParserService({ fs, isBinaryFileSync }),
+      offenderLoaderFactory(elite2Api),
+      logError
+    ).postAndParseCsvOffenderList
+  )
+)
 
 nunjucksSetup(app, path)
 
