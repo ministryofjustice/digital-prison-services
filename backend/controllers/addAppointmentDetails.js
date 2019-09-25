@@ -1,6 +1,11 @@
 const moment = require('moment')
+const config = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+
+const {
+  app: { notmEndpointUrl },
+} = config
 
 const toSelectValue = data => ({
   value: data.id,
@@ -40,6 +45,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         title: 'Add appointment details',
         appointmentTypes,
         locations,
+        homeUrl: notmEndpointUrl,
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
@@ -137,6 +143,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         comments,
         appointmentTypes: setSelected(appointmentType, appointmentTypes),
         locations: setSelected(Number(location), locations),
+        homeUrl: notmEndpointUrl,
       }
 
       res.render('addAppointmentDetails.njk', viewModel)

@@ -40,6 +40,21 @@ module.exports = (app, path) => {
     ]
   })
 
+  njkEnv.addFilter('addDefaultSelectedVale', (items, text) => {
+    if (!items) return null
+
+    return [
+      {
+        text,
+        value: '',
+        disabled: true,
+        hidden: true,
+        selected: true,
+      },
+      ...items,
+    ]
+  })
+
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))
