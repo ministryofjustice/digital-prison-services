@@ -36,7 +36,8 @@
             label: 'Date',
             name: 'date',
             date: date,
-            errorMessage: errors | findError('date')
+            errorMessage: errors | findError('date'),
+            attributes: {'data-hide-future-date':'true'}
         }) }}
     </div>
     <div class="govuk-grid-column-one-quarter">
