@@ -37,6 +37,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       const { appointmentTypes, locations } = await getAppointmentTypesAndLocations(res.locals, activeCaseLoadId)
 
       res.render('addAppointmentDetails.njk', {
+        title: 'Add appointment details',
         appointmentTypes,
         locations,
       })

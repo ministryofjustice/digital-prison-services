@@ -1,14 +1,14 @@
 const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logError) => {
-  const index = async (req, res) => {
+  const csvBulkOffenderUpload = async (req, res) => {
     try {
       if (!req.session.data) {
         res.render('error.njk', {
-          url: '/need-to-upload-file',
+          url: '/bulk-appointments/add-appointment-details',
         })
         return
       }
 
-      res.render('bulkUploadFile.njk', {
+      res.render('uploadOffenders.njk', {
         title: 'Upload a CSV File',
         errors: req.flash('errors'),
         appointmentDetails: req.session.data,
@@ -16,7 +16,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
-        url: '/need-to-upload-file',
+        url: '/bulk-appointments/add-appointment-details',
       })
     }
   }
@@ -36,12 +36,12 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
 
   const postAndParseCsvOffenderList = async (req, res) => {
     const { file } = req.files
-    const { location } = req.session.data
+    const { activeCaseLoadId } = req.session.userDetails
 
     csvParserService
       .loadAndParseCsvFile(file)
       .then(async fileContent => {
-        const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, location)
+        const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, activeCaseLoadId)
 
         const removeDuplicates = array => [...new Set(array)]
         const offendersFromCsv = removeDuplicates(fileContent.map(row => row[0]))
@@ -78,7 +78,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
   }
 
   return {
-    index,
+    csvBulkOffenderUpload,
     postAndParseCsvOffenderList,
   }
 }

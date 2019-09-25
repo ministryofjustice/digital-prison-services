@@ -9,7 +9,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
   text: "Back",
-  href: "#"
+  href: "/bulk-appointments/upload-file"
 }) }}
 {% endblock %}
 
@@ -135,7 +135,7 @@
     {{ govukButton({
       text: "Cancel",
       element: 'a',
-      href: '/need-to-upload-file',
+      href: '/bulk-appointments/upload-file',
       classes: "govuk-button--secondary"
     }) }}
   </form>
