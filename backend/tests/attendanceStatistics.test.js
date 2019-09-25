@@ -197,7 +197,6 @@ describe('Attendance reason statistics', () => {
       await attendanceStatistics({ query: { agencyId, date, period } }, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
-        title: 'Attendance reason statistics',
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     })

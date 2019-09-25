@@ -50,6 +50,7 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
+const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 
@@ -320,6 +321,9 @@ app.get(
 app.get('/need-to-upload-file', async (req, res) => {
   res.render('bulkUploadFile.njk', { title: 'You need to upload a CSV file' })
 })
+
+app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
+app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
 
 app.use('/add-appointment-details', addAppointmentDetailsController({ elite2Api, oauthApi, logError }))
 
