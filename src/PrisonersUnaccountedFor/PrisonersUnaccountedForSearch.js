@@ -116,6 +116,7 @@ const PrisonersUnaccountedForSearch = ({
 PrisonersUnaccountedForSearch.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
+  reloadPage: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   setColumnSort: PropTypes.func.isRequired,

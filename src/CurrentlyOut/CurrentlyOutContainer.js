@@ -77,6 +77,7 @@ class CurrentlyOutContainer extends Component {
 CurrentlyOutContainer.propTypes = {
   dataFetcher: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
   // history from Redux Router Route
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,

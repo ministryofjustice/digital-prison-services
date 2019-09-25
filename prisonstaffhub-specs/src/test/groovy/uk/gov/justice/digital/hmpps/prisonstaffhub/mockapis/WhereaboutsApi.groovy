@@ -4,7 +4,10 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonOutput
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
+import java.util.stream.Collectors
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static com.github.tomakehurst.wiremock.client.WireMock.post
 import static com.github.tomakehurst.wiremock.client.WireMock.put
@@ -19,6 +22,7 @@ public class WhereaboutsApi extends WireMockRule {
     }
 
     def attendance = [
+        attendances:[
             {
                 id: 1
                 bookingId: 3
@@ -53,9 +57,11 @@ public class WhereaboutsApi extends WireMockRule {
                 absenceReasons: 'UnacceptableAbsence'
                 eventDate: '2019-05-15'
             },
+        ]
     ]
 
     def attendanceForBookingsResponse = [
+        attendances: [
             [
                 id: 1,
                 attended: true,
@@ -86,6 +92,7 @@ public class WhereaboutsApi extends WireMockRule {
                 period: 'AM',
                 prisonId: 'string',
             ],
+        ]
     ]
 
     def absenceReasons = [
@@ -102,27 +109,25 @@ public class WhereaboutsApi extends WireMockRule {
 
     void stubGetAttendance(Caseload caseload, int locationId, String timeSlot, String date, data = attendance) {
         this.stubFor(
-                get("/attendance/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
+                get("/attendances/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
                         .withBody(JsonOutput.toJson(data))))
     }
 
-    void stubGetAttendanceForBookings(Caseload caseload, String bookings, String timeSlot, String date, data = attendanceForBookingsResponse) {
+    void stubGetAttendanceForBookings(Caseload caseload, String timeSlot, String date, data = attendanceForBookingsResponse) {
         this.stubFor(
-                get("/attendance/${caseload.id}?${bookings}&date=${date}&period=${timeSlot}")
+                post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
                         .withBody(JsonOutput.toJson(data))))
     }
-
-
 
     void stubGetAbsenceReasons() {
         this.stubFor(
-                get('/attendance/absence-reasons')
+                get('/absence-reasons')
                         .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')

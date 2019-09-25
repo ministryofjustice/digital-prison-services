@@ -175,13 +175,9 @@
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setupTests.js",
+    "setupFilesAfterEnv": ["<rootDir>/config/jest/setupTests.js"],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
-      "<rootDir>/(src|backend)/**/?(*.)(spec|test).{js,jsx,mjs}"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",

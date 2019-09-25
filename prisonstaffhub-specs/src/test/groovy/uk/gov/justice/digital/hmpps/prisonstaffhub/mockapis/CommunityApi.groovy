@@ -5,6 +5,8 @@ import groovy.json.JsonOutput
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.head
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 
 class CommunityApi extends WireMockRule {
 
@@ -19,6 +21,24 @@ class CommunityApi extends WireMockRule {
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson(convictions))))
+    }
+
+    void stubDocuments(offenderNo, documents) {
+        this.stubFor(
+                get("/api/offenders/nomsNumber/${offenderNo}/documents/grouped")
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(documents))))
+    }
+
+    void stubDocument(offenderNo, documentId, content) {
+        this.stubFor(
+                get("/api/offenders/nomsNumber/${offenderNo}/documents/${documentId}")
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/pdf')
+                                .withBody(content)))
     }
 
     void stubOffenderDetails(offenderNo, details) {

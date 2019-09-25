@@ -176,10 +176,13 @@ GlobalSearchForm.propTypes = {
   handleSearchTextChange: PropTypes.func.isRequired,
   handleSearchGenderFilterChange: PropTypes.func.isRequired,
   handleSearchLocationFilterChange: PropTypes.func.isRequired,
+  handleDateOfBirthChange: PropTypes.func.isRequired,
+  showErrors: PropTypes.func.isRequired,
   clearFilters: PropTypes.func.isRequired,
   searchText: PropTypes.string.isRequired,
   locationFilter: PropTypes.string.isRequired,
   genderFilter: PropTypes.string.isRequired,
+  searchPerformed: PropTypes.bool.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 }
 

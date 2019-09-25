@@ -31,6 +31,7 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
+import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
 
 const ManageResults = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ const StackedTotals = styled.div`
   text-align: right;
 `
 const BatchLink = styled(Link)`
+  display: block;
   font-size: ${FONT_SIZE.SIZE_22};
   color: ${LINK_COLOUR};
   cursor: pointer;
@@ -86,13 +88,46 @@ class ResultsActivity extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      payingAll: false,
+      attendingAll: false,
     }
+    this.unattendedOffenders = new Set()
+    this.totalOffenders = new Set()
   }
 
   componentWillUnmount() {
     const { resetErrorDispatch } = this.props
     resetErrorDispatch()
+  }
+
+  updateMultipleAttendances = ({ paid, attended, reason, comments, offenders }) =>
+    axios.post('/api/attendance/batch', {
+      attended,
+      paid,
+      reason,
+      comments,
+      offenders,
+    })
+
+  notRequireAll = async values => {
+    const { showModal, getActivityList, handleError } = this.props
+    const { comments } = values
+
+    try {
+      this.setState({ notRequiringAll: true })
+      await this.updateMultipleAttendances({
+        paid: true,
+        attended: false,
+        offenders: [...this.unattendedOffenders],
+        reason: 'NotRequired',
+        comments,
+      })
+      getActivityList()
+      this.setState({ notRequiringAll: false })
+    } catch (error) {
+      handleError(error)
+    }
+
+    showModal(false)
   }
 
   render() {
@@ -117,6 +152,7 @@ class ResultsActivity extends Component {
       activityName,
       updateAttendanceEnabled,
       totalAttended,
+      totalAbsent,
       userRoles,
     } = this.props
 
@@ -173,27 +209,18 @@ class ResultsActivity extends Component {
       </div>
     )
 
-    const unpaidOffenders = new Set()
-    const totalOffenders = new Set()
-
     const attendAllNonAssigned = async () => {
       try {
-        this.setState({ payingAll: true })
-
-        const offenders = [...unpaidOffenders]
-
-        await axios.post('/api/attendance/batch', {
-          offenders,
-        })
-
+        this.setState({ attendingAll: true })
+        await this.updateMultipleAttendances({ paid: true, attended: true, offenders: [...this.unattendedOffenders] })
         getActivityList()
-        this.setState({ payingAll: false })
+        this.setState({ attendingAll: false })
       } catch (error) {
         handleError(error)
       }
     }
 
-    const showAttendAllControl = (activities, paidList) => {
+    const showUpdateAllControls = (activities, paidList) => {
       let showControls = true
       const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
       const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
@@ -210,25 +237,47 @@ class ResultsActivity extends Component {
       return showControls
     }
 
-    const showRemainingButton = activities => {
-      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
-      return totalAttended !== 0 || attendanceInfo.length
+    const { attendingAll, notRequiringAll } = this.state
+
+    const BatchControls = () => {
+      const totalMarked = totalAttended + totalAbsent
+      const anyRemaining = totalMarked % this.totalOffenders.size > 0 ? ' remaining ' : ' '
+
+      return (
+        <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
+          {showUpdateAllControls(activityData, totalMarked) && (
+            <>
+              {attendingAll ? (
+                'Marking all as attended...'
+              ) : (
+                <BatchLink onClick={() => attendAllNonAssigned()} id="attendAllLink" className="no-print">
+                  All
+                  {anyRemaining}
+                  prisoners have attended
+                </BatchLink>
+              )}
+              {notRequiringAll ? (
+                'Marking all as not required...'
+              ) : (
+                <BatchLink
+                  onClick={() =>
+                    showModal(
+                      true,
+                      <AttendanceNotRequiredForm showModal={showModal} submitHandler={this.notRequireAll} />
+                    )
+                  }
+                  id="notRequireAllLink"
+                >
+                  All
+                  {anyRemaining}
+                  prisoners are not required
+                </BatchLink>
+              )}
+            </>
+          )}
+        </div>
+      )
     }
-
-    const { payingAll } = this.state
-
-    const batchControls = (
-      <div id="batchControls" className="pure-u-md-12-12 padding-bottom">
-        {showAttendAllControl(activityData, totalAttended) &&
-          (payingAll ? (
-            'Marking all as attended...'
-          ) : (
-            <BatchLink onClick={() => attendAllNonAssigned()} id="allAttendedButton" className="no-print">
-              {`Attend all${showRemainingButton(activityData) ? ' remaining ' : ' '}prisoners`}
-            </BatchLink>
-          ))}
-      </div>
-    )
 
     const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
     const redactedPrint = redactedPrintState ? 'straightPrint' : 'no-print'
@@ -296,6 +345,8 @@ class ResultsActivity extends Component {
       return <td className="row-gutters">{mainEventDescription}</td>
     }
 
+    const unattendedOffenders = new Set()
+
     const offenders =
       activityData &&
       activityData.map((mainEvent, index) => {
@@ -325,20 +376,19 @@ class ResultsActivity extends Component {
           attendanceInfo,
         }
 
-        if (!attendanceInfo)
-          unpaidOffenders.add({
+        if (!attendanceInfo) {
+          unattendedOffenders.add({
             offenderNo,
             bookingId,
             eventId,
             eventLocationId: locationId,
             offenderIndex: index,
-            attended: true,
-            paid: true,
             period,
             prisonId: agencyId,
             eventDate: date,
           })
-        totalOffenders.add(offenderNo)
+        }
+        this.totalOffenders.add(offenderNo)
 
         const { absentReason } = attendanceInfo || {}
         const otherActivitiesClasses = classNames({
@@ -410,6 +460,8 @@ class ResultsActivity extends Component {
         )
       })
 
+    this.unattendedOffenders = unattendedOffenders
+
     return (
       <div className="results-activity">
         <span className="whereabouts-date print-only">
@@ -437,11 +489,11 @@ class ResultsActivity extends Component {
             />
           </div>
           <StackedTotals>
-            <TotalResults label="Prisoners listed:" totalResults={totalOffenders.size} />
+            <TotalResults label="Prisoners listed:" totalResults={this.totalOffenders.size} />
             <HideForPrint>
               <TotalResults label="Sessions attended:" totalResults={totalAttended} />
             </HideForPrint>
-            {activityHubUser && batchControls}
+            {activityHubUser && <BatchControls />}
           </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
@@ -485,6 +537,7 @@ ResultsActivity.propTypes = {
     })
   ).isRequired,
   totalAttended: PropTypes.number.isRequired,
+  totalAbsent: PropTypes.number.isRequired,
   setColumnSort: PropTypes.func.isRequired,
   orderField: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,

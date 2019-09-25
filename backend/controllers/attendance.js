@@ -36,17 +36,22 @@ const attendanceFactory = whereaboutsApi => {
     return response
   }
 
-  const batchUpdateAttendance = async (context, body) => {
-    const offenderCount = body.offenders.length
+  const batchUpdateAttendance = (context, body) => {
+    const { attended, paid, reason, comments, offenders } = body
+    const offenderCount = offenders.length
     log.info(`Number of offenders to be paid ${offenderCount}`)
 
-    const { eventLocationId, period, eventDate, prisonId } = body.offenders[0]
-    const bookingActivities = body.offenders.map(offender => ({
+    const { eventLocationId, period, eventDate, prisonId } = offenders[0]
+    const bookingActivities = offenders.map(offender => ({
       bookingId: offender.bookingId,
       activityId: offender.eventId,
     }))
 
     const payload = {
+      attended,
+      paid,
+      reason,
+      comments,
       bookingActivities,
       eventLocationId,
       period,
@@ -54,8 +59,7 @@ const attendanceFactory = whereaboutsApi => {
       prisonId,
     }
 
-    const response = await whereaboutsApi.attendAll(context, payload)
-    return response
+    return whereaboutsApi.postAttendances(context, payload)
   }
 
   const getAbsenceReasons = async context => {

@@ -1,5 +1,6 @@
 const nunjucks = require('nunjucks')
 const config = require('../config')
+const { getDate, getTime } = require('../utils')
 
 module.exports = (app, path) => {
   const njkEnv = nunjucks.configure([path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/'], {
@@ -39,7 +40,8 @@ module.exports = (app, path) => {
     ]
   })
 
+  njkEnv.addFilter('getDate', getDate)
+  njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))
-
   njkEnv.addGlobal('notmUrl', config.app.notmEndpointUrl)
 }

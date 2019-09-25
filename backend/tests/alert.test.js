@@ -197,7 +197,6 @@ describe('alert management', () => {
         await handleCloseAlertForm(req, res)
 
         expect(elite2api.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
-          alertStatus: 'INACTIVE',
           expiryDate: '2019-03-29',
         })
 

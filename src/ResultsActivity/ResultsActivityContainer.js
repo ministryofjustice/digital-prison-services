@@ -156,6 +156,8 @@ class ResultsActivityContainer extends Component {
       showModal,
       updateAttendanceEnabled,
       userRoles,
+      totalAttended,
+      totalAbsent,
     } = this.props
 
     const { redactedPrint } = this.state
@@ -175,6 +177,8 @@ class ResultsActivityContainer extends Component {
           showModal={showModal}
           userRoles={userRoles}
           redactedPrintState={redactedPrint}
+          totalAttended={totalAttended}
+          totalAbsent={totalAbsent}
           {...this.props}
         />
       </Page>
@@ -189,6 +193,9 @@ ResultsActivityContainer.propTypes = {
   handlePeriodChange: PropTypes.func.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
+  getAbsentReasonsDispatch: PropTypes.func.isRequired,
+  setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
+  updateAttendanceEnabled: PropTypes.bool.isRequired,
 
   // mapStateToProps
   activity: PropTypes.string.isRequired,
@@ -216,6 +223,8 @@ ResultsActivityContainer.propTypes = {
   loaded: PropTypes.bool.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
   userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  totalAttended: PropTypes.number.isRequired,
+  totalAbsent: PropTypes.number.isRequired,
 
   // mapDispatchToProps
   activitiesDispatch: PropTypes.func.isRequired,
@@ -248,6 +257,7 @@ const mapStateToProps = state => ({
   sortOrder: state.events.sortOrder,
   updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
   totalAttended: state.events.totalAttended,
+  totalAbsent: state.events.totalAbsent,
   userRoles: state.app.user.roles,
 })
 

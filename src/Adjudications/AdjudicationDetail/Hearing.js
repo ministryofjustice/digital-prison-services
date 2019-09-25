@@ -56,6 +56,10 @@ Hearing.propTypes = {
   }),
 }
 
+Hearing.defaultProps = {
+  hearing: undefined,
+}
+
 const mapStateToProps = ({
   adjudicationHistory: {
     detail: { hearing },

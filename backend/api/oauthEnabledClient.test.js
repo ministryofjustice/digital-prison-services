@@ -153,6 +153,74 @@ describe('Test clients built by oauthEnabledClient', () => {
         await expect(client.getStream({}, '/api/users/me')).rejects.toThrow('Timeout of 300ms exceeded')
       })
     })
+
+    describe('pipe', () => {
+      let res
+      beforeEach(() => {
+        const header = jest.fn()
+        const on = jest.fn()
+        const once = jest.fn()
+        const emit = jest.fn()
+        const write = jest.fn()
+        const end = jest.fn()
+
+        res = {
+          header,
+          on,
+          once,
+          emit,
+          write,
+          end,
+        }
+      })
+      it('Should retry twice if request fails', async () => {
+        const pipe = new Promise((resolve, reject) => {
+          mock
+            .get('/api/users/me')
+            .reply(500, { failure: 'one' })
+            .get('/api/users/me')
+            .reply(500, { failure: 'two' })
+            .get('/api/users/me')
+            .reply(200, Buffer.from('some binary data'), ['Content-Type', 'image/png'])
+
+          client.pipe(
+            {},
+            '/api/users/me',
+            {
+              ...res,
+              end: () => {
+                resolve()
+              },
+            }
+          )
+        })
+
+        await pipe
+        expect(res.write).toHaveBeenCalled()
+      })
+      it('Should set headers on response to pipe to', async () => {
+        const pipe = new Promise((resolve, reject) => {
+          mock.get('/api/users/me').reply(200, Buffer.from('some binary data'), {
+            'Content-Type': 'image/png',
+            'Content-Length': 123,
+          })
+
+          client.pipe(
+            {},
+            '/api/users/me',
+            {
+              ...res,
+              end: () => {
+                resolve()
+              },
+            }
+          )
+        })
+
+        await pipe
+        expect(res.header).toHaveBeenCalledWith({ 'content-type': 'image/png', 'content-length': 123 })
+      })
+    })
   })
 
   describe('Normalise base url behaviour', () => {

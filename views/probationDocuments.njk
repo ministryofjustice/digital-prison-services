@@ -33,38 +33,107 @@
   </div>
 {% endmacro %}
 
-
 {%  macro summaryTitle(conviction) %}
   {{ conviction.title}} {% if conviction.institutionName %} at {{conviction.institutionName}} {% endif %}
 {% endmacro %}
 
 {%  macro incorrectDetails(probationDetails) %}
   <p>We have retrieved this information from the probation system where the prisoner's name is recorded as <strong>{{probationDetails.name}}</strong>. If something does not look right you should ask a Community offender manager to check the details in Delius, the case reference number (CRN) is <strong>{{probationDetails.crn}}</strong>.</p>
-  <p>The Delius record should have the prison number assigned to the Delius NOMS number and the Throughcare (custody) details may need to be updated.</p>
+  <p>The Delius record should have the prison number assigned to the Delius NOMS number and the Throughcare (custody) details may need to be updated using the Search DSS feature.</p>
+{% endmacro %}
+
+{% macro documentDetail(document, offenderDetails) %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <a class="qa-document-link" href="/offenders/{{offenderDetails.offenderNo}}/probation-documents/{{document.id}}/download">{{ document.documentName }}</a>
+    </div>
+    <div class="govuk-grid-column-full">
+      {{ document.type}} created by {{ document.author }}
+    </div>
+    {% if document.description %}
+      <div class="govuk-grid-column-full govuk-caption-m">
+        {{ document.description}}
+      </div>
+    {%  endif %}
+  </div>
+{% endmacro %}
+
+{% macro documentTable(documents, caption, offenderDetails) %}
+    {% set rows = [] %}
+
+    {% for document in documents %}
+      {% set rows = (rows.push(          [
+        {
+          html: documentDetail(document, offenderDetails)
+        },
+        {
+          text: document.date
+        }
+      ]), rows) %}
+    {% endfor %}
+
+
+    {{ govukTable({
+      firstCellIsHeader: false,
+      caption: caption,
+      head: [
+        {
+          text: "Details"
+        },
+        {
+          text: "Date"
+        }
+      ],
+      rows: rows
+    })
+    }}
+{% endmacro %}
+
+{%  macro convictionDocuments(conviction, offenderDetails) %}
+  {% if conviction.documents.length > 0 %}
+    {{ documentTable(conviction.documents, "Documents for this sentence", offenderDetails)  }}
+  {%  else %}
+    <p class="govuk-body">No documents have been upload for this conviction.</p>
+  {% endif %}
 {% endmacro %}
 
 
+
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-  items: [
-    {
-      text: "Home",
-      href: notmUrl
-    },
-    {
-      text: offenderDetails.name,
-      href: offenderDetails.profileUrl
-    },
-    {
-      text: "Probation documents"
-    }
-  ]
-}) 
-}}
+  {% if offenderDetails %}
+    {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: notmUrl
+      },
+      {
+        text: offenderDetails.name,
+        href: offenderDetails.profileUrl
+      },
+      {
+        text: "Probation documents"
+      }
+    ]
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% block content %}
   <h1 class="govuk-heading-l">Documents held by probation</h1>
+
+  {% if probationDetails %}
+    {{ govukDetails({
+      summaryText: "These details don't look correct",
+      html: incorrectDetails(probationDetails)
+    }) }}
+  {% else %}
+    {{ govukDetails({
+      summaryText: "What can I do to find the probation documents",
+      text: "If something does not look right you should ask a Community offender manager to check the details in Delius. It is possible that the offender record does exist in Delius, but the Delius NOMS number has not been set correctly to the prison number. Ask a someone to update the Delius record and try again."
+    }) }}
+  {% endif %}
+
 
   {% if errors.length > 0 %}
     {{ govukErrorSummary({
@@ -75,22 +144,15 @@
     }}
   {% endif %}
 
-  {% if probationDetails %}
-    {{ govukDetails({
-      summaryText: "These details don't look correct",
-      html: incorrectDetails(probationDetails)
-    }) }}
-  {% else %}
-    {{ govukDetails({
-      summaryText: "What can I do to find the probation documents",
-      text: "If something does not look right you should ask a Community offender manager to check the details in Delius. It is possible that the offender record does exist in Delius, but the Delius NOMS number has not been set correctly to the prison number. Ask a someone to update the Delius the record and try again."
-    }) }}
+  {% if documents.offenderDocuments.length > 0 %}
+    {{ documentTable(documents.offenderDocuments, "General documents for " + probationDetails.name, offenderDetails)  }}
   {% endif %}
 
-  {% set rows = [] %}
+
+  {% set convictionItems = [] %}
 
   {% for conviction in documents.convictions %}
-    {% set rows = (rows.push(
+    {% set convictionItems = (convictionItems.push(
         {
           heading: {
             text: summaryTitle(conviction)
@@ -99,14 +161,15 @@
             html: summary(conviction)
           },
           content: {
-            html: "<p class='govuk-body'>Documents will appear here</p>"
+            html: convictionDocuments(conviction, offenderDetails)
           }
         }
-      ), rows) %}
+      ), convictionItems) %}
   {% endfor %}
 
+  <h3 class="govuk-heading-s govuk-!-margin-top-9 govuk-!-margin-bottom-0">Documents related to each sentence</h3>
   {{ govukAccordion({
   id: "accordion-default",
-  items: rows
+  items: convictionItems
   }) }}
 {% endblock %}

@@ -8,7 +8,7 @@ const {
   batchUpdateAttendance,
 } = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
 
-describe('Attendence and Pay controller', async () => {
+describe('Attendence and Pay controller', () => {
   const attendenceDetails = {
     offenderNo: 'ABC123',
     bookingId: 1,
@@ -97,7 +97,7 @@ describe('Attendence and Pay controller', async () => {
 
   describe('batchUpdateAttendance', () => {
     beforeEach(() => {
-      whereaboutsApi.attendAll = jest.fn()
+      whereaboutsApi.postAttendances = jest.fn()
     })
 
     const offenders = [
@@ -136,10 +136,10 @@ describe('Attendence and Pay controller', async () => {
       },
     ]
 
-    it('should call attendAll with list of valid offenders', async () => {
-      await batchUpdateAttendance(context, { offenders })
-      expect(whereaboutsApi.attendAll).toHaveBeenCalledTimes(1)
-      expect(whereaboutsApi.attendAll.mock.calls[0]).toEqual([
+    it('should call postAttendances with list of valid offenders', async () => {
+      await batchUpdateAttendance(context, { attended: true, paid: true, offenders })
+      expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
+      expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
         context,
         {
           bookingActivities: [
@@ -160,6 +160,43 @@ describe('Attendence and Pay controller', async () => {
           eventLocationId: 123,
           period: 'AM',
           prisonId: 'LEI',
+          attended: true,
+          paid: true,
+        },
+      ])
+    })
+
+    it('should call postAttendances with list of valid offenders and additional comments and absent reason', async () => {
+      const comments = 'Supporting comments.'
+      const reason = 'NotRequired'
+
+      await batchUpdateAttendance(context, { attended: true, paid: true, offenders, comments, reason })
+      expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
+      expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
+        context,
+        {
+          bookingActivities: [
+            {
+              activityId: 123,
+              bookingId: 1,
+            },
+            {
+              activityId: 123,
+              bookingId: 2,
+            },
+            {
+              activityId: 123,
+              bookingId: 3,
+            },
+          ],
+          eventDate: '2019-06-29',
+          eventLocationId: 123,
+          period: 'AM',
+          prisonId: 'LEI',
+          attended: true,
+          paid: true,
+          comments,
+          reason,
         },
       ])
     })

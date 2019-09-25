@@ -69,6 +69,7 @@ MovementsInContainer.propTypes = {
 
   agencyId: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setLoadedDispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

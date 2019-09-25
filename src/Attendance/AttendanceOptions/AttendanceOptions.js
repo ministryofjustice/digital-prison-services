@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import Radio from '@govuk-react/radio'
@@ -190,6 +190,7 @@ function AttendanceOptions({
 AttendanceOptions.propTypes = {
   offenderDetails: PropTypes.shape({
     offenderNo: PropTypes.string,
+    bookingId: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     eventId: PropTypes.number,

@@ -114,7 +114,6 @@ const alertFactory = (oauthApi, elite2Api) => {
     if (closeAlert) {
       try {
         await elite2Api.updateAlert(res.locals, bookingId, alertId, {
-          alertStatus: 'INACTIVE',
           expiryDate: moment().format('YYYY-MM-DD'),
         })
 

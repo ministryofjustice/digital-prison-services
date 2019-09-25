@@ -56,7 +56,7 @@ Detail.propTypes = {
     interiorLocation: PropTypes.string,
     reportNumber: PropTypes.number,
     reporterName: PropTypes.string,
-    reporterTime: PropTypes.string,
+    reportTime: PropTypes.string,
   }),
 }
 
