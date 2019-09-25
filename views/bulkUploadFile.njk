@@ -13,7 +13,7 @@
       text: "Add Bulk Appointments"
     }
   ]
-}) 
+})
 }}
 {% endblock %}
 
@@ -22,7 +22,7 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{title}}</h1>
       <p class="govuk-body">
-        The CSV file must include prison numbers of each prisoner you want to create an appointment for. 
+        The CSV file must include prison numbers of each prisoner you want to create an appointment for.
       </p>
 
       <a href="bulk-appointments/csv-template" class="govuk-!-font-size-19 govuk-link govuk-link--no-visited-state">Download a CSV file template</a>
@@ -41,7 +41,7 @@
 
       {{ govukButton({
         text: "Continue",
-        href: "#"
+        href: "/bulk-appointments/add-appointment-details"
       }) }}
 
     </div>

@@ -318,7 +318,7 @@ app.get(
   '/offenders/:offenderNo/probation-documents/:documentId/download',
   handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, oauthClientId).downloadDocument)
 )
-app.get('/need-to-upload-file', async (req, res) => {
+app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
   res.render('bulkUploadFile.njk', { title: 'You need to upload a CSV file' })
 })
 
