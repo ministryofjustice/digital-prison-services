@@ -1,0 +1,51 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set title = 'Appointments created' %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: "The appointments have been added"
+      }) }}
+
+      <p class="govuk-body">Appointments have not been added for:</p>
+
+      {% if prisonersNotFound.length > 0 %}
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Prison number</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for prisonNumber in prisonersNotFound %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{prisonNumber}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+
+      {{ govukButton({ 
+          text: "Upload another CSV file",
+          element: 'a',
+          href: '/bulk-appointments/upload-file',
+          classes: "govuk-!-margin-right-3"
+        })
+      }}
+
+      {{ govukButton({
+          text: "Exit to Digital Prison Services",
+          element: 'a',
+          href: '/',
+          classes: "govuk-button--secondary"
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}

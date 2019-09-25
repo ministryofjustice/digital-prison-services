@@ -51,6 +51,7 @@ const { downloadProbationDocumentFactory } = require('./controllers/downloadProb
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
+const { bulkAppointmentsCreatedFactory } = require('./controllers/bulkAppointmentsCreated')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 
@@ -324,6 +325,7 @@ app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
 
 app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
 app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
+app.get('/bulk-appointments/appointments-created', handleErrors(bulkAppointmentsCreatedFactory().index))
 
 app.use(
   '/bulk-appointments/add-appointment-details',
