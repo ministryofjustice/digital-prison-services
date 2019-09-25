@@ -1,49 +1,112 @@
 {% extends "./partials/layout.njk" %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
- {% block beforeContent %}
-  {{ govukBreadcrumbs({
-  items: [
-    {
-      text: "Home",
-      href: notmUrl
-    },
-    {
-      text: "Add Bulk Appointments"
-    }
-  ]
-})
-}}
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/bulk-appointments/add-appointment-details"
+  }) }}
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+  {% if errors and errors.length > 0 %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) 
+    }}
+  {% endif %}
+
+  <div class="govuk-width-container">
       <h1 class="govuk-heading-xl">{{title}}</h1>
       <p class="govuk-body">
-        The CSV file must include prison numbers of each prisoner you want to create an appointment for.
+        Upload a CSV file with the prisoner numbers of all prisoners attending this appointment: 
       </p>
 
-      <a href="bulk-appointments/csv-template" class="govuk-!-font-size-19 govuk-link govuk-link--no-visited-state">Download a CSV file template</a>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "Appointment type"
+          },
+          value: {
+            text: appointmentDetails.appointmentTypeDescription
+          }
+        },
+        {
+          key: {
+            text: "Location"
+          },
+          value: {
+            text: appointmentDetails.locationDescription
+          }
+        },
+        {
+        key: {
+          text: "Start date"
+        },
+        value: {
+          text: appointmentDetails.startTime | getDate()
+        }
+      },
+      {
+        key: {
+          text: "Time"
+        },
+        value: {
+          text: appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()
+        }
+      },
+      {
+        key: {
+          text: "End date"
+        },
+        value: {
+          text: appointmentDetails.endTime | getDate()
+        }
+      }
+      ]
+      }) }}
 
       {{ govukInsetText({
         text: "You can only include each prison number once on a CSV file. If you need to add appointments for different times for the same prisoner, you must do this using different CSV files."
       }) }}
+      
+      <form action="/bulk-appointments/upload-file" method="POST" enctype="multipart/form-data">
 
-      <p class="govuk-body">You can only add appointments on a CSV file:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>for the same appointment type</li>
-        <li>in the same location</li>
-      </ul>
+        {{ govukFileUpload({
+          id: "file",
+          name: "file",
+          type: "file",
+          errorMessage: errors | findError('file')
+        }) }}
 
-      <p class="govuk-body">You must use a different CSV file to add appointments for other types or in another location.</p>
+        {% for key, detail in data %}
+          <input type="hidden" value="{{detail}}" name="{{key}}" />
+        {% endfor %}
+
+      <p class="govuk-body">
+        <a href="bulk-appointments/csv-template" class="govuk-!-font-size-19 govuk-link govuk-link--no-visited-state">Download a CSV file template</a>
+      </p>
 
       {{ govukButton({
-        text: "Continue",
-        href: "/bulk-appointments/add-appointment-details"
-      }) }}
+          text: "Continue",
+          classes: "govuk-!-margin-right-1"
+        }) }}
 
-    </div>
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary"
+        }) }}
+      </form>
   </div>
 {% endblock %}
