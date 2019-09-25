@@ -321,10 +321,10 @@ app.get(
 )
 
 app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
-  res.render('bulkInformation.njk', { title: 'You need to upload a CSV file' })
+  res.render('addBulkAppointments.njk', { title: 'You need to upload a CSV file' })
 })
 
-app.get('/bulk-appointments/upload-file', handleErrors(bulkAppointmentsUploadFactory(logError).index))
+app.get('/bulk-appointments/upload-file', handleErrors(bulkAppointmentsUploadFactory(logError).csvBulkOffenderUpload))
 app.post(
   '/bulk-appointments/upload-file',
   handleErrors(
