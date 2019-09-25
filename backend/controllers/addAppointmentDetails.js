@@ -1,8 +1,6 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../common-messages')
-
-const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
-const DAY_MONTH_YEAR = 'DD/MM/YYYY'
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 
 const validMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
 
