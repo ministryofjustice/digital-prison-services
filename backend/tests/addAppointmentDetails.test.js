@@ -109,7 +109,7 @@ describe('Add appointment details controller', () => {
         errors: [
           { text: 'Select an appointment type', href: '#appointment-type' },
           { text: 'Select a location', href: '#location' },
-          { text: 'Select a start time', href: '#start-time' },
+          { text: 'Select a start time', href: '#start-time-hours' },
           { text: 'Select a date', href: '#date' },
           { text: 'Select yes if the appointments all have the same time', href: '#same-time-appointments' },
         ],
@@ -137,7 +137,7 @@ describe('Add appointment details controller', () => {
       expect(res.render).toHaveBeenCalledWith(
         'addAppointmentDetails.njk',
         expect.objectContaining({
-          errors: [{ text: 'Select a start time that is not in the past', href: '#start-time' }],
+          errors: [{ text: 'Select a start time that is not in the past', href: '#start-time-hours' }],
         })
       )
     })
@@ -192,7 +192,7 @@ describe('Add appointment details controller', () => {
       expect(res.render).toHaveBeenCalledWith(
         'addAppointmentDetails.njk',
         expect.objectContaining({
-          errors: [{ text: 'Select an end time that is not in the past', href: '#end-time' }],
+          errors: [{ text: 'Select an end time that is not in the past', href: '#end-time-hours' }],
         })
       )
     })

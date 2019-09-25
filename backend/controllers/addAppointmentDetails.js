@@ -83,7 +83,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
 
       if (!appointmentType) errors.push({ text: 'Select an appointment type', href: '#appointment-type' })
       if (!location) errors.push({ text: 'Select a location', href: '#location' })
-      if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time' })
+      if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time-hours' })
       if (!date) errors.push({ text: 'Select a date', href: '#date' })
       if (!sameTimeAppointments)
         errors.push({ text: 'Select yes if the appointments all have the same time', href: '#same-time-appointments' })
@@ -95,10 +95,10 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         errors.push({ text: 'Select a date that is not in the past', href: '#date' })
       } else {
         if (startTime && startTime.isBefore(now, 'minutes'))
-          errors.push({ text: 'Select a start time that is not in the past', href: '#start-time' })
+          errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
 
         if (endTime && endTime.isBefore(startTime, 'minutes'))
-          errors.push({ text: 'Select an end time that is not in the past', href: '#end-time' })
+          errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
       }
 
       if (comments && comments.length > 3600)
