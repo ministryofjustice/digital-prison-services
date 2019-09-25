@@ -1,0 +1,17 @@
+
+.time-picker-container {
+  display: flex;
+  flex-direction: row;
+
+  .time-picker-hours, .time-picker-minutes {
+    width: 70px;
+  }
+
+  .time-picker-hours {
+    margin-right: 16px;
+  }
+
+  .govuk-form-group {
+    margin-bottom: 0;
+  }
+}

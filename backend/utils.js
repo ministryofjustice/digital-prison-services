@@ -5,6 +5,7 @@ const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
   if (displayDate) {
     return moment(displayDate, format).format('YYYY-MM-DD')
   }
+
   return displayDate
 }
 

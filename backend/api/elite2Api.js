@@ -27,42 +27,60 @@ const elite2ApiFactory = client => {
 
   const getHouseblockList = (context, agencyId, groupName, date, timeSlot) =>
     get(context, `/api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}`)
+
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
     get(context, `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`)
+
   const getVisits = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/visits?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
+
   const getAgencyIepLevels = (context, agencyId) => get(context, `/api/agencies/${agencyId}/iepLevels`)
+
   const getStaffDetails = (context, staffId) => get(context, `/api/users/${staffId}`)
+
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/courtEvents?date=${date}`, offenderNumbers)
+
   const getExternalTransfers = (context, { agencyId, date, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/externalTransfers?date=${date}`, offenderNumbers)
   // TODO can refactor these alerts calls later to just use the system one once the client id is established in env
+
   const getAlerts = (context, { agencyId, offenderNumbers }) =>
     post(context, `/api/bookings/offenderNo/${agencyId}/alerts`, offenderNumbers)
+
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
+
   const getAssessments = (context, { code, offenderNumbers }) =>
     post(context, `/api/offender-assessments/${code}`, offenderNumbers)
+
   const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
     get(context, `/api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
+
   const getEstablishmentRollMovementsCount = (context, agencyId) =>
     get(context, `/api/movements/rollcount/${agencyId}/movements`)
+
   const getEstablishmentRollEnrouteCount = (context, agencyId) =>
     get(context, `/api/movements/rollcount/${agencyId}/enroute`)
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `/api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
+
   const searchGroups = (context, agencyId) => get(context, `/api/agencies/${agencyId}/locations/groups`)
 
   const getSentenceData = (context, offenderNumbers) => post(context, `/api/offender-sentences`, offenderNumbers)
+
   const getPrisonerImage = (context, offenderNo) =>
     getStream(context, `/api/bookings/offenderNo/${offenderNo}/image/data`)
+
   const globalSearch = (context, offenderNo, lastName, firstName, genderFilter, locationFilter, dateOfBirthFilter) =>
     get(
       context,

@@ -9,6 +9,7 @@ module.exports = (app, path) => {
   })
 
   njkEnv.addFilter('findError', (array, formFieldId) => {
+    if (!array) return null
     const item = array.find(error => error.href === `#${formFieldId}`)
     if (item) {
       return {
@@ -17,7 +18,30 @@ module.exports = (app, path) => {
     }
     return null
   })
+
+  njkEnv.addFilter('toTextValue', (array, selected) => {
+    if (!array) return null
+
+    const items = array.map(entry => ({
+      text: entry,
+      value: entry,
+      selected: entry && entry === selected,
+    }))
+
+    return [
+      {
+        text: '--',
+        value: '',
+        disabled: true,
+        hidden: true,
+        selected: true,
+      },
+      ...items,
+    ]
+  })
+
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)
+  njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('notmUrl', config.app.notmEndpointUrl)
 }

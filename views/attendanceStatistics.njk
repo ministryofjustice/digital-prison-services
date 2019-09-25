@@ -1,8 +1,8 @@
 {% extends "./partials/layout.njk" %}
 
-{% from "govuk/components/button/macro.njk" import govukButton %} 
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
+{% from "components/datePicker/datePicker.njk" import datePicker %}
 
  {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -19,7 +19,7 @@
       text: "Attendance reason statistics"
     }
   ]
-}) 
+})
 }}
 {% endblock %}
 
@@ -31,7 +31,13 @@
   <div class="govuk-grid-row">
     <input type="hidden" name="agencyId" value="{{caseLoadId}}" />
     <div class="govuk-grid-column-one-quarter">
-      {% include "./components/datePicker.njk" %}
+        {{ datePicker({
+            id: 'date-picker',
+            label: 'Date',
+            name: 'date',
+            date: date,
+            errorMessage: errors | findError('date')
+        }) }}
     </div>
     <div class="govuk-grid-column-one-quarter">
       {% include "./components/periodSelect.njk" %}

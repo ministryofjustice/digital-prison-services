@@ -1,0 +1,120 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "components/timePicker/timePicker.njk" import timePicker %}
+
+{% extends "./partials/layout.njk" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+
+                {% if errors.length > 0 %}
+                    {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList: errors,
+                        attributes: { 'data-qa-errors': true }
+                    }) }}
+                {% endif %}
+
+                <form action="/bulk-appointments/add-appointment-details" method="POST">
+                    {% call govukFieldset({
+                        legend: {
+                            text: "Add appointment details",
+                            classes: "govuk-fieldset__legend--l",
+                            isPageHeading: true
+                        }
+                    }) %}
+
+                    {{ govukSelect({
+                        id: "appointment-type",
+                        name: "appointmentType",
+                        label: {
+                            text: "Appointment type"
+                        },
+                        items: appointmentTypes,
+                        errorMessage: errors | findError('appointment-type')
+                    }) }}
+
+                    {{ govukSelect({
+                        id: "location",
+                        name: "location",
+                        label: {
+                            text: "Location"
+                        },
+                        items: locations,
+                        errorMessage: errors | findError('location')
+                    }) }}
+
+                    {{ datePicker({
+                        id: 'date-picker',
+                        label: 'Date',
+                        name: 'date',
+                        date: date,
+                        errorMessage: errors | findError('date')
+                    }) }}
+
+                    {{ timePicker({
+                        id: 'start-time',
+                        label: 'Start time',
+                        name: 'startTime',
+                        hour: startTimeHours,
+                        minute: startTimeMinutes,
+                        errorMessage: errors | findError('start-time')
+                    }) }}
+
+                    {{ timePicker({
+                        id: 'end-time',
+                        label: 'End time',
+                        name: 'endTime',
+                        hour: endTimeHours,
+                        minute: endTimeMinutes,
+                        errorMessage: errors | findError('end-time')
+                    }) }}
+
+                    {{ govukRadios({
+                        classes: "govuk-radios--inline",
+                        idPrefix: "same-time-appointments",
+                        name: "sameTimeAppointments",
+                        errorMessage: errors | findError('same-time-appointments'),
+                        value: 'yes',
+                        fieldset: {
+                            legend: {
+                                text: "Do the appointments all have the same time?",
+                                classes: "govuk-fieldset__legend--s"
+                            }
+                        },
+                        items: [
+                            {
+                                value: "yes",
+                                text: "Yes"
+                            },
+                            {
+                                value: "no",
+                                text: "No"
+                            }
+                        ]
+                    }) }}
+
+                    {{ govukTextarea({
+                        name: "comments",
+                        id: "comments",
+                        value: comments,
+                        errorMessage: errors | findError('comments'),
+                        label: {
+                            text: "Comments (optional)"
+                        }
+                    }) }}
+
+                    {% endcall %}
+
+                    {{ govukButton({ text: "Continue" }) }}
+
+                </form>
+        </div>
+    </div>
+{% endblock %}

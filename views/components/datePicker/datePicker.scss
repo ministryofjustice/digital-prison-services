@@ -1,0 +1,58 @@
+/*Datepicker overrides*/
+.ui-widget-header {
+  border: 0 !important;
+  background:govuk-colour("white") !important;
+  color: govuk-colour("black") !important;
+  font-weight: bold;
+}
+
+.ui-datepicker {
+  margin-top: 20px;
+}
+
+.date-picker-container {
+    width: 150px;
+    margin-bottom: 32px;
+}
+
+.ui-datepicker table {
+  background: govuk-colour("white") !important;
+}
+
+.ui-widget-content {
+  border: 1px solid govuk-colour("black") !important;
+  background: govuk-colour("white") !important;
+}
+
+.ui-state-default {
+  border: 0 !important;
+  background: govuk-colour("white") !important;
+  color: govuk-colour("black") !important;
+  font-weight: normal !important;
+  text-align: center !important;
+}
+
+.ui-state-active {
+  background:  $govuk-brand-colour !important;
+  color: govuk-colour("white") !important;
+  border-radius: 15px !important;
+  padding: 2px !important;
+  width: 25px !important;
+  margin: 0 auto !important;
+}
+
+.ui-state-highlight {
+  border: 1px solid govuk-colour("light-blue") !important;
+  border-radius: 15px !important;
+  padding: 2px !important;
+  width: 25px !important;
+  margin: 0 auto !important;
+}
+
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary {
+  opacity: .2 !important;
+}
+
+.ui-widget-header .ui-icon {
+  background-image: url(https://code.jquery.com/ui/1.12.1/themes/ui-lightness/images/ui-icons_222222_256x240.png) !important;
+}
