@@ -2,16 +2,6 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 
-const validMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
-
-const formatNumbersUpTo = total =>
-  [...Array(total).keys()].map(i => {
-    if (i < 10) return `0${i}`
-    return `${i}`
-  })
-
-const constructHours = () => [...formatNumbersUpTo(24)]
-
 const toSelectValue = data => ({
   value: data.id,
   text: data.description,
@@ -49,8 +39,6 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       res.render('addAppointmentDetails.njk', {
         appointmentTypes,
         locations,
-        hours: constructHours(),
-        minutes: validMinutes,
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
