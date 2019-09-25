@@ -1,7 +1,7 @@
 const config = require('../config')
 
 const bulkAppointmentsAddedFactory = () => {
-  const index = async (req, res) => {
+  const index = (req, res) => {
     const { data } = req.session
 
     if (!data) {
