@@ -52,9 +52,9 @@ const { attendanceStatisticsFactory } = require('./controllers/attendanceStatist
 const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
 const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
-const { bulkAppointmentsAddedFactory } = require('./controllers/bulkAppointmentsAdded')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
+const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -339,12 +339,12 @@ app.post(
 
 app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
 app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
-app.get('/bulk-appointments/appointments-added', handleErrors(bulkAppointmentsAddedFactory().index))
 
 app.use(
   '/bulk-appointments/add-appointment-details',
   addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
+app.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedController())
 
 nunjucksSetup(app, path)
 
