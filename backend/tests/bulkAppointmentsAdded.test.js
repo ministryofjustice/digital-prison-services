@@ -1,5 +1,8 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const { index } = require('../controllers/bulkAppointmentsCreated').bulkAppointmentsCreatedFactory()
+const { index } = require('../controllers/bulkAppointmentsAdded').bulkAppointmentsAddedFactory()
+const config = require('../config')
+
+config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -33,8 +36,9 @@ describe('bulk appointments confirm', () => {
       it('should render the confirm appointments confirm page', async () => {
         await index(req, res)
 
-        expect(res.render).toBeCalledWith('appointmentsCreated.njk', {
+        expect(res.render).toBeCalledWith('appointmentsAdded.njk', {
           prisonersNotFound: appointmentDetails.prisonersNotFound,
+          dpsUrl: '//newNomisEndPointUrl/',
         })
       })
     })

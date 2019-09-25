@@ -1,4 +1,6 @@
-const bulkAppointmentsCreatedFactory = () => {
+const config = require('../config')
+
+const bulkAppointmentsAddedFactory = () => {
   const index = async (req, res) => {
     const { data } = req.session
 
@@ -10,12 +12,12 @@ const bulkAppointmentsCreatedFactory = () => {
 
     const { prisonersNotFound } = data
 
-    return res.render('appointmentsCreated.njk', { prisonersNotFound })
+    return res.render('appointmentsAdded.njk', { prisonersNotFound, dpsUrl: config.app.notmEndpointUrl })
   }
 
   return { index }
 }
 
 module.exports = {
-  bulkAppointmentsCreatedFactory,
+  bulkAppointmentsAddedFactory,
 }
