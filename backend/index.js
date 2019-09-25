@@ -325,7 +325,10 @@ app.get('/need-to-upload-file', async (req, res) => {
 app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
 app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
 
-app.use('/add-appointment-details', addAppointmentDetailsController({ elite2Api, oauthApi, logError }))
+app.use(
+  '/bulk-appointments/add-appointment-details',
+  addAppointmentDetailsController({ elite2Api, oauthApi, logError })
+)
 
 nunjucksSetup(app, path)
 

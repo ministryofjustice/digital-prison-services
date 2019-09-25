@@ -5,7 +5,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 
 describe('Add appointment details controller', () => {
-  const bulkdAppointmentService = {}
+  const bulkAppointmentService = {}
   const oauthApi = {}
   const context = {}
 
@@ -27,16 +27,16 @@ describe('Add appointment details controller', () => {
     res = { locals: {} }
     res.render = jest.fn()
 
-    bulkdAppointmentService.getBulkAppointmentsViewModel = jest.fn()
+    bulkAppointmentService.getBulkAppointmentsViewModel = jest.fn()
     oauthApi.currentUser = jest.fn()
     logError = jest.fn()
 
-    bulkdAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+    bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
       appointmentTypes: [],
       locationTypes: [],
     })
 
-    controller = addAppointmentDetailsFactory(bulkdAppointmentService, oauthApi, logError)
+    controller = addAppointmentDetailsFactory(bulkAppointmentService, oauthApi, logError)
   })
 
   describe('Index', () => {
@@ -54,11 +54,11 @@ describe('Add appointment details controller', () => {
 
       await controller.index(req, res)
 
-      expect(bulkdAppointmentService.getBulkAppointmentsViewModel).toHaveBeenCalledWith(context, 'LEI')
+      expect(bulkAppointmentService.getBulkAppointmentsViewModel).toHaveBeenCalledWith(context, 'LEI')
     })
 
     it('should return handle api errors', async () => {
-      bulkdAppointmentService.getBulkAppointmentsViewModel.mockImplementation(() =>
+      bulkAppointmentService.getBulkAppointmentsViewModel.mockImplementation(() =>
         Promise.reject(new Error('Network error'))
       )
 
@@ -72,7 +72,7 @@ describe('Add appointment details controller', () => {
     })
 
     it('should render template with view model', async () => {
-      bulkdAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+      bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
         appointmentTypes: [{ id: 'app1', description: 'app1' }, { id: 2, description: 'app2' }],
         locationTypes: [{ id: 1, description: 'loc1' }, { id: 2, description: 'loc2' }],
       })
@@ -142,7 +142,7 @@ describe('Add appointment details controller', () => {
     })
 
     it('should return selected location and appointment type', async () => {
-      bulkdAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+      bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
         appointmentTypes: [{ id: 'app1', description: 'appointment 1' }, { id: 'app2', description: 'appointment 2' }],
         locationTypes: [{ id: 1, description: 'location 1' }, { id: 2, description: 'location 2' }],
       })
@@ -191,7 +191,7 @@ describe('Add appointment details controller', () => {
       expect(res.render).toHaveBeenCalledWith(
         'addAppointmentDetails.njk',
         expect.objectContaining({
-          errors: [{ text: 'Select a end time that is not in the past', href: '#end-time' }],
+          errors: [{ text: 'Select an end time that is not in the past', href: '#end-time' }],
         })
       )
     })
@@ -241,7 +241,7 @@ describe('Add appointment details controller', () => {
 
     it('should validate against past dates', async () => {
       res.redirect = jest.fn()
-      bulkdAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+      bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
         appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
         locationTypes: [{ id: 1, description: 'location 1' }],
       })
@@ -274,7 +274,7 @@ describe('Add appointment details controller', () => {
 
       res.redirect = jest.fn()
 
-      bulkdAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+      bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
         appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
         locationTypes: [{ id: 1, description: 'location 1' }],
       })
@@ -303,7 +303,21 @@ describe('Add appointment details controller', () => {
         sameTimeAppointments: 'yes',
       })
 
-      expect(res.redirect).toHaveBeenCalledWith('/upload-file')
+      expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/upload-file')
+    })
+
+    it('should return handle api errors', async () => {
+      bulkAppointmentService.getBulkAppointmentsViewModel.mockImplementation(() =>
+        Promise.reject(new Error('Network error'))
+      )
+
+      await controller.post(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('error.njk', {
+        url: 'http://localhost',
+      })
+
+      expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
     })
   })
 })

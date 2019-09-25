@@ -97,7 +97,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
           errors.push({ text: 'Select a start time that is not in the past', href: '#start-time' })
 
         if (endTime && endTime.isBefore(startTime, 'minutes'))
-          errors.push({ text: 'Select a end time that is not in the past', href: '#end-time' })
+          errors.push({ text: 'Select an end time that is not in the past', href: '#end-time' })
       }
 
       if (comments && comments.length > 3600)
@@ -121,7 +121,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
           sameTimeAppointments,
         }
 
-        res.redirect('/upload-file')
+        res.redirect('/bulk-appointments/upload-file')
         return
       }
 
