@@ -344,7 +344,7 @@ app.use(
   '/bulk-appointments/add-appointment-details',
   addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
-app.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedController())
+app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
 
 nunjucksSetup(app, path)
 

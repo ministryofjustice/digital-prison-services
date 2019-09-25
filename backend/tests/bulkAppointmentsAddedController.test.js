@@ -1,5 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const { index } = require('../controllers/bulkAppointmentsAdded').bulkAppointmentsAddedFactory()
+const bulkAppointmentsAddedController = require('../controllers/bulkAppointmentsAddedController')
 const config = require('../config')
 
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
@@ -34,7 +34,7 @@ describe('bulk appointments confirm', () => {
       const res = { ...mockRes }
 
       it('should render the confirm appointments confirm page', async () => {
-        await index(req, res)
+        await bulkAppointmentsAddedController(req, res)
 
         expect(res.render).toBeCalledWith('appointmentsAdded.njk', {
           prisonersNotFound: appointmentDetails.prisonersNotFound,
@@ -48,7 +48,7 @@ describe('bulk appointments confirm', () => {
       const res = { ...mockRes }
 
       it('should render the error page', async () => {
-        await index(req, res)
+        await bulkAppointmentsAddedController(req, res)
 
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
