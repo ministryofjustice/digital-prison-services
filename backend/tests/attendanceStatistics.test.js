@@ -66,18 +66,20 @@ describe('Attendance reason statistics', () => {
           locationId: 27219,
         },
       ])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([
-        {
-          id: 5812,
-          bookingId: 1133341,
-          eventId: 3,
-          eventLocationId: 26149,
-          period: 'AM',
-          prisonId: 'MDI',
-          attended: true,
-          paid: true,
-        },
-      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
+        attendances: [
+          {
+            id: 5812,
+            bookingId: 1133341,
+            eventId: 3,
+            eventLocationId: 26149,
+            period: 'AM',
+            prisonId: 'MDI',
+            attended: true,
+            paid: true,
+          },
+        ],
+      })
       elite2Api.userCaseLoads.mockReturnValue([
         {
           caseLoadId: 'LEI',
@@ -195,14 +197,13 @@ describe('Attendance reason statistics', () => {
       await attendanceStatistics({ query: { agencyId, date, period } }, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', {
-        title: 'Attendance reason statistics',
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     })
 
     it('should log the correct error', async () => {
       elite2Api.getOffenderActivities.mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({ attendances: [] })
       elite2Api.userCaseLoads.mockReturnValue([])
       oauthApi.currentUser.mockReturnValue({})
       const logError = jest.fn()
@@ -239,7 +240,7 @@ describe('Attendance reason statistics', () => {
 
     it('should call eliteApi and whereaboutsApi with the correct parameters', async () => {
       elite2Api.getOffenderActivities.mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({ attendances: [] })
 
       const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
       await getDashboardStats(context, { agencyId, date, period, absenceReasons })
@@ -250,27 +251,29 @@ describe('Attendance reason statistics', () => {
 
     it('should count paid reasons', async () => {
       elite2Api.getOffenderActivities.mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([
-        {
-          attended: true,
-          paid: true,
-        },
-        {
-          attended: false,
-          paid: true,
-          absentReason: 'NotRequired',
-        },
-        {
-          attended: false,
-          paid: true,
-          absentReason: 'AcceptableAbsence',
-        },
-        {
-          attended: false,
-          paid: true,
-          absentReason: 'ApprovedCourse',
-        },
-      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
+        attendances: [
+          {
+            attended: true,
+            paid: true,
+          },
+          {
+            attended: false,
+            paid: true,
+            absentReason: 'NotRequired',
+          },
+          {
+            attended: false,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+          },
+          {
+            attended: false,
+            paid: true,
+            absentReason: 'ApprovedCourse',
+          },
+        ],
+      })
 
       const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
@@ -291,38 +294,40 @@ describe('Attendance reason statistics', () => {
       const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
       elite2Api.getOffenderActivities.mockReturnValue([])
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([
-        {
-          attended: false,
-          paid: false,
-          absentReason: 'SessionCancelled',
-        },
-        {
-          attended: false,
-          paid: false,
-          absentReason: 'Sick',
-        },
-        {
-          attended: false,
-          paid: false,
-          absentReason: 'UnacceptableAbsence',
-        },
-        {
-          attended: false,
-          paid: false,
-          absentReason: 'RestDay',
-        },
-        {
-          attended: false,
-          paid: false,
-          absentReason: 'Refused',
-        },
-        {
-          attended: false,
-          paid: false,
-          absentReason: 'RestInCell',
-        },
-      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
+        attendances: [
+          {
+            attended: false,
+            paid: false,
+            absentReason: 'SessionCancelled',
+          },
+          {
+            attended: false,
+            paid: false,
+            absentReason: 'Sick',
+          },
+          {
+            attended: false,
+            paid: false,
+            absentReason: 'UnacceptableAbsence',
+          },
+          {
+            attended: false,
+            paid: false,
+            absentReason: 'RestDay',
+          },
+          {
+            attended: false,
+            paid: false,
+            absentReason: 'Refused',
+          },
+          {
+            attended: false,
+            paid: false,
+            absentReason: 'RestInCell',
+          },
+        ],
+      })
 
       const { sessioncancelled, sick, unacceptableabsence, restday, refused, restincell } = await getDashboardStats(
         context,
@@ -349,12 +354,14 @@ describe('Attendance reason statistics', () => {
     it('should count unaccounted for prisoners', async () => {
       const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
-      whereaboutsApi.getPrisonAttendance.mockReturnValue([
-        {
-          bookingId: 1,
-          attended: true,
-        },
-      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
+        attendances: [
+          {
+            bookingId: 1,
+            attended: true,
+          },
+        ],
+      })
       elite2Api.getOffenderActivities.mockReturnValue([
         {
           eventId: 1,

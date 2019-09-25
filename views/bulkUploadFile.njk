@@ -10,7 +10,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "#"
+    href: "/bulk-appointments/add-appointment-details"
   }) }}
 {% endblock %}
 
@@ -39,7 +39,7 @@
             text: "Appointment type"
           },
           value: {
-            text: appointmentDetails.appointmentType
+            text: appointmentDetails.appointmentTypeDescription
           }
         },
         {
@@ -47,33 +47,33 @@
             text: "Location"
           },
           value: {
-            text: appointmentDetails.location
+            text: appointmentDetails.locationDescription
           }
         },
         {
-          key: {
-            text: "Start Time"
-          },
-          value: {
-            html: appointmentDetails.startDate
-          }
+        key: {
+          text: "Start date"
         },
-        {
-          key: {
-            text: "Occurences"
-          },
-          value: {
-            html: appointmentDetails.occurences
-          }
-        },
-        {
-          key: {
-            text: "Frequency"
-          },
-          value: {
-            html: appointmentDetails.frequency
-          }
+        value: {
+          text: appointmentDetails.startTime | getDate()
         }
+      },
+      {
+        key: {
+          text: "Time"
+        },
+        value: {
+          text: appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()
+        }
+      },
+      {
+        key: {
+          text: "End date"
+        },
+        value: {
+          text: appointmentDetails.endTime | getDate()
+        }
+      }
       ]
       }) }}
 

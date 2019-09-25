@@ -3,8 +3,8 @@ const { formatTimestampToDate, properCaseName, formatName } = require('../utils'
 const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
+const { serviceUnavailableMessage } = require('../common-messages')
 
-const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
 
 const alertFactory = (oauthApi, elite2Api) => {

@@ -25,10 +25,11 @@ const getReasonCountMap = (data, reasons) => {
 
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
   const getDashboardStats = async (context, { agencyId, period, date, absenceReasons }) => {
-    const [attendances, scheduledActivities] = await Promise.all([
+    const [getPrisonAttendance, scheduledActivities] = await Promise.all([
       whereaboutsApi.getPrisonAttendance(context, { agencyId, period, date }),
       elite2Api.getOffenderActivities(context, { agencyId, period, date }),
     ])
+    const { attendances } = getPrisonAttendance
 
     const attended = attendances.filter(attendance => attendance && attendance.attended).length
     const attendedBookings = attendances.map(activity => activity.bookingId)
@@ -108,7 +109,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
-        title: 'Attendance reason statistics',
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     }

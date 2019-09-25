@@ -51,6 +51,9 @@ const { downloadProbationDocumentFactory } = require('./controllers/downloadProb
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
+const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
+
+const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -138,6 +141,14 @@ app.use(bodyParser.json())
 app.use(
   sass({
     src: path.join(__dirname, '../sass'),
+    dest: path.join(__dirname, '../build/static/stylesheets'),
+    outputStyle: 'compressed',
+    prefix: '/stylesheets',
+  })
+)
+app.use(
+  sass({
+    src: path.join(__dirname, '../views/components'),
     dest: path.join(__dirname, '../build/static/stylesheets'),
     outputStyle: 'compressed',
     prefix: '/stylesheets',
@@ -247,6 +258,15 @@ app.use('/api', (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '../build')))
 
+app.use(async (req, res, next) => {
+  const { userDetails } = req.session
+  if (!userDetails) {
+    // eslint-disable-next-line no-param-reassign
+    req.session.userDetails = await oauthApi.currentUser(res.locals)
+  }
+  next()
+})
+
 app.use('/api/config', getConfiguration)
 app.use('/api/userroles', userMeFactory(oauthApi).userRoles)
 app.use('/api/me', userMeFactory(oauthApi).userMe)
@@ -299,7 +319,8 @@ app.get(
   '/offenders/:offenderNo/probation-documents/:documentId/download',
   handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, oauthClientId).downloadDocument)
 )
-app.get('/need-to-upload-file', (req, res) => {
+
+app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
   res.render('bulkInformation.njk', { title: 'You need to upload a CSV file' })
 })
 
@@ -313,6 +334,14 @@ app.post(
       logError
     ).postAndParseCsvOffenderList
   )
+)
+
+app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
+app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
+
+app.use(
+  '/bulk-appointments/add-appointment-details',
+  addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
 
 nunjucksSetup(app, path)

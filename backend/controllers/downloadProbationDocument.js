@@ -3,7 +3,7 @@ const { logError } = require('../logError')
 const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthClient) => {
   const downloadDocument = async (req, res) => {
     const ensureAllowedPageAccess = userRoles => {
-      if (!userRoles.find(role => role.roleCode === 'VIEW_PROBATION_DOCUMENTS')) {
+      if (!userRoles.find(role => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
         throw new Error('You do not have the correct role to access this page')
       }
     }
@@ -17,7 +17,6 @@ const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthCli
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       res.render('error.njk', {
-        title: 'Probation documents',
         url: `/offenders/${offenderNo}/probation-documents`,
       })
     }

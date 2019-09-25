@@ -16,7 +16,7 @@ describe('Download probation documents', () => {
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
-      oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'POM' }])
     })
 
     describe('when downloading document', () => {
@@ -52,7 +52,6 @@ describe('Download probation documents', () => {
         await page(req, res)
 
         expect(res.render).toHaveBeenCalledWith('error.njk', {
-          title: 'Probation documents',
           url: '/offenders/G9542VP/probation-documents',
         })
       })
