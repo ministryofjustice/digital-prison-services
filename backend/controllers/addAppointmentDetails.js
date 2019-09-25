@@ -33,7 +33,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
 
   async function index(req, res) {
     try {
-      const { activeCaseLoadId } = req.session.user
+      const { activeCaseLoadId } = req.session.userDetails
       const { appointmentTypes, locations } = await getAppointmentTypesAndLocations(res.locals, activeCaseLoadId)
 
       res.render('addAppointmentDetails.njk', {
@@ -49,7 +49,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
   }
 
   async function post(req, res) {
-    const { activeCaseLoadId } = req.session.user
+    const { activeCaseLoadId } = req.session.userDetails
 
     try {
       const {

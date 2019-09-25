@@ -18,7 +18,7 @@ describe('Add appointment details controller', () => {
     req = {
       originalUrl: 'http://localhost',
       session: {
-        user: {
+        userDetails: {
           activeCaseLoadId: 'LEI',
         },
         data: {},

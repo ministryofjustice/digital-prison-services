@@ -258,10 +258,10 @@ app.use('/api', (req, res, next) => {
 app.use(express.static(path.join(__dirname, '../build')))
 
 app.use(async (req, res, next) => {
-  const { user } = req.session
-  if (!user) {
+  const { userDetails } = req.session
+  if (!userDetails) {
     // eslint-disable-next-line no-param-reassign
-    req.session.user = await oauthApi.currentUser(res.locals)
+    req.session.userDetails = await oauthApi.currentUser(res.locals)
   }
   next()
 })
