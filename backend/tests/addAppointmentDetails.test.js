@@ -93,6 +93,7 @@ describe('Add appointment details controller', () => {
         title: 'Add appointment details',
         appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
         locations: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
+        homeUrl: 'http://localhost:3000/',
       })
     })
   })
@@ -106,6 +107,7 @@ describe('Add appointment details controller', () => {
         date: undefined,
         locations: [],
         sameTimeAppointments: undefined,
+        homeUrl: 'http://localhost:3000/',
         errors: [
           { text: 'Select an appointment type', href: '#appointment-type' },
           { text: 'Select a location', href: '#location' },

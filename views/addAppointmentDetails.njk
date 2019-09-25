@@ -44,7 +44,7 @@
                         label: {
                             text: "Appointment type"
                         },
-                        items: appointmentTypes,
+                        items: appointmentTypes | addDefaultSelectedVale('Select'),
                         errorMessage: errors | findError('appointment-type')
                     }) }}
 
@@ -54,7 +54,7 @@
                         label: {
                             text: "Location"
                         },
-                        items: locations,
+                        items: locations | addDefaultSelectedVale('Select'),
                         errorMessage: errors | findError('location')
                     }) }}
 
@@ -121,6 +121,13 @@
                     {% endcall %}
 
                     {{ govukButton({ text: "Continue" }) }}
+
+                    {{ govukButton({
+                        text: "Cancel",
+                        element: 'a',
+                        href: homeUrl,
+                        classes: "govuk-button--secondary"
+                    }) }}
 
                 </form>
         </div>
