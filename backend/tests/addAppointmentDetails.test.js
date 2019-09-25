@@ -90,6 +90,7 @@ describe('Add appointment details controller', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('addAppointmentDetails.njk', {
+        title: 'Add appointment details',
         appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
         locations: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
       })
