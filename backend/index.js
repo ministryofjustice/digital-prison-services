@@ -49,6 +49,7 @@ const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
+const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
 const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
 const { bulkAppointmentsCreatedFactory } = require('./controllers/bulkAppointmentsCreated')
@@ -319,9 +320,22 @@ app.get(
   '/offenders/:offenderNo/probation-documents/:documentId/download',
   handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, oauthClientId).downloadDocument)
 )
+
 app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
-  res.render('bulkUploadFile.njk', { title: 'You need to upload a CSV file' })
+  res.render('bulkInformation.njk', { title: 'You need to upload a CSV file' })
 })
+
+app.get('/bulk-appointments/upload-file', handleErrors(bulkAppointmentsUploadFactory(logError).index))
+app.post(
+  '/bulk-appointments/upload-file',
+  handleErrors(
+    bulkAppointmentsUploadFactory(
+      csvParserService({ fs, isBinaryFileSync }),
+      offenderLoaderFactory(elite2Api),
+      logError
+    ).postAndParseCsvOffenderList
+  )
+)
 
 app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
 app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))

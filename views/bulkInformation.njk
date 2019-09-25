@@ -1,0 +1,49 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+ {% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: notmUrl
+    },
+    {
+      text: "Add Bulk Appointments"
+    }
+  ]
+})
+}}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">{{title}}</h1>
+      <p class="govuk-body">
+        The CSV file must include prison numbers of each prisoner you want to create an appointment for.
+      </p>
+
+      <a href="bulk-appointments/csv-template" class="govuk-!-font-size-19 govuk-link govuk-link--no-visited-state">Download a CSV file template</a>
+
+      {{ govukInsetText({
+        text: "You can only include each prison number once on a CSV file. If you need to add appointments for different times for the same prisoner, you must do this using different CSV files."
+      }) }}
+
+      <p class="govuk-body">You can only add appointments on a CSV file:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>for the same appointment type</li>
+        <li>in the same location</li>
+      </ul>
+
+      <p class="govuk-body">You must use a different CSV file to add appointments for other types or in another location.</p>
+
+      {{ govukButton({
+        text: "Continue",
+        href: "/bulk-appointments/add-appointment-details"
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}
