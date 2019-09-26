@@ -307,6 +307,21 @@ describe('Probation documents', () => {
           })
         )
       })
+      it('should allow page to be displayed when no documents at all', async () => {
+        communityApi.getOffenderDocuments.mockReturnValue({})
+
+        await page(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'probationDocuments.njk',
+          expect.objectContaining({
+            documents: {
+              offenderDocuments: [],
+              convictions: [],
+            },
+          })
+        )
+      })
 
       it('should supply page with conviction related document', async () => {
         communityApi.getOffenderConvictions.mockReturnValue([

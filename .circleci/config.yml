@@ -127,7 +127,7 @@ jobs:
             command: |
               VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
               yarn run plant-beanstalk ${VERSION}
-              ~/.local/bin/eb deploy --process --verbose --label ${VERSION}
+              AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_ELB AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_ELB ~/.local/bin/eb deploy --process --verbose --label ${VERSION}
 
 workflows:
   version: 2
