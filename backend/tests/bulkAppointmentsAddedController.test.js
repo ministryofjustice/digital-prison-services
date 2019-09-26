@@ -1,5 +1,8 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const { index } = require('../controllers/bulkAppointmentsCreated').bulkAppointmentsCreatedFactory()
+const bulkAppointmentsAddedController = require('../controllers/bulkAppointmentsAddedController')
+const config = require('../config')
+
+config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -12,7 +15,17 @@ describe('bulk appointments confirm', () => {
     startTime: '2019-09-23T15:30:00',
     endTime: '2019-09-30T16:30:00',
     comment: 'Activity comment',
-    prisonersNotFound: ['ABC123', 'ABC345', 'ABC678'],
+    prisonersNotFound: [],
+    prisonersNotAdded: [
+      {
+        offenderNo: 'ABC123',
+        lastName: 'Smith',
+      },
+      {
+        offenderNo: 'ABC345',
+        lastName: 'Jones',
+      },
+    ],
     prisonersListed: [
       {
         bookingId: 'K00278',
@@ -31,10 +44,11 @@ describe('bulk appointments confirm', () => {
       const res = { ...mockRes }
 
       it('should render the confirm appointments confirm page', async () => {
-        await index(req, res)
+        await bulkAppointmentsAddedController(req, res)
 
-        expect(res.render).toBeCalledWith('appointmentsCreated.njk', {
-          prisonersNotFound: appointmentDetails.prisonersNotFound,
+        expect(res.render).toBeCalledWith('appointmentsAdded.njk', {
+          prisonersNotAdded: appointmentDetails.prisonersNotAdded,
+          dpsUrl: '//newNomisEndPointUrl/',
         })
       })
     })
@@ -44,7 +58,7 @@ describe('bulk appointments confirm', () => {
       const res = { ...mockRes }
 
       it('should render the error page', async () => {
-        await index(req, res)
+        await bulkAppointmentsAddedController(req, res)
 
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })

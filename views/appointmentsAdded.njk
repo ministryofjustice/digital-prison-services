@@ -12,19 +12,21 @@
         titleText: "The appointments have been added"
       }) }}
 
-      <p class="govuk-body">Appointments have not been added for:</p>
+      {% if prisonersNotAdded.length > 0 %}
+        <p class="govuk-body">Appointments have not been added for:</p>
 
-      {% if prisonersNotFound.length > 0 %}
         <table class="govuk-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Last name</th>
               <th scope="col" class="govuk-table__header">Prison number</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            {% for prisonNumber in prisonersNotFound %}
+            {% for prisoner in prisonersNotAdded %}
               <tr class="govuk-table__row">
-                <td class="govuk-table__cell">{{prisonNumber}}</td>
+                <td class="govuk-table__cell">{{prisoner.lastName}}</td>
+                <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -32,9 +34,9 @@
       {% endif %}
 
       {{ govukButton({ 
-          text: "Upload another CSV file",
+          text: "Add more appointments",
           element: 'a',
-          href: '/bulk-appointments/upload-file',
+          href: '/bulk-appointments/add-appointment-details',
           classes: "govuk-!-margin-right-3"
         })
       }}
@@ -42,7 +44,7 @@
       {{ govukButton({
           text: "Exit to Digital Prison Services",
           element: 'a',
-          href: '/',
+          href: dpsUrl,
           classes: "govuk-button--secondary"
         })
       }}
