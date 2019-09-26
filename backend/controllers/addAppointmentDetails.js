@@ -49,7 +49,7 @@ const getValidationMessages = ({
   comments,
 }) => {
   const errors = []
-  const now = moment().subtract(1, 'minute')
+  const now = moment()
   const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
 
   if (!appointmentType) errors.push({ text: 'Select an appointment type', href: '#appointment-type' })
@@ -70,10 +70,10 @@ const getValidationMessages = ({
 
     if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time-hours' })
 
-    if (isToday && startTimeDuration.asMinutes() > 2)
+    if (isToday && startTimeDuration.asMinutes() > 1)
       errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
 
-    if (endTime && endTimeDuration.asMinutes() > 2) {
+    if (endTime && endTimeDuration.asMinutes() > 1) {
       errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
     }
   }
