@@ -1,11 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
-const { view, submit } = require('../controllers/bulkAppointmentsConfirm').bulkAppointmentsConfirmFactory(elite2Api)
-const { logError } = require('../logError')
-
-jest.mock('../logError', () => ({
-  logError: jest.fn(),
-}))
+const { bulkAppointmentsConfirmFactory } = require('../controllers/bulkAppointmentsConfirm')
 
 describe('bulk appointments confirm', () => {
   const appointmentDetails = {
@@ -49,13 +44,17 @@ describe('bulk appointments confirm', () => {
 
   const mockRes = { render: jest.fn(), redirect: jest.fn(), locals: {} }
 
+  const logError = jest.fn()
+
+  const controller = bulkAppointmentsConfirmFactory(elite2Api, logError)
+
   describe('view', () => {
     describe('when there are no errors', () => {
       const req = { ...mockReq, session: { data: { ...appointmentDetails } } }
       const res = { ...mockRes }
 
       it('should render the confirm appointments confirm page', async () => {
-        await view(req, res)
+        await controller.index(req, res)
 
         expect(res.render).toBeCalledWith('confirmAppointments.njk', { appointmentDetails })
       })
@@ -66,7 +65,7 @@ describe('bulk appointments confirm', () => {
       const res = { ...mockRes }
 
       it('should render the error page', async () => {
-        await view(req, res)
+        await controller.index(req, res)
 
         expect(res.render).toBeCalledWith('error.njk', { url: '/need-to-upload-file' })
       })
@@ -83,7 +82,7 @@ describe('bulk appointments confirm', () => {
       })
 
       it('should submit the data and redirect to success page', async () => {
-        await submit(req, res)
+        await controller.post(req, res)
 
         expect(elite2Api.addBulkAppointments).toBeCalledWith(
           {},
@@ -116,7 +115,7 @@ describe('bulk appointments confirm', () => {
       })
 
       it('should log an error and render the error page', async () => {
-        await submit(req, res)
+        await controller.post(req, res)
 
         expect(logError).toBeCalledWith(
           '/bulk-appointments/confirm-appointment/',
