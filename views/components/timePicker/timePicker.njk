@@ -30,9 +30,6 @@
 
             <div class="time-picker-container">
                 {{ govukSelect({
-                    label: {
-                        text: 'Hours'
-                    },
                     id: params.id +'-hours',
                     name: params.name + 'Hours',
                     errorMessage: params.errorMessage | truthy,
@@ -41,9 +38,6 @@
                 }) }}
 
                 {{ govukSelect({
-                    label: {
-                        text: 'Minutes'
-                    },
                     id: params.id +'-minutes',
                     name: params.name + 'Minutes',
                     errorMessage: params.errorMessage | truthy,

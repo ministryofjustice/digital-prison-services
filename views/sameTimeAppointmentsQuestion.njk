@@ -1,0 +1,58 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% extends "./partials/layout.njk" %}
+
+{% block beforeContent %}
+    {{ govukBackLink({
+        text: "Back",
+        href: "/bulk-appointments/add-appointment-details"
+    }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <form action="/bulk-appointments/add-appointment-details/appointments-times" method="POST">
+
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "same-time-appointments",
+                    name: "sameTimeAppointments",
+                    errorMessage: errors | findError('same-time-appointments'),
+                    value: 'yes',
+                    fieldset: {
+                        legend: {
+                            text: "Do the appointments all have the same time?",
+                            classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "no",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+
+            {{ govukButton({ text: "Continue" }) }}
+
+            {{ govukButton({
+                text: "Cancel",
+                element: 'a',
+                href: homeUrl,
+                classes: "govuk-button--secondary"
+            }) }}
+
+        </form>
+    </div>
+</div>
+
+{%  endblock %}
