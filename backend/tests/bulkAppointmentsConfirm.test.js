@@ -67,7 +67,7 @@ describe('bulk appointments confirm', () => {
       it('should render the error page', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toBeCalledWith('error.njk', { url: '/need-to-upload-file' })
+        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })
   })
@@ -122,7 +122,7 @@ describe('bulk appointments confirm', () => {
           new Error('There has been an error'),
           'Sorry, the service is unavailable'
         )
-        expect(res.render).toBeCalledWith('error.njk', { url: '/need-to-upload-file' })
+        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })
   })
