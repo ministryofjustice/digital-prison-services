@@ -51,10 +51,10 @@ const { downloadProbationDocumentFactory } = require('./controllers/downloadProb
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
-const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
-const { bulkAppointmentsCreatedFactory } = require('./controllers/bulkAppointmentsCreated')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
+const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
+const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -336,15 +336,13 @@ app.post(
     ).postAndParseCsvOffenderList
   )
 )
-
-app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
-app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
-app.get('/bulk-appointments/appointments-created', handleErrors(bulkAppointmentsCreatedFactory().index))
+app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
 
 app.use(
   '/bulk-appointments/add-appointment-details',
   addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
+app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
 
 nunjucksSetup(app, path)
 

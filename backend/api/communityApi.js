@@ -6,7 +6,8 @@ const communityApiFactory = client => {
     client.pipe(
       context,
       url,
-      res
+      res,
+      { retry: 0 }
     )
   const getOffenderConvictions = (context, { offenderNo }) =>
     get(context, `/api/offenders/nomsNumber/${offenderNo}/convictions`)

@@ -95,7 +95,8 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
           }
         })
         const convictionSummaries = convictionsWithDocuments.sort(convictionSorter).map(convictionMapper)
-        const offenderDocuments = allDocuments.documents.sort(documentSorter).map(documentMapper)
+        const offenderDocuments =
+          (allDocuments.documents && allDocuments.documents.sort(documentSorter).map(documentMapper)) || []
 
         return {
           documents: {

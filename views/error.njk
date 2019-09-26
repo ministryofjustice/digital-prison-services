@@ -2,7 +2,6 @@
 {% set mainClasses = "govuk-main-wrapper--l" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-
 {% set title = 'Sorry, there is a problem with the service' %}
 
  {% block beforeContent %}
@@ -13,8 +12,7 @@
       href: "/"
     },
     {
-      text: title,
-      href: url
+      text: title
     }
   ]
 }) 
