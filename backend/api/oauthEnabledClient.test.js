@@ -198,6 +198,38 @@ describe('Test clients built by oauthEnabledClient', () => {
         await pipe
         expect(res.write).toHaveBeenCalled()
       })
+      it('Should retry many time if configure with more retires if request fails', async () => {
+        const pipe = new Promise((resolve, reject) => {
+          mock
+            .get('/api/users/me')
+            .reply(500, { failure: 'one' })
+            .get('/api/users/me')
+            .reply(500, { failure: 'two' })
+            .get('/api/users/me')
+            .reply(500, { failure: 'three' })
+            .get('/api/users/me')
+            .reply(500, { failure: 'four' })
+            .get('/api/users/me')
+            .reply(500, { failure: 'five' })
+            .get('/api/users/me')
+            .reply(200, Buffer.from('some binary data'), ['Content-Type', 'image/png'])
+
+          client.pipe(
+            {},
+            '/api/users/me',
+            {
+              ...res,
+              end: () => {
+                resolve()
+              },
+            },
+            { retry: 5 }
+          )
+        })
+
+        await pipe
+        expect(res.write).toHaveBeenCalled()
+      })
       it('Should set headers on response to pipe to', async () => {
         const pipe = new Promise((resolve, reject) => {
           mock.get('/api/users/me').reply(200, Buffer.from('some binary data'), {

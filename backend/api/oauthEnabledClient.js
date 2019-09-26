@@ -122,18 +122,18 @@ const factory = ({ baseUrl, timeout }) => {
         })
     })
 
-  const pipe = (context, path, pipeTo) => {
+  const pipe = (context, path, pipeTo, options = { retry: 2 }) => {
     const url = remoteUrl + path
     const retryHandler = (err, res) => {
       if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
       return undefined // retry handler only for logging retries, not to influence retry logic
     }
-    const deadline = { deadline: timeout / 3 }
+    const deadline = { deadline: timeout / (options.retry + 1) }
     return superagent
       .get(url)
       .agent(keepaliveAgent)
       .set(getHeaders(context))
-      .retry(2, retryHandler)
+      .retry(options.retry, retryHandler)
       .timeout(deadline)
       .on('response', res => {
         pipeTo.header(res.header)
