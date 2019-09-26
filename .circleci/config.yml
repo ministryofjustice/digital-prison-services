@@ -87,7 +87,6 @@ jobs:
              DATE=$(date '+%Y-%m-%d')
              export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
              export GIT_REF=${CIRCLE_SHA1}
-             export GIT_DATE=${DATE}
              yarn record-build-info
       - persist_to_workspace:
           root: .
