@@ -84,7 +84,8 @@
                         label: 'Date',
                         name: 'date',
                         date: date,
-                        errorMessage: errors | findError('date')
+                        errorMessage: errors | findError('date'),
+                        attributes: {'data-disable-past-date':'true'}
                     }) }}
 
                     {{ govukRadios({
