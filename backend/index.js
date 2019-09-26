@@ -51,9 +51,9 @@ const { downloadProbationDocumentFactory } = require('./controllers/downloadProb
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
-const { bulkAppointmentsConfirmFactory } = require('./controllers/bulkAppointmentsConfirm')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
+const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
@@ -336,9 +336,7 @@ app.post(
     ).postAndParseCsvOffenderList
   )
 )
-
-app.get('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).view))
-app.post('/bulk-appointments/confirm-appointments', handleErrors(bulkAppointmentsConfirmFactory(elite2Api).submit))
+app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
 
 app.use(
   '/bulk-appointments/add-appointment-details',
