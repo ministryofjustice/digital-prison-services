@@ -29,13 +29,11 @@ const buildDateTime = ({ date, hours, minutes }) => {
 }
 
 const extractHoursMinutes = dateTime => {
+  if (!dateTime) return { hours: '', minutes: '' }
   const instant = moment(dateTime, DATE_TIME_FORMAT_SPEC)
-  const hours = instant.hours()
-  const minutes = instant.minutes()
-
   return {
-    hours: hours <= 9 ? `0${hours}` : hours,
-    minutes: minutes <= 9 ? `0${minutes}` : minutes,
+    hours: instant.format('HH'),
+    minutes: instant.format('mm'),
   }
 }
 
@@ -105,8 +103,8 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       const { appointmentType, location, date, startTime, endTime, sameTimeAppointments, comments } =
         req.session.data || {}
 
-      const startTimeHoursMinutes = startTime && extractHoursMinutes(startTime)
-      const endTimeHoursMinutes = endTime && extractHoursMinutes(endTime)
+      const startTimeHoursMinutes = extractHoursMinutes(startTime)
+      const endTimeHoursMinutes = extractHoursMinutes(endTime)
 
       res.render('addAppointmentDetails.njk', {
         title: 'Add appointment details',
@@ -117,10 +115,10 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         location,
         comments,
         date,
-        startTimeHours: startTime && String(startTimeHoursMinutes.hours),
-        startTimeMinutes: startTime && String(startTimeHoursMinutes.minutes),
-        endTimeHours: endTime && String(endTimeHoursMinutes.hours),
-        endTimeMinutes: endTime && String(endTimeHoursMinutes.minutes),
+        startTimeHours: startTimeHoursMinutes.hours,
+        startTimeMinutes: startTimeHoursMinutes.minutes,
+        endTimeHours: endTimeHoursMinutes.hours,
+        endTimeMinutes: endTimeHoursMinutes.minutes,
         sameTimeAppointments,
       })
     } catch (error) {

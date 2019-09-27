@@ -80,6 +80,10 @@ describe('Add appointment details controller', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('addAppointmentDetails.njk', {
+        startTimeHours: '',
+        startTimeMinutes: '',
+        endTimeHours: '',
+        endTimeMinutes: '',
         title: 'Add appointment details',
         appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
         locations: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
@@ -429,7 +433,7 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           appointmentTypeDescription: 'appointment 1',
           comments: undefined,
-          date: '27/09/2019',
+          date: now.format(DAY_MONTH_YEAR),
           endTime: undefined,
           location: 1,
           locationDescription: 'location 1',
