@@ -32,7 +32,6 @@ module.exports = (app, path) => {
       {
         text: '--',
         value: '',
-        disabled: true,
         hidden: true,
         selected: true,
       },
@@ -47,13 +46,22 @@ module.exports = (app, path) => {
       {
         text,
         value: '',
-        disabled: true,
         hidden: true,
         selected: true,
       },
       ...items,
     ]
   })
+
+  njkEnv.addFilter(
+    'setSelected',
+    (items, selected) =>
+      items &&
+      items.map(entry => ({
+        ...entry,
+        selected: entry && entry.value === selected,
+      }))
+  )
 
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)

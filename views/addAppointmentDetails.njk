@@ -17,6 +17,27 @@
     }) }}
 {% endblock %}
 
+{%  set times %}
+    {{ timePicker({
+        id: 'start-time',
+        label: 'Start time',
+        name: 'startTime',
+        hour: startTimeHours,
+        minute: startTimeMinutes,
+        errorMessage: errors | findError('start-time-hours')
+    }) }}
+
+    {{ timePicker({
+        id: 'end-time',
+        label: 'End time (optional)',
+        name: 'endTime',
+        hour: endTimeHours,
+        minute: endTimeMinutes,
+        errorMessage: errors | findError('end-time-hours')
+    }) }}
+
+{%  endset -%}
+
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
@@ -44,7 +65,7 @@
                         label: {
                             text: "Appointment type"
                         },
-                        items: appointmentTypes | addDefaultSelectedVale('Select'),
+                        items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(appointmentType),
                         errorMessage: errors | findError('appointment-type')
                     }) }}
 
@@ -54,7 +75,7 @@
                         label: {
                             text: "Location"
                         },
-                        items: locations | addDefaultSelectedVale('Select'),
+                        items: locations | addDefaultSelectedVale('Select') | setSelected(location),
                         errorMessage: errors | findError('location')
                     }) }}
 
@@ -63,25 +84,8 @@
                         label: 'Date',
                         name: 'date',
                         date: date,
-                        errorMessage: errors | findError('date')
-                    }) }}
-
-                    {{ timePicker({
-                        id: 'start-time',
-                        label: 'Start time',
-                        name: 'startTime',
-                        hour: startTimeHours,
-                        minute: startTimeMinutes,
-                        errorMessage: errors | findError('start-time')
-                    }) }}
-
-                    {{ timePicker({
-                        id: 'end-time',
-                        label: 'End time',
-                        name: 'endTime',
-                        hour: endTimeHours,
-                        minute: endTimeMinutes,
-                        errorMessage: errors | findError('end-time')
+                        errorMessage: errors | findError('date'),
+                        attributes: {'data-disable-past-date':'true'}
                     }) }}
 
                     {{ govukRadios({
@@ -89,24 +93,28 @@
                         idPrefix: "same-time-appointments",
                         name: "sameTimeAppointments",
                         errorMessage: errors | findError('same-time-appointments'),
-                        value: 'yes',
                         fieldset: {
                             legend: {
                                 text: "Do the appointments all have the same time?",
                                 classes: "govuk-fieldset__legend--s"
                             }
                         },
-                        items: [
-                            {
+                        items: [{
                                 value: "yes",
-                                text: "Yes"
+                                text: "Yes",
+                                checked: sameTimeAppointments == 'yes',
+                                conditional: {
+                                    html: times
+                                }
                             },
                             {
                                 value: "no",
-                                text: "No"
+                                text: "No",
+                                checked: sameTimeAppointments == 'no'
                             }
                         ]
                     }) }}
+
 
                     {{ govukTextarea({
                         name: "comments",
