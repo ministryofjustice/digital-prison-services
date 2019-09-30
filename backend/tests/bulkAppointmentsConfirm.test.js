@@ -4,6 +4,8 @@ const { bulkAppointmentsConfirmFactory } = require('../controllers/bulkAppointme
 
 let req
 let res
+let logError
+let controller
 
 beforeEach(() => {
   elite2Api.addBulkAppointments = jest.fn()
@@ -16,52 +18,50 @@ beforeEach(() => {
     },
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
+  logError = jest.fn()
+  controller = bulkAppointmentsConfirmFactory(elite2Api, logError)
 })
 
-describe('bulk appointments confirm', () => {
-  const appointmentDetails = {
-    appointmentType: 'TEST',
-    appointmentTypeDescription: 'Test Type',
-    location: 1,
-    locationDescription: 'Chapel',
-    date: '23/09/2019',
-    startTime: '2019-09-23T15:30:00',
-    endTime: '2019-09-30T16:30:00',
-    comment: 'Activity comment',
-    prisonersNotFound: [],
-    prisonersListed: [
-      {
-        bookingId: 'K00278',
-        offenderNo: 'G1683VN',
-        firstName: 'Elton',
-        lastName: 'Abbatiello',
-      },
-      {
-        bookingId: 'V37486',
-        offenderNo: 'G4803UT',
-        firstName: 'Bobby',
-        lastName: 'Abdulkadir',
-      },
-      {
-        bookingId: 'V38608',
-        offenderNo: 'G4346UT',
-        firstName: 'Dewey',
-        lastName: 'Affolter',
-      },
-      {
-        bookingId: 'V31474',
-        offenderNo: 'G5402VR',
-        firstName: 'Gabriel',
-        lastName: 'Agugliaro',
-      },
-    ],
-  }
+const appointmentDetails = {
+  appointmentType: 'TEST',
+  appointmentTypeDescription: 'Test Type',
+  location: 1,
+  locationDescription: 'Chapel',
+  date: '23/09/2019',
+  startTime: '2019-09-23T15:30:00',
+  endTime: '2019-09-30T16:30:00',
+  comment: 'Activity comment',
+  prisonersNotFound: [],
+  prisonersListed: [
+    {
+      bookingId: 'K00278',
+      offenderNo: 'G1683VN',
+      firstName: 'Elton',
+      lastName: 'Abbatiello',
+    },
+    {
+      bookingId: 'V37486',
+      offenderNo: 'G4803UT',
+      firstName: 'Bobby',
+      lastName: 'Abdulkadir',
+    },
+    {
+      bookingId: 'V38608',
+      offenderNo: 'G4346UT',
+      firstName: 'Dewey',
+      lastName: 'Affolter',
+    },
+    {
+      bookingId: 'V31474',
+      offenderNo: 'G5402VR',
+      firstName: 'Gabriel',
+      lastName: 'Agugliaro',
+    },
+  ],
+}
 
-  const logError = jest.fn()
-
-  const controller = bulkAppointmentsConfirmFactory(elite2Api, logError)
-
-  describe('when viewing confirm appointments', () => {
+describe('when confirming bulk appointment details', () => {
+  describe('and viewing the page', () => {
     describe('and there is data', () => {
       it('should render the confirm appointments page', async () => {
         req.session.data = { ...appointmentDetails }
@@ -83,7 +83,7 @@ describe('bulk appointments confirm', () => {
     })
   })
 
-  describe('when submitting confirm appointments', () => {
+  describe('and submitting the data', () => {
     describe('and the start times are the same', () => {
       describe('and there are no errors', () => {
         beforeEach(() => {
@@ -115,7 +115,7 @@ describe('bulk appointments confirm', () => {
       })
     })
 
-    describe('are there are individual start and end times', () => {
+    describe('and there are individual start and end times', () => {
       beforeEach(() => {
         elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
         req.session.data = {
@@ -235,7 +235,7 @@ describe('bulk appointments confirm', () => {
       })
     })
 
-    describe('when there is an issue with the api', () => {
+    describe('and there is an issue with the api', () => {
       beforeEach(() => {
         elite2Api.addBulkAppointments = jest.fn().mockImplementation(() => {
           throw new Error('There has been an error')
