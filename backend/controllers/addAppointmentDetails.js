@@ -179,7 +179,6 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
           comments,
           ...timeInfo,
         }
-
         res.redirect('/bulk-appointments/upload-file')
         return
       }
@@ -201,6 +200,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      console.error({ error })
       res.render('error.njk', {
         url: req.originalUrl,
       })
