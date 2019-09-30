@@ -1,7 +1,6 @@
 {% extends "./partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set title = 'Confirm appointments' %}
@@ -20,50 +19,55 @@
     Appointment details
   </h2>
 
-  {{ govukSummaryList({
-    rows: [
-      {
-        key: {
-          text: "Appointment type"
-        },
-        value: {
-          text: appointmentDetails.appointmentType
-        }
-      },
-      {
-        key: {
-          text: "Location"
-        },
-        value: {
-          text: appointmentDetails.location
-        }
-      },
-      {
-        key: {
-          text: "Start date"
-        },
-        value: {
-          text: appointmentDetails.startTime | getDate()
-        }
-      },
-      {
-        key: {
-          text: "Time"
-        },
-        value: {
-          text: appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()
-        }
-      },
-      {
-        key: {
-          text: "End date"
-        },
-        value: {
-          text: appointmentDetails.endTime | getDate()
-        }
-      }
-    ]
-  }) }}
+  <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Appointment type
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{appointmentDetails.appointmentTypeDescription}}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Location
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{appointmentDetails.locationDescription}}
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Start date
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{appointmentDetails.date | getDate()}}
+      </dd>
+    </div>
+
+    {% if appointmentDetails.startTime %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Time
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()}}
+        </dd>
+      </div>
+    {% endif %}
+
+    {% if appointmentDetails.endTime %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          End date
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{appointmentDetails.endTime | getDate()}}
+        </dd>
+      </div>
+    {% endif %}
+  </dl>
 
   {% if appointmentDetails.prisonersNotFound.length > 0 %}
     <h2 class="govuk-heading-m">
@@ -102,26 +106,26 @@
     Appointments will be created for these prisoners.
   </p>
 
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">Last name</th>
-        <th scope="col" class="govuk-table__header">First name</th>
-        <th scope="col" class="govuk-table__header">Prison number</th>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      {% for prisoner in appointmentDetails.prisonersListed %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">{{prisoner.lastName}}</td>
-          <td class="govuk-table__cell">{{prisoner.firstName}}</td>
-          <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+          <th scope="col" class="govuk-table__header">Last name</th>
+          <th scope="col" class="govuk-table__header">First name</th>
+          <th scope="col" class="govuk-table__header">Prison number</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for prisoner in appointmentDetails.prisonersListed %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{prisoner.lastName}}</td>
+            <td class="govuk-table__cell">{{prisoner.firstName}}</td>
+            <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-  {{ govukInsetText({
+    {{ govukInsetText({
     text: "You cannot delete the CSV file once you have confirmed these details. If you want to delete any appointments, you will need to delete it through the individual prisoner’s activity page."
   }) }}
 
