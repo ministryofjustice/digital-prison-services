@@ -53,7 +53,7 @@ describe('csv-parser', () => {
     const service = csvParserService({ fs, isBinaryFileSync })
 
     service.loadAndParseCsvFile({}).catch(error => {
-      expect(error.message).toBe(validationMessages.invalidFile)
+      expect(error.message).toBe(validationMessages.parsingError)
       done()
     })
   })
@@ -70,7 +70,7 @@ describe('csv-parser', () => {
     const service = csvParserService({ fs, isBinaryFileSync })
 
     service.loadAndParseCsvFile({}).catch(error => {
-      expect(error.message).toBe(validationMessages.invalidFile)
+      expect(error.message).toBe(validationMessages.parsingError)
       done()
     })
   })
