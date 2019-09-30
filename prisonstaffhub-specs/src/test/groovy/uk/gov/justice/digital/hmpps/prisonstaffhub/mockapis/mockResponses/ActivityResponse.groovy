@@ -105,6 +105,11 @@ class ActivityResponse {
             activity2,
             activity3
     ])
+    static  pastActivities = JsonOutput.toJson([
+            activity1_1,
+            activity1_2,
+            activity2,
+    ])
     static visits = JsonOutput.toJson([
             visit1
     ])

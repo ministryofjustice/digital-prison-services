@@ -17,7 +17,7 @@ const TotalNumber = styled.span`
 
 const TotalResults = ({ label, totalResults }) => (
   <StyledTotalResults>
-    {label} <TotalNumber>{totalResults}</TotalNumber>
+    {label} <TotalNumber name="total-number">{totalResults}</TotalNumber>
   </StyledTotalResults>
 )
 
