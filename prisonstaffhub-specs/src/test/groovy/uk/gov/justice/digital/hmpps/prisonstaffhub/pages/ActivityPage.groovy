@@ -26,6 +26,9 @@ class ActivityPage extends DatePickerPage {
         flags { bodyRows*.$('td', 5)*.$('span') }
         events { bodyRows*.$('td', 6)*.text() }
         eventsElsewhere { bodyRows*.$('td', 7).collect { it.$('ul li')*.text() } }
+        totalNumbers { $(name: 'total-number') }
+        prisonersListed { totalNumbers[0]}
+        sessionsAttended { totalNumbers[1]}
 
         attendRadioElements(required: false) { bodyRows*.$('td[data-qa="pay-option"]')*.$('input') }
         notAttendedRadioElements(required: false) { bodyRows*.$('td[data-qa="other-option"]')*.$('input') }

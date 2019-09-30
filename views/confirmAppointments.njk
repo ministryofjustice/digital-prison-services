@@ -64,7 +64,10 @@
           Time
         </dt>
         <dd class="govuk-summary-list__value">
-          {{appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()}}
+          {{appointmentDetails.startTime | getTime()}}
+          {% if appointmentDetails.endTime %}
+            {{' to ' + appointmentDetails.endTime | getTime()}}
+          {% endif %}
         </dd>
       </div>
     {% endif %}

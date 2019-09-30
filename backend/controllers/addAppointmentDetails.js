@@ -174,7 +174,6 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
           comments,
           ...timeInfo,
         }
-
         res.redirect('/bulk-appointments/upload-file')
         return
       }
