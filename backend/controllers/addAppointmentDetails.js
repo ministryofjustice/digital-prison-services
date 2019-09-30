@@ -200,7 +200,6 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      console.error({ error })
       res.render('error.njk', {
         url: req.originalUrl,
       })
