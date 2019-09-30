@@ -5,6 +5,7 @@ const logger = require('./log')
 const validationMessages = {
   invalidFile: 'There was a problem importing your file, please use the template provided',
   maxFileSizeReached: `The file is too large. Maximum file size is ${config.app.maximumFileUploadSizeInMb}MB`,
+  noFileInput: `Please select a file`,
 }
 
 const csvParserService = ({ fs, isBinaryFileSync }) => {
@@ -42,6 +43,11 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
     const maximumFileSizeInBytes = sizeInMb * 1000000
 
     const { size } = fs.lstatSync(path)
+
+    if (size <= 0) {
+      logger.error(`No file was input`)
+      throw new Error(validationMessages.noFileInput)
+    }
 
     if (size > maximumFileSizeInBytes) {
       logger.error(`A file exceeding ${sizeInMb} was rejected, filename ${originalFilename} size ${size}`)

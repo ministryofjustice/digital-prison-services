@@ -95,12 +95,13 @@
         {% endfor %}
 
       <p class="govuk-body">
-        <a href="bulk-appointments/csv-template" class="govuk-!-font-size-19 govuk-link govuk-link--no-visited-state">Download a CSV file template</a>
+        <a href="/bulk-appointments/csv-template" class="govuk-!-font-size-19 govuk-link govuk-link--no-visited-state">Download a CSV file template</a>
       </p>
 
       {{ govukButton({
           text: "Continue",
-          classes: "govuk-!-margin-right-1"
+          classes: "govuk-!-margin-right-1",
+          preventDoubleClick: true
         }) }}
 
         {{ govukButton({
