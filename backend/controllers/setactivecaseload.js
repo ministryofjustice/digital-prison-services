@@ -7,7 +7,7 @@ const activeCaseloadFactory = elite2Api => {
     await elite2Api.setActiveCaseload(res.locals, { caseLoadId })
 
     // eslint-disable-next-line no-param-reassign
-    req.session.data.activeCaseLoadId = caseLoadId
+    if (req.session && req.session.data) req.session.data.activeCaseLoadId = caseLoadId
     res.json({})
   })
 
