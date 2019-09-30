@@ -74,6 +74,10 @@ class ActivitySpecification extends BrowserReportingSpec {
         flags[0]*.text() == ['ACCT','E-LIST','CAT A']
         flags[1]*.text() == ['CAT A Prov']
         flags[2]*.text() == ['CAT A High']
+
+        prisonersListed.text() == '3'
+        sessionsAttended.text() == '0'
+
         events == [
                 '17:00 - Activity 1',
                 '11:45 - Activity 1',
@@ -198,10 +202,21 @@ class ActivitySpecification extends BrowserReportingSpec {
         at ActivityPage
         activityTitle == 'loc1'
 
+        events == [
+                '17:00 - Activity 1',
+                '11:45 - Activity 1',
+                '17:45 - Activity 1',
+                '17:00 - Activity 2',
+                '17:00 - Activity 3'
+        ]
+
+        prisonersListed.text() == '3'
+        sessionsAttended.text() == '0'
+
         when: "I change selections and update"
         def firstOfMonthDisplayFormat = '01/08/2018'
         def firstOfMonthApiFormat = '2018-08-01'
-        elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
+        elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat, true)
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
         whereaboutsApi.stubGetAbsenceReasons()
         setDatePicker('2018', 'Aug', '1')
@@ -213,11 +228,12 @@ class ActivitySpecification extends BrowserReportingSpec {
 
         events == [
                 '17:00 - Activity 1',
-                '11:45 - Activity 1',
                 '17:45 - Activity 1',
                 '17:00 - Activity 2',
-                '17:00 - Activity 3'
         ]
+
+        prisonersListed.text() == '2'
+        sessionsAttended.text() == '0'
 
 
         when: "I go to the search page afresh"
