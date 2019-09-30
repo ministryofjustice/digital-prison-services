@@ -14,6 +14,7 @@ describe('bulk appointments upload', () => {
     startTime: '2019-09-23T15:30:00',
     endTime: '2019-09-30T16:30:00',
     comment: 'Activity comment',
+    date: '23/09/2019',
   }
 
   let req
@@ -41,9 +42,8 @@ describe('bulk appointments upload', () => {
         await controller.index(req, res)
 
         expect(res.render).toBeCalledWith('uploadOffenders.njk', {
-          appointmentDetails,
+          appointmentDetails: { ...appointmentDetails, date: '2019-09-23T00:00:00' },
           errors: undefined,
-          title: 'Upload a CSV File',
         })
       })
     })
@@ -124,6 +124,7 @@ describe('bulk appointments upload', () => {
           location: 'Gym',
           startTime: '2019-09-23T15:30:00',
           endTime: '2019-09-30T16:30:00',
+          date: '23/09/2019',
           comment: 'Activity comment',
           prisonersListed: [
             {

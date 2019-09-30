@@ -1,3 +1,6 @@
+const moment = require('moment')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+
 const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logError) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
@@ -10,10 +13,14 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
 
     if (!data) return renderError(req, res)
 
+    const appointmentDetails = {
+      ...data,
+      date: moment(data.date, DAY_MONTH_YEAR).format(DATE_TIME_FORMAT_SPEC),
+    }
+
     return res.render('uploadOffenders.njk', {
-      title: 'Upload a CSV File',
       errors: req.flash('errors'),
-      appointmentDetails: req.session.data,
+      appointmentDetails,
     })
   }
 

@@ -7,6 +7,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% set title = 'Upload a CSV File' %}
+
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
@@ -32,50 +34,58 @@
 
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-      {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: "Appointment type"
-          },
-          value: {
-            text: appointmentDetails.appointmentTypeDescription
-          }
-        },
-        {
-          key: {
-            text: "Location"
-          },
-          value: {
-            text: appointmentDetails.locationDescription
-          }
-        },
-        {
-        key: {
-          text: "Start date"
-        },
-        value: {
-          text: appointmentDetails.startTime | getDate()
-        }
-      },
-      {
-        key: {
-          text: "Time"
-        },
-        value: {
-          text: appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()
-        }
-      },
-      {
-        key: {
-          text: "End date"
-        },
-        value: {
-          text: appointmentDetails.endTime | getDate()
-        }
-      }
-      ]
-      }) }}
+      <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Appointment type
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{appointmentDetails.appointmentTypeDescription}}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Location
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{appointmentDetails.locationDescription}}
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Start date
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{appointmentDetails.date | getDate()}}
+      </dd>
+    </div>
+
+    {% if appointmentDetails.startTime %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Time
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{appointmentDetails.startTime | getTime()}}
+          {% if appointmentDetails.endTime %}
+            {{' to ' + appointmentDetails.endTime | getTime()}}
+          {% endif %}
+        </dd>
+      </div>
+    {% endif %}
+
+    {% if appointmentDetails.endTime %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          End date
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{appointmentDetails.endTime | getDate()}}
+        </dd>
+      </div>
+    {% endif %}
+  </dl>
 
       {{ govukInsetText({
         text: "You can only include each prison number once on a CSV file. If you need to add appointments for different times for the same prisoner, you must do this using different CSV files."
