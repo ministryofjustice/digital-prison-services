@@ -4,8 +4,11 @@ const { bulkAppointmentsConfirmFactory } = require('../controllers/bulkAppointme
 
 describe('bulk appointments confirm', () => {
   const appointmentDetails = {
-    appointmentType: 'Test type',
-    location: 'Chapel',
+    appointmentType: 'TEST',
+    appointmentTypeDescription: 'Test Type',
+    location: 1,
+    locationDescription: 'Chapel',
+    date: '23/09/2019',
     startTime: '2019-09-23T15:30:00',
     endTime: '2019-09-30T16:30:00',
     comment: 'Activity comment',
@@ -56,7 +59,9 @@ describe('bulk appointments confirm', () => {
       it('should render the confirm appointments confirm page', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toBeCalledWith('confirmAppointments.njk', { appointmentDetails })
+        expect(res.render).toBeCalledWith('confirmAppointments.njk', {
+          appointmentDetails: { ...appointmentDetails, date: '2019-09-23T00:00:00' },
+        })
       })
     })
 
@@ -88,10 +93,10 @@ describe('bulk appointments confirm', () => {
           {},
           {
             appointmentDefaults: {
-              appointmentType: 'Test type',
+              appointmentType: 'TEST',
+              locationId: 1,
               comment: 'Activity comment',
               endTime: '2019-09-30T16:30:00',
-              locationId: NaN,
               startTime: '2019-09-23T15:30:00',
             },
             appointments: [
