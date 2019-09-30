@@ -346,6 +346,7 @@ class ResultsActivity extends Component {
     }
 
     const unattendedOffenders = new Set()
+    const totalOffenders = new Set()
 
     const offenders =
       activityData &&
@@ -388,7 +389,7 @@ class ResultsActivity extends Component {
             eventDate: date,
           })
         }
-        this.totalOffenders.add(offenderNo)
+        totalOffenders.add(offenderNo)
 
         const { absentReason } = attendanceInfo || {}
         const otherActivitiesClasses = classNames({
@@ -461,6 +462,7 @@ class ResultsActivity extends Component {
       })
 
     this.unattendedOffenders = unattendedOffenders
+    this.totalOffenders = totalOffenders
 
     return (
       <div className="results-activity">
