@@ -1,3 +1,6 @@
+const moment = require('moment')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+
 const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
@@ -10,7 +13,12 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
 
     if (!data) return renderError(req, res)
 
-    return res.render('confirmAppointments.njk', { appointmentDetails: data })
+    const appointmentDetails = {
+      ...data,
+      date: moment(data.date, DAY_MONTH_YEAR).format(DATE_TIME_FORMAT_SPEC),
+    }
+
+    return res.render('confirmAppointments.njk', { appointmentDetails })
   }
 
   const post = async (req, res) => {
