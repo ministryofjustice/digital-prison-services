@@ -64,7 +64,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
 
   const post = async (req, res) => {
     const {
-      data: { appointmentType, location, startTime, endTime, date, prisonersListed, comment, sameTimeAppointments },
+      data: { appointmentType, location, startTime, endTime, date, prisonersListed, comments, sameTimeAppointments },
     } = req.session
 
     const prisonersWithAppointmentTimes = prisonersListed.map(prisoner => {
@@ -105,26 +105,28 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
       }
     }
 
+    const request = {
+      appointmentDefaults: {
+        comment: comments,
+        locationId: Number(location),
+        appointmentType,
+        startTime: startTime || buildDateTime({ date, hours: 23, minutes: 59 }).format(DATE_TIME_FORMAT_SPEC),
+        endTime,
+      },
+      appointments: prisonersWithAppointmentTimes.map(prisoner => ({
+        bookingId: prisoner.bookingId,
+        startTime: prisoner.startTime,
+        endTime: prisoner.endTime,
+      })),
+    }
+
     try {
-      await elite2Api.addBulkAppointments(res.locals, {
-        appointmentDefaults: {
-          comment,
-          locationId: Number(location),
-          appointmentType,
-          startTime,
-          endTime,
-        },
-        appointments: prisonersWithAppointmentTimes.map(prisoner => ({
-          bookingId: prisoner.bookingId,
-          startTime: prisoner.startTime,
-          endTime: prisoner.endTime,
-        })),
-      })
+      await elite2Api.addBulkAppointments(res.locals, request)
     } catch (error) {
       return renderError(req, res, error)
     }
 
-    return res.redirect('/bulk-appointments/success')
+    return res.redirect('/bulk-appointments/appointments-added')
   }
 
   return { index, post }

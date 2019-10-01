@@ -30,7 +30,7 @@ const appointmentDetails = {
   date: '23/09/2019',
   startTime: '2019-09-23T15:30:00',
   endTime: '2019-09-30T16:30:00',
-  comment: 'Activity comment',
+  comments: 'Activity comment',
   prisonersNotFound: [],
   prisonersListed: [
     {
@@ -91,7 +91,7 @@ describe('when confirming bulk appointment details', () => {
           elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
         })
 
-        it('should submit the data and redirect to success page', async () => {
+        it('should submit the data and redirect to the appointments added page', async () => {
           await controller.post(req, res)
 
           expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
@@ -110,7 +110,7 @@ describe('when confirming bulk appointment details', () => {
             ],
           })
 
-          expect(res.redirect).toBeCalledWith('/bulk-appointments/success')
+          expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
         })
       })
     })
@@ -123,7 +123,7 @@ describe('when confirming bulk appointment details', () => {
           location: 1,
           date: '27/09/2019',
           sameTimeAppointments: 'no',
-          comment: 'Activity comment',
+          comments: 'Activity comment',
           prisonersNotFound: [],
           prisonersListed: [
             {
@@ -143,7 +143,7 @@ describe('when confirming bulk appointment details', () => {
       })
 
       describe('and there are no form errors', () => {
-        it('should submit the data and redirect to success page', async () => {
+        it('should submit the data and redirect to the appointments added page', async () => {
           req.body = {
             G1683VNstartTimeHours: '08',
             G1683VNstartTimeMinutes: '30',
@@ -162,7 +162,7 @@ describe('when confirming bulk appointment details', () => {
               appointmentType: 'TEST',
               comment: 'Activity comment',
               locationId: 1,
-              startTime: undefined,
+              startTime: '2019-09-27T23:59:00',
               endTime: undefined,
             },
             appointments: [
@@ -171,7 +171,7 @@ describe('when confirming bulk appointment details', () => {
             ],
           })
 
-          expect(res.redirect).toBeCalledWith('/bulk-appointments/success')
+          expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
         })
       })
 
@@ -196,7 +196,7 @@ describe('when confirming bulk appointment details', () => {
               appointmentType: 'TEST',
               location: 1,
               sameTimeAppointments: 'no',
-              comment: 'Activity comment',
+              comments: 'Activity comment',
               prisonersNotFound: [],
               prisonersListed: [
                 {
