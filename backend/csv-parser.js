@@ -7,7 +7,8 @@ const validationMessages = {
   maxFileSizeReached: `Select a CSV file less than ${
     config.app.maximumFileUploadSizeInMb
   }MB - the file you selected is too big`,
-  noFileInput: `Please select a file`,
+  noFileInput: `Select a file`,
+  noFileContent: `Select a CSV file with prison numbers entered`,
   parsingError: 'There was a problem importing your file, please use the template provided',
 }
 
@@ -46,6 +47,11 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
     const maximumFileSizeInBytes = sizeInMb * 1000000
 
     const { size } = fs.lstatSync(path)
+
+    if (originalFilename && size <= 0) {
+      logger.error(`file input had no records in it`)
+      throw new Error(validationMessages.noFileContent)
+    }
 
     if (size <= 0) {
       logger.error(`No file was input`)
