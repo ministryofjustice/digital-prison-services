@@ -23,7 +23,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
   const validate = (prisonersWithAppointmentTimes, date) => {
     const errors = []
     const now = moment()
-    const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
+    const isToday = moment(date, DAY_MONTH_YEAR).isSame(now, 'day')
 
     prisonersWithAppointmentTimes.forEach(({ startTime, endTime, offenderNo }) => {
       const startTimeDuration = moment.duration(now.diff(startTime))
