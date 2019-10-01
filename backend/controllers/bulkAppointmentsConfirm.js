@@ -125,7 +125,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     } catch (error) {
       return renderError(req, res, error)
     }
-
+    console.log('Code cov test')
     return res.redirect('/bulk-appointments/appointments-added')
   }
 
