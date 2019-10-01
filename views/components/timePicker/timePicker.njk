@@ -16,11 +16,13 @@
         '50', '55'
     ] %}
 
-<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %}">
+<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %}{%- if params.classes %} {{ params.classes }}{% endif %}">
     <div class="time-picker">
-            {{ govukLabel({
-                text: params.label
-            }) }}
+            {% if params.label %}
+                {{ govukLabel({
+                    text: params.label
+                }) }}
+            {% endif %}
 
             {% if params.errorMessage %}
                 {{ govukErrorMessage({
@@ -30,25 +32,25 @@
 
             <div class="time-picker-container">
                 {{ govukSelect({
-                    label: {
-                        text: 'Hours'
-                    },
                     id: params.id +'-hours',
                     name: params.name + 'Hours',
                     errorMessage: params.errorMessage | truthy,
                     classes: ['time-picker-hours'],
-                    items: hours | toTextValue(params.hour)
+                    items: hours | toTextValue(params.hour),
+                    attributes: {
+                        'aria-label': 'Hours'
+                    }
                 }) }}
 
                 {{ govukSelect({
-                    label: {
-                        text: 'Minutes'
-                    },
                     id: params.id +'-minutes',
                     name: params.name + 'Minutes',
                     errorMessage: params.errorMessage | truthy,
                     classes: ['time-picker-minutes'],
-                    items: minutes | toTextValue(params.minute)
+                    items: minutes | toTextValue(params.minute),
+                    attributes: {
+                        'aria-label': 'Minutes'
+                    }
                 }) }}
             </div>
     </div>
