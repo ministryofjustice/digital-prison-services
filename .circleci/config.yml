@@ -26,8 +26,8 @@ jobs:
           command: |
              set -e
              yarn test --maxWorkers=2
-       - store_artifacts:
-          path: coverage
+      - store_artifacts:
+        path: coverage
       - run: NODE_ENV=production yarn build
       - run: |
              DATE=$(date '+%Y-%m-%d')
