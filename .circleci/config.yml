@@ -26,6 +26,7 @@ jobs:
           command: |
              set -e
              yarn test --maxWorkers=2
+      - run: codecov
       - run: NODE_ENV=production yarn build
       - run: |
              DATE=$(date '+%Y-%m-%d')
