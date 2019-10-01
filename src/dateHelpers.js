@@ -9,6 +9,12 @@ const DayOfTheWeek = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(
 const DayMonthYear = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
 const Time = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 
+const buildDateTime = ({ date, hours, minutes }) => {
+  const time = date && hours && minutes && moment(date, DAY_MONTH_YEAR)
+
+  return time && time.hour(Number(hours)).minutes(Number(minutes))
+}
+
 module.exports = {
   DATE_TIME_FORMAT_SPEC,
   DATE_ONLY_FORMAT_SPEC,
@@ -17,4 +23,5 @@ module.exports = {
   DayOfTheWeek,
   DayMonthYear,
   Time,
+  buildDateTime,
 }

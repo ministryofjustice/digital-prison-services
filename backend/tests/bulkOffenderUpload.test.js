@@ -128,19 +128,19 @@ describe('bulk appointments upload', () => {
           comment: 'Activity comment',
           prisonersListed: [
             {
-              bookingId: 'K00278',
+              bookingId: 747272,
               offenderNo: 'G1683VN',
               firstName: 'Elton',
               lastName: 'Abbatiello',
             },
             {
-              bookingId: 'V37486',
+              bookingId: 1053607,
               offenderNo: 'G4803UT',
               firstName: 'Bobby',
               lastName: 'Abdulkadir',
             },
             {
-              bookingId: 'V38608',
+              bookingId: 1054729,
               offenderNo: 'G4346UT',
               firstName: 'Dewey',
               lastName: 'Affolter',
