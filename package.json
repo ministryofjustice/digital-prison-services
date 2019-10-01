@@ -168,14 +168,18 @@
     "verify": "yarn lint && yarn test"
   },
   "jest": {
+    "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}",
       "backend/**/*.{js,jsx,mjs}"
     ],
+    "coverageDirectory": "./coverage/",
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
     ],
-    "setupFilesAfterEnv": ["<rootDir>/config/jest/setupTests.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/jest/setupTests.js"
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
