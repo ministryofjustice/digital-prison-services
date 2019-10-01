@@ -47,7 +47,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
         const offendersFromCsv = removeDuplicates(fileContent.map(row => row[0]))
 
         const prisonerList = prisonersDetails.map(prisoner => ({
-          bookingId: prisoner.bookingNo,
+          bookingId: prisoner.bookingId,
           offenderNo: prisoner.offenderNo,
           firstName: prisoner.firstName,
           lastName: prisoner.lastName,
