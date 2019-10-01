@@ -144,6 +144,7 @@ describe('when confirming bulk appointment details', () => {
 
       describe('and there are no form errors', () => {
         it('should submit the data and redirect to the appointments added page', async () => {
+          jest.spyOn(Date, 'now').mockImplementation(() => 1569481200000) // Thursday 2019-09-26T07:00:00.000Z
           req.body = {
             G1683VNstartTimeHours: '08',
             G1683VNstartTimeMinutes: '30',
@@ -172,11 +173,15 @@ describe('when confirming bulk appointment details', () => {
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          Date.now.mockRestore()
         })
       })
 
       describe('and there are form errors ', () => {
         it('should not submit the data and return with correct error messages', async () => {
+          jest.spyOn(Date, 'now').mockImplementation(() => 1569573900000) // Friday 2019-09-27T08:45:00.000Z
+
           req.body = {
             G1683VNstartTimeHours: '08',
             G1683VNstartTimeMinutes: '30',
@@ -227,10 +232,13 @@ describe('when confirming bulk appointment details', () => {
               date: '2019-09-27T00:00:00',
             },
             errors: [
+              { href: '#G1683VN-start-time-hours', text: 'Select a start time that is not in the past for G1683VN' },
               { href: '#G1683VN-end-time-hours', text: 'Select an end time that is not in the past for G1683VN' },
               { href: '#G4803UT-start-time-hours', text: 'Select a start time for G4803UT' },
             ],
           })
+
+          Date.now.mockRestore()
         })
       })
     })
