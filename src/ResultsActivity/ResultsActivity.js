@@ -267,6 +267,7 @@ class ResultsActivity extends Component {
                     )
                   }
                   id="notRequireAllLink"
+                  className="no-print"
                 >
                   All
                   {anyRemaining}
