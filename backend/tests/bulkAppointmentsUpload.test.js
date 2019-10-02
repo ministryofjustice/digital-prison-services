@@ -32,7 +32,7 @@ describe('bulk appointments upload', () => {
       flash: jest.fn(),
       files: { file: 'test' },
     }
-    res = { locals: {} }
+    res = { locals: {}, end: jest.fn() }
     res.render = jest.fn()
   })
 
@@ -68,14 +68,9 @@ describe('bulk appointments upload', () => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
     })
-    const fileContent = [
-      ['G1683VN'],
-      ['G4803UT'],
-      ['G4346UT'],
-      ['BADNUMBER'],
-      ['ANOTHERBADNUMBER'],
-      ['REALLYBADNUMBER'],
-    ]
+    let fileContent = [['G1683VN'], ['G4803UT'], ['G4346UT'], ['BADNUMBER'], ['ANOTHERBADNUMBER'], ['REALLYBADNUMBER']]
+
+    let offenderNosNotFound = []
 
     const prisonerList = [
       {
@@ -150,6 +145,22 @@ describe('bulk appointments upload', () => {
         })
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/confirm-appointments')
+      })
+    })
+
+    describe('when there are no matches in the CSV list uploaded', () => {
+      beforeEach(() => {
+        fileContent = [['G1683VN'], ['G4803UT']]
+        offenderNosNotFound = ['G1683VN', 'G4803UT']
+      })
+      it('should redirect to the no appointments added page', async () => {
+        csvParser.loadAndParseCsvFile.mockImplementation(() => Promise.resolve(fileContent))
+        offenderLoader.loadFromCsvContent.mockReturnValue(offenderNosNotFound)
+        res.redirect = jest.fn()
+
+        await controller.post(req, res)
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added')
+        expect(res.end).toHaveBeenCalled()
       })
     })
 

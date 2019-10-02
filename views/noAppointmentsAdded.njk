@@ -1,0 +1,49 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+ {% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: notmUrl
+    },
+    {
+      text: "Add Bulk Appointments"
+    }
+  ]
+})
+}}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">{{title}}</h1>
+
+      <p class="govuk-body">This might be because the prison numbers:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>do not exist in this location</li>
+        <li>do not belong to any prisoner</li>
+        <li>are not in the format 'A1234BC'</li>
+      </ul>
+
+      <p class="govuk-body">You should check all of the numbers on the CSV file.</p>
+
+      {{ govukButton({
+        text: "Upload another CSV file",
+        href: "/bulk-appointments/upload-file",
+        classes: "govuk-!-margin-right-1"
+      }) }}
+
+      {{ govukButton({
+          text: "Exit to Digital Prison Service",
+          element: 'a',
+          href: notmUrl,
+          classes: "govuk-button--secondary"
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}

@@ -325,6 +325,10 @@ app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
   res.render('addBulkAppointments.njk', { title: 'You need to upload a CSV file' })
 })
 
+app.get('/bulk-appointments/no-appointments-added', async (req, res) => {
+  res.render('noAppointmentsAdded.njk', { title: 'No appointments have been added' })
+})
+
 app.use('/bulk-appointments/upload-file', uploadAppointmentDetailsController({ elite2Api, logError }))
 
 app.use(
