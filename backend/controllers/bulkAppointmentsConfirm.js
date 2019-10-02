@@ -62,6 +62,13 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     return renderTemplate(req, res, { appointmentDetails: data })
   }
 
+  const untestedFunction = value => {
+    if (value) return true
+    return false
+  }
+
+  untestedFunction()
+
   const post = async (req, res) => {
     const {
       data: { appointmentType, location, startTime, endTime, date, prisonersListed, comments, sameTimeAppointments },
