@@ -1,21 +1,21 @@
-import moment from 'moment-business-days'
-import { DayOfTheWeek, DATE_TIME_FORMAT_SPEC } from '../dateHelpers'
+const moment = require('moment-business-days')
+const { DayOfTheWeek, DATE_TIME_FORMAT_SPEC } = require('../dateHelpers')
+
+const repeatsToMomentMap = {
+  WEEKLY: 'weeks',
+  DAILY: 'day',
+  WEEKDAYS: 'day',
+  YEARLY: 'years',
+  MONTHLY: 'month',
+  FORTNIGHTLY: 'weeks',
+}
 
 const calculateEndDate = ({ startTime, repeats, numberOfTimes }) => {
   if (!startTime) return null
 
-  const repeatsToMomentMap = {
-    WEEKLY: 'weeks',
-    DAILY: 'day',
-    WEEKDAYS: 'day',
-    YEARLY: 'years',
-    MONTHLY: 'month',
-    FORTNIGHTLY: 'weeks',
-  }
-
   const unitOfTime = repeatsToMomentMap[repeats]
 
-  const inclusiveAdjustment = numberOfTimes - 1
+  const inclusiveAdjustment = Number(numberOfTimes) - 1
   const times = repeats === 'FORTNIGHTLY' ? Number(inclusiveAdjustment * 2) : Number(inclusiveAdjustment)
 
   return repeats === 'WEEKDAYS'
@@ -33,7 +33,7 @@ const recurringEndDate = values => {
   return endDate && `${DayOfTheWeek(endDate)}, ${endDate.format('MMMM Do YYYY')}`
 }
 
-export default {
+module.exports = {
   calculateEndDate,
   recurringEndDate,
 }

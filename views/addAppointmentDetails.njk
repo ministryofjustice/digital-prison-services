@@ -3,6 +3,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/label/macro.njk" import govukLabel %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
@@ -17,7 +19,7 @@
     }) }}
 {% endblock %}
 
-{%  set times %}
+{%  set timesHtml %}
     {{ timePicker({
         id: 'start-time',
         label: 'Start time',
@@ -37,6 +39,43 @@
     }) }}
 
 {%  endset -%}
+
+{%  set recurringHtml %}
+
+    {{ govukSelect({
+        id: "repeats",
+        name: "repeats",
+        label: {
+            text: "Repeats"
+        },
+        items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(repeats),
+        errorMessage: errors | findError('repeats')
+    }) }}
+
+    {{ govukInput({
+        id: "times",
+        name: "times",
+        value: times,
+        errorMessage: errors | findError('times'),
+        type: "number",
+        label: {
+            text: "How many appointments do you want to add?"
+        },
+        hint: {
+            text: "This includes the first appointment you have already added above. You can add appointments up to a maximum of 1 year."
+        },
+        classes: "govuk-input--width-3"
+    }) }}
+
+    {%  if endOfPeriod %}
+        <h4 class="govuk-heading-s"> Ends on </h4>
+
+        <p class="govuk-body ovuk-!-font-weight-bold">
+            {{  endOfPeriod }}
+        </p>
+    {% endif -%}
+
+{% endset -%}
 
 {% block content %}
     <h1 class="govuk-heading-l"> Add appointment details </h1>
@@ -98,13 +137,40 @@
                                 text: "Yes",
                                 checked: sameTimeAppointments == 'yes',
                                 conditional: {
-                                    html: times
+                                    html: timesHtml
                                 }
                             },
                             {
                                 value: "no",
                                 text: "No",
                                 checked: sameTimeAppointments == 'no'
+                            }
+                        ]
+                    }) }}
+
+                    {{ govukRadios({
+                        classes: "govuk-radios--inline",
+                        idPrefix: "recurring",
+                        name: "recurring",
+                        errorMessage: errors | findError('recurring'),
+                        fieldset: {
+                            legend: {
+                                text: "Are these recurring appointments?",
+                                classes: "govuk-fieldset__legend--s"
+                            }
+                        },
+                        items: [{
+                            value: "yes",
+                            text: "Yes",
+                            checked: recurring == 'yes',
+                            conditional: {
+                                html: recurringHtml
+                            }
+                        },
+                            {
+                                value: "no",
+                                text: "No",
+                                checked: recurring == 'no'
                             }
                         ]
                     }) }}
