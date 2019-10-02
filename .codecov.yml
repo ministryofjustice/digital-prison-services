@@ -1,18 +1,6 @@
 coverage:
   status:
-    project:
-      default:
-      backend:
-        flags: backend
-      frontend:
-        flags: frontend
-flags:
-  backend:
-    paths:
-      - backend/
-  frontend:
-    paths:
-      - src/
+    project: off
 comment:
   layout: "diff,flags,tree"
   behavior: new
