@@ -1,6 +1,7 @@
 coverage:
   status:
     project:
+      default:
       backend:
         flags: backend
       frontend:
@@ -14,5 +15,5 @@ flags:
       - src/
 comment:
   layout: "diff,flags,tree"
-  behavior: default
+  behavior: new
   require_changes: no
