@@ -23,29 +23,30 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
   const validate = (prisonersWithAppointmentTimes, date) => {
     const errors = []
     const now = moment()
-    const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
+    const isToday = moment(date, DAY_MONTH_YEAR).isSame(now, 'day')
 
-    prisonersWithAppointmentTimes.forEach(({ startTime, endTime, offenderNo }) => {
+    prisonersWithAppointmentTimes.forEach(({ startTime, endTime, offenderNo, firstName, lastName }) => {
+      const name = `${lastName}, ${firstName}`
       const startTimeDuration = moment.duration(now.diff(startTime))
       const endTimeDuration = endTime && moment.duration(moment(startTime).diff(endTime))
 
       if (!startTime) {
         errors.push({
-          text: `Select a start time for ${offenderNo}`,
+          text: `Select a start time for ${name}`,
           href: `#${offenderNo}-start-time-hours`,
         })
       }
 
       if (isToday && startTimeDuration.asMinutes() > 1) {
         errors.push({
-          text: `Select a start time that is not in the past for ${offenderNo}`,
+          text: `Select a start time for ${name} that is not in the past`,
           href: `#${offenderNo}-start-time-hours`,
         })
       }
 
       if (endTime && endTimeDuration.asMinutes() > 1) {
         errors.push({
-          text: `Select an end time that is not in the past for ${offenderNo}`,
+          text: `Select an end time for ${name} which is after the start time`,
           href: `#${offenderNo}-end-time-hours`,
         })
       }

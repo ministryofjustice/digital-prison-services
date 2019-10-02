@@ -49,12 +49,12 @@ const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
-const { bulkAppointmentsUploadFactory } = require('./controllers/bulkAppointmentsUpload')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
+const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -128,6 +128,8 @@ app.get('/health', (req, res, next) => {
     return result
   })
 })
+
+app.get('/ping', (req, res) => res.send('pong'))
 
 if (config.app.production) {
   app.use(ensureHttps)
@@ -325,24 +327,15 @@ app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
   res.render('addBulkAppointments.njk', { title: 'You need to upload a CSV file' })
 })
 
-app.get('/bulk-appointments/upload-file', handleErrors(bulkAppointmentsUploadFactory(logError).csvBulkOffenderUpload))
-app.post(
-  '/bulk-appointments/upload-file',
-  handleErrors(
-    bulkAppointmentsUploadFactory(
-      csvParserService({ fs, isBinaryFileSync }),
-      offenderLoaderFactory(elite2Api),
-      logError
-    ).postAndParseCsvOffenderList
-  )
-)
-app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
+app.use('/bulk-appointments/upload-file', uploadAppointmentDetailsController({ elite2Api, logError }))
 
 app.use(
   '/bulk-appointments/add-appointment-details',
   addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
 app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
+
+app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
 
 nunjucksSetup(app, path)
 

@@ -33,6 +33,28 @@ describe('csv-parser', () => {
     })
   })
 
+  it('should return a validation error where no file has been input', done => {
+    fs.lstatSync.mockReturnValue({ size: 0 })
+    const service = csvParserService({ fs, isBinaryFileSync })
+
+    service.loadAndParseCsvFile({}).catch(error => {
+      expect(error.message).toBe(validationMessages.noFileInput)
+      done()
+    })
+  })
+
+  it('should return return a validation error if the file added has no records input', done => {
+    isBinaryFileSync.mockReturnValue(true)
+    fs.lstatSync.mockReturnValue({ size: 0 })
+
+    const service = csvParserService({ fs, isBinaryFileSync })
+
+    service.loadAndParseCsvFile({ path: '/path/to/cvs', originalFilename: 'fileName.csv' }).catch(error => {
+      expect(error.message).toBe(validationMessages.noFileContent)
+      done()
+    })
+  })
+
   it('should handle errors from readFile', done => {
     isBinaryFileSync.mockReturnValue(false)
     fs.lstatSync.mockReturnValue({ size: 2 })
@@ -43,7 +65,7 @@ describe('csv-parser', () => {
     const service = csvParserService({ fs, isBinaryFileSync })
 
     service.loadAndParseCsvFile({}).catch(error => {
-      expect(error.message).toBe(validationMessages.invalidFile)
+      expect(error.message).toBe(validationMessages.parsingError)
       done()
     })
   })
@@ -60,7 +82,7 @@ describe('csv-parser', () => {
     const service = csvParserService({ fs, isBinaryFileSync })
 
     service.loadAndParseCsvFile({}).catch(error => {
-      expect(error.message).toBe(validationMessages.invalidFile)
+      expect(error.message).toBe(validationMessages.parsingError)
       done()
     })
   })
