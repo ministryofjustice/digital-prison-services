@@ -25,7 +25,6 @@ env:
   UPDATE_ATTENDANCE_PRISONS: "MDI,HMI,NHI,PVI,WWI,BXI,STI,LEI,HLI,GHI,HHI,WLI,WCI,BLI,HEI,LLI,LNI,UKI,UPI,CFI,LHI,PVI,KMI,RNI,GTI,EYI"
   LICENCES_URL: https://licences-preprod.service.hmpps.dsd.io/
   HMPPS_COOKIE_NAME: hmpps-session-preprod
-  NODE_ENV: production
   REMOTE_AUTH_STRATEGY: "true"
   WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
   API_COMMUNITY_ENDPOINT_URL: https://community-api-t2.hmpps.dsd.io/communityapi/

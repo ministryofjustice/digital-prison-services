@@ -86,6 +86,6 @@ env:
     value: {{ .Values.ingress.host | quote }}
 
   - name: NODE_ENV
-    value: {{ .Values.env.NODE_ENV | quote }}
+    value: production
 
 {{- end -}}
