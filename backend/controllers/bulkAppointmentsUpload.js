@@ -1,24 +1,27 @@
-const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logError) => {
-  const csvBulkOffenderUpload = async (req, res) => {
-    try {
-      if (!req.session.data) {
-        res.render('error.njk', {
-          url: '/bulk-appointments/add-appointment-details',
-        })
-        return
-      }
+const moment = require('moment')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
 
-      res.render('uploadOffenders.njk', {
-        title: 'Upload a CSV File',
-        errors: req.flash('errors'),
-        appointmentDetails: req.session.data,
-      })
-    } catch (error) {
-      logError(req.originalUrl, error, 'Sorry, the service is unavailable')
-      res.render('error.njk', {
-        url: '/bulk-appointments/add-appointment-details',
-      })
+const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logError) => {
+  const renderError = (req, res, error) => {
+    if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+
+    return res.render('error.njk', { url: '/need-to-upload-file' })
+  }
+
+  const index = async (req, res) => {
+    const { data } = req.session
+
+    if (!data) return renderError(req, res)
+
+    const appointmentDetails = {
+      ...data,
+      date: moment(data.date, DAY_MONTH_YEAR).format(DATE_TIME_FORMAT_SPEC),
     }
+
+    return res.render('uploadOffenders.njk', {
+      errors: req.flash('errors'),
+      appointmentDetails,
+    })
   }
 
   const getNonExistingOffenderNumbers = (uploadedList, prisonersList) => {
@@ -34,52 +37,56 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
     return uploadedList.filter(x => matchingPrisonerNumbers.indexOf(x) < 0)
   }
 
-  const postAndParseCsvOffenderList = async (req, res) => {
+  const post = async (req, res) => {
     const { file } = req.files
     const { activeCaseLoadId } = req.session.userDetails
 
-    csvParserService
-      .loadAndParseCsvFile(file)
-      .then(async fileContent => {
-        const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, activeCaseLoadId)
+    try {
+      return csvParserService
+        .loadAndParseCsvFile(file)
+        .then(async fileContent => {
+          const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, activeCaseLoadId)
 
-        const removeDuplicates = array => [...new Set(array)]
-        const offendersFromCsv = removeDuplicates(fileContent.map(row => row[0]))
+          const removeDuplicates = array => [...new Set(array)]
+          const offendersFromCsv = removeDuplicates(fileContent.map(row => row[0]))
 
-        const prisonerList = prisonersDetails.map(prisoner => ({
-          bookingId: prisoner.bookingNo,
-          offenderNo: prisoner.offenderNo,
-          firstName: prisoner.firstName,
-          lastName: prisoner.lastName,
-        }))
+          const prisonerList = prisonersDetails.map(prisoner => ({
+            bookingId: prisoner.bookingId,
+            offenderNo: prisoner.offenderNo,
+            firstName: prisoner.firstName,
+            lastName: prisoner.lastName,
+          }))
 
-        const offenderNosNotFound = getNonExistingOffenderNumbers(offendersFromCsv, prisonerList)
+          const offenderNosNotFound = getNonExistingOffenderNumbers(offendersFromCsv, prisonerList)
 
-        if (offenderNosNotFound.length === fileContent.length) {
-          throw new Error('Select a file with prison numbers in the correct format - for example, A1234BC')
-        }
+          if (offenderNosNotFound.length === fileContent.length) {
+            throw new Error('Select a file with prison numbers in the correct format - for example, A1234BC')
+            // REDIRECT TO ALL MISSING PAGE - TODO
+          }
 
-        if (prisonerList && prisonerList.length) {
-          // eslint-disable-next-line no-param-reassign
-          req.session.data.prisonersListed = prisonerList
-        }
+          if (prisonerList && prisonerList.length) {
+            // eslint-disable-next-line no-param-reassign
+            req.session.data.prisonersListed = prisonerList
+          }
+          if (offenderNosNotFound && offenderNosNotFound.length) {
+            // eslint-disable-next-line no-param-reassign
+            req.session.data.prisonersNotFound = offenderNosNotFound
+          }
 
-        if (offenderNosNotFound && offenderNosNotFound.length) {
-          // eslint-disable-next-line no-param-reassign
-          req.session.data.prisonersNotFound = offenderNosNotFound
-        }
-
-        return res.redirect('/bulk-appointments/confirm-appointments')
-      })
-      .catch(error => {
-        req.flash('errors', { text: error.message, href: '#file' })
-        return res.redirect('back')
-      })
+          res.redirect('/bulk-appointments/confirm-appointments')
+        })
+        .catch(error => {
+          req.flash('errors', { text: error.message, href: '#file' })
+          return res.redirect('back')
+        })
+    } catch (error) {
+      return renderError(req, res, error)
+    }
   }
 
   return {
-    csvBulkOffenderUpload,
-    postAndParseCsvOffenderList,
+    index,
+    post,
   }
 }
 

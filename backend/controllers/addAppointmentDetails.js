@@ -1,7 +1,7 @@
 const moment = require('moment')
 const config = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, buildDateTime } = require('../../src/dateHelpers')
 
 const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
 
@@ -24,17 +24,6 @@ const setSelected = (value, items) =>
           }
         : item
   )
-
-const buildDateTime = ({ date, hours, minutes }) => {
-  const time = date && hours && minutes && moment(date, DAY_MONTH_YEAR)
-  return (
-    time &&
-    time
-      .hour(Number(hours))
-      .minutes(Number(minutes))
-      .seconds(0)
-  )
-}
 
 const extractHoursMinutes = dateTime => {
   if (!dateTime) return { hours: '', minutes: '' }

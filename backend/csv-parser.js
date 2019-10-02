@@ -3,8 +3,13 @@ const config = require('./config')
 const logger = require('./log')
 
 const validationMessages = {
-  invalidFile: 'There was a problem importing your file, please use the template provided',
-  maxFileSizeReached: `The file is too large. Maximum file size is ${config.app.maximumFileUploadSizeInMb}MB`,
+  invalidFile: 'Select a CSV file - the file you have chosen is not a CSV file',
+  maxFileSizeReached: `Select a CSV file less than ${
+    config.app.maximumFileUploadSizeInMb
+  }MB - the file you selected is too big`,
+  noFileInput: `Select a file`,
+  noFileContent: `Select a CSV file with prison numbers entered`,
+  parsingError: 'There was a problem importing your file, please use the template provided',
 }
 
 const csvParserService = ({ fs, isBinaryFileSync }) => {
@@ -43,6 +48,16 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
 
     const { size } = fs.lstatSync(path)
 
+    if (originalFilename && size <= 0) {
+      logger.error(`file input had no records in it`)
+      throw new Error(validationMessages.noFileContent)
+    }
+
+    if (size <= 0) {
+      logger.error(`No file was input`)
+      throw new Error(validationMessages.noFileInput)
+    }
+
     if (size > maximumFileSizeInBytes) {
       logger.error(`A file exceeding ${sizeInMb} was rejected, filename ${originalFilename} size ${size}`)
       throw new Error(validationMessages.maxFileSizeReached)
@@ -62,7 +77,7 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
       return await parseCsvData(data)
     } catch (error) {
       logger.error(`There was parsing error - ${(error && error.message) || error}, filename ${originalFilename}`)
-      throw new Error('There was a problem importing your file, please use the template provided')
+      throw new Error(validationMessages.parsingError)
     }
   }
 

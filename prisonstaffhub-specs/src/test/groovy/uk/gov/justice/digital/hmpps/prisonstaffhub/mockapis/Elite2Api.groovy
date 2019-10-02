@@ -295,21 +295,20 @@ class Elite2Api extends WireMockRule {
                                         .withStatus(200)))
     }
 
-    void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date) {
+    void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date, Boolean inThePast = false) {
 
-        stubProgEventsAtLocation(caseload, locationId, timeSlot, date,  ActivityResponse.activities)
+        def activityResponse = inThePast ? ActivityResponse.pastActivities : ActivityResponse.activities
+
+        stubProgEventsAtLocation(caseload, locationId, timeSlot, date,  activityResponse)
+
+        def offenderNumbers = extractOffenderNumbers(activityResponse)
+
         stubVisitsAtLocation(caseload, locationId, timeSlot, date)
         stubAppointmentsAtLocation(caseload, locationId, timeSlot, date)
 
-        def offenderNumbers = [
-                ActivityResponse.activity1_1.offenderNo,
-                ActivityResponse.activity2.offenderNo,
-                ActivityResponse.activity3.offenderNo
-        ]
-
         stubVisits(caseload, timeSlot, date, offenderNumbers, ActivityResponse.visits)
         stubAppointments(caseload, timeSlot, date, offenderNumbers, ActivityResponse.appointments)
-        stubActivities(caseload, timeSlot, date, offenderNumbers, ActivityResponse.activities)
+        stubActivities(caseload, timeSlot, date, offenderNumbers, activityResponse)
         stubCourtEvents(offenderNumbers, date, HouseblockResponse.courtEventsWithDifferentStatuesResponse)
         stubExternalTransfers(offenderNumbers, date)
         stubAlerts(offenderNumbers)

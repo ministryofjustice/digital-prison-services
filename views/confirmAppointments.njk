@@ -2,6 +2,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "components/timePicker/timePicker.njk" import timePicker %}
 
 {% set title = 'Confirm appointments' %}
 
@@ -13,6 +15,16 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+    })
+  }}
+  {% endif %}
+
   <h1 class="govuk-heading-xl">{{title}}</h1>
 
   <h2 class="govuk-heading-m">
@@ -52,7 +64,10 @@
           Time
         </dt>
         <dd class="govuk-summary-list__value">
-          {{appointmentDetails.startTime | getTime() + ' to ' + appointmentDetails.endTime | getTime()}}
+          {{appointmentDetails.startTime | getTime()}}
+          {% if appointmentDetails.endTime %}
+            {{' to ' + appointmentDetails.endTime | getTime()}}
+          {% endif %}
         </dd>
       </div>
     {% endif %}
@@ -105,13 +120,17 @@
   <p class="govuk-body">
     Appointments will be created for these prisoners.
   </p>
-
+  <form method="POST" id="confirmBulkAppointments">
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Last name</th>
           <th scope="col" class="govuk-table__header">First name</th>
           <th scope="col" class="govuk-table__header">Prison number</th>
+          {% if appointmentDetails.sameTimeAppointments === 'no' %}
+            <th scope="col" class="govuk-table__header">Start time</th>
+            <th scope="col" class="govuk-table__header">End time (optional)</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -120,16 +139,39 @@
             <td class="govuk-table__cell">{{prisoner.lastName}}</td>
             <td class="govuk-table__cell">{{prisoner.firstName}}</td>
             <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+            {% if appointmentDetails.sameTimeAppointments === 'no' %}
+              <td class="govuk-table__cell">
+                {{ timePicker({
+                  id: prisoner.offenderNo + '-start-time',
+                  name: prisoner.offenderNo + 'startTime',
+                  hour: prisoner.startTimeHours,
+                  minute: prisoner.startTimeMinutes,
+                  errorMessage: errors | findError(prisoner.offenderNo + '-start-time-hours'),
+                  classes: ['govuk-!-margin-bottom-0']
+              })
+            }}
+              </td>
+              <td class="govuk-table__cell">
+                {{ timePicker({
+                  id: prisoner.offenderNo + '-end-time',
+                  name: prisoner.offenderNo + 'endTime',
+                  hour: prisoner.endTimeHours,
+                  minute: prisoner.endTimeMinutes,
+                  errorMessage: errors | findError(prisoner.offenderNo + '-end-time-hours'),
+                  classes: ['govuk-!-margin-bottom-0']
+              })
+            }}
+              </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
     </table>
 
     {{ govukInsetText({
-    text: "You cannot delete the CSV file once you have confirmed these details. If you want to delete any appointments, you will need to delete it through the individual prisoner’s activity page."
-  }) }}
+      text: "You cannot delete the CSV file once you have confirmed these details. If you want to delete any appointments, you will need to delete it through the individual prisoner’s activity page."
+    }) }}
 
-  <form method="POST" id="confirmBulkAppointments">
     {{ govukButton({ 
       text: "Confirm",
       preventDoubleClick: true,
