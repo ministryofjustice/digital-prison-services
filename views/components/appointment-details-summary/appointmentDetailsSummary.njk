@@ -1,5 +1,3 @@
-
-
    <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
@@ -41,28 +39,42 @@
           </div>
         {% endif %}
 
-        {% if appointmentDetails.endTime %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              End date
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{appointmentDetails.endTime | getDate()}}
-            </dd>
-          </div>
-        {% endif %}
-
-
-      {% if appointmentDetails.recurring === 'yes' %}
+      {% if appointmentDetails.recurring === 'no' %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Recurring
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ appointmentDetails.repeatsText }} , {{appointmentDetails.times}} Occurrences
-            <div>
-                {{ appointmentDetails.endOfPeriod }}
-            </div>
+            None
+          </dd>
+        </div>
+      {% endif %}
+
+      {% if appointmentDetails.recurring === 'yes' %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            How often?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ appointmentDetails.repeatsText }}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Occurrences
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ appointmentDetails.times }}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            End date
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ appointmentDetails.endOfPeriod }}
           </dd>
         </div>
       {% endif %}
