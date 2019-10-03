@@ -113,8 +113,8 @@ const getValidationMessages = ({
   if (recurring === 'yes' && !repeats) errors.push({ href: '#repeats', text: 'Select a period' })
 
   if (recurring === 'yes') {
-    if (!times) errors.push({ href: '#times', text: 'Number of occurrences must be 1 or more' })
-    if (!Number.isInteger(Number(times))) errors.push({ href: '#times', text: 'Please enter a number' })
+    if (!Number.isInteger(Number(times)))
+      errors.push({ href: '#times', text: 'Number of occurrences must be 1 or more' })
 
     if (repeats && times) {
       const { recurringStartTime, endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
