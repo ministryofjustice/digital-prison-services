@@ -20,7 +20,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            Start date
+            Date
           </dt>
           <dd class="govuk-summary-list__value">
             {{appointmentDetails.date | getDate()}}
@@ -40,18 +40,6 @@
             </dd>
           </div>
         {% endif %}
-
-        {% if appointmentDetails.endTime %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              End date
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{appointmentDetails.endTime | getDate()}}
-            </dd>
-          </div>
-        {% endif %}
-
 
       {% if appointmentDetails.recurring === 'yes' %}
         <div class="govuk-summary-list__row">
