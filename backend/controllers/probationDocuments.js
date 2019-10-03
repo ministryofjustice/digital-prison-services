@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { capitalise } = require('../utils')
+const { properCaseName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
 const { formatTimestampToDate } = require('../utils')
@@ -139,7 +139,7 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
         bookingId,
         offenderNo,
         profileUrl: getOffenderUrl(offenderNo),
-        name: `${capitalise(lastName)}, ${capitalise(firstName)}`,
+        name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
       }
 
       renderTemplate(req, res, {

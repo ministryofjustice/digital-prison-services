@@ -1,6 +1,6 @@
 import {
   capitalize,
-  capitalise,
+  properCaseName,
   mapToQueryString,
   formatDaysInYears,
   formatMonthsAndDays,
@@ -44,22 +44,22 @@ describe('capitalize()', () => {
 
 describe('properCaseName', () => {
   it('null string', () => {
-    expect(capitalise(null)).toEqual('')
+    expect(properCaseName(null)).toEqual('')
   })
   it('empty string', () => {
-    expect(capitalise('')).toEqual('')
+    expect(properCaseName('')).toEqual('')
   })
   it('Lower Case', () => {
-    expect(capitalise('bob')).toEqual('Bob')
+    expect(properCaseName('bob')).toEqual('Bob')
   })
   it('Mixed Case', () => {
-    expect(capitalise('GDgeHHdGr')).toEqual('Gdgehhdgr')
+    expect(properCaseName('GDgeHHdGr')).toEqual('Gdgehhdgr')
   })
   it('Multiple words', () => {
-    expect(capitalise('BOB SMITH')).toEqual('Bob smith')
+    expect(properCaseName('BOB SMITH')).toEqual('Bob smith')
   })
   it('Hyphenated', () => {
-    expect(capitalise('MONTGOMERY-FOSTER-SMYTH-WALLACE-BOB')).toEqual('Montgomery-Foster-Smyth-Wallace-Bob')
+    expect(properCaseName('MONTGOMERY-FOSTER-SMYTH-WALLACE-BOB')).toEqual('Montgomery-Foster-Smyth-Wallace-Bob')
   })
 })
 

@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { formatTimestampToDate, capitalise, formatName } = require('../utils')
+const { formatTimestampToDate, properCaseName, formatName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
@@ -65,7 +65,7 @@ const alertFactory = (oauthApi, elite2Api) => {
         bookingId,
         offenderNo,
         profileUrl: getOffenderUrl(offenderNo),
-        name: `${capitalise(lastName)}, ${capitalise(firstName)}`,
+        name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
       }
       const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
 

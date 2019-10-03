@@ -2,7 +2,7 @@ const moment = require('moment')
 const config = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, buildDateTime } = require('../../src/dateHelpers')
-const { capitalise } = require('../utils')
+const { capitalize } = require('../utils')
 const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
 
 const {
@@ -256,7 +256,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         const recurringInfo = recurring === 'yes' && {
           times,
           repeats,
-          repeatsText: capitalise(repeats),
+          repeatsText: capitalize(repeats),
           endOfPeriod: endOfPeriod && endOfPeriod.format('dddd, MMMM Do YYYY'),
         }
 
@@ -299,6 +299,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      console.error({ error })
       res.render('error.njk', {
         url: req.originalUrl,
       })

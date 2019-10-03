@@ -46,7 +46,7 @@ const isBlank = str => !str || /^\s*$/.test(str)
  * @param name name to be converted.
  * @returns name converted to proper case.
  */
-const capitalise = name =>
+const properCaseName = name =>
   isBlank(name)
     ? ''
     : name
@@ -54,7 +54,8 @@ const capitalise = name =>
         .map(capitalize)
         .join('-')
 
-const formatName = (firstName, lastName) => [capitalise(firstName), capitalise(lastName)].filter(Boolean).join(' ')
+const formatName = (firstName, lastName) =>
+  [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
 
 const isViewableFlag = code => ['HA', 'XEL', 'PEEP'].includes(code)
 
@@ -183,7 +184,7 @@ module.exports = {
   isViewableFlag,
   arrayToQueryString,
   mapToQueryString,
-  capitalise,
+  properCaseName,
   formatName,
   formatDaysInYears,
   formatMonthsAndDays,
