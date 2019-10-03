@@ -148,7 +148,7 @@ describe('bulk appointments upload', () => {
       })
     })
 
-    describe('when there are no matches in the CSV list uploaded', () => {
+    describe('when all the offender numbers cannot be found from the CSV list uploaded', () => {
       beforeEach(() => {
         fileContent = [['G1683VN'], ['G4803UT']]
         offenderNosNotFound = ['G1683VN', 'G4803UT']
