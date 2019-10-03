@@ -1,4 +1,4 @@
-const { properCaseName } = require('../utils')
+const { capitalise } = require('../utils')
 
 const OffenderServiceFactory = elite2Api => {
   const getOffender = async (context, offenderNo) => {
@@ -6,8 +6,8 @@ const OffenderServiceFactory = elite2Api => {
 
     return {
       bookingId: bookingDetails.bookingId,
-      firstName: properCaseName(bookingDetails.firstName),
-      lastName: properCaseName(bookingDetails.lastName),
+      firstName: capitalise(bookingDetails.firstName),
+      lastName: capitalise(bookingDetails.lastName),
     }
   }
 

@@ -623,7 +623,8 @@ describe('Add appointment details controller', () => {
           sameTimeAppointments: 'yes',
           recurring: 'yes',
           times: 1,
-          repeats: 'Daily',
+          repeatsText: 'Daily',
+          repeats: 'DAILY',
           comments: 'test',
           endOfPeriod: date.format('dddd, MMMM Do YYYY'),
         })

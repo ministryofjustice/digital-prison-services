@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { properCaseName, formatDaysInYears } = require('../utils')
+const { capitalise, formatDaysInYears } = require('../utils')
 
 const getIepDetailsFactory = elite2Api => {
   const filterData = (data, fields) => {
@@ -51,7 +51,7 @@ const getIepDetailsFactory = elite2Api => {
       const user = details.userId && users.find(u => u.username === details.userId)
       return {
         iepEstablishment: description,
-        iepStaffMember: user && `${properCaseName(user.firstName)} ${properCaseName(user.lastName)}`,
+        iepStaffMember: user && `${capitalise(user.firstName)} ${capitalise(user.lastName)}`,
         formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm'),
         ...details,
       }
