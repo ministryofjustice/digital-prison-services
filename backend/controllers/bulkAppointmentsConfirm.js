@@ -65,7 +65,19 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
 
   const post = async (req, res) => {
     const {
-      data: { appointmentType, location, startTime, endTime, date, prisonersListed, comments, sameTimeAppointments },
+      data: {
+        appointmentType,
+        location,
+        startTime,
+        endTime,
+        date,
+        prisonersListed,
+        comments,
+        recurring,
+        repeats,
+        times,
+        sameTimeAppointments,
+      },
     } = req.session
 
     const prisonersWithAppointmentTimes = prisonersListed.map(prisoner => {
@@ -119,6 +131,12 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         startTime: prisoner.startTime,
         endTime: prisoner.endTime,
       })),
+      repeat: recurring
+        ? {
+            repeatPeriod: repeats,
+            count: Number(times),
+          }
+        : undefined,
     }
 
     try {
