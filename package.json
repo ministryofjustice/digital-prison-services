@@ -163,7 +163,6 @@
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
     "record-build-info": "node scripts/record-build-info",
-    "plant-beanstalk": "node scripts/plant-beanstalk.js",
     "lint": "node node_modules/eslint/bin/eslint.js src backend",
     "verify": "yarn lint && yarn test"
   },

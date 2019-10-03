@@ -15,8 +15,7 @@ const getEnvironmentVariable = (name) => {
 
 const buildInfo = {
   buildNumber: getEnvironmentVariable('BUILD_NUMBER'),
-  gitRef: getEnvironmentVariable('GIT_REF'),
-  gitDate: getEnvironmentVariable('GIT_DATE')
+  gitRef: getEnvironmentVariable('GIT_REF')
 };
 
 recordBuildInfoTo(target, buildInfo, (error) => {

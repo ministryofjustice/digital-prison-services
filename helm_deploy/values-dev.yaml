@@ -1,0 +1,31 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: docker.io/mojdigitalstudio/prisonstaffhub
+  tag: latest
+  pullPolicy: IfNotPresent
+  port: 3000
+
+ingress:
+  enabled: true
+  enable_whitelist: false
+  host: whereabouts-dev.prison.service.justice.gov.uk
+  cert_secret: prison-staff-hub-cert
+  path: /
+
+env:
+  API_ENDPOINT_URL: https://gateway.t3.nomis-api.hmpps.dsd.io/elite2api/
+  OAUTH_ENDPOINT_URL: https://gateway.t3.nomis-api.hmpps.dsd.io/auth/
+  NN_ENDPOINT_URL: https://digital-dev.prison.service.justice.gov.uk/
+  API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/
+  IEP_CHANGE_LINK_ENABLED: "true"
+  UPDATE_ATTENDANCE_PRISONS: "ACI,AGI,AKI,ALI,ASI,AWI,AYI,BAI,BCI,BDI,BFI,BHI,BKI,BLI,BMI,BNI,BRI,BSI,BTI,BUI,BWI,BXI,BZI,CDI,CFI,CHI,CKI,CLI,CSI,CWI,CYI,DAI,DGI,DHI,DMI,DNI,DRI,DTI,DVI,DWI,EEI,EHI,ESI,EVI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,GHI,GLI,GMI,GNI,GPI,GTI,HBI,HCI,HDI,HEI,HGI,HHI,HII,HLI,HMI,HOI,HPI,HQGRP,HRI,HVI,HYI,ISI,KMI,KTI,KVI,LAI,LCI,LEI,LFI,LGI,LHI,LIC,LII,LLI,LMI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NEI,NHI,NLI,NMI,NNI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PKI,PNI,PRI,PTI,PVI,RCI,RDI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SMI,SNI,SPI,STI,SUI,SWI,SYI,TCI,TRN,TSI,UKI,UPI,VEI,WAI,WBI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WNI,WOI,WRI,WSI,WTI,WWI,WYI,ZZGHI,IWI"
+  LICENCES_URL: "https://licences-stage.hmpps.dsd.io/"
+  HMPPS_COOKIE_NAME: hmpps-session-dev
+  REMOTE_AUTH_STRATEGY: "true"
+  WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
+  API_COMMUNITY_ENDPOINT_URL: "https://community-proxy.apps.live-1.cloud-platform.service.justice.gov.uk/communityapi/"
+

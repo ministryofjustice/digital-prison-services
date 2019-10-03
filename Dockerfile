@@ -3,7 +3,6 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 ARG BUILD_NUMBER
 ARG GIT_REF
-ARG GIT_DATE
 
 RUN addgroup --gid 2000 --system appgroup && \
     adduser --uid 2000 --system appuser --gid 2000
@@ -17,7 +16,6 @@ RUN yarn --frozen-lockfile && \
     yarn build && \
     export BUILD_NUMBER=${BUILD_NUMBER} && \
     export GIT_REF=${GIT_REF} && \
-    export GIT_DATE=${GIT_DATE} && \
     yarn record-build-info
 
 ENV PORT=3000
