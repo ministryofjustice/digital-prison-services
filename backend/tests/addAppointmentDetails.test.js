@@ -197,7 +197,6 @@ describe('Add appointment details controller', () => {
               { href: '#start-time-hours', text: 'Select a start time' },
               { href: '#repeats', text: 'Select a period' },
               { href: '#times', text: 'Number of occurrences must be 1 or more' },
-              { href: '#times', text: 'Please enter a number' },
             ],
           })
         )
@@ -529,7 +528,7 @@ describe('Add appointment details controller', () => {
         expect(res.render).toHaveBeenCalledWith(
           'addAppointmentDetails.njk',
           expect.objectContaining({
-            errors: [{ text: 'Please enter a number', href: '#times' }],
+            errors: [{ text: 'Number of occurrences must be 1 or more', href: '#times' }],
           })
         )
       })
