@@ -606,7 +606,7 @@ describe('Add appointment details controller', () => {
           sameTimeAppointments: 'yes',
           recurring: 'yes',
           times: 1,
-          repeats: 'WEEKLY',
+          repeats: 'DAILY',
           comments: 'test',
         }
 
@@ -623,8 +623,9 @@ describe('Add appointment details controller', () => {
           sameTimeAppointments: 'yes',
           recurring: 'yes',
           times: 1,
-          repeats: 'WEEKLY',
+          repeats: 'Daily',
           comments: 'test',
+          endOfPeriod: date.format('dddd, MMMM Do YYYY'),
         })
 
         expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/upload-file')

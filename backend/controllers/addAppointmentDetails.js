@@ -2,7 +2,7 @@ const moment = require('moment')
 const config = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, buildDateTime } = require('../../src/dateHelpers')
-
+const { properCaseName } = require('../utils')
 const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
 
 const {
@@ -255,7 +255,8 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
 
         const recurringInfo = recurring === 'yes' && {
           times,
-          repeats,
+          repeats: properCaseName(repeats),
+          endOfPeriod: endOfPeriod && endOfPeriod.format('dddd, MMMM Do YYYY'),
         }
 
         // eslint-disable-next-line no-param-reassign

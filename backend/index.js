@@ -328,13 +328,11 @@ app.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
 })
 
 app.use('/bulk-appointments/upload-file', uploadAppointmentDetailsController({ elite2Api, logError }))
-
 app.use(
   '/bulk-appointments/add-appointment-details',
   addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
 app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
-
 app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
 
 nunjucksSetup(app, path)

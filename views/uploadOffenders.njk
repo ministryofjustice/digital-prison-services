@@ -34,57 +34,72 @@
 
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-      <dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Appointment type
-      </dt>
-      <dd class="govuk-summary-list__value">
-        {{appointmentDetails.appointmentTypeDescription}}
-      </dd>
-    </div>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Location
-      </dt>
-      <dd class="govuk-summary-list__value">
-        {{appointmentDetails.locationDescription}}
-      </dd>
-    </div>
+   <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Appointment type
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{appointmentDetails.appointmentTypeDescription}}
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Location
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{appointmentDetails.locationDescription}}
+          </dd>
+        </div>
 
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Start date
-      </dt>
-      <dd class="govuk-summary-list__value">
-        {{appointmentDetails.date | getDate()}}
-      </dd>
-    </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Start date
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{appointmentDetails.date | getDate()}}
+          </dd>
+        </div>
 
-    {% if appointmentDetails.startTime %}
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Time
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{appointmentDetails.startTime | getTime()}}
-          {% if appointmentDetails.endTime %}
-            {{' to ' + appointmentDetails.endTime | getTime()}}
-          {% endif %}
-        </dd>
-      </div>
-    {% endif %}
+        {% if appointmentDetails.startTime %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Time
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{appointmentDetails.startTime | getTime()}}
+              {% if appointmentDetails.endTime %}
+                {{' to ' + appointmentDetails.endTime | getTime()}}
+              {% endif %}
+            </dd>
+          </div>
+        {% endif %}
 
-    {% if appointmentDetails.endTime %}
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          End date
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{appointmentDetails.endTime | getDate()}}
-        </dd>
-      </div>
-    {% endif %}
+        {% if appointmentDetails.endTime %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              End date
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{appointmentDetails.endTime | getDate()}}
+            </dd>
+          </div>
+        {% endif %}
+
+
+      {% if appointmentDetails.recurring === 'yes' %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Recurring
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ appointmentDetails.repeats }} , {{appointmentDetails.times}} Occurrences
+            <div>
+                {{ appointmentDetails.endOfPeriod }}
+            </div>
+          </dd>
+        </div>
+      {% endif %}
   </dl>
 
       {{ govukInsetText({
