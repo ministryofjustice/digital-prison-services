@@ -53,6 +53,7 @@ const referenceCodesService = require('./controllers/reference-codes-service')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
+const bulkAppointmentsClashesController = require('./controllers/bulkAppointmentsClashesController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
 
@@ -334,6 +335,7 @@ app.use(
 )
 app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
 app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
+app.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
 
 nunjucksSetup(app, path)
 

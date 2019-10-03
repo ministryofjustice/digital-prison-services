@@ -1,0 +1,36 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "components/timePicker/timePicker.njk" import timePicker %}
+
+{% set title = 'Appointment clashes' %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "/bulk-appointments/confirm-appointments"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <h1 class="govuk-heading-xl">{{title}}</h1>
+
+  <p class="govuk-body">
+    Some prisoners already have events for the time you want to add. The only events which we list as a clash are:
+  </p>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li>external moves</li>
+    <li>visits</li>
+    <li>appointments</li>
+  </ul>
+
+  <p class="govuk-body">
+    The existing events cannot be removed. You can only remove the new appointments.
+  </p>
+
+  <p>Table of clashes...</p>
+{% endblock %}
