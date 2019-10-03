@@ -249,6 +249,44 @@ describe('when confirming bulk appointment details', () => {
       })
     })
 
+    describe('and there are recurring appointments', () => {
+      beforeEach(() => {
+        elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+        req.session.data = {
+          ...appointmentDetails,
+          recurring: 'yes',
+          times: '5',
+          repeats: 'WEEKLY',
+        }
+      })
+
+      it('should submit the correct data and redirect to the appointments added page', async () => {
+        await controller.post(req, res)
+
+        expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+          appointmentDefaults: {
+            appointmentType: 'TEST',
+            comment: 'Activity comment',
+            locationId: 1,
+            startTime: '2019-09-23T15:30:00',
+            endTime: '2019-09-30T16:30:00',
+          },
+          appointments: [
+            { bookingId: 'K00278' },
+            { bookingId: 'V37486' },
+            { bookingId: 'V38608' },
+            { bookingId: 'V31474' },
+          ],
+          repeat: {
+            count: 5,
+            repeatPeriod: 'WEEKLY',
+          },
+        })
+
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+      })
+    })
+
     describe('and there is an issue with the api', () => {
       beforeEach(() => {
         elite2Api.addBulkAppointments = jest.fn().mockImplementation(() => {
