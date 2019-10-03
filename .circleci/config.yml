@@ -158,13 +158,13 @@ jobs:
               --label "build.url=$CIRCLE_BUILD_URL" \
               --label "build.gitref=$CIRCLE_SHA1"
 
-            #if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
+            if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
               #publish to docker hub as the tag
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               docker tag mojdigitalstudio/prisonstaffhub:$APP_VERSION mojdigitalstudio/prisonstaffhub:latest
               docker push mojdigitalstudio/prisonstaffhub:$APP_VERSION
               docker push mojdigitalstudio/prisonstaffhub:latest
-            #fi
+            fi
 
   deploy_dev:
     executor: deployer
@@ -196,9 +196,9 @@ workflows:
       - build_docker:
           requires:
             - integration_tests
-          #filters:
-            #branches:
-              #only: master
+          filters:
+            branches:
+              only: master
       - deploy_dev:
           requires:
             - build_docker
