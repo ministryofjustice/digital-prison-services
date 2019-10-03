@@ -129,6 +129,8 @@ app.get('/health', (req, res, next) => {
   })
 })
 
+app.get('/ping', (req, res) => res.send('pong'))
+
 if (config.app.production) {
   app.use(ensureHttps)
 }
@@ -330,13 +332,11 @@ app.get('/bulk-appointments/no-appointments-added', async (req, res) => {
 })
 
 app.use('/bulk-appointments/upload-file', uploadAppointmentDetailsController({ elite2Api, logError }))
-
 app.use(
   '/bulk-appointments/add-appointment-details',
   addAppointmentDetailsController({ elite2Api, oauthApi, logError })
 )
 app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
-
 app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
 
 nunjucksSetup(app, path)

@@ -232,9 +232,15 @@ describe('when confirming bulk appointment details', () => {
               date: '2019-09-27T00:00:00',
             },
             errors: [
-              { href: '#G1683VN-start-time-hours', text: 'Select a start time that is not in the past for G1683VN' },
-              { href: '#G1683VN-end-time-hours', text: 'Select an end time that is not in the past for G1683VN' },
-              { href: '#G4803UT-start-time-hours', text: 'Select a start time for G4803UT' },
+              {
+                href: '#G1683VN-start-time-hours',
+                text: 'Select a start time for Abbatiello, Elton that is not in the past',
+              },
+              {
+                href: '#G1683VN-end-time-hours',
+                text: 'Select an end time for Abbatiello, Elton which is after the start time',
+              },
+              { href: '#G4803UT-start-time-hours', text: 'Select a start time for Abdulkadir, Bobby' },
             ],
           })
 

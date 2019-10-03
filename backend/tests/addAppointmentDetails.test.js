@@ -4,6 +4,31 @@ const { serviceUnavailableMessage } = require('../common-messages')
 
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 
+const buildBodyForDate = date => {
+  const startTime = moment().add(1, 'hours')
+  const endTime = moment().add(2, 'hours')
+
+  return {
+    date,
+    startTimeHours: startTime.hours(),
+    startTimeMinutes: startTime.minutes(),
+    endTimeHours: endTime.hours(),
+    endTimeMinutes: endTime.minutes(),
+    appointmentType: 'app1',
+    location: 1,
+    sameTimeAppointments: 'no',
+    times: undefined,
+    recurring: 'no',
+    repeatTypes: [
+      { value: 'WEEKLY', text: 'Weekly' },
+      { value: 'DAILY', text: 'Daily' },
+      { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
+      { value: 'MONTHLY', text: 'Monthly' },
+      { value: 'FORTNIGHTLY', text: 'Fortnightly' },
+    ],
+  }
+}
+
 describe('Add appointment details controller', () => {
   const bulkAppointmentService = {}
   const oauthApi = {}
@@ -80,10 +105,18 @@ describe('Add appointment details controller', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('addAppointmentDetails.njk', {
-        startTimeHours: '',
-        startTimeMinutes: '',
+        ...buildBodyForDate(moment()),
+        appointmentType: undefined,
+        comments: undefined,
+        date: undefined,
         endTimeHours: '',
         endTimeMinutes: '',
+        location: undefined,
+        repeats: undefined,
+        sameTimeAppointments: undefined,
+        recurring: undefined,
+        startTimeHours: '',
+        startTimeMinutes: '',
         title: 'Add appointment details',
         appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
         locations: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
@@ -109,6 +142,9 @@ describe('Add appointment details controller', () => {
           .format(DATE_TIME_FORMAT_SPEC),
         sameTimeAppointments: 'yes',
         comments: 'test',
+        times: 1,
+        repeats: 'DAILY',
+        recurring: 'yes',
       }
 
       bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
@@ -119,6 +155,7 @@ describe('Add appointment details controller', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('addAppointmentDetails.njk', {
+        ...buildBodyForDate(now),
         appointmentType: 'app1',
         appointmentTypes: [{ text: 'app1', value: 'app1' }, { text: 'app2', value: 2 }],
         comments: 'test',
@@ -132,6 +169,9 @@ describe('Add appointment details controller', () => {
         startTimeHours: '01',
         startTimeMinutes: '30',
         title: 'Add appointment details',
+        times: 1,
+        repeats: 'DAILY',
+        recurring: 'yes',
       })
     })
   })
@@ -139,6 +179,11 @@ describe('Add appointment details controller', () => {
   describe('Post', () => {
     describe('Form validation', () => {
       it('should return a required fields validation messages', async () => {
+        req.body = {
+          sameTimeAppointments: 'yes',
+          recurring: 'yes',
+        }
+
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
@@ -146,10 +191,13 @@ describe('Add appointment details controller', () => {
           expect.objectContaining({
             homeUrl: 'http://localhost:3000/',
             errors: [
-              { text: 'Select an appointment type', href: '#appointment-type' },
-              { text: 'Select a location', href: '#location' },
-              { text: 'Select a date', href: '#date' },
-              { text: 'Select yes if the appointments all have the same time', href: '#same-time-appointments' },
+              { href: '#appointment-type', text: 'Select an appointment type' },
+              { href: '#location', text: 'Select a location' },
+              { href: '#date', text: 'Select a date' },
+              { href: '#start-time-hours', text: 'Select a start time' },
+              { href: '#repeats', text: 'Select a period' },
+              { href: '#times', text: 'Number of occurrences must be 1 or more' },
+              { href: '#times', text: 'Please enter a number' },
             ],
           })
         )
@@ -166,6 +214,7 @@ describe('Add appointment details controller', () => {
           appointmentType: 'App',
           location: 2,
           sameTimeAppointments: 'yes',
+          recurring: 'no',
           date,
           startTimeHours,
           startTimeMinutes,
@@ -196,6 +245,7 @@ describe('Add appointment details controller', () => {
           appointmentType: 'App',
           location: 2,
           sameTimeAppointments: 'yes',
+          recurring: 'no',
           date,
           startTimeHours,
           startTimeMinutes,
@@ -224,6 +274,7 @@ describe('Add appointment details controller', () => {
           endTimeHours,
           endTimeMinutes,
           sameTimeAppointments: 'yes',
+          recurring: 'no',
         }
 
         await controller.post(req, res)
@@ -246,6 +297,7 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           location: 1,
           sameTimeAppointments: 'yes',
+          recurring: 'no',
           comments,
         }
 
@@ -267,6 +319,7 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           location: 1,
           sameTimeAppointments: 'yes',
+          recurring: 'no',
         }
 
         await controller.post(req, res)
@@ -294,6 +347,7 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           location: 1,
           sameTimeAppointments: 'yes',
+          recurring: 'no',
         }
 
         await controller.post(req, res)
@@ -318,29 +372,231 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           location: 1,
           sameTimeAppointments: 'no',
+          recurring: 'no',
         }
 
         await controller.post(req, res)
 
         expect(res.redirect).toHaveBeenCalled()
       })
+
+      it('should only validate times and repeats when recurring is "Yes"', async () => {
+        res.redirect = jest.fn()
+
+        req.body = {
+          date: moment().format(DAY_MONTH_YEAR),
+          appointmentType: 'app1',
+          location: 1,
+          sameTimeAppointments: 'no',
+          recurring: 'no',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.redirect).toHaveBeenCalled()
+      })
+
+      it('should return a error message when daily x times days exceeds 1 year', async () => {
+        const date = moment().endOf('day')
+        const yearAndDay = moment()
+          .endOf('day')
+          .add('1', 'year')
+          .add(2, 'days')
+
+        const days = Math.abs(date.diff(yearAndDay, 'days', true))
+
+        req.body = {
+          ...buildBodyForDate(date),
+          startTime: date,
+          recurring: 'yes',
+          repeats: 'DAILY',
+          times: days,
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [
+              {
+                text: 'Select fewer number of appointments - you can only add them for a maximum of 1 year',
+                href: '#times',
+              },
+            ],
+          })
+        )
+      })
+
+      it('should return an error message when date is on a Saturday', async () => {
+        const date = moment().day('Saturday')
+
+        req.body = {
+          ...buildBodyForDate(date),
+          date: date.format(DAY_MONTH_YEAR),
+          recurring: 'yes',
+          times: 1,
+          repeats: 'WEEKDAYS',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [{ text: 'The date must be a week day', href: '#date' }],
+          })
+        )
+      })
+
+      it('should return an error message when date is on a Sunday', async () => {
+        const date = moment()
+          .day('SUNDAY')
+          .add(1, 'week')
+
+        req.body = {
+          ...buildBodyForDate(date),
+          date: date.format(DAY_MONTH_YEAR),
+          recurring: 'yes',
+          repeats: 'WEEKDAYS',
+          times: 1,
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [{ text: 'The date must be a week day', href: '#date' }],
+          })
+        )
+      })
+
+      it('should return an error when weekdays x working days exceeds 1 year', async () => {
+        const date = moment()
+
+        req.body = {
+          ...buildBodyForDate(date),
+          startTime: date,
+          recurring: 'yes',
+          repeats: 'WEEKDAYS',
+          times: 400,
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [
+              {
+                text: 'Select fewer number of appointments - you can only add them for a maximum of 1 year',
+                href: '#times',
+              },
+            ],
+          })
+        )
+      })
+
+      it('should validate that occurrences is larger than zero', async () => {
+        req.body = {
+          ...buildBodyForDate(moment()),
+          recurring: 'yes',
+          repeats: 'WEEKDAYS',
+          times: '-1',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [{ text: 'Enter how many appointments you want to add', href: '#times' }],
+          })
+        )
+      })
+
+      it('should validate that Occurrences is a number', async () => {
+        req.body = {
+          ...buildBodyForDate(moment()),
+          recurring: 'yes',
+          repeats: 'WEEKDAYS',
+          times: 'A',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [{ text: 'Please enter a number', href: '#times' }],
+          })
+        )
+      })
+
+      it('should validate missing answer for same time appointments', async () => {
+        res.render = jest.fn()
+
+        req.body = {
+          date: moment().format(DAY_MONTH_YEAR),
+          appointmentType: 'ap1',
+          location: 1,
+          recurring: 'yes',
+          repeats: 'DAILY',
+          times: 1,
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#same-time-appointments', text: 'Select yes if the appointments all have the same time' },
+            ],
+          })
+        )
+      })
+
+      it('should validate missing answer for recurring appointments', async () => {
+        res.render = jest.fn()
+
+        req.body = {
+          date: moment().format(DAY_MONTH_YEAR),
+          appointmentType: 'ap1',
+          location: 1,
+          sameTimeAppointments: 'no',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointmentDetails.njk',
+          expect.objectContaining({
+            errors: [{ href: '#recurring', text: 'Select yes if these are recurring appointments' }],
+          })
+        )
+      })
     })
 
     describe('Form', () => {
       it('should store the appointment details into session', async () => {
-        const date = moment()
-        const startTime = moment().add(1, 'hours')
-        const endTime = moment().add(2, 'hours')
-
         res.redirect = jest.fn()
-
         bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
           appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
 
+        const date = moment()
+        const startTime = moment()
+          .add(1, 'hours')
+          .seconds(0)
+        const endTime = moment()
+          .add(2, 'hours')
+          .seconds(0)
+
         req.body = {
-          date,
+          date: date.format(DAY_MONTH_YEAR),
           startTimeHours: startTime.hours(),
           startTimeMinutes: startTime.minutes(),
           endTimeHours: endTime.hours(),
@@ -348,6 +604,50 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           location: 1,
           sameTimeAppointments: 'yes',
+          recurring: 'yes',
+          times: 1,
+          repeats: 'DAILY',
+          comments: 'test',
+        }
+
+        await controller.post(req, res)
+
+        expect(req.session.data).toEqual({
+          location: 1,
+          locationDescription: 'location 1',
+          appointmentType: 'app1',
+          appointmentTypeDescription: 'appointment 1',
+          date: date.format(DAY_MONTH_YEAR),
+          startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+          endTime: endTime.format(DATE_TIME_FORMAT_SPEC),
+          sameTimeAppointments: 'yes',
+          recurring: 'yes',
+          times: 1,
+          repeatsText: 'Daily',
+          repeats: 'DAILY',
+          comments: 'test',
+          endOfPeriod: date.format('dddd, MMMM Do YYYY'),
+        })
+
+        expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/upload-file')
+      })
+
+      it('it should only store time and recurring data into session when correct args are passed', async () => {
+        res.redirect = jest.fn()
+        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+          appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
+          locationTypes: [{ id: 1, description: 'location 1' }],
+        })
+
+        const date = moment().format(DAY_MONTH_YEAR)
+
+        req.body = {
+          date,
+          appointmentType: 'app1',
+          location: 1,
+          sameTimeAppointments: 'no',
+          recurring: 'no',
+          comments: 'test',
         }
 
         await controller.post(req, res)
@@ -358,12 +658,11 @@ describe('Add appointment details controller', () => {
           appointmentType: 'app1',
           appointmentTypeDescription: 'appointment 1',
           date,
-          startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-          endTime: endTime.format(DATE_TIME_FORMAT_SPEC),
-          sameTimeAppointments: 'yes',
+          sameTimeAppointments: 'no',
+          repeats: undefined,
+          recurring: 'no',
+          comments: 'test',
         })
-
-        expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/upload-file')
       })
 
       it('should return handle api errors', async () => {
@@ -425,6 +724,7 @@ describe('Add appointment details controller', () => {
           endTimeHours: '10',
           endTimeMinute: '20',
           sameTimeAppointments: 'no',
+          recurring: 'no',
         }
 
         await controller.post(req, res)
@@ -438,6 +738,7 @@ describe('Add appointment details controller', () => {
           location: 1,
           locationDescription: 'location 1',
           sameTimeAppointments: 'no',
+          recurring: 'no',
           startTime: undefined,
         })
       })
