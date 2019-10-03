@@ -32,6 +32,7 @@ import AttendanceOptions from '../Attendance/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
 import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
+import { allNotRequired, attendAll } from '../Attendance/attendanceGAEvents'
 
 const ManageResults = styled.div`
   display: flex;
@@ -109,7 +110,7 @@ class ResultsActivity extends Component {
     })
 
   notRequireAll = async values => {
-    const { showModal, getActivityList, handleError } = this.props
+    const { showModal, getActivityList, handleError, raiseAnalyticsEvent, agencyId } = this.props
     const { comments } = values
 
     try {
@@ -121,6 +122,7 @@ class ResultsActivity extends Component {
         reason: 'NotRequired',
         comments,
       })
+      raiseAnalyticsEvent(allNotRequired(this.unattendedOffenders.size, agencyId))
       getActivityList()
       this.setState({ notRequiringAll: false })
     } catch (error) {
@@ -213,6 +215,7 @@ class ResultsActivity extends Component {
       try {
         this.setState({ attendingAll: true })
         await this.updateMultipleAttendances({ paid: true, attended: true, offenders: [...this.unattendedOffenders] })
+        raiseAnalyticsEvent(attendAll(this.unattendedOffenders.size, agencyId))
         getActivityList()
         this.setState({ attendingAll: false })
       } catch (error) {
