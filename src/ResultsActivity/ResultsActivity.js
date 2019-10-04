@@ -224,20 +224,20 @@ class ResultsActivity extends Component {
     }
 
     const showUpdateAllControls = (activities, paidList) => {
-      let showControls = true
-      const attendanceInfo = activities.filter(activity => activity.attendanceInfo)
+      // Activities need an eventId in order to be updatable
+      // Ignore ones without when deciding whether to show the
+      // batch buttons - they can't be actioned.
+      const activitiesWithEventId = activities.filter(activity => activity.eventId)
+      const attendanceInfo = activitiesWithEventId.filter(activity => activity.attendanceInfo)
       const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
 
-      if (
+      return !(
         !isWithinLastWeek(date) ||
         isAfterToday(date) ||
-        activityData.length === paidList ||
-        attendanceInfo.length === activities.length ||
-        lockedCases.length === activities.length
+        activitiesWithEventId.length === paidList ||
+        attendanceInfo.length === activitiesWithEventId.length ||
+        lockedCases.length === activitiesWithEventId.length
       )
-        showControls = false
-
-      return showControls
     }
 
     const { attendingAll, notRequiringAll } = this.state
@@ -381,7 +381,7 @@ class ResultsActivity extends Component {
           attendanceInfo,
         }
 
-        if (!attendanceInfo) {
+        if (!attendanceInfo && eventId) {
           unattendedOffenders.add({
             offenderNo,
             bookingId,
