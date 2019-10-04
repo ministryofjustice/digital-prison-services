@@ -495,7 +495,7 @@ describe('Offender activity list results component', () => {
 
   it('should not display pay all button if all prisoners are paid', () => {
     const component = shallow(
-      <ResultsActivity {...props} totalAttended={4} activityData={response} date={today} period="AM" />
+      <ResultsActivity {...props} totalAttended={3} activityData={response} date={today} period="AM" />
     )
 
     const attendAllLink = component
@@ -594,6 +594,7 @@ describe('Offender activity list results component', () => {
         cellLocation: `${PRISON}-A-1-1`,
         event: 'PA',
         eventDescription: 'Prison Activities',
+        eventId: 123,
         comment: 'Chapel',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
@@ -607,6 +608,7 @@ describe('Offender activity list results component', () => {
         cellLocation: `${PRISON}-A-1-3`,
         event: 'PA',
         eventDescription: 'Prison Activities',
+        eventId: 456,
         comment: 'Chapel',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
@@ -644,6 +646,7 @@ describe('Offender activity list results component', () => {
         cellLocation: `${PRISON}-A-1-1`,
         event: 'PA',
         eventDescription: 'Prison Activities',
+        eventId: 123,
         comment: 'Chapel',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
@@ -657,6 +660,7 @@ describe('Offender activity list results component', () => {
         cellLocation: `${PRISON}-A-1-3`,
         event: 'PA',
         eventDescription: 'Prison Activities',
+        eventId: 456,
         comment: 'Chapel',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
@@ -765,7 +769,7 @@ describe('Offender activity list results component', () => {
         const component = shallow(
           <ResultsActivity
             {...props}
-            totalAttended={2}
+            totalAttended={1}
             totalAbsent={2}
             activityData={response}
             date={today}
@@ -820,16 +824,6 @@ describe('Offender activity list results component', () => {
               eventId: 789,
               eventLocationId: undefined,
               offenderIndex: 2,
-              period: 'AM',
-              prisonId: 'SYI',
-              eventDate: '01/01/2017',
-            },
-            {
-              offenderNo: 'A1234AD',
-              bookingId: 4,
-              eventId: undefined,
-              eventLocationId: undefined,
-              offenderIndex: 3,
               period: 'AM',
               prisonId: 'SYI',
               eventDate: '01/01/2017',
