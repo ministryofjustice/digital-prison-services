@@ -12,11 +12,13 @@ describe('Download probation documents', () => {
     }
     beforeEach(() => {
       oauthApi.userRoles = jest.fn()
+      oauthApi.currentUser = jest.fn()
       communityApi.pipeOffenderDocument = jest.fn()
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
       oauthApi.userRoles.mockReturnValue([{ roleCode: 'POM' }])
+      oauthApi.currentUser.mockReturnValue({ username: 'USER_ADM' })
     })
 
     describe('when downloading document', () => {
