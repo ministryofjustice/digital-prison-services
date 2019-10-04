@@ -3,11 +3,21 @@ const { properCaseName } = require('../utils')
 const config = require('../config')
 const { logError } = require('../logError')
 const { formatTimestampToDate } = require('../utils')
+const telemetry = require('../azure-appinsights')
 
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const offenderNotFoundInProbationMessage =
   'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system'
 const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
+
+const trackEvent = (offenderNo, suffix, { username }) => {
+  if (telemetry) {
+    telemetry.trackEvent({
+      name: `ViewProbationDocument${suffix}`,
+      properties: { username, offenderNo },
+    })
+  }
+}
 
 const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOauthClient) => {
   const renderTemplate = (req, res, pageData) => {
@@ -118,8 +128,9 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
       }
     }
 
+    const { offenderNo } = req.params
+
     try {
-      const { offenderNo } = req.params
       const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
 
       const [caseloads, user, userRoles, communityDocuments] = await Promise.all([
@@ -142,6 +153,8 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
         name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
       }
 
+      trackEvent(offenderNo, 'Success', user)
+
       renderTemplate(req, res, {
         offenderDetails,
         pageErrors,
@@ -158,6 +171,7 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       pageErrors.push({ text: serviceUnavailableMessage })
+      trackEvent(offenderNo, 'Failure', { username: 'unknown' })
       renderTemplate(req, res, { pageErrors })
     }
   }
