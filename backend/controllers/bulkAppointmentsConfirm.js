@@ -1,5 +1,7 @@
 const moment = require('moment')
+const { switchDateFormat } = require('../utils')
 const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
+const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
 
 const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {
@@ -140,12 +142,23 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     }
 
     try {
+      const { getOtherEvents } = bulkAppointmentsClashesFactory(elite2Api, logError)
+      const eventsForAllOffenders = await getOtherEvents(req, res, {
+        offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
+        date: switchDateFormat(date),
+        agencyId: req.session.userDetails.activeCaseLoadId,
+      })
+
+      if (eventsForAllOffenders.length > 0) {
+        return res.redirect('/bulk-appointments/appointment-clashes')
+      }
+
       await elite2Api.addBulkAppointments(res.locals, request)
+
+      return res.redirect('/bulk-appointments/appointments-added')
     } catch (error) {
       return renderError(req, res, error)
     }
-
-    return res.redirect('/bulk-appointments/appointments-added')
   }
 
   return { index, post }

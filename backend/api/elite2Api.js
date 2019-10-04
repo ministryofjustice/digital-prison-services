@@ -32,10 +32,18 @@ const elite2ApiFactory = client => {
     get(context, `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`)
 
   const getVisits = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
-    post(context, `/api/schedules/${agencyId}/visits?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+    post(
+      context,
+      `/api/schedules/${agencyId}/visits?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
+      offenderNumbers
+    )
 
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
-    post(context, `/api/schedules/${agencyId}/appointments?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+    post(
+      context,
+      `/api/schedules/${agencyId}/appointments?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
+      offenderNumbers
+    )
 
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)

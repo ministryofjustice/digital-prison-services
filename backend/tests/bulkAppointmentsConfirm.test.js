@@ -9,6 +9,11 @@ let controller
 
 beforeEach(() => {
   elite2Api.addBulkAppointments = jest.fn()
+  elite2Api.getVisits = jest.fn().mockResolvedValue([])
+  elite2Api.getAppointments = jest.fn().mockResolvedValue([])
+  elite2Api.getExternalTransfers = jest.fn().mockResolvedValue([])
+  elite2Api.getCourtEvents = jest.fn().mockResolvedValue([])
+
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
     session: {
