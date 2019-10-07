@@ -292,6 +292,33 @@ describe('when confirming bulk appointment details', () => {
       })
     })
 
+    describe('and there are appointment clashes', () => {
+      beforeEach(() => {
+        elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+        elite2Api.getAppointments = jest.fn().mockResolvedValue([
+          {
+            offenderNo: 'G1683VN',
+            locationId: 123,
+            firstName: 'Elton',
+            lastName: 'Abbatiello',
+            event: 'CABA',
+            eventDescription: 'Case - Bail Apps',
+            eventLocation: 'OFFICE 1',
+            comment: 'A comment.',
+            startTime: '2019-09-23T15:00:00',
+            endTime: '2019-09-23T16:00:00',
+          },
+        ])
+        req.session.data = { ...appointmentDetails }
+      })
+
+      it('should redirect to the appointment clashes page', async () => {
+        await controller.post(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/appointment-clashes')
+      })
+    })
+
     describe('and there is an issue with the api', () => {
       beforeEach(() => {
         elite2Api.addBulkAppointments = jest.fn().mockImplementation(() => {
@@ -310,6 +337,22 @@ describe('when confirming bulk appointment details', () => {
         )
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
+    })
+
+    it('should check for appointment clashes', async () => {
+      req.session.data = { ...appointmentDetails }
+      await controller.post(req, res)
+
+      const expectedRequestBody = {
+        agencyId: 'LEI',
+        date: '2019-09-23',
+        offenderNumbers: ['G1683VN', 'G4803UT', 'G4346UT', 'G5402VR'],
+      }
+
+      expect(elite2Api.getVisits).toHaveBeenCalledWith({}, expectedRequestBody)
+      expect(elite2Api.getAppointments).toHaveBeenCalledWith({}, expectedRequestBody)
+      expect(elite2Api.getExternalTransfers).toHaveBeenCalledWith({}, expectedRequestBody)
+      expect(elite2Api.getCourtEvents).toHaveBeenCalledWith({}, expectedRequestBody)
     })
   })
 })
