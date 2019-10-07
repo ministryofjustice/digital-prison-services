@@ -39,21 +39,10 @@
           </div>
         {% endif %}
 
-      {% if appointmentDetails.recurring === 'no' %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Recurring
-          </dt>
-          <dd class="govuk-summary-list__value">
-            None
-          </dd>
-        </div>
-      {% endif %}
-
       {% if appointmentDetails.recurring === 'yes' %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            How often?
+            How often
           </dt>
           <dd class="govuk-summary-list__value">
             {{ appointmentDetails.repeatsText }}
@@ -62,7 +51,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            Occurrences
+            Number of appointments
           </dt>
           <dd class="govuk-summary-list__value">
             {{ appointmentDetails.times }}

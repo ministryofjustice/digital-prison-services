@@ -257,7 +257,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
           times,
           repeats,
           repeatsText: capitalize(repeats),
-          endOfPeriod: endOfPeriod && endOfPeriod.format('dddd, MMMM Do YYYY'),
+          endOfPeriod: endOfPeriod && endOfPeriod.format('dddd D MMMM YYYY'),
         }
 
         // eslint-disable-next-line no-param-reassign
@@ -295,7 +295,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         repeats,
         times: Number(times),
         recurring,
-        endOfPeriod: endOfPeriod && endOfPeriod.format('dddd, MMMM Do YYYY'),
+        endOfPeriod: endOfPeriod && endOfPeriod.format('dddd D MMMM YYYY'),
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)

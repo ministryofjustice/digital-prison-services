@@ -625,7 +625,7 @@ describe('Add appointment details controller', () => {
           repeatsText: 'Daily',
           repeats: 'DAILY',
           comments: 'test',
-          endOfPeriod: date.format('dddd, MMMM Do YYYY'),
+          endOfPeriod: date.format('dddd D MMMM YYYY'),
         })
 
         expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/upload-file')
