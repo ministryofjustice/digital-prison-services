@@ -22,8 +22,8 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       elite2Api.getExternalTransfers(res.locals, searchCriteria),
       elite2Api.getCourtEvents(res.locals, searchCriteria),
     ])
-      .then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
-      .catch(error => renderError(req, res, error))
+      .then(events => events && events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
+      .catch(error => logError(req.originalUrl, error))
   }
 
   const index = async (req, res) => {
@@ -35,33 +35,34 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       data: { date, prisonersListed },
     } = req.session
 
-    const eventsForAllOffenders = await getOtherEvents(req, res, {
+    const prisonersOtherEvents = await getOtherEvents(req, res, {
       offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
       date: switchDateFormat(date),
       agencyId: req.session.userDetails.activeCaseLoadId,
-    })
-
-    const eventsGroupedByOffenderNo = eventsForAllOffenders.reduce(
-      (offenders, event) =>
-        Object.assign(offenders, { [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event) }),
-      {}
+    }).then(
+      events =>
+        events
+          ? events.reduce(
+              (offenders, event) =>
+                Object.assign(offenders, { [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event) }),
+              {}
+            )
+          : undefined
     )
 
-    const prisonersWithClashes = prisonersListed.map(prisoner => {
-      if (eventsGroupedByOffenderNo[prisoner.offenderNo]) {
-        return {
-          ...prisoner,
-          clashes: eventsGroupedByOffenderNo[prisoner.offenderNo],
-        }
-      }
-      return null
-    })
+    if (!prisonersOtherEvents) return renderError(req, res)
 
     return renderTemplate(req, res, {
-      appointmentDetails: {
-        ...req.session.data,
-      },
-      prisonersWithClashes,
+      appointmentDetails: { ...req.session.data },
+      prisonersWithClashes: prisonersListed.map(
+        prisoner =>
+          prisonersOtherEvents[prisoner.offenderNo]
+            ? {
+                ...prisoner,
+                clashes: prisonersOtherEvents[prisoner.offenderNo],
+              }
+            : null
+      ),
     })
   }
 

@@ -343,16 +343,16 @@ describe('when confirming bulk appointment details', () => {
       req.session.data = { ...appointmentDetails }
       await controller.post(req, res)
 
-      const expectedRequestBody = {
+      const searchCriteria = {
         agencyId: 'LEI',
         date: '2019-09-23',
         offenderNumbers: ['G1683VN', 'G4803UT', 'G4346UT', 'G5402VR'],
       }
 
-      expect(elite2Api.getVisits).toHaveBeenCalledWith({}, expectedRequestBody)
-      expect(elite2Api.getAppointments).toHaveBeenCalledWith({}, expectedRequestBody)
-      expect(elite2Api.getExternalTransfers).toHaveBeenCalledWith({}, expectedRequestBody)
-      expect(elite2Api.getCourtEvents).toHaveBeenCalledWith({}, expectedRequestBody)
+      expect(elite2Api.getVisits).toHaveBeenCalledWith({}, searchCriteria)
+      expect(elite2Api.getAppointments).toHaveBeenCalledWith({}, searchCriteria)
+      expect(elite2Api.getExternalTransfers).toHaveBeenCalledWith({}, searchCriteria)
+      expect(elite2Api.getCourtEvents).toHaveBeenCalledWith({}, searchCriteria)
     })
   })
 })
