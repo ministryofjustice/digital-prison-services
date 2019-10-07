@@ -5,7 +5,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
 
-    return res.render('error.njk', { url: '/need-to-upload-file' })
+    return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
 
   const index = async (req, res) => {
@@ -60,8 +60,8 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
           const offenderNosNotFound = getNonExistingOffenderNumbers(offendersFromCsv, prisonerList)
 
           if (offenderNosNotFound.length === fileContent.length) {
-            throw new Error('Select a file with prison numbers in the correct format - for example, A1234BC')
-            // REDIRECT TO ALL MISSING PAGE - TODO
+            res.redirect('/bulk-appointments/no-appointments-added')
+            res.end()
           }
 
           if (prisonerList && prisonerList.length) {

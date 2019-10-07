@@ -32,7 +32,7 @@ describe('bulk appointments upload', () => {
       flash: jest.fn(),
       files: { file: 'test' },
     }
-    res = { locals: {} }
+    res = { locals: {}, end: jest.fn() }
     res.render = jest.fn()
   })
 
@@ -58,7 +58,7 @@ describe('bulk appointments upload', () => {
       it('should render the error page', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toBeCalledWith('error.njk', { url: '/need-to-upload-file' })
+        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })
   })
@@ -68,14 +68,9 @@ describe('bulk appointments upload', () => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
     })
-    const fileContent = [
-      ['G1683VN'],
-      ['G4803UT'],
-      ['G4346UT'],
-      ['BADNUMBER'],
-      ['ANOTHERBADNUMBER'],
-      ['REALLYBADNUMBER'],
-    ]
+    let fileContent = [['G1683VN'], ['G4803UT'], ['G4346UT'], ['BADNUMBER'], ['ANOTHERBADNUMBER'], ['REALLYBADNUMBER']]
+
+    let offenderNosNotFound = []
 
     const prisonerList = [
       {
@@ -153,6 +148,22 @@ describe('bulk appointments upload', () => {
       })
     })
 
+    describe('when all the offender numbers cannot be found from the CSV list uploaded', () => {
+      beforeEach(() => {
+        fileContent = [['G1683VN'], ['G4803UT']]
+        offenderNosNotFound = ['G1683VN', 'G4803UT']
+      })
+      it('should redirect to the no appointments added page', async () => {
+        csvParser.loadAndParseCsvFile.mockImplementation(() => Promise.resolve(fileContent))
+        offenderLoader.loadFromCsvContent.mockReturnValue(offenderNosNotFound)
+        res.redirect = jest.fn()
+
+        await controller.post(req, res)
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added')
+        expect(res.end).toHaveBeenCalled()
+      })
+    })
+
     describe('when there are errors', () => {
       beforeEach(() => {
         csvParser.loadAndParseCsvFile = jest.fn().mockImplementation(() => {
@@ -168,7 +179,7 @@ describe('bulk appointments upload', () => {
           'Sorry, the service is unavailable'
         )
 
-        expect(res.render).toBeCalledWith('error.njk', { url: '/need-to-upload-file' })
+        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })
   })
