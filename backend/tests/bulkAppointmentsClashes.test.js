@@ -198,7 +198,6 @@ describe('appointment clashes', () => {
               lastName: 'Abdulkadir',
               offenderNo: 'G4803UT',
             },
-            null,
             {
               bookingId: '444',
               clashes: [

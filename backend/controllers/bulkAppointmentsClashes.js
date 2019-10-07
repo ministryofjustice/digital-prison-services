@@ -35,34 +35,33 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       data: { date, prisonersListed },
     } = req.session
 
-    const prisonersOtherEvents = await getOtherEvents(req, res, {
+    const eventsByOffenderNo = await getOtherEvents(req, res, {
       offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
       date: switchDateFormat(date),
       agencyId: req.session.userDetails.activeCaseLoadId,
     }).then(
       events =>
-        events
-          ? events.reduce(
-              (offenders, event) =>
-                Object.assign(offenders, { [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event) }),
-              {}
-            )
-          : undefined
+        events &&
+        events.reduce(
+          (offenders, event) =>
+            Object.assign(offenders, { [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event) }),
+          {}
+        )
     )
 
-    if (!prisonersOtherEvents) return renderError(req, res)
+    if (!eventsByOffenderNo) return renderError(req, res)
 
     return renderTemplate(req, res, {
       appointmentDetails: { ...req.session.data },
-      prisonersWithClashes: prisonersListed.map(
-        prisoner =>
-          prisonersOtherEvents[prisoner.offenderNo]
-            ? {
-                ...prisoner,
-                clashes: prisonersOtherEvents[prisoner.offenderNo],
-              }
-            : null
-      ),
+      prisonersWithClashes: prisonersListed
+        .map(
+          prisoner =>
+            eventsByOffenderNo[prisoner.offenderNo] && {
+              ...prisoner,
+              clashes: eventsByOffenderNo[prisoner.offenderNo],
+            }
+        )
+        .filter(prisoner => prisoner),
     })
   }
 
