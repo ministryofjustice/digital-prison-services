@@ -242,7 +242,6 @@ describe('appointment clashes', () => {
 
         await controller.index(req, res)
 
-        expect(logError).toBeCalledWith('/bulk-appointments/confirm-appointment/', new Error('There has been an error'))
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })

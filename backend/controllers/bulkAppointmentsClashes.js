@@ -21,48 +21,44 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       elite2Api.getAppointments(res.locals, searchCriteria),
       elite2Api.getExternalTransfers(res.locals, searchCriteria),
       elite2Api.getCourtEvents(res.locals, searchCriteria),
-    ])
-      .then(events => events && events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
-      .catch(error => logError(req.originalUrl, error))
+    ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
   }
 
   const index = async (req, res) => {
-    const { data } = req.session
+    if (!req.session.data) return renderError(req, res)
 
-    if (!data) return renderError(req, res)
+    try {
+      const {
+        data: { date, prisonersListed },
+      } = req.session
 
-    const {
-      data: { date, prisonersListed },
-    } = req.session
-
-    const eventsByOffenderNo = await getOtherEvents(req, res, {
-      offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
-      date: switchDateFormat(date),
-      agencyId: req.session.userDetails.activeCaseLoadId,
-    }).then(
-      events =>
-        events &&
+      const eventsByOffenderNo = await getOtherEvents(req, res, {
+        offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
+        date: switchDateFormat(date),
+        agencyId: req.session.userDetails.activeCaseLoadId,
+      }).then(events =>
         events.reduce(
           (offenders, event) =>
             Object.assign(offenders, { [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event) }),
           {}
         )
-    )
+      )
 
-    if (!eventsByOffenderNo) return renderError(req, res)
-
-    return renderTemplate(req, res, {
-      appointmentDetails: { ...req.session.data },
-      prisonersWithClashes: prisonersListed
-        .map(
-          prisoner =>
-            eventsByOffenderNo[prisoner.offenderNo] && {
-              ...prisoner,
-              clashes: eventsByOffenderNo[prisoner.offenderNo],
-            }
-        )
-        .filter(prisoner => prisoner),
-    })
+      return renderTemplate(req, res, {
+        appointmentDetails: { ...req.session.data },
+        prisonersWithClashes: prisonersListed
+          .map(
+            prisoner =>
+              eventsByOffenderNo[prisoner.offenderNo] && {
+                ...prisoner,
+                clashes: eventsByOffenderNo[prisoner.offenderNo],
+              }
+          )
+          .filter(prisoner => prisoner),
+      })
+    } catch (error) {
+      return renderError(req, res, error)
+    }
   }
 
   const post = async (req, res) => {
