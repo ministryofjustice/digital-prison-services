@@ -73,6 +73,7 @@ beforeEach(() => {
         activeCaseLoadId: 'LEI',
       },
     },
+    body: {},
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -250,12 +251,12 @@ describe('appointment clashes', () => {
 
   describe('and submitting the data', () => {
     describe('and the start times are the same', () => {
-      beforeEach(() => {
-        req.session.data = { ...appointmentDetails }
-        elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
-      })
-
       describe('and some prisoners have been selected for removal', () => {
+        beforeEach(() => {
+          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          req.session.data = { ...appointmentDetails }
+        })
+
         it('should submit the correct data and redirect to the appointments added page', async () => {
           req.body = { G1683VN: 'remove', G4803UT: 'remove' }
 
@@ -270,6 +271,39 @@ describe('appointment clashes', () => {
               startTime: '2019-09-23T15:30:00',
             },
             appointments: [{ bookingId: '333' }, { bookingId: '444' }],
+          })
+
+          expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+        })
+      })
+
+      describe('and there are recurring appointments', () => {
+        beforeEach(() => {
+          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          req.session.data = {
+            ...appointmentDetails,
+            recurring: 'yes',
+            times: '5',
+            repeats: 'WEEKLY',
+          }
+        })
+
+        it('should submit the correct data and redirect to the appointments added page', async () => {
+          await controller.post(req, res)
+
+          expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+            appointmentDefaults: {
+              appointmentType: 'TEST',
+              comment: 'Activity comment',
+              locationId: 1,
+              startTime: '2019-09-23T15:30:00',
+              endTime: '2019-09-30T16:30:00',
+            },
+            appointments: [{ bookingId: '111' }, { bookingId: '222' }, { bookingId: '333' }, { bookingId: '444' }],
+            repeat: {
+              count: 5,
+              repeatPeriod: 'WEEKLY',
+            },
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')

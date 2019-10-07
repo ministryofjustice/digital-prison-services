@@ -39,25 +39,25 @@ const appointmentDetails = {
   prisonersNotFound: [],
   prisonersListed: [
     {
-      bookingId: 'K00278',
+      bookingId: '111',
       offenderNo: 'G1683VN',
       firstName: 'Elton',
       lastName: 'Abbatiello',
     },
     {
-      bookingId: 'V37486',
+      bookingId: '222',
       offenderNo: 'G4803UT',
       firstName: 'Bobby',
       lastName: 'Abdulkadir',
     },
     {
-      bookingId: 'V38608',
+      bookingId: '333',
       offenderNo: 'G4346UT',
       firstName: 'Dewey',
       lastName: 'Affolter',
     },
     {
-      bookingId: 'V31474',
+      bookingId: '444',
       offenderNo: 'G5402VR',
       firstName: 'Gabriel',
       lastName: 'Agugliaro',
@@ -107,12 +107,7 @@ describe('when confirming bulk appointment details', () => {
               endTime: '2019-09-30T16:30:00',
               startTime: '2019-09-23T15:30:00',
             },
-            appointments: [
-              { bookingId: 'K00278' },
-              { bookingId: 'V37486' },
-              { bookingId: 'V38608' },
-              { bookingId: 'V31474' },
-            ],
+            appointments: [{ bookingId: '111' }, { bookingId: '222' }, { bookingId: '333' }, { bookingId: '444' }],
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
@@ -132,13 +127,13 @@ describe('when confirming bulk appointment details', () => {
           prisonersNotFound: [],
           prisonersListed: [
             {
-              bookingId: 'K00278',
+              bookingId: '111',
               offenderNo: 'G1683VN',
               firstName: 'Elton',
               lastName: 'Abbatiello',
             },
             {
-              bookingId: 'V37486',
+              bookingId: '222',
               offenderNo: 'G4803UT',
               firstName: 'Bobby',
               lastName: 'Abdulkadir',
@@ -172,8 +167,8 @@ describe('when confirming bulk appointment details', () => {
               endTime: undefined,
             },
             appointments: [
-              { bookingId: 'K00278', startTime: '2019-09-27T08:30:00', endTime: '' },
-              { bookingId: 'V37486', startTime: '2019-09-27T10:00:00', endTime: '' },
+              { bookingId: '111', startTime: '2019-09-27T08:30:00', endTime: '' },
+              { bookingId: '222', startTime: '2019-09-27T10:00:00', endTime: '' },
             ],
           })
 
@@ -210,7 +205,7 @@ describe('when confirming bulk appointment details', () => {
               prisonersNotFound: [],
               prisonersListed: [
                 {
-                  bookingId: 'K00278',
+                  bookingId: '111',
                   startTime: '2019-09-27T08:30:00',
                   startTimeHours: '08',
                   startTimeMinutes: '30',
@@ -222,7 +217,7 @@ describe('when confirming bulk appointment details', () => {
                   offenderNo: 'G1683VN',
                 },
                 {
-                  bookingId: 'V37486',
+                  bookingId: '222',
                   startTime: '',
                   startTimeHours: '',
                   startTimeMinutes: '',
@@ -276,12 +271,7 @@ describe('when confirming bulk appointment details', () => {
             startTime: '2019-09-23T15:30:00',
             endTime: '2019-09-30T16:30:00',
           },
-          appointments: [
-            { bookingId: 'K00278' },
-            { bookingId: 'V37486' },
-            { bookingId: 'V38608' },
-            { bookingId: 'V31474' },
-          ],
+          appointments: [{ bookingId: '111' }, { bookingId: '222' }, { bookingId: '333' }, { bookingId: '444' }],
           repeat: {
             count: 5,
             repeatPeriod: 'WEEKLY',
