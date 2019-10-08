@@ -1,4 +1,5 @@
 const { switchDateFormat } = require('../utils')
+const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
 
 const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {
@@ -63,7 +64,18 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
 
   const post = async (req, res) => {
     const {
-      data: { appointmentType, location, startTime, endTime, prisonersListed, comments, recurring, repeats, times },
+      data: {
+        appointmentType,
+        location,
+        startTime,
+        endTime,
+        date,
+        prisonersListed,
+        comments,
+        recurring,
+        repeats,
+        times,
+      },
     } = req.session
 
     const remainingPrisoners = prisonersListed.filter(prisoner => !req.body[prisoner.offenderNo])
@@ -73,10 +85,14 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
         comment: comments,
         locationId: Number(location),
         appointmentType,
-        startTime,
+        startTime: startTime || buildDateTime({ date, hours: 23, minutes: 59 }).format(DATE_TIME_FORMAT_SPEC),
         endTime,
       },
-      appointments: remainingPrisoners.map(prisoner => ({ bookingId: prisoner.bookingId })),
+      appointments: remainingPrisoners.map(prisoner => ({
+        bookingId: prisoner.bookingId,
+        startTime: prisoner.startTime,
+        endTime: prisoner.endTime,
+      })),
       repeat:
         recurring === 'yes'
           ? {

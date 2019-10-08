@@ -109,12 +109,12 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     if (sameTimeAppointments === 'no') {
       const errors = validate(prisonersWithAppointmentTimes, date)
 
+      // eslint-disable-next-line no-param-reassign
+      req.session.data.prisonersListed = prisonersWithAppointmentTimes
+
       if (errors.length > 0) {
         return renderTemplate(req, res, {
-          appointmentDetails: {
-            ...req.session.data,
-            prisonersListed: prisonersWithAppointmentTimes,
-          },
+          appointmentDetails: { ...req.session.data },
           errors,
         })
       }

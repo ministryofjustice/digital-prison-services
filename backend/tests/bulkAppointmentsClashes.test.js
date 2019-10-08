@@ -308,5 +308,69 @@ describe('appointment clashes', () => {
         })
       })
     })
+
+    describe('and there are individual start and end times', () => {
+      beforeEach(() => {
+        elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+        req.session.data = {
+          appointmentType: 'TEST',
+          location: 1,
+          date: '27/09/2019',
+          sameTimeAppointments: 'no',
+          comments: 'Activity comment',
+          prisonersNotFound: [],
+          prisonersListed: [
+            {
+              bookingId: '111',
+              offenderNo: 'G1683VN',
+              firstName: 'Elton',
+              lastName: 'Abbatiello',
+              startTimeHours: '18',
+              startTimeMinutes: '45',
+              endTimeHours: '19',
+              endTimeMinutes: '10',
+              startTime: '2019-10-08T18:45:00',
+              endTime: '2019-10-08T19:10:00',
+            },
+            {
+              bookingId: '222',
+              offenderNo: 'G4803UT',
+              firstName: 'Bobby',
+              lastName: 'Abdulkadir',
+              startTimeHours: '18',
+              startTimeMinutes: '50',
+              endTimeHours: '19',
+              endTimeMinutes: '15',
+              startTime: '2019-10-08T18:50:00',
+              endTime: '2019-10-08T19:15:00',
+            },
+          ],
+        }
+      })
+
+      it('submit the data and redirect to the appointments added page', async () => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 1569481200000) // Thursday 2019-09-26T07:00:00.000Z
+
+        await controller.post(req, res)
+
+        expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+          appointmentDefaults: {
+            appointmentType: 'TEST',
+            comment: 'Activity comment',
+            locationId: 1,
+            startTime: '2019-09-27T23:59:00',
+            endTime: undefined,
+          },
+          appointments: [
+            { bookingId: '111', startTime: '2019-10-08T18:45:00', endTime: '2019-10-08T19:10:00' },
+            { bookingId: '222', startTime: '2019-10-08T18:50:00', endTime: '2019-10-08T19:15:00' },
+          ],
+        })
+
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+        Date.now.mockRestore()
+      })
+    })
   })
 })

@@ -47,9 +47,9 @@
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
             <td class="govuk-table__cell">{{prisoner.lastName}}</td>
-            <td class="govuk-table__cell">{{appointmentDetails.startTime | getTime()}}
-              {% if appointmentDetails.endTime %}
-                {{' to ' + appointmentDetails.endTime | getTime()}}
+            <td class="govuk-table__cell">{{(appointmentDetails.startTime or prisoner.startTime) | getTime()}}
+              {% if appointmentDetails.endTime or prisoner.endTime %}
+                {{' to ' + (appointmentDetails.endTime or prisoner.endTime) | getTime()}}
               {% endif %}
             </td>
             <td class="govuk-table__cell">
