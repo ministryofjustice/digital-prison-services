@@ -260,7 +260,6 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
           endOfPeriod: endOfPeriod && endOfPeriod.format('dddd D MMMM YYYY'),
         }
 
-        // eslint-disable-next-line no-param-reassign
         req.session.data = {
           appointmentType,
           appointmentTypeDescription: appointmentTypeDetails && appointmentTypeDetails.text,
