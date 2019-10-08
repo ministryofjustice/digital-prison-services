@@ -1,5 +1,3 @@
-const { arrayToQueryString } = require('../utils')
-
 const whereaboutsApiFactory = client => {
   const processResponse = () => response => response.body
 

@@ -230,7 +230,6 @@ app.use(
 
 // Ensure cookie session is extended (once per minute) when user interacts with the server
 app.use((req, res, next) => {
-  // eslint-disable-next-line no-param-reassign
   req.session.nowInMinutes = Math.floor(Date.now() / 60e3)
   next()
 })
@@ -265,7 +264,6 @@ app.use(express.static(path.join(__dirname, '../build')))
 app.use(async (req, res, next) => {
   const { userDetails } = req.session
   if (!userDetails) {
-    // eslint-disable-next-line no-param-reassign
     req.session.userDetails = await oauthApi.currentUser(res.locals)
   }
   next()
