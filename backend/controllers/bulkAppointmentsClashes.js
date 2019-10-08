@@ -1,5 +1,6 @@
 const { switchDateFormat } = require('../utils')
 const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
+const { serviceUnavailableMessage } = require('../common-messages')
 
 const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {
@@ -9,7 +10,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   }
 
   const renderError = (req, res, error) => {
-    if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
@@ -39,8 +40,10 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
         agencyId: req.session.userDetails.activeCaseLoadId,
       }).then(events =>
         events.reduce(
-          (offenders, event) =>
-            Object.assign(offenders, { [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event) }),
+          (offenders, event) => ({
+            ...offenders,
+            [event.offenderNo]: (offenders[event.offenderNo] || []).concat(event),
+          }),
           {}
         )
       )
