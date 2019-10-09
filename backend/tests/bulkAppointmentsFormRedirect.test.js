@@ -3,7 +3,7 @@ const bulkAppointmentsFormRedirect = require('../controllers/bulkAppointmentsFor
 
 const mockRes = { redirect: jest.fn() }
 
-describe('index', () => {
+describe('add appointment redirect', () => {
   const res = { ...mockRes }
   const req = {
     session: {

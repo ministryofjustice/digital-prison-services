@@ -12,8 +12,6 @@
         titleText: "The appointments have been added"
       }) }}
 
-      <form method="POST" id="bulkAppointmentRemovals">
-
       {% if prisonersRemoved.length > 0 %}
         <p class="govuk-body">Appointments have not been added for:</p>
 
@@ -50,7 +48,6 @@
           classes: "govuk-button--secondary"
         })
       }}
-      </form>
     </div>
   </div>
 {% endblock %}
