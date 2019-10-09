@@ -21,14 +21,12 @@ const configureRoutes = ({ app, tokenRefresher, mailTo, homeLink }) => {
   }`
 
   const remoteLoginIndex = (req, res, next) => {
-    // eslint-disable-next-line no-param-reassign
     req.session.returnTo = req.query.returnTo
     return passport.authenticate('oauth2')(req, res, next)
   }
 
   const logout = (req, res) => {
     req.logout()
-    // eslint-disable-next-line no-param-reassign
     req.session = null
     res.redirect(authLogoutUrl)
   }

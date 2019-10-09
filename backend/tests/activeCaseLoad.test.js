@@ -2,7 +2,6 @@ const { activeCaseloadFactory } = require('../controllers/setactivecaseload')
 
 describe('Switch caseload', () => {
   const elite2Api = {}
-  const context = {}
   const req = {
     session: {
       data: {

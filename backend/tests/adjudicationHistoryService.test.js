@@ -250,7 +250,6 @@ describe('Adjudication History Service', () => {
     expect(elite2Api.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
-  /* eslint no-param-reassign: "error" */
   it('pagination is only applied to adjudication retrieval requests', async () => {
     elite2Api.getAdjudications.mockImplementation(ctx => {
       ctx.adjudicationResponseHeaders = true

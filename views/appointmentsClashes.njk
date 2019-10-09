@@ -1,0 +1,97 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set title = 'Appointment clashes' %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+  text: "Back",
+  href: "/bulk-appointments/confirm-appointments"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <h1 class="govuk-heading-xl">{{title}}</h1>
+
+  <p class="govuk-body">
+    Some prisoners already have events for the time you want to add. The only events which we list as a clash are:
+  </p>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li>external moves</li>
+    <li>visits</li>
+    <li>appointments</li>
+  </ul>
+
+  <p class="govuk-body">
+    The existing events cannot be removed. You can only remove the new appointments.
+  </p>
+
+  <form method="POST" id="bulkAppointmentsClashes">
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Prison number</th>
+          <th scope="col" class="govuk-table__header">Last name</th>
+          <th scope="col" class="govuk-table__header">Time</th>
+          <th scope="col" class="govuk-table__header">Remove</th>
+          <th scope="col" class="govuk-table__header">Scheduled events</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for prisoner in prisonersWithClashes %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+            <td class="govuk-table__cell">{{prisoner.lastName}}</td>
+            <td class="govuk-table__cell">{{(appointmentDetails.startTime or prisoner.startTime) | getTime()}}
+              {% if appointmentDetails.endTime or prisoner.endTime %}
+                {{' to ' + (appointmentDetails.endTime or prisoner.endTime) | getTime()}}
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell">
+              {{ govukCheckboxes({
+                idPrefix: prisoner.offenderNo,
+                name: prisoner.offenderNo,
+                items: [
+                  {
+                    value: "remove",
+                    text: ' '
+                  }
+                ],
+                attributes: {
+                    'aria-label': 'Remove ' + prisoner.firstName + ' ' + prisoner.lastName
+                }
+              })
+            }}
+            </td>
+            <td class="govuk-table__cell">
+              {% for event in prisoner.clashes %}
+                <p class="govuk-!-margin-0">
+                  <span>{{event.eventLocation}}
+                    -
+                  </span>
+                  <span>{{event.eventDescription}}
+                    -
+                  </span>
+                  <span>{{event.startTime | getTime()}}
+                    {% if event.endTime %}
+                      {{' to ' + event.endTime | getTime()}}
+                    {% endif %}
+                  </span>
+                </p>
+              {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ govukButton({ 
+      text: "Confirm",
+      preventDoubleClick: true
+    }) }}
+  </form>
+{% endblock %}
