@@ -35,6 +35,8 @@ const addAppointmentDetailsController = require('./controllers/appointmentDetail
 const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
+const bulkAppointmentsClashesController = require('./controllers/bulkAppointmentsClashesController')
+
 const controllerFactory = require('./controllers/controller').factory
 
 const contextProperties = require('./contextProperties')
@@ -149,6 +151,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   )
   router.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
   router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
+  router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
 
   router.get('/terms', async (req, res) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
