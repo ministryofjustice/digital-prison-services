@@ -11,7 +11,9 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
   const index = async (req, res) => {
     const { data } = req.session
 
-    if (!data) return renderError(req, res)
+    if (!data) {
+      return renderError(req, res)
+    }
 
     const appointmentDetails = {
       ...data,
@@ -65,11 +67,9 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
           }
 
           if (prisonerList && prisonerList.length) {
-            // eslint-disable-next-line no-param-reassign
             req.session.data.prisonersListed = prisonerList
           }
           if (offenderNosNotFound && offenderNosNotFound.length) {
-            // eslint-disable-next-line no-param-reassign
             req.session.data.prisonersNotFound = offenderNosNotFound
           }
 
