@@ -1,6 +1,7 @@
 const moment = require('moment')
 const {
   merge,
+  capitalize,
   switchDateFormat,
   getCurrentPeriod,
   pascalToString,
@@ -114,9 +115,18 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     }
   }
 
+  const attendanceStatisticsOffendersList = async (req, res) => {
+    const reasonCapitalised = capitalize(req.params.reason)
+    res.render('attendanceStatisticsOffendersList.njk', {
+      title: reasonCapitalised,
+      reason: reasonCapitalised,
+    })
+  }
+
   return {
     attendanceStatistics,
     getDashboardStats,
+    attendanceStatisticsOffendersList,
   }
 }
 

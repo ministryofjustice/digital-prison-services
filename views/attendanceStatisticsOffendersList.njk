@@ -1,0 +1,66 @@
+{% extends "./partials/layout.njk" %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: notmUrl
+    },
+    {
+      text: "Manage prisoner whereabouts",
+      href: "/manage-prisoner-whereabouts"
+    },
+    {
+      text: "Attendance reason statistics",
+      href: "/manage-prisoner-whereabouts/attendance-reason-statistics"
+    },
+    {
+      text: reason
+    }
+  ]
+})
+}}
+{% endblock %}
+{% block content %}
+<table class="govuk-table sortable">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header sortable-column sortableLink" data-sortby="text">
+        <span class="th-content">Name <i class="arrow"></i></span>
+      </th>
+      <th scope="col" class="govuk-table__header">Prisoner no.</th>
+      <th scope="col" class="govuk-table__header sortable-column sortableLink" data-sortby="text">
+       <span class="th-content">Location <i class="arrow"></i></span></th>
+      </th>
+      <th scope="col" class="govuk-table__header">Scheduled activity</th>
+      <th scope="col" class="govuk-table__header">Other activities</th>
+      <th scope="col" class="govuk-table__header">Attendance outcome</th>
+      <th scope="col" class="govuk-table__header">Comment/case note</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">Something</td>
+      <td class="govuk-table__cell">Something</td>
+      <td class="govuk-table__cell">Something</td>
+      <td class="govuk-table__cell">Something</td>
+      <td class="govuk-table__cell">Something</td>
+      <td class="govuk-table__cell">Something</td>
+      <td class="govuk-table__cell">Something</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">New</td>
+      <td class="govuk-table__cell">New</td>
+      <td class="govuk-table__cell">New</td>
+      <td class="govuk-table__cell">New</td>
+      <td class="govuk-table__cell">New</td>
+      <td class="govuk-table__cell">New</td>
+      <td class="govuk-table__cell">New</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
+{% block bodyEnd %}
+<script src="/static/js/sortable-table.js"></script>
+{% endblock %}

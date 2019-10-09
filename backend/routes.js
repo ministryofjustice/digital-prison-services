@@ -126,6 +126,12 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
   )
   router.get(
+    '/manage-prisoner-whereabouts/attendance-reason-statistics/:reason/offender-list',
+    handleErrors(
+      attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsOffendersList
+    )
+  )
+  router.get(
     '/offenders/:offenderNo/probation-documents',
     handleErrors(
       probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
