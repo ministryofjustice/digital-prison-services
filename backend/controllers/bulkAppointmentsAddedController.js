@@ -9,7 +9,7 @@ module.exports = (req, res) => {
     })
   }
 
-  const { prisonersNotAdded } = data
+  const { prisonersRemoved } = data
 
-  return res.render('appointmentsAdded.njk', { prisonersNotAdded, dpsUrl: config.app.notmEndpointUrl })
+  return res.render('appointmentsAdded.njk', { prisonersRemoved, dpsUrl: config.app.notmEndpointUrl })
 }

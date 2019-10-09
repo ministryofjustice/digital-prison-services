@@ -12,7 +12,9 @@
         titleText: "The appointments have been added"
       }) }}
 
-      {% if prisonersNotAdded.length > 0 %}
+      <form method="POST" id="bulkAppointmentRemovals">
+
+      {% if prisonersRemoved.length > 0 %}
         <p class="govuk-body">Appointments have not been added for:</p>
 
         <table class="govuk-table">
@@ -23,7 +25,7 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            {% for prisoner in prisonersNotAdded %}
+            {% for prisoner in prisonersRemoved %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">{{prisoner.lastName}}</td>
                 <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
@@ -33,7 +35,7 @@
         </table>
       {% endif %}
 
-      {{ govukButton({ 
+      {{ govukButton({
           text: "Add more appointments",
           element: 'a',
           href: '/bulk-appointments/add-appointment-details',
@@ -48,6 +50,7 @@
           classes: "govuk-button--secondary"
         })
       }}
+      </form>
     </div>
   </div>
 {% endblock %}

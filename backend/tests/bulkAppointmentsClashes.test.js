@@ -271,6 +271,20 @@ describe('appointment clashes', () => {
             appointments: [{ bookingId: '333' }, { bookingId: '444' }],
           })
 
+          expect(req.session.data).toEqual({
+            ...appointmentDetails,
+            prisonersRemoved: [
+              {
+                offenderNo: 'G1683VN',
+                lastName: 'Abbatiello',
+              },
+              {
+                offenderNo: 'G4803UT',
+                lastName: 'Abdulkadir',
+              },
+            ],
+          })
+
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
         })
       })
