@@ -56,6 +56,7 @@ const bulkAppointmentsConfirmController = require('./controllers/bulkAppointment
 const bulkAppointmentsClashesController = require('./controllers/bulkAppointmentsClashesController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
+const clearAndAddNewBulkAppointmentsHandler = require('./controllers/bulkAppointmentsFormRedirect')
 
 const sessionManagementRoutes = require('./sessionManagementRoutes')
 const auth = require('./auth')
@@ -340,6 +341,7 @@ app.use(
 app.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
 app.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
 app.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
+app.use('/bulk-appointments/add-more-appointments', clearAndAddNewBulkAppointmentsHandler)
 
 nunjucksSetup(app, path)
 
