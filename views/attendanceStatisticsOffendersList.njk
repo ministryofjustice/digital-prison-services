@@ -29,35 +29,24 @@
       <th scope="col" class="govuk-table__header sortable-column sortableLink" data-sortby="text">
         <span class="th-content">Name <i class="arrow"></i></span>
       </th>
-      <th scope="col" class="govuk-table__header">Prisoner no.</th>
-      <th scope="col" class="govuk-table__header sortable-column sortableLink" data-sortby="text">
-       <span class="th-content">Location <i class="arrow"></i></span></th>
-      </th>
-      <th scope="col" class="govuk-table__header">Scheduled activity</th>
-      <th scope="col" class="govuk-table__header">Other activities</th>
-      <th scope="col" class="govuk-table__header">Attendance outcome</th>
-      <th scope="col" class="govuk-table__header">Comment/case note</th>
+      <th scope="col" class="govuk-table__header">Prison no.</th>
+      <th scope="col" class="govuk-table__header">Location </th>
+      <th scope="col" class="govuk-table__header">Activity</th>
+      <th scope="col" class="govuk-table__header">Outcome</th>
+      <th scope="col" class="govuk-table__header">Comments</th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
+    {% for offender in offenders %}
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell">Something</td>
-      <td class="govuk-table__cell">Something</td>
-      <td class="govuk-table__cell">Something</td>
-      <td class="govuk-table__cell">Something</td>
-      <td class="govuk-table__cell">Something</td>
-      <td class="govuk-table__cell">Something</td>
-      <td class="govuk-table__cell">Something</td>
-    </tr>
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">New</td>
-      <td class="govuk-table__cell">New</td>
-      <td class="govuk-table__cell">New</td>
-      <td class="govuk-table__cell">New</td>
-      <td class="govuk-table__cell">New</td>
-      <td class="govuk-table__cell">New</td>
-      <td class="govuk-table__cell">New</td>
-    </tr>
+        <td class="govuk-table__cell">{{offender.fullName}}</td>
+        <td class="govuk-table__cell">{{offender.offenderNo}}</td>
+        <td class="govuk-table__cell">{{offender.cellLocation}}</td>
+        <td class="govuk-table__cell">{{offender.comment}}</td>
+        <td class="govuk-table__cell">{{offender.eventOutcome}}</td>
+        <td class="govuk-table__cell">{{offender.comments}}</td>
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 {% endblock %}

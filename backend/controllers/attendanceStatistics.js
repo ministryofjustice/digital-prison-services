@@ -44,6 +44,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     }
   }
 
+  const getAbsentOffenders = async (context, { agencyId, period, date }) => {
+    const absences = await whereaboutsApi.getAbsences(context, { agencyId, period, date })
+    return absences
+  }
+
   const attendanceStatistics = async (req, res) => {
     const { agencyId, period, date } = req.query || {}
 
@@ -116,16 +121,42 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
   }
 
   const attendanceStatisticsOffendersList = async (req, res) => {
-    const reasonCapitalised = capitalize(req.params.reason)
+    const { reason } = req.params
+    const { agencyId, period, date } = req.query || {}
+
+    const formattedDate = switchDateFormat(date, 'DD/MM/YYYY')
+
+    const [absentOffenders, activities] = await Promise.all([
+      getAbsentOffenders(res.locals, {
+        agencyId,
+        date: formattedDate,
+        period,
+      }),
+      elite2Api.getOffenderActivities(res.locals, { agencyId, period, date: formattedDate }),
+    ])
+    const { attendances } = absentOffenders
+    const absences = attendances.filter(absence => absence.absentReason === reason)
+
+    const offenders = absences.map(absence => {
+      const offenderActivity = activities.find(activity => activity.bookingId === absence.bookingId)
+      return {
+        ...absence,
+        fullName: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
+        ...offenderActivity,
+      }
+    })
+
     res.render('attendanceStatisticsOffendersList.njk', {
-      title: reasonCapitalised,
-      reason: reasonCapitalised,
+      title: reason,
+      reason,
+      offenders,
     })
   }
 
   return {
     attendanceStatistics,
     getDashboardStats,
+    getAbsentOffenders,
     attendanceStatisticsOffendersList,
   }
 }
