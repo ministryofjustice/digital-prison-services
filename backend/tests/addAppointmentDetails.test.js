@@ -196,7 +196,7 @@ describe('Add appointment details controller', () => {
               { href: '#date', text: 'Select a date' },
               { href: '#start-time-hours', text: 'Select a start time' },
               { href: '#repeats', text: 'Select a period' },
-              { href: '#times', text: 'Enter the number of appointments using numbers only' },
+              { href: '#times', text: 'Enter how many appointments you want to add' },
             ],
           })
         )
@@ -511,24 +511,6 @@ describe('Add appointment details controller', () => {
           'addAppointmentDetails.njk',
           expect.objectContaining({
             errors: [{ text: 'Enter how many appointments you want to add', href: '#times' }],
-          })
-        )
-      })
-
-      it('should validate that Occurrences is a number', async () => {
-        req.body = {
-          ...buildBodyForDate(moment()),
-          recurring: 'yes',
-          repeats: 'WEEKDAYS',
-          times: 'A',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
-          expect.objectContaining({
-            errors: [{ text: 'Enter the number of appointments using numbers only', href: '#times' }],
           })
         )
       })
