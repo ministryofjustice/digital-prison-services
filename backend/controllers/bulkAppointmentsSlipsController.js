@@ -8,13 +8,14 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
 
-  if (!req.session.data) {
+  const { data } = req.session
+
+  if (!data || !data.prisonersListed.length) {
     return renderError()
   }
 
   try {
     const {
-      data,
       data: { prisonersListed },
       userDetails,
     } = req.session
