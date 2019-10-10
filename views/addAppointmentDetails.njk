@@ -51,13 +51,13 @@
         items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(repeats),
         errorMessage: errors | findError('repeats')
     }) }}
-
+    {# times field (below) changed to text field to
+     prevent Firefox default error messaging on non numeric input #}
     {{ govukInput({
         id: "times",
         name: "times",
         value: times,
         errorMessage: errors | findError('times'),
-        type: "number",
         label: {
             text: "How many appointments do you want to add?"
         },
