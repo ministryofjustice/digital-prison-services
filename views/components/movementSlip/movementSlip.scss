@@ -1,0 +1,25 @@
+.movement-slip {
+  margin-bottom: govuk-spacing(6);
+  padding: 0 govuk-spacing(6) govuk-spacing(3);
+  border-bottom: 2px dashed;
+  page-break-inside: avoid;
+
+  &__section {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: govuk-spacing(3);
+    border-top: 1px solid;
+
+    &__values {
+      @extend .govuk-body;
+      margin-bottom: govuk-spacing(3);
+      flex: 1 0 33.333%;
+      box-sizing: border-box;
+      padding-right: govuk-spacing(3);
+
+      @media print {
+        font-size: 14px;
+      }
+    }
+  }
+}
