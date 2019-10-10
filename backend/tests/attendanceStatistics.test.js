@@ -234,6 +234,9 @@ describe('Attendance reason statistics', () => {
     beforeEach(() => {
       elite2Api.getOffenderActivities = jest.fn()
       whereaboutsApi.getAbsences = jest.fn()
+      oauthApi.currentUser = jest.fn()
+      elite2Api.userCaseLoads = jest.fn()
+      oauthApi.userRoles = jest.fn()
     })
 
     it('should render the list of offenders who were absent for specified reason', async () => {
@@ -266,6 +269,19 @@ describe('Attendance reason statistics', () => {
           },
         ],
       })
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+          currentlyActive: true,
+        },
+      ])
+      oauthApi.currentUser.mockReturnValue({
+        username: 'USER_ADM',
+        active: true,
+        name: 'User Name',
+        activeCaseLoadId: 'LEI',
+      })
       const logError = jest.fn()
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
         oauthApi,
@@ -283,6 +299,14 @@ describe('Attendance reason statistics', () => {
       )
 
       expect(res.render).toHaveBeenCalledWith('attendanceStatisticsOffendersList.njk', {
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        caseLoadId: 'LEI',
         title: 'AcceptableAbsence offenders list',
         reason: 'AcceptableAbsence',
         offenders: [
@@ -295,6 +319,14 @@ describe('Attendance reason statistics', () => {
             outcome: 'ACC',
           },
         ],
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        userRoles: undefined,
       })
     })
 
@@ -322,6 +354,8 @@ describe('Attendance reason statistics', () => {
 
     it('should log the correct error', async () => {
       elite2Api.getOffenderActivities.mockReturnValue([])
+      elite2Api.userCaseLoads.mockReturnValue([])
+      oauthApi.currentUser.mockReturnValue({})
       const logError = jest.fn()
 
       whereaboutsApi.getAbsences.mockImplementation(() => {

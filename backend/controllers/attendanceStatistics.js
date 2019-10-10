@@ -118,9 +118,26 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
   const attendanceStatisticsOffendersList = async (req, res) => {
     const { reason } = req.params
     const { agencyId, period, date } = req.query || {}
+    const formattedDate = switchDateFormat(date, 'DD/MM/YYYY')
+    const currentPeriod = getCurrentPeriod(moment().format())
+    const today = moment().format('DD/MM/YYYY')
 
     try {
-      const formattedDate = switchDateFormat(date, 'DD/MM/YYYY')
+      const [user, caseloads, roles] = await Promise.all([
+        oauthApi.currentUser(res.locals),
+        elite2Api.userCaseLoads(res.locals),
+        oauthApi.userRoles(res.locals),
+      ])
+
+      const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
+      const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
+
+      if (!period || !date) {
+        res.redirect(
+          `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&date=${today}`
+        )
+        return
+      }
 
       const [absentOffenders, activities] = await Promise.all([
         whereaboutsApi.getAbsences(res.locals, {
@@ -149,6 +166,16 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         title: `${reason} offenders list`,
         reason,
         offenders,
+        user: {
+          displayName: user.name,
+          activeCaseLoad: {
+            description: activeCaseLoad.description,
+            id: activeCaseLoadId,
+          },
+        },
+        caseLoadId: activeCaseLoad.caseLoadId,
+        allCaseloads: caseloads,
+        userRoles: roles,
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
