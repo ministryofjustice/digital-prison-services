@@ -67,6 +67,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
 
   const post = async (req, res) => {
     const {
+      data,
       data: {
         appointmentType,
         location,
@@ -90,6 +91,11 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
     )
 
     req.session.data.prisonersRemoved = prisonersRemoved
+
+    req.session.data = {
+      ...data,
+      prisonersListed: remainingPrisoners,
+    }
 
     const request = {
       appointmentDefaults: {
