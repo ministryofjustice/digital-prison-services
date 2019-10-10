@@ -126,7 +126,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
   )
   router.get(
-    '/manage-prisoner-whereabouts/attendance-reason-statistics/:reason',
+    '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
     handleErrors(
       attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsOffendersList
     )

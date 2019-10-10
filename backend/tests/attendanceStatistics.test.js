@@ -20,7 +20,7 @@ describe('Attendance reason statistics', () => {
     'RestInCell',
   ]
 
-  describe('Controller', () => {
+  describe('Dashboard Controller', () => {
     const mockReq = { originalUrl: '/manage-prisoner-whereabouts/attendance-reason-statistics' }
     beforeEach(() => {
       oauthApi.currentUser = jest.fn()
@@ -223,6 +223,127 @@ describe('Attendance reason statistics', () => {
 
       expect(logError).toHaveBeenCalledWith(
         '/manage-prisoner-whereabouts/attendance-reason-statistics',
+        new Error('something is wrong'),
+        'Sorry, the service is unavailable'
+      )
+    })
+  })
+
+  describe('Absence Reasons Controller', () => {
+    const mockReq = { originalUrl: '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/' }
+    beforeEach(() => {
+      elite2Api.getOffenderActivities = jest.fn()
+      whereaboutsApi.getAbsences = jest.fn()
+    })
+
+    it('should render the list of offenders who were absent for specified reason', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([
+        {
+          offenderNo: 'G8974UK',
+          eventId: 3,
+          bookingId: 1133341,
+          locationId: 27219,
+          firstName: 'Adam',
+          lastName: 'Smith',
+          cellLocation: 'LEI-1',
+          comment: 'Cleaner',
+          eventOutcome: 'ACC',
+        },
+      ])
+      whereaboutsApi.getAbsences.mockReturnValue({
+        attendances: [
+          {
+            id: 5812,
+            bookingId: 1133341,
+            eventId: 3,
+            eventLocationId: 26149,
+            period: 'AM',
+            prisonId: 'LEI',
+            attended: true,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Asked nicely.',
+          },
+        ],
+      })
+      const logError = jest.fn()
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      await attendanceStatisticsOffendersList(
+        { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } },
+        res
+      )
+
+      expect(res.render).toHaveBeenCalledWith('attendanceStatisticsOffendersList.njk', {
+        title: 'AcceptableAbsence offenders list',
+        reason: 'AcceptableAbsence',
+        offenders: [
+          {
+            absenceComment: 'Asked nicely.',
+            fullName: 'Smith, Adam',
+            offenderNo: 'G8974UK',
+            cellLocation: 'LEI-1',
+            activity: 'Cleaner',
+            outcome: 'ACC',
+          },
+        ],
+      })
+    })
+
+    it('should try render the error template on error', async () => {
+      const logError = jest.fn()
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      await attendanceStatisticsOffendersList(
+        { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } },
+        res
+      )
+
+      expect(res.render).toHaveBeenCalledWith('error.njk', {
+        url: '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/AcceptableAbsence',
+      })
+    })
+
+    it('should log the correct error', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([])
+      const logError = jest.fn()
+
+      whereaboutsApi.getAbsences.mockImplementation(() => {
+        throw new Error('something is wrong')
+      })
+
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      const req = { ...mockReq, query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } }
+
+      await attendanceStatisticsOffendersList(req, res)
+
+      expect(logError).toHaveBeenCalledWith(
+        '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/',
         new Error('something is wrong'),
         'Sorry, the service is unavailable'
       )
