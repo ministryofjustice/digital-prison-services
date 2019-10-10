@@ -14,7 +14,7 @@ var sortableTables = document.getElementsByClassName('sortable')
   // Add a default ARIA unsorted state, and attach the sort
   // handler to any sortable columns in this table.
   var cellIndex = 0 // track numeric cell index to simplify sort logic
-  var headerCells = table.getElementsByClassName('sortable-column')
+  var headerCells = table.getElementsByClassName('govuk-table__header')
   ;[].forEach.call(headerCells, function(th) {
     th.setAttribute('aria-sort', 'none')
     th.dataset.index = cellIndex++
@@ -88,7 +88,7 @@ function sortCol(e) {
   } else if (sortType === 'date') {
     items.sort(dateSort)
   } else if (sortType === 'text') {
-    items.sort(textSort)
+    items.sort(sortAlphaNum)
   } else if (sortType === 'money') {
     items.sort(moneySort)
   }
@@ -112,7 +112,6 @@ function updateIcon(th) {
   var state = 'ascending'
   var icon = th.getElementsByTagName('i').item(0)
   var ourIndex = th.getAttribute('data-index')
-
   // classList is supported in pretty much everything after IE8,
   // use that rather than a regex to modify the arrow classes
   if (icon.classList.contains('arrow')) {
@@ -133,90 +132,29 @@ function updateIcon(th) {
 
   th.setAttribute('aria-sort', state)
   // update all other rows with the neutral sort icon
-  var allTh = th.parentNode.getElementsByClassName('sortable-column')
+  var allTh = th.parentNode.getElementsByClassName('govuk-table__header')
   ;[].forEach.call(allTh, function(thisTh, thisIndex) {
     // skip our sorted column
     if (thisIndex == ourIndex) {
       return
     }
-
     // reset the state for an unsorted column
     thisTh.setAttribute('aria-sort', 'none')
     var thisIcon = thisTh.getElementsByTagName('i').item(0)
-    thisIcon.classList.remove('arrow-up')
-    thisIcon.classList.remove('arrow-down')
-    thisIcon.classList.add('arrow')
+    if (thisIcon) {
+      thisIcon.classList.remove('arrow-up')
+      thisIcon.classList.remove('arrow-down')
+      thisIcon.classList.add('arrow')
+    }
   })
   return state
 }
 
-/**
- * Executes a numeric sort (direct comparisons)
- */
-function numericSort(a, b) {
-  return sortOrder === 'ascending' ? a.val - b.val : b.val - a.val
-}
-
-/**
- * Takes two formatted date/time values
- * (see `formatDate`) and compares them
- */
-function dateSort(a, b) {
-  return sortOrder === 'ascending' ? formatDate(a.val) - formatDate(b.val) : formatDate(b.val) - formatDate(a.val)
-}
-
-function textSort(a, b) {
+function sortAlphaNum(a, b) {
+  a = a.val.toLowerCase()
+  b = b.val.toLowerCase()
   if (sortOrder === 'ascending') {
-    if (a.val.toLowerCase() < b.val.toLowerCase()) {
-      return -1
-    }
-    if (a.val.toLowerCase() > b.val.toLowerCase()) {
-      return 1
-    }
-
-    return 0
-  } else {
-    if (a.val.toLowerCase() < b.val.toLowerCase()) {
-      return 1
-    }
-    if (a.val.toLowerCase() > b.val.toLowerCase()) {
-      return -1
-    }
-
-    return 0
+    return a.localeCompare(b, 'en', { numeric: true, ignorePunctuation: true })
   }
-}
-
-function moneySort(a, b) {
-  var strippedA = a.val.replace(/,/g, '')
-  var strippedB = b.val.replace(/,/g, '')
-
-  if (sortOrder === 'ascending') {
-    if (strippedA < strippedB) {
-      return -1
-    }
-    if (strippedA > strippedB) {
-      return 1
-    }
-
-    return 0
-  } else {
-    if (strippedA < strippedB) {
-      return 1
-    }
-    if (strippedA > strippedB) {
-      return -1
-    }
-
-    return 0
-  }
-}
-
-/**
- * Formats a date string ("01/01/01") as
- * a numeric value using `Date.getTime`
- */
-function formatDate(dateString) {
-  var formattedDate = new Date(dateString)
-  return formattedDate.getTime()
+  return b.localeCompare(a, 'en', { numeric: true, ignorePunctuation: true })
 }
