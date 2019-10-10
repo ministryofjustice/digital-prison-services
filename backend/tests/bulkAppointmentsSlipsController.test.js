@@ -66,7 +66,7 @@ const appointmentDetails = {
 describe('appointment movement slips', () => {
   describe('and viewing page', () => {
     describe('and there is no data', () => {
-      it('should wprk', async () => {
+      it('should render the error page', async () => {
         await controller(req, res)
 
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
@@ -89,7 +89,7 @@ describe('appointment movement slips', () => {
         ])
       })
 
-      it('should render the movements template with the correct info', async () => {
+      it('should render the movement slips page with the correct details', async () => {
         elite2Api.getOffenderSummaries = jest
           .fn()
           .mockReturnValue([
