@@ -172,6 +172,11 @@ const getTime = dateTimeString => {
   return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 }
 
+const forenameToInitial = name => {
+  if (!name) return null
+  return `${name.charAt()} ${name.split(' ').pop()}`
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -197,4 +202,5 @@ module.exports = {
   readableDateFormat,
   getDate,
   getTime,
+  forenameToInitial,
 }
