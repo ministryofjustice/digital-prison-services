@@ -275,10 +275,14 @@ describe('appointment clashes', () => {
             ...appointmentDetails,
             prisonersRemoved: [
               {
+                bookingId: '111',
+                firstName: 'Elton',
                 offenderNo: 'G1683VN',
                 lastName: 'Abbatiello',
               },
               {
+                bookingId: '222',
+                firstName: 'Bobby',
                 offenderNo: 'G4803UT',
                 lastName: 'Abdulkadir',
               },

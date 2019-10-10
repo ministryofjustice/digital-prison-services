@@ -81,18 +81,15 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       },
     } = req.session
 
-    const remainingPrisoners = prisonersListed.filter(prisoner => !req.body[prisoner.offenderNo])
-    const removedPrisoners = prisonersListed.filter(prisoner => req.body[prisoner.offenderNo])
+    const [prisonersRemoved, remainingPrisoners] = prisonersListed.reduce(
+      (prisonersSeparated, prisoner) => {
+        prisonersSeparated[req.body[prisoner.offenderNo] ? 0 : 1].push(prisoner)
+        return prisonersSeparated
+      },
+      [[], []]
+    )
 
-    const prisonersRemoved = removedPrisoners.map(prisoner => ({
-      offenderNo: prisoner.offenderNo,
-      lastName: prisoner.lastName,
-    }))
-
-    if (prisonersRemoved && prisonersRemoved.length) {
-      // eslint-disable-next-line no-param-reassign
-      req.session.data.prisonersRemoved = prisonersRemoved
-    }
+    req.session.data.prisonersRemoved = prisonersRemoved
 
     const request = {
       appointmentDefaults: {
