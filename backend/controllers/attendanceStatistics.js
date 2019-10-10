@@ -19,7 +19,7 @@ const getReasonCountMap = (data, reasons) => {
 
   return Object.values(reasons)
     .map(absentReason => ({
-      [absentReason.toLowerCase()]: countAttendancesForReason(absentReason),
+      [absentReason]: countAttendancesForReason(absentReason),
     }))
     .reduce(merge, {})
 }
@@ -83,7 +83,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       const formattedReasons = {}
       Object.entries(absenceReasons).forEach(([key, values]) => {
-        formattedReasons[key] = values.map(reason => ({ value: reason.toLowerCase(), name: pascalToString(reason) }))
+        formattedReasons[key] = values.map(reason => ({ value: reason, name: pascalToString(reason) }))
       })
 
       res.render('attendanceStatistics.njk', {

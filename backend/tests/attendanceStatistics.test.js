@@ -115,17 +115,17 @@ describe('Attendance reason statistics', () => {
         ],
         caseLoadId: 'LEI',
         dashboardStats: {
-          acceptableabsence: 0,
-          approvedcourse: 0,
+          AcceptableAbsence: 0,
+          ApprovedCourse: 0,
           attended: 1,
           unaccountedFor: 1,
-          notrequired: 0,
-          refused: 0,
-          restday: 0,
-          restincell: 0,
-          sessioncancelled: 0,
-          sick: 0,
-          unacceptableabsence: 0,
+          NotRequired: 0,
+          Refused: 0,
+          RestDay: 0,
+          RestInCell: 0,
+          SessionCancelled: 0,
+          Sick: 0,
+          UnacceptableAbsence: 0,
         },
         date: '10/10/2019',
         displayDate: '10 October 2019',
@@ -133,41 +133,41 @@ describe('Attendance reason statistics', () => {
           paidReasons: [
             {
               name: 'Acceptable absence',
-              value: 'acceptableabsence',
+              value: 'AcceptableAbsence',
             },
             {
               name: 'Approved course',
-              value: 'approvedcourse',
+              value: 'ApprovedCourse',
             },
             {
               name: 'Not required',
-              value: 'notrequired',
+              value: 'NotRequired',
             },
           ],
           unpaidReasons: [
             {
               name: 'Refused',
-              value: 'refused',
+              value: 'Refused',
             },
             {
               name: 'Session cancelled',
-              value: 'sessioncancelled',
+              value: 'SessionCancelled',
             },
             {
               name: 'Rest in cell',
-              value: 'restincell',
+              value: 'RestInCell',
             },
             {
               name: 'Rest day',
-              value: 'restday',
+              value: 'RestDay',
             },
             {
               name: 'Unacceptable absence',
-              value: 'unacceptableabsence',
+              value: 'UnacceptableAbsence',
             },
             {
               name: 'Sick',
-              value: 'sick',
+              value: 'Sick',
             },
           ],
         },
@@ -432,7 +432,7 @@ describe('Attendance reason statistics', () => {
 
       const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
-      const { attended, notrequired, acceptableabsence, approvedcourse } = await getDashboardStats(context, {
+      const { attended, NotRequired, AcceptableAbsence, ApprovedCourse } = await getDashboardStats(context, {
         agencyId,
         date,
         period,
@@ -440,9 +440,9 @@ describe('Attendance reason statistics', () => {
       })
 
       expect(attended).toBe(1)
-      expect(notrequired).toBe(1)
-      expect(acceptableabsence).toBe(1)
-      expect(approvedcourse).toBe(1)
+      expect(NotRequired).toBe(1)
+      expect(AcceptableAbsence).toBe(1)
+      expect(ApprovedCourse).toBe(1)
     })
 
     it('should count not paid reasons', async () => {
@@ -484,25 +484,25 @@ describe('Attendance reason statistics', () => {
         ],
       })
 
-      const { sessioncancelled, sick, unacceptableabsence, restday, refused, restincell } = await getDashboardStats(
+      const { SessionCancelled, Sick, UnacceptableAbsence, RestDay, Refused, RestInCell } = await getDashboardStats(
         context,
         { agencyId, date, period, absenceReasons }
       )
 
       expect({
-        sessioncancelled,
-        sick,
-        unacceptableabsence,
-        restday,
-        refused,
-        restincell,
+        SessionCancelled,
+        Sick,
+        UnacceptableAbsence,
+        RestDay,
+        Refused,
+        RestInCell,
       }).toEqual({
-        sessioncancelled: 1,
-        sick: 1,
-        unacceptableabsence: 1,
-        restday: 1,
-        refused: 1,
-        restincell: 1,
+        SessionCancelled: 1,
+        Sick: 1,
+        UnacceptableAbsence: 1,
+        RestDay: 1,
+        Refused: 1,
+        RestInCell: 1,
       })
     })
 
