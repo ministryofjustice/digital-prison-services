@@ -9,6 +9,7 @@
 
 {% macro movementSlip(appointmentDetails, prisoner) %}
   {% set startTime = (appointmentDetails.startTime or prisoner.startTime) %}
+  {% set endTime = (appointmentDetails.endTime or prisoner.endTime) %}
   <div class="movement-slip">
     <h1 class="govuk-heading-m">Movement authorisation</h1>
     <div class="movement-slip__section">
@@ -18,7 +19,7 @@
     </div>
 
     <div class="movement-slip__section">
-      {{ labelAndValue('Date and time', (startTime | getDate()) + ' - ' + (startTime | getTime())) }}
+      {{ labelAndValue('Date and time', (startTime | getDate()) + ' - ' + (startTime | getTime()) + ((' to ' + (endTime | getTime)) if endTime)) }}
       {{ labelAndValue('Moving to', appointmentDetails.locationDescription) }}
       {{ labelAndValue('Reason', appointmentDetails.appointmentTypeDescription) }}
       {{ labelAndValue('Comments', appointmentDetails.comments) }}

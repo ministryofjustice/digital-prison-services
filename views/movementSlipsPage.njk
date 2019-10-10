@@ -7,11 +7,6 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-  <script>
-    window.print()
-    window.onafterprint = function closeWindow() { window.close() }
-  </script>
-
   {% for prisoner in appointmentDetails.prisonersListed %}
     {{ movementSlip(appointmentDetails, prisoner )}}
   {% endfor %}
