@@ -26,10 +26,9 @@ app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
 app.set('view engine', 'njk')
 
-app.use(setupWebSecurity())
 app.use(setupBodyParsers())
-
 app.use(setupHealthChecks())
+app.use(setupWebSecurity())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi }))
 app.use(setupSass())
