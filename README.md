@@ -30,7 +30,8 @@ Run remotely as docker
 ```bash
 docker run -p 3000:3000 -d \
      --name prisonstaffhub \
-     -e API_ENDPOINT_URL=https://noms-api-dev.dsd.io/elite2api/ \
+     -e API_ENDPOINT_URL=https://gateway.t3.nomis-api.hmpps.dsd.io/elite2api/ \
+     -e OAUTH_ENDPOINT_URL=https://gateway.t3.nomis-api.hmpps.dsd.io/auth/ \
      -e API_GATEWAY_TOKEN=<add here> \
      -e API_CLIENT_SECRET=<add here> \
      -e API_GATEWAY_PRIVATE_KEY=<add here> \
