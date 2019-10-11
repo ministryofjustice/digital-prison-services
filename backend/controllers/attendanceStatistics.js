@@ -162,9 +162,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         }
       })
 
+      const displayReason = pascalToString(reason)
+
       res.render('attendanceStatisticsOffendersList.njk', {
-        title: `${reason} offenders list`,
-        reason,
+        title: `${displayReason} offenders`,
+        reason: displayReason,
         offenders,
         user: {
           displayName: user.name,

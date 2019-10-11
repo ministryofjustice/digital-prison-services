@@ -307,8 +307,8 @@ describe('Attendance reason statistics', () => {
           },
         ],
         caseLoadId: 'LEI',
-        title: 'AcceptableAbsence offenders list',
-        reason: 'AcceptableAbsence',
+        title: 'Acceptable absence offenders',
+        reason: 'Acceptable absence',
         offenders: [
           {
             absenceComment: 'Asked nicely.',

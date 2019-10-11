@@ -1,7 +1,6 @@
-// This has been adapted from https://github.com/LJWatson/sortable-tables
-// as a first pass on sorting tables outside of React
+// This is adapted from https://github.com/LJWatson/sortable-tables
 
-var sortOrder
+let sortOrder
 
 // Initialization of all sortable tables in the page
 
@@ -9,20 +8,22 @@ var sortOrder
  * Initialization
  * Configure all sortable tables on the page
  */
-var sortableTables = document.getElementsByClassName('sortable')
+const sortableTables = document.getElementsByClassName('sortable')
 ;[].forEach.call(sortableTables, function(table) {
   // Add a default ARIA unsorted state, and attach the sort
   // handler to any sortable columns in this table.
-  var cellIndex = 0 // track numeric cell index to simplify sort logic
-  var headerCells = table.getElementsByClassName('govuk-table__header')
+  let cellIndex = 0 // track numeric cell index to simplify sort logic
+  const headerCells = table.getElementsByClassName('govuk-table__header')
   ;[].forEach.call(headerCells, function(th) {
     th.setAttribute('aria-sort', 'none')
     th.dataset.index = cellIndex++
-    th.addEventListener('click', sortCol)
+    if (th.classList.contains('sortableLink')) {
+      th.addEventListener('click', sortCol)
+    }
   })
 
   // Give the span 'buttons' within the table headers focus and keyboard handling
-  var buttonSpans = table.getElementsByClassName('th-content')
+  const buttonSpans = table.getElementsByClassName('th-content')
   ;[].forEach.call(buttonSpans, function(span) {
     span.setAttribute('role', 'button')
     span.setAttribute('tabindex', '0')
@@ -58,14 +59,21 @@ function getParentTable(node) {
 function sortCol(e) {
   // sortCol event gets triggered from the th or the nested span,
   // identify the TH col, and assign some element lookups
-  var thisCol = e.target.tagName === 'TH' ? e.target : e.target.parentNode
-  var table = getParentTable(thisCol)
-  var tbody = table.getElementsByTagName('tbody').item(0)
-  var rows = tbody.getElementsByTagName('tr')
-  var cols = table.getElementsByClassName('sortable-column')
 
-  var sortType = thisCol.getAttribute('data-sortby')
-  var thisIndex = thisCol.getAttribute('data-index')
+  // closest isn't supported in IE, spaghetti as a result
+  // https://caniuse.com/#search=closest
+  let thisCol
+  if (e.target.tagName === 'TH') {
+    thisCol = e.target
+  } else if (e.target.parentNode.tagName === 'TH') {
+    thisCol = e.target.parentNode
+  } else {
+    thisCol = e.target.parentNode.parentNode
+  }
+  const table = getParentTable(thisCol)
+  const tbody = table.getElementsByTagName('tbody').item(0)
+  const rows = tbody.getElementsByTagName('tr')
+  const thisIndex = thisCol.getAttribute('data-index')
 
   // update the sort icon and return the new sort state
   sortOrder = updateIcon(thisCol)
@@ -76,25 +84,16 @@ function sortCol(e) {
   //  tr: (the HTMLElement reference to the given row),
   //  val: (the String value of the corresponding td)
   // }
-  var items = []
+  const items = []
   ;[].forEach.call(rows, function(row) {
-    var content = row.getElementsByTagName('td').item(thisIndex)
+    const content = row.getElementsByTagName('td').item(thisIndex)
     items.push({ tr: row, val: content.innerText })
   })
 
-  // sort the array of values, using an appropriate sorter
-  if (!sortType || sortType === 'numeric') {
-    items.sort(numericSort)
-  } else if (sortType === 'date') {
-    items.sort(dateSort)
-  } else if (sortType === 'text') {
-    items.sort(sortAlphaNum)
-  } else if (sortType === 'money') {
-    items.sort(moneySort)
-  }
+  items.sort(sortAlphaNum)
 
   // Create a new table body, appending each row in the new, sorted order
-  var newTbody = document.createElement('tbody')
+  const newTbody = document.createElement('tbody')
   ;[].forEach.call(items, function(item) {
     newTbody.appendChild(item.tr)
   })
@@ -109,9 +108,9 @@ function sortCol(e) {
  * @return {String}      state The new sort state ("ascending" or "descending")
  */
 function updateIcon(th) {
-  var state = 'ascending'
-  var icon = th.getElementsByTagName('i').item(0)
-  var ourIndex = th.getAttribute('data-index')
+  let state = 'ascending'
+  const icon = th.getElementsByTagName('i').item(0)
+  const ourIndex = th.getAttribute('data-index')
   // classList is supported in pretty much everything after IE8,
   // use that rather than a regex to modify the arrow classes
   if (icon.classList.contains('arrow')) {
@@ -132,7 +131,7 @@ function updateIcon(th) {
 
   th.setAttribute('aria-sort', state)
   // update all other rows with the neutral sort icon
-  var allTh = th.parentNode.getElementsByClassName('govuk-table__header')
+  const allTh = th.parentNode.getElementsByClassName('govuk-table__header')
   ;[].forEach.call(allTh, function(thisTh, thisIndex) {
     // skip our sorted column
     if (thisIndex == ourIndex) {
@@ -140,7 +139,7 @@ function updateIcon(th) {
     }
     // reset the state for an unsorted column
     thisTh.setAttribute('aria-sort', 'none')
-    var thisIcon = thisTh.getElementsByTagName('i').item(0)
+    const thisIcon = thisTh.getElementsByTagName('i').item(0)
     if (thisIcon) {
       thisIcon.classList.remove('arrow-up')
       thisIcon.classList.remove('arrow-down')
