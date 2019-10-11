@@ -160,7 +160,6 @@ describe('bulk appointments upload', () => {
 
         await controller.post(req, res)
         expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
-        expect(res.end).toHaveBeenCalled()
       })
     })
 
