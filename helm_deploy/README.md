@@ -37,3 +37,12 @@ e.g.
 ```
 cloud-platform-environments/namespaces/live-1.cloud-platform.service.justice.gov.uk/[INSERT NAMESPACE NAME]/05-certificate.yaml
 ```
+
+### Adding secrets
+
+Ensure the following files are updated:
+- helm_deploy/prison-staff-hub/template/secrets.yaml
+- helm_deploy/prison-staff-hub/template/_envs.tpl
+- helm_deploy/prison-staff-hub/secrets-example.yaml
+
+When updating _envs.tpl ensure the name matches the one returned when running kubectl -n NAME_SPACE get secrets.
