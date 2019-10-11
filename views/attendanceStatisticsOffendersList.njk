@@ -1,3 +1,4 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% extends "./partials/layout.njk" %}
 
 {% block beforeContent %}
@@ -23,42 +24,34 @@
 }}
 {% endblock %}
 {% block content %}
-<table class="govuk-table sortable">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header sortableLink">
-        <span class="th-content">Name <i class="arrow"></i></span>
-      </th>
-      <th scope="col" class="govuk-table__header">
-        <span class="th-content">Prison no.<i class="arrow"></i></span>
-      </th>
-      <th scope="col" class="govuk-table__header">
-        <span class="th-content">Location <i class="arrow"></i></span>
-      </th>
-      <th scope="col" class="govuk-table__header sortableLink">
-      <span class="th-content">Activity <i class="arrow"></i></span>
-      </th>
-      <th scope="col" class="govuk-table__header">
-        <span class="th-content">Outcome <i class="arrow"></i></span>
-      </th>
-      <th scope="col" class="govuk-table__header">
-        <span class="th-content">Comments <i class="arrow"></i></span>
-      </th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    {% for offender in offenders %}
-    <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{offender.fullName}}</td>
-        <td class="govuk-table__cell">{{offender.offenderNo}}</td>
-        <td class="govuk-table__cell">{{offender.cellLocation}}</td>
-        <td class="govuk-table__cell">{{offender.activity}}</td>
-        <td class="govuk-table__cell">{{offender.outcome}}</td>
-        <td class="govuk-table__cell">{{offender.absenceComment}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+
+{{ govukTable({
+  firstCellIsHeader: false,
+  classes: "sortable",
+  head: [
+    {
+      html: '<span class="th-content">Name <i class="arrow"></i></span>',
+      classes: "sortableLink"
+    },
+    {
+      html: '<span class="th-content">Prison no. <i class="arrow"></i></span>'
+    },
+    {
+      html: '<span class="th-content">Location <i class="arrow"></i></span>'
+    },
+    {
+      html: '<span class="th-content">Activity <i class="arrow"></i></span>',
+      classes: "sortableLink"
+    },
+    {
+      html: '<span class="th-content">Outcome <i class="arrow"></i></span>'
+    },
+    {
+      html: '<span class="th-content">Comments <i class="arrow"></i></span>'
+    }
+  ],
+  rows: offenders
+}) }}
 {% endblock %}
 {% block bodyEnd %}
 <script src="/static/js/sortable-table.js"></script>

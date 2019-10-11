@@ -152,14 +152,28 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       const offenders = absences.map(absence => {
         const offenderActivity = activities.find(activity => activity.bookingId === absence.bookingId)
-        return {
-          absenceComment: absence.comments,
-          fullName: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
-          offenderNo: offenderActivity.offenderNo,
-          cellLocation: offenderActivity.cellLocation,
-          activity: offenderActivity.comment,
-          outcome: offenderActivity.eventOutcome,
-        }
+
+        // Return the data in the appropriate format to seed the table macro
+        return [
+          {
+            text: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
+          },
+          {
+            text: offenderActivity.offenderNo,
+          },
+          {
+            text: offenderActivity.cellLocation,
+          },
+          {
+            text: offenderActivity.comment,
+          },
+          {
+            text: offenderActivity.eventOutcome,
+          },
+          {
+            text: absence.comments,
+          },
+        ]
       })
 
       const displayReason = pascalToString(reason)

@@ -310,14 +310,26 @@ describe('Attendance reason statistics', () => {
         title: 'Acceptable absence offenders',
         reason: 'Acceptable absence',
         offenders: [
-          {
-            absenceComment: 'Asked nicely.',
-            fullName: 'Smith, Adam',
-            offenderNo: 'G8974UK',
-            cellLocation: 'LEI-1',
-            activity: 'Cleaner',
-            outcome: 'ACC',
-          },
+          [
+            {
+              text: 'Smith, Adam',
+            },
+            {
+              text: 'G8974UK',
+            },
+            {
+              text: 'LEI-1',
+            },
+            {
+              text: 'Cleaner',
+            },
+            {
+              text: 'ACC',
+            },
+            {
+              text: 'Asked nicely.',
+            },
+          ],
         ],
         user: {
           activeCaseLoad: {
