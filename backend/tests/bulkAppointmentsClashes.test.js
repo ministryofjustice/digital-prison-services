@@ -295,7 +295,7 @@ describe('appointment clashes', () => {
           req.session.data = { ...appointmentDetails }
         })
 
-        it('should not submit any appointments and redirect to  ', async () => {
+        it('should not submit any appointments and redirect to the no appointments added page', async () => {
           req.body = { G1683VN: 'remove', G4803UT: 'remove', G4346UT: 'remove', G5402VR: 'remove' }
 
           await controller.post(req, res)
