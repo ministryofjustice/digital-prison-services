@@ -159,7 +159,7 @@ describe('bulk appointments upload', () => {
         res.redirect = jest.fn()
 
         await controller.post(req, res)
-        expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added')
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
         expect(res.end).toHaveBeenCalled()
       })
     })

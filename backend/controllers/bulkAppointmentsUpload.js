@@ -60,7 +60,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
           const offenderNosNotFound = getNonExistingOffenderNumbers(offendersFromCsv, prisonerList)
 
           if (offenderNosNotFound.length === fileContent.length) {
-            res.redirect('/bulk-appointments/no-appointments-added')
+            res.redirect('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
             res.end()
           }
 
