@@ -41,7 +41,7 @@ cloud-platform-environments/namespaces/live-1.cloud-platform.service.justice.gov
 ### Adding secrets
 
 Ensure the following files are updated:
-- helm_deploy/prison-staff-hub/template/secrets.yaml (Do not put cloud platform generated ones in here. Example redis details)
+- helm_deploy/prison-staff-hub/template/secrets.yaml (Do not put cloud platform generated ones in here. Example being secrets generated for modules such as ElasticCache.
 - helm_deploy/prison-staff-hub/template/_envs.tpl
 - helm_deploy/prison-staff-hub/secrets-example.yaml
 
