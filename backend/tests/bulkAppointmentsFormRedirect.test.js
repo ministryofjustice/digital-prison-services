@@ -24,7 +24,7 @@ describe('add appointment redirect', () => {
 
   it('should clear the saved session data and redirect to the add appointments page', async () => {
     await bulkAppointmentsFormRedirect(req, res)
-    expect(req.session.data).toEqual([])
+    expect(req.session.data).toBe(null)
     expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
   })
 })
