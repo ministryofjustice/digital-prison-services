@@ -271,7 +271,36 @@ describe('appointment clashes', () => {
             appointments: [{ bookingId: '333' }, { bookingId: '444' }],
           })
 
+          expect(req.session.data.prisonersListed).toEqual([
+            {
+              bookingId: '333',
+              firstName: 'Dewey',
+              lastName: 'Affolter',
+              offenderNo: 'G4346UT',
+            },
+            {
+              bookingId: '444',
+              firstName: 'Gabriel',
+              lastName: 'Agugliaro',
+              offenderNo: 'G5402VR',
+            },
+          ])
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+        })
+      })
+
+      describe('and all prisoners have been selected for removal', () => {
+        beforeEach(() => {
+          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          req.session.data = { ...appointmentDetails }
+        })
+
+        it('should not submit any appointments and redirect to the no appointments added page', async () => {
+          req.body = { G1683VN: 'remove', G4803UT: 'remove', G4346UT: 'remove', G5402VR: 'remove' }
+
+          await controller.post(req, res)
+          expect(elite2Api.addBulkAppointments).not.toBeCalled()
+          expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=removedAllClashes')
         })
       })
 

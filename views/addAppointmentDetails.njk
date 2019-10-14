@@ -90,7 +90,7 @@
                     }) }}
                 {% endif %}
 
-                <form action="/bulk-appointments/add-appointment-details" method="POST">
+                <form action="/bulk-appointments/add-appointment-details" method="POST" novalidate>
 
                     {{ govukSelect({
                         id: "appointment-type",

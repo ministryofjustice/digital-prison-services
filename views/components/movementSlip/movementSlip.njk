@@ -1,0 +1,32 @@
+{% macro labelAndValue(label, value) %}
+  <div class="movement-slip__section__values">
+    <div>
+      <strong>{{label}}</strong>
+    </div>
+    <span>{{ value if value else "--" }}</span>
+  </div>
+{% endmacro %}
+
+{% macro movementSlip(appointmentDetails, prisoner) %}
+  {% set startTime = (appointmentDetails.startTime or prisoner.startTime) %}
+  {% set endTime = (appointmentDetails.endTime or prisoner.endTime) %}
+  <div class="movement-slip">
+    <h1 class="govuk-heading-m">Movement authorisation</h1>
+    <div class="movement-slip__section">
+      {{ labelAndValue('Name', prisoner.firstName + ' ' + prisoner.lastName) }}
+      {{ labelAndValue('Prison number', prisoner.offenderNo) }}
+      {{ labelAndValue('Cell location', prisoner.assignedLivingUnitDesc) }}
+    </div>
+
+    <div class="movement-slip__section">
+      {{ labelAndValue('Date and time', (startTime | getDate()) + ' - ' + (startTime | getTime()) + ((' to ' + (endTime | getTime)) if endTime)) }}
+      {{ labelAndValue('Moving to', appointmentDetails.locationDescription) }}
+      {{ labelAndValue('Reason', appointmentDetails.appointmentTypeDescription) }}
+      {{ labelAndValue('Comments', appointmentDetails.comments) }}
+    </div>
+
+    <div class="movement-slip__section">
+      {{ labelAndValue('Created by', appointmentDetails.createdBy) }}
+    </div>
+  </div>
+{% endmacro %}

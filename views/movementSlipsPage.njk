@@ -1,0 +1,15 @@
+{% extends "./partials/layout.njk" %}
+{% from "components/movementSlip/movementSlip.njk" import movementSlip %}
+
+{% set title = 'Movement slips' %}
+{% set htmlClasses = "printed-page" %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+  {% for prisoner in appointmentDetails.prisonersListed %}
+    {{ movementSlip(appointmentDetails, prisoner )}}
+  {% endfor %}
+{% endblock %}
+
+{% block footer %}{% endblock %}
