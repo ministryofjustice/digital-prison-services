@@ -194,12 +194,13 @@ workflows:
           requires:
             - build
       - build_docker:
+          requires:
+            - integration_tests
           filters:
             branches:
               only: master
       - deploy_dev:
           requires:
-            - integration_tests
             - build_docker
       - request-preprod-approval:
           type: approval
