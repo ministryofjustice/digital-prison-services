@@ -58,7 +58,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
 
         when: "I fill out the appointment details"
         at BulkAppointmentsAddPage
-        enterBasicAppointmentDetails(startDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)))
+        enterBasicAppointmentDetails(startDate.format(DateTimeFormatter.ofPattern("d/M/yyyy")))
         form.sameTimeAppointments = "yes"
         form.startTimeHours = 10
         form.startTimeMinutes = 10
@@ -77,7 +77,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         at BulkAppointmentsConfirmPage
         appointmentType.text() == "Activities"
         appointmentLocation.text() == "Adj"
-        appointmentStartDate.text() == startDate.format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy"))
+        appointmentStartDate.text() == startDate.format(DateTimeFormatter.ofPattern("EEEE d MMMM y"))
         appointmentStartTime.text() == "10:10"
         prisonersNotFound.children()[1].text() == "offenderNo"
         prisonersFound.children()[1].text() == "Doe John A12345"
