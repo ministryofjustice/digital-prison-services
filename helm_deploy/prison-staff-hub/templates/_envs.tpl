@@ -50,13 +50,13 @@ env:
      valueFrom:
        secretKeyRef:
         name: dps-redis
-        key: primary_endpoint_address
+        key: REDIS_HOST
 
-  - name: REDIS_AUTH_TOKEN
+  - name: REDIS_PASSWORD
     valueFrom:
       secretKeyRef:
         name: dps-redis
-        key: auth_token
+        key: REDIS_PASSWORD
 
   - name: API_ENDPOINT_URL
     value: {{ .Values.env.API_ENDPOINT_URL | quote }}
