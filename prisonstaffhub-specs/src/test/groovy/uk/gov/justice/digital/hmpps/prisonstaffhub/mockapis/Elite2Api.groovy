@@ -250,7 +250,7 @@ class Elite2Api extends WireMockRule {
 
     void stubVisits(Caseload caseload, String timeSlot, String date, def offenderNumbers,  data = JsonOutput.toJson([])) {
         this.stubFor(
-                post("/api/schedules/${caseload.id}/visits?${timeSlot ? '?timeSlot='{timeSlot} + '&' : ''}date=${date}")
+                post("/api/schedules/${caseload.id}/visits?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                                 aResponse()
@@ -262,7 +262,7 @@ class Elite2Api extends WireMockRule {
 
     void stubAppointments(Caseload caseload, String timeSlot, String date, def offenderNumbers, data = JsonOutput.toJson([])) {
         this.stubFor(
-                post("/api/schedules/${caseload.id}/appointments?${timeSlot ? '?timeSlot='{timeSlot} + '&' : ''}date=${date}")
+                post("/api/schedules/${caseload.id}/appointments?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                                 aResponse()
