@@ -37,3 +37,17 @@ e.g.
 ```
 cloud-platform-environments/namespaces/live-1.cloud-platform.service.justice.gov.uk/[INSERT NAMESPACE NAME]/05-certificate.yaml
 ```
+
+### Adding secrets
+
+Ensure that the following files are updated.
+
+For secrets managed by the team and reside in AWS secret manager
+- helm_deploy/prison-staff-hub/template/secrets.yaml 
+- helm_deploy/prison-staff-hub/template/_envs.tpl
+- helm_deploy/prison-staff-hub/secrets-example.yaml
+
+For secrets managed by terraform
+- helm_deploy/prison-staff-hub/template/_envs.tpl
+
+When updating _envs.tpl ensure the name matches the one returned when running kubectl -n NAME_SPACE get secret
