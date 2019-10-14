@@ -49,13 +49,13 @@ env:
   - name: REDIS_HOST
      valueFrom:
        secretKeyRef:
-        name: dps-redis
+        name: "dps-redis"
         key: REDIS_HOST
 
   - name: REDIS_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: dps-redis
+        name: "dps-redis"
         key: REDIS_PASSWORD
 
   - name: API_ENDPOINT_URL
@@ -99,7 +99,5 @@ env:
 
   - name: NODE_ENV
     value: production
-
-
-
+    
 {{- end -}}
