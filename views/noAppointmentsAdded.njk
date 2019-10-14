@@ -2,19 +2,27 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
+{% set title = 'No appointments have been added' %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{title}}</h1>
 
-      <p class="govuk-body">This might be because the prison numbers:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>do not exist in this location</li>
-        <li>do not belong to any prisoner</li>
-        <li>are not in the format 'A1234BC'</li>
-      </ul>
+      {% if reason === 'offendersNotFound' %}
+        <p class="govuk-body">This might be because the prison numbers:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>do not exist in this location</li>
+          <li>do not belong to any prisoner</li>
+          <li>are not in the format 'A1234BC'</li>
+        </ul>
 
-      <p class="govuk-body">You should check all of the numbers on the CSV file.</p>
+        <p class="govuk-body">You should check all of the numbers on the CSV file.</p>
+      {% endif %}
+
+      {% if reason === 'removedAllClashes' %}
+        <p class="govuk-body">This is because you have removed all the appointments which clashed.</p>
+      {% endif %}
 
       {{ govukButton({
         text: "Upload another CSV file",
