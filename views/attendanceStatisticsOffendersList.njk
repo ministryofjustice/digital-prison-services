@@ -1,4 +1,5 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% extends "./partials/layout.njk" %}
 
 {% block beforeContent %}
@@ -14,7 +15,7 @@
     },
     {
       text: "Attendance reason statistics",
-      href: "/manage-prisoner-whereabouts/attendance-reason-statistics"
+      href: dashboardUrl
     },
     {
       text: reason
@@ -25,12 +26,24 @@
 {% endblock %}
 {% block content %}
 
+<h1 class="govuk-heading-xl">{{reason}}</h1>
+
+{{ govukSelect({
+        id: "sortingOptions",
+        name: "sortingOptions",
+        label: {
+            text: "Order the list"
+        },
+        items: sortOptions,
+        errorMessage: errors | findError('sortingOptions')
+    }) }}
+
 {{ govukTable({
   firstCellIsHeader: false,
   classes: "sortable",
   head: [
     {
-      html: '<span class="th-content">Name <i class="arrow"></i></span>',
+      html: '<span class="th-content">Name <i class="arrow-up"></i></span>',
       classes: "sortableLink"
     },
     {
@@ -42,9 +55,6 @@
     {
       html: '<span class="th-content">Activity <i class="arrow"></i></span>',
       classes: "sortableLink"
-    },
-    {
-      html: '<span class="th-content">Outcome <i class="arrow"></i></span>'
     },
     {
       html: '<span class="th-content">Comments <i class="arrow"></i></span>'

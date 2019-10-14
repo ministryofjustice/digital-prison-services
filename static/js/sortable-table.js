@@ -22,6 +22,11 @@ const sortableTables = document.getElementsByClassName('sortable')
     }
   })
 
+  const options = document.getElementsByTagName('option')
+  ;[].forEach.call(options, function(option) {
+    option.addEventListener('click', sortCol)
+  })
+
   // Give the span 'buttons' within the table headers focus and keyboard handling
   const buttonSpans = table.getElementsByClassName('th-content')
   ;[].forEach.call(buttonSpans, function(span) {
@@ -67,8 +72,12 @@ function sortCol(e) {
     thisCol = e.target
   } else if (e.target.parentNode.tagName === 'TH') {
     thisCol = e.target.parentNode
-  } else {
+  } else if (e.target.parentNode.parentNode.tagName === 'TH') {
     thisCol = e.target.parentNode.parentNode
+  } else {
+    let [colIndex, sortOrderOption] = e.target.value.split('_')
+    sortOrder = sortOrderOption
+    thisCol = document.querySelector(`[data-index="${colIndex}"]`)
   }
   const table = getParentTable(thisCol)
   const tbody = table.getElementsByTagName('tbody').item(0)

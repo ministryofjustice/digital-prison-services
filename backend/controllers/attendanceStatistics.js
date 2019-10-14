@@ -1,4 +1,5 @@
 const moment = require('moment')
+const config = require('../config')
 const {
   merge,
   capitalize,
@@ -150,38 +151,57 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const { attendances } = absentOffenders
       const absences = attendances.filter(absence => absence.absentReason === reason)
 
-      const offenders = absences.map(absence => {
+      const offenderData = absences.map(absence => {
         const offenderActivity = activities.find(activity => activity.bookingId === absence.bookingId)
-
-        // Return the data in the appropriate format to seed the table macro
-        return [
-          {
-            text: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
-          },
-          {
-            text: offenderActivity.offenderNo,
-          },
-          {
-            text: offenderActivity.cellLocation,
-          },
-          {
-            text: offenderActivity.comment,
-          },
-          {
-            text: offenderActivity.eventOutcome,
-          },
-          {
-            text: absence.comments,
-          },
-        ]
+        return {
+          offenderName: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
+          offenderNo: offenderActivity.offenderNo,
+          location: offenderActivity.cellLocation,
+          activity: offenderActivity.comment,
+          comments: absence.comments,
+        }
       })
 
+      const offenders = offenderData
+        .sort((a, b) => a.offenderName.localeCompare(b.offenderName, 'en', { ignorePunctuation: true }))
+        .map(data => {
+          const quickLookUrl = `${config.app.notmEndpointUrl}offenders/${data.offenderNo}/quick-look`
+
+          // Return the data in the appropriate format to seed the table macro
+          return [
+            {
+              html: `<a href=${quickLookUrl} target="_blank">${data.offenderName}</a>`,
+            },
+            {
+              text: data.offenderNo,
+            },
+            {
+              text: data.location,
+            },
+            {
+              text: data.activity,
+            },
+            {
+              text: data.comments,
+            },
+          ]
+        })
+
       const displayReason = pascalToString(reason)
+
+      const sortOptions = [
+        { value: '0_ascending', text: 'Name (A-Z)' },
+        { value: '0_descending', text: 'Name (Z-A)' },
+        { value: '3_ascending', text: 'Activity (A-Z)' },
+        { value: '3_descending', text: 'Activity (Z-A)' },
+      ]
 
       res.render('attendanceStatisticsOffendersList.njk', {
         title: `${displayReason} offenders`,
         reason: displayReason,
+        dashboardUrl: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=${period}&date=${date}`,
         offenders,
+        sortOptions,
         user: {
           displayName: user.name,
           activeCaseLoad: {

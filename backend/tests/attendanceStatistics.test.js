@@ -306,13 +306,15 @@ describe('Attendance reason statistics', () => {
             description: 'Leeds (HMP)',
           },
         ],
+        dashboardUrl:
+          '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&date=10/10/2019',
         caseLoadId: 'LEI',
         title: 'Acceptable absence offenders',
         reason: 'Acceptable absence',
         offenders: [
           [
             {
-              text: 'Smith, Adam',
+              html: '<a href=http://localhost:3000/offenders/G8974UK/quick-look target="_blank">Smith, Adam</a>',
             },
             {
               text: 'G8974UK',
@@ -324,12 +326,27 @@ describe('Attendance reason statistics', () => {
               text: 'Cleaner',
             },
             {
-              text: 'ACC',
-            },
-            {
               text: 'Asked nicely.',
             },
           ],
+        ],
+        sortOptions: [
+          {
+            text: 'Name (A-Z)',
+            value: '0_ascending',
+          },
+          {
+            text: 'Name (Z-A)',
+            value: '0_descending',
+          },
+          {
+            text: 'Activity (A-Z)',
+            value: '3_ascending',
+          },
+          {
+            text: 'Activity (Z-A)',
+            value: '3_descending',
+          },
         ],
         user: {
           activeCaseLoad: {
