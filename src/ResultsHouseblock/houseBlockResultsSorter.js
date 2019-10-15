@@ -4,7 +4,6 @@ import { DESC } from '../tablesorting/sortOrder'
 import { ACTIVITY, CELL_LOCATION, LAST_NAME } from '../tablesorting/sortColumns'
 
 const mainActivity = activities => activities.find(activity => activity.mainActivity)
-
 const anyHouseblockActivity = obj => mainActivity(obj.activities) || obj.activities[0]
 
 const houseblockLastNameComparator = thenComparing(
