@@ -1,0 +1,22 @@
+.sortableLink {
+    cursor: pointer;
+  }
+
+.sortableLink,
+.sortableLink:hover {
+    text-decoration: none;
+    color: $govuk-link-colour;
+}
+
+.arrow-up{
+    content: url("/images/Triangle_asc.png");
+}
+
+.arrow-down {
+    content: url("/images/Triangle_desc.png");
+}
+
+i[class^="arrow-"] {
+    transform: scale(.75);
+    vertical-align: middle;
+}
