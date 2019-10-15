@@ -12,10 +12,12 @@ module.exports = () => {
     const { host, port, password } = config.redis
     if (!host) return null
 
-    const passwordOnly = password ? `:${password}` : ''
-    const url = `redis://${passwordOnly}@${host}:${port}`
-
-    const client = redis.createClient(url)
+    const client = redis.createClient({
+      host,
+      port,
+      password,
+      tls: false,
+    })
 
     return new RedisStore({ client })
   }
