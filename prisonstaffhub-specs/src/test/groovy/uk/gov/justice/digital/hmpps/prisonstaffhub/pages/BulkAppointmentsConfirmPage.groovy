@@ -11,6 +11,9 @@ class BulkAppointmentsConfirmPage extends Page {
         appointmentLocation {$('[data-qa="appointment-details-summary-appointment-location"]') }
         appointmentStartDate {$('[data-qa="appointment-details-summary-appointment-start-date"]') }
         appointmentStartTime {$('[data-qa="appointment-details-summary-appointment-start-time"]') }
+        appointmentsHowOften {$('[data-qa="appointment-details-summary-appointment-how-often"]') }
+        appointmentsOccurrences {$('[data-qa="appointment-details-summary-appointment-occurrences"]') }
+        appointmentsEndDate {$('[data-qa="appointment-details-summary-appointment-end-date"]') }
         prisonersNotFound {$('[data-qa="prisoners-not-found"]') }
         prisonersFound {$('[data-qa="prisoners-found"]') }
         submitButton { $('button', type: 'submit') }
