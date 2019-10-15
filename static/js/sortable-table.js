@@ -1,17 +1,19 @@
 // This is adapted from https://github.com/LJWatson/sortable-tables
 
+window.onload = function() {
+  const sortableTable = document.getElementById('offenderListTable')
+  sortTable(sortableTable)
+}
+
 let sortOrder
 
-// Initialization of all sortable tables in the page
-
-/**
- * Initialization
- * Configure all sortable tables on the page
- */
-const sortableTables = document.getElementsByClassName('sortable')
-;[].forEach.call(sortableTables, function(table) {
+function sortTable(table) {
   // Add a default ARIA unsorted state, and attach the sort
   // handler to any sortable columns in this table.
+
+  // Not using ES6 syntax for looping as not support by IE
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
+
   let cellIndex = 0 // track numeric cell index to simplify sort logic
   const headerCells = table.getElementsByClassName('govuk-table__header')
   ;[].forEach.call(headerCells, function(th) {
@@ -32,20 +34,9 @@ const sortableTables = document.getElementsByClassName('sortable')
   ;[].forEach.call(buttonSpans, function(span) {
     span.setAttribute('role', 'button')
     span.setAttribute('tabindex', '0')
-    span.addEventListener('keydown', function(e) {
-      if (e.which === 13 || e.which === 32) {
-        this.click()
-      }
-    })
   })
-})
+}
 
-/**
- * getParentTable - helper to find the parent table element from any child node
- *
- * @param  {HTMLElement} node any child node in a table
- * @return {HTMLElement}      parent table or undef
- */
 function getParentTable(node) {
   while (node) {
     node = node.parentNode
@@ -56,29 +47,32 @@ function getParentTable(node) {
   return undefined
 }
 
-/**
- * sortCol - Sort event handler. Attached to all sortable column headers
- *
- * @param  {Event} e The event triggering the sort action
- */
-function sortCol(e) {
-  // sortCol event gets triggered from the th or the nested span,
-  // identify the TH col, and assign some element lookups
-
+function getColumnFromEvent(e) {
   // closest isn't supported in IE, spaghetti as a result
   // https://caniuse.com/#search=closest
-  let thisCol
+
+  // They clicked on the header
   if (e.target.tagName === 'TH') {
-    thisCol = e.target
+    return e.target
+    // The clicked on the span
   } else if (e.target.parentNode.tagName === 'TH') {
-    thisCol = e.target.parentNode
+    return e.target.parentNode
+    // They clicked on the icon
   } else if (e.target.parentNode.parentNode.tagName === 'TH') {
-    thisCol = e.target.parentNode.parentNode
+    return e.target.parentNode.parentNode
+    // They used the dropdown
   } else {
     let [colIndex, sortOrderOption] = e.target.value.split('_')
     sortOrder = sortOrderOption
-    thisCol = document.querySelector(`[data-index="${colIndex}"]`)
+    return document.querySelector(`[data-index="${colIndex}"]`)
   }
+}
+
+function sortCol(e) {
+  // sortCol event gets triggered from the th, the nested span,
+  // the icon or the dropdown.
+
+  const thisCol = getColumnFromEvent(e)
   const table = getParentTable(thisCol)
   const tbody = table.getElementsByTagName('tbody').item(0)
   const rows = tbody.getElementsByTagName('tr')
@@ -111,21 +105,21 @@ function sortCol(e) {
   table.replaceChild(newTbody, tbody)
 }
 
-/**
- * updateIcon - Updates the arrow icon based on new sort status
- * @param  {HTMLElement} th    The table heading element reference
- * @return {String}      state The new sort state ("ascending" or "descending")
- */
 function updateIcon(th) {
-  let state = 'ascending'
+  // The sortOrder will be set if the user used the dropdown
+  let state = sortOrder || 'ascending'
+  console.log(state)
   const icon = th.getElementsByTagName('i').item(0)
   const ourIndex = th.getAttribute('data-index')
   // classList is supported in pretty much everything after IE8,
   // use that rather than a regex to modify the arrow classes
   if (icon.classList.contains('arrow')) {
-    // No sort -> Ascending
     icon.classList.remove('arrow')
-    icon.classList.add('arrow-up')
+    if (state === 'ascending') {
+      icon.classList.add('arrow-up')
+    } else if (state === 'descending') {
+      icon.classList.add('arrow-down')
+    }
   } else if (icon.classList.contains('arrow-down')) {
     // Descending -> Ascending
     icon.classList.remove('arrow-down')

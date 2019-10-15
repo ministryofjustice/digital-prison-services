@@ -18,7 +18,7 @@
       href: dashboardUrl
     },
     {
-      text: reason
+      text: title
     }
   ]
 })
@@ -26,7 +26,7 @@
 {% endblock %}
 {% block content %}
 
-<h1 class="govuk-heading-xl">{{reason}}</h1>
+<h1 class="govuk-heading-xl">{{title}}</h1>
 
 {{ govukSelect({
         id: "sortingOptions",
@@ -40,6 +40,7 @@
 
 {{ govukTable({
   firstCellIsHeader: false,
+  attributes: { id: "offenderListTable" },
   classes: "sortable",
   head: [
     {
@@ -50,7 +51,8 @@
       html: '<span class="th-content">Prison no. <i class="arrow"></i></span>'
     },
     {
-      html: '<span class="th-content">Location <i class="arrow"></i></span>'
+      html: '<span class="th-content">Location <i class="arrow"></i></span>',
+      classes: "sortableLink"
     },
     {
       html: '<span class="th-content">Activity <i class="arrow"></i></span>',

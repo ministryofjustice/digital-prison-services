@@ -309,7 +309,7 @@ describe('Attendance reason statistics', () => {
         dashboardUrl:
           '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&date=10/10/2019',
         caseLoadId: 'LEI',
-        title: 'Acceptable absence offenders',
+        title: 'Acceptable absence - 10 October 2019',
         reason: 'Acceptable absence',
         offenders: [
           [
@@ -320,7 +320,7 @@ describe('Attendance reason statistics', () => {
               text: 'G8974UK',
             },
             {
-              text: 'LEI-1',
+              text: '1',
             },
             {
               text: 'Cleaner',
@@ -338,6 +338,14 @@ describe('Attendance reason statistics', () => {
           {
             text: 'Name (Z-A)',
             value: '0_descending',
+          },
+          {
+            text: 'Location (A-Z)',
+            value: '2_ascending',
+          },
+          {
+            text: 'Location (Z-A)',
+            value: '2_descending',
           },
           {
             text: 'Activity (A-Z)',

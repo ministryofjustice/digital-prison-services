@@ -9,6 +9,7 @@ const {
   flagFuturePeriodSelected,
   readablePeriod,
   readableDateFormat,
+  stripAgencyPrefix,
 } = require('../utils')
 
 const getReasonCountMap = (data, reasons) => {
@@ -156,7 +157,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         return {
           offenderName: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
           offenderNo: offenderActivity.offenderNo,
-          location: offenderActivity.cellLocation,
+          location: stripAgencyPrefix(offenderActivity.cellLocation, agencyId),
           activity: offenderActivity.comment,
           comments: absence.comments,
         }
@@ -188,16 +189,19 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         })
 
       const displayReason = pascalToString(reason)
+      const displayDate = readableDateFormat(date, 'DD/MM/YYYY')
 
       const sortOptions = [
         { value: '0_ascending', text: 'Name (A-Z)' },
         { value: '0_descending', text: 'Name (Z-A)' },
+        { value: '2_ascending', text: 'Location (A-Z)' },
+        { value: '2_descending', text: 'Location (Z-A)' },
         { value: '3_ascending', text: 'Activity (A-Z)' },
         { value: '3_descending', text: 'Activity (Z-A)' },
       ]
 
       res.render('attendanceStatisticsOffendersList.njk', {
-        title: `${displayReason} offenders`,
+        title: `${displayReason} - ${displayDate}`,
         reason: displayReason,
         dashboardUrl: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=${period}&date=${date}`,
         offenders,
