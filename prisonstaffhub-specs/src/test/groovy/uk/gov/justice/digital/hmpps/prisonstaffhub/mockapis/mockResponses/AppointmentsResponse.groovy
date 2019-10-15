@@ -2,8 +2,6 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses
 import groovy.json.JsonOutput
 
 class AppointmentsResponse {
-
-
     static appointment1 = [
             offenderNo      : "A12345",
             firstName       : "TEST",
