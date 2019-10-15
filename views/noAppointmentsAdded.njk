@@ -9,32 +9,40 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{title}}</h1>
 
-      {% if reason === 'offendersNotFound' %}
-        <p class="govuk-body">This might be because the prison numbers:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>do not exist in this location</li>
-          <li>do not belong to any prisoner</li>
-          <li>are not in the format 'A1234BC'</li>
-        </ul>
+      <div data-qa="appointments-not-added-message">
+        {% if reason === 'offendersNotFound' %}
+          <p class="govuk-body">This might be because the prison numbers:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>do not exist in this location</li>
+            <li>do not belong to any prisoner</li>
+            <li>are not in the format 'A1234BC'</li>
+          </ul>
 
-        <p class="govuk-body">You should check all of the numbers on the CSV file.</p>
-      {% endif %}
+          <p class="govuk-body">You should check all of the numbers on the CSV file.</p>
+        {% endif %}
 
-      {% if reason === 'removedAllClashes' %}
-        <p class="govuk-body">This is because you have removed all the appointments which clashed.</p>
-      {% endif %}
+        {% if reason === 'removedAllClashes' %}
+          <p class="govuk-body">This is because you have removed all the appointments which clashed.</p>
+        {% endif %}
+      </div>
 
       {{ govukButton({
         text: "Upload another CSV file",
         href: "/bulk-appointments/upload-file",
-        classes: "govuk-!-margin-right-1"
+        classes: "govuk-!-margin-right-1",
+        attributes: {
+            'data-qa': 'upload-another-file'
+          }
       }) }}
 
       {{ govukButton({
-          text: "Exit to Digital Prison Service",
+          text: "Exit to Digital Prison Services",
           element: 'a',
           href: notmUrl,
-          classes: "govuk-button--secondary"
+          classes: "govuk-button--secondary",
+          attributes: {
+            'data-qa': 'exit-bulk-appointments'
+          }
       }) }}
 
     </div>

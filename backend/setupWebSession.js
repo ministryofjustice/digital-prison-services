@@ -12,10 +12,12 @@ module.exports = () => {
     const { host, port, password } = config.redis
     if (!host) return null
 
-    const passwordOnly = password ? `:${password}` : ''
-    const url = `redis://${passwordOnly}@${host}:${port}`
-
-    const client = redis.createClient(url)
+    const client = redis.createClient({
+      host,
+      port,
+      password,
+      tls: config.app.production ? {} : false,
+    })
 
     return new RedisStore({ client })
   }
@@ -32,7 +34,7 @@ module.exports = () => {
         domain: config.hmppsCookie.domain,
         httpOnly: true,
         maxAge: config.hmppsCookie.expiryMinutes * 60 * 1000,
-        sameSite: 'strict',
+        sameSite: 'lax',
         secure: config.app.production,
         signed: true,
       },
