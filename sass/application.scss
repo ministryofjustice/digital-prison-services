@@ -1,9 +1,11 @@
 $govuk-page-width: 1170px;
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'components/_header.scss';
+@import "components/_sortable-table.scss";
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
 @import 'views/components/movementSlip/movementSlip.scss';
+
 
 .no-select {
   -webkit-touch-callout: none;

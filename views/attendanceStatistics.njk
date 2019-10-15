@@ -75,7 +75,15 @@
   {% for paidReasons in formattedReasons.paidReasons|sort(attribute="value") %}
     <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
       <p class="govuk-body">{{paidReasons.name}}</p>
-      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[paidReasons.value]}}</span>
+      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
+      {% if dashboardStats[paidReasons.value] > 0 %}
+        <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{paidReasons.value}}?agencyId={{caseLoadId}}&date={{date}}&period={{period}}" class="govuk-link--no-visited-state">
+        {{dashboardStats[paidReasons.value]}}
+        </a>
+      {% else %}
+        {{dashboardStats[paidReasons.value]}}
+      {% endif %}
+      </span>
     </div>
   {% endfor %}
 </div>
@@ -87,7 +95,15 @@
   {% for unpaidReasons in formattedReasons.unpaidReasons|sort(attribute="value") %}
       <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
         <p class="govuk-body">{{unpaidReasons.name}}</p>
-        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats[unpaidReasons.value]}}</span>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
+        {% if dashboardStats[unpaidReasons.value] > 0 %}
+          <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{unpaidReasons.value}}?agencyId={{caseLoadId}}&date={{date}}&period={{period}}" class="govuk-link--no-visited-state">
+          {{dashboardStats[unpaidReasons.value]}}
+          </a>
+        {% else %}
+          {{dashboardStats[unpaidReasons.value]}}
+        {% endif %}
+        </span>
       </div>
   {% endfor %}
 </div>
