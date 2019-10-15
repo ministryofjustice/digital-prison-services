@@ -34,7 +34,7 @@ module.exports = () => {
         domain: config.hmppsCookie.domain,
         httpOnly: true,
         maxAge: config.hmppsCookie.expiryMinutes * 60 * 1000,
-        sameSite: 'strict',
+        sameSite: 'lax',
         secure: config.app.production,
         signed: true,
       },
