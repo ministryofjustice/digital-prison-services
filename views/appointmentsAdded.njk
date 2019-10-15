@@ -34,7 +34,7 @@
       {% endif %}
 
       <p class="govuk-body">
-        <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank">
+        <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
           Print movement authorisation slips
         </a>
       </p>
@@ -42,8 +42,11 @@
       {{ govukButton({ 
           text: "Add more appointments",
           element: 'a',
-          href: '/bulk-appointments/add-more-appointments',
-          classes: "govuk-!-margin-right-3"
+          href: '/bulk-appointments/add-appointment-details',
+          classes: "govuk-!-margin-right-3",
+          attributes: {
+            'data-qa': 'add-more-appointments'
+          }
         })
       }}
 
@@ -51,7 +54,10 @@
           text: "Exit to Digital Prison Services",
           element: 'a',
           href: dpsUrl,
-          classes: "govuk-button--secondary"
+          classes: "govuk-button--secondary",
+          attributes: {
+            'data-qa': 'exit-bulk-appointments'
+          }
         })
       }}
     </div>

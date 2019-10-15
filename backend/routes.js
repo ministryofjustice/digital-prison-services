@@ -70,7 +70,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use(async (req, res, next) => {
     const { userDetails } = req.session
     if (!userDetails) {
-      // eslint-disable-next-line no-param-reassign
       req.session.userDetails = await oauthApi.currentUser(res.locals)
     }
     next()

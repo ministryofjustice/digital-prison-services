@@ -1,9 +1,9 @@
-   <dl class="govuk-summary-list">
+   <dl class="govuk-summary-list" data-qa="appointment-details-summary">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Appointment type
           </dt>
-          <dd class="govuk-summary-list__value">
+          <dd class="govuk-summary-list__value" data-qa="appointment-details-summary-appointment-type">
             {{appointmentDetails.appointmentTypeDescription}}
           </dd>
         </div>
@@ -11,7 +11,7 @@
           <dt class="govuk-summary-list__key">
             Location
           </dt>
-          <dd class="govuk-summary-list__value">
+          <dd class="govuk-summary-list__value" data-qa="appointment-details-summary-appointment-location">
             {{appointmentDetails.locationDescription}}
           </dd>
         </div>
@@ -20,7 +20,7 @@
           <dt class="govuk-summary-list__key">
             Start date
           </dt>
-          <dd class="govuk-summary-list__value">
+          <dd class="govuk-summary-list__value" data-qa="appointment-details-summary-appointment-start-date">
             {{appointmentDetails.date | getDate()}}
           </dd>
         </div>
@@ -30,7 +30,7 @@
             <dt class="govuk-summary-list__key">
               Time
             </dt>
-            <dd class="govuk-summary-list__value">
+            <dd class="govuk-summary-list__value" data-qa="appointment-details-summary-appointment-start-time">
               {{appointmentDetails.startTime | getTime()}}
               {% if appointmentDetails.endTime %}
                 {{' to ' + appointmentDetails.endTime | getTime()}}

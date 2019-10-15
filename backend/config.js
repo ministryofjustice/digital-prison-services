@@ -19,6 +19,11 @@ module.exports = {
     expiryMinutes: process.env.WEB_SESSION_TIMEOUT_IN_MINUTES || 60,
     sessionSecret: process.env.SESSION_COOKIE_SECRET || 'notm-insecure-session',
   },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT || 6379,
+    password: process.env.REDIS_PASSWORD,
+  },
   apis: {
     oauth2: {
       url: process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth',
