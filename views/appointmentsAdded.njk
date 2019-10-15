@@ -12,7 +12,7 @@
         titleText: "The appointments have been added"
       }) }}
 
-      {% if prisonersNotAdded.length > 0 %}
+      {% if prisonersRemoved.length > 0 %}
         <p class="govuk-body">Appointments have not been added for:</p>
 
         <table class="govuk-table">
@@ -23,7 +23,7 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            {% for prisoner in prisonersNotAdded %}
+            {% for prisoner in prisonersRemoved %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">{{prisoner.lastName}}</td>
                 <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
