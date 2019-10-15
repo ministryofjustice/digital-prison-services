@@ -119,6 +119,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
         at HouseblockPage
+        sleep(5000)
 
         when: "I change selections and update"
         def firstOfMonthDisplayFormat = '01/08/2018'
