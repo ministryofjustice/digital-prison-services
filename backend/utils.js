@@ -177,6 +177,18 @@ const forenameToInitial = name => {
   return `${name.charAt()} ${name.split(' ').pop()}`
 }
 
+// Copied from React utils
+const stripAgencyPrefix = (location, agency) => {
+  const parts = location && location.split('-')
+  if (parts && parts.length > 0) {
+    const index = parts.findIndex(p => p === agency)
+    if (index >= 0) {
+      return location.substring(parts[index].length + 1, location.length)
+    }
+  }
+  return location
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -203,4 +215,5 @@ module.exports = {
   getDate,
   getTime,
   forenameToInitial,
+  stripAgencyPrefix,
 }
