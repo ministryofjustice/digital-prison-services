@@ -82,7 +82,15 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       },
     } = req.session
 
-    const remainingPrisoners = prisonersListed.filter(prisoner => !req.body[prisoner.offenderNo])
+    const [prisonersRemoved, remainingPrisoners] = prisonersListed.reduce(
+      (prisonersSeparated, prisoner) => {
+        prisonersSeparated[req.body[prisoner.offenderNo] ? 0 : 1].push(prisoner)
+        return prisonersSeparated
+      },
+      [[], []]
+    )
+
+    req.session.data.prisonersRemoved = prisonersRemoved
 
     if (!remainingPrisoners.length) {
       return res.redirect('/bulk-appointments/no-appointments-added?reason=removedAllClashes')

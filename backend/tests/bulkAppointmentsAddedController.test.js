@@ -16,7 +16,7 @@ describe('bulk appointments confirm', () => {
     endTime: '2019-09-30T16:30:00',
     comment: 'Activity comment',
     prisonersNotFound: [],
-    prisonersNotAdded: [
+    prisonersRemoved: [
       {
         offenderNo: 'ABC123',
         lastName: 'Smith',
@@ -47,7 +47,7 @@ describe('bulk appointments confirm', () => {
         await bulkAppointmentsAddedController(req, res)
 
         expect(res.render).toBeCalledWith('appointmentsAdded.njk', {
-          prisonersNotAdded: appointmentDetails.prisonersNotAdded,
+          prisonersRemoved: appointmentDetails.prisonersRemoved,
           dpsUrl: '//newNomisEndPointUrl/',
         })
       })
