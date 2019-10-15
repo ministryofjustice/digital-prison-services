@@ -146,8 +146,8 @@ class Elite2Api extends WireMockRule {
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseCellOrder)
         //order does not matter here
         stubSentenceData(offenderNumbers, date, true)
-        stubCourtEvents(offenderNumbers, date)
-        stubExternalTransfers(offenderNumbers, date, true)
+        stubCourtEvents(caseload, offenderNumbers, date)
+        stubExternalTransfers(caseload, offenderNumbers, date, true)
         stubAlerts(offenderNumbers)
         stubAssessments(offenderNumbers)
     }
@@ -164,8 +164,8 @@ class Elite2Api extends WireMockRule {
 
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseMultipleActivities)
         stubSentenceData(offenderNumbers, date)
-        stubCourtEvents(offenderNumbers, date)
-        stubExternalTransfers(offenderNumbers, date, true)
+        stubCourtEvents(caseload, offenderNumbers, date)
+        stubExternalTransfers(caseload, offenderNumbers, date, true)
         stubAlerts(offenderNumbers)
         stubAssessments(offenderNumbers)
     }
@@ -182,8 +182,8 @@ class Elite2Api extends WireMockRule {
 
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseNoActivities)
         stubSentenceData(offenderNumbers, date)
-        stubCourtEvents(offenderNumbers, date)
-        stubExternalTransfers(offenderNumbers, date)
+        stubCourtEvents(caseload, offenderNumbers, date)
+        stubExternalTransfers(caseload, offenderNumbers, date)
         stubAlerts(offenderNumbers)
         stubAssessments(offenderNumbers)
     }
@@ -200,7 +200,7 @@ class Elite2Api extends WireMockRule {
 
         def offenderNumbers = extractOffenderNumbers(HouseblockResponse.responseNoActivities)
         stubSentenceData(offenderNumbers, date, true)
-        stubExternalTransfers(offenderNumbers, date, true)
+        stubExternalTransfers(caseload, offenderNumbers, date, true)
         stubAlerts(offenderNumbers)
         stubAssessments(offenderNumbers)
 
@@ -250,7 +250,7 @@ class Elite2Api extends WireMockRule {
 
     void stubVisits(Caseload caseload, String timeSlot, String date, def offenderNumbers,  data = JsonOutput.toJson([])) {
         this.stubFor(
-                post("/api/schedules/${caseload.id}/visits?timeSlot=${timeSlot}&date=${date}")
+                post("/api/schedules/${caseload.id}/visits?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                                 aResponse()
@@ -262,7 +262,7 @@ class Elite2Api extends WireMockRule {
 
     void stubAppointments(Caseload caseload, String timeSlot, String date, def offenderNumbers, data = JsonOutput.toJson([])) {
         this.stubFor(
-                post("/api/schedules/${caseload.id}/appointments?timeSlot=${timeSlot}&date=${date}")
+                post("/api/schedules/${caseload.id}/appointments?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
                         .willReturn(
                                 aResponse()
@@ -284,9 +284,9 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubCourtEvents(def offenderNumbers, String date,  data = JsonOutput.toJson([])) {
+    void stubCourtEvents(Caseload caseload, def offenderNumbers, String date,  data = JsonOutput.toJson([])) {
         this.stubFor(
-                post("/api/schedules/LEI/courtEvents?date=${date}")
+                post("/api/schedules/${caseload.id}/courtEvents?date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
                         .willReturn(
                                 aResponse()
@@ -309,8 +309,8 @@ class Elite2Api extends WireMockRule {
         stubVisits(caseload, timeSlot, date, offenderNumbers, ActivityResponse.visits)
         stubAppointments(caseload, timeSlot, date, offenderNumbers, ActivityResponse.appointments)
         stubActivities(caseload, timeSlot, date, offenderNumbers, activityResponse)
-        stubCourtEvents(offenderNumbers, date, HouseblockResponse.courtEventsWithDifferentStatuesResponse)
-        stubExternalTransfers(offenderNumbers, date)
+        stubCourtEvents(caseload, offenderNumbers, date, HouseblockResponse.courtEventsWithDifferentStatuesResponse)
+        stubExternalTransfers(caseload, offenderNumbers, date)
         stubAlerts(offenderNumbers)
         stubAssessments(offenderNumbers)
 
@@ -352,22 +352,24 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    def stubCourtEvents(List offenderNumbers, String date) {
+    def stubCourtEvents(Caseload caseload, List offenderNumbers, String date, Boolean emptyResponse = false) {
+        def json = emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.courtEventsResponse
+
         this.stubFor(
-                post("/api/schedules/LEI/courtEvents?date=${date}")
+                post("/api/schedules/${caseload.id}/courtEvents?date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
                         .willReturn(
                         aResponse()
-                                .withBody(HouseblockResponse.courtEventsResponse)
+                                .withBody(json)
                                 .withHeader('Content-Type', 'application/json')
                                 .withStatus(200)))
     }
 
-    def stubExternalTransfers(List offenderNumbers, String date, Boolean emptyResponse = false) {
+    def stubExternalTransfers(Caseload caseload, List offenderNumbers, String date, Boolean emptyResponse = false) {
         def json = emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.externalTransfersResponse
 
         this.stubFor(
-                post("/api/schedules/LEI/externalTransfers?date=${date}")
+                post("/api/schedules/${caseload.id}/externalTransfers?date=${date}")
                         .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers), true, false))
                         .willReturn(
                         aResponse()
@@ -587,9 +589,9 @@ class Elite2Api extends WireMockRule {
         stubAppointments(caseload, timeSlot, date, offenders)
         stubActivities(caseload, timeSlot, date, offenders)
         stubSentenceData(offenders, date)
-        stubCourtEvents(offenders, date)
+        stubCourtEvents(caseload, offenders, date)
 
-        stubExternalTransfers(offenders, date)
+        stubExternalTransfers(caseload, offenders, date)
         stubAlerts(offenders)
         stubAssessments(offenders)
     }
