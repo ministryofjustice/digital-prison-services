@@ -165,9 +165,7 @@ jobs:
               --label "build.gitref=$CIRCLE_SHA1"
             
             # Copy build-info.json from image
-            docker run --name app "mojdigitalstudio/prisonstaffhub:$APP_VERSION"
-            docker cp app:/app/build-info.json ./build-info.json
-            docker rm -f app
+            docker run -it --rm mojdigitalstudio/prisonstaffhub:$APP_VERSION cat /app/build-info.json > build-info.json
             
             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
               #publish to docker hub as the tag
