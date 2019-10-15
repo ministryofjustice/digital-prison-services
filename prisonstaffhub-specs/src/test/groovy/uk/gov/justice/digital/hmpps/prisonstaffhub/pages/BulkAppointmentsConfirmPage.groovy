@@ -16,6 +16,7 @@ class BulkAppointmentsConfirmPage extends Page {
         appointmentsEndDate {$('[data-qa="appointment-details-summary-appointment-end-date"]') }
         prisonersNotFound {$('[data-qa="prisoners-not-found"]') }
         prisonersFound {$('[data-qa="prisoners-found"]') }
+        form { $('form')}
         submitButton { $('button', type: 'submit') }
     }
 
