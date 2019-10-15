@@ -152,7 +152,8 @@ class OauthApi extends WireMockRule {
                                 username        : user.username,
                                 firstName       : user.staffMember.firstName,
                                 lastName        : user.staffMember.lastName,
-                                email           : 'itaguser@syscon.net'
+                                email           : 'itaguser@syscon.net',
+                                activeCaseLoadId: user.getWorkingCaseload()
                         ]))))
     }
 
