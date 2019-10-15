@@ -119,6 +119,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         waitFor { continueButton.module(FormElement).enabled }
         continueButton.click()
         at HouseblockPage
+        sleep(2000)
 
         when: "I change selections and update"
         def firstOfMonthDisplayFormat = '01/08/2018'
@@ -134,6 +135,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         location == 'B'
         form['search-date'] == firstOfMonthDisplayFormat
         period == 'PM'
+        sleep(2000)
 
         headingText.contains('1 - B')
         waitFor { tableRows[1].find('td')[activityColumn].text() == '17:00 - Woodwork' }
