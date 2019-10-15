@@ -16,7 +16,7 @@ module.exports = () => {
       host,
       port,
       password,
-      tls: false,
+      tls: config.app.production ? {} : false,
     })
 
     return new RedisStore({ client })
