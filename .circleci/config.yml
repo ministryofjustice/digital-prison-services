@@ -61,7 +61,7 @@ orbs:
   helm: circleci/helm@0.1.2
 
 jobs:
-  build:
+  validate_build:
     executor: builder
     steps:
       - checkout
@@ -99,7 +99,6 @@ jobs:
           paths:
             - node_modules
             - build
-            - build-info.json
 
   integration_tests:
     working_directory: ~/app
@@ -151,8 +150,8 @@ jobs:
       - run:
           name: Build container and publish to docker hub
           command: |
-            APP_VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
-            
+            APP_VERSION=${DATE}.${CIRCLE_BUILD_NUM}
+
             docker build --rm=false . \
               --build-arg BUILD_NUMBER=$APP_VERSION \
               --build-arg GIT_REF=$CIRCLE_SHA1 \
@@ -163,7 +162,9 @@ jobs:
               --label "build.number=$CIRCLE_BUILD_NUM" \
               --label "build.url=$CIRCLE_BUILD_URL" \
               --label "build.gitref=$CIRCLE_SHA1"
-
+            
+            docker cp "mojdigitalstudio/prisonstaffhub:$APP_VERSION":~/build-info.json build-info.json
+            
             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
               #publish to docker hub as the tag
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -171,6 +172,10 @@ jobs:
               docker push mojdigitalstudio/prisonstaffhub:$APP_VERSION
               docker push mojdigitalstudio/prisonstaffhub:latest
             fi
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build-info.json
 
   deploy_dev:
     executor: deployer
@@ -192,22 +197,21 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build:
+      - validate_build:
           filters:
             tags:
               ignore: /.*/
       - integration_tests:
           requires:
-            - build
+            - validate_build
       - build_docker:
-          requires:
-            - integration_tests
-          filters:
-            branches:
-              only: master
+          #filters:
+            #branches:
+              #only: master
       - deploy_dev:
           requires:
             - build_docker
+            - integration_tests
       - request-preprod-approval:
           type: approval
           requires:
