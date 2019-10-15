@@ -4,9 +4,10 @@ const logger = require('./log')
 const contextProperties = require('./contextProperties')
 const config = require('./config')
 
-const isXHRRequest = req =>
-  req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1) || (req.path && req.path.endsWith('.js'))
-
+const isXHROrImageRequest = req =>
+  req.xhr ||
+  (req.headers.accept && (req.headers.accept.indexOf('json') > -1 || req.headers.accept.indexOf('image/*') > -1)) ||
+  (req.path && req.path.endsWith('.js'))
 /**
  * Add session management related routes to an express 'app'.
  * These handle login, logout, and middleware to handle the JWT token cookie. (hmppsCookie).
@@ -59,7 +60,7 @@ const configureRoutes = ({ app, tokenRefresher, mailTo, homeLink }) => {
       // need to logout here otherwise user will still be considered authenticated when we take them to /login
       req.logout()
 
-      if (isXHRRequest(req)) {
+      if (isXHROrImageRequest(req)) {
         res.status(401)
         res.json({ reason: 'session-expired' })
         next(error)
@@ -81,7 +82,7 @@ const configureRoutes = ({ app, tokenRefresher, mailTo, homeLink }) => {
       next()
       return
     }
-    if (isXHRRequest(req)) {
+    if (isXHROrImageRequest(req)) {
       res.status(401)
       res.json({ reason: 'session-expired' })
       return

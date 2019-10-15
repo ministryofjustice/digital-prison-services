@@ -69,7 +69,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use(async (req, res, next) => {
     const { userDetails } = req.session
     if (!userDetails) {
-      // eslint-disable-next-line no-param-reassign
       req.session.userDetails = await oauthApi.currentUser(res.locals)
     }
     next()
@@ -148,7 +147,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   })
 
   router.get('/bulk-appointments/no-appointments-added', async (req, res) => {
-    res.render('noAppointmentsAdded.njk', { title: 'No appointments have been added' })
+    const { reason } = req.query
+    res.render('noAppointmentsAdded.njk', { reason })
   })
 
   router.use('/bulk-appointments/upload-file', uploadAppointmentDetailsController({ elite2Api, logError }))

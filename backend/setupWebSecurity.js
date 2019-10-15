@@ -11,6 +11,8 @@ const sixtyDaysInSeconds = 5184000
 const router = express.Router()
 
 module.exports = () => {
+  router.use(helmet())
+
   router.use(
     hsts({
       maxAge: sixtyDaysInSeconds,
@@ -18,9 +20,6 @@ module.exports = () => {
       preload: true,
     })
   )
-
-  router.use(helmet())
-
   router.use(
     bunyanMiddleware({
       logger: log,

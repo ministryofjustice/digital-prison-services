@@ -289,6 +289,21 @@ describe('appointment clashes', () => {
         })
       })
 
+      describe('and all prisoners have been selected for removal', () => {
+        beforeEach(() => {
+          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          req.session.data = { ...appointmentDetails }
+        })
+
+        it('should not submit any appointments and redirect to the no appointments added page', async () => {
+          req.body = { G1683VN: 'remove', G4803UT: 'remove', G4346UT: 'remove', G5402VR: 'remove' }
+
+          await controller.post(req, res)
+          expect(elite2Api.addBulkAppointments).not.toBeCalled()
+          expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=removedAllClashes')
+        })
+      })
+
       describe('and there are recurring appointments', () => {
         beforeEach(() => {
           elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
