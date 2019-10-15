@@ -150,6 +150,7 @@ jobs:
       - run:
           name: Build container and publish to docker hub
           command: |
+            DATE=$(date '+%Y-%m-%d')
             APP_VERSION=${DATE}.${CIRCLE_BUILD_NUM}
 
             docker build --rm=false . \
