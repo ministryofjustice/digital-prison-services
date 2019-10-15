@@ -108,7 +108,6 @@ function sortCol(e) {
 function updateIcon(th) {
   // The sortOrder will be set if the user used the dropdown
   let state = sortOrder || 'ascending'
-  console.log(state)
   const icon = th.getElementsByTagName('i').item(0)
   const ourIndex = th.getAttribute('data-index')
   // classList is supported in pretty much everything after IE8,
