@@ -9,11 +9,9 @@ class HouseblockPage extends DatePickerPage {
 
     static at = {
         tableRows.size() > 1
-        !spinner.displayed
     }
 
     static content = {
-        spinner(required: false) { $('.spinner-component') }
         headingText { $('h1').first().text() }
         header(required: false) { module(HeaderModule) }
         location { $('#housing-location-select') }
