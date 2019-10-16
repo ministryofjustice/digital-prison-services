@@ -196,7 +196,7 @@ describe('Add appointment details controller', () => {
               { href: '#date', text: 'Select a date' },
               { href: '#start-time-hours', text: 'Select a start time' },
               { href: '#repeats', text: 'Select a period' },
-              { href: '#times', text: 'Enter how many appointments you want to add' },
+              { href: '#times', text: 'Enter the number of appointments using numbers only' },
             ],
           })
         )
@@ -510,7 +510,7 @@ describe('Add appointment details controller', () => {
         expect(res.render).toHaveBeenCalledWith(
           'addAppointmentDetails.njk',
           expect.objectContaining({
-            errors: [{ text: 'Enter how many appointments you want to add', href: '#times' }],
+            errors: [{ text: 'Enter the number of appointments using numbers only', href: '#times' }],
           })
         )
       })
