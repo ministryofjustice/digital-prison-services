@@ -114,7 +114,7 @@ const getValidationMessages = ({
 
   if (recurring === 'yes') {
     if (Number(times) <= 0 || !Number(times))
-      errors.push({ href: '#times', text: 'Enter how many appointments you want to add' })
+      errors.push({ href: '#times', text: 'Enter the number of appointments using numbers only' })
 
     if (repeats && times) {
       const { recurringStartTime, endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
