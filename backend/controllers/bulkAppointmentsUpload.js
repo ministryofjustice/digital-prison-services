@@ -68,12 +68,9 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
             return res.redirect('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
           }
 
-          if (prisonerList && prisonerList.length) {
-            req.session.data.prisonersListed = prisonerList
-          }
-          if (offenderNosNotFound && offenderNosNotFound.length) {
-            req.session.data.prisonersNotFound = offenderNosNotFound
-          }
+          req.session.data.prisonersListed = prisonerList
+
+          req.session.data.prisonersNotFound = offenderNosNotFound
 
           return res.redirect('/bulk-appointments/confirm-appointments')
         })
