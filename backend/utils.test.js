@@ -15,6 +15,7 @@ import {
   isViewableFlag,
   getDate,
   getTime,
+  chunk,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -308,5 +309,13 @@ describe('getTime()', () => {
 
   it('should return Invalid message if no date time string is used', () => {
     expect(getTime()).toEqual('Invalid date or time')
+  })
+})
+
+describe('chunk()', () => {
+  it('should split an array into multiple arrays at the specified number', () => {
+    const arrayWithFourThings = ['Item 1', 'Item 2', 'Item 3', 'Item 4']
+
+    expect(chunk(arrayWithFourThings, 2)).toEqual([['Item 1', 'Item 2'], ['Item 3', 'Item 4']])
   })
 })

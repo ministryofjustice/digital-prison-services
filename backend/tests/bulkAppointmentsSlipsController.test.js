@@ -93,7 +93,7 @@ describe('appointment movement slips', () => {
       it('should render the movement slips page with the correct details', async () => {
         elite2Api.getOffenderSummaries = jest
           .fn()
-          .mockReturnValueOnce([
+          .mockReturnValue([
             { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
             { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
             { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
