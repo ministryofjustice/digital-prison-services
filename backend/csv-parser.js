@@ -20,7 +20,7 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
       let record
       // eslint-disable-next-line no-cond-assign
       while ((record = this.read())) {
-        output.push(record)
+        if (record[0] !== 'Prison number') output.push(record)
       }
     })
 

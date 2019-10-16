@@ -93,7 +93,7 @@ describe('csv-parser', () => {
     fs.readFileSync = jest.fn()
 
     fs.readFile = (path, callback) => {
-      callback(null, `A12345\n`)
+      callback(null, `Prison number\nA12345\n`)
     }
 
     const service = csvParserService({ fs, isBinaryFileSync })
