@@ -11,7 +11,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.HouseblockPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import java.text.SimpleDateFormat
-import java.text.SimpleDateFormat
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
