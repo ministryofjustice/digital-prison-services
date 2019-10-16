@@ -45,10 +45,15 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
       return csvParserService
         .loadAndParseCsvFile(file)
         .then(async fileContent => {
-          const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, activeCaseLoadId)
+          const fileContentWithNoHeader = fileContent[0][0] === 'Prison number' ? fileContent.slice(1) : fileContent
+          const prisonersDetails = await offenderLoader.loadFromCsvContent(
+            res.locals,
+            fileContentWithNoHeader,
+            activeCaseLoadId
+          )
 
           const removeDuplicates = array => [...new Set(array)]
-          const offendersFromCsv = removeDuplicates(fileContent.map(row => row[0]))
+          const offendersFromCsv = removeDuplicates(fileContentWithNoHeader.map(row => row[0]))
 
           const prisonerList = prisonersDetails.map(prisoner => ({
             bookingId: prisoner.bookingId,
