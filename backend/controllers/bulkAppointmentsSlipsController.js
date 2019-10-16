@@ -29,9 +29,9 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       offenders: offendersChunk,
     }))
 
-    const offenderSummaries = await Promise.all(
+    const offenderSummaries = (await Promise.all(
       offenderSummaryApiCalls.map(apiCall => apiCall.getOffenderSummaries(res.locals, apiCall.offenders))
-    ).then(offenders => offenders.reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), []))
+    )).reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
 
     const prisonersListedWithCellInfo = prisonersListed.map(prisoner => {
       const prisonerDetails = offenderSummaries.find(offender => prisoner.offenderNo === offender.offenderNo)
