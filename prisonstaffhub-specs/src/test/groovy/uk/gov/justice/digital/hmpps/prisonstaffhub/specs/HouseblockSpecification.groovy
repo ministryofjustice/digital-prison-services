@@ -11,6 +11,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.HouseblockPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import java.text.SimpleDateFormat
+import java.text.SimpleDateFormat
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -103,57 +104,6 @@ class HouseblockSpecification extends BrowserReportingSpec {
         def row3 = tableRows[3].find('td')
         row3[activityColumn].text() == '11:45 - Chapel'
         row3[otherActivityColumn].text() == ''
-    }
-
-    def "The updated houseblock list is displayed"() {
-        given: 'I am on the houseblock list page'
-        fixture.toSearch()
-        this.initialPeriod = period.value()
-        def today = getNow()
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1_B', 'PM', today)
-        whereaboutsApi.stubGetAbsenceReasons()
-        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'PM', today)
-        location = '1'
-        period = 'PM'
-        waitFor { continueButton.module(FormElement).enabled }
-        continueButton.click()
-        at HouseblockPage
-        sleep(2000)
-
-        when: "I change selections and update"
-        def firstOfMonthDisplayFormat = '01/08/2018'
-        def firstOfMonthApiFormat = '2018-08-01'
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1_B', 'PM', firstOfMonthApiFormat)
-        whereaboutsApi.stubGetAbsenceReasons()
-        whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'PM', firstOfMonthApiFormat)
-        location = 'B'
-        setDatePicker('2018', 'Aug', '1')
-
-        then: 'The new houseblock list results are displayed'
-        at HouseblockPage
-        location == 'B'
-        form['search-date'] == firstOfMonthDisplayFormat
-        period == 'PM'
-        sleep(2000)
-
-        headingText.contains('1 - B')
-        waitFor { tableRows[1].find('td')[activityColumn].text() == '17:00 - Woodwork' }
-        waitFor { tableRows[2].find('td')[activityColumn].text() == '17:45 - TV Repairs' }
-        tableRows[1].find('td')[otherActivityColumn].find('li')*.text() == ['Court visit scheduled', '18:00 - Visits - Friends', '18:30 - Visits - Friends (cancelled)','19:10 - 20:30 - hair cut - room 1 - crew cut' ]
-        def texts = tableRows*.text()
-        texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
-        texts[2].contains("Balog, Eugene A-1-2 A1234AB")
-        texts[3].contains("Not Recorded")
-
-        when: "I go to the search page afresh"
-        browser.to SearchPage
-
-        then: 'The selections are reinitialised'
-        at SearchPage
-        location.value() == '--'
-        date.value() == 'Today'
-        period.value() == this.initialPeriod
     }
 
     def "should navigate to the whereabouts search on a page refresh"() {
