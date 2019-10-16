@@ -166,7 +166,7 @@ const elite2ApiFactory = client => {
     put(context, `/api/bookings/${bookingId}/alert/${alertId}`, body)
 
   const getOffenderSummaries = (context, offenderNo) =>
-    get(context, `/api/bookings?${arrayToQueryString(offenderNo, 'offenderNo')}`)
+    get(context, `/api/bookings?${arrayToQueryString(offenderNo, 'offenderNo')}`, 100)
 
   return {
     userLocations,
