@@ -153,7 +153,9 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const absences = attendances.filter(absence => absence.absentReason === reason)
 
       const offenderData = absences.map(absence => {
-        const offenderActivity = activities.find(activity => activity.bookingId === absence.bookingId)
+        const offenderActivity = activities.find(
+          activity => activity.bookingId === absence.bookingId && activity.eventId === absence.eventId
+        )
         return {
           offenderName: `${capitalize(offenderActivity.lastName)}, ${capitalize(offenderActivity.firstName)}`,
           offenderNo: offenderActivity.offenderNo,
@@ -190,6 +192,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       const displayReason = pascalToString(reason)
       const displayDate = readableDateFormat(date, 'DD/MM/YYYY')
+      const displayPeriod = readablePeriod(period)
 
       const sortOptions = [
         { value: '0_ascending', text: 'Name (A-Z)' },
@@ -201,7 +204,9 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       ]
 
       res.render('attendanceStatisticsOffendersList.njk', {
-        title: `${displayReason} - ${displayDate}`,
+        title: `${displayReason}`,
+        displayDate,
+        displayPeriod,
         reason: displayReason,
         dashboardUrl: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=${period}&date=${date}`,
         offenders,
