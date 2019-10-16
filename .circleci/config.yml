@@ -65,6 +65,12 @@ jobs:
     executor: builder
     steps:
       - checkout
+      - helm/install-helm-client:
+          version: v2.13.1
+      - run:
+          name: Run helm lint
+          command: helm lint prison-staff-hub --values=values-dev.yaml --values=secrets-example.yaml
+          working_directory: helm_deploy
       - restore_cache:
           key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
       - run:

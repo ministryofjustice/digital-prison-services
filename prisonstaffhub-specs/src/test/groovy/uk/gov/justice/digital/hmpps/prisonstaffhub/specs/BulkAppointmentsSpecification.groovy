@@ -30,7 +30,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
 
     LocalDate startDate = LocalDate.now().plusDays(10)
 
-    def "should add a non reoccurring bulk appointment"() {
+    def "should add a non reoccurring bulk appointment with the same start time"() {
         setupTests()
         setupNoClashes()
 
@@ -62,6 +62,49 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         appointmentStartTime.text() == "10:10"
         prisonersNotFound.children()[1].text() == "offenderNo"
         prisonersFound.children()[1].text() == "Doe John A12345"
+
+        and: "I confirm the appointments I want to create"
+        submitButton.click()
+
+        then: "I am presented with the appointments added page"
+        at BulkAppointmentsAddedPage
+    }
+
+    def "should add a non reoccurring bulk appointment with different start times"() {
+        setupTests()
+        setupNoClashes()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "no"
+        form.recurring = "no"
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile()
+        submitButton.click()
+
+        then: "I am on the confirm appointments page"
+        at BulkAppointmentsConfirmPage
+        appointmentType.text() == "Activities"
+        appointmentLocation.text() == "Adj"
+        appointmentStartDate.text() == startDate.format(longDatePattern)
+        prisonersNotFound.children()[1].text() == "offenderNo"
+        prisonersFound.children()[1].text().contains("Doe John A12345")
+
+        when: "I set the individual start and end time for the offenders"
+        form.A12345startTimeHours = 10
+        form.A12345startTimeMinutes = 30
+        form.A12345endTimeHours = 11
+        form.A12345endTimeMinutes = 30
 
         and: "I confirm the appointments I want to create"
         submitButton.click()
