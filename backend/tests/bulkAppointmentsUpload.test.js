@@ -68,7 +68,15 @@ describe('bulk appointments upload', () => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
     })
-    let fileContent = [['G1683VN'], ['G4803UT'], ['G4346UT'], ['BADNUMBER'], ['ANOTHERBADNUMBER'], ['REALLYBADNUMBER']]
+    let fileContent = [
+      ['Prison number'],
+      ['G1683VN'],
+      ['G4803UT'],
+      ['G4346UT'],
+      ['BADNUMBER'],
+      ['ANOTHERBADNUMBER'],
+      ['REALLYBADNUMBER'],
+    ]
 
     let offenderNosNotFound = []
 
