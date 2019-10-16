@@ -1,4 +1,4 @@
-const { forenameToInitial, chunk } = require('../utils')
+const { forenameToInitial, chunkArray } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
@@ -22,7 +22,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
 
     const createdBy = forenameToInitial(userDetails.name)
     const offenderNumbers = prisonersListed.map(prisoner => prisoner.offenderNo)
-    const chunkedOffenderNumbers = chunk(offenderNumbers, 100)
+    const chunkedOffenderNumbers = chunkArray(offenderNumbers, 100)
 
     const offenderSummaryApiCalls = chunkedOffenderNumbers.map(offendersChunk => ({
       getOffenderSummaries: elite2Api.getOffenderSummaries,
