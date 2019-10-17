@@ -20,6 +20,7 @@ beforeEach(() => {
       },
     },
     body: {},
+    flash: jest.fn().mockReturnValue([]),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -27,42 +28,39 @@ beforeEach(() => {
 })
 
 const appointmentDetails = {
-  appointmentType: 'TEST',
-  appointmentTypeDescription: 'Test Type',
-  location: 1,
-  locationDescription: 'Chapel',
-  date: '23/09/2019',
   startTime: '2019-09-23T15:30:00',
   endTime: '2019-09-30T16:30:00',
   comments: 'Activity comment',
-  prisonersNotFound: [],
-  prisonersListed: [
-    {
-      bookingId: '111',
-      offenderNo: 'G1683VN',
-      firstName: 'Elton',
-      lastName: 'Abbatiello',
-    },
-    {
-      bookingId: '222',
-      offenderNo: 'G4803UT',
-      firstName: 'Bobby',
-      lastName: 'Abdulkadir',
-    },
-    {
-      bookingId: '333',
-      offenderNo: 'G4346UT',
-      firstName: 'Dewey',
-      lastName: 'Affolter',
-    },
-    {
-      bookingId: '444',
-      offenderNo: 'G5402VR',
-      firstName: 'Gabriel',
-      lastName: 'Agugliaro',
-    },
-  ],
+  appointmentTypeDescription: 'Test Type',
+  locationDescription: 'Chapel',
 }
+
+const prisonersListed = [
+  {
+    bookingId: '111',
+    offenderNo: 'G1683VN',
+    firstName: 'Elton',
+    lastName: 'Abbatiello',
+  },
+  {
+    bookingId: '222',
+    offenderNo: 'G4803UT',
+    firstName: 'Bobby',
+    lastName: 'Abdulkadir',
+  },
+  {
+    bookingId: '333',
+    offenderNo: 'G4346UT',
+    firstName: 'Dewey',
+    lastName: 'Affolter',
+  },
+  {
+    bookingId: '444',
+    offenderNo: 'G5402VR',
+    firstName: 'Gabriel',
+    lastName: 'Agugliaro',
+  },
+]
 
 describe('appointment movement slips', () => {
   describe('and viewing page', () => {
@@ -76,7 +74,7 @@ describe('appointment movement slips', () => {
 
     describe('and there is a small amount of data', () => {
       beforeEach(() => {
-        req.session.data = { ...appointmentDetails }
+        req.flash = jest.fn().mockReturnValue([{ appointmentDetails, prisonersListed }])
       })
 
       it('should call the correct endpoint for the extra required offender information', async () => {
@@ -161,7 +159,7 @@ describe('appointment movement slips', () => {
 
     describe('and there is a large amount of data', () => {
       beforeEach(() => {
-        req.session.data = { ...appointmentDetails, prisonersListed: largePrisonersListed }
+        req.flash = jest.fn().mockReturnValue([{ appointmentDetails, prisonersListed: largePrisonersListed }])
       })
 
       it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {

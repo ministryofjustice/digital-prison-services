@@ -21,6 +21,7 @@ beforeEach(() => {
         activeCaseLoadId: 'LEI',
       },
     },
+    flash: jest.fn(),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -262,6 +263,17 @@ describe('when confirming bulk appointment details', () => {
 
       it('should submit the correct data and redirect to the appointments added page', async () => {
         await controller.post(req, res)
+
+        expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+          appointmentDetails: {
+            appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
+            comments: appointmentDetails.comments,
+            endTime: appointmentDetails.endTime,
+            locationDescription: appointmentDetails.locationDescription,
+            startTime: appointmentDetails.startTime,
+          },
+          prisonersListed: appointmentDetails.prisonersListed,
+        })
 
         expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
