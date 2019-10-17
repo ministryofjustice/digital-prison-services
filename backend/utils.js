@@ -177,7 +177,6 @@ const forenameToInitial = name => {
   return `${name.charAt()} ${name.split(' ').pop()}`
 }
 
-// Copied from React utils
 const stripAgencyPrefix = (location, agency) => {
   const parts = location && location.split('-')
   if (parts && parts.length > 0) {
@@ -186,7 +185,8 @@ const stripAgencyPrefix = (location, agency) => {
       return location.substring(parts[index].length + 1, location.length)
     }
   }
-  return location
+
+  return null
 }
 
 const chunkArray = (arr, size) =>
