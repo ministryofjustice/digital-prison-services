@@ -1,6 +1,11 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('../controllers/bulkAppointmentsClashes')
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 let req
 let res
@@ -296,6 +301,12 @@ describe('appointment clashes', () => {
             ],
           })
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `2 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
 
@@ -344,6 +355,12 @@ describe('appointment clashes', () => {
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `20 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
     })
