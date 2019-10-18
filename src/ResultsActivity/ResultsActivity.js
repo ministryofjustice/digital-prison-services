@@ -19,6 +19,7 @@ import {
   getListSizeClass,
   getLongDateFormat,
 } from '../utils'
+import { stripAgencyPrefix } from '../../backend/utils'
 import OtherActivitiesView from '../OtherActivityListView'
 import AlertFlags from '../AlertFlags'
 import SortableColumn from '../tablesorting/SortableColumn'
@@ -396,6 +397,7 @@ class ResultsActivity extends Component {
         totalOffenders.add(offenderNo)
 
         const { absentReason } = attendanceInfo || {}
+        const inCaseLoad = stripAgencyPrefix(cellLocation, agencyId)
         const otherActivitiesClasses = classNames({
           'row-gutters': true,
           'last-text-column-padding': !updateAttendanceEnabled,
@@ -404,9 +406,12 @@ class ResultsActivity extends Component {
         return (
           <tr key={key} className="row-gutters">
             <td className={`row-gutters ${redactedHide}`}>
-              <OffenderLink offenderNo={offenderNo}>
-                <OffenderName firstName={firstName} lastName={lastName} />
-              </OffenderLink>
+              {inCaseLoad && (
+                <OffenderLink offenderNo={offenderNo}>
+                  <OffenderName firstName={firstName} lastName={lastName} />
+                </OffenderLink>
+              )}
+              {!inCaseLoad && <OffenderName firstName={firstName} lastName={lastName} />}
             </td>
             <td className={`no-display ${redactedPrint}`}>
               <OffenderLink offenderNo={offenderNo}>

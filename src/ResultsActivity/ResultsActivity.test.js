@@ -67,7 +67,7 @@ const response = [
     offenderNo: 'A1234AB',
     firstName: 'MICHAEL',
     lastName: 'SMITH',
-    cellLocation: `${PRISON}-A-1-2`,
+    cellLocation: `XXX-A-1-2`,
     event: 'VISIT',
     eventStatus: 'CANC',
     eventDescription: 'Visits',
@@ -277,8 +277,6 @@ describe('Offender activity list results component', () => {
     expect(
       row2Tds
         .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
         .childAt(0)
         .dive()
         .text()
