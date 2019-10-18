@@ -69,7 +69,9 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     const {
       data: {
         appointmentType,
+        appointmentTypeDescription,
         location,
+        locationDescription,
         startTime,
         endTime,
         date,
@@ -118,6 +120,17 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         })
       }
     }
+
+    req.flash('appointmentSlipsData', {
+      appointmentDetails: {
+        startTime,
+        endTime,
+        comments,
+        appointmentTypeDescription,
+        locationDescription,
+      },
+      prisonersListed: req.session.data.prisonersListed,
+    })
 
     const request = {
       appointmentDefaults: {
