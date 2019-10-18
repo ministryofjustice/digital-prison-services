@@ -29,8 +29,8 @@ module.exports = () => {
       resave: false,
       saveUninitialized: false,
       rolling: true,
+      name: config.hmppsCookie.name,
       cookie: {
-        name: config.hmppsCookie.name,
         domain: config.hmppsCookie.domain,
         httpOnly: true,
         maxAge: config.hmppsCookie.expiryMinutes * 60 * 1000,
