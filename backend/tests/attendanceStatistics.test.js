@@ -239,7 +239,7 @@ describe('Attendance reason statistics', () => {
       oauthApi.userRoles = jest.fn()
     })
 
-    it('should render the list of offenders who were absent for specified reason', async () => {
+    it('should render the list of offenders who were absent for specified reason when offender in caseload', async () => {
       elite2Api.getOffenderActivities.mockReturnValue([
         {
           offenderNo: 'G8974UK',
@@ -323,6 +323,136 @@ describe('Attendance reason statistics', () => {
             },
             {
               text: '1',
+            },
+            {
+              text: 'Cleaner',
+            },
+            {
+              text: 'Asked nicely.',
+            },
+          ],
+        ],
+        sortOptions: [
+          {
+            text: 'Name (A-Z)',
+            value: '0_ascending',
+          },
+          {
+            text: 'Name (Z-A)',
+            value: '0_descending',
+          },
+          {
+            text: 'Location (A-Z)',
+            value: '2_ascending',
+          },
+          {
+            text: 'Location (Z-A)',
+            value: '2_descending',
+          },
+          {
+            text: 'Activity (A-Z)',
+            value: '3_ascending',
+          },
+          {
+            text: 'Activity (Z-A)',
+            value: '3_descending',
+          },
+        ],
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        userRoles: undefined,
+      })
+    })
+
+    it('should render the list of offenders who were absent for specified reason when offender is not in caseload anymore but was on date', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([
+        {
+          offenderNo: 'G8974UK',
+          eventId: 3,
+          bookingId: 1133341,
+          locationId: 27219,
+          firstName: 'Adam',
+          lastName: 'Smith',
+          cellLocation: 'MDI-1',
+          comment: 'Cleaner',
+          eventOutcome: 'ACC',
+        },
+      ])
+      whereaboutsApi.getAbsences.mockReturnValue({
+        attendances: [
+          {
+            id: 5812,
+            bookingId: 1133341,
+            eventId: 3,
+            eventLocationId: 26149,
+            period: 'AM',
+            prisonId: 'LEI',
+            attended: true,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Asked nicely.',
+          },
+        ],
+      })
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+          currentlyActive: true,
+        },
+      ])
+      oauthApi.currentUser.mockReturnValue({
+        username: 'USER_ADM',
+        active: true,
+        name: 'User Name',
+        activeCaseLoadId: 'LEI',
+      })
+      const logError = jest.fn()
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      await attendanceStatisticsOffendersList(
+        { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } },
+        res
+      )
+
+      expect(res.render).toHaveBeenCalledWith('attendanceStatisticsOffendersList.njk', {
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        dashboardUrl:
+          '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&date=10/10/2019',
+        caseLoadId: 'LEI',
+        title: 'Acceptable absence',
+        reason: 'Acceptable absence',
+        displayDate: '10 October 2019',
+        displayPeriod: 'Morning',
+        offenders: [
+          [
+            {
+              html: 'Smith, Adam',
+            },
+            {
+              text: 'G8974UK',
+            },
+            {
+              text: '--',
             },
             {
               text: 'Cleaner',

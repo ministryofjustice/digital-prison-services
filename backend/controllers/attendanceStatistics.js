@@ -173,13 +173,15 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
           // Return the data in the appropriate format to seed the table macro
           return [
             {
-              html: `<a href=${quickLookUrl} target="_blank">${data.offenderName}</a>`,
+              html: data.location
+                ? `<a href=${quickLookUrl} target="_blank">${data.offenderName}</a>`
+                : data.offenderName,
             },
             {
               text: data.offenderNo,
             },
             {
-              text: data.location,
+              text: data.location || '--',
             },
             {
               text: data.activity,
