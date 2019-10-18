@@ -74,6 +74,7 @@ beforeEach(() => {
       },
     },
     body: {},
+    flash: jest.fn(),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -271,20 +272,29 @@ describe('appointment clashes', () => {
             appointments: [{ bookingId: '333' }, { bookingId: '444' }],
           })
 
-          expect(req.session.data.prisonersListed).toEqual([
-            {
-              bookingId: '333',
-              firstName: 'Dewey',
-              lastName: 'Affolter',
-              offenderNo: 'G4346UT',
+          expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+            appointmentDetails: {
+              appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
+              comments: appointmentDetails.comments,
+              endTime: appointmentDetails.endTime,
+              locationDescription: appointmentDetails.locationDescription,
+              startTime: appointmentDetails.startTime,
             },
-            {
-              bookingId: '444',
-              firstName: 'Gabriel',
-              lastName: 'Agugliaro',
-              offenderNo: 'G5402VR',
-            },
-          ])
+            prisonersListed: [
+              {
+                bookingId: '333',
+                firstName: 'Dewey',
+                lastName: 'Affolter',
+                offenderNo: 'G4346UT',
+              },
+              {
+                bookingId: '444',
+                firstName: 'Gabriel',
+                lastName: 'Agugliaro',
+                offenderNo: 'G5402VR',
+              },
+            ],
+          })
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
         })
       })

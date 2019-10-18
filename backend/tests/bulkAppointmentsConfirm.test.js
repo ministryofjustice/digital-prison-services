@@ -318,6 +318,7 @@ describe('when confirming bulk appointment details', () => {
         await controller.post(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/appointment-clashes')
+        expect(req.flash).not.toHaveBeenCalled()
       })
     })
 
