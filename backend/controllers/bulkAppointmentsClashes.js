@@ -1,6 +1,7 @@
 const { switchDateFormat } = require('../utils')
 const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../common-messages')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 
 const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {
@@ -81,6 +82,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
         repeats,
         times,
       },
+      userDetails: { activeCaseLoadId },
     } = req.session
 
     const [prisonersRemoved, remainingPrisoners] = prisonersListed.reduce(
@@ -108,6 +110,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       prisonersListed: remainingPrisoners,
     })
 
+    const count = Number(times)
     const request = {
       appointmentDefaults: {
         comment: comments,
@@ -125,12 +128,18 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
         recurring === 'yes'
           ? {
               repeatPeriod: repeats,
-              count: Number(times),
+              count,
             }
           : undefined,
     }
 
     await elite2Api.addBulkAppointments(res.locals, request)
+
+    raiseAnalyticsEvent(
+      'Bulk Appointments',
+      `${remainingPrisoners.length * (count || 1)} appointments created at ${activeCaseLoadId}`,
+      `Appointment type - ${appointmentTypeDescription}`
+    )
 
     return res.redirect('/bulk-appointments/appointments-added')
   }
