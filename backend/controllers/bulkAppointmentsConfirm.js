@@ -121,17 +121,6 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
       }
     }
 
-    req.flash('appointmentSlipsData', {
-      appointmentDetails: {
-        startTime,
-        endTime,
-        comments,
-        appointmentTypeDescription,
-        locationDescription,
-      },
-      prisonersListed: req.session.data.prisonersListed,
-    })
-
     const request = {
       appointmentDefaults: {
         comment: comments,
@@ -164,6 +153,17 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
       if (eventsForAllOffenders.length > 0) {
         return res.redirect('/bulk-appointments/appointment-clashes')
       }
+
+      req.flash('appointmentSlipsData', {
+        appointmentDetails: {
+          startTime,
+          endTime,
+          comments,
+          appointmentTypeDescription,
+          locationDescription,
+        },
+        prisonersListed: req.session.data.prisonersListed,
+      })
 
       await elite2Api.addBulkAppointments(res.locals, request)
 
