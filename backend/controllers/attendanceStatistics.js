@@ -141,16 +141,12 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         return
       }
 
-      const [absentOffenders, activities] = await Promise.all([
-        whereaboutsApi.getAbsences(res.locals, {
-          agencyId,
-          date: formattedDate,
-          period,
-        }),
+      const [attendedOffenders, activities] = await Promise.all([
+        whereaboutsApi.getPrisonAttendance(res.locals, { agencyId, period, date }),
         elite2Api.getOffenderActivities(res.locals, { agencyId, period, date: formattedDate }),
       ])
-      const { attendances } = absentOffenders
-      const absences = attendances.filter(absence => absence.absentReason === reason)
+      const { attendances } = attendedOffenders
+      const absences = attendances.filter(absence => absence.absentReason && absence.absentReason === reason)
 
       const offenderData = absences.map(absence => {
         const offenderActivity = activities.find(
