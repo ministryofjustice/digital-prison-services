@@ -28,7 +28,9 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   }
 
   const index = async (req, res) => {
-    if (!req.session.data) return renderError(req, res)
+    if (!req.session.data) {
+      return res.redirect('/bulk-appointments/add-appointment-details')
+    }
 
     try {
       const {
@@ -93,7 +95,9 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       [[], []]
     )
 
-    req.session.data.prisonersRemoved = prisonersRemoved
+    if (prisonersRemoved && prisonersRemoved.length) {
+      req.flash('prisonersRemoved', prisonersRemoved)
+    }
 
     if (!remainingPrisoners.length) {
       return res.redirect('/bulk-appointments/no-appointments-added?reason=removedAllClashes')
@@ -134,6 +138,8 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
     }
 
     await elite2Api.addBulkAppointments(res.locals, request)
+
+    req.session.data = null
 
     raiseAnalyticsEvent(
       'Bulk Appointments',
