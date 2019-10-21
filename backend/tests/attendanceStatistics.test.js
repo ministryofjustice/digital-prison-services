@@ -253,7 +253,7 @@ describe('Attendance reason statistics', () => {
           eventOutcome: 'ACC',
         },
       ])
-      whereaboutsApi.getAbsences.mockReturnValue({
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
         attendances: [
           {
             id: 5812,
@@ -383,7 +383,7 @@ describe('Attendance reason statistics', () => {
           eventOutcome: 'ACC',
         },
       ])
-      whereaboutsApi.getAbsences.mockReturnValue({
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
         attendances: [
           {
             id: 5812,
@@ -527,7 +527,7 @@ describe('Attendance reason statistics', () => {
       oauthApi.currentUser.mockReturnValue({})
       const logError = jest.fn()
 
-      whereaboutsApi.getAbsences.mockImplementation(() => {
+      whereaboutsApi.getPrisonAttendance.mockImplementation(() => {
         throw new Error('something is wrong')
       })
 

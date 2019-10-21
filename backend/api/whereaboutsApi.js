@@ -22,9 +22,6 @@ const whereaboutsApiFactory = client => {
 
   const postAttendances = (context, body) => post(context, '/attendances', body)
 
-  const getAbsences = (context, { agencyId, date, period }) =>
-    get(context, `/attendances/${agencyId}/absences?date=${date}&period=${period}`)
-
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -33,7 +30,6 @@ const whereaboutsApiFactory = client => {
     getAbsenceReasons,
     getPrisonAttendance,
     postAttendances,
-    getAbsences,
   }
 }
 
