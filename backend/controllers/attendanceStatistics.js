@@ -142,7 +142,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       }
 
       const [attendedOffenders, activities] = await Promise.all([
-        whereaboutsApi.getPrisonAttendance(res.locals, { agencyId, period, date }),
+        whereaboutsApi.getPrisonAttendance(res.locals, { agencyId, period, date: formattedDate }),
         elite2Api.getOffenderActivities(res.locals, { agencyId, period, date: formattedDate }),
       ])
       const { attendances } = attendedOffenders
