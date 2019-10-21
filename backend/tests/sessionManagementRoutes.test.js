@@ -2,7 +2,7 @@
 const request = require('supertest')
 const express = require('express')
 const bodyParser = require('body-parser')
-const cookieSession = require('cookie-session')
+const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
 const setCookie = require('set-cookie-parser')
@@ -28,11 +28,16 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   app.use(bodyParser.urlencoded({ extended: false }))
 
   app.use(
-    cookieSession({
+    session({
       name: hmppsCookieName,
-      maxAge: 1 * 60 * 1000,
-      secure: false,
-      signed: false, // supertest can't cope with multiple cookies - https://github.com/visionmedia/supertest/issues/336
+      resave: false,
+      saveUninitialized: false,
+      secret: 'secret',
+      cookie: {
+        maxAge: 1 * 60 * 1000,
+        secure: false,
+        signed: true,
+      },
     })
   )
 
@@ -90,10 +95,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .expect(
         'location',
         'http://localhost:9090/auth/logout?client_id=elite2apiclient&redirect_uri=https://newnomis.url/'
-      )
-      // The server sends a set cookie header to clear the cookie.
-      // The next test shows that the cookie was cleared because of the redirect to '/'
-      .expect(hasCookies(['testCookie'])))
+      ))
 
   it('After logout get "/" should redirect to "/login"', () =>
     agent
