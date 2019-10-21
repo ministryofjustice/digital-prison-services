@@ -1,6 +1,11 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('../controllers/bulkAppointmentsClashes')
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 let req
 let res
@@ -273,7 +278,37 @@ describe('appointment clashes', () => {
           })
 
           expect(req.session.data).toEqual(null)
+
+          expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+            appointmentDetails: {
+              appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
+              comments: appointmentDetails.comments,
+              endTime: appointmentDetails.endTime,
+              locationDescription: appointmentDetails.locationDescription,
+              startTime: appointmentDetails.startTime,
+            },
+            prisonersListed: [
+              {
+                bookingId: '333',
+                firstName: 'Dewey',
+                lastName: 'Affolter',
+                offenderNo: 'G4346UT',
+              },
+              {
+                bookingId: '444',
+                firstName: 'Gabriel',
+                lastName: 'Agugliaro',
+                offenderNo: 'G5402VR',
+              },
+            ],
+          })
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `2 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
 
@@ -322,6 +357,12 @@ describe('appointment clashes', () => {
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `20 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
     })

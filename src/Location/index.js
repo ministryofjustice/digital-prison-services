@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { stripAgencyPrefix } from '../utils'
+import { stripAgencyPrefix } from '../../backend/utils'
 
 const Location = props => {
   const { location, agencyId } = props
-  if (!location) return ''
-  return stripAgencyPrefix(location, agencyId)
+  if (!location) return '--'
+  return stripAgencyPrefix(location, agencyId) || '--'
 }
 
 Location.propTypes = {

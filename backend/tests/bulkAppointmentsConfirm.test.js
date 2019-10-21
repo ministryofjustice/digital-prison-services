@@ -1,6 +1,11 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { bulkAppointmentsConfirmFactory } = require('../controllers/bulkAppointmentsConfirm')
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 let req
 let res
@@ -21,6 +26,7 @@ beforeEach(() => {
         activeCaseLoadId: 'LEI',
       },
     },
+    flash: jest.fn(),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -111,6 +117,11 @@ describe('when confirming bulk appointment details', () => {
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `4 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
     })
@@ -263,6 +274,17 @@ describe('when confirming bulk appointment details', () => {
       it('should submit the correct data and redirect to the appointments added page', async () => {
         await controller.post(req, res)
 
+        expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+          appointmentDetails: {
+            appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
+            comments: appointmentDetails.comments,
+            endTime: appointmentDetails.endTime,
+            locationDescription: appointmentDetails.locationDescription,
+            startTime: appointmentDetails.startTime,
+          },
+          prisonersListed: appointmentDetails.prisonersListed,
+        })
+
         expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
             appointmentType: 'TEST',
@@ -279,6 +301,12 @@ describe('when confirming bulk appointment details', () => {
         })
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+        expect(raiseAnalyticsEvent).toBeCalledWith(
+          'Bulk Appointments',
+          `20 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+          `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+        )
       })
     })
 
@@ -306,6 +334,7 @@ describe('when confirming bulk appointment details', () => {
         await controller.post(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith('/bulk-appointments/appointment-clashes')
+        expect(req.flash).not.toHaveBeenCalled()
       })
     })
 

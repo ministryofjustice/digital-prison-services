@@ -8,17 +8,14 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
 
-  const { data } = req.session
+  const { appointmentDetails, prisonersListed } = req.flash('appointmentSlipsData')[0] || {}
 
-  if (!data || !data.prisonersListed.length) {
+  if (!appointmentDetails || !prisonersListed) {
     return renderError()
   }
 
   try {
-    const {
-      data: { prisonersListed },
-      userDetails,
-    } = req.session
+    const { userDetails } = req.session
 
     const createdBy = forenameToInitial(userDetails.name)
     const offenderNumbers = prisonersListed.map(prisoner => prisoner.offenderNo)
@@ -43,7 +40,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     })
 
     return res.render('movementSlipsPage.njk', {
-      appointmentDetails: { ...data, createdBy, prisonersListed: prisonersListedWithCellInfo },
+      appointmentDetails: { ...appointmentDetails, createdBy, prisonersListed: prisonersListedWithCellInfo },
     })
   } catch (error) {
     return renderError(error)

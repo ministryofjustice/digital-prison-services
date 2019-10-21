@@ -141,16 +141,12 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         return
       }
 
-      const [absentOffenders, activities] = await Promise.all([
-        whereaboutsApi.getAbsences(res.locals, {
-          agencyId,
-          date: formattedDate,
-          period,
-        }),
+      const [attendedOffenders, activities] = await Promise.all([
+        whereaboutsApi.getPrisonAttendance(res.locals, { agencyId, period, date: formattedDate }),
         elite2Api.getOffenderActivities(res.locals, { agencyId, period, date: formattedDate }),
       ])
-      const { attendances } = absentOffenders
-      const absences = attendances.filter(absence => absence.absentReason === reason)
+      const { attendances } = attendedOffenders
+      const absences = attendances.filter(absence => absence.absentReason && absence.absentReason === reason)
 
       const offenderData = absences.map(absence => {
         const offenderActivity = activities.find(
@@ -173,13 +169,15 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
           // Return the data in the appropriate format to seed the table macro
           return [
             {
-              html: `<a href=${quickLookUrl} target="_blank">${data.offenderName}</a>`,
+              html: data.location
+                ? `<a href=${quickLookUrl} target="_blank">${data.offenderName}</a>`
+                : data.offenderName,
             },
             {
               text: data.offenderNo,
             },
             {
-              text: data.location,
+              text: data.location || '--',
             },
             {
               text: data.activity,
