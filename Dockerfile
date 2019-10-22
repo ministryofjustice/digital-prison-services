@@ -7,6 +7,9 @@ ARG GIT_REF
 RUN addgroup --gid 2000 --system appgroup && \
     adduser --uid 2000 --system appuser --gid 2000
 
+ENV TZ=Europe/London
+RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
+
 # Create app directory
 RUN mkdir -p /app
 WORKDIR /app
