@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import moment from 'moment'
 
+import { stripAgencyPrefix } from '../../backend/utils'
 import Page from '../Components/Page'
 import PrisonersUnaccountedForSearch from './PrisonersUnaccountedForSearch'
 import PrisonersUnaccountedFor from './PrisonersUnaccountedFor'
@@ -60,6 +61,7 @@ function PrisonersUnaccountedForContainer({
           const offenders = response.data.map((offender, index) => ({
             eventLocationId: offender.locationId,
             offenderIndex: index,
+            inCaseLoad: stripAgencyPrefix(offender.cellLocation, agencyId),
             ...offender,
           }))
 
