@@ -73,7 +73,8 @@ describe('Search component', () => {
         activity="bob"
       />
     )
-    expect(component.find('ValidationErrors')).toHaveLength(1)
+
+    expect(component.find('ErrorSummary')).toHaveLength(1)
   })
 
   it('should handle search button correctly', async () => {
