@@ -20,7 +20,7 @@ describe('Attendance reason statistics', () => {
     'RestInCell',
   ]
 
-  describe('Controller', () => {
+  describe('Dashboard Controller', () => {
     const mockReq = { originalUrl: '/manage-prisoner-whereabouts/attendance-reason-statistics' }
     beforeEach(() => {
       oauthApi.currentUser = jest.fn()
@@ -115,17 +115,17 @@ describe('Attendance reason statistics', () => {
         ],
         caseLoadId: 'LEI',
         dashboardStats: {
-          acceptableabsence: 0,
-          approvedcourse: 0,
+          AcceptableAbsence: 0,
+          ApprovedCourse: 0,
           attended: 1,
           unaccountedFor: 1,
-          notrequired: 0,
-          refused: 0,
-          restday: 0,
-          restincell: 0,
-          sessioncancelled: 0,
-          sick: 0,
-          unacceptableabsence: 0,
+          NotRequired: 0,
+          Refused: 0,
+          RestDay: 0,
+          RestInCell: 0,
+          SessionCancelled: 0,
+          Sick: 0,
+          UnacceptableAbsence: 0,
         },
         date: '10/10/2019',
         displayDate: '10 October 2019',
@@ -133,41 +133,41 @@ describe('Attendance reason statistics', () => {
           paidReasons: [
             {
               name: 'Acceptable absence',
-              value: 'acceptableabsence',
+              value: 'AcceptableAbsence',
             },
             {
               name: 'Approved course',
-              value: 'approvedcourse',
+              value: 'ApprovedCourse',
             },
             {
               name: 'Not required',
-              value: 'notrequired',
+              value: 'NotRequired',
             },
           ],
           unpaidReasons: [
             {
               name: 'Refused',
-              value: 'refused',
+              value: 'Refused',
             },
             {
               name: 'Session cancelled',
-              value: 'sessioncancelled',
+              value: 'SessionCancelled',
             },
             {
               name: 'Rest in cell',
-              value: 'restincell',
+              value: 'RestInCell',
             },
             {
               name: 'Rest day',
-              value: 'restday',
+              value: 'RestDay',
             },
             {
               name: 'Unacceptable absence',
-              value: 'unacceptableabsence',
+              value: 'UnacceptableAbsence',
             },
             {
               name: 'Sick',
-              value: 'sick',
+              value: 'Sick',
             },
           ],
         },
@@ -229,6 +229,330 @@ describe('Attendance reason statistics', () => {
     })
   })
 
+  describe('Absence Reasons Controller', () => {
+    const mockReq = { originalUrl: '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/' }
+    beforeEach(() => {
+      elite2Api.getOffenderActivities = jest.fn()
+      whereaboutsApi.getAbsences = jest.fn()
+      oauthApi.currentUser = jest.fn()
+      elite2Api.userCaseLoads = jest.fn()
+      oauthApi.userRoles = jest.fn()
+    })
+
+    it('should render the list of offenders who were absent for specified reason when offender in caseload', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([
+        {
+          offenderNo: 'G8974UK',
+          eventId: 3,
+          bookingId: 1133341,
+          locationId: 27219,
+          firstName: 'Adam',
+          lastName: 'Smith',
+          cellLocation: 'LEI-1',
+          comment: 'Cleaner',
+          eventOutcome: 'ACC',
+        },
+      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
+        attendances: [
+          {
+            id: 5812,
+            bookingId: 1133341,
+            eventId: 3,
+            eventLocationId: 26149,
+            period: 'AM',
+            prisonId: 'LEI',
+            attended: true,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Asked nicely.',
+          },
+        ],
+      })
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+          currentlyActive: true,
+        },
+      ])
+      oauthApi.currentUser.mockReturnValue({
+        username: 'USER_ADM',
+        active: true,
+        name: 'User Name',
+        activeCaseLoadId: 'LEI',
+      })
+      const logError = jest.fn()
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      await attendanceStatisticsOffendersList(
+        { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } },
+        res
+      )
+
+      expect(res.render).toHaveBeenCalledWith('attendanceStatisticsOffendersList.njk', {
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        dashboardUrl:
+          '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&date=10/10/2019',
+        caseLoadId: 'LEI',
+        title: 'Acceptable absence',
+        reason: 'Acceptable absence',
+        displayDate: '10 October 2019',
+        displayPeriod: 'Morning',
+        offenders: [
+          [
+            {
+              html: '<a href=http://localhost:3000/offenders/G8974UK/quick-look target="_blank">Smith, Adam</a>',
+            },
+            {
+              text: 'G8974UK',
+            },
+            {
+              text: '1',
+            },
+            {
+              text: 'Cleaner',
+            },
+            {
+              text: 'Asked nicely.',
+            },
+          ],
+        ],
+        sortOptions: [
+          {
+            text: 'Name (A-Z)',
+            value: '0_ascending',
+          },
+          {
+            text: 'Name (Z-A)',
+            value: '0_descending',
+          },
+          {
+            text: 'Location (A-Z)',
+            value: '2_ascending',
+          },
+          {
+            text: 'Location (Z-A)',
+            value: '2_descending',
+          },
+          {
+            text: 'Activity (A-Z)',
+            value: '3_ascending',
+          },
+          {
+            text: 'Activity (Z-A)',
+            value: '3_descending',
+          },
+        ],
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        userRoles: undefined,
+      })
+    })
+
+    it('should render the list of offenders who were absent for specified reason when offender is not in caseload anymore but was on date', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([
+        {
+          offenderNo: 'G8974UK',
+          eventId: 3,
+          bookingId: 1133341,
+          locationId: 27219,
+          firstName: 'Adam',
+          lastName: 'Smith',
+          cellLocation: 'MDI-1',
+          comment: 'Cleaner',
+          eventOutcome: 'ACC',
+        },
+      ])
+      whereaboutsApi.getPrisonAttendance.mockReturnValue({
+        attendances: [
+          {
+            id: 5812,
+            bookingId: 1133341,
+            eventId: 3,
+            eventLocationId: 26149,
+            period: 'AM',
+            prisonId: 'LEI',
+            attended: true,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Asked nicely.',
+          },
+        ],
+      })
+      elite2Api.userCaseLoads.mockReturnValue([
+        {
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+          currentlyActive: true,
+        },
+      ])
+      oauthApi.currentUser.mockReturnValue({
+        username: 'USER_ADM',
+        active: true,
+        name: 'User Name',
+        activeCaseLoadId: 'LEI',
+      })
+      const logError = jest.fn()
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      await attendanceStatisticsOffendersList(
+        { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } },
+        res
+      )
+
+      expect(res.render).toHaveBeenCalledWith('attendanceStatisticsOffendersList.njk', {
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        dashboardUrl:
+          '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&date=10/10/2019',
+        caseLoadId: 'LEI',
+        title: 'Acceptable absence',
+        reason: 'Acceptable absence',
+        displayDate: '10 October 2019',
+        displayPeriod: 'Morning',
+        offenders: [
+          [
+            {
+              html: 'Smith, Adam',
+            },
+            {
+              text: 'G8974UK',
+            },
+            {
+              text: '--',
+            },
+            {
+              text: 'Cleaner',
+            },
+            {
+              text: 'Asked nicely.',
+            },
+          ],
+        ],
+        sortOptions: [
+          {
+            text: 'Name (A-Z)',
+            value: '0_ascending',
+          },
+          {
+            text: 'Name (Z-A)',
+            value: '0_descending',
+          },
+          {
+            text: 'Location (A-Z)',
+            value: '2_ascending',
+          },
+          {
+            text: 'Location (Z-A)',
+            value: '2_descending',
+          },
+          {
+            text: 'Activity (A-Z)',
+            value: '3_ascending',
+          },
+          {
+            text: 'Activity (Z-A)',
+            value: '3_descending',
+          },
+        ],
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        userRoles: undefined,
+      })
+    })
+
+    it('should try render the error template on error', async () => {
+      const logError = jest.fn()
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      await attendanceStatisticsOffendersList(
+        { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } },
+        res
+      )
+
+      expect(res.render).toHaveBeenCalledWith('error.njk', {
+        url: '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/AcceptableAbsence',
+      })
+    })
+
+    it('should log the correct error', async () => {
+      elite2Api.getOffenderActivities.mockReturnValue([])
+      elite2Api.userCaseLoads.mockReturnValue([])
+      oauthApi.currentUser.mockReturnValue({})
+      const logError = jest.fn()
+
+      whereaboutsApi.getPrisonAttendance.mockImplementation(() => {
+        throw new Error('something is wrong')
+      })
+
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        logError
+      )
+      const res = {
+        render: jest.fn(),
+      }
+
+      const req = { ...mockReq, query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } }
+
+      await attendanceStatisticsOffendersList(req, res)
+
+      expect(logError).toHaveBeenCalledWith(
+        '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/',
+        new Error('something is wrong'),
+        'Sorry, the service is unavailable'
+      )
+    })
+  })
+
   describe('Dashboard stats ', () => {
     beforeEach(() => {
       oauthApi.currentUser = jest.fn()
@@ -277,7 +601,7 @@ describe('Attendance reason statistics', () => {
 
       const { getDashboardStats } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
 
-      const { attended, notrequired, acceptableabsence, approvedcourse } = await getDashboardStats(context, {
+      const { attended, NotRequired, AcceptableAbsence, ApprovedCourse } = await getDashboardStats(context, {
         agencyId,
         date,
         period,
@@ -285,9 +609,9 @@ describe('Attendance reason statistics', () => {
       })
 
       expect(attended).toBe(1)
-      expect(notrequired).toBe(1)
-      expect(acceptableabsence).toBe(1)
-      expect(approvedcourse).toBe(1)
+      expect(NotRequired).toBe(1)
+      expect(AcceptableAbsence).toBe(1)
+      expect(ApprovedCourse).toBe(1)
     })
 
     it('should count not paid reasons', async () => {
@@ -329,25 +653,25 @@ describe('Attendance reason statistics', () => {
         ],
       })
 
-      const { sessioncancelled, sick, unacceptableabsence, restday, refused, restincell } = await getDashboardStats(
+      const { SessionCancelled, Sick, UnacceptableAbsence, RestDay, Refused, RestInCell } = await getDashboardStats(
         context,
         { agencyId, date, period, absenceReasons }
       )
 
       expect({
-        sessioncancelled,
-        sick,
-        unacceptableabsence,
-        restday,
-        refused,
-        restincell,
+        SessionCancelled,
+        Sick,
+        UnacceptableAbsence,
+        RestDay,
+        Refused,
+        RestInCell,
       }).toEqual({
-        sessioncancelled: 1,
-        sick: 1,
-        unacceptableabsence: 1,
-        restday: 1,
-        refused: 1,
-        restincell: 1,
+        SessionCancelled: 1,
+        Sick: 1,
+        UnacceptableAbsence: 1,
+        RestDay: 1,
+        Refused: 1,
+        RestInCell: 1,
       })
     })
 

@@ -1,6 +1,11 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('../controllers/bulkAppointmentsClashes')
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 let req
 let res
@@ -74,6 +79,7 @@ beforeEach(() => {
       },
     },
     body: {},
+    flash: jest.fn(),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -225,10 +231,10 @@ describe('appointment clashes', () => {
     })
 
     describe('and there is no data', () => {
-      it('should render the error page', async () => {
+      it('should redirect to the add appointment page', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
       })
     })
 
@@ -255,7 +261,7 @@ describe('appointment clashes', () => {
           req.session.data = { ...appointmentDetails }
         })
 
-        it('should submit the correct data and redirect to the appointments added page', async () => {
+        it('should submit the correct data, clear the session data, and redirect to the appointments added page', async () => {
           req.body = { G1683VN: 'remove', G4803UT: 'remove' }
 
           await controller.post(req, res)
@@ -271,21 +277,38 @@ describe('appointment clashes', () => {
             appointments: [{ bookingId: '333' }, { bookingId: '444' }],
           })
 
-          expect(req.session.data.prisonersListed).toEqual([
-            {
-              bookingId: '333',
-              firstName: 'Dewey',
-              lastName: 'Affolter',
-              offenderNo: 'G4346UT',
+          expect(req.session.data).toEqual(null)
+
+          expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+            appointmentDetails: {
+              appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
+              comments: appointmentDetails.comments,
+              endTime: appointmentDetails.endTime,
+              locationDescription: appointmentDetails.locationDescription,
+              startTime: appointmentDetails.startTime,
             },
-            {
-              bookingId: '444',
-              firstName: 'Gabriel',
-              lastName: 'Agugliaro',
-              offenderNo: 'G5402VR',
-            },
-          ])
+            prisonersListed: [
+              {
+                bookingId: '333',
+                firstName: 'Dewey',
+                lastName: 'Affolter',
+                offenderNo: 'G4346UT',
+              },
+              {
+                bookingId: '444',
+                firstName: 'Gabriel',
+                lastName: 'Agugliaro',
+                offenderNo: 'G5402VR',
+              },
+            ],
+          })
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `2 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
 
@@ -334,6 +357,12 @@ describe('appointment clashes', () => {
           })
 
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
+
+          expect(raiseAnalyticsEvent).toBeCalledWith(
+            'Bulk Appointments',
+            `20 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          )
         })
       })
     })

@@ -1,15 +1,14 @@
-const config = require('../config')
+const express = require('express')
+const { bulkAppointmentsAddedFactory } = require('./bulkAppointmentsAdded')
 
-module.exports = (req, res) => {
-  const { data } = req.session
+const router = express.Router()
 
-  if (!data) {
-    return res.render('error.njk', {
-      url: '/bulk-appointments/need-to-upload-file',
-    })
-  }
+const controller = () => {
+  const { index } = bulkAppointmentsAddedFactory()
 
-  const { prisonersRemoved } = data
+  router.get('/', index)
 
-  return res.render('appointmentsAdded.njk', { prisonersRemoved, dpsUrl: config.app.notmEndpointUrl })
+  return router
 }
+
+module.exports = dependencies => controller(dependencies)

@@ -1,4 +1,4 @@
-const { forenameToInitial } = require('../utils')
+const { forenameToInitial, chunkArray } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
@@ -8,32 +8,39 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
 
-  const { data } = req.session
+  const { appointmentDetails, prisonersListed } = req.flash('appointmentSlipsData')[0] || {}
 
-  if (!data || !data.prisonersListed.length) {
+  if (!appointmentDetails || !prisonersListed) {
     return renderError()
   }
 
   try {
-    const {
-      data: { prisonersListed },
-      userDetails,
-    } = req.session
+    const { userDetails } = req.session
 
     const createdBy = forenameToInitial(userDetails.name)
     const offenderNumbers = prisonersListed.map(prisoner => prisoner.offenderNo)
-    const offenderSummaries = await elite2Api.getOffenderSummaries(res.locals, offenderNumbers)
+    const chunkedOffenderNumbers = chunkArray(offenderNumbers, 100)
+
+    const offenderSummaryApiCalls = chunkedOffenderNumbers.map(offendersChunk => ({
+      getOffenderSummaries: elite2Api.getOffenderSummaries,
+      offenders: offendersChunk,
+    }))
+
+    const offenderSummaries = (await Promise.all(
+      offenderSummaryApiCalls.map(apiCall => apiCall.getOffenderSummaries(res.locals, apiCall.offenders))
+    )).reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
+
     const prisonersListedWithCellInfo = prisonersListed.map(prisoner => {
       const prisonerDetails = offenderSummaries.find(offender => prisoner.offenderNo === offender.offenderNo)
 
       return {
         ...prisoner,
-        assignedLivingUnitDesc: prisonerDetails.assignedLivingUnitDesc,
+        assignedLivingUnitDesc: prisonerDetails && prisonerDetails.assignedLivingUnitDesc,
       }
     })
 
     return res.render('movementSlipsPage.njk', {
-      appointmentDetails: { ...data, createdBy, prisonersListed: prisonersListedWithCellInfo },
+      appointmentDetails: { ...appointmentDetails, createdBy, prisonersListed: prisonersListedWithCellInfo },
     })
   } catch (error) {
     return renderError(error)

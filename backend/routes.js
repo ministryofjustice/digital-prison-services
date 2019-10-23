@@ -127,6 +127,12 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
   )
   router.get(
+    '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
+    handleErrors(
+      attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsOffendersList
+    )
+  )
+  router.get(
     '/offenders/:offenderNo/probation-documents',
     handleErrors(
       probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
@@ -151,7 +157,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     '/bulk-appointments/add-appointment-details',
     addAppointmentDetailsController({ elite2Api, oauthApi, logError })
   )
-  router.get('/bulk-appointments/appointments-added', bulkAppointmentsAddedController)
+  router.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedController({ logError }))
   router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsController({ elite2Api, logError }))
   router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
   router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))

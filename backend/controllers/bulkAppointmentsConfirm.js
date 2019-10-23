@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { switchDateFormat } = require('../utils')
 const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
 
 const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
@@ -69,7 +70,9 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     const {
       data: {
         appointmentType,
+        appointmentTypeDescription,
         location,
+        locationDescription,
         startTime,
         endTime,
         date,
@@ -80,6 +83,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         times,
         sameTimeAppointments,
       },
+      userDetails: { activeCaseLoadId },
     } = req.session
 
     const prisonersWithAppointmentTimes = prisonersListed.map(prisoner => {
@@ -119,6 +123,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
       }
     }
 
+    const count = Number(times)
     const request = {
       appointmentDefaults: {
         comment: comments,
@@ -135,7 +140,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
       repeat: recurring
         ? {
             repeatPeriod: repeats,
-            count: Number(times),
+            count,
           }
         : undefined,
     }
@@ -145,14 +150,31 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
       const eventsForAllOffenders = await getOtherEvents(req, res, {
         offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
         date: switchDateFormat(date),
-        agencyId: req.session.userDetails.activeCaseLoadId,
+        agencyId: activeCaseLoadId,
       })
 
       if (eventsForAllOffenders.length > 0) {
         return res.redirect('/bulk-appointments/appointment-clashes')
       }
 
+      req.flash('appointmentSlipsData', {
+        appointmentDetails: {
+          startTime,
+          endTime,
+          comments,
+          appointmentTypeDescription,
+          locationDescription,
+        },
+        prisonersListed: req.session.data.prisonersListed,
+      })
+
       await elite2Api.addBulkAppointments(res.locals, request)
+
+      raiseAnalyticsEvent(
+        'Bulk Appointments',
+        `${prisonersWithAppointmentTimes.length * (count || 1)} appointments created at ${activeCaseLoadId}`,
+        `Appointment type - ${appointmentTypeDescription}`
+      )
 
       return res.redirect('/bulk-appointments/appointments-added')
     } catch (error) {

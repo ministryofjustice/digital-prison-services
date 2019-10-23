@@ -93,9 +93,14 @@ const PrisonersUnaccountedFor = ({
       {prisonersUnaccountedFor.map(prisonerActivity => (
         <Table.Row key={prisonerActivity.eventId}>
           <Table.Cell>
-            <OffenderLink offenderNo={prisonerActivity.offenderNo}>
+            {prisonerActivity.inCaseLoad && (
+              <OffenderLink offenderNo={prisonerActivity.offenderNo}>
+                <OffenderName firstName={prisonerActivity.firstName} lastName={prisonerActivity.lastName} />
+              </OffenderLink>
+            )}
+            {!prisonerActivity.inCaseLoad && (
               <OffenderName firstName={prisonerActivity.firstName} lastName={prisonerActivity.lastName} />
-            </OffenderLink>
+            )}
           </Table.Cell>
           <Table.Cell>
             <Location location={prisonerActivity.cellLocation} />

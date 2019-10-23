@@ -11,7 +11,8 @@ class BulkAppointmentsAddPage extends Page {
         appointmentTypesLoaded { $(name: 'appointmentType').find('option').size() > 1 }
         submitButton { $('button', type: 'submit') }
         datePicker { $('#ui-datepicker-div')}
-        activeDate { $'.ui-state-active'}
+        activeDate { $('.ui-state-active')}
+        recurringInputs {$("[data-qa='recurring-inputs']")}
     }
 
     static at = {

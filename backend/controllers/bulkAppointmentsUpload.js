@@ -45,10 +45,15 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
       return csvParserService
         .loadAndParseCsvFile(file)
         .then(async fileContent => {
-          const prisonersDetails = await offenderLoader.loadFromCsvContent(res.locals, fileContent, activeCaseLoadId)
+          const fileContentWithNoHeader = fileContent[0][0] === 'Prison number' ? fileContent.slice(1) : fileContent
+          const prisonersDetails = await offenderLoader.loadFromCsvContent(
+            res.locals,
+            fileContentWithNoHeader,
+            activeCaseLoadId
+          )
 
           const removeDuplicates = array => [...new Set(array)]
-          const offendersFromCsv = removeDuplicates(fileContent.map(row => row[0]))
+          const offendersFromCsv = removeDuplicates(fileContentWithNoHeader.map(row => row[0]))
 
           const prisonerList = prisonersDetails.map(prisoner => ({
             bookingId: prisoner.bookingId,
@@ -63,12 +68,9 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
             return res.redirect('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
           }
 
-          if (prisonerList && prisonerList.length) {
-            req.session.data.prisonersListed = prisonerList
-          }
-          if (offenderNosNotFound && offenderNosNotFound.length) {
-            req.session.data.prisonersNotFound = offenderNosNotFound
-          }
+          req.session.data.prisonersListed = prisonerList
+
+          req.session.data.prisonersNotFound = offenderNosNotFound
 
           return res.redirect('/bulk-appointments/confirm-appointments')
         })

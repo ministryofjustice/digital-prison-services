@@ -5,12 +5,12 @@ import { Location } from '.'
 describe('Location', () => {
   it('renders and empty string when location is not present', () => {
     const component = shallow(<Location agencyId="MDI" />)
-    expect(component.equals('')).toEqual(true)
+    expect(component.equals('--')).toEqual(true)
   })
 
   it('renders location as supplied if its prefix does not match agencyId', () => {
     const component = shallow(<Location location="COURT" agencyId="MDI" />)
-    expect(component.equals('COURT')).toEqual(true)
+    expect(component.equals('--')).toEqual(true)
   })
 
   it('strips agencyId prefix from location when it matches', () => {

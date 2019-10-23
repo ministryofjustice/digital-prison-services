@@ -1,12 +1,13 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const bulkAppointmentsAddedController = require('../controllers/bulkAppointmentsAddedController')
+const { bulkAppointmentsAddedFactory } = require('../controllers/bulkAppointmentsAdded')
 const config = require('../config')
 
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
+let controller
 
-jest.mock('../logError', () => ({
-  logError: jest.fn(),
-}))
+beforeEach(() => {
+  controller = bulkAppointmentsAddedFactory()
+})
 
 describe('bulk appointments confirm', () => {
   const appointmentDetails = {
@@ -40,27 +41,25 @@ describe('bulk appointments confirm', () => {
 
   describe('index', () => {
     describe('when there are no errors', () => {
-      const req = { session: { data: { ...appointmentDetails } } }
+      const req = {
+        session: { data: null },
+        flash: jest
+          .fn()
+          .mockReturnValue([{ lastName: 'Smith', offenderNo: 'ABC123' }, { lastName: 'Jones', offenderNo: 'ABC345' }]),
+      }
       const res = { ...mockRes }
 
-      it('should render the confirm appointments confirm page', async () => {
-        await bulkAppointmentsAddedController(req, res)
+      it('should render the confirm appointments page with prisoners list populated from req.flash', async () => {
+        await controller.index(req, res)
+
+        expect(req.session.data).toBe(null)
+
+        expect(req.flash).toBeCalledWith('prisonersRemoved')
 
         expect(res.render).toBeCalledWith('appointmentsAdded.njk', {
           prisonersRemoved: appointmentDetails.prisonersRemoved,
           dpsUrl: '//newNomisEndPointUrl/',
         })
-      })
-    })
-
-    describe('when there is an error', () => {
-      const req = { session: {} }
-      const res = { ...mockRes }
-
-      it('should render the error page', async () => {
-        await bulkAppointmentsAddedController(req, res)
-
-        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })
   })

@@ -104,17 +104,6 @@ const isWithinLastWeek = date => {
 
 const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
 
-const stripAgencyPrefix = (location, agency) => {
-  const parts = location && location.split('-')
-  if (parts && parts.length > 0) {
-    const index = parts.findIndex(p => p === agency)
-    if (index >= 0) {
-      return location.substring(parts[index].length + 1, location.length)
-    }
-  }
-  return location
-}
-
 const getMainEventDescription = event => {
   if (event.eventType === 'PRISON_ACT' || event.event === 'PA') {
     return event.comment
@@ -171,7 +160,6 @@ module.exports = {
   isBeforeToday,
   getMainEventDescription,
   getEventDescription,
-  stripAgencyPrefix,
   getListSizeClass,
   getLongDateFormat,
   linkOnClick,
