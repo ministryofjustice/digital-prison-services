@@ -8,11 +8,12 @@ import { BLUE, LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import styled from 'styled-components'
 import Link from '@govuk-react/link'
 import { FONT_SIZE, BREAKPOINTS } from '@govuk-react/constants'
+import ErrorSummary from '@govuk-react/error-summary'
 import { Flag } from '../flags'
-import ValidationErrors from '../ValidationError'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { isBeforeToday, isAfterToday, getCurrentPeriod } from '../utils'
 import routePaths from '../routePaths'
+import { onHandleErrorClick } from '../final-form-govuk-helpers'
 
 const StatsLink = styled(Link)`
   font-size: ${FONT_SIZE.SIZE_22};
@@ -211,9 +212,16 @@ class Search extends Component {
       </div>
     )
 
+    const searchError = []
+    if (validationErrors) {
+      searchError.push({ targetName: 'housing-location-select', text: 'Please select location or activity' })
+    }
+
     return (
       <>
-        <ValidationErrors validationErrors={validationErrors} fieldName="searchForm" />
+        {Boolean(validationErrors && Object.entries(validationErrors).length > 0) && (
+          <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={searchError} />
+        )}
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">
             <div className="pure-u-md-1-6">

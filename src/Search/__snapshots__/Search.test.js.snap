@@ -2,7 +2,33 @@
 
 exports[`Search component should render correctly with feature toggle disabled 1`] = `
 Array [
-  "",
+  <div
+    className="sc-bZQynM jBLGme"
+    tabIndex={-1}
+  >
+    <h2
+      className="sc-bwzfXH hbEaRv"
+      size="MEDIUM"
+    >
+      There is a problem
+    </h2>
+    <ul
+      className="sc-ifAKCX dYyvpM"
+    >
+      <li
+        className="sc-bxivhb etPFPc"
+      >
+        <a
+          className="sc-bdVaJa sc-EHOje sdFTb"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={1}
+        >
+          Please select location or activity
+        </a>
+      </li>
+    </ul>
+  </div>,
   <form
     className="searchForm"
     id="searchForm"
@@ -22,17 +48,17 @@ Array [
           >
             <div>
               <label
-                className="sc-htpNat ccHZSo"
+                className="sc-htoDjs cJGBnj"
               >
                 <span
-                  className="sc-bwzfXH lbxcXc"
+                  className="sc-gzVnrw clQBNW"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-ifAKCX gXzDEH"
+                  className="form-control sc-iwsKbI eFzTeJ"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -572,7 +598,33 @@ Array [
 
 exports[`Search component should render correctly with feature toggle enabled 1`] = `
 Array [
-  "",
+  <div
+    className="sc-bZQynM jBLGme"
+    tabIndex={-1}
+  >
+    <h2
+      className="sc-bwzfXH hbEaRv"
+      size="MEDIUM"
+    >
+      There is a problem
+    </h2>
+    <ul
+      className="sc-ifAKCX dYyvpM"
+    >
+      <li
+        className="sc-bxivhb etPFPc"
+      >
+        <a
+          className="sc-bdVaJa sc-EHOje sdFTb"
+          muted={false}
+          onClick={[Function]}
+          tabIndex={1}
+        >
+          Please select location or activity
+        </a>
+      </li>
+    </ul>
+  </div>,
   <form
     className="searchForm"
     id="searchForm"
@@ -592,17 +644,17 @@ Array [
           >
             <div>
               <label
-                className="sc-htpNat ccHZSo"
+                className="sc-htoDjs cJGBnj"
               >
                 <span
-                  className="sc-bwzfXH lbxcXc"
+                  className="sc-gzVnrw clQBNW"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-ifAKCX gXzDEH"
+                  className="form-control sc-iwsKbI eFzTeJ"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -1007,13 +1059,13 @@ Array [
         </select>
       </div>
       <div
-        className="sc-bZQynM hLyEZh"
+        className="sc-gqjmRU crbzUF"
       >
         <div
-          className="sc-gzVnrw fXIzxI"
+          className="sc-VigVT hLPYRt"
         >
           <a
-            className="sc-bdVaJa sc-EHOje heZRwM"
+            className="sc-bdVaJa sc-gZMcBi bJavgj"
             data-qa="prisoners-unaccounted-for"
             muted={false}
             onClick={[Function]}
@@ -1022,7 +1074,7 @@ Array [
           </a>
         </div>
         <a
-          className="sc-bdVaJa sc-EHOje heZRwM"
+          className="sc-bdVaJa sc-gZMcBi bJavgj"
           href="/manage-prisoner-whereabouts/attendance-reason-statistics"
           muted={false}
         >
