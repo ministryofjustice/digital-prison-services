@@ -220,7 +220,9 @@ class Search extends Component {
     return (
       <>
         {Boolean(validationErrors && Object.entries(validationErrors).length > 0) && (
-          <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={searchError} />
+          <span id="validation-message">
+            <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={searchError} />
+          </span>
         )}
         <form id="searchForm" name="searchForm" className="searchForm">
           <div className="padding-top padding-bottom-large">

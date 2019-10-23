@@ -41,7 +41,7 @@ class SearchSpecification extends BrowserReportingSpec {
 
         then: 'an error is displayed'
         at SearchPage
-        validationMessage.text() == "Please select location or activity"
+        validationMessage.find('li').text() == "Please select location or activity"
     }
 
     def "The activity location list is updated when selecting date or period"() {

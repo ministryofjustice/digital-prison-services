@@ -2,33 +2,37 @@
 
 exports[`Search component should render correctly with feature toggle disabled 1`] = `
 Array [
-  <div
-    className="sc-bZQynM jBLGme"
-    tabIndex={-1}
+  <span
+    id="validation-message"
   >
-    <h2
-      className="sc-bwzfXH hbEaRv"
-      size="MEDIUM"
+    <div
+      className="sc-bZQynM jBLGme"
+      tabIndex={-1}
     >
-      There is a problem
-    </h2>
-    <ul
-      className="sc-ifAKCX dYyvpM"
-    >
-      <li
-        className="sc-bxivhb etPFPc"
+      <h2
+        className="sc-bwzfXH hbEaRv"
+        size="MEDIUM"
       >
-        <a
-          className="sc-bdVaJa sc-EHOje sdFTb"
-          muted={false}
-          onClick={[Function]}
-          tabIndex={1}
+        There is a problem
+      </h2>
+      <ul
+        className="sc-ifAKCX dYyvpM"
+      >
+        <li
+          className="sc-bxivhb etPFPc"
         >
-          Please select location or activity
-        </a>
-      </li>
-    </ul>
-  </div>,
+          <a
+            className="sc-bdVaJa sc-EHOje sdFTb"
+            muted={false}
+            onClick={[Function]}
+            tabIndex={1}
+          >
+            Please select location or activity
+          </a>
+        </li>
+      </ul>
+    </div>
+  </span>,
   <form
     className="searchForm"
     id="searchForm"
@@ -598,33 +602,37 @@ Array [
 
 exports[`Search component should render correctly with feature toggle enabled 1`] = `
 Array [
-  <div
-    className="sc-bZQynM jBLGme"
-    tabIndex={-1}
+  <span
+    id="validation-message"
   >
-    <h2
-      className="sc-bwzfXH hbEaRv"
-      size="MEDIUM"
+    <div
+      className="sc-bZQynM jBLGme"
+      tabIndex={-1}
     >
-      There is a problem
-    </h2>
-    <ul
-      className="sc-ifAKCX dYyvpM"
-    >
-      <li
-        className="sc-bxivhb etPFPc"
+      <h2
+        className="sc-bwzfXH hbEaRv"
+        size="MEDIUM"
       >
-        <a
-          className="sc-bdVaJa sc-EHOje sdFTb"
-          muted={false}
-          onClick={[Function]}
-          tabIndex={1}
+        There is a problem
+      </h2>
+      <ul
+        className="sc-ifAKCX dYyvpM"
+      >
+        <li
+          className="sc-bxivhb etPFPc"
         >
-          Please select location or activity
-        </a>
-      </li>
-    </ul>
-  </div>,
+          <a
+            className="sc-bdVaJa sc-EHOje sdFTb"
+            muted={false}
+            onClick={[Function]}
+            tabIndex={1}
+          >
+            Please select location or activity
+          </a>
+        </li>
+      </ul>
+    </div>
+  </span>,
   <form
     className="searchForm"
     id="searchForm"
