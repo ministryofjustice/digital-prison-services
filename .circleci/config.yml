@@ -206,7 +206,7 @@ workflows:
       - integration_tests:
           requires:
             - validate_build
-      - build_docker
+      - build_docker:
           filters:
             branches:
               only: master
