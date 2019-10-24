@@ -11,7 +11,9 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
   const index = async (req, res) => {
     const { data } = req.session
 
-    if (!data) return renderError(req, res)
+    if (!req.session.data) {
+      return res.redirect('/bulk-appointments/add-appointment-details')
+    }
 
     const appointmentDetails = {
       ...data,
