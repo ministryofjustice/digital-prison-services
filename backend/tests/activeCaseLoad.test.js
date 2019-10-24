@@ -4,6 +4,7 @@ describe('Switch caseload', () => {
   const elite2Api = {}
   const req = {
     session: {
+      userDetails: {},
       data: {
         activeCaseLoadId: 'LEI',
       },
@@ -34,5 +35,6 @@ describe('Switch caseload', () => {
     await controller.setActiveCaseload(req, res)
 
     expect(req.session.data.activeCaseLoadId).toBe('MDI')
+    expect(req.session.userDetails.activeCaseLoadId).toBe('MDI')
   })
 })
