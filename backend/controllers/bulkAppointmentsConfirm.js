@@ -61,7 +61,9 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
   const index = async (req, res) => {
     const { data } = req.session
 
-    if (!data) return renderError(req, res)
+    if (!req.session.data) {
+      return res.redirect('/bulk-appointments/add-appointment-details')
+    }
 
     return renderTemplate(req, res, { appointmentDetails: data })
   }
