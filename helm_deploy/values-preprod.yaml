@@ -55,3 +55,6 @@ whitelist:
   cloudplatform-live1-1: "35.178.209.113/32"
   cloudplatform-live1-2: "3.8.51.207/32"
   cloudplatform-live1-3: "35.177.252.54/32"
+  dxc_webproxy1: "195.92.38.20/32"
+  dxc_webproxy2: "195.92.38.21/32"
+  dxc_webproxy3: "195.92.38.23/32"
