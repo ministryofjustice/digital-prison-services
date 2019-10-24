@@ -6,25 +6,11 @@ const mockRes = { redirect: jest.fn() }
 describe('add appointment redirect', () => {
   const res = { ...mockRes }
   const req = {
-    session: {
-      data: {
-        location: 1,
-        locationDescription: 'location 1',
-        appointmentType: 'app1',
-        appointmentTypeDescription: 'appointment 1',
-        sameTimeAppointments: 'yes',
-        recurring: 'yes',
-        times: 1,
-        repeatsText: 'Daily',
-        repeats: 'DAILY',
-        comments: 'test',
-      },
-    },
+    session: {},
   }
 
-  it('should clear the saved session data and redirect to the add appointments page', async () => {
+  it('should redirect to the add appointments page', async () => {
     await bulkAppointmentsFormRedirect(req, res)
-    expect(req.session.data).toBe(null)
     expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
   })
 })
