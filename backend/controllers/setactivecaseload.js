@@ -6,7 +6,10 @@ const activeCaseloadFactory = elite2Api => {
 
     await elite2Api.setActiveCaseload(res.locals, { caseLoadId })
 
-    if (req.session && req.session.data) req.session.data.activeCaseLoadId = caseLoadId
+    if (req.session && req.session.data) {
+      req.session.data.activeCaseLoadId = caseLoadId
+      req.session.userDetails.activeCaseLoadId = caseLoadId
+    }
     res.json({})
   })
 
