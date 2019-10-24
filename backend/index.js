@@ -21,6 +21,7 @@ const setupAuth = require('./setupAuth')
 const setupSass = require('./setupSass')
 const setupStaticContent = require('./setupStaticContent')
 const setupWebpackForDev = require('./setupWebpackForDev')
+const setupRedirects = require('./setupRedirects')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
@@ -34,6 +35,7 @@ app.use(setupAuth({ oauthApi: apis.oauthApi }))
 app.use(setupSass())
 app.use(setupWebpackForDev())
 
+app.use(setupRedirects())
 app.use(routes(apis))
 
 app.use(setupStaticContent({ app }))
