@@ -48,17 +48,17 @@ describe('bulk appointments upload', () => {
       })
     })
 
-    describe('when there is an error', () => {
+    describe('when there is no session data', () => {
       beforeEach(() => {
         req = { originalUrl: '/bulk-appointments/upload-file/', session: {} }
-        res = { locals: {} }
+        res = { locals: {}, redirect: jest.fn() }
         res.render = jest.fn()
       })
 
-      it('should render the error page', async () => {
+      it('should redirect to start when session is invalid', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
       })
     })
   })

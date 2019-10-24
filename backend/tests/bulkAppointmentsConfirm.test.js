@@ -86,10 +86,10 @@ describe('when confirming bulk appointment details', () => {
     })
 
     describe('and there is no data', () => {
-      it('should render the error page', async () => {
+      it('should redirect to start when session is invalid', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
       })
     })
   })
