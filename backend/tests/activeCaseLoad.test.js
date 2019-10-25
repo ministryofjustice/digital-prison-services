@@ -27,14 +27,14 @@ describe('Switch caseload', () => {
     expect(elite2Api.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI' })
   })
 
-  it('should update session with new caseload id', async () => {
+  it('should update session with new caseload id and clear app session data', async () => {
     const controller = activeCaseloadFactory(elite2Api)
 
     req.body = { caseLoadId: 'MDI' }
 
     await controller.setActiveCaseload(req, res)
 
-    expect(req.session.data.activeCaseLoadId).toBe('MDI')
+    expect(req.session.data).toBe(null)
     expect(req.session.userDetails.activeCaseLoadId).toBe('MDI')
   })
 })
