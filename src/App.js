@@ -25,12 +25,10 @@ import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './C
 import IepHistoryContainer from './IepDetails/IepDetailsContainer'
 import IepChangeContainer from './IepDetails/IepChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
-import AppointmentDetailsContainer from './BulkAppointments/AppointmentDetailsForm/AppointmentDetailsContainer'
 import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
 import AdjudicationDetailContainer from './Adjudications/AdjudicationDetail/AdjudicationDetailContainer'
 import routePaths from './routePaths'
 import Content from './Components/Content'
-import AddPrisonerContainer from './BulkAppointments/AddPrisoners/AddPrisonersContainer'
 import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
@@ -405,30 +403,6 @@ class App extends React.Component {
             path={routePaths.enRoute}
             render={({ history }) => (
               <EnRouteContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.bulkAppointments}
-            render={({ history }) => (
-              <AppointmentDetailsContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.bulkAppointmentsAddPrisoners}
-            render={({ history }) => (
-              <AddPrisonerContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
