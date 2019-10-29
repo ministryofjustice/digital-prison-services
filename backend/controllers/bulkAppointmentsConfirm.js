@@ -139,12 +139,13 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         startTime: prisoner.startTime,
         endTime: prisoner.endTime,
       })),
-      repeat: recurring
-        ? {
-            repeatPeriod: repeats,
-            count,
-          }
-        : undefined,
+      repeat:
+        recurring === 'yes'
+          ? {
+              repeatPeriod: repeats,
+              count,
+            }
+          : undefined,
     }
 
     try {

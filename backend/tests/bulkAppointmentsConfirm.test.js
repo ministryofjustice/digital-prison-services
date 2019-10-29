@@ -74,6 +74,35 @@ const appointmentDetails = {
 describe('when confirming bulk appointment details', () => {
   describe('and viewing the page', () => {
     describe('and there is data', () => {
+      it('should not send recurring information when recurring  is not set', async () => {
+        req.session.data = {
+          ...appointmentDetails,
+        }
+        await controller.post(req, res)
+
+        expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+          appointmentDetails: {
+            appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
+            comments: appointmentDetails.comments,
+            endTime: appointmentDetails.endTime,
+            locationDescription: appointmentDetails.locationDescription,
+            startTime: appointmentDetails.startTime,
+          },
+          prisonersListed: appointmentDetails.prisonersListed,
+        })
+
+        expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+          appointmentDefaults: {
+            appointmentType: 'TEST',
+            comment: 'Activity comment',
+            locationId: 1,
+            startTime: '2019-09-23T15:30:00',
+            endTime: '2019-09-30T16:30:00',
+          },
+          appointments: [{ bookingId: '111' }, { bookingId: '222' }, { bookingId: '333' }, { bookingId: '444' }],
+        })
+      })
+
       it('should render the confirm appointments page', async () => {
         req.session.data = { ...appointmentDetails }
 

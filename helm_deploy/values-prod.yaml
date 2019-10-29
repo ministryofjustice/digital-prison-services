@@ -22,7 +22,7 @@ env:
   NN_ENDPOINT_URL: https://digital.prison.service.justice.gov.uk/
   API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api.service.justice.gov.uk/
   IEP_CHANGE_LINK_ENABLED: "true"
-  UPDATE_ATTENDANCE_PRISONS: "MDI,HMI,LEI,HLI,HHI,WLI,WCI,NWI,STI,HEI,BLI,LLI,LNI,LHI,CFI,PVI,KMI,RNI,GTI,BXI,NWI,MRI"
+  UPDATE_ATTENDANCE_PRISONS: "MDI,HMI,LEI,HLI,HHI,WLI,WCI,NWI,STI,HEI,BLI,LLI,LNI,LHI,CFI,PVI,KMI,RNI,GTI,BXI,NWI,MRI,WNI,SKI"
   LICENCES_URL: https://licences.service.hmpps.dsd.io/
   HMPPS_COOKIE_NAME: hmpps-session-preprod
   REMOTE_AUTH_STRATEGY: "true"
@@ -57,4 +57,5 @@ whitelist:
   cloudplatform-live1-3: "35.177.252.54/32"
   dxc_webproxy1: "195.92.38.20/32"
   dxc_webproxy2: "195.92.38.21/32"
-  dxc_webproxy3: "195.92.38.23/32"
+  dxc_webproxy3: "195.92.38.22/32"
+  dxc_webprox23: "195.92.38.23/32"
