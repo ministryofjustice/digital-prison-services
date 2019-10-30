@@ -209,6 +209,11 @@ export function search(state = searchInitialState, action) {
         ...state,
         period: action.period,
       }
+    case ActionTypes.SET_SEARCH_STAYING_ON_WING:
+      return {
+        ...state,
+        stayingOnWing: action.stayingOnWing,
+      }
     default:
       return state
   }

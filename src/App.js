@@ -44,6 +44,7 @@ import {
   setMenuOpen,
   setSearchActivities,
   setSearchActivity,
+  setSearchStayingOnWing,
   setSearchDate,
   setSearchPeriod,
   setTermsVisibility,
@@ -140,6 +141,12 @@ class App extends React.Component {
     const { periodDispatch } = this.props
 
     periodDispatch(event.target.value)
+  }
+
+  handleWingResidenceChange = event => {
+    const { stayingOnWingDispatch } = this.props
+
+    stayingOnWingDispatch(event.target.value)
   }
 
   handlePeriodChangeWithLocationsUpdate = event => {
@@ -255,6 +262,7 @@ class App extends React.Component {
       resetErrorDispatch,
       dateDispatch,
       periodDispatch,
+      stayingOnWingDispatch,
       error,
       user,
       title,
@@ -313,8 +321,10 @@ class App extends React.Component {
                 handleError={this.handleError}
                 handleDateChange={event => this.handleDateChange(event)}
                 handlePeriodChange={event => this.handlePeriodChange(event)}
+                handleWingResidenceChange={event => this.handleWingResidenceChange(event)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 showModal={setShowModalDispatch}
+                stayingOnWingDispatch={stayingOnWingDispatch}
               />
             )}
           />
@@ -610,6 +620,7 @@ App.propTypes = {
   configDispatch: PropTypes.func.isRequired,
   dateDispatch: PropTypes.func.isRequired,
   periodDispatch: PropTypes.func.isRequired,
+  stayingOnWingDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
@@ -652,6 +663,7 @@ const mapDispatchToProps = dispatch => ({
   configDispatch: config => dispatch(setConfig(config)),
   dateDispatch: text => dispatch(setSearchDate(text)),
   periodDispatch: text => dispatch(setSearchPeriod(text)),
+  stayingOnWingDispatch: text => dispatch(setSearchStayingOnWing(text)),
   resetErrorDispatch: () => dispatch(resetError()),
   setErrorDispatch: error => dispatch(setError(error)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),

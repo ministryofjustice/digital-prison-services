@@ -315,6 +315,18 @@ describe('app (global) reducer', () => {
     })
   })
 
+  it('should handle SET_SEARCH_STAYING_ON_WING', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_STAYING_ON_WING,
+        stayingOnWing: true,
+      })
+    ).toEqual({
+      ...searchInitialState,
+      stayingOnWing: true,
+    })
+  })
+
   it('should handle SET_HOUSEBLOCK_DATA', () => {
     expect(
       events(undefined, {
