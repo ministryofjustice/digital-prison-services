@@ -61,6 +61,7 @@ const searchInitialState = {
   activities: [],
   location: '',
   subLocation: '--',
+  stayingOnWing: '',
   activity: '',
   date: 'Today',
   period: defaultPeriod(moment()),

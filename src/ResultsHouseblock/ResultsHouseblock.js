@@ -92,11 +92,11 @@ class ResultsHouseblock extends Component {
       date,
       currentSubLocation,
       handleSubLocationChange,
+      handleWingResidenceChange,
       subLocations,
       handleDateChange,
       period,
       handlePeriodChange,
-      handleWingResidenceChange,
       handlePrint,
       redactedPrintState,
       houseblockData,
@@ -195,16 +195,15 @@ class ResultsHouseblock extends Component {
           id="staying-leaving-select"
           name="staying-leaving-select"
           className="form-control"
-          // value={period}
           onChange={handleWingResidenceChange}
         >
-          <option key="All" value="All">
+          <option key="All" value="--">
             All
           </option>
-          <option key="Staying" value="Staying">
+          <option key="Staying" value>
             Staying
           </option>
-          <option key="Leaving" value="Leaving">
+          <option key="Leaving" value={false}>
             Leaving
           </option>
         </select>
