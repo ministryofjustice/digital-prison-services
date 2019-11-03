@@ -260,7 +260,7 @@ describe('Add appointment details controller', () => {
         const endTimeHours = endTime.hour()
         const endTimeMinutes = endTime.minute()
 
-        const startTime = moment()
+        const startTime = moment().add(5, 'minutes')
         const startTimeHours = startTime.hour()
         const startTimeMinutes = startTime.minute()
 
