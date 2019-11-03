@@ -472,7 +472,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should return an error when weekdays x working days exceeds 1 year', async () => {
-        const date = moment()
+        const date = moment('3014-04-25T01:32:21.196Z')
 
         req.body = {
           ...buildBodyForDate(date),
@@ -499,7 +499,7 @@ describe('Add appointment details controller', () => {
 
       it('should validate that occurrences is larger than zero', async () => {
         req.body = {
-          ...buildBodyForDate(moment()),
+          ...buildBodyForDate(moment('3014-04-25T01:32:21.196Z')),
           recurring: 'yes',
           repeats: 'WEEKDAYS',
           times: '-1',
@@ -568,13 +568,9 @@ describe('Add appointment details controller', () => {
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
 
-        const date = moment()
-        const startTime = moment()
-          .add(1, 'hours')
-          .seconds(0)
-        const endTime = moment()
-          .add(2, 'hours')
-          .seconds(0)
+        const date = moment('3014-04-25T01:32:21.196Z')
+        const startTime = date.add(1, 'hours').seconds(0)
+        const endTime = date.add(2, 'hours').seconds(0)
 
         req.body = {
           date: date.format(DAY_MONTH_YEAR),
