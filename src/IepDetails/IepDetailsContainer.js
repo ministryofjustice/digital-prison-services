@@ -11,7 +11,7 @@ import OffenderPage from '../OffenderPage/OffenderPage'
 
 const axios = require('axios')
 
-class IepDetailsContainer extends Component {
+export class IepDetailsContainer extends Component {
   componentDidMount() {
     this.getIepDetails({})
   }
