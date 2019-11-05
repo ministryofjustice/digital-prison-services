@@ -23,7 +23,8 @@ const communityApi = communityApiFactory(
   clientFactory({
     baseUrl: config.apis.community.url,
     timeout: config.apis.community.timeoutSeconds * 1000,
-  })
+  }),
+  config.apis.community.apiPrefix
 )
 
 const oauthApi = oauthApiFactory(
