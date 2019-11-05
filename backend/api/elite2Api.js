@@ -25,11 +25,8 @@ const elite2ApiFactory = client => {
   // However, only 'caseLoadId' has meaning.  The other two properties can take *any* non-blank value and these will be ignored.
   const setActiveCaseload = (context, caseload) => put(context, '/api/users/me/activeCaseLoad', caseload)
 
-  const getHouseblockList = (context, agencyId, groupName, date, timeSlot, stayingOnWing) =>
-    get(
-      context,
-      `/api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}&stayingOnWing=${stayingOnWing}`
-    )
+  const getHouseblockList = (context, agencyId, groupName, date, timeSlot) =>
+    get(context, `/api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}`)
 
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
     get(context, `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`)
