@@ -1,4 +1,4 @@
-const communityApiFactory = client => {
+const communityApiFactory = (client, apiPrefix) => {
   const processResponse = () => response => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
@@ -10,17 +10,18 @@ const communityApiFactory = client => {
       { retry: 0 }
     )
   const getOffenderConvictions = (context, { offenderNo }) =>
-    get(context, `/api/offenders/nomsNumber/${offenderNo}/convictions`)
+    get(context, `${apiPrefix}/offenders/nomsNumber/${offenderNo}/convictions`)
 
-  const getOffenderDetails = (context, { offenderNo }) => get(context, `/api/offenders/nomsNumber/${offenderNo}`)
+  const getOffenderDetails = (context, { offenderNo }) =>
+    get(context, `${apiPrefix}/offenders/nomsNumber/${offenderNo}`)
 
   const getOffenderDocuments = (context, { offenderNo }) =>
-    get(context, `/api/offenders/nomsNumber/${offenderNo}/documents/grouped`)
+    get(context, `${apiPrefix}/offenders/nomsNumber/${offenderNo}/documents/grouped`)
 
   const pipeOffenderDocument = (context, { offenderNo, documentId, res }) =>
     pipe(
       context,
-      `/api/offenders/nomsNumber/${offenderNo}/documents/${documentId}`,
+      `${apiPrefix}/offenders/nomsNumber/${offenderNo}/documents/${documentId}`,
       res
     )
 
