@@ -95,7 +95,8 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
         ])
 
         const convictionsWithDocuments = convictions.map(conviction => {
-          const relatedConviction = allDocuments.convictions.find(
+          const convictionDocuments = allDocuments.convictions || []
+          const relatedConviction = convictionDocuments.find(
             // community api mixes types for convictionId so use string
             documentConviction => documentConviction.convictionId.toString() === conviction.convictionId.toString()
           )

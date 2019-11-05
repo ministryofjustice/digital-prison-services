@@ -11,7 +11,7 @@ import OffenderPage from '../OffenderPage/OffenderPage'
 
 const axios = require('axios')
 
-class IepDetailsContainer extends Component {
+export class IepDetailsContainer extends Component {
   componentDidMount() {
     this.getIepDetails({})
   }
@@ -59,8 +59,10 @@ class IepDetailsContainer extends Component {
   }
 
   updateResults = async fields => {
+    const { establishment, level, fromDate, toDate } = fields
     const { setIepHistoryFilter: setFilter } = this.props
-    setFilter(fields)
+
+    setFilter({ establishment, level, fromDate, toDate })
     return this.getIepDetails(fields)
   }
 
