@@ -319,11 +319,11 @@ describe('app (global) reducer', () => {
     expect(
       search(searchInitialState, {
         type: types.SET_SEARCH_WING_STATUS,
-        wingStatus: true,
+        wingStatus: 'leaving',
       })
     ).toEqual({
       ...searchInitialState,
-      wingStatus: true,
+      wingStatus: 'leaving',
     })
   })
 

@@ -134,8 +134,6 @@ class ResultsHouseblockContainer extends Component {
         },
       }
 
-      console.log('config', config)
-
       const response = await axios.get('/api/houseblocklist', config)
       const houseblockData = response.data
       sortHouseblockData(houseblockData, orderField, sortOrder)
