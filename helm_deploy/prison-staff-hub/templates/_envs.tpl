@@ -91,6 +91,9 @@ env:
   - name: API_COMMUNITY_ENDPOINT_URL
     value: {{ .Values.env.API_COMMUNITY_ENDPOINT_URL | quote }}
 
+  - name: API_COMMUNITY_API_PREFIX
+    value: {{ .Values.env.API_COMMUNITY_API_PREFIX | quote }}
+
   - name: HMPPS_COOKIE_NAME
     value: {{ .Values.env.HMPPS_COOKIE_NAME | quote }}
 
