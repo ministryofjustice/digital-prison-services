@@ -153,10 +153,10 @@ describe('actions', () => {
 
   it('should create an action to save prisoners wing residence state', () => {
     const expectedAction = {
-      type: types.SET_SEARCH_STAYING_ON_WING,
-      stayingOnWing: true,
+      type: types.SET_SEARCH_WING_STATUS,
+      wingStatus: 'staying',
     }
-    expect(actions.setSearchStayingOnWing(true)).toEqual(expectedAction)
+    expect(actions.setSearchWingStatus('staying')).toEqual(expectedAction)
   })
 
   it('should create an action to save the events list data', () => {

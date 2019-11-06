@@ -86,9 +86,9 @@ export const setSearchPeriod = period => ({
   period,
 })
 
-export const setSearchStayingOnWing = stayingOnWing => ({
-  type: ActionTypes.SET_SEARCH_STAYING_ON_WING,
-  stayingOnWing,
+export const setSearchWingStatus = wingStatus => ({
+  type: ActionTypes.SET_SEARCH_WING_STATUS,
+  wingStatus,
 })
 
 export const setHouseblockData = data => ({

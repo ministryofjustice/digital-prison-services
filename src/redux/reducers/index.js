@@ -61,7 +61,7 @@ const searchInitialState = {
   activities: [],
   location: '',
   subLocation: '--',
-  stayingOnWing: '',
+  wingStatus: 'all',
   activity: '',
   date: 'Today',
   period: defaultPeriod(moment()),
@@ -210,10 +210,10 @@ export function search(state = searchInitialState, action) {
         ...state,
         period: action.period,
       }
-    case ActionTypes.SET_SEARCH_STAYING_ON_WING:
+    case ActionTypes.SET_SEARCH_WING_STATUS:
       return {
         ...state,
-        stayingOnWing: action.stayingOnWing,
+        wingStatus: action.wingStatus,
       }
     default:
       return state

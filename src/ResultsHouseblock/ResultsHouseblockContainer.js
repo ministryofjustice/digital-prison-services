@@ -13,7 +13,7 @@ import {
   setHouseblockData,
   setOrderField,
   setSearchSubLocation,
-  setSearchStayingOnWing,
+  setSearchWingStatus,
   setSortOrder,
   getAbsentReasons,
   setHouseblockOffenderAttendance,
@@ -26,7 +26,7 @@ class ResultsHouseblockContainer extends Component {
   constructor(props) {
     super(props)
     this.handleSubLocationChange = this.handleSubLocationChange.bind(this)
-    this.handleWingResidenceChange = this.handleWingResidenceChange.bind(this)
+    this.handleWingStatusChange = this.handleWingStatusChange.bind(this)
 
     this.getHouseblockList = this.getHouseblockList.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
@@ -54,14 +54,16 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { date, period, currentLocation, currentSubLocation, stayingOnWing } = this.props
+    const { date, period, currentLocation, currentSubLocation, wingStatus } = this.props
+
+    console.log('prevProps', prevProps)
 
     if (
       (prevProps.date && prevProps.date !== date) ||
       (prevProps.period && prevProps.period !== period) ||
       (prevProps.currentLocation && prevProps.currentLocation !== currentLocation) ||
       (prevProps.currentSubLocation && prevProps.currentSubLocation !== currentSubLocation) ||
-      (prevProps.stayingOnWing && prevProps.stayingOnWing !== stayingOnWing)
+      (prevProps.wingStatus && prevProps.wingStatus !== wingStatus)
     ) {
       await this.update()
     }
@@ -85,7 +87,7 @@ class ResultsHouseblockContainer extends Component {
     let { date } = this.props
     const {
       agencyId,
-      stayingOnWing,
+      wingStatus,
       currentLocation,
       currentSubLocation,
       period,
@@ -124,13 +126,15 @@ class ResultsHouseblockContainer extends Component {
           groupName: compoundGroupName(currentLocation, currentSubLocation),
           date,
           timeSlot: period,
-          stayingOnWing,
+          wingStatus,
         },
         headers: {
           'Sort-Fields': 'lastName',
           'Sort-Order': 'ASC',
         },
       }
+
+      console.log('config', config)
 
       const response = await axios.get('/api/houseblocklist', config)
       const houseblockData = response.data
@@ -192,10 +196,10 @@ class ResultsHouseblockContainer extends Component {
     subLocationDispatch(event.target.value)
   }
 
-  handleWingResidenceChange(event) {
-    const { stayingOnWingDispatch } = this.props
+  handleWingStatusChange(event) {
+    const { wingStatusDispatch } = this.props
 
-    stayingOnWingDispatch(event.target.value)
+    wingStatusDispatch(event.target.value)
   }
 
   titleString() {
@@ -219,7 +223,7 @@ class ResultsHouseblockContainer extends Component {
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
-          handleWingResidenceChange={this.handleWingResidenceChange}
+          handleWingStatusChange={this.handleWingStatusChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
           resetErrorDispatch={resetErrorDispatch}
@@ -247,7 +251,7 @@ ResultsHouseblockContainer.propTypes = {
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
-  stayingOnWing: PropTypes.bool.isRequired,
+  wingStatus: PropTypes.bool.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   houseblockData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   locations: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -266,7 +270,7 @@ ResultsHouseblockContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
-  stayingOnWingDispatch: PropTypes.func.isRequired,
+  wingStatusDispatch: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   getAbsentReasonsDispatch: PropTypes.func.isRequired,
 
@@ -291,6 +295,7 @@ const mapStateToProps = state => ({
   currentSubLocation: state.search.subLocation,
   date: state.search.date,
   period: state.search.period,
+  wingStatus: state.search.wingStatus,
   houseblockData: state.events.houseblockData,
   loaded: state.app.loaded,
   orderField: state.events.orderField,
@@ -310,7 +315,7 @@ const mapDispatchToProps = dispatch => ({
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
-  stayingOnWingDispatch: status => dispatch(setSearchStayingOnWing(status)),
+  wingStatusDispatch: status => dispatch(setSearchWingStatus(status)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) =>
     dispatch(setHouseblockOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),

@@ -315,15 +315,15 @@ describe('app (global) reducer', () => {
     })
   })
 
-  it('should handle SET_SEARCH_STAYING_ON_WING', () => {
+  it('should handle SET_SEARCH_WING_STATUS', () => {
     expect(
       search(searchInitialState, {
-        type: types.SET_SEARCH_STAYING_ON_WING,
-        stayingOnWing: true,
+        type: types.SET_SEARCH_WING_STATUS,
+        wingStatus: true,
       })
     ).toEqual({
       ...searchInitialState,
-      stayingOnWing: true,
+      wingStatus: true,
     })
   })
 
