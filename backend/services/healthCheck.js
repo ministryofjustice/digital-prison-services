@@ -35,7 +35,7 @@ module.exports = function healthcheckFactory(authUrl, elite2Url, whereaboutsUrl,
     service('auth', `${authUrl}ping`),
     service('elite2', `${elite2Url}ping`),
     service('whereabouts', `${whereaboutsUrl}ping`),
-    service('community', `${communityUrl}ping`),
+    service('community', `${communityUrl}/ping`),
   ]
 
   return callback =>

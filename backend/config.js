@@ -43,7 +43,7 @@ module.exports = {
       timeoutSeconds: process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
     community: {
-      url: process.env.API_COMMUNITY_ENDPOINT_URL || 'http://localhost:8083/communityapi/',
+      url: process.env.API_COMMUNITY_ENDPOINT_URL || 'http://localhost:8083/communityapi',
       timeoutSeconds: process.env.API_COMMUNITY_ENDPOINT_TIMEOUT_SECONDS || 30,
       apiPrefix: process.env.API_COMMUNITY_API_PREFIX || '/api',
     },
