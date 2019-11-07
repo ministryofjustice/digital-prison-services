@@ -4,6 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
+import { properCase } from '../utils'
 import sortHouseblockData from './houseblockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
 
@@ -55,8 +56,6 @@ class ResultsHouseblockContainer extends Component {
 
   async componentDidUpdate(prevProps) {
     const { date, period, currentLocation, currentSubLocation, wingStatus } = this.props
-
-    console.log('prevProps', prevProps)
 
     if (
       (prevProps.date && prevProps.date !== date) ||
@@ -202,13 +201,14 @@ class ResultsHouseblockContainer extends Component {
 
   titleString() {
     const { activeSubLocation } = this.state
-    const { locations, subLocations, currentLocation } = this.props
+    const { locations, subLocations, currentLocation, wingStatus } = this.props
     const locationName = locations.filter(location => location.key === currentLocation).map(it => it.name)[0]
+    let title = locationName
     if (activeSubLocation && activeSubLocation !== '--') {
       const subLocationName = subLocations.filter(location => location.key === activeSubLocation).map(it => it.name)[0]
-      return `${locationName} -  ${subLocationName}`
+      title = `${locationName} - ${subLocationName}`
     }
-    return locationName
+    return `${title} - ${properCase(wingStatus)}`
   }
 
   render() {
@@ -249,7 +249,7 @@ ResultsHouseblockContainer.propTypes = {
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
-  wingStatus: PropTypes.bool.isRequired,
+  wingStatus: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   houseblockData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   locations: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -319,7 +319,7 @@ const mapDispatchToProps = dispatch => ({
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
 })
 
-export { extractSubLocations }
+export { ResultsHouseblockContainer, extractSubLocations }
 
 export default withRouter(
   connect(
