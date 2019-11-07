@@ -21,7 +21,7 @@ describe('ResultsHouseblockContainer', () => {
     loaded: true,
     orderField: 'lastName',
     sortOrder: 'ASC',
-    subLocations: [],
+    subLocations: [{ key: 'A-Wing', name: 'A-Wing' }],
     houseblockDataDispatch: jest.fn(),
     orderDispatch: jest.fn(),
     resetErrorDispatch: jest.fn(),
@@ -62,6 +62,12 @@ describe('ResultsHouseblockContainer', () => {
       const wrapper = shallow(<ResultsHouseblockContainer {...props} wingStatus="leaving" />)
 
       expect(wrapper.find('Connect(Page)').prop('title')).toEqual('Houseblock 1 - Leaving')
+    })
+
+    it('should have the correct page title when when a sub location is selected', () => {
+      const wrapper = shallow(<ResultsHouseblockContainer {...props} currentSubLocation="A-Wing" />)
+
+      expect(wrapper.find('Connect(Page)').prop('title')).toEqual('Houseblock 1 - A-Wing - All')
     })
   })
 })

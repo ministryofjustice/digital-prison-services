@@ -206,7 +206,7 @@ class ResultsHouseblockContainer extends Component {
     let title = locationName
     if (activeSubLocation && activeSubLocation !== '--') {
       const subLocationName = subLocations.filter(location => location.key === activeSubLocation).map(it => it.name)[0]
-      title = `${locationName} -  ${subLocationName}`
+      title = `${locationName} - ${subLocationName}`
     }
     return `${title} - ${properCase(wingStatus)}`
   }
