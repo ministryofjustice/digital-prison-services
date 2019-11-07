@@ -27,7 +27,7 @@ env:
   HMPPS_COOKIE_NAME: hmpps-session-preprod
   REMOTE_AUTH_STRATEGY: "true"
   WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
-  API_COMMUNITY_ENDPOINT_URL: "https://community-api.service.hmpps.dsd.io/communityapi/"
+  API_COMMUNITY_ENDPOINT_URL: "https://community-api.service.hmpps.dsd.io/communityapi"
   API_COMMUNITY_API_PREFIX: "/api"
 
 whitelist:
