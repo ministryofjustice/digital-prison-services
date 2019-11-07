@@ -26,8 +26,7 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
   return Boolean(safeTimeCompare(mainActivity.startTime, newActivity.startTime))
 }
 
-const isStayingOnWing = locationCode =>
-  locationCode === 'WOW' || locationCode === 'STAYONWING' || locationCode === 'UNEMPLOYED' || locationCode === 'RETIRED'
+const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED']
 
 const promoteToMainActivity = (offender, activity) => {
   const newMainActivity = { ...activity, mainActivity: true }
@@ -43,7 +42,7 @@ const promoteToMainActivity = (offender, activity) => {
   return {
     ...offender,
     activities,
-    stayingOnWing: isStayingOnWing(newMainActivity.locationCode),
+    stayingOnWing: stayingOnWingCodes.includes(newMainActivity.locationCode),
   }
 }
 
