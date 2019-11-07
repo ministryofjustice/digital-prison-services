@@ -41,8 +41,15 @@ const factory = ({
   })
 
   const getHouseblockList = asyncMiddleware(async (req, res) => {
-    const { agencyId, groupName, date, timeSlot } = req.query
-    const viewModel = await houseblockListService.getHouseblockList(res.locals, agencyId, groupName, date, timeSlot)
+    const { agencyId, groupName, date, timeSlot, wingStatus } = req.query
+    const viewModel = await houseblockListService.getHouseblockList(
+      res.locals,
+      agencyId,
+      groupName,
+      date,
+      timeSlot,
+      wingStatus
+    )
     res.json(viewModel)
   })
 

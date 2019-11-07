@@ -92,6 +92,7 @@ class ResultsHouseblock extends Component {
       date,
       currentSubLocation,
       handleSubLocationChange,
+      handleWingStatusChange,
       subLocations,
       handleDateChange,
       period,
@@ -159,7 +160,7 @@ class ResultsHouseblock extends Component {
     )
 
     const periodSelect = (
-      <div className="pure-u-md-1-6">
+      <div className="pure-u-md-1-6 padding-right">
         <label className="form-label" htmlFor="period-select">
           Choose period
         </label>
@@ -179,6 +180,31 @@ class ResultsHouseblock extends Component {
           </option>
           <option key="EVENING" value="ED">
             Evening (ED)
+          </option>
+        </select>
+      </div>
+    )
+
+    const stayingLeavingSelect = (
+      <div className="pure-u-md-1-6">
+        <label className="form-label" htmlFor="period-select">
+          Staying or leaving wing
+        </label>
+
+        <select
+          id="staying-leaving-select"
+          name="staying-leaving-select"
+          className="form-control"
+          onChange={handleWingStatusChange}
+        >
+          <option key="All" value="all">
+            All
+          </option>
+          <option key="Staying" value="staying">
+            Staying
+          </option>
+          <option key="Leaving" value="leaving">
+            Leaving
           </option>
         </select>
       </div>
@@ -358,6 +384,7 @@ class ResultsHouseblock extends Component {
             {locationSelect}
             {dateSelect}
             {periodSelect}
+            {stayingLeavingSelect}
             {printButton}
           </div>
           <hr />
@@ -406,6 +433,7 @@ ResultsHouseblock.propTypes = {
   agencyId: PropTypes.string.isRequired,
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
+  handleWingStatusChange: PropTypes.func.isRequired,
   handlePrint: PropTypes.func.isRequired,
   redactedPrintState: PropTypes.bool.isRequired,
   handleSubLocationChange: PropTypes.func.isRequired,
