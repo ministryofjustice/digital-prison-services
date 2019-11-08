@@ -26,6 +26,8 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
   return Boolean(safeTimeCompare(mainActivity.startTime, newActivity.startTime))
 }
 
+const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED']
+
 const promoteToMainActivity = (offender, activity) => {
   const newMainActivity = { ...activity, mainActivity: true }
   const oldMainActivity = offender.activities.find(act => act.mainActivity)
@@ -40,6 +42,7 @@ const promoteToMainActivity = (offender, activity) => {
   return {
     ...offender,
     activities,
+    stayingOnWing: stayingOnWingCodes.includes(newMainActivity.locationCode),
   }
 }
 
@@ -54,12 +57,13 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
     app: { production },
   } = config
   const updateAttendanceEnabled = agencyId => !production || updateAttendancePrisons.includes(agencyId)
-  const getHouseblockList = async (context, agencyId, groupName, date, timeSlot) => {
+  const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
     const data = await elite2Api.getHouseblockList(context, agencyId, groupName, formattedDate, timeSlot)
 
     const offenderNumbers = distinct(data.map(offender => offender.offenderNo))
+
     const externalEventsForOffenders = await getExternalEventsForOffenders(elite2Api, context, {
       offenderNumbers,
       formattedDate,
@@ -134,7 +138,7 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
         if (attended && paid) eventWithAttendance.attendanceInfo.pay = true
       }
 
-      const updatedEntry = {
+      const offenderWithUpdatedActivities = {
         [event.offenderNo]: shouldPromoteToMainActivity(offenderData, eventWithAttendance)
           ? promoteToMainActivity(offenderData, eventWithAttendance)
           : addToActivities(offenderData, eventWithAttendance),
@@ -142,14 +146,20 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
 
       return {
         ...offenders,
-        ...updatedEntry,
+        ...offenderWithUpdatedActivities,
       }
     }, {})
 
-    return Object.keys(offendersMap).map(offenderNo => ({
+    const response = Object.keys(offendersMap).map(offenderNo => ({
       offenderNo,
       ...offendersMap[offenderNo],
     }))
+
+    if (wingStatus === 'staying') return response.filter(offender => offender.stayingOnWing)
+
+    if (wingStatus === 'leaving') return response.filter(offender => !offender.stayingOnWing)
+
+    return response
   }
 
   return {

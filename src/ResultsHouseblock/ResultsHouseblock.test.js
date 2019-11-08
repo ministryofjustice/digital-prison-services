@@ -186,6 +186,7 @@ const props = {
   handleSearch: jest.fn(),
   handlePrint: jest.fn(),
   handleSubLocationChange: jest.fn(),
+  handleWingStatusChange: jest.fn(),
   handlePeriodChange: jest.fn(),
   handleDateChange: jest.fn(),
   update: jest.fn(),

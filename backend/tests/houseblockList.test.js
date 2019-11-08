@@ -527,6 +527,7 @@ describe('Houseblock list controller', () => {
           offenderNo: 'A1234AA',
           releaseScheduled: false,
           scheduledTransfers: [],
+          stayingOnWing: false,
         },
         {
           activities: [
@@ -596,6 +597,7 @@ describe('Houseblock list controller', () => {
           offenderNo: 'A1234AB',
           releaseScheduled: false,
           scheduledTransfers: [],
+          stayingOnWing: false,
         },
       ])
     })
@@ -669,6 +671,226 @@ describe('Houseblock list controller', () => {
 
       expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
       expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
+    })
+  })
+
+  describe('Wing status', () => {
+    const responseWithOneLeavingWing = [
+      {
+        bookingId: 1,
+        eventId: 10,
+        eventLocationId: 100,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: 'LEI-A-1-1',
+        event: 'CHAP',
+        eventType: 'PRISON_ACT',
+        eventDescription: 'Chapel',
+        comment: 'comment11',
+        endTime: '2017-10-15T18:30:00',
+        locationCode: 'WOW',
+      },
+      {
+        bookingId: 1,
+        eventId: 20,
+        eventLocationId: 200,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: 'LEI-A-1-1',
+        event: 'VISIT',
+        eventType: 'VISIT',
+        eventDescription: 'Official Visit',
+        comment: 'comment18',
+        startTime: '2017-10-15T19:00:00',
+        endTime: '2017-10-15T20:30:00',
+      },
+      {
+        bookingId: 2,
+        offenderNo: 'A1234AB',
+        firstName: 'MICHAEL',
+        lastName: 'SMITH',
+        cellLocation: 'LEI-A-1-1',
+        event: 'CHAP',
+        eventType: 'PRISON_ACT',
+        eventDescription: 'Chapel',
+        comment: 'comment12',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+      },
+      {
+        bookingId: 3,
+        offenderNo: 'A1234AC',
+        firstName: 'FRED',
+        lastName: 'QUIMBY',
+        cellLocation: 'LEI-A-1-3',
+        event: 'CHAP',
+        eventType: 'PRISON_ACT',
+        payRate: 1.3,
+        eventDescription: 'Chapel Activity',
+        comment: 'comment13',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        locationCode: 'UNEMPLOYED',
+      },
+      {
+        bookingId: 4,
+        offenderNo: 'A1234AD',
+        firstName: 'STEVE',
+        lastName: 'JONES',
+        cellLocation: 'LEI-A-1-4',
+        event: 'CHAP',
+        eventType: 'PRISON_ACT',
+        payRate: 1.3,
+        eventDescription: 'Chapel Activity',
+        comment: 'comment13',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        locationCode: 'STAYONWING',
+      },
+      {
+        bookingId: 5,
+        offenderNo: 'A1234AE',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        cellLocation: 'LEI-A-1-5',
+        event: 'CHAP',
+        eventType: 'PRISON_ACT',
+        payRate: 1.3,
+        eventDescription: 'Chapel Activity',
+        comment: 'comment13',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        locationCode: 'RETIRED',
+      },
+    ]
+
+    it('should return only offenders leaving the wing', async () => {
+      elite2Api.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
+
+      const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'leaving')
+
+      expect(response.length).toEqual(1)
+      expect(response).toEqual([
+        expect.objectContaining({
+          bookingId: 2,
+          firstName: 'MICHAEL',
+          lastName: 'SMITH',
+          offenderNo: 'A1234AB',
+          stayingOnWing: false,
+          activities: [
+            expect.objectContaining({
+              bookingId: 2,
+              firstName: 'MICHAEL',
+              lastName: 'SMITH',
+              offenderNo: 'A1234AB',
+              event: 'CHAP',
+              eventDescription: 'Chapel',
+              eventType: 'PRISON_ACT',
+              mainActivity: true,
+            }),
+          ],
+        }),
+      ])
+    })
+
+    it('should return only offenders staying on the wing', async () => {
+      elite2Api.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
+
+      const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')
+
+      expect(response.length).toEqual(4)
+      expect(response).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            bookingId: 1,
+            firstName: 'ARTHUR',
+            lastName: 'ANDERSON',
+            offenderNo: 'A1234AA',
+            stayingOnWing: true,
+            activities: expect.arrayContaining([
+              expect.objectContaining({
+                bookingId: 1,
+                firstName: 'ARTHUR',
+                lastName: 'ANDERSON',
+                offenderNo: 'A1234AA',
+                event: 'CHAP',
+                eventDescription: 'Chapel',
+                eventType: 'PRISON_ACT',
+                mainActivity: true,
+                locationCode: 'WOW',
+              }),
+            ]),
+          }),
+        ]),
+        expect.arrayContaining([
+          expect.objectContaining({
+            bookingId: 3,
+            firstName: 'FRED',
+            lastName: 'QUIMBY',
+            offenderNo: 'A1234AC',
+            stayingOnWing: true,
+            activities: expect.arrayContaining([
+              expect.objectContaining({
+                bookingId: 3,
+                firstName: 'FRED',
+                lastName: 'QUIMBY',
+                offenderNo: 'A1234AC',
+                event: 'CHAP',
+                eventDescription: 'Chapel',
+                eventType: 'PRISON_ACT',
+                mainActivity: true,
+                locationCode: 'UNEMPLOYED',
+              }),
+            ]),
+          }),
+        ]),
+        expect.arrayContaining([
+          expect.objectContaining({
+            bookingId: 4,
+            firstName: 'STEVE',
+            lastName: 'JONES',
+            offenderNo: 'A1234AD',
+            stayingOnWing: true,
+            activities: expect.arrayContaining([
+              expect.objectContaining({
+                bookingId: 4,
+                firstName: 'STEVE',
+                lastName: 'JONES',
+                offenderNo: 'A1234AD',
+                event: 'CHAP',
+                eventDescription: 'Chapel',
+                eventType: 'PRISON_ACT',
+                mainActivity: true,
+                locationCode: 'STAYONWING',
+              }),
+            ]),
+          }),
+        ]),
+        expect.arrayContaining([
+          expect.objectContaining({
+            bookingId: 5,
+            firstName: 'JOHN',
+            lastName: 'SMITH',
+            offenderNo: 'A1234AE',
+            stayingOnWing: true,
+            activities: expect.arrayContaining([
+              expect.objectContaining({
+                bookingId: 5,
+                firstName: 'JOHN',
+                lastName: 'SMITH',
+                offenderNo: 'A1234AE',
+                event: 'CHAP',
+                eventDescription: 'Chapel',
+                eventType: 'PRISON_ACT',
+                mainActivity: true,
+                locationCode: 'RETIRED',
+              }),
+            ]),
+          }),
+        ])
+      )
     })
   })
 })

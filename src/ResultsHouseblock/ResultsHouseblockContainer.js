@@ -4,6 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import moment from 'moment'
+import { properCase } from '../utils'
 import sortHouseblockData from './houseblockResultsSorter'
 import ResultsHouseblock from './ResultsHouseblock'
 
@@ -13,6 +14,7 @@ import {
   setHouseblockData,
   setOrderField,
   setSearchSubLocation,
+  setSearchWingStatus,
   setSortOrder,
   getAbsentReasons,
   setHouseblockOffenderAttendance,
@@ -25,6 +27,8 @@ class ResultsHouseblockContainer extends Component {
   constructor(props) {
     super(props)
     this.handleSubLocationChange = this.handleSubLocationChange.bind(this)
+    this.handleWingStatusChange = this.handleWingStatusChange.bind(this)
+
     this.getHouseblockList = this.getHouseblockList.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
     this.handlePrint = this.handlePrint.bind(this)
@@ -51,13 +55,14 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { date, period, currentLocation, currentSubLocation } = this.props
+    const { date, period, currentLocation, currentSubLocation, wingStatus } = this.props
 
     if (
       (prevProps.date && prevProps.date !== date) ||
       (prevProps.period && prevProps.period !== period) ||
       (prevProps.currentLocation && prevProps.currentLocation !== currentLocation) ||
-      (prevProps.currentSubLocation && prevProps.currentSubLocation !== currentSubLocation)
+      (prevProps.currentSubLocation && prevProps.currentSubLocation !== currentSubLocation) ||
+      (prevProps.wingStatus && prevProps.wingStatus !== wingStatus)
     ) {
       await this.update()
     }
@@ -81,6 +86,7 @@ class ResultsHouseblockContainer extends Component {
     let { date } = this.props
     const {
       agencyId,
+      wingStatus,
       currentLocation,
       currentSubLocation,
       period,
@@ -119,6 +125,7 @@ class ResultsHouseblockContainer extends Component {
           groupName: compoundGroupName(currentLocation, currentSubLocation),
           date,
           timeSlot: period,
+          wingStatus,
         },
         headers: {
           'Sort-Fields': 'lastName',
@@ -186,15 +193,22 @@ class ResultsHouseblockContainer extends Component {
     subLocationDispatch(event.target.value)
   }
 
+  handleWingStatusChange(event) {
+    const { wingStatusDispatch } = this.props
+
+    wingStatusDispatch(event.target.value)
+  }
+
   titleString() {
     const { activeSubLocation } = this.state
-    const { locations, subLocations, currentLocation } = this.props
+    const { locations, subLocations, currentLocation, wingStatus } = this.props
     const locationName = locations.filter(location => location.key === currentLocation).map(it => it.name)[0]
+    let title = locationName
     if (activeSubLocation && activeSubLocation !== '--') {
       const subLocationName = subLocations.filter(location => location.key === activeSubLocation).map(it => it.name)[0]
-      return `${locationName} -  ${subLocationName}`
+      title = `${locationName} - ${subLocationName}`
     }
-    return locationName
+    return `${title} - ${properCase(wingStatus)}`
   }
 
   render() {
@@ -207,6 +221,7 @@ class ResultsHouseblockContainer extends Component {
         <ResultsHouseblock
           handlePrint={this.handlePrint}
           handleSubLocationChange={this.handleSubLocationChange}
+          handleWingStatusChange={this.handleWingStatusChange}
           setColumnSort={this.setColumnSort}
           update={this.update}
           resetErrorDispatch={resetErrorDispatch}
@@ -234,6 +249,7 @@ ResultsHouseblockContainer.propTypes = {
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,
   currentLocation: PropTypes.string.isRequired,
+  wingStatus: PropTypes.string.isRequired,
   currentSubLocation: PropTypes.string.isRequired,
   houseblockData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   locations: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -252,6 +268,7 @@ ResultsHouseblockContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
+  wingStatusDispatch: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   getAbsentReasonsDispatch: PropTypes.func.isRequired,
 
@@ -276,6 +293,7 @@ const mapStateToProps = state => ({
   currentSubLocation: state.search.subLocation,
   date: state.search.date,
   period: state.search.period,
+  wingStatus: state.search.wingStatus,
   houseblockData: state.events.houseblockData,
   loaded: state.app.loaded,
   orderField: state.events.orderField,
@@ -295,12 +313,13 @@ const mapDispatchToProps = dispatch => ({
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
+  wingStatusDispatch: status => dispatch(setSearchWingStatus(status)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) =>
     dispatch(setHouseblockOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
 })
 
-export { extractSubLocations }
+export { ResultsHouseblockContainer, extractSubLocations }
 
 export default withRouter(
   connect(
