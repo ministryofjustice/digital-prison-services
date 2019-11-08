@@ -1,17 +1,17 @@
 const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC } = require('../src/dateHelpers')
 
-const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
+const switchDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, format).format('YYYY-MM-DD')
+    return moment(displayDate, fromFormat).format('YYYY-MM-DD')
   }
 
   return displayDate
 }
 
-const readableDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
+const readableDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, format).format('DD MMMM YYYY')
+    return moment(displayDate, fromFormat).format('DD MMMM YYYY')
   }
   return displayDate
 }
@@ -37,6 +37,8 @@ const capitalize = string => {
   const lowerCase = string.toLowerCase()
   return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
 }
+
+const capitalizeStart = string => string && string[0].toUpperCase() + string.slice(1, string.length)
 
 const isBlank = str => !str || /^\s*$/.test(str)
 
@@ -149,14 +151,8 @@ const readablePeriod = period => {
   return 'Evening'
 }
 
-const flagFuturePeriodSelected = (date, period, currentPeriod) => {
-  if (isTodayOrAfter(date)) {
-    return (
-      (currentPeriod === 'AM' && (period === 'PM' || period === 'ED')) || (currentPeriod === 'PM' && period === 'ED')
-    )
-  }
-  return false
-}
+const flagFuturePeriodSelected = (date, period, currentPeriod, periodOrder = { AM: 1, PM: 2, AM_PM: 2, ED: 3 }) =>
+  Boolean(isTodayOrAfter(date) && periodOrder[period] > periodOrder[currentPeriod])
 
 const isValidDateTimeFormat = dateTimeString => moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
@@ -189,6 +185,8 @@ const stripAgencyPrefix = (location, agency) => {
   return null
 }
 
+const toUpperCamelCase = value => value.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
+
 const chunkArray = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size))
 
@@ -220,4 +218,6 @@ module.exports = {
   forenameToInitial,
   stripAgencyPrefix,
   chunkArray,
+  toUpperCamelCase,
+  capitalizeStart,
 }
