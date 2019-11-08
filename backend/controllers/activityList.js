@@ -58,6 +58,11 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
 
   const getActivityList = async (context, agencyId, locationIdString, frontEndDate, timeSlot) => {
     const locationId = Number.parseInt(locationIdString, 10)
+
+    if (!locationId) {
+      throw new Error('Location ID is missing')
+    }
+
     const date = switchDateFormat(frontEndDate)
 
     const absenceReasons =
