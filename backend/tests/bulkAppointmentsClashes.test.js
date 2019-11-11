@@ -306,8 +306,9 @@ describe('appointment clashes', () => {
 
           expect(raiseAnalyticsEvent).toBeCalledWith(
             'Bulk Appointments',
-            `2 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
-            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+            `Appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`,
+            2
           )
         })
       })
@@ -360,8 +361,9 @@ describe('appointment clashes', () => {
 
           expect(raiseAnalyticsEvent).toBeCalledWith(
             'Bulk Appointments',
-            `20 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
-            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+            `Appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`,
+            20
           )
         })
       })
