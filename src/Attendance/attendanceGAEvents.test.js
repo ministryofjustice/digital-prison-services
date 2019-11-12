@@ -50,16 +50,18 @@ describe('Pay and attendance GA events', () => {
   it('should raise a GA event when attending all', () => {
     expect(attendAll(10, 'MDI')).toEqual({
       category: 'Pay and attendance',
-      action: `10 offenders bulk paid at MDI`,
+      action: `Bulk pay at MDI`,
       label: 'Pay',
+      value: 10,
     })
   })
 
   it('should raise a GA event when all not required', () => {
     expect(allNotRequired(10, 'MDI')).toEqual({
       category: 'Pay and attendance',
-      action: `10 offenders bulk not required at MDI`,
+      action: `Bulk not required at MDI`,
       label: 'Other - Not Required',
+      value: 10,
     })
   })
 })
