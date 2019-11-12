@@ -46,13 +46,14 @@ export class EstablishmentRollContainer extends Component {
     return (
       <Page title="Establishment roll">
         <div className="establishment-roll-container">
-          <EstablishmentRollBlock block={movements} highlight />
-          {blocks.length > 0 &&
+          {movements && <EstablishmentRollBlock block={movements} highlight data-qa="movements-roll-block" />}
+          {blocks &&
+            blocks.length > 0 &&
             blocks.map((block, i, array) => {
               const isLastBlock = array.length - 1 === i
               return <EstablishmentRollBlock block={block} key={block.name} isLastBlock={isLastBlock} />
             })}
-          <EstablishmentRollBlock block={totals} highlight />
+          {totals && <EstablishmentRollBlock block={totals} highlight data-qa="totals-roll-block" />}
         </div>
       </Page>
     )
