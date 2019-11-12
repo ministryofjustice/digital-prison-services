@@ -219,11 +219,11 @@ class App extends React.Component {
 
     try {
       if (redirectToNotm) {
-        await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
+        await axios.put(`/api/setactivecaseload/${newCaseload}`)
         window.location.assign(config.notmEndpointUrl)
       } else {
         switchAgencyDispatch(newCaseload)
-        await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
+        await axios.put(`/api/setactivecaseload/${newCaseload}`)
         await this.loadUserAndCaseload()
       }
     } catch (error) {

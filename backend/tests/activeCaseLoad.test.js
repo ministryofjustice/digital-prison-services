@@ -20,7 +20,7 @@ describe('Switch caseload', () => {
   it('should call the API with the correct body', async () => {
     const controller = activeCaseloadFactory(elite2Api)
 
-    req.body = { caseLoadId: 'MDI' }
+    req.params = { caseLoadId: 'MDI' }
 
     await controller.setActiveCaseload(req, res)
 
@@ -30,7 +30,7 @@ describe('Switch caseload', () => {
   it('should update session with new caseload id and clear app session data', async () => {
     const controller = activeCaseloadFactory(elite2Api)
 
-    req.body = { caseLoadId: 'MDI' }
+    req.params = { caseLoadId: 'MDI' }
 
     await controller.setActiveCaseload(req, res)
 

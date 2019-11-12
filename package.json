@@ -33,6 +33,7 @@
     "@govuk-react/table": "^0.7.0",
     "@govuk-react/text-area": "^0.7.0",
     "@govuk-react/visually-hidden": "^0.7.0",
+    "@ministryofjustice/frontend": "^0.0.17-alpha",
     "agentkeepalive": "^4.0.2",
     "applicationinsights": "^1.4.0",
     "applicationinsights-native-metrics": "^0.0.5",

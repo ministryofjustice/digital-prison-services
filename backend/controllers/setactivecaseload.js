@@ -2,7 +2,7 @@ const asyncMiddleware = require('../middleware/asyncHandler')
 
 const activeCaseloadFactory = elite2Api => {
   const setActiveCaseload = asyncMiddleware(async (req, res) => {
-    const { caseLoadId } = req.body
+    const { caseLoadId } = req.params
 
     await elite2Api.setActiveCaseload(res.locals, { caseLoadId })
 
