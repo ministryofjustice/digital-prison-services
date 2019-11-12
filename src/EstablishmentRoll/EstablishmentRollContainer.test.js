@@ -6,9 +6,6 @@ import { movements, blocks, totals } from './establishmentRollDummyData'
 
 describe('<EstablishmentRollContainer />', () => {
   const props = {
-    movements,
-    blocks,
-    totals,
     agencyId: 'LEI',
     establishmentRollBlockDataDispatch: jest.fn(),
     handleError: jest.fn(),
@@ -18,13 +15,26 @@ describe('<EstablishmentRollContainer />', () => {
     titleDispatch: jest.fn(),
   }
 
-  const wrapper = shallow(
-    <MemoryRouter>
-      <EstablishmentRollContainer {...props} />
-    </MemoryRouter>
-  )
+  describe('when loading', () => {
+    const wrapper = shallow(
+      <MemoryRouter>
+        <EstablishmentRollContainer {...props} />
+      </MemoryRouter>
+    )
+
+    it('should not display any blocks', () => {
+      const container = wrapper.find('EstablishmentRollContainer').dive()
+      expect(container.find('withRouter(EstablishmentRollBlock)').exists()).toBe(false)
+    })
+  })
 
   describe('when loaded', () => {
+    const wrapper = shallow(
+      <MemoryRouter>
+        <EstablishmentRollContainer {...props} movements={movements} blocks={blocks} totals={totals} />
+      </MemoryRouter>
+    )
+
     it('should render without error', () => {
       const container = wrapper.find('EstablishmentRollContainer').dive()
       expect(container.find('.establishment-roll-container').exists()).toBe(true)
@@ -68,6 +78,12 @@ describe('<EstablishmentRollContainer />', () => {
   })
 
   describe('when changing the case load/agency', () => {
+    const wrapper = shallow(
+      <MemoryRouter>
+        <EstablishmentRollContainer {...props} />
+      </MemoryRouter>
+    )
+
     it('should stay on the establishment roll page get the establishment roll blocks for the new case load', () => {
       const newAgencyID = 'MID'
       const container = wrapper.find('EstablishmentRollContainer').dive()
