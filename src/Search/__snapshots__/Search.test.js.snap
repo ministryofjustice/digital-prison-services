@@ -485,13 +485,13 @@ Array [
               <legend
                 className="heading-medium"
               >
-                Search by housing
+                Residential location
               </legend>
               <label
                 className="form-label padding-top"
                 htmlFor="housing-location-select"
               >
-                Housing
+                Choose a location
               </label>
               <select
                 className="form-control"
@@ -551,13 +551,13 @@ Array [
               <legend
                 className="heading-medium"
               >
-                Search by activity
+                Activity/appointment location
               </legend>
               <label
                 className="form-label padding-top"
                 htmlFor="activity-select"
               >
-                Activity
+                Choose a location
               </label>
               <select
                 className="form-control"
@@ -1108,13 +1108,13 @@ Array [
               <legend
                 className="heading-medium"
               >
-                Search by housing
+                Residential location
               </legend>
               <label
                 className="form-label padding-top"
                 htmlFor="housing-location-select"
               >
-                Housing
+                Choose a location
               </label>
               <select
                 className="form-control"
@@ -1174,13 +1174,13 @@ Array [
               <legend
                 className="heading-medium"
               >
-                Search by activity
+                Activity/appointment location
               </legend>
               <label
                 className="form-label padding-top"
                 htmlFor="activity-select"
               >
-                Activity
+                Choose a location
               </label>
               <select
                 className="form-control"
