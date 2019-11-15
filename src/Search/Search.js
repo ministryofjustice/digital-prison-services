@@ -145,9 +145,9 @@ class Search extends Component {
       <div className="pure-g padding-bottom-large">
         <div className="pure-u-md-4-5">
           <div className="padding-left-large">
-            <legend className="heading-medium">Search by housing</legend>
+            <legend className="heading-medium">Residential location</legend>
             <label className="form-label padding-top" htmlFor="housing-location-select">
-              Housing
+              Choose a location
             </label>
             <select
               id="housing-location-select"
@@ -180,9 +180,9 @@ class Search extends Component {
       <div className="pure-g padding-bottom-large">
         <div className="pure-u-md-4-5">
           <div className="padding-left-large">
-            <legend className="heading-medium">Search by activity</legend>
+            <legend className="heading-medium">Activity/appointment location</legend>
             <label className="form-label padding-top" htmlFor="activity-select">
-              Activity
+              Choose a location
             </label>
             <select
               id="activity-select"

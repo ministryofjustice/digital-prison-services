@@ -61,7 +61,7 @@ orbs:
   helm: circleci/helm@0.1.2
 
 jobs:
-  validate_build:
+  validate:
     executor: builder
     steps:
       - checkout
@@ -139,7 +139,7 @@ jobs:
       - store_test_results:
           path: prisonstaffhub-specs/build/test-results
 
-  build_docker:
+  build:
     executor: deployer
     steps:
       - checkout
@@ -199,20 +199,20 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - validate_build:
+      - validate:
           filters:
             tags:
               ignore: /.*/
       - integration_tests:
           requires:
-            - validate_build
-      - build_docker:
+            - validate
+      - build:
           filters:
             branches:
               only: master
       - deploy_dev:
           requires:
-            - build_docker
+            - build
             - integration_tests
           filters:
             branches:

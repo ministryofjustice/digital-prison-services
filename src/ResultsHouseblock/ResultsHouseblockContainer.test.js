@@ -70,6 +70,16 @@ describe('ResultsHouseblockContainer', () => {
       expect(wrapper.find('Connect(Page)').prop('title')).toEqual('Houseblock 1 - A-Wing - All')
     })
   })
+
+  describe('on unmount', () => {
+    it('should reset the wing status filter', () => {
+      const wrapper = shallow(<ResultsHouseblockContainer {...props} />)
+
+      wrapper.unmount()
+
+      expect(props.wingStatusDispatch).toBeCalledWith('all')
+    })
+  })
 })
 
 describe('extractSubLocations', () => {

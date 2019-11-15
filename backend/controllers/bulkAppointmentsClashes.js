@@ -143,8 +143,9 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
 
     raiseAnalyticsEvent(
       'Bulk Appointments',
-      `${remainingPrisoners.length * (count || 1)} appointments created at ${activeCaseLoadId}`,
-      `Appointment type - ${appointmentTypeDescription}`
+      `Appointments created at ${activeCaseLoadId}`,
+      `Appointment type - ${appointmentTypeDescription}`,
+      remainingPrisoners.length * (count || 1)
     )
 
     return res.redirect('/bulk-appointments/appointments-added')

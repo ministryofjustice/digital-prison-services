@@ -69,8 +69,9 @@ class ResultsHouseblockContainer extends Component {
   }
 
   componentWillUnmount() {
-    const { houseblockDataDispatch } = this.props
+    const { houseblockDataDispatch, wingStatusDispatch } = this.props
     houseblockDataDispatch([])
+    wingStatusDispatch('all')
   }
 
   setColumnSort(sortColumn, sortOrder) {

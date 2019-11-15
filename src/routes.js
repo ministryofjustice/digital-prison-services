@@ -5,6 +5,7 @@ import OffenderBreadcrumb from './Components/OffenderBreadcrumb'
 export default [
   { path: '/', breadcrumb: null },
   { path: '/content', breadcrumb: null },
+  { path: '/establishment-roll/in-today', breadcrumb: 'In today' },
   { path: '/establishment-roll/out-today', breadcrumb: 'Out today' },
   { path: '/establishment-roll/in-reception', breadcrumb: 'In reception' },
   { path: '/establishment-roll/en-route', breadcrumb: 'En route' },

@@ -175,8 +175,9 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
 
       raiseAnalyticsEvent(
         'Bulk Appointments',
-        `${prisonersWithAppointmentTimes.length * (count || 1)} appointments created at ${activeCaseLoadId}`,
-        `Appointment type - ${appointmentTypeDescription}`
+        `Appointments created at ${activeCaseLoadId}`,
+        `Appointment type - ${appointmentTypeDescription}`,
+        prisonersWithAppointmentTimes.length * (count || 1)
       )
 
       return res.redirect('/bulk-appointments/appointments-added')
