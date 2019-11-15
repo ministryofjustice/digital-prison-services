@@ -1,6 +1,5 @@
 $govuk-page-width: 1170px;
 @import 'node_modules/govuk-frontend/govuk/all';
-@import "node_modules/@ministryofjustice/frontend/moj/all";
 @import 'components/_header.scss';
 @import "components/_sortable-table.scss";
 @import 'views/components/datePicker/datePicker.scss';

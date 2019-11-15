@@ -216,7 +216,7 @@ class App extends React.Component {
     const { config } = this.props
 
     try {
-      await axios.put(`/api/setactivecaseload/${newCaseload}`)
+      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
       window.location.assign(config.notmEndpointUrl)
     } catch (error) {
       this.handleError(error)
@@ -533,15 +533,10 @@ class App extends React.Component {
                 <ScrollToTop>
                   <Notifications />
                   <Route
-                    render={({ location, history }) => {
+                    render={({ location }) => {
                       if (config && config.googleAnalyticsId) {
                         ReactGA.pageview(location.pathname)
                       }
-                      const locationRequiresRedirectWhenCaseloadChanges = !(
-                        location.pathname.includes('global-search-results') ||
-                        location.pathname.includes('establishment-roll') ||
-                        location.pathname.includes('content')
-                      )
 
                       return (
                         <Header
@@ -549,11 +544,9 @@ class App extends React.Component {
                           title={title}
                           logoText="HMPPS"
                           user={user}
-                          switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload)}
                           menuOpen={menuOpen}
                           setMenuOpen={boundSetMenuOpen}
-                          caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
-                          history={history}
+                          extraLinks={[{ text: 'Change caseload', url: '/change-caseload' }]}
                         />
                       )
                     }}

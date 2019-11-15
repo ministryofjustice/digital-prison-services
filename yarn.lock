@@ -1516,13 +1516,6 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@ministryofjustice/frontend@^0.0.17-alpha":
-  version "0.0.17-alpha"
-  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-0.0.17-alpha.tgz#a5e2e2d2dce58102e9245153bd6d4992e7977c5b"
-  integrity sha512-UOwqFA24kd8xJY6XrWxaQxM2xzr8BHdwb5L82xPk3rG7hgEnWRppk7vt9eszqSt3Hwdfj63pD8aaMTMsi89P4Q==
-  dependencies:
-    moment "^2.22.2"
-
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -7443,7 +7436,7 @@ moment-timezone@^0.5.21:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
-moment@^2.22.2, moment@^2.24.0:
+moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
@@ -7570,10 +7563,10 @@ neo-async@^2.5.0, neo-async@^2.6.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
-new-nomis-shared-components@^1.15.1:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.15.1.tgz#116fccbe73e59c25506d4fff2a7cfe8c097fda0d"
-  integrity sha512-Rxyh8w3lWDrtiOWBbm/UCkXln7wIjf3NTb3qgNyb7ndp3vYX327nkVxX+C89ohUdOgY56nsCC+iyjTxR8PbMlw==
+new-nomis-shared-components@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/new-nomis-shared-components/-/new-nomis-shared-components-1.16.0.tgz#768d020b27b82315954edeb554ffbb3ec15cec81"
+  integrity sha512-yQcNYyxXPewJANYhQVHbahxdpfyJavUEGwStaVLq1Jk3fe+PhWva6s3w9nRv+irOMNj0BxbSnKcY3J8hySkvGw==
 
 nice-try@^1.0.4:
   version "1.0.5"

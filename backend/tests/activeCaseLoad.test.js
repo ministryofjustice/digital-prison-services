@@ -11,7 +11,7 @@ describe('Switch caseload', () => {
     },
   }
   const res = {
-    locals: {},
+    redirect: jest.fn(),
   }
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('Switch caseload', () => {
   it('should call the API with the correct body', async () => {
     const controller = activeCaseloadFactory(elite2Api)
 
-    req.params = { caseLoadId: 'MDI' }
+    req.body = { caseLoadId: 'MDI' }
 
     await controller.setActiveCaseload(req, res)
 
@@ -30,7 +30,7 @@ describe('Switch caseload', () => {
   it('should update session with new caseload id and clear app session data', async () => {
     const controller = activeCaseloadFactory(elite2Api)
 
-    req.params = { caseLoadId: 'MDI' }
+    req.body = { caseLoadId: 'MDI' }
 
     await controller.setActiveCaseload(req, res)
 
