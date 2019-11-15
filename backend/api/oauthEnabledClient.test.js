@@ -107,6 +107,23 @@ describe('Test clients built by oauthEnabledClient', () => {
 
         await expect(client.get({}, '/api/users/me')).rejects.toThrow('Timeout of 300ms exceeded')
       })
+
+      it('Should fail if request times out three with custom time out', async () => {
+        mock
+          .get('/api/users/me')
+          .delay(200)
+          .reply(200, { failure: 'one' })
+          .get('/api/users/me')
+          .delay(200)
+          .reply(200, { failure: 'two' })
+          .get('/api/users/me')
+          .delay(200)
+          .reply(200, { failure: 'three' })
+
+        await expect(client.getWithTimeout({}, '/api/users/me', { customTimeout: 100 })).rejects.toThrow(
+          'Timeout of 100ms exceeded'
+        )
+      })
     })
 
     describe('getStream', () => {

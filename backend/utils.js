@@ -11,7 +11,7 @@ const switchDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
 
 const readableDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, fromFormat).format('DD MMMM YYYY')
+    return moment(displayDate, fromFormat).format('D MMMM YYYY')
   }
   return displayDate
 }
@@ -145,15 +145,6 @@ const getCurrentPeriod = date => {
   return 'ED'
 }
 
-const readablePeriod = period => {
-  if (period === 'AM') return 'Morning'
-  if (period === 'PM') return 'Afternoon'
-  return 'Evening'
-}
-
-const flagFuturePeriodSelected = (date, period, currentPeriod, periodOrder = { AM: 1, PM: 2, AM_PM: 2, ED: 3 }) =>
-  Boolean(isTodayOrAfter(date) && periodOrder[period] > periodOrder[currentPeriod])
-
 const isValidDateTimeFormat = dateTimeString => moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
 const getDate = dateTimeString => {
@@ -210,8 +201,6 @@ module.exports = {
   pascalToString,
   merge,
   getCurrentPeriod,
-  flagFuturePeriodSelected,
-  readablePeriod,
   readableDateFormat,
   getDate,
   getTime,

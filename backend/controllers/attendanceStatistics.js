@@ -84,35 +84,80 @@ const absentReasonTableViewModel = offenderData => ({
     }),
 })
 
-const renderErrorTemplate = ({ error, req, res, logError, url }) => {
-  if (error.code === 'ECONNABORTED') {
-    logError(req.originalUrl, error, 'Request has timed out')
-    return res.render('error.njk', {
-      url: req.originalUrl,
-      title: 'Your request has timed out.',
-    })
-  }
-  logError(req.originalUrl, error, 'Sorry, the service is unavailable')
-  return res.render('error.njk', {
-    url,
-  })
-}
-
-const validateDates = ({ fromDate, toDate }) => {
+const validateDates = dates => {
   const errors = []
 
-  if (moment(fromDate, 'DD/MM/YYYY', 'day').isAfter(moment(toDate, 'DD/MM/YYYY', 'day')))
-    errors.push({ text: 'Select a date which is before the to date', href: '#fromDate' })
+  const fromDate = moment(dates.fromDate, 'DD/MM/YYYY')
+  const toDate = moment(dates.toDate, 'DD/MM/YYYY')
 
   const now = moment()
-
-  if (moment(fromDate, 'DD/MM/YYYY', 'day').isAfter(now, 'day'))
+  if (fromDate.isAfter(now, 'day'))
     errors.push({ text: 'Select a date range that is not in the future', href: '#fromDate' })
 
-  if (moment(toDate, 'DD/MM/YYYY', 'day').isAfter(now, 'day'))
+  if (fromDate.isAfter(now, 'day'))
     errors.push({ text: 'Select a date range that is not in the future', href: '#toDate' })
 
+  if (toDate) {
+    const weeks = fromDate.diff(toDate, 'week')
+
+    if (Math.abs(weeks) > 2)
+      errors.push({ text: 'Select a date range that does not exceed two weeks', href: '#fromDate' })
+  }
   return errors
+}
+
+const dateRangeForStats = (subtractWeeks = 0) => {
+  const sunday = moment()
+    .subtract(subtractWeeks, 'week')
+    .day(0)
+    .format('DD/MM/YYYY')
+  const saturday = moment()
+    .subtract(subtractWeeks, 'week')
+    .day(6)
+    .format('DD/MM/YYYY')
+
+  return {
+    fromDate: sunday,
+    toDate: saturday,
+  }
+}
+
+const formatDatesForDisplay = ({ fromDate, toDate }) => {
+  if (fromDate && toDate) {
+    if (fromDate !== toDate)
+      return `${readableDateFormat(fromDate, 'D/MM/YYYY')} to ${readableDateFormat(toDate, 'D/MM/YYYY')}`
+  }
+
+  return `${readableDateFormat(fromDate, 'D/MM/YYYY')}`
+}
+
+const getStatPresetsLinks = ({ activeCaseLoadId }) => {
+  const weeklyDateRange = dateRangeForStats()
+  const previousWeeklyDateRange = dateRangeForStats(1)
+  const statsFor2WeeksAgoDateRange = dateRangeForStats(2)
+
+  const statsForCurrentWeek = `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+    weeklyDateRange.fromDate
+  }&toDate=${weeklyDateRange.toDate}`
+
+  const statsForPreviousWeek = `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+    previousWeeklyDateRange.fromDate
+  }&toDate=${previousWeeklyDateRange.toDate}`
+
+  const statsFor2WeeksAgo = `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+    statsFor2WeeksAgoDateRange.fromDate
+  }&toDate=${statsFor2WeeksAgoDateRange.toDate}`
+
+  return {
+    statsForCurrentWeek,
+    statsForPreviousWeek,
+    statsFor2WeeksAgo,
+  }
+}
+
+const urlWithDefaultParameters = ({ activeCaseLoadId, currentPeriod }) => {
+  const today = moment().format('DD/MM/YYYY')
+  return `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}`
 }
 
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
@@ -128,74 +173,65 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       const { activeCaseLoad, inactiveCaseLoads, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
       const currentPeriod = getCurrentPeriod(moment().format())
-      const userViewModel = {
-        displayName: user.name,
-        activeCaseLoad: {
-          description: activeCaseLoad.description,
-          id: activeCaseLoadId,
-        },
-      }
 
-      if (fromDate && toDate) {
-        const errors = validateDates({ fromDate, toDate })
+      if (!period || !fromDate) return res.redirect(urlWithDefaultParameters({ activeCaseLoadId, currentPeriod }))
 
-        if (errors.length > 0)
-          return res.render('attendanceStatistics.njk', {
-            title: 'Attendance reason statistics',
-            errors,
-            user: userViewModel,
-            isFuturePeriod: flagFuturePeriodSelected(fromDate, period, currentPeriod),
-            caseLoadId: activeCaseLoad.caseLoadId,
-            allCaseloads: caseloads,
-            inactiveCaseLoads,
-            userRoles: roles,
-            fromDate,
-            toDate,
-            displayPeriod: periodDisplayLookup[period],
-            period,
-          })
-      }
+      const shouldClearFormValues = Boolean(fromDate && toDate)
 
-      const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
-      const toDateValue = switchDateFormat(toDate, 'DD/MM/YYYY')
-      const fromDisplayDate = readableDateFormat(fromDate, 'DD/MM/YYYY')
-      const toDisplayDate = readableDateFormat(toDate, 'DD/MM/YYYY')
-
-      if (!period || !fromDate) {
-        const today = moment().format('DD/MM/YYYY')
-        return res.redirect(
-          `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}&toDate=${today}`
-        )
-      }
-
-      const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
-        agencyId,
-        fromDate: fromDateValue,
-        toDate: toDateValue,
-        period: period === 'AM_PM' ? '' : period,
-      })
-
-      return res.render('attendanceStatistics.njk', {
+      const mainViewModel = {
         title: 'Attendance reason statistics',
-        user: userViewModel,
-        displayDate: `${fromDisplayDate} - ${toDisplayDate}`,
-        isFuturePeriod: flagFuturePeriodSelected(fromDate, period, currentPeriod),
-        dashboardStats: buildStatsViewModel(dashboardStats),
+        user: {
+          displayName: user.name,
+          activeCaseLoad: {
+            description: activeCaseLoad.description,
+            id: activeCaseLoadId,
+          },
+        },
+        displayDate: formatDatesForDisplay({ fromDate, toDate }),
         caseLoadId: activeCaseLoad.caseLoadId,
         allCaseloads: caseloads,
         inactiveCaseLoads,
         userRoles: roles,
+        shouldClearFormValues,
+        period,
         fromDate,
         toDate,
+        clickThrough: {
+          fromDate,
+          toDate,
+          period,
+        },
         displayPeriod: periodDisplayLookup[period],
-        period,
+        ...getStatPresetsLinks({ activeCaseLoadId }),
+      }
+
+      if (fromDate) {
+        const errors = validateDates({ fromDate, toDate })
+
+        if (errors.length > 0)
+          return res.render('attendanceStatistics.njk', {
+            errors,
+            ...mainViewModel,
+          })
+      }
+
+      const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
+      const toDateValue = toDate && switchDateFormat(toDate, 'DD/MM/YYYY')
+
+      const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
+        agencyId,
+        fromDate: fromDateValue,
+        toDate: toDateValue || fromDateValue,
+        period: period === 'AM_PM' ? '' : period,
+      })
+
+      return res.render('attendanceStatistics.njk', {
+        ...mainViewModel,
+        dashboardStats: buildStatsViewModel(dashboardStats),
       })
     } catch (error) {
-      return renderErrorTemplate({
-        error,
-        req,
-        res,
-        logError,
+      logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      return res.render('error.njk', {
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
     }
@@ -230,7 +266,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         reason,
         period: period === 'AM_PM' ? '' : period,
         fromDate: formattedFromDate,
-        toDate: formattedToDate,
+        toDate: formattedToDate || formattedFromDate,
       })
 
       const offenderData = absences.map(absence => ({
@@ -244,8 +280,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       const { offenders, sortOptions } = absentReasonTableViewModel(offenderData)
       const displayReason = pascalToString(reason)
-      const fromDisplayDate = readableDateFormat(fromDate, 'DD/MM/YYYY')
-      const toDisplayDate = readableDateFormat(toDate, 'DD/MM/YYYY')
 
       return res.render('attendanceStatisticsOffendersList.njk', {
         title: `${displayReason}`,
@@ -256,7 +290,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
             id: activeCaseLoadId,
           },
         },
-        displayDate: `${fromDisplayDate} - ${toDisplayDate}`,
+        displayDate: formatDatesForDisplay({ fromDate, toDate }),
         displayPeriod: periodDisplayLookup[period],
         reason: displayReason,
         dashboardUrl: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate}`,
@@ -267,11 +301,8 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         userRoles: roles,
       })
     } catch (error) {
-      return renderErrorTemplate({
-        error,
-        req,
-        res,
-        logError,
+      logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      return res.render('error.njk', {
         url: `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}`,
       })
     }

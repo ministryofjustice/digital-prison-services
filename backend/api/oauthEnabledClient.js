@@ -68,27 +68,26 @@ const factory = ({ baseUrl, timeout }) => {
     })
 
   /**
-   * A superagent GET request with Oauth token and custom timeout and retry
+   * A superagent GET request with Oauth token with custom timeoput value
    *
    * @param context A request scoped context. Holds OAuth tokens and pagination information for the request
    * @param path relative path to get, starting with /
    * @param resultLimit - the maximum number of results that a Get request should return.  Becomes the value of the 'page-limit' request header.
    *        The header isn't set if resultLimit is falsy.
-   * @param timeout
-   * @param retryCount
+   * @param customTimeout
    * @returns A Promise which settles to the superagent result object if the promise is resolved, otherwise to the 'error' object.
    */
-  const getWithOverrides = (context, path, { resultLimit, newTimeout = timeout, retryCount = 2 }) =>
+  const getWithTimeout = (context, path, { resultLimit, customTimeout }) =>
     new Promise((resolve, reject) => {
       superagent
         .get(remoteUrl + path)
         .agent(keepaliveAgent)
         .set(getHeaders(context, resultLimit))
-        .retry(retryCount, (err, res) => {
+        .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .timeout({ deadline: newTimeout })
+        .timeout({ deadline: customTimeout || timeout })
         .end((error, response) => {
           if (error) reject(errorLogger(error))
           else if (response) resolve(resultLogger(response))
@@ -171,7 +170,7 @@ const factory = ({ baseUrl, timeout }) => {
 
   return {
     get,
-    getWithOverrides,
+    getWithTimeout,
     getStream,
     pipe,
     post,

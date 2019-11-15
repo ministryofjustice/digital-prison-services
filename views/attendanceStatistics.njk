@@ -3,6 +3,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% if shouldClearFormValues  %}
+   {%  set period = null %}
+   {%  set fromDate = null %}
+   {%  set toDate = null %}
+{%  endif %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -26,38 +33,41 @@
 {% block content %}
 
   <h1 class="govuk-heading-l govuk-!-margin-bottom-1">Attendance reason statistics</h1>
-  <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} — {{displayPeriod}} </p>
+  <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}} </p>
+
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { 'data-qa-errors': true }
+    }) }}
+  {% endif %}
+
   <form action="/manage-prisoner-whereabouts/attendance-reason-statistics">
     <div class="govuk-grid-row">
       <input type="hidden" name="agencyId" value="{{caseLoadId}}"/>
       <div class="govuk-grid-column-one-quarter">
         {{ datePicker({
-            id: 'date-picker-from',
-            label: 'From',
+            id: 'fromDate',
+            label: 'Date',
             name: 'fromDate',
             date: fromDate,
             errorMessage: errors | findError('fromDate'),
-            attributes: {'data-disable-future-date':'true', 'data-min-date': '-2W'}
+            attributes: {'data-disable-future-date':'true'},
+            errorMessage: errors | findError('fromDate')
         }) }}
       </div>
 
-      <div class="govuk-grid-column-one-quarter">
-        {{ datePicker({
-        id: 'date-picker-to',
-        label: 'To',
-        name: 'toDate',
-        date: toDate,
-        errorMessage: errors | findError('toDate'),
-        attributes: {'data-disable-future-date':'true', 'data-min-date': '-2W'}
-      }) }}
-      </div>
       <div class="govuk-grid-column-one-quarter">
         <div class="govuk-form-group">
           <label class="govuk-label" for="period">
             Period
           </label>
 
-          <select class="govuk-select govuk-!-width-full" id="period" name="period" value={{ period }}>
+          <select class="govuk-select govuk-!-width-full" id="period" name="period" value={{ periodToSet }}>
+            <option hidden selected>
+             Select
+            </option>
             <option value="AM" {% if period === "AM" %} selected {%endif%}>
               AM
             </option>
@@ -84,6 +94,21 @@
       </div>
     </div>
   </form>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+          <a href="{{ statsForCurrentWeek }}" class="govuk-link govuk-!-font-size-19">View current week</a>
+    </div>
+
+    <div class="govuk-grid-column-one-quarter">
+        <a href="{{ statsForPreviousWeek  }}" class="govuk-link govuk-!-font-size-19">View last week</a>
+    </div>
+
+    <div class="govuk-grid-column-one-quarter">
+        <a href="{{ statsFor2WeeksAgo  }}" class="govuk-link govuk-!-font-size-19">View last 2 weeks</a>
+    </div>
+  </div>
+
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
   {%if not isFuturePeriod %}
@@ -110,7 +135,7 @@
           <p class="govuk-body">{{paidReasons.name}}</p>
           <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
             {% if paidReasons.value > 0 %}
-              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{paidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{fromDate}}&toDate={{toDate}}&period={{period}}" class="govuk-link--no-visited-state">
+              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{paidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{paidReasons.value}}
               </a>
             {% else %}
@@ -130,7 +155,7 @@
           <p class="govuk-body">{{unpaidReasons.name}}</p>
           <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
             {% if unpaidReasons.value > 0 %}
-              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{unpaidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{fromDate}}&toDate={{toDate}}&period={{period}}" class="govuk-link--no-visited-state">
+              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{unpaidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{unpaidReasons.value}}
               </a>
             {% else %}
@@ -140,13 +165,6 @@
         </div>
       {% endfor %}
     </div>
-    {%endif%}
-
-    {%if isFuturePeriod %}
-      <div class="govuk-inset-text">
-  This {%if period === 'PM' %}afternoon’s{%endif%}
-          {%if period === 'ED' %}evening’s{%endif%} statistics cannot be viewed. Try again later.
-      </div>
     {%endif%}
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
