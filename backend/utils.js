@@ -1,17 +1,17 @@
 const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC } = require('../src/dateHelpers')
 
-const switchDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
+const switchDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, format).format('YYYY-MM-DD')
+    return moment(displayDate, fromFormat).format('YYYY-MM-DD')
   }
 
   return displayDate
 }
 
-const readableDateFormat = (displayDate, format = 'DD/MM/YYYY') => {
+const readableDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {
-    return moment(displayDate, format).format('DD MMMM YYYY')
+    return moment(displayDate, fromFormat).format('D MMMM YYYY')
   }
   return displayDate
 }
@@ -37,6 +37,8 @@ const capitalize = string => {
   const lowerCase = string.toLowerCase()
   return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
 }
+
+const capitalizeStart = string => string && string[0].toUpperCase() + string.slice(1, string.length)
 
 const isBlank = str => !str || /^\s*$/.test(str)
 
@@ -143,21 +145,6 @@ const getCurrentPeriod = date => {
   return 'ED'
 }
 
-const readablePeriod = period => {
-  if (period === 'AM') return 'Morning'
-  if (period === 'PM') return 'Afternoon'
-  return 'Evening'
-}
-
-const flagFuturePeriodSelected = (date, period, currentPeriod) => {
-  if (isTodayOrAfter(date)) {
-    return (
-      (currentPeriod === 'AM' && (period === 'PM' || period === 'ED')) || (currentPeriod === 'PM' && period === 'ED')
-    )
-  }
-  return false
-}
-
 const isValidDateTimeFormat = dateTimeString => moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
 const getDate = dateTimeString => {
@@ -212,12 +199,11 @@ module.exports = {
   pascalToString,
   merge,
   getCurrentPeriod,
-  flagFuturePeriodSelected,
-  readablePeriod,
   readableDateFormat,
   getDate,
   getTime,
   forenameToInitial,
   stripAgencyPrefix,
   chunkArray,
+  capitalizeStart,
 }

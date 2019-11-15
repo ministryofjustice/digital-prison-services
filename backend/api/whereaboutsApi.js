@@ -2,6 +2,8 @@ const whereaboutsApiFactory = client => {
   const processResponse = () => response => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
+  const getWithCustomTimeout = (context, path, overrides) =>
+    client.getWithCustomTimeout(context, path, overrides).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
   const put = (context, url, data) => client.put(context, url, data).then(processResponse())
 
@@ -22,6 +24,20 @@ const whereaboutsApiFactory = client => {
 
   const postAttendances = (context, body) => post(context, '/attendances', body)
 
+  const getAttendanceStats = (context, { agencyId, fromDate, toDate, period }) =>
+    getWithCustomTimeout(
+      context,
+      `/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}`,
+      { customTimeout: 30000 }
+    )
+
+  const getAbsences = (context, { agencyId, fromDate, toDate, period, reason }) =>
+    getWithCustomTimeout(
+      context,
+      `/attendances/${agencyId}/absences-for-scheduled-activities/${reason}?period=${period}&fromDate=${fromDate}&toDate=${toDate}`,
+      { customTimeout: 30000 }
+    )
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -30,6 +46,8 @@ const whereaboutsApiFactory = client => {
     getAbsenceReasons,
     getPrisonAttendance,
     postAttendances,
+    getAttendanceStats,
+    getAbsences,
   }
 }
 
