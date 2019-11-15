@@ -11,6 +11,8 @@ const {
   stripAgencyPrefix,
 } = require('../utils')
 
+const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
+
 const buildStatsViewModel = dashboardStats => {
   const mapReasons = reasons =>
     Object.keys(reasons).map(name => ({
@@ -135,15 +137,15 @@ const getStatPresetsLinks = ({ activeCaseLoadId }) => {
   const previousWeeklyDateRange = dateRangeForStats(1)
   const statsFor2WeeksAgoDateRange = dateRangeForStats(2)
 
-  const statsForCurrentWeek = `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+  const statsForCurrentWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
     weeklyDateRange.fromDate
   }&toDate=${weeklyDateRange.toDate}`
 
-  const statsForPreviousWeek = `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+  const statsForPreviousWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
     previousWeeklyDateRange.fromDate
   }&toDate=${previousWeeklyDateRange.toDate}`
 
-  const statsFor2WeeksAgo = `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+  const statsFor2WeeksAgo = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
     statsFor2WeeksAgoDateRange.fromDate
   }&toDate=${statsFor2WeeksAgoDateRange.toDate}`
 
@@ -156,7 +158,7 @@ const getStatPresetsLinks = ({ activeCaseLoadId }) => {
 
 const urlWithDefaultParameters = ({ activeCaseLoadId, currentPeriod }) => {
   const today = moment().format('DD/MM/YYYY')
-  return `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}`
+  return `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}`
 }
 
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
@@ -231,7 +233,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       return res.render('error.njk', {
-        url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
+        url: attendanceReasonStatsUrl,
       })
     }
   }
@@ -256,7 +258,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       if (!period || !fromDate) {
         return res.redirect(
-          `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}&toDate=${toDate}`
+          `${attendanceReasonStatsUrl}/reason/${reason}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}&toDate=${today}`
         )
       }
 
@@ -292,7 +294,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         displayDate: formatDatesForDisplay({ fromDate, toDate }),
         displayPeriod: periodDisplayLookup[period],
         reason: displayReason,
-        dashboardUrl: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate}`,
+        dashboardUrl: `${attendanceReasonStatsUrl}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate}`,
         offenders,
         sortOptions,
         caseLoadId: activeCaseLoad.caseLoadId,
@@ -302,7 +304,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       return res.render('error.njk', {
-        url: `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}`,
+        url: `${attendanceReasonStatsUrl}/reason/${reason}`,
       })
     }
   }
