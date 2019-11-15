@@ -481,6 +481,18 @@ describe('Activity list controller', () => {
       )
     })
 
+    it('should throw error when location is not a number and no call the APIs', async done => {
+      try {
+        await activityList({}, 'LEI', '--', '23/11/2018', 'PM')
+      } catch (e) {
+        expect(e).toEqual(new Error('Location ID is missing'))
+        expect(whereaboutsApi.getAttendance.mock.calls.length).toBe(0)
+        expect(elite2Api.getActivityList.mock.calls.length).toBe(0)
+
+        done()
+      }
+    })
+
     it('should load attendance details', async () => {
       whereaboutsApi.getAttendance.mockReturnValue({
         attendances: [

@@ -148,8 +148,9 @@ describe('when confirming bulk appointment details', () => {
           expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
           expect(raiseAnalyticsEvent).toBeCalledWith(
             'Bulk Appointments',
-            `4 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
-            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+            `Appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+            `Appointment type - ${appointmentDetails.appointmentTypeDescription}`,
+            4
           )
         })
       })
@@ -333,8 +334,9 @@ describe('when confirming bulk appointment details', () => {
 
         expect(raiseAnalyticsEvent).toBeCalledWith(
           'Bulk Appointments',
-          `20 appointments created at ${req.session.userDetails.activeCaseLoadId}`,
-          `Appointment type - ${appointmentDetails.appointmentTypeDescription}`
+          `Appointments created at ${req.session.userDetails.activeCaseLoadId}`,
+          `Appointment type - ${appointmentDetails.appointmentTypeDescription}`,
+          20
         )
       })
     })

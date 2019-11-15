@@ -46,7 +46,8 @@
           id: "file",
           name: "file",
           type: "file",
-          errorMessage: errors | findError('file')
+          errorMessage: errors | findError('file'),
+          attributes: { 'accept':'.csv' }
         }) }}
 
         {% for key, detail in data %}

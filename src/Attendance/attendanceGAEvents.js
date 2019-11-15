@@ -11,16 +11,18 @@ const attendanceUpdated = (offenderAttendanceData, agencyId) => {
 const attendAll = (numberOfOffenders, agencyId) => {
   return {
     category: 'Pay and attendance',
-    action: `${numberOfOffenders} offenders bulk paid at ${agencyId}`,
+    action: `Bulk pay at ${agencyId}`,
     label: 'Pay',
+    value: numberOfOffenders,
   }
 }
 
 const allNotRequired = (numberOfOffenders, agencyId) => {
   return {
     category: 'Pay and attendance',
-    action: `${numberOfOffenders} offenders bulk not required at ${agencyId}`,
+    action: `Bulk not required at ${agencyId}`,
     label: 'Other - Not Required',
+    value: numberOfOffenders,
   }
 }
 
