@@ -7,9 +7,10 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
-import static uk.gov.justice.digital.hmpps.prisonstaffhub.specs.AgencySelectionSpecification.NOTM_URL
 
 class IepDetailsSpecification extends BrowserReportingSpec {
+
+    static final NOTM_URL = 'http://localhost:20200/'
 
     @Rule
     Elite2Api elite2api = new Elite2Api()
