@@ -212,20 +212,12 @@ class App extends React.Component {
     setTermsVisibilityDispatch(true)
   }
 
-  switchCaseLoad = async (newCaseload, location) => {
-    const { switchAgencyDispatch, config } = this.props
-    const redirectToNotm =
-      location.pathname.includes('global-search-results') || location.pathname.includes('offenders')
+  switchCaseLoad = async newCaseload => {
+    const { config } = this.props
 
     try {
-      if (redirectToNotm) {
-        await axios.put(`/api/setactivecaseload/${newCaseload}`)
-        window.location.assign(config.notmEndpointUrl)
-      } else {
-        switchAgencyDispatch(newCaseload)
-        await axios.put(`/api/setactivecaseload/${newCaseload}`)
-        await this.loadUserAndCaseload()
-      }
+      await axios.put(`/api/setactivecaseload/${newCaseload}`)
+      window.location.assign(config.notmEndpointUrl)
     } catch (error) {
       this.handleError(error)
     }
@@ -557,7 +549,7 @@ class App extends React.Component {
                           title={title}
                           logoText="HMPPS"
                           user={user}
-                          switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
+                          switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload)}
                           menuOpen={menuOpen}
                           setMenuOpen={boundSetMenuOpen}
                           caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
@@ -614,7 +606,6 @@ App.propTypes = {
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
-  switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
   setFlagsDispatch: PropTypes.func.isRequired,
   setShowModalDispatch: PropTypes.func.isRequired,
