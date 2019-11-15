@@ -120,7 +120,7 @@ describe('Test clients built by oauthEnabledClient', () => {
           .delay(200)
           .reply(200, { failure: 'three' })
 
-        await expect(client.getWithTimeout({}, '/api/users/me', { customTimeout: 100 })).rejects.toThrow(
+        await expect(client.getWithCustomTimeout({}, '/api/users/me', { customTimeout: 100 })).rejects.toThrow(
           'Timeout of 100ms exceeded'
         )
       })

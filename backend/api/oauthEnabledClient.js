@@ -68,16 +68,16 @@ const factory = ({ baseUrl, timeout }) => {
     })
 
   /**
-   * A superagent GET request with Oauth token with custom timeoput value
+   * A superagent GET request with Oauth token with custom timeout value
    *
    * @param context A request scoped context. Holds OAuth tokens and pagination information for the request
    * @param path relative path to get, starting with /
    * @param resultLimit - the maximum number of results that a Get request should return.  Becomes the value of the 'page-limit' request header.
    *        The header isn't set if resultLimit is falsy.
-   * @param customTimeout
+   * @param customTimeout value in milliseconds to override default timeout
    * @returns A Promise which settles to the superagent result object if the promise is resolved, otherwise to the 'error' object.
    */
-  const getWithTimeout = (context, path, { resultLimit, customTimeout }) =>
+  const getWithCustomTimeout = (context, path, { resultLimit, customTimeout }) =>
     new Promise((resolve, reject) => {
       superagent
         .get(remoteUrl + path)
@@ -170,7 +170,7 @@ const factory = ({ baseUrl, timeout }) => {
 
   return {
     get,
-    getWithTimeout,
+    getWithCustomTimeout,
     getStream,
     pipe,
     post,
