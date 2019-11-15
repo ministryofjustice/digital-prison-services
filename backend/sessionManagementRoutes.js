@@ -123,7 +123,7 @@ const configureRoutes = ({ app, tokenRefresher, mailTo, homeLink }) => {
 
   app.get('/autherror', (req, res) => {
     res.status(401)
-    return res.render('autherror', {
+    return res.render('autherror.ejs', {
       authURL: authLogoutUrl,
       mailTo,
       homeLink,

@@ -10,8 +10,6 @@ import {
   getCurrentPeriod,
   isToday,
   isTodayOrAfter,
-  flagFuturePeriodSelected,
-  readablePeriod,
   isViewableFlag,
   getDate,
   getTime,
@@ -189,18 +187,6 @@ describe('getCurrentPeriod()', () => {
   })
 })
 
-describe('readablePeriod()', () => {
-  it('returns Morning if selected period is AM', () => {
-    expect(readablePeriod('AM')).toEqual('Morning')
-  })
-  it('returns Afternoon if selected period is PM', () => {
-    expect(readablePeriod('PM')).toEqual('Afternoon')
-  })
-  it('returns Evening if selected period is ED', () => {
-    expect(readablePeriod('ED')).toEqual('Evening')
-  })
-})
-
 describe('isToday()', () => {
   beforeAll(() => {
     jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
@@ -246,23 +232,6 @@ describe('isTodayOrAfter()', () => {
 
   it('returns true if date is within the next week', () => {
     expect(isTodayOrAfter('19/01/2019')).toBe(true)
-  })
-})
-
-describe('flagFuturePeriodSelected()', () => {
-  beforeAll(() => {
-    jest.spyOn(Date, 'now').mockImplementation(() => 1547424000000) // Sunday 2019-01-13T00:00:00.000
-  })
-
-  afterAll(() => {
-    Date.now.mockRestore()
-  })
-
-  it('returns true if selected period is in the future', () => {
-    expect(flagFuturePeriodSelected('14/01/2019', 'ED', 'AM')).toEqual(true)
-  })
-  it('returns false if selected period is not in the future', () => {
-    expect(flagFuturePeriodSelected('14/01/2019', 'PM', 'ED')).toEqual(false)
   })
 })
 

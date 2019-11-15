@@ -156,6 +156,12 @@ const elite2ApiFactory = client => {
   const getOffenderActivities = (context, { agencyId, date, period }) =>
     get(context, `/api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
 
+  const getOffenderActivitiesOverDateRange = (context, { agencyId, fromDate, toDate, period }) =>
+    get(
+      context,
+      `/api/schedules/${agencyId}/activities-over-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}`
+    )
+
   const getAlertTypes = context => get(context, '/api/reference-domains/alertTypes', 1000)
 
   const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
@@ -219,6 +225,7 @@ const elite2ApiFactory = client => {
     getAlert,
     updateAlert,
     getOffenderSummaries,
+    getOffenderActivitiesOverDateRange,
   }
 }
 
