@@ -176,8 +176,6 @@ const stripAgencyPrefix = (location, agency) => {
   return null
 }
 
-const toUpperCamelCase = value => value.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
-
 const chunkArray = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size))
 
@@ -207,6 +205,5 @@ module.exports = {
   forenameToInitial,
   stripAgencyPrefix,
   chunkArray,
-  toUpperCamelCase,
   capitalizeStart,
 }

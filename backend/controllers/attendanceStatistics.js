@@ -7,7 +7,6 @@ const {
   switchDateFormat,
   getCurrentPeriod,
   pascalToString,
-  flagFuturePeriodSelected,
   readableDateFormat,
   stripAgencyPrefix,
 } = require('../utils')
