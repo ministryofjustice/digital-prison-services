@@ -1,12 +1,9 @@
 const config = require('../config')
 
-const changeCaseloadFactory = (oauthApi, elite2Api, logError) => {
+const changeCaseloadFactory = (elite2Api, logError) => {
   const index = async (req, res) => {
     try {
-      const [user, caseloads] = await Promise.all([
-        oauthApi.currentUser(res.locals),
-        elite2Api.userCaseLoads(res.locals),
-      ])
+      const caseloads = await elite2Api.userCaseLoads(res.locals)
 
       // In case someone goes directly to the URL
       // and they don't have more than 1 caseload
@@ -19,8 +16,9 @@ const changeCaseloadFactory = (oauthApi, elite2Api, logError) => {
       res.render('changeCaseload.njk', {
         title: 'Change caseload',
         options,
+        allCaseloads: caseloads,
         user: {
-          displayName: user.name,
+          displayName: req.session.userDetails.name,
           activeCaseLoad: {
             description: activeCaseLoad.description,
             id: activeCaseLoad ? activeCaseLoad.caseLoadId : null,

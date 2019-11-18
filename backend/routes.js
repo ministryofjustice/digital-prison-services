@@ -162,7 +162,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
   router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
 
-  router.use('/change-caseload', changeCaseloadController({ oauthApi, elite2Api, logError }))
+  router.use('/change-caseload', changeCaseloadController({ elite2Api, logError }))
 
   router.get('/terms', async (req, res) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })

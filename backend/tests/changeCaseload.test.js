@@ -5,7 +5,6 @@ config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('index', () => {
   const elite2Api = {}
-  const oauthApi = {}
   const mockRes = { render: jest.fn(), redirect: jest.fn(), locals: {} }
   const logError = jest.fn()
 
@@ -13,22 +12,24 @@ describe('index', () => {
 
   beforeEach(() => {
     elite2Api.userCaseLoads = jest.fn()
-    oauthApi.currentUser = jest.fn()
-
-    service = changeCaseloadFactory(oauthApi, elite2Api, logError)
+    service = changeCaseloadFactory(elite2Api, logError)
   })
 
-  it('should make a request for user and caseloads', async () => {
+  it('should make a request for caseloads', async () => {
+    const req = {
+      headers: { referer: '//newNomisEndPointUrl/' },
+      session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
+    }
     const res = { ...mockRes }
-    await service.index({}, res)
+    await service.index(req, res)
 
     expect(elite2Api.userCaseLoads).toHaveBeenCalledWith({})
-    expect(oauthApi.currentUser).toHaveBeenCalledWith({})
   })
 
   it('should render the change caseload page with correct data', async () => {
     const req = {
       headers: { referer: '//newNomisEndPointUrl/' },
+      session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
     const res = { ...mockRes }
 
@@ -47,12 +48,25 @@ describe('index', () => {
       },
     ])
 
-    oauthApi.currentUser.mockReturnValue({ name: 'Test User', activeCaseLoadId: 'LEI' })
     await service.index(req, res)
 
     expect(res.render).toBeCalledWith('changeCaseload.njk', {
       title: 'Change caseload',
       options: [{ value: 'LEI', text: 'Leeds (HMP)' }, { value: 'HEI', text: 'Hewell (HMP)' }],
+      allCaseloads: [
+        {
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+          type: 'INST',
+          currentlyActive: true,
+        },
+        {
+          caseLoadId: 'HEI',
+          description: 'Hewell (HMP)',
+          type: 'INST',
+          currentlyActive: false,
+        },
+      ],
       user: {
         displayName: 'Test User',
         activeCaseLoad: {
@@ -68,6 +82,7 @@ describe('index', () => {
   it('should redirect back to homepage if user has less than 2 caseloads', async () => {
     const req = {
       headers: { referer: '//newNomisEndPointUrl/' },
+      session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
     const res = { ...mockRes }
 
@@ -80,7 +95,6 @@ describe('index', () => {
       },
     ])
 
-    oauthApi.currentUser.mockReturnValue({ name: 'Test User', activeCaseLoadId: 'LEI' })
     await service.index(req, res)
 
     expect(res.redirect).toHaveBeenCalledWith('//newNomisEndPointUrl/')
