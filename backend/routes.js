@@ -6,7 +6,6 @@ const { logError } = require('./logError')
 const config = require('./config')
 
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
-const setActiveCaseLoadFactory = require('./controllers/setactivecaseload').activeCaseloadFactory
 const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
 const offenderServiceFactory = require('./controllers/offenderService')
 const { offenderActivitesFactory } = require('./controllers/offenderActivities')
@@ -37,6 +36,7 @@ const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsA
 const bulkAppointmentsSlipsController = require('./controllers/bulkAppointmentsSlipsController')
 const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
 const bulkAppointmentsClashesController = require('./controllers/bulkAppointmentsClashesController')
+const changeCaseloadController = require('./controllers/changeCaseloadController')
 
 const controllerFactory = require('./controllers/controller').factory
 
@@ -85,7 +85,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/api/me', userMeFactory(oauthApi).userMe)
   router.use('/api/usercaseloads', userCaseLoadsFactory(elite2Api).userCaseloads)
   router.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)
-  router.use('/api/setactivecaseload', setActiveCaseLoadFactory(elite2Api).setActiveCaseload)
   router.use('/api/houseblockLocations', houseblockLocationsFactory(elite2Api).getHouseblockLocations)
   router.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
   router.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
@@ -160,6 +159,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsController({ elite2Api, logError }))
   router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
   router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
+
+  router.use('/change-caseload', changeCaseloadController({ elite2Api, logError }))
 
   router.get('/terms', async (req, res) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })

@@ -1,0 +1,35 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% extends "./partials/layout.njk" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+        text: "Back",
+        href: backUrl
+    }) }}
+{% endblock %}
+{% block content %}
+<h1 class="govuk-heading-l">{{title}}</h1>
+<form method="POST" id="changeCaseload">
+  {{ govukSelect({
+          id: "changeCaseloadSelect",
+          name: "caseLoadId",
+          label: {
+              text: "Select active case load"
+          },
+          items: options | setSelected(caseLoadId)
+      }) }}
+  {{ govukButton({ 
+      text: "Submit",
+      preventDoubleClick: true
+    }) }}
+
+  {{ govukButton({
+      text: "Cancel",
+      element: 'a',
+      href: backUrl,
+      classes: "govuk-button--secondary"
+    }) }}
+</form>
+{% endblock %}

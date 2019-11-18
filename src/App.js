@@ -48,7 +48,6 @@ import {
   setSearchPeriod,
   setTermsVisibility,
   setUserDetails,
-  switchAgency,
   setShowModal,
   setActivityOffenderAttendance,
   getAbsentReasons,
@@ -210,25 +209,6 @@ class App extends React.Component {
     const { setTermsVisibilityDispatch } = this.props
 
     setTermsVisibilityDispatch(true)
-  }
-
-  switchCaseLoad = async (newCaseload, location) => {
-    const { switchAgencyDispatch, config } = this.props
-    const redirectToNotm =
-      location.pathname.includes('global-search-results') || location.pathname.includes('offenders')
-
-    try {
-      if (redirectToNotm) {
-        await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
-        window.location.assign(config.notmEndpointUrl)
-      } else {
-        switchAgencyDispatch(newCaseload)
-        await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
-        await this.loadUserAndCaseload()
-      }
-    } catch (error) {
-      this.handleError(error)
-    }
   }
 
   loadUserAndCaseload = async () => {
@@ -541,15 +521,10 @@ class App extends React.Component {
                 <ScrollToTop>
                   <Notifications />
                   <Route
-                    render={({ location, history }) => {
+                    render={({ location }) => {
                       if (config && config.googleAnalyticsId) {
                         ReactGA.pageview(location.pathname)
                       }
-                      const locationRequiresRedirectWhenCaseloadChanges = !(
-                        location.pathname.includes('global-search-results') ||
-                        location.pathname.includes('establishment-roll') ||
-                        location.pathname.includes('content')
-                      )
 
                       return (
                         <Header
@@ -557,11 +532,13 @@ class App extends React.Component {
                           title={title}
                           logoText="HMPPS"
                           user={user}
-                          switchCaseLoad={newCaseload => this.switchCaseLoad(newCaseload, location)}
                           menuOpen={menuOpen}
                           setMenuOpen={boundSetMenuOpen}
-                          caseChangeRedirect={locationRequiresRedirectWhenCaseloadChanges}
-                          history={history}
+                          extraLinks={
+                            user.caseLoadOptions && user.caseLoadOptions.length > 1
+                              ? [{ text: 'Change caseload', url: '/change-caseload' }]
+                              : []
+                          }
                         />
                       )
                     }}
@@ -614,7 +591,6 @@ App.propTypes = {
   setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   setTermsVisibilityDispatch: PropTypes.func.isRequired,
-  switchAgencyDispatch: PropTypes.func.isRequired,
   userDetailsDispatch: PropTypes.func.isRequired,
   setFlagsDispatch: PropTypes.func.isRequired,
   setShowModalDispatch: PropTypes.func.isRequired,
@@ -656,7 +632,6 @@ const mapDispatchToProps = dispatch => ({
   setErrorDispatch: error => dispatch(setError(error)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
-  switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
   setFlagsDispatch: flags => dispatch(setFlagsAction(flags)),
   setShowModalDispatch: (modalActive, modalContent) => dispatch(setShowModal(modalActive, modalContent)),
