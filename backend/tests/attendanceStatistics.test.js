@@ -79,6 +79,27 @@ describe('Attendance reason statistics', () => {
       )
     })
 
+    it('should use current period by default when date is present and period is missing', async () => {
+      mockDateToSunday012017()
+
+      whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
+
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+
+      const req = { query: { agencyId, toDate, fromDate, period: null } }
+      const res = { render: jest.fn(), locals: context }
+
+      await attendanceStatistics(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'attendanceStatistics.njk',
+        expect.objectContaining({
+          period: 'AM',
+          displayPeriod: 'AM',
+        })
+      )
+    })
+
     it('should validate against future fromDate', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
 
