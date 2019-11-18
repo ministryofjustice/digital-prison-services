@@ -72,7 +72,6 @@ const props = {
   setMessageDispatch: fn,
   setTermsVisibilityDispatch: fn,
   sortOrderDispatch: fn,
-  switchAgencyDispatch: fn,
   userDetailsDispatch: fn,
   fetchContentLinksDispatch: fn,
   setFlagsDispatch: fn,

@@ -48,7 +48,6 @@ import {
   setSearchPeriod,
   setTermsVisibility,
   setUserDetails,
-  switchAgency,
   setShowModal,
   setActivityOffenderAttendance,
   getAbsentReasons,
@@ -210,17 +209,6 @@ class App extends React.Component {
     const { setTermsVisibilityDispatch } = this.props
 
     setTermsVisibilityDispatch(true)
-  }
-
-  switchCaseLoad = async newCaseload => {
-    const { config } = this.props
-
-    try {
-      await axios.put('/api/setactivecaseload', { caseLoadId: newCaseload })
-      window.location.assign(config.notmEndpointUrl)
-    } catch (error) {
-      this.handleError(error)
-    }
   }
 
   loadUserAndCaseload = async () => {
@@ -644,7 +632,6 @@ const mapDispatchToProps = dispatch => ({
   setErrorDispatch: error => dispatch(setError(error)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
-  switchAgencyDispatch: agencyId => dispatch(switchAgency(agencyId)),
   userDetailsDispatch: user => dispatch(setUserDetails(user)),
   setFlagsDispatch: flags => dispatch(setFlagsAction(flags)),
   setShowModalDispatch: (modalActive, modalContent) => dispatch(setShowModal(modalActive, modalContent)),

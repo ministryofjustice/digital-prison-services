@@ -29,15 +29,6 @@ describe('actions', () => {
     expect(actions.setUserDetails(user)).toEqual(expectedAction)
   })
 
-  it('should create an action to switch current Agency', () => {
-    const activeCaseLoadId = 'LEI'
-    const expectedAction = {
-      type: types.SWITCH_AGENCY,
-      activeCaseLoadId,
-    }
-    expect(actions.switchAgency(activeCaseLoadId)).toEqual(expectedAction)
-  })
-
   it('should create an action to toggle ts and cs', () => {
     const shouldShowTerms = true
     const expectedAction = {

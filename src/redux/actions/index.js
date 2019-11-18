@@ -12,11 +12,6 @@ export const setUserDetails = user => ({
   user,
 })
 
-export const switchAgency = agencyId => ({
-  type: ActionTypes.SWITCH_AGENCY,
-  activeCaseLoadId: agencyId,
-})
-
 export const setTermsVisibility = shouldShowTerms => ({
   type: ActionTypes.SET_TERMS_VISIBILITY,
   shouldShowTerms,
