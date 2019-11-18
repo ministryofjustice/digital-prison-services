@@ -166,7 +166,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     const currentPeriod = getCurrentPeriod(moment().format())
 
     const { agencyId, fromDate, toDate } = req.query || {}
-    const period = req.query.period || currentPeriod
+    const period = (req.query && req.query.period) || currentPeriod
 
     try {
       const [user, caseloads, roles] = await Promise.all([
