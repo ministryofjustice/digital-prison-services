@@ -11,7 +11,7 @@
 {% endblock %}
 {% block content %}
 <h1 class="govuk-heading-xl">{{title}}</h1>
-<form method="POST" id="changeCaseload" action="/api/setactivecaseload">
+<form method="POST" id="changeCaseload">
   {{ govukSelect({
           id: "changeCaseload",
           name: "caseLoadId",

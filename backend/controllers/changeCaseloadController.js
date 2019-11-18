@@ -4,9 +4,10 @@ const { changeCaseloadFactory } = require('./changeCaseload')
 const router = express.Router()
 
 const controller = ({ elite2Api, logError }) => {
-  const { index } = changeCaseloadFactory(elite2Api, logError)
+  const { index, post } = changeCaseloadFactory(elite2Api, logError)
 
   router.get('/', index)
+  router.post('/', post)
   return router
 }
 
