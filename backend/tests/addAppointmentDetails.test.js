@@ -256,7 +256,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should validate that the end time comes after the start time', async () => {
-        const endTime = moment().subtract(1, 'hours')
+        const endTime = moment().subtract(2, 'hours')
         const endTimeHours = endTime.hour()
         const endTimeMinutes = endTime.minute()
 
