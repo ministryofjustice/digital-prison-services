@@ -546,7 +546,11 @@ class App extends React.Component {
                           user={user}
                           menuOpen={menuOpen}
                           setMenuOpen={boundSetMenuOpen}
-                          extraLinks={[{ text: 'Change caseload', url: '/change-caseload' }]}
+                          extraLinks={
+                            user.caseLoadOptions && user.caseLoadOptions.length > 1
+                              ? [{ text: 'Change caseload', url: '/change-caseload' }]
+                              : []
+                          }
                         />
                       )
                     }}

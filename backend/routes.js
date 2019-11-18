@@ -86,7 +86,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/api/me', userMeFactory(oauthApi).userMe)
   router.use('/api/usercaseloads', userCaseLoadsFactory(elite2Api).userCaseloads)
   router.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)
-  router.post('/api/setactivecaseload', handleErrors(setActiveCaseLoadFactory(elite2Api).setActiveCaseload))
+  router.post('/api/setactivecaseload', handleErrors(setActiveCaseLoadFactory(elite2Api, logError).setActiveCaseload))
   router.use('/api/houseblockLocations', houseblockLocationsFactory(elite2Api).getHouseblockLocations)
   router.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
   router.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
