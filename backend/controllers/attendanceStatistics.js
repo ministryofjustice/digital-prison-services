@@ -163,7 +163,10 @@ const urlWithDefaultParameters = ({ activeCaseLoadId, currentPeriod }) => {
 
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
   const attendanceStatistics = async (req, res) => {
-    const { agencyId, period, fromDate, toDate } = req.query || {}
+    const currentPeriod = getCurrentPeriod(moment().format())
+
+    const { agencyId, fromDate, toDate } = req.query || {}
+    const period = (req.query && req.query.period) || currentPeriod
 
     try {
       const [user, caseloads, roles] = await Promise.all([
@@ -173,7 +176,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       ])
 
       const { activeCaseLoad, inactiveCaseLoads, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
-      const currentPeriod = getCurrentPeriod(moment().format())
 
       if (!period || !fromDate) return res.redirect(urlWithDefaultParameters({ activeCaseLoadId, currentPeriod }))
 
