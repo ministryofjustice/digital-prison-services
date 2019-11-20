@@ -133,26 +133,25 @@ const formatDatesForDisplay = ({ fromDate, toDate }) => {
 }
 
 const getStatPresetsLinks = ({ activeCaseLoadId }) => {
-  const weeklyDateRange = dateRangeForStats()
-  const previousWeeklyDateRange = dateRangeForStats(1)
-  const statsFor2WeeksAgoDateRange = dateRangeForStats(2)
+  const currentWeek = dateRangeForStats()
+  const previousWeek = dateRangeForStats(1)
 
   const statsForCurrentWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
-    weeklyDateRange.fromDate
-  }&toDate=${weeklyDateRange.toDate}`
+    currentWeek.fromDate
+  }&toDate=${currentWeek.toDate}`
 
   const statsForPreviousWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
-    previousWeeklyDateRange.fromDate
-  }&toDate=${previousWeeklyDateRange.toDate}`
+    previousWeek.fromDate
+  }&toDate=${previousWeek.toDate}`
 
-  const statsFor2WeeksAgo = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
-    statsFor2WeeksAgoDateRange.fromDate
-  }&toDate=${statsFor2WeeksAgoDateRange.toDate}`
+  const statsFor2Weeks = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
+    previousWeek.fromDate
+  }&toDate=${currentWeek.toDate}`
 
   return {
     statsForCurrentWeek,
     statsForPreviousWeek,
-    statsFor2WeeksAgo,
+    statsFor2Weeks,
   }
 }
 

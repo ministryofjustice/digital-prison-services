@@ -167,7 +167,7 @@ describe('Attendance reason statistics', () => {
       )
     })
 
-    it('should return a valid url for previous 2 weeks stats', async () => {
+    it('should return a valid url for 2 weeks stats, current week plus previous week', async () => {
       mockDateToSunday012017()
 
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
@@ -179,13 +179,13 @@ describe('Attendance reason statistics', () => {
 
       await attendanceStatistics(req, res)
 
-      const sunday = '18/12/2016'
-      const saturday = '24/12/2016'
+      const sunday = '25/12/2016'
+      const saturday = '07/01/2017'
 
       expect(res.render).toHaveBeenCalledWith(
         'attendanceStatistics.njk',
         expect.objectContaining({
-          statsFor2WeeksAgo: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=AM_PM&fromDate=${sunday}&toDate=${saturday}`,
+          statsFor2Weeks: `/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=AM_PM&fromDate=${sunday}&toDate=${saturday}`,
         })
       )
     })
