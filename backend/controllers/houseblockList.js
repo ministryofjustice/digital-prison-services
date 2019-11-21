@@ -26,7 +26,12 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
   return Boolean(safeTimeCompare(mainActivity.startTime, newActivity.startTime))
 }
 
-const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED']
+const isStayingOnWing = activities => {
+  const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED']
+  const leavingWingActivities = activities.filter(activity => !stayingOnWingCodes.includes(activity.locationCode))
+
+  return leavingWingActivities.length === 0
+}
 
 const promoteToMainActivity = (offender, activity) => {
   const newMainActivity = { ...activity, mainActivity: true }
@@ -42,13 +47,14 @@ const promoteToMainActivity = (offender, activity) => {
   return {
     ...offender,
     activities,
-    stayingOnWing: stayingOnWingCodes.includes(newMainActivity.locationCode),
+    stayingOnWing: isStayingOnWing(activities),
   }
 }
 
 const addToActivities = (offender, activity) => ({
   ...offender,
   activities: [...offender.activities, activity],
+  stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
 const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {

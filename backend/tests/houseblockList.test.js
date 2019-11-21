@@ -686,10 +686,10 @@ describe('Houseblock list controller', () => {
         cellLocation: 'LEI-A-1-1',
         event: 'CHAP',
         eventType: 'PRISON_ACT',
-        eventDescription: 'Chapel',
+        eventDescription: 'Chapel Activity',
         comment: 'comment11',
         endTime: '2017-10-15T18:30:00',
-        locationCode: 'WOW',
+        locationCode: 'ACTIVITYELSEWHERE',
       },
       {
         bookingId: 1,
@@ -705,6 +705,7 @@ describe('Houseblock list controller', () => {
         comment: 'comment18',
         startTime: '2017-10-15T19:00:00',
         endTime: '2017-10-15T20:30:00',
+        locationCode: 'STAYONWING',
       },
       {
         bookingId: 2,
@@ -714,7 +715,7 @@ describe('Houseblock list controller', () => {
         cellLocation: 'LEI-A-1-1',
         event: 'CHAP',
         eventType: 'PRISON_ACT',
-        eventDescription: 'Chapel',
+        eventDescription: 'Chapel Activity',
         comment: 'comment12',
         startTime: '2017-10-15T18:00:00',
         endTime: '2017-10-15T18:30:00',
@@ -771,36 +772,7 @@ describe('Houseblock list controller', () => {
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'leaving')
 
-      expect(response.length).toEqual(1)
-      expect(response).toEqual([
-        expect.objectContaining({
-          bookingId: 2,
-          firstName: 'MICHAEL',
-          lastName: 'SMITH',
-          offenderNo: 'A1234AB',
-          stayingOnWing: false,
-          activities: [
-            expect.objectContaining({
-              bookingId: 2,
-              firstName: 'MICHAEL',
-              lastName: 'SMITH',
-              offenderNo: 'A1234AB',
-              event: 'CHAP',
-              eventDescription: 'Chapel',
-              eventType: 'PRISON_ACT',
-              mainActivity: true,
-            }),
-          ],
-        }),
-      ])
-    })
-
-    it('should return only offenders staying on the wing', async () => {
-      elite2Api.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
-
-      const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')
-
-      expect(response.length).toEqual(4)
+      expect(response.length).toEqual(2)
       expect(response).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -808,7 +780,7 @@ describe('Houseblock list controller', () => {
             firstName: 'ARTHUR',
             lastName: 'ANDERSON',
             offenderNo: 'A1234AA',
-            stayingOnWing: true,
+            stayingOnWing: false,
             activities: expect.arrayContaining([
               expect.objectContaining({
                 bookingId: 1,
@@ -816,14 +788,55 @@ describe('Houseblock list controller', () => {
                 lastName: 'ANDERSON',
                 offenderNo: 'A1234AA',
                 event: 'CHAP',
-                eventDescription: 'Chapel',
+                eventDescription: 'Chapel Activity',
                 eventType: 'PRISON_ACT',
                 mainActivity: true,
-                locationCode: 'WOW',
+                locationCode: 'ACTIVITYELSEWHERE',
+              }),
+              expect.objectContaining({
+                bookingId: 1,
+                firstName: 'ARTHUR',
+                lastName: 'ANDERSON',
+                offenderNo: 'A1234AA',
+                event: 'VISIT',
+                eventDescription: 'Official Visit',
+                eventType: 'VISIT',
+                locationCode: 'STAYONWING',
               }),
             ]),
           }),
         ]),
+        expect.arrayContaining([
+          expect.objectContaining({
+            bookingId: 2,
+            firstName: 'MICHAEL',
+            lastName: 'SMITH',
+            offenderNo: 'A1234AB',
+            stayingOnWing: false,
+            activities: [
+              expect.objectContaining({
+                bookingId: 2,
+                firstName: 'MICHAEL',
+                lastName: 'SMITH',
+                offenderNo: 'A1234AB',
+                event: 'CHAP',
+                eventDescription: 'Chapel Activity',
+                eventType: 'PRISON_ACT',
+                mainActivity: true,
+              }),
+            ],
+          }),
+        ])
+      )
+    })
+
+    it('should return only offenders staying on the wing', async () => {
+      elite2Api.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
+
+      const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')
+
+      expect(response.length).toEqual(3)
+      expect(response).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             bookingId: 3,
@@ -838,7 +851,7 @@ describe('Houseblock list controller', () => {
                 lastName: 'QUIMBY',
                 offenderNo: 'A1234AC',
                 event: 'CHAP',
-                eventDescription: 'Chapel',
+                eventDescription: 'Chapel Activity',
                 eventType: 'PRISON_ACT',
                 mainActivity: true,
                 locationCode: 'UNEMPLOYED',
@@ -860,7 +873,7 @@ describe('Houseblock list controller', () => {
                 lastName: 'JONES',
                 offenderNo: 'A1234AD',
                 event: 'CHAP',
-                eventDescription: 'Chapel',
+                eventDescription: 'Chapel Activity',
                 eventType: 'PRISON_ACT',
                 mainActivity: true,
                 locationCode: 'STAYONWING',
@@ -882,7 +895,7 @@ describe('Houseblock list controller', () => {
                 lastName: 'SMITH',
                 offenderNo: 'A1234AE',
                 event: 'CHAP',
-                eventDescription: 'Chapel',
+                eventDescription: 'Chapel Activity',
                 eventType: 'PRISON_ACT',
                 mainActivity: true,
                 locationCode: 'RETIRED',
