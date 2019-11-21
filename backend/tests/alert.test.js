@@ -75,7 +75,7 @@ describe('alert management', () => {
 
         await displayCloseAlertPage(req, res)
 
-        expect(res.render).toBeCalledWith('closeAlertForm.njk', {
+        expect(res.render).toBeCalledWith('editAlertForm.njk', {
           title: 'Close alert - Digital Prison Services',
           errors: [{ text: 'Sorry, the service is unavailable' }],
         })
@@ -94,7 +94,7 @@ describe('alert management', () => {
         await displayCloseAlertPage(req, res)
 
         expect(res.render).toBeCalledWith(
-          'closeAlertForm.njk',
+          'editAlertForm.njk',
           expect.objectContaining({
             errors: [{ text: 'This alert has already expired' }],
           })
@@ -109,7 +109,7 @@ describe('alert management', () => {
 
       await displayCloseAlertPage(req, res)
 
-      expect(res.render).toBeCalledWith('closeAlertForm.njk', {
+      expect(res.render).toBeCalledWith('editAlertForm.njk', {
         alert: {
           active: false,
           alertCode: 'LFC21',
@@ -149,7 +149,7 @@ describe('alert management', () => {
         const req = {
           ...mockReq,
           params: { offenderNo, alertId: 1 },
-          body: { alertStatus: 'yes', offenderNo },
+          body: { alertStatus: 'yes', offenderNo, comment: 'test' },
         }
 
         elite2api.updateAlert = jest.fn().mockImplementationOnce(() => {
@@ -166,7 +166,7 @@ describe('alert management', () => {
         const req = {
           ...mockReq,
           params: { offenderNo, alertId: 1 },
-          body: { offenderNo },
+          body: { offenderNo, comment: 'test' },
         }
 
         await handleCloseAlertForm(req, res)
@@ -178,11 +178,54 @@ describe('alert management', () => {
       })
     })
 
+    describe('when comment triggers validation errors', () => {
+      const comment = Array.from(Array(1001).keys())
+        .map(_ => 'A')
+        .join('')
+
+      it('should validate maximum length does not exceed 1000', async () => {
+        const req = {
+          ...mockReq,
+          params: { offenderNo, alertId: 1 },
+          body: { offenderNo, alertStatus: 'No', comment },
+        }
+
+        await handleCloseAlertForm(req, res)
+        expect(req.flash).toBeCalledWith('errors', [
+          { href: '#comment', text: 'Enter a comment using 1000 characters or less' },
+        ])
+      })
+
+      it('should redirect back, placing the new comment into flash so that the comment is not lost', async () => {
+        const req = {
+          ...mockReq,
+          params: { offenderNo, alertId: 1 },
+          body: { offenderNo, comment: 'test' },
+        }
+
+        await handleCloseAlertForm(req, res)
+
+        expect(req.flash).toBeCalledWith('comment', 'test')
+        expect(res.redirect).toBeCalledWith('back')
+      })
+
+      it('should validate missing comment', async () => {
+        const req = {
+          ...mockReq,
+          params: { offenderNo, alertId: 1 },
+          body: { offenderNo, alertStatus: 'yes' },
+        }
+
+        await handleCloseAlertForm(req, res)
+        expect(req.flash).toBeCalledWith('errors', [{ href: '#comment', text: 'Comment required' }])
+      })
+    })
+
     describe('when yes is selected', () => {
       const req = {
         ...mockReq,
         params: { bookingId: 1234, alertId: 1 },
-        body: { alertStatus: 'yes', offenderNo },
+        body: { alertStatus: 'yes', offenderNo, comment: 'test' },
       }
 
       it('should update the alert to INACTIVE and set the expiry date to the current date, then redirect back to the offender alerts page', async () => {
@@ -198,6 +241,7 @@ describe('alert management', () => {
 
         expect(elite2api.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
           expiryDate: '2019-03-29',
+          comment: 'test',
         })
 
         expect(raiseAnalyticsEvent).toBeCalledWith('Alert Closed', 'Alert closed for LEI', 'Alert type - LFC21')
@@ -208,19 +252,57 @@ describe('alert management', () => {
       })
     })
 
-    describe('when no is selected', () => {
+    describe('when yes is selected, and a comment has a value', () => {
       const req = {
         ...mockReq,
         params: { bookingId: '1234', alertId: 1 },
-        body: { alertStatus: 'no', offenderNo },
+        body: { alertStatus: 'yes', offenderNo, comment: 'test' },
       }
 
-      it('should not update the alert, then redirect back to the offender alerts page', async () => {
+      it('should update the alert comment and expiry date', async () => {
+        elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
+        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+
         await handleCloseAlertForm(req, res)
 
-        expect(elite2api.updateAlert).not.toBeCalled()
+        expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test', expiryDate: '2019-03-29' })
+
+        expect(res.redirect).toBeCalledWith(
+          `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=closed`
+        )
+
+        Date.now.mockRestore()
+      })
+    })
+
+    describe('when no is selected, and a comment has a value', () => {
+      const req = {
+        ...mockReq,
+        params: { bookingId: '1234', alertId: 1 },
+        body: { alertStatus: 'no', offenderNo, comment: 'test' },
+      }
+
+      beforeEach(() => {
+        elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
+        raiseAnalyticsEvent.mockRestore()
+      })
+
+      it('should update the alert comment only', async () => {
+        await handleCloseAlertForm(req, res)
+
+        expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test' })
         expect(res.redirect).toBeCalledWith(
           `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=open`
+        )
+      })
+
+      it('should raise an analytics even changes to the comment have been made', async () => {
+        await handleCloseAlertForm(req, res)
+
+        expect(raiseAnalyticsEvent).toBeCalledWith(
+          'Alert comment updated',
+          'Alert comment updated for ALI',
+          'Alert type - LFC21'
         )
       })
     })

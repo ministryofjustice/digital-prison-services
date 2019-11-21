@@ -115,9 +115,9 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
   router.get('/api/get-alert-types', controller.getAlertTypes)
   router.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
-  router.get('/close-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertPage))
+  router.get('/edit-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayCloseAlertPage))
   router.post(
-    '/api/close-alert/:bookingId/:alertId',
+    '/api/edit-alert/:bookingId/:alertId',
     handleErrors(alertFactory(oauthApi, elite2Api).handleCloseAlertForm)
   )
   router.get(
