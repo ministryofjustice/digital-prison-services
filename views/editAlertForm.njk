@@ -127,6 +127,12 @@
           classes: "govuk-radios--inline",
           idPrefix: "alertStatus",
           name: "alertStatus",
+          fieldset: {
+              legend: {
+                  text: "Do you want to close this alert?",
+                  classes: "govuk-fieldset__legend--s"
+              }
+          },
           hint: {
             text: "Closing this alert will change it to inactive and you cannot re-activate it"
           },
