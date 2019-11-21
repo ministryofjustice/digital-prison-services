@@ -150,9 +150,7 @@ const alertFactory = (oauthApi, elite2Api) => {
     const errors = getValidationErrors({ alertStatus, comment })
 
     if (errors.length > 0) {
-      if (comment) {
-        req.flash('comment', comment)
-      }
+      if (comment) req.flash('comment', comment)
       req.flash('errors', errors)
       return res.redirect('back')
     }
