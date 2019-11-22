@@ -4,10 +4,7 @@ const oauthApi = {}
 const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-const { displayCloseAlertPage, handleCloseAlertForm } = require('../controllers/alert').alertFactory(
-  oauthApi,
-  elite2api
-)
+const { displayEditAlertPage, handleEditAlertForm } = require('../controllers/alert').alertFactory(oauthApi, elite2api)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -73,7 +70,7 @@ describe('alert management', () => {
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
-        await displayCloseAlertPage(req, res)
+        await displayEditAlertPage(req, res)
 
         expect(res.render).toBeCalledWith('editAlertForm.njk', {
           title: 'Edit / close alert - Digital Prison Services',
@@ -91,7 +88,7 @@ describe('alert management', () => {
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
-        await displayCloseAlertPage(req, res)
+        await displayEditAlertPage(req, res)
 
         expect(res.render).toBeCalledWith(
           'editAlertForm.njk',
@@ -107,7 +104,7 @@ describe('alert management', () => {
 
       const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
-      await displayCloseAlertPage(req, res)
+      await displayEditAlertPage(req, res)
 
       expect(res.render).toBeCalledWith('editAlertForm.njk', {
         alert: {
@@ -156,7 +153,7 @@ describe('alert management', () => {
           throw new Error('There has been an error')
         })
 
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
         expect(res.redirect).toBeCalledWith('back')
@@ -169,7 +166,7 @@ describe('alert management', () => {
           body: { offenderNo, comment: 'test' },
         }
 
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [
           { href: '#alertStatus', text: 'Select yes if you want to close this alert' },
@@ -190,7 +187,7 @@ describe('alert management', () => {
           body: { offenderNo, alertStatus: 'No', comment },
         }
 
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
         expect(req.flash).toBeCalledWith('errors', [
           { href: '#comment', text: 'Enter a comment using 1000 characters or less' },
         ])
@@ -203,7 +200,7 @@ describe('alert management', () => {
           body: { offenderNo, comment: 'test' },
         }
 
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('comment', 'test')
         expect(res.redirect).toBeCalledWith('back')
@@ -216,7 +213,7 @@ describe('alert management', () => {
           body: { offenderNo, alertStatus: 'yes' },
         }
 
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
         expect(req.flash).toBeCalledWith('errors', [{ href: '#comment', text: 'Comment required' }])
       })
     })
@@ -237,7 +234,7 @@ describe('alert management', () => {
           },
         ])
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(elite2api.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
           expiryDate: '2019-03-29',
@@ -263,7 +260,7 @@ describe('alert management', () => {
         elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
 
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test', expiryDate: '2019-03-29' })
 
@@ -288,7 +285,7 @@ describe('alert management', () => {
       })
 
       it('should update the alert comment only', async () => {
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test' })
         expect(res.redirect).toBeCalledWith(
@@ -297,7 +294,7 @@ describe('alert management', () => {
       })
 
       it('should raise an analytics even changes to the comment have been made', async () => {
-        await handleCloseAlertForm(req, res)
+        await handleEditAlertForm(req, res)
 
         expect(raiseAnalyticsEvent).toBeCalledWith(
           'Alert comment updated',

@@ -172,7 +172,7 @@ const alertFactory = (oauthApi, elite2Api) => {
     return res.redirect(`${getOffenderUrl(offenderNo)}/alerts?alertStatus=${closeAlert ? 'closed' : 'open'}`)
   }
 
-  return { displayCloseAlertPage: displayEditAlertPage, handleCloseAlertForm: handleEditAlertForm }
+  return { displayEditAlertPage, handleEditAlertForm }
 }
 
 module.exports = { alertFactory }
