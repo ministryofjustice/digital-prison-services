@@ -67,7 +67,7 @@ const alertFactory = (oauthApi, elite2Api) => {
     } = alert || {}
 
     res.render('editAlertForm.njk', {
-      title: 'Close alert - Digital Prison Services',
+      title: 'Edit / close alert - Digital Prison Services',
       errors: [...req.flash('errors'), ...pageErrors],
       offenderDetails,
       formAction,
