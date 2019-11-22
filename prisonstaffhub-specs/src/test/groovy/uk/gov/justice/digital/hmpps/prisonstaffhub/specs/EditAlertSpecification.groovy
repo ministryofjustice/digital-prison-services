@@ -51,7 +51,7 @@ class EditAlertSpecification extends BrowserReportingSpec {
         submit.click()
         at NewNomisLandingPage
 
-        then: "The alert should get updated"
+        then: "The alert should be updated"
         elite2api.verify(WireMock.putRequestedFor(WireMock.urlEqualTo("/api/bookings/1/alert/1")))
 
         then: "I should be redirected to the new nomis ui"
