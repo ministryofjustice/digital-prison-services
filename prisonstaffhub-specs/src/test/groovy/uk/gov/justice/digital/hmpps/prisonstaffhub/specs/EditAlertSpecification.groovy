@@ -54,7 +54,7 @@ class EditAlertSpecification extends BrowserReportingSpec {
         then: "The alert should get updated"
         elite2api.verify(WireMock.putRequestedFor(WireMock.urlEqualTo("/api/bookings/1/alert/1")))
 
-        then: "Should be redirected to the new nomis ui"
+        then: "I should be redirected to the new nomis ui"
         newNomisWebServer.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/offenders/${offenderNo}/alerts?alertStatus=open")))
 
     }
