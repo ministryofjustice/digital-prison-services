@@ -16,8 +16,8 @@ class BulkAppointmentsUploadCSVPage extends Page {
         submitButton.text() == 'Continue'
     }
 
-    void selectFile() {
-        File file = new File("src/test/resources/offenders-for-appointments.csv")
+    void selectFile(String path) {
+        File file = new File(path)
         form.file = file.absolutePath
     }
 }
