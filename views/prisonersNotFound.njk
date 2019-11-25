@@ -1,8 +1,7 @@
 {% extends "./partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% set title = 'Some appointments cannot be added' %}
 
@@ -17,7 +16,7 @@
 
   <h1 class="govuk-heading-xl">{{title}}</h1>
 
- {% if prisonersNotFound.length > 0 %}
+  {% if prisonersNotFound.length > 0 %}
     <h2 class="govuk-heading-m">
       Unable to find prisoners on the CSV file
     </h2>
@@ -30,20 +29,25 @@
       You should check these numbers. No appointments will be created for these prison numbers.
     </p>
 
-    <table class="govuk-table" data-qa="prisoners-not-found">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Prison number</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        {% for prisonNumber in prisonersNotFound %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{prisonNumber}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    {% set rows = [] %}
+
+    {% for prisonNumber in prisonersNotFound %}
+      {% set rows = (rows.push([
+        {
+          text: prisonNumber
+        }
+      ]), rows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { "data-qa": "prisoners-not-found" },
+      head: [
+        {
+          text: "Prison number"
+        }
+      ],
+      rows: rows
+    }) }}
   {% endif %}
 
   {{ govukButton({ 
@@ -56,7 +60,7 @@
       }
     }) }}
 
-    {{ govukButton({
+  {{ govukButton({
       text: "Cancel",
       element: 'a',
       href: '/bulk-appointments/upload-file',
@@ -66,4 +70,4 @@
       }
     }) }}
 
-{% endblock %}  
+{% endblock %}
