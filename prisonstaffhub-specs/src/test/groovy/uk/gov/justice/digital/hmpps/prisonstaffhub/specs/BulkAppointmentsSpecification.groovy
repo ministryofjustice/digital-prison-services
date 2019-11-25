@@ -11,6 +11,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsAddPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsAddedPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsPrisonersNotFoundPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsClashesPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsConfirmPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsNotAddedPage
@@ -29,6 +30,133 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
     LocalDate startDate = LocalDate.now().plusDays(10)
+
+    def "should add a non reoccurring bulk appointment with the same start time"() {
+        setupTests()
+        setupNoClashes()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "yes"
+        form.startTimeHours = 10
+        form.startTimeMinutes = 10
+        form.recurring = "no"
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile("src/test/resources/offenders-for-appointments.csv")
+        submitButton.click()
+
+        then: "I am on the confirm appointments page"
+        at BulkAppointmentsConfirmPage
+        appointmentType.text() == "Activities"
+        appointmentLocation.text() == "Adj"
+        appointmentStartDate.text() == startDate.format(longDatePattern)
+        appointmentStartTime.text() == "10:10"
+        prisonersFound.children()[1].text() == "Doe John A12345"
+
+        and: "I confirm the appointments I want to create"
+        submitButton.click()
+
+        then: "I am presented with the appointments added page"
+        at BulkAppointmentsAddedPage
+    }
+
+    def "should add a non reoccurring bulk appointment with different start times"() {
+        setupTests()
+        setupNoClashes()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "no"
+        form.recurring = "no"
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile("src/test/resources/offenders-for-appointments.csv")
+        submitButton.click()
+
+        then: "I am on the confirm appointments page"
+        at BulkAppointmentsConfirmPage
+        appointmentType.text() == "Activities"
+        appointmentLocation.text() == "Adj"
+        appointmentStartDate.text() == startDate.format(longDatePattern)
+        prisonersFound.children()[1].text().contains("Doe John A12345")
+
+        when: "I set the individual start and end time for the offenders"
+        form.A12345startTimeHours = 10
+        form.A12345startTimeMinutes = 30
+        form.A12345endTimeHours = 11
+        form.A12345endTimeMinutes = 30
+
+        and: "I confirm the appointments I want to create"
+        submitButton.click()
+
+        then: "I am presented with the appointments added page"
+        at BulkAppointmentsAddedPage
+    }
+
+    def "should add a recurring bulk appointment" () {
+        def occurrenceValue = 5
+        setupTests()
+        setupNoClashes()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "yes"
+        form.startTimeHours = 10
+        form.startTimeMinutes = 10
+        form.recurring = "yes"
+        waitFor { recurringInputs.displayed }
+        form.repeats = "WEEKLY"
+        form.times = occurrenceValue
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile("src/test/resources/offenders-for-appointments.csv")
+        submitButton.click()
+
+        then: "I am on the confirm appointments page"
+        at BulkAppointmentsConfirmPage
+        appointmentType.text() == "Activities"
+        appointmentLocation.text() == "Adj"
+        appointmentStartDate.text() == startDate.format(longDatePattern)
+        appointmentStartTime.text() == "10:10"
+        prisonersFound.children()[1].text() == "Doe John A12345"
+        appointmentsHowOften.text() == 'Weekly'
+        appointmentsOccurrences.text() == occurrenceValue.toString()
+        appointmentsEndDate.text() == startDate.plusWeeks(occurrenceValue - 1).format(longDatePattern)
+
+        and: "I confirm the appointments I want to create"
+        submitButton.click()
+
+        then: "I am presented with the appointments added page"
+        at BulkAppointmentsAddedPage
+    }
 
     def "should not add any appointments when all have been removed due to clashes" () {
         setupTests()
@@ -56,7 +184,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
 
         and: "I upload a CSV"
         at BulkAppointmentsUploadCSVPage
-        selectFile()
+        selectFile("src/test/resources/offenders-for-appointments.csv")
         submitButton.click()
 
         then: "I am on the confirm appointments page"
@@ -79,6 +207,52 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         then: "I am presented with the no appointments have been added page"
         at BulkAppointmentsNotAddedPage
         notAddedMessage == "This is because you have removed all the appointments which clashed."
+    }
+
+    def "should handle invalid prisoner/offender numbers in a CSV"() {
+        setupTests()
+        setupNoClashes()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "yes"
+        form.startTimeHours = 10
+        form.startTimeMinutes = 10
+        form.recurring = "no"
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile("src/test/resources/offenders-for-appointments-with-missing.csv")
+        submitButton.click()
+
+        then: "I am am on the prisoners not found page"
+        at BulkAppointmentsPrisonersNotFoundPage
+        prisonersNotFound.children()[1].text() == "B12345"
+
+        and: "I choose to continue"
+        continueCTA.click()
+
+        then: "I am on the confirm appointments page"
+        at BulkAppointmentsConfirmPage
+        appointmentType.text() == "Activities"
+        appointmentLocation.text() == "Adj"
+        appointmentStartDate.text() == startDate.format(longDatePattern)
+        appointmentStartTime.text() == "10:10"
+        prisonersFound.children()[1].text() == "Doe John A12345"
+
+        and: "I confirm the appointments I want to create"
+        submitButton.click()
+
+        then: "I am presented with the appointments added page"
+        at BulkAppointmentsAddedPage
     }
 
     def shortDatePattern = DateTimeFormatter.ofPattern("d/M/yyyy")

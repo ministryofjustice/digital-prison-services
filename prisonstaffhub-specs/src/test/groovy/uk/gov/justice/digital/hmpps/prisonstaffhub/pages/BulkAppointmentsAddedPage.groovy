@@ -8,7 +8,7 @@ class BulkAppointmentsAddedPage extends Page {
     static content = {
         pageTitle { $("h1").first().text() }
         printMovementsCTA {$("[data-qa='print-movement-slips']", href: "/bulk-appointments/appointments-movement-slips").text()}
-        addMoreAppointmentsCTA {$("[data-qa='add-more-appointments']", href: "/bulk-appointments/add-more-appointments").text()}
+        addMoreAppointmentsCTA {$("[data-qa='add-more-appointments']", href: "/bulk-appointments/add-appointment-details").text()}
         exitBulkAppointmentsCTA {$("[data-qa='exit-bulk-appointments']", href: "http://localhost:20200/").text()}
     }
 

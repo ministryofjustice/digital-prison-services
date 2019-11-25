@@ -68,17 +68,7 @@ describe('bulk appointments upload', () => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
     })
-    let fileContent = [
-      ['Prison number'],
-      ['G1683VN'],
-      ['G4803UT'],
-      ['G4346UT'],
-      ['BADNUMBER'],
-      ['ANOTHERBADNUMBER'],
-      ['REALLYBADNUMBER'],
-    ]
-
-    let offenderNosNotFound = []
+    let fileContent = [['Prison number'], ['G1683VN'], ['G4803UT'], ['G4346UT']]
 
     const prisonerList = [
       {
@@ -149,21 +139,34 @@ describe('bulk appointments upload', () => {
               lastName: 'Affolter',
             },
           ],
-          prisonersNotFound: ['BADNUMBER', 'ANOTHERBADNUMBER', 'REALLYBADNUMBER'],
+          prisonersNotFound: [],
         })
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/confirm-appointments')
       })
     })
 
-    describe('when all the offender numbers cannot be found from the CSV list uploaded', () => {
+    describe('when some of the offender numbers cannot be found from the uploaded CSV file', () => {
+      beforeEach(() => {
+        fileContent = [['G1683VN'], ['G4803UT'], ['BADNUMBER']]
+      })
+      it('should redirect to the prisoners not found page', async () => {
+        csvParser.loadAndParseCsvFile.mockImplementation(() => Promise.resolve(fileContent))
+        offenderLoader.loadFromCsvContent.mockReturnValue(prisonerList)
+        res.redirect = jest.fn()
+
+        await controller.post(req, res)
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/prisoners-not-found')
+      })
+    })
+
+    describe('when all the offender numbers cannot be found from the uploaded CSV file', () => {
       beforeEach(() => {
         fileContent = [['G1683VN'], ['G4803UT']]
-        offenderNosNotFound = ['G1683VN', 'G4803UT']
       })
       it('should redirect to the no appointments added page', async () => {
         csvParser.loadAndParseCsvFile.mockImplementation(() => Promise.resolve(fileContent))
-        offenderLoader.loadFromCsvContent.mockReturnValue(offenderNosNotFound)
+        offenderLoader.loadFromCsvContent.mockReturnValue([])
         res.redirect = jest.fn()
 
         await controller.post(req, res)

@@ -74,6 +74,10 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
 
           req.session.data.prisonersNotFound = offenderNosNotFound
 
+          if (offenderNosNotFound.length > 0) {
+            return res.redirect('/bulk-appointments/prisoners-not-found')
+          }
+
           return res.redirect('/bulk-appointments/confirm-appointments')
         })
         .catch(error => {

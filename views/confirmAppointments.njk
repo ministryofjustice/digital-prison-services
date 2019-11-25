@@ -10,7 +10,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
   text: "Back",
-  href: "/bulk-appointments/upload-file"
+  href: "/bulk-appointments/prisoners-not-found"
 }) }}
 {% endblock %}
 
@@ -32,35 +32,6 @@
   </h2>
 
   {% include ("components/appointment-details-summary/appointmentDetailsSummary.njk") -%}
-
-  {% if appointmentDetails.prisonersNotFound.length > 0 %}
-    <h2 class="govuk-heading-m">
-      Unable to find prisoners on the CSV file
-    </h2>
-
-    <p class="govuk-body">
-      Some prisoners could not be found. This might be because the prison number and the name do not match, or the prison number does not exist in this location.
-    </p>
-
-    <p class="govuk-body">
-      You should check these numbers. No appointments will be created for these prison numbers.
-    </p>
-
-    <table class="govuk-table" data-qa="prisoners-not-found">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Prison number</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        {% for prisonNumber in appointmentDetails.prisonersNotFound %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{prisonNumber}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% endif %}
 
   <h2 class="govuk-heading-m">
     Prisoners listed on CSV file
