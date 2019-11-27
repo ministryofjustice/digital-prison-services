@@ -2,14 +2,15 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
 import geb.Page
 
-class BulkAppointmentsPrisonersNotFoundPage extends Page {
-    static url = "/bulk-appointments/prisoners-not-found"
+class BulkAppointmentsInvalidNumbersPage extends Page {
+    static url = "/bulk-appointments/invalid-numbers"
 
     static content = {
         pageTitle { $("h1").first().text() }
         continueCTA {$('[data-qa="continue-with-invalid"]') }
         cancelCTA {$('[data-qa="upload-another-file"]') }
-        prisonersNotFound {$('[data-qa="prisoners-not-found"]') }
+        prisonersNotFound {$('[data-qa="invalid-numbers-not-found"]') }
+        prisonersDuplicated {$('[data-qa="invalid-numbers-duplicated"]') }
     }
 
     static at = {

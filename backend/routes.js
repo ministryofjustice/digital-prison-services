@@ -32,7 +32,7 @@ const referenceCodesService = require('./controllers/reference-codes-service')
 
 const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
 const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
-const bulkAppointmentsPrisonersNotFoundController = require('./controllers/bulkAppointmentsPrisonersNotFoundController')
+const bulkAppointmentsInvalidNumbersController = require('./controllers/bulkAppointmentsInvalidNumbersController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 const bulkAppointmentsSlipsController = require('./controllers/bulkAppointmentsSlipsController')
 const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
@@ -160,10 +160,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsController({ elite2Api, logError }))
   router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
   router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
-  router.use(
-    '/bulk-appointments/prisoners-not-found',
-    bulkAppointmentsPrisonersNotFoundController({ elite2Api, logError })
-  )
+  router.use('/bulk-appointments/invalid-numbers', bulkAppointmentsInvalidNumbersController({ elite2Api, logError }))
 
   router.use('/change-caseload', changeCaseloadController({ elite2Api, logError }))
 

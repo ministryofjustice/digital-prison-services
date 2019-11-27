@@ -29,24 +29,54 @@
       You should check these numbers. No appointments will be created for these prison numbers.
     </p>
 
-    {% set rows = [] %}
+    {% set prisonersNotFoundRows = [] %}
 
     {% for prisonNumber in prisonersNotFound %}
-      {% set rows = (rows.push([
+      {% set prisonersNotFoundRows = (prisonersNotFoundRows.push([
         {
           text: prisonNumber
         }
-      ]), rows) %}
+      ]), prisonersNotFoundRows) %}
     {% endfor %}
 
     {{ govukTable({
-      attributes: { "data-qa": "prisoners-not-found" },
+      attributes: { "data-qa": "invalid-numbers-not-found" },
       head: [
         {
           text: "Prison number"
         }
       ],
-      rows: rows
+      rows: prisonersNotFoundRows
+    }) }}
+  {% endif %}
+
+  {% if prisonersDuplicated.length > 0 %}
+    <h2 class="govuk-heading-m">
+      Duplicate prison numbers listed on the CSV file
+    </h2>
+
+    <p class="govuk-body">
+      You can only include each prison number once on a CSV file. You must use a different CSV file if you want to add appointments for different times for the same prisoner.
+    </p>
+
+    {% set prisonersDuplicatedRows = [] %}
+
+    {% for prisonNumber in prisonersDuplicated %}
+      {% set prisonersDuplicatedRows = (prisonersDuplicatedRows.push([
+        {
+          text: prisonNumber
+        }
+      ]), prisonersDuplicatedRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { "data-qa": "invalid-numbers-duplicated" },
+      head: [
+        {
+          text: "Prison number"
+        }
+      ],
+      rows: prisonersDuplicatedRows
     }) }}
   {% endif %}
 

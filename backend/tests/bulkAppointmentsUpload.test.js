@@ -140,6 +140,7 @@ describe('bulk appointments upload', () => {
             },
           ],
           prisonersNotFound: [],
+          prisonersDuplicated: [],
         })
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/confirm-appointments')
@@ -150,13 +151,14 @@ describe('bulk appointments upload', () => {
       beforeEach(() => {
         fileContent = [['G1683VN'], ['G4803UT'], ['BADNUMBER']]
       })
-      it('should redirect to the prisoners not found page', async () => {
+      it('should redirect to the invalid numbers page with the correct data', async () => {
         csvParser.loadAndParseCsvFile.mockImplementation(() => Promise.resolve(fileContent))
         offenderLoader.loadFromCsvContent.mockReturnValue(prisonerList)
         res.redirect = jest.fn()
 
         await controller.post(req, res)
-        expect(res.redirect).toBeCalledWith('/bulk-appointments/prisoners-not-found')
+        expect(req.session.data).toEqual(expect.objectContaining({ prisonersNotFound: ['BADNUMBER'] }))
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/invalid-numbers')
       })
     })
 
@@ -171,6 +173,25 @@ describe('bulk appointments upload', () => {
 
         await controller.post(req, res)
         expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
+      })
+    })
+
+    describe('when there are duplicates found in the uploaded CSV file', () => {
+      beforeEach(() => {
+        fileContent = [['G1683VN'], ['G1683VN'], ['G4803UT'], ['G4803UT'], ['G4803UT']]
+      })
+      it('should redirect to the invalid numbers page with the correct data', async () => {
+        csvParser.loadAndParseCsvFile.mockImplementation(() => Promise.resolve(fileContent))
+        offenderLoader.loadFromCsvContent.mockReturnValue([])
+        res.redirect = jest.fn()
+
+        await controller.post(req, res)
+        expect(req.session.data).toEqual(
+          expect.objectContaining({
+            prisonersDuplicated: ['G1683VN', 'G4803UT'],
+          })
+        )
+        expect(res.redirect).toBeCalledWith('/bulk-appointments/invalid-numbers')
       })
     })
 
