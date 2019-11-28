@@ -57,7 +57,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
           const [duplicatedPrisoners, nonDuplicatedPrisoners] = fileContentWithNoHeader.reduce(
             (separatedList, offender) => {
               const [offenderNumber] = offender
-              separatedList[JSON.stringify(separatedList[1]).includes(offenderNumber) ? 0 : 1].push(offenderNumber)
+              separatedList[separatedList[1].includes(offenderNumber) ? 0 : 1].push(offenderNumber)
               return separatedList
             },
             [[], []]
