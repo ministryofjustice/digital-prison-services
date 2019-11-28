@@ -43,6 +43,7 @@ const appointmentDetails = {
   endTime: '2019-09-30T16:30:00',
   comments: 'Activity comment',
   prisonersNotFound: [],
+  prisonersDuplicated: [],
   prisonersListed: [
     {
       bookingId: '111',
@@ -103,13 +104,40 @@ describe('when confirming bulk appointment details', () => {
         })
       })
 
-      it('should render the confirm appointments page', async () => {
+      it('should render the confirm appointments page with the correct values', async () => {
         req.session.data = { ...appointmentDetails }
 
         await controller.index(req, res)
 
         expect(res.render).toBeCalledWith('confirmAppointments.njk', {
           appointmentDetails: { ...req.session.data, date: '2019-09-23T00:00:00' },
+          previousPage: 'upload-file',
+        })
+      })
+
+      describe('and there are duplicate offender numbers', () => {
+        it('should allow the user to navigate back to the invalid numbers page', async () => {
+          req.session.data = { ...appointmentDetails, prisonersDuplicated: ['DUPLICATE'] }
+
+          await controller.index(req, res)
+
+          expect(res.render).toBeCalledWith('confirmAppointments.njk', {
+            appointmentDetails: { ...req.session.data, date: '2019-09-23T00:00:00' },
+            previousPage: 'invalid-numbers',
+          })
+        })
+      })
+
+      describe('and there are invalid/not found offender numbers', () => {
+        it('should allow the user to navigate back to the invalid numbers page', async () => {
+          req.session.data = { ...appointmentDetails, prisonersNotFound: ['NOTFOUND'] }
+
+          await controller.index(req, res)
+
+          expect(res.render).toBeCalledWith('confirmAppointments.njk', {
+            appointmentDetails: { ...req.session.data, date: '2019-09-23T00:00:00' },
+            previousPage: 'invalid-numbers',
+          })
         })
       })
     })
@@ -166,6 +194,7 @@ describe('when confirming bulk appointment details', () => {
           sameTimeAppointments: 'no',
           comments: 'Activity comment',
           prisonersNotFound: [],
+          prisonersDuplicated: [],
           prisonersListed: [
             {
               bookingId: '111',
@@ -244,6 +273,7 @@ describe('when confirming bulk appointment details', () => {
               sameTimeAppointments: 'no',
               comments: 'Activity comment',
               prisonersNotFound: [],
+              prisonersDuplicated: [],
               prisonersListed: [
                 {
                   bookingId: '111',
@@ -283,6 +313,7 @@ describe('when confirming bulk appointment details', () => {
               },
               { href: '#G4803UT-start-time-hours', text: 'Select a start time for Abdulkadir, Bobby' },
             ],
+            previousPage: 'upload-file',
           })
 
           Date.now.mockRestore()
