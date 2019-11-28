@@ -10,7 +10,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
   text: "Back",
-  href: "/bulk-appointments/" + "invalid-numbers" if appointmentDetails.prisonersNotFound else "upload-file"
+  href: "/bulk-appointments/" + previousPage
   }) }}
 {% endblock %}
 

@@ -6,13 +6,19 @@ const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
 
 const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {
-    const { appointmentDetails, errors } = pageData
+    const {
+      appointmentDetails,
+      appointmentDetails: { prisonersNotFound, prisonersDuplicated },
+      errors,
+    } = pageData
+    const hasInvalidNumbers = prisonersNotFound.length > 0 || prisonersDuplicated.length > 0
 
     res.render('confirmAppointments.njk', {
       appointmentDetails: {
         ...appointmentDetails,
         date: moment(appointmentDetails.date, DAY_MONTH_YEAR).format(DATE_TIME_FORMAT_SPEC),
       },
+      previousPage: hasInvalidNumbers ? 'invalid-numbers' : 'upload-file',
       errors,
     })
   }
