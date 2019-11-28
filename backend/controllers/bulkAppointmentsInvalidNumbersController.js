@@ -1,10 +1,10 @@
 const express = require('express')
-const { bulkAppointmentsPrisonersNotFoundFactory } = require('./bulkAppointmentsPrisonersNotFound')
+const { bulkAppointmentsInvalidNumbersFactory } = require('./bulkAppointmentsInvalidNumbers')
 
 const router = express.Router()
 
 const controller = () => {
-  const { index } = bulkAppointmentsPrisonersNotFoundFactory()
+  const { index } = bulkAppointmentsInvalidNumbersFactory()
 
   router.get('/', index)
 

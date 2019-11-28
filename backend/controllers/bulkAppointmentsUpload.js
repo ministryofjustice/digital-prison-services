@@ -54,8 +54,14 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
             activeCaseLoadId
           )
 
-          const removeDuplicates = array => [...new Set(array)]
-          const offendersFromCsv = removeDuplicates(fileContentWithNoHeader.map(row => row[0]))
+          const [duplicatedPrisoners, nonDuplicatedPrisoners] = fileContentWithNoHeader.reduce(
+            (separatedList, offender) => {
+              const [offenderNumber] = offender
+              separatedList[separatedList[1].includes(offenderNumber) ? 0 : 1].push(offenderNumber)
+              return separatedList
+            },
+            [[], []]
+          )
 
           const prisonerList = prisonersDetails.map(prisoner => ({
             bookingId: prisoner.bookingId,
@@ -64,18 +70,21 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
             lastName: prisoner.lastName,
           }))
 
-          const offenderNosNotFound = getNonExistingOffenderNumbers(offendersFromCsv, prisonerList)
+          const offenderNosNotFound = getNonExistingOffenderNumbers(nonDuplicatedPrisoners, prisonerList)
 
           if (offenderNosNotFound.length === fileContent.length) {
             return res.redirect('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
           }
 
-          req.session.data.prisonersListed = prisonerList
+          req.session.data = {
+            ...req.session.data,
+            prisonersListed: prisonerList,
+            prisonersNotFound: offenderNosNotFound,
+            prisonersDuplicated: [...new Set(duplicatedPrisoners)],
+          }
 
-          req.session.data.prisonersNotFound = offenderNosNotFound
-
-          if (offenderNosNotFound.length > 0) {
-            return res.redirect('/bulk-appointments/prisoners-not-found')
+          if (offenderNosNotFound.length > 0 || duplicatedPrisoners.length > 0) {
+            return res.redirect('/bulk-appointments/invalid-numbers')
           }
 
           return res.redirect('/bulk-appointments/confirm-appointments')

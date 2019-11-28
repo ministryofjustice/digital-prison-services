@@ -11,7 +11,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsAddPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsAddedPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsPrisonersNotFoundPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsInvalidNumbersPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsClashesPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsConfirmPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsNotAddedPage
@@ -234,8 +234,54 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         submitButton.click()
 
         then: "I am am on the prisoners not found page"
-        at BulkAppointmentsPrisonersNotFoundPage
+        at BulkAppointmentsInvalidNumbersPage
         prisonersNotFound.children()[1].text() == "B12345"
+
+        and: "I choose to continue"
+        continueCTA.click()
+
+        then: "I am on the confirm appointments page"
+        at BulkAppointmentsConfirmPage
+        appointmentType.text() == "Activities"
+        appointmentLocation.text() == "Adj"
+        appointmentStartDate.text() == startDate.format(longDatePattern)
+        appointmentStartTime.text() == "10:10"
+        prisonersFound.children()[1].text() == "Doe John A12345"
+
+        and: "I confirm the appointments I want to create"
+        submitButton.click()
+
+        then: "I am presented with the appointments added page"
+        at BulkAppointmentsAddedPage
+    }
+
+    def "should handle duplicated prisoner/offender numbers in a CSV"() {
+        setupTests()
+        setupNoClashes()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "yes"
+        form.startTimeHours = 10
+        form.startTimeMinutes = 10
+        form.recurring = "no"
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile("src/test/resources/offenders-for-appointments-with-duplicates.csv")
+        submitButton.click()
+
+        then: "I am am on the prisoners not found page"
+        at BulkAppointmentsInvalidNumbersPage
+        prisonersDuplicated.children()[1].text() == "A12345"
 
         and: "I choose to continue"
         continueCTA.click()
