@@ -23,7 +23,37 @@ describe('<AttendanceNotRequiredForm />', () => {
     })
   })
 
-  describe('with form values', () => {
+  describe('with less than the minimum permitted characters in the comments input', () => {
+    const wrapper = mount(<AttendanceNotRequiredForm {...props} />)
+    const comments = 'A'
+    wrapper.find('textarea[name="comments"]').simulate('change', { target: { value: comments } })
+    const confirmButton = wrapper.find('button[name="confirm"]')
+
+    it('should display correct error and not trigger the submit handler when submitted', () => {
+      confirmButton.simulate('submit')
+      const errors = wrapper.find('ErrorSummary').find('li')
+
+      expect(errors.first().text()).toEqual('Enter a valid comment')
+      expect(props.submitHandler).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('with no characters in the comments input', () => {
+    const wrapper = mount(<AttendanceNotRequiredForm {...props} />)
+    const comments = '       '
+    wrapper.find('textarea[name="comments"]').simulate('change', { target: { value: comments } })
+    const confirmButton = wrapper.find('button[name="confirm"]')
+
+    it('should display correct errors and not trigger the submit handler when submitted', () => {
+      confirmButton.simulate('submit')
+      const errors = wrapper.find('ErrorSummary').find('li')
+
+      expect(errors.first().text()).toEqual('Enter comment')
+      expect(props.submitHandler).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('with valid form values', () => {
     const wrapper = mount(<AttendanceNotRequiredForm {...props} />)
     const comments = 'A supporting comment.'
     wrapper.find('textarea[name="comments"]').simulate('change', { target: { value: comments } })
