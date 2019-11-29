@@ -37,10 +37,11 @@ export function AttendanceOtherForm({
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
   const shouldTriggerIEP = selectedReason => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
-  const commentOrCaseNote = selectedReason => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comments')
+  const commentOrCaseNote = selectedReason => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comment')
 
   const validateThenSubmit = submitHandler => async values => {
     const formErrors = []
+    const commentText = values.comments && values.comments.trim()
 
     if (!values.pay) {
       formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
@@ -50,11 +51,15 @@ export function AttendanceOtherForm({
       formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
     }
 
-    if (!values.comments) {
+    if (!commentText) {
       formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
     }
 
-    if (values.comments && values.comments.length > 240) {
+    if (commentText && commentText.length < 2) {
+      formErrors.push({ targetName: 'comments', text: `Enter a valid ${commentOrCaseNote(values.absentReason)}` })
+    }
+
+    if (commentText && commentText.length > 240) {
       formErrors.push({ targetName: 'comments', text: 'Maximum length should not exceed 240 characters' })
     }
 

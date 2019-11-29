@@ -120,7 +120,7 @@ describe('<AttendanceOtherForm />', () => {
 
         expect(errors.at(0).text()).toEqual('Select a pay option')
         expect(errors.at(1).text()).toEqual('Select a reason')
-        expect(errors.at(2).text()).toEqual('Enter comments')
+        expect(errors.at(2).text()).toEqual('Enter comment')
       })
 
       it('should change error message if a case note is required', async () => {
@@ -134,6 +134,23 @@ describe('<AttendanceOtherForm />', () => {
 
         const errors = wrapper.find('ErrorSummary').find('li')
         expect(errors.at(0).text()).toEqual('Enter case note')
+      })
+
+      it('should show validation message if the minimum amount of characters have not been entered', async () => {
+        yesRadio.instance().checked = true
+        yesRadio.simulate('change', noRadio)
+        reasonSelector.instance().value = 'AcceptableAbsence'
+        reasonSelector.simulate('change', reasonSelector)
+
+        commentInput.instance().value = 'A '
+
+        commentInput.simulate('change', commentInput)
+        wrapper.update()
+
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+        expect(errors.at(0).text()).toEqual('Enter a valid comment')
       })
 
       it('should show correct maximum length validation message for the comments text', async () => {
