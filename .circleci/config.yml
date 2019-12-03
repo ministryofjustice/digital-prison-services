@@ -50,7 +50,7 @@ executors:
     docker:
       - image: circleci/python:3
     working_directory: ~/app
-  builder:  
+  builder:
     docker:
       - image: circleci/node:10.15.3-browsers
     working_directory: ~/app
@@ -110,7 +110,7 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: yarn start-feature 
+          command: yarn start-feature
           background: true
 #      - run:
 #          name: Wait for node app to start
@@ -163,10 +163,10 @@ jobs:
               --label "build.number=$CIRCLE_BUILD_NUM" \
               --label "build.url=$CIRCLE_BUILD_URL" \
               --label "build.gitref=$CIRCLE_SHA1"
-            
+
             # Copy build-info.json from image
             docker run -it --rm mojdigitalstudio/prisonstaffhub:$APP_VERSION cat /app/build-info.json > build-info.json
-            
+
             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
               #publish to docker hub as the tag
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -195,6 +195,21 @@ jobs:
       - deploy_to_env:
           env: "prod"
 
+  security_audit:
+    executor: builder
+    steps:
+      - checkout
+      - run:
+          name: update-yarn
+          command: 'sudo yarn global add yarn'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-yarn
+          command: 'yarn --frozen-lockfile --no-audit'
+      - run:
+          name: run-security-audit
+          command: 'yarn security_audit'
 workflows:
   version: 2
   build-test-and-deploy:
@@ -233,3 +248,13 @@ workflows:
           context: prison-staff-hub-prod
           requires:
             - request-prod-approval
+  scheduled:
+    triggers:
+      - schedule:
+          cron: "0 7 * * 1-5"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - security_audit
