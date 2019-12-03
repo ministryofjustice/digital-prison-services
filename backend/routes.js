@@ -148,6 +148,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
 
   router.get('/bulk-appointments/no-appointments-added', async (req, res) => {
     const { reason } = req.query
+    req.session.data = null
     res.render('noAppointmentsAdded.njk', { reason })
   })
 
