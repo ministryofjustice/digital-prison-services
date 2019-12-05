@@ -9,8 +9,6 @@
 
 {% set title = 'Add new appointment' %}
 {% set offenderUrl = notmEndpointUrl + 'offenders/' + offenderNo %}
-{% set types = [] %}
-{% set locations = [] %}
 {% set recurringHtml %}
   <div data-qa="recurring-inputs">
       {{ govukSelect({
@@ -71,33 +69,15 @@
   <p>{{offenderName}} ({{offenderNo}})</p>
 
   <form method="POST" novalidate="novalidate">
-    {% for type in appointmentTypes %}
-      {% set types = (types.push(
-        {
-          value: type.code,
-          text: type.description
-        }
-      ), types) %}
-    {% endfor %}
-
     {{ govukSelect({
       id: "appointmentType",
       name: "appointmentType",
       label: {
         text: "Appointment type"
       },
-      items: types | addDefaultSelectedVale('Select'),
+      items: appointmentTypes | addDefaultSelectedVale('Select'),
       errorMessage: errors | findError('appointment-type')
     }) }}
-
-    {% for location in appointmentLocations %}
-      {% set locations = (locations.push(
-        {
-          value: location.locationId,
-          text: location.userDescription
-        }
-      ), locations) %}
-    {% endfor %}
 
     {{ govukSelect({
       id: "appointmentLocation",
@@ -105,7 +85,7 @@
       label: {
         text: "Appointment location"
       },
-      items: locations | addDefaultSelectedVale('Select'),
+      items: appointmentLocations | addDefaultSelectedVale('Select'),
       errorMessage: errors | findError('location')
     }) }}
 

@@ -12,7 +12,31 @@ const repeatTypes = [
   { value: 'FORTNIGHTLY', text: 'Fortnightly' },
 ]
 
-const addAppointmentFactory = elite2Api => {
+// Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
+const toSelectValue = data => ({
+  value: data.id,
+  text: data.description,
+})
+
+const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
+  const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
+    const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
+      locals,
+      activeCaseLoadId
+    )
+
+    return {
+      appointmentTypes: appointmentTypes.map(toSelectValue),
+      appointmentLocations: locationTypes.map(toSelectValue),
+    }
+  }
+
+  const renderError = (req, res, error) => {
+    if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+
+    return res.render('error.njk', { url: '/' })
+  }
+
   const renderTemplate = (req, res, pageData) => {
     res.render('addAppointment.njk', pageData)
   }
@@ -25,12 +49,14 @@ const addAppointmentFactory = elite2Api => {
     }
 
     try {
-      const { firstName, lastName, agencyId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { activeCaseLoadId } = req.session.userDetails
+      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-      const [appointmentTypes, appointmentLocations] = await Promise.all([
-        elite2Api.getAppointmentTypes(res.locals),
-        elite2Api.getLocationsForAppointments(res.locals, agencyId),
-      ])
+
+      const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
+        res.locals,
+        activeCaseLoadId
+      )
 
       return renderTemplate(req, res, {
         offenderNo,
@@ -41,29 +67,12 @@ const addAppointmentFactory = elite2Api => {
         repeatTypes,
       })
     } catch (error) {
-      return console.log(error)
+      return renderError(req, res, error)
     }
   }
 
   const post = async (req, res) => {
-    // const payload = {
-    //   offenderNo: props.match.params.offenderNo,
-    //   detail: {
-    //     appointmentDefaults: {
-    //       appointmentType,
-    //       locationId: location,
-    //       startTime,
-    //       endTime,
-    //       comment,
-    //     },
-    //   },
-    // }
-    // if (recurringAppointment) {
-    //   payload.detail.repeat = {
-    //     repeatPeriod,
-    //     count: repeatCount,
-    //   }
-    // }
+    // To do
   }
 
   return { index, post }
@@ -72,15 +81,3 @@ const addAppointmentFactory = elite2Api => {
 module.exports = {
   addAppointmentFactory,
 }
-
-// Back from getDetails
-// { bookingId: 1065240,
-//   bookingNo: 'V74111',
-//   offenderNo: 'G9542VP',
-//   firstName: 'BERTRAND',
-//   middleName: 'CONREEM',
-//   lastName: 'AADLAND',
-//   agencyId: 'MDI',
-//   assignedLivingUnitId: 25750,
-//   activeFlag: true,
-//   dateOfBirth: '1979-03-22' }
