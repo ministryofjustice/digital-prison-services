@@ -47,7 +47,6 @@ module.exports = (app, path) => {
         text,
         value: '',
         selected: true,
-        disabled: true,
         attributes: {
           hidden: '',
         },
