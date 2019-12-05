@@ -13,7 +13,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     } = pageData
     const hasInvalidNumbers = prisonersNotFound.length > 0 || prisonersDuplicated.length > 0
 
-    res.render('confirmAppointments.njk', {
+    res.render('bulkAppointmentsConfirm.njk', {
       appointmentDetails: {
         ...appointmentDetails,
         date: moment(appointmentDetails.date, DAY_MONTH_YEAR).format(DATE_TIME_FORMAT_SPEC),
@@ -177,7 +177,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         prisonersListed: req.session.data.prisonersListed,
       })
 
-      await elite2Api.addBulkAppointments(res.locals, request)
+      await elite2Api.addAppointments(res.locals, request)
 
       raiseAnalyticsEvent(
         'Bulk Appointments',

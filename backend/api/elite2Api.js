@@ -149,7 +149,7 @@ const elite2ApiFactory = client => {
   const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
     get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
 
-  const addBulkAppointments = (context, body) => post(context, '/api/appointments', body)
+  const addAppointments = (context, body) => post(context, '/api/appointments', body)
 
   const changeIepLevel = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/iepLevels`, body)
 
@@ -217,7 +217,7 @@ const elite2ApiFactory = client => {
     getAdjudicationFindingTypes,
     getAdjudications,
     getAdjudicationDetails,
-    addBulkAppointments,
+    addAppointments,
     changeIepLevel,
     getOffenderActivities,
     getAlertTypes,

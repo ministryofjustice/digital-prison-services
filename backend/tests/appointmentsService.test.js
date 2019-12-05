@@ -1,4 +1,4 @@
-const bulkAppointmebulkAppointmentsServiceFactory = require('../controllers/bulk-appointments-service')
+const bulkAppointmeappointmentsServiceFactory = require('../controllers/appointmentsService')
 
 describe('Bulk appointments service', () => {
   const elite2Api = {}
@@ -32,20 +32,20 @@ describe('Bulk appointments service', () => {
   beforeEach(() => {
     elite2Api.getLocationsForAppointments = jest.fn()
     elite2Api.getAppointmentTypes = jest.fn()
-    elite2Api.addBulkAppointments = jest.fn()
+    elite2Api.addAppointments = jest.fn()
 
-    service = bulkAppointmebulkAppointmentsServiceFactory(elite2Api)
+    service = bulkAppointmeappointmentsServiceFactory(elite2Api)
   })
 
   it('should make a request for appointment locations and types', async () => {
-    await service.getBulkAppointmentsViewModel(context, agency)
+    await service.getAppointmentOptions(context, agency)
 
     expect(elite2Api.getLocationsForAppointments).toHaveBeenCalledWith(context, agency)
     expect(elite2Api.getAppointmentTypes).toHaveBeenCalledWith(context)
   })
 
   it('should handle empty responses from appointment types and locations', async () => {
-    const response = await service.getBulkAppointmentsViewModel(context, agency)
+    const response = await service.getAppointmentOptions(context, agency)
 
     expect(response).toEqual({})
   })
@@ -54,7 +54,7 @@ describe('Bulk appointments service', () => {
     elite2Api.getLocationsForAppointments.mockReturnValue(locationTypes)
     elite2Api.getAppointmentTypes.mockReturnValue(appointmentTypes)
 
-    const response = await service.getBulkAppointmentsViewModel(context, agency)
+    const response = await service.getAppointmentOptions(context, agency)
 
     expect(response).toEqual({
       appointmentTypes: [{ id: 'ACTI', description: 'Activities' }],
@@ -83,8 +83,8 @@ describe('Bulk appointments service', () => {
       ],
     }
 
-    await service.addBulkAppointments(context, parameters)
+    await service.addAppointments(context, parameters)
 
-    expect(elite2Api.addBulkAppointments).toHaveBeenCalledWith(context, parameters)
+    expect(elite2Api.addAppointments).toHaveBeenCalledWith(context, parameters)
   })
 })

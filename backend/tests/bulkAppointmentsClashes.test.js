@@ -13,7 +13,7 @@ let logError
 let controller
 
 beforeEach(() => {
-  elite2Api.addBulkAppointments = jest.fn([])
+  elite2Api.addAppointments = jest.fn([])
   elite2Api.getVisits = jest.fn().mockResolvedValue([
     {
       offenderNo: 'G4803UT',
@@ -226,7 +226,7 @@ describe('appointment clashes', () => {
             },
           ],
         }
-        expect(res.render).toBeCalledWith('appointmentsClashes.njk', expectedTemplateObject)
+        expect(res.render).toBeCalledWith('bulkAppointmentsClashes.njk', expectedTemplateObject)
       })
     })
 
@@ -257,7 +257,7 @@ describe('appointment clashes', () => {
     describe('and the start times are the same', () => {
       describe('and some prisoners have been selected for removal', () => {
         beforeEach(() => {
-          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
           req.session.data = { ...appointmentDetails }
         })
 
@@ -266,7 +266,7 @@ describe('appointment clashes', () => {
 
           await controller.post(req, res)
 
-          expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+          expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
             appointmentDefaults: {
               appointmentType: 'TEST',
               locationId: 1,
@@ -315,7 +315,7 @@ describe('appointment clashes', () => {
 
       describe('and all prisoners have been selected for removal', () => {
         beforeEach(() => {
-          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
           req.session.data = { ...appointmentDetails }
         })
 
@@ -323,14 +323,14 @@ describe('appointment clashes', () => {
           req.body = { G1683VN: 'remove', G4803UT: 'remove', G4346UT: 'remove', G5402VR: 'remove' }
 
           await controller.post(req, res)
-          expect(elite2Api.addBulkAppointments).not.toBeCalled()
+          expect(elite2Api.addAppointments).not.toBeCalled()
           expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=removedAllClashes')
         })
       })
 
       describe('and there are recurring appointments', () => {
         beforeEach(() => {
-          elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+          elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
           req.session.data = {
             ...appointmentDetails,
             recurring: 'yes',
@@ -342,7 +342,7 @@ describe('appointment clashes', () => {
         it('should submit the correct data and redirect to the appointments added page', async () => {
           await controller.post(req, res)
 
-          expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+          expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
             appointmentDefaults: {
               appointmentType: 'TEST',
               comment: 'Activity comment',
@@ -371,7 +371,7 @@ describe('appointment clashes', () => {
 
     describe('and there are individual start and end times', () => {
       beforeEach(() => {
-        elite2Api.addBulkAppointments = jest.fn().mockReturnValue('All good')
+        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
         req.session.data = {
           appointmentType: 'TEST',
           location: 1,
@@ -413,7 +413,7 @@ describe('appointment clashes', () => {
 
         await controller.post(req, res)
 
-        expect(elite2Api.addBulkAppointments).toBeCalledWith(res.locals, {
+        expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
             appointmentType: 'TEST',
             comment: 'Activity comment',

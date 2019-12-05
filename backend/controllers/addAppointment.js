@@ -3,7 +3,7 @@ const {
 } = require('../config')
 const { properCaseName } = require('../utils')
 
-// Put somewhere and share with bulk appointment addAppointmentDetails
+// Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
 const repeatTypes = [
   { value: 'WEEKLY', text: 'Weekly' },
   { value: 'DAILY', text: 'Daily' },
