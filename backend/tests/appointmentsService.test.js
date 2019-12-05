@@ -1,4 +1,4 @@
-const bulkAppointmeappointmentsServiceFactory = require('../controllers/appointmentsService')
+const appointmentsServiceFactory = require('../controllers/appointmentsService')
 
 describe('Bulk appointments service', () => {
   const elite2Api = {}
@@ -34,7 +34,7 @@ describe('Bulk appointments service', () => {
     elite2Api.getAppointmentTypes = jest.fn()
     elite2Api.addAppointments = jest.fn()
 
-    service = bulkAppointmeappointmentsServiceFactory(elite2Api)
+    service = appointmentsServiceFactory(elite2Api)
   })
 
   it('should make a request for appointment locations and types', async () => {
