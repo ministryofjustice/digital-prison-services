@@ -1,0 +1,165 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "components/timePicker/timePicker.njk" import timePicker %}
+
+{% set title = 'Add new appointment' %}
+{% set offenderUrl = notmEndpointUrl + 'offenders/' + offenderNo %}
+{% set recurringHtml %}
+  <div data-qa="recurring-inputs">
+      {{ govukSelect({
+          id: "repeats",
+          name: "repeats",
+          label: {
+              text: "Repeats"
+          },
+          items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(repeats),
+          errorMessage: errors | findError('repeats')
+      }) }}
+
+      {{ govukInput({
+          id: "times",
+          name: "times",
+          value: times,
+          errorMessage: errors | findError('times'),
+          type: "number",
+          label: {
+              text: "How many appointments do you want to add?"
+          },
+          classes: "govuk-input--width-3"
+      }) }}
+
+      {% if endOfPeriod %}
+          <h4 class="govuk-heading-s">
+              Ends on
+          </h4>
+
+          <p class="govuk-body ovuk-!-font-weight-bold">
+              {{ endOfPeriod }}
+          </p>
+      {% endif -%}
+  </div>
+{% endset -%}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+      items: [
+          {
+              text: "Home",
+              href: notmEndpointUrl
+          },
+          {
+              text: offenderName,
+              href: offenderUrl
+          },
+          {
+              text: title
+          }
+      ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{title}}</h1>
+  
+  <p>{{offenderName}} ({{offenderNo}})</p>
+
+  <form method="POST" novalidate="novalidate">
+    {{ govukSelect({
+      id: "appointmentType",
+      name: "appointmentType",
+      label: {
+        text: "Appointment type"
+      },
+      items: appointmentTypes | addDefaultSelectedVale('Select'),
+      errorMessage: errors | findError('appointment-type')
+    }) }}
+
+    {{ govukSelect({
+      id: "appointmentLocation",
+      name: "appointmentLocation",
+      label: {
+        text: "Appointment location"
+      },
+      items: appointmentLocations | addDefaultSelectedVale('Select'),
+      errorMessage: errors | findError('location')
+    }) }}
+
+    {{ datePicker({
+        id: 'date',
+        label: 'Date',
+        name: 'date',
+        date: date,
+        errorMessage: errors | findError('date'),
+        attributes: {'data-disable-past-date':'true'}
+    }) }}
+
+    {{ timePicker({
+        id: 'start-time',
+        label: 'Start time',
+        name: 'startTime',
+        hour: startTimeHours,
+        minute: startTimeMinutes,
+        errorMessage: errors | findError('start-time-hours')
+    }) }}
+
+    {{ timePicker({
+        id: 'end-time',
+        label: 'End time (optional)',
+        name: 'endTime',
+        hour: endTimeHours,
+        minute: endTimeMinutes,
+        errorMessage: errors | findError('end-time-hours')
+    }) }}
+
+    {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "recurring",
+        name: "recurring",
+        errorMessage: errors | findError('recurring'),
+        fieldset: {
+            legend: {
+                text: "Is this a recurring appointment?",
+                classes: "govuk-fieldset__legend--s"
+            }
+        },
+        items: [{
+            value: "yes",
+            text: "Yes",
+            checked: recurring == 'yes',
+            conditional: {
+                html: recurringHtml
+            }
+        },
+            {
+                value: "no",
+                text: "No",
+                checked: recurring == 'no'
+            }
+        ]
+    }) }}
+
+    {{ govukTextarea({
+        name: "comments",
+        id: "comments",
+        value: comments,
+        errorMessage: errors | findError('comments'),
+        label: {
+            text: "Comments (optional)"
+        }
+    }) }}
+
+    {{ govukButton({ text: "Add appointment" }) }}
+
+    {{ govukButton({
+        text: "Cancel",
+        element: 'a',
+        href: offenderUrl,
+        classes: "govuk-button--secondary"
+    }) }}
+  </form>
+{% endblock %}

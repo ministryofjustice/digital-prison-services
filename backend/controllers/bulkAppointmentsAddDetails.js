@@ -142,9 +142,9 @@ const getValidationMessages = ({
   return errors
 }
 
-const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError) => {
+const bulkAppointmentsAddDetailsFactory = (appointmentsService, oauthApi, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
-    const { appointmentTypes, locationTypes } = await bulkAppointmentService.getBulkAppointmentsViewModel(
+    const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
       activeCaseLoadId
     )
@@ -176,7 +176,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
       const startTimeHoursMinutes = extractHoursMinutes(startTime)
       const endTimeHoursMinutes = extractHoursMinutes(endTime)
 
-      res.render('addAppointmentDetails.njk', {
+      res.render('bulkAppointmentsAddDetails.njk', {
         title: 'Add appointment details',
         appointmentTypes,
         locations,
@@ -274,7 +274,7 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
         return
       }
 
-      res.render('addAppointmentDetails.njk', {
+      res.render('bulkAppointmentsAddDetails.njk', {
         errors,
         date,
         sameTimeAppointments,
@@ -309,5 +309,5 @@ const addAppointmentDetailsFactory = (bulkAppointmentService, oauthApi, logError
 }
 
 module.exports = {
-  addAppointmentDetailsFactory,
+  bulkAppointmentsAddDetailsFactory,
 }

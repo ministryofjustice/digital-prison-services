@@ -10,7 +10,7 @@ const factory = ({
   globalSearchService,
   movementsService,
   offenderLoader,
-  bulkAppointmentsService,
+  appointmentsService,
   csvParserService,
   offenderService,
   offenderActivitesService,
@@ -165,15 +165,10 @@ const factory = ({
     res.end()
   })
 
-  const getBulkAppointmentsViewModel = asyncMiddleware(async (req, res) => {
+  const getAppointmentOptions = asyncMiddleware(async (req, res) => {
     const { agencyId } = req.query
-    const viewModel = await bulkAppointmentsService.getBulkAppointmentsViewModel(res.locals, agencyId)
+    const viewModel = await appointmentsService.getAppointmentOptions(res.locals, agencyId)
     res.json(viewModel)
-  })
-
-  const addBulkAppointments = asyncMiddleware(async (req, res) => {
-    await bulkAppointmentsService.addBulkAppointments(res.locals, req.body)
-    res.end()
   })
 
   const changeIepLevel = asyncMiddleware(async (req, res) => {
@@ -233,8 +228,7 @@ const factory = ({
     getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
     uploadOffenders,
-    getBulkAppointmentsViewModel,
-    addBulkAppointments,
+    getAppointmentOptions,
     bulkAppointmentsCsvTemplate,
     changeIepLevel,
     getPossibleLevels,

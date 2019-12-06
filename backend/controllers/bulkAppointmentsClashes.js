@@ -7,7 +7,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 
-    res.render('appointmentsClashes.njk', { appointmentDetails, prisonersWithClashes })
+    res.render('bulkAppointmentsClashes.njk', { appointmentDetails, prisonersWithClashes })
   }
 
   const renderError = (req, res, error) => {
@@ -137,7 +137,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
           : undefined,
     }
 
-    await elite2Api.addBulkAppointments(res.locals, request)
+    await elite2Api.addAppointments(res.locals, request)
 
     req.session.data = null
 

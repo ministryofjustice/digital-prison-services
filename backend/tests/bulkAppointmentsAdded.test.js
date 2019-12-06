@@ -56,7 +56,7 @@ describe('bulk appointments confirm', () => {
 
         expect(req.flash).toBeCalledWith('prisonersRemoved')
 
-        expect(res.render).toBeCalledWith('appointmentsAdded.njk', {
+        expect(res.render).toBeCalledWith('bulkAppointmentsAdded.njk', {
           prisonersRemoved: appointmentDetails.prisonersRemoved,
           dpsUrl: '//newNomisEndPointUrl/',
         })

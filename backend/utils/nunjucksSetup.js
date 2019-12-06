@@ -46,8 +46,10 @@ module.exports = (app, path) => {
       {
         text,
         value: '',
-        hidden: true,
         selected: true,
+        attributes: {
+          hidden: '',
+        },
       },
       ...items,
     ]

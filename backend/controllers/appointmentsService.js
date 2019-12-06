@@ -1,5 +1,5 @@
-const BulkAppointmentsServiceFactory = elite2Api => {
-  const getBulkAppointmentsViewModel = async (context, agency) => {
+const appointmentsServiceFactory = elite2Api => {
+  const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
       elite2Api.getLocationsForAppointments(context, agency),
       elite2Api.getAppointmentTypes(context),
@@ -21,14 +21,14 @@ const BulkAppointmentsServiceFactory = elite2Api => {
     }
   }
 
-  const addBulkAppointments = async (context, appointments) => {
-    await elite2Api.addBulkAppointments(context, appointments)
+  const addAppointments = async (context, appointments) => {
+    await elite2Api.addAppointments(context, appointments)
   }
 
   return {
-    getBulkAppointmentsViewModel,
-    addBulkAppointments,
+    getAppointmentOptions,
+    addAppointments,
   }
 }
 
-module.exports = BulkAppointmentsServiceFactory
+module.exports = appointmentsServiceFactory

@@ -23,21 +23,23 @@ const { movementsServiceFactory } = require('./controllers/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
-const bulkAppointmentsServiceFactory = require('./controllers/bulk-appointments-service')
+const appointmentsServiceFactory = require('./controllers/appointmentsService')
 const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
-const addAppointmentDetailsController = require('./controllers/appointmentDetailsController')
+const bulkAppointmentsAddDetailsController = require('./controllers/bulkAppointmentsAddDetailsController')
 const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
 const bulkAppointmentsInvalidNumbersController = require('./controllers/bulkAppointmentsInvalidNumbersController')
 const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
 const bulkAppointmentsSlipsController = require('./controllers/bulkAppointmentsSlipsController')
-const uploadAppointmentDetailsController = require('./controllers/bulkAppointmentsUploadController')
+const bulkAppointmentsUploadController = require('./controllers/bulkAppointmentsUploadController')
 const bulkAppointmentsClashesController = require('./controllers/bulkAppointmentsClashesController')
+
 const changeCaseloadController = require('./controllers/changeCaseloadController')
+const addAppointmentController = require('./controllers/addAppointmentController')
 
 const controllerFactory = require('./controllers/controller').factory
 
@@ -59,7 +61,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     globalSearchService: globalSearchFactory(elite2Api),
     movementsService: movementsServiceFactory(elite2Api, oauthClientId),
     offenderLoader: offenderLoaderFactory(elite2Api),
-    bulkAppointmentsService: bulkAppointmentsServiceFactory(elite2Api),
+    appointmentsService: appointmentsServiceFactory(elite2Api),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
     offenderService: offenderServiceFactory(elite2Api),
     offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
@@ -110,8 +112,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/api/globalSearch', controller.globalSearch)
   router.use('/api/appointments/upload-offenders/:agencyId', controller.uploadOffenders)
   router.get('/app/images/:offenderNo/data', prisonerImageFactory(elite2Api).prisonerImage)
-  router.get('/api/bulk-appointments/view-model', controller.getBulkAppointmentsViewModel)
-  router.post('/api/bulk-appointments', controller.addBulkAppointments)
   router.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
   router.get('/api/get-alert-types', controller.getAlertTypes)
@@ -143,19 +143,19 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   )
 
   router.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
-    res.render('addBulkAppointments.njk', { title: 'You need to upload a CSV file' })
+    res.render('bulkAppointmentsAdd.njk', { title: 'You need to upload a CSV file' })
   })
 
   router.get('/bulk-appointments/no-appointments-added', async (req, res) => {
     const { reason } = req.query
     req.session.data = null
-    res.render('noAppointmentsAdded.njk', { reason })
+    res.render('bulkAppointmentsNotAdded.njk', { reason })
   })
 
-  router.use('/bulk-appointments/upload-file', uploadAppointmentDetailsController({ elite2Api, logError }))
+  router.use('/bulk-appointments/upload-file', bulkAppointmentsUploadController({ elite2Api, logError }))
   router.use(
     '/bulk-appointments/add-appointment-details',
-    addAppointmentDetailsController({ elite2Api, oauthApi, logError })
+    bulkAppointmentsAddDetailsController({ elite2Api, oauthApi, logError })
   )
   router.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedController({ logError }))
   router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsController({ elite2Api, logError }))
@@ -168,6 +168,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/terms', async (req, res) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
   })
+
+  router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api }))
 
   return router
 }

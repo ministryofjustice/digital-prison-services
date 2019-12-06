@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { addAppointmentDetailsFactory } = require('../controllers/addAppointmentDetails')
+const { bulkAppointmentsAddDetailsFactory } = require('../controllers/bulkAppointmentsAddDetails')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
@@ -30,7 +30,7 @@ const buildBodyForDate = date => {
 }
 
 describe('Add appointment details controller', () => {
-  const bulkAppointmentService = {}
+  const appointmentsService = {}
   const oauthApi = {}
   const context = {}
 
@@ -52,16 +52,16 @@ describe('Add appointment details controller', () => {
     res = { locals: {} }
     res.render = jest.fn()
 
-    bulkAppointmentService.getBulkAppointmentsViewModel = jest.fn()
+    appointmentsService.getAppointmentOptions = jest.fn()
     oauthApi.currentUser = jest.fn()
     logError = jest.fn()
 
-    bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+    appointmentsService.getAppointmentOptions.mockReturnValue({
       appointmentTypes: [],
       locationTypes: [],
     })
 
-    controller = addAppointmentDetailsFactory(bulkAppointmentService, oauthApi, logError)
+    controller = bulkAppointmentsAddDetailsFactory(appointmentsService, oauthApi, logError)
   })
 
   describe('Index', () => {
@@ -79,13 +79,11 @@ describe('Add appointment details controller', () => {
 
       await controller.index(req, res)
 
-      expect(bulkAppointmentService.getBulkAppointmentsViewModel).toHaveBeenCalledWith(context, 'LEI')
+      expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(context, 'LEI')
     })
 
     it('should return handle api errors', async () => {
-      bulkAppointmentService.getBulkAppointmentsViewModel.mockImplementation(() =>
-        Promise.reject(new Error('Network error'))
-      )
+      appointmentsService.getAppointmentOptions.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller.index(req, res)
 
@@ -97,14 +95,14 @@ describe('Add appointment details controller', () => {
     })
 
     it('should render template with view model', async () => {
-      bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+      appointmentsService.getAppointmentOptions.mockReturnValue({
         appointmentTypes: [{ id: 'app1', description: 'app1' }, { id: 2, description: 'app2' }],
         locationTypes: [{ id: 1, description: 'loc1' }, { id: 2, description: 'loc2' }],
       })
 
       await controller.index(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('addAppointmentDetails.njk', {
+      expect(res.render).toHaveBeenCalledWith('bulkAppointmentsAddDetails.njk', {
         ...buildBodyForDate(moment()),
         appointmentType: undefined,
         comments: undefined,
@@ -147,14 +145,14 @@ describe('Add appointment details controller', () => {
         recurring: 'yes',
       }
 
-      bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+      appointmentsService.getAppointmentOptions.mockReturnValue({
         appointmentTypes: [{ id: 'app1', description: 'app1' }, { id: 2, description: 'app2' }],
         locationTypes: [{ id: 1, description: 'loc1' }, { id: 2, description: 'loc2' }],
       })
 
       await controller.index(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('addAppointmentDetails.njk', {
+      expect(res.render).toHaveBeenCalledWith('bulkAppointmentsAddDetails.njk', {
         ...buildBodyForDate(now),
         appointmentType: 'app1',
         appointmentTypes: [{ text: 'app1', value: 'app1' }, { text: 'app2', value: 2 }],
@@ -187,7 +185,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             homeUrl: 'http://localhost:3000/',
             errors: [
@@ -222,7 +220,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ text: 'Select a start time that is not in the past', href: '#start-time-hours' }],
           })
@@ -279,7 +277,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ text: 'Select an end time that is not in the past', href: '#end-time-hours' }],
           })
@@ -303,7 +301,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ href: '#comments', text: 'Maximum length should not exceed 3600 characters' }],
           })
@@ -324,7 +322,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ href: '#date', text: 'Enter a date in DD/MM/YYYY format' }],
           })
@@ -332,7 +330,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should validate against past dates', async () => {
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+        appointmentsService.getAppointmentOptions.mockReturnValue({
           appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
@@ -352,7 +350,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ href: '#date', text: 'Select a date that is not in the past' }],
           })
@@ -361,7 +359,7 @@ describe('Add appointment details controller', () => {
 
       it('should only validate start and end time when "Yes" has been selected', async () => {
         res.redirect = jest.fn()
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+        appointmentsService.getAppointmentOptions.mockReturnValue({
           appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
@@ -415,7 +413,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [
               {
@@ -441,7 +439,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ text: 'The date must be a week day', href: '#date' }],
           })
@@ -464,7 +462,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ text: 'The date must be a week day', href: '#date' }],
           })
@@ -485,7 +483,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [
               {
@@ -508,7 +506,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ text: 'Enter the number of appointments using numbers only', href: '#times' }],
           })
@@ -530,7 +528,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [
               { href: '#same-time-appointments', text: 'Select yes if the appointments all have the same time' },
@@ -552,7 +550,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             errors: [{ href: '#recurring', text: 'Select yes if these are recurring appointments' }],
           })
@@ -563,7 +561,7 @@ describe('Add appointment details controller', () => {
     describe('Form', () => {
       it('should store the appointment details into session', async () => {
         res.redirect = jest.fn()
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+        appointmentsService.getAppointmentOptions.mockReturnValue({
           appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
@@ -611,7 +609,7 @@ describe('Add appointment details controller', () => {
 
       it('it should only store time and recurring data into session when correct args are passed', async () => {
         res.redirect = jest.fn()
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+        appointmentsService.getAppointmentOptions.mockReturnValue({
           appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
@@ -643,9 +641,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should return handle api errors', async () => {
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockImplementation(() =>
-          Promise.reject(new Error('Network error'))
-        )
+        appointmentsService.getAppointmentOptions.mockImplementation(() => Promise.reject(new Error('Network error')))
 
         await controller.post(req, res)
 
@@ -657,7 +653,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should return selected location and appointment type', async () => {
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+        appointmentsService.getAppointmentOptions.mockReturnValue({
           appointmentTypes: [
             { id: 'app1', description: 'appointment 1' },
             { id: 'app2', description: 'appointment 2' },
@@ -673,7 +669,7 @@ describe('Add appointment details controller', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointmentDetails.njk',
+          'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
             appointmentTypes: [
               { text: 'appointment 1', value: 'app1' },
@@ -685,7 +681,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should ignore the previously selected start and end time of "no" has been selected', async () => {
-        bulkAppointmentService.getBulkAppointmentsViewModel.mockReturnValue({
+        appointmentsService.getAppointmentOptions.mockReturnValue({
           appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
           locationTypes: [{ id: 1, description: 'location 1' }],
         })
