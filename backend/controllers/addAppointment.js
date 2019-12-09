@@ -2,6 +2,7 @@ const {
   app: { notmEndpointUrl },
 } = require('../config')
 const { properCaseName } = require('../utils')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
 
 // Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
 const repeatTypes = [
@@ -38,7 +39,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   }
 
   const renderTemplate = (req, res, pageData) => {
-    res.render('addAppointment.njk', pageData)
+    res.render('addAppointment.njk', { errors: req.flash('errors'), ...pageData })
   }
 
   const index = async (req, res) => {
@@ -50,7 +51,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
 
     try {
       const { activeCaseLoadId } = req.session.userDetails
-      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
@@ -65,6 +66,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
         appointmentTypes,
         appointmentLocations,
         repeatTypes,
+        bookingId,
       })
     } catch (error) {
       return renderError(req, res, error)
@@ -72,7 +74,61 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   }
 
   const post = async (req, res) => {
-    // To do
+    const {
+      appointmentType,
+      appointmentLocation,
+      date,
+      startTimeHours,
+      startTimeMinutes,
+      endTimeHours,
+      endTimeMinutes,
+      recurring,
+      repeats,
+      times,
+      comments,
+      bookingId,
+    } = req.body
+
+    // Share appointment form validation
+    // const errors = getValidationErrors({ alertStatus, comment })
+
+    // if (errors.length > 0) {
+    //   req.flash('errors', errors)
+
+    //   return res.redirect('back')
+    // }
+
+    const request = {
+      appointmentDefaults: {
+        comment: comments,
+        locationId: Number(appointmentLocation),
+        appointmentType,
+        startTime: buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes }).format(
+          DATE_TIME_FORMAT_SPEC
+        ),
+        endTime: buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes }).format(DATE_TIME_FORMAT_SPEC),
+      },
+      appointments: [
+        {
+          bookingId,
+        },
+      ],
+      repeat:
+        recurring === 'yes'
+          ? {
+              repeatPeriod: repeats,
+              count: times,
+            }
+          : undefined,
+    }
+
+    try {
+      await elite2Api.addAppointments(res.locals, request)
+
+      return res.send('Appointment added')
+    } catch (error) {
+      return renderError(req, res, error)
+    }
   }
 
   return { index, post }
