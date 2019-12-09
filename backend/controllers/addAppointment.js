@@ -13,12 +13,6 @@ const repeatTypes = [
   { value: 'FORTNIGHTLY', text: 'Fortnightly' },
 ]
 
-// Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
-const toSelectValue = data => ({
-  value: data.id,
-  text: data.description,
-})
-
 const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
@@ -27,8 +21,8 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     )
 
     return {
-      appointmentTypes: appointmentTypes.map(toSelectValue),
-      appointmentLocations: locationTypes.map(toSelectValue),
+      appointmentTypes,
+      appointmentLocations: locationTypes,
     }
   }
 

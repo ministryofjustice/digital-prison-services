@@ -96,8 +96,8 @@ describe('Add appointment details controller', () => {
 
     it('should render template with view model', async () => {
       appointmentsService.getAppointmentOptions.mockReturnValue({
-        appointmentTypes: [{ id: 'app1', description: 'app1' }, { id: 2, description: 'app2' }],
-        locationTypes: [{ id: 1, description: 'loc1' }, { id: 2, description: 'loc2' }],
+        appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
+        locationTypes: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
       })
 
       await controller.index(req, res)
@@ -146,8 +146,8 @@ describe('Add appointment details controller', () => {
       }
 
       appointmentsService.getAppointmentOptions.mockReturnValue({
-        appointmentTypes: [{ id: 'app1', description: 'app1' }, { id: 2, description: 'app2' }],
-        locationTypes: [{ id: 1, description: 'loc1' }, { id: 2, description: 'loc2' }],
+        appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
+        locationTypes: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
       })
 
       await controller.index(req, res)
@@ -331,8 +331,8 @@ describe('Add appointment details controller', () => {
 
       it('should validate against past dates', async () => {
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
-          locationTypes: [{ id: 1, description: 'location 1' }],
+          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }],
+          locationTypes: [{ value: 1, text: 'location 1' }],
         })
 
         req.body = {
@@ -360,8 +360,8 @@ describe('Add appointment details controller', () => {
       it('should only validate start and end time when "Yes" has been selected', async () => {
         res.redirect = jest.fn()
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
-          locationTypes: [{ id: 1, description: 'location 1' }],
+          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }],
+          locationTypes: [{ value: 1, text: 'location 1' }],
         })
 
         req.body = {
@@ -562,8 +562,8 @@ describe('Add appointment details controller', () => {
       it('should store the appointment details into session', async () => {
         res.redirect = jest.fn()
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
-          locationTypes: [{ id: 1, description: 'location 1' }],
+          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }],
+          locationTypes: [{ value: 1, text: 'location 1' }],
         })
 
         const date = moment('3014-04-25T01:32:21.196Z')
@@ -610,8 +610,8 @@ describe('Add appointment details controller', () => {
       it('it should only store time and recurring data into session when correct args are passed', async () => {
         res.redirect = jest.fn()
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
-          locationTypes: [{ id: 1, description: 'location 1' }],
+          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }],
+          locationTypes: [{ value: 1, text: 'location 1' }],
         })
 
         const date = moment().format(DAY_MONTH_YEAR)
@@ -654,11 +654,8 @@ describe('Add appointment details controller', () => {
 
       it('should return selected location and appointment type', async () => {
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [
-            { id: 'app1', description: 'appointment 1' },
-            { id: 'app2', description: 'appointment 2' },
-          ],
-          locationTypes: [{ id: 1, description: 'location 1' }, { id: 2, description: 'location 2' }],
+          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }, { value: 'app2', text: 'appointment 2' }],
+          locationTypes: [{ value: 1, text: 'location 1' }, { value: 2, text: 'location 2' }],
         })
 
         req.body = {
@@ -682,8 +679,8 @@ describe('Add appointment details controller', () => {
 
       it('should ignore the previously selected start and end time of "no" has been selected', async () => {
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [{ id: 'app1', description: 'appointment 1' }],
-          locationTypes: [{ id: 1, description: 'location 1' }],
+          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }],
+          locationTypes: [{ value: 1, text: 'location 1' }],
         })
 
         const now = moment().add(1, 'days')

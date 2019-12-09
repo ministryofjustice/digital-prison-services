@@ -1,6 +1,6 @@
 const appointmentsServiceFactory = require('../controllers/appointmentsService')
 
-describe('Bulk appointments service', () => {
+describe('Appointments service', () => {
   const elite2Api = {}
   const context = {}
   const agency = 'LEI'
@@ -57,8 +57,8 @@ describe('Bulk appointments service', () => {
     const response = await service.getAppointmentOptions(context, agency)
 
     expect(response).toEqual({
-      appointmentTypes: [{ id: 'ACTI', description: 'Activities' }],
-      locationTypes: [{ id: 27187, description: 'Adj' }, { id: 27188, description: 'RES-MCASU-MCASU' }],
+      appointmentTypes: [{ value: 'ACTI', text: 'Activities' }],
+      locationTypes: [{ value: 27187, text: 'Adj' }, { value: 27188, text: 'RES-MCASU-MCASU' }],
     })
   })
 

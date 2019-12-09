@@ -9,11 +9,6 @@ const {
   app: { notmEndpointUrl },
 } = config
 
-const toSelectValue = data => ({
-  value: data.id,
-  text: data.description,
-})
-
 const setSelected = (value, items) =>
   items.map(
     item =>
@@ -150,8 +145,8 @@ const bulkAppointmentsAddDetailsFactory = (appointmentsService, oauthApi, logErr
     )
 
     return {
-      appointmentTypes: appointmentTypes.map(toSelectValue),
-      locations: locationTypes.map(toSelectValue),
+      appointmentTypes,
+      locations: locationTypes,
     }
   }
 

@@ -9,14 +9,14 @@ const appointmentsServiceFactory = elite2Api => {
       locationTypes:
         locationTypes &&
         locationTypes.map(location => ({
-          id: location.locationId,
-          description: location.userDescription || location.description,
+          value: location.locationId,
+          text: location.userDescription || location.description,
         })),
       appointmentTypes:
         appointmentTypes &&
         appointmentTypes.map(appointment => ({
-          id: appointment.code,
-          description: appointment.description,
+          value: appointment.code,
+          text: appointment.description,
         })),
     }
   }
