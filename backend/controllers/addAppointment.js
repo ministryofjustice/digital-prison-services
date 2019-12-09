@@ -1,22 +1,10 @@
 const {
-  app: { notmEndpointUrl },
+  app: { notmEndpointUrl: dpsUrl },
 } = require('../config')
 const { properCaseName } = require('../utils')
-
-// Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
-const repeatTypes = [
-  { value: 'WEEKLY', text: 'Weekly' },
-  { value: 'DAILY', text: 'Daily' },
-  { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
-  { value: 'MONTHLY', text: 'Monthly' },
-  { value: 'FORTNIGHTLY', text: 'Fortnightly' },
-]
-
-// Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
-const toSelectValue = data => ({
-  value: data.id,
-  text: data.description,
-})
+const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { serviceUnavailableMessage } = require('../common-messages')
+const { repeatTypes } = require('../shared/appointmentConstants')
 
 const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
@@ -26,31 +14,30 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     )
 
     return {
-      appointmentTypes: appointmentTypes.map(toSelectValue),
-      appointmentLocations: locationTypes.map(toSelectValue),
+      appointmentTypes,
+      appointmentLocations: locationTypes,
     }
   }
 
-  const renderError = (req, res, error) => {
-    if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+  const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
 
-    return res.render('error.njk', { url: '/' })
+  const renderError = (req, res, error) => {
+    const { offenderNo } = req.params
+    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
+
+    return res.render('error.njk', { url: getOffenderUrl(offenderNo) })
   }
 
   const renderTemplate = (req, res, pageData) => {
-    res.render('addAppointment.njk', pageData)
+    res.render('addAppointment.njk', { errors: req.flash('errors'), ...pageData })
   }
 
   const index = async (req, res) => {
     const { offenderNo } = req.params
 
-    if (!offenderNo) {
-      return res.redirect('/')
-    }
-
     try {
       const { activeCaseLoadId } = req.session.userDetails
-      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
@@ -61,10 +48,11 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
       return renderTemplate(req, res, {
         offenderNo,
         offenderName,
-        notmEndpointUrl,
+        dpsUrl,
         appointmentTypes,
         appointmentLocations,
         repeatTypes,
+        bookingId,
       })
     } catch (error) {
       return renderError(req, res, error)
@@ -72,7 +60,53 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   }
 
   const post = async (req, res) => {
-    // To do
+    const { offenderNo } = req.params
+    const {
+      appointmentType,
+      appointmentLocation,
+      date,
+      startTimeHours,
+      startTimeMinutes,
+      endTimeHours,
+      endTimeMinutes,
+      recurring,
+      repeats,
+      times,
+      comments,
+      bookingId,
+    } = req.body
+
+    const request = {
+      appointmentDefaults: {
+        comment: comments,
+        locationId: Number(appointmentLocation),
+        appointmentType,
+        startTime: buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes }).format(
+          DATE_TIME_FORMAT_SPEC
+        ),
+        endTime: buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes }).format(DATE_TIME_FORMAT_SPEC),
+      },
+      appointments: [
+        {
+          bookingId,
+        },
+      ],
+      repeat:
+        recurring === 'yes'
+          ? {
+              repeatPeriod: repeats,
+              count: times,
+            }
+          : undefined,
+    }
+
+    try {
+      await elite2Api.addAppointments(res.locals, request)
+
+      return res.redirect(`${getOffenderUrl(offenderNo)}?appointmentAdded=true`)
+    } catch (error) {
+      return renderError(req, res, error)
+    }
   }
 
   return { index, post }

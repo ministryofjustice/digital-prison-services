@@ -169,7 +169,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
   })
 
-  router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api }))
+  router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
 
   return router
 }
