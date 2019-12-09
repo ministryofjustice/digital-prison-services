@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { bulkAppointmentsAddDetailsFactory } = require('../controllers/bulkAppointmentsAddDetails')
 const { serviceUnavailableMessage } = require('../common-messages')
+const { repeatTypes } = require('../shared/appointmentConstants')
 
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 
@@ -19,13 +20,7 @@ const buildBodyForDate = date => {
     sameTimeAppointments: 'no',
     times: undefined,
     recurring: 'no',
-    repeatTypes: [
-      { value: 'WEEKLY', text: 'Weekly' },
-      { value: 'DAILY', text: 'Daily' },
-      { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
-      { value: 'MONTHLY', text: 'Monthly' },
-      { value: 'FORTNIGHTLY', text: 'Fortnightly' },
-    ],
+    repeatTypes,
   }
 }
 

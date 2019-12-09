@@ -10,7 +10,7 @@
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 
 {% set title = 'Add new appointment' %}
-{% set offenderUrl = notmEndpointUrl + 'offenders/' + offenderNo %}
+{% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
 {% set recurringHtml %}
   <div data-qa="recurring-inputs">
       {{ govukSelect({
@@ -52,7 +52,7 @@
       items: [
           {
               text: "Home",
-              href: notmEndpointUrl
+              href: dpsUrl
           },
           {
               text: offenderName,

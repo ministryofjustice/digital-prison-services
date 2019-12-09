@@ -4,6 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, buildDateTime } = require('../../src/dateHelpers')
 const { capitalize } = require('../utils')
 const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
+const { repeatTypes } = require('../shared/appointmentConstants')
 
 const {
   app: { notmEndpointUrl },
@@ -47,14 +48,6 @@ const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
     recurringStartTime,
   }
 }
-
-const repeatTypes = [
-  { value: 'WEEKLY', text: 'Weekly' },
-  { value: 'DAILY', text: 'Daily' },
-  { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
-  { value: 'MONTHLY', text: 'Monthly' },
-  { value: 'FORTNIGHTLY', text: 'Fortnightly' },
-]
 
 const getValidationMessages = ({
   appointmentType,

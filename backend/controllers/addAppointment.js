@@ -1,17 +1,10 @@
 const {
-  app: { notmEndpointUrl },
+  app: { notmEndpointUrl: dpsUrl },
 } = require('../config')
 const { properCaseName } = require('../utils')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
-
-// Put somewhere and share with bulk appointment bulkAppointmentsAddDetails
-const repeatTypes = [
-  { value: 'WEEKLY', text: 'Weekly' },
-  { value: 'DAILY', text: 'Daily' },
-  { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
-  { value: 'MONTHLY', text: 'Monthly' },
-  { value: 'FORTNIGHTLY', text: 'Fortnightly' },
-]
+const { serviceUnavailableMessage } = require('../common-messages')
+const { repeatTypes } = require('../shared/appointmentConstants')
 
 const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
@@ -26,10 +19,13 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     }
   }
 
-  const renderError = (req, res, error) => {
-    if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+  const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
 
-    return res.render('error.njk', { url: '/' })
+  const renderError = (req, res, error) => {
+    const { offenderNo } = req.params
+    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
+
+    return res.render('error.njk', { url: getOffenderUrl(offenderNo) })
   }
 
   const renderTemplate = (req, res, pageData) => {
@@ -38,10 +34,6 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
 
   const index = async (req, res) => {
     const { offenderNo } = req.params
-
-    if (!offenderNo) {
-      return res.redirect('/')
-    }
 
     try {
       const { activeCaseLoadId } = req.session.userDetails
@@ -56,7 +48,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
       return renderTemplate(req, res, {
         offenderNo,
         offenderName,
-        notmEndpointUrl,
+        dpsUrl,
         appointmentTypes,
         appointmentLocations,
         repeatTypes,
@@ -68,6 +60,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   }
 
   const post = async (req, res) => {
+    const { offenderNo } = req.params
     const {
       appointmentType,
       appointmentLocation,
@@ -82,15 +75,6 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
       comments,
       bookingId,
     } = req.body
-
-    // Share appointment form validation
-    // const errors = getValidationErrors({ alertStatus, comment })
-
-    // if (errors.length > 0) {
-    //   req.flash('errors', errors)
-
-    //   return res.redirect('back')
-    // }
 
     const request = {
       appointmentDefaults: {
@@ -119,7 +103,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     try {
       await elite2Api.addAppointments(res.locals, request)
 
-      return res.send('Appointment added')
+      return res.redirect(`${getOffenderUrl(offenderNo)}?appointmentAdded=true`)
     } catch (error) {
       return renderError(req, res, error)
     }
