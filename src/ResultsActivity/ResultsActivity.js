@@ -339,6 +339,16 @@ class ResultsActivity extends Component {
 
     const renderMainEvent = event => {
       const mainEventDescription = `${getHoursMinutes(event.startTime)} - ${getMainEventDescription(event)}`
+      if (event.suspended) {
+        return (
+          <td className="row-gutters">
+            <div data-qa="suspended">
+              {mainEventDescription}
+              <span className="suspended"> (suspended)</span>
+            </div>
+          </td>
+        )
+      }
       if (ResultsActivity.eventCancelled(event)) {
         return (
           <td className="row-gutters">
@@ -545,6 +555,7 @@ ResultsActivity.propTypes = {
       eventDescription: PropTypes.string.isRequired,
       eventStatus: PropTypes.string,
       comment: PropTypes.string.isRequired,
+      suspended: PropTypes.bool,
     })
   ).isRequired,
   totalAttended: PropTypes.number.isRequired,
