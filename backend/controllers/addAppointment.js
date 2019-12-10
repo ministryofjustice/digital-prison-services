@@ -4,7 +4,7 @@ const {
 const { properCaseName } = require('../utils')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../common-messages')
-const { repeatTypes } = require('../shared/appointmentConstants')
+const { repeatTypes, getValidationMessages } = require('../shared/appointmentConstants')
 
 const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
@@ -28,24 +28,22 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     return res.render('error.njk', { url: getOffenderUrl(offenderNo) })
   }
 
-  const renderTemplate = (req, res, pageData) => {
-    res.render('addAppointment.njk', { errors: req.flash('errors'), ...pageData })
-  }
-
-  const index = async (req, res) => {
+  const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
+    const { activeCaseLoadId } = req.session.userDetails
 
     try {
-      const { activeCaseLoadId } = req.session.userDetails
       const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
         res.locals,
         activeCaseLoadId
       )
 
-      return renderTemplate(req, res, {
+      console.log('====> pageData', pageData)
+
+      return res.render('addAppointment.njk', {
+        ...pageData,
         offenderNo,
         offenderName,
         dpsUrl,
@@ -59,11 +57,13 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     }
   }
 
+  const index = async (req, res) => renderTemplate(req, res)
+
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const {
       appointmentType,
-      appointmentLocation,
+      location,
       date,
       startTimeHours,
       startTimeMinutes,
@@ -76,15 +76,37 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
       bookingId,
     } = req.body
 
+    const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
+    const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
+
+    const errors = [
+      ...getValidationMessages(
+        {
+          appointmentType,
+          location,
+          date,
+          startTime,
+          endTime,
+          comments,
+          times,
+          repeats,
+          recurring,
+        },
+        true
+      ),
+    ]
+
+    if (errors.length > 0) {
+      return renderTemplate(req, res, { errors, formValues: { ...req.body, location: Number(location) } })
+    }
+
     const request = {
       appointmentDefaults: {
         comment: comments,
-        locationId: Number(appointmentLocation),
+        locationId: Number(location),
         appointmentType,
-        startTime: buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes }).format(
-          DATE_TIME_FORMAT_SPEC
-        ),
-        endTime: buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes }).format(DATE_TIME_FORMAT_SPEC),
+        startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+        endTime: endTime.format(DATE_TIME_FORMAT_SPEC),
       },
       appointments: [
         {

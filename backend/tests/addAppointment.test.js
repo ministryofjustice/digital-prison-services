@@ -92,11 +92,11 @@ describe('Add appointment', () => {
   })
 
   describe('post', () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+    jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
 
     const validBody = {
       appointmentType: 'APT1',
-      appointmentLocation: '1',
+      location: '1',
       date: moment().format(DAY_MONTH_YEAR),
       startTimeHours: '01',
       startTimeMinutes: '00',
@@ -127,8 +127,8 @@ describe('Add appointment', () => {
           appointmentDefaults: {
             appointmentType: 'APT1',
             locationId: 1,
-            startTime: '2019-03-29T01:00:00',
-            endTime: '2019-03-29T02:00:00',
+            startTime: '3019-01-01T01:00:00',
+            endTime: '3019-01-01T02:00:00',
             comment: 'Test comment',
           },
           appointments: [
