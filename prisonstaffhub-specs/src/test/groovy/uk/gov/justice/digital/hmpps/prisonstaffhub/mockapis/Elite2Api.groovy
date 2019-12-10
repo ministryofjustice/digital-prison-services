@@ -214,9 +214,9 @@ class Elite2Api extends WireMockRule {
 
     }
 
-    void stubProgEventsAtLocation(Caseload caseload, int locationId, String timeSlot, String date, def data = JsonOutput.toJson([])) {
+    void stubProgEventsAtLocation(int locationId, String timeSlot, String date, def data = JsonOutput.toJson([])) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/PROG?date=${date}&timeSlot=${timeSlot}")
+                get("/api/schedules/locations/${locationId}/activities?date=${date}&timeSlot=${timeSlot}&includeSuspended=true")
                         .willReturn(
                                 aResponse()
                                         .withBody(data)
@@ -298,7 +298,7 @@ class Elite2Api extends WireMockRule {
 
         def activityResponse = inThePast ? ActivityResponse.pastActivities : ActivityResponse.activities
 
-        stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activityResponse)
+        stubProgEventsAtLocation(locationId, timeSlot, date, activityResponse)
 
         def offenderNumbers = extractOffenderNumbers(activityResponse)
 
