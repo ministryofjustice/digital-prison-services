@@ -1,10 +1,9 @@
 const moment = require('moment')
 const config = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, buildDateTime } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
 const { capitalize } = require('../utils')
-const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
-const { repeatTypes, getValidationMessages } = require('../shared/appointmentConstants')
+const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../shared/appointmentConstants')
 
 const {
   app: { notmEndpointUrl },
@@ -27,25 +26,6 @@ const extractHoursMinutes = dateTime => {
   return {
     hours: instant.format('HH'),
     minutes: instant.format('mm'),
-  }
-}
-
-const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
-  const recurringStartTime =
-    (startTime && moment(startTime)) ||
-    moment(date, DAY_MONTH_YEAR)
-      .hours(0)
-      .minutes(0)
-
-  const endOfPeriod = calculateEndDate({
-    startTime: recurringStartTime,
-    repeats,
-    numberOfTimes: times,
-  })
-
-  return {
-    endOfPeriod,
-    recurringStartTime,
   }
 }
 

@@ -1,6 +1,5 @@
 const moment = require('moment')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
-
 const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
 
 const repeatTypes = [
@@ -76,7 +75,12 @@ const getValidationMessages = (fields, singleAppointment) => {
   if (comments && comments.length > 3600)
     errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comments' })
 
-  if (!recurring) errors.push({ href: '#recurring', text: 'Select yes if these are recurring appointments' })
+  if (!recurring) {
+    const recurringErrorMessage = singleAppointment
+      ? 'this is a recurring appointment'
+      : 'these are recurring appointments'
+    errors.push({ href: '#recurring', text: `Select yes if ${recurringErrorMessage}` })
+  }
 
   if (recurring === 'yes' && !repeats) errors.push({ href: '#repeats', text: 'Select a period' })
 
@@ -111,6 +115,7 @@ const getValidationMessages = (fields, singleAppointment) => {
 }
 
 module.exports = {
+  endRecurringEndingDate,
   getValidationMessages,
   repeatTypes,
 }

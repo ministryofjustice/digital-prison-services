@@ -40,8 +40,6 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
         activeCaseLoadId
       )
 
-      console.log('====> pageData', pageData)
-
       return res.render('addAppointment.njk', {
         ...pageData,
         offenderNo,
@@ -106,7 +104,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
         locationId: Number(location),
         appointmentType,
         startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-        endTime: endTime.format(DATE_TIME_FORMAT_SPEC),
+        endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
       },
       appointments: [
         {

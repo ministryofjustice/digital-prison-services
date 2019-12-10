@@ -92,8 +92,6 @@ describe('Add appointment', () => {
   })
 
   describe('post', () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
-
     const validBody = {
       appointmentType: 'APT1',
       location: '1',
@@ -115,10 +113,14 @@ describe('Add appointment', () => {
 
     describe('when there are no errors', () => {
       beforeEach(() => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+
         elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
 
         req.body = validBody
       })
+
+      afterEach(() => Date.now.mockRestore())
 
       it('should submit the appointment with the correct details and redirect', async () => {
         await controller.post(req, res)
@@ -157,6 +159,122 @@ describe('Add appointment', () => {
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `http://localhost:3000/offenders/${offenderNo}` })
+      })
+    })
+
+    describe.only('when there are form errors', () => {
+      beforeEach(() => {
+        req.params.offenderNo = offenderNo
+        elite2Api.getDetails.mockReturnValue({
+          bookingId,
+          firstName: 'BARRY',
+          lastName: 'SMITH',
+        })
+      })
+
+      it('should validate and check for missing required fields', async () => {
+        req.body = {
+          recurring: 'yes',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#appointment-type', text: 'Select an appointment type' },
+              { href: '#location', text: 'Select a location' },
+              { href: '#date', text: 'Select a date' },
+              { href: '#start-time-hours', text: 'Select a start time' },
+              { href: '#repeats', text: 'Select a period' },
+              { href: '#times', text: 'Enter the number of appointments using numbers only' },
+            ],
+          })
+        )
+      })
+
+      it('should validate missing answer for a recurring appointment', async () => {
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment.njk',
+          expect.objectContaining({
+            errors: expect.arrayContaining([
+              { href: '#recurring', text: 'Select yes if this is a recurring appointment' },
+            ]),
+          })
+        )
+      })
+
+      it('should return validation messages for start times being in the past', async () => {
+        const date = moment().format(DAY_MONTH_YEAR)
+        const startTime = moment().subtract(5, 'minutes')
+        const startTimeHours = startTime.hour()
+        const startTimeMinutes = startTime.minute()
+
+        req.body = {
+          date,
+          startTimeHours,
+          startTimeMinutes,
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment.njk',
+          expect.objectContaining({
+            errors: expect.arrayContaining([
+              { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
+            ]),
+          })
+        )
+      })
+
+      it('should validate that the end time comes after the start time', async () => {
+        const endTime = moment().subtract(2, 'hours')
+        const endTimeHours = endTime.hour()
+        const endTimeMinutes = endTime.minute()
+
+        const startTime = moment().add(5, 'minutes')
+        const startTimeHours = startTime.hour()
+        const startTimeMinutes = startTime.minute()
+
+        req.body = {
+          date: moment().format(DAY_MONTH_YEAR),
+          startTimeHours,
+          startTimeMinutes,
+          endTimeHours,
+          endTimeMinutes,
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment.njk',
+          expect.objectContaining({
+            errors: expect.arrayContaining([
+              { text: 'Select an end time that is not in the past', href: '#end-time-hours' },
+            ]),
+          })
+        )
+      })
+
+      it('should validate maximum length of comments', async () => {
+        req.body = {
+          comments: [...Array(3601).keys()].map(_ => 'A').join(''),
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment.njk',
+          expect.objectContaining({
+            errors: expect.arrayContaining([
+              { href: '#comments', text: 'Maximum length should not exceed 3600 characters' },
+            ]),
+          })
+        )
       })
     })
   })
