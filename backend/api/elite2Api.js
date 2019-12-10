@@ -31,6 +31,12 @@ const elite2ApiFactory = client => {
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
     get(context, `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`)
 
+  const getActivitiesAtLocation = (context, { locationId, date, timeSlot, includeSuspended }) =>
+    get(
+      context,
+      `/api/schedules/locations/${locationId}/activities?date=${date}&timeSlot=${timeSlot}&includeSuspended=${includeSuspended}`
+    )
+
   const getVisits = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
       context,
@@ -226,6 +232,7 @@ const elite2ApiFactory = client => {
     updateAlert,
     getOffenderSummaries,
     getOffenderActivitiesOverDateRange,
+    getActivitiesAtLocation,
   }
 }
 

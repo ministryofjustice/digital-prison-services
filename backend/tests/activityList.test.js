@@ -112,6 +112,7 @@ beforeEach(() => {
   elite2Api.getAlerts = jest.fn()
   elite2Api.getAssessments = jest.fn()
   elite2Api.getDetailsLight = jest.fn()
+  elite2Api.getActivitiesAtLocation = jest.fn()
   whereaboutsApi.getAttendance = jest.fn()
   whereaboutsApi.getAbsenceReasons = jest.fn()
 
@@ -126,16 +127,17 @@ beforeEach(() => {
 describe('Activity list controller', () => {
   it('Should return no results as an empty array', async () => {
     elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue([])
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
     expect(response).toEqual([])
 
-    expect(elite2Api.getActivityList.mock.calls.length).toBe(3)
+    expect(elite2Api.getActivityList.mock.calls.length).toBe(2)
     const query = { agencyId: 'LEI', locationId: -1, date: '2018-11-23', timeSlot: 'PM' }
 
-    expect(elite2Api.getActivityList.mock.calls[0][1]).toEqual(Object.assign(query, { usage: 'PROG' }))
-    expect(elite2Api.getActivityList.mock.calls[1][1]).toEqual(Object.assign(query, { usage: 'VISIT' }))
-    expect(elite2Api.getActivityList.mock.calls[2][1]).toEqual(Object.assign(query, { usage: 'APP' }))
+    expect(elite2Api.getActivitiesAtLocation).toHaveBeenCalledWith({}, { ...query, includeSuspended: true })
+    expect(elite2Api.getActivityList).toHaveBeenCalledWith({}, { ...query, usage: 'VISIT' })
+    expect(elite2Api.getActivityList).toHaveBeenCalledWith({}, { ...query, usage: 'APP' })
 
     expect(elite2Api.getVisits.mock.calls.length).toBe(1)
     expect(elite2Api.getAppointments.mock.calls.length).toBe(1)
@@ -153,8 +155,6 @@ describe('Activity list controller', () => {
   it('Should use the offender numbers returned from activity lists in visit, appointment and activity searches ', async () => {
     elite2Api.getActivityList.mockImplementation((context, { usage }) => {
       switch (usage) {
-        case 'PROG':
-          return [{ offenderNo: 'B' }]
         case 'VISIT':
           return [{ offenderNo: 'C' }, { offenderNo: 'A' }]
         case 'APP':
@@ -163,6 +163,8 @@ describe('Activity list controller', () => {
           throw new Error('Unexpected')
       }
     })
+
+    elite2Api.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'B' }])
 
     await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
 
@@ -179,14 +181,8 @@ describe('Activity list controller', () => {
   })
 
   it('Should assign visits, appointments and activities by offender number', async () => {
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-      switch (usage) {
-        case 'PROG':
-          return [{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }]
-        default:
-          return []
-      }
-    })
+    elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
 
     elite2Api.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'B', locationId: 3 }])
     elite2Api.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 4 }, { offenderNo: 'C', locationId: 5 }])
@@ -230,14 +226,8 @@ describe('Activity list controller', () => {
   })
 
   it('Should exclude visits, appointments and activities at the location from eventsElsewhere', async () => {
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-      switch (usage) {
-        case 'PROG':
-          return [{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }]
-        default:
-          return []
-      }
-    })
+    elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
 
     elite2Api.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'B', locationId: 1 }])
     elite2Api.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 2 }, { offenderNo: 'C', locationId: 1 }])
@@ -281,9 +271,8 @@ describe('Activity list controller', () => {
   })
 
   it('Should add visit and appointment details to activity array', async () => {
-    elite2Api.getActivityList.mockImplementation(
-      (context, { usage }) => (usage === 'PROG' ? createActivitiesResponse() : [])
-    )
+    elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue(createActivitiesResponse())
 
     elite2Api.getVisits.mockReturnValue(createVisitsResponse())
     elite2Api.getAppointments.mockReturnValue(createAppointmentsResponse())
@@ -401,21 +390,15 @@ describe('Activity list controller', () => {
   })
 
   it('should order activities by comment then by last name', async () => {
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-      switch (usage) {
-        case 'PROG':
-          return [
-            { offenderNo: 'A', comment: 'aa', lastName: 'b' },
-            { offenderNo: 'B', comment: 'a', lastName: 'c' },
-            { offenderNo: 'C', comment: 'a', lastName: 'a' },
-            { offenderNo: 'D', comment: 'aa', lastName: 'a' },
-            { offenderNo: 'E', comment: 'aa', lastName: 'c' },
-            { offenderNo: 'F', comment: 'a', lastName: 'b' },
-          ]
-        default:
-          return []
-      }
-    })
+    elite2Api.getActivitiesAtLocation.mockReturnValue([
+      { offenderNo: 'A', comment: 'aa', lastName: 'b' },
+      { offenderNo: 'B', comment: 'a', lastName: 'c' },
+      { offenderNo: 'C', comment: 'a', lastName: 'a' },
+      { offenderNo: 'D', comment: 'aa', lastName: 'a' },
+      { offenderNo: 'E', comment: 'aa', lastName: 'c' },
+      { offenderNo: 'F', comment: 'a', lastName: 'b' },
+    ])
+    elite2Api.getActivityList.mockReturnValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -423,14 +406,8 @@ describe('Activity list controller', () => {
   })
 
   it('should order eventsElsewhere by startTime', async () => {
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-      switch (usage) {
-        case 'PROG':
-          return [{ offenderNo: 'A', comment: 'aa', lastName: 'b' }]
-        default:
-          return []
-      }
-    })
+    elite2Api.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A', comment: 'aa', lastName: 'b' }])
+    elite2Api.getActivityList.mockReturnValue([])
 
     elite2Api.getVisits.mockReturnValue([
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T00:00:00' },
@@ -462,14 +439,8 @@ describe('Activity list controller', () => {
 
   describe('Attendance information', () => {
     beforeEach(() => {
-      elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-        switch (usage) {
-          case 'PROG':
-            return [{ offenderNo: 'A', comment: 'aa', lastName: 'b' }]
-          default:
-            return []
-        }
-      })
+      elite2Api.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A', comment: 'aa', lastName: 'b' }])
+      elite2Api.getActivityList.mockReturnValue([])
     })
 
     it('should call getAttendance with correct parameters', async () => {
@@ -538,18 +509,12 @@ describe('Activity list controller', () => {
         ],
       })
 
-      elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-        switch (usage) {
-          case 'PROG':
-            return [
-              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventId: 1 },
-              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2, eventId: 2 },
-              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3, eventId: 3 },
-            ]
-          default:
-            return []
-        }
-      })
+      elite2Api.getActivitiesAtLocation.mockReturnValue([
+        { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventId: 1 },
+        { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2, eventId: 2 },
+        { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3, eventId: 3 },
+      ])
+      elite2Api.getActivityList.mockReturnValue([])
 
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -650,18 +615,12 @@ describe('Activity list controller', () => {
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
       })
 
-      elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-        switch (usage) {
-          case 'PROG':
-            return [
-              { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1 },
-              { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2 },
-              { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3 },
-            ]
-          default:
-            return []
-        }
-      })
+      elite2Api.getActivitiesAtLocation.mockReturnValue([
+        { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1 },
+        { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2 },
+        { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3 },
+      ])
+      elite2Api.getActivityList.mockReturnValue([])
 
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -677,17 +636,11 @@ describe('Activity list controller', () => {
   })
 
   it('should attach attendance to the correct activity', async () => {
-    elite2Api.getActivityList.mockImplementation((context, { usage }) => {
-      switch (usage) {
-        case 'PROG':
-          return [
-            { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
-            { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 1, eventLocationId: 2, eventId: 2 },
-          ]
-        default:
-          return []
-      }
-    })
+    elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue([
+      { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
+      { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 1, eventLocationId: 2, eventId: 2 },
+    ])
     whereaboutsApi.getAttendance.mockReturnValue({
       attendances: [
         {
@@ -724,13 +677,10 @@ describe('Activity list controller', () => {
   })
 
   it('should only request attendance for prison that have been enabled', async () => {
-    elite2Api.getActivityList.mockImplementation(
-      (context, { usage }) =>
-        usage === 'PROG'
-          ? [{ offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 }]
-          : []
-    )
-
+    elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue([
+      { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
+    ])
     whereaboutsApi.getAttendance.mockReturnValue({ attendances: [] })
     whereaboutsApi.getAbsenceReasons.mockReturnValue([])
 
@@ -747,12 +697,10 @@ describe('Activity list controller', () => {
   })
 
   it('should enable attendance for everyone in dev', async () => {
-    elite2Api.getActivityList.mockImplementation(
-      (context, { usage }) =>
-        usage === 'PROG'
-          ? [{ offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 }]
-          : []
-    )
+    elite2Api.getActivityList.mockReturnValue([])
+    elite2Api.getActivitiesAtLocation.mockReturnValue([
+      { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
+    ])
     whereaboutsApi.getAttendance.mockReturnValue({ attendances: [] })
     whereaboutsApi.getAbsenceReasons.mockReturnValue([])
 

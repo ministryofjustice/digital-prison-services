@@ -333,6 +333,39 @@ describe('Offender activity list results component', () => {
     ).toEqual('Court visit scheduled')
   })
 
+  it('should render suspended activity correctly', async () => {
+    const aFewDaysAgo = moment().subtract(3, 'days')
+    const date = aFewDaysAgo.format('DD/MM/YYYY')
+
+    const data = [
+      {
+        bookingId: 1,
+        eventId: 123,
+        offenderNo: 'A1234AA',
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: `${PRISON}-A-1-1`,
+        event: 'PA',
+        eventDescription: 'Prison Activities',
+        comment: 'Chapel',
+        startTime: '2017-10-15T18:00:00',
+        endTime: '2017-10-15T18:30:00',
+        releaseScheduled: true,
+        scheduledTransfers: [],
+        courtEvents: [],
+        category: 'A',
+        alertFlags: ['XEL'],
+        suspended: true,
+      },
+    ]
+
+    const component = shallow(<ResultsActivity {...props} activityData={data} date={date} period="ED" />)
+    const suspended = component.find('div[data-qa="suspended"]').props().children
+
+    expect(suspended[0]).toBe('18:00 - Chapel')
+    expect(suspended[1].props.children).toBe(' (suspended)')
+  })
+
   it('should render empty results list correctly', async () => {
     const component = shallow(<ResultsActivity {...props} activityData={[]} period="PM" date="" />)
     const tr = component.find('tr')
