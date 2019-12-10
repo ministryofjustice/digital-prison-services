@@ -555,6 +555,7 @@ ResultsActivity.propTypes = {
       eventDescription: PropTypes.string.isRequired,
       eventStatus: PropTypes.string,
       comment: PropTypes.string.isRequired,
+      suspended: PropTypes.bool,
     })
   ).isRequired,
   totalAttended: PropTypes.number.isRequired,
