@@ -95,7 +95,7 @@ describe('Add appointment', () => {
     const validBody = {
       appointmentType: 'APT1',
       location: '1',
-      date: moment().format(DAY_MONTH_YEAR),
+      // date: moment().format(DAY_MONTH_YEAR),
       startTimeHours: '01',
       startTimeMinutes: '00',
       endTimeHours: '02',
@@ -112,17 +112,17 @@ describe('Add appointment', () => {
     })
 
     describe('when there are no errors', () => {
-      beforeEach(() => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
-
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
-
-        req.body = validBody
-      })
-
-      afterEach(() => Date.now.mockRestore())
-
       it('should submit the appointment with the correct details and redirect', async () => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+        req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
+        req.params.offenderNo = offenderNo
+        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+        elite2Api.getDetails.mockReturnValue({
+          bookingId,
+          firstName: 'BARRY',
+          lastName: 'SMITH',
+        })
+
         await controller.post(req, res)
 
         expect(elite2Api.addAppointments).toHaveBeenCalledWith(res.locals, {
@@ -144,25 +144,33 @@ describe('Add appointment', () => {
           },
         })
         expect(res.redirect).toHaveBeenCalledWith(`http://localhost:3000/offenders/${offenderNo}?appointmentAdded=true`)
+
+        Date.now.mockRestore()
       })
     })
 
     describe('when there are API errors', () => {
-      beforeEach(() => {
-        req.body = validBody
-
-        elite2Api.addAppointments.mockImplementation(() => Promise.reject(new Error('Network error')))
-      })
-
       it('should render the error template', async () => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+        req.params.offenderNo = offenderNo
+        req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
+        elite2Api.getDetails.mockReturnValue({
+          bookingId,
+          firstName: 'BARRY',
+          lastName: 'SMITH',
+        })
+        elite2Api.addAppointments.mockImplementation(() => Promise.reject(new Error('Network error')))
+
         await controller.post(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `http://localhost:3000/offenders/${offenderNo}` })
+
+        Date.now.mockRestore()
       })
     })
 
-    describe.only('when there are form errors', () => {
+    describe('when there are form errors', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
         elite2Api.getDetails.mockReturnValue({
