@@ -13,4 +13,19 @@ $(document).ready(function() {
       minDate: minDate,
     })
   })
+
+  $('.js-appointment-date').change(e => {
+    const clashesContainer = $('#clashesContainer')
+
+    $.ajax({
+      url: '/api/get-existing-events',
+      data: { offenderNo: $('#offenderNo').text(), date: e.target.value },
+    })
+      .done(data => {
+        clashesContainer.html(data).show()
+      })
+      .fail(() => {
+        clashesContainer.hide()
+      })
+  })
 })

@@ -63,7 +63,7 @@ describe('Add appointment', () => {
 
         expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
         expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'LEI')
-        expect(res.render).toHaveBeenCalledWith('addAppointment.njk', {
+        expect(res.render).toHaveBeenCalledWith('addAppointment/addAppointment.njk', {
           bookingId,
           offenderNo,
           appointmentLocations: [],
@@ -181,7 +181,7 @@ describe('Add appointment', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointment.njk',
+          'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: [
               { href: '#appointment-type', text: 'Select an appointment type' },
@@ -199,7 +199,7 @@ describe('Add appointment', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointment.njk',
+          'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.arrayContaining([
               { href: '#recurring', text: 'Select yes if this is a recurring appointment' },
@@ -223,7 +223,7 @@ describe('Add appointment', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointment.njk',
+          'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.arrayContaining([
               { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
@@ -252,7 +252,7 @@ describe('Add appointment', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointment.njk',
+          'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.arrayContaining([
               { text: 'Select an end time that is not in the past', href: '#end-time-hours' },
@@ -269,7 +269,7 @@ describe('Add appointment', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'addAppointment.njk',
+          'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.arrayContaining([
               { href: '#comments', text: 'Maximum length should not exceed 3600 characters' },
