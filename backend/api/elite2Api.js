@@ -52,7 +52,11 @@ const elite2ApiFactory = client => {
     )
 
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
-    post(context, `/api/schedules/${agencyId}/activities?timeSlot=${timeSlot}&date=${date}`, offenderNumbers)
+    post(
+      context,
+      `/api/schedules/${agencyId}/activities?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
+      offenderNumbers
+    )
 
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 

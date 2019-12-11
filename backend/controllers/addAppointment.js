@@ -40,7 +40,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
         activeCaseLoadId
       )
 
-      return res.render('addAppointment.njk', {
+      return res.render('addAppointment/addAppointment.njk', {
         ...pageData,
         offenderNo,
         offenderName,
