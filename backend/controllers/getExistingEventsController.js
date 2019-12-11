@@ -23,7 +23,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         endTime: event.endTime && getTime(event.endTime),
       }))
 
-    return res.json(formattedExistingEvents)
+    return res.render('appointmentClashes.njk', { clashes: formattedExistingEvents })
   } catch (error) {
     const errorMessage = 'Error retrieving existing events for offender'
     if (error) logError(req.originalUrl, error, errorMessage)

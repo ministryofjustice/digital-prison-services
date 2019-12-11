@@ -114,10 +114,7 @@
               attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
           }) }}
 
-          <div id="clashesContainer" style="display: none;">
-            <h2 class="govuk-heading-m">Other scheduled events on this date</h2>
-            <ul id="clashesList" class="appointment-clashes govuk-list"></ul>
-          </div>
+          <div id="clashesContainer" style="display: none;"></div>
 
           {{ timePicker({
               id: 'start-time',

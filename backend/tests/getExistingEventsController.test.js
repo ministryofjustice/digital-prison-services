@@ -24,7 +24,7 @@ describe('existing events controller', () => {
       query: { date: '11/12/2019', offenderNo: 'ABC123' },
     }
 
-    res = { locals: {}, json: jest.fn(), status: jest.fn() }
+    res = { locals: {}, json: jest.fn(), status: jest.fn(), render: jest.fn() }
 
     logError = jest.fn()
     controller = getExistingEventsController({ elite2Api, logError })
@@ -124,33 +124,35 @@ describe('existing events controller', () => {
       it('should return events sorted by start time', async () => {
         await controller(req, res)
 
-        expect(res.json).toHaveBeenCalledWith([
-          expect.objectContaining({
-            locationId: 2,
-            startTime: '12:00',
-            endTime: '13:00',
-          }),
-          expect.objectContaining({
-            locationId: 1,
-            startTime: '14:00',
-            endTime: '15:00',
-          }),
-          expect.objectContaining({
-            locationId: 3,
-            startTime: '16:00',
-            endTime: '17:00',
-          }),
-          expect.objectContaining({
-            locationId: 5,
-            startTime: '18:00',
-            endTime: '19:00',
-          }),
-          expect.objectContaining({
-            locationId: 4,
-            startTime: '19:00',
-            endTime: '20:00',
-          }),
-        ])
+        expect(res.render).toHaveBeenCalledWith('appointmentClashes.njk', {
+          clashes: [
+            expect.objectContaining({
+              locationId: 2,
+              startTime: '12:00',
+              endTime: '13:00',
+            }),
+            expect.objectContaining({
+              locationId: 1,
+              startTime: '14:00',
+              endTime: '15:00',
+            }),
+            expect.objectContaining({
+              locationId: 3,
+              startTime: '16:00',
+              endTime: '17:00',
+            }),
+            expect.objectContaining({
+              locationId: 5,
+              startTime: '18:00',
+              endTime: '19:00',
+            }),
+            expect.objectContaining({
+              locationId: 4,
+              startTime: '19:00',
+              endTime: '20:00',
+            }),
+          ],
+        })
       })
     })
 

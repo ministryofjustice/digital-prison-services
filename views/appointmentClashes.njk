@@ -1,0 +1,12 @@
+<h2 class="govuk-heading-m">Other scheduled events on this date</h2>
+
+<ul class="appointment-clashes govuk-list">
+  {% for clash in clashes %}
+    <li class="appointment-clashes__event">
+      <span class="appointment-clashes__event__time">{{ clash.startTime + ' - ' + clash.endTime if clash.endTime else clash.startTime }}</span>
+      {{clash.eventLocation}}
+      -
+      {{clash.eventDescription}}
+    </li>
+  {% endfor %}
+</ul>
