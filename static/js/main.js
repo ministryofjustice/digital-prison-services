@@ -44,7 +44,6 @@ $(document).ready(function() {
         }
       })
       .fail(() => {
-        console.log('been an error')
         clashesContainer.hide()
       })
   })
