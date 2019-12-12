@@ -40,6 +40,7 @@ const bulkAppointmentsClashesController = require('./controllers/bulkAppointment
 
 const changeCaseloadController = require('./controllers/changeCaseloadController')
 const addAppointmentController = require('./controllers/addAppointmentController')
+const confirmAppointment = require('./controllers/confirmAppointmentController')
 
 const controllerFactory = require('./controllers/controller').factory
 
@@ -170,6 +171,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   })
 
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
+  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointment({ logError }))
 
   return router
 }
