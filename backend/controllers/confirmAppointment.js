@@ -56,7 +56,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('D MMMM YYYY'),
         startTime: Time(startTime),
         endTime: Time(endTime),
-        recurring,
+        recurring: properCaseName(recurring),
         comment,
       })
     } catch (error) {
