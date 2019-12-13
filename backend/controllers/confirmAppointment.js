@@ -55,7 +55,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         locationDescription,
         date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('D MMMM YYYY'),
         startTime: Time(startTime),
-        endTime: Time(endTime),
+        endTime: endTime && Time(endTime),
         recurring: properCaseName(recurring),
         comment,
       })

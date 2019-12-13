@@ -23,7 +23,7 @@
                     { key: { text: "Location"}, value: { text: locationDescription } },
                     { key: { text: "Date"}, value: { text: date } },
                     { key: { text: "Start time"}, value: { text: startTime } },
-                    { key: { text: "End time"}, value: { text: endTime } },
+                    { key: { text: "End time"}, value: { text: endTime if endTime else "--"} },
                     { key: { text: "Recurring"}, value: { text: recurring } },
                     { key: { text: "Comments"}, value: { text: comment if comment else "--"} }
                 ]
