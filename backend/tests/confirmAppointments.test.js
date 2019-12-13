@@ -56,6 +56,7 @@ describe('Confirm appointments', () => {
     expect(res.render).toHaveBeenCalledWith(
       'confirmAppointments.njk',
       expect.objectContaining({
+        addAppointmentsLink: '/offenders/A12345/add-appointment',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
         prisonerName: `Doe, John (A12345)`,
         appointmentTypeDescription: 'Videolink',
