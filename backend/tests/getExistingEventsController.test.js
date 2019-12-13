@@ -8,6 +8,7 @@ describe('existing events controller', () => {
   let controller
 
   beforeEach(() => {
+    elite2Api.getSentenceData = jest.fn()
     elite2Api.getVisits = jest.fn()
     elite2Api.getAppointments = jest.fn()
     elite2Api.getExternalTransfers = jest.fn()
@@ -49,6 +50,17 @@ describe('existing events controller', () => {
 
     describe('when there are no errors', () => {
       beforeEach(() => {
+        elite2Api.getSentenceData = jest.fn().mockResolvedValue([
+          {
+            offenderNo: 'ABC123',
+            firstName: 'Test',
+            lastName: 'Offender',
+            agencyLocationId: 'LEI',
+            sentenceDetail: {
+              releaseDate: '2019-12-11',
+            },
+          },
+        ])
         elite2Api.getVisits = jest.fn().mockResolvedValue([
           {
             offenderNo: 'ABC123',
@@ -72,7 +84,6 @@ describe('existing events controller', () => {
             event: 'APPT',
             eventDescription: 'An appointment',
             eventLocation: 'Office 1',
-            comment: 'A comment.',
             startTime: '2019-12-11T12:00:00',
             endTime: '2019-12-11T13:00:00',
           },
@@ -94,15 +105,14 @@ describe('existing events controller', () => {
         elite2Api.getCourtEvents = jest.fn().mockResolvedValue([
           {
             offenderNo: 'ABC123',
-            locationId: 4,
+            eventId: 4,
             firstName: 'Test',
             lastName: 'Offender',
-            event: 'COURT',
-            eventDescription: 'Court event',
-            eventLocation: 'Court',
-            comment: 'A comment.',
-            startTime: '2019-12-11T19:00:00',
-            endTime: '2019-12-11T20:00:00',
+            event: 'CRT',
+            eventType: 'COURT',
+            eventDescription: 'Court Appearance',
+            eventStatus: 'SCH',
+            startTime: '2019-12-11T11:00:00',
           },
         ])
         elite2Api.getActivities = jest.fn().mockResolvedValue([
@@ -112,7 +122,7 @@ describe('existing events controller', () => {
             firstName: 'Test',
             lastName: 'Offender',
             event: 'ACTIVITY',
-            eventDescription: 'Activity',
+            eventDescription: 'Prison Activities',
             eventLocation: 'Somewhere',
             comment: 'A comment.',
             startTime: '2019-12-11T18:00:00',
@@ -126,30 +136,31 @@ describe('existing events controller', () => {
 
         expect(res.render).toHaveBeenCalledWith('appointmentClashes.njk', {
           clashes: [
+            { eventDescription: '**Due for release**' },
+            { eventDescription: '**Court visit scheduled**' },
             expect.objectContaining({
               locationId: 2,
+              eventDescription: 'Office 1 - An appointment',
               startTime: '12:00',
               endTime: '13:00',
             }),
             expect.objectContaining({
               locationId: 1,
+              eventDescription: 'Visiting room - Visit - A comment.',
               startTime: '14:00',
               endTime: '15:00',
             }),
             expect.objectContaining({
               locationId: 3,
+              eventDescription: 'Somewhere else - Transfer - A comment.',
               startTime: '16:00',
               endTime: '17:00',
             }),
             expect.objectContaining({
               locationId: 5,
+              eventDescription: 'Somewhere - Activity - A comment.',
               startTime: '18:00',
               endTime: '19:00',
-            }),
-            expect.objectContaining({
-              locationId: 4,
-              startTime: '19:00',
-              endTime: '20:00',
             }),
           ],
         })
