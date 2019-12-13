@@ -122,8 +122,13 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
 
     try {
       await elite2Api.addAppointments(res.locals, request)
+      req.flash('appointmentDetails', {
+        recurring,
+        ...request.appointmentDefaults,
+        bookingId,
+      })
 
-      return res.redirect(`${getOffenderUrl(offenderNo)}?appointmentAdded=true`)
+      return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
       return renderError(req, res, error)
     }

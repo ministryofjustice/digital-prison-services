@@ -1,0 +1,61 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = 'Appointments added' %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukPanel({
+                titleText: "Appointment successfully added"
+            }) }}
+
+            <h3 class="govuk-heading-m">Appointment details</h3>
+
+            {{ govukSummaryList({
+                classes: "govuk-summary-list--no-border",
+                rows: [
+                    { key: { text: "Prisoner name"}, value: { text: prisonerName } },
+                    { key: { text: "Appointment type"}, value: { text: appointmentTypeDescription } },
+                    { key: { text: "Location"}, value: { text: locationDescription } },
+                    { key: { text: "Date"}, value: { text: date } },
+                    { key: { text: "Start time"}, value: { text: startTime } },
+                    { key: { text: "End time"}, value: { text: endTime } },
+                    { key: { text: "Recurring"}, value: { text: recurring } },
+                    { key: { text: "Comments"}, value: { text: comment } }
+                ]
+            }) }}
+
+            <p class="govuk-body">
+                <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
+                    Print movement slip
+                </a>
+            </p>
+
+
+            {{ govukButton({
+                text: "Add more appointments",
+                element: 'a',
+                href: '/bulk-appointments/add-appointment-details',
+                classes: "govuk-!-margin-right-3",
+                attributes: {
+                    'data-qa': 'add-more-appointments'
+                }
+            })
+            }}
+
+            {{ govukButton({
+                text: "Back to prisoner profile",
+                element: 'a',
+                href: prisonerProfileLink,
+                classes: "govuk-button--secondary",
+                attributes: {
+                    'data-qa': 'back-to-profile'
+                }
+            })
+            }}
+        </div>
+{% endblock %}

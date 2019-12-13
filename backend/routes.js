@@ -174,7 +174,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   })
 
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
-  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointment({ logError }))
+  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointment({ elite2Api, logError }))
 
   return router
 }
