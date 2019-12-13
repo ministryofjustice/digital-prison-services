@@ -344,7 +344,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         ]
 
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, attendance)
-        elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, JsonOutput.toJson(activities))
+        elite2api.stubProgEventsAtLocation(locationId, timeSlot, date, JsonOutput.toJson(activities))
         stubForAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, offenders)
 
         when: "I select a period and activity location"
@@ -399,7 +399,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         ]
 
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, locationId, timeSlot, date, [])
-        elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, JsonOutput.toJson(activities))
+        elite2api.stubProgEventsAtLocation(locationId, timeSlot, date, JsonOutput.toJson(activities))
         whereaboutsApi.stubPostAttendance(attendanceToReturn)
         whereaboutsApi.stubPutAttendance(attendanceToReturn)
 

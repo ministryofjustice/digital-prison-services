@@ -1,4 +1,4 @@
-{% extends "./partials/layout.njk" %}
+{% extends "../partials/layout.njk" %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
@@ -19,14 +19,14 @@
           label: {
               text: "Repeats"
           },
-          items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(repeats),
+          items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(formValues.repeats),
           errorMessage: errors | findError('repeats')
       }) }}
 
       {{ govukInput({
           id: "times",
           name: "times",
-          value: times,
+          value: formValues.times,
           errorMessage: errors | findError('times'),
           type: "number",
           label: {
@@ -69,7 +69,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l">{{offenderName}} ({{offenderNo}})</span>
+        <span class="govuk-caption-l">{{offenderName}} (<span id="offenderNo">{{offenderNo}}</span>)</span>
         {{title}}
       </h1>
 
@@ -85,40 +85,43 @@
           <input type="hidden" name="bookingId" value={{bookingId}} />
 
           {{ govukSelect({
-            id: "appointmentType",
+            id: "appointment-type",
             name: "appointmentType",
             label: {
                 text: "Appointment type"
             },
-            items: appointmentTypes | addDefaultSelectedVale('Select'),
+            items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(formValues.appointmentType),
             errorMessage: errors | findError('appointment-type')
           }) }}
 
           {{ govukSelect({
-            id: "appointmentLocation",
-            name: "appointmentLocation",
-            label: {
-                text: "Appointment location"
-            },
-            items: appointmentLocations | addDefaultSelectedVale('Select'),
-            errorMessage: errors | findError('location')
+              id: "location",
+              name: "location",
+              label: {
+                  text: "Location"
+              },
+              items: appointmentLocations | addDefaultSelectedVale('Select') | setSelected(formValues.location),
+              errorMessage: errors | findError('location')
           }) }}
 
           {{ datePicker({
               id: 'date',
               label: 'Date',
               name: 'date',
-              date: date,
+              date: formValues.date,
               errorMessage: errors | findError('date'),
-              attributes: {'data-disable-past-date':'true'}
+              classes: 'js-appointment-date',
+              attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
           }) }}
+
+          <div id="clashesContainer" style="display: none;"></div>
 
           {{ timePicker({
               id: 'start-time',
               label: 'Start time',
               name: 'startTime',
-              hour: startTimeHours,
-              minute: startTimeMinutes,
+              hour: formValues.startTimeHours,
+              minute: formValues.startTimeMinutes,
               errorMessage: errors | findError('start-time-hours')
           }) }}
 
@@ -126,8 +129,8 @@
               id: 'end-time',
               label: 'End time (optional)',
               name: 'endTime',
-              hour: endTimeHours,
-              minute: endTimeMinutes,
+              hour: formValues.endTimeHours,
+              minute: formValues.endTimeMinutes,
               errorMessage: errors | findError('end-time-hours')
           }) }}
 
@@ -145,7 +148,7 @@
               items: [{
                   value: "yes",
                   text: "Yes",
-                  checked: recurring == 'yes',
+                  checked: formValues.recurring == 'yes',
                   conditional: {
                       html: recurringHtml
                   }
@@ -153,7 +156,7 @@
                   {
                       value: "no",
                       text: "No",
-                      checked: recurring == 'no'
+                      checked: formValues.recurring == 'no'
                   }
               ]
           }) }}
@@ -161,7 +164,7 @@
           {{ govukTextarea({
               name: "comments",
               id: "comments",
-              value: comments,
+              value: formValues.comments,
               errorMessage: errors | findError('comments'),
               label: {
                   text: "Comments (optional)"

@@ -68,13 +68,11 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
     const absenceReasons =
       (updateAttendanceEnabled(agencyId) && (await whereaboutsApi.getAbsenceReasons(context))) || []
 
-    const getEventsAtLocation = usage =>
-      elite2Api.getActivityList(context, { agencyId, locationId, usage, date, timeSlot })
-
+    const apiParams = { agencyId, locationId, date, timeSlot }
     const eventsAtLocationByUsage = await Promise.all([
-      getEventsAtLocation('PROG'),
-      getEventsAtLocation('VISIT'),
-      getEventsAtLocation('APP'),
+      elite2Api.getActivitiesAtLocation(context, { ...apiParams, includeSuspended: true }),
+      elite2Api.getActivityList(context, { ...apiParams, usage: 'VISIT' }),
+      elite2Api.getActivityList(context, { ...apiParams, usage: 'APP' }),
     ])
 
     const eventsAtLocation = [
