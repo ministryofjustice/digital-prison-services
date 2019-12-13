@@ -4,9 +4,7 @@
   {% for clash in clashes %}
     <li class="appointment-clashes__event">
       <span class="appointment-clashes__event__time">{{ clash.startTime + ' - ' + clash.endTime if clash.endTime else clash.startTime }}</span>
-      {{clash.eventLocation}}
-      -
-      {{clash.eventDescription}}
+      <strong>{{clash.eventDescription}}</strong>
     </li>
   {% endfor %}
 </ul>
