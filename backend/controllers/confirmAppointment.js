@@ -49,7 +49,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       })
 
       res.render('confirmAppointments.njk', {
-        prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}?appointmentAdded=true`,
+        prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
         prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
         appointmentTypeDescription,
         locationDescription,
