@@ -120,6 +120,7 @@ describe('Add appointment', () => {
       it('should submit the appointment with the correct details and redirect', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
+        req.flash = jest.fn()
         elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
 
         await controller.post(req, res)
@@ -142,7 +143,16 @@ describe('Add appointment', () => {
             repeatPeriod: 'DAILY',
           },
         })
-        expect(res.redirect).toHaveBeenCalledWith(`http://localhost:3000/offenders/${offenderNo}?appointmentAdded=true`)
+        expect(res.redirect).toHaveBeenCalledWith(`/offenders/${offenderNo}/confirm-appointment`)
+        expect(req.flash).toHaveBeenCalledWith('appointmentDetails', {
+          appointmentType: 'APT1',
+          bookingId: 123,
+          locationId: 1,
+          startTime: '3019-01-01T01:00:00',
+          endTime: '3019-01-01T02:00:00',
+          comment: 'Test comment',
+          recurring: 'yes',
+        })
 
         Date.now.mockRestore()
       })
