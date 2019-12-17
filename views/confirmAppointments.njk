@@ -10,7 +10,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: "Appointment successfully added",
+                titleText: "Appointment added",
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
@@ -18,16 +18,7 @@
 
             {{ govukSummaryList({
                 classes: "govuk-summary-list--no-border",
-                rows: [
-                    { key: { text: "Prisoner name"}, value: { text: prisonerName } },
-                    { key: { text: "Appointment type"}, value: { text: appointmentTypeDescription } },
-                    { key: { text: "Location"}, value: { text: locationDescription } },
-                    { key: { text: "Date"}, value: { text: date } },
-                    { key: { text: "Start time"}, value: { text: startTime } },
-                    { key: { text: "End time"}, value: { text: endTime if endTime else "--"} },
-                    { key: { text: "Recurring"}, value: { text: recurring } },
-                    { key: { text: "Comments"}, value: { text: comment if comment else "--"} }
-                ]
+                rows: details | toSummaryViewModel
             }) }}
 
             <p class="govuk-body">

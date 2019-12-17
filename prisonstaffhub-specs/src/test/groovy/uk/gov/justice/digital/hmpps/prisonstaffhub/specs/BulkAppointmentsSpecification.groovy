@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
-import geb.Browser
-import groovy.json.JsonOutput
+
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -9,13 +8,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.Appoin
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.VisitsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsAddPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsAddedPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsInvalidNumbersPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsClashesPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsConfirmPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsNotAddedPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.BulkAppointmentsUploadCSVPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.*
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

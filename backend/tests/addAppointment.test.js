@@ -152,6 +152,8 @@ describe('Add appointment', () => {
           endTime: '3019-01-01T02:00:00',
           comment: 'Test comment',
           recurring: 'yes',
+          times: '1',
+          repeats: 'DAILY',
         })
 
         Date.now.mockRestore()

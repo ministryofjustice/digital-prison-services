@@ -124,6 +124,8 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
       await elite2Api.addAppointments(res.locals, request)
       req.flash('appointmentDetails', {
         recurring,
+        times,
+        repeats,
         ...request.appointmentDefaults,
         bookingId,
       })

@@ -10,6 +10,14 @@ const repeatsToMomentMap = {
   FORTNIGHTLY: 'weeks',
 }
 
+const repeatTypes = [
+  { value: 'WEEKLY', text: 'Weekly' },
+  { value: 'DAILY', text: 'Daily' },
+  { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
+  { value: 'MONTHLY', text: 'Monthly' },
+  { value: 'FORTNIGHTLY', text: 'Fortnightly' },
+]
+
 const calculateEndDate = ({ startTime, repeats, numberOfTimes }) => {
   if (!startTime) return null
 
@@ -36,4 +44,5 @@ const recurringEndDate = values => {
 module.exports = {
   calculateEndDate,
   recurringEndDate,
+  repeatTypes,
 }

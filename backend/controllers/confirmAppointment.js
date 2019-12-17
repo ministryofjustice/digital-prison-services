@@ -6,6 +6,7 @@ const {
 const { properCaseName } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
+const { calculateEndDate, repeatTypes } = require('../../src/BulkAppointments/RecurringAppointments')
 
 const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
   const index = async (req, res) => {
@@ -21,7 +22,16 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       const appointmentDetails = req.flash('appointmentDetails')
       if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
 
-      const { locationId, appointmentType, startTime, endTime, comment, recurring } = appointmentDetails[0]
+      const {
+        locationId,
+        appointmentType,
+        startTime,
+        endTime,
+        comment,
+        recurring,
+        times,
+        repeats,
+      } = appointmentDetails[0]
 
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
@@ -48,17 +58,26 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         ],
       })
 
+      const recurringInformation = recurring === 'yes' && {
+        howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
+        numberOfAppointments: times,
+        endDate: calculateEndDate({ startTime, repeats, times }).format('dddd D MMMM YYYY'),
+      }
+
       res.render('confirmAppointments.njk', {
         addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
         prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
-        prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
-        appointmentTypeDescription,
-        locationDescription,
-        date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('D MMMM YYYY'),
-        startTime: Time(startTime),
-        endTime: endTime && Time(endTime),
-        recurring: properCaseName(recurring),
-        comment,
+        details: {
+          prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
+          appointmentType: appointmentTypeDescription,
+          location: locationDescription,
+          date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY'),
+          startTime: Time(startTime),
+          endTime: endTime && Time(endTime),
+          comment,
+          recurring: properCaseName(recurring),
+          ...recurringInformation,
+        },
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
