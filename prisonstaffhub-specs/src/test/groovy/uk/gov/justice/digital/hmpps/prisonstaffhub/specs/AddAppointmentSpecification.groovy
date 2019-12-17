@@ -9,7 +9,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddAppointmentPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmAppointmentPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmSingleAppointmentPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmRecurringAppointmentPage
 
 import java.time.LocalDate
 
@@ -51,7 +52,38 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         submitButton.click()
 
         then: "I should be presented with the confirmation page"
-        at ConfirmAppointmentPage
+        at ConfirmSingleAppointmentPage
+    }
+
+    def "should post appointment and redirect to the recurring confirmation page"() {
+        setupTests()
+
+        elite2api.stubSentenceData(offenders, date,true)
+        elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
+        elite2api.stubActivities(Caseload.LEI, null, date, offenders)
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders)
+        elite2api.stubAppointments(Caseload.LEI, null, date, offenders)
+        elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "ACTI"
+        form.location = 1
+        form.startTimeHours = 23
+        form.startTimeMinutes = 55
+        form.recurring = "yes"
+        form.repeats = "DAILY"
+        form.times = 3
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        then: "I should be presented with the confirmation page"
+        at ConfirmRecurringAppointmentPage
     }
 
     def "should load appointment clashes when there are form validation errors"() {

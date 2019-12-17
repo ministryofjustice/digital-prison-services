@@ -3,14 +3,13 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set title = 'Appointments added' %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: "Appointment added",
+                titleText: title,
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
