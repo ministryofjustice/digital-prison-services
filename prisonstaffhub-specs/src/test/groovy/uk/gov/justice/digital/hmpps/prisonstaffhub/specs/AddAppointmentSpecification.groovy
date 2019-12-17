@@ -74,7 +74,5 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with the confirmation page"
         at ConfirmAppointmentPage
-        elite2api.verify()
-
     }
 }
