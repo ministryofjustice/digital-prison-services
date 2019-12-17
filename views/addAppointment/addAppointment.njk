@@ -114,7 +114,11 @@
               attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
           }) }}
 
-          <div id="clashesContainer" style="display: none;"></div>
+          <div id="clashesContainer">
+            {% if formValues.date %}
+                {% include "../appointmentClashes.njk" %}
+            {% endif %}
+          </div>
 
           {{ timePicker({
               id: 'start-time',

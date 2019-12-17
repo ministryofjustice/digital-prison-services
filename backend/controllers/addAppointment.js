@@ -6,7 +6,7 @@ const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers'
 const { serviceUnavailableMessage } = require('../common-messages')
 const { repeatTypes, getValidationMessages } = require('../shared/appointmentConstants')
 
-const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
+const addAppointmentFactory = (appointmentsService, existingEventsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -33,12 +33,22 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
     const { activeCaseLoadId } = req.session.userDetails
 
     try {
+      let formattedEvents
       const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
         res.locals,
         activeCaseLoadId
       )
+
+      if (pageData && pageData.formValues && pageData.formValues.date) {
+        formattedEvents = await existingEventsService.getExistingEventsForOffender(
+          res.locals,
+          activeCaseLoadId,
+          pageData.formValues.date,
+          offenderNo
+        )
+      }
 
       return res.render('addAppointment/addAppointment.njk', {
         ...pageData,
@@ -49,6 +59,7 @@ const addAppointmentFactory = (appointmentsService, elite2Api, logError) => {
         appointmentLocations,
         repeatTypes,
         bookingId,
+        clashes: formattedEvents,
       })
     } catch (error) {
       return renderError(req, res, error)

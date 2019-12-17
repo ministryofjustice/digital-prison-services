@@ -1,11 +1,8 @@
-const getExistingEventsController = require('../controllers/getExistingEventsController')
+const existingEventsService = require('../controllers/existingEventsService')
 
-describe('existing events controller', () => {
+describe('existing events', () => {
   const elite2Api = {}
-  let req
-  let res
-  let logError
-  let controller
+  let service
 
   beforeEach(() => {
     elite2Api.getSentenceData = jest.fn()
@@ -15,23 +12,10 @@ describe('existing events controller', () => {
     elite2Api.getCourtEvents = jest.fn()
     elite2Api.getActivities = jest.fn()
 
-    req = {
-      originalUrl: 'http://localhost',
-      session: {
-        userDetails: {
-          activeCaseLoadId: 'LEI',
-        },
-      },
-      query: { date: '11/12/2019', offenderNo: 'ABC123' },
-    }
-
-    res = { locals: {}, json: jest.fn(), status: jest.fn(), render: jest.fn() }
-
-    logError = jest.fn()
-    controller = getExistingEventsController({ elite2Api, logError })
+    service = existingEventsService(elite2Api)
   })
 
-  describe('getting events', () => {
+  describe('getting events for offenders', () => {
     it('should call the correct endpoints with the correct parameters', async () => {
       const expectedParameters = {
         agencyId: 'LEI',
@@ -39,7 +23,7 @@ describe('existing events controller', () => {
         offenderNumbers: ['ABC123'],
       }
 
-      await controller(req, res)
+      await service.getExistingEventsForOffender({}, 'LEI', '11/12/2019', 'ABC123')
 
       expect(elite2Api.getVisits).toHaveBeenCalledWith({}, expectedParameters)
       expect(elite2Api.getAppointments).toHaveBeenCalledWith({}, expectedParameters)
@@ -132,50 +116,47 @@ describe('existing events controller', () => {
       })
 
       it('should return events sorted by start time', async () => {
-        await controller(req, res)
+        const events = await service.getExistingEventsForOffender({}, 'LEI', '11/12/2019', 'ABC123')
 
-        expect(res.render).toHaveBeenCalledWith('appointmentClashes.njk', {
-          clashes: [
-            { eventDescription: '**Due for release**' },
-            { eventDescription: '**Court visit scheduled**' },
-            expect.objectContaining({
-              locationId: 2,
-              eventDescription: 'Office 1 - An appointment',
-              startTime: '12:00',
-              endTime: '13:00',
-            }),
-            expect.objectContaining({
-              locationId: 1,
-              eventDescription: 'Visiting room - Visit - A comment.',
-              startTime: '14:00',
-              endTime: '15:00',
-            }),
-            expect.objectContaining({
-              locationId: 3,
-              eventDescription: 'Somewhere else - Transfer - A comment.',
-              startTime: '16:00',
-              endTime: '17:00',
-            }),
-            expect.objectContaining({
-              locationId: 5,
-              eventDescription: 'Somewhere - Activity - A comment.',
-              startTime: '18:00',
-              endTime: '19:00',
-            }),
-          ],
-        })
+        expect(events).toEqual([
+          { eventDescription: '**Due for release**' },
+          { eventDescription: '**Court visit scheduled**' },
+          expect.objectContaining({
+            locationId: 2,
+            eventDescription: 'Office 1 - An appointment',
+            startTime: '12:00',
+            endTime: '13:00',
+          }),
+          expect.objectContaining({
+            locationId: 1,
+            eventDescription: 'Visiting room - Visit - A comment.',
+            startTime: '14:00',
+            endTime: '15:00',
+          }),
+          expect.objectContaining({
+            locationId: 3,
+            eventDescription: 'Somewhere else - Transfer - A comment.',
+            startTime: '16:00',
+            endTime: '17:00',
+          }),
+          expect.objectContaining({
+            locationId: 5,
+            eventDescription: 'Somewhere - Activity - A comment.',
+            startTime: '18:00',
+            endTime: '19:00',
+          }),
+        ])
       })
     })
 
     describe('when there are errors with elite2Api', () => {
-      it('should set the correct response status and return an error message', async () => {
-        const errorMessage = 'Error retrieving existing events for offender'
-        elite2Api.getVisits.mockImplementation(() => Promise.reject(new Error('Network error')))
-        await controller(req, res)
+      it('should return the error', async () => {
+        const error = new Error('Network error')
+        elite2Api.getVisits.mockImplementation(() => Promise.reject(error))
 
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), errorMessage)
-        expect(res.json).toHaveBeenCalledWith({ errorMessage })
+        const events = await service.getExistingEventsForOffender({}, 'LEI', '11/12/2019', 'ABC123')
+
+        expect(events).toEqual(error)
       })
     })
   })

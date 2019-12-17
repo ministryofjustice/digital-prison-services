@@ -12,6 +12,8 @@ class AddAppointmentPage extends Page {
         datePicker { $('#ui-datepicker-div')}
         activeDate { $('.ui-state-active')}
         recurringInputs {$("[data-qa='recurring-inputs']")}
+        offenderClashes {$("[data-qa='offender-clashes']")}
+        errorSummary {$('.govuk-error-summary')}
     }
 
     static at = {
