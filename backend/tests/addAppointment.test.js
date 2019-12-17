@@ -10,6 +10,7 @@ config.app.notmEndpointUrl = '//dpsUrl/'
 describe('Add appointment', () => {
   const elite2Api = {}
   const appointmentsService = {}
+  const existingEventsService = {}
   const offenderNo = 'ABC123'
   const bookingId = 123
 
@@ -33,18 +34,20 @@ describe('Add appointment', () => {
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
-    appointmentsService.getAppointmentOptions = jest.fn()
     logError = jest.fn()
 
+    appointmentsService.getAppointmentOptions = jest.fn()
     appointmentsService.getAppointmentOptions.mockReturnValue({
       appointmentTypes: [],
       locationTypes: [],
     })
 
+    existingEventsService.getExistingEventsForOffender = jest.fn()
+
     elite2Api.getDetails = jest.fn()
     elite2Api.addAppointments = jest.fn()
 
-    controller = addAppointmentFactory(appointmentsService, elite2Api, logError)
+    controller = addAppointmentFactory(appointmentsService, existingEventsService, elite2Api, logError)
   })
 
   describe('index', () => {
@@ -286,6 +289,51 @@ describe('Add appointment', () => {
             ]),
           })
         )
+      })
+
+      describe('and there are existing events for an offender', () => {
+        it('still show the appointment clashes along with the validation messages', async () => {
+          jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+          const offenderEvents = [
+            { eventDescription: '**Court visit scheduled**' },
+            {
+              locationId: 2,
+              eventDescription: 'Office 1 - An appointment',
+              startTime: '12:00',
+              endTime: '13:00',
+            },
+          ]
+          const date = moment().format(DAY_MONTH_YEAR)
+          const startTime = moment().subtract(5, 'minutes')
+          const startTimeHours = startTime.hour()
+          const startTimeMinutes = startTime.minute()
+
+          req.body = {
+            date,
+            startTimeHours,
+            startTimeMinutes,
+          }
+
+          existingEventsService.getExistingEventsForOffender.mockReturnValue(offenderEvents)
+
+          await controller.post(req, res)
+
+          expect(existingEventsService.getExistingEventsForOffender).toHaveBeenCalledWith(
+            {},
+            'LEI',
+            '29/03/2019',
+            'ABC123'
+          )
+          expect(res.render).toHaveBeenCalledWith(
+            'addAppointment/addAppointment.njk',
+            expect.objectContaining({
+              errors: expect.arrayContaining([
+                { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
+              ]),
+              clashes: offenderEvents,
+            })
+          )
+        })
       })
     })
   })
