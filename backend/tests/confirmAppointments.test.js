@@ -5,6 +5,17 @@ describe('Confirm appointments', () => {
   const appointmentsService = {}
   const req = {}
   const res = {}
+  const appointmentDetails = {
+    offenderNo: 'A12345',
+    firstName: 'john',
+    lastName: 'doe',
+    appointmentType: 'vid1',
+    locationId: 1,
+    startTime: '2017-10-10T11:00',
+    endTime: '2017-10-10T14:00',
+    recurring: 'No',
+    comment: 'Test',
+  }
 
   beforeEach(() => {
     elite2Api.getDetails = jest.fn()
@@ -29,19 +40,7 @@ describe('Confirm appointments', () => {
 
     res.render = jest.fn()
 
-    req.flash.mockImplementation(() => [
-      {
-        offenderNo: 'A12345',
-        firstName: 'john',
-        lastName: 'doe',
-        appointmentType: 'vid1',
-        locationId: 1,
-        startTime: '2017-10-10T11:00',
-        endTime: '2017-10-10T14:00',
-        recurring: 'No',
-        comment: 'Test',
-      },
-    ])
+    req.flash.mockImplementation(() => [appointmentDetails])
   })
 
   it('should extract appointment details from flash and return a populated view model', async () => {
@@ -58,14 +57,55 @@ describe('Confirm appointments', () => {
       expect.objectContaining({
         addAppointmentsLink: '/offenders/A12345/add-appointment',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
-        prisonerName: `Doe, John (A12345)`,
-        appointmentTypeDescription: 'Videolink',
-        locationDescription: 'Room 3',
-        date: '10 October 2017',
-        startTime: '11:00',
-        endTime: '14:00',
-        recurring: 'No',
-        comment: 'Test',
+        details: {
+          prisonerName: `Doe, John (A12345)`,
+          appointmentType: 'Videolink',
+          location: 'Room 3',
+          date: 'Tuesday 10 October 2017',
+          startTime: '11:00',
+          endTime: '14:00',
+          recurring: 'No',
+          comment: 'Test',
+        },
+      })
+    )
+  })
+
+  it('should display recurring information', async () => {
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError: () => {},
+    })
+
+    req.flash = jest.fn()
+    req.flash.mockImplementation(() => [
+      {
+        ...appointmentDetails,
+        recurring: 'yes',
+        times: '1',
+        repeats: 'DAILY',
+      },
+    ])
+
+    await index(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'confirmAppointments.njk',
+      expect.objectContaining({
+        details: {
+          prisonerName: `Doe, John (A12345)`,
+          appointmentType: 'Videolink',
+          location: 'Room 3',
+          date: 'Tuesday 10 October 2017',
+          startTime: '11:00',
+          endTime: '14:00',
+          comment: 'Test',
+          recurring: 'Yes',
+          howOften: 'Daily',
+          numberOfAppointments: '1',
+          endDate: 'Tuesday 10 October 2017',
+        },
       })
     )
   })

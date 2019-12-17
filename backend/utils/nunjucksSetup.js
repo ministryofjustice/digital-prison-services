@@ -1,6 +1,6 @@
 const nunjucks = require('nunjucks')
 const config = require('../config')
-const { getDate, getTime } = require('../utils')
+const { getDate, getTime, pascalToString, capitalize } = require('../utils')
 
 module.exports = (app, path) => {
   const njkEnv = nunjucks.configure([path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/'], {
@@ -63,6 +63,13 @@ module.exports = (app, path) => {
         ...entry,
         selected: entry && entry.value === selected,
       }))
+  )
+
+  njkEnv.addFilter('toSummaryViewModel', model =>
+    Object.keys(model).map(key => ({
+      key: { text: capitalize(pascalToString(key)) },
+      value: { text: model[key] || '--' },
+    }))
   )
 
   njkEnv.addFilter('getDate', getDate)
