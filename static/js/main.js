@@ -14,18 +14,51 @@ $(document).ready(function() {
     })
   })
 
-  $('.js-appointment-date').change(e => {
-    const clashesContainer = $('#clashesContainer')
+  const appointmentDate = $('.js-appointment-date')
+  const appointmentLocation = $('.js-appointment-location')
+
+  const getEventsForLocation = (locationId, date) => {
+    const locationEventsContainer = $('#location-events')
 
     $.ajax({
-      url: '/api/get-existing-events',
-      data: { offenderNo: $('#offenderNo').text(), date: e.target.value },
+      url: '/api/get-location-events',
+      data: { date, locationId },
     })
       .done(data => {
-        clashesContainer.html(data).show()
+        locationEventsContainer.html(data)
       })
       .fail(() => {
-        clashesContainer.hide()
+        locationEventsContainer.hide()
       })
+  }
+
+  const getEventsForOffender = (offenderNo, date) => {
+    const offenderEventsContainer = $('#offender-events')
+
+    $.ajax({
+      url: '/api/get-offender-events',
+      data: { date, offenderNo },
+    })
+      .done(data => {
+        offenderEventsContainer.html(data)
+      })
+      .fail(() => {
+        offenderEventsContainer.hide()
+      })
+  }
+
+  appointmentLocation.change(e => {
+    console.log(e.target)
+    if (appointmentDate.val()) {
+      getEventsForLocation(e.target.value, appointmentDate.val())
+    }
+  })
+
+  appointmentDate.change(e => {
+    getEventsForOffender($('#offenderNo').text(), e.target.value)
+
+    if (appointmentLocation.val()) {
+      getEventsForLocation(appointmentLocation.val(), e.target.value)
+    }
   })
 })

@@ -332,7 +332,7 @@ describe('Add appointment', () => {
               errors: expect.arrayContaining([
                 { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
               ]),
-              clashes: offenderEvents,
+              offenderEvents,
             })
           )
         })

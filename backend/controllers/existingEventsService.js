@@ -1,17 +1,17 @@
 const { switchDateFormat, getTime, sortByDateTime } = require('../utils')
 
 module.exports = elite2Api => {
+  const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
+    const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription
+    const locationString = eventLocation ? `${eventLocation} -` : ''
+    const descriptionString = comment ? `${description} - ${comment}` : eventDescription
+
+    return `${locationString} ${descriptionString}`
+  }
+
   const getExistingEventsForOffender = async (context, agencyId, date, offenderNo) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, offenderNumbers: [offenderNo] }
-
-    const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
-      const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription
-      const locationString = eventLocation ? `${eventLocation} -` : ''
-      const descriptionString = comment ? `${description} - ${comment}` : eventDescription
-
-      return `${locationString} ${descriptionString}`
-    }
 
     try {
       const [sentenceData, courtEvents, ...rest] = await Promise.all([
@@ -48,5 +48,27 @@ module.exports = elite2Api => {
     }
   }
 
-  return { getExistingEventsForOffender }
+  const getExistingEventsForLocation = async (context, agencyId, locationId, date) => {
+    const formattedDate = switchDateFormat(date)
+    const searchCriteria = { agencyId, date: formattedDate, locationId }
+
+    const eventsAtLocationByUsage = await Promise.all([
+      elite2Api.getActivitiesAtLocation(context, searchCriteria),
+      elite2Api.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
+      elite2Api.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
+    ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
+
+    const formattedEvents = eventsAtLocationByUsage
+      .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
+      .map(event => ({
+        ...event,
+        startTime: getTime(event.startTime),
+        endTime: event.endTime && getTime(event.endTime),
+        eventDescription: getEventDescription(event),
+      }))
+
+    return formattedEvents
+  }
+
+  return { getExistingEventsForOffender, getExistingEventsForLocation }
 }

@@ -29,12 +29,19 @@ const elite2ApiFactory = client => {
     get(context, `/api/schedules/${agencyId}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}`)
 
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
-    get(context, `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?date=${date}&timeSlot=${timeSlot}`)
+    get(
+      context,
+      `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?${
+        timeSlot ? `timeSlot=${timeSlot}&` : ''
+      }date=${date}`
+    )
 
   const getActivitiesAtLocation = (context, { locationId, date, timeSlot, includeSuspended }) =>
     get(
       context,
-      `/api/schedules/locations/${locationId}/activities?date=${date}&timeSlot=${timeSlot}&includeSuspended=${includeSuspended}`
+      `/api/schedules/locations/${locationId}/activities?${
+        timeSlot ? `timeSlot=${timeSlot}&` : ''
+      }date=${date}&includeSuspended=${includeSuspended}`
     )
 
   const getVisits = (context, { agencyId, date, timeSlot, offenderNumbers }) =>

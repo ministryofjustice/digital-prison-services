@@ -33,7 +33,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
     const { activeCaseLoadId } = req.session.userDetails
 
     try {
-      let formattedEvents
+      const prePopulatedData = {}
       const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
@@ -42,7 +42,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
       )
 
       if (pageData && pageData.formValues && pageData.formValues.date) {
-        formattedEvents = await existingEventsService.getExistingEventsForOffender(
+        prePopulatedData.offenderEvents = await existingEventsService.getExistingEventsForOffender(
           res.locals,
           activeCaseLoadId,
           pageData.formValues.date,
@@ -50,8 +50,24 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         )
       }
 
+      if (pageData && pageData.formValues && pageData.formValues.date && pageData.formValues.location) {
+        const [locationDetails, locationEvents] = await Promise.all([
+          elite2Api.getLocation(res.locals, pageData.formValues.location),
+          existingEventsService.getExistingEventsForLocation(
+            res.locals,
+            activeCaseLoadId,
+            pageData.formValues.location,
+            pageData.formValues.date
+          ),
+        ])
+
+        prePopulatedData.locationName = locationDetails.userDescription
+        prePopulatedData.locationEvents = locationEvents
+      }
+
       return res.render('addAppointment/addAppointment.njk', {
         ...pageData,
+        ...prePopulatedData,
         offenderNo,
         offenderName,
         dpsUrl,
@@ -59,7 +75,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         appointmentLocations,
         repeatTypes,
         bookingId,
-        clashes: formattedEvents,
       })
     } catch (error) {
       return renderError(req, res, error)
