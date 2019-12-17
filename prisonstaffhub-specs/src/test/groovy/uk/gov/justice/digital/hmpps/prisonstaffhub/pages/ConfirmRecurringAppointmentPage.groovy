@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
 import geb.Page
 
-class ConfirmAppointmentPage extends Page {
+class ConfirmRecurringAppointmentPage extends Page {
     static url = "/offenders/A12345/confirm-appointment"
 
     static content = {
@@ -10,7 +10,7 @@ class ConfirmAppointmentPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("Appointment added")
+        pageTitle.contains("Appointments booked")
     }
 
 }

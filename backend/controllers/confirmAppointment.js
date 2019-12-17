@@ -64,7 +64,10 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         endDate: calculateEndDate({ startTime, repeats, times }).format('dddd D MMMM YYYY'),
       }
 
+      const title = recurring === 'yes' ? 'Appointments booked' : 'Appointment booked'
+
       res.render('confirmAppointments.njk', {
+        title,
         addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
         prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
         details: {
