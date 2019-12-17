@@ -1,6 +1,14 @@
 const moment = require('moment')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
-const { calculateEndDate, repeatTypes } = require('../../src/BulkAppointments/RecurringAppointments')
+const { calculateEndDate } = require('../../src/BulkAppointments/RecurringAppointments')
+
+const repeatTypes = [
+  { value: 'WEEKLY', text: 'Weekly' },
+  { value: 'DAILY', text: 'Daily' },
+  { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
+  { value: 'MONTHLY', text: 'Monthly' },
+  { value: 'FORTNIGHTLY', text: 'Fortnightly' },
+]
 
 const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
   const recurringStartTime =
