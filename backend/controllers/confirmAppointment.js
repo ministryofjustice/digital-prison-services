@@ -6,7 +6,7 @@ const {
 const { properCaseName } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
-const { calculateEndDate, repeatTypes } = require('../../src/BulkAppointments/RecurringAppointments')
+const { endRecurringEndingDate, repeatTypes } = require('../shared/appointmentConstants')
 
 const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
   const index = async (req, res) => {
@@ -61,7 +61,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       const recurringInformation = recurring === 'yes' && {
         howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
         numberOfAppointments: times,
-        endDate: calculateEndDate({ startTime, repeats, times }).format('dddd D MMMM YYYY'),
+        endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
       }
 
       const title = recurring === 'yes' ? 'Appointments booked' : 'Appointment booked'

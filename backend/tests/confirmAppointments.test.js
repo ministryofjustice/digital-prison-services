@@ -83,8 +83,8 @@ describe('Confirm appointments', () => {
       {
         ...appointmentDetails,
         recurring: 'yes',
-        times: '1',
-        repeats: 'DAILY',
+        times: '2',
+        repeats: 'FORTNIGHTLY',
       },
     ])
 
@@ -102,9 +102,9 @@ describe('Confirm appointments', () => {
           endTime: '14:00',
           comment: 'Test',
           recurring: 'Yes',
-          howOften: 'Daily',
-          numberOfAppointments: '1',
-          endDate: 'Tuesday 10 October 2017',
+          howOften: 'Fortnightly',
+          numberOfAppointments: '2',
+          endDate: 'Tuesday 24 October 2017',
         },
       })
     )
