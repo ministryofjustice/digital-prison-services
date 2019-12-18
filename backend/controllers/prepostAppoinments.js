@@ -187,26 +187,33 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
 
       await createAppointment(res.locals, appointmentDetails)
 
-      const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(Number(preAppointmentDuration), 'minutes')
-      const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(Number(preAppointmentDuration), 'minutes')
+      if (preAppointment === 'yes') {
+        const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(
+          Number(preAppointmentDuration),
+          'minutes'
+        )
+        const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(Number(preAppointmentDuration), 'minutes')
 
-      await createAppointment(res.locals, {
-        ...appointmentDetails,
-        recurring: 'no',
-        startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
-        endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
-        locationId: Number(preAppointmentLocation),
-      })
+        await createAppointment(res.locals, {
+          ...appointmentDetails,
+          recurring: 'no',
+          startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
+          endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
+          locationId: Number(preAppointmentLocation),
+        })
+      }
 
-      const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(Number(postAppointmentDuration), 'minutes')
+      if (postAppointment === 'yes') {
+        const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(Number(postAppointmentDuration), 'minutes')
 
-      await createAppointment(res.locals, {
-        ...appointmentDetails,
-        recurring: 'no',
-        startTime: endTime,
-        endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
-        locationId: Number(postAppointmentLocation),
-      })
+        await createAppointment(res.locals, {
+          ...appointmentDetails,
+          recurring: 'no',
+          startTime: endTime,
+          endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
+          locationId: Number(postAppointmentLocation),
+        })
+      }
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

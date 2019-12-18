@@ -347,5 +347,17 @@ describe('Pre post appointments', () => {
         }
       )
     })
+
+    it('should not request pre or post appointments when "no" has been selected', async () => {
+      const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+
+      req.body = {
+        postAppointment: 'no',
+        preAppointment: 'no',
+      }
+      await post(req, res)
+
+      expect(elite2Api.addAppointments.mock.calls.length).toBe(1)
+    })
   })
 })
