@@ -295,8 +295,8 @@ describe('Add appointment', () => {
         )
       })
 
-      describe.only('and there are existing events for an offender and a location', () => {
-        it('still show the offender events along with the validation messages', async () => {
+      describe('and there are existing events for an offender and a location', () => {
+        it('should still show the offender and location events along with the validation messages', async () => {
           jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
           const offenderEvents = [
             { eventDescription: '**Court visit scheduled**' },

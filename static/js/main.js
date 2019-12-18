@@ -62,11 +62,11 @@ $(document).ready(function() {
   appointmentTypeSelect
     .add(appointmentLocationSelect)
     .add(appointmentDateInput)
-    .change(function(e) {
+    .change(function() {
       getEventsForLocation()
     })
 
-  appointmentDateInput.change(function(e) {
-    getEventsForOffender($('#offenderNo').text(), e.target.value)
+  appointmentDateInput.change(function() {
+    getEventsForOffender($('#offenderNo').text(), $(this).val())
   })
 })
