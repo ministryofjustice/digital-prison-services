@@ -8,6 +8,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "components/timePicker/timePicker.njk" import timePicker %}
+{% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
 {% set title = 'Add new appointment' %}
 {% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
@@ -67,7 +68,7 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">{{offenderName}} (<span id="offenderNo">{{offenderNo}}</span>)</span>
         {{title}}
@@ -90,6 +91,7 @@
             label: {
                 text: "Appointment type"
             },
+            classes: 'js-appointment-type',
             items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(formValues.appointmentType),
             errorMessage: errors | findError('appointment-type')
           }) }}
@@ -100,6 +102,7 @@
               label: {
                   text: "Location"
               },
+              classes: 'js-appointment-location',
               items: appointmentLocations | addDefaultSelectedVale('Select') | setSelected(formValues.location),
               errorMessage: errors | findError('location')
           }) }}
@@ -114,10 +117,17 @@
               attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
           }) }}
 
-          <div id="clashesContainer">
-            {% if formValues.date %}
-                {% include "../appointmentClashes.njk" %}
-            {% endif %}
+          <div class="govuk-grid-row">
+            <div id="location-events" class="govuk-grid-column-one-half">
+                {% if formValues.date and formValues.location %}
+                    {{scheduledEvents(locationEvents, 'location', locationName)}}
+                {% endif %}
+            </div>
+            <div id="offender-events" class="govuk-grid-column-one-half">
+                {% if formValues.date %}
+                    {{scheduledEvents(offenderEvents, 'offender', offenderName)}}
+                {% endif %}
+            </div>
           </div>
 
           {{ timePicker({
