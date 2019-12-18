@@ -52,22 +52,26 @@ module.exports = elite2Api => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, locationId }
 
-    const eventsAtLocationByUsage = await Promise.all([
-      elite2Api.getActivitiesAtLocation(context, searchCriteria),
-      elite2Api.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
-      elite2Api.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
-    ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
+    try {
+      const eventsAtLocationByUsage = await Promise.all([
+        elite2Api.getActivitiesAtLocation(context, searchCriteria),
+        elite2Api.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
+        elite2Api.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
+      ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
 
-    const formattedEvents = eventsAtLocationByUsage
-      .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-      .map(event => ({
-        ...event,
-        startTime: getTime(event.startTime),
-        endTime: event.endTime && getTime(event.endTime),
-        eventDescription: getEventDescription(event),
-      }))
+      const formattedEvents = eventsAtLocationByUsage
+        .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
+        .map(event => ({
+          ...event,
+          startTime: getTime(event.startTime),
+          endTime: event.endTime && getTime(event.endTime),
+          eventDescription: getEventDescription(event),
+        }))
 
-    return formattedEvents
+      return formattedEvents
+    } catch (error) {
+      return error
+    }
   }
 
   return { getExistingEventsForOffender, getExistingEventsForLocation }
