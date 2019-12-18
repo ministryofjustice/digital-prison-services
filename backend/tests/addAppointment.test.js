@@ -309,6 +309,36 @@ describe('Add appointment', () => {
         )
       })
 
+      it('should validate end time is required if video link appointment', async () => {
+        req.body = {
+          appointmentType: 'VLB',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment/addAppointment.njk',
+          expect.objectContaining({
+            errors: expect.arrayContaining([{ href: '#end-time-hours', text: 'Select an end time' }]),
+          })
+        )
+      })
+
+      it('should not validate end time is required if not a video link appointment', async () => {
+        req.body = {
+          appointmentType: 'AP1',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment/addAppointment.njk',
+          expect.objectContaining({
+            errors: expect.not.arrayContaining([{ href: '#end-time-hours', text: 'Select an end time' }]),
+          })
+        )
+      })
+
       describe('and there are existing events for an offender and a location', () => {
         it('should still show the offender and location events along with the validation messages', async () => {
           jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z

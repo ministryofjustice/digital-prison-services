@@ -72,6 +72,9 @@ const getValidationMessages = (fields, singleAppointment) => {
     }
   }
 
+  // Video link appointments require an end time so we can show availability
+  if (appointmentType === 'VLB' && !endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
+
   if (comments && comments.length > 3600)
     errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comments' })
 

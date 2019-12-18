@@ -140,7 +140,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with missing start time error along with the clashes"
         at AddAppointmentPage
-        errorSummary.text() == 'There is a problem\nSelect a start time'
+        errorSummary.text() == 'There is a problem\nSelect a start time\nSelect an end time'
         offenderEvents.text() == '18:00 - 18:30\nVisiting room - Visits - Friends'
         locationEvents.text() == '15:30\nMedical Room1 - Medical - Dentist - Appt details'
     }
