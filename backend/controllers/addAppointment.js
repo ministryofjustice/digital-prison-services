@@ -132,7 +132,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
     }
 
     try {
-      await elite2Api.addAppointments(res.locals, request)
       req.flash('appointmentDetails', {
         recurring,
         times,
@@ -140,6 +139,10 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         ...request.appointmentDefaults,
         bookingId,
       })
+
+      if (appointmentType === 'VLB') return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
+
+      await elite2Api.addAppointments(res.locals, request)
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

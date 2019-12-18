@@ -1,0 +1,130 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title = "Pre and post appointment" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% macro appointment(params) %}
+    {{ govukSelect({
+        name: params.name + "Location",
+        label: {
+            text: "Room selection"
+        },
+        items: locations | addDefaultSelectedVale('Select') | setSelected(params.location),
+        errorMessage: errors | findError(params.name + "Location")
+    }) }}
+
+    {{ govukSelect({
+        name: params.name + "Duration",
+        label: {
+            text: "Duration"
+        },
+        items: [
+            { text: '15 minutes', value: '15' },
+            { text: '30 minutes', value: '30' },
+            { text: '45 minutes', value: '45' },
+            { text: '1 hour', value: '60' }
+        ] | setSelected(params.duration),
+        errorMessage: errors | findError(params.name + "Duration")
+    }) }}
+{% endmacro %}
+
+{% set preAppointmentHtml %}
+    {{ appointment({name:"preAppointment",locations: locations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
+{% endset -%}
+
+{% set postAppointmentHtml %}
+   {{ appointment({name:"postAppointment",locations: locations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
+{% endset -%}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-m">Videolink appointment details</h1>
+
+        {{ govukSummaryList({
+            classes: "govuk-summary-list--no-border",
+            rows: details | toSummaryViewModel
+        }) }}
+
+        <h2 class="govuk-heading-m">Pre and post appointment</h2>
+
+        <form method="post" about="{{ links.postAppointments }}">
+            {{ govukRadios({
+                classes: "govuk-radios--inline",
+                idPrefix: "preAppointment",
+                name: "preAppointment",
+                fieldset: {
+                    legend: {
+                        text: "Add pre-appointment session?",
+                        classes: "govuk-fieldset__legend--s"
+                    }
+                },
+                items: [{
+                    value: "yes",
+                    text: "Yes",
+                    checked: formValues.preAppointment == 'yes',
+                    conditional: {
+                        html: preAppointmentHtml
+                    }
+                },
+                    {
+                        value: "no",
+                        text: "No",
+                        checked: formValues.preAppointment == 'no'
+                    }
+                ]
+            }) }}
+
+            {{ govukRadios({
+                classes: "govuk-radios--inline",
+                idPrefix: "postAppointment",
+                name: "postAppointment",
+                fieldset: {
+                    legend: {
+                        text: "Add post-appointment session?",
+                        classes: "govuk-fieldset__legend--s"
+                    }
+                },
+                items: [{
+                    value: "yes",
+                    text: "Yes",
+                    checked: formValues.postAppointment == 'yes',
+                    conditional: {
+                        html: postAppointmentHtml
+                    }
+                },
+                    {
+                        value: "no",
+                        text: "No",
+                        checked: formValues.postAppointment == 'no'
+                    }
+                ]
+            }) }}
+
+
+            {{ govukButton({
+                text: "Save and continue",
+                type: 'submit',
+                classes: "govuk-!-margin-right-3"
+            })
+            }}
+
+            {{ govukButton({
+                text: "Cancel",
+                element: 'a',
+                href: links.prisonerProfile,
+                classes: "govuk-button--secondary",
+                attributes: {
+                    'data-qa': 'back-to-profile'
+                }
+            })
+            }}
+        </form>
+    </div>
+{% endblock %}
