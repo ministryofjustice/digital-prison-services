@@ -122,22 +122,25 @@ describe('Add appointment', () => {
     })
 
     describe('when there are no errors', () => {
+      const appointmentDefaults = {
+        appointmentType: 'APT1',
+        locationId: 1,
+        startTime: '3019-01-01T01:00:00',
+        endTime: '3019-01-01T02:00:00',
+        comment: 'Test comment',
+      }
+      beforeEach(() => {
+        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+        req.flash = jest.fn()
+      })
       it('should submit the appointment with the correct details and redirect', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
-        req.flash = jest.fn()
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
 
         await controller.post(req, res)
 
         expect(elite2Api.addAppointments).toHaveBeenCalledWith(res.locals, {
-          appointmentDefaults: {
-            appointmentType: 'APT1',
-            locationId: 1,
-            startTime: '3019-01-01T01:00:00',
-            endTime: '3019-01-01T02:00:00',
-            comment: 'Test comment',
-          },
+          appointmentDefaults,
           appointments: [
             {
               bookingId,
@@ -160,6 +163,17 @@ describe('Add appointment', () => {
           times: '1',
           repeats: 'DAILY',
         })
+
+        Date.now.mockRestore()
+      })
+
+      it('should redirect to the prepost appointment page when the appointment type is "VLB"', async () => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+        req.body = { ...validBody, appointmentType: 'VLB', date: moment().format(DAY_MONTH_YEAR) }
+
+        await controller.post(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(`/offenders/${offenderNo}/prepost-appointments`)
 
         Date.now.mockRestore()
       })

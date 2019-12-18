@@ -1,4 +1,4 @@
-const appointmentsServiceFactory = require('../controllers/appointmentsService')
+const { appointmentsServiceFactory } = require('../controllers/appointmentsService')
 
 describe('Appointments service', () => {
   const elite2Api = {}
