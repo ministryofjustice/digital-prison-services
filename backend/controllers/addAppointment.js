@@ -29,11 +29,12 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
   }
 
   const renderTemplate = async (req, res, pageData) => {
+    const { formValues } = pageData || {}
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
     try {
-      let formattedEvents
+      const prePopulatedData = {}
       const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
@@ -41,17 +42,33 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         activeCaseLoadId
       )
 
-      if (pageData && pageData.formValues && pageData.formValues.date) {
-        formattedEvents = await existingEventsService.getExistingEventsForOffender(
+      if (formValues && formValues.date) {
+        prePopulatedData.offenderEvents = await existingEventsService.getExistingEventsForOffender(
           res.locals,
           activeCaseLoadId,
-          pageData.formValues.date,
+          formValues.date,
           offenderNo
         )
       }
 
+      if (formValues && formValues.appointmentType === 'VLB' && formValues.location && formValues.date) {
+        const [locationDetails, locationEvents] = await Promise.all([
+          elite2Api.getLocation(res.locals, formValues.location),
+          existingEventsService.getExistingEventsForLocation(
+            res.locals,
+            activeCaseLoadId,
+            formValues.location,
+            formValues.date
+          ),
+        ])
+
+        prePopulatedData.locationName = locationDetails.userDescription
+        prePopulatedData.locationEvents = locationEvents
+      }
+
       return res.render('addAppointment/addAppointment.njk', {
         ...pageData,
+        ...prePopulatedData,
         offenderNo,
         offenderName,
         dpsUrl,
@@ -59,7 +76,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         appointmentLocations,
         repeatTypes,
         bookingId,
-        clashes: formattedEvents,
       })
     } catch (error) {
       return renderError(req, res, error)

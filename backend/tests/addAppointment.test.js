@@ -43,9 +43,11 @@ describe('Add appointment', () => {
     })
 
     existingEventsService.getExistingEventsForOffender = jest.fn()
+    existingEventsService.getExistingEventsForLocation = jest.fn()
 
     elite2Api.getDetails = jest.fn()
     elite2Api.addAppointments = jest.fn()
+    elite2Api.getLocation = jest.fn()
 
     controller = addAppointmentFactory(appointmentsService, existingEventsService, elite2Api, logError)
   })
@@ -293,14 +295,22 @@ describe('Add appointment', () => {
         )
       })
 
-      describe('and there are existing events for an offender', () => {
-        it('still show the appointment clashes along with the validation messages', async () => {
+      describe('and there are existing events for an offender and a location', () => {
+        it('should still show the offender and location events along with the validation messages', async () => {
           jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
           const offenderEvents = [
             { eventDescription: '**Court visit scheduled**' },
             {
               locationId: 2,
               eventDescription: 'Office 1 - An appointment',
+              startTime: '12:00',
+              endTime: '13:00',
+            },
+          ]
+          const locationEvents = [
+            {
+              locationId: 3,
+              eventDescription: 'Doctors - An appointment',
               startTime: '12:00',
               endTime: '13:00',
             },
@@ -314,9 +324,13 @@ describe('Add appointment', () => {
             date,
             startTimeHours,
             startTimeMinutes,
+            appointmentType: 'VLB',
+            location: '3',
           }
 
           existingEventsService.getExistingEventsForOffender.mockReturnValue(offenderEvents)
+          existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
+          elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
 
           await controller.post(req, res)
 
@@ -326,13 +340,17 @@ describe('Add appointment', () => {
             '29/03/2019',
             'ABC123'
           )
+          expect(existingEventsService.getExistingEventsForLocation).toHaveBeenCalledWith({}, 'LEI', 3, '29/03/2019')
+
           expect(res.render).toHaveBeenCalledWith(
             'addAppointment/addAppointment.njk',
             expect.objectContaining({
+              locationName: 'Test location',
               errors: expect.arrayContaining([
                 { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
               ]),
-              clashes: offenderEvents,
+              offenderEvents,
+              locationEvents,
             })
           )
         })
