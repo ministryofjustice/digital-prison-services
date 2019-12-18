@@ -141,7 +141,7 @@
 
           {{ timePicker({
               id: 'end-time',
-              label: 'End time (optional)',
+              label: 'End time',
               name: 'endTime',
               hour: formValues.endTimeHours,
               minute: formValues.endTimeMinutes,
@@ -185,7 +185,7 @@
               }
           }) }}
 
-          {{ govukButton({ text: "Add appointment", type: "submit" }) }}
+          {{ govukButton({ text: "Save and continue", type: "submit" }) }}
 
           {{ govukButton({
               text: "Cancel",
