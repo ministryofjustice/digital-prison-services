@@ -29,6 +29,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
   }
 
   const renderTemplate = async (req, res, pageData) => {
+    const { formValues } = pageData || {}
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
@@ -41,23 +42,23 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         activeCaseLoadId
       )
 
-      if (pageData && pageData.formValues && pageData.formValues.date) {
+      if (formValues && formValues.date) {
         prePopulatedData.offenderEvents = await existingEventsService.getExistingEventsForOffender(
           res.locals,
           activeCaseLoadId,
-          pageData.formValues.date,
+          formValues.date,
           offenderNo
         )
       }
 
-      if (pageData && pageData.formValues && pageData.formValues.date && pageData.formValues.location) {
+      if (formValues && formValues.appointmentType === 'VLB' && formValues.location && formValues.date) {
         const [locationDetails, locationEvents] = await Promise.all([
-          elite2Api.getLocation(res.locals, pageData.formValues.location),
+          elite2Api.getLocation(res.locals, formValues.location),
           existingEventsService.getExistingEventsForLocation(
             res.locals,
             activeCaseLoadId,
-            pageData.formValues.location,
-            pageData.formValues.date
+            formValues.location,
+            formValues.date
           ),
         ])
 

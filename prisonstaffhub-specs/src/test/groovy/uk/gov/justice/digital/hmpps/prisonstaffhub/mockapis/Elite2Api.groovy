@@ -214,9 +214,9 @@ class Elite2Api extends WireMockRule {
 
     }
 
-    void stubProgEventsAtLocation(int locationId, String timeSlot, String date, def data = JsonOutput.toJson([])) {
+    void stubProgEventsAtLocation(int locationId, String timeSlot, String date, def data = JsonOutput.toJson([]), String suspended = 'true') {
         this.stubFor(
-                get("/api/schedules/locations/${locationId}/activities?date=${date}&timeSlot=${timeSlot}&includeSuspended=true")
+                get("/api/schedules/locations/${locationId}/activities?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}&includeSuspended=${suspended}")
                         .willReturn(
                                 aResponse()
                                         .withBody(data)
@@ -227,7 +227,7 @@ class Elite2Api extends WireMockRule {
 
     void stubVisitsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?date=${date}&timeSlot=${timeSlot}")
+                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .willReturn(
                                 aResponse()
                                         .withBody('[]')
@@ -238,7 +238,7 @@ class Elite2Api extends WireMockRule {
 
     void stubAppointmentsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/APP?date=${date}&timeSlot=${timeSlot}")
+                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/APP?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .willReturn(
                                 aResponse()
                                         .withBody('[]')

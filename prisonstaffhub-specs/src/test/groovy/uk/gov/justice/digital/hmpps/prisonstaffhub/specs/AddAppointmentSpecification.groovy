@@ -1,9 +1,11 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import org.junit.Rule
+import org.openqa.selenium.json.Json
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.VisitsResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
@@ -28,12 +30,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
     def "should post appointment and redirect to the confirmation page"() {
         setupTests()
 
-        elite2api.stubSentenceData(offenders, date,true)
-        elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
-        elite2api.stubActivities(Caseload.LEI, null, date, offenders)
         elite2api.stubVisits(Caseload.LEI, null, date, offenders)
-        elite2api.stubAppointments(Caseload.LEI, null, date, offenders)
-        elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
 
         given: "I am on the add appointment page"
         to AddAppointmentPage
@@ -54,15 +51,10 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         at ConfirmAppointmentPage
     }
 
-    def "should load appointment clashes when there are form validation errors"() {
+    def "should load offender events and again when there are form validation errors"() {
         setupTests()
 
-        elite2api.stubSentenceData(offenders, date,true)
-        elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
-        elite2api.stubActivities(Caseload.LEI, null, date, offenders)
         elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
-        elite2api.stubAppointments(Caseload.LEI, null, date, offenders)
-        elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
 
         given: "I am on the add appointment page"
         to AddAppointmentPage
@@ -76,7 +68,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         form.comments = "Test comment."
 
         then: "Clashes should display"
-        offenderClashes.text() == '18:00 - 18:30 Visiting room - Visits - Friends'
+        offenderEvents.text() == '18:00 - 18:30\nVisiting room - Visits - Friends'
 
         when: "I submit"
         submitButton.click()
@@ -84,7 +76,41 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         then: "I should be presented with missing start time error along with the clashes"
         at AddAppointmentPage
         errorSummary.text() == 'There is a problem\nSelect a start time'
-        offenderClashes.text() == '18:00 - 18:30 Visiting room - Visits - Friends'
+        offenderEvents.text() == '18:00 - 18:30\nVisiting room - Visits - Friends'
+    }
+
+    def "should load location events and again when there are form validation errors for VLB"() {
+        setupTests()
+
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
+        elite2api.stubLocation(1)
+        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, 'undefined')
+        elite2api.stubVisitsAtLocation(Caseload.LEI, 1, null, date)
+        elite2api.stubAppointmentsAtLocation(Caseload.LEI, 1, null, date)
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form without a start time"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.recurring = "no"
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+        form.comments = "Test comment."
+
+        then: "Clashes should display"
+        offenderEvents.text() == '18:00 - 18:30\nVisiting room - Visits - Friends'
+        locationEvents.text() == '15:30\nMedical Room1 - Medical - Dentist - Appt details'
+
+        when: "I submit"
+        submitButton.click()
+
+        then: "I should be presented with missing start time error along with the clashes"
+        at AddAppointmentPage
+        errorSummary.text() == 'There is a problem\nSelect a start time'
+        offenderEvents.text() == '18:00 - 18:30\nVisiting room - Visits - Friends'
+        locationEvents.text() == '15:30\nMedical Room1 - Medical - Dentist - Appt details'
     }
 
     def offenderNo = "A12345"
@@ -96,14 +122,17 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
     def setupTests() {
         fixture.loginAs(UserAccount.ITAG_USER)
 
+        elite2api.stubSentenceData(offenders, date,true)
+        elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
+        elite2api.stubActivities(Caseload.LEI, null, date, offenders)
         elite2api.stubPostBulkAppointments()
-
+        elite2api.stubAppointments(Caseload.LEI, null, date, offenders)
+        elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
         elite2api.stubOffenderDetails(offenderNo,
                 Map.of("firstName", "john",
                         "lastName", "doe",
                         "offenderNo", offenderNo
                 ))
-
         elite2api.stubAppointmentLocations(
                 UserAccount.ITAG_USER.workingCaseload.id,
                 [Map.of("locationId", 1,
@@ -113,6 +142,6 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
                         "agencyId", "LEI",
 
                 )])
-        elite2api.stubAppointmentTypes([Map.of("code", "ACTI", "description", "Activities")])
+        elite2api.stubAppointmentTypes([Map.of("code", "ACTI", "description", "Activities"), Map.of("code", "VLB", "description", "Video link booking")], )
     }
 }

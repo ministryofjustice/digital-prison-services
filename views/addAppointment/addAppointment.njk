@@ -91,6 +91,7 @@
             label: {
                 text: "Appointment type"
             },
+            classes: 'js-appointment-type',
             items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(formValues.appointmentType),
             errorMessage: errors | findError('appointment-type')
           }) }}
