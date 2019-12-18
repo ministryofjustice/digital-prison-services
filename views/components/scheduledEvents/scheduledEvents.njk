@@ -1,0 +1,17 @@
+{% macro scheduledEvents(events, type, name) %}
+  <h2 class="govuk-heading-m">{{name}} schedule</h2>
+  <ul class="{{'scheduled-events govuk-list scheduled-events--' + type}}" data-qa="{{type + '-events'}}">
+    {% if events.length %}
+      {% for event in events %}
+        <li class="scheduled-events__event">
+          <span class="scheduled-events__event__time">{{ event.startTime + ' - ' + event.endTime if event.endTime else event.startTime }}</span>
+          <strong>{{event.eventDescription}}</strong>
+        </li>
+      {% endfor %}
+    {% else %}
+      <li>Nothing scheduled on this date</li>
+    {% endif %}
+  </ul>
+{% endmacro %}
+
+{{ scheduledEvents(events, type, name) }}

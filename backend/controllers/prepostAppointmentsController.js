@@ -1,14 +1,15 @@
 const express = require('express')
-const confirmAppointment = require('./confirmAppointment')
-const { appointmentsServiceFactory } = require('./appointmentsService')
+const prepostAppointments = require('./prepostAppoinments')
+const { appointmentsServiceFactory } = require('../controllers/appointmentsService')
 
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ elite2Api, logError }) => {
   const appointmentsService = appointmentsServiceFactory(elite2Api)
-  const { index } = confirmAppointment.confirmAppointmentFactory({ elite2Api, appointmentsService, logError })
+  const { index, post } = prepostAppointments.prepostAppointmentsFactory({ elite2Api, logError, appointmentsService })
 
   router.get('/', index)
+  router.post('/', post)
 
   return router
 }

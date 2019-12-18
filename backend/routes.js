@@ -23,7 +23,7 @@ const { movementsServiceFactory } = require('./controllers/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
-const appointmentsServiceFactory = require('./controllers/appointmentsService')
+const { appointmentsServiceFactory } = require('./controllers/appointmentsService')
 const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
@@ -40,9 +40,11 @@ const bulkAppointmentsClashesController = require('./controllers/bulkAppointment
 
 const changeCaseloadController = require('./controllers/changeCaseloadController')
 const addAppointmentController = require('./controllers/addAppointmentController')
-const confirmAppointment = require('./controllers/confirmAppointmentController')
+const confirmAppointmentController = require('./controllers/confirmAppointmentController')
+const prepostAppointmentController = require('./controllers/prepostAppointmentsController')
 
 const getExistingEventsController = require('./controllers/getExistingEventsController')
+const getLocationExistingEventsController = require('./controllers/getLocationExistingEventsController')
 
 const controllerFactory = require('./controllers/controller').factory
 
@@ -118,7 +120,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
   router.get('/api/get-alert-types', controller.getAlertTypes)
-  router.get('/api/get-existing-events', getExistingEventsController({ elite2Api, logError }))
+  router.get('/api/get-offender-events', getExistingEventsController({ elite2Api, logError }))
+  router.get('/api/get-location-events', getLocationExistingEventsController({ elite2Api, logError }))
   router.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
   router.get('/edit-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayEditAlertPage))
   router.post(
@@ -174,7 +177,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   })
 
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
-  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointment({ elite2Api, logError }))
+  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
+  router.use('/offenders/:offenderNo/prepost-appointments', prepostAppointmentController({ elite2Api, logError }))
 
   return router
 }

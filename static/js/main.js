@@ -1,10 +1,9 @@
 $(document).ready(function() {
-  $('.date-input').each((index, element) => {
-    var disableFutureDates = Boolean($(element).data('disable-future-date'))
-    var disablePastDates = Boolean($(element).data('disable-past-date'))
-    var maxDate = disableFutureDates ? '0' : undefined
-    var minDate = disablePastDates ? '0' : undefined
-
+  $('.date-input').each(function(index, element) {
+    const disableFutureDates = Boolean($(element).data('disable-future-date'))
+    const disablePastDates = Boolean($(element).data('disable-past-date'))
+    const maxDate = disableFutureDates ? '0' : undefined
+    const minDate = disablePastDates ? '0' : undefined
     $(element).datepicker({
       dateFormat: 'dd/mm/yy',
       showOtherMonths: true,
@@ -14,18 +13,60 @@ $(document).ready(function() {
     })
   })
 
-  $('.js-appointment-date').change(e => {
-    const clashesContainer = $('#clashesContainer')
+  const appointmentDateInput = $('.js-appointment-date')
+  const appointmentLocationSelect = $('.js-appointment-location')
+  const appointmentTypeSelect = $('.js-appointment-type')
+  const locationEventsContainer = $('#location-events')
+  const offenderEventsContainer = $('#offender-events')
 
+  function getEventsForLocation() {
+    const isVLB = appointmentTypeSelect.children('option:selected').val() === 'VLB'
+    const date = appointmentDateInput.val()
+    const locationId = appointmentLocationSelect.val()
+
+    if (isVLB && date && locationId) {
+      $.ajax({
+        url: '/api/get-location-events',
+        data: {
+          date: date,
+          locationId: locationId,
+        },
+      })
+        .done(function(data) {
+          locationEventsContainer.html(data).show()
+        })
+        .fail(function() {
+          locationEventsContainer.hide()
+        })
+    } else {
+      locationEventsContainer.hide()
+    }
+  }
+
+  function getEventsForOffender(offenderNo, date) {
     $.ajax({
-      url: '/api/get-existing-events',
-      data: { offenderNo: $('#offenderNo').text(), date: e.target.value },
+      url: '/api/get-offender-events',
+      data: {
+        date: date,
+        offenderNo: offenderNo,
+      },
     })
-      .done(data => {
-        clashesContainer.html(data).show()
+      .done(function(data) {
+        offenderEventsContainer.html(data)
       })
-      .fail(() => {
-        clashesContainer.hide()
+      .fail(function() {
+        offenderEventsContainer.hide()
       })
+  }
+
+  appointmentTypeSelect
+    .add(appointmentLocationSelect)
+    .add(appointmentDateInput)
+    .change(function() {
+      getEventsForLocation()
+    })
+
+  appointmentDateInput.change(function() {
+    getEventsForOffender($('#offenderNo').text(), $(this).val())
   })
 })

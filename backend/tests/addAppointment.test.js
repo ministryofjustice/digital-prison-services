@@ -43,9 +43,11 @@ describe('Add appointment', () => {
     })
 
     existingEventsService.getExistingEventsForOffender = jest.fn()
+    existingEventsService.getExistingEventsForLocation = jest.fn()
 
     elite2Api.getDetails = jest.fn()
     elite2Api.addAppointments = jest.fn()
+    elite2Api.getLocation = jest.fn()
 
     controller = addAppointmentFactory(appointmentsService, existingEventsService, elite2Api, logError)
   })
@@ -120,22 +122,25 @@ describe('Add appointment', () => {
     })
 
     describe('when there are no errors', () => {
+      const appointmentDefaults = {
+        appointmentType: 'APT1',
+        locationId: 1,
+        startTime: '3019-01-01T01:00:00',
+        endTime: '3019-01-01T02:00:00',
+        comment: 'Test comment',
+      }
+      beforeEach(() => {
+        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+        req.flash = jest.fn()
+      })
       it('should submit the appointment with the correct details and redirect', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
-        req.flash = jest.fn()
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
 
         await controller.post(req, res)
 
         expect(elite2Api.addAppointments).toHaveBeenCalledWith(res.locals, {
-          appointmentDefaults: {
-            appointmentType: 'APT1',
-            locationId: 1,
-            startTime: '3019-01-01T01:00:00',
-            endTime: '3019-01-01T02:00:00',
-            comment: 'Test comment',
-          },
+          appointmentDefaults,
           appointments: [
             {
               bookingId,
@@ -158,6 +163,17 @@ describe('Add appointment', () => {
           times: '1',
           repeats: 'DAILY',
         })
+
+        Date.now.mockRestore()
+      })
+
+      it('should redirect to the prepost appointment page when the appointment type is "VLB"', async () => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+        req.body = { ...validBody, appointmentType: 'VLB', date: moment().format(DAY_MONTH_YEAR) }
+
+        await controller.post(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(`/offenders/${offenderNo}/prepost-appointments`)
 
         Date.now.mockRestore()
       })
@@ -323,14 +339,22 @@ describe('Add appointment', () => {
         )
       })
 
-      describe('and there are existing events for an offender', () => {
-        it('still show the appointment clashes along with the validation messages', async () => {
+      describe('and there are existing events for an offender and a location', () => {
+        it('should still show the offender and location events along with the validation messages', async () => {
           jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
           const offenderEvents = [
             { eventDescription: '**Court visit scheduled**' },
             {
               locationId: 2,
               eventDescription: 'Office 1 - An appointment',
+              startTime: '12:00',
+              endTime: '13:00',
+            },
+          ]
+          const locationEvents = [
+            {
+              locationId: 3,
+              eventDescription: 'Doctors - An appointment',
               startTime: '12:00',
               endTime: '13:00',
             },
@@ -344,9 +368,13 @@ describe('Add appointment', () => {
             date,
             startTimeHours,
             startTimeMinutes,
+            appointmentType: 'VLB',
+            location: '3',
           }
 
           existingEventsService.getExistingEventsForOffender.mockReturnValue(offenderEvents)
+          existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
+          elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
 
           await controller.post(req, res)
 
@@ -356,13 +384,17 @@ describe('Add appointment', () => {
             '29/03/2019',
             'ABC123'
           )
+          expect(existingEventsService.getExistingEventsForLocation).toHaveBeenCalledWith({}, 'LEI', 3, '29/03/2019')
+
           expect(res.render).toHaveBeenCalledWith(
             'addAppointment/addAppointment.njk',
             expect.objectContaining({
+              locationName: 'Test location',
               errors: expect.arrayContaining([
                 { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
               ]),
-              clashes: offenderEvents,
+              offenderEvents,
+              locationEvents,
             })
           )
         })
