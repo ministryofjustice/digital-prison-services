@@ -205,8 +205,14 @@ describe('Add appointment', () => {
       })
 
       it('should validate and check for missing required fields', async () => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+        const date = moment().format(DAY_MONTH_YEAR)
+
         req.body = {
+          date,
           recurring: 'yes',
+          repeats: 'WEEKLY',
+          times: '5',
         }
 
         await controller.post(req, res)
@@ -217,13 +223,13 @@ describe('Add appointment', () => {
             errors: [
               { href: '#appointment-type', text: 'Select an appointment type' },
               { href: '#location', text: 'Select a location' },
-              { href: '#date', text: 'Select a date' },
               { href: '#start-time-hours', text: 'Select a start time' },
-              { href: '#repeats', text: 'Select a period' },
-              { href: '#times', text: 'Enter the number of appointments using numbers only' },
             ],
+            endOfPeriod: 'Friday 26 April 2019',
           })
         )
+
+        Date.now.mockRestore()
       })
 
       it('should validate missing answer for a recurring appointment', async () => {

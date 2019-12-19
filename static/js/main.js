@@ -16,6 +16,10 @@ $(document).ready(function() {
   const appointmentDateInput = $('.js-appointment-date')
   const appointmentLocationSelect = $('.js-appointment-location')
   const appointmentTypeSelect = $('.js-appointment-type')
+  const appointmentRepeatsSelect = $('.js-appointment-repeats')
+  const appointmentRepeatsTimesInput = $('.js-appointment-repeats-times')
+
+  const appointmentEndDateContainer = $('#appointment-end-date')
   const locationEventsContainer = $('#location-events')
   const offenderEventsContainer = $('#offender-events')
 
@@ -27,10 +31,7 @@ $(document).ready(function() {
     if (isVLB && date && locationId) {
       $.ajax({
         url: '/api/get-location-events',
-        data: {
-          date: date,
-          locationId: locationId,
-        },
+        data: { date: date, locationId: locationId },
       })
         .done(function(data) {
           locationEventsContainer.html(data).show()
@@ -46,10 +47,7 @@ $(document).ready(function() {
   function getEventsForOffender(offenderNo, date) {
     $.ajax({
       url: '/api/get-offender-events',
-      data: {
-        date: date,
-        offenderNo: offenderNo,
-      },
+      data: { date: date, offenderNo: offenderNo },
     })
       .done(function(data) {
         offenderEventsContainer.html(data)
@@ -57,6 +55,27 @@ $(document).ready(function() {
       .fail(function() {
         offenderEventsContainer.hide()
       })
+  }
+
+  function getAppointmentEndDate() {
+    const date = appointmentDateInput.val()
+    const repeats = appointmentRepeatsSelect.children('option:selected').val()
+    const times = appointmentRepeatsTimesInput.val()
+
+    if (date) {
+      $.ajax({
+        url: '/api/get-recurring-end-date',
+        data: { date: date, repeats: repeats, times: times },
+      })
+        .done(function(data) {
+          appointmentEndDateContainer.text(data)
+        })
+        .fail(function() {
+          appointmentEndDateContainer.text('--')
+        })
+    } else {
+      appointmentEndDateContainer.text('--')
+    }
   }
 
   appointmentTypeSelect
@@ -69,4 +88,11 @@ $(document).ready(function() {
   appointmentDateInput.change(function() {
     getEventsForOffender($('#offenderNo').text(), $(this).val())
   })
+
+  appointmentRepeatsSelect
+    .add(appointmentRepeatsTimesInput)
+    .add(appointmentDateInput)
+    .change(function() {
+      getAppointmentEndDate()
+    })
 })

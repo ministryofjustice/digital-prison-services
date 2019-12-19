@@ -20,6 +20,7 @@
           label: {
               text: "Repeats"
           },
+          classes: "js-appointment-repeats",
           items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(formValues.repeats),
           errorMessage: errors | findError('repeats')
       }) }}
@@ -33,18 +34,16 @@
           label: {
               text: "How many appointments do you want to add?"
           },
-          classes: "govuk-input--width-3"
+          classes: "govuk-input--width-3 js-appointment-repeats-times"
       }) }}
 
-      {% if endOfPeriod %}
-          <h4 class="govuk-heading-s">
-              Ends on
-          </h4>
 
-          <p class="govuk-body ovuk-!-font-weight-bold">
-              {{ endOfPeriod }}
-          </p>
-      {% endif -%}
+    <div class="govuk-form-group">
+        <span class="govuk-body">Last appointment on</span>
+        <div id="appointment-end-date" class=" govuk-body govuk-!-font-weight-bold">
+            {{ endOfPeriod or '--' }}
+        </div>
+    </div>
   </div>
 {% endset -%}
 
