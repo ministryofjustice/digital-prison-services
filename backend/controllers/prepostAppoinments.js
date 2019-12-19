@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../config')
@@ -35,7 +35,7 @@ const getLinks = offenderNo => ({
   prisonerProfile: `${dpsUrl}offenders/${offenderNo}`,
 })
 
-const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }) => {
+const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEventsService, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
@@ -53,6 +53,8 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
 
       const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
 
+      const date = moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
+
       packAppointmentDetails(req, {
         ...appointmentDetails,
         locationDescription,
@@ -61,6 +63,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
         firstName,
         lastName,
         bookingId,
+        date,
       })
 
       res.render('prepostAppointments.njk', {
@@ -72,6 +75,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
           postAppointmentDuration: 15,
           preAppointmentDuration: 15,
         },
+        date,
         details: toAppointmentDetailsSummary({
           firstName,
           lastName,
@@ -125,8 +129,22 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
     await elite2Api.addAppointments(context, mainAppointment)
   }
 
+  const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {
+    const [locationDetails, locationEvents] = await Promise.all([
+      elite2Api.getLocation(context, Number(locationId)),
+      existingEventsService.getExistingEventsForLocation(context, activeCaseLoadId, Number(locationId), date),
+    ])
+
+    return {
+      locationName: locationDetails && locationDetails.userDescription,
+      events: locationEvents,
+    }
+  }
+
   const post = async (req, res) => {
     const { offenderNo } = req.params
+    const { activeCaseLoadId } = req.session.userDetails
+
     const {
       postAppointment,
       preAppointment,
@@ -150,6 +168,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
         locationTypes,
         firstName,
         lastName,
+        date,
       } = appointmentDetails
 
       packAppointmentDetails(req, appointmentDetails)
@@ -157,7 +176,34 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
       const errors = validate({ preAppointment, postAppointment, preAppointmentLocation, postAppointmentLocation })
 
       if (errors.length) {
+        const locationEvents = {}
+
+        if (preAppointmentLocation) {
+          const { locationName, events } = await getLocationEvents(res.locals, {
+            activeCaseLoadId,
+            locationId: preAppointmentLocation,
+            date,
+          })
+          locationEvents.preAppointment = {
+            locationName,
+            events,
+          }
+        }
+
+        if (postAppointmentLocation) {
+          const { locationName, events } = await getLocationEvents(res.locals, {
+            activeCaseLoadId,
+            locationId: postAppointmentLocation,
+            date,
+          })
+          locationEvents.postAppointment = {
+            locationName,
+            events,
+          }
+        }
+
         return res.render('prepostAppointments.njk', {
+          locationEvents,
           links: getLinks(offenderNo),
           locations: locationTypes,
           formValues: {
@@ -169,6 +215,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, logError }
             postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
           },
           errors,
+          date,
           details: toAppointmentDetailsSummary({
             firstName,
             lastName,
