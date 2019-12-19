@@ -36,7 +36,7 @@ const elite2ApiFactory = client => {
       }date=${date}`
     )
 
-  const getActivitiesAtLocation = (context, { locationId, date, timeSlot, includeSuspended }) =>
+  const getActivitiesAtLocation = (context, { locationId, date, timeSlot, includeSuspended = false }) =>
     get(
       context,
       `/api/schedules/locations/${locationId}/activities?${
