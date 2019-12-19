@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import org.junit.Rule
-import org.openqa.selenium.json.Json
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
@@ -11,8 +10,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddAppointmentPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmSingleAppointmentPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmRecurringAppointmentPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmSingleAppointmentPage
 
 import java.time.LocalDate
 
@@ -116,7 +115,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
 
         elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
         elite2api.stubLocation(1)
-        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, 'undefined')
+        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
         elite2api.stubVisitsAtLocation(Caseload.LEI, 1, null, date)
         elite2api.stubAppointmentsAtLocation(Caseload.LEI, 1, null, date)
 

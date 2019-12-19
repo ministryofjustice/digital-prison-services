@@ -214,7 +214,7 @@ class Elite2Api extends WireMockRule {
 
     }
 
-    void stubProgEventsAtLocation(int locationId, String timeSlot, String date, def data = JsonOutput.toJson([]), String suspended = 'true') {
+    void stubProgEventsAtLocation(int locationId, String timeSlot, String date, def data = JsonOutput.toJson([]), Boolean suspended = true) {
         this.stubFor(
                 get("/api/schedules/locations/${locationId}/activities?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}&includeSuspended=${suspended}")
                         .willReturn(
