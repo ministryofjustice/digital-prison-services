@@ -1,4 +1,4 @@
-.scheduled-events {
+.scheduled-events-container {
   @include govuk-responsive-padding(3);
 
   &--offender {
@@ -8,12 +8,12 @@
   &--location {
     background: #dfe0e2;
   }
+}
 
-  &__event {
-    display: flex;
+.scheduled-event {
+  display: flex;
 
-    &__time {
-      min-width: 140px;
-    }
+  &__time {
+    min-width: 140px;
   }
 }
