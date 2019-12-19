@@ -4,7 +4,7 @@ const {
 const { properCaseName } = require('../utils')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../common-messages')
-const { repeatTypes, getValidationMessages } = require('../shared/appointmentConstants')
+const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../shared/appointmentConstants')
 
 const addAppointmentFactory = (appointmentsService, existingEventsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
@@ -122,7 +122,13 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
     ]
 
     if (errors.length > 0) {
-      return renderTemplate(req, res, { errors, formValues: { ...req.body, location: Number(location) } })
+      const { endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
+
+      return renderTemplate(req, res, {
+        errors,
+        formValues: { ...req.body, location: Number(location) },
+        endOfPeriod: endOfPeriod && endOfPeriod.format('dddd D MMMM YYYY'),
+      })
     }
 
     const request = {

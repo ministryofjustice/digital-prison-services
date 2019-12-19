@@ -45,6 +45,7 @@ const prepostAppointmentController = require('./controllers/prepostAppointmentsC
 
 const getExistingEventsController = require('./controllers/getExistingEventsController')
 const getLocationExistingEventsController = require('./controllers/getLocationExistingEventsController')
+const endDateController = require('./controllers/endDateController')
 
 const controllerFactory = require('./controllers/controller').factory
 
@@ -122,6 +123,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/api/get-alert-types', controller.getAlertTypes)
   router.get('/api/get-offender-events', getExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-location-events', getLocationExistingEventsController({ elite2Api, logError }))
+  router.get('/api/get-recurring-end-date', endDateController)
   router.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
   router.get('/edit-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayEditAlertPage))
   router.post(
