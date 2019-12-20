@@ -12,8 +12,8 @@ const repeatTypes = [
 
 const prepostDurations = {
   15: '15 minutes',
-  30: '15 minutes',
-  45: '15 minutes',
+  30: '30 minutes',
+  45: '45 minutes',
   60: '1 hour',
 }
 
