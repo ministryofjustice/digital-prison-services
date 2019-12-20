@@ -87,6 +87,10 @@ describe('Confirm appointments', () => {
     req.flash.mockImplementation(() => [
       {
         ...appointmentDetails,
+        preAppointment: {
+          ...appointmentDetails.preAppointment,
+          duration: 30,
+        },
         appointmentType: 'VLB',
       },
     ])
@@ -107,7 +111,7 @@ describe('Confirm appointments', () => {
           endTime: '14:00',
           recurring: 'No',
           comment: 'Test',
-          preAppointment: `Room 1 - 15 minutes`,
+          preAppointment: `Room 1 - 30 minutes`,
           postAppointment: 'None',
         },
       })
