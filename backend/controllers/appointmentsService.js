@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { calculateEndDate, repeatTypes } = require('../../src/BulkAppointments/RecurringAppointments')
+const { repeatTypes, endRecurringEndingDate } = require('../shared/appointmentConstants')
 const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
 const { properCaseName } = require('../utils')
 
@@ -19,9 +19,8 @@ const toAppointmentDetailsSummary = ({
   const recurringInformation = recurring === 'yes' && {
     howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
     numberOfAppointments: times,
-    endDate: calculateEndDate({ startTime, repeats, times }).format('dddd D MMMM YYYY'),
+    endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
   }
-
   return {
     prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
     appointmentType,

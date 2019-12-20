@@ -15,6 +15,12 @@ describe('Confirm appointments', () => {
     endTime: '2017-10-10T14:00',
     recurring: 'No',
     comment: 'Test',
+    preAppointment: {
+      endTime: '2017-10-10T11:00:00',
+      locationId: 2,
+      startTime: '2017-10-10T10:45:00',
+      duration: 15,
+    },
   }
 
   beforeEach(() => {
@@ -23,7 +29,7 @@ describe('Confirm appointments', () => {
 
     appointmentsService.getAppointmentOptions.mockReturnValue({
       appointmentTypes: [{ value: 'vid1', text: 'Videolink' }],
-      locationTypes: [{ value: 1, text: 'Room 3' }],
+      locationTypes: [{ value: 1, text: 'Room 3' }, { value: 2, text: 'Room 1' }, { value: 3, text: 'Room 2' }],
     })
 
     elite2Api.getDetails.mockReturnValue({
@@ -66,6 +72,8 @@ describe('Confirm appointments', () => {
           endTime: '14:00',
           recurring: 'No',
           comment: 'Test',
+          preAppointment: `Room 1 - 15 minutes`,
+          postAppointment: 'None',
         },
       })
     )
@@ -105,6 +113,8 @@ describe('Confirm appointments', () => {
           howOften: 'Fortnightly',
           numberOfAppointments: '2',
           endDate: 'Tuesday 24 October 2017',
+          preAppointment: `Room 1 - 15 minutes`,
+          postAppointment: 'None',
         },
       })
     )

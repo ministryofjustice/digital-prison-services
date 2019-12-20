@@ -1,12 +1,12 @@
-const moment = require('moment')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../config')
 
 const { properCaseName } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
-const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
-const { endRecurringEndingDate, repeatTypes } = require('../shared/appointmentConstants')
+
+const { prepostDurations } = require('../shared/appointmentConstants')
+const { toAppointmentDetailsSummary } = require('../controllers/appointmentsService')
 
 const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
   const index = async (req, res) => {
@@ -31,6 +31,8 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         recurring,
         times,
         repeats,
+        preAppointment,
+        postAppointment,
       } = appointmentDetails[0]
 
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
@@ -58,28 +60,43 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         ],
       })
 
-      const recurringInformation = recurring === 'yes' && {
-        howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
-        numberOfAppointments: times,
-        endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
-      }
-
       const title = recurring === 'yes' ? 'Appointments booked' : 'Appointment booked'
+
+      const details = toAppointmentDetailsSummary({
+        firstName,
+        lastName,
+        offenderNo,
+        appointmentType: appointmentTypeDescription,
+        location: locationDescription,
+        startTime,
+        endTime,
+        comment,
+        recurring,
+        times,
+        repeats,
+      })
+
+      const preAppointmentView = preAppointment && {
+        locationDescription: locationTypes.find(l => l.value === Number(preAppointment.locationId)).text,
+        duration: prepostDurations[preAppointment.duration],
+      }
+      const postAppointmentView = postAppointment && {
+        locationDescription: locationTypes.find(l => l.value === Number(postAppointment.locationId)).text,
+        duration: prepostDurations[postAppointment.duration],
+      }
 
       res.render('confirmAppointments.njk', {
         title,
         addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
         prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
         details: {
-          prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
-          appointmentType: appointmentTypeDescription,
-          location: locationDescription,
-          date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY'),
-          startTime: Time(startTime),
-          endTime: endTime && Time(endTime),
-          comment,
-          recurring: properCaseName(recurring),
-          ...recurringInformation,
+          ...details,
+          preAppointment:
+            (preAppointmentView && `${preAppointmentView.locationDescription} - ${preAppointmentView.duration}`) ||
+            'None',
+          postAppointment:
+            (postAppointmentView && `${postAppointmentView.locationDescription} - ${postAppointmentView.duration}`) ||
+            'None',
         },
       })
     } catch (error) {

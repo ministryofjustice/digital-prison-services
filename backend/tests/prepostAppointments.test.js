@@ -282,7 +282,7 @@ describe('Pre post appointments', () => {
       expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
     })
 
-    describe('events at location', () => {
+    describe('Events at location', () => {
       const locationEvents = [
         { locationId: 3, eventDescription: 'Doctors - An appointment', startTime: '12:00', endTime: '13:00' },
       ]
@@ -467,6 +467,51 @@ describe('Pre post appointments', () => {
         await post(req, res)
 
         expect(elite2Api.addAppointments.mock.calls.length).toBe(1)
+      })
+
+      it('should place pre and post appointment details into flash', async () => {
+        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+
+        req.body = {
+          postAppointment: 'yes',
+          preAppointment: 'yes',
+          preAppointmentLocation: 1,
+          postAppointmentLocation: 2,
+          preAppointmentDuration: 15,
+          postAppointmentDuration: 15,
+        }
+
+        await post(req, res)
+
+        expect(req.flash).toHaveBeenCalledWith(
+          'appointmentDetails',
+          expect.objectContaining({
+            preAppointment: {
+              endTime: '2017-10-10T11:00:00',
+              locationId: 1,
+              startTime: '2017-10-10T10:45:00',
+              duration: 15,
+            },
+            postAppointment: {
+              endTime: '2017-10-10T14:15:00',
+              locationId: 2,
+              startTime: '2017-10-10T14:00',
+              duration: 15,
+            },
+          })
+        )
+      })
+
+      it('should redirect to confirmation page', async () => {
+        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+
+        req.body = {
+          postAppointment: 'no',
+          preAppointment: 'no',
+        }
+        await post(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
       })
     })
   })
