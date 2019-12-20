@@ -129,6 +129,50 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
     await elite2Api.addAppointments(context, mainAppointment)
   }
 
+  const createPreAppointment = async (
+    context,
+    { appointmentDetails, startTime, preAppointmentDuration, preAppointmentLocation }
+  ) => {
+    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(Number(preAppointmentDuration), 'minutes')
+    const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(Number(preAppointmentDuration), 'minutes')
+    const preDetails = {
+      startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
+      endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
+      locationId: Number(preAppointmentLocation),
+      duration: preAppointmentDuration,
+    }
+
+    await createAppointment(context, {
+      ...appointmentDetails,
+      recurring: 'no',
+      ...preDetails,
+    })
+
+    return preDetails
+  }
+
+  const createPostAppointment = async (
+    context,
+    { appointmentDetails, endTime, postAppointmentDuration, postAppointmentLocation }
+  ) => {
+    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(Number(postAppointmentDuration), 'minutes')
+
+    const postDetails = {
+      startTime: endTime,
+      endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
+      locationId: Number(postAppointmentLocation),
+      duration: postAppointmentDuration,
+    }
+
+    await createAppointment(context, {
+      ...appointmentDetails,
+      recurring: 'no',
+      ...postDetails,
+    })
+
+    return postDetails
+  }
+
   const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {
     const [locationDetails, locationEvents] = await Promise.all([
       elite2Api.getLocation(context, Number(locationId)),
@@ -171,11 +215,11 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
         date,
       } = appointmentDetails
 
-      packAppointmentDetails(req, appointmentDetails)
-
       const errors = validate({ preAppointment, postAppointment, preAppointmentLocation, postAppointmentLocation })
 
       if (errors.length) {
+        packAppointmentDetails(req, appointmentDetails)
+
         const locationEvents = {}
 
         if (preAppointmentLocation) {
@@ -234,33 +278,30 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
 
       await createAppointment(res.locals, appointmentDetails)
 
-      if (preAppointment === 'yes') {
-        const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(
-          Number(preAppointmentDuration),
-          'minutes'
-        )
-        const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(Number(preAppointmentDuration), 'minutes')
+      const prepostAppointments = {}
 
-        await createAppointment(res.locals, {
-          ...appointmentDetails,
-          recurring: 'no',
-          startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
-          endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
-          locationId: Number(preAppointmentLocation),
+      if (preAppointment === 'yes') {
+        prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
+          appointmentDetails,
+          startTime,
+          preAppointmentLocation,
+          preAppointmentDuration,
         })
       }
 
       if (postAppointment === 'yes') {
-        const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(Number(postAppointmentDuration), 'minutes')
-
-        await createAppointment(res.locals, {
-          ...appointmentDetails,
-          recurring: 'no',
-          startTime: endTime,
-          endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
-          locationId: Number(postAppointmentLocation),
+        prepostAppointments.postAppointment = await createPostAppointment(res.locals, {
+          appointmentDetails,
+          endTime,
+          postAppointmentLocation,
+          postAppointmentDuration,
         })
       }
+
+      packAppointmentDetails(req, {
+        ...appointmentDetails,
+        ...prepostAppointments,
+      })
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

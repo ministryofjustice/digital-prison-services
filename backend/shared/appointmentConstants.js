@@ -10,6 +10,13 @@ const repeatTypes = [
   { value: 'FORTNIGHTLY', text: 'Fortnightly' },
 ]
 
+const prepostDurations = {
+  15: '15 minutes',
+  30: '15 minutes',
+  45: '15 minutes',
+  60: '1 hour',
+}
+
 const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
   const recurringStartTime =
     (startTime && moment(startTime)) ||
@@ -121,4 +128,5 @@ module.exports = {
   endRecurringEndingDate,
   getValidationMessages,
   repeatTypes,
+  prepostDurations,
 }
