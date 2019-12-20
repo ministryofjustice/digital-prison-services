@@ -9,7 +9,7 @@ describe('Confirm appointments', () => {
     offenderNo: 'A12345',
     firstName: 'john',
     lastName: 'doe',
-    appointmentType: 'vid1',
+    appointmentType: 'appointment1',
     locationId: 1,
     startTime: '2017-10-10T11:00',
     endTime: '2017-10-10T14:00',
@@ -28,7 +28,7 @@ describe('Confirm appointments', () => {
     appointmentsService.getAppointmentOptions = jest.fn()
 
     appointmentsService.getAppointmentOptions.mockReturnValue({
-      appointmentTypes: [{ value: 'vid1', text: 'Videolink' }],
+      appointmentTypes: [{ value: 'VLB', text: 'Videolink' }, { value: 'appointment1', text: 'Appointment 1' }],
       locationTypes: [{ value: 1, text: 'Room 3' }, { value: 2, text: 'Room 1' }, { value: 3, text: 'Room 2' }],
     })
 
@@ -55,6 +55,41 @@ describe('Confirm appointments', () => {
       appointmentsService,
       logError: () => {},
     })
+
+    await index(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'confirmAppointments.njk',
+      expect.objectContaining({
+        addAppointmentsLink: '/offenders/A12345/add-appointment',
+        prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
+        details: {
+          prisonerName: `Doe, John (A12345)`,
+          appointmentType: 'Appointment 1',
+          location: 'Room 3',
+          date: 'Tuesday 10 October 2017',
+          startTime: '11:00',
+          endTime: '14:00',
+          recurring: 'No',
+          comment: 'Test',
+        },
+      })
+    )
+  })
+
+  it('should only extract pre and post appointments when appointmentType is VLB', async () => {
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError: () => {},
+    })
+
+    req.flash.mockImplementation(() => [
+      {
+        ...appointmentDetails,
+        appointmentType: 'VLB',
+      },
+    ])
 
     await index(req, res)
 
@@ -103,7 +138,7 @@ describe('Confirm appointments', () => {
       expect.objectContaining({
         details: {
           prisonerName: `Doe, John (A12345)`,
-          appointmentType: 'Videolink',
+          appointmentType: 'Appointment 1',
           location: 'Room 3',
           date: 'Tuesday 10 October 2017',
           startTime: '11:00',
@@ -113,8 +148,6 @@ describe('Confirm appointments', () => {
           howOften: 'Fortnightly',
           numberOfAppointments: '2',
           endDate: 'Tuesday 24 October 2017',
-          preAppointment: `Room 1 - 15 minutes`,
-          postAppointment: 'None',
         },
       })
     )
@@ -134,7 +167,7 @@ describe('Confirm appointments', () => {
         startTime: '2017-10-10T11:00',
         endTime: '2017-10-10T14:00',
         comments: 'Test',
-        appointmentTypeDescription: 'Videolink',
+        appointmentTypeDescription: 'Appointment 1',
         locationDescription: 'Room 3',
       },
       prisonersListed: [

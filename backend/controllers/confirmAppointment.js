@@ -76,13 +76,24 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         repeats,
       })
 
-      const preAppointmentView = preAppointment && {
-        locationDescription: locationTypes.find(l => l.value === Number(preAppointment.locationId)).text,
-        duration: prepostDurations[preAppointment.duration],
-      }
-      const postAppointmentView = postAppointment && {
-        locationDescription: locationTypes.find(l => l.value === Number(postAppointment.locationId)).text,
-        duration: prepostDurations[postAppointment.duration],
+      const prepostData = {}
+
+      if (appointmentType === 'VLB') {
+        const preAppointmentData = preAppointment && {
+          locationDescription: locationTypes.find(l => l.value === Number(preAppointment.locationId)).text,
+          duration: prepostDurations[preAppointment.duration],
+        }
+        const postAppointmentData = postAppointment && {
+          locationDescription: locationTypes.find(l => l.value === Number(postAppointment.locationId)).text,
+          duration: prepostDurations[postAppointment.duration],
+        }
+
+        prepostData.preAppointment =
+          (preAppointmentData && `${preAppointmentData.locationDescription} - ${preAppointmentData.duration}`) || 'None'
+
+        prepostData.postAppointment =
+          (postAppointmentData && `${postAppointmentData.locationDescription} - ${postAppointmentData.duration}`) ||
+          'None'
       }
 
       res.render('confirmAppointments.njk', {
@@ -91,12 +102,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
         details: {
           ...details,
-          preAppointment:
-            (preAppointmentView && `${preAppointmentView.locationDescription} - ${preAppointmentView.duration}`) ||
-            'None',
-          postAppointment:
-            (postAppointmentView && `${postAppointmentView.locationDescription} - ${postAppointmentView.duration}`) ||
-            'None',
+          ...prepostData,
         },
       })
     } catch (error) {
