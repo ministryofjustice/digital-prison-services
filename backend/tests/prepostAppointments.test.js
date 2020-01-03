@@ -74,7 +74,6 @@ describe('Pre post appointments', () => {
         expect.objectContaining({
           links: {
             postAppointments: '/offenders/A12345/prepost-appointments',
-            prisonerProfile: 'http://localhost:3000/offenders/A12345',
             cancel: '/offenders/A12345/prepost-appointments/cancel',
           },
         })
@@ -240,7 +239,6 @@ describe('Pre post appointments', () => {
         expect.objectContaining({
           links: {
             postAppointments: `/offenders/A12345/prepost-appointments`,
-            prisonerProfile: `http://localhost:3000/offenders/A12345`,
             cancel: '/offenders/A12345/prepost-appointments/cancel',
           },
           locations: [{ value: 1, text: 'Room 3' }],

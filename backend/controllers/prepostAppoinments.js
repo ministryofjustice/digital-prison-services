@@ -32,7 +32,6 @@ const validate = ({ postAppointment, preAppointment, preAppointmentLocation, pos
 
 const getLinks = offenderNo => ({
   postAppointments: `/offenders/${offenderNo}/prepost-appointments`,
-  prisonerProfile: `${dpsUrl}offenders/${offenderNo}`,
   cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
 })
 
