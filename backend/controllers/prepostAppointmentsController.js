@@ -8,7 +8,7 @@ const router = express.Router({ mergeParams: true })
 const controller = ({ elite2Api, logError }) => {
   const appointmentsService = appointmentsServiceFactory(elite2Api)
   const existingEventsService = existingEventsServiceFactory(elite2Api)
-  const { index, post } = prepostAppointments.prepostAppointmentsFactory({
+  const { index, post, cancel } = prepostAppointments.prepostAppointmentsFactory({
     elite2Api,
     logError,
     appointmentsService,
@@ -17,6 +17,7 @@ const controller = ({ elite2Api, logError }) => {
 
   router.get('/', index)
   router.post('/', post)
+  router.get('/cancel', cancel)
 
   return router
 }
