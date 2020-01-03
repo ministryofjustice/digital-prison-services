@@ -8,6 +8,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationDetailPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationHistoryPage
 
+import java.time.LocalDate
+
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class AdjudicationsSpecification extends BrowserReportingSpec {
@@ -91,10 +93,12 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
 
         tableRows.size() == 4
 
-        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.dateFilteringhistoryResponse, '?fromDate=2012-01-01&toDate=2012-02-01')
+        def lastYear = (LocalDate.now().year-1)
+        elite2api.stubAdjudicationHistory('AA00112', AdjudicationResponses.dateFilteringhistoryResponse, "?fromDate=${lastYear}-01-01&toDate=${lastYear}-02-01")
+
         when: "I filter establishment to only show offences in January 2012"
-        setFromDate(2012, 0, 1)
-        setToDate(2012, 1, 1)
+        setFromDate(lastYear, 0, 1)
+        setToDate(lastYear, 1, 1)
         applyFilter.click()
 
         then: "I should be presented with filtered results"
