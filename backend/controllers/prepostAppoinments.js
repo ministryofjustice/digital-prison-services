@@ -11,7 +11,13 @@ const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
   if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
 
-  return appointmentDetails[0]
+  return appointmentDetails.reduce(
+    (acc, current) => ({
+      ...acc,
+      ...current,
+    }),
+    {}
+  )
 }
 
 const packAppointmentDetails = (req, details) => {
