@@ -32,11 +32,10 @@ const validate = ({ postAppointment, preAppointment, preAppointmentLocation, pos
 
 const getLinks = offenderNo => ({
   postAppointments: `/offenders/${offenderNo}/prepost-appointments`,
-  cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
+  prisonerProfile: `${dpsUrl}offenders/${offenderNo}`,
 })
 
 const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEventsService, logError }) => {
-  const cancel = async (req, res) => res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
@@ -314,7 +313,6 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
   return {
     index,
     post,
-    cancel,
   }
 }
 

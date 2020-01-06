@@ -4,10 +4,9 @@ import geb.module.FormElement
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
-
-import java.time.LocalDate
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -46,15 +45,14 @@ class SearchSpecification extends BrowserReportingSpec {
     }
 
     def "The activity location list is updated when selecting date or period"() {
-        def lastYear = (LocalDate.now().year-1).toString()
         given: 'I am on the search page'
         fixture.toSearch()
         at SearchPage
 
         when: "I select a date"
         def currentPeriod = period.value()
-        elite2api.stubActivityLocations("${lastYear}-07-23", currentPeriod)
-        setDatePicker('2019', 'Jul', '23')
+        elite2api.stubActivityLocations('2018-07-23', currentPeriod)
+        setDatePicker('2018', 'Jul', '23')
         waitFor { !activity.module(FormElement).disabled }
 
         then: 'a new activity location list is displayed'
@@ -62,13 +60,13 @@ class SearchSpecification extends BrowserReportingSpec {
 
         when: "I select a period"
         // First use a different date to reset to original activity list
-        setDatePicker(lastYear, 'Aug', '10')
+        setDatePicker('2018', 'Aug', '10')
         waitFor { !activity.module(FormElement).disabled }
         activity.find('option', value: '1').text() == 'loc1'
 
         def newPeriod = currentPeriod == 'ED' ? 'PM' : 'ED'
         // Now add stub for other list
-        elite2api.stubActivityLocations("${lastYear}-08-10", newPeriod)
+        elite2api.stubActivityLocations('2018-08-10', newPeriod)
         form['period-select'] = newPeriod
         waitFor { !activity.module(FormElement).disabled }
 

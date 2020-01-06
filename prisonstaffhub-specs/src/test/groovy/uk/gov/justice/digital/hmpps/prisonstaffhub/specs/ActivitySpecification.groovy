@@ -12,8 +12,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ActivityPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
 class ActivitySpecification extends BrowserReportingSpec {
@@ -216,13 +214,12 @@ class ActivitySpecification extends BrowserReportingSpec {
         sessionsAttended.text() == '0'
 
         when: "I change selections and update"
-        def lastYear = (LocalDate.now().year-1).toString()
-        def firstOfMonthDisplayFormat = "01/08/${lastYear}"
-        def firstOfMonthApiFormat = "${lastYear}-08-01"
+        def firstOfMonthDisplayFormat = '01/08/2018'
+        def firstOfMonthApiFormat = '2018-08-01'
         elite2api.stubGetActivityList(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat, true)
         whereaboutsApi.stubGetAttendance(ITAG_USER.workingCaseload, 1, 'PM', firstOfMonthApiFormat)
         whereaboutsApi.stubGetAbsenceReasons()
-        setDatePicker(lastYear, 'Aug', '1')
+        setDatePicker('2018', 'Aug', '1')
 
         then: 'The new activity list results are displayed'
         at ActivityPage
