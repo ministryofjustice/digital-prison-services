@@ -61,7 +61,6 @@ $(document).ready(function() {
         },
       })
         .done(function(data) {
-          console.log({ data })
           container.html(data).show()
         })
         .fail(function() {
