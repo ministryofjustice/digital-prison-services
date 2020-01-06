@@ -33,7 +33,13 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         repeats,
         preAppointment,
         postAppointment,
-      } = appointmentDetails[0]
+      } = appointmentDetails.reduce(
+        (acc, current) => ({
+          ...acc,
+          ...current,
+        }),
+        {}
+      )
 
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)

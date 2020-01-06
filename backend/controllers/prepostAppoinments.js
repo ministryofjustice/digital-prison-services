@@ -11,7 +11,13 @@ const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
   if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
 
-  return appointmentDetails[0]
+  return appointmentDetails.reduce(
+    (acc, current) => ({
+      ...acc,
+      ...current,
+    }),
+    {}
+  )
 }
 
 const packAppointmentDetails = (req, details) => {
@@ -36,7 +42,10 @@ const getLinks = offenderNo => ({
 })
 
 const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEventsService, logError }) => {
-  const cancel = async (req, res) => res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
+  const cancel = async (req, res) => {
+    unpackAppointmentDetails(req)
+    res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
+  }
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
