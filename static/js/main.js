@@ -115,12 +115,13 @@ $(document).ready(function() {
     getEventsForOffender($('#offenderNo').text(), $(this).val())
   })
 
-  appointmentRepeatsSelect
-    .add(appointmentRepeatsTimesInput)
-    .add(appointmentDateInput)
-    .change(function() {
-      getAppointmentEndDate()
-    })
+  appointmentRepeatsSelect.add(appointmentDateInput).change(function() {
+    getAppointmentEndDate()
+  })
+
+  appointmentRepeatsTimesInput.keyup(function() {
+    getAppointmentEndDate()
+  })
 
   locationSelectPreAppointment.change(function(e) {
     getPrePostEventsForLocation(e, locationEventsContainerPreAppointments)
