@@ -45,7 +45,7 @@ const MovementsIn = ({ rows, sortOrder, setColumnSort, agencyId }) => (
           </th>
           <th className="straight width10">Prison no.</th>
           <th className="straight width10">D.O.B.</th>
-          <th className="straight width10">IEP</th>
+          <th className="straight width10">Incentive level</th>
           <th className="straight width10">Location</th>
           <th className="straight width10">Time in</th>
           <th className="straight width15">Arrived from</th>

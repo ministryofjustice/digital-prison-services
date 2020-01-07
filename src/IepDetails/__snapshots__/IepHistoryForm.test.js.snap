@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IEP history Form should render the iep history table correctly 1`] = `
+exports[`Incentive level History Form should render the Incentive level History table correctly 1`] = `
 <form
   onSubmit={[Function]}
 >
@@ -11,7 +11,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
       className="sc-bdVaJa gkOpjT"
     >
       <div
-        className="sc-bwzfXH dGugEg"
+        className="sc-bwzfXH cZFmYR"
       >
         <div
           className="sc-bdVaJa gkOpjT"
@@ -68,7 +68,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
               <span
                 className="sc-gqjmRU hMYAWR"
               >
-                IEP level
+                Incentive level
               </span>
               <select
                 className="sc-cSHVUG iPEkCj"
@@ -94,7 +94,7 @@ exports[`IEP history Form should render the iep history table correctly 1`] = `
         </div>
       </div>
       <div
-        className="sc-bwzfXH bfdhGR"
+        className="sc-bwzfXH cZFmYR"
       >
         <div
           className="sc-bdVaJa gkOpjT"

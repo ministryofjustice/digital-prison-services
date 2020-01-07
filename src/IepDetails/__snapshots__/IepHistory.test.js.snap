@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IEP history should render the iep history table correctly 1`] = `
+exports[`Incentive level History should render the Incentive level History table correctly 1`] = `
 Array [
   <h2
     className="sc-bZQynM ifeWwe"
   >
-    IEP history
+    Incentive level History
   </h2>,
   <div
     className="sc-htoDjs xQRkw"
@@ -27,7 +27,7 @@ Array [
           <th
             className="sc-bxivhb crGQu"
           >
-            IEP description
+            Incentive level
           </th>
           <th
             className="sc-bxivhb gLzMqy"
@@ -97,7 +97,7 @@ Array [
           <th
             className="sc-bxivhb kZbmwT"
           >
-            IEP description
+            Incentive level
           </th>
           <th
             className="sc-bxivhb kZbmwT"

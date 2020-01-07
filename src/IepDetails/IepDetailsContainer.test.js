@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { IepDetailsContainer } from './IepDetailsContainer'
 
-describe('IEP Details Container', () => {
+describe('Incentive details container', () => {
   const props = {
     offenderNo: 'ABC123',
     handleError: jest.fn(),

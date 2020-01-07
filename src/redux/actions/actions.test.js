@@ -309,7 +309,7 @@ describe('actions', () => {
     expect(actions.setOffender({ firstName: 'first-name-1', lastName: 'last-name1' })).toEqual(expectedAction)
   })
 
-  it('should create an action to update iep history results', () => {
+  it('should create an action to update Incentive level History results', () => {
     const expectedAction = {
       type: types.SET_IEP_HISTORY_RESULTS,
       results: ['result-1'],
@@ -317,7 +317,7 @@ describe('actions', () => {
     expect(actions.setIepHistoryResults(['result-1'])).toEqual(expectedAction)
   })
 
-  it('should create an action to update possible iep levels', () => {
+  it('should create an action to update possible Incentive levels', () => {
     const expectedAction = {
       type: types.SET_POSSIBLE_IEP_LEVELS,
       levels: ['level-1'],

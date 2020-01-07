@@ -1,6 +1,6 @@
 import { iepChangeGaEvent, LevelSelected, ChangeAbandonment } from './IepChangeGaEvents'
 
-describe('Bulk IEP level change ga events', () => {
+describe('Bulk Incentive level change ga events', () => {
   it('should create an ga event of type of level changed', () => {
     const toLevel = 'Basic'
     const fromLevel = 'Enhanced'
@@ -12,10 +12,10 @@ describe('Bulk IEP level change ga events', () => {
     })
   })
 
-  it('should create an ga event for cancelling of IEP level change', () => {
+  it('should create an ga event for cancelling of Incentive level change', () => {
     expect(ChangeAbandonment()).toEqual({
       ...iepChangeGaEvent,
-      action: `IEP level update abandoned`,
+      action: `Incentive level update abandoned`,
     })
   })
 })

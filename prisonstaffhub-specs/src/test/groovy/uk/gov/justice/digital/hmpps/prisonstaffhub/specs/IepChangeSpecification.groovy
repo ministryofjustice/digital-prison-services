@@ -20,7 +20,7 @@ class IepChangeSpecification extends BrowserReportingSpec {
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
-    def "should present the IEP change form page when role MAINTAIN_IEP"() {
+    def "should present the Incentive level change form page when role MAINTAIN_IEP"() {
         def offenderDetails = [
                 bookingId: -3,
                 bookingNo: "A00113",
@@ -73,17 +73,17 @@ class IepChangeSpecification extends BrowserReportingSpec {
         given: "I am logged in"
         fixture.loginAsMaintainIep(ITAG_USER)
 
-        when: "I view the IEP change page"
+        when: "I view the Incentive level change page"
         to IepChangePage
 
         then: "I should be presented with the form"
 
         breadcrumb == [['Home', NOTM_URL],
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
-                       ['IEP details', 'http://localhost:3006/offenders/A1234AC/iep-details'],
-                       ['Change IEP', '']]
+                       ['Incentive details', 'http://localhost:3006/offenders/A1234AC/iep-details'],
+                       ['Change Incentive level', '']]
 
-        pageTitle == "Change IEP level"
+        pageTitle == "Change Incentive level"
         formLabel == "Select new level"
 
         waitFor { basicInput }

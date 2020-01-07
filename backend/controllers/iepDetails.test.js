@@ -59,7 +59,7 @@ beforeEach(() => {
   elite2Api.getAgencyIepLevels = jest.fn()
 })
 
-describe('IEP details controller', () => {
+describe('Incentive details controller', () => {
   beforeEach(() => {
     elite2Api.getDetails.mockReturnValue({
       firstName: 'ARTHUR',
@@ -123,7 +123,7 @@ describe('IEP details controller', () => {
       { iepLevel: 'NEW', iepDescription: 'New level' },
     ])
   })
-  it('Should return the IEP history for offender', async () => {
+  it('Should return the Incentive level History for offender', async () => {
     const response = await getIepDetails({}, '1', {})
     const expected = createIepDetailsReponse()
     expect(response).toEqual(expected)
@@ -375,7 +375,7 @@ describe('IEP details controller', () => {
     expect(elite2Api.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
   })
 
-  it('Should return the right IEP levels when current is Basic', async () => {
+  it('Should return the right Incentive levels when current is Basic', async () => {
     const levels = await getPossibleLevels({}, 'Basic', 'HEI')
 
     expect(levels).toEqual([
@@ -398,7 +398,7 @@ describe('IEP details controller', () => {
     ])
   })
 
-  it('Should return the right IEP levels when current is Standard', async () => {
+  it('Should return the right Incentive levels when current is Standard', async () => {
     const levels = await getPossibleLevels({}, 'Standard', 'HEI')
 
     expect(levels).toEqual([
@@ -421,7 +421,7 @@ describe('IEP details controller', () => {
     ])
   })
 
-  it('Should return the right IEP levels when current is Enhanced', async () => {
+  it('Should return the right Incentive levels when current is Enhanced', async () => {
     const levels = await getPossibleLevels({}, 'Enhanced', 'HEI')
 
     expect(levels).toEqual([
@@ -444,7 +444,7 @@ describe('IEP details controller', () => {
     ])
   })
 
-  it('Should return the right IEP levels when current is Entry', async () => {
+  it('Should return the right Incentive levels when current is Entry', async () => {
     const levels = await getPossibleLevels({}, 'Entry', 'HEI')
 
     expect(levels).toEqual([

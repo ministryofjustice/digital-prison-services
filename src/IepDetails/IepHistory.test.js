@@ -26,7 +26,7 @@ const initialState = {
   },
 }
 
-describe('IEP history', () => {
+describe('Incentive level History', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('IEP history', () => {
     store.getState.mockReturnValue(initialState)
   })
 
-  it('should render the iep history table correctly', () => {
+  it('should render the Incentive level History table correctly', () => {
     const wrapper = testRenderer.create(<IepHistory store={store} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
