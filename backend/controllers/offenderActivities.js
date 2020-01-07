@@ -17,10 +17,13 @@ const offenderActivitesFactory = (elite2api, whereaboutsApi) => {
     const prisonersUnaccountedFor = offenderActivities.filter(
       offenderActivity =>
         prisonAttendance.attendances &&
-        !prisonAttendance.attendances.find(attendance => offenderActivity.bookingId === attendance.bookingId)
+        !prisonAttendance.attendances.find(
+          attendance =>
+            offenderActivity.bookingId === attendance.bookingId && offenderActivity.eventId === attendance.eventId
+        )
     )
 
-    const offenderNumbers = [...new Set(prisonersUnaccountedFor.map(prisoner => prisoner.offenderNo))]
+    const offenderNumbers = prisonersUnaccountedFor.map(prisoner => prisoner.offenderNo)
 
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
 
