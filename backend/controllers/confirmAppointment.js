@@ -43,24 +43,28 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
 
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
+      const { text: preAppointmentLocationDescription } =
+        (preAppointment && locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) || {}
+
+      console.error({ preAppointment })
+      console.error({ locationId })
+      console.error({ preAppointmentLocationDescription })
 
       const { firstName, lastName, assignedLivingUnitDesc } = await elite2Api.getDetails(res.locals, offenderNo)
 
       req.flash('appointmentSlipsData', {
         appointmentDetails: {
-          startTime,
-          endTime,
           comments: comment,
           appointmentTypeDescription,
-          locationDescription,
+          locationDescription: (preAppointment && preAppointmentLocationDescription) || locationDescription,
         },
         prisonersListed: [
           {
             firstName: properCaseName(firstName),
             lastName: properCaseName(lastName),
             offenderNo,
-            startTime,
-            endTime,
+            startTime: (preAppointment && preAppointment.startTime) || startTime,
+            endTime: (postAppointment && postAppointment.endTime) || endTime,
             assignedLivingUnitDesc,
           },
         ],
