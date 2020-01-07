@@ -1,7 +1,7 @@
 import reducer from './iepLevels'
 import * as Actions from '../actions'
 
-describe('IEP levels reducer', () => {
+describe('Incentive levels reducer', () => {
   const initialState = {}
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchObject({})

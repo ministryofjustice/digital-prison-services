@@ -1,6 +1,6 @@
 export const iepChangeGaEvent = {
-  category: 'update IEP level',
-  label: 'IEP change',
+  category: 'update Incentive level',
+  label: 'Incentive level change',
 }
 
 export const LevelSelected = (toLevel, fromLevel, agencyId) => ({
@@ -10,5 +10,5 @@ export const LevelSelected = (toLevel, fromLevel, agencyId) => ({
 
 export const ChangeAbandonment = () => ({
   ...iepChangeGaEvent,
-  action: `IEP level update abandoned`,
+  action: `Incentive level update abandoned`,
 })

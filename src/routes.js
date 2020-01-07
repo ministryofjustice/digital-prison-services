@@ -14,8 +14,8 @@ export default [
 
   { path: '/offenders', breadcrumb: null },
   { path: '/offenders/:offenderNo', breadcrumb: OffenderBreadcrumb, renderDirectly: true },
-  { path: '/offenders/:offenderNo/iep-details', breadcrumb: 'IEP details' },
-  { path: '/offenders/:offenderNo/iep-details/change-iep', breadcrumb: 'Change IEP' },
+  { path: '/offenders/:offenderNo/iep-details', breadcrumb: 'Incentive details' },
+  { path: '/offenders/:offenderNo/iep-details/change-iep', breadcrumb: 'Change Incentive level' },
   { path: '/offenders/:offenderNo/adjudications/:adjudicationNo', breadcrumb: 'Details' },
   // Below are temporary as latest version of react-router-breadcrumbs-hoc leaves hyphens in the breadcrumb text
   { path: '/establishment-roll', breadcrumb: 'Establishment roll' },

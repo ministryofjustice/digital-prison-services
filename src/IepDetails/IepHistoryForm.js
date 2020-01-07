@@ -58,7 +58,7 @@ const shouldShowDay = now => date => date.isSameOrBefore(now, 'day')
 export const FormFields = ({ now, errors, establishments, levels, submitting, values, reset }) => (
   <>
     <GridRow>
-      <GridCol setDesktopWidth="one-third">
+      <GridCol setDesktopWidth="one-half">
         <GridRow>
           <FiltersLabel>Filters</FiltersLabel>
         </GridRow>
@@ -85,7 +85,7 @@ export const FormFields = ({ now, errors, establishments, levels, submitting, va
               errors={errors}
               name="level"
               component={FullWidthSelect}
-              label="IEP level"
+              label="Incentive level"
               id="iep-level-select"
               value={values.iepLevel}
             >
@@ -99,7 +99,7 @@ export const FormFields = ({ now, errors, establishments, levels, submitting, va
           </GridCol>
         </GridRow>
       </GridCol>
-      <GridCol setDesktopWidth="two-thirds">
+      <GridCol setDesktopWidth="one-half">
         <GridRow>
           <DateRangeLabel>Date range</DateRangeLabel>
         </GridRow>
