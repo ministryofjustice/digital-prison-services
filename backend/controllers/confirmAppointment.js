@@ -46,10 +46,6 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       const { text: preAppointmentLocationDescription } =
         (preAppointment && locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) || {}
 
-      console.error({ preAppointment })
-      console.error({ locationId })
-      console.error({ preAppointmentLocationDescription })
-
       const { firstName, lastName, assignedLivingUnitDesc } = await elite2Api.getDetails(res.locals, offenderNo)
 
       req.flash('appointmentSlipsData', {
