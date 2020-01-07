@@ -153,7 +153,7 @@ describe('Confirm appointments', () => {
     )
   })
 
-  it('should place data needed for movement slips into flash', async () => {
+  it('should place data needed for movement slips into flash including pre and post appointments', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       elite2Api,
       appointmentsService,
@@ -193,6 +193,40 @@ describe('Confirm appointments', () => {
           offenderNo: 'A12345',
           startTime: '2017-10-10T10:00:00',
           endTime: '2017-10-10T17:00:00',
+          assignedLivingUnitDesc: 'Cell 1',
+        },
+      ],
+    })
+  })
+
+  it('should place data needed for movement slips into flash', async () => {
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError: () => {},
+    })
+
+    req.flash.mockImplementation(() => [
+      {
+        ...appointmentDetails,
+      },
+    ])
+
+    await index(req, res)
+
+    expect(req.flash).toHaveBeenCalledWith('appointmentSlipsData', {
+      appointmentDetails: {
+        comments: 'Test',
+        appointmentTypeDescription: 'Appointment 1',
+        locationDescription: 'Room 3',
+      },
+      prisonersListed: [
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+          offenderNo: 'A12345',
+          startTime: '2017-10-10T11:00',
+          endTime: '2017-10-10T14:00',
           assignedLivingUnitDesc: 'Cell 1',
         },
       ],

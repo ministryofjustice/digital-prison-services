@@ -43,9 +43,8 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
 
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
-      const { text: locationDescriptionForMovementSlip } =
-        (preAppointment && locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) ||
-        locationDescription
+      const { text: locationDescriptionForMovementSlip } = (preAppointment &&
+        locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) || { text: locationDescription }
 
       const { firstName, lastName, assignedLivingUnitDesc } = await elite2Api.getDetails(res.locals, offenderNo)
 
