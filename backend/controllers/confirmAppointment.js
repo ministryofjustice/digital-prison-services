@@ -43,8 +43,9 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
 
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
-      const { text: preAppointmentLocationDescription } =
-        (preAppointment && locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) || {}
+      const { text: locationDescriptionForMovementSlip } =
+        (preAppointment && locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) ||
+        locationDescription
 
       const { firstName, lastName, assignedLivingUnitDesc } = await elite2Api.getDetails(res.locals, offenderNo)
 
@@ -52,7 +53,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         appointmentDetails: {
           comments: comment,
           appointmentTypeDescription,
-          locationDescription: (preAppointment && preAppointmentLocationDescription) || locationDescription,
+          locationDescription: locationDescriptionForMovementSlip,
         },
         prisonersListed: [
           {
