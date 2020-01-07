@@ -32,10 +32,12 @@ const PrisonersUnaccountedFor = ({
   agencyId,
   setOffenderPaymentDataDispatch,
   resetErrorDispatch,
+  setErrorDispatch,
   raiseAnalyticsEvent,
   handleError,
   showModal,
   activityHubUser,
+  reloadPage,
 }) => (
   <TableContainer>
     <Table
@@ -125,6 +127,8 @@ const PrisonersUnaccountedFor = ({
                   offenderDetails={prisonerActivity}
                   raiseAnalyticsEvent={raiseAnalyticsEvent}
                   resetErrorDispatch={resetErrorDispatch}
+                  setErrorDispatch={setErrorDispatch}
+                  reloadPage={reloadPage}
                   handleError={handleError}
                   agencyId={agencyId}
                   period={period}
@@ -153,6 +157,8 @@ PrisonersUnaccountedFor.propTypes = {
   period: PropTypes.string.isRequired,
   agencyId: PropTypes.string.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
+  reloadPage: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,

@@ -7,6 +7,7 @@ import moment from 'moment'
 import ResultsActivity from './ResultsActivity'
 import {
   resetError,
+  setError,
   setActivityData,
   setLoaded,
   setOrderField,
@@ -152,6 +153,7 @@ class ResultsActivityContainer extends Component {
   render() {
     const {
       resetErrorDispatch,
+      setErrorDispatch,
       setOffenderPaymentDataDispatch,
       showModal,
       updateAttendanceEnabled,
@@ -174,6 +176,7 @@ class ResultsActivityContainer extends Component {
           activityName={activityName}
           updateAttendanceEnabled={updateAttendanceEnabled}
           resetErrorDispatch={resetErrorDispatch}
+          setErrorDispatch={setErrorDispatch}
           showModal={showModal}
           userRoles={userRoles}
           redactedPrintState={redactedPrint}
@@ -232,6 +235,7 @@ ResultsActivityContainer.propTypes = {
   sortOrderDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
   activityDataDispatch: PropTypes.func.isRequired,
 
   // special
@@ -267,6 +271,7 @@ const mapDispatchToProps = dispatch => ({
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
+  setErrorDispatch: error => dispatch(setError(error)),
   activityDataDispatch: data => dispatch(setActivityData(data)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),

@@ -233,6 +233,7 @@ class App extends React.Component {
       shouldShowTerms,
       setLoadedDispatch,
       resetErrorDispatch,
+      setErrorDispatch,
       dateDispatch,
       periodDispatch,
       error,
@@ -457,6 +458,7 @@ class App extends React.Component {
                 handlePeriodChange={event => this.handlePeriodChange(event)}
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
+                setErrorDispatch={setErrorDispatch}
                 resetErrorDispatch={resetErrorDispatch}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 showModal={setShowModalDispatch}

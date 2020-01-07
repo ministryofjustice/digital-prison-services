@@ -34,6 +34,8 @@ describe('<AttendanceOtherForm />', () => {
     agencyId: 'LEI',
     setOffenderAttendance: jest.fn(),
     resetErrorDispatch: jest.fn(),
+    setErrorDispatch: jest.fn(),
+    reloadPage: jest.fn(),
     raiseAnalyticsEvent: jest.fn(),
     handleError: jest.fn(),
     setSelectedOption: jest.fn(),
@@ -211,8 +213,10 @@ describe('<AttendanceOtherForm />', () => {
           props.handleError,
           props.showModal,
           props.resetErrorDispatch,
+          props.setErrorDispatch,
           props.setSelectedOption,
-          props.raiseAnalyticsEvent
+          props.raiseAnalyticsEvent,
+          props.reloadPage
         )
       })
 
@@ -248,8 +252,10 @@ describe('<AttendanceOtherForm />', () => {
           props.handleError,
           props.showModal,
           props.resetErrorDispatch,
+          props.setErrorDispatch,
           props.setSelectedOption,
-          props.raiseAnalyticsEvent
+          props.raiseAnalyticsEvent,
+          props.reloadPage
         )
         expect(props.showModal).toHaveBeenCalledWith(
           true,

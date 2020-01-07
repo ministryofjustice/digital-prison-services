@@ -10,6 +10,7 @@ import ResultsHouseblock from './ResultsHouseblock'
 
 import {
   resetError,
+  setError,
   setLoaded,
   setHouseblockData,
   setOrderField,
@@ -214,7 +215,7 @@ class ResultsHouseblockContainer extends Component {
 
   render() {
     const title = this.titleString()
-    const { resetErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
+    const { resetErrorDispatch, setErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
     const { redactedPrint } = this.state
 
     return (
@@ -226,6 +227,7 @@ class ResultsHouseblockContainer extends Component {
           setColumnSort={this.setColumnSort}
           update={this.update}
           resetErrorDispatch={resetErrorDispatch}
+          setErrorDispatch={setErrorDispatch}
           handleError={this.handleError}
           setHouseblockOffenderAttendance={setOffenderPaymentDataDispatch}
           showModal={showModal}
@@ -266,6 +268,7 @@ ResultsHouseblockContainer.propTypes = {
   houseblockDataDispatch: PropTypes.func.isRequired,
   orderDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   sortOrderDispatch: PropTypes.func.isRequired,
   subLocationDispatch: PropTypes.func.isRequired,
@@ -311,6 +314,7 @@ const mapDispatchToProps = dispatch => ({
   houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
   orderDispatch: field => dispatch(setOrderField(field)),
   resetErrorDispatch: () => dispatch(resetError()),
+  setErrorDispatch: error => dispatch(setError(error)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   sortOrderDispatch: field => dispatch(setSortOrder(field)),
   subLocationDispatch: text => dispatch(setSearchSubLocation(text)),

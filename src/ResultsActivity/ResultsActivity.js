@@ -150,6 +150,7 @@ class ResultsActivity extends Component {
       handleError,
       setActivityOffenderAttendance,
       resetErrorDispatch,
+      setErrorDispatch,
       raiseAnalyticsEvent,
       showModal,
       activityName,
@@ -464,6 +465,8 @@ class ResultsActivity extends Component {
                   offenderDetails={offenderDetails}
                   raiseAnalyticsEvent={raiseAnalyticsEvent}
                   resetErrorDispatch={resetErrorDispatch}
+                  setErrorDispatch={setErrorDispatch}
+                  reloadPage={getActivityList}
                   handleError={handleError}
                   agencyId={agencyId}
                   period={period}
@@ -566,6 +569,7 @@ ResultsActivity.propTypes = {
   handleError: PropTypes.func.isRequired,
   setActivityOffenderAttendance: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,

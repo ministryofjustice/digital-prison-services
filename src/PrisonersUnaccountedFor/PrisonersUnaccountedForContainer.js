@@ -14,6 +14,7 @@ import sortResults from '../ResultsActivity/activityResultsSorter'
 function PrisonersUnaccountedForContainer({
   setLoadedDispatch,
   resetErrorDispatch,
+  setErrorDispatch,
   raiseAnalyticsEvent,
   showModal,
   setOffenderPaymentDataDispatch,
@@ -100,6 +101,8 @@ function PrisonersUnaccountedForContainer({
         period={period}
         agencyId={agencyId}
         resetErrorDispatch={resetErrorDispatch}
+        setErrorDispatch={setErrorDispatch}
+        reloadPage={setReloadPage}
         raiseAnalyticsEvent={raiseAnalyticsEvent}
         setOffenderPaymentDataDispatch={setOffenderPaymentDataDispatch}
         showModal={showModal}
@@ -113,6 +116,7 @@ function PrisonersUnaccountedForContainer({
 PrisonersUnaccountedForContainer.propTypes = {
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   getAbsentReasonsDispatch: PropTypes.func.isRequired,
