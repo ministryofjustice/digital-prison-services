@@ -309,7 +309,7 @@ describe('actions', () => {
     expect(actions.setOffender({ firstName: 'first-name-1', lastName: 'last-name1' })).toEqual(expectedAction)
   })
 
-  it('should create an action to update Incentive level History results', () => {
+  it('should create an action to update Incentive level history results', () => {
     const expectedAction = {
       type: types.SET_IEP_HISTORY_RESULTS,
       results: ['result-1'],
