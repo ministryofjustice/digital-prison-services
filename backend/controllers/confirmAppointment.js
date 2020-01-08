@@ -48,7 +48,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
 
       const { firstName, lastName, assignedLivingUnitDesc } = await elite2Api.getDetails(res.locals, offenderNo)
 
-      req.flash('appointmentSlipsData', {
+      req.session.appointmentSlipsData = {
         appointmentDetails: {
           comments: comment,
           appointmentTypeDescription,
@@ -64,7 +64,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
             assignedLivingUnitDesc,
           },
         ],
-      })
+      }
 
       const title = recurring === 'yes' ? 'Appointments booked' : 'Appointment booked'
 
