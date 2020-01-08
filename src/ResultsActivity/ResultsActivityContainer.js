@@ -27,6 +27,7 @@ class ResultsActivityContainer extends Component {
     this.handlePrint = this.handlePrint.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
     this.getActivityList = this.getActivityList.bind(this)
+    this.update = this.update.bind(this)
     this.state = {
       redactedPrint: false,
     }
@@ -50,7 +51,7 @@ class ResultsActivityContainer extends Component {
     const { date, period } = this.props
 
     if ((prevProps.date && prevProps.date !== date) || (prevProps.period && prevProps.period !== period)) {
-      await this.getActivityList()
+      await this.update()
     }
   }
 
@@ -124,6 +125,10 @@ class ResultsActivityContainer extends Component {
     )
   }
 
+  update() {
+    this.getActivityList()
+  }
+
   handlePrint(version) {
     const { raiseAnalyticsEvent } = this.props
 
@@ -172,6 +177,7 @@ class ResultsActivityContainer extends Component {
           getActivityList={this.getActivityList}
           setColumnSort={this.setColumnSort}
           handleError={this.handleError}
+          reloadPage={this.update}
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           activityName={activityName}
           updateAttendanceEnabled={updateAttendanceEnabled}

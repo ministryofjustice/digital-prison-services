@@ -8,6 +8,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import classNames from 'classnames'
 import Link from '@govuk-react/link'
+import { Link as RouterLink } from 'react-router-dom'
 import { FONT_SIZE } from '@govuk-react/constants'
 import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
@@ -34,6 +35,7 @@ import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import { Flag } from '../flags'
 import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
 import { allNotRequired, attendAll } from '../Attendance/attendanceGAEvents'
+import { linkOnClick } from '../helpers'
 
 const ManageResults = styled.div`
   display: flex;
@@ -158,6 +160,7 @@ class ResultsActivity extends Component {
       totalAttended,
       totalAbsent,
       userRoles,
+      reloadPage,
     } = this.props
 
     const activityHubUser = userRoles.includes('ACTIVITY_HUB')
@@ -466,7 +469,7 @@ class ResultsActivity extends Component {
                   raiseAnalyticsEvent={raiseAnalyticsEvent}
                   resetErrorDispatch={resetErrorDispatch}
                   setErrorDispatch={setErrorDispatch}
-                  reloadPage={getActivityList}
+                  reloadPage={reloadPage}
                   handleError={handleError}
                   agencyId={agencyId}
                   period={period}
@@ -500,6 +503,11 @@ class ResultsActivity extends Component {
             {periodSelect}
           </div>
           <hr />
+          <div className="margin-bottom">
+            <Link as={RouterLink} {...linkOnClick(reloadPage)}>
+              Reload page
+            </Link>
+          </div>
           {buttons}
         </form>
 
@@ -571,6 +579,7 @@ ResultsActivity.propTypes = {
   resetErrorDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
+  reloadPage: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
   updateAttendanceEnabled: PropTypes.bool.isRequired,
