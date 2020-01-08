@@ -103,7 +103,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
       return res.redirect('/bulk-appointments/no-appointments-added?reason=removedAllClashes')
     }
 
-    req.flash('appointmentSlipsData', {
+    req.session.appointmentSlipsData = {
       appointmentDetails: {
         startTime,
         endTime,
@@ -112,7 +112,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
         locationDescription,
       },
       prisonersListed: remainingPrisoners,
-    })
+    }
 
     const count = Number(times)
     const request = {
