@@ -214,7 +214,7 @@ describe('Confirm appointments', () => {
 
     await index(req, res)
 
-    expect(req.flash).toHaveBeenCalledWith('appointmentSlipsData', {
+    expect(req.session.appointmentSlipsData).toEqual({
       appointmentDetails: {
         comments: 'Test',
         appointmentTypeDescription: 'Appointment 1',
