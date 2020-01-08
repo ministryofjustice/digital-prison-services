@@ -33,6 +33,8 @@ describe('<AttendanceOptions />', () => {
     showModal: jest.fn(),
     setOffenderAttendance: jest.fn(),
     resetErrorDispatch: jest.fn(),
+    setErrorDispatch: jest.fn(),
+    reloadPage: jest.fn(),
     raiseAnalyticsEvent: jest.fn(),
     handleError: jest.fn(),
     activityName: 'Activity name',
@@ -73,7 +75,9 @@ describe('<AttendanceOptions />', () => {
       props.handleError,
       props.showModal,
       props.resetErrorDispatch,
-      props.raiseAnalyticsEvent
+      props.setErrorDispatch,
+      props.raiseAnalyticsEvent,
+      props.reloadPage
     )
     expect(paid).toBeTruthy()
   })
