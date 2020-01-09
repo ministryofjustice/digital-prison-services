@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-/* eslint-disable jsx-a11y/anchor-is-valid */
 class Error extends Component {
   render() {
     const { error } = this.props
     const reloadLink =
       error && error.showReload && error.reloadPage ? (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a href="#" onClick={error.reloadPage}>
           Please refresh the page.
         </a>
