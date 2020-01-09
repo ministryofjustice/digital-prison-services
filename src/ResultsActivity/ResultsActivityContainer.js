@@ -7,6 +7,7 @@ import moment from 'moment'
 import ResultsActivity from './ResultsActivity'
 import {
   resetError,
+  setError,
   setActivityData,
   setLoaded,
   setOrderField,
@@ -26,6 +27,7 @@ class ResultsActivityContainer extends Component {
     this.handlePrint = this.handlePrint.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
     this.getActivityList = this.getActivityList.bind(this)
+    this.update = this.update.bind(this)
     this.state = {
       redactedPrint: false,
     }
@@ -49,7 +51,7 @@ class ResultsActivityContainer extends Component {
     const { date, period } = this.props
 
     if ((prevProps.date && prevProps.date !== date) || (prevProps.period && prevProps.period !== period)) {
-      await this.getActivityList()
+      await this.update()
     }
   }
 
@@ -123,6 +125,10 @@ class ResultsActivityContainer extends Component {
     )
   }
 
+  update() {
+    this.getActivityList()
+  }
+
   handlePrint(version) {
     const { raiseAnalyticsEvent } = this.props
 
@@ -152,6 +158,7 @@ class ResultsActivityContainer extends Component {
   render() {
     const {
       resetErrorDispatch,
+      setErrorDispatch,
       setOffenderPaymentDataDispatch,
       showModal,
       updateAttendanceEnabled,
@@ -170,10 +177,12 @@ class ResultsActivityContainer extends Component {
           getActivityList={this.getActivityList}
           setColumnSort={this.setColumnSort}
           handleError={this.handleError}
+          reloadPage={this.update}
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           activityName={activityName}
           updateAttendanceEnabled={updateAttendanceEnabled}
           resetErrorDispatch={resetErrorDispatch}
+          setErrorDispatch={setErrorDispatch}
           showModal={showModal}
           userRoles={userRoles}
           redactedPrintState={redactedPrint}
@@ -232,6 +241,7 @@ ResultsActivityContainer.propTypes = {
   sortOrderDispatch: PropTypes.func.isRequired,
   setLoadedDispatch: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
   activityDataDispatch: PropTypes.func.isRequired,
 
   // special
@@ -267,6 +277,7 @@ const mapDispatchToProps = dispatch => ({
   activitiesDispatch: text => dispatch(setSearchActivities(text)),
   setLoadedDispatch: status => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
+  setErrorDispatch: error => dispatch(setError(error)),
   activityDataDispatch: data => dispatch(setActivityData(data)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),

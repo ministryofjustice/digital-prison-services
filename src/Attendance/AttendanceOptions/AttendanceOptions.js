@@ -21,8 +21,10 @@ export const updateOffenderAttendance = async (
   handleError,
   showModal,
   resetErrorDispatch,
+  setErrorDispatch,
   setSelectedOption,
-  raiseAnalyticsEvent
+  raiseAnalyticsEvent,
+  reloadPage
 ) => {
   let updateSuccess = false
   const eventDetails = { prisonId: agencyId, period, eventDate: date }
@@ -48,7 +50,16 @@ export const updateOffenderAttendance = async (
     setOffenderAttendance(offenderIndex, offenderAttendanceData)
     updateSuccess = true
   } catch (error) {
-    handleError(error)
+    if (error.response.status === 409) {
+      window.scrollTo(0, 0)
+      setErrorDispatch({
+        message: 'An outcome for this offender has already been saved.',
+        showReload: true,
+        reloadPage,
+      })
+    } else {
+      handleError(error)
+    }
     updateSuccess = false
   }
 
@@ -67,11 +78,13 @@ function AttendanceOptions({
   showModal,
   activityName,
   resetErrorDispatch,
+  setErrorDispatch,
   raiseAnalyticsEvent,
   handleError,
   setOffenderAttendance,
   agencyId,
   period,
+  reloadPage,
 }) {
   const radioSize = `${spacing.simple(7)}px`
   const [selectedOption, setSelectedOption] = useState()
@@ -101,8 +114,10 @@ function AttendanceOptions({
       handleError,
       showModal,
       resetErrorDispatch,
+      setErrorDispatch,
       setSelectedOption,
-      raiseAnalyticsEvent
+      raiseAnalyticsEvent,
+      reloadPage
     )
     setIsPaying(false)
   }
@@ -120,6 +135,8 @@ function AttendanceOptions({
         updateOffenderAttendance={updateOffenderAttendance}
         raiseAnalyticsEvent={raiseAnalyticsEvent}
         resetErrorDispatch={resetErrorDispatch}
+        setErrorDispatch={setErrorDispatch}
+        reloadPage={reloadPage}
         handleError={handleError}
         agencyId={agencyId}
         period={period}
@@ -208,6 +225,8 @@ AttendanceOptions.propTypes = {
   setOffenderAttendance: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
+  reloadPage: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
   noPay: PropTypes.bool,
   showModal: PropTypes.func.isRequired,

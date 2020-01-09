@@ -26,6 +26,8 @@ export function AttendanceOtherForm({
   showModal,
   activityName,
   resetErrorDispatch,
+  setErrorDispatch,
+  reloadPage,
   raiseAnalyticsEvent,
   handleError,
   setOffenderAttendance,
@@ -109,8 +111,10 @@ export function AttendanceOtherForm({
       handleError,
       showModal,
       resetErrorDispatch,
+      setErrorDispatch,
       setSelectedOption,
-      raiseAnalyticsEvent
+      raiseAnalyticsEvent,
+      reloadPage
     )
   }
 
@@ -215,6 +219,8 @@ AttendanceOtherForm.propTypes = {
   setOffenderAttendance: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
+  reloadPage: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
   setSelectedOption: PropTypes.func.isRequired,
 }

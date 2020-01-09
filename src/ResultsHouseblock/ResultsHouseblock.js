@@ -107,6 +107,7 @@ class ResultsHouseblock extends Component {
       agencyId,
       setHouseblockOffenderAttendance,
       resetErrorDispatch,
+      setErrorDispatch,
       raiseAnalyticsEvent,
       handleError,
       showModal,
@@ -355,7 +356,9 @@ class ResultsHouseblock extends Component {
                         offenderDetails={offenderDetails}
                         raiseAnalyticsEvent={raiseAnalyticsEvent}
                         resetErrorDispatch={resetErrorDispatch}
+                        setErrorDispatch={setErrorDispatch}
                         handleError={handleError}
+                        reloadPage={update}
                         agencyId={agencyId}
                         period={period}
                         showModal={showModal}
@@ -467,6 +470,7 @@ ResultsHouseblock.propTypes = {
   update: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
   resetErrorDispatch: PropTypes.func.isRequired,
+  setErrorDispatch: PropTypes.func.isRequired,
   raiseAnalyticsEvent: PropTypes.func.isRequired,
   setHouseblockOffenderAttendance: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
