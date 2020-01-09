@@ -14,13 +14,13 @@ beforeEach(() => {
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
     session: {
+      appointmentSlipsData: {},
       userDetails: {
         activeCaseLoadId: 'LEI',
         name: 'Test User',
       },
     },
     body: {},
-    flash: jest.fn().mockReturnValue([]),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
@@ -74,7 +74,7 @@ describe('appointment movement slips', () => {
 
     describe('and there is a small amount of data', () => {
       beforeEach(() => {
-        req.flash = jest.fn().mockReturnValue([{ appointmentDetails, prisonersListed }])
+        req.session.appointmentSlipsData = { appointmentDetails, prisonersListed }
       })
 
       it('should call the correct endpoint for the extra required offender information', async () => {
@@ -142,6 +142,7 @@ describe('appointment movement slips', () => {
         const genericErrorMessage = 'There has been an error'
         beforeEach(() => {
           elite2Api.getOffenderSummaries = jest.fn().mockRejectedValue(new Error(genericErrorMessage))
+          req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
         })
 
         it('should log an error and render the error page', async () => {
@@ -159,7 +160,7 @@ describe('appointment movement slips', () => {
 
     describe('and there is a large amount of data', () => {
       beforeEach(() => {
-        req.flash = jest.fn().mockReturnValue([{ appointmentDetails, prisonersListed: largePrisonersListed }])
+        req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
       })
 
       it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {

@@ -15,12 +15,6 @@ describe('Confirm appointments', () => {
     endTime: '2017-10-10T14:00',
     recurring: 'No',
     comment: 'Test',
-    preAppointment: {
-      endTime: '2017-10-10T11:00:00',
-      locationId: 2,
-      startTime: '2017-10-10T10:45:00',
-      duration: 15,
-    },
   }
 
   beforeEach(() => {
@@ -88,7 +82,9 @@ describe('Confirm appointments', () => {
       {
         ...appointmentDetails,
         preAppointment: {
-          ...appointmentDetails.preAppointment,
+          endTime: '2017-10-10T11:00:00',
+          locationId: 2,
+          startTime: '2017-10-10T10:45:00',
           duration: 30,
         },
         appointmentType: 'VLB',
@@ -157,6 +153,52 @@ describe('Confirm appointments', () => {
     )
   })
 
+  it('should place data needed for movement slips into flash including pre and post appointments', async () => {
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError: () => {},
+    })
+
+    req.flash.mockImplementation(() => [
+      {
+        ...appointmentDetails,
+        preAppointment: {
+          startTime: '2017-10-10T10:00:00',
+          endTime: '2017-10-10T10:45:00',
+          locationId: 3,
+          duration: 15,
+        },
+        postAppointment: {
+          startTime: '2017-10-10T16:00:00',
+          endTime: '2017-10-10T17:00:00',
+          locationId: 4,
+          duration: 15,
+        },
+      },
+    ])
+
+    await index(req, res)
+
+    expect(req.session.appointmentSlipsData).toEqual({
+      appointmentDetails: {
+        comments: 'Test',
+        appointmentTypeDescription: 'Appointment 1',
+        locationDescription: 'Room 2',
+      },
+      prisonersListed: [
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+          offenderNo: 'A12345',
+          startTime: '2017-10-10T10:00:00',
+          endTime: '2017-10-10T17:00:00',
+          assignedLivingUnitDesc: 'Cell 1',
+        },
+      ],
+    })
+  })
+
   it('should place data needed for movement slips into flash', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       elite2Api,
@@ -164,12 +206,16 @@ describe('Confirm appointments', () => {
       logError: () => {},
     })
 
+    req.flash.mockImplementation(() => [
+      {
+        ...appointmentDetails,
+      },
+    ])
+
     await index(req, res)
 
-    expect(req.flash).toHaveBeenCalledWith('appointmentSlipsData', {
+    expect(req.session.appointmentSlipsData).toEqual({
       appointmentDetails: {
-        startTime: '2017-10-10T11:00',
-        endTime: '2017-10-10T14:00',
         comments: 'Test',
         appointmentTypeDescription: 'Appointment 1',
         locationDescription: 'Room 3',

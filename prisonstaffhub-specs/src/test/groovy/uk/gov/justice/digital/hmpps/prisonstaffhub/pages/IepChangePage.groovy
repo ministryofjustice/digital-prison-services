@@ -6,7 +6,7 @@ class IepChangePage extends Page {
     static url = '/offenders/A1234AC/iep-details/change-iep'
 
     static at = {
-        pageTitle == 'Change IEP level'
+        pageTitle == 'Change Incentive level'
     }
 
     static content = {

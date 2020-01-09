@@ -8,7 +8,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
 
-  const { appointmentDetails, prisonersListed } = req.flash('appointmentSlipsData')[0] || {}
+  const { appointmentDetails, prisonersListed } = req.session.appointmentSlipsData
 
   if (!appointmentDetails || !prisonersListed) {
     return renderError()

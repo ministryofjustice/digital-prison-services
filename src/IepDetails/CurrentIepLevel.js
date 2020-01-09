@@ -11,7 +11,7 @@ const CurrentIepLevel = ({ level, days, nextReviewDate, userCanMaintainIep, hist
   <CurrentIepLevelArea className="current-iep">
     <GridRow>
       <GridCol setWidth="one-quarter">
-        <strong className="label">Current IEP level</strong>
+        <strong className="label">Current Incentive level</strong>
         <p>{level}</p>
       </GridCol>
       <GridCol setWidth="one-quarter">
@@ -26,7 +26,7 @@ const CurrentIepLevel = ({ level, days, nextReviewDate, userCanMaintainIep, hist
         <GridCol setWidth="one-quarter">
           <div>
             <Button buttonColour={BLUE} onClick={() => history.push(`iep-details/change-iep`)} data-qa="change-iep">
-              Change IEP level
+              Change Incentive level
             </Button>
           </div>
         </GridCol>

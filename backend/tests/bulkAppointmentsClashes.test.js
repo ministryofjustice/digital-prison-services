@@ -279,7 +279,7 @@ describe('appointment clashes', () => {
 
           expect(req.session.data).toEqual(null)
 
-          expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+          expect(req.session.appointmentSlipsData).toEqual({
             appointmentDetails: {
               appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
               comments: appointmentDetails.comments,

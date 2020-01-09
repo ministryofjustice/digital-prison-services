@@ -61,7 +61,7 @@ exports[`Currently out should display toCity when toAgencyDescription is not set
         <th
           className="straight width10"
         >
-          IEP
+          Incentive level
         </th>
         <th
           className="straight width15"
@@ -228,7 +228,7 @@ exports[`Currently out should render the page 1`] = `
         <th
           className="straight width10"
         >
-          IEP
+          Incentive level
         </th>
         <th
           className="straight width15"

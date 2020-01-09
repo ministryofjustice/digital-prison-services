@@ -76,7 +76,7 @@ export class IepDetailsContainer extends Component {
     const { offenderNo, handleError, setLoadedDispatch, history } = this.props
     return (
       <OffenderPage
-        title={({ firstName, lastName }) => `IEP details for ${firstName} ${lastName}`}
+        title={({ firstName, lastName }) => `Incentive details for ${firstName} ${lastName}`}
         handleError={handleError}
         offenderNumber={offenderNo}
         setLoaded={setLoadedDispatch}
