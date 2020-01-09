@@ -7,7 +7,7 @@ class Error extends Component {
     const { error } = this.props
     const reloadLink =
       error && error.showReload && error.reloadPage ? (
-        <a href="" onClick={error.reloadPage}>
+        <a href="#" onClick={error.reloadPage}>
           Please refresh the page.
         </a>
       ) : (
