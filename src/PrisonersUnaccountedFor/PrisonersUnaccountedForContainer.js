@@ -77,6 +77,8 @@ function PrisonersUnaccountedForContainer({
 
       getPrisonersUnaccountedFor()
       setReloadPage(false)
+
+      return resetErrorDispatch
     },
     [period, date, reloadPage]
   )
