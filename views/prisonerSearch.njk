@@ -42,6 +42,9 @@
     {{ govukInput({
       id: "nameOrNumber",
       name: "nameOrNumber",
+      hint: {
+        text: "For example: Smith, John or A1234AA"
+      },
       value: formValues.nameOrNumber,
       errorMessage: errors | findError('nameOrNumber'),
       label: {
@@ -54,7 +57,7 @@
       id: "dob",
       fieldset: {
         legend: {
-          text: "Date of birth",
+          text: "Date of birth (optional)",
           classes: "govuk-fieldset__legend--s"
         }
       },
@@ -91,7 +94,7 @@
       id: "prison",
       name: "prison",
       label: {
-        text: "Prison"
+        text: "Prison (optional)"
       },
       items: [
         {
