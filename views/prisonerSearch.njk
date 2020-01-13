@@ -1,0 +1,110 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Search for a prisoner' %}
+
+{% macro errorClass(field) -%}
+  {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
+{%- endmacro %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+      items: [
+          {
+              text: "Home",
+              href: "/"
+          },
+          {
+              text: title
+          }
+      ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">
+    {{title}}
+  </h1>
+
+  <form method="POST" novalidate="novalidate">
+    {{ govukInput({
+      id: "nameOrNumber",
+      name: "nameOrNumber",
+      value: formValues.nameOrNumber,
+      errorMessage: errors | findError('nameOrNumber'),
+      label: {
+          text: "Name or prison number"
+      },
+      classes: 'govuk-!-width-one-third'
+    }) }}
+
+    {{ govukDateInput({
+      id: "dob",
+      fieldset: {
+        legend: {
+          text: "Date of birth",
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      errorMessage: errors | findErrors(['dobDay', 'dobMonth', 'dobYear']),
+      hint: {
+        text: "For example, 12 11 1990"
+      },
+      items: [
+        {
+          id: "dobDay",
+          name: "dobDay",
+          label: "Day",
+          classes: "govuk-input--width-2" + errorClass('dobDay'),
+          value: formValues['dobDay']
+        },
+        {
+          id: "dobMonth",
+          name: "dobMonth",
+          label: "Month",
+          classes: "govuk-input--width-2" + errorClass('dobMonth'),
+          value: formValues['dobMonth']
+        },
+        {
+          id: "dobYear",
+          name: "dobYear",
+          label: "Year",
+          classes: "govuk-input--width-4" + errorClass('dobYear'),
+          value: formValues['dobYear']
+        }
+      ]
+    }) }}
+
+    {{ govukSelect({
+      id: "prison",
+      name: "prison",
+      label: {
+        text: "Prison"
+      },
+      items: [
+        {
+          value: "prison-1",
+          text: "Prison 1"
+        },
+        {
+          value: "prison-2",
+          text: "Prison 2"
+        }
+      ] | addDefaultSelectedVale('Select')
+    }) }}
+
+    {{ govukButton({ text: "Search", isStartButton: true }) }}
+  </form>
+{% endblock %}
