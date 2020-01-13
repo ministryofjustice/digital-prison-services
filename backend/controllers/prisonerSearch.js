@@ -74,13 +74,11 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
       })
     }
 
-    return res.send(
-      JSON.stringify({
-        nameOrNumber,
-        dob: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
-        prison,
-      })
-    )
+    return res.send({
+      nameOrNumber,
+      dob: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
+      prison,
+    })
   }
 
   return { index, post }
