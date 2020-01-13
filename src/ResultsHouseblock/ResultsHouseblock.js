@@ -79,6 +79,11 @@ const LargeLink = styled(Link)`
 `
 
 class ResultsHouseblock extends Component {
+  componentWillUnmount() {
+    const { resetErrorDispatch } = this.props
+    resetErrorDispatch()
+  }
+
   olderThan7Days = () => {
     const { date } = this.props
     const searchDate = moment(date, 'DD/MM/YYYY')
