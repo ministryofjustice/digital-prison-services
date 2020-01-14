@@ -562,7 +562,7 @@ describe('Houseblock list controller', () => {
               attendanceInfo: {
                 absentReason: {
                   value: 'UnacceptableAbsence',
-                  name: 'Unacceptable - IEP',
+                  name: 'Unacceptable - Incentive Level warning',
                 },
                 comments: 'string',
                 id: 2,
