@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.Access
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.VideoLinkPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -36,6 +37,13 @@ class TestFixture {
         stubForLogin(currentUser, [AccessRoles.maintain_iep])
 
         browser.to SearchPage
+    }
+
+    def loginAsVideoLinkCourtUser(UserAccount user) {
+        currentUser = user
+        stubForLogin(currentUser, [AccessRoles.video_link_court_user])
+
+        browser.to VideoLinkPage
     }
 
     private void stubForLogin(UserAccount currentUser, def roles = ['ROLE']) {
