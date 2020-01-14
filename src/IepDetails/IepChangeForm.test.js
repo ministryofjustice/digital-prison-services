@@ -36,7 +36,7 @@ describe('<IepChangeForm />', () => {
       submitForm(wrapper)
       const errors = wrapper.find('ErrorSummary').find('li')
 
-      expect(errors.at(0).text()).toEqual('Enter reason for Incentive level change')
+      expect(errors.at(0).text()).toEqual('Enter reason for Incentive Level change')
       expect(errors.at(1).text()).toEqual('Select a level')
     })
 

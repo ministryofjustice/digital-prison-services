@@ -27,7 +27,7 @@ const initialState = {
   },
 }
 
-describe('Current Incentive level', () => {
+describe('Current Incentive Level', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
@@ -38,15 +38,15 @@ describe('Current Incentive level', () => {
     history.replace = jest.fn()
   })
 
-  describe('should render the current Incentive level correctly', () => {
-    it("when user can't maintain Incentive level", () => {
+  describe('should render the current Incentive Level correctly', () => {
+    it("when user can't maintain Incentive Level", () => {
       store.getState.mockReturnValue(initialState)
       const wrapper = testRenderer.create(<CurrentIepLevel history={history} store={store} />).toJSON()
 
       expect(wrapper).toMatchSnapshot()
     })
 
-    it('when user can maintain Incentive level', () => {
+    it('when user can maintain Incentive Level', () => {
       store.getState.mockReturnValue({
         ...initialState,
         iepHistory: { ...initialState.iepHistory, userCanMaintainIep: true },

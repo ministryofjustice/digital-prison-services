@@ -54,7 +54,7 @@ exports[`Movements in should display fromCity when fromAgencyDescription is not 
         <th
           className="straight width10"
         >
-          Incentive level
+          Incentive Level
         </th>
         <th
           className="straight width10"
@@ -203,7 +203,7 @@ exports[`Movements in should remove the offender link when the location is not s
         <th
           className="straight width10"
         >
-          Incentive level
+          Incentive Level
         </th>
         <th
           className="straight width10"
@@ -350,7 +350,7 @@ exports[`Movements in should remove the offender link when the toAgencyId does n
         <th
           className="straight width10"
         >
-          Incentive level
+          Incentive Level
         </th>
         <th
           className="straight width10"
@@ -499,7 +499,7 @@ exports[`Movements in should render page correctly 1`] = `
         <th
           className="straight width10"
         >
-          Incentive level
+          Incentive Level
         </th>
         <th
           className="straight width10"

@@ -72,7 +72,7 @@ class IepChangeContainer extends Component {
       })
       raiseAnalyticsEvent(LevelSelected(level.title, currentIepLevel, activeCaseLoadId))
       history.goBack()
-      notify.show(`Incentive level successfully changed to ${level.title}`, 'success')
+      notify.show(`Incentive Level successfully changed to ${level.title}`, 'success')
     } catch (error) {
       handleError(error)
     }
@@ -89,7 +89,7 @@ class IepChangeContainer extends Component {
 
     return (
       <OffenderPage
-        title={() => `Change Incentive level`}
+        title={() => `Change Incentive Level`}
         handleError={handleError}
         offenderNumber={offenderNo}
         setLoaded={setLoadedDispatch}

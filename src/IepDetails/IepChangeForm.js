@@ -15,7 +15,7 @@ const validateThenSubmit = submitHandler => values => {
   const formErrors = []
 
   if (!values.reason) {
-    formErrors.push({ targetName: 'reason', text: 'Enter reason for Incentive level change' })
+    formErrors.push({ targetName: 'reason', text: 'Enter reason for Incentive Level change' })
   }
 
   if (values.reason && values.reason.length > 240) {
