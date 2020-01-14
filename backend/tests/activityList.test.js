@@ -117,7 +117,7 @@ beforeEach(() => {
   whereaboutsApi.getAbsenceReasons = jest.fn()
 
   whereaboutsApi.getAbsenceReasons.mockReturnValue({
-    triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+    triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
   })
   elite2Api.getVisits.mockReturnValue([])
   elite2Api.getAppointments.mockReturnValue([])
@@ -558,7 +558,7 @@ describe('Activity list controller', () => {
           attendanceInfo: {
             absentReason: {
               value: 'Refused',
-              name: 'Refused - IEP',
+              name: 'Refused',
             },
             comments: undefined,
             other: true,
@@ -600,7 +600,7 @@ describe('Activity list controller', () => {
           },
           {
             id: 2,
-            absentReason: 'Refused',
+            absentReason: 'RefusedIncentiveLevelWarning',
             bookingId: 2,
           },
           {
@@ -612,7 +612,7 @@ describe('Activity list controller', () => {
       })
 
       whereaboutsApi.getAbsenceReasons.mockReturnValue({
-        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+        triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
       })
 
       elite2Api.getActivitiesAtLocation.mockReturnValue([
@@ -625,10 +625,10 @@ describe('Activity list controller', () => {
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
       expect(response[0].attendanceInfo.absentReason.value).toBe('UnacceptableAbsence')
-      expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable - IEP')
+      expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable - Incentive Level warning')
 
-      expect(response[1].attendanceInfo.absentReason.value).toBe('Refused')
-      expect(response[1].attendanceInfo.absentReason.name).toBe('Refused - IEP')
+      expect(response[1].attendanceInfo.absentReason.value).toBe('RefusedIncentiveLevelWarning')
+      expect(response[1].attendanceInfo.absentReason.name).toBe('Refused - Incentive Level warning')
 
       expect(response[2].attendanceInfo.absentReason.value).toBe('AcceptableAbsence')
       expect(response[2].attendanceInfo.absentReason.name).toBe('Acceptable')
@@ -666,7 +666,7 @@ describe('Activity list controller', () => {
     expect(response[1].attendanceInfo).toEqual({
       id: 1,
       absentReason: {
-        name: 'Unacceptable - IEP',
+        name: 'Unacceptable - Incentive Level warning',
         value: 'UnacceptableAbsence',
       },
       comments: undefined,

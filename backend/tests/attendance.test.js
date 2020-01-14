@@ -87,8 +87,8 @@ describe('Attendence and Pay controller', () => {
           { name: 'Rest in cell', value: 'RestInCell' },
         ],
         unpaidReasons: [
-          { name: 'Refused - IEP', value: 'Refused' },
-          { name: 'Unacceptable - IEP', value: 'UnacceptableAbsence' },
+          { name: 'Refused - Incentive Level warning', value: 'Refused' },
+          { name: 'Unacceptable - Incentive Level warning', value: 'UnacceptableAbsence' },
         ],
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
       })

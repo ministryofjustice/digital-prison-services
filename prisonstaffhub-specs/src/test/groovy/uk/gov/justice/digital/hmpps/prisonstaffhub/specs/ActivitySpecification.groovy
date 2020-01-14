@@ -360,7 +360,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         then: "The the absent reason should be visible"
 
         assert attendedValues == ['pay', null]
-        assert absenseReasons == [null, 'Unacceptable - IEP']
+        assert absenseReasons == [null, 'Unacceptable - Incentive Level warning']
     }
 
 
