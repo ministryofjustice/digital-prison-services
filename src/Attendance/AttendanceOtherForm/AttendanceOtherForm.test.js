@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { AttendanceOtherForm } from './AttendanceOtherForm'
-import IEPCreated from '../../IEPCreated'
+import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 
 describe('<AttendanceOtherForm />', () => {
   const submitForm = async formWrapper => {
@@ -220,7 +220,7 @@ describe('<AttendanceOtherForm />', () => {
         )
       })
 
-      it('should submit with the correct, unpaid information and trigger the IEP created modal', async () => {
+      it('should submit with the correct, unpaid information and trigger the Incentive Level created modal', async () => {
         const expectedPayload = {
           absentReason: {
             value: 'UnacceptableAbsence',
@@ -259,7 +259,7 @@ describe('<AttendanceOtherForm />', () => {
         )
         expect(props.showModal).toHaveBeenCalledWith(
           true,
-          <IEPCreated
+          <IncentiveLevelCreated
             activityName={props.activityName}
             iepValues={{
               absentReason: expectedPayload.absentReason.value,
@@ -283,7 +283,7 @@ describe('<AttendanceOtherForm />', () => {
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
     })
 
-    it('should not trigger the IEP created modal', async () => {
+    it('should not trigger the Incentive Level created modal', async () => {
       noRadio.instance().checked = true
       noRadio.simulate('change', noRadio)
       wrapper.update()

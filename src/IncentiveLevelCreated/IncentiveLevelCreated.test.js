@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Button from '@govuk-react/button'
 import { mockUserAgent } from 'jest-useragent-mock'
-import IEPCreated from '.'
+import IncentiveLevelCreated from '.'
 
 const props = {
   offender: {
@@ -26,9 +26,9 @@ const props = {
 
 let wrapper
 
-describe('<IEPCreated />', () => {
+describe('<IncentiveLevelCreated />', () => {
   const setStorageSpy = jest.spyOn(Storage.prototype, 'setItem')
-  wrapper = shallow(<IEPCreated {...props} />)
+  wrapper = shallow(<IncentiveLevelCreated {...props} />)
 
   it('should handle clicking print', () => {
     wrapper
@@ -40,7 +40,7 @@ describe('<IEPCreated />', () => {
     expect(setStorageSpy).toHaveBeenCalled()
   })
 
-  it('should close the IEP created modal when cancelled', () => {
+  it('should close the Incentive Level created modal when cancelled', () => {
     wrapper
       .find('ButtonCancel')
       .props()
@@ -48,14 +48,14 @@ describe('<IEPCreated />', () => {
     expect(props.showModal).toHaveBeenCalledWith(false)
   })
 
-  it('close the IEP created modal when print dialog has been closed', () => {
+  it('close the Incentive Level created modal when print dialog has been closed', () => {
     global.afterPrint()
     expect(props.showModal).toHaveBeenCalledWith(false)
   })
 
   it('should display a close button on mobile devices', () => {
     mockUserAgent('Android')
-    wrapper = shallow(<IEPCreated {...props} />)
+    wrapper = shallow(<IncentiveLevelCreated {...props} />)
     expect(window.navigator.userAgent).toEqual('Android')
 
     const closeButton = wrapper.find(Button)

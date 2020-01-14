@@ -10,13 +10,13 @@ import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
 import { userType } from '../types'
 import { properCaseName, pascalToString } from '../utils'
 
-const IEPCreatedMessage = styled.div`
+const IncentiveLevelCreatedMessage = styled.div`
   @media print {
     display: none;
   }
 `
 
-const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
+const IncentiveLevelCreated = ({ showModal, offender, iepValues, activityName, user }) => {
   const setPrintIepData = () => {
     const iepSlipData = {
       raisedBy: user.name,
@@ -41,12 +41,12 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
 
   return (
     <div data-qa="iep-created">
-      <IEPCreatedMessage>
-        <H1 size="MEDIUM">An IEP has been created</H1>
+      <IncentiveLevelCreatedMessage>
+        <H1 size="MEDIUM">An Incentive Level warning has been created</H1>
         <ButtonContainer>
           {!isMobile && (
             <>
-              <Paragraph>Do you want to print an IEP warning slip?</Paragraph>
+              <Paragraph>Do you want to print an Incentive Level warning slip?</Paragraph>
               <HintText>You can also print this later from their case notes.</HintText>
               <Button onClick={handlePrint} mb={0}>
                 Yes - print slip
@@ -62,12 +62,12 @@ const IEPCreated = ({ showModal, offender, iepValues, activityName, user }) => {
             </Button>
           )}
         </ButtonContainer>
-      </IEPCreatedMessage>
+      </IncentiveLevelCreatedMessage>
     </div>
   )
 }
 
-IEPCreated.propTypes = {
+IncentiveLevelCreated.propTypes = {
   user: userType.isRequired,
   showModal: PropTypes.func.isRequired,
   offender: PropTypes.shape({
@@ -84,4 +84,4 @@ IEPCreated.propTypes = {
   }).isRequired,
 }
 
-export default IEPCreated
+export default IncentiveLevelCreated

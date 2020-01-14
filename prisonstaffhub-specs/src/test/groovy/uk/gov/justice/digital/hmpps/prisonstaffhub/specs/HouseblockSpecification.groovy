@@ -303,7 +303,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         whereaboutsApi.verifyPostAttendance()
     }
 
-    def "should display IEP created modal"() {
+    def "should display Incentive Level created modal"() {
         given: 'I am on the whereabouts search page'
         fixture.toSearch()
 
@@ -326,7 +326,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         assert absentReasonForm.fillOutAbsentReasonForm('no', 'Refused')
 
         whereaboutsApi.verifyPostAttendance()
-        iepCreated.find('h1').text() == 'An IEP has been created'
+        iepCreated.find('h1').text() == 'An Incentive Level warning has been created'
     }
 
     private static String getNow() {

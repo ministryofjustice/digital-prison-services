@@ -14,7 +14,7 @@ import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
 import RadioGroup from '../../Components/RadioGroup'
 import { properCaseName } from '../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../final-form-govuk-helpers'
-import IEPCreated from '../../IEPCreated'
+import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 import { userType } from '../../types'
 
 export function AttendanceOtherForm({
@@ -72,7 +72,7 @@ export function AttendanceOtherForm({
     if (attendanceUpdated && shouldTriggerIEP(values.absentReason)) {
       showModal(
         true,
-        <IEPCreated
+        <IncentiveLevelCreated
           showModal={showModal}
           offender={offender}
           iepValues={values}
