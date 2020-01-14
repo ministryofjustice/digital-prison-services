@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.VideoLinkPage
 
 import java.time.LocalDate
 
@@ -29,6 +30,19 @@ class SearchSpecification extends BrowserReportingSpec {
 
         then: 'The search page is displayed'
         at SearchPage
+    }
+
+    def "Video court user is redirected to video link home page"() {
+
+        when: "I log in"
+        elite2api.stubGroups ITAG_USER.workingCaseload
+        fixture.loginAsVideoLinkCourtUser(ITAG_USER)
+
+        and: "Navigate to the root url"
+        go "/"
+
+        then: 'The video link home page is displayed'
+        at VideoLinkPage
     }
 
     def "Validation error if neither activity and location are selected"() {

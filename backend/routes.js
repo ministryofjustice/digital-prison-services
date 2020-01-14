@@ -186,6 +186,14 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
 
+  router.get('/videolink', async (req, res) => {
+    res.render('courtsVideolink.njk', {
+      user: { displayName: req.session.userDetails.name },
+      homeUrl: '/videolink',
+      title: 'Videolink appointment booking',
+    })
+  })
+
   return router
 }
 
