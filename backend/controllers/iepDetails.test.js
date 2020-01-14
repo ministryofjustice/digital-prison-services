@@ -123,7 +123,7 @@ describe('Incentive details controller', () => {
       { iepLevel: 'NEW', iepDescription: 'New level' },
     ])
   })
-  it('Should return the Incentive level history for offender', async () => {
+  it('Should return the Incentive Level history for offender', async () => {
     const response = await getIepDetails({}, '1', {})
     const expected = createIepDetailsReponse()
     expect(response).toEqual(expected)

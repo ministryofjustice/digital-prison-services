@@ -59,7 +59,7 @@ exports[`In Reception should display fromCity when fromAgencyDescription is not 
         <th
           className="straight width10"
         >
-          Incentive level 
+          Incentive Level 
         </th>
         <th
           className="straight width25"
@@ -204,7 +204,7 @@ exports[`In Reception should render the page correctly 1`] = `
         <th
           className="straight width10"
         >
-          Incentive level 
+          Incentive Level 
         </th>
         <th
           className="straight width25"

@@ -7,12 +7,12 @@ import { LargeScreenOnly, SmallScreenOnly } from '../Components/sizing'
 
 const IepHistory = ({ results }) => (
   <>
-    <H2>Incentive level history</H2>
+    <H2>Incentive Level history</H2>
     <LargeScreenOnly>
       <Table className="results">
         <Table.Row>
           <Table.CellHeader setWidth="20%">Date and time</Table.CellHeader>
-          <Table.CellHeader setWidth="15%">Incentive level</Table.CellHeader>
+          <Table.CellHeader setWidth="15%">Incentive Level</Table.CellHeader>
           <Table.CellHeader setWidth="30%">Reason</Table.CellHeader>
           <Table.CellHeader setWidth="20%">Establishment</Table.CellHeader>
           <Table.CellHeader setWidth="15%">Staff member</Table.CellHeader>
@@ -32,7 +32,7 @@ const IepHistory = ({ results }) => (
       <Table>
         <Table.Row>
           <Table.CellHeader>Date and time</Table.CellHeader>
-          <Table.CellHeader>Incentive level</Table.CellHeader>
+          <Table.CellHeader>Incentive Level</Table.CellHeader>
           <Table.CellHeader>Establishment</Table.CellHeader>
         </Table.Row>
         {results.map(row => (
