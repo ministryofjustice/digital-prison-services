@@ -6,7 +6,7 @@ commands:
       - aws-cli/install
       - kubernetes/install
       - helm/install-helm-client:
-          version: v2.13.1
+          version: v3.0.2
       - run:
           name: Setup kubectl
           command: |
@@ -36,12 +36,11 @@ commands:
           name: Deploy to << parameters.env >>
           command: |
             APP_VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
+            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/prison-staff-hub/Chart.yaml
             aws secretsmanager get-secret-value --secret-id ${AWS_SECRET_NAME} | jq -r .SecretString | \
             helm upgrade prison-staff-hub ~/git/helm_deploy/prison-staff-hub/. \
-              --install --wait --force --reset-values --timeout 360 \
-              --tiller-namespace=${KUBE_ENV_NAMESPACE} \
+              --install --wait --reset-values --timeout 5m --history-max 10 \
               --namespace=${KUBE_ENV_NAMESPACE} \
-              --description="${APP_VERSION} - ${CIRCLE_BUILD_URL}" \
               --values ~/git/helm_deploy/values-<< parameters.env >>.yaml \
               --values - \
               --set image.tag="${APP_VERSION}"
@@ -56,9 +55,9 @@ executors:
     working_directory: ~/app
 
 orbs:
-  aws-cli: circleci/aws-cli@0.1.13
-  kubernetes: circleci/kubernetes@0.3.0
-  helm: circleci/helm@0.1.2
+  aws-cli: circleci/aws-cli@0.1.18
+  kubernetes: circleci/kubernetes@0.10.1
+  helm: circleci/helm@0.2.3
 
 jobs:
   validate:
