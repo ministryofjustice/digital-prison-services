@@ -22,9 +22,30 @@ describe('Prisoner search', () => {
     logError = jest.fn()
 
     oauthApi.userRoles = jest.fn()
+    elite2Api.getAgencies = jest.fn().mockReturnValue([
+      {
+        agencyId: 'PRISON1',
+        description: 'Prison 1',
+      },
+      {
+        agencyId: 'PRISON2',
+        description: 'Prison 2',
+      },
+    ])
 
     controller = prisonerSearchFactory(oauthApi, elite2Api, logError)
   })
+
+  const agencyOptions = [
+    {
+      value: 'PRISON1',
+      text: 'Prison 1',
+    },
+    {
+      value: 'PRISON2',
+      text: 'Prison 2',
+    },
+  ]
 
   describe('index', () => {
     describe('when the user does not have the correct roles', () => {
@@ -43,13 +64,21 @@ describe('Prisoner search', () => {
 
         await controller.index(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {})
+        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', { agencyOptions })
       })
     })
 
     describe('when there are API errors', () => {
-      it('should render the error template', async () => {
+      it('should render the error template if there is an error retrieving user roles', async () => {
         oauthApi.userRoles.mockImplementation(() => Promise.reject(new Error('Network error')))
+        await controller.index(req, res)
+
+        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
+        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+      })
+
+      it('should render the error template if there is an error retrieving agencies', async () => {
+        elite2Api.getAgencies.mockImplementation(() => Promise.reject(new Error('Network error')))
         await controller.index(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
@@ -70,6 +99,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Enter prisoner name or number', href: '#nameOrNumber' }],
           formValues: {},
+          agencyOptions,
         })
       })
     })
@@ -87,6 +117,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Date of birth must include a day', href: '#dobDay' }],
           formValues: req.body,
+          agencyOptions,
         })
       })
 
@@ -102,6 +133,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Date of birth must include a month', href: '#dobMonth' }],
           formValues: req.body,
+          agencyOptions,
         })
       })
 
@@ -117,6 +149,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Date of birth must include a year', href: '#dobYear' }],
           formValues: req.body,
+          agencyOptions,
         })
       })
 
@@ -133,6 +166,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Enter a real date of birth', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
+          agencyOptions,
         })
       })
 
@@ -151,6 +185,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Date of birth must be in the past', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
+          agencyOptions,
         })
 
         Date.now.mockRestore()
@@ -169,6 +204,7 @@ describe('Prisoner search', () => {
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
           errors: [{ text: 'Date of birth must be after 1900', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
+          agencyOptions,
         })
       })
     })

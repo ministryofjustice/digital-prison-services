@@ -65,6 +65,8 @@ const elite2ApiFactory = client => {
       offenderNumbers
     )
 
+  const getAgencies = context => get(context, '/api/agencies/prison')
+
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 
   const getAgencyIepLevels = (context, agencyId) => get(context, `/api/agencies/${agencyId}/iepLevels`)
@@ -202,6 +204,7 @@ const elite2ApiFactory = client => {
     getVisits,
     getAppointments,
     getActivities,
+    getAgencies,
     getAgencyDetails,
     getAgencyIepLevels,
     getStaffDetails,

@@ -10,12 +10,18 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
 
   const renderTemplate = async (req, res, pageData) => {
     try {
-      const userRoles = await oauthApi.userRoles(res.locals)
+      const [userRoles, agencies] = await Promise.all([
+        oauthApi.userRoles(res.locals),
+        elite2Api.getAgencies(res.locals),
+      ])
+
       const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
+      const agencyOptions = agencies.map(agency => ({ value: agency.agencyId, text: agency.description }))
 
       if (hasSearchAccess) {
         return res.render('prisonerSearch.njk', {
           ...pageData,
+          agencyOptions,
         })
       }
 

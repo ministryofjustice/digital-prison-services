@@ -96,16 +96,7 @@
       label: {
         text: "Prison (optional)"
       },
-      items: [
-        {
-          value: "prison-1",
-          text: "Prison 1"
-        },
-        {
-          value: "prison-2",
-          text: "Prison 2"
-        }
-      ] | addDefaultSelectedVale('Select')
+      items: agencyOptions | addDefaultSelectedVale('Select')
     }) }}
 
     {{ govukButton({ text: "Search", isStartButton: true }) }}
