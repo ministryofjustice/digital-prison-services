@@ -6,4 +6,9 @@ class AccessRoles {
             roleName: 'Maintain IEP'
     ]
 
+    static def video_link_court_user = [
+            roleCode           : 'VIDEO_LINK_COURT_USER',
+            roleName: 'Video Link Court User'
+    ]
+
 }

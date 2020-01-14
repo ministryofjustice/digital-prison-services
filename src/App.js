@@ -260,7 +260,19 @@ class App extends React.Component {
         <div className="pure-g">
           <Route
             path="(/)"
-            render={() => <Route exact path="/" render={() => <Redirect to="/manage-prisoner-whereabouts" />} />}
+            render={() => (
+              <Route
+                exact
+                path="/"
+                render={() => {
+                  if (user.roles.includes('VIDEO_LINK_COURT_USER')) {
+                    window.location.href = '/videolink'
+                    return null
+                  }
+                  return <Redirect to="/manage-prisoner-whereabouts" />
+                }}
+              />
+            )}
           />
           <Route
             exact
