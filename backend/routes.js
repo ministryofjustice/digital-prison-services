@@ -43,6 +43,8 @@ const addAppointmentController = require('./controllers/addAppointmentController
 const confirmAppointmentController = require('./controllers/confirmAppointmentController')
 const prepostAppointmentController = require('./controllers/prepostAppointmentsController')
 
+const prisonerSearchController = require('./controllers/prisonerSearchController')
+
 const getExistingEventsController = require('./controllers/getExistingEventsController')
 const getLocationExistingEventsController = require('./controllers/getLocationExistingEventsController')
 const endDateController = require('./controllers/endDateController')
@@ -181,6 +183,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
   router.use('/offenders/:offenderNo/prepost-appointments', prepostAppointmentController({ elite2Api, logError }))
+
+  router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
 
   return router
 }
