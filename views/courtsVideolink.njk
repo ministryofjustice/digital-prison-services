@@ -1,0 +1,21 @@
+{% extends "./partials/layout.njk" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">{{ title }}</h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <a href="/prisoner-search" class="govuk-link"><h2>Book an appointment</h2></a>
+            <p class="govuk-body">Search for a prisoner and book a videolink appointment for them</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <a href="#" class="govuk-link"><h2>View appointment lists</h2></a>
+            <p class="govuk-body">View a list of your booked appointments by day or date range</p>
+        </div>
+    </div>
+{% endblock %}
