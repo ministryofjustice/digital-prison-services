@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.VideoLinkPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -54,6 +55,24 @@ class LoginSpecification extends BrowserReportingSpec {
 
         then: 'My credentials are accepted and I am shown the Search page'
         at SearchPage
+    }
+
+    def "Log in as video link court user"() {
+        given: 'I am on the Login page'
+        oauthApi.stubValidOAuthTokenRequest()
+        to LoginPage
+
+        oauthApi.stubGetMyDetails ITAG_USER
+        oauthApi.stubGetMyRoles()
+        elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
+        elite2api.stubGroups ITAG_USER.workingCaseload
+        elite2api.stubActivityLocations()
+
+        when: "I login using valid credentials"
+        fixture.loginAsVideoLinkCourtUser ITAG_USER
+
+        then: 'My credentials are accepted and I am shown the Video Link homepage'
+        at VideoLinkPage
     }
 
     def "Log out"() {
