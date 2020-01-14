@@ -269,7 +269,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         at HouseblockPage
 
         tableRows[1].find('td')[attendanceColumn].text() == 'Received'
-        tableRows[3].find('td')[attendanceColumn].text() == 'Unacceptable - IEP'
+        tableRows[3].find('td')[attendanceColumn].text() == 'Unacceptable - Incentive Level warning'
         tableRows[3].find('td')[attendanceColumn].find('[data-qa="other-message"]').click()
 
         def payRadios = $(name: "pay").module(RadioButtons)

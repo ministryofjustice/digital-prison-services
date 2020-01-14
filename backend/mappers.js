@@ -1,5 +1,7 @@
 const { pascalToString } = require('./utils')
 
+const warning = 'Incentive Level warning'
+
 const absentReasonMapper = absenceReasons => absentReason => {
   const { triggersIEPWarning } = absenceReasons
 
@@ -8,7 +10,11 @@ const absentReasonMapper = absenceReasons => absentReason => {
     UnacceptableAbsence: 'Unacceptable',
   }
 
-  const enhanceWithIepIfRequired = (key, value) => (triggersIEPWarning.includes(key) ? `${value} - IEP` : value)
+  const enhanceWithIepIfRequired = (key, value) =>
+    triggersIEPWarning.includes(key)
+      ? ` ${value.replace(warning.toLowerCase(), '').trim()} - ${warning}`.trimStart()
+      : value
+
   return (
     absentReason && {
       value: absentReason,
@@ -19,4 +25,5 @@ const absentReasonMapper = absenceReasons => absentReason => {
 
 module.exports = {
   absentReasonMapper,
+  warning,
 }
