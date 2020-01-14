@@ -1,53 +1,69 @@
+# Deployment Notes
 
-### Example test deploy command
+## Prerequisites
 
-```
-helm --namespace digital-prison-services-dev --tiller-namespace digital-prison-services-dev upgrade prison-staff-hub ./prison-staff-hub/ --install --values=values-dev.yaml --values=secrets-example.yaml --dry-run --debug
-```
+- Ensure you have helm v3 client installed.
 
-Test template output:
-
-```
-helm template ./prison-staff-hub/ --values=values-dev.yaml --values=secrets-example.yaml
+```sh
+$ helm version
+version.BuildInfo{Version:"v3.0.1", GitCommit:"7c22ef9ce89e0ebeb7125ba2ebf7d421f3e82ffa", GitTreeState:"clean", GoVersion:"go1.13.4"}
 ```
 
-### Rolling back a release
-Find the revision number for the deployment you want to roll back:
-```
-helm --tiller-namespace digital-prison-services-dev history prison-staff-hub -o yaml
-```
-(note, each revision has a description which has the app version and circleci build URL)
+- Ensure a TLS cert for your intended hostname is configured and ready, see section below.
 
-Rollback
-```
-helm --tiller-namespace digital-prison-services-dev rollback prison-staff-hub [INSERT REVISION NUMBER HERE] --wait
-```
+### Useful helm (v3) commands:
 
-### Helm init
+__Test chart template rendering:__
 
-```
-helm init --tiller-namespace digital-prison-services-dev --service-account tiller --history-max 200
+This will out the fully rendered kubernetes resources in raw yaml.
+
+```sh
+helm template [path to chart] --values=values-dev.yaml --values=secrets-example.yaml
 ```
 
-### Setup Lets Encrypt cert
+__List releases:__
 
-Ensure the certificate definition exists in the cloud-platform-environments repo under the relevant namespaces folder
+```sh
+helm --namespace [namespace] list
+```
+
+__List current and previously installed application versions:__
+
+```sh
+helm --namespace [namespace] history [release name]
+```
+
+__Rollback to previous version:__
+
+```sh
+helm --namespace [namespace] rollback [release name] [revision number] --wait
+```
+
+Note: replace _revision number_ with one from listed in the `history` command)
+
+__Example deploy command:__
+
+The following example is `--dry-run` mode - which will allow for testing. CircleCI normally runs this command with actual secret values (from AWS secret manager), and also updated the chart's application version to match the release version:
+
+```sh
+helm upgrade [release name] [path to chart]. \
+  --install --wait --force --reset-values --timeout 5m --history-max 10 \
+  --dry-run \
+  --namespace [namespace] \
+  --values values-dev.yaml \
+  --values example-secrets.yaml
+```
+
+### Ingress TLS certificate
+
+Ensure a certificate definition exists in the cloud-platform-environments repo under the relevant namespaces folder:
 
 e.g.
-```
+
+```sh
 cloud-platform-environments/namespaces/live-1.cloud-platform.service.justice.gov.uk/[INSERT NAMESPACE NAME]/05-certificate.yaml
 ```
 
-### Adding secrets
+Ensure the certificate is created and ready for use.
 
-Ensure that the following files are updated.
-
-For secrets managed by the team and reside in AWS secret manager
-- helm_deploy/prison-staff-hub/template/secrets.yaml 
-- helm_deploy/prison-staff-hub/template/_envs.tpl
-- helm_deploy/prison-staff-hub/secrets-example.yaml
-
-For secrets managed by terraform
-- helm_deploy/prison-staff-hub/template/_envs.tpl
-
-When updating _envs.tpl ensure the name matches the one returned when running kubectl -n NAME_SPACE get secret
+The name of the kubernetes secret where the certificate is stored is used as a value to the helm chart - this is used to configured the ingress.
