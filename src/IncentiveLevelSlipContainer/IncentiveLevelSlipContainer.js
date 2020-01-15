@@ -12,7 +12,7 @@ function IncentiveLevelSlipContainer() {
   const [printed, setPrinted] = useState(false)
 
   useEffect(() => {
-    setIepData(JSON.parse(localStorage.getItem('IncentiveLevelSlip')))
+    setIepData(JSON.parse(localStorage.getItem('incentiveLevelSlip')))
 
     if (iepData && !printed) {
       window.print()

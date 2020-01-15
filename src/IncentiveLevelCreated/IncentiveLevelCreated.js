@@ -18,7 +18,7 @@ const IncentiveLevelCreatedMessage = styled.div`
 
 const IncentiveLevelCreated = ({ showModal, offender, iepValues, activityName, user }) => {
   const setPrintIepData = () => {
-    const iepSlipData = {
+    const incentiveLevelSlipData = {
       raisedBy: user.name,
       issuedBy: user.name,
       offenderNo: offender.offenderNo,
@@ -28,7 +28,7 @@ const IncentiveLevelCreated = ({ showModal, offender, iepValues, activityName, u
       activityName,
     }
 
-    localStorage.setItem('iepSlip', JSON.stringify(iepSlipData))
+    localStorage.setItem('incentiveLevelSlip', JSON.stringify(incentiveLevelSlipData))
   }
 
   const handlePrint = () => {

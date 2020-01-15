@@ -32,7 +32,7 @@ import Content from './Components/Content'
 import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
-import IEPSlipContainer from './IEPSlipContainer'
+import IncentiveLevelSlipContainer from './IncentiveLevelSlipContainer'
 import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
 import CreateAlertContainer from './CreateAlert/CreateAlertContainer'
 
@@ -526,7 +526,7 @@ class App extends React.Component {
               if (config && config.googleAnalyticsId) {
                 ReactGA.pageview(location.pathname)
               }
-              return <IEPSlipContainer />
+              return <IncentiveLevelSlipContainer />
             }}
           />
           <Route
