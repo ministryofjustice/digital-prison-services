@@ -29,6 +29,7 @@ describe('Attendance reason statistics', () => {
       sessionCancelled: 0,
       sick: 0,
       unacceptableAbsence: 0,
+      refusedIncentiveLevelWarning: 0,
     },
   }
 
@@ -38,6 +39,7 @@ describe('Attendance reason statistics', () => {
     oauthApi.userRoles = jest.fn()
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
+    whereaboutsApi.getAbsenceReasons = jest.fn()
 
     elite2Api.userCaseLoads.mockReturnValue([{ caseLoadId: 'LEI', description: 'Leeds (HMP)', currentlyActive: true }])
     oauthApi.currentUser.mockReturnValue({
@@ -45,6 +47,10 @@ describe('Attendance reason statistics', () => {
       active: true,
       name: 'User Name',
       activeCaseLoadId: 'LEI',
+    })
+
+    whereaboutsApi.getAbsenceReasons.mockReturnValue({
+      triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWaring'],
     })
   })
 
@@ -304,7 +310,8 @@ describe('Attendance reason statistics', () => {
               { id: 'RestInCell', name: 'Rest in cell', value: 0 },
               { id: 'SessionCancelled', name: 'Session cancelled', value: 0 },
               { id: 'Sick', name: 'Sick', value: 0 },
-              { id: 'UnacceptableAbsence', name: 'Unacceptable absence', value: 0 },
+              { id: 'UnacceptableAbsence', name: 'Unacceptable absence with warning', value: 0 },
+              { id: 'RefusedIncentiveLevelWarning', name: 'Refused incentive level warning', value: 0 },
             ],
           },
           shouldClearFormValues: true,
@@ -417,7 +424,7 @@ describe('Attendance reason statistics', () => {
         jest.fn()
       )
 
-      const req = { query: { agencyId, fromDate, toDate, period }, params: { reason: 'AcceptableAbsence' } }
+      const req = { query: { agencyId, fromDate, toDate, period }, params: { reason: 'UnacceptableAbsence' } }
       const res = { render: jest.fn() }
 
       await attendanceStatisticsOffendersList(req, res)
@@ -440,8 +447,8 @@ describe('Attendance reason statistics', () => {
         dashboardUrl:
           '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&fromDate=10/10/2019&toDate=11/10/2019',
         caseLoadId: 'LEI',
-        title: 'Acceptable absence',
-        reason: 'Acceptable absence',
+        title: 'Unacceptable absence with warning',
+        reason: 'Unacceptable absence with warning',
         displayDate: '10 October 2019 to 11 October 2019',
         displayPeriod: 'AM',
         offenders: [
