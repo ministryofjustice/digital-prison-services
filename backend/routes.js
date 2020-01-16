@@ -44,6 +44,7 @@ const confirmAppointmentController = require('./controllers/confirmAppointmentCo
 const prepostAppointmentController = require('./controllers/prepostAppointmentsController')
 
 const prisonerSearchController = require('./controllers/prisonerSearchController')
+const prisonerSearchResultsController = require('./controllers/prisonerSearchResultsController')
 
 const getExistingEventsController = require('./controllers/getExistingEventsController')
 const getLocationExistingEventsController = require('./controllers/getLocationExistingEventsController')
@@ -185,6 +186,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/offenders/:offenderNo/prepost-appointments', prepostAppointmentController({ elite2Api, logError }))
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
+  router.get('/prisoner-search/results', prisonerSearchResultsController({ oauthApi, elite2Api, logError }))
 
   router.get('/videolink', async (req, res) => {
     res.render('courtsVideolink.njk', {

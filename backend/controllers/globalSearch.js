@@ -1,27 +1,25 @@
 const moment = require('moment')
 const shortid = require('shortid')
 const log = require('../log')
-
-const offenderIdPattern = /^[A-Za-z][0-9]{4}[A-Za-z]{2}$/
+const { isOffenderNumber } = require('../utils')
 
 const globalSearchFactory = elite2Api => {
-  const searchByOffender = (context, offenderNo, genderFilter, locationFilter, dateOfBirthFilter) =>
-    elite2Api.globalSearch(context, offenderNo, '', '', genderFilter, locationFilter, dateOfBirthFilter)
+  const searchByOffender = (context, offenderNo, gender, location, dateOfBirth) =>
+    elite2Api.globalSearch(context, { offenderNo, gender, location, dateOfBirth, includeAliases: true })
 
-  const searchByName = (context, name, genderFilter, locationFilter, dateOfBirthFilter) => {
+  const searchByName = (context, name, gender, location, dateOfBirth) => {
     const [lastName, firstName] = name.split(' ')
-    return elite2Api.globalSearch(
-      context,
-      '',
+    return elite2Api.globalSearch(context, {
       lastName,
-      firstName || '',
-      genderFilter,
-      locationFilter,
-      dateOfBirthFilter
-    )
+      firstName,
+      gender,
+      location,
+      dateOfBirth,
+      includeAliases: true,
+    })
   }
 
-  const globalSearch = async (context, searchText, genderFilter, locationFilter, dateOfBirthFilter) => {
+  const globalSearch = async (context, searchText, gender, location, dateOfBirth) => {
     log.info(`In globalSearch, searchText=${searchText}`)
     if (!searchText) {
       return []
@@ -30,9 +28,9 @@ const globalSearchFactory = elite2Api => {
       .replace(/,/g, ' ')
       .replace(/\s\s+/g, ' ')
       .trim()
-    const data = await (offenderIdPattern.test(text)
-      ? searchByOffender(context, text, genderFilter, locationFilter, dateOfBirthFilter)
-      : searchByName(context, text, genderFilter, locationFilter, dateOfBirthFilter))
+    const data = await (isOffenderNumber(text)
+      ? searchByOffender(context, text, gender, location, dateOfBirth)
+      : searchByName(context, text, gender, location, dateOfBirth))
     log.info(data, 'globalSearch data received')
 
     const offenderOutIds = data
@@ -51,13 +49,14 @@ const globalSearchFactory = elite2Api => {
             : `Outside - ${movement.movementTypeDescription}`)) ||
         offender.latestLocation
 
-      const dateOfBirth = offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
+      const formattedDateOfBirth =
+        offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
       const uiId = shortid.generate()
 
       return {
         ...offender,
         latestLocation,
-        dateOfBirth,
+        dateOfBirth: formattedDateOfBirth,
         uiId,
       }
     })

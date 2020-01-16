@@ -217,11 +217,14 @@ describe('Prisoner search', () => {
           dobDay: '17',
           dobMonth: '07',
           dobYear: '1980',
+          prison: 'MDI',
         }
 
         await controller.post(req, res)
 
-        expect(res.send).toHaveBeenCalledWith({ nameOrNumber: 'Test', dob: '1980-07-17', prison: undefined })
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/prisoner-search/results?nameOrNumber=Test&dob=1980-07-17&prison=MDI'
+        )
       })
     })
   })

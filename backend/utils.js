@@ -179,6 +179,12 @@ const stripAgencyPrefix = (location, agency) => {
 const chunkArray = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size))
 
+const isOffenderNumber = string => {
+  const offenderIdPattern = /^[A-Za-z][0-9]{4}[A-Za-z]{2}$/
+
+  return offenderIdPattern.test(string)
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -206,4 +212,5 @@ module.exports = {
   stripAgencyPrefix,
   chunkArray,
   capitalizeStart,
+  isOffenderNumber,
 }
