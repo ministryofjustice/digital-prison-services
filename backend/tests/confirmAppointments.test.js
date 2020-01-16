@@ -94,18 +94,18 @@ describe('Confirm appointments', () => {
     await index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'confirmAppointments.njk',
+      'videolinkBookingConfirmHearing.njk',
       expect.objectContaining({
-        addAppointmentsLink: '/offenders/A12345/add-appointment',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
+        prisonerSearchLink: '/prisoner-search',
+        prisonUser: false,
+        title: 'Hearing added',
         details: {
           prisonerName: `Doe, John (A12345)`,
-          appointmentType: 'Videolink',
           location: 'Room 3',
           date: 'Tuesday 10 October 2017',
           startTime: '11:00',
           endTime: '14:00',
-          recurring: 'No',
           comment: 'Test',
           preAppointment: `Room 1 - 30 minutes`,
           postAppointment: 'None',

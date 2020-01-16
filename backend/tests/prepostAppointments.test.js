@@ -120,13 +120,11 @@ describe('Pre post appointments', () => {
         'prepostAppointments.njk',
         expect.objectContaining({
           details: {
-            appointmentType: 'Videolink',
             comment: 'Test',
             date: 'Tuesday 10 October 2017',
             endTime: '14:00',
             location: 'Room 3',
             prisonerName: 'Doe, John (A12345)',
-            recurring: 'No',
             startTime: '11:00',
           },
         })
@@ -243,13 +241,11 @@ describe('Pre post appointments', () => {
           },
           locations: [{ value: 1, text: 'Room 3' }],
           details: {
-            appointmentType: 'Videolink',
             comment: 'Test',
             date: 'Tuesday 10 October 2017',
             endTime: '14:00',
             location: 'Room 3',
             prisonerName: 'Doe, John (A12345)',
-            recurring: 'No',
             startTime: '11:00',
           },
         })
