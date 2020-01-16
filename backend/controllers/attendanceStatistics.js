@@ -1,6 +1,8 @@
 const moment = require('moment')
 const config = require('../config')
 
+const { stripWarning } = require('../mappers')
+
 const {
   capitalize,
   capitalizeStart,
@@ -13,11 +15,16 @@ const {
 
 const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
 
-const buildStatsViewModel = dashboardStats => {
+const formatReason = ({ name, triggersIEPWarning }) =>
+  triggersIEPWarning.includes(capitalizeStart(name))
+    ? `${stripWarning(capitalize(pascalToString(name)))} with warning`
+    : capitalize(pascalToString(name))
+
+const buildStatsViewModel = (dashboardStats, triggersIEPWarning) => {
   const mapReasons = reasons =>
     Object.keys(reasons).map(name => ({
       id: capitalizeStart(name),
-      name: capitalize(pascalToString(name)),
+      name: formatReason({ name, triggersIEPWarning }),
       value: Number(reasons[name]),
     }))
 
@@ -227,9 +234,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         period: period === 'AM_PM' ? '' : period,
       })
 
+      const { triggersIEPWarning } = await whereaboutsApi.getAbsenceReasons(res.locals)
+
       return res.render('attendanceStatistics.njk', {
         ...mainViewModel,
-        dashboardStats: buildStatsViewModel(dashboardStats),
+        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning),
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
@@ -281,7 +290,8 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       }))
 
       const { offenders, sortOptions } = absentReasonTableViewModel(offenderData)
-      const displayReason = pascalToString(reason)
+      const { triggersIEPWarning } = await whereaboutsApi.getAbsenceReasons(res.locals)
+      const displayReason = formatReason({ name: reason, triggersIEPWarning })
 
       return res.render('attendanceStatisticsOffendersList.njk', {
         title: `${displayReason}`,
