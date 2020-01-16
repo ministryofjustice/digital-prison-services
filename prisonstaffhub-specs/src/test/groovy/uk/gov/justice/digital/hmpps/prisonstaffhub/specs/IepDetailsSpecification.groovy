@@ -20,7 +20,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
-    def "should present Incentive level history, no change Incentive level button without role"() {
+    def "should present Incentive Level history, no change Incentive Level button without role"() {
         def offenderDetails = [
                 bookingId: -3,
                 bookingNo: "A00113",
@@ -53,7 +53,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         given: "I am logged in"
         fixture.loginAs(ITAG_USER)
 
-        when: "I view the Incentive level history page"
+        when: "I view the Incentive Level history page"
         to IepDetails
 
         then: "I should be presented with results"
@@ -86,7 +86,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
                              'Staff Member',]
 
         labels.size() == 3
-        labels*.text() == ['Current Incentive level',
+        labels*.text() == ['Current Incentive Level',
                           'Time since review',
                           'Date of next review']
 
@@ -99,7 +99,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         assert(!($('button[data-qa="change-iep"]').isDisplayed()))
     }
 
-    def "should present Incentive level history with change Incentive level button"() {
+    def "should present Incentive Level history with change Incentive Level button"() {
         def offenderDetails = [
                 bookingId: -3,
                 bookingNo: "A00113",
@@ -132,10 +132,10 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         given: "I am logged in"
         fixture.loginAsMaintainIep(ITAG_USER)
 
-        when: "I view the Incentive level history page as a use with the MAINTAIN_IEP role"
+        when: "I view the Incentive Level history page as a use with the MAINTAIN_IEP role"
         to IepDetails
 
-        then: "I should see the Change Incentive level button"
+        then: "I should see the Change Incentive Level button"
 
         assert(($('button[data-qa="change-iep"]').isDisplayed()))
     }

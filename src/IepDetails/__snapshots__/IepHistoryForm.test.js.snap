@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Incentive level history Form should render the Incentive level history table correctly 1`] = `
+exports[`Incentive Level history Form should render the Incentive Level history table correctly 1`] = `
 <form
   onSubmit={[Function]}
 >
@@ -68,7 +68,7 @@ exports[`Incentive level history Form should render the Incentive level history 
               <span
                 className="sc-gqjmRU hMYAWR"
               >
-                Incentive level
+                Incentive Level
               </span>
               <select
                 className="sc-cSHVUG iPEkCj"

@@ -35,7 +35,7 @@ const InReception = ({ sortOrder, setColumnSort, rows }) => (
           <th className="straight width10">Prison no.</th>
           <th className="straight width10">D.O.B.</th>
           <th className="straight width15"> Received from </th>
-          <th className="straight width10">Incentive level </th>
+          <th className="straight width10">Incentive Level </th>
           <th className="straight width25">Flags</th>
         </tr>
       </thead>

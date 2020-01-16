@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { IEPSlip } from 'new-nomis-shared-components'
+import { IncentiveLevelSlip } from 'new-nomis-shared-components'
 import { spacing } from '@govuk-react/lib'
 
-const StyledIEPSlipContainer = styled.div`
+const StyledIncentiveLevelSlipContainer = styled.div`
   padding: ${spacing.simple(3)}px;
 `
 
-function IEPSlipContainer() {
+function IncentiveLevelSlipContainer() {
   const [iepData, setIepData] = useState()
   const [printed, setPrinted] = useState(false)
 
   useEffect(() => {
-    setIepData(JSON.parse(localStorage.getItem('iepSlip')))
+    setIepData(JSON.parse(localStorage.getItem('incentiveLevelSlip')))
 
     if (iepData && !printed) {
       window.print()
@@ -26,10 +26,10 @@ function IEPSlipContainer() {
   }
 
   return (
-    <StyledIEPSlipContainer>
-      <IEPSlip {...iepData} />
-    </StyledIEPSlipContainer>
+    <StyledIncentiveLevelSlipContainer>
+      <IncentiveLevelSlip {...iepData} />
+    </StyledIncentiveLevelSlipContainer>
   )
 }
 
-export default IEPSlipContainer
+export default IncentiveLevelSlipContainer

@@ -49,7 +49,7 @@ const initialState = {
   },
 }
 
-describe('Incentive level change container', () => {
+describe('Incentive Level change container', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
@@ -60,7 +60,7 @@ describe('Incentive level change container', () => {
     history.replace = jest.fn()
   })
 
-  it('should render the Incentive level history table correctly', () => {
+  it('should render the Incentive Level history table correctly', () => {
     store.getState.mockReturnValue(initialState)
 
     const wrapper = shallow(
@@ -77,7 +77,7 @@ describe('Incentive level change container', () => {
     const page = wrapper.dive().find(OffenderPage)
 
     expect(page.length).toBe(1)
-    expect(page.getElement().props.title()).toBe('Change Incentive level')
+    expect(page.getElement().props.title()).toBe('Change Incentive Level')
     expect(page.find('Connect(IepChangeForm)').length).toBe(1)
   })
 })

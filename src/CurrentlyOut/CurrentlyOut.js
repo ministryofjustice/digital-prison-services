@@ -37,7 +37,7 @@ const CurrentlyOut = ({ rows, sortOrder, setColumnSort }) => (
           <th className="straight width10">Prison no.</th>
           <th className="straight width10">D.O.B.</th>
           <th className="straight width10">Location</th>
-          <th className="straight width10">Incentive level</th>
+          <th className="straight width10">Incentive Level</th>
           <th className="straight width15">Flags</th>
           <th className="straight width10">Current location</th>
           <th className="straight width15">Comment</th>
