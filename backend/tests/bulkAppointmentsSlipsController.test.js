@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const { largePrisonersListed, largePrisonersListedWithCell } = require('./bulkAppointmentsTestData')
-const bulkAppointmentsSlipsController = require('../controllers/bulkAppointmentsSlipsController')
+const bulkAppointmentsSlipsController = require('../controllers/appointments/bulkAppointmentsSlipsController')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 let req

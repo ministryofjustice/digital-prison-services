@@ -1,7 +1,7 @@
 const moment = require('moment')
-const { repeatTypes, endRecurringEndingDate } = require('../shared/appointmentConstants')
-const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
-const { properCaseName } = require('../utils')
+const { repeatTypes, endRecurringEndingDate } = require('../../shared/appointmentConstants')
+const { DATE_TIME_FORMAT_SPEC, Time } = require('../../../src/dateHelpers')
+const { properCaseName } = require('../../utils')
 
 const toAppointmentDetailsSummary = ({
   firstName,

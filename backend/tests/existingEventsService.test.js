@@ -1,4 +1,4 @@
-const existingEventsService = require('../controllers/existingEventsService')
+const existingEventsService = require('../controllers/attendance/existingEventsService')
 
 describe('existing events', () => {
   const elite2Api = {}

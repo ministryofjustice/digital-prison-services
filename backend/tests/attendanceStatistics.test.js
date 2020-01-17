@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { attendanceStatisticsFactory } from '../controllers/attendanceStatistics'
+import { attendanceStatisticsFactory } from '../controllers/attendance/attendanceStatistics'
 
 const mockDateToSunday012017 = () => jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
 

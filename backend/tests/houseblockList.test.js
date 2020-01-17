@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 const { elite2ApiFactory } = require('../api/elite2Api')
-const factory = require('../controllers/houseblockList').getHouseblockListFactory
+const factory = require('../controllers/attendance/houseblockList').getHouseblockListFactory
 
 const elite2Api = elite2ApiFactory(null)
 const whereaboutsApi = {}
@@ -11,7 +11,7 @@ const config = {
     production: true,
   },
 }
-const houseblockList = require('../controllers/houseblockList').getHouseblockListFactory(
+const houseblockList = require('../controllers/attendance/houseblockList').getHouseblockListFactory(
   elite2Api,
   whereaboutsApi,
   config

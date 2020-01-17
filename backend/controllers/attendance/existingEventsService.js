@@ -1,4 +1,4 @@
-const { switchDateFormat, getTime, sortByDateTime } = require('../utils')
+const { switchDateFormat, getTime, sortByDateTime } = require('../../utils')
 
 module.exports = elite2Api => {
   const getEventDescription = ({ eventDescription, eventLocation, comment }) => {

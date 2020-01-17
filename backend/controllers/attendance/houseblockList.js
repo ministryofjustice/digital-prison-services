@@ -1,9 +1,9 @@
 /* eslint-disable no-lonely-if */
 const moment = require('moment')
-const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders')
-const log = require('../log')
-const { switchDateFormat, distinct } = require('../utils')
-const { absentReasonMapper } = require('../mappers')
+const getExternalEventsForOffenders = require('../../shared/getExternalEventsForOffenders')
+const log = require('../../log')
+const { switchDateFormat, distinct } = require('../../utils')
+const { absentReasonMapper } = require('../../mappers')
 
 function safeTimeCompare(a, b) {
   if (a && b) return moment(b).isBefore(a)

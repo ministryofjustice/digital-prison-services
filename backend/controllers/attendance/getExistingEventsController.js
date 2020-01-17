@@ -1,5 +1,5 @@
 const existingEventsService = require('./existingEventsService')
-const { properCaseName } = require('../utils')
+const { properCaseName } = require('../../utils')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const { activeCaseLoadId: agencyId } = req.session.userDetails

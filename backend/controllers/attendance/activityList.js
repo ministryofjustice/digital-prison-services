@@ -1,6 +1,6 @@
-const { switchDateFormat, sortByDateTime } = require('../utils')
-const getExternalEventsForOffenders = require('../shared/getExternalEventsForOffenders')
-const { absentReasonMapper } = require('../mappers')
+const { switchDateFormat, sortByDateTime } = require('../../utils')
+const getExternalEventsForOffenders = require('../../shared/getExternalEventsForOffenders')
+const { absentReasonMapper } = require('../../mappers')
 
 const offenderNumberMultiMap = offenderNumbers =>
   offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())

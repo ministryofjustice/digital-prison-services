@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-const { bulkAppointmentsClashesFactory } = require('../controllers/bulkAppointmentsClashes')
+const { bulkAppointmentsClashesFactory } = require('../controllers/appointments/bulkAppointmentsClashes')
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),

@@ -1,4 +1,4 @@
-const { prepostAppointmentsFactory } = require('../controllers/prepostAppoinments')
+const { prepostAppointmentsFactory } = require('../controllers/appointments/prepostAppoinments')
 
 describe('Pre post appointments', () => {
   const elite2Api = {}
