@@ -1,10 +1,10 @@
 const {
   app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
-const { properCaseName } = require('../utils')
-const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
-const { serviceUnavailableMessage } = require('../common-messages')
-const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../shared/appointmentConstants')
+} = require('../../config')
+const { properCaseName } = require('../../utils')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
+const { serviceUnavailableMessage } = require('../../common-messages')
+const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
 
 const addAppointmentFactory = (appointmentsService, existingEventsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {

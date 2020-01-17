@@ -1,7 +1,7 @@
 const moment = require('moment')
-const config = require('../config')
+const config = require('../../config')
 
-const { stripWarning } = require('../mappers')
+const { stripWarning } = require('../../mappers')
 
 const {
   capitalize,
@@ -11,7 +11,7 @@ const {
   pascalToString,
   readableDateFormat,
   stripAgencyPrefix,
-} = require('../utils')
+} = require('../../utils')
 
 const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
 

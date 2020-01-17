@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { toMap } = require('../utils')
+const { toMap } = require('../../utils')
 
 const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {

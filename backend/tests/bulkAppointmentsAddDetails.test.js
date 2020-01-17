@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { bulkAppointmentsAddDetailsFactory } = require('../controllers/bulkAppointmentsAddDetails')
+const { bulkAppointmentsAddDetailsFactory } = require('../controllers/appointments/bulkAppointmentsAddDetails')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { repeatTypes } = require('../shared/appointmentConstants')
 

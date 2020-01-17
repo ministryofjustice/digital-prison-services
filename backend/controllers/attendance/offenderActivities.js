@@ -1,4 +1,4 @@
-const { switchDateFormat } = require('../utils')
+const { switchDateFormat } = require('../../utils')
 
 const offenderActivitesFactory = (elite2api, whereaboutsApi) => {
   const getPrisonersUnaccountedFor = async (context, agencyId, dateString, timeSlot) => {

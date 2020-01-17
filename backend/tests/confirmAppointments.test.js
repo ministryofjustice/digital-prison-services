@@ -1,4 +1,4 @@
-const confirmAppointments = require('../controllers/confirmAppointment')
+const confirmAppointments = require('../controllers/appointments/confirmAppointment')
 
 describe('Confirm appointments', () => {
   const elite2Api = {}

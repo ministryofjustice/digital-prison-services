@@ -1,5 +1,5 @@
-const { forenameToInitial, chunkArray } = require('../utils')
-const { serviceUnavailableMessage } = require('../common-messages')
+const { forenameToInitial, chunkArray } = require('../../utils')
+const { serviceUnavailableMessage } = require('../../common-messages')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const renderError = error => {

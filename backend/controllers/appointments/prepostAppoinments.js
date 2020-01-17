@@ -1,11 +1,11 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
+} = require('../../config')
 
-const { serviceUnavailableMessage } = require('../common-messages')
-const { toAppointmentDetailsSummary } = require('../controllers/appointmentsService')
+const { serviceUnavailableMessage } = require('../../common-messages')
+const { toAppointmentDetailsSummary } = require('./appointmentsService')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')

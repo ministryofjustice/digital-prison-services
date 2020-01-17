@@ -1,4 +1,4 @@
-const { bulkAppointmentsUploadFactory } = require('../controllers/bulkAppointmentsUpload')
+const { bulkAppointmentsUploadFactory } = require('../controllers/appointments/bulkAppointmentsUpload')
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 

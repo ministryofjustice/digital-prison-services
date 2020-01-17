@@ -1,7 +1,7 @@
 const moment = require('moment')
-const { switchDateFormat } = require('../utils')
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
+const { switchDateFormat } = require('../../utils')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
 
 const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
