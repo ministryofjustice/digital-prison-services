@@ -419,11 +419,12 @@ class Elite2Api extends WireMockRule {
                                 .withBody(JsonOutput.toJson(offender))))
     }
 
-    def stubGlobalSearch(offenderNo, lastName, firstName, location, gender, dob, response) {
+    def stubGlobalSearch(String offenderNo, String lastName, String firstName, String location, String gender, String dob, response) {
         final totalRecords = String.valueOf(response.size())
 
         this.stubFor(
-                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=${gender}&location=${location}&dob=${dob}&partialNameMatch=false&includeAliases=true")
+                any(urlPathEqualTo("/api/prisoners"))
+                        .withQueryParams(Map.of("lastName", equalTo(lastName), "gender", equalTo(gender), "location", equalTo(location), "includeAliases", equalTo('true'), "dob", equalTo(dob)))
                         .withHeader('page-offset', equalTo('0'))
                         .withHeader('page-limit', equalTo(resultsPerPage.toString()))
                         .willReturn(
@@ -436,11 +437,12 @@ class Elite2Api extends WireMockRule {
                                         .withStatus(200)))
     }
 
-    def stubGlobalSearch(offenderNo, lastName, firstName, response) {
+    def stubGlobalSearch(String offenderNo, String lastName, String firstName, response) {
         final totalRecords = String.valueOf(response.size())
 
         this.stubFor(
-                get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&dob=&partialNameMatch=false&includeAliases=true")
+                any(urlPathEqualTo("/api/prisoners"))
+                        .withQueryParams(Map.of("lastName", equalTo(lastName), "gender", equalTo("ALL"), "location", equalTo("ALL"), "includeAliases", equalTo('true')))
                         .withHeader('page-offset', equalTo('0'))
                         .withHeader('page-limit', equalTo(resultsPerPage.toString()))
                         .willReturn(
@@ -455,7 +457,8 @@ class Elite2Api extends WireMockRule {
         if (response.size() > resultsPerPage - 1) {
             final nextPage = resultsPerPage + (response.size() - resultsPerPage) - 1
             this.stubFor(
-                    get("/api/prisoners?offenderNo=${offenderNo}&lastName=${lastName}&firstName=${firstName}&gender=ALL&location=ALL&dob=&partialNameMatch=false&includeAliases=true")
+                    any(urlPathEqualTo("/api/prisoners"))
+                            .withQueryParams(Map.of("lastName", equalTo(lastName), "gender", equalTo("ALL"), "location", equalTo("ALL"), "includeAliases", equalTo('true')))
                             .withHeader('page-offset', equalTo(resultsPerPage.toString()))
                             .withHeader('page-limit', equalTo(resultsPerPage.toString()))
                             .willReturn(
