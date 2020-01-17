@@ -1,0 +1,45 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = 'Search results' %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/prisoner-search"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    {{title}}
+  </h1>
+
+  {% set rows = [] %}
+  {% for result in results %}
+    {% set rows = (rows.push([
+      { text: result.name }, 
+      { text: result.offenderNo },
+      { text: result.dob },
+      { text: result.prison },
+      { text: result.pncNumber },
+      { html: '<a href="/offenders/' + result.offenderNo + '/add-appointment" class="govuk-link">Book appointment</a>' }
+    ]), rows) %}
+  {% endfor %}
+
+  {% set resultString = 'result' if results.length === 1 else  'results' %}
+  <p class="govuk-body">Showing {{results.length}} {{resultString}}</p>
+
+  {{ govukTable({
+    head: [
+      { text: "Name" },
+      { text: "Prison no." },
+      { text: "Date of birth" },
+      { text: "Prison name" },
+      { text: "PNC" },
+      { text: "Book appointment" }
+    ],
+    rows: rows
+  }) }}
+{% endblock %}

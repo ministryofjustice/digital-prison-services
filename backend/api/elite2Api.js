@@ -18,8 +18,6 @@ const elite2ApiFactory = client => {
   const userLocations = context => (context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : [])
   const userCaseLoads = context => (context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : [])
 
-  const encodeQueryString = input => encodeURIComponent(input)
-
   // NB. This function expects a caseload object.
   // The object *must* have non-blank caseLoadId,  description and type properties.
   // However, only 'caseLoadId' has meaning.  The other two properties can take *any* non-blank value and these will be ignored.
@@ -108,15 +106,21 @@ const elite2ApiFactory = client => {
   const getPrisonerImage = (context, offenderNo) =>
     getStream(context, `/api/bookings/offenderNo/${offenderNo}/image/data`)
 
-  const globalSearch = (context, offenderNo, lastName, firstName, genderFilter, locationFilter, dateOfBirthFilter) =>
-    get(
-      context,
-      `/api/prisoners?offenderNo=${offenderNo}&lastName=${encodeQueryString(lastName)}&firstName=${encodeQueryString(
-        firstName
-      )}&gender=${genderFilter}&location=${locationFilter}&dob=${
-        dateOfBirthFilter === undefined ? '' : dateOfBirthFilter
-      }&partialNameMatch=false&includeAliases=true`
-    )
+  const globalSearch = (context, params) => {
+    const { offenderNo, lastName, firstName, gender, location, dateOfBirth, includeAliases } = params
+
+    const searchParams = mapToQueryString({
+      offenderNo,
+      lastName,
+      firstName,
+      gender,
+      location,
+      dob: dateOfBirth,
+      partialNameMatch: false,
+      includeAliases,
+    })
+    return get(context, `/api/prisoners?${searchParams}`)
+  }
   const getLastPrison = (context, body) => post(context, `/api/movements/offenders`, body)
 
   const getRecentMovements = (context, body, movementTypes) =>

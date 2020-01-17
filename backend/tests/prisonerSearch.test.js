@@ -1,4 +1,4 @@
-const { prisonerSearchFactory } = require('../controllers/prisonerSearch')
+const { prisonerSearchFactory } = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('Prisoner search', () => {
@@ -14,10 +14,8 @@ describe('Prisoner search', () => {
     req = {
       body: {},
       originalUrl: 'http://localhost',
-      params: {},
-      flash: jest.fn(),
     }
-    res = { locals: {}, render: jest.fn(), redirect: jest.fn(), send: jest.fn() }
+    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
     logError = jest.fn()
 
@@ -217,11 +215,14 @@ describe('Prisoner search', () => {
           dobDay: '17',
           dobMonth: '07',
           dobYear: '1980',
+          prison: 'MDI',
         }
 
         await controller.post(req, res)
 
-        expect(res.send).toHaveBeenCalledWith({ nameOrNumber: 'Test', dob: '1980-07-17', prison: undefined })
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/prisoner-search/results?nameOrNumber=Test&dob=1980-07-17&prison=MDI'
+        )
       })
     })
   })
