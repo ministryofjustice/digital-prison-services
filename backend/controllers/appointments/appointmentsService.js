@@ -1,13 +1,16 @@
 const moment = require('moment')
-const { repeatTypes, endRecurringEndingDate } = require('../shared/appointmentConstants')
-const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
-const { properCaseName } = require('../utils')
+const { repeatTypes, endRecurringEndingDate } = require('../../shared/appointmentConstants')
+const { DATE_TIME_FORMAT_SPEC, Time } = require('../../../src/dateHelpers')
+const { properCaseName } = require('../../utils')
+
+const isVideoLinkBooking = appointmentType => appointmentType === 'VLB'
 
 const toAppointmentDetailsSummary = ({
   firstName,
   lastName,
   offenderNo,
   appointmentType,
+  appointmentTypeDescription,
   location,
   startTime,
   endTime,
@@ -16,14 +19,16 @@ const toAppointmentDetailsSummary = ({
   times,
   repeats,
 }) => {
-  const recurringInformation = recurring === 'yes' && {
-    howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
-    numberOfAppointments: times,
-    endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
-  }
-  return {
+  const recurringInformation = recurring === 'yes' &&
+    !isVideoLinkBooking(appointmentType) && {
+      howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
+      numberOfAppointments: times,
+      endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
+    }
+
+  const appointmentInfo = {
     prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
-    appointmentType,
+    appointmentType: appointmentTypeDescription,
     location,
     date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY'),
     startTime: Time(startTime),
@@ -32,6 +37,12 @@ const toAppointmentDetailsSummary = ({
     recurring: properCaseName(recurring),
     ...recurringInformation,
   }
+
+  if (isVideoLinkBooking(appointmentType)) {
+    ;['appointmentType', 'recurring'].forEach(e => delete appointmentInfo[e])
+  }
+
+  return appointmentInfo
 }
 const appointmentsServiceFactory = elite2Api => {
   const getAppointmentOptions = async (context, agency) => {
@@ -79,5 +90,6 @@ const appointmentsServiceFactory = elite2Api => {
 
 module.exports = {
   appointmentsServiceFactory,
+  isVideoLinkBooking,
   toAppointmentDetailsSummary,
 }

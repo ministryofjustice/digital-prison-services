@@ -1,9 +1,9 @@
 const moment = require('moment')
-const config = require('../config')
-const { serviceUnavailableMessage } = require('../common-messages')
-const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
-const { capitalize } = require('../utils')
-const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../shared/appointmentConstants')
+const config = require('../../config')
+const { serviceUnavailableMessage } = require('../../common-messages')
+const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { capitalize } = require('../../utils')
+const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
 
 const {
   app: { notmEndpointUrl },

@@ -1,5 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const factory = require('../controllers/activityList').getActivityListFactory
+const factory = require('../controllers/attendance/activityList').getActivityListFactory
 
 const elite2Api = {}
 const whereaboutsApi = {}
@@ -8,8 +8,11 @@ const config = {
   app: { production: true },
 }
 
-const activityList = require('../controllers/activityList').getActivityListFactory(elite2Api, whereaboutsApi, config)
-  .getActivityList
+const activityList = require('../controllers/attendance/activityList').getActivityListFactory(
+  elite2Api,
+  whereaboutsApi,
+  config
+).getActivityList
 
 function createActivitiesResponse() {
   return [

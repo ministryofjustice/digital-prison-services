@@ -7,48 +7,48 @@ const config = require('./config')
 
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
 const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
-const offenderServiceFactory = require('./controllers/offenderService')
-const { offenderActivitesFactory } = require('./controllers/offenderActivities')
+const offenderServiceFactory = require('./controllers/attendance/offenderService')
+const { offenderActivitesFactory } = require('./controllers/attendance/offenderActivities')
 const { userLocationsFactory } = require('./controllers/userLocations')
 const { userMeFactory } = require('./controllers/userMe')
 const { getConfiguration } = require('./controllers/getConfig')
-const houseblockLocationsFactory = require('./controllers/houseblockLocations').getHouseblockLocationsFactory
-const activityLocationsFactory = require('./controllers/activityLocations').getActivityLocationsFactory
-const activityListFactory = require('./controllers/activityList').getActivityListFactory
+const houseblockLocationsFactory = require('./controllers/attendance/houseblockLocations').getHouseblockLocationsFactory
+const activityLocationsFactory = require('./controllers/attendance/activityLocations').getActivityLocationsFactory
+const activityListFactory = require('./controllers/attendance/activityList').getActivityListFactory
 const iepDetailsFactory = require('./controllers/iepDetails').getIepDetailsFactory
-const houseblockListFactory = require('./controllers/houseblockList').getHouseblockListFactory
-const { attendanceFactory } = require('./controllers/attendance')
+const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
+const { attendanceFactory } = require('./controllers/attendance/attendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
-const { movementsServiceFactory } = require('./controllers/movementsService')
+const { movementsServiceFactory } = require('./controllers/attendance/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
-const { appointmentsServiceFactory } = require('./controllers/appointmentsService')
+const { appointmentsServiceFactory } = require('./controllers/appointments/appointmentsService')
 const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
-const { attendanceStatisticsFactory } = require('./controllers/attendanceStatistics')
+const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
-const bulkAppointmentsAddDetailsController = require('./controllers/bulkAppointmentsAddDetailsController')
-const bulkAppointmentsConfirmController = require('./controllers/bulkAppointmentsConfirmController')
-const bulkAppointmentsInvalidNumbersController = require('./controllers/bulkAppointmentsInvalidNumbersController')
-const bulkAppointmentsAddedController = require('./controllers/bulkAppointmentsAddedController')
-const bulkAppointmentsSlipsController = require('./controllers/bulkAppointmentsSlipsController')
-const bulkAppointmentsUploadController = require('./controllers/bulkAppointmentsUploadController')
-const bulkAppointmentsClashesController = require('./controllers/bulkAppointmentsClashesController')
+const bulkAppointmentsAddDetailsController = require('./controllers/appointments/bulkAppointmentsAddDetailsController')
+const bulkAppointmentsConfirmController = require('./controllers/appointments/bulkAppointmentsConfirmController')
+const bulkAppointmentsInvalidNumbersController = require('./controllers/appointments/bulkAppointmentsInvalidNumbersController')
+const bulkAppointmentsAddedController = require('./controllers/appointments/bulkAppointmentsAddedController')
+const bulkAppointmentsSlipsController = require('./controllers/appointments/bulkAppointmentsSlipsController')
+const bulkAppointmentsUploadController = require('./controllers/appointments/bulkAppointmentsUploadController')
+const bulkAppointmentsClashesController = require('./controllers/appointments/bulkAppointmentsClashesController')
 
 const changeCaseloadController = require('./controllers/changeCaseloadController')
-const addAppointmentController = require('./controllers/addAppointmentController')
-const confirmAppointmentController = require('./controllers/confirmAppointmentController')
-const prepostAppointmentController = require('./controllers/prepostAppointmentsController')
+const addAppointmentController = require('./controllers/appointments/addAppointmentController')
+const confirmAppointmentController = require('./controllers/appointments/confirmAppointmentController')
+const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
 
 const prisonerSearchController = require('./controllers/prisonerSearchController')
 const prisonerSearchResultsController = require('./controllers/prisonerSearchResultsController')
 
-const getExistingEventsController = require('./controllers/getExistingEventsController')
-const getLocationExistingEventsController = require('./controllers/getLocationExistingEventsController')
-const endDateController = require('./controllers/endDateController')
+const getExistingEventsController = require('./controllers/attendance/getExistingEventsController')
+const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEventsController')
+const endDateController = require('./controllers/appointments/endDateController')
 
 const controllerFactory = require('./controllers/controller').factory
 

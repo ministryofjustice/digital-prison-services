@@ -1,11 +1,11 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
+} = require('../../config')
 
-const { serviceUnavailableMessage } = require('../common-messages')
-const { toAppointmentDetailsSummary } = require('../controllers/appointmentsService')
+const { serviceUnavailableMessage } = require('../../common-messages')
+const { toAppointmentDetailsSummary } = require('./appointmentsService')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -90,7 +90,8 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
           firstName,
           lastName,
           offenderNo,
-          appointmentType: appointmentTypeDescription,
+          appointmentType,
+          appointmentTypeDescription,
           location: locationDescription,
           startTime,
           endTime,
@@ -218,6 +219,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
         times,
         repeats,
         locationDescription,
+        appointmentType,
         appointmentTypeDescription,
         locationTypes,
         firstName,
@@ -274,7 +276,8 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
             firstName,
             lastName,
             offenderNo,
-            appointmentType: appointmentTypeDescription,
+            appointmentType,
+            appointmentTypeDescription,
             location: locationDescription,
             startTime,
             endTime,

@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { addAppointmentFactory } = require('../controllers/addAppointment')
+const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
 const config = require('../config')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../common-messages')

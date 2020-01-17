@@ -1,17 +1,17 @@
 const {
   app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
+} = require('../../config')
 
-const { properCaseName } = require('../utils')
-const { serviceUnavailableMessage } = require('../common-messages')
+const { properCaseName } = require('../../utils')
+const { serviceUnavailableMessage } = require('../../common-messages')
 
-const { prepostDurations } = require('../shared/appointmentConstants')
-const { toAppointmentDetailsSummary } = require('../controllers/appointmentsService')
+const { prepostDurations } = require('../../shared/appointmentConstants')
+const { toAppointmentDetailsSummary, isVideoLinkBooking } = require('./appointmentsService')
 
 const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
+    const { activeCaseLoadId, authSource } = req.session.userDetails
 
     try {
       const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
@@ -72,7 +72,8 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         firstName,
         lastName,
         offenderNo,
-        appointmentType: appointmentTypeDescription,
+        appointmentType,
+        appointmentTypeDescription,
         location: locationDescription,
         startTime,
         endTime,
@@ -102,15 +103,28 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           'None'
       }
 
-      res.render('confirmAppointments.njk', {
-        title,
-        addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
-        prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
-        details: {
-          ...details,
-          ...prepostData,
-        },
-      })
+      if (isVideoLinkBooking(appointmentType)) {
+        res.render('videolinkBookingConfirmHearing.njk', {
+          title: 'Hearing added',
+          prisonUser: authSource === 'nomis',
+          prisonerSearchLink: '/prisoner-search',
+          prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+          details: {
+            ...details,
+            ...prepostData,
+          },
+        })
+      } else {
+        res.render('confirmAppointments.njk', {
+          title,
+          addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
+          prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+          details: {
+            ...details,
+            ...prepostData,
+          },
+        })
+      }
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       res.render('error.njk')
