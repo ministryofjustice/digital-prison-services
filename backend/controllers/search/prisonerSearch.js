@@ -1,6 +1,6 @@
 const moment = require('moment')
 const querystring = require('querystring')
-const { serviceUnavailableMessage } = require('../common-messages')
+const { serviceUnavailableMessage } = require('../../common-messages')
 
 const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const renderError = (req, res, error) => {

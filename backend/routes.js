@@ -43,8 +43,8 @@ const addAppointmentController = require('./controllers/appointments/addAppointm
 const confirmAppointmentController = require('./controllers/appointments/confirmAppointmentController')
 const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
 
-const prisonerSearchController = require('./controllers/prisonerSearchController')
-const prisonerSearchResultsController = require('./controllers/prisonerSearchResultsController')
+const prisonerSearchController = require('./controllers/search/prisonerSearchController')
+const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResultsController')
 
 const getExistingEventsController = require('./controllers/attendance/getExistingEventsController')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEventsController')

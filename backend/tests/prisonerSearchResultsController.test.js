@@ -1,4 +1,4 @@
-const prisonerSearchResultsController = require('../controllers/prisonerSearchResultsController')
+const prisonerSearchResultsController = require('../controllers/search/prisonerSearchResultsController')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('Prisoner search results', () => {

@@ -1,6 +1,6 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../common-messages')
-const { properCaseName, isOffenderNumber } = require('../utils')
+const { serviceUnavailableMessage } = require('../../common-messages')
+const { properCaseName, isOffenderNumber } = require('../../utils')
 
 module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
   try {

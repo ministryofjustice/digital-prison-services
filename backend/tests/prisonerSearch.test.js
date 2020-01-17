@@ -1,4 +1,4 @@
-const { prisonerSearchFactory } = require('../controllers/prisonerSearch')
+const { prisonerSearchFactory } = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('Prisoner search', () => {
