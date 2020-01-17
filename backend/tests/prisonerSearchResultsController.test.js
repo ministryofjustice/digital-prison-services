@@ -21,6 +21,7 @@ describe('Prisoner search results', () => {
 
     oauthApi.userRoles = jest.fn()
     elite2Api.globalSearch = jest.fn()
+    elite2Api.getAgencyDetails = jest.fn().mockReturnValue({ description: 'Prison name' })
 
     controller = prisonerSearchResultsController({ elite2Api, oauthApi, logError })
   })
@@ -97,7 +98,10 @@ describe('Prisoner search results', () => {
             location: 'IN',
           })
 
+          expect(elite2Api.getAgencyDetails).not.toHaveBeenCalled()
+
           expect(res.render).toHaveBeenCalledWith('prisonerSearchResults.njk', {
+            searchString: 'User, Test',
             results: [
               {
                 name: 'User, Test',
@@ -118,7 +122,7 @@ describe('Prisoner search results', () => {
         })
 
         describe('and searching with a dob and prison', () => {
-          const dob = '1981-17-07'
+          const dob = '1981-07-17'
           const prison = 'MDI'
 
           it('should make the correct search and return the correct results', async () => {
@@ -133,7 +137,10 @@ describe('Prisoner search results', () => {
               dateOfBirth: dob,
             })
 
+            expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, prison)
+
             expect(res.render).toHaveBeenCalledWith('prisonerSearchResults.njk', {
+              searchString: 'User, Test + 17/07/1981 + Prison name',
               results: [
                 {
                   name: 'User, Test',

@@ -27,7 +27,19 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
         location: 'IN',
       })
 
+      const prisonDetails = prison ? await elite2Api.getAgencyDetails(res.locals, prison) : undefined
+
+      const formattedSearchParams = {
+        nameOrNumber,
+        dob: dob ? moment(dob).format('DD/MM/YYYY') : undefined,
+        prison: prisonDetails ? prisonDetails.description : undefined,
+      }
+
       return res.render('prisonerSearchResults.njk', {
+        searchString: Object.keys(formattedSearchParams)
+          .filter(param => formattedSearchParams[param])
+          .map(param => formattedSearchParams[param])
+          .join(' + '),
         results: searchResults.filter(result => (prison ? prison === result.latestLocationId : result)).map(result => ({
           name: `${properCaseName(result.lastName)}, ${properCaseName(result.firstName)}`,
           offenderNo: result.offenderNo,
