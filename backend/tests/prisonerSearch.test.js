@@ -22,12 +22,12 @@ describe('Prisoner search', () => {
     oauthApi.userRoles = jest.fn()
     elite2Api.getAgencies = jest.fn().mockReturnValue([
       {
-        agencyId: 'PRISON1',
-        description: 'Prison 1',
-      },
-      {
         agencyId: 'PRISON2',
         description: 'Prison 2',
+      },
+      {
+        agencyId: 'PRISON1',
+        description: 'Prison 1',
       },
     ])
 

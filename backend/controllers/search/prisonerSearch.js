@@ -16,7 +16,9 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
         elite2Api.getAgencies(res.locals),
       ])
       const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
-      const agencyOptions = agencies.map(agency => ({ value: agency.agencyId, text: agency.description }))
+      const agencyOptions = agencies
+        .map(agency => ({ value: agency.agencyId, text: agency.description }))
+        .sort((a, b) => a.text.localeCompare(b.text))
 
       if (hasSearchAccess) {
         return res.render('prisonerSearch.njk', {
