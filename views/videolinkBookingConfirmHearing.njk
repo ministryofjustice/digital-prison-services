@@ -1,0 +1,58 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukPanel({
+                titleText: title,
+                classes: "govuk-!-margin-bottom-9"
+            }) }}
+
+            <h3 class="govuk-heading-m">Hearing details</h3>
+
+            {{ govukSummaryList({
+                classes: "govuk-summary-list--no-border",
+                rows: details | toSummaryViewModel
+            }) }}
+
+            {% if prisonUser %}
+            
+                <p class="govuk-body">
+                    <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
+                        Print movement slip
+                    </a>
+                </p>
+            
+
+                {{ govukButton({
+                    text: "Back to prisoner profile",
+                    element: 'a',
+                    href: prisonerProfileLink,
+                    classes: "govuk-button--secondary",
+                    attributes: {
+                        'data-qa': 'back-to-profile'
+                    }
+                })
+                }}
+
+            {% else %}
+
+                {{ govukButton({
+                    text: "Back to prisoner search",
+                    element: 'a',
+                    href: prisonerSearchLink,
+                    classes: "govuk-button--secondary",
+                    attributes: {
+                        'data-qa': 'back-to-prisoner-search'
+                    }
+                })
+                }}
+
+            {% endif %}
+        </div>
+{% endblock %}
