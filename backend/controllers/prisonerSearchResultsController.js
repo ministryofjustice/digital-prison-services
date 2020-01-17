@@ -8,7 +8,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
     const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
 
     if (hasSearchAccess) {
-      const { nameOrNumber, dob, prison } = req.query
+      const { nameOrNumber = '', dob, prison } = req.query
 
       const formattedNameOrNumber = nameOrNumber
         .replace(/,/g, ' ')
@@ -20,7 +20,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
         : [null, null]
 
       const searchResults = await elite2Api.globalSearch(res.locals, {
-        offenderNo: isOffenderNumber(formattedNameOrNumber) && nameOrNumber,
+        offenderNo: isOffenderNumber(formattedNameOrNumber) ? nameOrNumber : undefined,
         lastName,
         firstName,
         dateOfBirth: dob,

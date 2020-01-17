@@ -14,10 +14,8 @@ describe('Prisoner search', () => {
     req = {
       body: {},
       originalUrl: 'http://localhost',
-      params: {},
-      flash: jest.fn(),
     }
-    res = { locals: {}, render: jest.fn(), redirect: jest.fn(), send: jest.fn() }
+    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
     logError = jest.fn()
 
