@@ -1,4 +1,4 @@
-const { properCaseName } = require('../utils')
+const { properCaseName } = require('../../utils')
 
 const OffenderServiceFactory = elite2Api => {
   const getOffender = async (context, offenderNo) => {

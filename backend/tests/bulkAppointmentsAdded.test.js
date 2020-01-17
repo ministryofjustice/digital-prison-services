@@ -1,5 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const { bulkAppointmentsAddedFactory } = require('../controllers/bulkAppointmentsAdded')
+const { bulkAppointmentsAddedFactory } = require('../controllers/appointments/bulkAppointmentsAdded')
 const config = require('../config')
 
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'

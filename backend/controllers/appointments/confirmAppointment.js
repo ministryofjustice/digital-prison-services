@@ -1,12 +1,12 @@
 const {
   app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
+} = require('../../config')
 
-const { properCaseName } = require('../utils')
-const { serviceUnavailableMessage } = require('../common-messages')
+const { properCaseName } = require('../../utils')
+const { serviceUnavailableMessage } = require('../../common-messages')
 
-const { prepostDurations } = require('../shared/appointmentConstants')
-const { toAppointmentDetailsSummary } = require('../controllers/appointmentsService')
+const { prepostDurations } = require('../../shared/appointmentConstants')
+const { toAppointmentDetailsSummary } = require('./appointmentsService')
 
 const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
   const index = async (req, res) => {

@@ -1,4 +1,4 @@
-const asyncMiddleware = require('../middleware/asyncHandler')
+const asyncMiddleware = require('../../middleware/asyncHandler')
 
 const getHouseblockLocationsFactory = elite2Api => {
   const getHouseblockLocations = asyncMiddleware(async (req, res) => {

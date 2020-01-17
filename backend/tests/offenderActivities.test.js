@@ -3,7 +3,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const context = {}
 const elite2api = {}
 const whereaboutsApi = {}
-const { getPrisonersUnaccountedFor } = require('../controllers/offenderActivities').offenderActivitesFactory(
+const { getPrisonersUnaccountedFor } = require('../controllers/attendance/offenderActivities').offenderActivitesFactory(
   elite2api,
   whereaboutsApi
 )

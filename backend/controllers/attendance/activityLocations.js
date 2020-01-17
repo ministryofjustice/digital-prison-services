@@ -1,5 +1,5 @@
-const asyncMiddleware = require('../middleware/asyncHandler')
-const { switchDateFormat } = require('../utils')
+const asyncMiddleware = require('../../middleware/asyncHandler')
+const { switchDateFormat } = require('../../utils')
 
 const getActivityLocationsFactory = elite2Api => {
   const getActivityLocations = asyncMiddleware(async (req, res) => {

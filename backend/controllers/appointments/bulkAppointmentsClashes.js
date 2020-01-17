@@ -1,7 +1,7 @@
-const { switchDateFormat } = require('../utils')
-const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../src/dateHelpers')
-const { serviceUnavailableMessage } = require('../common-messages')
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
+const { switchDateFormat } = require('../../utils')
+const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { serviceUnavailableMessage } = require('../../common-messages')
+const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
   const renderTemplate = (req, res, pageData) => {

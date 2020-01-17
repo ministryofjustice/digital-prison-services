@@ -6,7 +6,7 @@ const {
   updateAttendance,
   getAbsenceReasons,
   batchUpdateAttendance,
-} = require('../controllers/attendance').attendanceFactory(whereaboutsApi)
+} = require('../controllers/attendance/attendance').attendanceFactory(whereaboutsApi)
 
 describe('Attendence and Pay controller', () => {
   const attendenceDetails = {

@@ -1,8 +1,8 @@
 const moment = require('moment')
-const { switchDateFormat } = require('../utils')
-const log = require('../log')
+const { switchDateFormat } = require('../../utils')
+const log = require('../../log')
 
-const { absentReasonMapper } = require('../mappers')
+const { absentReasonMapper } = require('../../mappers')
 
 const attendanceFactory = whereaboutsApi => {
   const sortByName = (a, b) => {
