@@ -29,7 +29,7 @@
   {% endfor %}
 
   {% set resultString = 'result' if results.length === 1 else  'results' %}
-  <p class="govuk-body">Showing {{results.length}} {{resultString}}</p>
+  <p class="govuk-body">Showing {{results.length}} {{resultString}} for <strong>{{searchString}}</strong></p>
 
   {{ govukTable({
     head: [
