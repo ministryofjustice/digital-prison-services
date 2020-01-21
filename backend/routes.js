@@ -44,7 +44,8 @@ const addCourtAppointmentController = require('./controllers/appointments/courtC
 const confirmAppointmentController = require('./controllers/appointments/confirmAppointmentController')
 const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
 
-const prisonerSearchController = require('./controllers/prisonerSearchController')
+const prisonerSearchController = require('./controllers/search/prisonerSearchController')
+const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResultsController')
 
 const getExistingEventsController = require('./controllers/attendance/getExistingEventsController')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEventsController')
@@ -187,6 +188,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/offenders/:offenderNo/add-court-appointment', addCourtAppointmentController({ elite2Api, logError }))
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
+  router.get('/prisoner-search/results', prisonerSearchResultsController({ oauthApi, elite2Api, logError }))
 
   router.get('/videolink', async (req, res) => {
     res.render('courtsVideolink.njk', {
