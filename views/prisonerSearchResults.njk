@@ -24,7 +24,7 @@
       { text: result.dob },
       { text: result.prison },
       { text: result.pncNumber },
-      { html: '<a href="/offenders/' + result.offenderNo + '/add-appointment" class="govuk-link">Book appointment</a>' }
+      { html: '<a href="/offenders/' + result.offenderNo + '/add-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>' }
     ]), rows) %}
   {% endfor %}
 
@@ -40,6 +40,7 @@
       { text: "PNC" },
       { text: "Book appointment" }
     ],
-    rows: rows
+    rows: rows,
+    attributes: { "data-qa": "search-results-table" }
   }) }}
 {% endblock %}
