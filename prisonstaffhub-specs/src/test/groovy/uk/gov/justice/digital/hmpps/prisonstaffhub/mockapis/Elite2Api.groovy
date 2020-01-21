@@ -872,7 +872,7 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubPostBulkAppointments() {
+    void stubPostAppointments() {
         this.stubFor(
                 post("/api/appointments")
                         .willReturn(
