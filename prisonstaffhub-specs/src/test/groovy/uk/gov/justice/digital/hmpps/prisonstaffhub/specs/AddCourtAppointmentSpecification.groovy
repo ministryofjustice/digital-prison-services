@@ -34,7 +34,6 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubActivities(Caseload.LEI, null, date, offenders)
         elite2api.stubVisits(Caseload.LEI, null, date, offenders)
         elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
-        elite2api.stubPostAppointments()
 
         fixture.loginAs(UserAccount.ITAG_USER)
         elite2api.stubOffenderDetails(offenderNo,
@@ -58,9 +57,9 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
         given: "I am on the add court appointment page"
         to AddCourtAppointmentPage
-        at AddCourtAppointmentPage
 
         when: "I enter all details and click submit"
+        at AddCourtAppointmentPage
         form.location = 1
         form.date = date
         form.startTimeHours = 10

@@ -12,6 +12,6 @@ class PrePostAppointmentsPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("Videolink appointment details")
+        pageTitle.contains("Video link hearing details")
     }
 }
