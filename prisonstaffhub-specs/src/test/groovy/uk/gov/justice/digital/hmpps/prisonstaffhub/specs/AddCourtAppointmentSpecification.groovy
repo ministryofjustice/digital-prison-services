@@ -4,6 +4,7 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddCourtAppointmentPage
@@ -25,6 +26,15 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
     def "should redirect to pre and post appointments page"() {
         def offenderNo = "A12345"
+        def offenders = [offenderNo]
+        def date = LocalDate.now().plusDays(1).format("dd/MM/YYYY")
+
+        elite2api.stubSentenceData(offenders, date,true)
+        elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
+        elite2api.stubActivities(Caseload.LEI, null, date, offenders)
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders)
+        elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
+        elite2api.stubPostAppointments()
 
         fixture.loginAs(UserAccount.ITAG_USER)
         elite2api.stubOffenderDetails(offenderNo,
@@ -52,7 +62,7 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
         when: "I enter all details and click submit"
         form.location = 1
-        form.date = LocalDate.now().plusDays(1).format("dd/MM/YYYY")
+        form.date = date
         form.startTimeHours = 10
         form.startTimeMinutes = 55
         form.endTimeHours = 11
