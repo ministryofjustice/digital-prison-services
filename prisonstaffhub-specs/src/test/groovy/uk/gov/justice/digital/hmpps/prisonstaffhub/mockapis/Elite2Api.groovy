@@ -435,6 +435,16 @@ class Elite2Api extends WireMockRule {
                                         .withHeader('page-limit', resultsPerPage.toString())
                                         .withHeader('page-offset', '0')
                                         .withStatus(200)))
+
+        this.stubFor(
+                any(urlPathEqualTo("/api/prisoners"))
+                        .withQueryParams(Map.of("lastName", equalTo(lastName),  "location", equalTo(location)))
+                        .willReturn(
+                        aResponse()
+                                .withBody(JsonOutput.toJson(response[0..Math.min(9, response.size() - 1)]))
+                                .withHeader('Content-Type', 'application/json')
+                                .withHeader('total-records', totalRecords)
+                                .withStatus(200)))
     }
 
     def stubGlobalSearch(String offenderNo, String lastName, String firstName, response) {
@@ -822,6 +832,18 @@ class Elite2Api extends WireMockRule {
                                         .withHeader('Content-Type', 'application/json')
                                         .withBody(JsonOutput.toJson(response))
                         )
+        )
+    }
+
+    void stubGetAgencies(response) {
+        this.stubFor(
+                get("/api/agencies/prison")
+                        .willReturn(
+                            aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
         )
     }
 
