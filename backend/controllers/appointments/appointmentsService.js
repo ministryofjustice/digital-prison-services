@@ -44,7 +44,21 @@ const toAppointmentDetailsSummary = ({
 
   return appointmentInfo
 }
+
+const mapLocationType = location => ({
+  value: location.locationId,
+  text: location.userDescription || location.description,
+})
+
+const mapAppointmentType = appointment => ({
+  value: appointment.code,
+  text: appointment.description,
+})
+
 const appointmentsServiceFactory = elite2Api => {
+  const getLocations = async (context, agency) =>
+    (await elite2Api.getLocationsForAppointments(context, agency)).map(mapLocationType)
+
   const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
       elite2Api.getLocationsForAppointments(context, agency),
@@ -52,18 +66,8 @@ const appointmentsServiceFactory = elite2Api => {
     ])
 
     return {
-      locationTypes:
-        locationTypes &&
-        locationTypes.map(location => ({
-          value: location.locationId,
-          text: location.userDescription || location.description,
-        })),
-      appointmentTypes:
-        appointmentTypes &&
-        appointmentTypes.map(appointment => ({
-          value: appointment.code,
-          text: appointment.description,
-        })),
+      locationTypes: locationTypes && locationTypes.map(mapLocationType),
+      appointmentTypes: appointmentTypes && appointmentTypes.map(mapAppointmentType),
     }
   }
   const addAppointments = async (context, appointments) => {
@@ -85,6 +89,7 @@ const appointmentsServiceFactory = elite2Api => {
     getLocationAndAppointmentDescription,
     getAppointmentOptions,
     addAppointments,
+    getLocations,
   }
 }
 

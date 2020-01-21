@@ -316,7 +316,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
                 "lastName", " Doe",
                 "agencyId", "LEI"
         )])
-        elite2api.stubPostBulkAppointments()
+        elite2api.stubPostAppointments()
     }
 
     def setupNoClashes() {

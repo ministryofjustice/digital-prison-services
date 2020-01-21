@@ -156,7 +156,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubSentenceData(offenders, date,true)
         elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
         elite2api.stubActivities(Caseload.LEI, null, date, offenders)
-        elite2api.stubPostBulkAppointments()
+        elite2api.stubPostAppointments()
         elite2api.stubAppointments(Caseload.LEI, null, date, offenders)
         elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
         elite2api.stubOffenderDetails(offenderNo,

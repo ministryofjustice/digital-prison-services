@@ -1,0 +1,126 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "components/timePicker/timePicker.njk" import timePicker %}
+{% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
+
+{% set title = 'Add new hearing' %}
+{% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: dpsUrl
+            },
+            {
+                text: offenderName,
+                href: offenderUrl
+            },
+            {
+                text: title
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">
+                <span class="govuk-caption-l">{{offenderName}} (<span id="offenderNo">{{offenderNo}}</span>)</span>
+                {{title}}
+            </h1>
+
+            {% if errors.length > 0 %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+
+            <form method="POST" novalidate="novalidate">
+                <input type="hidden" name="bookingId" value={{bookingId}} />
+
+                <input type="hidden" name="appointmentType" value="{{ formValues.appointmentType }}">
+                <input type="hidden" name="bookingId" value="{{ bookingId }}">
+                {{ govukSelect({
+                    id: "location",
+                    name: "location",
+                    label: {
+                        text: "Location"
+                    },
+                    classes: 'js-court-appointment-location',
+                    items: appointmentLocations | addDefaultSelectedVale('Select') | setSelected(formValues.location),
+                    errorMessage: errors | findError('location')
+                }) }}
+
+                {{ datePicker({
+                    id: 'date',
+                    label: 'Date',
+                    name: 'date',
+                    date: formValues.date,
+                    errorMessage: errors | findError('date'),
+                    attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
+                }) }}
+
+                <div class="govuk-grid-row">
+                    <div id="location-events" class="govuk-grid-column-one-half">
+                        {% if formValues.date and formValues.location %}
+                            {{scheduledEvents(locationEvents, 'location', locationName)}}
+                        {% endif %}
+                    </div>
+                </div>
+
+                {{ timePicker({
+                    id: 'start-time',
+                    label: 'Start time',
+                    name: 'startTime',
+                    hour: formValues.startTimeHours,
+                    minute: formValues.startTimeMinutes,
+                    errorMessage: errors | findError('start-time-hours')
+                }) }}
+
+                {{ timePicker({
+                    id: 'end-time',
+                    label: 'End time',
+                    name: 'endTime',
+                    hour: formValues.endTimeHours,
+                    minute: formValues.endTimeMinutes,
+                    errorMessage: errors | findError('end-time-hours')
+                }) }}
+
+                {{ govukTextarea({
+                    name: "comments",
+                    id: "comments",
+                    value: formValues.comments,
+                    errorMessage: errors | findError('comments'),
+                    classes: 'govuk-!-width-one-half',
+                    label: {
+                        text: "Comments (optional)"
+                    },
+                    hint: {
+                        text: "Type of hearing and additional information"
+                    }
+                }) }}
+
+                {{ govukButton({ text: "Save and continue", type: "submit" }) }}
+
+                {{ govukButton({
+                    text: "Cancel",
+                    element: 'a',
+                    href: offenderUrl,
+                    classes: "govuk-button--secondary"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
