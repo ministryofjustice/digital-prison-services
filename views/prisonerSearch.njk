@@ -38,6 +38,8 @@
     {{title}}
   </h1>
 
+  <p class="govuk-body">Use one or more of the search options below.</p>
+
   <form method="POST" novalidate="novalidate">
     {{ govukInput({
       id: "nameOrNumber",
@@ -71,21 +73,21 @@
           name: "dobDay",
           label: "Day",
           classes: "govuk-input--width-2" + errorClass('dobDay'),
-          value: formValues['dobDay']
+          value: formValues.dobDay
         },
         {
           id: "dobMonth",
           name: "dobMonth",
           label: "Month",
           classes: "govuk-input--width-2" + errorClass('dobMonth'),
-          value: formValues['dobMonth']
+          value: formValues.dobMonth
         },
         {
           id: "dobYear",
           name: "dobYear",
           label: "Year",
           classes: "govuk-input--width-4" + errorClass('dobYear'),
-          value: formValues['dobYear']
+          value: formValues.dobYear
         }
       ]
     }) }}
@@ -96,7 +98,7 @@
       label: {
         text: "Prison (optional)"
       },
-      items: agencyOptions | addDefaultSelectedVale('Select')
+      items: agencyOptions | addDefaultSelectedVale('Select') | setSelected(formValues.prison)
     }) }}
 
     {{ govukButton({ text: "Search", isStartButton: true }) }}

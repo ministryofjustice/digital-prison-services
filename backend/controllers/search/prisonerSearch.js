@@ -1,5 +1,6 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../common-messages')
+const querystring = require('querystring')
+const { serviceUnavailableMessage } = require('../../common-messages')
 
 const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const renderError = (req, res, error) => {
@@ -14,9 +15,10 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
         oauthApi.userRoles(res.locals),
         elite2Api.getAgencies(res.locals),
       ])
-
       const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
-      const agencyOptions = agencies.map(agency => ({ value: agency.agencyId, text: agency.description }))
+      const agencyOptions = agencies
+        .map(agency => ({ value: agency.agencyId, text: agency.description }))
+        .sort((a, b) => a.text.localeCompare(b.text))
 
       if (hasSearchAccess) {
         return res.render('prisonerSearch.njk', {
@@ -80,11 +82,13 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
       })
     }
 
-    return res.send({
+    const searchQuery = querystring.stringify({
       nameOrNumber,
       dob: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
       prison,
     })
+
+    return res.redirect(`/prisoner-search/results?${searchQuery}`)
   }
 
   return { index, post }
