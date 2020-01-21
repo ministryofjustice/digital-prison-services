@@ -51,4 +51,7 @@ module.exports = {
   updateAttendancePrisons: process.env.UPDATE_ATTENDANCE_PRISONS
     ? process.env.UPDATE_ATTENDANCE_PRISONS.split(',').map(agency => agency.trim())
     : [],
+  notifications: {
+    notifyKey: process.env.NOTIFY_API_KEY || '',
+  },
 }
