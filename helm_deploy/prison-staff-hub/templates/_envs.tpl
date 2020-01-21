@@ -46,6 +46,12 @@ env:
         name: {{ template "app.name" . }}
         key: SESSION_COOKIE_SECRET
 
+  - name: NOTIFY_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: NOTIFY_API_KEY
+
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
