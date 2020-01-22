@@ -184,8 +184,14 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
 
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
-  router.use('/offenders/:offenderNo/prepost-appointments', prepostAppointmentController({ elite2Api, logError }))
-  router.use('/offenders/:offenderNo/add-court-appointment', addCourtAppointmentController({ elite2Api, logError }))
+  router.use(
+    '/offenders/:offenderNo/prepost-appointments',
+    prepostAppointmentController({ elite2Api, logError, oauthApi, systemOauthClient: oauthClientId })
+  )
+  router.use(
+    '/:agencyId/offenders/:offenderNo/add-court-appointment',
+    addCourtAppointmentController({ elite2Api, logError })
+  )
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
   router.get('/prisoner-search/results', prisonerSearchResultsController({ oauthApi, elite2Api, logError }))

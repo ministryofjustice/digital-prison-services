@@ -6,12 +6,11 @@ const appointmentService = {}
 const elite2Api = {}
 const req = {
   session: {
-    userDetails: {
-      activeCaseLoadId: 'MDI',
-    },
+    userDetails: {},
   },
   params: {
     offenderNo: 'A12345',
+    agencyId: 'MDI',
   },
 }
 const res = { locals: {} }
