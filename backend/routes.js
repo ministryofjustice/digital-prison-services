@@ -186,7 +186,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentController({ elite2Api, logError, oauthApi, systemOauthClient: oauthClientId })
+    prepostAppointmentController({ elite2Api, logError, oauthApi })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
