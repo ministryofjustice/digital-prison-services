@@ -134,4 +134,12 @@ describe('Add court appointment', () => {
     })
     expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/prepost-appointments')
   })
+
+  it('should pack agencyId into user details', async () => {
+    const { index } = addCourtAppointmentsFactory(appointmentService, elite2Api, {})
+
+    await index(req, res)
+
+    expect(req.session.userDetails).toEqual({ activeCaseLoadId: 'MDI' })
+  })
 })
