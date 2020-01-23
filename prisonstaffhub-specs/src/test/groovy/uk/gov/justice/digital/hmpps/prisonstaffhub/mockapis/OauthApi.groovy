@@ -148,11 +148,11 @@ class OauthApi extends WireMockRule {
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson([
-                                staffId         : user.staffMember.id,
+                                staffId         : user.staffMember ? user.staffMember.id : null,
                                 username        : user.username,
-                                firstName       : user.staffMember.firstName,
-                                lastName        : user.staffMember.lastName,
-                                authSource      : user.staffMember.authSource,
+                                firstName       : user.staffMember ? user.staffMember.firstName : '',
+                                lastName        : user.staffMember ? user.staffMember.lastName: '',
+                                authSource      : user.staffMember ? user.staffMember.authSource: '',
                                 email           : 'itaguser@syscon.net',
                                 activeCaseLoadId: user.getWorkingCaseload()
                         ]))))

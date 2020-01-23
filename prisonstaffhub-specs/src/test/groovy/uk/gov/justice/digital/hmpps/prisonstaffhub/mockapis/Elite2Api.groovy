@@ -303,7 +303,7 @@ class Elite2Api extends WireMockRule {
         def offenderNumbers = extractOffenderNumbers(activityResponse)
 
         stubVisitsAtLocation(caseload, locationId, timeSlot, date)
-        stubUsageAtLocation(caseload, locationId, timeSlot, date)
+        stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP')
 
         stubVisits(caseload, timeSlot, date, offenderNumbers, ActivityResponse.visits)
         stubAppointments(caseload, timeSlot, date, offenderNumbers, ActivityResponse.appointments)
