@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
+
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -12,6 +13,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddAppointmentPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmRecurringAppointmentPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmSingleAppointmentPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrePostAppointmentsPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
 
 import java.time.LocalDate
 
@@ -117,7 +120,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubLocation(1)
         elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
         elite2api.stubVisitsAtLocation(Caseload.LEI, 1, null, date)
-        elite2api.stubAppointmentsAtLocation(Caseload.LEI, 1, null, date)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
 
         given: "I am on the add appointment page"
         to AddAppointmentPage
@@ -144,14 +147,55 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         locationEvents.text() == '15:30\nMedical Room1 - Medical - Dentist - Appt details'
     }
 
+    def "should post video link appointment and redirect to the video link confirmation page"() {
+        setupTests()
+
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
+        elite2api.stubLocation(1)
+        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.startTimeHours = 22
+        form.startTimeMinutes = 55
+        form.endTimeHours = 23
+        form.endTimeMinutes = 55
+        form.recurring = "no"
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        and: "I am redirected to the Pre/Post appointments page"
+        at PrePostAppointmentsPage
+
+        and: "I fill out the form"
+        prePostForm.preAppointment = "yes"
+        prePostForm.preAppointmentLocation = 1
+        prePostForm.preAppointmentDuration = 15
+        prePostForm.postAppointment = "no"
+
+        prePostSubmitButton.click()
+
+        then: "I should be presented with the video link confirmation page for prison staff"
+        at ConfirmVideoLinkPrisonPage
+    }
+
     def offenderNo = "A12345"
 
     def date = LocalDate.now().format("YYYY-MM-dd")
 
     def offenders = List.of(offenderNo)
 
-    def setupTests() {
-        fixture.loginAs(UserAccount.ITAG_USER)
+    def setupTests(def user = UserAccount.ITAG_USER) {
+        fixture.loginAs(user)
 
         elite2api.stubSentenceData(offenders, date,true)
         elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)

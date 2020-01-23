@@ -7,8 +7,8 @@ class PrePostAppointmentsPage extends Page {
 
     static content = {
         pageTitle { $('h1').text() }
-        form { $('form')}
-        submitButton { $('button', type: 'submit') }
+        prePostForm { $('form')}
+        prePostSubmitButton { $('button', type: 'submit') }
     }
 
     static at = {

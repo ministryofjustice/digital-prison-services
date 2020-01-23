@@ -434,7 +434,7 @@ class ActivitySpecification extends BrowserReportingSpec {
         whereaboutsApi.stubGetAbsenceReasons()
         oauthApi.stubGetMyRoles()
         elite2api.stubVisitsAtLocation(caseload, locationId, timeSlot, date)
-        elite2api.stubAppointmentsAtLocation(caseload, locationId, timeSlot, date)
+        elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP')
         elite2api.stubAllOtherEventsOnActivityLists(caseload, timeSlot, date, offenders.collect{ it -> it.offenderNo})
     }
 
