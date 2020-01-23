@@ -153,8 +153,8 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
 
     def offenders = List.of(offenderNo)
 
-    def setupTests(def user = UserAccount.ITAG_USER) {
-        fixture.loginAs(user)
+    def setupTests() {
+        fixture.loginAs(UserAccount.ITAG_USER)
 
         elite2api.stubSentenceData(offenders, date,true)
         elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
