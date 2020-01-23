@@ -147,47 +147,6 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         locationEvents.text() == '15:30\nMedical Room1 - Medical - Dentist - Appt details'
     }
 
-    def "should post video link appointment and redirect to the video link confirmation page"() {
-        setupTests()
-
-        elite2api.stubVisits(Caseload.LEI, null, date, offenders)
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
-        elite2api.stubLocation(1)
-        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
-
-        given: "I am on the add appointment page"
-        to AddAppointmentPage
-
-        when: "I fill out the form"
-        at AddAppointmentPage
-        form.appointmentType = "VLB"
-        form.location = 1
-        form.startTimeHours = 22
-        form.startTimeMinutes = 55
-        form.endTimeHours = 23
-        form.endTimeMinutes = 55
-        form.recurring = "no"
-        form.comments = "Test comment."
-        form.date = LocalDate.now().format("dd/MM/YYYY")
-
-        submitButton.click()
-
-        and: "I am redirected to the Pre/Post appointments page"
-        at PrePostAppointmentsPage
-
-        and: "I fill out the form"
-        prePostForm.preAppointment = "yes"
-        prePostForm.preAppointmentLocation = 1
-        prePostForm.preAppointmentDuration = 15
-        prePostForm.postAppointment = "no"
-
-        prePostSubmitButton.click()
-
-        then: "I should be presented with the video link confirmation page for prison staff"
-        at ConfirmVideoLinkPrisonPage
-    }
-
     def offenderNo = "A12345"
 
     def date = LocalDate.now().format("YYYY-MM-dd")

@@ -4,10 +4,12 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.ActivityResponse
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddCourtAppointmentPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrePostAppointmentsPage
 
 import java.time.LocalDate
@@ -24,10 +26,11 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
-    def "should redirect to pre and post appointments page"() {
+    def "should go to pre post page and then redirect to video link confirmation page"() {
         def offenderNo = "A12345"
         def offenders = [offenderNo]
         def date = LocalDate.now().plusDays(1).format("dd/MM/YYYY")
+        def isoFormatDate = LocalDate.now().plusDays(1).format("YYYY-MM-dd")
 
         elite2api.stubSentenceData(offenders, date,true)
         elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
@@ -35,6 +38,11 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubVisits(Caseload.LEI, null, date, offenders)
         elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
 
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'VISIT')
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'APP')
+        elite2api.stubLocation(1)
+        elite2api.stubProgEventsAtLocation(1, null, isoFormatDate, ActivityResponse.appointments, false)
+        elite2api.stubPostAppointments()
         fixture.loginAs(UserAccount.ITAG_USER)
         elite2api.stubOffenderDetails(offenderNo,
                 Map.of("firstName", "john",
@@ -69,7 +77,18 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         form.comments = "Test comment."
         submitButton.click()
 
-        then: "I should be taken to the pre post appointments page"
+        and: "I am redirected to the Pre/Post appointments page"
         at PrePostAppointmentsPage
+
+        and: "I fill out the form"
+        prePostForm.preAppointment = "yes"
+        prePostForm.preAppointmentLocation = 1
+        prePostForm.preAppointmentDuration = 15
+        prePostForm.postAppointment = "no"
+
+        prePostSubmitButton.click()
+
+        then: "I should be presented with the video link confirmation page for prison staff"
+        at ConfirmVideoLinkPrisonPage
     }
 }
