@@ -16,15 +16,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
     const startTimeDuration = moment.duration(now.diff(startTime))
     const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
 
-    if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time-hours' })
-
-    if (isToday && startTimeDuration.asMinutes() > 1)
-      errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
-
-    if (endTime && endTimeDuration.asMinutes() > 1) {
-      errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
-    }
-
     if (!location) errors.push({ text: 'Select a location', href: '#location' })
 
     if (!date) errors.push({ text: 'Select a date', href: '#date' })
@@ -34,6 +25,15 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
 
     if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))
       errors.push({ text: 'Select a date that is not in the past', href: '#date' })
+
+    if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time-hours' })
+
+    if (isToday && startTimeDuration.asMinutes() > 1)
+      errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
+
+    if (endTime && endTimeDuration.asMinutes() > 1) {
+      errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
+    }
 
     if (!endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
 
@@ -82,46 +82,51 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
     const { bookingId, location, date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, comments } =
       req.body || {}
 
-    const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
-    const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
+    try {
+      const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
+      const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
 
-    const errors = [
-      ...getValidationMessages({
-        location,
-        date,
-        startTime,
-        endTime,
-        comments,
-      }),
-    ]
+      const errors = [
+        ...getValidationMessages({
+          location,
+          date,
+          startTime,
+          endTime,
+          comments,
+        }),
+      ]
 
-    if (errors.length > 0) {
-      return renderTemplate(req, res, {
-        errors,
-        formValues: { ...req.body, location: Number(location) },
-      })
-    }
+      if (errors.length > 0) {
+        return renderTemplate(req, res, {
+          errors,
+          formValues: { ...req.body, location: Number(location) },
+        })
+      }
 
-    const request = {
-      appointmentDefaults: {
-        comment: comments,
-        locationId: location && Number(location),
-        appointmentType: 'VLB',
-        startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-        endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
-      },
-      appointments: [
-        {
-          bookingId,
+      const request = {
+        appointmentDefaults: {
+          comment: comments,
+          locationId: location && Number(location),
+          appointmentType: 'VLB',
+          startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+          endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
         },
-      ],
-    }
-    req.flash('appointmentDetails', {
-      ...request.appointmentDefaults,
-      bookingId,
-    })
+        appointments: [
+          {
+            bookingId,
+          },
+        ],
+      }
+      req.flash('appointmentDetails', {
+        ...request.appointmentDefaults,
+        bookingId,
+      })
 
-    return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
+      return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
+    } catch (error) {
+      if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
+      return res.render('error.njk', { url: `${dpsUrl}offenders/${offenderNo}` })
+    }
   }
 
   return { index, post }

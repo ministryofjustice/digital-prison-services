@@ -39,7 +39,7 @@ describe('Pre post appointments', () => {
 
   beforeEach(() => {
     elite2Api.getDetails = jest.fn()
-    elite2Api.addAppointments = jest.fn()
+    elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
@@ -65,7 +65,11 @@ describe('Pre post appointments', () => {
 
   describe('index', () => {
     it('should return correct links', async () => {
-      const { index } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
 
       await index(req, res)
 
@@ -81,7 +85,11 @@ describe('Pre post appointments', () => {
     })
 
     it('should return locations', async () => {
-      const { index } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
 
       await index(req, res)
 
@@ -94,7 +102,11 @@ describe('Pre post appointments', () => {
     })
 
     it('should return default form values', async () => {
-      const { index } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
 
       await index(req, res)
 
@@ -112,7 +124,11 @@ describe('Pre post appointments', () => {
     })
 
     it('should extract appointment details', async () => {
-      const { index } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
 
       await index(req, res)
 
@@ -151,7 +167,11 @@ describe('Pre post appointments', () => {
 
   describe('post', () => {
     it('should validate presence of room locations', async () => {
-      const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
 
       req.body = {
         ...body,
@@ -175,7 +195,11 @@ describe('Pre post appointments', () => {
     })
 
     it('should validate presence of room locations when "no" have been selected', async () => {
-      const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
 
       req.body = {
         ...body,
@@ -270,7 +294,11 @@ describe('Pre post appointments', () => {
     })
 
     it('should pack appointment details back into flash before rendering', async () => {
-      const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        logError: () => {},
+      })
       req.body = body
 
       await post(req, res)
@@ -359,9 +387,6 @@ describe('Pre post appointments', () => {
             ...appointmentDetails,
             startTime: '2017-10-10T11:00',
             endTime: '2017-10-10T14:00',
-            recurring: 'yes',
-            times: 1,
-            repeats: 'DAILY',
           },
         ])
 
@@ -378,83 +403,65 @@ describe('Pre post appointments', () => {
       })
 
       it('should create main appointment', async () => {
-        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          appointmentsService,
+          logError: () => {},
+        })
 
         await post(req, res)
 
-        expect(elite2Api.addAppointments).toHaveBeenCalledWith(
-          {},
-          {
-            appointmentDefaults: {
-              comment: 'Test',
-              locationId: 1,
-              appointmentType: 'VLB',
-              startTime: '2017-10-10T11:00',
-              endTime: '2017-10-10T14:00',
-            },
-            appointments: [
-              {
-                bookingId,
-              },
-            ],
-            repeat: {
-              repeatPeriod: 'DAILY',
-              count: 1,
-            },
-          }
-        )
+        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
+          comment: 'Test',
+          locationId: 1,
+          appointmentType: 'VLB',
+          startTime: '2017-10-10T11:00',
+          endTime: '2017-10-10T14:00',
+        })
       })
 
       it('should create main pre appointment', async () => {
-        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          appointmentsService,
+          logError: () => {},
+        })
 
         await post(req, res)
 
-        expect(elite2Api.addAppointments).toHaveBeenCalledWith(
-          {},
-          {
-            appointmentDefaults: {
-              comment: 'Test',
-              locationId: 2,
-              appointmentType: 'VLB',
-              startTime: '2017-10-10T10:45:00',
-              endTime: '2017-10-10T11:00:00',
-            },
-            appointments: [
-              {
-                bookingId,
-              },
-            ],
-          }
-        )
+        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
+          comment: 'Test',
+          locationId: 2,
+          appointmentType: 'VLB',
+          startTime: '2017-10-10T10:45:00',
+          endTime: '2017-10-10T11:00:00',
+        })
       })
 
       it('should create main post appointment', async () => {
-        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          appointmentsService,
+          logError: () => {},
+        })
 
         await post(req, res)
 
-        expect(elite2Api.addAppointments).toHaveBeenCalledWith(
-          {},
-          {
-            appointmentDefaults: {
-              comment: 'Test',
-              locationId: 3,
-              appointmentType: 'VLB',
-              startTime: '2017-10-10T14:00',
-              endTime: '2017-10-10T15:00:00',
-            },
-            appointments: [
-              {
-                bookingId,
-              },
-            ],
-          }
-        )
+        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
+          comment: 'Test',
+          locationId: 3,
+          appointmentType: 'VLB',
+          startTime: '2017-10-10T14:00',
+          endTime: '2017-10-10T15:00:00',
+        })
       })
 
       it('should not request pre or post appointments when "no" has been selected', async () => {
-        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          appointmentsService,
+          logError: () => {},
+        })
 
         req.body = {
           postAppointment: 'no',
@@ -462,11 +469,15 @@ describe('Pre post appointments', () => {
         }
         await post(req, res)
 
-        expect(elite2Api.addAppointments.mock.calls.length).toBe(1)
+        expect(elite2Api.addSingleAppointment.mock.calls.length).toBe(1)
       })
 
       it('should place pre and post appointment details into flash', async () => {
-        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          appointmentsService,
+          logError: () => {},
+        })
 
         req.body = {
           postAppointment: 'yes',
@@ -499,7 +510,11 @@ describe('Pre post appointments', () => {
       })
 
       it('should redirect to confirmation page', async () => {
-        const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError: () => {} })
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          appointmentsService,
+          logError: () => {},
+        })
 
         req.body = {
           postAppointment: 'no',
