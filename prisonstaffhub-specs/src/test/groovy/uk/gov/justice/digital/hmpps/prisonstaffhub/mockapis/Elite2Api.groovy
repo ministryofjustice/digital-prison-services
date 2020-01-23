@@ -225,17 +225,6 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubVisitsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
-        this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
-                        .willReturn(
-                                aResponse()
-                                        .withBody('[]')
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
     void stubUsageAtLocation(Caseload caseload, int locationId, String timeSlot, String date, String usage) {
         this.stubFor(
                 get("/api/schedules/${caseload.id}/locations/${locationId}/usage/${usage}?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")

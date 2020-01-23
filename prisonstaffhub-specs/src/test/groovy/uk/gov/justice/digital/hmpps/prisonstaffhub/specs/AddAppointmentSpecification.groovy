@@ -119,8 +119,8 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
         elite2api.stubLocation(1)
         elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
-        elite2api.stubVisitsAtLocation(Caseload.LEI, 1, null, date)
         elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
 
         given: "I am on the add appointment page"
         to AddAppointmentPage
