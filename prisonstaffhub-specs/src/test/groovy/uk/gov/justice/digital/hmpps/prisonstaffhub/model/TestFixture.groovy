@@ -46,13 +46,18 @@ class TestFixture {
         browser.to VideoLinkPage
     }
 
-    private void stubForLogin(UserAccount currentUser, def roles = ['ROLE']) {
+    private void stubForLogin(UserAccount currentUser, def roles = ['ROLE'], def caseload = Caseload.undefined) {
         oauthApi.stubValidOAuthTokenLogin()
 
         oauthApi.stubGetMyDetails currentUser
         oauthApi.stubGetMyRoles(roles)
         elite2Api.stubGetMyCaseloads currentUser.caseloads
-        elite2Api.stubGroups currentUser.workingCaseload
+        if (currentUser.workingCaseload) {
+            elite2Api.stubGroups currentUser.workingCaseload
+        } else {
+            elite2Api.stubGroups caseload
+        }
+
         elite2Api.stubActivityLocations()
     }
 
