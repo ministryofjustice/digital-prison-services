@@ -13,6 +13,7 @@ enum UserAccount {
     ITAG_USER('ITAG_USER', SM_2, GENERAL, LEI, [BXI, LEI, MDI, SYI, WAI]),
     API_TEST_USER('API_TEST_USER', SM_4, GENERAL, MUL, [MUL]),
     EXOFF5('EXOFF5', SM_10, GENERAL, LEI, []),
+    COURT_USER('COURT_USER', null, null, null, []),
 
     NOT_KNOWN('NOT_KNOWN', null, null, null, [])
 

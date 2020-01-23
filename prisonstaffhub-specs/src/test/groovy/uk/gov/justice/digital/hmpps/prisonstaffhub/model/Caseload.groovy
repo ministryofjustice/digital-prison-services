@@ -163,7 +163,8 @@ enum Caseload {
     OWI('OWI', 'OAKWOOD (HMP)', INST, []),
     TSI('TSI', 'THAMESIDE (HMP)', INST, []),
     MUL('MUL', 'MUL Prison', INST, [AgencyLocation.BXI, AgencyLocation.LEI]),
-    NWEB('NWEB', 'Nomis-Web Application', APP, [])
+    NWEB('NWEB', 'Nomis-Web Application', APP, []),
+    undefined('undefined', 'undefined', INST, [])
 
     String id
     String description

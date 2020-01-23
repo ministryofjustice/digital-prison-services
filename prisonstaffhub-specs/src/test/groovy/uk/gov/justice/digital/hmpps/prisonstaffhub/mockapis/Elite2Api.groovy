@@ -225,20 +225,9 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubVisitsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
+    void stubUsageAtLocation(Caseload caseload, int locationId, String timeSlot, String date, String usage) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/VISIT?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
-                        .willReturn(
-                                aResponse()
-                                        .withBody('[]')
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
-    void stubAppointmentsAtLocation(Caseload caseload, int locationId, String timeSlot, String date) {
-        this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/APP?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
+                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/${usage}?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
                         .willReturn(
                                 aResponse()
                                         .withBody('[]')
@@ -302,8 +291,8 @@ class Elite2Api extends WireMockRule {
 
         def offenderNumbers = extractOffenderNumbers(activityResponse)
 
-        stubVisitsAtLocation(caseload, locationId, timeSlot, date)
-        stubAppointmentsAtLocation(caseload, locationId, timeSlot, date)
+        stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP')
+        stubUsageAtLocation(caseload, locationId, timeSlot, date, 'VISIT')
 
         stubVisits(caseload, timeSlot, date, offenderNumbers, ActivityResponse.visits)
         stubAppointments(caseload, timeSlot, date, offenderNumbers, ActivityResponse.appointments)
