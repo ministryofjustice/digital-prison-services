@@ -896,6 +896,16 @@ class Elite2Api extends WireMockRule {
         )
     }
 
+    void stubSingleAppointment(bookingId) {
+        this.stubFor(
+                post("/api/bookings/${bookingId}/appointments")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                        )
+        )
+    }
+
     void stubGetAgencyIepLevels(agencyId, response) {
         this.stubFor(
                 get("/api/agencies/${agencyId}/iepLevels")

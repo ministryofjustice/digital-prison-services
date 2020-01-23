@@ -42,6 +42,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
           offenderNo: result.offenderNo,
           dob: result.dateOfBirth ? moment(result.dateOfBirth).format('DD/MM/YYYY') : undefined,
           prison: result.latestLocation,
+          prisonId: result.latestLocationId,
           pncNumber: result.pncNumber ? result.pncNumber : '--',
         })),
       })

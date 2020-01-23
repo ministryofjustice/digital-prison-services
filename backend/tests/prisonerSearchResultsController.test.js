@@ -109,6 +109,7 @@ describe('Prisoner search results', () => {
                 dob: '17/07/1980',
                 prison: 'Leeds',
                 pncNumber: '1/2345',
+                prisonId: 'LEI',
               },
               {
                 name: 'User, Test',
@@ -116,6 +117,7 @@ describe('Prisoner search results', () => {
                 dob: '17/07/1981',
                 prison: 'Moorlands',
                 pncNumber: '--',
+                prisonId: 'MDI',
               },
             ],
           })
@@ -148,6 +150,7 @@ describe('Prisoner search results', () => {
                   dob: '17/07/1981',
                   prison: 'Moorlands',
                   pncNumber: '--',
+                  prisonId: 'MDI',
                 },
               ],
             })

@@ -90,8 +90,8 @@ describe('Add court appointment', () => {
         bookingId: 1,
         dpsUrl: 'http://localhost:3000/',
         errors: [
-          { href: '#start-time-hours', text: 'Select a start time' },
           { href: '#date', text: 'Select a date' },
+          { href: '#start-time-hours', text: 'Select a start time' },
           { href: '#end-time-hours', text: 'Select an end time' },
         ],
         formValues: { location: 1 },

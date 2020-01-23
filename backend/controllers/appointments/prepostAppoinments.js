@@ -107,37 +107,15 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
     }
   }
   const createAppointment = async (context, appointmentDetails) => {
-    const {
+    const { startTime, endTime, comment, bookingId, locationId, appointmentType } = appointmentDetails
+
+    await elite2Api.addSingleAppointment(context, bookingId, {
+      appointmentType,
+      locationId: Number(locationId),
       startTime,
       endTime,
       comment,
-      recurring,
-      times,
-      repeats,
-      bookingId,
-      locationId,
-      appointmentType,
-    } = appointmentDetails
-
-    const mainAppointment = {
-      appointmentDefaults: {
-        comment,
-        locationId: Number(locationId),
-        appointmentType,
-        startTime,
-        endTime,
-      },
-      appointments: [{ bookingId }],
-      repeat:
-        recurring === 'yes'
-          ? {
-              repeatPeriod: repeats,
-              count: times,
-            }
-          : undefined,
-    }
-
-    await elite2Api.addAppointments(context, mainAppointment)
+    })
   }
 
   const createPreAppointment = async (
@@ -155,7 +133,6 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
 
     await createAppointment(context, {
       ...appointmentDetails,
-      recurring: 'no',
       ...preDetails,
     })
 
@@ -177,7 +154,6 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
 
     await createAppointment(context, {
       ...appointmentDetails,
-      recurring: 'no',
       ...postDetails,
     })
 

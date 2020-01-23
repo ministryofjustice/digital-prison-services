@@ -80,7 +80,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
         then: "I should be presented with the the search results page"
         at PrisonerSearchResultsPage
         searchResultsTable.children()[1].text() == "User, Test G0011GX 17/07/1980 Leeds 1/2345 Book appointment"
-        bookAppointmentLinks[0].attr('href') == "http://localhost:3006/offenders/G0011GX/add-appointment"
+        bookAppointmentLinks[0].attr('href') == "http://localhost:3006/LEI/offenders/G0011GX/add-court-appointment"
     }
 
     def setupTests() {

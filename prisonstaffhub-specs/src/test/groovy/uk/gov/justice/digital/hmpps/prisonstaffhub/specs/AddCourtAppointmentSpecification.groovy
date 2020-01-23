@@ -43,11 +43,12 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'APP')
         elite2api.stubLocation(1)
         elite2api.stubProgEventsAtLocation(1, null, isoFormatDate, ActivityResponse.appointments, false)
-        elite2api.stubPostAppointments()
+        elite2api.stubSingleAppointment(1)
         fixture.loginAs(UserAccount.ITAG_USER)
         elite2api.stubOffenderDetails(offenderNo,
                 Map.of("firstName", "john",
                         "lastName", "doe",
+                        "bookingId", 1,
                         "offenderNo", offenderNo))
 
         elite2api.stubAppointmentLocations(
@@ -109,11 +110,12 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'APP')
         elite2api.stubLocation(1)
         elite2api.stubProgEventsAtLocation(1, null, isoFormatDate, ActivityResponse.appointments, false)
-        elite2api.stubPostAppointments()
+        elite2api.stubSingleAppointment(1)
         fixture.loginAs(UserAccount.COURT_USER)
         elite2api.stubOffenderDetails(offenderNo,
                 Map.of("firstName", "john",
                         "lastName", "doe",
+                        "bookingId", 1,
                         "offenderNo", offenderNo))
 
         elite2api.stubAppointmentLocations(

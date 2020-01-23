@@ -19,12 +19,12 @@
   {% set rows = [] %}
   {% for result in results %}
     {% set rows = (rows.push([
-      { text: result.name }, 
+      { text: result.name },
       { text: result.offenderNo },
       { text: result.dob },
       { text: result.prison },
       { text: result.pncNumber },
-      { html: '<a href="/offenders/' + result.offenderNo + '/add-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>' }
+      { html: '<a href="/' + result.prisonId + '/offenders/' + result.offenderNo + '/add-court-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>' }
     ]), rows) %}
   {% endfor %}
 
