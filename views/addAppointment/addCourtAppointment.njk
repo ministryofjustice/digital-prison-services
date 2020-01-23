@@ -72,14 +72,6 @@
                     attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
                 }) }}
 
-                <div class="govuk-grid-row">
-                    <div id="location-events" class="govuk-grid-column-one-half">
-                        {% if formValues.date and formValues.location %}
-                            {{scheduledEvents(locationEvents, 'location', locationName)}}
-                        {% endif %}
-                    </div>
-                </div>
-
                 {{ timePicker({
                     id: 'start-time',
                     label: 'Start time',

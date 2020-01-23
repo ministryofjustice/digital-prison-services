@@ -44,11 +44,15 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
   }
 
   const renderTemplate = async (req, res, data) => {
-    const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
+    const { offenderNo, agencyId } = req.params
     const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
     const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-    const locationTypes = await appointmentService.getLocations(res.locals, activeCaseLoadId)
+    const locationTypes = await appointmentService.getLocations(res.locals, agencyId)
+
+    req.session.userDetails = {
+      ...req.session.userDetails,
+      activeCaseLoadId: agencyId,
+    }
 
     return res.render('addAppointment/addCourtAppointment.njk', {
       formValues: {
@@ -69,7 +73,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       return await renderTemplate(req, res)
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
       return res.render('error.njk', { url: `${dpsUrl}offenders/${offenderNo}` })
     }
   }

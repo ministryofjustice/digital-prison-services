@@ -6,12 +6,11 @@ const appointmentService = {}
 const elite2Api = {}
 const req = {
   session: {
-    userDetails: {
-      activeCaseLoadId: 'MDI',
-    },
+    userDetails: {},
   },
   params: {
     offenderNo: 'A12345',
+    agencyId: 'MDI',
   },
 }
 const res = { locals: {} }
@@ -134,5 +133,13 @@ describe('Add court appointment', () => {
       startTime: `${isoFormatted}T00:01:00`,
     })
     expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/prepost-appointments')
+  })
+
+  it('should pack agencyId into user details', async () => {
+    const { index } = addCourtAppointmentsFactory(appointmentService, elite2Api, {})
+
+    await index(req, res)
+
+    expect(req.session.userDetails).toEqual({ activeCaseLoadId: 'MDI' })
   })
 })

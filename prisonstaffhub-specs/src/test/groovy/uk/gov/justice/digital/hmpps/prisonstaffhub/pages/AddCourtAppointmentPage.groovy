@@ -3,7 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 import geb.Page
 
 class AddCourtAppointmentPage extends Page {
-    static url = "/offenders/A12345/add-court-appointment"
+    static url = "/LEI/offenders/A12345/add-court-appointment"
 
     static content = {
         pageTitle { $('h1').text() }
