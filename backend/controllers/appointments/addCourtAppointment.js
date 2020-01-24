@@ -40,8 +40,13 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
 
   const renderTemplate = async (req, res, data) => {
     const { offenderNo, agencyId } = req.params
-    const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+    const [offenderDetails, agencyDetails] = await Promise.all([
+      elite2Api.getDetails(res.locals, offenderNo),
+      elite2Api.getAgencyDetails(res.locals, agencyId),
+    ])
+    const { firstName, lastName, bookingId } = offenderDetails
     const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
+    const agencyDescription = agencyDetails.description
 
     req.session.userDetails = {
       ...req.session.userDetails,
@@ -55,6 +60,7 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       ...data,
       offenderNo,
       offenderName,
+      agencyDescription,
       dpsUrl,
       bookingId,
     })

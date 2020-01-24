@@ -18,17 +18,21 @@ const res = { locals: {} }
 describe('Add court appointment', () => {
   beforeEach(() => {
     elite2Api.getDetails = jest.fn()
+    elite2Api.getAgencyDetails = jest.fn()
     res.render = jest.fn()
 
     elite2Api.getDetails.mockReturnValue({ firstName: 'firstName', lastName: 'lastName', bookingId: 1 })
+    elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
   })
 
-  it('should request user details', async () => {
+  it('should request user and agency details', async () => {
     const { index } = addCourtAppointmentsFactory(appointmentService, elite2Api, {})
 
     await index(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
+
+    expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith({}, 'MDI')
   })
 
   it('should render template with default data', async () => {
@@ -44,6 +48,7 @@ describe('Add court appointment', () => {
         },
         offenderNo: 'A12345',
         offenderName: 'Lastname, Firstname',
+        agencyDescription: 'Moorland',
         dpsUrl: 'http://localhost:3000/',
         bookingId: 1,
       })
@@ -79,6 +84,7 @@ describe('Add court appointment', () => {
           { href: '#end-time-hours', text: 'Select an end time' },
         ],
         offenderName: 'Lastname, Firstname',
+        agencyDescription: 'Moorland',
         offenderNo: 'A12345',
       })
     )

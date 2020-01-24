@@ -1,16 +1,14 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
-{% set title = 'Add new hearing' %}
+{% set title = 'Add videolink booking date and time' %}
 {% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
 
 {% block beforeContent %}
@@ -35,9 +33,16 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-l">
-                <span class="govuk-caption-l">{{offenderName}} (<span id="offenderNo">{{offenderNo}}</span>)</span>
                 {{title}}
             </h1>
+
+            <p class="govuk-body">
+                <strong>Name:</strong> {{offenderName}}
+            </p>
+
+            <p class="govuk-body">
+                <strong>Prison:</strong> {{agencyDescription}}
+            </p>
 
             {% if errors.length > 0 %}
                 {{ govukErrorSummary({
@@ -80,7 +85,55 @@
                     errorMessage: errors | findError('end-time-hours')
                 }) }}
 
-                {{ govukButton({ text: "Save and continue", type: "submit" }) }}
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "pre-session",
+                    name: "pre-session",
+                    fieldset: {
+                        legend: {
+                        text: "Add videolink session before?",
+                        classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "no",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "post-session",
+                    name: "post-session",
+                    fieldset: {
+                        legend: {
+                        text: "Add videolink session after?",
+                        classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "no",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Save and continue",
+                    type: "submit",
+                    classes: "govuk-!-margin-right-2"
+                }) }}
 
                 {{ govukButton({
                     text: "Cancel",
