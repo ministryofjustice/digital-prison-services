@@ -36,14 +36,6 @@
                 {{title}}
             </h1>
 
-            <p class="govuk-body">
-                <strong>Name:</strong> {{offenderName}}
-            </p>
-
-            <p class="govuk-body">
-                <strong>Prison:</strong> {{agencyDescription}}
-            </p>
-
             {% if errors.length > 0 %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
@@ -51,6 +43,14 @@
                     attributes: { 'data-qa-errors': true }
                 }) }}
             {% endif %}
+
+            <p class="govuk-body">
+                <strong>Name:</strong> {{offenderName}}
+            </p>
+
+            <p class="govuk-body">
+                <strong>Prison:</strong> {{agencyDescription}}
+            </p>
 
             <form method="POST" novalidate="novalidate">
                 <input type="hidden" name="bookingId" value={{bookingId}} />
@@ -87,8 +87,9 @@
 
                 {{ govukRadios({
                     classes: "govuk-radios--inline",
-                    idPrefix: "pre-session",
-                    name: "pre-session",
+                    idPrefix: "pre-appointment-required",
+                    name: "preAppointmentRequired",
+                    errorMessage: errors | findError('pre-appointment-required'),
                     fieldset: {
                         legend: {
                         text: "Add videolink session before?",
@@ -98,19 +99,22 @@
                     items: [
                         {
                             value: "yes",
-                            text: "Yes"
+                            text: "Yes",
+                            checked: formValues.preAppointmentRequired == 'yes'
                         },
                         {
                             value: "no",
-                            text: "No"
+                            text: "No",
+                            checked: formValues.preAppointmentRequired == 'no'
                         }
                     ]
                 }) }}
 
                 {{ govukRadios({
                     classes: "govuk-radios--inline",
-                    idPrefix: "post-session",
-                    name: "post-session",
+                    idPrefix: "post-appointment-required",
+                    name: "postAppointmentRequired",
+                    errorMessage: errors | findError('post-appointment-required'),
                     fieldset: {
                         legend: {
                         text: "Add videolink session after?",
@@ -120,11 +124,13 @@
                     items: [
                         {
                             value: "yes",
-                            text: "Yes"
+                            text: "Yes",
+                            checked: formValues.postAppointmentRequired == 'yes'
                         },
                         {
                             value: "no",
-                            text: "No"
+                            text: "No",
+                            checked: formValues.postAppointmentRequired == 'no'
                         }
                     ]
                 }) }}

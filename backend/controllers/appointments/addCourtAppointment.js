@@ -8,7 +8,7 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 
 const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) => {
   const getValidationMessages = fields => {
-    const { date, startTime, endTime } = fields
+    const { date, startTime, endTime, preAppointmentRequired, postAppointmentRequired } = fields
     const errors = []
     const now = moment()
     const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
@@ -34,6 +34,12 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
     }
 
     if (!endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
+
+    if (!preAppointmentRequired)
+      errors.push({ text: 'Select if a pre appointment is required', href: '#pre-appointment-required' })
+
+    if (!postAppointmentRequired)
+      errors.push({ text: 'Select if a post appointment is required', href: '#post-appointment-required' })
 
     return errors
   }
@@ -77,8 +83,17 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
   }
 
   const post = async (req, res) => {
-    const { offenderNo } = req.params
-    const { bookingId, date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes } = req.body || {}
+    const { offenderNo, agencyId } = req.params
+    const {
+      bookingId,
+      date,
+      startTimeHours,
+      startTimeMinutes,
+      endTimeHours,
+      endTimeMinutes,
+      preAppointmentRequired,
+      postAppointmentRequired,
+    } = req.body || {}
 
     try {
       const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
@@ -89,6 +104,8 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
           date,
           startTime,
           endTime,
+          preAppointmentRequired,
+          postAppointmentRequired,
         }),
       ]
 
@@ -114,9 +131,11 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       req.flash('appointmentDetails', {
         ...request.appointmentDefaults,
         bookingId,
+        preAppointmentRequired,
+        postAppointmentRequired,
       })
 
-      return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
+      return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms`)
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: `${dpsUrl}offenders/${offenderNo}` })
