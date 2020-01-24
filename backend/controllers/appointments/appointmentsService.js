@@ -56,8 +56,12 @@ const mapAppointmentType = appointment => ({
 })
 
 const appointmentsServiceFactory = elite2Api => {
-  const getLocations = async (context, agency) =>
-    (await elite2Api.getLocationsForAppointments(context, agency)).map(mapLocationType)
+  const getLocations = async (context, agency, filterByLocationType) =>
+    filterByLocationType
+      ? (await elite2Api.getLocationsForAppointments(context, agency))
+          .filter(loc => loc.locationType === filterByLocationType)
+          .map(mapLocationType)
+      : (await elite2Api.getLocationsForAppointments(context, agency)).map(mapLocationType)
 
   const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
