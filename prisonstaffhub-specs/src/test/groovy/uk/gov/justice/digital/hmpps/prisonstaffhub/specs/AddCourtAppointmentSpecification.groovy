@@ -70,7 +70,6 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
         when: "I enter all details and click submit"
         at AddCourtAppointmentPage
-        form.location = 1
         form.date = date
         form.startTimeHours = 10
         form.startTimeMinutes = 55
@@ -136,7 +135,6 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
         when: "I enter all details and click submit"
         at AddCourtAppointmentPage
-        form.location = 1
         form.date = date
         form.startTimeHours = 10
         form.startTimeMinutes = 55

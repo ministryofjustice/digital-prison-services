@@ -8,15 +8,13 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 
 const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) => {
   const getValidationMessages = fields => {
-    const { location, date, startTime, endTime } = fields
+    const { date, startTime, endTime } = fields
     const errors = []
     const now = moment()
     const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
 
     const startTimeDuration = moment.duration(now.diff(startTime))
     const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
-
-    if (!location) errors.push({ text: 'Select a location', href: '#location' })
 
     if (!date) errors.push({ text: 'Select a date', href: '#date' })
 
@@ -44,7 +42,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
     const { offenderNo, agencyId } = req.params
     const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
     const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-    const locationTypes = await appointmentService.getLocations(res.locals, agencyId)
 
     req.session.userDetails = {
       ...req.session.userDetails,
@@ -59,7 +56,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       offenderNo,
       offenderName,
       dpsUrl,
-      appointmentLocations: locationTypes,
       bookingId,
     })
   }
@@ -76,7 +72,7 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { bookingId, location, date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes } = req.body || {}
+    const { bookingId, date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes } = req.body || {}
 
     try {
       const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
@@ -84,7 +80,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
 
       const errors = [
         ...getValidationMessages({
-          location,
           date,
           startTime,
           endTime,
@@ -94,13 +89,12 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       if (errors.length > 0) {
         return renderTemplate(req, res, {
           errors,
-          formValues: { ...req.body, location: Number(location) },
+          formValues: req.body,
         })
       }
 
       const request = {
         appointmentDefaults: {
-          locationId: location && Number(location),
           appointmentType: 'VLB',
           startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
           endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),

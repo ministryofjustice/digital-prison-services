@@ -17,11 +17,9 @@ const res = { locals: {} }
 
 describe('Add court appointment', () => {
   beforeEach(() => {
-    appointmentService.getLocations = jest.fn()
     elite2Api.getDetails = jest.fn()
     res.render = jest.fn()
 
-    appointmentService.getLocations.mockReturnValue([{ value: 1, text: 'location 1' }])
     elite2Api.getDetails.mockReturnValue({ firstName: 'firstName', lastName: 'lastName', bookingId: 1 })
   })
 
@@ -31,14 +29,6 @@ describe('Add court appointment', () => {
     await index(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
-  })
-
-  it('should request appointment locations', async () => {
-    const { index } = addCourtAppointmentsFactory(appointmentService, elite2Api, {})
-
-    await index(req, res)
-
-    expect(appointmentService.getLocations).toHaveBeenCalledWith({}, 'MDI')
   })
 
   it('should render template with default data', async () => {
@@ -55,7 +45,6 @@ describe('Add court appointment', () => {
         offenderNo: 'A12345',
         offenderName: 'Lastname, Firstname',
         dpsUrl: 'http://localhost:3000/',
-        appointmentLocations: [{ value: 1, text: 'location 1' }],
         bookingId: 1,
       })
     )
@@ -77,16 +66,11 @@ describe('Add court appointment', () => {
   it('should return validation errors', async () => {
     const { post } = addCourtAppointmentsFactory(appointmentService, elite2Api, {})
 
-    req.body = {
-      location: 1,
-    }
-
     await post(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
       'addAppointment/addCourtAppointment.njk',
       expect.objectContaining({
-        appointmentLocations: [{ text: 'location 1', value: 1 }],
         bookingId: 1,
         dpsUrl: 'http://localhost:3000/',
         errors: [
@@ -94,7 +78,6 @@ describe('Add court appointment', () => {
           { href: '#start-time-hours', text: 'Select a start time' },
           { href: '#end-time-hours', text: 'Select an end time' },
         ],
-        formValues: { location: 1 },
         offenderName: 'Lastname, Firstname',
         offenderNo: 'A12345',
       })
@@ -111,7 +94,6 @@ describe('Add court appointment', () => {
 
     req.body = {
       bookingId: 1,
-      location: 2,
       date: tomorrow.format(DAY_MONTH_YEAR),
       startTimeHours: '00',
       startTimeMinutes: '01',
@@ -127,7 +109,6 @@ describe('Add court appointment', () => {
       appointmentType: 'VLB',
       bookingId: 1,
       endTime: `${isoFormatted}T00:01:00`,
-      locationId: 2,
       startTime: `${isoFormatted}T00:01:00`,
     })
     expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/prepost-appointments')

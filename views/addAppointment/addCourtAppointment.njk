@@ -52,16 +52,6 @@
 
                 <input type="hidden" name="appointmentType" value="{{ formValues.appointmentType }}">
                 <input type="hidden" name="bookingId" value="{{ bookingId }}">
-                {{ govukSelect({
-                    id: "location",
-                    name: "location",
-                    label: {
-                        text: "Location"
-                    },
-                    classes: 'js-court-appointment-location',
-                    items: appointmentLocations | addDefaultSelectedVale('Select') | setSelected(formValues.location),
-                    errorMessage: errors | findError('location')
-                }) }}
 
                 {{ datePicker({
                     id: 'date',
