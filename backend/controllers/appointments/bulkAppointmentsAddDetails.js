@@ -187,7 +187,6 @@ const bulkAppointmentsAddDetailsFactory = (appointmentsService, oauthApi, logErr
         endOfPeriod: endOfPeriod && endOfPeriod.format('dddd D MMMM YYYY'),
       })
     } catch (error) {
-      console.error({ error })
       logError(req.originalUrl, error, serviceUnavailableMessage)
       res.render('error.njk', {
         url: req.originalUrl,
