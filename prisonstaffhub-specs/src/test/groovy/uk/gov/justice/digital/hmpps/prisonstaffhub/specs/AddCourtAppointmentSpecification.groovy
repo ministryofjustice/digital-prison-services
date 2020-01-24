@@ -76,7 +76,6 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         form.startTimeMinutes = 55
         form.endTimeHours = 11
         form.endTimeMinutes = 55
-        form.comments = "Test comment."
         submitButton.click()
 
         and: "I am redirected to the Pre/Post appointments page"
@@ -143,7 +142,6 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         form.startTimeMinutes = 55
         form.endTimeHours = 11
         form.endTimeMinutes = 55
-        form.comments = "Test comment."
         submitButton.click()
 
         and: "I am redirected to the Pre/Post appointments page"

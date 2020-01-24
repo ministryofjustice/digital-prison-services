@@ -117,7 +117,6 @@ describe('Add court appointment', () => {
       startTimeMinutes: '01',
       endTimeHours: '00',
       endTimeMinutes: '01',
-      comments: 'test',
     }
 
     await post(req, res)
@@ -127,7 +126,6 @@ describe('Add court appointment', () => {
     expect(req.flash).toHaveBeenCalledWith('appointmentDetails', {
       appointmentType: 'VLB',
       bookingId: 1,
-      comment: 'test',
       endTime: `${isoFormatted}T00:01:00`,
       locationId: 2,
       startTime: `${isoFormatted}T00:01:00`,

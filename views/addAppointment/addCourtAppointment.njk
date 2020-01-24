@@ -90,20 +90,6 @@
                     errorMessage: errors | findError('end-time-hours')
                 }) }}
 
-                {{ govukTextarea({
-                    name: "comments",
-                    id: "comments",
-                    value: formValues.comments,
-                    errorMessage: errors | findError('comments'),
-                    classes: 'govuk-!-width-one-half',
-                    label: {
-                        text: "Comments (optional)"
-                    },
-                    hint: {
-                        text: "Type of hearing and additional information"
-                    }
-                }) }}
-
                 {{ govukButton({ text: "Save and continue", type: "submit" }) }}
 
                 {{ govukButton({

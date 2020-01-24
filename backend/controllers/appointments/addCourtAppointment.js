@@ -8,7 +8,7 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 
 const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) => {
   const getValidationMessages = fields => {
-    const { location, date, startTime, endTime, comments } = fields
+    const { location, date, startTime, endTime } = fields
     const errors = []
     const now = moment()
     const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
@@ -36,9 +36,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
     }
 
     if (!endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
-
-    if (comments && comments.length > 3600)
-      errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comments' })
 
     return errors
   }
@@ -79,8 +76,7 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { bookingId, location, date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, comments } =
-      req.body || {}
+    const { bookingId, location, date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes } = req.body || {}
 
     try {
       const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
@@ -92,7 +88,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
           date,
           startTime,
           endTime,
-          comments,
         }),
       ]
 
@@ -105,7 +100,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
 
       const request = {
         appointmentDefaults: {
-          comment: comments,
           locationId: location && Number(location),
           appointmentType: 'VLB',
           startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
