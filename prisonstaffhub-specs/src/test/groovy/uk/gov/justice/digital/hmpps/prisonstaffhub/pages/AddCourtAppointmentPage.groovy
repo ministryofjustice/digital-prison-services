@@ -17,6 +17,6 @@ class AddCourtAppointmentPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("Add new hearing")
+        pageTitle.contains("Add videolink booking date and time")
     }
 }
