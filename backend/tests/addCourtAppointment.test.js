@@ -82,6 +82,8 @@ describe('Add court appointment', () => {
           { href: '#date', text: 'Select a date' },
           { href: '#start-time-hours', text: 'Select a start time' },
           { href: '#end-time-hours', text: 'Select an end time' },
+          { href: '#pre-appointment-required', text: 'Select if a pre appointment is required' },
+          { href: '#post-appointment-required', text: 'Select if a post appointment is required' },
         ],
         offenderName: 'Lastname, Firstname',
         agencyDescription: 'Moorland',
@@ -105,6 +107,8 @@ describe('Add court appointment', () => {
       startTimeMinutes: '01',
       endTimeHours: '00',
       endTimeMinutes: '01',
+      preAppointmentRequired: 'yes',
+      postAppointmentRequired: 'yes',
     }
 
     await post(req, res)
@@ -116,8 +120,10 @@ describe('Add court appointment', () => {
       bookingId: 1,
       endTime: `${isoFormatted}T00:01:00`,
       startTime: `${isoFormatted}T00:01:00`,
+      postAppointmentRequired: 'yes',
+      preAppointmentRequired: 'yes',
     })
-    expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/prepost-appointments')
+    expect(res.redirect).toHaveBeenCalledWith('/MDI/offenders/A12345/add-court-appointment/select-rooms')
   })
 
   it('should pack agencyId into user details', async () => {
