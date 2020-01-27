@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <form method="post" about="{{ links.postAppointments }}">
+        <form method="post">
             <input type="hidden" id="appointment-date" value="{{ date }}"/>
 
             {% if preAppointmentRequired %}
@@ -79,7 +79,7 @@
             {{ govukButton({
                     text: "Cancel",
                     element: 'a',
-                    href: links.cancel,
+                    href: cancelLink,
                     classes: "govuk-button--secondary",
                     attributes: {
                         'data-qa': 'back-to-profile'

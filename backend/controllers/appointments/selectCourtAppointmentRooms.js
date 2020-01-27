@@ -25,8 +25,8 @@ const packAppointmentDetails = (req, details) => {
 }
 
 const validate = ({
-  postAppointment,
-  preAppointment,
+  preAppointmentRequired,
+  postAppointmentRequired,
   preAppointmentLocation,
   postAppointmentLocation,
   mainAppointmentLocation,
@@ -34,13 +34,13 @@ const validate = ({
 }) => {
   const errors = []
 
-  if (preAppointment === 'yes' && !preAppointmentLocation)
+  if (preAppointmentRequired === 'yes' && !preAppointmentLocation)
     errors.push({ text: 'Select a room for the pre appointment', href: '#preAppointmentLocation' })
 
   if (!mainAppointmentLocation)
     errors.push({ text: 'Select a room for the main appointment', href: '#mainAppointmentLocation' })
 
-  if (postAppointment === 'yes' && !postAppointmentLocation)
+  if (postAppointmentRequired === 'yes' && !postAppointmentLocation)
     errors.push({ text: 'Select a room for the post appointment', href: '#postAppointmentLocation' })
 
   if (comment && comment.length > 3600)
@@ -49,11 +49,6 @@ const validate = ({
   return errors
 }
 
-const getLinks = offenderNo => ({
-  postAppointments: `/offenders/${offenderNo}/prepost-appointments`,
-  cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
-})
-
 const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, logError }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
@@ -61,7 +56,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
   }
 
   const index = async (req, res) => {
-    const { offenderNo } = req.params
+    const { offenderNo, agencyId } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
     try {
@@ -97,7 +92,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
       })
 
       res.render('addAppointment/selectCourtAppointmentRooms.njk', {
-        links: getLinks(offenderNo),
+        cancelLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms/cancel`,
         locations: locationTypes,
         date,
         details: toAppointmentDetailsSummary({
@@ -131,16 +126,12 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
     })
   }
 
-  const createPreAppointment = async (
-    context,
-    { appointmentDetails, startTime, preAppointmentDuration, preAppointmentLocation }
-  ) => {
+  const createPreAppointment = async (context, { appointmentDetails, startTime, preAppointmentLocation }) => {
     const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes')
     const preDetails = {
       startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
       endTime: startTime,
       locationId: Number(preAppointmentLocation),
-      duration: preAppointmentDuration,
     }
 
     await createAppointment(context, {
@@ -151,17 +142,13 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
     return preDetails
   }
 
-  const createPostAppointment = async (
-    context,
-    { appointmentDetails, endTime, postAppointmentDuration, postAppointmentLocation }
-  ) => {
+  const createPostAppointment = async (context, { appointmentDetails, endTime, postAppointmentLocation }) => {
     const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes')
 
     const postDetails = {
       startTime: endTime,
       endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(postAppointmentLocation),
-      duration: postAppointmentDuration,
     }
 
     await createAppointment(context, {
@@ -173,7 +160,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
   }
 
   const post = async (req, res) => {
-    const { offenderNo } = req.params
+    const { offenderNo, agencyId } = req.params
 
     const { preAppointmentLocation, mainAppointmentLocation, postAppointmentLocation, comment } = req.body
 
@@ -205,7 +192,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
         packAppointmentDetails(req, appointmentDetails)
 
         return res.render('addAppointment/selectCourtAppointmentRooms.njk', {
-          links: getLinks(offenderNo),
+          cancelLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms/cancel`,
           locations: locationTypes,
           formValues: {
             preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),

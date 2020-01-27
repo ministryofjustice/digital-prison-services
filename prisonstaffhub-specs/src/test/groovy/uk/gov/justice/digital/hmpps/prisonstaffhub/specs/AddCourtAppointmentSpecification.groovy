@@ -11,7 +11,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddCourtAppointmentPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkCourtPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrePostAppointmentsPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SelectCourtAppointmentRoomsPage
 
 import java.time.LocalDate
