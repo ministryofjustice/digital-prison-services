@@ -77,12 +77,19 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
 
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
 
-      const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const [offenderDetails, agencyDetails] = await Promise.all([
+        elite2Api.getDetails(res.locals, offenderNo),
+        elite2Api.getAgencyDetails(res.locals, agencyId),
+      ])
+      const { firstName, lastName, bookingId } = offenderDetails
+
+      const agencyDescription = agencyDetails.description
 
       const date = moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
 
       packAppointmentDetails(req, {
         ...appointmentDetails,
+        agencyDescription,
         appointmentTypeDescription,
         locationTypes,
         firstName,
@@ -104,6 +111,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
           startTime,
           endTime,
           times,
+          agencyDescription,
         }),
         preAppointmentRequired: preAppointmentRequired === 'yes',
         postAppointmentRequired: postAppointmentRequired === 'yes',
@@ -177,6 +185,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
         date,
         preAppointmentRequired,
         postAppointmentRequired,
+        agencyDescription,
       } = appointmentDetails
 
       const errors = validate({
@@ -210,6 +219,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
             appointmentTypeDescription,
             startTime,
             endTime,
+            agencyDescription,
           }),
           preAppointmentRequired: preAppointmentRequired === 'yes',
           postAppointmentRequired: postAppointmentRequired === 'yes',

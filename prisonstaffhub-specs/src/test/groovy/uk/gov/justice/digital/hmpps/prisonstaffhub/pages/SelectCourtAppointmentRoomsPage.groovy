@@ -4,7 +4,7 @@ import geb.Page
 
 class SelectCourtAppointmentRoomsPage extends Page {
 
-    static url = "/offenders/A12345/prepost-appointments"
+    static url = "/LEI/offenders/A12345/add-court-appointment/select-rooms"
 
     static content = {
         pageTitle { $('h1').text() }

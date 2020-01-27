@@ -83,10 +83,12 @@ module.exports = (app, path) => {
   )
 
   njkEnv.addFilter('toSummaryViewModel', model =>
-    Object.keys(model).map(key => ({
-      key: { text: capitalize(pascalToString(key)) },
-      value: { text: model[key] || '--' },
-    }))
+    Object.keys(model)
+      .filter(key => model[key])
+      .map(key => ({
+        key: { text: capitalize(pascalToString(key)) },
+        value: { text: model[key] },
+      }))
   )
 
   njkEnv.addFilter('getDate', getDate)

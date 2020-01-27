@@ -51,7 +51,7 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       elite2Api.getAgencyDetails(res.locals, agencyId),
     ])
     const { firstName, lastName, bookingId } = offenderDetails
-    const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
+    const offenderNameWithNumber = `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`
     const agencyDescription = agencyDetails.description
 
     req.session.userDetails = {
@@ -65,7 +65,7 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
       },
       ...data,
       offenderNo,
-      offenderName,
+      offenderNameWithNumber,
       agencyDescription,
       dpsUrl,
       bookingId,

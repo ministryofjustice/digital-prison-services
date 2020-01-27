@@ -35,6 +35,7 @@ describe('Select court appointment rooms', () => {
 
   beforeEach(() => {
     elite2Api.getDetails = jest.fn()
+    elite2Api.getAgencyDetails = jest.fn()
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
@@ -54,6 +55,8 @@ describe('Select court appointment rooms', () => {
       lastName: 'doe',
       assignedLivingUnitDesc: 'Cell 1',
     })
+
+    elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
     req.flash.mockImplementation(() => [appointmentDetails])
   })
@@ -98,6 +101,7 @@ describe('Select court appointment rooms', () => {
             endTime: '14:00',
             prisonerName: 'Doe, John (A12345)',
             startTime: '11:00',
+            prison: 'Moorland',
           },
         })
       )

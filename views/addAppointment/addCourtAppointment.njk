@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -44,13 +45,31 @@
                 }) }}
             {% endif %}
 
-            <p class="govuk-body">
-                <strong>Name:</strong> {{offenderName}}
-            </p>
-
-            <p class="govuk-body">
-                <strong>Prison:</strong> {{agencyDescription}}
-            </p>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    {{ govukSummaryList({
+                        classes: "govuk-summary-list--no-border",
+                        rows: [
+                            {
+                                key: {
+                                    text: "Prisoner name"
+                                },
+                                value: {
+                                    text: offenderNameWithNumber
+                                }
+                            },
+                            {
+                                key: {
+                                    text: "Prison"
+                                },
+                                value: {
+                                    text: agencyDescription
+                                }
+                            }
+                        ]
+                    }) }}
+                </div>
+            </div>
 
             <form method="POST" novalidate="novalidate">
                 <input type="hidden" name="bookingId" value={{bookingId}} />

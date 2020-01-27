@@ -18,6 +18,7 @@ const toAppointmentDetailsSummary = ({
   recurring,
   times,
   repeats,
+  agencyDescription,
 }) => {
   const recurringInformation = recurring === 'yes' &&
     !isVideoLinkBooking(appointmentType) && {
@@ -28,6 +29,7 @@ const toAppointmentDetailsSummary = ({
 
   const appointmentInfo = {
     prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
+    prison: agencyDescription,
     appointmentType: appointmentTypeDescription,
     location,
     date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY'),
