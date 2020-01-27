@@ -45,6 +45,7 @@ const confirmAppointmentController = require('./controllers/appointments/confirm
 const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
 
 const prisonerSearchController = require('./controllers/search/prisonerSearchController')
+const requestBookingController = require('./controllers/appointments/requestBookingController')
 const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResultsController')
 
 const getExistingEventsController = require('./controllers/attendance/getExistingEventsController')
@@ -203,6 +204,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
       title: 'Videolink appointment booking',
     })
   })
+
+  router.use('/request-booking', requestBookingController({ logError }))
 
   return router
 }
