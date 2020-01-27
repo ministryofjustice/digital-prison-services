@@ -59,6 +59,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
   }
+
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
@@ -117,6 +118,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
       res.render('error.njk')
     }
   }
+
   const createAppointment = async (context, appointmentDetails) => {
     const { startTime, endTime, bookingId, locationId, appointmentType, comment } = appointmentDetails
 
@@ -134,10 +136,9 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
     { appointmentDetails, startTime, preAppointmentDuration, preAppointmentLocation }
   ) => {
     const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes')
-    const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes')
     const preDetails = {
       startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
-      endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
+      endTime: startTime,
       locationId: Number(preAppointmentLocation),
       duration: preAppointmentDuration,
     }
