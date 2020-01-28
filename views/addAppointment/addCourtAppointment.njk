@@ -1,16 +1,15 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
-{% set title = 'Add new hearing' %}
+{% set title = 'Add videolink booking date and time' %}
 {% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
 
 {% block beforeContent %}
@@ -35,7 +34,6 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-l">
-                <span class="govuk-caption-l">{{offenderName}} (<span id="offenderNo">{{offenderNo}}</span>)</span>
                 {{title}}
             </h1>
 
@@ -47,21 +45,37 @@
                 }) }}
             {% endif %}
 
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    {{ govukSummaryList({
+                        classes: "govuk-summary-list--no-border",
+                        rows: [
+                            {
+                                key: {
+                                    text: "Prisoner name"
+                                },
+                                value: {
+                                    text: offenderNameWithNumber
+                                }
+                            },
+                            {
+                                key: {
+                                    text: "Prison"
+                                },
+                                value: {
+                                    text: agencyDescription
+                                }
+                            }
+                        ]
+                    }) }}
+                </div>
+            </div>
+
             <form method="POST" novalidate="novalidate">
                 <input type="hidden" name="bookingId" value={{bookingId}} />
 
                 <input type="hidden" name="appointmentType" value="{{ formValues.appointmentType }}">
                 <input type="hidden" name="bookingId" value="{{ bookingId }}">
-                {{ govukSelect({
-                    id: "location",
-                    name: "location",
-                    label: {
-                        text: "Location"
-                    },
-                    classes: 'js-court-appointment-location',
-                    items: appointmentLocations | addDefaultSelectedVale('Select') | setSelected(formValues.location),
-                    errorMessage: errors | findError('location')
-                }) }}
 
                 {{ datePicker({
                     id: 'date',
@@ -90,21 +104,61 @@
                     errorMessage: errors | findError('end-time-hours')
                 }) }}
 
-                {{ govukTextarea({
-                    name: "comments",
-                    id: "comments",
-                    value: formValues.comments,
-                    errorMessage: errors | findError('comments'),
-                    classes: 'govuk-!-width-one-half',
-                    label: {
-                        text: "Comments (optional)"
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "pre-appointment-required",
+                    name: "preAppointmentRequired",
+                    errorMessage: errors | findError('pre-appointment-required'),
+                    fieldset: {
+                        legend: {
+                        text: "Add videolink session before?",
+                        classes: "govuk-fieldset__legend--s"
+                        }
                     },
-                    hint: {
-                        text: "Type of hearing and additional information"
-                    }
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes",
+                            checked: formValues.preAppointmentRequired == 'yes'
+                        },
+                        {
+                            value: "no",
+                            text: "No",
+                            checked: formValues.preAppointmentRequired == 'no'
+                        }
+                    ]
                 }) }}
 
-                {{ govukButton({ text: "Save and continue", type: "submit" }) }}
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "post-appointment-required",
+                    name: "postAppointmentRequired",
+                    errorMessage: errors | findError('post-appointment-required'),
+                    fieldset: {
+                        legend: {
+                        text: "Add videolink session after?",
+                        classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes",
+                            checked: formValues.postAppointmentRequired == 'yes'
+                        },
+                        {
+                            value: "no",
+                            text: "No",
+                            checked: formValues.postAppointmentRequired == 'no'
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Save and continue",
+                    type: "submit",
+                    classes: "govuk-!-margin-right-2"
+                }) }}
 
                 {{ govukButton({
                     text: "Cancel",

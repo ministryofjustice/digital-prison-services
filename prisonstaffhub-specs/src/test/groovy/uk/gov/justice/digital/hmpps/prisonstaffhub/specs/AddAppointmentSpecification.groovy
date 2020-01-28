@@ -54,6 +54,48 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         at ConfirmSingleAppointmentPage
     }
 
+    def "should handle video link bookings"() {
+        setupTests()
+
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
+        elite2api.stubLocation(1)
+        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
+        elite2api.stubSingleAppointment(1)
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.startTimeHours = 22
+        form.startTimeMinutes = 55
+        form.endTimeHours = 23
+        form.endTimeMinutes = 55
+        form.recurring = "no"
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        and: "I am redirected to the Pre/Post appointments page"
+        at PrePostAppointmentsPage
+
+        and: "I fill out the form"
+        prePostForm.preAppointment = "yes"
+        prePostForm.preAppointmentLocation = 1
+        prePostForm.preAppointmentDuration = 15
+        prePostForm.postAppointment = "no"
+
+        prePostSubmitButton.click()
+
+        then: "I should be presented with the video link confirmation page for prison staff"
+        at ConfirmVideoLinkPrisonPage
+    }
+
     def "should post appointment and redirect to the recurring confirmation page"() {
         setupTests()
 
@@ -165,6 +207,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubOffenderDetails(offenderNo,
                 Map.of("firstName", "john",
                         "lastName", "doe",
+                        "bookingId", 1,
                         "offenderNo", offenderNo
                 ))
         elite2api.stubAppointmentLocations(
