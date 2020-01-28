@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { buildDateTime, DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC, Time } = require('../../../src/dateHelpers')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC, Time } = require('../../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { validateComments, validateDate, validateStartEndTime } = require('../../shared/appointmentConstants')
 
@@ -50,10 +50,15 @@ const requestBookingFactory = ({ logError }) => {
       dateOfBirth.isValid() && !Number.isNaN(dobDay) && !Number.isNaN(dobMonth) && !Number.isNaN(dobYear)
 
     const errors = []
-    if (!firstName) errors.push({ text: 'Enter first name', href: '#first-name' })
-    if (!lastName) errors.push({ text: 'Enter last name', href: '#last-name' })
-    if (!hearingLocation) errors.push({ text: 'Enter court (hearing) location', href: '#hearing-location' })
-    if (!caseNumber) errors.push({ text: 'Enter case number', href: '#case-number' })
+    if (!firstName) errors.push({ text: 'Enter a first name', href: '#first-name' })
+    if (!lastName) errors.push({ text: 'Enter a last name', href: '#last-name' })
+    if (!hearingLocation) errors.push({ text: 'Enter a court (hearing) location', href: '#hearing-location' })
+    if (!caseNumber) errors.push({ text: 'Enter a case number', href: '#case-number' })
+    if (!prison) errors.push({ text: 'Select a prison', href: '#prison' })
+    if (!endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
+    if (!dobYear && !dobDay && !dobMonth) {
+      errors.push({ text: 'Enter a date of birth', href: '#dobDay' })
+    }
 
     if (dobDay && dobMonth && dobYear) {
       const dobInThePast = dobIsValid ? dateOfBirth.isBefore(moment(), 'day') : false
@@ -83,14 +88,6 @@ const requestBookingFactory = ({ logError }) => {
     if (!dobYear && (dobDay || dobMonth)) {
       errors.push({ text: 'Date of birth must include a year', href: '#dobYear' })
     }
-
-    if (!dobYear && !dobDay && !dobMonth) {
-      errors.push({ text: 'Enter a date of birth', href: '#dobDay' })
-    }
-
-    if (!prison) errors.push({ text: 'Select a prison', href: '#prison' })
-
-    if (!endTimeHours) errors.push({ text: 'Enter an end time', href: '#end-time-hours' })
 
     validateDate(date, errors)
     validateStartEndTime(date, startTime, endTime, errors)
