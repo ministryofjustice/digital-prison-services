@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { IepDetailsContainer } from './IepDetailsContainer'
+import { IncentiveLevelDetailsContainer } from './IncentiveLevelDetailsContainer'
 
 describe('Incentive details container', () => {
   const props = {
@@ -21,7 +21,7 @@ describe('Incentive details container', () => {
     setLoadedDispatch: jest.fn(),
   }
 
-  const wrapper = shallow(<IepDetailsContainer {...props} />)
+  const wrapper = shallow(<IncentiveLevelDetailsContainer {...props} />)
 
   describe('filter values', () => {
     it('should update correctly when results are updated', () => {

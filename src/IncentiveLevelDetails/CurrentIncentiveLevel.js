@@ -5,10 +5,10 @@ import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import Button from '@govuk-react/button'
 import { BLUE } from 'govuk-colours'
-import CurrentIepLevelArea from './IepDetails.styles'
+import CurrentIncentiveLevelArea from './IncentiveLevelDetails.styles'
 
-const CurrentIepLevel = ({ level, days, nextReviewDate, userCanMaintainIep, history }) => (
-  <CurrentIepLevelArea className="current-iep">
+const CurrentIncentiveLevel = ({ level, days, nextReviewDate, userCanMaintainIep, history }) => (
+  <CurrentIncentiveLevelArea className="current-iep">
     <GridRow>
       <GridCol setWidth="one-quarter">
         <strong className="label">Current Incentive Level</strong>
@@ -32,10 +32,10 @@ const CurrentIepLevel = ({ level, days, nextReviewDate, userCanMaintainIep, hist
         </GridCol>
       )}
     </GridRow>
-  </CurrentIepLevelArea>
+  </CurrentIncentiveLevelArea>
 )
 
-CurrentIepLevel.propTypes = {
+CurrentIncentiveLevel.propTypes = {
   level: PropTypes.string,
   days: PropTypes.string,
   nextReviewDate: PropTypes.string,
@@ -46,7 +46,7 @@ CurrentIepLevel.propTypes = {
   userCanMaintainIep: PropTypes.bool.isRequired,
 }
 
-CurrentIepLevel.defaultProps = {
+CurrentIncentiveLevel.defaultProps = {
   level: '',
   days: '',
   nextReviewDate: '',
@@ -59,4 +59,4 @@ const mapStateToProps = state => ({
   userCanMaintainIep: state.iepHistory.userCanMaintainIep,
 })
 
-export default connect(mapStateToProps)(CurrentIepLevel)
+export default connect(mapStateToProps)(CurrentIncentiveLevel)

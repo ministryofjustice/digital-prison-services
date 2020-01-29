@@ -1,8 +1,8 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { IepChangeForm } from './IepChangeForm'
+import { IncentiveLevelChangeForm } from './IncentiveLevelChangeForm'
 
-describe('<IepChangeForm />', () => {
+describe('<IncentiveLevelChangeForm />', () => {
   const submitForm = formWrapper => {
     formWrapper.find('form').simulate('submit')
     formWrapper.update()
@@ -19,7 +19,7 @@ describe('<IepChangeForm />', () => {
   let reasonInput = {}
 
   beforeEach(() => {
-    wrapper = mount(<IepChangeForm {...props} />)
+    wrapper = mount(<IncentiveLevelChangeForm {...props} />)
     basicRadio = wrapper.find('input[value="BAS"]')
     reasonInput = wrapper.find('textarea[name="reason"]')
   })
