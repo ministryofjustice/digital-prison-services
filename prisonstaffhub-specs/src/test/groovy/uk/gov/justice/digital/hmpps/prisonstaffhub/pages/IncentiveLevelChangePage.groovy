@@ -2,8 +2,8 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
 import geb.Page
 
-class IepChangePage extends Page {
-    static url = '/offenders/A1234AC/iep-details/change-iep'
+class IncentiveLevelChangePage extends Page {
+    static url = '/offenders/A1234AC/incentive-level-details/change-incentive-level'
 
     static at = {
         pageTitle == 'Change Incentive Level'

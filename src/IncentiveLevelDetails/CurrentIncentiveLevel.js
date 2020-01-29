@@ -25,7 +25,11 @@ const CurrentIncentiveLevel = ({ level, days, nextReviewDate, userCanMaintainIep
       {userCanMaintainIep && (
         <GridCol setWidth="one-quarter">
           <div>
-            <Button buttonColour={BLUE} onClick={() => history.push(`iep-details/change-iep`)} data-qa="change-iep">
+            <Button
+              buttonColour={BLUE}
+              onClick={() => history.push(`incentive-level-details/change-iep`)}
+              data-qa="change-iep"
+            >
               Change Incentive Level
             </Button>
           </div>

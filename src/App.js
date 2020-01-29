@@ -405,7 +405,7 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.iepHistory}
+            path={[routePaths.iepHistory, routePaths.incentiveLevelDetails]}
             render={({ history, match: { params } }) => (
               <IncentiveLevelDetailsContainer
                 offenderNo={params.offenderNo}
@@ -419,7 +419,7 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.iepChange}
+            path={routePaths.incentiveLevelChange}
             render={({ history, match: { params } }) => (
               <IncentiveLevelChangeContainer
                 offenderNo={params.offenderNo}
