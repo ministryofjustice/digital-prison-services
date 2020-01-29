@@ -185,6 +185,12 @@ const isOffenderNumber = string => {
   return offenderIdPattern.test(string)
 }
 
+const isAfterToday = date => {
+  const dayAfter = moment().add(1, 'day')
+  const daysDifference = moment(date).diff(dayAfter, 'day')
+  return daysDifference >= 0
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -213,4 +219,5 @@ module.exports = {
   chunkArray,
   capitalizeStart,
   isOffenderNumber,
+  isAfterToday,
 }
