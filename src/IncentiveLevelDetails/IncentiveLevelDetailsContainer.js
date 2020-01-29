@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import IepHistory from './IepHistory'
-import CurrentIepLevel from './CurrentIepLevel'
-import IepHistoryForm from './IepHistoryForm'
+import IncentiveLevelHistory from './IncentiveLevelHistory'
+import CurrentIncentiveLevel from './CurrentIncentiveLevel'
+import IncentiveLevelHistoryForm from './IncentiveLevelHistoryForm'
 import { setIepHistoryResults, setIepHistoryFilter } from '../redux/actions'
 import OffenderPage from '../OffenderPage/OffenderPage'
 
 const axios = require('axios')
 
-export class IepDetailsContainer extends Component {
+export class IncentiveLevelDetailsContainer extends Component {
   componentDidMount() {
     this.getIepDetails({})
   }
@@ -81,15 +81,15 @@ export class IepDetailsContainer extends Component {
         offenderNumber={offenderNo}
         setLoaded={setLoadedDispatch}
       >
-        <CurrentIepLevel history={history} />
-        <IepHistoryForm search={this.applyFilter} reset={this.reset} />
-        <IepHistory />
+        <CurrentIncentiveLevel history={history} />
+        <IncentiveLevelHistoryForm search={this.applyFilter} reset={this.reset} />
+        <IncentiveLevelHistory />
       </OffenderPage>
     )
   }
 }
 
-IepDetailsContainer.propTypes = {
+IncentiveLevelDetailsContainer.propTypes = {
   offenderNo: PropTypes.string.isRequired,
   handleError: PropTypes.func.isRequired,
   setIepHistoryResults: PropTypes.func.isRequired,
@@ -129,4 +129,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(IepDetailsContainer)
+)(IncentiveLevelDetailsContainer)

@@ -31,7 +31,7 @@ const validateThenSubmit = submitHandler => values => {
   return submitHandler(values)
 }
 
-export function IepChangeForm({ levels, cancelHandler, changeIepLevel }) {
+export function IncentiveLevelChangeForm({ levels, cancelHandler, changeIepLevel }) {
   return (
     <Form
       onSubmit={values => validateThenSubmit(changeIepLevel)(values)}
@@ -67,11 +67,11 @@ export function IepChangeForm({ levels, cancelHandler, changeIepLevel }) {
   )
 }
 
-IepChangeForm.defaultProps = {
+IncentiveLevelChangeForm.defaultProps = {
   levels: [],
 }
 
-IepChangeForm.propTypes = {
+IncentiveLevelChangeForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   changeIepLevel: PropTypes.func.isRequired,
   // mapStateToProps
@@ -83,4 +83,4 @@ IepChangeForm.propTypes = {
   ),
 }
 
-export default connect()(IepChangeForm)
+export default connect()(IncentiveLevelChangeForm)

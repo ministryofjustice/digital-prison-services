@@ -22,8 +22,8 @@ import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
-import IepHistoryContainer from './IepDetails/IepDetailsContainer'
-import IepChangeContainer from './IepDetails/IepChangeContainer'
+import IncentiveLevelDetailsContainer from './IncentiveLevelDetails/IncentiveLevelDetailsContainer'
+import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
 import AdjudicationDetailContainer from './Adjudications/AdjudicationDetail/AdjudicationDetailContainer'
@@ -405,9 +405,9 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.iepHistory}
+            path={[routePaths.iepHistory, routePaths.incentiveLevelDetails]}
             render={({ history, match: { params } }) => (
-              <IepHistoryContainer
+              <IncentiveLevelDetailsContainer
                 offenderNo={params.offenderNo}
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
@@ -419,9 +419,9 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.iepChange}
+            path={routePaths.incentiveLevelChange}
             render={({ history, match: { params } }) => (
-              <IepChangeContainer
+              <IncentiveLevelChangeContainer
                 offenderNo={params.offenderNo}
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}

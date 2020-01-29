@@ -1,6 +1,6 @@
 import React from 'react'
 import testRenderer from 'react-test-renderer'
-import CurrentIepLevel from './CurrentIepLevel'
+import CurrentIncentiveLevel from './CurrentIncentiveLevel'
 
 const initialState = {
   iepHistory: {
@@ -41,7 +41,7 @@ describe('Current Incentive Level', () => {
   describe('should render the current Incentive Level correctly', () => {
     it("when user can't maintain Incentive Level", () => {
       store.getState.mockReturnValue(initialState)
-      const wrapper = testRenderer.create(<CurrentIepLevel history={history} store={store} />).toJSON()
+      const wrapper = testRenderer.create(<CurrentIncentiveLevel history={history} store={store} />).toJSON()
 
       expect(wrapper).toMatchSnapshot()
     })
@@ -51,7 +51,7 @@ describe('Current Incentive Level', () => {
         ...initialState,
         iepHistory: { ...initialState.iepHistory, userCanMaintainIep: true },
       })
-      const wrapper = testRenderer.create(<CurrentIepLevel history={history} store={store} />).toJSON()
+      const wrapper = testRenderer.create(<CurrentIncentiveLevel history={history} store={store} />).toJSON()
 
       expect(wrapper).toMatchSnapshot()
     })

@@ -1,7 +1,9 @@
 const elite2Api = {}
-const { getIepDetails, changeIepLevel, getPossibleLevels } = require('../controllers/iepDetails').getIepDetailsFactory(
-  elite2Api
-)
+const {
+  getIepDetails,
+  changeIepLevel,
+  getPossibleLevels,
+} = require('../controllers/incentiveLevelDetails').getIepDetailsFactory(elite2Api)
 
 function createIepDetailsReponse() {
   return {

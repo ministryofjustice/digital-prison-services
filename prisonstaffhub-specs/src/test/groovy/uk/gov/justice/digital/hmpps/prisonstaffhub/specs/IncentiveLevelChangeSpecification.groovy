@@ -4,12 +4,11 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepChangePage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IncentiveLevelChangePage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class IepChangeSpecification extends BrowserReportingSpec {
+class IncentiveLevelChangeSpecification extends BrowserReportingSpec {
     
     static final NOTM_URL = 'http://localhost:20200/'
     @Rule
@@ -74,13 +73,13 @@ class IepChangeSpecification extends BrowserReportingSpec {
         fixture.loginAsMaintainIep(ITAG_USER)
 
         when: "I view the Incentive Level change page"
-        to IepChangePage
+        to IncentiveLevelChangePage
 
         then: "I should be presented with the form"
 
         breadcrumb == [['Home', NOTM_URL],
                        ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
-                       ['Incentive details', 'http://localhost:3006/offenders/A1234AC/iep-details'],
+                       ['Incentive details', 'http://localhost:3006/offenders/A1234AC/incentive-level-details'],
                        ['Change Incentive Level', '']]
 
         pageTitle == "Change Incentive Level"

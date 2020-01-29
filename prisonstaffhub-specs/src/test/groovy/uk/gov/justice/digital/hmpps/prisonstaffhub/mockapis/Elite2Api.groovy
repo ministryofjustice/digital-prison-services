@@ -715,7 +715,7 @@ class Elite2Api extends WireMockRule {
                                 aResponse()
                                         .withStatus(200)
                                         .withHeader('Content-Type', 'application/json')
-                                        .withBody(JsonOutput.toJson(IepHistoryResponse.response1)))
+                                        .withBody(JsonOutput.toJson(IncentiveLevelHistoryResponse.response1)))
         )
     }
 
