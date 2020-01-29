@@ -36,6 +36,38 @@ const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
   }
 }
 
+const validateDate = (date, errors) => {
+  const now = moment()
+  if (!date) errors.push({ text: 'Select a date', href: '#date' })
+
+  if (date && !moment(date, DAY_MONTH_YEAR).isValid())
+    errors.push({ text: 'Enter a date in DD/MM/YYYY format', href: '#date' })
+
+  if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))
+    errors.push({ text: 'Select a date that is not in the past', href: '#date' })
+}
+
+const validateStartEndTime = (date, startTime, endTime, errors) => {
+  const now = moment()
+  const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
+  const startTimeDuration = moment.duration(now.diff(startTime))
+  const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
+
+  if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time-hours' })
+
+  if (isToday && startTimeDuration.asMinutes() > 1)
+    errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
+
+  if (endTime && endTimeDuration.asMinutes() > 1) {
+    errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
+  }
+}
+
+const validateComments = (comments, errors) => {
+  if (comments && comments.length > 3600)
+    errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comments' })
+}
+
 const getValidationMessages = (fields, singleAppointment) => {
   const {
     appointmentType,
@@ -50,40 +82,21 @@ const getValidationMessages = (fields, singleAppointment) => {
     sameTimeAppointments,
   } = fields
   const errors = []
-  const now = moment()
-  const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
 
   if (!appointmentType) errors.push({ text: 'Select an appointment type', href: '#appointment-type' })
 
   if (!location) errors.push({ text: 'Select a location', href: '#location' })
 
-  if (!date) errors.push({ text: 'Select a date', href: '#date' })
-
-  if (date && !moment(date, DAY_MONTH_YEAR).isValid())
-    errors.push({ text: 'Enter a date in DD/MM/YYYY format', href: '#date' })
-
-  if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))
-    errors.push({ text: 'Select a date that is not in the past', href: '#date' })
+  validateDate(date, errors)
 
   if (sameTimeAppointments === 'yes' || singleAppointment) {
-    const startTimeDuration = moment.duration(now.diff(startTime))
-    const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
-
-    if (!startTime) errors.push({ text: 'Select a start time', href: '#start-time-hours' })
-
-    if (isToday && startTimeDuration.asMinutes() > 1)
-      errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
-
-    if (endTime && endTimeDuration.asMinutes() > 1) {
-      errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
-    }
+    validateStartEndTime(date, startTime, endTime, errors)
   }
 
   // Video link appointments require an end time so we can show availability
   if (appointmentType === 'VLB' && !endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
 
-  if (comments && comments.length > 3600)
-    errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comments' })
+  validateComments(comments, errors)
 
   if (!recurring) {
     const recurringErrorMessage = singleAppointment
@@ -126,6 +139,9 @@ const getValidationMessages = (fields, singleAppointment) => {
 
 module.exports = {
   endRecurringEndingDate,
+  validateDate,
+  validateStartEndTime,
+  validateComments,
   getValidationMessages,
   repeatTypes,
   prepostDurations,
