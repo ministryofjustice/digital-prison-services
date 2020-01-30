@@ -66,7 +66,7 @@ class IncentiveLevelChangeContainer extends Component {
     const level = levels.find(l => l.value === values.level)
 
     try {
-      await axios.post(`/api/offenders/${offenderNo}/change-iep-level`, {
+      await axios.post(`/api/offenders/${offenderNo}/change-incentive-level`, {
         iepLevel: values.level,
         comment: values.reason,
       })

@@ -96,7 +96,7 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
                                         '12/10/2018']
 
 
-        assert(!($('button[data-qa="change-iep"]').isDisplayed()))
+        assert(!($('button[data-qa="change-incentive-level"]').isDisplayed()))
     }
 
     def "should present Incentive Level history with change Incentive Level button"() {
@@ -137,6 +137,6 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
 
         then: "I should see the Change Incentive Level button"
 
-        assert(($('button[data-qa="change-iep"]').isDisplayed()))
+        assert(($('button[data-qa="change-incentive-level"]').isDisplayed()))
     }
 }
