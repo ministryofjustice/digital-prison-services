@@ -6,6 +6,7 @@ const {
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
+const { notifyClient } = require('../../shared/notifyClient')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -41,7 +42,7 @@ const getLinks = offenderNo => ({
   cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
 })
 
-const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEventsService, logError }) => {
+const prepostAppointmentsFactory = ({ elite2Api, oauthApi, appointmentsService, existingEventsService, logError }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
@@ -174,7 +175,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
+    const { activeCaseLoadId, username, authSource } = req.session.userDetails
 
     const {
       postAppointment,
@@ -292,6 +293,40 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
         ...prepostAppointments,
       })
 
+      const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+      const prisonTemplateId = '391bb0e0-89b3-4aef-b11e-c6550b71fee8'
+      const courtTemplateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
+      const templateId = authSource === 'nomis' ? prisonTemplateId : courtTemplateId
+
+      if (userEmailData && userEmailData.email) {
+        const personalisation = {
+          startTime,
+          endTime,
+          comment,
+          firstName,
+          lastName,
+          offenderNo,
+          location: locationDescription,
+          preAppointment,
+          postAppointment,
+          postAppointmentDuration,
+          preAppointmentDuration,
+          preAppointmentLocation:
+            preAppointment === 'yes'
+              ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text
+              : 'No location',
+          postAppointmentLocation:
+            postAppointment === 'yes'
+              ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
+              : 'No location',
+        }
+
+        notifyClient.sendEmail(templateId, userEmailData.email, {
+          personalisation,
+          reference: null,
+        })
+      }
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
