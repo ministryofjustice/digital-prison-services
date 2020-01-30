@@ -2,6 +2,7 @@ const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
+  notifications: { confirmBookingCourtTemplateId },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -49,7 +50,7 @@ const validate = ({
   return errors
 }
 
-const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, logError }) => {
+const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient, logError, appointmentsService }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
@@ -172,6 +173,8 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
 
     const { preAppointmentLocation, mainAppointmentLocation, postAppointmentLocation, comment } = req.body
 
+    const { username } = req.session.userDetails
+
     try {
       const appointmentDetails = unpackAppointmentDetails(req)
       const {
@@ -252,6 +255,40 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
         locationId: mainAppointmentLocation,
         comment,
       })
+
+      const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+      if (userEmailData && userEmailData.email) {
+        const personalisation = {
+          startTime,
+          endTime,
+          comment,
+          firstName,
+          lastName,
+          offenderNo,
+          location: locationTypes.find(l => l.value === Number(mainAppointmentLocation)).text,
+          postAppointmentStartTime:
+            postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.startTime : 'N/A',
+          postAppointmentEndTime:
+            postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.endTime : 'N/A',
+          preAppointmentStartTime:
+            preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.startTime : 'N/A',
+          preAppointmentEndTime: preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.endTime : 'N/A',
+          preAppointmentLocation:
+            preAppointmentRequired === 'yes'
+              ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text
+              : 'N/A',
+          postAppointmentLocation:
+            postAppointmentRequired === 'yes'
+              ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
+              : 'N/A',
+        }
+
+        notifyClient.sendEmail(confirmBookingCourtTemplateId, userEmailData.email, {
+          personalisation,
+          reference: null,
+        })
+      }
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

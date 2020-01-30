@@ -1,14 +1,17 @@
 const { prepostAppointmentsFactory } = require('../controllers/appointments/prepostAppoinments')
+const { notifyClient } = require('../shared/notifyClient')
+const config = require('../config')
 
 describe('Pre post appointments', () => {
   const elite2Api = {}
+  const oauthApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
 
   const req = {
     originalUrl: 'http://localhost',
     params: { offenderNo: 'A12345' },
-    session: { userDetails: { activeCaseLoadId: 'LEI' } },
+    session: { userDetails: { activeCaseLoadId: 'LEI', authSource: 'nomis' } },
   }
   const res = { locals: {} }
 
@@ -41,6 +44,7 @@ describe('Pre post appointments', () => {
     elite2Api.getDetails = jest.fn()
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
+    oauthApi.userEmail = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
 
@@ -510,8 +514,11 @@ describe('Pre post appointments', () => {
       })
 
       it('should redirect to confirmation page', async () => {
+        notifyClient.sendEmail = jest.fn()
+
         const { post } = prepostAppointmentsFactory({
           elite2Api,
+          oauthApi,
           appointmentsService,
           logError: () => {},
         })
@@ -523,6 +530,54 @@ describe('Pre post appointments', () => {
         await post(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
+        expect(notifyClient.sendEmail).not.toHaveBeenCalled()
+      })
+
+      it('should try to send email with prison template when prison user has email', async () => {
+        notifyClient.sendEmail = jest.fn()
+
+        oauthApi.userEmail.mockReturnValue({
+          email: 'test@example.com',
+        })
+
+        notifyClient.sendEmail = jest.fn()
+
+        const { post } = prepostAppointmentsFactory({
+          elite2Api,
+          oauthApi,
+          notifyClient,
+          appointmentsService,
+          logError: () => {},
+        })
+
+        req.body = {
+          postAppointment: 'no',
+          preAppointment: 'no',
+        }
+        await post(req, res)
+
+        const personalisation = {
+          startTime: appointmentDetails.startTime,
+          endTime: appointmentDetails.endTime,
+          comment: appointmentDetails.comment,
+          firstName: appointmentDetails.firstName,
+          lastName: appointmentDetails.lastName,
+          offenderNo: appointmentDetails.offenderNo,
+          location: 'Room 3',
+          preAppointmentDuration: 'N/A',
+          postAppointmentDuration: 'N/A',
+          preAppointmentLocation: 'N/A',
+          postAppointmentLocation: 'N/A',
+        }
+
+        expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+          config.notifications.confirmBookingPrisonTemplateId,
+          'test@example.com',
+          {
+            personalisation,
+            reference: null,
+          }
+        )
       })
     })
   })

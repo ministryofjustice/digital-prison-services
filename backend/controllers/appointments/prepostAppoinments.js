@@ -2,6 +2,7 @@ const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
+  notifications: { confirmBookingPrisonTemplateId },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -41,7 +42,14 @@ const getLinks = offenderNo => ({
   cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
 })
 
-const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEventsService, logError }) => {
+const prepostAppointmentsFactory = ({
+  elite2Api,
+  oauthApi,
+  notifyClient,
+  appointmentsService,
+  existingEventsService,
+  logError,
+}) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
@@ -174,7 +182,7 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
+    const { activeCaseLoadId, username } = req.session.userDetails
 
     const {
       postAppointment,
@@ -292,6 +300,32 @@ const prepostAppointmentsFactory = ({ elite2Api, appointmentsService, existingEv
         ...prepostAppointments,
       })
 
+      const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+      if (userEmailData && userEmailData.email) {
+        const personalisation = {
+          startTime,
+          endTime,
+          comment,
+          firstName,
+          lastName,
+          offenderNo,
+          location: locationDescription,
+          postAppointmentDuration: postAppointment === 'yes' ? postAppointmentDuration : 'N/A',
+          preAppointmentDuration: preAppointment === 'yes' ? preAppointmentDuration : 'N/A',
+          preAppointmentLocation:
+            preAppointment === 'yes' ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text : 'N/A',
+          postAppointmentLocation:
+            postAppointment === 'yes'
+              ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
+              : 'N/A',
+        }
+
+        notifyClient.sendEmail(confirmBookingPrisonTemplateId, userEmailData.email, {
+          personalisation,
+          reference: null,
+        })
+      }
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)

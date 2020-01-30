@@ -59,6 +59,7 @@ const contextProperties = require('./contextProperties')
 const oauthClientId = require('./api/oauthClientId')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
+const { notifyClient } = require('./shared/notifyClient')
 
 const router = express.Router()
 
@@ -188,7 +189,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentController({ elite2Api, logError, oauthApi })
+    prepostAppointmentController({ elite2Api, logError, oauthApi, notifyClient })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
@@ -196,7 +197,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
-    selectCourtAppointmentRooms({ elite2Api, logError, oauthApi })
+    selectCourtAppointmentRooms({ elite2Api, logError, oauthApi, notifyClient })
   )
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
