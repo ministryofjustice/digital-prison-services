@@ -6,6 +6,7 @@ const {
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
+const { notifyClient } = require('../../shared/notifyClient')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -49,7 +50,7 @@ const validate = ({
   return errors
 }
 
-const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, logError }) => {
+const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, logError, appointmentsService }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
@@ -172,6 +173,8 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
 
     const { preAppointmentLocation, mainAppointmentLocation, postAppointmentLocation, comment } = req.body
 
+    const { username } = req.session.userDetails
+
     try {
       const appointmentDetails = unpackAppointmentDetails(req)
       const {
@@ -252,6 +255,42 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, appointmentsService, lo
         locationId: mainAppointmentLocation,
         comment,
       })
+
+      const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+      const templateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
+
+      if (userEmailData && userEmailData.email) {
+        const personalisation = {
+          startTime,
+          endTime,
+          comment,
+          firstName,
+          lastName,
+          offenderNo,
+          location: locationTypes.find(l => l.value === Number(mainAppointmentLocation)).text,
+          postAppointmentStartTime:
+            postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.startTime : 'N/A',
+          postAppointmentEndTime:
+            postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.endTime : 'N/A',
+          preAppointmentStartTime:
+            preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.startTime : 'N/A',
+          preAppointmentEndTime: preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.endTime : 'N/A',
+          preAppointmentLocation:
+            preAppointmentRequired === 'yes'
+              ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text
+              : 'N/A',
+          postAppointmentLocation:
+            postAppointmentRequired === 'yes'
+              ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
+              : 'N/A',
+        }
+
+        notifyClient.sendEmail(templateId, userEmailData.email, {
+          personalisation,
+          reference: null,
+        })
+      }
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

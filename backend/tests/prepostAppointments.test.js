@@ -44,7 +44,6 @@ describe('Pre post appointments', () => {
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
     oauthApi.userEmail = jest.fn()
-    notifyClient.sendEmail = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
 
@@ -514,6 +513,8 @@ describe('Pre post appointments', () => {
       })
 
       it('should redirect to confirmation page', async () => {
+        notifyClient.sendEmail = jest.fn()
+
         const { post } = prepostAppointmentsFactory({
           elite2Api,
           oauthApi,
@@ -532,6 +533,8 @@ describe('Pre post appointments', () => {
       })
 
       it('should try to send email with prison template when prison user has email', async () => {
+        notifyClient.sendEmail = jest.fn()
+
         oauthApi.userEmail.mockReturnValue({
           email: 'test@example.com',
         })
@@ -561,61 +564,13 @@ describe('Pre post appointments', () => {
           lastName: appointmentDetails.lastName,
           offenderNo: appointmentDetails.offenderNo,
           location: 'Room 3',
-          postAppointment: 'no',
-          preAppointment: 'no',
-          preAppointmentDuration: undefined,
-          postAppointmentDuration: undefined,
-          preAppointmentLocation: 'No location',
-          postAppointmentLocation: 'No location',
+          preAppointmentDuration: 'N/A',
+          postAppointmentDuration: 'N/A',
+          preAppointmentLocation: 'N/A',
+          postAppointmentLocation: 'N/A',
         }
 
         expect(notifyClient.sendEmail).toHaveBeenCalledWith(prisonTemplateId, 'test@example.com', {
-          personalisation,
-          reference: null,
-        })
-      })
-
-      it('should try to send email with court template when court user has email', async () => {
-        oauthApi.userEmail.mockReturnValue({
-          email: 'test@example.com',
-        })
-
-        req.session.userDetails.authSource = 'auth'
-
-        notifyClient.sendEmail = jest.fn()
-
-        const courtTemplateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
-
-        const { post } = prepostAppointmentsFactory({
-          elite2Api,
-          oauthApi,
-          appointmentsService,
-          logError: () => {},
-        })
-
-        req.body = {
-          postAppointment: 'no',
-          preAppointment: 'no',
-        }
-        await post(req, res)
-
-        const personalisation = {
-          startTime: appointmentDetails.startTime,
-          endTime: appointmentDetails.endTime,
-          comment: appointmentDetails.comment,
-          firstName: appointmentDetails.firstName,
-          lastName: appointmentDetails.lastName,
-          offenderNo: appointmentDetails.offenderNo,
-          location: 'Room 3',
-          postAppointment: 'no',
-          preAppointment: 'no',
-          preAppointmentDuration: undefined,
-          postAppointmentDuration: undefined,
-          preAppointmentLocation: 'No location',
-          postAppointmentLocation: 'No location',
-        }
-
-        expect(notifyClient.sendEmail).toHaveBeenCalledWith(courtTemplateId, 'test@example.com', {
           personalisation,
           reference: null,
         })

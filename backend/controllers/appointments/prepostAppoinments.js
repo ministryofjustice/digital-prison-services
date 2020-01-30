@@ -175,7 +175,7 @@ const prepostAppointmentsFactory = ({ elite2Api, oauthApi, appointmentsService, 
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId, username, authSource } = req.session.userDetails
+    const { activeCaseLoadId, username } = req.session.userDetails
 
     const {
       postAppointment,
@@ -295,9 +295,7 @@ const prepostAppointmentsFactory = ({ elite2Api, oauthApi, appointmentsService, 
 
       const userEmailData = await oauthApi.userEmail(res.locals, username)
 
-      const prisonTemplateId = '391bb0e0-89b3-4aef-b11e-c6550b71fee8'
-      const courtTemplateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
-      const templateId = authSource === 'nomis' ? prisonTemplateId : courtTemplateId
+      const templateId = '391bb0e0-89b3-4aef-b11e-c6550b71fee8'
 
       if (userEmailData && userEmailData.email) {
         const personalisation = {
@@ -308,18 +306,14 @@ const prepostAppointmentsFactory = ({ elite2Api, oauthApi, appointmentsService, 
           lastName,
           offenderNo,
           location: locationDescription,
-          preAppointment,
-          postAppointment,
-          postAppointmentDuration,
-          preAppointmentDuration,
+          postAppointmentDuration: postAppointment === 'yes' ? postAppointmentDuration : 'N/A',
+          preAppointmentDuration: preAppointment === 'yes' ? preAppointmentDuration : 'N/A',
           preAppointmentLocation:
-            preAppointment === 'yes'
-              ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text
-              : 'No location',
+            preAppointment === 'yes' ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text : 'N/A',
           postAppointmentLocation:
             postAppointment === 'yes'
               ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
-              : 'No location',
+              : 'N/A',
         }
 
         notifyClient.sendEmail(templateId, userEmailData.email, {
