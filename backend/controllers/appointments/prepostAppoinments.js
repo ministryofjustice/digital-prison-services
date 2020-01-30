@@ -6,7 +6,6 @@ const {
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
-const { notifyClient } = require('../../shared/notifyClient')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -42,7 +41,14 @@ const getLinks = offenderNo => ({
   cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
 })
 
-const prepostAppointmentsFactory = ({ elite2Api, oauthApi, appointmentsService, existingEventsService, logError }) => {
+const prepostAppointmentsFactory = ({
+  elite2Api,
+  oauthApi,
+  notifyClient,
+  appointmentsService,
+  existingEventsService,
+  logError,
+}) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)

@@ -6,7 +6,6 @@ const {
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
-const { notifyClient } = require('../../shared/notifyClient')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -50,7 +49,7 @@ const validate = ({
   return errors
 }
 
-const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, logError, appointmentsService }) => {
+const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient, logError, appointmentsService }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)

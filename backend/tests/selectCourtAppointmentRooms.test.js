@@ -334,7 +334,13 @@ describe('Select court appointment rooms', () => {
 
       const courtTemplateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
 
-      const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, oauthApi, logError, appointmentsService })
+      const { post } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        oauthApi,
+        notifyClient,
+        logError,
+        appointmentsService,
+      })
 
       req.body = {
         preAppointmentLocation: '1',

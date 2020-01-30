@@ -546,6 +546,7 @@ describe('Pre post appointments', () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
           oauthApi,
+          notifyClient,
           appointmentsService,
           logError: () => {},
         })
