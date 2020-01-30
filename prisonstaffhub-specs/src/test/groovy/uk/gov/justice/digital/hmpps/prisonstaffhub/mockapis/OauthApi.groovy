@@ -158,6 +158,18 @@ class OauthApi extends WireMockRule {
                         ]))))
     }
 
+    void stubGetEmail(username, email='') {
+        this.stubFor(
+                get("/auth/api/user/${username}/email")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson([
+                                                email           : email,
+                                        ]))))
+    }
+
     void stubGetMyRoles(def roles = ['ROLE']) {
         this.stubFor(
                 get('/auth/api/user/me/roles')

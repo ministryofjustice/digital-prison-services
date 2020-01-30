@@ -27,8 +27,8 @@ const CurrentIncentiveLevel = ({ level, days, nextReviewDate, userCanMaintainIep
           <div>
             <Button
               buttonColour={BLUE}
-              onClick={() => history.push(`incentive-level-details/change-iep`)}
-              data-qa="change-iep"
+              onClick={() => history.push(`incentive-level-details/change-incentive-level`)}
+              data-qa="change-incentive-level"
             >
               Change Incentive Level
             </Button>

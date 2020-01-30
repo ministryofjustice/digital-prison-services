@@ -110,7 +110,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/api/offenders/:offenderNumber/adjudications', controller.getAdjudications)
   router.use('/api/offenders/:offenderNumber/iep-details', controller.getIepDetails)
   router.use('/api/iep-levels', controller.getPossibleLevels)
-  router.post('/api/offenders/:offenderNumber/change-iep-level', controller.changeIepLevel)
+  router.post('/api/offenders/:offenderNumber/change-incentive-level', controller.changeIepLevel)
   router.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
   router.use('/api/attendance/batch', controller.batchUpdateAttendance)
   router.use('/api/attendance', controller.updateAttendance)
