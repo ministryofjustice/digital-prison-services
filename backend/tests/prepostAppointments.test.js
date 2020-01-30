@@ -1,5 +1,6 @@
 const { prepostAppointmentsFactory } = require('../controllers/appointments/prepostAppoinments')
 const { notifyClient } = require('../shared/notifyClient')
+const config = require('../config')
 
 describe('Pre post appointments', () => {
   const elite2Api = {}
@@ -541,8 +542,6 @@ describe('Pre post appointments', () => {
 
         notifyClient.sendEmail = jest.fn()
 
-        const prisonTemplateId = '391bb0e0-89b3-4aef-b11e-c6550b71fee8'
-
         const { post } = prepostAppointmentsFactory({
           elite2Api,
           oauthApi,
@@ -571,10 +570,14 @@ describe('Pre post appointments', () => {
           postAppointmentLocation: 'N/A',
         }
 
-        expect(notifyClient.sendEmail).toHaveBeenCalledWith(prisonTemplateId, 'test@example.com', {
-          personalisation,
-          reference: null,
-        })
+        expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+          config.notifications.confirmBookingPrisonTemplateId,
+          'test@example.com',
+          {
+            personalisation,
+            reference: null,
+          }
+        )
       })
     })
   })

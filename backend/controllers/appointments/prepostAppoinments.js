@@ -2,6 +2,7 @@ const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
+  notifications: { confirmBookingPrisonTemplateId },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -301,8 +302,6 @@ const prepostAppointmentsFactory = ({
 
       const userEmailData = await oauthApi.userEmail(res.locals, username)
 
-      const templateId = '391bb0e0-89b3-4aef-b11e-c6550b71fee8'
-
       if (userEmailData && userEmailData.email) {
         const personalisation = {
           startTime,
@@ -322,7 +321,7 @@ const prepostAppointmentsFactory = ({
               : 'N/A',
         }
 
-        notifyClient.sendEmail(templateId, userEmailData.email, {
+        notifyClient.sendEmail(confirmBookingPrisonTemplateId, userEmailData.email, {
           personalisation,
           reference: null,
         })

@@ -1,5 +1,6 @@
 const { selectCourtAppointmentRoomsFactory } = require('../controllers/appointments/selectCourtAppointmentRooms')
 const { notifyClient } = require('../shared/notifyClient')
+const config = require('../config')
 
 describe('Select court appointment rooms', () => {
   const elite2Api = {}
@@ -332,8 +333,6 @@ describe('Select court appointment rooms', () => {
         email: 'test@example.com',
       })
 
-      const courtTemplateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
-
       const { post } = selectCourtAppointmentRoomsFactory({
         elite2Api,
         oauthApi,
@@ -367,10 +366,14 @@ describe('Select court appointment rooms', () => {
         postAppointmentLocation: 'Room 3',
       }
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(courtTemplateId, 'test@example.com', {
-        personalisation,
-        reference: null,
-      })
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        config.notifications.confirmBookingCourtTemplateId,
+        'test@example.com',
+        {
+          personalisation,
+          reference: null,
+        }
+      )
     })
   })
 })

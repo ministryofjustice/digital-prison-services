@@ -2,6 +2,7 @@ const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
+  notifications: { confirmBookingCourtTemplateId },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -257,8 +258,6 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
 
       const userEmailData = await oauthApi.userEmail(res.locals, username)
 
-      const templateId = '7f44cd94-4a74-4b9d-aff8-386fec34bd2e'
-
       if (userEmailData && userEmailData.email) {
         const personalisation = {
           startTime,
@@ -285,7 +284,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
               : 'N/A',
         }
 
-        notifyClient.sendEmail(templateId, userEmailData.email, {
+        notifyClient.sendEmail(confirmBookingCourtTemplateId, userEmailData.email, {
           personalisation,
           reference: null,
         })
