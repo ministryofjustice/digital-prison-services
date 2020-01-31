@@ -20,6 +20,7 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   const get = (context, path) => client.get(context, path).then(response => response.body)
   const currentUser = context => get(context, '/api/user/me')
   const userRoles = context => get(context, '/api/user/me/roles')
+  const userEmail = (context, username) => get(context, `/api/user/${username}/email`)
 
   const oauthAxios = axios.create({
     baseURL: url,
@@ -82,6 +83,7 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   return {
     currentUser,
     userRoles,
+    userEmail,
     refresh,
     makeTokenRequest,
     // Expose the internals so they can be Monkey Patched for testing. Oo oo oo.

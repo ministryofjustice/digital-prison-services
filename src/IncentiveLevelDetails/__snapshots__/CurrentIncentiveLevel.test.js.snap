@@ -49,7 +49,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       <div>
         <button
           className="sc-htpNat dZoydM"
-          data-qa="change-iep"
+          data-qa="change-incentive-level"
           disabled={false}
           onClick={[Function]}
         >

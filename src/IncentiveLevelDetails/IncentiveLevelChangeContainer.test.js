@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme/build'
-import IepChangeContainer from './IepChangeContainer'
+import IncentiveLevelChangeContainer from './IncentiveLevelChangeContainer'
 import OffenderPage from '../OffenderPage'
 
 const initialState = {
@@ -64,7 +64,7 @@ describe('Incentive Level change container', () => {
     store.getState.mockReturnValue(initialState)
 
     const wrapper = shallow(
-      <IepChangeContainer
+      <IncentiveLevelChangeContainer
         store={store}
         handleError={jest.fn()}
         setLoadedDispatch={jest.fn()}
@@ -78,6 +78,6 @@ describe('Incentive Level change container', () => {
 
     expect(page.length).toBe(1)
     expect(page.getElement().props.title()).toBe('Change Incentive Level')
-    expect(page.find('Connect(IepChangeForm)').length).toBe(1)
+    expect(page.find('Connect(IncentiveLevelChangeForm)').length).toBe(1)
   })
 })

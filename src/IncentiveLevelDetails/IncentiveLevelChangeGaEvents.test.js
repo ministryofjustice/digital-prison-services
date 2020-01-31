@@ -1,4 +1,4 @@
-import { iepChangeGaEvent, LevelSelected, ChangeAbandonment } from './IepChangeGaEvents'
+import { iepChangeGaEvent, LevelSelected, ChangeAbandonment } from './IncentiveLevelChangeGaEvents'
 
 describe('Bulk Incentive Level change ga events', () => {
   it('should create an ga event of type of level changed', () => {

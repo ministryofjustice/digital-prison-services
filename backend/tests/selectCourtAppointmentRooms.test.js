@@ -1,7 +1,10 @@
 const { selectCourtAppointmentRoomsFactory } = require('../controllers/appointments/selectCourtAppointmentRooms')
+const { notifyClient } = require('../shared/notifyClient')
+const config = require('../config')
 
 describe('Select court appointment rooms', () => {
   const elite2Api = {}
+  const oauthApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
 
@@ -28,7 +31,7 @@ describe('Select court appointment rooms', () => {
     comment: 'Test',
     locationDescription: 'Room 3',
     appointmentTypeDescription: 'Videolink',
-    locationTypes: [{ value: 1, text: 'Room 3' }],
+    locationTypes: [{ value: 1, text: 'Room 3' }, { value: 2, text: 'Room 2' }, { value: 3, text: 'Room 3' }],
     date: '10/10/2019',
     preAppointmentRequired: 'yes',
     postAppointmentRequired: 'yes',
@@ -39,6 +42,7 @@ describe('Select court appointment rooms', () => {
     elite2Api.getAgencyDetails = jest.fn()
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
+    oauthApi.userEmail = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     appointmentsService.getLocations = jest.fn()
 
@@ -193,6 +197,7 @@ describe('Select court appointment rooms', () => {
         appointmentsService,
         logError,
         existingEventsService,
+        oauthApi,
       })
 
       req.body = {
@@ -363,7 +368,13 @@ describe('Select court appointment rooms', () => {
       })
 
       it('should not request pre or post appointments when "no" has been selected', async () => {
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          appointmentsService,
+          logError,
+          notifyClient,
+          oauthApi,
+        })
 
         req.flash.mockImplementation(() => [
           {
@@ -405,7 +416,8 @@ describe('Select court appointment rooms', () => {
       })
 
       it('should redirect to confirmation page', async () => {
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+        notifyClient.sendEmail = jest.fn()
+        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, oauthApi, logError, appointmentsService })
 
         req.body = {
           selectPreAppointmentLocation: '1',
@@ -417,7 +429,68 @@ describe('Select court appointment rooms', () => {
         await post(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
+        expect(notifyClient.sendEmail).not.toHaveBeenCalled()
       })
+    })
+
+    it('should try to send email with court template when court user has email', async () => {
+      notifyClient.sendEmail = jest.fn()
+
+      req.flash.mockImplementation(() => [
+        {
+          ...appointmentDetails,
+          preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [{ value: 2, text: 'Room 2' }],
+          postLocations: [{ value: 3, text: 'Room 3' }],
+        },
+      ])
+
+      oauthApi.userEmail.mockReturnValue({
+        email: 'test@example.com',
+      })
+
+      const { post } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        oauthApi,
+        notifyClient,
+        logError,
+        appointmentsService,
+        existingEventsService,
+      })
+
+      req.body = {
+        selectPreAppointmentLocation: '1',
+        selectMainAppointmentLocation: '2',
+        selectPostAppointmentLocation: '3',
+        comment: 'Test',
+      }
+
+      await post(req, res)
+
+      const personalisation = {
+        startTime: appointmentDetails.startTime,
+        endTime: appointmentDetails.endTime,
+        comment: appointmentDetails.comment,
+        firstName: appointmentDetails.firstName,
+        lastName: appointmentDetails.lastName,
+        offenderNo: appointmentDetails.offenderNo,
+        location: 'Room 2',
+        preAppointmentStartTime: '2017-10-10T10:40:00',
+        preAppointmentEndTime: '2017-10-10T11:00',
+        postAppointmentStartTime: '2017-10-10T14:00',
+        postAppointmentEndTime: '2017-10-10T14:20:00',
+        preAppointmentLocation: 'Room 1',
+        postAppointmentLocation: 'Room 3',
+      }
+
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        config.notifications.confirmBookingCourtTemplateId,
+        'test@example.com',
+        {
+          personalisation,
+          reference: null,
+        }
+      )
     })
   })
 })

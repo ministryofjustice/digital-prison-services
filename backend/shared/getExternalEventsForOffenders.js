@@ -1,4 +1,4 @@
-const { sortByDateTime, isViewableFlag } = require('../utils')
+const { sortByDateTime, isViewableFlag, isAfterToday } = require('../utils')
 
 const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, formattedDate }) =>
   Promise.all([
@@ -14,7 +14,10 @@ const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) =>
     releaseScheduledData &&
       releaseScheduledData.length &&
       releaseScheduledData.filter(
-        release => release.offenderNo === offenderNo && release.sentenceDetail.releaseDate === formattedDate
+        release =>
+          release.offenderNo === offenderNo &&
+          release.sentenceDetail.releaseDate === formattedDate &&
+          !isAfterToday(formattedDate)
       )[0]
   )
 
@@ -47,9 +50,12 @@ const latestCompletedCourtEvent = events => {
   return event && toCourtEvent(event)
 }
 
-const getOffenderCourtEvents = (courtEvents, offenderNo) => {
+const getOffenderCourtEvents = (courtEvents, offenderNo, formattedDate) => {
   const events =
-    (courtEvents && courtEvents.length && courtEvents.filter(courtEvent => courtEvent.offenderNo === offenderNo)) || []
+    (courtEvents &&
+      courtEvents.length &&
+      courtEvents.filter(courtEvent => courtEvent.offenderNo === offenderNo && !isAfterToday(formattedDate))) ||
+    []
 
   const scheduledAndExpiredCourtEvents = events
     .filter(event => event.eventStatus !== 'COMP')
@@ -78,10 +84,10 @@ const transferStatus = eventStatus => {
   }
 }
 
-const scheduledTransfers = (transfers, offenderNo) =>
+const scheduledTransfers = (transfers, offenderNo, formattedDate) =>
   (transfers &&
     transfers.length &&
-    transfers.filter(transfer => transfer.offenderNo === offenderNo).map(event => ({
+    transfers.filter(transfer => transfer.offenderNo === offenderNo && !isAfterToday(formattedDate)).map(event => ({
       eventId: event.eventId,
       eventDescription: 'Transfer scheduled',
       ...transferStatus(event.eventStatus),
@@ -118,8 +124,8 @@ const reduceToMap = (
   offenderNumbers.reduce((map, offenderNumber) => {
     const offenderData = {
       releaseScheduled: releaseScheduled(releaseScheduleData, offenderNumber, formattedDate),
-      courtEvents: getOffenderCourtEvents(courtEventData, offenderNumber),
-      scheduledTransfers: scheduledTransfers(transferData, offenderNumber),
+      courtEvents: getOffenderCourtEvents(courtEventData, offenderNumber, formattedDate),
+      scheduledTransfers: scheduledTransfers(transferData, offenderNumber, formattedDate),
       alertFlags: selectAlertFlags(alertData, offenderNumber),
       category: selectCategory(assessmentData, offenderNumber),
     }

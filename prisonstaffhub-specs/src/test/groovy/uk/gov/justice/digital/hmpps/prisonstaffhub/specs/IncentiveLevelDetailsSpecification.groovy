@@ -4,11 +4,11 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IepDetails
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IncentiveLevelDetails
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class IepDetailsSpecification extends BrowserReportingSpec {
+class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
 
     static final NOTM_URL = 'http://localhost:20200/'
 
@@ -54,7 +54,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         when: "I view the Incentive Level history page"
-        to IepDetails
+        to IncentiveLevelDetails
 
         then: "I should be presented with results"
 
@@ -96,7 +96,7 @@ class IepDetailsSpecification extends BrowserReportingSpec {
                                         '12/10/2018']
 
 
-        assert(!($('button[data-qa="change-iep"]').isDisplayed()))
+        assert(!($('button[data-qa="change-incentive-level"]').isDisplayed()))
     }
 
     def "should present Incentive Level history with change Incentive Level button"() {
@@ -133,10 +133,10 @@ class IepDetailsSpecification extends BrowserReportingSpec {
         fixture.loginAsMaintainIep(ITAG_USER)
 
         when: "I view the Incentive Level history page as a use with the MAINTAIN_IEP role"
-        to IepDetails
+        to IncentiveLevelDetails
 
         then: "I should see the Change Incentive Level button"
 
-        assert(($('button[data-qa="change-iep"]').isDisplayed()))
+        assert(($('button[data-qa="change-incentive-level"]').isDisplayed()))
     }
 }

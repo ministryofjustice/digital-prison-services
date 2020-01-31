@@ -79,9 +79,6 @@ env:
   - name: API_WHEREABOUTS_ENDPOINT_URL
     value: {{ .Values.env.API_WHEREABOUTS_ENDPOINT_URL | quote }}
 
-  - name: IEP_CHANGE_LINK_ENABLED
-    value: {{ .Values.env.IEP_CHANGE_LINK_ENABLED | quote }}
-
   - name: UPDATE_ATTENDANCE_PRISONS
     value: {{ .Values.env.UPDATE_ATTENDANCE_PRISONS | quote }}
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import testRenderer from 'react-test-renderer'
-import IepHistory from './IepHistory'
+import IncentiveLevelHistory from './IncentiveLevelHistory'
 
 const initialState = {
   iepHistory: {
@@ -39,7 +39,7 @@ describe('Incentive Level history', () => {
   })
 
   it('should render the Incentive Level history table correctly', () => {
-    const wrapper = testRenderer.create(<IepHistory store={store} />).toJSON()
+    const wrapper = testRenderer.create(<IncentiveLevelHistory store={store} />).toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })

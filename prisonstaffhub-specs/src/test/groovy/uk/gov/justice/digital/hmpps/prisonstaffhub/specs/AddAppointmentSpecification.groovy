@@ -57,6 +57,8 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
     def "should handle video link bookings"() {
         setupTests()
 
+        oauthApi.stubGetEmail('ITAG_USER')
+
         elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
         elite2api.stubLocation(1)
         elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)

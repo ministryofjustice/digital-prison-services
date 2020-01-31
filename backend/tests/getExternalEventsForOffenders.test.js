@@ -402,4 +402,82 @@ describe('External events', () => {
       { eventDescription: 'Court visit scheduled', eventId: 1, complete: true },
     ])
   })
+
+  describe('when the search date is in the future', () => {
+    const thisTimeTomorrow = switchDateFormat(moment().add(1, 'day'))
+
+    it('should not return scheduled transfers', async () => {
+      elite2Api.getExternalTransfers.mockReturnValueOnce([
+        {
+          eventId: 1,
+          firstName: 'OFFENDER',
+          lastName: 'ONE',
+          offenderNo: 'A1234AA',
+          startTime: thisTimeTomorrow,
+        },
+      ])
+
+      const response = await externalEvents(
+        elite2Api,
+        {},
+        {
+          agencyId: 'LEI',
+          offenderNumbers: [offenderWithData],
+          formattedDate: thisTimeTomorrow,
+        }
+      )
+
+      expect(response.get(offenderWithData).scheduledTransfers.length).toBe(0)
+    })
+
+    it('should not return scheduled court visits', async () => {
+      elite2Api.getCourtEvents.mockReturnValueOnce([
+        {
+          eventId: 1,
+          eventDescription: 'Court Appearance - Police Product Order',
+          eventStatus: 'SCH',
+          eventType: 'COURT',
+          firstName: 'TEST',
+          lastName: 'OFFENDER',
+          offenderNo: 'A1234AA',
+          startTime: thisTimeTomorrow,
+        },
+      ])
+
+      const response = await externalEvents(
+        elite2Api,
+        {},
+        {
+          agencyId: 'LEI',
+          offenderNumbers: [offenderWithData],
+          formattedDate: thisTimeTomorrow,
+        }
+      )
+
+      expect(response.get(offenderWithData).courtEvents.length).toBe(0)
+    })
+
+    it('should not return release dates', async () => {
+      elite2Api.getSentenceData.mockReturnValueOnce([
+        {
+          offenderNo: 'A1234AA',
+          sentenceDetail: {
+            releaseDate: thisTimeTomorrow,
+          },
+        },
+      ])
+
+      const response = await externalEvents(
+        elite2Api,
+        {},
+        {
+          agencyId: 'LEI',
+          offenderNumbers: [offenderWithData],
+          formattedDate: thisTimeTomorrow,
+        }
+      )
+
+      expect(response.get(offenderWithData).releaseScheduled).toBe(false)
+    })
+  })
 })

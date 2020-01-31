@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import testRenderer from 'react-test-renderer'
 
-import IepHistoryForm from './IepHistoryForm'
+import IncentiveLevelHistoryForm from './IncentiveLevelHistoryForm'
 
 const initialState = {
   iepHistory: {
@@ -43,7 +43,9 @@ describe('Incentive Level history Form', () => {
   })
 
   it('should render the Incentive Level history table correctly', () => {
-    const wrapper = testRenderer.create(<IepHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />).toJSON()
+    const wrapper = testRenderer
+      .create(<IncentiveLevelHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />)
+      .toJSON()
 
     expect(wrapper).toMatchSnapshot()
   })

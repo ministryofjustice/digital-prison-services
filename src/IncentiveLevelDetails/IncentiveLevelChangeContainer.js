@@ -7,10 +7,10 @@ import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 import { setIepHistoryResults, setPossibleIepLevels } from '../redux/actions'
 import OffenderPage from '../OffenderPage/OffenderPage'
-import IepChangeForm from './IepChangeForm'
-import { ChangeAbandonment, LevelSelected } from './IepChangeGaEvents'
+import IncentiveLevelChangeForm from './IncentiveLevelChangeForm'
+import { ChangeAbandonment, LevelSelected } from './IncentiveLevelChangeGaEvents'
 
-class IepChangeContainer extends Component {
+class IncentiveLevelChangeContainer extends Component {
   componentDidMount() {
     this.getIepDetails()
   }
@@ -66,7 +66,7 @@ class IepChangeContainer extends Component {
     const level = levels.find(l => l.value === values.level)
 
     try {
-      await axios.post(`/api/offenders/${offenderNo}/change-iep-level`, {
+      await axios.post(`/api/offenders/${offenderNo}/change-incentive-level`, {
         iepLevel: values.level,
         comment: values.reason,
       })
@@ -110,19 +110,19 @@ class IepChangeContainer extends Component {
             <strong>{currentIepLevel}</strong>
           </GridCol>
         </GridRow>
-        <IepChangeForm cancelHandler={this.cancel} levels={levels} changeIepLevel={this.changeIepLevel} />
+        <IncentiveLevelChangeForm cancelHandler={this.cancel} levels={levels} changeIepLevel={this.changeIepLevel} />
       </OffenderPage>
     )
   }
 }
 
-IepChangeContainer.defaultProps = {
+IncentiveLevelChangeContainer.defaultProps = {
   currentIepLevel: '',
   levels: [],
   offenderNo: null,
 }
 
-IepChangeContainer.propTypes = {
+IncentiveLevelChangeContainer.propTypes = {
   offenderNo: PropTypes.string,
   currentIepLevel: PropTypes.string,
   activeCaseLoadId: PropTypes.string.isRequired,
@@ -167,4 +167,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(IepChangeContainer)
+)(IncentiveLevelChangeContainer)

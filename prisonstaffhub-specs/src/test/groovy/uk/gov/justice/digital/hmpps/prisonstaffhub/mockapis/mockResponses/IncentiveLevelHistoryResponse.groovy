@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses
 
-class IepHistoryResponse {
+class IncentiveLevelHistoryResponse {
     static response1 = [
         bookingId: -3,
         iepDate: "2017-10-12",

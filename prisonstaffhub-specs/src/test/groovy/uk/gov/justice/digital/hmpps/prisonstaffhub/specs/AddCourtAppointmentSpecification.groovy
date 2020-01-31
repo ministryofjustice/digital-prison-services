@@ -110,5 +110,7 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubOffenderDetails(offenderNo, Map.of("firstName", "john","lastName", "doe","bookingId", 1,"offenderNo", offenderNo))
         elite2api.stubAppointmentTypes([Map.of("code", "VLB", "description", "Video link booking")])
         elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
+        oauthApi.stubGetEmail('COURT_USER')
+        oauthApi.stubGetEmail('ITAG_USER')
     }
 }

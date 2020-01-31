@@ -15,7 +15,7 @@ const { getConfiguration } = require('./controllers/getConfig')
 const houseblockLocationsFactory = require('./controllers/attendance/houseblockLocations').getHouseblockLocationsFactory
 const activityLocationsFactory = require('./controllers/attendance/activityLocations').getActivityLocationsFactory
 const activityListFactory = require('./controllers/attendance/activityList').getActivityListFactory
-const iepDetailsFactory = require('./controllers/iepDetails').getIepDetailsFactory
+const iepDetailsFactory = require('./controllers/incentiveLevelDetails').getIepDetailsFactory
 const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
 const { attendanceFactory } = require('./controllers/attendance/attendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
@@ -46,6 +46,7 @@ const prepostAppointmentController = require('./controllers/appointments/prepost
 const selectCourtAppointmentRooms = require('./controllers/appointments/selectCourtAppointmentRoomsController')
 
 const prisonerSearchController = require('./controllers/search/prisonerSearchController')
+const requestBookingController = require('./controllers/appointments/requestBookingController')
 const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResultsController')
 
 const getExistingEventsController = require('./controllers/attendance/getExistingEventsController')
@@ -58,6 +59,7 @@ const contextProperties = require('./contextProperties')
 const oauthClientId = require('./api/oauthClientId')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
+const { notifyClient } = require('./shared/notifyClient')
 
 const router = express.Router()
 
@@ -108,7 +110,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/api/offenders/:offenderNumber/adjudications', controller.getAdjudications)
   router.use('/api/offenders/:offenderNumber/iep-details', controller.getIepDetails)
   router.use('/api/iep-levels', controller.getPossibleLevels)
-  router.post('/api/offenders/:offenderNumber/change-iep-level', controller.changeIepLevel)
+  router.post('/api/offenders/:offenderNumber/change-incentive-level', controller.changeIepLevel)
   router.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
   router.use('/api/attendance/batch', controller.batchUpdateAttendance)
   router.use('/api/attendance', controller.updateAttendance)
@@ -187,7 +189,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentController({ elite2Api, logError, oauthApi })
+    prepostAppointmentController({ elite2Api, logError, oauthApi, notifyClient })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
@@ -195,7 +197,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
-    selectCourtAppointmentRooms({ elite2Api, logError, oauthApi })
+    selectCourtAppointmentRooms({ elite2Api, logError, oauthApi, notifyClient })
   )
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
@@ -208,6 +210,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
       title: 'Videolink appointment booking',
     })
   })
+
+  router.use('/request-booking', requestBookingController({ logError }))
 
   return router
 }
