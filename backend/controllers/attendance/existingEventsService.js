@@ -111,8 +111,6 @@ module.exports = elite2Api => {
       return findOverlappingSlots(slots).length > 0
     })
 
-    console.error({ eventsAtLocations })
-
     return locations.filter(location => !fullyBookedLocations.includes(location))
   }
 

@@ -2,7 +2,6 @@ const { appointmentsServiceFactory } = require('../controllers/appointments/appo
 
 describe('Appointments service', () => {
   const elite2Api = {}
-  const existingEventsService = {}
   const context = {}
   const agency = 'LEI'
   const appointmentTypes = [{ code: 'ACTI', description: 'Activities' }]
@@ -35,9 +34,7 @@ describe('Appointments service', () => {
     elite2Api.getAppointmentTypes = jest.fn()
     elite2Api.addAppointments = jest.fn()
 
-    existingEventsService.getExistingEventsForLocation = jest.fn()
-
-    service = appointmentsServiceFactory(elite2Api, existingEventsService)
+    service = appointmentsServiceFactory(elite2Api)
   })
 
   it('should make a request for appointment locations and types', async () => {
