@@ -9,8 +9,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddCourtAppointmentPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkCourtPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SelectCourtAppointmentRoomsPage
 
 import java.time.LocalDate
@@ -28,13 +28,12 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
     TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
 
     def offenderNo = "A12345"
-    def offenders = [offenderNo]
     def date = LocalDate.now().plusDays(1).format("dd/MM/YYYY")
     def isoFormatDate = LocalDate.now().plusDays(1).format("YYYY-MM-dd")
     def appointmentLocations = [
-            Map.of("locationId", 1,"locationType", "COURT","description", "Room 1","userDescription","Room 1","agencyId","LEI"),
-            Map.of("locationId", 2,"locationType", "COURT","description", "Room 2","userDescription","Room 2","agencyId","LEI"),
-            Map.of("locationId", 3,"locationType", "COURT","description", "Room 3","userDescription","Room 3","agencyId","LEI")
+            Map.of("locationId", 1,"locationType", "VIDE","description", "Room 1","userDescription","Room 1","agencyId","LEI"),
+            Map.of("locationId", 2,"locationType", "VIDE","description", "Room 2","userDescription","Room 2","agencyId","LEI"),
+            Map.of("locationId", 3,"locationType", "VIDE","description", "Room 3","userDescription","Room 3","agencyId","LEI")
     ]
 
     def "should go to select court appointment rooms page and then redirect to prison video link confirmation page"() {
@@ -59,9 +58,9 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         at SelectCourtAppointmentRoomsPage
 
         and: "I fill out the form"
-        selectRoomsForm.preAppointmentLocation = 1
-        selectRoomsForm.mainAppointmentLocation = 2
-        selectRoomsForm.postAppointmentLocation = 3
+        selectRoomsForm.selectPreAppointmentLocation = 1
+        selectRoomsForm.selectMainAppointmentLocation = 2
+        selectRoomsForm.selectPostAppointmentLocation = 3
 
         selectRoomsSubmitButton.click()
 
@@ -91,7 +90,7 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         at SelectCourtAppointmentRoomsPage
 
         and: "I fill out the form"
-        selectRoomsForm.mainAppointmentLocation = 2
+        selectRoomsForm.selectMainAppointmentLocation = 2
 
         selectRoomsSubmitButton.click()
 
@@ -100,28 +99,15 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
     }
 
     def setupTests() {
-        elite2api.stubSentenceData(offenders, date,true)
-        elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
-        elite2api.stubActivities(Caseload.LEI, null, date, offenders)
-        elite2api.stubVisits(Caseload.LEI, null, date, offenders)
-        elite2api.stubExternalTransfers(Caseload.LEI, offenders, date, true)
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'VISIT')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'APP')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 2, null, isoFormatDate, 'VISIT')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 2, null, isoFormatDate, 'APP')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 3, null, isoFormatDate, 'VISIT')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 3, null, isoFormatDate, 'APP')
-        elite2api.stubLocation(1)
-        elite2api.stubLocation(2)
-        elite2api.stubLocation(3)
-        elite2api.stubProgEventsAtLocation(1, null, isoFormatDate, ActivityResponse.appointments, false)
-        elite2api.stubProgEventsAtLocation(2, null, isoFormatDate, ActivityResponse.appointments, false)
-        elite2api.stubProgEventsAtLocation(3, null, isoFormatDate, ActivityResponse.appointments, false)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, isoFormatDate, 'APP', ActivityResponse.appointments )
+        elite2api.stubUsageAtLocation(Caseload.LEI, 2, null, isoFormatDate, 'APP', ActivityResponse.appointments)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 3, null, isoFormatDate, 'APP', ActivityResponse.appointments)
+        elite2api.stubAppointmentLocations(Caseload.LEI.toString(), appointmentLocations )
+
         elite2api.stubSingleAppointment(1)
         elite2api.stubSingleAppointment(2)
         elite2api.stubSingleAppointment(3)
         elite2api.stubOffenderDetails(offenderNo, Map.of("firstName", "john","lastName", "doe","bookingId", 1,"offenderNo", offenderNo))
-        elite2api.stubAppointmentLocations('LEI', appointmentLocations)
         elite2api.stubAppointmentTypes([Map.of("code", "VLB", "description", "Video link booking")])
         elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
     }

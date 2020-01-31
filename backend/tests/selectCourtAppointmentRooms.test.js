@@ -3,6 +3,7 @@ const { selectCourtAppointmentRoomsFactory } = require('../controllers/appointme
 describe('Select court appointment rooms', () => {
   const elite2Api = {}
   const appointmentsService = {}
+  const existingEventsService = {}
 
   const req = {
     originalUrl: 'http://localhost',
@@ -39,6 +40,10 @@ describe('Select court appointment rooms', () => {
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
+    appointmentsService.getLocations = jest.fn()
+
+    existingEventsService.getAppointmentsAtLocations = jest.fn()
+    existingEventsService.getAvailableLocations = jest.fn()
 
     req.flash = jest.fn()
     res.render = jest.fn()
@@ -63,7 +68,12 @@ describe('Select court appointment rooms', () => {
 
   describe('index', () => {
     it('should return correct links', async () => {
-      const { index } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      const { index } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
 
       await index(req, res)
 
@@ -76,20 +86,34 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should return locations', async () => {
-      const { index } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      existingEventsService.getAvailableLocations.mockReturnValue([{ value: 1, text: 'Room 3' }])
+
+      const { index } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
 
       await index(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'addAppointment/selectCourtAppointmentRooms.njk',
         expect.objectContaining({
-          locations: [{ value: 1, text: 'Room 3' }],
+          mainLocations: [{ value: 1, text: 'Room 3' }],
+          preLocations: [{ value: 1, text: 'Room 3' }],
+          postLocations: [{ value: 1, text: 'Room 3' }],
         })
       )
     })
 
     it('should extract appointment details', async () => {
-      const { index } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      const { index } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
 
       await index(req, res)
 
@@ -108,7 +132,11 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should throw and log an error when appointment details are missing from flash', async () => {
-      const { index } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      const { index } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+      })
 
       req.flash.mockImplementation(() => [])
 
@@ -124,8 +152,22 @@ describe('Select court appointment rooms', () => {
   })
 
   describe('post', () => {
-    it('should validate presence of room locations', async () => {
-      const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+    it('should return a validation message if the pre or post appointment location is the same as the main appointment location', async () => {
+      req.body = {
+        selectPreAppointmentLocation: '1',
+        selectMainAppointmentLocation: '1',
+        selectPostAppointmentLocation: '1',
+        preAppointmentRequired: 'yes',
+        postAppointmentRequired: 'yes',
+        comment: 'Test',
+      }
+
+      const { post } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
 
       await post(req, res)
 
@@ -133,16 +175,57 @@ describe('Select court appointment rooms', () => {
         'addAppointment/selectCourtAppointmentRooms.njk',
         expect.objectContaining({
           errors: [
-            { text: 'Select a room for the pre appointment', href: '#preAppointmentLocation' },
-            { text: 'Select a room for the main appointment', href: '#mainAppointmentLocation' },
-            { text: 'Select a room for the post appointment', href: '#postAppointmentLocation' },
+            {
+              text: 'Select a room other than the one used for the main appointment',
+              href: '#selectPostAppointmentLocation',
+            },
+            {
+              text: 'Select a room other than the one used for the main appointment',
+              href: '#selectPreAppointmentLocation',
+            },
+          ],
+        })
+      )
+    })
+    it('should validate presence of room locations', async () => {
+      const { post } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
+
+      req.body = {
+        selectPreAppointmentLocation: null,
+        selectMainAppointmentLocation: null,
+        selectPostAppointmentLocation: null,
+        preAppointmentRequired: 'yes',
+        postAppointmentRequired: 'yes',
+        comment: 'Test',
+      }
+
+      await post(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'addAppointment/selectCourtAppointmentRooms.njk',
+        expect.objectContaining({
+          errors: [
+            { text: 'Select a room for the main appointment', href: '#selectMainAppointmentLocation' },
+            { text: 'Select a room for the pre appointment', href: '#selectPreAppointmentLocation' },
+            { text: 'Select a room for the post appointment', href: '#selectPostAppointmentLocation' },
           ],
         })
       )
     })
 
     it('should return selected form values on validation errors', async () => {
-      const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      existingEventsService.getAvailableLocations.mockReturnValue([{ value: 1, text: 'Room 3' }])
+      const { post } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
       const comment = 'Some supporting comment text'
 
       req.body = { comment }
@@ -158,7 +241,22 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should return locations, links and summary details on validation errors', async () => {
-      const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      existingEventsService.getAvailableLocations.mockReturnValue([{ value: 1, text: 'Room 3' }])
+      const { post } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        logError,
+        existingEventsService,
+      })
+
+      req.flash.mockImplementation(() => [
+        {
+          ...appointmentDetails,
+          mainLocations: [{ value: 1, text: 'Room 3' }],
+          postLocations: [{ value: 1, text: 'Room 3' }],
+          preLocations: [{ value: 1, text: 'Room 3' }],
+        },
+      ])
 
       await post(req, res)
 
@@ -166,7 +264,9 @@ describe('Select court appointment rooms', () => {
         'addAppointment/selectCourtAppointmentRooms.njk',
         expect.objectContaining({
           cancelLink: '/MDI/offenders/A12345/add-court-appointment/select-rooms/cancel',
-          locations: [{ value: 1, text: 'Room 3' }],
+          mainLocations: [{ value: 1, text: 'Room 3' }],
+          postLocations: [{ value: 1, text: 'Room 3' }],
+          preLocations: [{ value: 1, text: 'Room 3' }],
           details: {
             date: 'Tuesday 10 October 2017',
             startTime: '11:00',
@@ -211,9 +311,9 @@ describe('Select court appointment rooms', () => {
         ])
 
         req.body = {
-          preAppointmentLocation: '1',
-          mainAppointmentLocation: '2',
-          postAppointmentLocation: '3',
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
           comment: 'Test',
         }
 
@@ -274,7 +374,7 @@ describe('Select court appointment rooms', () => {
         ])
 
         req.body = {
-          mainAppointmentLocation: '2',
+          selectMainAppointmentLocation: '2',
         }
         await post(req, res)
 
@@ -285,9 +385,9 @@ describe('Select court appointment rooms', () => {
         const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
 
         req.body = {
-          preAppointmentLocation: '1',
-          mainAppointmentLocation: '2',
-          postAppointmentLocation: '3',
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
           comment: 'Test',
         }
 
@@ -308,9 +408,9 @@ describe('Select court appointment rooms', () => {
         const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
 
         req.body = {
-          preAppointmentLocation: '1',
-          mainAppointmentLocation: '2',
-          postAppointmentLocation: '3',
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
           comment: 'Test',
         }
 
