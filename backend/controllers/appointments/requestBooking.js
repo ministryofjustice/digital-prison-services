@@ -1,9 +1,12 @@
 const moment = require('moment')
-const { buildDateTime, DATE_TIME_FORMAT_SPEC, Time } = require('../../../src/dateHelpers')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { validateComments, validateDate, validateStartEndTime } = require('../../shared/appointmentConstants')
+const {
+  notifications: { requestBookingCourtTemplateId },
+} = require('../../config')
 
-const requestBookingFactory = ({ logError }) => {
+const requestBookingFactory = ({ logError, notifyClient }) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: req.originalUrl })
@@ -151,7 +154,7 @@ const requestBookingFactory = ({ logError }) => {
       firstName,
       lastName,
       dateOfBirth,
-      date: moment(date, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY'),
+      date: moment(date, DAY_MONTH_YEAR).format('dddd D MMMM YYYY'),
       startTime: Time(startTime),
       endTime: endTime && Time(endTime),
       prison,
@@ -159,6 +162,11 @@ const requestBookingFactory = ({ logError }) => {
       caseNumber,
       comment,
     }
+
+    notifyClient.sendEmail(requestBookingCourtTemplateId, prison, {
+      personalisation: { ...details, hearingLocation },
+      reference: null,
+    })
 
     return res.render('requestBooking/requestBookingConfirmation.njk', {
       user: { displayName: req.session.userDetails.name },
