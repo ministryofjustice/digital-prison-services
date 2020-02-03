@@ -28,21 +28,45 @@ const packAppointmentDetails = (req, details) => {
 const validate = ({
   preAppointmentRequired,
   postAppointmentRequired,
-  preAppointmentLocation,
-  postAppointmentLocation,
-  mainAppointmentLocation,
+  selectPreAppointmentLocation,
+  selectPostAppointmentLocation,
+  selectMainAppointmentLocation,
   comment,
 }) => {
   const errors = []
 
-  if (preAppointmentRequired === 'yes' && !preAppointmentLocation)
-    errors.push({ text: 'Select a room for the pre appointment', href: '#preAppointmentLocation' })
+  if (!selectMainAppointmentLocation)
+    errors.push({ text: 'Select a room for the main appointment', href: '#selectMainAppointmentLocation' })
 
-  if (!mainAppointmentLocation)
-    errors.push({ text: 'Select a room for the main appointment', href: '#mainAppointmentLocation' })
+  if (preAppointmentRequired === 'yes' && !selectPreAppointmentLocation)
+    errors.push({ text: 'Select a room for the pre appointment', href: '#selectPreAppointmentLocation' })
 
-  if (postAppointmentRequired === 'yes' && !postAppointmentLocation)
-    errors.push({ text: 'Select a room for the post appointment', href: '#postAppointmentLocation' })
+  if (postAppointmentRequired === 'yes' && !selectPostAppointmentLocation)
+    errors.push({ text: 'Select a room for the post appointment', href: '#selectPostAppointmentLocation' })
+
+  if (
+    postAppointmentRequired === 'yes' &&
+    selectMainAppointmentLocation &&
+    selectPostAppointmentLocation &&
+    selectPostAppointmentLocation === selectMainAppointmentLocation
+  ) {
+    errors.push({
+      text: 'Select a room other than the one used for the main appointment',
+      href: '#selectPostAppointmentLocation',
+    })
+  }
+
+  if (
+    preAppointmentRequired === 'yes' &&
+    selectPreAppointmentLocation &&
+    selectMainAppointmentLocation &&
+    selectPreAppointmentLocation === selectMainAppointmentLocation
+  ) {
+    errors.push({
+      text: 'Select a room other than the one used for the main appointment',
+      href: '#selectPreAppointmentLocation',
+    })
+  }
 
   if (comment && comment.length > 3600)
     errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comment' })
@@ -50,7 +74,60 @@ const validate = ({
   return errors
 }
 
-const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient, logError, appointmentsService }) => {
+const selectCourtAppointmentRoomsFactory = ({
+  elite2Api,
+  appointmentsService,
+  existingEventsService,
+  logError,
+  oauthApi,
+  notifyClient,
+}) => {
+  const getAvailableLocations = async (
+    context,
+    { agencyId, startTime, endTime, date, preAppointmentRequired, postAppointmentRequired }
+  ) => {
+    const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
+    const eventsAtLocations = await existingEventsService.getAppointmentsAtLocations(context, {
+      agency: agencyId,
+      date,
+      locations,
+    })
+
+    const mainLocations = await existingEventsService.getAvailableLocations(context, {
+      timeSlot: { startTime, endTime },
+      locations,
+      eventsAtLocations,
+    })
+
+    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
+      .subtract(20, 'minutes')
+      .format(DATE_TIME_FORMAT_SPEC)
+
+    const preLocations =
+      preAppointmentRequired === 'yes'
+        ? await existingEventsService.getAvailableLocations(context, {
+            timeSlot: { startTime: preStartTime, endTime: startTime },
+            locations,
+            eventsAtLocations,
+          })
+        : []
+
+    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC)
+      .add(20, 'minutes')
+      .format(DATE_TIME_FORMAT_SPEC)
+
+    const postLocations =
+      postAppointmentRequired === 'yes'
+        ? await existingEventsService.getAvailableLocations(context, {
+            timeSlot: { startTime: endTime, endTime: postEndTime },
+            locations,
+            eventsAtLocations,
+          })
+        : []
+
+    return { mainLocations, preLocations, postLocations }
+  }
+
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
@@ -71,11 +148,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
         postAppointmentRequired,
       } = appointmentDetails
 
-      const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
-        res.locals,
-        activeCaseLoadId
-      )
-
+      const { appointmentTypes } = await appointmentsService.getAppointmentOptions(res.locals, activeCaseLoadId)
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
 
       const [offenderDetails, agencyDetails] = await Promise.all([
@@ -88,11 +161,22 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
 
       const date = moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
 
+      const { mainLocations, preLocations, postLocations } = await getAvailableLocations(res.locals, {
+        agencyId,
+        startTime,
+        endTime,
+        date,
+        preAppointmentRequired,
+        postAppointmentRequired,
+      })
+
       packAppointmentDetails(req, {
         ...appointmentDetails,
+        mainLocations,
+        preLocations,
+        postLocations,
         agencyDescription,
         appointmentTypeDescription,
-        locationTypes,
         firstName,
         lastName,
         bookingId,
@@ -101,7 +185,9 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
 
       res.render('addAppointment/selectCourtAppointmentRooms.njk', {
         cancelLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms/cancel`,
-        locations: locationTypes,
+        mainLocations,
+        preLocations,
+        postLocations,
         date,
         details: toAppointmentDetailsSummary({
           firstName,
@@ -118,6 +204,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
         postAppointmentRequired: postAppointmentRequired === 'yes',
       })
     } catch (error) {
+      console.error({ error })
       logError(req.originalUrl, error, serviceUnavailableMessage)
       res.render('error.njk')
     }
@@ -171,7 +258,12 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
   const post = async (req, res) => {
     const { offenderNo, agencyId } = req.params
 
-    const { preAppointmentLocation, mainAppointmentLocation, postAppointmentLocation, comment } = req.body
+    const {
+      selectPreAppointmentLocation,
+      selectMainAppointmentLocation,
+      selectPostAppointmentLocation,
+      comment,
+    } = req.body
 
     const { username } = req.session.userDetails
 
@@ -182,21 +274,23 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
         endTime,
         appointmentType,
         appointmentTypeDescription,
-        locationTypes,
         firstName,
         lastName,
         date,
         preAppointmentRequired,
         postAppointmentRequired,
         agencyDescription,
+        mainLocations,
+        preLocations,
+        postLocations,
       } = appointmentDetails
 
       const errors = validate({
         preAppointmentRequired,
         postAppointmentRequired,
-        preAppointmentLocation,
-        postAppointmentLocation,
-        mainAppointmentLocation,
+        selectPreAppointmentLocation,
+        selectPostAppointmentLocation,
+        selectMainAppointmentLocation,
         comment,
       })
 
@@ -205,11 +299,13 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
 
         return res.render('addAppointment/selectCourtAppointmentRooms.njk', {
           cancelLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms/cancel`,
-          locations: locationTypes,
+          mainLocations,
+          preLocations,
+          postLocations,
           formValues: {
-            preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
-            mainAppointmentLocation: mainAppointmentLocation && Number(mainAppointmentLocation),
-            postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
+            preAppointmentLocation: selectPreAppointmentLocation && Number(selectPreAppointmentLocation),
+            mainAppointmentLocation: selectMainAppointmentLocation && Number(selectMainAppointmentLocation),
+            postAppointmentLocation: selectPostAppointmentLocation && Number(selectPostAppointmentLocation),
             comment,
           },
           errors,
@@ -229,7 +325,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
         })
       }
 
-      await createAppointment(res.locals, { ...appointmentDetails, comment, locationId: mainAppointmentLocation })
+      await createAppointment(res.locals, { ...appointmentDetails, comment, locationId: selectMainAppointmentLocation })
 
       const prepostAppointments = {}
 
@@ -237,7 +333,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
         prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
           appointmentDetails,
           startTime,
-          preAppointmentLocation,
+          preAppointmentLocation: selectPreAppointmentLocation,
         })
       }
 
@@ -245,14 +341,14 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
         prepostAppointments.postAppointment = await createPostAppointment(res.locals, {
           appointmentDetails,
           endTime,
-          postAppointmentLocation,
+          postAppointmentLocation: selectPostAppointmentLocation,
         })
       }
 
       packAppointmentDetails(req, {
         ...appointmentDetails,
         ...prepostAppointments,
-        locationId: mainAppointmentLocation,
+        locationId: selectMainAppointmentLocation,
         comment,
       })
 
@@ -266,7 +362,7 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
           firstName,
           lastName,
           offenderNo,
-          location: locationTypes.find(l => l.value === Number(mainAppointmentLocation)).text,
+          location: mainLocations.find(l => l.value === Number(selectMainAppointmentLocation)).text,
           postAppointmentStartTime:
             postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.startTime : 'N/A',
           postAppointmentEndTime:
@@ -276,11 +372,11 @@ const selectCourtAppointmentRoomsFactory = ({ elite2Api, oauthApi, notifyClient,
           preAppointmentEndTime: preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.endTime : 'N/A',
           preAppointmentLocation:
             preAppointmentRequired === 'yes'
-              ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text
+              ? preLocations.find(l => l.value === Number(selectPreAppointmentLocation)).text
               : 'N/A',
           postAppointmentLocation:
             postAppointmentRequired === 'yes'
-              ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
+              ? postLocations.find(l => l.value === Number(selectPostAppointmentLocation)).text
               : 'N/A',
         }
 

@@ -1,14 +1,25 @@
+const moment = require('moment')
+const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const { switchDateFormat, getTime, sortByDateTime } = require('../../utils')
 
+const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
+  const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription
+  const locationString = eventLocation ? `${eventLocation} -` : ''
+  const descriptionString = comment ? `${description} - ${comment}` : eventDescription
+
+  return `${locationString} ${descriptionString}`
+}
+
+const toEvent = event => ({
+  ...event,
+  startTime: getTime(event.startTime),
+  endTime: event.endTime && getTime(event.endTime),
+  start: event.startTime,
+  end: event.endTime,
+  eventDescription: getEventDescription(event),
+})
+
 module.exports = elite2Api => {
-  const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
-    const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription
-    const locationString = eventLocation ? `${eventLocation} -` : ''
-    const descriptionString = comment ? `${description} - ${comment}` : eventDescription
-
-    return `${locationString} ${descriptionString}`
-  }
-
   const getExistingEventsForOffender = async (context, agencyId, date, offenderNo) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, offenderNumbers: [offenderNo] }
@@ -31,12 +42,7 @@ module.exports = elite2Api => {
 
       const formattedEvents = otherEvents
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-        .map(event => ({
-          ...event,
-          startTime: getTime(event.startTime),
-          endTime: event.endTime && getTime(event.endTime),
-          eventDescription: getEventDescription(event),
-        }))
+        .map(toEvent)
 
       if (hasCourtVisit) formattedEvents.unshift({ eventDescription: '**Court visit scheduled**' })
 
@@ -61,12 +67,7 @@ module.exports = elite2Api => {
 
       const formattedEvents = eventsAtLocationByUsage
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-        .map(event => ({
-          ...event,
-          startTime: getTime(event.startTime),
-          endTime: event.endTime && getTime(event.endTime),
-          eventDescription: getEventDescription(event),
-        }))
+        .map(toEvent)
 
       return formattedEvents
     } catch (error) {
@@ -74,5 +75,49 @@ module.exports = elite2Api => {
     }
   }
 
-  return { getExistingEventsForOffender, getExistingEventsForLocation }
+  const getAppointmentsAtLocationEnhanceWithLocationId = (context, agency, locationId, date) =>
+    new Promise((resolve, reject) => {
+      elite2Api
+        .getActivityList(context, { agencyId: agency, date: switchDateFormat(date), locationId, usage: 'APP' })
+        .then(response => {
+          resolve(response.map(event => toEvent({ ...event, locationId })))
+        })
+        .catch(reject)
+    })
+
+  const getAppointmentsAtLocations = async (context, { agency, date, locations }) => {
+    return (await Promise.all(
+      locations.map(location => getAppointmentsAtLocationEnhanceWithLocationId(context, agency, location.value, date))
+    )).reduce((acc, current) => acc.concat(current), [])
+  }
+
+  const getAvailableLocations = async (context, { timeSlot, locations, eventsAtLocations }) => {
+    const requestedStartTime = moment(timeSlot.startTime, DATE_TIME_FORMAT_SPEC)
+    const requestedEndTime = moment(timeSlot.endTime, DATE_TIME_FORMAT_SPEC)
+
+    const findOverlappingSlots = slots =>
+      slots.filter(bookedSlot => {
+        const bookedStartTime = moment(bookedSlot.start, DATE_TIME_FORMAT_SPEC)
+        const bookedEndTime = moment(bookedSlot.end, DATE_TIME_FORMAT_SPEC)
+
+        return (
+          moment(bookedStartTime).isSameOrBefore(requestedEndTime, 'minute') &&
+          moment(requestedStartTime).isSameOrBefore(bookedEndTime, 'minute')
+        )
+      })
+
+    const fullyBookedLocations = locations.filter(location => {
+      const slots = eventsAtLocations.filter(locationEvent => locationEvent.locationId === location.value)
+      return findOverlappingSlots(slots).length > 0
+    })
+
+    return locations.filter(location => !fullyBookedLocations.includes(location))
+  }
+
+  return {
+    getExistingEventsForOffender,
+    getExistingEventsForLocation,
+    getAvailableLocations,
+    getAppointmentsAtLocations,
+  }
 }
