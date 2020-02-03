@@ -1,6 +1,10 @@
 const moment = require('moment')
 const { requestBookingFactory } = require('../controllers/appointments/requestBooking')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { notifyClient } = require('../shared/notifyClient')
+const {
+  notifications: { requestBookingCourtTemplateId },
+} = require('../config')
 
 describe('Request a booking', () => {
   let req
@@ -24,8 +28,9 @@ describe('Request a booking', () => {
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
     logError = jest.fn()
+    notifyClient.sendEmail = jest.fn()
 
-    controller = requestBookingFactory(logError)
+    controller = requestBookingFactory({ logError, notifyClient })
   })
 
   describe('index', () => {
@@ -187,6 +192,55 @@ describe('Request a booking', () => {
             })
           )
         })
+      })
+    })
+  })
+
+  describe('confirm', () => {
+    it('should submit an email and render the confirmation template', async () => {
+      req.flash.mockReturnValue([
+        {
+          firstName: 'Test',
+          lastName: 'Offender',
+          dateOfBirth: '17 July 1960',
+          prison: 'test@email.com',
+          caseNumber: 'Case 1234',
+          hearingLocation: 'A court',
+          date: '06/02/2020',
+          comment: 'Test',
+          startTime: '2020-02-06T03:10:00',
+          endTime: '2020-02-06T07:20:00',
+        },
+      ])
+      await controller.confirm(req, res)
+
+      const details = {
+        caseNumber: 'Case 1234',
+        comment: 'Test',
+        date: 'Thursday 6 February 2020',
+        dateOfBirth: '17 July 1960',
+        startTime: '03:10',
+        endTime: '07:20',
+        firstName: 'Test',
+        lastName: 'Offender',
+      }
+
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@email.com', {
+        personalisation: expect.objectContaining({
+          ...details,
+          hearingLocation: 'A court',
+        }),
+        reference: null,
+      })
+      expect(res.render).toHaveBeenCalledWith('requestBooking/requestBookingConfirmation.njk', {
+        details: {
+          ...details,
+          courtHearingLocation: 'A court',
+          prison: 'test@email.com',
+        },
+        homeUrl: '/videolink',
+        title: 'Request submitted',
+        user: { displayName: 'Test User' },
       })
     })
   })
