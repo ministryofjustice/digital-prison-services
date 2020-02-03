@@ -55,7 +55,7 @@ describe('Request a booking', () => {
         dobDay: '01',
         dobMonth: '01',
         dobYear: '1970',
-        prison: 'test@email.com',
+        prison: 'dominic.bull@digital.justice.gov.uk',
         hearingLocation: "King's Court",
         caseNumber: 123446,
         startTimeHours: '01',
@@ -81,7 +81,7 @@ describe('Request a booking', () => {
             lastName: 'Offender',
             date: '01/01/3019',
             dateOfBirth: '1 January 1970',
-            prison: 'test@email.com',
+            prison: 'dominic.bull@digital.justice.gov.uk',
             hearingLocation: "King's Court",
             caseNumber: 123446,
             startTime: '3019-01-01T01:00:00',
@@ -203,7 +203,7 @@ describe('Request a booking', () => {
           firstName: 'Test',
           lastName: 'Offender',
           dateOfBirth: '17 July 1960',
-          prison: 'test@email.com',
+          prison: 'dominic.bull@digital.justice.gov.uk',
           caseNumber: 'Case 1234',
           hearingLocation: 'A court',
           date: '06/02/2020',
@@ -225,18 +225,22 @@ describe('Request a booking', () => {
         lastName: 'Offender',
       }
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@email.com', {
-        personalisation: expect.objectContaining({
-          ...details,
-          hearingLocation: 'A court',
-        }),
-        reference: null,
-      })
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        requestBookingCourtTemplateId,
+        'dominic.bull@digital.justice.gov.uk',
+        {
+          personalisation: expect.objectContaining({
+            ...details,
+            hearingLocation: 'A court',
+          }),
+          reference: null,
+        }
+      )
       expect(res.render).toHaveBeenCalledWith('requestBooking/requestBookingConfirmation.njk', {
         details: {
           ...details,
           courtHearingLocation: 'A court',
-          prison: 'test@email.com',
+          prison: 'dominic.bull@digital.justice.gov.uk',
         },
         homeUrl: '/videolink',
         title: 'Request submitted',
