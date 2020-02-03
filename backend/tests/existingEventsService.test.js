@@ -1,3 +1,5 @@
+const moment = require('moment')
+const { DATE_ONLY_FORMAT_SPEC } = require('../../src/dateHelpers')
 const existingEventsService = require('../controllers/attendance/existingEventsService')
 
 describe('existing events', () => {
@@ -5,7 +7,181 @@ describe('existing events', () => {
   let service
 
   beforeEach(() => {
+    elite2Api.getActivityList = jest.fn()
     service = existingEventsService(elite2Api)
+  })
+
+  describe('location availability', () => {
+    beforeEach(() => {
+      elite2Api.getLocations = jest.fn()
+      elite2Api.getEventsAtLocations = jest.fn()
+      elite2Api.getLocations.mockReturnValue(Promise.resolve([]))
+    })
+
+    it('should handle time slot where location booking slightly overlap ', async () => {
+      const today = moment().format(DATE_ONLY_FORMAT_SPEC)
+      const startTime = `${today}T09:00:00`
+      const endTime = `${today}T13:00:00`
+
+      const availableLocations = await service.getAvailableLocations(
+        {},
+        {
+          agency: 'MDI',
+          timeSlot: { startTime, endTime },
+          locations: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }],
+          eventsAtLocations: [
+            {
+              locationId: 1,
+              start: `${today}T10:00:00`,
+              end: `${today}T15:00:00`,
+              eventDescription: 'Video booking for John',
+            },
+          ],
+        }
+      )
+      expect(availableLocations).toEqual([{ value: 2, text: 'Location 2' }])
+    })
+
+    it('should handle a location being fully booked', async () => {
+      const today = moment().format(DATE_ONLY_FORMAT_SPEC)
+      const startTime = `${today}T09:00:00`
+      const endTime = `${today}T13:00:00`
+
+      const availableLocations = await service.getAvailableLocations(
+        {},
+        {
+          agency: 'MDI',
+          timeSlot: { startTime, endTime },
+          locations: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }],
+          eventsAtLocations: [
+            {
+              locationId: 1,
+              start: `${today}T09:00:00`,
+              end: `${today}T10:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T10:00:00`,
+              end: `${today}T11:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T11:00:00`,
+              end: `${today}T12:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T12:00:00`,
+              end: `${today}T13:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T13:00:00`,
+              end: `${today}T14:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T14:00:00`,
+              end: `${today}T15:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T15:00:00`,
+              end: `${today}T16:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T16:00:00`,
+              end: `${today}T17:00:00`,
+            },
+            {
+              locationId: 1,
+              start: `${today}T17:00:00`,
+              end: `${today}T18:00:00`,
+            },
+          ],
+        }
+      )
+      expect(availableLocations).toEqual([{ value: 2, text: 'Location 2' }])
+    })
+
+    it('should return all rooms as available', async () => {
+      const today = moment().format(DATE_ONLY_FORMAT_SPEC)
+      const startTime = `${today}T11:00:00`
+      const endTime = `${today}T14:00:00`
+      elite2Api.getActivityList.mockReturnValue(
+        Promise.resolve([
+          {
+            locationId: 1,
+            startTime: `${today}T17:00:00`,
+            endTime: `${today}T18:00:00`,
+            eventDescription: 'Video booking for John',
+          },
+        ])
+      )
+
+      const availableLocations = await service.getAvailableLocations(
+        {},
+        {
+          agency: 'MDI',
+          timeSlot: { startTime, endTime },
+          locations: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }],
+          eventsAtLocations: [
+            {
+              locationId: 1,
+              start: `${today}T17:00:00`,
+              end: `${today}T18:00:00`,
+              eventDescription: 'Video booking for John',
+            },
+          ],
+        }
+      )
+      expect(availableLocations).toEqual([{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }])
+    })
+
+    it('should make multiple calls to retrieve events at each location, also enhancing each event with the locationId', async () => {
+      elite2Api.getActivityList.mockReturnValue(
+        Promise.resolve([{ eventId: 1, startTime: '2010-10-10T10:00:00', endTime: '2010-10-10T10:00:00' }])
+      )
+
+      const date = '10/10/2019'
+      const events = await service.getAppointmentsAtLocations(
+        {},
+        { date, agency: 'MDI', locations: [{ value: 1, text: 'location 1' }, { value: 2, text: 'location 2' }] }
+      )
+
+      expect(events).toEqual(
+        expect.objectContaining([
+          {
+            end: '2010-10-10T10:00:00',
+            endTime: '10:00',
+            eventDescription: ' undefined',
+            eventId: 1,
+            locationId: 1,
+            start: '2010-10-10T10:00:00',
+            startTime: '10:00',
+          },
+          {
+            end: '2010-10-10T10:00:00',
+            endTime: '10:00',
+            eventDescription: ' undefined',
+            eventId: 1,
+            locationId: 2,
+            start: '2010-10-10T10:00:00',
+            startTime: '10:00',
+          },
+        ])
+      )
+
+      expect(elite2Api.getActivityList).toHaveBeenCalledWith(
+        {},
+        { agencyId: 'MDI', date: '2019-10-10', locationId: 1, usage: 'APP' }
+      )
+      expect(elite2Api.getActivityList).toHaveBeenCalledWith(
+        {},
+        { agencyId: 'MDI', date: '2019-10-10', locationId: 2, usage: 'APP' }
+      )
+    })
   })
 
   describe('getting events for offenders', () => {

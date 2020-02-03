@@ -17,7 +17,7 @@
         label: {
             text: params.description + " appointment room"
         },
-        items: locations | addDefaultSelectedVale('Select') | setSelected(params.location),
+        items: params.locations | addDefaultSelectedVale('Select') | setSelected(params.location),
         errorMessage: errors | findError(params.name + "Location")
     }) }}
 {% endmacro %}
@@ -47,27 +47,27 @@
             <input type="hidden" id="appointment-date" value="{{ date }}"/>
 
             {% if preAppointmentRequired %}
-                {{ appointment({description: "Pre", name:"preAppointment",locations: locations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
+                {{ appointment({description: "Pre", name:"selectPreAppointment",locations: preLocations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
             {% endif %}
 
-            {{ appointment({description: "Main", name:"mainAppointment",locations: locations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
+            {{ appointment({description: "Main", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
 
             {% if postAppointmentRequired %}
-                {{ appointment({description: "Post", name:"postAppointment",locations: locations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
+                {{ appointment({description: "Post", name:"selectPostAppointment",locations: postLocations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
             {% endif %}
 
-            {{ govukTextarea({	
-                name: "comment",	
-                id: "comment",	
-                value: formValues.comment,	
-                errorMessage: errors | findError('comment'),	
-                classes: 'govuk-!-width-one-half',	
-                label: {	
-                    text: "Comments (optional)"	
-                },	
-                hint: {	
-                    text: "Type of hearing and additional information"	
-                }	
+            {{ govukTextarea({
+                name: "comment",
+                id: "comment",
+                value: formValues.comment,
+                errorMessage: errors | findError('comment'),
+                classes: 'govuk-!-width-one-half',
+                label: {
+                    text: "Comments (optional)"
+                },
+                hint: {
+                    text: "Type of hearing and additional information"
+                }
             }) }}
 
             {{ govukButton({
@@ -85,7 +85,7 @@
                         'data-qa': 'back-to-profile'
                     }
                 }) }}
-            
+
         </form>
     </div>
 {% endblock %}
