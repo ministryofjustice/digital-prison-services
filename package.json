@@ -44,7 +44,7 @@
     "classnames": "^2.2.6",
     "connect-flash": "^0.1.1",
     "connect-redis": "^4.0.3",
-    "contentful": "^7.3.0",
+    "contentful": "^7.13.1",
     "cookie-session": "^2.0.0-beta.3",
     "csv-parse": "^4.4.6",
     "debug": "~2.6.9",
