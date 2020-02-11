@@ -38,6 +38,8 @@ const whereaboutsApiFactory = client => {
       { customTimeout: 30000 }
     )
 
+  const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -48,6 +50,7 @@ const whereaboutsApiFactory = client => {
     postAttendances,
     getAttendanceStats,
     getAbsences,
+    searchGroups,
   }
 }
 
