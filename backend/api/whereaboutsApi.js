@@ -40,6 +40,9 @@ const whereaboutsApiFactory = client => {
 
   const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
 
+  const getAgencyGroupLocations = (context, agencyId, groupName) =>
+    get(context, `/locations/groups/${agencyId}/${groupName}`)
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -51,6 +54,7 @@ const whereaboutsApiFactory = client => {
     getAttendanceStats,
     getAbsences,
     searchGroups,
+    getAgencyGroupLocations,
   }
 }
 

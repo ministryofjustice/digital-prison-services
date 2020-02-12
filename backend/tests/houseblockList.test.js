@@ -196,13 +196,16 @@ describe('Houseblock list controller', () => {
     whereaboutsApi.getAbsenceReasons.mockReturnValue({
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     })
+    whereaboutsApi.getAgencyGroupLocations = jest.fn()
   })
 
   it('Should add visit and appointment details to array', async () => {
+    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([1, 2])
     elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
+    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
 
     expect(response.length).toBe(4)

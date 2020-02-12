@@ -64,9 +64,10 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
   } = config
   const updateAttendanceEnabled = agencyId => !production || updateAttendancePrisons.includes(agencyId)
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
+    const locationIds = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
-    const data = await elite2Api.getHouseblockList(context, agencyId, groupName, formattedDate, timeSlot)
+    const data = await elite2Api.getHouseblockList(context, agencyId, locationIds, formattedDate, timeSlot)
 
     const offenderNumbers = distinct(data.map(offender => offender.offenderNo))
 
