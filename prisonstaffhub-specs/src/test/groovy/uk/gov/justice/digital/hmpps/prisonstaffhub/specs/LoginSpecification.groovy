@@ -4,6 +4,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
@@ -19,7 +20,10 @@ class LoginSpecification extends BrowserReportingSpec {
     @Rule
     OauthApi oauthApi = new OauthApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "The login page is present"() {
         when: 'I go to the login page'
@@ -47,7 +51,7 @@ class LoginSpecification extends BrowserReportingSpec {
         oauthApi.stubGetMyDetails ITAG_USER
         oauthApi.stubGetMyRoles()
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
-        elite2api.stubGroups ITAG_USER.workingCaseload
+        whereaboutsApi.stubGroups ITAG_USER.workingCaseload
         elite2api.stubActivityLocations()
 
         when: "I login using valid credentials"
@@ -65,7 +69,7 @@ class LoginSpecification extends BrowserReportingSpec {
         oauthApi.stubGetMyDetails ITAG_USER
         oauthApi.stubGetMyRoles()
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
-        elite2api.stubGroups ITAG_USER.workingCaseload
+        whereaboutsApi.stubGroups ITAG_USER.workingCaseload
         elite2api.stubActivityLocations()
 
         when: "I login using valid credentials"

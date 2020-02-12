@@ -27,7 +27,7 @@ class ActivitySpecification extends BrowserReportingSpec {
     @Rule
     WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
     def initialPeriod
 
     def offenders = [

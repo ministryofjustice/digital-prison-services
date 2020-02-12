@@ -2,6 +2,8 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.get
 import org.junit.Rule
@@ -24,9 +26,12 @@ class CaseloadChangeSpecification extends BrowserReportingSpec {
    OauthApi oauthApi = new OauthApi()
 
    @Rule
+   WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
+   @Rule
    public WireMockRule notmServer = new WireMockRule(20200)
 
-   TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+   TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
 
     def 'Clicking dropdown link takes to caseload change page'() {
@@ -36,7 +41,7 @@ class CaseloadChangeSpecification extends BrowserReportingSpec {
         elite2api.stubUpdateActiveCaseload()
         oauthApi.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
-        elite2api.stubGroups Caseload.MDI
+        whereaboutsApi.stubGroups Caseload.MDI
 
         $('#info-wrapper').click()
         $('a', text: 'Change caseload').click()
@@ -49,7 +54,7 @@ class CaseloadChangeSpecification extends BrowserReportingSpec {
         elite2api.stubUpdateActiveCaseload()
         oauthApi.stubGetMyDetails(ITAG_USER)
         elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
-        elite2api.stubGroups Caseload.MDI
+        whereaboutsApi.stubGroups Caseload.MDI
         notmServer.stubFor(
                 get(WireMock.urlPathMatching('/.*'))
                         .willReturn(

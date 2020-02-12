@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.AdjudicationResponses
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AdjudicationDetailPage
@@ -22,6 +23,9 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
     @Rule
     OauthApi oauthApi = new OauthApi()
 
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
     def setup() {
         def offenderDetails = [
                 firstName: "HARRY",
@@ -32,7 +36,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         elite2api.stubOffenderDetails('AA00112', offenderDetails)
     }
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "should present adjudication history results"() {
 

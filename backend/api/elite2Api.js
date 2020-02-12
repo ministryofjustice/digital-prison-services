@@ -99,8 +99,6 @@ const elite2ApiFactory = client => {
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
     get(context, `/api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
 
-  const searchGroups = (context, agencyId) => get(context, `/api/agencies/${agencyId}/locations/groups`)
-
   const getSentenceData = (context, offenderNumbers) => post(context, `/api/offender-sentences`, offenderNumbers)
 
   const getPrisonerImage = (context, offenderNo) =>
@@ -207,7 +205,6 @@ const elite2ApiFactory = client => {
     getHouseblockList,
     getActivityList,
     searchActivityLocations,
-    searchGroups,
     getVisits,
     getAppointments,
     getActivities,
