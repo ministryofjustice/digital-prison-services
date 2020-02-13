@@ -201,6 +201,7 @@ public class WhereaboutsApi extends WireMockRule {
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
+                                .withBody("[]")
                         )
         )
 
