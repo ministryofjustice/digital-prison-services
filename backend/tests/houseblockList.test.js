@@ -196,6 +196,8 @@ describe('Houseblock list controller', () => {
     whereaboutsApi.getAbsenceReasons.mockReturnValue({
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     })
+    whereaboutsApi.getAgencyGroupLocations = jest.fn()
+    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
   })
 
   it('Should add visit and appointment details to array', async () => {
@@ -203,6 +205,7 @@ describe('Houseblock list controller', () => {
 
     const response = await houseblockList({})
 
+    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
 
     expect(response.length).toBe(4)
@@ -249,6 +252,17 @@ describe('Houseblock list controller', () => {
     expect(response[0].activities[3].comment).toBe('comment14')
     expect(response[0].activities[3].startTime).toBe('2017-10-15T17:00:00')
     expect(response[0].activities[3].endTime).toBe('2017-10-15T17:30:00')
+  })
+
+  it('Should pass location Ids to getHouseblockList', async () => {
+    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }, { locationId: 2 }])
+    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+
+    await houseblockList({})
+
+    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
+    expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
+    expect(elite2Api.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
   })
 
   it('Should correctly choose main activity', async () => {

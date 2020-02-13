@@ -40,7 +40,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: "I select and display a location"
         String today = getNow()
 
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
 
@@ -110,7 +111,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         fixture.toSearch()
         this.initialPeriod = period.value()
         def today = getNow()
-        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, '1', 'PM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockList(ITAG_USER.workingCaseload, 'PM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'PM', today)
 
@@ -138,7 +140,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         def today = simpleDateFormat.format(new Date());
 
-        elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithMultipleActivities(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
 
@@ -165,7 +168,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: "I select and display a location"
         def today = getNow()
-        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
 
@@ -189,7 +193,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: "I select and display a location"
         def today = getNow()
 
-        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
         location = '1'
@@ -212,7 +217,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: 'I select and display a location'
         def today = getNow()
 
-        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithNoActivityOffender(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
         location = '1'
@@ -234,7 +240,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: 'I select and display a location'
         def today = getNow()
 
-        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
         location = '1'
@@ -257,7 +264,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
 
         when: 'I select and display a location'
         def today = getNow()
-        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today)
         location = '1'
@@ -285,7 +293,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: 'I select and display a location'
         def today = getNow()
 
-        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today, [])
         whereaboutsApi.stubPostAttendance()
@@ -310,7 +319,8 @@ class HouseblockSpecification extends BrowserReportingSpec {
         when: 'I select and display a location'
         def today = getNow()
 
-        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, '1', 'AM', today)
+        whereaboutsApi.stubGetAgencyGroupLocations(ITAG_USER.workingCaseload, '1')
+        elite2api.stubGetHouseblockListWithAllCourtEvents(ITAG_USER.workingCaseload, 'AM', today)
         whereaboutsApi.stubGetAbsenceReasons()
         whereaboutsApi.stubGetAttendanceForBookings(ITAG_USER.workingCaseload, 'AM', today, [])
         whereaboutsApi.stubPostAttendance()

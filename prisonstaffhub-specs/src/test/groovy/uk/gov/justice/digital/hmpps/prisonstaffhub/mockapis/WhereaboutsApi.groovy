@@ -195,6 +195,18 @@ public class WhereaboutsApi extends WireMockRule {
         )
     }
 
+    void stubGetAgencyGroupLocations(agencyId, groupName) {
+        this.stubFor(
+                get("/locations/groups/${agencyId}/${groupName}")
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody("[]")
+                        )
+        )
+
+    }
+
     void verifyPostAttendance() {
         this.verify(postRequestedFor(urlEqualTo('/attendance')))
     }
