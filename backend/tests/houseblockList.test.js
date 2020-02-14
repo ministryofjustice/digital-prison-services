@@ -274,7 +274,7 @@ describe('Houseblock list controller', () => {
 
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(elite2Api.getHouseblockList.mock.calls.length).toBe(0)
-    expect(response).toStrictEqual({})
+    expect(response).toStrictEqual([])
   })
 
   it('Should correctly choose main activity', async () => {
