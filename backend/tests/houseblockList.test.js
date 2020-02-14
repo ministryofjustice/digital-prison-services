@@ -197,7 +197,7 @@ describe('Houseblock list controller', () => {
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     })
     whereaboutsApi.getAgencyGroupLocations = jest.fn()
-    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([1])
+    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }])
   })
 
   it('Should add visit and appointment details to array', async () => {
