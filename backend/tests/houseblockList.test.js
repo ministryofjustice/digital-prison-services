@@ -197,7 +197,7 @@ describe('Houseblock list controller', () => {
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     })
     whereaboutsApi.getAgencyGroupLocations = jest.fn()
-    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
+    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([1])
   })
 
   it('Should add visit and appointment details to array', async () => {
@@ -263,6 +263,18 @@ describe('Houseblock list controller', () => {
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
     expect(elite2Api.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
+  })
+
+  it('Should not retrieve houseblock list if no cell locations in wing', async () => {
+    whereaboutsApi.getAgencyGroupLocations = jest.fn()
+    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
+    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+
+    const response = await houseblockList({})
+
+    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
+    expect(elite2Api.getHouseblockList.mock.calls.length).toBe(0)
+    expect(response).toStrictEqual([])
   })
 
   it('Should correctly choose main activity', async () => {
