@@ -165,6 +165,48 @@ public class WhereaboutsApi extends WireMockRule {
         )
     }
 
+    void stubGroups(Caseload caseload) {
+
+        def json = JsonOutput.toJson([
+                [name: '1', key: '1', children: [
+                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
+                ]],
+                [name: '2', key: '2', children: [
+                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
+                ]],
+                [name: '3', key: '3', children: [
+                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
+                ]]])
+        def jsonSYI = JsonOutput.toJson([
+                [name: 'block1', key: 'block1', children: [
+                        [name: 'A', key: 'A'], [name: 'B', key: 'B']
+                ]],
+                [name: 'block2', key: 'block2', children: [
+                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
+                ]]])
+
+        this.stubFor(
+                get("/agencies/${caseload.id}/locations/groups")
+                        .willReturn(
+                                aResponse()
+                                        .withBody(caseload.id.equals('SYI') ? jsonSYI : json)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withStatus(200))
+        )
+    }
+
+    void stubGetAgencyGroupLocations(agencyId, groupName) {
+        this.stubFor(
+                get("/locations/groups/${agencyId}/${groupName}")
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody("[1]")
+                        )
+        )
+
+    }
+
     void verifyPostAttendance() {
         this.verify(postRequestedFor(urlEqualTo('/attendance')))
     }

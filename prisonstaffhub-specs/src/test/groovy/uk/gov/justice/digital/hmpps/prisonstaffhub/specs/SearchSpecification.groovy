@@ -4,6 +4,7 @@ import geb.module.FormElement
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.VideoLinkPage
@@ -20,12 +21,15 @@ class SearchSpecification extends BrowserReportingSpec {
     @Rule
     OauthApi oauthApi = new OauthApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "The search page is displayed"() {
 
         when: "I log in"
-        elite2api.stubGroups ITAG_USER.workingCaseload
+        whereaboutsApi.stubGroups ITAG_USER.workingCaseload
         fixture.loginAs(ITAG_USER)
 
         then: 'The search page is displayed'
@@ -35,7 +39,7 @@ class SearchSpecification extends BrowserReportingSpec {
     def "Video court user is redirected to video link home page"() {
 
         when: "I log in"
-        elite2api.stubGroups ITAG_USER.workingCaseload
+        whereaboutsApi.stubGroups ITAG_USER.workingCaseload
         fixture.loginAsVideoLinkCourtUser(ITAG_USER)
 
         and: "Navigate to the root url"

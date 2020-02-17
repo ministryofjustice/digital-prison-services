@@ -26,7 +26,7 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
     @Rule
     WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def offenderNo = "A12345"
     def date = LocalDate.now().plusDays(1).format("dd/MM/YYYY")

@@ -2,6 +2,10 @@
   "name": "prisonstaffhub",
   "version": "0.0.1",
   "private": false,
+  "engines": {
+    "npm": ">=3",
+    "node": ">=10.*"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@contentful/rich-text-react-renderer": "^13.0.1",

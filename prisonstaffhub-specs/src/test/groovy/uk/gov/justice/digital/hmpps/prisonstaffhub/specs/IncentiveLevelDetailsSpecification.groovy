@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.IncentiveLevelDetails
 
@@ -18,7 +19,10 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
     @Rule
     OauthApi oauthApi = new OauthApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "should present Incentive Level history, no change Incentive Level button without role"() {
         def offenderDetails = [

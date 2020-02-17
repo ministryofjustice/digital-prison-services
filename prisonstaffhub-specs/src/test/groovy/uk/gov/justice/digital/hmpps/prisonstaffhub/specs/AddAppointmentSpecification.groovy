@@ -28,7 +28,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
     @Rule
     WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "should post appointment and redirect to the confirmation page"() {
         setupTests()

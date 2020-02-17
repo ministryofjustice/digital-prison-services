@@ -3,9 +3,9 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 import geb.Browser
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.AccessRoles
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.DashboardPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.LoginPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SearchPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.VideoLinkPage
 
@@ -16,13 +16,15 @@ class TestFixture {
     Browser browser
     Elite2Api elite2Api
     OauthApi oauthApi
+    WhereaboutsApi whereaboutsApi
 
     UserAccount currentUser
 
-    TestFixture(Browser browser, Elite2Api elite2Api, OauthApi oauthApi) {
+    TestFixture(Browser browser, Elite2Api elite2Api, OauthApi oauthApi, WhereaboutsApi whereaboutsApi) {
         this.browser = browser
         this.elite2Api = elite2Api
         this.oauthApi = oauthApi
+        this.whereaboutsApi = whereaboutsApi
     }
 
     def loginAs(UserAccount user) {
@@ -53,9 +55,9 @@ class TestFixture {
         oauthApi.stubGetMyRoles(roles)
         elite2Api.stubGetMyCaseloads currentUser.caseloads
         if (currentUser.workingCaseload) {
-            elite2Api.stubGroups currentUser.workingCaseload
+            whereaboutsApi.stubGroups currentUser.workingCaseload
         } else {
-            elite2Api.stubGroups caseload
+            whereaboutsApi.stubGroups caseload
         }
 
         elite2Api.stubActivityLocations()

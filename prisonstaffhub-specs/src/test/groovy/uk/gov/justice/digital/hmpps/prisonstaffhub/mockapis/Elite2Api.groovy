@@ -93,39 +93,9 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubGroups(Caseload caseload) {
-
-        def json = JsonOutput.toJson([
-                [name: '1', key: '1', children: [
-                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
-                ]],
-                [name: '2', key: '2', children: [
-                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
-                ]],
-                [name: '3', key: '3', children: [
-                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
-                ]]])
-        def jsonSYI = JsonOutput.toJson([
-                [name: 'block1', key: 'block1', children: [
-                        [name: 'A', key: 'A'], [name: 'B', key: 'B']
-                ]],
-                [name: 'block2', key: 'block2', children: [
-                        [name: 'A', key: 'A'], [name: 'B', key: 'B'], [name: 'C', key: 'C']
-                ]]])
-
+    void stubGetHouseblockList(Caseload caseload, String timeSlot, String date) {
         this.stubFor(
-                get("/api/agencies/${caseload.id}/locations/groups")
-                        .willReturn(
-                                aResponse()
-                                        .withBody(caseload.id.equals('SYI') ? jsonSYI : json)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
-    void stubGetHouseblockList(Caseload caseload, String groupName, String timeSlot, String date) {
-        this.stubFor(
-                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                post("/api/schedules/${caseload.id}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                                 aResponse()
                                         .withBody(HouseblockResponse.responseCellOrder)
@@ -133,7 +103,7 @@ class Elite2Api extends WireMockRule {
                                         .withStatus(200))
         )
         this.stubFor(
-                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                post("/api/schedules/${caseload.id}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}")
                         .withHeader('Sort-Fields', equalTo('lastName'))
                         .willReturn(
                                 aResponse()
@@ -151,9 +121,9 @@ class Elite2Api extends WireMockRule {
         stubAssessments(offenderNumbers)
     }
 
-    void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String groupName, String timeSlot, String date) {
+    void stubGetHouseblockListWithMultipleActivities(Caseload caseload, String timeSlot, String date) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                post("/api/schedules/${caseload.id}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                                 aResponse()
                                         .withBody(HouseblockResponse.responseMultipleActivities)
@@ -169,9 +139,9 @@ class Elite2Api extends WireMockRule {
         stubAssessments(offenderNumbers)
     }
 
-    void stubGetHouseblockListWithNoActivityOffender(Caseload caseload, String groupName, String timeSlot, String date) {
+    void stubGetHouseblockListWithNoActivityOffender(Caseload caseload, String timeSlot, String date) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                post("/api/schedules/${caseload.id}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                                 aResponse()
                                         .withBody(HouseblockResponse.responseNoActivities)
@@ -187,9 +157,9 @@ class Elite2Api extends WireMockRule {
         stubAssessments(offenderNumbers)
     }
 
-    void stubGetHouseblockListWithAllCourtEvents(Caseload caseload, String groupName, String timeSlot, String date) {
+    void stubGetHouseblockListWithAllCourtEvents(Caseload caseload, String timeSlot, String date) {
         this.stubFor(
-                get("/api/schedules/${caseload.id}/groups/${groupName}?date=${date}&timeSlot=${timeSlot}")
+                post("/api/schedules/${caseload.id}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}")
                         .willReturn(
                                 aResponse()
                                         .withBody(HouseblockResponse.responseNoActivities)

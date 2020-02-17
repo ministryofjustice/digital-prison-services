@@ -4,6 +4,7 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.CommunityApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ProbationDocumentsPage
 
@@ -22,7 +23,10 @@ class ProbationDocumentsSpecification extends BrowserReportingSpec {
     @Rule
     CommunityApi communityApi = new CommunityApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi)
+    @Rule
+    WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "should present probation document page"() {
         def offenderDetails = [
