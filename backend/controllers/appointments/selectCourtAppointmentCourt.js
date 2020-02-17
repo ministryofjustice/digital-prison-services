@@ -1,7 +1,6 @@
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
-// MOVE============================
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
   if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
@@ -14,9 +13,8 @@ const unpackAppointmentDetails = req => {
     {}
   )
 }
-// =================================
 
-const selectCourtAppointmentCourtFactory = (appointmentService, elite2Api, logError) => {
+const selectCourtAppointmentCourtFactory = (elite2Api, logError) => {
   const courts = {
     london: 'City of London',
     kingston: 'Kingston-upon-Thames',
