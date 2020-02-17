@@ -44,6 +44,7 @@ const addCourtAppointmentController = require('./controllers/appointments/courtC
 const confirmAppointmentController = require('./controllers/appointments/confirmAppointmentController')
 const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
 const selectCourtAppointmentRooms = require('./controllers/appointments/selectCourtAppointmentRoomsController')
+const selectCourtAppointmentCourt = require('./controllers/appointments/selectCourtAppointmentCourtController')
 
 const prisonerSearchController = require('./controllers/search/prisonerSearchController')
 const requestBookingController = require('./controllers/appointments/requestBookingController')
@@ -195,6 +196,12 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
     addCourtAppointmentController({ elite2Api, logError })
   )
+
+  router.use(
+    '/:agencyId/offenders/:offenderNo/add-court-appointment/select-court',
+    selectCourtAppointmentCourt({ elite2Api, logError })
+  )
+
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
     selectCourtAppointmentRooms({ elite2Api, logError, oauthApi, notifyClient })

@@ -135,7 +135,8 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
         postAppointmentRequired,
       })
 
-      return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms`)
+      // Check for room availability here and then redirect
+      return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-court`)
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: `${dpsUrl}offenders/${offenderNo}` })

@@ -204,7 +204,6 @@ const selectCourtAppointmentRoomsFactory = ({
         postAppointmentRequired: postAppointmentRequired === 'yes',
       })
     } catch (error) {
-      console.error({ error })
       logError(req.originalUrl, error, serviceUnavailableMessage)
       res.render('error.njk')
     }
