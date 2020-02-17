@@ -33,6 +33,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         repeats,
         preAppointment,
         postAppointment,
+        court,
       } = appointmentDetails.reduce(
         (acc, current) => ({
           ...acc,
@@ -81,6 +82,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         recurring,
         times,
         repeats,
+        court,
       })
 
       const prepostData = {}

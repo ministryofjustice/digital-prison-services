@@ -19,6 +19,7 @@ const toAppointmentDetailsSummary = ({
   times,
   repeats,
   agencyDescription,
+  court,
 }) => {
   const recurringInformation = recurring === 'yes' &&
     !isVideoLinkBooking(appointmentType) && {
@@ -38,6 +39,7 @@ const toAppointmentDetailsSummary = ({
     comment,
     recurring: properCaseName(recurring),
     ...recurringInformation,
+    court,
   }
 
   if (isVideoLinkBooking(appointmentType)) {

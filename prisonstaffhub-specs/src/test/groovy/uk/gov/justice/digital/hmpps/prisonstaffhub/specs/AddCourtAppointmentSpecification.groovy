@@ -11,6 +11,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddCourtAppointmentPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkCourtPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SelectCourtAppointmentCourtPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.SelectCourtAppointmentRoomsPage
 
 import java.time.LocalDate
@@ -36,7 +37,7 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
             Map.of("locationId", 3,"locationType", "VIDE","description", "Room 3","userDescription","Room 3","agencyId","LEI")
     ]
 
-    def "should go to select court appointment rooms page and then redirect to prison video link confirmation page"() {
+    def "should go to select court and rooms pages and then redirect to prison video link confirmation page"() {
         setupTests()
         fixture.loginAs(UserAccount.ITAG_USER)
 
@@ -54,7 +55,14 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         form.postAppointmentRequired = "yes"
         submitButton.click()
 
-        and: "I am redirected to select court appointment rooms page"
+        and: "I am redirected to select court page"
+        at SelectCourtAppointmentCourtPage
+
+        and: "I select a court"
+        selectCourtForm.court = 'london'
+        selectCourtSubmitButton.click()
+
+        and: "I am redirected to select rooms page"
         at SelectCourtAppointmentRoomsPage
 
         and: "I fill out the form"
@@ -86,7 +94,14 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         form.postAppointmentRequired = "no"
         submitButton.click()
 
-        and: "I am redirected to select court appointment rooms page"
+        and: "I am redirected to select court page"
+        at SelectCourtAppointmentCourtPage
+
+        and: "I select a court"
+        selectCourtForm.court = 'london'
+        selectCourtSubmitButton.click()
+
+        and: "I am redirected to select rooms page"
         at SelectCourtAppointmentRoomsPage
 
         and: "I fill out the form"

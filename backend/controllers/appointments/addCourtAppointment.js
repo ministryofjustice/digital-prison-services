@@ -6,7 +6,7 @@ const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../
 const { properCaseName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
-const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) => {
+const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError) => {
   const getValidationMessages = fields => {
     const { date, startTime, endTime, preAppointmentRequired, postAppointmentRequired } = fields
     const errors = []
@@ -128,6 +128,26 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
           },
         ],
       }
+
+      const { mainLocations, preLocations, postLocations } = await existingEventsService.getAvailableLocationsForVLB(
+        res.locals,
+        {
+          agencyId,
+          startTime,
+          endTime,
+          date,
+          preAppointmentRequired,
+          postAppointmentRequired,
+        }
+      )
+
+      const preAppointmentLocationsValid = preAppointmentRequired === 'yes' ? preLocations.length : true
+      const postAppointmentLocationsValid = postAppointmentRequired === 'yes' ? postLocations.length : true
+
+      if (!mainLocations.length || !preAppointmentLocationsValid || !postAppointmentLocationsValid) {
+        return res.send('No rooms available')
+      }
+
       req.flash('appointmentDetails', {
         ...request.appointmentDefaults,
         bookingId,
@@ -135,7 +155,6 @@ const addCourtAppointmentsFactory = (appointmentService, elite2Api, logError) =>
         postAppointmentRequired,
       })
 
-      // Check for room availability here and then redirect
       return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-court`)
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

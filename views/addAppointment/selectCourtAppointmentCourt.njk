@@ -34,13 +34,7 @@
     label: {
         text: "What court are you in?"
     },
-    items: [
-        { text: 'City of London', value: 'london' },
-        { text: 'Kingston-upon-Thames', value: 'kingston' },
-        { text: 'Southwark', value: 'southwark' },
-        { text: 'Westminster', value: 'westminster' },
-        { text: 'Wimbledon', value: 'wimbledon' }
-    ] | addDefaultSelectedVale('Select'),
+    items: courts | addDefaultSelectedVale('Select'),
     errorMessage: errors | findError("court")
   }) }}
 

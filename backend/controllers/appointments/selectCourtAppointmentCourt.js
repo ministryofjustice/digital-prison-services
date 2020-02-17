@@ -17,6 +17,14 @@ const unpackAppointmentDetails = req => {
 // =================================
 
 const selectCourtAppointmentCourtFactory = (appointmentService, elite2Api, logError) => {
+  const courts = {
+    london: 'City of London',
+    kingston: 'Kingston-upon-Thames',
+    southwark: 'Southwark',
+    westminster: 'Westminster',
+    wimbledon: 'Wimbledon',
+  }
+
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
@@ -40,6 +48,7 @@ const selectCourtAppointmentCourtFactory = (appointmentService, elite2Api, logEr
 
       return res.render('addAppointment/selectCourtAppointmentCourt.njk', {
         ...pageData,
+        courts: Object.keys(courts).map(key => ({ value: key, text: courts[key] })),
         details: toAppointmentDetailsSummary({
           firstName,
           lastName,
@@ -69,7 +78,7 @@ const selectCourtAppointmentCourtFactory = (appointmentService, elite2Api, logEr
       })
     }
 
-    req.flash('appointmentDetails', { ...appointmentDetails, court })
+    req.flash('appointmentDetails', { ...appointmentDetails, court: courts[court] })
 
     return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms`)
   }
