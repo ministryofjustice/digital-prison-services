@@ -47,7 +47,7 @@ describe('Select court appointment rooms', () => {
     appointmentsService.getLocations = jest.fn()
 
     existingEventsService.getAppointmentsAtLocations = jest.fn()
-    existingEventsService.getAvailableLocations = jest.fn()
+    existingEventsService.getAvailableLocationsForVLB = jest.fn()
 
     req.flash = jest.fn()
     res.render = jest.fn()
@@ -56,6 +56,8 @@ describe('Select court appointment rooms', () => {
       appointmentTypes: [{ value: 'VLB', text: 'Videolink' }],
       locationTypes: [{ value: 1, text: 'Room 3' }],
     })
+
+    existingEventsService.getAvailableLocationsForVLB.mockReturnValue({})
 
     elite2Api.getDetails.mockReturnValue({
       bookingId,
@@ -90,7 +92,12 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should return locations', async () => {
-      existingEventsService.getAvailableLocations.mockReturnValue([{ value: 1, text: 'Room 3' }])
+      const availableLocations = {
+        mainLocations: [{ value: 1, text: 'Room 1' }],
+        preLocations: [{ value: 2, text: 'Room 2' }],
+        postLocations: [{ value: 3, text: 'Room 3' }],
+      }
+      existingEventsService.getAvailableLocationsForVLB.mockReturnValue(availableLocations)
 
       const { index } = selectCourtAppointmentRoomsFactory({
         elite2Api,
@@ -103,11 +110,7 @@ describe('Select court appointment rooms', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'addAppointment/selectCourtAppointmentRooms.njk',
-        expect.objectContaining({
-          mainLocations: [{ value: 1, text: 'Room 3' }],
-          preLocations: [{ value: 1, text: 'Room 3' }],
-          postLocations: [{ value: 1, text: 'Room 3' }],
-        })
+        expect.objectContaining(availableLocations)
       )
     })
 
@@ -224,7 +227,6 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should return selected form values on validation errors', async () => {
-      existingEventsService.getAvailableLocations.mockReturnValue([{ value: 1, text: 'Room 3' }])
       const { post } = selectCourtAppointmentRoomsFactory({
         elite2Api,
         appointmentsService,
@@ -246,7 +248,6 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should return locations, links and summary details on validation errors', async () => {
-      existingEventsService.getAvailableLocations.mockReturnValue([{ value: 1, text: 'Room 3' }])
       const { post } = selectCourtAppointmentRoomsFactory({
         elite2Api,
         appointmentsService,

@@ -1,12 +1,11 @@
 const express = require('express')
 const { addCourtAppointmentsFactory } = require('./addCourtAppointment')
-
-const { appointmentsServiceFactory } = require('./appointmentsService')
+const existingEventsServiceFactory = require('../attendance/existingEventsService')
 
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ elite2Api, logError }) => {
-  const { index, post } = addCourtAppointmentsFactory(appointmentsServiceFactory(elite2Api), elite2Api, logError)
+  const { index, post } = addCourtAppointmentsFactory(existingEventsServiceFactory(elite2Api), elite2Api, logError)
 
   router.get('/', index)
   router.post('/', post)

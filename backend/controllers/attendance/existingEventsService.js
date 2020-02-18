@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const { switchDateFormat, getTime, sortByDateTime } = require('../../utils')
+const { appointmentsServiceFactory } = require('../appointments/appointmentsService')
 
 const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
   const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription
@@ -114,10 +115,59 @@ module.exports = elite2Api => {
     return locations.filter(location => !fullyBookedLocations.includes(location))
   }
 
+  const getAvailableLocationsForVLB = async (
+    context,
+    { agencyId, startTime, endTime, date, preAppointmentRequired, postAppointmentRequired }
+  ) => {
+    const appointmentsService = appointmentsServiceFactory(elite2Api)
+    const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
+
+    const eventsAtLocations = await getAppointmentsAtLocations(context, {
+      agency: agencyId,
+      date,
+      locations,
+    })
+
+    const mainLocations = await getAvailableLocations(context, {
+      timeSlot: { startTime, endTime },
+      locations,
+      eventsAtLocations,
+    })
+
+    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
+      .subtract(20, 'minutes')
+      .format(DATE_TIME_FORMAT_SPEC)
+
+    const preLocations =
+      preAppointmentRequired === 'yes'
+        ? await getAvailableLocations(context, {
+            timeSlot: { startTime: preStartTime, endTime: startTime },
+            locations,
+            eventsAtLocations,
+          })
+        : []
+
+    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC)
+      .add(20, 'minutes')
+      .format(DATE_TIME_FORMAT_SPEC)
+
+    const postLocations =
+      postAppointmentRequired === 'yes'
+        ? await getAvailableLocations(context, {
+            timeSlot: { startTime: endTime, endTime: postEndTime },
+            locations,
+            eventsAtLocations,
+          })
+        : []
+
+    return { mainLocations, preLocations, postLocations }
+  }
+
   return {
     getExistingEventsForOffender,
     getExistingEventsForLocation,
     getAvailableLocations,
+    getAvailableLocationsForVLB,
     getAppointmentsAtLocations,
   }
 }

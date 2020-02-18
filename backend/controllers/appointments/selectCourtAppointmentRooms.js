@@ -82,52 +82,6 @@ const selectCourtAppointmentRoomsFactory = ({
   oauthApi,
   notifyClient,
 }) => {
-  const getAvailableLocations = async (
-    context,
-    { agencyId, startTime, endTime, date, preAppointmentRequired, postAppointmentRequired }
-  ) => {
-    const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
-    const eventsAtLocations = await existingEventsService.getAppointmentsAtLocations(context, {
-      agency: agencyId,
-      date,
-      locations,
-    })
-
-    const mainLocations = await existingEventsService.getAvailableLocations(context, {
-      timeSlot: { startTime, endTime },
-      locations,
-      eventsAtLocations,
-    })
-
-    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
-      .subtract(20, 'minutes')
-      .format(DATE_TIME_FORMAT_SPEC)
-
-    const preLocations =
-      preAppointmentRequired === 'yes'
-        ? await existingEventsService.getAvailableLocations(context, {
-            timeSlot: { startTime: preStartTime, endTime: startTime },
-            locations,
-            eventsAtLocations,
-          })
-        : []
-
-    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC)
-      .add(20, 'minutes')
-      .format(DATE_TIME_FORMAT_SPEC)
-
-    const postLocations =
-      postAppointmentRequired === 'yes'
-        ? await existingEventsService.getAvailableLocations(context, {
-            timeSlot: { startTime: endTime, endTime: postEndTime },
-            locations,
-            eventsAtLocations,
-          })
-        : []
-
-    return { mainLocations, preLocations, postLocations }
-  }
-
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
@@ -161,14 +115,17 @@ const selectCourtAppointmentRoomsFactory = ({
 
       const date = moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
 
-      const { mainLocations, preLocations, postLocations } = await getAvailableLocations(res.locals, {
-        agencyId,
-        startTime,
-        endTime,
-        date,
-        preAppointmentRequired,
-        postAppointmentRequired,
-      })
+      const { mainLocations, preLocations, postLocations } = await existingEventsService.getAvailableLocationsForVLB(
+        res.locals,
+        {
+          agencyId,
+          startTime,
+          endTime,
+          date,
+          preAppointmentRequired,
+          postAppointmentRequired,
+        }
+      )
 
       packAppointmentDetails(req, {
         ...appointmentDetails,
@@ -204,7 +161,6 @@ const selectCourtAppointmentRoomsFactory = ({
         postAppointmentRequired: postAppointmentRequired === 'yes',
       })
     } catch (error) {
-      console.error({ error })
       logError(req.originalUrl, error, serviceUnavailableMessage)
       res.render('error.njk')
     }
