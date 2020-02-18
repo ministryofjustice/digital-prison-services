@@ -13,7 +13,7 @@ class SelectCourtAppointmentRoomsPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("Select an available room")
+        pageTitle.contains("Select an available room in the prison")
     }
 }
 

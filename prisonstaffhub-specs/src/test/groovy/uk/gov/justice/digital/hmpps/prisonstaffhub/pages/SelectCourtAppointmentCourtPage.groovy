@@ -12,6 +12,6 @@ class SelectCourtAppointmentCourtPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("Date and time is available")
+        pageTitle.contains("The video link date and time is available")
     }
 }
