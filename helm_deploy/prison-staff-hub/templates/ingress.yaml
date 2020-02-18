@@ -19,8 +19,18 @@ spec:
   - hosts:
     - {{ .Values.ingress.host }}
     {{ if .Values.ingress.cert_secret }}secretName: {{ .Values.ingress.cert_secret }}{{ end }}
+  - hosts:
+    - {{ .Values.ingress.host_alt }}
+    {{ if .Values.ingress.cert_secret_alt }}secretName: {{ .Values.ingress.cert_secret_alt }}{{ end }}
   rules:
     - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: http
+    - host: {{ .Values.ingress.host_alt }}
       http:
         paths:
           - path: {{ $ingressPath }}
