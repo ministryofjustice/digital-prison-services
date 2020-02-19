@@ -14,13 +14,20 @@ const unpackAppointmentDetails = req => {
   )
 }
 
-const selectCourtAppointmentCourtFactory = (elite2Api, logError) => {
-  const courts = {
-    london: 'City of London',
-    kingston: 'Kingston-upon-Thames',
-    southwark: 'Southwark',
-    westminster: 'Westminster',
-    wimbledon: 'Wimbledon',
+const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError) => {
+  const getCourts = async context => {
+    try {
+      const { courtLocations } = await whereaboutsApi.getCourtLocations(context)
+
+      const courts = courtLocations.reduce((courtList, court) => {
+        const key = court.replace(/\W+/g, '-').toLowerCase()
+        return { ...courtList, [key]: court }
+      }, {})
+
+      return courts
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   const renderError = (req, res, error) => {
@@ -38,7 +45,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, logError) => {
         elite2Api.getDetails(res.locals, offenderNo),
         elite2Api.getAgencyDetails(res.locals, agencyId),
       ])
-
+      const courts = await getCourts(res.locals)
       const { firstName, lastName } = offenderDetails
       const { startTime, endTime } = appointmentDetails
 
@@ -63,7 +70,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, logError) => {
 
   const index = async (req, res) => renderTemplate(req, res)
 
-  const post = (req, res) => {
+  const post = async (req, res) => {
     const { offenderNo, agencyId } = req.params
     const { court } = req.body
     const appointmentDetails = unpackAppointmentDetails(req)
@@ -75,6 +82,8 @@ const selectCourtAppointmentCourtFactory = (elite2Api, logError) => {
         errors: [{ text: 'Select a court', href: '#court' }],
       })
     }
+
+    const courts = await getCourts(res.locals)
 
     req.flash('appointmentDetails', { ...appointmentDetails, court: courts[court] })
 

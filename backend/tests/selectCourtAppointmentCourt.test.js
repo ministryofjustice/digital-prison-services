@@ -2,6 +2,7 @@ const { selectCourtAppointmentCourtFactory } = require('../controllers/appointme
 
 describe('Select court appoinment court', () => {
   const elite2Api = {}
+  const whereaboutsApi = {}
   const req = {
     originalUrl: 'http://localhost',
     params: { agencyId: 'MDI', offenderNo: 'A12345' },
@@ -34,6 +35,8 @@ describe('Select court appoinment court', () => {
     elite2Api.getDetails = jest.fn()
     elite2Api.getAgencyDetails = jest.fn()
 
+    whereaboutsApi.getCourtLocations = jest.fn()
+
     req.flash = jest.fn()
     res.render = jest.fn()
     res.redirect = jest.fn()
@@ -47,12 +50,16 @@ describe('Select court appoinment court', () => {
     })
     elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
+    whereaboutsApi.getCourtLocations.mockReturnValue({
+      courtLocations: ['City of London', 'Kingston-upon-Thames', 'Southwark', 'Westminster', 'Wimbledon'],
+    })
+
     req.flash.mockImplementation(() => [appointmentDetails])
   })
 
   describe('index', () => {
     it('should render the template correctly with the right court values', async () => {
-      const { index } = selectCourtAppointmentCourtFactory(elite2Api, logError)
+      const { index } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
 
       await index(req, res)
 
@@ -60,8 +67,8 @@ describe('Select court appoinment court', () => {
         'addAppointment/selectCourtAppointmentCourt.njk',
         expect.objectContaining({
           courts: [
-            { text: 'City of London', value: 'london' },
-            { text: 'Kingston-upon-Thames', value: 'kingston' },
+            { text: 'City of London', value: 'city-of-london' },
+            { text: 'Kingston-upon-Thames', value: 'kingston-upon-thames' },
             { text: 'Southwark', value: 'southwark' },
             { text: 'Westminster', value: 'westminster' },
             { text: 'Wimbledon', value: 'wimbledon' },
@@ -74,7 +81,7 @@ describe('Select court appoinment court', () => {
   describe('post', () => {
     describe('when no court has been selected', () => {
       it('should return an error', async () => {
-        const { post } = selectCourtAppointmentCourtFactory(elite2Api, logError)
+        const { post } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
 
         await post(req, res)
 
@@ -89,9 +96,9 @@ describe('Select court appoinment court', () => {
 
     describe('when a court has been selected', () => {
       it('should populate the details with the selected court and redirect to room selection page ', async () => {
-        const { post } = selectCourtAppointmentCourtFactory(elite2Api, logError)
+        const { post } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
 
-        req.body = { court: 'london' }
+        req.body = { court: 'city-of-london' }
         await post(req, res)
 
         expect(req.flash).toHaveBeenCalledWith(

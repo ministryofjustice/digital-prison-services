@@ -199,7 +199,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
 
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-court',
-    selectCourtAppointmentCourt({ elite2Api, logError })
+    selectCourtAppointmentCourt({ elite2Api, whereaboutsApi, logError })
   )
 
   router.use(
