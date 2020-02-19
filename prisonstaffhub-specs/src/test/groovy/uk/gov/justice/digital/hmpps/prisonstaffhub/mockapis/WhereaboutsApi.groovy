@@ -227,6 +227,16 @@ public class WhereaboutsApi extends WireMockRule {
         )
     }
 
+    void stubAddVideoLinkAppointment() {
+        this.stubFor(
+                post("/court/add-video-link-appointment")
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                )
+        )
+    }
+
     void verifyPostAttendance() {
         this.verify(postRequestedFor(urlEqualTo('/attendance')))
     }
