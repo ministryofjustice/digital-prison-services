@@ -11,7 +11,7 @@ class ConfirmVideoLinkCourtPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("Hearing added")
+        pageTitle.contains("The video link booking has been created")
         backLink.contains("Back to prisoner search")
     }
 

@@ -97,23 +97,30 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           duration: prepostDurations[postAppointment.duration],
         }
 
-        prepostData.preAppointment =
+        prepostData.legalBriefingBefore =
           (preAppointmentData && `${preAppointmentData.locationDescription} - ${preAppointmentData.duration}`) || 'None'
 
-        prepostData.postAppointment =
+        prepostData.legalBriefingAfter =
           (postAppointmentData && `${postAppointmentData.locationDescription} - ${postAppointmentData.duration}`) ||
           'None'
       }
 
       if (isVideoLinkBooking(appointmentType)) {
+        const { court: courtLocation, location: prisonLocation } = details
+        delete details.court
+        delete details.location
         res.render('videolinkBookingConfirmHearing.njk', {
-          title: 'Hearing added',
+          title: 'The video link booking has been created',
           prisonUser: authSource === 'nomis',
           prisonerSearchLink: '/prisoner-search',
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           details: {
+            prisonLocation,
             ...details,
-            ...prepostData,
+          },
+          prepostData,
+          court: {
+            courtLocation,
           },
         })
       } else {

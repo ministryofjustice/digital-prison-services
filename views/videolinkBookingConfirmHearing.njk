@@ -13,11 +13,21 @@
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
-            <h3 class="govuk-heading-m">Hearing details</h3>
+            <h3 class="govuk-heading-m">Video link booking details</h3>
 
             {{ govukSummaryList({
                 classes: "govuk-summary-list--no-border",
                 rows: details | toSummaryViewModel
+            }) }}
+
+            {{ govukSummaryList({
+                classes: "govuk-summary-list--no-border",
+                rows: prepostData | toSummaryViewModel
+            }) }}
+
+            {{ govukSummaryList({
+                classes: "govuk-summary-list--no-border",
+                rows: court | toSummaryViewModel
             }) }}
 
             {% if prisonUser %}

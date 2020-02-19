@@ -7,7 +7,7 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = "Select an available room" %}
+{% set title = "Select an available room in the prison" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
 {% macro appointment(params) %}
@@ -15,7 +15,7 @@
         name: params.name + "Location",
         id: params.name + "Location",
         label: {
-            text: params.description + " appointment room"
+            text: params.description
         },
         items: params.locations | addDefaultSelectedVale('Select') | setSelected(params.location),
         errorMessage: errors | findError(params.name + "Location")
@@ -38,13 +38,13 @@
             <input type="hidden" id="appointment-date" value="{{ date }}"/>
 
             {% if preAppointmentRequired %}
-                {{ appointment({description: "Pre", name:"selectPreAppointment",locations: preLocations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
+                {{ appointment({description: "Legal briefing before", name:"selectPreAppointment",locations: preLocations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
             {% endif %}
 
-            {{ appointment({description: "Main", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
+            {{ appointment({description: "Court hearing", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
 
             {% if postAppointmentRequired %}
-                {{ appointment({description: "Post", name:"selectPostAppointment",locations: postLocations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
+                {{ appointment({description: "Legal briefing after", name:"selectPostAppointment",locations: postLocations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
             {% endif %}
 
             {{ govukTextarea({
