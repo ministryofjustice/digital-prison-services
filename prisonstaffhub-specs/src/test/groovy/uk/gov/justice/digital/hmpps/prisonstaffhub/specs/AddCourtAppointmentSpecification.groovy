@@ -127,5 +127,6 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
         oauthApi.stubGetEmail('COURT_USER')
         oauthApi.stubGetEmail('ITAG_USER')
+        whereaboutsApi.stubCourtLocations()
     }
 }
