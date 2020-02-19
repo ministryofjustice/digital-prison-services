@@ -204,7 +204,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
 
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
-    selectCourtAppointmentRooms({ elite2Api, logError, oauthApi, notifyClient })
+    selectCourtAppointmentRooms({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClient })
   )
 
   router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))

@@ -4,6 +4,7 @@ const config = require('../config')
 
 describe('Select court appointment rooms', () => {
   const elite2Api = {}
+  const whereaboutsApi = {}
   const oauthApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
@@ -35,6 +36,7 @@ describe('Select court appointment rooms', () => {
     date: '10/10/2019',
     preAppointmentRequired: 'yes',
     postAppointmentRequired: 'yes',
+    court: 'Leeds',
   }
 
   beforeEach(() => {
@@ -43,6 +45,7 @@ describe('Select court appointment rooms', () => {
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
     oauthApi.userEmail = jest.fn()
+    whereaboutsApi.addVideoLinkAppointment = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     appointmentsService.getLocations = jest.fn()
 
@@ -327,50 +330,81 @@ describe('Select court appointment rooms', () => {
       })
 
       it('should create main appointment', async () => {
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          appointmentsService,
+          logError,
+        })
 
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
-          comment: 'Test',
-          locationId: 2,
-          appointmentType: 'VLB',
-          startTime: '2017-10-10T11:00',
-          endTime: '2017-10-10T14:00',
-        })
+        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            court: 'Leeds',
+            hearingType: 'MAIN',
+            comment: 'Test',
+            locationId: 2,
+            startTime: '2017-10-10T11:00',
+            endTime: '2017-10-10T14:00',
+          }
+        )
       })
 
       it('should create main pre appointment 20 minutes before main with 20 minute duration', async () => {
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          appointmentsService,
+          logError,
+        })
 
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
-          comment: 'Test',
-          locationId: 1,
-          appointmentType: 'VLB',
-          startTime: '2017-10-10T10:40:00',
-          endTime: '2017-10-10T11:00',
-        })
+        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            court: 'Leeds',
+            hearingType: 'PRE',
+            comment: 'Test',
+            locationId: 1,
+            startTime: '2017-10-10T10:40:00',
+            endTime: '2017-10-10T11:00',
+          }
+        )
       })
 
       it('should create main post appointment 20 minutes after main with 20 minute duration', async () => {
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          appointmentsService,
+          logError,
+        })
 
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
-          comment: 'Test',
-          locationId: 3,
-          appointmentType: 'VLB',
-          startTime: '2017-10-10T14:00',
-          endTime: '2017-10-10T14:20:00',
-        })
+        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            court: 'Leeds',
+            hearingType: 'POST',
+            comment: 'Test',
+            locationId: 3,
+            startTime: '2017-10-10T14:00',
+            endTime: '2017-10-10T14:20:00',
+          }
+        )
       })
 
       it('should not request pre or post appointments when "no" has been selected', async () => {
         const { post } = selectCourtAppointmentRoomsFactory({
           elite2Api,
+          whereaboutsApi,
           appointmentsService,
           logError,
           notifyClient,
@@ -390,11 +424,16 @@ describe('Select court appointment rooms', () => {
         }
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment.mock.calls.length).toBe(1)
+        expect(whereaboutsApi.addVideoLinkAppointment.mock.calls.length).toBe(1)
       })
 
       it('should place pre and post appointment details into flash', async () => {
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          appointmentsService,
+          logError,
+        })
 
         req.body = {
           selectPreAppointmentLocation: '1',
@@ -418,7 +457,13 @@ describe('Select court appointment rooms', () => {
 
       it('should redirect to confirmation page', async () => {
         notifyClient.sendEmail = jest.fn()
-        const { post } = selectCourtAppointmentRoomsFactory({ elite2Api, oauthApi, logError, appointmentsService })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          oauthApi,
+          logError,
+          appointmentsService,
+        })
 
         req.body = {
           selectPreAppointmentLocation: '1',
@@ -452,6 +497,7 @@ describe('Select court appointment rooms', () => {
 
       const { post } = selectCourtAppointmentRoomsFactory({
         elite2Api,
+        whereaboutsApi,
         oauthApi,
         notifyClient,
         logError,

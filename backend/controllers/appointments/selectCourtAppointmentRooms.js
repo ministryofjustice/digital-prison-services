@@ -76,6 +76,7 @@ const validate = ({
 
 const selectCourtAppointmentRoomsFactory = ({
   elite2Api,
+  whereaboutsApi,
   appointmentsService,
   existingEventsService,
   logError,
@@ -167,14 +168,16 @@ const selectCourtAppointmentRoomsFactory = ({
   }
 
   const createAppointment = async (context, appointmentDetails) => {
-    const { startTime, endTime, bookingId, locationId, appointmentType, comment } = appointmentDetails
+    const { startTime, endTime, bookingId, locationId, comment, court, hearingType } = appointmentDetails
 
-    await elite2Api.addSingleAppointment(context, bookingId, {
-      appointmentType,
+    await whereaboutsApi.addVideoLinkAppointment(context, {
+      bookingId,
       locationId: Number(locationId),
       startTime,
       endTime,
       comment,
+      court,
+      hearingType,
     })
   }
 
@@ -189,6 +192,7 @@ const selectCourtAppointmentRoomsFactory = ({
     await createAppointment(context, {
       ...appointmentDetails,
       ...preDetails,
+      hearingType: 'PRE',
     })
 
     return preDetails
@@ -206,6 +210,7 @@ const selectCourtAppointmentRoomsFactory = ({
     await createAppointment(context, {
       ...appointmentDetails,
       ...postDetails,
+      hearingType: 'POST',
     })
 
     return postDetails
@@ -281,7 +286,12 @@ const selectCourtAppointmentRoomsFactory = ({
         })
       }
 
-      await createAppointment(res.locals, { ...appointmentDetails, comment, locationId: selectMainAppointmentLocation })
+      await createAppointment(res.locals, {
+        ...appointmentDetails,
+        comment,
+        locationId: selectMainAppointmentLocation,
+        hearingType: 'MAIN',
+      })
 
       const prepostAppointments = {}
 

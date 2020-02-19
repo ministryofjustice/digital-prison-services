@@ -5,11 +5,12 @@ const existingEventsServiceFactory = require('../attendance/existingEventsServic
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, logError, oauthApi, notifyClient }) => {
+const controller = ({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClient }) => {
   const appointmentsService = appointmentsServiceFactory(elite2Api)
   const existingEventsService = existingEventsServiceFactory(elite2Api)
   const { index, post, cancel } = selectCourtAppointmentRoomsFactory({
     elite2Api,
+    whereaboutsApi,
     oauthApi,
     notifyClient,
     logError,

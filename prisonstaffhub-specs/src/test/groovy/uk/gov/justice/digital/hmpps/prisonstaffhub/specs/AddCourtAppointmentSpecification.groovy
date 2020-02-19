@@ -118,15 +118,12 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         elite2api.stubUsageAtLocation(Caseload.LEI, 2, null, isoFormatDate, 'APP', ActivityResponse.appointments)
         elite2api.stubUsageAtLocation(Caseload.LEI, 3, null, isoFormatDate, 'APP', ActivityResponse.appointments)
         elite2api.stubAppointmentLocations(Caseload.LEI.toString(), appointmentLocations )
-
-        elite2api.stubSingleAppointment(1)
-        elite2api.stubSingleAppointment(2)
-        elite2api.stubSingleAppointment(3)
         elite2api.stubOffenderDetails(offenderNo, Map.of("firstName", "john","lastName", "doe","bookingId", 1,"offenderNo", offenderNo))
         elite2api.stubAppointmentTypes([Map.of("code", "VLB", "description", "Video link booking")])
         elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
         oauthApi.stubGetEmail('COURT_USER')
         oauthApi.stubGetEmail('ITAG_USER')
         whereaboutsApi.stubCourtLocations()
+        whereaboutsApi.stubAddVideoLinkAppointment()
     }
 }
