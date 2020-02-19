@@ -51,14 +51,14 @@ describe('Select court appoinment court', () => {
     elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
     whereaboutsApi.getCourtLocations.mockReturnValue({
-      courtLocations: ['City of London', 'Kingston-upon-Thames', 'Southwark', 'Westminster', 'Wimbledon'],
+      courtLocations: ['Kingston-upon-Thames', 'Westminster', 'Wimbledon', 'City of London', 'Southwark'],
     })
 
     req.flash.mockImplementation(() => [appointmentDetails])
   })
 
   describe('index', () => {
-    it('should render the template correctly with the right court values', async () => {
+    it('should render the template correctly with the court values sorted alphabetically', async () => {
       const { index } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
 
       await index(req, res)

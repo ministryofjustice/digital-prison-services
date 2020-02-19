@@ -16,18 +16,14 @@ const unpackAppointmentDetails = req => {
 
 const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError) => {
   const getCourts = async context => {
-    try {
-      const { courtLocations } = await whereaboutsApi.getCourtLocations(context)
+    const { courtLocations } = await whereaboutsApi.getCourtLocations(context)
 
-      const courts = courtLocations.reduce((courtList, court) => {
-        const key = court.replace(/\W+/g, '-').toLowerCase()
-        return { ...courtList, [key]: court }
-      }, {})
+    const courts = courtLocations.sort().reduce((courtList, court) => {
+      const key = court.replace(/\W+/g, '-').toLowerCase()
+      return { ...courtList, [key]: court }
+    }, {})
 
-      return courts
-    } catch (error) {
-      throw new Error(error)
-    }
+    return courts
   }
 
   const renderError = (req, res, error) => {
