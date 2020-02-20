@@ -131,9 +131,9 @@ describe('Select court appointment rooms', () => {
         'addAppointment/selectCourtAppointmentRooms.njk',
         expect.objectContaining({
           details: {
-            date: 'Tuesday 10 October 2017',
+            date: '10 October 2017',
             endTime: '14:00',
-            prisonerName: 'Doe, John (A12345)',
+            name: 'John Doe',
             startTime: '11:00',
             prison: 'Moorland',
           },
@@ -277,10 +277,10 @@ describe('Select court appointment rooms', () => {
           postLocations: [{ value: 1, text: 'Room 3' }],
           preLocations: [{ value: 1, text: 'Room 3' }],
           details: {
-            date: 'Tuesday 10 October 2017',
+            date: '10 October 2017',
             startTime: '11:00',
             endTime: '14:00',
-            prisonerName: 'Doe, John (A12345)',
+            name: 'John Doe',
           },
         })
       )

@@ -13,7 +13,7 @@
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
-            <h3 class="govuk-heading-m">Video link booking details</h3>
+            <h3 class="govuk-heading-m">Video link details</h3>
 
             {{ govukSummaryList({
                 classes: "govuk-summary-list--no-border",
@@ -53,12 +53,23 @@
             {% else %}
 
                 {{ govukButton({
-                    text: "Back to prisoner search",
+                    text: "Create another video link",
                     element: 'a',
                     href: prisonerSearchLink,
-                    classes: "govuk-button--secondary",
+                    classes: "govuk-button--primary",
                     attributes: {
                         'data-qa': 'back-to-prisoner-search'
+                    }
+                })
+                }}
+
+                {{ govukButton({
+                    text: "Finish",
+                    element: 'a',
+                    href: '/videolink',
+                    classes: "govuk-button--secondary",
+                    attributes: {
+                        'data-qa': 'back-to-video-link'
                     }
                 })
                 }}

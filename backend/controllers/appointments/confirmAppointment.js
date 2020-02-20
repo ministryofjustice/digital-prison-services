@@ -1,3 +1,5 @@
+const moment = require('moment')
+const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -98,15 +100,24 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         }
 
         prepostData.legalBriefingBefore =
-          (preAppointmentData && `${preAppointmentData.locationDescription} - ${preAppointmentData.duration}`) || 'None'
+          (preAppointmentData &&
+            `${preAppointmentData.locationDescription} - ${moment(
+              preAppointment.startTime,
+              DATE_TIME_FORMAT_SPEC
+            ).format('HH:mm')} to ${moment(preAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
+          'None'
 
         prepostData.legalBriefingAfter =
-          (postAppointmentData && `${postAppointmentData.locationDescription} - ${postAppointmentData.duration}`) ||
+          (postAppointmentData &&
+            `${postAppointmentData.locationDescription} - ${moment(
+              postAppointment.startTime,
+              DATE_TIME_FORMAT_SPEC
+            ).format('HH:mm')} to ${moment(postAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
           'None'
       }
 
       if (isVideoLinkBooking(appointmentType)) {
-        const { court: courtLocation, location: prisonLocation } = details
+        const { court: courtLocation, location: room } = details
         delete details.court
         delete details.location
         res.render('videolinkBookingConfirmHearing.njk', {
@@ -115,7 +126,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           prisonerSearchLink: '/prisoner-search',
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           details: {
-            prisonLocation,
+            room,
             ...details,
           },
           prepostData,

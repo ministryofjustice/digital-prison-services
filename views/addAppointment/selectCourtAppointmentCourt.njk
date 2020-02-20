@@ -3,6 +3,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set title = "The video link date and time is available" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
@@ -41,6 +42,10 @@
   <p class="govuk-body">
     You now need to select the videolink rooms in the prison.
   </p>
+
+  {{ govukInsetText({
+    text: "Next you need to select the video link rooms in the prison."
+  }) }}
 
   {{ govukButton({
       text: "Continue",
