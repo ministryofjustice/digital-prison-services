@@ -56,6 +56,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
           offenderNo,
           startTime,
           endTime,
+          appointmentType: 'VLB',
           agencyDescription: agencyDetails.description,
         }),
       })
