@@ -29,11 +29,13 @@ const toAppointmentDetailsSummary = ({
     }
 
   const appointmentInfo = {
-    prisonerName: `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
+    prisonerName: isVideoLinkBooking(appointmentType)
+      ? `${properCaseName(firstName)} ${properCaseName(lastName)}`
+      : `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
     prison: agencyDescription,
     appointmentType: appointmentTypeDescription,
     location,
-    date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY'),
+    date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('D MMMM YYYY'),
     startTime: Time(startTime),
     endTime: endTime && Time(endTime),
     comment,

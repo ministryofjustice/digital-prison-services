@@ -1,3 +1,5 @@
+const moment = require('moment')
+const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -33,6 +35,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         repeats,
         preAppointment,
         postAppointment,
+        agencyDescription,
         court,
       } = appointmentDetails.reduce(
         (acc, current) => ({
@@ -98,29 +101,42 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         }
 
         prepostData.legalBriefingBefore =
-          (preAppointmentData && `${preAppointmentData.locationDescription} - ${preAppointmentData.duration}`) || 'None'
+          (preAppointmentData &&
+            `${preAppointmentData.locationDescription} - ${moment(
+              preAppointment.startTime,
+              DATE_TIME_FORMAT_SPEC
+            ).format('HH:mm')} to ${moment(preAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
+          'None'
 
         prepostData.legalBriefingAfter =
-          (postAppointmentData && `${postAppointmentData.locationDescription} - ${postAppointmentData.duration}`) ||
+          (postAppointmentData &&
+            `${postAppointmentData.locationDescription} - ${moment(
+              postAppointment.startTime,
+              DATE_TIME_FORMAT_SPEC
+            ).format('HH:mm')} to ${moment(postAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
           'None'
       }
 
       if (isVideoLinkBooking(appointmentType)) {
-        const { court: courtLocation, location: prisonLocation } = details
-        delete details.court
-        delete details.location
         res.render('videolinkBookingConfirmHearing.njk', {
-          title: 'The video link booking has been created',
+          title: 'The video link has been created',
           prisonUser: authSource === 'nomis',
           prisonerSearchLink: '/prisoner-search',
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+          offender: {
+            name: details.prisonerName,
+            prison: agencyDescription,
+            room: details.location,
+          },
           details: {
-            prisonLocation,
-            ...details,
+            date: details.date,
+            startTime: details.startTime,
+            endTime: details.endTime,
+            comments: details.comment,
           },
           prepostData,
           court: {
-            courtLocation,
+            courtLocation: details.court,
           },
         })
       } else {
