@@ -7,12 +7,14 @@ class ConfirmVideoLinkCourtPage extends Page {
 
     static content = {
         pageTitle { $('h1').text() }
-        backLink { $('a.govuk-button').text() }
+        backLink { $('a.govuk-button.govuk-button--primary').text() }
+        finishLink { $('a.govuk-button.govuk-button--secondary').text() }
     }
 
     static at = {
-        pageTitle.contains("The video link booking has been created")
-        backLink.contains("Back to prisoner search")
+        pageTitle.contains("The video link has been created")
+        backLink.contains("Create another video link")
+        finishLink.contains("Finish")
     }
 
 }
