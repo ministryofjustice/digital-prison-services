@@ -16,19 +16,37 @@
             <h3 class="govuk-heading-m">Video link details</h3>
 
             {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border",
-                rows: details | toSummaryViewModel
+                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+                rows: offender | toSummaryViewModel | removePaddingBottom
             }) }}
-
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
             {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border",
-                rows: prepostData | toSummaryViewModel
+                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+                rows: details | toSummaryViewModel | removePaddingBottom
             }) }}
-
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
             {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border",
-                rows: court | toSummaryViewModel
+                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+                rows: prepostData | toSummaryViewModel | removePaddingBottom
             }) }}
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukSummaryList({
+                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+                rows: court | toSummaryViewModel | removePaddingBottom
+            }) }}
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
             {% if prisonUser %}
             
@@ -76,4 +94,5 @@
 
             {% endif %}
         </div>
+    </div>
 {% endblock %}

@@ -133,7 +133,7 @@ describe('Select court appointment rooms', () => {
           details: {
             date: '10 October 2017',
             endTime: '14:00',
-            name: 'John Doe',
+            prisonerName: 'John Doe',
             startTime: '11:00',
             prison: 'Moorland',
           },
@@ -280,7 +280,7 @@ describe('Select court appointment rooms', () => {
             date: '10 October 2017',
             startTime: '11:00',
             endTime: '14:00',
-            name: 'John Doe',
+            prisonerName: 'John Doe',
           },
         })
       )

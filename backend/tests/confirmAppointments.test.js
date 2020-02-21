@@ -58,7 +58,7 @@ describe('Confirm appointments', () => {
         addAppointmentsLink: '/offenders/A12345/add-appointment',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
         details: {
-          name: `Doe, John (A12345)`,
+          prisonerName: `Doe, John (A12345)`,
           appointmentType: 'Appointment 1',
           location: 'Room 3',
           date: '10 October 2017',
@@ -99,14 +99,17 @@ describe('Confirm appointments', () => {
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
         prisonerSearchLink: '/prisoner-search',
         prisonUser: false,
-        title: 'The video link booking has been created',
-        details: {
+        title: 'The video link has been created',
+        offender: {
           name: 'John Doe',
           room: 'Room 3',
+          prison: undefined,
+        },
+        details: {
           date: '10 October 2017',
           startTime: '11:00',
           endTime: '14:00',
-          comment: 'Test',
+          comments: 'Test',
         },
         prepostData: {
           legalBriefingAfter: 'None',
@@ -142,7 +145,7 @@ describe('Confirm appointments', () => {
       'confirmAppointments.njk',
       expect.objectContaining({
         details: {
-          name: `Doe, John (A12345)`,
+          prisonerName: `Doe, John (A12345)`,
           appointmentType: 'Appointment 1',
           location: 'Room 3',
           date: '10 October 2017',

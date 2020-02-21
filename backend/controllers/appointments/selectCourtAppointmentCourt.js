@@ -47,18 +47,28 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
 
       req.flash('appointmentDetails', appointmentDetails)
 
+      const details = toAppointmentDetailsSummary({
+        firstName,
+        lastName,
+        offenderNo,
+        startTime,
+        endTime,
+        appointmentType: 'VLB',
+        agencyDescription: agencyDetails.description,
+      })
+
       return res.render('addAppointment/selectCourtAppointmentCourt.njk', {
         ...pageData,
         courts: Object.keys(courts).map(key => ({ value: key, text: courts[key] })),
-        details: toAppointmentDetailsSummary({
-          firstName,
-          lastName,
-          offenderNo,
-          startTime,
-          endTime,
-          appointmentType: 'VLB',
-          agencyDescription: agencyDetails.description,
-        }),
+        offender: {
+          name: details.prisonerName,
+          prison: details.prison,
+        },
+        details: {
+          date: details.date,
+          startTime: details.startTime,
+          endTime: details.endTime,
+        },
       })
     } catch (error) {
       return renderError(req, res, error)

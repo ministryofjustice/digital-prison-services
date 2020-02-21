@@ -144,7 +144,7 @@ describe('Pre post appointments', () => {
             date: '10 October 2017',
             endTime: '14:00',
             location: 'Room 3',
-            name: 'John Doe',
+            prisonerName: 'John Doe',
             startTime: '11:00',
           },
         })
@@ -273,7 +273,7 @@ describe('Pre post appointments', () => {
             date: '10 October 2017',
             endTime: '14:00',
             location: 'Room 3',
-            name: 'John Doe',
+            prisonerName: 'John Doe',
             startTime: '11:00',
           },
         })

@@ -35,6 +35,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         repeats,
         preAppointment,
         postAppointment,
+        agencyDescription,
         court,
       } = appointmentDetails.reduce(
         (acc, current) => ({
@@ -117,21 +118,25 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       }
 
       if (isVideoLinkBooking(appointmentType)) {
-        const { court: courtLocation, location: room } = details
-        delete details.court
-        delete details.location
         res.render('videolinkBookingConfirmHearing.njk', {
-          title: 'The video link booking has been created',
+          title: 'The video link has been created',
           prisonUser: authSource === 'nomis',
           prisonerSearchLink: '/prisoner-search',
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+          offender: {
+            name: details.prisonerName,
+            prison: agencyDescription,
+            room: details.location,
+          },
           details: {
-            room,
-            ...details,
+            date: details.date,
+            startTime: details.startTime,
+            endTime: details.endTime,
+            comments: details.comment,
           },
           prepostData,
           court: {
-            courtLocation,
+            courtLocation: details.court,
           },
         })
       } else {

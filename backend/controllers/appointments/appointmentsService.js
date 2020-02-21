@@ -29,7 +29,7 @@ const toAppointmentDetailsSummary = ({
     }
 
   const appointmentInfo = {
-    name: isVideoLinkBooking(appointmentType)
+    prisonerName: isVideoLinkBooking(appointmentType)
       ? `${properCaseName(firstName)} ${properCaseName(lastName)}`
       : `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`,
     prison: agencyDescription,
