@@ -206,6 +206,36 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         notAddedMessage == "This is because you have removed all the appointments which clashed."
     }
 
+    def "should not add any appointments when all offender numbers are invalid" () {
+        setupTests()
+
+        given: "I navigate to the add bulk appointments screen"
+        to BulkAppointmentsAddPage
+
+        when: "I fill out the appointment details"
+        at BulkAppointmentsAddPage
+        enterBasicAppointmentDetails(startDate.format(shortDatePattern))
+        form.sameTimeAppointments = "yes"
+        form.startTimeHours = 10
+        form.startTimeMinutes = 10
+        form.recurring = "no"
+        form.comments = "Test comment."
+
+        and: "I submit"
+        submitButton.click()
+
+        and: "I upload a CSV"
+        at BulkAppointmentsUploadCSVPage
+        selectFile("src/test/resources/offenders-for-appointments-invalid.csv")
+        submitButton.click()
+
+        then: "I am presented with the no appointments have been added page"
+        at BulkAppointmentsNotAddedPage
+        notAddedMessage.contains("This might be because the prison numbers")
+
+        
+    }
+
     def "should handle invalid prisoner/offender numbers in a CSV"() {
         setupTests()
         setupNoClashes()
