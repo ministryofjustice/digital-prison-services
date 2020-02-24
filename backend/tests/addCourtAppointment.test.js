@@ -245,7 +245,7 @@ describe('Add court appointment', () => {
         continueLink: '/MDI/offenders/A12345/add-court-appointment',
         date: 'Sunday 1 January 2017',
         endTime: '13:20',
-        startTime: '11:30',
+        startTime: '11:40',
       })
     })
 
