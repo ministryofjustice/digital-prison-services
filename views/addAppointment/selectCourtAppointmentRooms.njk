@@ -15,7 +15,8 @@
         name: params.name + "Location",
         id: params.name + "Location",
         label: {
-            text: params.description
+            text: params.description,
+            classes: "govuk-body govuk-!-font-weight-bold"
         },
         items: params.locations | addDefaultSelectedVale('Select') | setSelected(params.location),
         errorMessage: errors | findError(params.name + "Location")
@@ -54,27 +55,18 @@
                 errorMessage: errors | findError('comment'),
                 classes: 'govuk-!-width-one-half',
                 label: {
-                    text: "Comments (optional)"
+                    text: "Comments (optional)",
+                    classes: "govuk-body govuk-!-font-weight-bold"
                 },
                 hint: {
-                    text: "Type of hearing and additional information"
+                    text: "Type of hearing and additional details"
                 }
             }) }}
 
             {{ govukButton({
-                    text: "Save and continue",
+                    text: "Continue",
                     type: 'submit',
                     classes: "govuk-!-margin-right-2"
-                }) }}
-
-            {{ govukButton({
-                    text: "Cancel",
-                    element: 'a',
-                    href: cancelLink,
-                    classes: "govuk-button--secondary",
-                    attributes: {
-                        'data-qa': 'back-to-profile'
-                    }
                 }) }}
 
         </form>

@@ -91,6 +91,22 @@ module.exports = (app, path) => {
       }))
   )
 
+  njkEnv.addFilter(
+    'removePaddingBottom',
+    items =>
+      items &&
+      items.map(entry => ({
+        key: {
+          ...entry.key,
+          classes: 'govuk-!-padding-bottom-0',
+        },
+        value: {
+          ...entry.value,
+          classes: 'govuk-!-padding-bottom-0',
+        },
+      }))
+  )
+
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))

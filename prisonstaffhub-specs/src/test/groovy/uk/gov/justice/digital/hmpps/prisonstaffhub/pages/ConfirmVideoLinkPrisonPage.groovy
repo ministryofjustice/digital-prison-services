@@ -12,7 +12,7 @@ class ConfirmVideoLinkPrisonPage extends Page {
     }
 
     static at = {
-        pageTitle.contains("The video link booking has been created")
+        pageTitle.contains("The video link has been created")
         printMovementSlip.contains("Print movement slip")
         backLink.contains("Back to prisoner profile")
     }

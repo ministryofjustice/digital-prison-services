@@ -3,6 +3,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set title = "The video link date and time is available" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
@@ -22,7 +23,16 @@
     <div class="govuk-grid-column-two-thirds">
         {{ govukSummaryList({
             classes: "govuk-summary-list--no-border",
-            rows: details | toSummaryViewModel
+            rows: offender | toSummaryViewModel | removePaddingBottom
+        }) }}
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        {{ govukSummaryList({
+            classes: "govuk-summary-list--no-border",
+            rows: details | toSummaryViewModel | removePaddingBottom
         }) }}
     </div>
 </div>
@@ -32,15 +42,16 @@
     name: "court",
     id: "court",
     label: {
-        text: "What court are you in?"
+        text: "What court are you in?",
+        classes: "govuk-body govuk-!-font-size-27 govuk-!-font-weight-bold"
     },
     items: courts | addDefaultSelectedVale('Select'),
     errorMessage: errors | findError("court")
   }) }}
 
-  <p class="govuk-body">
-    You now need to select the videolink rooms in the prison.
-  </p>
+  {{ govukInsetText({
+    text: "Next you need to select the video link rooms in the prison."
+  }) }}
 
   {{ govukButton({
       text: "Continue",
