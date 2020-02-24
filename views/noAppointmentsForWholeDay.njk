@@ -1,0 +1,31 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'There are no video link bookings available' %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">
+                {{ title }}
+            </h1>
+
+            <div class="govuk-body">
+                <p>
+                    There are no bookings available on {{date}}.
+                </p>
+
+                <p>
+                    You must select different date of the video link booking.
+                </p>
+            </div>
+
+            {{ govukButton({
+                text: "Continue",
+                element: "a",
+                href: continueLink
+            }) }}
+
+        </div>
+    </div>
+{% endblock %}

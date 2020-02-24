@@ -6,7 +6,7 @@ const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../
 const { properCaseName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
-const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError) => {
+const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError, availableSlotsService) => {
   const getValidationMessages = fields => {
     const { date, startTime, endTime, preAppointmentRequired, postAppointmentRequired } = fields
     const errors = []
@@ -116,19 +116,6 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError)
         })
       }
 
-      const request = {
-        appointmentDefaults: {
-          appointmentType: 'VLB',
-          startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-          endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
-        },
-        appointments: [
-          {
-            bookingId,
-          },
-        ],
-      }
-
       const { mainLocations, preLocations, postLocations } = await existingEventsService.getAvailableLocationsForVLB(
         res.locals,
         {
@@ -143,11 +130,58 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError)
 
       const preAppointmentLocationsValid = preAppointmentRequired === 'yes' ? preLocations.length : true
       const postAppointmentLocationsValid = postAppointmentRequired === 'yes' ? postLocations.length : true
+      const noAvailabilityForGivenTime = Boolean(
+        !mainLocations.length || !preAppointmentLocationsValid || !postAppointmentLocationsValid
+      )
+      if (noAvailabilityForGivenTime) {
+        const start =
+          preAppointmentRequired === 'yes'
+            ? startTime.subtract(25, 'minutes').format(DATE_TIME_FORMAT_SPEC)
+            : startTime.format(DATE_TIME_FORMAT_SPEC)
 
-      if (!mainLocations.length || !preAppointmentLocationsValid || !postAppointmentLocationsValid) {
-        return res.send('No rooms available')
+        const end =
+          postAppointmentRequired === 'yes'
+            ? endTime.add(25, 'minutes').format(DATE_TIME_FORMAT_SPEC)
+            : endTime.format(DATE_TIME_FORMAT_SPEC)
+
+        const availableRooms = await availableSlotsService.getAvailableRooms(res.locals, {
+          startTime: start,
+          endTime: end,
+          agencyId,
+        })
+
+        const atLeastTwoRoomsNeeded = Boolean(preAppointmentRequired === 'yes' || postAppointmentRequired === 'yes')
+        const minRooms = atLeastTwoRoomsNeeded ? 2 : 1
+
+        if (availableRooms.length < minRooms) {
+          return res.render('noAppointmentsForWholeDay.njk', {
+            date: startTime.format('dddd D MMMM YYYY'),
+            continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment`,
+          })
+        }
+
+        if (availableRooms.length >= minRooms) {
+          return res.render('noAppointmentsForDateTime.njk', {
+            date: startTime.format('dddd D MMMM YYYY'),
+            startTime: startTime.format('HH:mm'),
+            endTime: endTime.format('HH:mm'),
+            continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment`,
+          })
+        }
       }
 
+      const request = {
+        appointmentDefaults: {
+          appointmentType: 'VLB',
+          startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+          endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
+        },
+        appointments: [
+          {
+            bookingId,
+          },
+        ],
+      }
       req.flash('appointmentDetails', {
         ...request.appointmentDefaults,
         bookingId,
