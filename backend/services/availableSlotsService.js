@@ -3,7 +3,7 @@ const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers
 
 const defaultOptions = {
   startOfDay: 8,
-  endOfDay: 16,
+  endOfDay: 18,
   byMinutes: 5,
 }
 

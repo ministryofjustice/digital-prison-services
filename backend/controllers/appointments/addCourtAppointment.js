@@ -128,10 +128,10 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
         }
       )
 
-      const preAppointmentLocationsValid = preAppointmentRequired === 'yes' ? preLocations.length : true
-      const postAppointmentLocationsValid = postAppointmentRequired === 'yes' ? postLocations.length : true
+      const preAppointmentLocationsNotValid = Boolean(preAppointmentRequired === 'yes' && preLocations.length < 2)
+      const postAppointmentLocationsNotValid = Boolean(postAppointmentRequired === 'yes' && postLocations.length < 2)
       const noAvailabilityForGivenTime = Boolean(
-        !mainLocations.length || !preAppointmentLocationsValid || !postAppointmentLocationsValid
+        !mainLocations.length || preAppointmentLocationsNotValid || postAppointmentLocationsNotValid
       )
       if (noAvailabilityForGivenTime) {
         const start =

@@ -103,8 +103,8 @@ describe('Add court appointment', () => {
     it('should place appointment details into flash and redirect to court selection page', async () => {
       existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
         mainLocations: [{ value: 1, text: 'Room 1' }],
-        preLocations: [{ value: 2, text: 'Room 2' }],
-        postLocations: [{ value: 3, text: 'Room 3' }],
+        preLocations: [{ value: 2, text: 'Room 2' }, { value: 22, text: 'Room 22' }],
+        postLocations: [{ value: 3, text: 'Room 3' }, { value: 33, text: 'Room 33' }],
       })
 
       const tomorrow = moment().add(1, 'day')
@@ -250,16 +250,19 @@ describe('Add court appointment', () => {
     })
 
     it('should continue with the journey if a pre appointment not required', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000)
+
       existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
         mainLocations: [{ value: 1, text: 'Room 1' }],
         preLocations: [],
-        postLocations: [{ value: 3, text: 'Room 3' }],
+        postLocations: [{ value: 3, text: 'Room 3' }, { value: 4, text: 'Room 4' }],
       })
 
       req.flash = () => {}
       req.body = {
         ...req.body,
         preAppointmentRequired: 'no',
+        date: moment().format(DAY_MONTH_YEAR),
       }
       await controller.post(req, res)
 
@@ -267,14 +270,20 @@ describe('Add court appointment', () => {
     })
 
     it('should continue with the journey if a post appointment not required', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000)
+
       existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
         mainLocations: [{ value: 1, text: 'Room 1' }],
-        preLocations: [{ value: 2, text: 'Room 2' }],
+        preLocations: [{ value: 3, text: 'Room 3' }, { value: 4, text: 'Room 4' }],
         postLocations: [],
       })
 
       req.flash = () => {}
-      req.body = { ...req.body, postAppointmentRequired: 'no' }
+      req.body = {
+        ...req.body,
+        postAppointmentRequired: 'no',
+        date: moment().format(DAY_MONTH_YEAR),
+      }
       await controller.post(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/MDI/offenders/A12345/add-court-appointment/select-court')
