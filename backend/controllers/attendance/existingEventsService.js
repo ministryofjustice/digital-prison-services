@@ -81,7 +81,6 @@ module.exports = elite2Api => {
       elite2Api
         .getActivityList(context, { agencyId: agency, date: switchDateFormat(date), locationId, usage: 'APP' })
         .then(response => {
-          console.error({ locationId })
           resolve(response.map(event => toEvent({ ...event, locationId })))
         })
         .catch(reject)
