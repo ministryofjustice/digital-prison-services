@@ -15,8 +15,7 @@
         name: params.name + "Location",
         id: params.name + "Location",
         label: {
-            text: params.description,
-            classes: "govuk-body govuk-!-font-weight-bold"
+            text: params.description
         },
         items: params.locations | addDefaultSelectedVale('Select') | setSelected(params.location),
         errorMessage: errors | findError(params.name + "Location")
@@ -55,8 +54,7 @@
                 errorMessage: errors | findError('comment'),
                 classes: 'govuk-!-width-one-half',
                 label: {
-                    text: "Comments (optional)",
-                    classes: "govuk-body govuk-!-font-weight-bold"
+                    text: "Comments (optional)"
                 },
                 hint: {
                     text: "Type of hearing and additional details"
