@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } = require('../../src/dateHelpers')
 
 const availableSlotsServiceFactory = require('../services/availableSlotsService')
 
@@ -26,14 +26,27 @@ describe('Available slots service', () => {
       { existingEventsService, appointmentsService },
       { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
     )
+    const date = moment().format(DATE_ONLY_FORMAT_SPEC)
 
-    const chunks = availableSlotsService.breakDayIntoSlots()
+    const chunks = availableSlotsService.breakDayIntoSlots({ date })
 
     expect(chunks).toEqual([
-      { startTime: getTime({ hour: 9, minutes: 0 }), endTime: getTime({ hour: 9, minutes: 30 }) },
-      { startTime: getTime({ hour: 9, minutes: 30 }), endTime: getTime({ hour: 10, minutes: 0 }) },
-      { startTime: getTime({ hour: 10, minutes: 0 }), endTime: getTime({ hour: 10, minutes: 30 }) },
-      { startTime: getTime({ hour: 10, minutes: 30 }), endTime: getTime({ hour: 11, minutes: 0 }) },
+      {
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 9, minutes: 0 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 9, minutes: 30 }),
+      },
+      {
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 9, minutes: 30 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 0 }),
+      },
+      {
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 0 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 30 }),
+      },
+      {
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 30 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 11, minutes: 0 }),
+      },
     ])
   })
 
@@ -53,7 +66,10 @@ describe('Available slots service', () => {
       { appointmentsService, existingEventsService },
       { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
     )
-    const availableSlots = availableSlotsService.getAvailableSlots(bookedSlots)
+    const availableSlots = availableSlotsService.getAvailableSlots({
+      bookedSlots,
+      date: moment().format(DATE_ONLY_FORMAT_SPEC),
+    })
 
     expect(availableSlots).toEqual([
       { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 9, minutes: 30 }) },
@@ -71,7 +87,10 @@ describe('Available slots service', () => {
       { existingEventsService, appointmentsService },
       { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
     )
-    const availableSlots = availableSlotsService.getAvailableSlots(bookedSlots)
+    const availableSlots = availableSlotsService.getAvailableSlots({
+      bookedSlots,
+      date: moment().format(DATE_ONLY_FORMAT_SPEC),
+    })
 
     expect(availableSlots).toEqual([
       { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 10, minutes: 0 }) },
@@ -84,7 +103,9 @@ describe('Available slots service', () => {
       { existingEventsService, appointmentsService },
       { startOfDay: 9, endOfDay: 17, byMinutes: 30 }
     )
-    const availableSlots = availableSlotsService.getAvailableSlots(bookedSlots)
+
+    const date = moment().format(DATE_ONLY_FORMAT_SPEC)
+    const availableSlots = availableSlotsService.getAvailableSlots({ bookedSlots, date })
 
     expect(availableSlots).toEqual([
       { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 17, minutes: 0 }) },
@@ -98,7 +119,11 @@ describe('Available slots service', () => {
       { existingEventsService, appointmentsService },
       { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
     )
-    const availableSlots = availableSlotsService.getAvailableSlotsByMinLength(bookedSlots, 30)
+    const availableSlots = availableSlotsService.getAvailableSlotsByMinLength({
+      bookedSlots,
+      minutesNeeded: 30,
+      date: moment().format(DATE_ONLY_FORMAT_SPEC),
+    })
 
     expect(availableSlots).toEqual([
       { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 10, minutes: 0 }) },

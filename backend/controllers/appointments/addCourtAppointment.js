@@ -136,12 +136,12 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
       if (noAvailabilityForGivenTime) {
         const start =
           preAppointmentRequired === 'yes'
-            ? startTime.subtract(25, 'minutes').format(DATE_TIME_FORMAT_SPEC)
+            ? startTime.subtract(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
             : startTime.format(DATE_TIME_FORMAT_SPEC)
 
         const end =
           postAppointmentRequired === 'yes'
-            ? endTime.add(25, 'minutes').format(DATE_TIME_FORMAT_SPEC)
+            ? endTime.add(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
             : endTime.format(DATE_TIME_FORMAT_SPEC)
 
         const availableRooms = await availableSlotsService.getAvailableRooms(res.locals, {
