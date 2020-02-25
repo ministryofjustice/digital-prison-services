@@ -110,8 +110,8 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
           startTimeMinutes,
           endTimeHours,
           endTimeMinutes,
-          startTime: startDateTime && startDateTime.format(DATE_TIME_FORMAT_SPEC),
-          endTime: endDateTime && endDateTime.format(DATE_TIME_FORMAT_SPEC),
+          startTime: startDateTime ? startDateTime.format(DATE_TIME_FORMAT_SPEC) : '',
+          endTime: endDateTime ? endDateTime.format(DATE_TIME_FORMAT_SPEC) : '',
         }
       }
 

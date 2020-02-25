@@ -284,7 +284,9 @@ describe('Add appointment details controller', () => {
 
         req.body = {
           date: moment().format(DAY_MONTH_YEAR),
-          startTimeHours: moment().add(1, 'hours'),
+          startTimeHours: moment()
+            .add(1, 'hours')
+            .hours(),
           startTimeMinutes: '00',
           appointmentType: 'app1',
           location: 1,
@@ -306,7 +308,9 @@ describe('Add appointment details controller', () => {
       it('should validate that date is in the correct format', async () => {
         req.body = {
           date: moment().format(DATE_TIME_FORMAT_SPEC),
-          startTimeHours: moment().add(1, 'hours'),
+          startTimeHours: moment()
+            .add(1, 'hours')
+            .hours(),
           startTimeMinutes: '00',
           appointmentType: 'app1',
           location: 1,
