@@ -45,6 +45,7 @@ const confirmAppointmentController = require('./controllers/appointments/confirm
 const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
 const selectCourtAppointmentRooms = require('./controllers/appointments/selectCourtAppointmentRoomsController')
 const selectCourtAppointmentCourt = require('./controllers/appointments/selectCourtAppointmentCourtController')
+const viewAppointmentsController = require('./controllers/appointments/viewAppointmentsController')
 
 const prisonerSearchController = require('./controllers/search/prisonerSearchController')
 const requestBookingController = require('./controllers/appointments/requestBookingController')
@@ -219,6 +220,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   })
 
   router.use('/request-booking', requestBookingController({ logError, notifyClient }))
+
+  router.use('/appointments', viewAppointmentsController({ elite2Api, whereaboutsApi, logError }))
 
   return router
 }
