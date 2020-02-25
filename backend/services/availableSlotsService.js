@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, DATE_ONLY_FORMAT_SPEC } = require('../../src/dateHelpers')
 
 const defaultOptions = {
   startOfDay: 8,
@@ -18,14 +18,14 @@ module.exports = (
   { appointmentsService, existingEventsService },
   { startOfDay, endOfDay, byMinutes } = defaultOptions
 ) => {
-  const breakDayIntoSlots = () => {
-    const startTime = moment()
+  const breakDayIntoSlots = ({ date }) => {
+    const startTime = moment(date, DATE_ONLY_FORMAT_SPEC)
       .hour(Number(startOfDay))
       .minute(0)
       .seconds(0)
       .millisecond(0)
 
-    const endTime = moment()
+    const endTime = moment(date, DATE_ONLY_FORMAT_SPEC)
       .hour(Number(endOfDay))
       .minute(0)
       .seconds(0)
@@ -100,8 +100,8 @@ module.exports = (
     ).connectedSlots
   }
 
-  const getAvailableSlots = bookedSlots => {
-    const dayIntoSlots = breakDayIntoSlots()
+  const getAvailableSlots = ({ bookedSlots, date }) => {
+    const dayIntoSlots = breakDayIntoSlots({ date })
 
     const freeSlots = dayIntoSlots.filter(day => {
       const overlappingSlots = bookedSlots.filter(bookedSlot => {
@@ -156,8 +156,8 @@ module.exports = (
     ),
   ]
 
-  const getAvailableSlotsByMinLength = (bookedSlots, minutesNeeded) =>
-    getAvailableSlots(bookedSlots)
+  const getAvailableSlotsByMinLength = ({ bookedSlots, date, minutesNeeded }) =>
+    getAvailableSlots({ bookedSlots, date })
       .map(slot => ({
         ...slot,
         lengthInMinutes: moment.duration(moment(slot.endTime).diff(moment(slot.startTime))).asMinutes(),
@@ -169,19 +169,25 @@ module.exports = (
       }))
 
   const getAvailableRooms = async (context, { agencyId, startTime, endTime }) => {
-    const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
+    const date = moment(startTime, DATE_TIME_FORMAT_SPEC)
 
+    const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
     const eventsAtLocations = await existingEventsService.getAppointmentsAtLocations(context, {
       agency: agencyId,
-      date: moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR),
+      date: date.format(DAY_MONTH_YEAR),
       locations,
     })
 
-    const durationInMinutes = getDiffInMinutes(
+    const minutesNeeded = getDiffInMinutes(
       moment(startTime, DATE_TIME_FORMAT_SPEC),
       moment(endTime, DATE_TIME_FORMAT_SPEC)
     )
-    const timeSlots = getAvailableSlotsByMinLength(eventsAtLocations, durationInMinutes)
+
+    const timeSlots = getAvailableSlotsByMinLength({
+      bookedSlots: eventsAtLocations,
+      date: date.format(DATE_ONLY_FORMAT_SPEC),
+      minutesNeeded,
+    })
 
     return getAvailableLocationsForSlots(context, { timeSlots, locations, eventsAtLocations })
   }
