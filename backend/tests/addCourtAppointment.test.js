@@ -185,10 +185,10 @@ describe('Add court appointment', () => {
         .minute(0)
 
       const startTime = moment(mainStartTime)
-        .subtract(25, 'minutes')
+        .subtract(20, 'minutes')
         .format(DATE_TIME_FORMAT_SPEC)
       const endTime = moment(mainEndTime)
-        .add(25, 'minutes')
+        .add(20, 'minutes')
         .format(DATE_TIME_FORMAT_SPEC)
 
       expect(availableSlotsService.getAvailableRooms).toHaveBeenCalledWith(
@@ -244,8 +244,8 @@ describe('Add court appointment', () => {
       expect(res.render).toHaveBeenCalledWith('noAppointmentsForDateTime.njk', {
         continueLink: '/MDI/offenders/A12345/add-court-appointment',
         date: 'Sunday 1 January 2017',
-        endTime: '13:25',
-        startTime: '11:35',
+        endTime: '13:20',
+        startTime: '11:40',
       })
     })
 
