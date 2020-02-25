@@ -150,8 +150,6 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
           agencyId,
         })
 
-        console.error({ availableRooms })
-
         const atLeastTwoRoomsNeeded = Boolean(preAppointmentRequired === 'yes' || postAppointmentRequired === 'yes')
         const minRooms = atLeastTwoRoomsNeeded ? 2 : 1
 
