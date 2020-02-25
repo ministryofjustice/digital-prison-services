@@ -22,6 +22,18 @@ $govuk-page-width: 1170px;
   cursor: pointer;
 }
 
+.horizontal-form {
+  display: flex;
+
+  > div {
+    margin-right: 15px;
+  }
+
+  button {
+    align-self: center;
+  }
+}
+
 // Print
 @page {
   margin: 0;

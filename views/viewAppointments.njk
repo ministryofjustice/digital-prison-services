@@ -1,189 +1,239 @@
 {% extends "./partials/layout.njk" %}
-{%- from "govuk/components/table/macro.njk" import govukTable -%}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set title = "Appointments for date" %}
+{% set title = "Appointments for " + formattedDate %}
 
 {% block content %}
 <h1 class="govuk-heading-l">{{title}}</h1>
 
+<form class="horizontal-form">
+  {{ datePicker({
+    id: 'date',
+    label: 'Date',
+    name: 'date',
+    date: date,
+    errorMessage: errors | findError('date')
+  }) }}
+
+  {{ govukSelect({
+    name: 'period',
+    id: 'period',
+    label: {
+        text: "Period"
+    },
+    items: [
+        { text: 'AM', value: 'am' },
+        { text: 'PM', value: 'pm' }
+    ] | setSelected(period),
+    errorMessage: errors | findError(period)
+  }) }}
+
+  {{ govukSelect({
+    name: 'type',
+    id: 'type',
+    label: {
+        text: "Type"
+    },
+    items: types | setSelected(type),
+    errorMessage: errors | findError(type)
+  }) }}
+
+  {{ govukSelect({
+    name: 'location',
+    id: 'location',
+    label: {
+        text: "Location"
+    },
+    items: locations | setSelected(location),
+    errorMessage: errors | findError(location)
+  }) }}
+
+  {{ govukButton({ 
+    text: "Update results",
+    preventDoubleClick: true
+  }) }}
+</form>
 
 {{ govukTable({
-head: [
-{
-  text: "Name",
-  attributes: {
-    "aria-sort": "ascending"
+  head: [
+  {
+    text: "Name",
+    attributes: {
+      "aria-sort": "ascending"
+    }
+  },
+  {
+    text: "Elevation",
+    attributes: {
+      "aria-sort": "none"
+    }
+  },
+  {
+    text: "Continent",
+    attributes: {
+      "aria-sort": "none"
+    }
+  },
+  {
+    text: "First summit",
+    attributes: {
+      "aria-sort": "none"
+    },
+    format: "numeric"
   }
-},
-{
-  text: "Elevation",
-  attributes: {
-    "aria-sort": "none"
-  }
-},
-{
-  text: "Continent",
-  attributes: {
-    "aria-sort": "none"
-  }
-},
-{
-  text: "First summit",
-  attributes: {
-    "aria-sort": "none"
-  },
-  format: "numeric"
-}
-],
-rows: [
-[
-  {
-    text: "Aconcagua"
-  },
-  {
-    text: "6,961 meters",
-    attributes: {
-      "data-sort-value": "6961"
+  ],
+  rows: [
+  [
+    {
+      text: "Aconcagua"
+    },
+    {
+      text: "6,961 meters",
+      attributes: {
+        "data-sort-value": "6961"
+      }
+    },
+    {
+      text: "South America"
+    },
+    {
+      text: "1897",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1897"
+      }
     }
-  },
-  {
-    text: "South America"
-  },
-  {
-    text: "1897",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1897"
+  ],
+  [
+    {
+      text: "Denali"
+    },
+    {
+      text: "6,194 meters",
+      attributes: {
+        "data-sort-value": "6194"
+      }
+    },
+    {
+      text: "North America"
+    },
+    {
+      text: "1913",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1913"
+      }
     }
-  }
-],
-[
-  {
-    text: "Denali"
-  },
-  {
-    text: "6,194 meters",
-    attributes: {
-      "data-sort-value": "6194"
+  ],
+  [
+    {
+      text: "Elbrus"
+    },
+    {
+      text: "5,642 meters",
+      attributes: {
+        "data-sort-value": "5642"
+      }
+    },
+    {
+      text: "Europe"
+    },
+    {
+      text: "1874",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1874"
+      }
     }
-  },
-  {
-    text: "North America"
-  },
-  {
-    text: "1913",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1913"
+  ],
+  [
+    {
+      text: "Everest"
+    },
+    {
+      text: "8,850 meters",
+      attributes: {
+        "data-sort-value": "8850"
+      }
+    },
+    {
+      text: "Asia"
+    },
+    {
+      text: "1953",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1953"
+      }
     }
-  }
-],
-[
-  {
-    text: "Elbrus"
-  },
-  {
-    text: "5,642 meters",
-    attributes: {
-      "data-sort-value": "5642"
+  ],
+  [
+    {
+      text: "Kilimanjaro"
+    },
+    {
+      text: "5,895 meters",
+      attributes: {
+        "data-sort-value": "5895"
+      }
+    },
+    {
+      text: "Africa"
+    },
+    {
+      text: "1889",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1889"
+      }
     }
-  },
-  {
-    text: "Europe"
-  },
-  {
-    text: "1874",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1874"
+  ],
+  [
+    {
+      text: "Puncak Jaya"
+    },
+    {
+      text: "4,884 meters",
+      attributes: {
+        "data-sort-value": "4884"
+      }
+    },
+    {
+      text: "Australia"
+    },
+    {
+      text: "1962",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1962"
+      }
     }
-  }
-],
-[
-  {
-    text: "Everest"
-  },
-  {
-    text: "8,850 meters",
-    attributes: {
-      "data-sort-value": "8850"
+  ],
+  [
+    {
+      text: "Vinson"
+    },
+    {
+      text: "4,897 meters",
+      attributes: {
+        "data-sort-value": "4897"
+      }
+    },
+    {
+      text: "Antarctica"
+    },
+    {
+      text: "1966",
+      format: "numeric",
+      attributes: {
+        "data-sort-value": "1966"
+      }
     }
-  },
-  {
-    text: "Asia"
-  },
-  {
-    text: "1953",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1953"
-    }
-  }
-],
-[
-  {
-    text: "Kilimanjaro"
-  },
-  {
-    text: "5,895 meters",
-    attributes: {
-      "data-sort-value": "5895"
-    }
-  },
-  {
-    text: "Africa"
-  },
-  {
-    text: "1889",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1889"
-    }
-  }
-],
-[
-  {
-    text: "Puncak Jaya"
-  },
-  {
-    text: "4,884 meters",
-    attributes: {
-      "data-sort-value": "4884"
-    }
-  },
-  {
-    text: "Australia"
-  },
-  {
-    text: "1962",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1962"
-    }
-  }
-],
-[
-  {
-    text: "Vinson"
-  },
-  {
-    text: "4,897 meters",
-    attributes: {
-      "data-sort-value": "4897"
-    }
-  },
-  {
-    text: "Antarctica"
-  },
-  {
-    text: "1966",
-    format: "numeric",
-    attributes: {
-      "data-sort-value": "1966"
-    }
-  }
-]
-]
+  ]
+  ]
 }) }} 
 {% endblock %}
 
