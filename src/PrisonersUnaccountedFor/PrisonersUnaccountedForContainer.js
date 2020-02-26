@@ -68,6 +68,7 @@ function PrisonersUnaccountedForContainer({
 
           setPrisonersUnaccountedFor(offenders)
           getAbsentReasonsDispatch()
+          sortResults(offenders, sortOrder.orderColumn, sortOrder.orderDirection)
         } catch (error) {
           handleError(error)
         }
