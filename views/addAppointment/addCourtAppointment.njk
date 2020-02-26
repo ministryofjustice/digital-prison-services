@@ -9,7 +9,7 @@
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
-{% set title = 'Add videolink booking date and time' %}
+{% set title = 'Add video link booking date and time' %}
 {% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
 
 {% block beforeContent %}
@@ -111,7 +111,7 @@
                     errorMessage: errors | findError('pre-appointment-required'),
                     fieldset: {
                         legend: {
-                        text: "Add videolink session before?",
+                        text: "Add video link session before?",
                         classes: "govuk-fieldset__legend--s"
                         }
                     },
@@ -136,7 +136,7 @@
                     errorMessage: errors | findError('post-appointment-required'),
                     fieldset: {
                         legend: {
-                        text: "Add videolink session after?",
+                        text: "Add video link session after?",
                         classes: "govuk-fieldset__legend--s"
                         }
                     },
