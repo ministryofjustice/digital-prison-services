@@ -13,7 +13,7 @@ class VideoLinkPage extends Page {
     }
 
     static at = {
-        pageTitle == "Videolink appointment booking"
+        pageTitle == "Video link appointment booking"
     }
 
 }
