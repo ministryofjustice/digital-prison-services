@@ -152,11 +152,11 @@ describe('Houseblock data sorter tests', () => {
       expect(data).toEqual([
         { activities: [{ eventType: 'PRISON_ACT', comment: 'A', mainActivity: true }] },
         { activities: [{ event: 'PA', comment: 'B', mainActivity: true }] },
+        { activities: [{ eventDescription: 'C', mainActivity: true }] },
         { activities: [{ eventDescription: 'C', lastName: 'A', firstName: 'P', mainActivity: true }] },
         { activities: [{ eventDescription: 'C', lastName: 'A', firstName: 'Q', mainActivity: true }] },
         { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'P', mainActivity: true }] },
         { activities: [{ eventDescription: 'C', lastName: 'B', firstName: 'Q', mainActivity: true }] },
-        { activities: [{ eventDescription: 'C', mainActivity: true }] },
         { activities: [{ comment: 'D', eventDescription: 'E', mainActivity: true }] },
         { activities: [{ comment: 'D', eventDescription: 'F', mainActivity: true }] },
       ])
