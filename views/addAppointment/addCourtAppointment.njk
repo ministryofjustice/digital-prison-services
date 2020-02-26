@@ -10,25 +10,6 @@
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
 {% set title = 'Add video link booking date and time' %}
-{% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
-
-{% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: dpsUrl
-            },
-            {
-                text: offenderName,
-                href: offenderUrl
-            },
-            {
-                text: title
-            }
-        ]
-    }) }}
-{% endblock %}
 
 {% block content %}
     <div class="govuk-grid-row">
