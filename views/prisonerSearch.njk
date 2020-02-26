@@ -11,20 +11,6 @@
   {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
 {%- endmacro %}
 
-{% block beforeContent %}
-  {{ govukBreadcrumbs({
-      items: [
-          {
-              text: "Home",
-              href: "/"
-          },
-          {
-              text: title
-          }
-      ]
-  }) }}
-{% endblock %}
-
 {% block content %}
   {% if errors.length > 0 %}
     {{ govukErrorSummary({
