@@ -77,8 +77,12 @@ const PrisonersUnaccountedFor = ({
               name={['updateAttendanceEnabled']}
               render={() => (
                 <>
-                  <Table.CellHeader setWidth="15%">Attended</Table.CellHeader>
-                  <Table.CellHeader setWidth="15%">Not attended</Table.CellHeader>
+                  <Table.CellHeader setWidth="15%" className="no-print">
+                    Attended
+                  </Table.CellHeader>
+                  <Table.CellHeader setWidth="15%" className="no-print">
+                    Not attended
+                  </Table.CellHeader>
                 </>
               )}
               fallbackRender={() => <></>}
