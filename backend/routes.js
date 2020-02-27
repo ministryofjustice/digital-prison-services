@@ -213,6 +213,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
   router.get('/videolink', async (req, res) => {
     res.render('courtsVideolink.njk', {
       user: { displayName: req.session.userDetails.name },
+      homeUrl: '/videolink',
     })
   })
 

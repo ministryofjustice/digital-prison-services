@@ -17,6 +17,7 @@ const requestBookingFactory = ({ logError, notifyClient }) => {
     try {
       return res.render('requestBooking/requestBooking.njk', {
         user: { displayName: req.session.userDetails.name },
+        homeUrl: '/videolink',
         errors,
         formValues,
       })
