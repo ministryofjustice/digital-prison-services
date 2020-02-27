@@ -10,11 +10,7 @@ const DayMonthYear = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(
 const Time = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 
 const buildDateTime = ({ date, hours, minutes }) => {
-  const time =
-    date &&
-    Number.isSafeInteger(Number.parseInt(hours, 10)) &&
-    Number.isSafeInteger(Number.parseInt(minutes, 10)) &&
-    moment(date, DAY_MONTH_YEAR)
+  const time = date && hours && minutes && moment(date, DAY_MONTH_YEAR)
 
   return time && time.hour(Number(hours)).minutes(Number(minutes))
 }
