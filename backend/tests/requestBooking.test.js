@@ -40,7 +40,6 @@ describe('Request a booking', () => {
         expect(res.render).toHaveBeenCalledWith('requestBooking/requestBooking.njk', {
           errors: undefined,
           formValues: undefined,
-          homeUrl: '/videolink',
           user: {
             displayName: 'Test User',
           },
