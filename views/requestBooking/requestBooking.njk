@@ -16,20 +16,6 @@
   {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
 {%- endmacro %}
 
-{% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: homeUrl
-            },
-            {
-                text: title
-            }
-        ]
-    }) }}
-{% endblock %}
-
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -186,13 +172,6 @@
                 }) }}
 
                 {{ govukButton({ text: "Continue", type: "submit" }) }}
-
-                {{ govukButton({
-                    text: "Cancel",
-                    element: 'a',
-                    href: homeUrl,
-                    classes: "govuk-button--secondary"
-                }) }}
             </form>
         </div>
     </div>
