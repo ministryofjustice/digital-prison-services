@@ -6,7 +6,6 @@ const factory = require('../controllers/attendance/houseblockList').getHousebloc
 const elite2Api = elite2ApiFactory(null)
 const whereaboutsApi = {}
 const config = {
-  updateAttendancePrisons: ['LEI'],
   app: {
     production: true,
   },
@@ -654,7 +653,6 @@ describe('Houseblock list controller', () => {
       ])
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
       const { getHouseblockList: service } = factory(elite2Api, whereaboutsApi, {
-        updateAttendancePrisons: ['LEI'],
         app: {
           production: true,
         },
@@ -663,8 +661,8 @@ describe('Houseblock list controller', () => {
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
 
-      expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(1)
-      expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(1)
+      expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
+      expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
     })
 
     it('should enable attendance for everyone in dev', async () => {
@@ -686,7 +684,6 @@ describe('Houseblock list controller', () => {
       ])
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
       const { getHouseblockList: service } = factory(elite2Api, whereaboutsApi, {
-        updateAttendancePrisons: ['LEI'],
         app: {
           production: false,
         },

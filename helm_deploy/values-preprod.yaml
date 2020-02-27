@@ -21,7 +21,6 @@ env:
   OAUTH_ENDPOINT_URL: https://gateway.preprod.nomis-api.service.hmpps.dsd.io/auth/
   NN_ENDPOINT_URL: https://digital-preprod.prison.service.justice.gov.uk/
   API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
-  UPDATE_ATTENDANCE_PRISONS: "MDI,HMI,NHI,PVI,WWI,BXI,STI,LEI,HLI,GHI,HHI,WLI,WCI,BLI,HEI,LLI,LNI,UKI,UPI,CFI,LHI,PVI,KMI,RNI,GTI,EYI,TCI,WYI,SWI,NWI,MRI,DTI,KVI,DMI,FKI,SKI,WNI,FNI,LWI,RSI,WEI,BRI,WDI,MSI,ONI,AGI,CLI,ESI,DWI,FDI,RCI,SDI,EHI,SLI,HVI,BCI,PNI,LFI"
   LICENCES_URL: https://licences-preprod.prison.service.justice.gov.uk/
   HMPPS_COOKIE_NAME: hmpps-session-preprod
   REMOTE_AUTH_STRATEGY: "true"

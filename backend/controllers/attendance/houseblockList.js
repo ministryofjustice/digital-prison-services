@@ -57,12 +57,7 @@ const addToActivities = (offender, activity) => ({
   stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
-const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
-  const {
-    updateAttendancePrisons,
-    app: { production },
-  } = config
-  const updateAttendanceEnabled = agencyId => !production || updateAttendancePrisons.includes(agencyId)
+const getHouseblockListFactory = (elite2Api, whereaboutsApi) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const locations = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
     if (locations.length === 0) {
@@ -85,9 +80,9 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi, config) => {
     log.info(data, 'getHouseblockList data received')
 
     const bookings = Array.from(new Set(data.map(event => event.bookingId)))
-    const shouldGetAttendanceForBookings = updateAttendanceEnabled(agencyId) && bookings.length > 0
-    const absentReasons = updateAttendanceEnabled(agencyId) ? await whereaboutsApi.getAbsenceReasons(context) : {}
-    const toAbsentReason = updateAttendanceEnabled(agencyId) && absentReasonMapper(absentReasons)
+    const shouldGetAttendanceForBookings = bookings.length > 0
+    const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
+    const toAbsentReason = absentReasonMapper(absentReasons)
 
     const attendanceInformation = shouldGetAttendanceForBookings
       ? await whereaboutsApi.getAttendanceForBookings(context, {

@@ -98,7 +98,6 @@ class ResultsHouseblockContainer extends Component {
       sortOrderDispatch,
       houseblockDataDispatch,
       handleError,
-      updateAttendanceEnabled,
       getAbsentReasonsDispatch,
     } = this.props
 
@@ -139,7 +138,7 @@ class ResultsHouseblockContainer extends Component {
       const houseblockData = response.data
       sortHouseblockData(houseblockData, orderField, sortOrder)
       houseblockDataDispatch(houseblockData)
-      if (updateAttendanceEnabled) getAbsentReasonsDispatch()
+      getAbsentReasonsDispatch()
     } catch (error) {
       handleError(error)
     }
@@ -247,7 +246,6 @@ ResultsHouseblockContainer.propTypes = {
   handleDateChange: PropTypes.func.isRequired,
   handlePeriodChange: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
-  updateAttendanceEnabled: PropTypes.bool.isRequired,
 
   // mapStateToProps
   agencyId: PropTypes.string.isRequired,
@@ -306,7 +304,6 @@ const mapStateToProps = state => ({
   locations: state.search.locations,
   subLocations: extractSubLocations(state.search.locations, state.search.location),
   error: state.app.error,
-  updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
   totalAttended: state.events.totalAttended,
 })
 

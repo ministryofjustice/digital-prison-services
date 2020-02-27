@@ -466,6 +466,29 @@ Array [
           </option>
         </select>
       </div>
+      <div
+        className="sc-gqjmRU crbzUF"
+      >
+        <div
+          className="sc-VigVT hLPYRt"
+        >
+          <a
+            className="sc-bdVaJa sc-gZMcBi bJavgj"
+            data-qa="prisoners-unaccounted-for"
+            muted={false}
+            onClick={[Function]}
+          >
+            View prisoners unaccounted for
+          </a>
+        </div>
+        <a
+          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          href="/manage-prisoner-whereabouts/attendance-reason-statistics"
+          muted={false}
+        >
+          View attendance reason statistics
+        </a>
+      </div>
     </div>
     <div
       className="top-gutter"

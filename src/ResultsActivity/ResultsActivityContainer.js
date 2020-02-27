@@ -81,7 +81,6 @@ class ResultsActivityContainer extends Component {
       sortOrderDispatch,
       date,
       handleError,
-      updateAttendanceEnabled,
       getAbsentReasonsDispatch,
     } = this.props
 
@@ -107,7 +106,7 @@ class ResultsActivityContainer extends Component {
 
       sortActivityData(activityData, orderField, sortOrder)
       activityDataDispatch(activityData)
-      if (updateAttendanceEnabled) getAbsentReasonsDispatch()
+      getAbsentReasonsDispatch()
     } catch (error) {
       handleError(error)
     }
@@ -161,7 +160,6 @@ class ResultsActivityContainer extends Component {
       setErrorDispatch,
       setOffenderPaymentDataDispatch,
       showModal,
-      updateAttendanceEnabled,
       userRoles,
       totalAttended,
       totalAbsent,
@@ -180,7 +178,6 @@ class ResultsActivityContainer extends Component {
           reloadPage={this.update}
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           activityName={activityName}
-          updateAttendanceEnabled={updateAttendanceEnabled}
           resetErrorDispatch={resetErrorDispatch}
           setErrorDispatch={setErrorDispatch}
           showModal={showModal}
@@ -204,7 +201,6 @@ ResultsActivityContainer.propTypes = {
   showModal: PropTypes.func.isRequired,
   getAbsentReasonsDispatch: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
-  updateAttendanceEnabled: PropTypes.bool.isRequired,
 
   // mapStateToProps
   activity: PropTypes.string.isRequired,
@@ -265,7 +261,6 @@ const mapStateToProps = state => ({
   error: state.app.error,
   orderField: state.events.orderField,
   sortOrder: state.events.sortOrder,
-  updateAttendanceEnabled: state.flags.updateAttendanceEnabled,
   totalAttended: state.events.totalAttended,
   totalAbsent: state.events.totalAbsent,
   userRoles: state.app.user.roles,

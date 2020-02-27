@@ -48,9 +48,6 @@ module.exports = {
       apiPrefix: process.env.API_COMMUNITY_API_PREFIX || '/api',
     },
   },
-  updateAttendancePrisons: process.env.UPDATE_ATTENDANCE_PRISONS
-    ? process.env.UPDATE_ATTENDANCE_PRISONS.split(',').map(agency => agency.trim())
-    : [],
   notifications: {
     notifyKey: process.env.NOTIFY_API_KEY || '',
     confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',

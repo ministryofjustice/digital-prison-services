@@ -9,7 +9,6 @@ describe('ResultsHouseblockContainer', () => {
     handleDateChange: jest.fn(),
     handlePeriodChange: jest.fn(),
     showModal: jest.fn(),
-    updateAttendanceEnabled: false,
     agencyId: 'LEI',
     currentLocation: 'Houseblock 1',
     wingStatus: 'all',

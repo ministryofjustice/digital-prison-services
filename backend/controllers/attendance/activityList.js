@@ -40,12 +40,7 @@ const extractAttendanceInfo = (attendanceInformation, event, absentReasons = [])
   return null
 }
 
-const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
-  const {
-    updateAttendancePrisons,
-    app: { production },
-  } = config
-  const updateAttendanceEnabled = agencyId => !production || updateAttendancePrisons.includes(agencyId)
+const getActivityListFactory = (elite2Api, whereaboutsApi) => {
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
@@ -65,8 +60,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
 
     const date = switchDateFormat(frontEndDate)
 
-    const absenceReasons =
-      (updateAttendanceEnabled(agencyId) && (await whereaboutsApi.getAbsenceReasons(context))) || []
+    const absenceReasons = (await whereaboutsApi.getAbsenceReasons(context)) || []
 
     const apiParams = { agencyId, locationId, date, timeSlot }
     const eventsAtLocationByUsage = await Promise.all([
@@ -84,14 +78,12 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
     const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
 
-    const attendanceInformation = updateAttendanceEnabled(agencyId)
-      ? await whereaboutsApi.getAttendance(context, {
-          agencyId,
-          locationId,
-          date,
-          period: timeSlot,
-        })
-      : null
+    const attendanceInformation = await whereaboutsApi.getAttendance(context, {
+      agencyId,
+      locationId,
+      date,
+      period: timeSlot,
+    })
 
     const externalEventsForOffenders = await getExternalEventsForOffenders(elite2Api, context, {
       offenderNumbers,
@@ -125,9 +117,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi, config) => {
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-      const attendanceInfo = updateAttendanceEnabled(agencyId)
-        ? extractAttendanceInfo(attendanceInformation, event, absenceReasons)
-        : {}
+      const attendanceInfo = extractAttendanceInfo(attendanceInformation, event, absenceReasons)
 
       return {
         ...event,
