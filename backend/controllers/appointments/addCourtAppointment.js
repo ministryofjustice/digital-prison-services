@@ -72,13 +72,13 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
     })
   }
   const index = async (req, res) => {
-    const { offenderNo } = req.params
+    const { offenderNo, agencyId } = req.params
 
     try {
       return await renderTemplate(req, res)
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: `${dpsUrl}offenders/${offenderNo}` })
+      return res.render('error.njk', { url: `/prisoner-search` })
     }
   }
 
@@ -192,7 +192,7 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
       return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-court`)
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: `${dpsUrl}offenders/${offenderNo}` })
+      return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/` })
     }
   }
 

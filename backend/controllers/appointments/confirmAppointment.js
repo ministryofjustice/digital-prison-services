@@ -152,7 +152,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       }
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk')
+      res.render('error.njk', { url: '/' })
     }
   }
   return { index }

@@ -111,7 +111,7 @@ const prepostAppointmentsFactory = ({
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk')
+      res.render('error.njk', { url: '/' })
     }
   }
   const createAppointment = async (context, appointmentDetails) => {
@@ -329,7 +329,7 @@ const prepostAppointmentsFactory = ({
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk')
+      return res.render('error.njk', { url: '/' })
     }
   }
 
