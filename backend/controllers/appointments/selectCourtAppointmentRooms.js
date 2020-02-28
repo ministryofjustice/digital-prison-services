@@ -82,7 +82,6 @@ const selectCourtAppointmentRoomsFactory = ({
   logError,
   oauthApi,
   notifyClient,
-  availableSlotsService,
 }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
@@ -287,20 +286,25 @@ const selectCourtAppointmentRoomsFactory = ({
         })
       }
 
-      const availableRooms = await availableSlotsService.getAvailableRooms(res.locals, {
+      const roomLocations = await existingEventsService.getAvailableLocationsForVLB(res.locals, {
+        agencyId,
         startTime,
         endTime,
-        agencyId,
+        date,
+        preAppointmentRequired,
+        postAppointmentRequired,
       })
 
-      const isRoomStillAvailable = selectedRoom => availableRooms.some(room => room.value === Number(selectedRoom))
-
       const preLocationAvailableOrNotRequired = selectPreAppointmentLocation
-        ? isRoomStillAvailable(selectPreAppointmentLocation)
+        ? roomLocations.preLocations.some(room => room.value === Number(selectPreAppointmentLocation))
         : true
-      const mainLocationAvailable = isRoomStillAvailable(selectMainAppointmentLocation)
+
+      const mainLocationAvailable = roomLocations.mainLocations.some(
+        room => room.value === Number(selectMainAppointmentLocation)
+      )
+
       const postLocationAvailableOrNotRequired = selectPostAppointmentLocation
-        ? isRoomStillAvailable(selectPostAppointmentLocation)
+        ? roomLocations.postLocations.some(room => room.value === Number(selectPostAppointmentLocation))
         : true
 
       if (!preLocationAvailableOrNotRequired || !mainLocationAvailable || !postLocationAvailableOrNotRequired) {

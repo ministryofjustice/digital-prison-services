@@ -2,7 +2,6 @@ const express = require('express')
 const { selectCourtAppointmentRoomsFactory } = require('./selectCourtAppointmentRooms')
 const { appointmentsServiceFactory } = require('./appointmentsService')
 const existingEventsServiceFactory = require('../attendance/existingEventsService')
-const availableSlotsService = require('../../services/availableSlotsService')
 
 const router = express.Router({ mergeParams: true })
 
@@ -17,7 +16,6 @@ const controller = ({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClien
     logError,
     appointmentsService,
     existingEventsService,
-    availableSlotsService: availableSlotsService({ existingEventsService, appointmentsService }),
   })
 
   router.get('/', index)

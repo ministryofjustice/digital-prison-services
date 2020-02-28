@@ -8,7 +8,6 @@ describe('Select court appointment rooms', () => {
   const oauthApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
-  const availableSlotsService = {}
 
   const req = {
     originalUrl: 'http://localhost',
@@ -55,8 +54,6 @@ describe('Select court appointment rooms', () => {
 
     existingEventsService.getAppointmentsAtLocations = jest.fn()
     existingEventsService.getAvailableLocationsForVLB = jest.fn()
-
-    availableSlotsService.getAvailableRooms = jest.fn()
 
     req.flash = jest.fn()
     res.render = jest.fn()
@@ -319,11 +316,12 @@ describe('Select court appointment rooms', () => {
 
     describe('when selected rooms are still available', () => {
       beforeEach(() => {
-        availableSlotsService.getAvailableRooms.mockReturnValue([
-          { value: 1, text: 'Vcc Room 1' },
-          { value: 2, text: 'Vcc Room 2' },
-          { value: 3, text: 'Vcc Room 3' },
-        ])
+        const availableLocations = {
+          preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [{ value: 2, text: 'Room 2' }],
+          postLocations: [{ value: 3, text: 'Room 3' }],
+        }
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue(availableLocations)
 
         req.flash.mockImplementation(() => [
           {
@@ -349,7 +347,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
-          availableSlotsService,
+          existingEventsService,
         })
 
         await post(req, res)
@@ -374,7 +372,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
-          availableSlotsService,
+          existingEventsService,
         })
 
         await post(req, res)
@@ -399,7 +397,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
-          availableSlotsService,
+          existingEventsService,
         })
 
         await post(req, res)
@@ -426,7 +424,7 @@ describe('Select court appointment rooms', () => {
           logError,
           notifyClient,
           oauthApi,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.flash.mockImplementation(() => [
@@ -451,7 +449,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.body = {
@@ -481,7 +479,7 @@ describe('Select court appointment rooms', () => {
           oauthApi,
           logError,
           appointmentsService,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.body = {
@@ -511,7 +509,7 @@ describe('Select court appointment rooms', () => {
           oauthApi,
           logError,
           appointmentsService,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.body = {
@@ -547,7 +545,6 @@ describe('Select court appointment rooms', () => {
           logError,
           appointmentsService,
           existingEventsService,
-          availableSlotsService,
         })
 
         req.body = {
@@ -588,18 +585,18 @@ describe('Select court appointment rooms', () => {
 
     describe('when selected rooms are no longer available', () => {
       it('should render room not available page if main room is not available', async () => {
-        res.send = jest.fn()
-        availableSlotsService.getAvailableRooms.mockReturnValue([
-          { value: 1, text: 'Vcc Room 1' },
-          { value: 3, text: 'Vcc Room 3' },
-        ])
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
+          preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [],
+          postLocations: [{ value: 3, text: 'Room 3' }],
+        })
         const { post } = selectCourtAppointmentRoomsFactory({
           elite2Api,
           whereaboutsApi,
           oauthApi,
           logError,
           appointmentsService,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.body = {
@@ -619,19 +616,18 @@ describe('Select court appointment rooms', () => {
       })
 
       it('should render room not available page if selected pre room is not available', async () => {
-        res.send = jest.fn()
-
-        availableSlotsService.getAvailableRooms.mockReturnValue([
-          { value: 2, text: 'Vcc Room 2' },
-          { value: 3, text: 'Vcc Room 3' },
-        ])
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
+          preLocations: [],
+          mainLocations: [{ value: 2, text: 'Room 2' }],
+          postLocations: [{ value: 3, text: 'Room 3' }],
+        })
         const { post } = selectCourtAppointmentRoomsFactory({
           elite2Api,
           whereaboutsApi,
           oauthApi,
           logError,
           appointmentsService,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.body = {
@@ -651,18 +647,18 @@ describe('Select court appointment rooms', () => {
       })
 
       it('should render room not available page if selected post room is not available', async () => {
-        res.send = jest.fn()
-        availableSlotsService.getAvailableRooms.mockReturnValue([
-          { value: 1, text: 'Vcc Room 1' },
-          { value: 2, text: 'Vcc Room 2' },
-        ])
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
+          preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [{ value: 2, text: 'Room 2' }],
+          postLocations: [],
+        })
         const { post } = selectCourtAppointmentRoomsFactory({
           elite2Api,
           whereaboutsApi,
           oauthApi,
           logError,
           appointmentsService,
-          availableSlotsService,
+          existingEventsService,
         })
 
         req.body = {
