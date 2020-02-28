@@ -44,8 +44,11 @@ describe('Select court appointment rooms', () => {
     elite2Api.getAgencyDetails = jest.fn()
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
+
     oauthApi.userEmail = jest.fn()
+
     whereaboutsApi.addVideoLinkAppointment = jest.fn()
+
     appointmentsService.getAppointmentOptions = jest.fn()
     appointmentsService.getLocations = jest.fn()
 
@@ -73,6 +76,8 @@ describe('Select court appointment rooms', () => {
     elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
     req.flash.mockImplementation(() => [appointmentDetails])
+
+    notifyClient.sendEmail = jest.fn()
   })
 
   describe('index', () => {
@@ -309,8 +314,15 @@ describe('Select court appointment rooms', () => {
       expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
     })
 
-    describe('Create appointments', () => {
+    describe('when selected rooms are still available', () => {
       beforeEach(() => {
+        const availableLocations = {
+          preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [{ value: 2, text: 'Room 2' }],
+          postLocations: [{ value: 3, text: 'Room 3' }],
+        }
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue(availableLocations)
+
         req.flash.mockImplementation(() => [
           {
             ...appointmentDetails,
@@ -335,6 +347,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
+          existingEventsService,
         })
 
         await post(req, res)
@@ -359,6 +372,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
+          existingEventsService,
         })
 
         await post(req, res)
@@ -383,6 +397,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
+          existingEventsService,
         })
 
         await post(req, res)
@@ -409,6 +424,7 @@ describe('Select court appointment rooms', () => {
           logError,
           notifyClient,
           oauthApi,
+          existingEventsService,
         })
 
         req.flash.mockImplementation(() => [
@@ -433,6 +449,7 @@ describe('Select court appointment rooms', () => {
           whereaboutsApi,
           appointmentsService,
           logError,
+          existingEventsService,
         })
 
         req.body = {
@@ -456,13 +473,13 @@ describe('Select court appointment rooms', () => {
       })
 
       it('should redirect to confirmation page', async () => {
-        notifyClient.sendEmail = jest.fn()
         const { post } = selectCourtAppointmentRoomsFactory({
           elite2Api,
           whereaboutsApi,
           oauthApi,
           logError,
           appointmentsService,
+          existingEventsService,
         })
 
         req.body = {
@@ -477,67 +494,188 @@ describe('Select court appointment rooms', () => {
         expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
         expect(notifyClient.sendEmail).not.toHaveBeenCalled()
       })
+
+      it('should redirect to confirmation page if no pre or post rooms are required', async () => {
+        req.flash.mockImplementation(() => [
+          {
+            ...appointmentDetails,
+            preAppointmentRequired: 'no',
+            postAppointmentRequired: 'no',
+          },
+        ])
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          oauthApi,
+          logError,
+          appointmentsService,
+          existingEventsService,
+        })
+
+        req.body = {
+          selectMainAppointmentLocation: '2',
+          comment: 'Test',
+        }
+
+        await post(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
+        expect(notifyClient.sendEmail).not.toHaveBeenCalled()
+      })
+
+      it('should try to send email with court template when court user has email', async () => {
+        req.flash.mockImplementation(() => [
+          {
+            ...appointmentDetails,
+            preLocations: [{ value: 1, text: 'Room 1' }],
+            mainLocations: [{ value: 2, text: 'Room 2' }],
+            postLocations: [{ value: 3, text: 'Room 3' }],
+          },
+        ])
+
+        oauthApi.userEmail.mockReturnValue({
+          email: 'test@example.com',
+        })
+
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          oauthApi,
+          notifyClient,
+          logError,
+          appointmentsService,
+          existingEventsService,
+        })
+
+        req.body = {
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
+          comment: 'Test',
+        }
+
+        await post(req, res)
+
+        const personalisation = {
+          startTime: appointmentDetails.startTime,
+          endTime: appointmentDetails.endTime,
+          comment: appointmentDetails.comment,
+          firstName: appointmentDetails.firstName,
+          lastName: appointmentDetails.lastName,
+          offenderNo: appointmentDetails.offenderNo,
+          location: 'Room 2',
+          preAppointmentStartTime: '2017-10-10T10:40:00',
+          preAppointmentEndTime: '2017-10-10T11:00',
+          postAppointmentStartTime: '2017-10-10T14:00',
+          postAppointmentEndTime: '2017-10-10T14:20:00',
+          preAppointmentLocation: 'Room 1',
+          postAppointmentLocation: 'Room 3',
+        }
+
+        expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+          config.notifications.confirmBookingCourtTemplateId,
+          'test@example.com',
+          {
+            personalisation,
+            reference: null,
+          }
+        )
+      })
     })
 
-    it('should try to send email with court template when court user has email', async () => {
-      notifyClient.sendEmail = jest.fn()
-
-      req.flash.mockImplementation(() => [
-        {
-          ...appointmentDetails,
+    describe('when selected rooms are no longer available', () => {
+      it('should render room not available page if main room is not available', async () => {
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
           preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [],
+          postLocations: [{ value: 3, text: 'Room 3' }],
+        })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          oauthApi,
+          logError,
+          appointmentsService,
+          existingEventsService,
+        })
+
+        req.body = {
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
+          comment: 'Test',
+        }
+
+        await post(req, res)
+
+        expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
+        expect(res.render).toHaveBeenCalledWith('appointmentRoomNoLongerAvailable.njk', {
+          continueLink: '/MDI/offenders/A12345/add-court-appointment/select-rooms',
+        })
+        expect(notifyClient.sendEmail).not.toHaveBeenCalled()
+      })
+
+      it('should render room not available page if selected pre room is not available', async () => {
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
+          preLocations: [],
           mainLocations: [{ value: 2, text: 'Room 2' }],
           postLocations: [{ value: 3, text: 'Room 3' }],
-        },
-      ])
+        })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          oauthApi,
+          logError,
+          appointmentsService,
+          existingEventsService,
+        })
 
-      oauthApi.userEmail.mockReturnValue({
-        email: 'test@example.com',
-      })
-
-      const { post } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
-        whereaboutsApi,
-        oauthApi,
-        notifyClient,
-        logError,
-        appointmentsService,
-        existingEventsService,
-      })
-
-      req.body = {
-        selectPreAppointmentLocation: '1',
-        selectMainAppointmentLocation: '2',
-        selectPostAppointmentLocation: '3',
-        comment: 'Test',
-      }
-
-      await post(req, res)
-
-      const personalisation = {
-        startTime: appointmentDetails.startTime,
-        endTime: appointmentDetails.endTime,
-        comment: appointmentDetails.comment,
-        firstName: appointmentDetails.firstName,
-        lastName: appointmentDetails.lastName,
-        offenderNo: appointmentDetails.offenderNo,
-        location: 'Room 2',
-        preAppointmentStartTime: '2017-10-10T10:40:00',
-        preAppointmentEndTime: '2017-10-10T11:00',
-        postAppointmentStartTime: '2017-10-10T14:00',
-        postAppointmentEndTime: '2017-10-10T14:20:00',
-        preAppointmentLocation: 'Room 1',
-        postAppointmentLocation: 'Room 3',
-      }
-
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
-        config.notifications.confirmBookingCourtTemplateId,
-        'test@example.com',
-        {
-          personalisation,
-          reference: null,
+        req.body = {
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
+          comment: 'Test',
         }
-      )
+
+        await post(req, res)
+
+        expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
+        expect(res.render).toHaveBeenCalledWith('appointmentRoomNoLongerAvailable.njk', {
+          continueLink: '/MDI/offenders/A12345/add-court-appointment/select-rooms',
+        })
+        expect(notifyClient.sendEmail).not.toHaveBeenCalled()
+      })
+
+      it('should render room not available page if selected post room is not available', async () => {
+        existingEventsService.getAvailableLocationsForVLB.mockReturnValue({
+          preLocations: [{ value: 1, text: 'Room 1' }],
+          mainLocations: [{ value: 2, text: 'Room 2' }],
+          postLocations: [],
+        })
+        const { post } = selectCourtAppointmentRoomsFactory({
+          elite2Api,
+          whereaboutsApi,
+          oauthApi,
+          logError,
+          appointmentsService,
+          existingEventsService,
+        })
+
+        req.body = {
+          selectPreAppointmentLocation: '1',
+          selectMainAppointmentLocation: '2',
+          selectPostAppointmentLocation: '3',
+          comment: 'Test',
+        }
+
+        await post(req, res)
+
+        expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
+        expect(res.render).toHaveBeenCalledWith('appointmentRoomNoLongerAvailable.njk', {
+          continueLink: '/MDI/offenders/A12345/add-court-appointment/select-rooms',
+        })
+        expect(notifyClient.sendEmail).not.toHaveBeenCalled()
+      })
     })
   })
 })

@@ -286,6 +286,34 @@ const selectCourtAppointmentRoomsFactory = ({
         })
       }
 
+      const roomLocations = await existingEventsService.getAvailableLocationsForVLB(res.locals, {
+        agencyId,
+        startTime,
+        endTime,
+        date,
+        preAppointmentRequired,
+        postAppointmentRequired,
+      })
+
+      const preLocationAvailableOrNotRequired = selectPreAppointmentLocation
+        ? roomLocations.preLocations.some(room => room.value === Number(selectPreAppointmentLocation))
+        : true
+
+      const mainLocationAvailable = roomLocations.mainLocations.some(
+        room => room.value === Number(selectMainAppointmentLocation)
+      )
+
+      const postLocationAvailableOrNotRequired = selectPostAppointmentLocation
+        ? roomLocations.postLocations.some(room => room.value === Number(selectPostAppointmentLocation))
+        : true
+
+      if (!preLocationAvailableOrNotRequired || !mainLocationAvailable || !postLocationAvailableOrNotRequired) {
+        packAppointmentDetails(req, appointmentDetails)
+        return res.render('appointmentRoomNoLongerAvailable.njk', {
+          continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms`,
+        })
+      }
+
       await createAppointment(res.locals, {
         ...appointmentDetails,
         comment,

@@ -1,0 +1,31 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'The room in the prison is no longer available' %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">
+                {{ title }}
+            </h1>
+
+            <div class="govuk-body">
+                <p>
+                    The room you have selected is no longer available.
+                </p>
+
+                <p>
+                    You must select a different room.
+                </p>
+            </div>
+
+            {{ govukButton({
+                text: "Continue",
+                element: "a",
+                href: continueLink
+            }) }}
+
+        </div>
+    </div>
+{% endblock %}
