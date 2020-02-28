@@ -82,6 +82,7 @@ const selectCourtAppointmentRoomsFactory = ({
   logError,
   oauthApi,
   notifyClient,
+  availableSlotsService,
 }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
@@ -283,6 +284,29 @@ const selectCourtAppointmentRoomsFactory = ({
           }),
           preAppointmentRequired: preAppointmentRequired === 'yes',
           postAppointmentRequired: postAppointmentRequired === 'yes',
+        })
+      }
+
+      const availableRooms = await availableSlotsService.getAvailableRooms(res.locals, {
+        startTime,
+        endTime,
+        agencyId,
+      })
+
+      const isRoomStillAvailable = selectedRoom => availableRooms.some(room => room.value === Number(selectedRoom))
+
+      const preLocationAvailableOrNotRequired = selectPreAppointmentLocation
+        ? isRoomStillAvailable(selectPreAppointmentLocation)
+        : true
+      const mainLocationAvailable = isRoomStillAvailable(selectMainAppointmentLocation)
+      const postLocationAvailableOrNotRequired = selectPostAppointmentLocation
+        ? isRoomStillAvailable(selectPostAppointmentLocation)
+        : true
+
+      if (!preLocationAvailableOrNotRequired || !mainLocationAvailable || !postLocationAvailableOrNotRequired) {
+        packAppointmentDetails(req, appointmentDetails)
+        return res.render('appointmentRoomNoLongerAvailable.njk', {
+          continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms`,
         })
       }
 
