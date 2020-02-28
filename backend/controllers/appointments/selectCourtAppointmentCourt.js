@@ -28,8 +28,9 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
 
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
+    const { offenderNo, agencyId } = req.params
 
-    return res.render('error.njk')
+    return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
   }
 
   const renderTemplate = async (req, res, pageData) => {
