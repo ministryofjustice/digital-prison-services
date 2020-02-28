@@ -93,10 +93,9 @@ class App extends React.Component {
   }
 
   updateFeatureFlags = flags => {
-    const { config, user, setFlagsDispatch } = this.props
+    const { setFlagsDispatch } = this.props
     const featureFlags = {
       ...flags,
-      updateAttendanceEnabled: config.updateAttendancePrisons.includes(user.activeCaseLoadId),
     }
 
     setFlagsDispatch(featureFlags)
@@ -582,7 +581,6 @@ App.propTypes = {
     googleAnalyticsId: PropTypes.string,
     licencesUrl: PropTypes.string,
     flags: PropTypes.objectOf(PropTypes.string),
-    updateAttendancePrisons: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),

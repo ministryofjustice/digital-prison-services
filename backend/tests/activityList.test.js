@@ -4,7 +4,6 @@ const factory = require('../controllers/attendance/activityList').getActivityLis
 const elite2Api = {}
 const whereaboutsApi = {}
 const config = {
-  updateAttendancePrisons: ['LEI'],
   app: { production: true },
 }
 
@@ -679,7 +678,7 @@ describe('Activity list controller', () => {
     })
   })
 
-  it('should only request attendance for prison that have been enabled', async () => {
+  it('should request attendance for all establishments', async () => {
     elite2Api.getActivityList.mockReturnValue([])
     elite2Api.getActivitiesAtLocation.mockReturnValue([
       { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
@@ -688,27 +687,6 @@ describe('Activity list controller', () => {
     whereaboutsApi.getAbsenceReasons.mockReturnValue([])
 
     const { getActivityList: service } = factory(elite2Api, whereaboutsApi, {
-      updateAttendancePrisons: ['LEI'],
-      app: { production: true },
-    })
-
-    await service({}, 'LEI', 1, '23/11/2018', 'PM')
-    await service({}, 'MDI', 1, '23/11/2018', 'PM')
-
-    expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(1)
-    expect(whereaboutsApi.getAttendance.mock.calls.length).toBe(1)
-  })
-
-  it('should enable attendance for everyone in dev', async () => {
-    elite2Api.getActivityList.mockReturnValue([])
-    elite2Api.getActivitiesAtLocation.mockReturnValue([
-      { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
-    ])
-    whereaboutsApi.getAttendance.mockReturnValue({ attendances: [] })
-    whereaboutsApi.getAbsenceReasons.mockReturnValue([])
-
-    const { getActivityList: service } = factory(elite2Api, whereaboutsApi, {
-      updateAttendancePrisons: ['LEI'],
       app: { production: false },
     })
 

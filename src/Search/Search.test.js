@@ -108,9 +108,7 @@ describe('Search component', () => {
     store.subscribe = jest.fn()
     store.dispatch = jest.fn()
     store.getState.mockReturnValue({
-      flags: {
-        updateAttendanceEnabled: true,
-      },
+      flags: {},
     })
 
     const wrapper = testRenderer
@@ -146,9 +144,7 @@ describe('Search component', () => {
     store.subscribe = jest.fn()
     store.dispatch = jest.fn()
     store.getState.mockReturnValue({
-      flags: {
-        updateAttendanceEnabled: false,
-      },
+      flags: {},
     })
 
     const wrapper = testRenderer
@@ -203,27 +199,9 @@ describe('Search component', () => {
       activity: 'bob',
     }
 
-    it('should not render attendance links if caseload does not have pay enabled', () => {
-      store.getState.mockReturnValue({
-        flags: {
-          updateAttendanceEnabled: false,
-        },
-      })
-      const component = mount(
-        <MemoryRouter>
-          <ConnectedFlagsProvider store={store}>
-            <Search {...props} date="Today" period="AM" />
-          </ConnectedFlagsProvider>
-        </MemoryRouter>
-      )
-      expect(component.find(AttendanceButtonsContainer).length).toBe(0)
-    })
-
     it('should render attendance links if caseload does have pay enabled', () => {
       store.getState.mockReturnValue({
-        flags: {
-          updateAttendanceEnabled: true,
-        },
+        flags: {},
       })
       const component = mount(
         <MemoryRouter>

@@ -163,7 +163,6 @@ const props = {
   resetErrorDispatch: jest.fn(),
   setColumnSort: jest.fn(),
   showPaymentReasonModal: jest.fn(),
-  updateAttendanceEnabled: false,
   payable: true,
   orderField: 'lastName',
   sortOrder: 'ASC',
