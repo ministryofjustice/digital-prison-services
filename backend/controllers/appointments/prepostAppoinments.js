@@ -335,10 +335,7 @@ const prepostAppointmentsFactory = ({
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', {
-        url:
-          authSource === 'nomis'
-            ? `/offenders/${offenderNo}/add-appointment`
-            : `/offenders/${offenderNo}/add-court-appointment`,
+        url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/prisoner-search',
       })
     }
   }
