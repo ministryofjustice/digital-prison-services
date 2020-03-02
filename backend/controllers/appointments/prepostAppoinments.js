@@ -56,7 +56,7 @@ const prepostAppointmentsFactory = ({
   }
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
+    const { activeCaseLoadId, authSource } = req.session.userDetails
 
     try {
       const appointmentDetails = unpackAppointmentDetails(req)
@@ -111,7 +111,9 @@ const prepostAppointmentsFactory = ({
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk', { url: '/' })
+      res.render('error.njk', {
+        url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/prisoner-search',
+      })
     }
   }
   const createAppointment = async (context, appointmentDetails) => {
@@ -182,7 +184,7 @@ const prepostAppointmentsFactory = ({
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId, username } = req.session.userDetails
+    const { activeCaseLoadId, username, authSource } = req.session.userDetails
 
     const {
       postAppointment,
@@ -329,7 +331,9 @@ const prepostAppointmentsFactory = ({
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: '/' })
+      return res.render('error.njk', {
+        url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/prisoner-search',
+      })
     }
   }
 
