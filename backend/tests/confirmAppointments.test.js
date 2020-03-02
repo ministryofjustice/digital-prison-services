@@ -257,6 +257,6 @@ describe('Confirm appointments', () => {
       new Error('Appointment details are missing'),
       'Sorry, the service is unavailable'
     )
-    expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+    expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-court-appointment' })
   })
 })
