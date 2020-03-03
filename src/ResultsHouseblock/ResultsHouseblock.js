@@ -30,7 +30,6 @@ import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
-import { Flag } from '../flags'
 import { linkOnClick } from '../helpers'
 
 const ManageResults = styled.div`
