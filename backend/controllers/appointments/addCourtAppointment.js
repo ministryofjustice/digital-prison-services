@@ -2,11 +2,11 @@ const moment = require('moment')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { DAY_MONTH_YEAR, buildDateTime } = require('../../../src/dateHelpers')
 const { properCaseName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
-const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError, availableSlotsService) => {
+const addCourtAppointmentsFactory = (elite2Api, logError) => {
   const getValidationMessages = fields => {
     const { date, startTime, endTime, preAppointmentRequired, postAppointmentRequired } = fields
     const errors = []
@@ -45,45 +45,41 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
   }
 
   const renderTemplate = async (req, res, data) => {
-    const { offenderNo, agencyId } = req.params
-    const [offenderDetails, agencyDetails] = await Promise.all([
-      elite2Api.getDetails(res.locals, offenderNo),
-      elite2Api.getAgencyDetails(res.locals, agencyId),
-    ])
-    const { firstName, lastName, bookingId } = offenderDetails
-    const offenderNameWithNumber = `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`
-    const agencyDescription = agencyDetails.description
-
-    req.session.userDetails = {
-      ...req.session.userDetails,
-      activeCaseLoadId: agencyId,
-    }
-
-    return res.render('addAppointment/addCourtAppointment.njk', {
-      formValues: {
-        appointmentType: 'VLB',
-      },
-      ...data,
-      offenderNo,
-      offenderNameWithNumber,
-      agencyDescription,
-      dpsUrl,
-      bookingId,
-    })
-  }
-  const index = async (req, res) => {
-    const { offenderNo, agencyId } = req.params
-
     try {
-      return await renderTemplate(req, res)
+      const { offenderNo, agencyId } = req.params
+      const [offenderDetails, agencyDetails] = await Promise.all([
+        elite2Api.getDetails(res.locals, offenderNo),
+        elite2Api.getAgencyDetails(res.locals, agencyId),
+      ])
+      const { firstName, lastName, bookingId } = offenderDetails
+      const offenderNameWithNumber = `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`
+      const agencyDescription = agencyDetails.description
+
+      req.session.userDetails = {
+        ...req.session.userDetails,
+        activeCaseLoadId: agencyId,
+      }
+
+      return res.render('addAppointment/addCourtAppointment.njk', {
+        formValues: {
+          appointmentType: 'VLB',
+        },
+        ...data,
+        offenderNo,
+        offenderNameWithNumber,
+        agencyDescription,
+        dpsUrl,
+        bookingId,
+      })
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: `/prisoner-search` })
     }
   }
 
-  const post = async (req, res) => {
-    const { offenderNo, agencyId } = req.params
+  const index = async (req, res) => renderTemplate(req, res)
+
+  const validateInput = async (req, res, next) => {
     const {
       bookingId,
       date,
@@ -95,108 +91,50 @@ const addCourtAppointmentsFactory = (existingEventsService, elite2Api, logError,
       postAppointmentRequired,
     } = req.body || {}
 
-    try {
-      const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
-      const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
+    const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
+    const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
 
-      const errors = [
-        ...getValidationMessages({
-          date,
-          startTime,
-          endTime,
-          preAppointmentRequired,
-          postAppointmentRequired,
-        }),
-      ]
-
-      if (errors.length > 0) {
-        return renderTemplate(req, res, {
-          errors,
-          formValues: req.body,
-        })
-      }
-
-      const { mainLocations, preLocations, postLocations } = await existingEventsService.getAvailableLocationsForVLB(
-        res.locals,
-        {
-          agencyId,
-          startTime,
-          endTime,
-          date,
-          preAppointmentRequired,
-          postAppointmentRequired,
-        }
-      )
-
-      const preAppointmentLocationsNotValid = Boolean(preAppointmentRequired === 'yes' && preLocations.length < 2)
-      const postAppointmentLocationsNotValid = Boolean(postAppointmentRequired === 'yes' && postLocations.length < 2)
-      const noAvailabilityForGivenTime = Boolean(
-        !mainLocations.length || preAppointmentLocationsNotValid || postAppointmentLocationsNotValid
-      )
-      if (noAvailabilityForGivenTime) {
-        const start =
-          preAppointmentRequired === 'yes'
-            ? startTime.subtract(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
-            : startTime.format(DATE_TIME_FORMAT_SPEC)
-
-        const end =
-          postAppointmentRequired === 'yes'
-            ? endTime.add(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
-            : endTime.format(DATE_TIME_FORMAT_SPEC)
-
-        const availableRooms = await availableSlotsService.getAvailableRooms(res.locals, {
-          startTime: start,
-          endTime: end,
-          agencyId,
-        })
-
-        const atLeastTwoRoomsNeeded = Boolean(preAppointmentRequired === 'yes' || postAppointmentRequired === 'yes')
-        const minRooms = atLeastTwoRoomsNeeded ? 2 : 1
-
-        if (availableRooms.length < minRooms) {
-          return res.render('noAppointmentsForWholeDay.njk', {
-            date: startTime.format('dddd D MMMM YYYY'),
-            continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment`,
-          })
-        }
-
-        if (availableRooms.length >= minRooms) {
-          return res.render('noAppointmentsForDateTime.njk', {
-            date: startTime.format('dddd D MMMM YYYY'),
-            startTime: startTime.format('HH:mm'),
-            endTime: endTime.format('HH:mm'),
-            continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment`,
-          })
-        }
-      }
-
-      const request = {
-        appointmentDefaults: {
-          appointmentType: 'VLB',
-          startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-          endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
-        },
-        appointments: [
-          {
-            bookingId,
-          },
-        ],
-      }
-      req.flash('appointmentDetails', {
-        ...request.appointmentDefaults,
-        bookingId,
+    const errors = [
+      ...getValidationMessages({
+        date,
+        startTime,
+        endTime,
         preAppointmentRequired,
         postAppointmentRequired,
-      })
+      }),
+    ]
 
-      return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-court`)
-    } catch (error) {
-      if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/` })
+    if (errors.length > 0) {
+      return renderTemplate(req, res, {
+        errors,
+        formValues: req.body,
+      })
     }
+
+    req.flash('appointmentDetails', {
+      appointmentType: 'VLB',
+      bookingId,
+      date,
+      startTime,
+      endTime,
+      startTimeHours,
+      startTimeMinutes,
+      endTimeHours,
+      endTimeMinutes,
+      preAppointmentRequired,
+      postAppointmentRequired,
+    })
+
+    return next()
   }
 
-  return { index, post }
+  const goToCourtSelection = (req, res) => {
+    const { offenderNo, agencyId } = req.params
+
+    return res.redirect(`/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-court`)
+  }
+
+  return { index, validateInput, goToCourtSelection }
 }
 
 module.exports = {
