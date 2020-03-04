@@ -13,10 +13,6 @@ const unpackAppointmentDetails = req => {
   )
 }
 
-const packAppointmentDetails = (req, details) => {
-  req.flash('appointmentDetails', details)
-}
-
 module.exports = (existingEventsService, availableSlotsService, logError) => async (req, res, next) => {
   const appointmentDetails = unpackAppointmentDetails(req)
   const {
@@ -106,13 +102,13 @@ module.exports = (existingEventsService, availableSlotsService, logError) => asy
       !mainLocationAvailableOrNotRequired ||
       !postLocationAvailableOrNotRequired
     ) {
-      packAppointmentDetails(req, appointmentDetails)
+      req.flash('appointmentDetails', appointmentDetails)
       return res.render('appointmentRoomNoLongerAvailable.njk', {
         continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms`,
       })
     }
 
-    packAppointmentDetails(req, appointmentDetails)
+    req.flash('appointmentDetails', appointmentDetails)
     return next()
   } catch (error) {
     if (error) logError(req.originalUrl, error, 'message')
