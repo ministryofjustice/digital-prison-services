@@ -90,15 +90,8 @@ describe('Room check middleware', () => {
       await middleware(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
-      // expect(res.redirect).toHaveBeenCalledWith('/MDI/offenders/A12345/add-court-appointment/select-court')
       expect(next).toHaveBeenCalled()
     })
-
-    // it('should pack agencyId into user details', async () => {
-    //   await controller.index(req, res)
-
-    //   expect(req.session.userDetails).toEqual({ activeCaseLoadId: 'MDI' })
-    // })
   })
 
   describe('when there are no rooms available', () => {
