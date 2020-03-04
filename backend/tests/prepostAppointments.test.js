@@ -165,7 +165,7 @@ describe('Pre post appointments', () => {
         new Error('Appointment details are missing'),
         'Sorry, the service is unavailable'
       )
-      expect(res.render).toHaveBeenCalledWith('error.njk')
+      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-appointment' })
     })
   })
 
@@ -294,7 +294,7 @@ describe('Pre post appointments', () => {
         new Error('Appointment details are missing'),
         'Sorry, the service is unavailable'
       )
-      expect(res.render).toHaveBeenCalledWith('error.njk')
+      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-appointment' })
     })
 
     it('should pack appointment details back into flash before rendering', async () => {

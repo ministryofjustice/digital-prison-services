@@ -9,26 +9,7 @@
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
-{% set title = 'Add videolink booking date and time' %}
-{% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
-
-{% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: dpsUrl
-            },
-            {
-                text: offenderName,
-                href: offenderUrl
-            },
-            {
-                text: title
-            }
-        ]
-    }) }}
-{% endblock %}
+{% set title = 'Add video link booking date and time' %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -111,7 +92,7 @@
                     errorMessage: errors | findError('pre-appointment-required'),
                     fieldset: {
                         legend: {
-                        text: "Add videolink session before?",
+                        text: "Add video link session before?",
                         classes: "govuk-fieldset__legend--s"
                         }
                     },
@@ -136,7 +117,7 @@
                     errorMessage: errors | findError('post-appointment-required'),
                     fieldset: {
                         legend: {
-                        text: "Add videolink session after?",
+                        text: "Add video link session after?",
                         classes: "govuk-fieldset__legend--s"
                         }
                     },
@@ -158,13 +139,6 @@
                     text: "Save and continue",
                     type: "submit",
                     classes: "govuk-!-margin-right-2"
-                }) }}
-
-                {{ govukButton({
-                    text: "Cancel",
-                    element: 'a',
-                    href: offenderUrl,
-                    classes: "govuk-button--secondary"
                 }) }}
             </form>
         </div>

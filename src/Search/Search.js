@@ -9,7 +9,6 @@ import styled from 'styled-components'
 import Link from '@govuk-react/link'
 import { FONT_SIZE, BREAKPOINTS } from '@govuk-react/constants'
 import ErrorSummary from '@govuk-react/error-summary'
-import { Flag } from '../flags'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { isBeforeToday, isAfterToday, getCurrentPeriod } from '../utils'
 import routePaths from '../routePaths'
@@ -232,28 +231,22 @@ class Search extends Component {
               </div>
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
-            <Flag
-              name={['updateAttendanceEnabled']}
-              render={() => (
-                <AttendanceButtonsContainer>
-                  {this.showPrisonersUnaccountedForCTA() && (
-                    <PrisonersUnaccountedForCTA>
-                      <StatsLink
-                        buttonColour={BLUE}
-                        onClick={() => history.push(routePaths.prisonersUnaccountedFor)}
-                        data-qa="prisoners-unaccounted-for"
-                      >
-                        View prisoners unaccounted for
-                      </StatsLink>
-                    </PrisonersUnaccountedForCTA>
-                  )}
-                  <StatsLink href="/manage-prisoner-whereabouts/attendance-reason-statistics" buttonColour={BLUE}>
-                    View attendance reason statistics
+            <AttendanceButtonsContainer>
+              {this.showPrisonersUnaccountedForCTA() && (
+                <PrisonersUnaccountedForCTA>
+                  <StatsLink
+                    buttonColour={BLUE}
+                    onClick={() => history.push(routePaths.prisonersUnaccountedFor)}
+                    data-qa="prisoners-unaccounted-for"
+                  >
+                    View prisoners unaccounted for
                   </StatsLink>
-                </AttendanceButtonsContainer>
+                </PrisonersUnaccountedForCTA>
               )}
-              fallbackRender={() => <></>}
-            />
+              <StatsLink href="/manage-prisoner-whereabouts/attendance-reason-statistics" buttonColour={BLUE}>
+                View attendance reason statistics
+              </StatsLink>
+            </AttendanceButtonsContainer>
           </div>
 
           <div className="top-gutter">

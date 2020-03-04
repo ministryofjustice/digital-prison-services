@@ -32,7 +32,6 @@ import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
-import { Flag } from '../flags'
 import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
 import { allNotRequired, attendAll } from '../Attendance/attendanceGAEvents'
 import { linkOnClick } from '../helpers'
@@ -156,7 +155,6 @@ class ResultsActivity extends Component {
       raiseAnalyticsEvent,
       showModal,
       activityName,
-      updateAttendanceEnabled,
       totalAttended,
       totalAbsent,
       userRoles,
@@ -328,16 +326,8 @@ class ResultsActivity extends Component {
             <span>Received</span>
           </div>
         </th>
-        <Flag
-          name={['updateAttendanceEnabled']}
-          render={() => (
-            <>
-              <th className="straight width4 no-print">Attended</th>
-              <th className="straight width6 no-print">Not attended</th>
-            </>
-          )}
-          fallbackRender={() => <></>}
-        />
+        <th className="straight width4 no-print">Attended</th>
+        <th className="straight width6 no-print">Not attended</th>
       </tr>
     )
 
@@ -414,7 +404,7 @@ class ResultsActivity extends Component {
         const inCaseLoad = stripAgencyPrefix(cellLocation, agencyId)
         const otherActivitiesClasses = classNames({
           'row-gutters': true,
-          'last-text-column-padding': !updateAttendanceEnabled,
+          'last-text-column-padding': false,
         })
 
         return (
@@ -461,26 +451,20 @@ class ResultsActivity extends Component {
                 </div>
               </td>
             )}
-            <Flag
-              name={['updateAttendanceEnabled']}
-              render={() => (
-                <AttendanceOptions
-                  offenderDetails={offenderDetails}
-                  raiseAnalyticsEvent={raiseAnalyticsEvent}
-                  resetErrorDispatch={resetErrorDispatch}
-                  setErrorDispatch={setErrorDispatch}
-                  reloadPage={reloadPage}
-                  handleError={handleError}
-                  agencyId={agencyId}
-                  period={period}
-                  showModal={showModal}
-                  activityName={activityName}
-                  setOffenderAttendance={setActivityOffenderAttendance}
-                  date={date}
-                  payAll={false}
-                />
-              )}
-              fallbackRender={() => <></>}
+            <AttendanceOptions
+              offenderDetails={offenderDetails}
+              raiseAnalyticsEvent={raiseAnalyticsEvent}
+              resetErrorDispatch={resetErrorDispatch}
+              setErrorDispatch={setErrorDispatch}
+              reloadPage={reloadPage}
+              handleError={handleError}
+              agencyId={agencyId}
+              period={period}
+              showModal={showModal}
+              activityName={activityName}
+              setOffenderAttendance={setActivityOffenderAttendance}
+              date={date}
+              payAll={false}
             />
           </tr>
         )
@@ -582,7 +566,6 @@ ResultsActivity.propTypes = {
   reloadPage: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
-  updateAttendanceEnabled: PropTypes.bool.isRequired,
   userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 

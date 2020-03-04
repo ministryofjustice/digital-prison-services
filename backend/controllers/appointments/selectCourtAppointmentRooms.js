@@ -1,7 +1,6 @@
 const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const {
-  app: { notmEndpointUrl: dpsUrl },
   notifications: { confirmBookingCourtTemplateId },
 } = require('../../config')
 
@@ -83,11 +82,6 @@ const selectCourtAppointmentRoomsFactory = ({
   oauthApi,
   notifyClient,
 }) => {
-  const cancel = async (req, res) => {
-    unpackAppointmentDetails(req)
-    res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
-  }
-
   const index = async (req, res) => {
     const { offenderNo, agencyId } = req.params
     const { activeCaseLoadId } = req.session.userDetails
@@ -98,7 +92,6 @@ const selectCourtAppointmentRoomsFactory = ({
         appointmentType,
         startTime,
         endTime,
-        times,
         preAppointmentRequired,
         postAppointmentRequired,
       } = appointmentDetails
@@ -142,7 +135,6 @@ const selectCourtAppointmentRoomsFactory = ({
       })
 
       res.render('addAppointment/selectCourtAppointmentRooms.njk', {
-        cancelLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms/cancel`,
         mainLocations,
         preLocations,
         postLocations,
@@ -155,7 +147,6 @@ const selectCourtAppointmentRoomsFactory = ({
           appointmentTypeDescription,
           startTime,
           endTime,
-          times,
           agencyDescription,
         }),
         preAppointmentRequired: preAppointmentRequired === 'yes',
@@ -163,7 +154,7 @@ const selectCourtAppointmentRoomsFactory = ({
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk')
+      res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
     }
   }
 
@@ -216,7 +207,7 @@ const selectCourtAppointmentRoomsFactory = ({
     return postDetails
   }
 
-  const post = async (req, res) => {
+  const validateInput = async (req, res, next) => {
     const { offenderNo, agencyId } = req.params
 
     const {
@@ -225,8 +216,6 @@ const selectCourtAppointmentRoomsFactory = ({
       selectPostAppointmentLocation,
       comment,
     } = req.body
-
-    const { username } = req.session.userDetails
 
     try {
       const appointmentDetails = unpackAppointmentDetails(req)
@@ -255,11 +244,9 @@ const selectCourtAppointmentRoomsFactory = ({
         comment,
       })
 
+      packAppointmentDetails(req, appointmentDetails)
       if (errors.length) {
-        packAppointmentDetails(req, appointmentDetails)
-
         return res.render('addAppointment/selectCourtAppointmentRooms.njk', {
-          cancelLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment/select-rooms/cancel`,
           mainLocations,
           preLocations,
           postLocations,
@@ -286,83 +273,107 @@ const selectCourtAppointmentRoomsFactory = ({
         })
       }
 
-      await createAppointment(res.locals, {
-        ...appointmentDetails,
-        comment,
-        locationId: selectMainAppointmentLocation,
-        hearingType: 'MAIN',
-      })
-
-      const prepostAppointments = {}
-
-      if (preAppointmentRequired === 'yes') {
-        prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
-          appointmentDetails,
-          startTime,
-          preAppointmentLocation: selectPreAppointmentLocation,
-        })
-      }
-
-      if (postAppointmentRequired === 'yes') {
-        prepostAppointments.postAppointment = await createPostAppointment(res.locals, {
-          appointmentDetails,
-          endTime,
-          postAppointmentLocation: selectPostAppointmentLocation,
-        })
-      }
-
-      packAppointmentDetails(req, {
-        ...appointmentDetails,
-        ...prepostAppointments,
-        locationId: selectMainAppointmentLocation,
-        comment,
-      })
-
-      const userEmailData = await oauthApi.userEmail(res.locals, username)
-
-      if (userEmailData && userEmailData.email) {
-        const personalisation = {
-          startTime,
-          endTime,
-          comment,
-          firstName,
-          lastName,
-          offenderNo,
-          location: mainLocations.find(l => l.value === Number(selectMainAppointmentLocation)).text,
-          postAppointmentStartTime:
-            postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.startTime : 'N/A',
-          postAppointmentEndTime:
-            postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.endTime : 'N/A',
-          preAppointmentStartTime:
-            preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.startTime : 'N/A',
-          preAppointmentEndTime: preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.endTime : 'N/A',
-          preAppointmentLocation:
-            preAppointmentRequired === 'yes'
-              ? preLocations.find(l => l.value === Number(selectPreAppointmentLocation)).text
-              : 'N/A',
-          postAppointmentLocation:
-            postAppointmentRequired === 'yes'
-              ? postLocations.find(l => l.value === Number(selectPostAppointmentLocation)).text
-              : 'N/A',
-        }
-
-        notifyClient.sendEmail(confirmBookingCourtTemplateId, userEmailData.email, {
-          personalisation,
-          reference: null,
-        })
-      }
-
-      return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
+      return next()
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk')
+      return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
     }
+  }
+
+  const createAppointments = async (req, res) => {
+    const { offenderNo } = req.params
+    const appointmentDetails = unpackAppointmentDetails(req)
+    const {
+      startTime,
+      endTime,
+      preAppointmentRequired,
+      postAppointmentRequired,
+      firstName,
+      lastName,
+      mainLocations,
+      preLocations,
+      postLocations,
+    } = appointmentDetails
+    const { username } = req.session.userDetails
+    const {
+      selectPreAppointmentLocation,
+      selectMainAppointmentLocation,
+      selectPostAppointmentLocation,
+      comment,
+    } = req.body
+
+    await createAppointment(res.locals, {
+      ...appointmentDetails,
+      comment,
+      locationId: selectMainAppointmentLocation,
+      hearingType: 'MAIN',
+    })
+
+    const prepostAppointments = {}
+
+    if (preAppointmentRequired === 'yes') {
+      prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
+        appointmentDetails,
+        startTime,
+        preAppointmentLocation: selectPreAppointmentLocation,
+      })
+    }
+
+    if (postAppointmentRequired === 'yes') {
+      prepostAppointments.postAppointment = await createPostAppointment(res.locals, {
+        appointmentDetails,
+        endTime,
+        postAppointmentLocation: selectPostAppointmentLocation,
+      })
+    }
+
+    packAppointmentDetails(req, {
+      ...appointmentDetails,
+      ...prepostAppointments,
+      locationId: selectMainAppointmentLocation,
+      comment,
+    })
+
+    const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+    if (userEmailData && userEmailData.email) {
+      const personalisation = {
+        startTime,
+        endTime,
+        comment,
+        firstName,
+        lastName,
+        offenderNo,
+        location: mainLocations.find(l => l.value === Number(selectMainAppointmentLocation)).text,
+        postAppointmentStartTime:
+          postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.startTime : 'N/A',
+        postAppointmentEndTime: postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.endTime : 'N/A',
+        preAppointmentStartTime:
+          preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.startTime : 'N/A',
+        preAppointmentEndTime: preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.endTime : 'N/A',
+        preAppointmentLocation:
+          preAppointmentRequired === 'yes'
+            ? preLocations.find(l => l.value === Number(selectPreAppointmentLocation)).text
+            : 'N/A',
+        postAppointmentLocation:
+          postAppointmentRequired === 'yes'
+            ? postLocations.find(l => l.value === Number(selectPostAppointmentLocation)).text
+            : 'N/A',
+      }
+
+      notifyClient.sendEmail(confirmBookingCourtTemplateId, userEmailData.email, {
+        personalisation,
+        reference: null,
+      })
+    }
+
+    return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
   }
 
   return {
     index,
-    post,
-    cancel,
+    validateInput,
+    createAppointments,
   }
 }
 

@@ -30,7 +30,6 @@ import Location from '../Location'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
-import { Flag } from '../flags'
 import { linkOnClick } from '../helpers'
 
 const ManageResults = styled.div`
@@ -277,11 +276,7 @@ class ResultsHouseblock extends Component {
             <span>Gone</span>
           </div>
         </th>
-        <Flag
-          name={['updateAttendanceEnabled']}
-          render={() => <th className="no-print">Attended</th>}
-          fallbackRender={() => <></>}
-        />
+        <th className="no-print">Attended</th>
       </tr>
     )
 
@@ -349,34 +344,28 @@ class ResultsHouseblock extends Component {
                 <input id={`col2_${index}`} type="checkbox" name="ch2" disabled={readOnly} />
               </div>
             </td>
-            <Flag
-              name={['updateAttendanceEnabled']}
-              render={() => (
-                <>
-                  {isReceived && <td className="no-print">Received</td>}
-                  {isPaid && <td className="no-print">Paid</td>}
-                  {!isReceived &&
-                    !isPaid && (
-                      <AttendanceOptions
-                        offenderDetails={offenderDetails}
-                        raiseAnalyticsEvent={raiseAnalyticsEvent}
-                        resetErrorDispatch={resetErrorDispatch}
-                        setErrorDispatch={setErrorDispatch}
-                        handleError={handleError}
-                        reloadPage={update}
-                        agencyId={agencyId}
-                        period={period}
-                        showModal={showModal}
-                        activityName={activityName}
-                        setOffenderAttendance={setHouseblockOffenderAttendance}
-                        date={date}
-                        noPay
-                      />
-                    )}
-                </>
-              )}
-              fallbackRender={() => <></>}
-            />
+            <>
+              {isReceived && <td className="no-print">Received</td>}
+              {isPaid && <td className="no-print">Paid</td>}
+              {!isReceived &&
+                !isPaid && (
+                  <AttendanceOptions
+                    offenderDetails={offenderDetails}
+                    raiseAnalyticsEvent={raiseAnalyticsEvent}
+                    resetErrorDispatch={resetErrorDispatch}
+                    setErrorDispatch={setErrorDispatch}
+                    handleError={handleError}
+                    reloadPage={update}
+                    agencyId={agencyId}
+                    period={period}
+                    showModal={showModal}
+                    activityName={activityName}
+                    setOffenderAttendance={setHouseblockOffenderAttendance}
+                    date={date}
+                    noPay
+                  />
+                )}
+            </>
           </tr>
         )
       })

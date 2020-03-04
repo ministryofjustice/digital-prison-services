@@ -84,11 +84,11 @@ describe('Activity results sorter tests', () => {
       expect(data).toEqual([
         { eventType: 'PRISON_ACT', comment: 'A' },
         { event: 'PA', comment: 'B' },
+        { eventDescription: 'C' },
         { eventDescription: 'C', lastName: 'A', firstName: 'P' },
         { eventDescription: 'C', lastName: 'A', firstName: 'Q' },
         { eventDescription: 'C', lastName: 'B', firstName: 'P' },
         { eventDescription: 'C', lastName: 'B', firstName: 'Q' },
-        { eventDescription: 'C' },
         { comment: 'D', eventDescription: 'E' },
         { comment: 'D', eventDescription: 'F' },
       ])

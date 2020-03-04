@@ -10,7 +10,6 @@ import OtherActivityListView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
 import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import { getHoursMinutes, getMainEventDescription } from '../utils'
-import { Flag } from '../flags'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 
 const TableContainer = styled.div`
@@ -73,16 +72,14 @@ const PrisonersUnaccountedFor = ({
           </Table.CellHeader>
           <Table.CellHeader setWidth="25%">Other activities</Table.CellHeader>
           {activityHubUser && (
-            <Flag
-              name={['updateAttendanceEnabled']}
-              render={() => (
-                <>
-                  <Table.CellHeader setWidth="15%">Attended</Table.CellHeader>
-                  <Table.CellHeader setWidth="15%">Not attended</Table.CellHeader>
-                </>
-              )}
-              fallbackRender={() => <></>}
-            />
+            <>
+              <Table.CellHeader setWidth="15%" className="no-print">
+                Attended
+              </Table.CellHeader>
+              <Table.CellHeader setWidth="15%" className="no-print">
+                Not attended
+              </Table.CellHeader>
+            </>
           )}
         </Table.Row>
       }
@@ -120,26 +117,20 @@ const PrisonersUnaccountedFor = ({
             />
           </Table.Cell>
           {activityHubUser && (
-            <Flag
-              name={['updateAttendanceEnabled']}
-              render={() => (
-                <AttendanceOptions
-                  offenderDetails={prisonerActivity}
-                  raiseAnalyticsEvent={raiseAnalyticsEvent}
-                  resetErrorDispatch={resetErrorDispatch}
-                  setErrorDispatch={setErrorDispatch}
-                  reloadPage={reloadPage}
-                  handleError={handleError}
-                  agencyId={agencyId}
-                  period={period}
-                  showModal={showModal}
-                  activityName={getMainEventDescription(prisonerActivity)}
-                  setOffenderAttendance={setOffenderPaymentDataDispatch}
-                  date={date}
-                  payAll={false}
-                />
-              )}
-              fallbackRender={() => <></>}
+            <AttendanceOptions
+              offenderDetails={prisonerActivity}
+              raiseAnalyticsEvent={raiseAnalyticsEvent}
+              resetErrorDispatch={resetErrorDispatch}
+              setErrorDispatch={setErrorDispatch}
+              reloadPage={reloadPage}
+              handleError={handleError}
+              agencyId={agencyId}
+              period={period}
+              showModal={showModal}
+              activityName={getMainEventDescription(prisonerActivity)}
+              setOffenderAttendance={setOffenderPaymentDataDispatch}
+              date={date}
+              payAll={false}
             />
           )}
         </Table.Row>

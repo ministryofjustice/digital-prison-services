@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DATE_ONLY_FORMAT_SPEC } = require('../../src/dateHelpers')
 
 const availableSlotsServiceFactory = require('../services/availableSlotsService')
 
@@ -26,82 +26,27 @@ describe('Available slots service', () => {
       { existingEventsService, appointmentsService },
       { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
     )
+    const date = moment().format(DATE_ONLY_FORMAT_SPEC)
 
-    const chunks = availableSlotsService.breakDayIntoSlots()
+    const chunks = availableSlotsService.breakDayIntoSlots({ date, minutesNeeded: 30 })
 
     expect(chunks).toEqual([
-      { startTime: getTime({ hour: 9, minutes: 0 }), endTime: getTime({ hour: 9, minutes: 30 }) },
-      { startTime: getTime({ hour: 9, minutes: 30 }), endTime: getTime({ hour: 10, minutes: 0 }) },
-      { startTime: getTime({ hour: 10, minutes: 0 }), endTime: getTime({ hour: 10, minutes: 30 }) },
-      { startTime: getTime({ hour: 10, minutes: 30 }), endTime: getTime({ hour: 11, minutes: 0 }) },
-    ])
-  })
-
-  it('should filter out slots that overlap with booked slots', () => {
-    const bookedSlots = [
       {
-        startTime: getTime({ hour: 9, minutes: 45 }),
-        endTime: getTime({ hour: 10, minutes: 0 }),
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 9, minutes: 0 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 9, minutes: 30 }),
       },
       {
-        startTime: getTime({ hour: 10, minutes: 0 }),
-        endTime: getTime({ hour: 11, minutes: 0 }),
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 9, minutes: 30 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 0 }),
       },
-    ]
-
-    const availableSlotsService = availableSlotsServiceFactory(
-      { appointmentsService, existingEventsService },
-      { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
-    )
-    const availableSlots = availableSlotsService.getAvailableSlots(bookedSlots)
-
-    expect(availableSlots).toEqual([
-      { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 9, minutes: 30 }) },
-    ])
-  })
-
-  it('should join slots together where the end and stat times meet', () => {
-    const bookedSlots = [
       {
-        startTime: getTime({ hour: 10, minutes: 30 }),
-        endTime: getTime({ hour: 11, minutes: 0 }),
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 0 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 30 }),
       },
-    ]
-    const availableSlotsService = availableSlotsServiceFactory(
-      { existingEventsService, appointmentsService },
-      { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
-    )
-    const availableSlots = availableSlotsService.getAvailableSlots(bookedSlots)
-
-    expect(availableSlots).toEqual([
-      { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 10, minutes: 0 }) },
-    ])
-  })
-
-  it('should return one slot for whole period', () => {
-    const bookedSlots = []
-    const availableSlotsService = availableSlotsServiceFactory(
-      { existingEventsService, appointmentsService },
-      { startOfDay: 9, endOfDay: 17, byMinutes: 30 }
-    )
-    const availableSlots = availableSlotsService.getAvailableSlots(bookedSlots)
-
-    expect(availableSlots).toEqual([
-      { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 17, minutes: 0 }) },
-    ])
-  })
-
-  it('should return time periods that have same or more length as the requested start + end time', () => {
-    const bookedSlots = [{ startTime: getTime({ hour: 10, minutes: 30 }), endTime: getTime({ hour: 11, minutes: 0 }) }]
-
-    const availableSlotsService = availableSlotsServiceFactory(
-      { existingEventsService, appointmentsService },
-      { startOfDay: 9, endOfDay: 11, byMinutes: 30 }
-    )
-    const availableSlots = availableSlotsService.getAvailableSlotsByMinLength(bookedSlots, 30)
-
-    expect(availableSlots).toEqual([
-      { startTime: getTimeWithFormat({ hour: 9, minutes: 0 }), endTime: getTimeWithFormat({ hour: 10, minutes: 0 }) },
+      {
+        startTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 10, minutes: 30 }),
+        endTime: getTime({ momentDate: moment(date, DATE_ONLY_FORMAT_SPEC), hour: 11, minutes: 0 }),
+      },
     ])
   })
 
@@ -130,27 +75,62 @@ describe('Available slots service', () => {
     expect(availableRooms).toEqual([{ value: 2 }])
   })
 
-  describe('Putting it all together', () => {
-    it('should only return a unique set of available rooms that meet the requested appointment duration of time', async () => {
-      appointmentsService.getLocations.mockReturnValue([{ value: 1 }, { value: 2 }])
-      existingEventsService.getAppointmentsAtLocations.mockReturnValue([
-        {
-          locationId: 1,
-          start: getTimeWithFormat({ hour: 9, minutes: 0 }),
-          end: getTimeWithFormat({ hour: 17, minutes: 0 }),
-        },
-      ])
+  it('should return no available rooms', async () => {
+    appointmentsService.getLocations.mockReturnValue([{ value: 1 }])
+    existingEventsService.getAppointmentsAtLocations.mockReturnValue([
+      {
+        locationId: 1,
+        start: getTimeWithFormat({ hour: 9, minutes: 0 }),
+        end: getTimeWithFormat({ hour: 17, minutes: 0 }),
+      },
+    ])
 
-      const availableSlotsService = availableSlotsServiceFactory(
-        { existingEventsService, appointmentsService },
-        { startOfDay: 9, endOfDay: 17, byMinutes: 5 }
-      )
+    const availableSlotsService = availableSlotsServiceFactory(
+      { existingEventsService, appointmentsService },
+      { startOfDay: 9, endOfDay: 17 }
+    )
 
-      const startTime = getTimeWithFormat({ hour: 9, minutes: 0 })
-      const endTime = getTimeWithFormat({ hour: 11, minutes: 0 })
-      const availableRooms = await availableSlotsService.getAvailableRooms({}, { agencyId: 'LEI', startTime, endTime })
+    const startTime = getTimeWithFormat({ hour: 9, minutes: 0 })
+    const endTime = getTimeWithFormat({ hour: 11, minutes: 0 })
+    const availableRooms = await availableSlotsService.getAvailableRooms({}, { agencyId: 'LEI', startTime, endTime })
 
-      expect(availableRooms).toEqual([{ value: 2 }])
-    })
+    expect(availableRooms).toEqual([])
+  })
+
+  it('should return a two locations, one of each id', async () => {
+    appointmentsService.getLocations.mockReturnValue([{ value: 1 }, { value: 2 }])
+    existingEventsService.getAppointmentsAtLocations.mockReturnValue([
+      {
+        locationId: 1,
+        start: getTimeWithFormat({ hour: 9, minutes: 0 }),
+        end: getTimeWithFormat({ hour: 10, minutes: 0 }),
+      },
+      {
+        locationId: 1,
+        start: getTimeWithFormat({ hour: 10, minutes: 0 }),
+        end: getTimeWithFormat({ hour: 11, minutes: 0 }),
+      },
+      {
+        locationId: 1,
+        start: getTimeWithFormat({ hour: 11, minutes: 0 }),
+        end: getTimeWithFormat({ hour: 12, minutes: 0 }),
+      },
+      {
+        locationId: 1,
+        start: getTimeWithFormat({ hour: 12, minutes: 0 }),
+        end: getTimeWithFormat({ hour: 13, minutes: 0 }),
+      },
+    ])
+
+    const availableSlotsService = availableSlotsServiceFactory(
+      { existingEventsService, appointmentsService },
+      { startOfDay: 9, endOfDay: 15 }
+    )
+
+    const startTime = getTimeWithFormat({ hour: 9, minutes: 0 })
+    const endTime = getTimeWithFormat({ hour: 10, minutes: 0 })
+    const availableRooms = await availableSlotsService.getAvailableRooms({}, { agencyId: 'LEI', startTime, endTime })
+
+    expect(availableRooms).toEqual([{ value: 2 }, { value: 1 }])
   })
 })

@@ -11,20 +11,6 @@
   {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
 {%- endmacro %}
 
-{% block beforeContent %}
-  {{ govukBreadcrumbs({
-      items: [
-          {
-              text: "Home",
-              href: "/"
-          },
-          {
-              text: title
-          }
-      ]
-  }) }}
-{% endblock %}
-
 {% block content %}
   {% if errors.length > 0 %}
     {{ govukErrorSummary({
@@ -34,9 +20,13 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
     {{title}}
   </h1>
+
+  <p class="govuk-body">
+    <a href="/request-booking" class="govuk-link">This person is not currently in prison</a>
+  </p>
 
   <p class="govuk-body">Use one or more of the search options below.</p>
 
