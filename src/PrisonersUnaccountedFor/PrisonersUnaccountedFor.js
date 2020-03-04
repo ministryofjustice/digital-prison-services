@@ -10,7 +10,6 @@ import OtherActivityListView from '../OtherActivityListView'
 import SortableColumn from '../tablesorting/SortableColumn'
 import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import { getHoursMinutes, getMainEventDescription } from '../utils'
-import { Flag } from '../flags'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 
 const TableContainer = styled.div`
