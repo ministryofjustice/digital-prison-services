@@ -9,6 +9,15 @@ class ConfirmVideoLinkCourtPage extends Page {
         pageTitle { $('h1').text() }
         backLink { $('a.govuk-button.govuk-button--primary').text() }
         finishLink { $('a.govuk-button.govuk-button--secondary').text() }
+        offenderName { $('.qa-name-value').text()}
+        prison { $('.qa-prison-value').text()}
+        room { $('.qa-room-value').text()}
+        date { $('.qa-date-value').text()}
+        startTime { $('.qa-startTime-value').text()}
+        endTime { $('.qa-endTime-value').text()}
+        legalBriefingBefore { $('.qa-legalBriefingBefore-value').text()}
+        legalBriefingAfter { $('.qa-legalBriefingAfter-value').text()}
+        courtLocation { $('.qa-courtLocation-value').text()}
     }
 
     static at = {
