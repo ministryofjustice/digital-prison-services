@@ -8,6 +8,12 @@ class SelectCourtAppointmentCourtPage extends Page {
     static content = {
         pageTitle { $('h1').text() }
         selectCourtForm { $('form')}
+        offenderName { $('.qa-name-value').text()}
+        prison { $('.qa-prison-value').text()}
+        date { $('.qa-date-value').text()}
+        startTime { $('.qa-startTime-value').text()}
+        endTime { $('.qa-endTime-value').text()}
+
         selectCourtSubmitButton { $('button', type: 'submit') }
     }
 
