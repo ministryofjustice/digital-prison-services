@@ -11,7 +11,11 @@ module.exports = ({ app }) => {
   router.use(express.static(path.join(__dirname, '../build'))) // << this needed?
   router.use(express.static(path.join(__dirname, '../build/static')))
 
-  const assetPaths = ['../node_modules/govuk-frontend/govuk/assets', '../node_modules/govuk-frontend']
+  const assetPaths = [
+    '../node_modules/govuk-frontend/govuk/assets',
+    '../node_modules/govuk-frontend',
+    '../node_modules/@ministryofjustice/frontend',
+  ]
   assetPaths.forEach(dir => {
     router.use('/assets', express.static(path.join(__dirname, dir)))
   })
