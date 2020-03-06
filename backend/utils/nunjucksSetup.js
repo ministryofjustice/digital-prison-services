@@ -87,7 +87,7 @@ module.exports = (app, path) => {
       .filter(key => model[key])
       .map(key => ({
         key: { text: capitalize(pascalToString(key)) },
-        value: { text: model[key] },
+        value: { text: model[key], classes: `qa-${key}-value` },
       }))
   )
 
@@ -98,11 +98,11 @@ module.exports = (app, path) => {
       items.map(entry => ({
         key: {
           ...entry.key,
-          classes: 'govuk-!-padding-bottom-0',
+          classes: `govuk-!-padding-bottom-0`,
         },
         value: {
           ...entry.value,
-          classes: 'govuk-!-padding-bottom-0',
+          classes: `${entry.value.classes} govuk-!-padding-bottom-0`,
         },
       }))
   )

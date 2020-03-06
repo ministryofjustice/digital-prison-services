@@ -77,7 +77,7 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi) => {
       agencyId,
     })
 
-    log.info(data, 'getHouseblockList data received')
+    log.info(data.size, 'getHouseblockList data received')
 
     const bookings = Array.from(new Set(data.map(event => event.bookingId)))
     const shouldGetAttendanceForBookings = bookings.length > 0
