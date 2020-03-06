@@ -3,238 +3,116 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set title = "Appointments for " + formattedDate %}
 
+{% block beforeContent %}
+  {{ govukBackLink({
+      text: "Back",
+      href: "/"
+  }) }}
+{% endblock %}
+
 {% block content %}
-<h1 class="govuk-heading-l">{{title}}</h1>
+  <h1 class="govuk-heading-l">{{title}}</h1>
 
-<form class="horizontal-form">
-  {{ datePicker({
-    id: 'date',
-    label: 'Date',
-    name: 'date',
-    date: date,
-    errorMessage: errors | findError('date')
-  }) }}
+  <form class="horizontal-form">
+    {{ datePicker({
+      id: 'date',
+      label: 'Date',
+      name: 'date',
+      date: date,
+      errorMessage: errors | findError('date')
+    }) }}
 
-  {{ govukSelect({
-    name: 'period',
-    id: 'period',
-    label: {
-        text: "Period"
-    },
-    items: [
-        { text: 'AM', value: 'am' },
-        { text: 'PM', value: 'pm' }
-    ] | setSelected(period),
-    errorMessage: errors | findError(period)
-  }) }}
+    {{ govukSelect({
+      name: 'timeSlot',
+      id: 'timeSlot',
+      label: {
+          text: "Period"
+      },
+      items: [
+          { text: 'All', value: 'all' },
+          { text: 'AM', value: 'AM' },
+          { text: 'PM', value: 'PM' },
+          { text: 'ED', value: 'ED' }
+      ] | setSelected(timeSlot),
+      errorMessage: errors | findError(timeSlot)
+    }) }}
 
-  {{ govukSelect({
-    name: 'type',
-    id: 'type',
-    label: {
-        text: "Type"
-    },
-    items: types | setSelected(type),
-    errorMessage: errors | findError(type)
-  }) }}
+    {{ govukSelect({
+      name: 'type',
+      id: 'type',
+      label: {
+          text: "Type"
+      },
+      items: types | addDefaultSelectedVale('All', true) | setSelected(type),
+      errorMessage: errors | findError(type)
+    }) }}
 
-  {{ govukSelect({
-    name: 'location',
-    id: 'location',
-    label: {
-        text: "Location"
-    },
-    items: locations | setSelected(location),
-    errorMessage: errors | findError(location)
-  }) }}
+    {{ govukSelect({
+      name: 'locationId',
+      id: 'locationId',
+      label: {
+          text: "Location"
+      },
+      items: locations | addDefaultSelectedVale('All', true) | setSelected(locationId),
+      errorMessage: errors | findError(locationId)
+    }) }}
 
-  {{ govukButton({ 
-    text: "Update results",
-    preventDoubleClick: true
-  }) }}
-</form>
+    {{ govukButton({ 
+      text: "Update results",
+      preventDoubleClick: true
+    }) }}
+  </form>
 
-{{ govukTable({
-  head: [
-  {
-    text: "Name",
-    attributes: {
-      "aria-sort": "ascending"
-    }
-  },
-  {
-    text: "Elevation",
-    attributes: {
-      "aria-sort": "none"
-    }
-  },
-  {
-    text: "Continent",
-    attributes: {
-      "aria-sort": "none"
-    }
-  },
-  {
-    text: "First summit",
-    attributes: {
-      "aria-sort": "none"
-    },
-    format: "numeric"
-  }
-  ],
-  rows: [
-  [
-    {
-      text: "Aconcagua"
-    },
-    {
-      text: "6,961 meters",
-      attributes: {
-        "data-sort-value": "6961"
-      }
-    },
-    {
-      text: "South America"
-    },
-    {
-      text: "1897",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1897"
-      }
-    }
-  ],
-  [
-    {
-      text: "Denali"
-    },
-    {
-      text: "6,194 meters",
-      attributes: {
-        "data-sort-value": "6194"
-      }
-    },
-    {
-      text: "North America"
-    },
-    {
-      text: "1913",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1913"
-      }
-    }
-  ],
-  [
-    {
-      text: "Elbrus"
-    },
-    {
-      text: "5,642 meters",
-      attributes: {
-        "data-sort-value": "5642"
-      }
-    },
-    {
-      text: "Europe"
-    },
-    {
-      text: "1874",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1874"
-      }
-    }
-  ],
-  [
-    {
-      text: "Everest"
-    },
-    {
-      text: "8,850 meters",
-      attributes: {
-        "data-sort-value": "8850"
-      }
-    },
-    {
-      text: "Asia"
-    },
-    {
-      text: "1953",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1953"
-      }
-    }
-  ],
-  [
-    {
-      text: "Kilimanjaro"
-    },
-    {
-      text: "5,895 meters",
-      attributes: {
-        "data-sort-value": "5895"
-      }
-    },
-    {
-      text: "Africa"
-    },
-    {
-      text: "1889",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1889"
-      }
-    }
-  ],
-  [
-    {
-      text: "Puncak Jaya"
-    },
-    {
-      text: "4,884 meters",
-      attributes: {
-        "data-sort-value": "4884"
-      }
-    },
-    {
-      text: "Australia"
-    },
-    {
-      text: "1962",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1962"
-      }
-    }
-  ],
-  [
-    {
-      text: "Vinson"
-    },
-    {
-      text: "4,897 meters",
-      attributes: {
-        "data-sort-value": "4897"
-      }
-    },
-    {
-      text: "Antarctica"
-    },
-    {
-      text: "1966",
-      format: "numeric",
-      attributes: {
-        "data-sort-value": "1966"
-      }
-    }
-  ]
-  ]
-}) }} 
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+  {% if appointmentRows.length %}
+    <p class="govuk-body-l"><strong>Total:</strong> {{ appointmentRows.length }}</p>
+
+    {{ govukTable({
+      head: [
+        {
+          text: "Time",
+          attributes: {
+            "aria-sort": "ascending"
+          }
+        },
+        {
+          text: "Name",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: "Prison no."
+        },
+        {
+          text: "Appointment type",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: "Location",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: "Added by",
+          attributes: {
+            "aria-sort": "none"
+          }
+        }
+      ],
+      rows: appointmentRows
+    }) }} 
+  {% else %}
+    <p class="govuk-body">There are no results for the selections you have made.</p>
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}

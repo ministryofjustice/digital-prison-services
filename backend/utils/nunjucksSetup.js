@@ -56,17 +56,17 @@ module.exports = (app, path) => {
     ]
   })
 
-  njkEnv.addFilter('addDefaultSelectedVale', (items, text) => {
+  njkEnv.addFilter('addDefaultSelectedVale', (items, text, show) => {
     if (!items) return null
+    const attributes = {}
+    if (!show) attributes.hidden = ''
 
     return [
       {
         text,
         value: '',
         selected: true,
-        attributes: {
-          hidden: '',
-        },
+        attributes,
       },
       ...items,
     ]

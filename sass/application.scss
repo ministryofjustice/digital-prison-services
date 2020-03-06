@@ -1,13 +1,13 @@
 $govuk-page-width: 1170px;
+// $govuk-global-styles: true;
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
 @import 'components/_header.scss';
-@import "components/_sortable-table.scss";
+@import 'components/_sortable-table.scss';
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
 @import 'views/components/movementSlip/movementSlip.scss';
 @import 'views/components/scheduledEvents/scheduledEvents.scss';
-
 
 .no-select {
   -webkit-touch-callout: none;
@@ -23,14 +23,30 @@ $govuk-page-width: 1170px;
 }
 
 .horizontal-form {
-  display: flex;
-
-  > div {
-    margin-right: 15px;
+  * {
+    width: 100%;
   }
 
-  button {
-    align-self: center;
+  @include govuk-media-query($from: desktop) {
+    display: flex;
+
+    * {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    > div {
+      margin-right: govuk-spacing(3);
+    }
+
+    label {
+      margin-bottom: govuk-spacing(1);
+    }
+
+    button {
+      align-self: flex-end;
+      margin-bottom: $govuk-border-width-form-element;
+    }
   }
 }
 
