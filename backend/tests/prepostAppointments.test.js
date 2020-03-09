@@ -120,8 +120,8 @@ describe('Pre post appointments', () => {
           formValues: {
             postAppointment: 'yes',
             preAppointment: 'yes',
-            postAppointmentDuration: 15,
-            preAppointmentDuration: 15,
+            postAppointmentDuration: 20,
+            preAppointmentDuration: 20,
           },
         })
       )
