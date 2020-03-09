@@ -1,8 +1,9 @@
 $govuk-page-width: 1170px;
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
-@import 'components/_header.scss';
-@import 'components/_sortable-table.scss';
+@import 'components/header';
+@import 'components/sortable-table';
+@import 'components/print-link';
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
 @import 'views/components/movementSlip/movementSlip.scss';
@@ -54,8 +55,48 @@ $govuk-page-width: 1170px;
   margin: 0;
 }
 
-@media print {
+@include govuk-media-query($media-type: print) {
+  // govuk-frontend overrides
+  .govuk-heading-l {
+    font-size: 19pt;
+  }
+
+  .govuk-body-l {
+    font-size: 12pt;
+  }
+
+  // from govuk-frontend 3.6
+  .govuk-\!-display-none-print {
+    display: none !important;
+  }
+
   .printed-page {
     background: none;
+  }
+
+  .govuk-table {
+    font-size: 10pt;
+
+    .govuk-link {
+      color: inherit;
+      text-decoration: none;
+
+      // Remove url from links in printed view within a table
+      &[href^="/"], &[href^="http://"], &[href^="https://"] {
+        &::after {
+          content: '';
+        }
+      }
+    }
+
+    // Remove styling from MOJ sortable table colum headers
+    [aria-sort] button {
+      color: inherit;
+
+      &:before,
+      &:after {
+        content: '';
+      }
+    }
   }
 }

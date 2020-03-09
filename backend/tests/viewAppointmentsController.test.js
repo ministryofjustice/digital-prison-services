@@ -285,7 +285,7 @@ describe('View appointments', () => {
     it('should not specify a timeSlot when All is selected for period', async () => {
       req.query = {
         ...req.query,
-        timeSlot: 'all',
+        timeSlot: 'All',
       }
 
       await controller(req, res)

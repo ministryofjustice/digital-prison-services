@@ -17,7 +17,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       elite2Api.getAppointmentsForAgency(res.locals, {
         agencyId,
         date: searchDate,
-        timeSlot: timeSlot !== 'all' ? timeSlot : undefined,
+        timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
         locationId,
       }),
     ])
