@@ -3,10 +3,10 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { getTime, properCaseName, formatName } = require('../../utils')
+const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
 
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
-  const { date, timeSlot = 'AM', type, locationId } = req.query
+  const { date, timeSlot = getCurrentPeriod(), type, locationId } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   const agencyId = req.session.userDetails.activeCaseLoadId
 
