@@ -30,7 +30,10 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
     const { offenderNo, agencyId } = req.params
 
-    return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
+    return res.render('error.njk', {
+      url: `/${agencyId}/offenders/${offenderNo}/add-appointment`,
+      homeUrl: '/videolink',
+    })
   }
 
   const renderTemplate = async (req, res, pageData) => {
@@ -70,6 +73,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
           startTime: details.startTime,
           endTime: details.endTime,
         },
+        homeUrl: '/videolink',
       })
     } catch (error) {
       return renderError(req, res, error)

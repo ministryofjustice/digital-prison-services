@@ -138,6 +138,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           court: {
             courtLocation: details.court,
           },
+          homeUrl: authSource === 'nomis' ? dpsUrl : '/videolink',
         })
       } else {
         res.render('confirmAppointments.njk', {
@@ -154,6 +155,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       logError(req.originalUrl, error, serviceUnavailableMessage)
       res.render('error.njk', {
         url: authSource === 'nomis' ? `${dpsUrl}offenders/${offenderNo}` : '/prisoner-search',
+        homeUrl: authSource === 'nomis' ? dpsUrl : '/videolink',
       })
     }
   }

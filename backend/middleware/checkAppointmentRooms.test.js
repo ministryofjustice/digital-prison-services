@@ -155,6 +155,7 @@ describe('Room check middleware', () => {
       expect(res.render).toHaveBeenCalledWith('noAppointmentsForWholeDay.njk', {
         continueLink: '/MDI/offenders/A12345/add-court-appointment',
         date: 'Sunday 1 January 2017',
+        homeUrl: '/videolink',
       })
     })
 
@@ -176,6 +177,7 @@ describe('Room check middleware', () => {
         date: 'Sunday 1 January 2017',
         endTime: '13:20',
         startTime: '11:40',
+        homeUrl: '/videolink',
       })
     })
 

@@ -69,11 +69,12 @@ const addCourtAppointmentsFactory = (elite2Api, logError) => {
         offenderNameWithNumber,
         agencyDescription,
         dpsUrl,
+        homeUrl: '/videolink',
         bookingId,
       })
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: `/prisoner-search` })
+      return res.render('error.njk', { url: `/prisoner-search`, homeUrl: '/videolink' })
     }
   }
 
