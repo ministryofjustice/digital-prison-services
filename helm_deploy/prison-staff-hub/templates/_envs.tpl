@@ -97,6 +97,9 @@ env:
   - name: API_COMMUNITY_API_PREFIX
     value: {{ .Values.env.API_COMMUNITY_API_PREFIX | quote }}
 
+  - name: VIDEO_LINK_ENABLED_FOR
+    value: {{ .Values.env.VIDEO_LINK_ENABLED_FOR | quote }}
+
   - name: HMPPS_COOKIE_NAME
     value: {{ .Values.env.HMPPS_COOKIE_NAME | quote }}
 
