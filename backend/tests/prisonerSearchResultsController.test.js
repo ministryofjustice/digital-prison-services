@@ -110,6 +110,7 @@ describe('Prisoner search results', () => {
                 prison: 'Leeds',
                 pncNumber: '1/2345',
                 prisonId: 'LEI',
+                addAppointmentHTML: '',
               },
               {
                 name: 'User, Test',
@@ -118,6 +119,7 @@ describe('Prisoner search results', () => {
                 prison: 'Moorlands',
                 pncNumber: '--',
                 prisonId: 'MDI',
+                addAppointmentHTML: '',
               },
             ],
             homeUrl: '/videolink',
@@ -152,6 +154,7 @@ describe('Prisoner search results', () => {
                   prison: 'Moorlands',
                   pncNumber: '--',
                   prisonId: 'MDI',
+                  addAppointmentHTML: '',
                 },
               ],
               homeUrl: '/videolink',
