@@ -46,7 +46,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
           prisonId: result.latestLocationId,
           pncNumber: result.pncNumber ? result.pncNumber : '--',
           addAppointmentHTML: config.app.videoLinkEnabledFor.includes(result.latestLocationId)
-            ? `<a href="/${result.prisonId}/offenders/${
+            ? `<a href="/${result.latestLocationId}/offenders/${
                 result.offenderNo
               }/add-court-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>`
             : '',
