@@ -77,6 +77,44 @@ describe('View appointments', () => {
         types: [{ text: 'Video link booking', value: 'VLB' }],
       })
     })
+
+    it('should request data for the PM period in the afternoon', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1577880000000) // 2020-01-01 12:00:00
+
+      await controller(req, res)
+
+      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(
+        res.locals,
+        expect.objectContaining({
+          timeSlot: 'PM',
+        })
+      )
+      expect(res.render).toHaveBeenCalledWith(
+        'viewAppointments.njk',
+        expect.objectContaining({
+          timeSlot: 'PM',
+        })
+      )
+    })
+
+    it('should request data for the ED period in the evening', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1577898000000) // 2020-01-01 17:00:00
+
+      await controller(req, res)
+
+      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(
+        res.locals,
+        expect.objectContaining({
+          timeSlot: 'ED',
+        })
+      )
+      expect(res.render).toHaveBeenCalledWith(
+        'viewAppointments.njk',
+        expect.objectContaining({
+          timeSlot: 'ED',
+        })
+      )
+    })
   })
 
   describe('when there are selected search parameters with results', () => {
