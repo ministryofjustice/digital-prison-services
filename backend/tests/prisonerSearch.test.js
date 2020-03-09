@@ -62,7 +62,7 @@ describe('Prisoner search', () => {
 
         await controller.index(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', { agencyOptions })
+        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', { agencyOptions, homeUrl: '/videolink' })
       })
     })
 
@@ -72,7 +72,7 @@ describe('Prisoner search', () => {
         await controller.index(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
       })
 
       it('should render the error template if there is an error retrieving agencies', async () => {
@@ -80,7 +80,7 @@ describe('Prisoner search', () => {
         await controller.index(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
       })
     })
   })
@@ -98,6 +98,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Enter prisoner name or number', href: '#nameOrNumber' }],
           formValues: {},
           agencyOptions,
+          homeUrl: '/videolink',
         })
       })
     })
@@ -116,6 +117,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Date of birth must include a day', href: '#dobDay' }],
           formValues: req.body,
           agencyOptions,
+          homeUrl: '/videolink',
         })
       })
 
@@ -132,6 +134,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Date of birth must include a month', href: '#dobMonth' }],
           formValues: req.body,
           agencyOptions,
+          homeUrl: '/videolink',
         })
       })
 
@@ -148,6 +151,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Date of birth must include a year', href: '#dobYear' }],
           formValues: req.body,
           agencyOptions,
+          homeUrl: '/videolink',
         })
       })
 
@@ -165,6 +169,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Enter a real date of birth', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
           agencyOptions,
+          homeUrl: '/videolink',
         })
       })
 
@@ -184,6 +189,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Date of birth must be in the past', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
           agencyOptions,
+          homeUrl: '/videolink',
         })
 
         Date.now.mockRestore()
@@ -203,6 +209,7 @@ describe('Prisoner search', () => {
           errors: [{ text: 'Date of birth must be after 1900', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
           agencyOptions,
+          homeUrl: '/videolink',
         })
       })
     })

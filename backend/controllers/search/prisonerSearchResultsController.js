@@ -45,6 +45,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
           prisonId: result.latestLocationId,
           pncNumber: result.pncNumber ? result.pncNumber : '--',
         })),
+        homeUrl: '/videolink',
       })
     }
 
@@ -52,6 +53,6 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
-    return res.render('error.njk', { url: '/' })
+    return res.render('error.njk', { url: '/', homeUrl: '/videolink' })
   }
 }
