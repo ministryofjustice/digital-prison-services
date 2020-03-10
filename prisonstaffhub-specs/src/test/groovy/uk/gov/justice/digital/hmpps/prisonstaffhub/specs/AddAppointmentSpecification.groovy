@@ -89,7 +89,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         and: "I fill out the form"
         prePostForm.preAppointment = "yes"
         prePostForm.preAppointmentLocation = 1
-        prePostForm.preAppointmentDuration = 15
+        prePostForm.preAppointmentDuration = 20
         prePostForm.postAppointment = "no"
 
         prePostSubmitButton.click()
