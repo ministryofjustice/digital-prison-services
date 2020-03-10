@@ -38,13 +38,13 @@
             <input type="hidden" id="appointment-date" value="{{ date }}"/>
 
             {% if preAppointmentRequired %}
-                {{ appointment({description: "Legal briefing before", name:"selectPreAppointment",locations: preLocations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
+                {{ appointment({description: "Prison room for pre-court hearing briefing", name:"selectPreAppointment",locations: preLocations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
             {% endif %}
 
-            {{ appointment({description: "Court hearing", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
+            {{ appointment({description: "Prison room for court hearing briefing", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
 
             {% if postAppointmentRequired %}
-                {{ appointment({description: "Legal briefing after", name:"selectPostAppointment",locations: postLocations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
+                {{ appointment({description: "Prison room for post-court hearing briefing", name:"selectPostAppointment",locations: postLocations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
             {% endif %}
 
             {{ govukTextarea({
@@ -57,12 +57,12 @@
                     text: "Comments (optional)"
                 },
                 hint: {
-                    text: "Type of hearing and additional details"
+                    text: "This can include the hearing number, type of hearing and any other additional details"
                 }
             }) }}
 
             {{ govukButton({
-                    text: "Continue",
+                    text: "Book video link",
                     type: 'submit',
                     classes: "govuk-!-margin-right-2"
                 }) }}

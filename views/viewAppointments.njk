@@ -1,0 +1,132 @@
+{% extends "./partials/layout.njk" %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set title = "Appointments for " + formattedDate + " - " + timeSlot %}
+{% set htmlClasses = "printed-page" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+      text: "Back",
+      href: "/",
+      classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{title}}</h1>
+  {% include "./partials/printLink.njk" %}
+
+  <form class="horizontal-form govuk-!-display-none-print">
+    {{ datePicker({
+      id: 'date',
+      label: 'Date',
+      name: 'date',
+      date: date,
+      errorMessage: errors | findError('date')
+    }) }}
+
+    {{ govukSelect({
+      name: 'timeSlot',
+      id: 'timeSlot',
+      label: {
+          text: "Period"
+      },
+      items: [
+          { text: 'All', value: 'All' },
+          { text: 'AM', value: 'AM' },
+          { text: 'PM', value: 'PM' },
+          { text: 'ED', value: 'ED' }
+      ] | setSelected(timeSlot),
+      errorMessage: errors | findError(timeSlot)
+    }) }}
+
+    {{ govukSelect({
+      name: 'type',
+      id: 'type',
+      label: {
+          text: "Type"
+      },
+      items: types | addDefaultSelectedVale('All', true) | setSelected(type),
+      errorMessage: errors | findError(type)
+    }) }}
+
+    {{ govukSelect({
+      name: 'locationId',
+      id: 'locationId',
+      label: {
+          text: "Location"
+      },
+      items: locations | addDefaultSelectedVale('All', true) | setSelected(locationId),
+      errorMessage: errors | findError(locationId)
+    }) }}
+
+    {{ govukButton({ 
+      text: "Update results",
+      preventDoubleClick: true
+    }) }}
+  </form>
+
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+  {% if appointmentRows.length %}
+    <p class="govuk-body-l"><strong>Total:</strong> {{ appointmentRows.length }}</p>
+
+    {{ govukTable({
+      head: [
+        {
+          text: "Time",
+          attributes: {
+            "aria-sort": "ascending"
+          }
+        },
+        {
+          text: "Name",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: "Prison no."
+        },
+        {
+          text: "Appointment type",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: "Location",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: "Added by",
+          attributes: {
+            "aria-sort": "none"
+          }
+        }
+      ],
+      rows: appointmentRows,
+      attributes: { "data-qa": "appointments-table" }
+    }) }} 
+  {% else %}
+    <p class="govuk-body" data-qa="no-results-message">There are no results for the selections you have made.</p>
+  {% endif %}
+
+  {% include "./partials/printLink.njk" %}
+{% endblock %}
+
+{% block bodyEnd %}
+{{ super() }}
+<script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+<script>
+new MOJFrontend.SortableTable({
+  table: $('table')[0],
+})
+</script>
+{% endblock %}

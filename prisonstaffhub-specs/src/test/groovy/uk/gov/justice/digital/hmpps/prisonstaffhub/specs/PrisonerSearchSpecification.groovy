@@ -68,8 +68,8 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
                     middleNames: 'ING',
                     lastName: 'USER',
                     dateOfBirth: '1980-07-17',
-                    latestLocationId: 'LEI',
-                    latestLocation: 'Leeds',
+                    latestLocationId: 'WWI',
+                    latestLocation: 'Wandsworth',
                     pncNumber: '1/2345',
                 ]
         ])
@@ -83,8 +83,8 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with the the search results page"
         at PrisonerSearchResultsPage
-        searchResultsTable.children()[1].text() == "User, Test G0011GX 17/07/1980 Leeds 1/2345 Book appointment"
-        bookAppointmentLinks[0].attr('href') == "http://localhost:3006/LEI/offenders/G0011GX/add-court-appointment"
+        searchResultsTable.children()[1].text() == "User, Test G0011GX 17/07/1980 Wandsworth 1/2345 Book appointment"
+        bookAppointmentLinks[0].attr('href') == "http://localhost:3006/WWI/offenders/G0011GX/add-court-appointment"
     }
 
     def setupTests() {
@@ -98,6 +98,11 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
                 [
                         "description": "Leeds (HMP)",
                         "agencyId": "LEI",
+                        "agencyType": "INST",
+                ],
+                [
+                        "description": "Wandsworth (HMP)",
+                        "agencyId": "WWI",
                         "agencyType": "INST",
                 ]
         ])

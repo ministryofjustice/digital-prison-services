@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { properCaseName, isOffenderNumber } = require('../../utils')
+const config = require('../../config')
 
 module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
   try {
@@ -44,7 +45,13 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
           prison: result.latestLocation,
           prisonId: result.latestLocationId,
           pncNumber: result.pncNumber ? result.pncNumber : '--',
+          addAppointmentHTML: config.app.videoLinkEnabledFor.includes(result.latestLocationId)
+            ? `<a href="/${result.latestLocationId}/offenders/${
+                result.offenderNo
+              }/add-court-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>`
+            : '',
         })),
+        homeUrl: '/videolink',
       })
     }
 
@@ -52,6 +59,6 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
-    return res.render('error.njk', { url: '/' })
+    return res.render('error.njk', { url: '/', homeUrl: '/videolink' })
   }
 }

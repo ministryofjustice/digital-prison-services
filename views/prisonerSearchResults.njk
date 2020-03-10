@@ -17,7 +17,7 @@
       { text: result.dob },
       { text: result.prison },
       { text: result.pncNumber },
-      { html: '<a href="/' + result.prisonId + '/offenders/' + result.offenderNo + '/add-court-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>' }
+      { html: result.addAppointmentHTML }
     ]), rows) %}
   {% endfor %}
 

@@ -110,6 +110,7 @@ describe('Prisoner search results', () => {
                 prison: 'Leeds',
                 pncNumber: '1/2345',
                 prisonId: 'LEI',
+                addAppointmentHTML: '',
               },
               {
                 name: 'User, Test',
@@ -118,8 +119,10 @@ describe('Prisoner search results', () => {
                 prison: 'Moorlands',
                 pncNumber: '--',
                 prisonId: 'MDI',
+                addAppointmentHTML: '',
               },
             ],
+            homeUrl: '/videolink',
           })
         })
 
@@ -151,8 +154,10 @@ describe('Prisoner search results', () => {
                   prison: 'Moorlands',
                   pncNumber: '--',
                   prisonId: 'MDI',
+                  addAppointmentHTML: '',
                 },
               ],
+              homeUrl: '/videolink',
             })
           })
         })
@@ -165,7 +170,7 @@ describe('Prisoner search results', () => {
         await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
       })
 
       it('should render the error template if there is an error with global search', async () => {
@@ -174,7 +179,7 @@ describe('Prisoner search results', () => {
         await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
       })
     })
   })

@@ -151,10 +151,11 @@ const selectCourtAppointmentRoomsFactory = ({
         }),
         preAppointmentRequired: preAppointmentRequired === 'yes',
         postAppointmentRequired: postAppointmentRequired === 'yes',
+        homeUrl: '/videolink',
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
+      res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment`, homeUrl: '/videolink' })
     }
   }
 

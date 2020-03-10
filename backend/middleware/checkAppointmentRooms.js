@@ -72,6 +72,7 @@ module.exports = (existingEventsService, availableSlotsService, logError) => asy
         return res.render('noAppointmentsForWholeDay.njk', {
           date: startTime.format('dddd D MMMM YYYY'),
           continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment`,
+          homeUrl: '/videolink',
         })
       }
 
@@ -81,6 +82,7 @@ module.exports = (existingEventsService, availableSlotsService, logError) => asy
           startTime: startTime.format('HH:mm'),
           endTime: endTime.format('HH:mm'),
           continueLink: `/${agencyId}/offenders/${offenderNo}/add-court-appointment`,
+          homeUrl: '/videolink',
         })
       }
     }

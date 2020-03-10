@@ -213,9 +213,9 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         then: "I am redirected no availability today page"
         at NoAvailabilityPage
         def correctDate = LocalDate.now().plusDays(1)
-                .format(DateTimeFormatter.ofPattern("d LLLL yyyy"))
+                .format(DateTimeFormatter.ofPattern("EEEE d LLLL yyyy"))
 
-        info == "There are no bookings available on Friday ${correctDate}."
+        info == "There are no bookings available on ${correctDate}."
     }
 
     def "should be redirected to no availability for requested time page"() {
@@ -295,9 +295,9 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         then: "I am redirected no availability today page"
         at NoAvailabilityPage
         def correctDate = LocalDate.now().plusDays(1)
-                .format(DateTimeFormatter.ofPattern("d LLLL yyyy"))
+                .format(DateTimeFormatter.ofPattern("EEEE d LLLL yyyy"))
 
-        info == "There are no bookings available on Friday ${correctDate} between 10:35 and 12:15."
+        info == "There are no bookings available on ${correctDate} between 10:35 and 12:15."
     }
 
 

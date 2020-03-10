@@ -37,6 +37,7 @@
     "@govuk-react/table": "^0.7.0",
     "@govuk-react/text-area": "^0.7.0",
     "@govuk-react/visually-hidden": "^0.7.0",
+    "@ministryofjustice/frontend": "^0.0.17-alpha",
     "agentkeepalive": "^4.0.2",
     "applicationinsights": "^1.4.0",
     "applicationinsights-native-metrics": "^0.0.5",
@@ -166,7 +167,7 @@
   },
   "scripts": {
     "start": "node backend/index.js",
-    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_COMMUNITY_ENDPOINT_URL=http://localhost:18083 API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ node backend/index.js",
+    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_COMMUNITY_ENDPOINT_URL=http://localhost:18083 API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ VIDEO_LINK_ENABLED_FOR=WWI node backend/index.js",
     "build": "webpack --mode=production",
     "build:analyse": "BUNDLE_ANALYSE=true yarn build",
     "test": "jest --env=jsdom",

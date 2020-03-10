@@ -9,6 +9,7 @@ module.exports = {
     url: process.env.PRISON_STAFF_HUB_UI_URL || `http://localhost:${process.env.PORT || 3002}/`,
     maximumFileUploadSizeInMb: process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB || 200,
     featureFlags: {},
+    videoLinkEnabledFor: process.env.VIDEO_LINK_ENABLED_FOR || '',
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,

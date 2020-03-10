@@ -1,3 +1,5 @@
+const moment = require('moment')
+const { DATE_TIME_FORMAT_SPEC, Time } = require('../../../src/dateHelpers')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
@@ -30,7 +32,10 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
     const { offenderNo, agencyId } = req.params
 
-    return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
+    return res.render('error.njk', {
+      url: `/${agencyId}/offenders/${offenderNo}/add-appointment`,
+      homeUrl: '/videolink',
+    })
   }
 
   const renderTemplate = async (req, res, pageData) => {
@@ -67,9 +72,18 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
         },
         details: {
           date: details.date,
-          startTime: details.startTime,
-          endTime: details.endTime,
+          courtHearingStartTime: details.startTime,
+          courtHearingEndTime: details.endTime,
         },
+        prePostData: {
+          'pre-court hearing briefing': `${Time(moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes'))} to ${
+            details.startTime
+          }`,
+          'post-court hearing briefing': `${details.endTime} to ${Time(
+            moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes')
+          )}`,
+        },
+        homeUrl: '/videolink',
       })
     } catch (error) {
       return renderError(req, res, error)

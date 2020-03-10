@@ -6,7 +6,7 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
-    return res.render('error.njk', { url: '/' })
+    return res.render('error.njk', { url: '/', homeUrl: '/videolink' })
   }
 
   const renderTemplate = async (req, res, pageData) => {
@@ -24,6 +24,7 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
         return res.render('prisonerSearch.njk', {
           ...pageData,
           agencyOptions,
+          homeUrl: '/videolink',
         })
       }
 

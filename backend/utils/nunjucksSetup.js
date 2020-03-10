@@ -56,17 +56,17 @@ module.exports = (app, path) => {
     ]
   })
 
-  njkEnv.addFilter('addDefaultSelectedVale', (items, text) => {
+  njkEnv.addFilter('addDefaultSelectedVale', (items, text, show) => {
     if (!items) return null
+    const attributes = {}
+    if (!show) attributes.hidden = ''
 
     return [
       {
         text,
         value: '',
         selected: true,
-        attributes: {
-          hidden: '',
-        },
+        attributes,
       },
       ...items,
     ]
@@ -98,11 +98,27 @@ module.exports = (app, path) => {
       items.map(entry => ({
         key: {
           ...entry.key,
-          classes: `govuk-!-padding-bottom-0`,
+          classes: 'govuk-!-padding-bottom-0',
         },
         value: {
           ...entry.value,
           classes: `${entry.value.classes} govuk-!-padding-bottom-0`,
+        },
+      }))
+  )
+
+  njkEnv.addFilter(
+    'longLabel',
+    items =>
+      items &&
+      items.map(entry => ({
+        key: {
+          ...entry.key,
+          classes: `${entry.key.classes} govuk-!-width-one-half`,
+        },
+        value: {
+          ...entry.value,
+          classes: `${entry.value.classes} govuk-!-width-one-half`,
         },
       }))
   )

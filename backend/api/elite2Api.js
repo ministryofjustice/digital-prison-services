@@ -56,6 +56,16 @@ const elite2ApiFactory = client => {
       offenderNumbers
     )
 
+  const getAppointmentsForAgency = (context, { agencyId, date, locationId, timeSlot }) => {
+    const searchParams = mapToQueryString({
+      date,
+      locationId,
+      timeSlot,
+    })
+
+    return get(context, `/api/schedules/${agencyId}/appointments?${searchParams}`)
+  }
+
   const getActivities = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
       context,
@@ -207,6 +217,7 @@ const elite2ApiFactory = client => {
     searchActivityLocations,
     getVisits,
     getAppointments,
+    getAppointmentsForAgency,
     getActivities,
     getAgencies,
     getAgencyDetails,
