@@ -98,11 +98,27 @@ module.exports = (app, path) => {
       items.map(entry => ({
         key: {
           ...entry.key,
-          classes: `govuk-!-padding-bottom-0`,
+          classes: `${entry.key.classes} govuk-!-padding-bottom-0`,
         },
         value: {
           ...entry.value,
           classes: `${entry.value.classes} govuk-!-padding-bottom-0`,
+        },
+      }))
+  )
+
+  njkEnv.addFilter(
+    'longLabel',
+    items =>
+      items &&
+      items.map(entry => ({
+        key: {
+          ...entry.key,
+          classes: `${entry.key.classes} govuk-!-width-one-half`,
+        },
+        value: {
+          ...entry.value,
+          classes: `${entry.value.classes} govuk-!-width-one-half`,
         },
       }))
   )
