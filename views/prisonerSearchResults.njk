@@ -21,13 +21,13 @@
     ]), rows) %}
   {% endfor %}
 
-  {% set resultString = 'result' if results.length === 1 else  'results' %}
-  <p class="govuk-body">Showing {{results.length}} {{resultString}} for <strong>{{searchString}}</strong></p>
+  {% set prisonerString = 'prisoner' if results.length === 1 else  'prisoners' %}
+  <p class="govuk-body">Showing {{results.length}} {{prisonerString}}</strong></p>
 
   {{ govukTable({
     head: [
       { text: "Name" },
-      { text: "Prison no." },
+      { text: "Prison number" },
       { text: "Date of birth" },
       { text: "Prison name" },
       { text: "PNC" },
