@@ -106,17 +106,15 @@ describe('Request a booking', () => {
           'requestBooking/requestBooking.njk',
           expect.objectContaining({
             errors: [
+              { href: '#pre-appointment-required', text: 'Select yes if you want to add a pre-court hearing briefing' },
               {
-                text: 'Select if a pre-court hearing briefing is required',
-                href: '#pre-appointment-required',
-              },
-              {
-                text: 'Select if a post-court hearing briefing is required',
                 href: '#post-appointment-required',
+                text: 'Select yes if you want to add a post-court hearing briefing',
               },
-              { text: 'Select a prison', href: '#prison' },
-              { text: 'Select an end time', href: '#end-time-hours' },
-              { text: 'Select a start time', href: '#start-time-hours' },
+              { href: '#prison', text: 'Select a prison' },
+              { href: '#end-time-hours', text: 'Select an end time' },
+              { href: '#start-time-hours', text: 'Select the start time of the court hearing video link' },
+              { href: '#end-time-hours', text: 'Select the end time of the court hearing video link' },
             ],
           })
         )
@@ -198,6 +196,44 @@ describe('Request a booking', () => {
             { href: '#last-name', text: 'Enter a last name' },
             { href: '#dobDay', text: 'Enter a date of birth' },
           ],
+        })
+      )
+    })
+
+    it('should trigger date of birth in the past validation message', async () => {
+      req.body = {
+        dobDay: 1,
+        dobMonth: 1,
+        dobYear: 8000,
+        firstName: 'John',
+        lastName: 'Doe',
+      }
+
+      await controller.validateOffenderDetails(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'requestBooking/offenderDetails.njk',
+        expect.objectContaining({
+          errors: [{ href: '#dobDay', text: 'Enter a date of birth which is in the past' }, { href: '#dobError' }],
+        })
+      )
+    })
+
+    it('should trigger date of birth not real validation message', async () => {
+      req.body = {
+        dobDay: 200,
+        dobMonth: 200,
+        dobYear: 8000,
+        firstName: 'John',
+        lastName: 'Doe',
+      }
+
+      await controller.validateOffenderDetails(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'requestBooking/offenderDetails.njk',
+        expect.objectContaining({
+          errors: [{ href: '#dobDay', text: 'Enter a date of birth which is a real date' }, { href: '#dobError' }],
         })
       )
     })
@@ -300,7 +336,9 @@ describe('Request a booking', () => {
       req.body = {}
       await controller.createBookingRequest(req, res)
 
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ text: 'Select a court location', href: '#hearingLocation' }])
+      expect(req.flash).toHaveBeenCalledWith('errors', [
+        { text: 'Select which court you are in', href: '#hearingLocation' },
+      ])
       expect(res.redirect).toHaveBeenCalledWith('/request-booking/select-court')
     })
 

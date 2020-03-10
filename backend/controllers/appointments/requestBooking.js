@@ -1,12 +1,46 @@
 const moment = require('moment')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { validateComments, validateDate, validateStartEndTime } = require('../../shared/appointmentConstants')
+const { validateComments } = require('../../shared/appointmentConstants')
 const {
   notifications: { requestBookingCourtTemplateId },
 } = require('../../config')
 
 const prisonsContactConfig = [{ text: 'HMP Wandsworth', value: 'dominic.bull@digital.justice.gov.uk' }]
+
+const validateStartEndTime = (date, startTime, endTime, errors) => {
+  const now = moment()
+  const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
+  const startTimeDuration = moment.duration(now.diff(startTime))
+  const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
+
+  if (!startTime)
+    errors.push({ text: 'Select the start time of the court hearing video link', href: '#start-time-hours' })
+
+  if (!endTime) errors.push({ text: 'Select the end time of the court hearing video link', href: '#end-time-hours' })
+
+  if (isToday && startTimeDuration.asMinutes() > 1)
+    errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
+
+  if (endTime && endTimeDuration.asMinutes() > 1) {
+    errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
+  }
+}
+
+const validateDate = (date, errors) => {
+  const now = moment()
+  if (!date) errors.push({ text: 'Select the date of the video link', href: '#date' })
+
+  if (date && !moment(date, DAY_MONTH_YEAR).isValid())
+    errors.push({
+      text:
+        'Enter the date of the video link using numbers in the format of day, month and year separated using a forward slash',
+      href: '#date',
+    })
+
+  if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))
+    errors.push({ text: 'Select a date that is not in the past', href: '#date' })
+}
 
 const getBookingDetails = req =>
   req.flash('requestBooking').reduce(
@@ -25,6 +59,18 @@ const packBookingDetails = (req, data) =>
 const rePackDataIntoFlash = req => packBookingDetails(req, getBookingDetails(req))
 
 const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthApi }) => {
+  const sendEmail = (templateId, email, personalisation) =>
+    new Promise((resolve, reject) => {
+      try {
+        notifyClient.sendEmail(templateId, email, {
+          personalisation,
+          reference: null,
+        })
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: req.originalUrl })
@@ -66,10 +112,16 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     const errors = []
 
     if (!preAppointmentRequired)
-      errors.push({ text: 'Select if a pre-court hearing briefing is required', href: '#pre-appointment-required' })
+      errors.push({
+        text: 'Select yes if you want to add a pre-court hearing briefing',
+        href: '#pre-appointment-required',
+      })
 
     if (!postAppointmentRequired)
-      errors.push({ text: 'Select if a post-court hearing briefing is required', href: '#post-appointment-required' })
+      errors.push({
+        text: 'Select yes if you want to add a post-court hearing briefing',
+        href: '#post-appointment-required',
+      })
 
     if (!prison) errors.push({ text: 'Select a prison', href: '#prison' })
     if (!endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
@@ -119,11 +171,11 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
       const dobIsTooEarly = dobIsValid ? dateOfBirth.isBefore(moment({ day: 1, month: 0, year: 1900 })) : true
 
       if (!dobIsValid) {
-        errors.push({ text: 'Enter a real date of birth', href: '#dobDay' }, { href: '#dobError' })
+        errors.push({ text: 'Enter a date of birth which is a real date', href: '#dobDay' }, { href: '#dobError' })
       }
 
       if (dobIsValid && !dobInThePast) {
-        errors.push({ text: 'Date of birth must be in the past', href: '#dobDay' }, { href: '#dobError' })
+        errors.push({ text: 'Enter a date of birth which is in the past', href: '#dobDay' }, { href: '#dobError' })
       }
 
       if (dobIsValid && dobIsTooEarly) {
@@ -218,7 +270,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     try {
       if (!hearingLocation) {
         rePackDataIntoFlash(req)
-        req.flash('errors', [{ text: 'Select a court location', href: '#hearingLocation' }])
+        req.flash('errors', [{ text: 'Select which court you are in', href: '#hearingLocation' }])
 
         return res.redirect('/request-booking/select-court')
       }
@@ -256,14 +308,12 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
 
       packBookingDetails(req, personalisation)
 
-      notifyClient.sendEmail(requestBookingCourtTemplateId, prison, {
-        personalisation,
-        reference: null,
+      sendEmail(requestBookingCourtTemplateId, prison, personalisation).catch(error => {
+        logError(req.originalUrl, error, 'Failed to email the prison about a booking request')
       })
 
-      notifyClient.sendEmail(requestBookingCourtTemplateId, email, {
-        personalisation,
-        reference: null,
+      sendEmail(requestBookingCourtTemplateId, email, personalisation).catch(error => {
+        logError(req.originalUrl, error, 'Failed to email the requester a copy of the booking')
       })
 
       return res.redirect('/request-booking/confirmation')

@@ -6,7 +6,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/input/macro.njk" import govukInput %}}
 
-{% set title = 'Who is gthe video link for?' %}
+{% set title = 'Who is the video link for?' %}
 
 {% macro errorClass(field) -%}
     {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
