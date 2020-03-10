@@ -52,6 +52,6 @@ module.exports = {
     notifyKey: process.env.NOTIFY_API_KEY || '',
     confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',
     confirmBookingCourtTemplateId: '7f44cd94-4a74-4b9d-aff8-386fec34bd2e',
-    requestBookingCourtTemplateId: 'c4616316-12d3-4536-8c5b-414084e12501',
+    requestBookingCourtTemplateId: 'c1008f55-c228-4cad-b6fd-fe931c993855',
   },
 }
