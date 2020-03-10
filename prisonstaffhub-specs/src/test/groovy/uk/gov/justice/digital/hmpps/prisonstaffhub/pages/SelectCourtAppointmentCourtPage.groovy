@@ -11,8 +11,8 @@ class SelectCourtAppointmentCourtPage extends Page {
         offenderName { $('.qa-name-value').text()}
         prison { $('.qa-prison-value').text()}
         date { $('.qa-date-value').text()}
-        startTime { $('.qa-startTime-value').text()}
-        endTime { $('.qa-endTime-value').text()}
+        startTime { $('.qa-courtHearingStartTime-value').text()}
+        endTime { $('.qa-courtHearingEndTime-value').text()}
 
         selectCourtSubmitButton { $('button', type: 'submit') }
     }

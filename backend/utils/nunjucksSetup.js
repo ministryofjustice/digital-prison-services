@@ -98,7 +98,7 @@ module.exports = (app, path) => {
       items.map(entry => ({
         key: {
           ...entry.key,
-          classes: `${entry.key.classes} govuk-!-padding-bottom-0`,
+          classes: 'govuk-!-padding-bottom-0',
         },
         value: {
           ...entry.value,
