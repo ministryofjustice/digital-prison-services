@@ -66,7 +66,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
                     offenderNo: 'G0011GX',
                     firstName: 'TEST',
                     middleNames: 'ING',
-                    lastName: 'USER',
+                    lastName: 'OFFENDER',
                     dateOfBirth: '1980-07-17',
                     latestLocationId: 'WWI',
                     latestLocation: 'Wandsworth',
@@ -83,7 +83,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with the the search results page"
         at PrisonerSearchResultsPage
-        searchResultsTable.children()[1].text() == "User, Test G0011GX 17/07/1980 Wandsworth 1/2345 Book appointment"
+        searchResultsTable.children()[1].text() == "Test Offender G0011GX 17 July 1980 Wandsworth 1/2345 Book video link\nfor Test Offender, prison number G0011GX"
         bookVlbLinks[0].attr('href') == "http://localhost:3006/WWI/offenders/G0011GX/add-court-appointment"
     }
 
