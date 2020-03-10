@@ -3,11 +3,28 @@ const { requestBookingFactory } = require('./requestBooking')
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ logError, notifyClient }) => {
-  const { index, post, confirm } = requestBookingFactory({ logError, notifyClient })
+const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi }) => {
+  const {
+    startOfJourney,
+    checkAvailability,
+    enterOffenderDetails,
+    validateOffenderDetails,
+    selectCourt,
+    createBookingRequest,
+    confirm,
+  } = requestBookingFactory({
+    logError,
+    notifyClient,
+    whereaboutsApi,
+    oauthApi,
+  })
 
-  router.get('/', index)
-  router.post('/', post)
+  router.get('/', startOfJourney)
+  router.post('/check-availability', checkAvailability)
+  router.get('/enter-offender-details', enterOffenderDetails)
+  router.post('/validate-offender-details', validateOffenderDetails)
+  router.get('/select-court', selectCourt)
+  router.post('/create-booking-request', createBookingRequest)
   router.get('/confirmation', confirm)
 
   return router

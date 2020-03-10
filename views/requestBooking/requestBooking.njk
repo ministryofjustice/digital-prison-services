@@ -2,15 +2,12 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "components/timePicker/timePicker.njk" import timePicker %}
-
-{% set title = 'Request new video link booking' %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% set title = 'Request video link date and time' %}
 
 {% macro errorClass(field) -%}
   {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
@@ -31,67 +28,7 @@
                 }) }}
             {% endif %}
 
-            <form method="POST" novalidate="novalidate">
-
-                {{ govukInput({
-                    label: {
-                        text: "First name"
-                    },
-                    id: "first-name",
-                    name: "firstName",
-                    value: formValues.firstName,
-                    classes: "govuk-!-width-one-third",
-                    errorMessage: errors | findError('first-name')
-                }) }}
-
-                {{ govukInput({
-                    label: {
-                        text: "Last name"
-                    },
-                    id: "last-name",
-                    name: "lastName",
-                    value: formValues.lastName,
-                    classes: "govuk-!-width-one-third",
-                    errorMessage: errors | findError('last-name')
-                }) }}
-
-                {{ govukDateInput({
-                    id: "dob",
-                    fieldset: {
-                        legend: {
-                        text: "Date of birth",
-                        classes: "govuk-fieldset__legend--s"
-                        }
-                    },
-                    errorMessage: errors | findErrors(['dobDay', 'dobMonth', 'dobYear']),
-                    hint: {
-                        text: "For example, 12 11 1990"
-                    },
-                    items: [
-                        {
-                        id: "dobDay",
-                        name: "dobDay",
-                        label: "Day",
-                        classes: "govuk-input--width-2" + errorClass('dobDay'),
-                        value: formValues.dobDay
-                        },
-                        {
-                        id: "dobMonth",
-                        name: "dobMonth",
-                        label: "Month",
-                        classes: "govuk-input--width-2" + errorClass('dobMonth'),
-                        value: formValues.dobMonth
-                        },
-                        {
-                        id: "dobYear",
-                        name: "dobYear",
-                        label: "Year",
-                        classes: "govuk-input--width-4" + errorClass('dobYear'),
-                        value: formValues.dobYear
-                        }
-                    ]
-                }) }}
-
+            <form method="POST" novalidate="novalidate" action="/request-booking/check-availability">
                 {{ govukSelect({
                     id: "prison",
                     name: "prison",
@@ -99,35 +36,8 @@
                         text: "Prison"
                     },
                     classes: 'js-prison',
-                    items: [
-                        {
-                            value: "dominic.bull@digital.justice.gov.uk",
-                            text: "HMP Wandsworth"
-                        }
-                    ],
+                    items: prisonsContactConfig | addDefaultSelectedVale('Select'),
                     errorMessage: errors | findError('prison')
-                }) }}
-
-                {{ govukInput({
-                    label: {
-                        text: "Court (hearing) location"
-                    },
-                    id: "hearing-location",
-                    name: "hearingLocation",
-                    value: formValues.hearingLocation,
-                    classes: "govuk-!-width-one-third",
-                    errorMessage: errors | findError('hearing-location')
-                }) }}
-
-                {{ govukInput({
-                    label: {
-                        text: "Case number"
-                    },
-                    id: "case-number",
-                    name: "caseNumber",
-                    value: formValues.caseNumber,
-                    classes: "govuk-!-width-one-third",
-                    errorMessage: errors | findError('case-number')
                 }) }}
 
                 {{ datePicker({
@@ -141,7 +51,7 @@
 
                 {{ timePicker({
                     id: 'start-time',
-                    label: 'Start time',
+                    label: 'Court hearing start time',
                     name: 'startTime',
                     hour: formValues.startTimeHours,
                     minute: formValues.startTimeMinutes,
@@ -150,25 +60,62 @@
 
                 {{ timePicker({
                     id: 'end-time',
-                    label: 'End time',
+                    label: 'Court hearing end time',
                     name: 'endTime',
                     hour: formValues.endTimeHours,
                     minute: formValues.endTimeMinutes,
                     errorMessage: errors | findError('end-time-hours')
                 }) }}
 
-                {{ govukTextarea({
-                    name: "comments",
-                    id: "comments",
-                    value: formValues.comments,
-                    errorMessage: errors | findError('comments'),
-                    classes: 'govuk-!-width-one-half',
-                    label: {
-                        text: "Comments (optional)"
+
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "pre-appointment-required",
+                    name: "preAppointmentRequired",
+                    errorMessage: errors | findError('pre-appointment-required'),
+                    fieldset: {
+                        legend: {
+                            text: "Do you want to add a pre-court hearing briefing?",
+                            classes: "govuk-fieldset__legend--s"
+                        }
                     },
-                    hint: {
-                        text: "Type of hearing and additional information"
-                    }
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes",
+                            checked: formValues.preAppointmentRequired == 'yes'
+                        },
+                        {
+                            value: "no",
+                            text: "No",
+                            checked: formValues.preAppointmentRequired == 'no'
+                        }
+                    ]
+                }) }}
+
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "post-appointment-required",
+                    name: "postAppointmentRequired",
+                    errorMessage: errors | findError('post-appointment-required'),
+                    fieldset: {
+                        legend: {
+                            text: "Do you want to add a post-court hearing briefing?",
+                            classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes",
+                            checked: formValues.postAppointmentRequired == 'yes'
+                        },
+                        {
+                            value: "no",
+                            text: "No",
+                            checked: formValues.postAppointmentRequired == 'no'
+                        }
+                    ]
                 }) }}
 
                 {{ govukButton({ text: "Continue", type: "submit" }) }}
