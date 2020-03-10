@@ -27,11 +27,11 @@ class GlobalSearchSpecification extends BrowserReportingSpec {
         elite2api.stubGlobalSearch('', 'quimby', '', GlobalSearchResponses.response1)
         elite2api.stubImage()
 
-        given: "I am logged in"
-        fixture.loginAs(ITAG_USER)
+            given: "I am logged in"
+            fixture.loginAs(ITAG_USER)
 
-        when: "I do a global search"
-        go "/global-search-results?searchText=quimby"
+            when: "I do a global search"
+            go "/global-search-results?searchText=quimby"
 
         then: "I should be presented with results"
         at GlobalSearchPage
