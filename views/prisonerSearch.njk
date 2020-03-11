@@ -28,14 +28,12 @@
     <a href="/request-booking" class="govuk-link">This person is not currently in prison</a>
   </p>
 
-  <p class="govuk-body">Use one or more of the search options below.</p>
-
   <form method="POST" novalidate="novalidate">
     {{ govukInput({
       id: "nameOrNumber",
       name: "nameOrNumber",
       hint: {
-        text: "For example: Smith, John or A1234AA"
+        text: "Enter a name in the format 'Smith, John' or a prison number in the format 'A1234AA'"
       },
       value: formValues.nameOrNumber,
       errorMessage: errors | findError('nameOrNumber'),
@@ -55,7 +53,7 @@
       },
       errorMessage: errors | findErrors(['dobDay', 'dobMonth', 'dobYear']),
       hint: {
-        text: "For example, 12 11 1990"
+        text: "For example, 31 3 1980"
       },
       items: [
         {
