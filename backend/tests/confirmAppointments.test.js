@@ -99,21 +99,21 @@ describe('Confirm appointments', () => {
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
         prisonerSearchLink: '/prisoner-search',
         prisonUser: false,
-        title: 'The video link has been created',
+        title: 'The video link has been booked',
         offender: {
           name: 'John Doe',
-          room: 'Room 3',
+          prisonRoom: 'Room 3',
           prison: undefined,
         },
         details: {
           date: '10 October 2017',
-          startTime: '11:00',
-          endTime: '14:00',
+          courtHearingStartTime: '11:00',
+          courtHearingEndTime: '14:00',
           comments: 'Test',
         },
         prepostData: {
-          legalBriefingAfter: 'None',
-          legalBriefingBefore: 'Room 1 - 10:45 to 11:00',
+          'post-court hearing briefing': 'None',
+          'pre-court hearing briefing': 'Room 1 - 10:45 to 11:00',
         },
         court: {
           courtLocation: undefined,

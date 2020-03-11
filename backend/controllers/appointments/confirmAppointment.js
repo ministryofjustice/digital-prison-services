@@ -100,7 +100,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           duration: prepostDurations[postAppointment.duration],
         }
 
-        prepostData.legalBriefingBefore =
+        prepostData['pre-court hearing briefing'] =
           (preAppointmentData &&
             `${preAppointmentData.locationDescription} - ${moment(
               preAppointment.startTime,
@@ -108,7 +108,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
             ).format('HH:mm')} to ${moment(preAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
           'None'
 
-        prepostData.legalBriefingAfter =
+        prepostData['post-court hearing briefing'] =
           (postAppointmentData &&
             `${postAppointmentData.locationDescription} - ${moment(
               postAppointment.startTime,
@@ -119,19 +119,19 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
 
       if (isVideoLinkBooking(appointmentType)) {
         res.render('videolinkBookingConfirmHearing.njk', {
-          title: 'The video link has been created',
+          title: 'The video link has been booked',
           prisonUser: authSource === 'nomis',
           prisonerSearchLink: '/prisoner-search',
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           offender: {
             name: details.prisonerName,
             prison: agencyDescription,
-            room: details.location,
+            prisonRoom: details.location,
           },
           details: {
             date: details.date,
-            startTime: details.startTime,
-            endTime: details.endTime,
+            courtHearingStartTime: details.startTime,
+            courtHearingEndTime: details.endTime,
             comments: details.comment,
           },
           prepostData,

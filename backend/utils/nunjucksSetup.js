@@ -1,6 +1,6 @@
 const nunjucks = require('nunjucks')
 const config = require('../config')
-const { getDate, getTime, pascalToString, capitalize } = require('../utils')
+const { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel } = require('../utils')
 
 module.exports = (app, path) => {
   const njkEnv = nunjucks.configure([path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/'], {
@@ -87,7 +87,7 @@ module.exports = (app, path) => {
       .filter(key => model[key])
       .map(key => ({
         key: { text: capitalize(pascalToString(key)) },
-        value: { text: model[key], classes: `qa-${key}-value` },
+        value: { text: model[key], classes: `qa-${hyphenatedStringToCamel(key)}-value` },
       }))
   )
 
