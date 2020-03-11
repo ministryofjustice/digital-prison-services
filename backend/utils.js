@@ -191,6 +191,11 @@ const isAfterToday = date => {
   return daysDifference >= 0
 }
 
+const hyphenatedStringToCamel = string =>
+  string.replace(/[-\s]([a-z])/g, char => {
+    return char[1].toUpperCase()
+  })
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -220,4 +225,5 @@ module.exports = {
   capitalizeStart,
   isOffenderNumber,
   isAfterToday,
+  hyphenatedStringToCamel,
 }

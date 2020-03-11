@@ -14,8 +14,8 @@ class RequestBookingSelectCourtPage extends Page {
         date { $('.qa-date-value').text()}
         startTime { $('.qa-courtHearingStartTime-value').text()}
         endTime { $('.qa-courtHearingEndTime-value').text()}
-        preStartEndTime { $('.qa-pre-court').text() }
-        postStartEndTime { $('.qa-post-court').text() }
+        preStartEndTime { $('.qa-preCourtHearingBriefing-value').text()}
+        postStartEndTime { $('.qa-postCourtHearingBriefing-value').text()}
     }
 
     static at = {
