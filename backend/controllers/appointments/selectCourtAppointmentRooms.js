@@ -1,11 +1,12 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
 const {
-  notifications: { confirmBookingCourtTemplateId },
+  notifications: { confirmBookingCourtTemplateId, prisonCourtBookingTemplateId, emails },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
+const { properCaseName } = require('../../utils')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -282,7 +283,7 @@ const selectCourtAppointmentRoomsFactory = ({
   }
 
   const createAppointments = async (req, res) => {
-    const { offenderNo } = req.params
+    const { offenderNo, agencyId } = req.params
     const appointmentDetails = unpackAppointmentDetails(req)
     const {
       startTime,
@@ -294,8 +295,11 @@ const selectCourtAppointmentRoomsFactory = ({
       mainLocations,
       preLocations,
       postLocations,
+      court,
+      date,
+      agencyDescription,
     } = appointmentDetails
-    const { username } = req.session.userDetails
+    const { username, name } = req.session.userDetails
     const {
       selectPreAppointmentLocation,
       selectMainAppointmentLocation,
@@ -337,35 +341,48 @@ const selectCourtAppointmentRoomsFactory = ({
 
     const userEmailData = await oauthApi.userEmail(res.locals, username)
 
+    const preAppointmentInfo =
+      preAppointmentRequired === 'yes'
+        ? `${preLocations.find(l => l.value === Number(selectPreAppointmentLocation)).text}, ${Time(
+            prepostAppointments.preAppointment.startTime
+          )} to ${Time(startTime)}`
+        : 'None requested'
+
+    const postAppointmentInfo =
+      postAppointmentRequired === 'yes'
+        ? `${postLocations.find(l => l.value === Number(selectPostAppointmentLocation)).text}, ${Time(
+            endTime
+          )} to ${Time(prepostAppointments.postAppointment.endTime)}`
+        : 'None requested'
+
     if (userEmailData && userEmailData.email) {
       const personalisation = {
-        startTime,
-        endTime,
-        comment,
-        firstName,
-        lastName,
+        startTime: Time(startTime),
+        endTime: Time(endTime),
+        comments: comment || 'None entered.',
+        firstName: properCaseName(firstName),
+        lastName: properCaseName(lastName),
         offenderNo,
         location: mainLocations.find(l => l.value === Number(selectMainAppointmentLocation)).text,
-        postAppointmentStartTime:
-          postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.startTime : 'N/A',
-        postAppointmentEndTime: postAppointmentRequired === 'yes' ? prepostAppointments.postAppointment.endTime : 'N/A',
-        preAppointmentStartTime:
-          preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.startTime : 'N/A',
-        preAppointmentEndTime: preAppointmentRequired === 'yes' ? prepostAppointments.preAppointment.endTime : 'N/A',
-        preAppointmentLocation:
-          preAppointmentRequired === 'yes'
-            ? preLocations.find(l => l.value === Number(selectPreAppointmentLocation)).text
-            : 'N/A',
-        postAppointmentLocation:
-          postAppointmentRequired === 'yes'
-            ? postLocations.find(l => l.value === Number(selectPostAppointmentLocation)).text
-            : 'N/A',
+        preAppointmentInfo,
+        postAppointmentInfo,
+        court,
+        date: moment(date, DAY_MONTH_YEAR).format('D MMMM YYYY'),
+        prison: agencyDescription,
+        userName: name,
       }
 
       notifyClient.sendEmail(confirmBookingCourtTemplateId, userEmailData.email, {
         personalisation,
         reference: null,
       })
+
+      if (emails[agencyId] && emails[agencyId].omu) {
+        notifyClient.sendEmail(prisonCourtBookingTemplateId, emails[agencyId].omu, {
+          personalisation,
+          reference: null,
+        })
+      }
     }
 
     return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
