@@ -7,23 +7,23 @@ class ConfirmVideoLinkCourtPage extends Page {
 
     static content = {
         pageTitle { $('h1').text() }
-        backLink { $('a.govuk-button.govuk-button--primary').text() }
-        finishLink { $('a.govuk-button.govuk-button--secondary').text() }
+        backLink { $('[data-qa="back-to-prisoner-search"]').text() }
+        finishLink { $('a.govuk-button.govuk-button--primary').text() }
         offenderName { $('.qa-name-value').text()}
         prison { $('.qa-prison-value').text()}
-        room { $('.qa-room-value').text()}
+        room { $('.qa-prisonRoom-value').text()}
         date { $('.qa-date-value').text()}
-        startTime { $('.qa-startTime-value').text()}
-        endTime { $('.qa-endTime-value').text()}
-        legalBriefingBefore { $('.qa-legalBriefingBefore-value').text()}
-        legalBriefingAfter { $('.qa-legalBriefingAfter-value').text()}
+        startTime { $('.qa-courtHearingStartTime-value').text()}
+        endTime { $('.qa-courtHearingEndTime-value').text()}
+        legalBriefingBefore { $('.qa-preCourtHearingBriefing-value').text()}
+        legalBriefingAfter { $('.qa-postCourtHearingBriefing-value').text()}
         courtLocation { $('.qa-courtLocation-value').text()}
     }
 
     static at = {
-        pageTitle.contains("The video link has been created")
+        pageTitle.contains("The video link has been booked")
         backLink.contains("Create another video link")
-        finishLink.contains("Finish")
+        finishLink.contains("Exit")
     }
 
 }

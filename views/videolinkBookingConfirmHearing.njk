@@ -13,6 +13,10 @@
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
+            {% if not prisonUser %}
+                <p class="govuk-body">We have sent you an email with the video link details. An email has also been sent to the prison.</p>
+            {% endif %}
+
             <h3 class="govuk-heading-m">Video link details</h3>
 
             {{ govukSummaryList({
@@ -69,23 +73,15 @@
                 }}
 
             {% else %}
+                <p class="govuk-body">
+                    <a href={{ prisonerSearchLink }} class="govuk-link" data-qa="back-to-prisoner-search">Create another video link</a>
+                </p>
 
                 {{ govukButton({
-                    text: "Create another video link",
-                    element: 'a',
-                    href: prisonerSearchLink,
-                    classes: "govuk-button--primary govuk-!-margin-right-2",
-                    attributes: {
-                        'data-qa': 'back-to-prisoner-search'
-                    }
-                })
-                }}
-
-                {{ govukButton({
-                    text: "Finish",
+                    text: "Exit",
                     element: 'a',
                     href: '/videolink',
-                    classes: "govuk-button--secondary",
+                    classes: "govuk-button--primary",
                     attributes: {
                         'data-qa': 'back-to-video-link'
                     }
