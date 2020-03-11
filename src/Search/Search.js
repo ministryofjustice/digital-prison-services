@@ -232,6 +232,9 @@ class Search extends Component {
             </div>
             <div className="pure-u-md-1-6">{periodSelect}</div>
             <AttendanceButtonsContainer>
+              <StatsLink href="/appointments" buttonColour={BLUE}>
+                View all appointments
+              </StatsLink>
               {this.showPrisonersUnaccountedForCTA() && (
                 <PrisonersUnaccountedForCTA>
                   <StatsLink
