@@ -53,6 +53,9 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
           },
           {
             html: `<a href="${offenderUrl}" class="govuk-link">${offenderName}</a>`,
+            attributes: {
+              'data-sort-value': appointment.lastName,
+            },
           },
           {
             text: offenderNo,
