@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class RequestCourtBookingSpecification  extends BrowserReportingSpec {
+class RequestCourtBookingSpecification extends BrowserReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -45,7 +45,7 @@ class RequestCourtBookingSpecification  extends BrowserReportingSpec {
         and: "I enter all required information"
         at RequestBookingStartPage
         form.date = tomorrow
-        form.prison = 'dominic.bull@digital.justice.gov.uk'
+        form.prison = 'WWI'
         form.startTimeHours = '10'
         form.startTimeMinutes = '00'
         form.endTimeHours = '11'
