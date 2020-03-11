@@ -64,8 +64,7 @@ env:
         name: {{ template "app.name" . }}
         key: WANDSWORTH_VLB_EMAIL
 
-
-   - name: REDIS_HOST
+  - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
         name: dps-redis
