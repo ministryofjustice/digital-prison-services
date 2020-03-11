@@ -3,7 +3,7 @@ const { requestBookingFactory } = require('./requestBooking')
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi }) => {
+const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }) => {
   const {
     startOfJourney,
     checkAvailability,
@@ -17,6 +17,7 @@ const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi }) => {
     notifyClient,
     whereaboutsApi,
     oauthApi,
+    elite2Api,
   })
 
   router.get('/', startOfJourney)
