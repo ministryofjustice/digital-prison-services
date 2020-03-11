@@ -3,10 +3,9 @@ const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { validateComments } = require('../../shared/appointmentConstants')
 const {
-  notifications: { requestBookingCourtTemplateId },
+  notifications: { requestBookingCourtTemplateId, emails: emailConfig },
+  app: { videoLinkEnabledFor },
 } = require('../../config')
-
-const prisonsContactConfig = [{ text: 'HMP Wandsworth', value: 'dominic.bull@digital.justice.gov.uk' }]
 
 const validateStartEndTime = (date, startTime, endTime, errors) => {
   const now = moment()
@@ -58,7 +57,7 @@ const packBookingDetails = (req, data) =>
 
 const rePackDataIntoFlash = req => packBookingDetails(req, getBookingDetails(req))
 
-const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthApi }) => {
+const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }) => {
   const sendEmail = (templateId, email, personalisation) =>
     new Promise((resolve, reject) => {
       try {
@@ -71,6 +70,15 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         reject(error)
       }
     })
+
+  const getVideoLinkEnabledPrisons = async locals => {
+    const prisons = await elite2Api.getAgencies(locals)
+
+    return prisons.filter(prison => videoLinkEnabledFor.includes(prison.agencyId)).map(vlp => ({
+      agencyId: vlp.agencyId,
+      description: vlp.description,
+    }))
+  }
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: req.originalUrl })
@@ -88,12 +96,17 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     }
   }
 
-  const startOfJourney = async (req, res) =>
-    res.render('requestBooking/requestBooking.njk', {
+  const startOfJourney = async (req, res) => {
+    const prisonDropdownValues = (await getVideoLinkEnabledPrisons(res.locals)).map(prison => ({
+      text: prison.description,
+      value: prison.agencyId,
+    }))
+    return res.render('requestBooking/requestBooking.njk', {
       user: { displayName: req.session.userDetails.name },
-      prisonsContactConfig,
+      prisons: prisonDropdownValues,
       homeUrl: '/videolink',
     })
+  }
 
   const checkAvailability = async (req, res) => {
     const {
@@ -131,9 +144,13 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
 
     if (errors.length > 0) {
       rePackDataIntoFlash(req)
+      const prisonDropdownValues = (await getVideoLinkEnabledPrisons(res.locals)).map(p => ({
+        text: p.description,
+        value: p.agencyId,
+      }))
       return renderTemplate(req, res, {
         errors,
-        prisonsContactConfig,
+        prisons: prisonDropdownValues,
         formValues: { ...req.body },
       })
     }
@@ -248,9 +265,11 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
       postHearingStartAndEndTime,
     })
 
+    const prisons = await elite2Api.getAgencies(res.locals)
+
     return res.render('requestBooking/selectCourt.njk', {
       details: {
-        prison: prisonsContactConfig.find(p => p.value === prison).text,
+        prison: prisons.find(p => p.agencyId === prison).description,
         date: moment(date, DAY_MONTH_YEAR).format('D MMMM YYYY'),
         courtHearingStartTime: Time(startTime),
         courtHearingEndTime: Time(endTime),
@@ -289,6 +308,8 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         postHearingStartAndEndTime,
       } = bookingDetails
 
+      const prisons = await elite2Api.getAgencies(res.locals)
+
       const personalisation = {
         firstName,
         lastName,
@@ -296,7 +317,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         date: moment(date, DAY_MONTH_YEAR).format('dddd D MMMM YYYY'),
         startTime: Time(startTime),
         endTime: endTime && Time(endTime),
-        prison,
+        prison: prisons.find(p => p.agencyId === prison).description,
         hearingLocation,
         comment,
         preHearingStartAndEndTime,
@@ -308,7 +329,9 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
 
       packBookingDetails(req, personalisation)
 
-      sendEmail(requestBookingCourtTemplateId, prison, personalisation).catch(error => {
+      const { vlb } = emailConfig[prison]
+
+      sendEmail(requestBookingCourtTemplateId, vlb, personalisation).catch(error => {
         logError(req.originalUrl, error, 'Failed to email the prison about a booking request')
       })
 
@@ -341,7 +364,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     } = requestDetails
 
     const details = {
-      prison: prisonsContactConfig.find(p => p.value === prison).text,
+      prison,
       name: `${lastName}, ${firstName}`,
       dateOfBirth,
       date,

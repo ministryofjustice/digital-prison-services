@@ -52,6 +52,18 @@ env:
         name: {{ template "app.name" . }}
         key: NOTIFY_API_KEY
 
+  - name: WANDSWORTH_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: WANDSWORTH_OMU_EMAIL
+
+  - name: WANDSWORTH_VLB_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: WANDSWORTH_VLB_EMAIL
+
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
@@ -108,5 +120,5 @@ env:
 
   - name: NODE_ENV
     value: production
-    
+
 {{- end -}}
