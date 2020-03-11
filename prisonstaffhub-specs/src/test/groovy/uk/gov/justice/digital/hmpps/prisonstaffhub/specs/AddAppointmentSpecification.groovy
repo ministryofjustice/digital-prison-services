@@ -60,6 +60,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         oauthApi.stubGetEmail('ITAG_USER')
 
         elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
+        elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
         elite2api.stubLocation(1)
         elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
         elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')

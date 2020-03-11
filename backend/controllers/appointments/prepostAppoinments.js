@@ -341,7 +341,7 @@ const prepostAppointmentsFactory = ({
           : 'None requested'
 
       const postAppointmentInfo =
-        preAppointment === 'yes'
+        postAppointment === 'yes'
           ? `${locationEvents.postAppointment.locationName}, ${Time(endTime)} to ${Time(
               moment(endTime, DATE_TIME_FORMAT_SPEC).add(postAppointmentDuration, 'minutes')
             )}`
