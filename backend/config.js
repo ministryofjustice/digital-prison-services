@@ -54,5 +54,11 @@ module.exports = {
     confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',
     confirmBookingCourtTemplateId: '7f44cd94-4a74-4b9d-aff8-386fec34bd2e',
     requestBookingCourtTemplateId: 'c1008f55-c228-4cad-b6fd-fe931c993855',
+    emails: {
+      WWI: {
+        omu: 'OMU.wandsworth@justice.gov.uk',
+        vlb: 'VVCWandsworth@justice.gov.uk',
+      },
+    },
   },
 }

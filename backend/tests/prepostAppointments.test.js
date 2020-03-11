@@ -1,4 +1,5 @@
 const { prepostAppointmentsFactory } = require('../controllers/appointments/prepostAppoinments')
+const { Time } = require('../../src/dateHelpers')
 const { notifyClient } = require('../shared/notifyClient')
 const config = require('../config')
 
@@ -40,10 +41,15 @@ describe('Pre post appointments', () => {
     preAppointmentLocation: '1',
   }
 
+  const locationEvents = [
+    { locationId: 3, eventDescription: 'Doctors - An appointment', startTime: '12:00', endTime: '13:00' },
+  ]
+
   beforeEach(() => {
     elite2Api.getDetails = jest.fn()
     elite2Api.addSingleAppointment = jest.fn()
     elite2Api.getLocation = jest.fn()
+    elite2Api.getAgencyDetails = jest.fn()
     oauthApi.userEmail = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
@@ -63,6 +69,14 @@ describe('Pre post appointments', () => {
       lastName: 'doe',
       assignedLivingUnitDesc: 'Cell 1',
     })
+
+    elite2Api.getAgencyDetails.mockReturnValue({
+      description: 'Moorland',
+    })
+
+    elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
+
+    existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
 
     req.flash.mockImplementation(() => [appointmentDetails])
   })
@@ -311,15 +325,6 @@ describe('Pre post appointments', () => {
     })
 
     describe('Events at location', () => {
-      const locationEvents = [
-        { locationId: 3, eventDescription: 'Doctors - An appointment', startTime: '12:00', endTime: '13:00' },
-      ]
-
-      beforeEach(() => {
-        existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
-        elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
-      })
-
       it('should return events at the pre appointment location on validation errors', async () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
@@ -409,7 +414,10 @@ describe('Pre post appointments', () => {
       it('should create main appointment', async () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
+          oauthApi,
+          notifyClient,
           appointmentsService,
+          existingEventsService,
           logError: () => {},
         })
 
@@ -427,7 +435,10 @@ describe('Pre post appointments', () => {
       it('should create main pre appointment', async () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
+          oauthApi,
+          notifyClient,
           appointmentsService,
+          existingEventsService,
           logError: () => {},
         })
 
@@ -445,7 +456,10 @@ describe('Pre post appointments', () => {
       it('should create main post appointment', async () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
+          oauthApi,
+          notifyClient,
           appointmentsService,
+          existingEventsService,
           logError: () => {},
         })
 
@@ -463,7 +477,10 @@ describe('Pre post appointments', () => {
       it('should not request pre or post appointments when "no" has been selected', async () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
+          oauthApi,
+          notifyClient,
           appointmentsService,
+          existingEventsService,
           logError: () => {},
         })
 
@@ -479,7 +496,10 @@ describe('Pre post appointments', () => {
       it('should place pre and post appointment details into flash', async () => {
         const { post } = prepostAppointmentsFactory({
           elite2Api,
+          oauthApi,
+          notifyClient,
           appointmentsService,
+          existingEventsService,
           logError: () => {},
         })
 
@@ -547,6 +567,7 @@ describe('Pre post appointments', () => {
           oauthApi,
           notifyClient,
           appointmentsService,
+          existingEventsService,
           logError: () => {},
         })
 
@@ -557,17 +578,17 @@ describe('Pre post appointments', () => {
         await post(req, res)
 
         const personalisation = {
-          startTime: appointmentDetails.startTime,
-          endTime: appointmentDetails.endTime,
-          comment: appointmentDetails.comment,
-          firstName: appointmentDetails.firstName,
-          lastName: appointmentDetails.lastName,
+          startTime: Time(appointmentDetails.startTime),
+          endTime: Time(appointmentDetails.endTime),
+          comments: appointmentDetails.comment,
+          date: '10 October 2019',
+          firstName: 'John',
+          lastName: 'Doe',
           offenderNo: appointmentDetails.offenderNo,
           location: 'Room 3',
-          preAppointmentDuration: 'N/A',
-          postAppointmentDuration: 'N/A',
-          preAppointmentLocation: 'N/A',
-          postAppointmentLocation: 'N/A',
+          postAppointmentInfo: 'None requested',
+          preAppointmentInfo: 'None requested',
+          prison: 'Moorland',
         }
 
         expect(notifyClient.sendEmail).toHaveBeenCalledWith(

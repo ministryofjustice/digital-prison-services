@@ -1,12 +1,13 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
-  notifications: { confirmBookingPrisonTemplateId },
+  notifications: { confirmBookingPrisonTemplateId, emails },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { toAppointmentDetailsSummary } = require('./appointmentsService')
+const { properCaseName } = require('../../utils')
 
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
@@ -213,12 +214,38 @@ const prepostAppointmentsFactory = ({
         date,
       } = appointmentDetails
 
+      let locationEvents = {}
+
+      if (preAppointment === 'yes' && preAppointmentLocation) {
+        const { locationName, events } = await getLocationEvents(res.locals, {
+          activeCaseLoadId,
+          locationId: preAppointmentLocation,
+          date,
+        })
+        locationEvents.preAppointment = {
+          locationName,
+          events,
+        }
+      }
+
+      if (postAppointment === 'yes' && postAppointmentLocation) {
+        const { locationName, events } = await getLocationEvents(res.locals, {
+          activeCaseLoadId,
+          locationId: postAppointmentLocation,
+          date,
+        })
+        locationEvents.postAppointment = {
+          locationName,
+          events,
+        }
+      }
+
       const errors = validate({ preAppointment, postAppointment, preAppointmentLocation, postAppointmentLocation })
 
       if (errors.length) {
         packAppointmentDetails(req, appointmentDetails)
 
-        const locationEvents = {}
+        locationEvents = {}
 
         if (preAppointmentLocation) {
           const { locationName, events } = await getLocationEvents(res.locals, {
@@ -275,9 +302,13 @@ const prepostAppointmentsFactory = ({
         })
       }
 
+      console.log('No errors')
+
       await createAppointment(res.locals, appointmentDetails)
 
       const prepostAppointments = {}
+
+      console.log('Main created')
 
       if (preAppointment === 'yes') {
         prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
@@ -302,31 +333,50 @@ const prepostAppointmentsFactory = ({
         ...prepostAppointments,
       })
 
+      const agencyDetails = await elite2Api.getAgencyDetails(res.locals, activeCaseLoadId)
+
       const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+      const preAppointmentInfo =
+        preAppointment === 'yes'
+          ? `${locationEvents.preAppointment.locationName}, ${Time(
+              moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(preAppointmentDuration, 'minutes')
+            )} to ${Time(startTime)}`
+          : 'None requested'
+
+      const postAppointmentInfo =
+        preAppointment === 'yes'
+          ? `${locationEvents.postAppointment.locationName}, ${Time(endTime)} to ${Time(
+              moment(endTime, DATE_TIME_FORMAT_SPEC).add(postAppointmentDuration, 'minutes')
+            )}`
+          : 'None requested'
 
       if (userEmailData && userEmailData.email) {
         const personalisation = {
-          startTime,
-          endTime,
-          comment,
-          firstName,
-          lastName,
+          startTime: Time(startTime),
+          endTime: Time(endTime),
+          comments: comment || 'None entered.',
+          firstName: properCaseName(firstName),
+          lastName: properCaseName(lastName),
           offenderNo,
+          prison: agencyDetails.description,
+          date: moment(date, DAY_MONTH_YEAR).format('D MMMM YYYY'),
           location: locationDescription,
-          postAppointmentDuration: postAppointment === 'yes' ? postAppointmentDuration : 'N/A',
-          preAppointmentDuration: preAppointment === 'yes' ? preAppointmentDuration : 'N/A',
-          preAppointmentLocation:
-            preAppointment === 'yes' ? locationTypes.find(l => l.value === Number(preAppointmentLocation)).text : 'N/A',
-          postAppointmentLocation:
-            postAppointment === 'yes'
-              ? locationTypes.find(l => l.value === Number(postAppointmentLocation)).text
-              : 'N/A',
+          preAppointmentInfo,
+          postAppointmentInfo,
         }
 
         notifyClient.sendEmail(confirmBookingPrisonTemplateId, userEmailData.email, {
           personalisation,
           reference: null,
         })
+
+        if (emails[activeCaseLoadId] && emails[activeCaseLoadId].omu) {
+          notifyClient.sendEmail(confirmBookingPrisonTemplateId, emails[activeCaseLoadId].omu, {
+            personalisation,
+            reference: null,
+          })
+        }
       }
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
