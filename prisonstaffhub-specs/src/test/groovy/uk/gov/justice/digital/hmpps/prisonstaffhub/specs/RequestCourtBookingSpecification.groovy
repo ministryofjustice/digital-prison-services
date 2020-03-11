@@ -31,6 +31,7 @@ class RequestCourtBookingSpecification extends BrowserReportingSpec {
     def "should request a video link booking"() {
         whereaboutsApi.stubCourtLocations()
         oauthApi.stubGetEmail("ITAG_USER", "itag@local")
+        elite2api.stubGetAgencies([["agencyId"   : "WWI", "description": "HMP Wandsworth"]])
 
         def tomorrow = LocalDateTime.now()
                 .plusDays(1)

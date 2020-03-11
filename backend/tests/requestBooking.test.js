@@ -1,10 +1,8 @@
-process.env.VIDEO_LINK_ENABLED_FOR = 'WWI'
-
 const moment = require('moment')
 
+process.env.VIDEO_LINK_ENABLED_FOR = 'WWI'
+process.env.WANDSWORTH_VLB_EMAIL = 'test@justice.gov.uk'
 const config = require('../config')
-
-config.notifications.emails = { WWI: { vlb: 'test@justice.gov.uk' } }
 
 const { requestBookingFactory } = require('../controllers/appointments/requestBooking')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')

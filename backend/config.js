@@ -56,8 +56,8 @@ module.exports = {
     requestBookingCourtTemplateId: 'c1008f55-c228-4cad-b6fd-fe931c993855',
     emails: {
       WWI: {
-        omu: 'OMU.wandsworth@justice.gov.uk',
-        vlb: 'VVCWandsworth@justice.gov.uk',
+        omu: process.env.WANDSWORTH_OMU_EMAIL,
+        vlb: process.env.WANDSWORTH_VLB_EMAIL,
       },
     },
   },
