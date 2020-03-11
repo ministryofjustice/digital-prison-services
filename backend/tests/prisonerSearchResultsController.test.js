@@ -1,5 +1,8 @@
 const prisonerSearchResultsController = require('../controllers/search/prisonerSearchResultsController')
 const { serviceUnavailableMessage } = require('../common-messages')
+const config = require('../config')
+
+config.app.videoLinkEnabledFor = ['MDI']
 
 describe('Prisoner search results', () => {
   const elite2Api = {}
@@ -21,7 +24,6 @@ describe('Prisoner search results', () => {
 
     oauthApi.userRoles = jest.fn()
     elite2Api.globalSearch = jest.fn()
-    elite2Api.getAgencyDetails = jest.fn().mockReturnValue({ description: 'Prison name' })
 
     controller = prisonerSearchResultsController({ elite2Api, oauthApi, logError })
   })
@@ -48,7 +50,7 @@ describe('Prisoner search results', () => {
             offenderNo: 'G0011GX',
             firstName: 'TEST',
             middleNames: 'ING',
-            lastName: 'USER',
+            lastName: 'OFFENDER',
             dateOfBirth: '1980-07-17',
             latestLocationId: 'LEI',
             latestLocation: 'Leeds',
@@ -58,7 +60,7 @@ describe('Prisoner search results', () => {
             offenderNo: 'A0011GZ',
             firstName: 'TEST',
             middleNames: 'ING',
-            lastName: 'USER',
+            lastName: 'OFFENDER',
             dateOfBirth: '1981-07-17',
             latestLocationId: 'MDI',
             latestLocation: 'Moorlands',
@@ -98,28 +100,26 @@ describe('Prisoner search results', () => {
             location: 'IN',
           })
 
-          expect(elite2Api.getAgencyDetails).not.toHaveBeenCalled()
-
           expect(res.render).toHaveBeenCalledWith('prisonerSearchResults.njk', {
-            searchString: 'User, Test',
             results: [
               {
-                name: 'User, Test',
+                name: 'Test Offender',
                 offenderNo: 'G0011GX',
-                dob: '17/07/1980',
+                dob: '17 July 1980',
                 prison: 'Leeds',
                 pncNumber: '1/2345',
                 prisonId: 'LEI',
                 addAppointmentHTML: '',
               },
               {
-                name: 'User, Test',
+                name: 'Test Offender',
                 offenderNo: 'A0011GZ',
-                dob: '17/07/1981',
+                dob: '17 July 1981',
                 prison: 'Moorlands',
                 pncNumber: '--',
                 prisonId: 'MDI',
-                addAppointmentHTML: '',
+                addAppointmentHTML:
+                  '<a href="/MDI/offenders/A0011GZ/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="visually-hidden"> for Test Offender, prison number A0011GZ</span></a>',
               },
             ],
             homeUrl: '/videolink',
@@ -142,19 +142,17 @@ describe('Prisoner search results', () => {
               dateOfBirth: dob,
             })
 
-            expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, prison)
-
             expect(res.render).toHaveBeenCalledWith('prisonerSearchResults.njk', {
-              searchString: 'User, Test + 17/07/1981 + Prison name',
               results: [
                 {
-                  name: 'User, Test',
+                  name: 'Test Offender',
                   offenderNo: 'A0011GZ',
-                  dob: '17/07/1981',
+                  dob: '17 July 1981',
                   prison: 'Moorlands',
                   pncNumber: '--',
                   prisonId: 'MDI',
-                  addAppointmentHTML: '',
+                  addAppointmentHTML:
+                    '<a href="/MDI/offenders/A0011GZ/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="visually-hidden"> for Test Offender, prison number A0011GZ</span></a>',
                 },
               ],
               homeUrl: '/videolink',

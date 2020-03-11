@@ -50,6 +50,18 @@ $govuk-page-width: 1170px;
   }
 }
 
+// Useful for hiding content, but not from screen readers
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
 // Print
 @page {
   margin: 0;

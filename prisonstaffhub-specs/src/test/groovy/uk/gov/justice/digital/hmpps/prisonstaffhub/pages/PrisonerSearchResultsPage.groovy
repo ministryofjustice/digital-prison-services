@@ -8,7 +8,7 @@ class PrisonerSearchResultsPage extends Page {
     static content = {
         pageTitle { $('h1').first().text() }
         searchResultsTable {$("[data-qa='search-results-table']")}
-        bookAppointmentLinks {$("[data-qa='book-appointment-link']")}
+        bookVlbLinks {$("[data-qa='book-vlb-link']")}
     }
 
     static at = {

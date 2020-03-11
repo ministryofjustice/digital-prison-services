@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { properCaseName, isOffenderNumber } = require('../../utils')
+const { formatName, isOffenderNumber } = require('../../utils')
 const config = require('../../config')
 
 module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
@@ -28,29 +28,23 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
         location: 'IN',
       })
 
-      const prisonDetails = prison ? await elite2Api.getAgencyDetails(res.locals, prison) : undefined
-
-      const formattedSearchParams = [
-        nameOrNumber,
-        dob && moment(dob).format('DD/MM/YYYY'),
-        prisonDetails && prisonDetails.description,
-      ]
-
       return res.render('prisonerSearchResults.njk', {
-        searchString: formattedSearchParams.filter(param => param).join(' + '),
-        results: searchResults.filter(result => (prison ? prison === result.latestLocationId : result)).map(result => ({
-          name: `${properCaseName(result.lastName)}, ${properCaseName(result.firstName)}`,
-          offenderNo: result.offenderNo,
-          dob: result.dateOfBirth ? moment(result.dateOfBirth).format('DD/MM/YYYY') : undefined,
-          prison: result.latestLocation,
-          prisonId: result.latestLocationId,
-          pncNumber: result.pncNumber ? result.pncNumber : '--',
-          addAppointmentHTML: config.app.videoLinkEnabledFor.includes(result.latestLocationId)
-            ? `<a href="/${result.latestLocationId}/offenders/${
-                result.offenderNo
-              }/add-court-appointment" class="govuk-link" data-qa="book-appointment-link">Book appointment</a>`
-            : '',
-        })),
+        results: searchResults.filter(result => (prison ? prison === result.latestLocationId : result)).map(result => {
+          const { offenderNo, latestLocationId, pncNumber } = result
+          const name = formatName(result.firstName, result.lastName)
+
+          return {
+            name,
+            offenderNo,
+            dob: result.dateOfBirth ? moment(result.dateOfBirth).format('D MMMM YYYY') : undefined,
+            prison: result.latestLocation,
+            prisonId: latestLocationId,
+            pncNumber: pncNumber || '--',
+            addAppointmentHTML: config.app.videoLinkEnabledFor.includes(latestLocationId)
+              ? `<a href="/${latestLocationId}/offenders/${offenderNo}/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="visually-hidden"> for ${name}, prison number ${offenderNo}</span></a>`
+              : '',
+          }
+        }),
         homeUrl: '/videolink',
       })
     }
