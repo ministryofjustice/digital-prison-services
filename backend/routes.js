@@ -218,7 +218,10 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     })
   })
 
-  router.use('/request-booking', requestBookingController({ logError, notifyClient, whereaboutsApi, oauthApi }))
+  router.use(
+    '/request-booking',
+    requestBookingController({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
+  )
 
   router.use('/appointments', viewAppointmentsController({ elite2Api, whereaboutsApi, logError }))
 

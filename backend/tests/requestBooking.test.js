@@ -1,10 +1,14 @@
 const moment = require('moment')
+
+process.env.VIDEO_LINK_ENABLED_FOR = 'WWI'
+process.env.WANDSWORTH_VLB_EMAIL = 'test@justice.gov.uk'
+const config = require('../config')
+
 const { requestBookingFactory } = require('../controllers/appointments/requestBooking')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { notifyClient } = require('../shared/notifyClient')
-const {
-  notifications: { requestBookingCourtTemplateId },
-} = require('../config')
+
+const { requestBookingCourtTemplateId } = config.notifications
 
 describe('Request a booking', () => {
   let req
@@ -13,6 +17,7 @@ describe('Request a booking', () => {
   let controller
   const whereaboutsApi = {}
   const oauthApi = {}
+  const elite2Api = {}
 
   beforeEach(() => {
     req = {
@@ -37,7 +42,11 @@ describe('Request a booking', () => {
     notifyClient.sendEmail = jest.fn()
     whereaboutsApi.getCourtLocations = jest.fn()
     oauthApi.userEmail = jest.fn()
-    controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi })
+    elite2Api.getAgencies = jest.fn()
+
+    elite2Api.getAgencies.mockReturnValue([{ agencyId: 'WWI', description: 'HMP Wandsworth' }])
+
+    controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
   })
 
   describe('Start of journey', () => {
@@ -45,10 +54,10 @@ describe('Request a booking', () => {
       await controller.startOfJourney(req, res)
       expect(res.render).toHaveBeenCalledWith('requestBooking/requestBooking.njk', {
         homeUrl: '/videolink',
-        prisonsContactConfig: [
+        prisons: [
           {
             text: 'HMP Wandsworth',
-            value: 'dominic.bull@digital.justice.gov.uk',
+            value: 'WWI',
           },
         ],
         user: {
@@ -295,7 +304,7 @@ describe('Request a booking', () => {
                 date: '01/01/3019',
                 startTime: '3019-01-01T01:00:00',
                 endTime: '3019-01-01T02:00:00',
-                prison: 'dominic.bull@digital.justice.gov.uk',
+                prison: 'WWI',
                 preAppointmentRequired: 'yes',
                 postAppointmentRequired: 'yes',
               },
@@ -351,7 +360,7 @@ describe('Request a booking', () => {
           date: '01/01/2019',
           startTime: '2919-01-01T10:00:00',
           endTime: '2019-01-01T11:00:00',
-          prison: 'dominic.bull@digital.justice.gov.uk',
+          prison: 'WWI',
           preAppointmentRequired: 'yes',
           postAppointmentRequired: 'yes',
           comment: 'test',
@@ -376,17 +385,13 @@ describe('Request a booking', () => {
         hearingLocation: 'London',
         lastName: 'Doe',
         comment: 'test',
-        prison: 'dominic.bull@digital.justice.gov.uk',
+        prison: 'HMP Wandsworth',
       }
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
-        requestBookingCourtTemplateId,
-        'dominic.bull@digital.justice.gov.uk',
-        {
-          personalisation,
-          reference: null,
-        }
-      )
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@justice.gov.uk', {
+        personalisation,
+        reference: null,
+      })
 
       expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@test', {
         personalisation,
@@ -403,7 +408,7 @@ describe('Request a booking', () => {
           date: '01/01/2019',
           startTime: '2919-01-01T10:00:00',
           endTime: '2019-01-01T11:00:00',
-          prison: 'dominic.bull@digital.justice.gov.uk',
+          prison: 'WWI',
           preAppointmentRequired: 'yes',
           postAppointmentRequired: 'yes',
           comment: 'test',
@@ -417,21 +422,24 @@ describe('Request a booking', () => {
       req.body = { hearingLocation: 'London' }
       await controller.createBookingRequest(req, res)
 
-      expect(req.flash).toHaveBeenCalledWith('requestBooking', {
-        comment: 'test',
-        date: 'Tuesday 1 January 2019',
-        dateOfBirth: '14/05/1920',
-        endTime: '11:00',
-        firstName: 'John',
-        hearingLocation: 'London',
-        lastName: 'Doe',
-        postAppointmentRequired: 'yes',
-        postHearingStartAndEndTime: '09:35 to 11:00',
-        preAppointmentRequired: 'yes',
-        preHearingStartAndEndTime: '11:00 to 11:20',
-        prison: 'dominic.bull@digital.justice.gov.uk',
-        startTime: '10:00',
-      })
+      expect(req.flash).toHaveBeenCalledWith(
+        'requestBooking',
+        expect.objectContaining({
+          comment: 'test',
+          date: 'Tuesday 1 January 2019',
+          dateOfBirth: '14/05/1920',
+          endTime: '11:00',
+          firstName: 'John',
+          hearingLocation: 'London',
+          lastName: 'Doe',
+          postAppointmentRequired: 'yes',
+          postHearingStartAndEndTime: '09:35 to 11:00',
+          preAppointmentRequired: 'yes',
+          preHearingStartAndEndTime: '11:00 to 11:20',
+          prison: 'HMP Wandsworth',
+          startTime: '10:00',
+        })
+      )
       expect(res.redirect).toHaveBeenCalledWith('/request-booking/confirmation')
     })
   })
@@ -450,7 +458,7 @@ describe('Request a booking', () => {
         postHearingStartAndEndTime: '09:35 to 11:00',
         preAppointmentRequired: 'yes',
         preHearingStartAndEndTime: '11:00 to 11:20',
-        prison: 'dominic.bull@digital.justice.gov.uk',
+        prison: 'HMP Wandsworth',
         startTime: '10:00',
       }
       req.flash.mockReturnValue([details])
