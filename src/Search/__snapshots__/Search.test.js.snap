@@ -469,6 +469,13 @@ Array [
       <div
         className="sc-gqjmRU crbzUF"
       >
+        <a
+          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          href="/appointments"
+          muted={false}
+        >
+          View all appointments
+        </a>
         <div
           className="sc-VigVT hLPYRt"
         >
@@ -1092,6 +1099,13 @@ Array [
       <div
         className="sc-gqjmRU crbzUF"
       >
+        <a
+          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          href="/appointments"
+          muted={false}
+        >
+          View all appointments
+        </a>
         <div
           className="sc-VigVT hLPYRt"
         >
