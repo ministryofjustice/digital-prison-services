@@ -12,7 +12,7 @@ describe('Select court appointment rooms', () => {
   const req = {
     originalUrl: 'http://localhost',
     params: { agencyId: 'MDI', offenderNo: 'A12345' },
-    session: { userDetails: { activeCaseLoadId: 'LEI' } },
+    session: { userDetails: { activeCaseLoadId: 'LEI', name: 'Court User' } },
     body: {},
   }
   const res = { locals: {}, redirect: jest.fn() }
@@ -36,7 +36,15 @@ describe('Select court appointment rooms', () => {
     date: '10/10/2019',
     preAppointmentRequired: 'yes',
     postAppointmentRequired: 'yes',
+    preLocations: [{ value: 1, text: 'Room 1' }],
+    postLocations: [{ value: 3, text: 'Room 3' }],
     court: 'Leeds',
+  }
+
+  const availableLocations = {
+    mainLocations: [{ value: 1, text: 'Room 1' }],
+    preLocations: [{ value: 2, text: 'Room 2' }],
+    postLocations: [{ value: 3, text: 'Room 3' }],
   }
 
   beforeEach(() => {
@@ -63,7 +71,7 @@ describe('Select court appointment rooms', () => {
       locationTypes: [{ value: 1, text: 'Room 3' }],
     })
 
-    existingEventsService.getAvailableLocationsForVLB.mockReturnValue({})
+    existingEventsService.getAvailableLocationsForVLB.mockReturnValue(availableLocations)
 
     elite2Api.getDetails.mockReturnValue({
       bookingId,
@@ -82,13 +90,6 @@ describe('Select court appointment rooms', () => {
 
   describe('index', () => {
     it('should return locations', async () => {
-      const availableLocations = {
-        mainLocations: [{ value: 1, text: 'Room 1' }],
-        preLocations: [{ value: 2, text: 'Room 2' }],
-        postLocations: [{ value: 3, text: 'Room 3' }],
-      }
-      existingEventsService.getAvailableLocationsForVLB.mockReturnValue(availableLocations)
-
       const { index } = selectCourtAppointmentRoomsFactory({
         elite2Api,
         appointmentsService,
@@ -324,8 +325,8 @@ describe('Select court appointment rooms', () => {
         elite2Api,
         whereaboutsApi,
         appointmentsService,
-        logError,
         existingEventsService,
+        logError,
         oauthApi,
       })
 
@@ -350,8 +351,8 @@ describe('Select court appointment rooms', () => {
         elite2Api,
         whereaboutsApi,
         appointmentsService,
-        logError,
         existingEventsService,
+        logError,
         oauthApi,
       })
 
@@ -539,19 +540,18 @@ describe('Select court appointment rooms', () => {
       await createAppointments(req, res)
 
       const personalisation = {
-        startTime: appointmentDetails.startTime,
-        endTime: appointmentDetails.endTime,
-        comment: appointmentDetails.comment,
-        firstName: appointmentDetails.firstName,
-        lastName: appointmentDetails.lastName,
+        startTime: '11:00',
+        endTime: '14:00',
+        date: '10 October 2019',
+        comments: appointmentDetails.comment,
+        court: 'Leeds',
+        firstName: 'John',
+        lastName: 'Doe',
         offenderNo: appointmentDetails.offenderNo,
         location: 'Room 2',
-        preAppointmentStartTime: '2017-10-10T10:40:00',
-        preAppointmentEndTime: '2017-10-10T11:00',
-        postAppointmentStartTime: '2017-10-10T14:00',
-        postAppointmentEndTime: '2017-10-10T14:20:00',
-        preAppointmentLocation: 'Room 1',
-        postAppointmentLocation: 'Room 3',
+        postAppointmentInfo: 'Room 3, 14:00 to 14:20',
+        preAppointmentInfo: 'Room 1, 10:40 to 11:00',
+        userName: 'Court User',
       }
 
       expect(notifyClient.sendEmail).toHaveBeenCalledWith(

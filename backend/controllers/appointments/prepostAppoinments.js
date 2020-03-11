@@ -302,13 +302,9 @@ const prepostAppointmentsFactory = ({
         })
       }
 
-      console.log('No errors')
-
       await createAppointment(res.locals, appointmentDetails)
 
       const prepostAppointments = {}
-
-      console.log('Main created')
 
       if (preAppointment === 'yes') {
         prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
