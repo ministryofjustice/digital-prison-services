@@ -9,7 +9,7 @@
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
-{% set title = 'Add video link booking date and time' %}
+{% set title = 'Add video link date and time' %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -33,7 +33,7 @@
                         rows: [
                             {
                                 key: {
-                                    text: "Prisoner name"
+                                    text: "Name"
                                 },
                                 value: {
                                     text: offenderNameWithNumber
@@ -69,7 +69,7 @@
 
                 {{ timePicker({
                     id: 'start-time',
-                    label: 'Start time',
+                    label: 'Court hearing start time',
                     name: 'startTime',
                     hour: formValues.startTimeHours,
                     minute: formValues.startTimeMinutes,
@@ -78,7 +78,7 @@
 
                 {{ timePicker({
                     id: 'end-time',
-                    label: 'End time',
+                    label: 'Court hearing end time',
                     name: 'endTime',
                     hour: formValues.endTimeHours,
                     minute: formValues.endTimeMinutes,
@@ -92,7 +92,7 @@
                     errorMessage: errors | findError('pre-appointment-required'),
                     fieldset: {
                         legend: {
-                        text: "Add video link session before?",
+                        text: "Do you want to add a pre-court hearing briefing?",
                         classes: "govuk-fieldset__legend--s"
                         }
                     },
@@ -117,7 +117,7 @@
                     errorMessage: errors | findError('post-appointment-required'),
                     fieldset: {
                         legend: {
-                        text: "Add video link session after?",
+                        text: "Do you want to add a post-court hearing briefing?",
                         classes: "govuk-fieldset__legend--s"
                         }
                     },
@@ -136,7 +136,7 @@
                 }) }}
 
                 {{ govukButton({
-                    text: "Save and continue",
+                    text: "Continue",
                     type: "submit",
                     classes: "govuk-!-margin-right-2"
                 }) }}
