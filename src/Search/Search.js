@@ -224,7 +224,7 @@ class Search extends Component {
           </span>
         )}
         <form id="searchForm" name="searchForm" className="searchForm">
-          <div className="padding-top padding-bottom-large" style={{ overflow: 'auto' }}>
+          <div className="padding-top padding-bottom-large clearfix">
             <div className="pure-u-md-1-6">
               <div className="padding-right">
                 <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
