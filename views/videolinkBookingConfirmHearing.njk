@@ -18,77 +18,58 @@
             {% endif %}
 
             <h3 class="govuk-heading-m">Video link details</h3>
+        </div>
+    </div>
+    
+    {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+        rows: offender | toSummaryViewModel | removePaddingBottom
+    }) }}
 
-            {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
-                rows: offender | toSummaryViewModel | removePaddingBottom
-            }) }}
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
-                rows: details | toSummaryViewModel | removePaddingBottom
-            }) }}
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
-                rows: prepostData | toSummaryViewModel | removePaddingBottom
-            }) }}
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            {{ govukSummaryList({
-                classes: "govuk-summary-list--no-border",
-                rows: court | toSummaryViewModel | removePaddingBottom
-            }) }}
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+    {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+        rows: details | toSummaryViewModel | removePaddingBottom
+    }) }}
+   
+    {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-2",
+        rows: prepostData | toSummaryViewModel | removePaddingBottom
+    }) }}
 
-            {% if prisonUser %}
+    {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border",
+        rows: court | toSummaryViewModel | removePaddingBottom
+    }) }}
+
+    {% if prisonUser %}
+        <p class="govuk-body">
+            <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
+                Print movement slip
+            </a>
+        </p>
             
-                <p class="govuk-body">
-                    <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
-                        Print movement slip
-                    </a>
-                </p>
-            
+        {{ govukButton({
+            text: "Back to prisoner profile",
+            element: 'a',
+            href: prisonerProfileLink,
+            classes: "govuk-button--secondary",
+            attributes: {
+                'data-qa': 'back-to-profile'
+            }
+        }) }}
+    {% else %}
+        <p class="govuk-body">
+            <a href={{ prisonerSearchLink }} class="govuk-link" data-qa="back-to-prisoner-search">Book another video link</a>
+        </p>
 
-                {{ govukButton({
-                    text: "Back to prisoner profile",
-                    element: 'a',
-                    href: prisonerProfileLink,
-                    classes: "govuk-button--secondary",
-                    attributes: {
-                        'data-qa': 'back-to-profile'
-                    }
-                })
-                }}
-
-            {% else %}
-                <p class="govuk-body">
-                    <a href={{ prisonerSearchLink }} class="govuk-link" data-qa="back-to-prisoner-search">Create another video link</a>
-                </p>
-
-                {{ govukButton({
-                    text: "Exit",
-                    element: 'a',
-                    href: '/videolink',
-                    classes: "govuk-button--primary",
-                    attributes: {
-                        'data-qa': 'back-to-video-link'
-                    }
-                })
-                }}
-
-            {% endif %}
-        </div>
-    </div>
+        {{ govukButton({
+            text: "Exit",
+            element: 'a',
+            href: '/videolink',
+            classes: "govuk-button--primary",
+            attributes: {
+                'data-qa': 'back-to-video-link'
+            }
+        }) }}
+    {% endif %}
 {% endblock %}
