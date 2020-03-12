@@ -22,7 +22,7 @@ class ConfirmVideoLinkCourtPage extends Page {
 
     static at = {
         pageTitle.contains("The video link has been booked")
-        backLink.contains("Create another video link")
+        backLink.contains("Book another video link")
         finishLink.contains("Exit")
     }
 
