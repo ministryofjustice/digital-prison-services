@@ -39,12 +39,7 @@ Array [
     name="searchForm"
   >
     <div
-      className="padding-top padding-bottom-large"
-      style={
-        Object {
-          "overflow": "auto",
-        }
-      }
+      className="padding-top padding-bottom-large clearfix"
     >
       <div
         className="pure-u-md-1-6"
@@ -674,12 +669,7 @@ Array [
     name="searchForm"
   >
     <div
-      className="padding-top padding-bottom-large"
-      style={
-        Object {
-          "overflow": "auto",
-        }
-      }
+      className="padding-top padding-bottom-large clearfix"
     >
       <div
         className="pure-u-md-1-6"
