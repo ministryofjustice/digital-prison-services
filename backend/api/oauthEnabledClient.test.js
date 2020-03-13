@@ -267,7 +267,7 @@ describe('Test clients built by oauthEnabledClient', () => {
         })
 
         await pipe
-        expect(res.header).toHaveBeenCalledWith({ 'content-type': 'image/png', 'content-length': 123 })
+        expect(res.header).toHaveBeenCalledWith({ 'content-type': 'image/png', 'content-length': '123' })
       })
     })
   })

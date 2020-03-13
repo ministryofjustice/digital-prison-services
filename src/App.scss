@@ -311,3 +311,9 @@ tr a.link:visited {
 .ReactModal__Body--open {
   overflow: hidden;
 }
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
