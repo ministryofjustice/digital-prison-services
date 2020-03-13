@@ -26,6 +26,9 @@ commands:
     parameters:
       env:
         type: string
+      slack_notification:
+        type: boolean
+        default: false
     steps:
       - setup
       - checkout:
@@ -35,15 +38,25 @@ commands:
       - deploy:
           name: Deploy to << parameters.env >>
           command: |
+            APP=prison-staff-hub
             APP_VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
-            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/prison-staff-hub/Chart.yaml
+            echo "export APP_VERSION=$APP_VERSION" >> $BASH_ENV
+            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/${APP}/Chart.yaml
             aws secretsmanager get-secret-value --secret-id ${AWS_SECRET_NAME} | jq -r .SecretString | \
-            helm upgrade prison-staff-hub ~/git/helm_deploy/prison-staff-hub/. \
+            helm upgrade ${APP} ~/git/helm_deploy/${APP}/. \
               --install --wait --reset-values --timeout 5m --history-max 10 \
               --namespace=${KUBE_ENV_NAMESPACE} \
               --values ~/git/helm_deploy/values-<< parameters.env >>.yaml \
               --values - \
               --set image.tag="${APP_VERSION}"
+      - when:
+          condition: <<parameters.slack_notification>>
+          steps:
+            - slack/notify:
+                message: "*${APP}* version:*${APP_VERSION}* deployed to << parameters.env >>"
+                include_project_field: false
+                include_job_number_field: false
+
 executors:
   deployer:
     docker:
@@ -59,6 +72,7 @@ orbs:
   kubernetes: circleci/kubernetes@0.10.1
   helm: circleci/helm@0.2.3
   gradle: circleci/gradle@2.0.0
+  slack: circleci/slack@3.4.2
 
 jobs:
   validate:
@@ -89,11 +103,6 @@ jobs:
              set -e
              yarn test --maxWorkers=2
       - run: NODE_ENV=production yarn build
-      - run: |
-             DATE=$(date '+%Y-%m-%d')
-             export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
-             export GIT_REF=${CIRCLE_SHA1}
-             yarn record-build-info
       - persist_to_workspace:
           root: .
           paths:
@@ -167,13 +176,12 @@ jobs:
             # Copy build-info.json from image
             docker run -it --rm mojdigitalstudio/prisonstaffhub:$APP_VERSION cat /app/build-info.json > build-info.json
 
-            if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-              #publish to docker hub as the tag
-              docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-              docker tag mojdigitalstudio/prisonstaffhub:$APP_VERSION mojdigitalstudio/prisonstaffhub:latest
-              docker push mojdigitalstudio/prisonstaffhub:$APP_VERSION
-              docker push mojdigitalstudio/prisonstaffhub:latest
-            fi
+            # Publish to docker hub
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker tag mojdigitalstudio/prisonstaffhub:$APP_VERSION mojdigitalstudio/prisonstaffhub:latest
+            docker push mojdigitalstudio/prisonstaffhub:$APP_VERSION
+            docker push mojdigitalstudio/prisonstaffhub:latest
+
       - persist_to_workspace:
           root: .
           paths:
@@ -194,6 +202,7 @@ jobs:
     steps:
       - deploy_to_env:
           env: "prod"
+          slack_notification: true
 
   security_audit:
     executor: builder
