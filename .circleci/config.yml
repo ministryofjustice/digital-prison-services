@@ -40,7 +40,7 @@ commands:
           command: |
             APP=prison-staff-hub
             APP_VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
-            echo "export APP_VERSION=$APP_VERSION" >> $BASH_ENV
+            echo "export APP_VERSION=$APP_VERSION;export APP=$APP" >> $BASH_ENV
             sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/${APP}/Chart.yaml
             aws secretsmanager get-secret-value --secret-id ${AWS_SECRET_NAME} | jq -r .SecretString | \
             helm upgrade ${APP} ~/git/helm_deploy/${APP}/. \
