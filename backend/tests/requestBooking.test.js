@@ -96,7 +96,7 @@ describe('Request a booking', () => {
           })
         )
 
-        expect(res.redirect).toHaveBeenCalledWith('/request-booking/enter-offender-details')
+        expect(res.redirect).toHaveBeenCalledWith('/request-booking/select-court')
 
         Date.now.mockRestore()
       })
@@ -114,6 +114,9 @@ describe('Request a booking', () => {
         expect(res.render).toHaveBeenCalledWith(
           'requestBooking/requestBooking.njk',
           expect.objectContaining({
+            formValues: {
+              date,
+            },
             errors: [
               { href: '#pre-appointment-required', text: 'Select yes if you want to add a pre-court hearing briefing' },
               {
@@ -187,89 +190,18 @@ describe('Request a booking', () => {
   })
 
   describe('Enter offender details', () => {
-    it('should render the correct template', async () => {
+    it('should render the correct template with errors and form values', async () => {
+      const errors = [{ href: '#first-name', text: 'Enter a first name' }]
+      req.flash.mockImplementation(key => (key === 'errors' ? errors : [{ lastName: 'doe' }]))
+
       await controller.enterOffenderDetails(req, res)
-      expect(res.render).toHaveBeenCalledWith('requestBooking/offenderDetails.njk')
+      expect(res.render).toHaveBeenCalledWith('requestBooking/offenderDetails.njk', {
+        errors,
+        formValues: { lastName: 'doe' },
+      })
     })
 
-    it('should validate missing offender details', async () => {
-      req.body = {}
-
-      await controller.validateOffenderDetails(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'requestBooking/offenderDetails.njk',
-        expect.objectContaining({
-          errors: [
-            { href: '#first-name', text: 'Enter a first name' },
-            { href: '#last-name', text: 'Enter a last name' },
-            { href: '#dobDay', text: 'Enter a date of birth' },
-          ],
-        })
-      )
-    })
-
-    it('should trigger date of birth in the past validation message', async () => {
-      req.body = {
-        dobDay: 1,
-        dobMonth: 1,
-        dobYear: 8000,
-        firstName: 'John',
-        lastName: 'Doe',
-      }
-
-      await controller.validateOffenderDetails(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'requestBooking/offenderDetails.njk',
-        expect.objectContaining({
-          errors: [{ href: '#dobDay', text: 'Enter a date of birth which is in the past' }, { href: '#dobError' }],
-        })
-      )
-    })
-
-    it('should trigger date of birth not real validation message', async () => {
-      req.body = {
-        dobDay: 200,
-        dobMonth: 200,
-        dobYear: 8000,
-        firstName: 'John',
-        lastName: 'Doe',
-      }
-
-      await controller.validateOffenderDetails(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'requestBooking/offenderDetails.njk',
-        expect.objectContaining({
-          errors: [{ href: '#dobDay', text: 'Enter a date of birth which is a real date' }, { href: '#dobError' }],
-        })
-      )
-    })
-
-    it('should validate maximum length of comments', async () => {
-      req.body = {
-        firstName: 'John',
-        lastName: 'Doe',
-        dobYear: 2019,
-        dobMonth: 12,
-        dobDay: 10,
-        comments: [...Array(3601).keys()].map(_ => 'A').join(''),
-      }
-
-      await controller.validateOffenderDetails(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'requestBooking/offenderDetails.njk',
-        expect.objectContaining({
-          errors: expect.arrayContaining([
-            { href: '#comments', text: 'Maximum length should not exceed 3600 characters' },
-          ]),
-        })
-      )
-    })
-
-    it('should stash the offender details and redirect to select court', async () => {
+    it('should stash the offender details and redirect to the confirmation page', async () => {
       req.body = {
         firstName: 'John',
         lastName: 'Doe',
@@ -278,19 +210,41 @@ describe('Request a booking', () => {
         dobDay: 10,
         comments: 'test',
       }
+      oauthApi.userEmail.mockReturnValue({
+        email: 'test@test',
+      })
+      req.flash.mockImplementation(() => [
+        {
+          date: '01/01/2019',
+          startTime: '2919-01-01T10:00:00',
+          endTime: '2019-01-01T11:00:00',
+          prison: 'WWI',
+          preAppointmentRequired: 'yes',
+          postAppointmentRequired: 'yes',
+          postHearingStartAndEndTime: '09:35 to 11:00',
+          preHearingStartAndEndTime: '11:00 to 11:20',
+          dateOfBirth: '14/05/1920',
+        },
+      ])
 
-      await controller.validateOffenderDetails(req, res)
+      await controller.createBookingRequest(req, res)
 
       expect(req.flash).toHaveBeenCalledWith(
         'requestBooking',
         expect.objectContaining({
-          comments: 'test',
+          comment: 'test',
+          date: 'Tuesday 1 January 2019',
           dateOfBirth: '10 December 2019',
+          endTime: '11:00',
           firstName: 'John',
           lastName: 'Doe',
+          postHearingStartAndEndTime: '09:35 to 11:00',
+          preHearingStartAndEndTime: '11:00 to 11:20',
+          prison: 'HMP Wandsworth',
+          startTime: '10:00',
         })
       )
-      expect(res.redirect).toHaveBeenCalledWith('/request-booking/select-court')
+      expect(res.redirect).toHaveBeenCalledWith('/request-booking/confirmation')
     })
   })
 
@@ -317,13 +271,17 @@ describe('Request a booking', () => {
       expect(res.render).toHaveBeenCalledWith(
         'requestBooking/selectCourt.njk',
         expect.objectContaining({
-          details: {
+          prisonDetails: {
+            prison: 'HMP Wandsworth',
+          },
+          hearingDetails: {
             courtHearingEndTime: '02:00',
             courtHearingStartTime: '01:00',
             date: '1 January 3019',
+          },
+          prePostDetails: {
             'post-court hearing briefing': '02:00 to 02:20',
             'pre-court hearing briefing': '00:40 to 01:00',
-            prison: 'HMP Wandsworth',
           },
           hearingLocations: [
             {
@@ -338,6 +296,16 @@ describe('Request a booking', () => {
         })
       )
     })
+
+    it('should stash hearing location into flash and redirect to enter offender details', async () => {
+      req.body = { hearingLocation: 'London' }
+      await controller.validateCourt(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('requestBooking', {
+        hearingLocation: 'London',
+      })
+      expect(res.redirect('/request-booking/enter-offender-details'))
+    })
   })
 
   describe('Create booking', () => {
@@ -346,9 +314,99 @@ describe('Request a booking', () => {
       await controller.createBookingRequest(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('errors', [
-        { text: 'Select which court you are in', href: '#hearingLocation' },
+        { text: 'Enter a first name', href: '#first-name' },
+        { text: 'Enter a last name', href: '#last-name' },
+        { text: 'Enter a date of birth', href: '#dobDay' },
       ])
-      expect(res.redirect).toHaveBeenCalledWith('/request-booking/select-court')
+      expect(res.redirect).toHaveBeenCalledWith('/request-booking/enter-offender-details')
+    })
+
+    it('should validate missing offender details', async () => {
+      const bookingDetails = {
+        date: '01/01/3019',
+        startTime: '3019-01-01T01:00:00',
+        endTime: '3019-01-01T02:00:00',
+        prison: 'WWI',
+        preAppointmentRequired: 'yes',
+        postAppointmentRequired: 'yes',
+      }
+      req.flash.mockImplementation(() => [bookingDetails])
+      req.body = { stuff: 'stuffOne' }
+
+      await controller.createBookingRequest(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('formValues', { stuff: 'stuffOne' })
+      expect(req.flash).toHaveBeenCalledWith('requestBooking', bookingDetails)
+      expect(req.flash).toHaveBeenCalledWith(
+        'errors',
+        expect.objectContaining([
+          { href: '#first-name', text: 'Enter a first name' },
+          { href: '#last-name', text: 'Enter a last name' },
+          { href: '#dobDay', text: 'Enter a date of birth' },
+        ])
+      )
+
+      expect(req.flash).toHaveBeenCalledWith('formValues', req.body)
+
+      expect(res.redirect('/request-booking/enter-offender-details'))
+    })
+
+    it('should trigger date of birth in the past validation message', async () => {
+      req.body = {
+        dobDay: 1,
+        dobMonth: 1,
+        dobYear: 8000,
+        firstName: 'John',
+        lastName: 'Doe',
+      }
+
+      await controller.createBookingRequest(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'errors',
+        expect.objectContaining([
+          { href: '#dobDay', text: 'Enter a date of birth which is in the past' },
+          { href: '#dobError' },
+        ])
+      )
+    })
+
+    it('should trigger date of birth not real validation message', async () => {
+      req.body = {
+        dobDay: 200,
+        dobMonth: 200,
+        dobYear: 8000,
+        firstName: 'John',
+        lastName: 'Doe',
+      }
+
+      await controller.createBookingRequest(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'errors',
+        expect.objectContaining([
+          { href: '#dobDay', text: 'Enter a date of birth which is a real date' },
+          { href: '#dobError' },
+        ])
+      )
+    })
+
+    it('should validate maximum length of comments', async () => {
+      req.body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        dobYear: 2019,
+        dobMonth: 12,
+        dobDay: 10,
+        comments: [...Array(3601).keys()].map(_ => 'A').join(''),
+      }
+
+      await controller.createBookingRequest(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'errors',
+        expect.objectContaining([{ href: '#comments', text: 'Maximum length should not exceed 3600 characters' }])
+      )
     })
 
     it('should submit two emails, one for the prison and another for the current user', async () => {
@@ -363,15 +421,20 @@ describe('Request a booking', () => {
           prison: 'WWI',
           preAppointmentRequired: 'yes',
           postAppointmentRequired: 'yes',
-          comment: 'test',
-          firstName: 'John',
-          lastName: 'Doe',
           postHearingStartAndEndTime: '09:35 to 11:00',
           preHearingStartAndEndTime: '11:00 to 11:20',
-          dateOfBirth: '14/05/1920',
+          courtHearing: 'HMP Wandsworth',
+          hearingLocation: 'London',
         },
       ])
-      req.body = { hearingLocation: 'London' }
+      req.body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        dobYear: 2019,
+        dobMonth: 12,
+        dobDay: 10,
+        comments: 'test',
+      }
       await controller.createBookingRequest(req, res)
 
       const personalisation = {
@@ -380,7 +443,7 @@ describe('Request a booking', () => {
         endTime: '11:00',
         postHearingStartAndEndTime: '09:35 to 11:00',
         preHearingStartAndEndTime: '11:00 to 11:20',
-        dateOfBirth: '14/05/1920',
+        dateOfBirth: '10 December 2019',
         firstName: 'John',
         hearingLocation: 'London',
         lastName: 'Doe',
@@ -411,33 +474,34 @@ describe('Request a booking', () => {
           prison: 'WWI',
           preAppointmentRequired: 'yes',
           postAppointmentRequired: 'yes',
-          comment: 'test',
-          firstName: 'John',
-          lastName: 'Doe',
           postHearingStartAndEndTime: '09:35 to 11:00',
           preHearingStartAndEndTime: '11:00 to 11:20',
-          dateOfBirth: '14/05/1920',
+          hearingLocation: 'London',
         },
       ])
-      req.body = { hearingLocation: 'London' }
+      req.body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        dobYear: 2019,
+        dobMonth: 12,
+        dobDay: 10,
+        comments: 'test',
+      }
       await controller.createBookingRequest(req, res)
 
       expect(req.flash).toHaveBeenCalledWith(
         'requestBooking',
         expect.objectContaining({
-          comment: 'test',
           date: 'Tuesday 1 January 2019',
-          dateOfBirth: '14/05/1920',
           endTime: '11:00',
-          firstName: 'John',
-          hearingLocation: 'London',
-          lastName: 'Doe',
-          postAppointmentRequired: 'yes',
           postHearingStartAndEndTime: '09:35 to 11:00',
-          preAppointmentRequired: 'yes',
           preHearingStartAndEndTime: '11:00 to 11:20',
           prison: 'HMP Wandsworth',
           startTime: '10:00',
+          hearingLocation: 'London',
+          firstName: 'John',
+          lastName: 'Doe',
+          comment: 'test',
         })
       )
       expect(res.redirect).toHaveBeenCalledWith('/request-booking/confirmation')
@@ -467,14 +531,20 @@ describe('Request a booking', () => {
       expect(res.render).toHaveBeenCalledWith('requestBooking/requestBookingConfirmation.njk', {
         details: {
           prison: 'HMP Wandsworth',
-          name: `Doe, John`,
+          name: 'John Doe',
           dateOfBirth: '14/05/1920',
+        },
+        hearingDetails: {
           date: 'Tuesday 1 January 2019',
           courtHearingStartTime: '10:00',
           courtHearingEndTime: '11:00',
           comment: 'test',
+        },
+        prePostDetails: {
           'post-court hearing briefing': '09:35 to 11:00',
           'pre-court hearing briefing': '11:00 to 11:20',
+        },
+        courtDetails: {
           courtLocation: 'London',
         },
         homeUrl: '/videolink',

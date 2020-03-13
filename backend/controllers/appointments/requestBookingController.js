@@ -7,9 +7,9 @@ const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Ap
   const {
     startOfJourney,
     checkAvailability,
-    enterOffenderDetails,
-    validateOffenderDetails,
     selectCourt,
+    validateCourt,
+    enterOffenderDetails,
     createBookingRequest,
     confirm,
   } = requestBookingFactory({
@@ -22,9 +22,9 @@ const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Ap
 
   router.get('/', startOfJourney)
   router.post('/check-availability', checkAvailability)
-  router.get('/enter-offender-details', enterOffenderDetails)
-  router.post('/validate-offender-details', validateOffenderDetails)
   router.get('/select-court', selectCourt)
+  router.post('/validate-court', validateCourt)
+  router.get('/enter-offender-details', enterOffenderDetails)
   router.post('/create-booking-request', createBookingRequest)
   router.get('/confirmation', confirm)
 

@@ -27,7 +27,7 @@
                 }) }}
             {% endif %}
 
-            <form method="POST" novalidate="novalidate" action="/request-booking/validate-offender-details">
+            <form method="POST" novalidate="novalidate" action="/request-booking/create-booking-request">
 
                 {{ govukInput({
                     label: {
@@ -61,7 +61,7 @@
                     },
                     errorMessage: errors | findErrors(['dobDay', 'dobMonth', 'dobYear']),
                     hint: {
-                        text: "For example, 12 11 1990"
+                        text: "For example, 31 3 1980"
                     },
                     items: [
                         {
