@@ -55,16 +55,6 @@ class RequestCourtBookingSpecification extends BrowserReportingSpec {
         form.postAppointmentRequired = 'yes'
         submitButton.click()
 
-        and: "I enter the offender details"
-        at RequestBookingEnterOffenderDetails
-        form.firstName = 'John'
-        form.lastName = 'Doe'
-        form.dobDay = 14
-        form.dobMonth = 5
-        form.dobYear = 1920
-        form.comments = 'test'
-        submitButton.click()
-
         and: "I select a court location"
         at RequestBookingSelectCourtPage
 
@@ -80,6 +70,16 @@ class RequestCourtBookingSpecification extends BrowserReportingSpec {
         form.hearingLocation = 'London'
         submitButton.click()
 
+        and: "I enter the offender details"
+        at RequestBookingEnterOffenderDetails
+        form.firstName = 'John'
+        form.lastName = 'Doe'
+        form.dobDay = 14
+        form.dobMonth = 5
+        form.dobYear = 1920
+        form.comments = 'test'
+        submitButton.click()
+
         then: "I land on the confirmation page with all details played back correctly"
         at RequestBookingConfirmationPage
         assert prison == 'HMP Wandsworth'
@@ -90,7 +90,7 @@ class RequestCourtBookingSpecification extends BrowserReportingSpec {
         assert endTime == '11:00'
         assert preStartEndTime == '09:40 to 10:00'
         assert postStartEndTime == '11:00 to 11:20'
-        assert name == 'Doe, John'
+        assert name == 'John Doe'
         assert dateOfBirth == '14 May 1920'
         assert courtLocation == 'London'
     }
