@@ -112,3 +112,8 @@ $govuk-page-width: 1170px;
     }
   }
 }
+.govuk-blue-background-confirm-override {
+  .govuk-panel--confirmation {
+    background-color: govuk-colour('blue') !important;
+  }
+}
