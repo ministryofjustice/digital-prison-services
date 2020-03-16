@@ -32,7 +32,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
       .map(async appointment => {
         const { startTime, endTime, offenderNo } = appointment
-        const staffDetails = await elite2Api.getStaffDetails(res.locals, appointment.auditUserId).catch(error => {
+        const staffDetails = await elite2Api.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
           logError(req.originalUrl, error, serviceUnavailableMessage)
           return null
         })
