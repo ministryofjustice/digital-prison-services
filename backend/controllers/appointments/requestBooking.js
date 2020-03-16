@@ -131,8 +131,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         href: '#post-appointment-required',
       })
 
-    if (!prison) errors.push({ text: 'Select a prison', href: '#prison' })
-    if (!endTime) errors.push({ text: 'Select an end time', href: '#end-time-hours' })
+    if (!prison) errors.push({ text: 'Select which prison you want a video link with', href: '#prison' })
 
     validateDate(date, errors)
     validateStartEndTime(date, startTime, endTime, errors)
