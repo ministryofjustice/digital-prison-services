@@ -99,7 +99,7 @@ class ViewAppointmentsSpecification extends BrowserReportingSpec {
                         appointmentTypeCode: 'MEOT',
                         locationDescription: 'HEALTH CARE',
                         locationId: 123,
-                        auditUserId: 'STAFF_1',
+                        createUserId: 'STAFF_1',
                         agencyId: 'MDI'
                 ],
                 [
@@ -114,7 +114,7 @@ class ViewAppointmentsSpecification extends BrowserReportingSpec {
                         appointmentTypeCode: 'GYM',
                         locationDescription: 'GYM',
                         locationId: 456,
-                        auditUserId: 'STAFF_2',
+                        createUserId: 'STAFF_2',
                         agencyId: 'MDI',
                 ],
                 [
@@ -129,7 +129,7 @@ class ViewAppointmentsSpecification extends BrowserReportingSpec {
                         appointmentTypeCode: 'VLB',
                         locationDescription: 'VCC ROOM',
                         locationId: 789,
-                        auditUserId: 'STAFF_3',
+                        createUserId: 'STAFF_3',
                         agencyId: 'MDI',
                 ],
         ])
