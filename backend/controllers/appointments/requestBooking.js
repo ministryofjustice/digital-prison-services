@@ -7,23 +7,33 @@ const {
   app: { videoLinkEnabledFor },
 } = require('../../config')
 
-const validateStartEndTime = (date, startTime, endTime, errors) => {
+const isValidNumber = number => Number.isSafeInteger(Number.parseInt(number, 10))
+
+const validateStartEndTime = ({ date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, errors }) => {
   const now = moment()
   const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
-  const startTimeDuration = moment.duration(now.diff(startTime))
-  const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
+  const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
+  const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
+  const startTimeDuration = startTime && moment.duration(now.diff(startTime))
+  const endTimeDuration = endTime && startTime && moment.duration(startTime.diff(endTime))
 
-  if (!startTime)
+  if (!startTime && (isValidNumber(startTimeHours) || isValidNumber(startTimeMinutes))) {
+    errors.push({ text: 'Select a full start time of the court hearing video link', href: '#start-time-hours' })
+  } else if (!startTime) {
     errors.push({ text: 'Select the start time of the court hearing video link', href: '#start-time-hours' })
+  }
 
-  if (!endTime) errors.push({ text: 'Select the end time of the court hearing video link', href: '#end-time-hours' })
+  if (!endTime && (isValidNumber(endTimeHours) || isValidNumber(endTimeMinutes))) {
+    errors.push({ text: 'Select a full end time of the court hearing video link', href: '#end-time-hours' })
+  } else if (!endTime) {
+    errors.push({ text: 'Select the end time of the court hearing video link', href: '#end-time-hours' })
+  }
 
-  if (isToday && startTimeDuration.asMinutes() > 1)
+  if (isToday && startTimeDuration && startTimeDuration.asMinutes() > 1)
     errors.push({ text: 'Select a start time that is not in the past', href: '#start-time-hours' })
 
-  if (endTime && endTimeDuration.asMinutes() > 1) {
+  if (endTime && endTimeDuration && endTimeDuration.asMinutes() > 1)
     errors.push({ text: 'Select an end time that is not in the past', href: '#end-time-hours' })
-  }
 }
 
 const validateDate = (date, errors) => {
@@ -134,7 +144,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     if (!prison) errors.push({ text: 'Select which prison you want a video link with', href: '#prison' })
 
     validateDate(date, errors)
-    validateStartEndTime(date, startTime, endTime, errors)
+    validateStartEndTime({ date, startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, errors })
 
     if (errors.length > 0) {
       packBookingDetails(req)
