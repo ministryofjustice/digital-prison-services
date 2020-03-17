@@ -276,9 +276,61 @@ describe('Request a booking', () => {
       )
       expect(res.redirect).toHaveBeenCalledWith('/request-booking/confirmation')
     })
+
+    it('should add provide default comment value', async () => {
+      req.body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        dobYear: 2019,
+        dobMonth: 12,
+        dobDay: 10,
+      }
+      oauthApi.userEmail.mockReturnValue({ email: 'test@test' })
+      req.flash.mockImplementation(() => [{ prison: 'WWI' }])
+
+      await controller.createBookingRequest(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'requestBooking',
+        expect.objectContaining({
+          comment: 'None entered',
+        })
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/request-booking/confirmation')
+    })
   })
 
   describe('Select court', () => {
+    it('should stash correct values into flash', async () => {
+      whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['London', 'York'] })
+      req.flash.mockImplementation(key => {
+        return key !== 'errors'
+          ? [
+              {
+                date: '01/01/3019',
+                startTime: '3019-01-01T01:00:00',
+                endTime: '3019-01-01T02:00:00',
+                prison: 'WWI',
+                preAppointmentRequired: 'no',
+                postAppointmentRequired: 'yes',
+              },
+            ]
+          : []
+      })
+
+      await controller.selectCourt(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('requestBooking', {
+        date: '01/01/3019',
+        endTime: '3019-01-01T02:00:00',
+        postAppointmentRequired: 'yes',
+        postHearingStartAndEndTime: '02:00 to 02:20',
+        preAppointmentRequired: 'no',
+        preHearingStartAndEndTime: 'Not required',
+        prison: 'WWI',
+        startTime: '3019-01-01T01:00:00',
+      })
+    })
     it('should render the correct template with the correct view model', async () => {
       whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['London', 'York'] })
       req.flash.mockImplementation(key => {

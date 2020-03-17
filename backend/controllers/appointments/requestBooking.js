@@ -183,14 +183,14 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     const { date, startTime, endTime, prison, preAppointmentRequired, postAppointmentRequired } = details
 
     const getPreHearingStartAndEndTime = () => {
-      if (preAppointmentRequired !== 'yes') return 'No pre court hearing added'
+      if (preAppointmentRequired !== 'yes') return 'Not required'
       const preCourtHearingStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minute')
       const preCourtHearingEndTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
       return `${Time(preCourtHearingStartTime)} to ${Time(preCourtHearingEndTime)}`
     }
 
     const getPostCourtHearingStartAndEndTime = () => {
-      if (postAppointmentRequired !== 'yes') return 'No post court hearing added'
+      if (postAppointmentRequired !== 'yes') return 'Not required'
       const postCourtHearingStartTime = moment(endTime, DATE_TIME_FORMAT_SPEC)
       const postCourtHearingEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minute')
       return `${Time(postCourtHearingStartTime)} to ${Time(postCourtHearingEndTime)}`
@@ -314,7 +314,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         endTime: endTime && Time(endTime),
         prison: prisons.find(p => p.agencyId === prison).description,
         hearingLocation,
-        comment: comments,
+        comment: comments || 'None entered',
         preHearingStartAndEndTime,
         postHearingStartAndEndTime,
       }
