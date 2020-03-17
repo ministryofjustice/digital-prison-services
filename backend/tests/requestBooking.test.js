@@ -293,7 +293,7 @@ describe('Request a booking', () => {
       expect(req.flash).toHaveBeenCalledWith(
         'requestBooking',
         expect.objectContaining({
-          comment: 'None entered.',
+          comment: 'None entered',
         })
       )
       expect(res.redirect).toHaveBeenCalledWith('/request-booking/confirmation')
