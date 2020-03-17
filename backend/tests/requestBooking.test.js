@@ -8,7 +8,7 @@ const { requestBookingFactory } = require('../controllers/appointments/requestBo
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { notifyClient } = require('../shared/notifyClient')
 
-const { requestBookingCourtTemplateId } = config.notifications
+const { requestBookingCourtTemplateVLBAdminId, requestBookingCourtTemplateRequesterId } = config.notifications
 
 describe('Request a booking', () => {
   let req
@@ -42,9 +42,13 @@ describe('Request a booking', () => {
     notifyClient.sendEmail = jest.fn()
     whereaboutsApi.getCourtLocations = jest.fn()
     oauthApi.userEmail = jest.fn()
+    oauthApi.userDetails = jest.fn()
     elite2Api.getAgencies = jest.fn()
 
     elite2Api.getAgencies.mockReturnValue([{ agencyId: 'WWI', description: 'HMP Wandsworth' }])
+
+    oauthApi.userEmail.mockReturnValue({ email: 'test@test' })
+    oauthApi.userDetails.mockReturnValue({ name: 'Staff member' })
 
     controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
   })
@@ -69,17 +73,18 @@ describe('Request a booking', () => {
     describe('Check availability', () => {
       const validBody = {
         prison: 'test@test',
-        startTimeHours: '01',
-        startTimeMinutes: '00',
-        endTimeHours: '02',
-        endTimeMinutes: '00',
+        startTimeHours: '22',
+        startTimeMinutes: '05',
+        endTimeHours: '23',
+        endTimeMinutes: '05',
         comments: 'Test comment',
         preAppointmentRequired: 'no',
         postAppointmentRequired: 'no',
       }
 
       it('should stash the appointment details and redirect to offender details', async () => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
 
         await controller.checkAvailability(req, res)
@@ -87,10 +92,10 @@ describe('Request a booking', () => {
         expect(req.flash).toHaveBeenCalledWith(
           'requestBooking',
           expect.objectContaining({
-            date: '01/01/3019',
+            date: '29/03/2019',
             prison: 'test@test',
-            startTime: '3019-01-01T01:00:00',
-            endTime: '3019-01-01T02:00:00',
+            startTime: '2019-03-29T22:05:00',
+            endTime: '2019-03-29T23:05:00',
             preAppointmentRequired: 'no',
             postAppointmentRequired: 'no',
           })
@@ -158,20 +163,12 @@ describe('Request a booking', () => {
       })
 
       it('should validate that the end time comes after the start time', async () => {
-        const endTime = moment().subtract(2, 'hours')
-        const endTimeHours = endTime.hour()
-        const endTimeMinutes = endTime.minute()
-
-        const startTime = moment().add(5, 'minutes')
-        const startTimeHours = startTime.hour()
-        const startTimeMinutes = startTime.minute()
-
         req.body = {
           date: moment().format(DAY_MONTH_YEAR),
-          startTimeHours,
-          startTimeMinutes,
-          endTimeHours,
-          endTimeMinutes,
+          startTimeHours: '23',
+          startTimeMinutes: '00',
+          endTimeHours: '22',
+          endTimeMinutes: '00',
         }
 
         await controller.checkAvailability(req, res)
@@ -185,6 +182,40 @@ describe('Request a booking', () => {
           })
         )
       })
+    })
+
+    it('should validate full start and end time', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+      const date = moment().format(DAY_MONTH_YEAR)
+
+      req.body = {
+        prison: 'WWI',
+        date,
+        startTimeHours: '23',
+        endTimeHours: '22',
+        preAppointmentRequired: 'no',
+        postAppointmentRequired: 'no',
+      }
+
+      await controller.checkAvailability(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'requestBooking/requestBooking.njk',
+        expect.objectContaining({
+          errors: [
+            {
+              text: 'Select a full start time of the court hearing video link',
+              href: '#start-time-hours',
+            },
+            {
+              text: 'Select a full end time of the court hearing video link',
+              href: '#end-time-hours',
+            },
+          ],
+        })
+      )
+
+      Date.now.mockRestore()
     })
   })
 
@@ -409,9 +440,6 @@ describe('Request a booking', () => {
     })
 
     it('should submit two emails, one for the prison and another for the current user', async () => {
-      oauthApi.userEmail.mockReturnValue({
-        email: 'test@test',
-      })
       req.flash.mockImplementation(() => [
         {
           date: '01/01/2019',
@@ -450,21 +478,29 @@ describe('Request a booking', () => {
         prison: 'HMP Wandsworth',
       }
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@justice.gov.uk', {
-        personalisation,
-        reference: null,
-      })
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        requestBookingCourtTemplateVLBAdminId,
+        'test@justice.gov.uk',
+        expect.objectContaining({
+          personalisation,
+          reference: null,
+        })
+      )
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@test', {
-        personalisation,
-        reference: null,
-      })
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        requestBookingCourtTemplateRequesterId,
+        'test@test',
+        expect.objectContaining({
+          personalisation: {
+            ...personalisation,
+            username: 'Staff member',
+          },
+          reference: null,
+        })
+      )
     })
 
     it('should stash appointment details and redirect to the confirmation page', async () => {
-      oauthApi.userEmail.mockReturnValue({
-        email: 'test@test',
-      })
       req.flash.mockImplementation(() => [
         {
           date: '01/01/2019',
