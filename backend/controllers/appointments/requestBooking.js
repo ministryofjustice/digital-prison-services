@@ -3,7 +3,7 @@ const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { validateComments } = require('../../shared/appointmentConstants')
 const {
-  notifications: { requestBookingCourtTemplateId, emails: emailConfig },
+  notifications: { requestBookingCourtTemplateVLBAdminId, requestBookingCourtTemplateRequesterId, emails: emailConfig },
   app: { videoLinkEnabledFor },
 } = require('../../config')
 
@@ -63,7 +63,7 @@ const getBookingDetails = req => extractObjectFromFlash({ req, key: 'requestBook
 const packBookingDetails = (req, data) => req.flash('requestBooking', data)
 
 const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }) => {
-  const sendEmail = (templateId, email, personalisation) =>
+  const sendEmail = ({ templateId, email, personalisation }) =>
     new Promise((resolve, reject) => {
       try {
         notifyClient.sendEmail(templateId, email, {
@@ -321,16 +321,24 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
 
       const { username } = req.session.userDetails
       const { email } = await oauthApi.userEmail(res.locals, username)
+      const { name } = await oauthApi.userDetails(res.locals, username)
 
       packBookingDetails(req, personalisation)
 
       const { vlb } = emailConfig[prison]
 
-      sendEmail(requestBookingCourtTemplateId, vlb, personalisation).catch(error => {
+      sendEmail({ templateId: requestBookingCourtTemplateVLBAdminId, email: vlb, personalisation }).catch(error => {
         logError(req.originalUrl, error, 'Failed to email the prison about a booking request')
       })
 
-      sendEmail(requestBookingCourtTemplateId, email, personalisation).catch(error => {
+      sendEmail({
+        templateId: requestBookingCourtTemplateRequesterId,
+        email,
+        personalisation: {
+          ...personalisation,
+          username: name,
+        },
+      }).catch(error => {
         logError(req.originalUrl, error, 'Failed to email the requester a copy of the booking')
       })
 
