@@ -69,17 +69,18 @@ describe('Request a booking', () => {
     describe('Check availability', () => {
       const validBody = {
         prison: 'test@test',
-        startTimeHours: '01',
-        startTimeMinutes: '00',
-        endTimeHours: '02',
-        endTimeMinutes: '00',
+        startTimeHours: '22',
+        startTimeMinutes: '05',
+        endTimeHours: '23',
+        endTimeMinutes: '05',
         comments: 'Test comment',
         preAppointmentRequired: 'no',
         postAppointmentRequired: 'no',
       }
 
       it('should stash the appointment details and redirect to offender details', async () => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
+        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
 
         await controller.checkAvailability(req, res)
@@ -87,10 +88,10 @@ describe('Request a booking', () => {
         expect(req.flash).toHaveBeenCalledWith(
           'requestBooking',
           expect.objectContaining({
-            date: '01/01/3019',
+            date: '29/03/2019',
             prison: 'test@test',
-            startTime: '3019-01-01T01:00:00',
-            endTime: '3019-01-01T02:00:00',
+            startTime: '2019-03-29T22:05:00',
+            endTime: '2019-03-29T23:05:00',
             preAppointmentRequired: 'no',
             postAppointmentRequired: 'no',
           })
@@ -158,20 +159,12 @@ describe('Request a booking', () => {
       })
 
       it('should validate that the end time comes after the start time', async () => {
-        const endTime = moment().subtract(2, 'hours')
-        const endTimeHours = endTime.hour()
-        const endTimeMinutes = endTime.minute()
-
-        const startTime = moment().add(5, 'minutes')
-        const startTimeHours = startTime.hour()
-        const startTimeMinutes = startTime.minute()
-
         req.body = {
           date: moment().format(DAY_MONTH_YEAR),
-          startTimeHours,
-          startTimeMinutes,
-          endTimeHours,
-          endTimeMinutes,
+          startTimeHours: '23',
+          startTimeMinutes: '00',
+          endTimeHours: '22',
+          endTimeMinutes: '00',
         }
 
         await controller.checkAvailability(req, res)
@@ -185,6 +178,40 @@ describe('Request a booking', () => {
           })
         )
       })
+    })
+
+    it('should validate full start and end time', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+      const date = moment().format(DAY_MONTH_YEAR)
+
+      req.body = {
+        prison: 'WWI',
+        date,
+        startTimeHours: '23',
+        endTimeHours: '22',
+        preAppointmentRequired: 'no',
+        postAppointmentRequired: 'no',
+      }
+
+      await controller.checkAvailability(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'requestBooking/requestBooking.njk',
+        expect.objectContaining({
+          errors: [
+            {
+              text: 'Select a full start time of the court hearing video link',
+              href: '#start-time-hours',
+            },
+            {
+              text: 'Select a full end time of the court hearing video link',
+              href: '#end-time-hours',
+            },
+          ],
+        })
+      )
+
+      Date.now.mockRestore()
     })
   })
 
