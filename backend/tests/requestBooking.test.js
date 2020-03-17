@@ -8,7 +8,7 @@ const { requestBookingFactory } = require('../controllers/appointments/requestBo
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { notifyClient } = require('../shared/notifyClient')
 
-const { requestBookingCourtTemplateId } = config.notifications
+const { requestBookingCourtTemplateVLBAdminId, requestBookingCourtTemplateRequesterId } = config.notifications
 
 describe('Request a booking', () => {
   let req
@@ -42,9 +42,13 @@ describe('Request a booking', () => {
     notifyClient.sendEmail = jest.fn()
     whereaboutsApi.getCourtLocations = jest.fn()
     oauthApi.userEmail = jest.fn()
+    oauthApi.userDetails = jest.fn()
     elite2Api.getAgencies = jest.fn()
 
     elite2Api.getAgencies.mockReturnValue([{ agencyId: 'WWI', description: 'HMP Wandsworth' }])
+
+    oauthApi.userEmail.mockReturnValue({ email: 'test@test' })
+    oauthApi.userDetails.mockReturnValue({ name: 'Staff member' })
 
     controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
   })
@@ -436,9 +440,6 @@ describe('Request a booking', () => {
     })
 
     it('should submit two emails, one for the prison and another for the current user', async () => {
-      oauthApi.userEmail.mockReturnValue({
-        email: 'test@test',
-      })
       req.flash.mockImplementation(() => [
         {
           date: '01/01/2019',
@@ -477,21 +478,29 @@ describe('Request a booking', () => {
         prison: 'HMP Wandsworth',
       }
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@justice.gov.uk', {
-        personalisation,
-        reference: null,
-      })
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        requestBookingCourtTemplateVLBAdminId,
+        'test@justice.gov.uk',
+        expect.objectContaining({
+          personalisation,
+          reference: null,
+        })
+      )
 
-      expect(notifyClient.sendEmail).toHaveBeenCalledWith(requestBookingCourtTemplateId, 'test@test', {
-        personalisation,
-        reference: null,
-      })
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
+        requestBookingCourtTemplateRequesterId,
+        'test@test',
+        expect.objectContaining({
+          personalisation: {
+            ...personalisation,
+            username: 'Staff member',
+          },
+          reference: null,
+        })
+      )
     })
 
     it('should stash appointment details and redirect to the confirmation page', async () => {
-      oauthApi.userEmail.mockReturnValue({
-        email: 'test@test',
-      })
       req.flash.mockImplementation(() => [
         {
           date: '01/01/2019',

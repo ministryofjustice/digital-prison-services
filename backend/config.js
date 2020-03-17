@@ -54,7 +54,8 @@ module.exports = {
     confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',
     confirmBookingCourtTemplateId: '7f44cd94-4a74-4b9d-aff8-386fec34bd2e',
     prisonCourtBookingTemplateId: '2b156491-3a7b-4bb4-ad1c-9ccfb4949fd9',
-    requestBookingCourtTemplateId: 'c1008f55-c228-4cad-b6fd-fe931c993855',
+    requestBookingCourtTemplateVLBAdminId: 'c1008f55-c228-4cad-b6fd-fe931c993855',
+    requestBookingCourtTemplateRequesterId: '02da54de-a564-4af8-8e6b-b141a85acf87',
     emails: {
       WWI: {
         omu: process.env.WANDSWORTH_OMU_EMAIL,
