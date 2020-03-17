@@ -36,13 +36,22 @@ const validate = ({
   const errors = []
 
   if (!selectMainAppointmentLocation)
-    errors.push({ text: 'Select a room for the main appointment', href: '#selectMainAppointmentLocation' })
+    errors.push({
+      text: 'Select a prison room for the court hearing video link',
+      href: '#selectMainAppointmentLocation',
+    })
 
   if (preAppointmentRequired === 'yes' && !selectPreAppointmentLocation)
-    errors.push({ text: 'Select a room for the pre appointment', href: '#selectPreAppointmentLocation' })
+    errors.push({
+      text: 'Select a prison room for the pre-court hearing briefing',
+      href: '#selectPreAppointmentLocation',
+    })
 
   if (postAppointmentRequired === 'yes' && !selectPostAppointmentLocation)
-    errors.push({ text: 'Select a room for the post appointment', href: '#selectPostAppointmentLocation' })
+    errors.push({
+      text: 'Select a prison room for the post-court hearing briefing',
+      href: '#selectPostAppointmentLocation',
+    })
 
   if (
     postAppointmentRequired === 'yes' &&
@@ -51,7 +60,7 @@ const validate = ({
     selectPostAppointmentLocation === selectMainAppointmentLocation
   ) {
     errors.push({
-      text: 'Select a room other than the one used for the main appointment',
+      text: 'Select a different room for the post-court hearing to the room for the court hearing briefing',
       href: '#selectPostAppointmentLocation',
     })
   }
@@ -63,7 +72,7 @@ const validate = ({
     selectPreAppointmentLocation === selectMainAppointmentLocation
   ) {
     errors.push({
-      text: 'Select a room other than the one used for the main appointment',
+      text: 'Select a different room for the pre-court hearing to the room for the court hearing briefing',
       href: '#selectPreAppointmentLocation',
     })
   }

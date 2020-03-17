@@ -44,7 +44,7 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
     const errors = []
 
     if (!nameOrNumber) {
-      errors.push({ text: 'Enter prisoner name or number', href: '#nameOrNumber' })
+      errors.push({ text: 'Enter a name or prison number', href: '#nameOrNumber' })
     }
 
     if (dobDay && dobMonth && dobYear) {
@@ -52,11 +52,11 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
       const dobIsTooEarly = dobIsValid ? dateOfBirth.isBefore(moment({ day: 1, month: 0, year: 1900 })) : true
 
       if (!dobIsValid) {
-        errors.push({ text: 'Enter a real date of birth', href: '#dobDay' }, { href: '#dobError' })
+        errors.push({ text: 'Enter a date of birth which is a real date', href: '#dobDay' }, { href: '#dobError' })
       }
 
       if (dobIsValid && !dobInThePast) {
-        errors.push({ text: 'Date of birth must be in the past', href: '#dobDay' }, { href: '#dobError' })
+        errors.push({ text: 'Enter a date of birth which is in the past', href: '#dobDay' }, { href: '#dobError' })
       }
 
       if (dobIsValid && dobIsTooEarly) {

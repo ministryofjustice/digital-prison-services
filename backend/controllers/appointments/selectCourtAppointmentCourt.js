@@ -101,7 +101,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
       req.flash('appointmentDetails', appointmentDetails)
 
       return renderTemplate(req, res, {
-        errors: [{ text: 'Select a court', href: '#court' }],
+        errors: [{ text: 'Select which court you are in', href: '#court' }],
       })
     }
 
