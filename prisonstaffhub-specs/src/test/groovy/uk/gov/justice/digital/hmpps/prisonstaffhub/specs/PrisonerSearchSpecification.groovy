@@ -32,7 +32,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
         submitButton.click()
 
         then: "I should be presented with an error which says I need to enter prisoner name or number"
-        errorSummary.text() == 'There is a problem\nEnter prisoner name or number'
+        errorSummary.text() == 'There is a problem\nEnter a name or prison number'
     }
 
     def "should handle missing dob fields"() {
