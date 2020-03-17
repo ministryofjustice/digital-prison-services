@@ -177,11 +177,11 @@ describe('Select court appointment rooms', () => {
         expect.objectContaining({
           errors: [
             {
-              text: 'Select a room other than the one used for the main appointment',
+              text: 'Select a different room for the post-court hearing to the room for the court hearing briefing',
               href: '#selectPostAppointmentLocation',
             },
             {
-              text: 'Select a room other than the one used for the main appointment',
+              text: 'Select a different room for the pre-court hearing to the room for the court hearing briefing',
               href: '#selectPreAppointmentLocation',
             },
           ],
@@ -213,9 +213,12 @@ describe('Select court appointment rooms', () => {
         'addAppointment/selectCourtAppointmentRooms.njk',
         expect.objectContaining({
           errors: [
-            { text: 'Select a room for the main appointment', href: '#selectMainAppointmentLocation' },
-            { text: 'Select a room for the pre appointment', href: '#selectPreAppointmentLocation' },
-            { text: 'Select a room for the post appointment', href: '#selectPostAppointmentLocation' },
+            { text: 'Select a prison room for the court hearing video link', href: '#selectMainAppointmentLocation' },
+            { text: 'Select a prison room for the pre-court hearing briefing', href: '#selectPreAppointmentLocation' },
+            {
+              text: 'Select a prison room for the post-court hearing briefing',
+              href: '#selectPostAppointmentLocation',
+            },
           ],
         })
       )

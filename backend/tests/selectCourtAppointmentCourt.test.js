@@ -88,7 +88,7 @@ describe('Select court appoinment court', () => {
         expect(res.render).toHaveBeenCalledWith(
           'addAppointment/selectCourtAppointmentCourt.njk',
           expect.objectContaining({
-            errors: [{ text: 'Select a court', href: '#court' }],
+            errors: [{ text: 'Select which court you are in', href: '#court' }],
           })
         )
       })

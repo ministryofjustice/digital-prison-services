@@ -95,7 +95,7 @@ describe('Prisoner search', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Enter prisoner name or number', href: '#nameOrNumber' }],
+          errors: [{ text: 'Enter a name or prison number', href: '#nameOrNumber' }],
           formValues: {},
           agencyOptions,
           homeUrl: '/videolink',
@@ -166,7 +166,7 @@ describe('Prisoner search', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Enter a real date of birth', href: '#dobDay' }, { href: '#dobError' }],
+          errors: [{ text: 'Enter a date of birth which is a real date', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
           agencyOptions,
           homeUrl: '/videolink',
@@ -186,7 +186,7 @@ describe('Prisoner search', () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Date of birth must be in the past', href: '#dobDay' }, { href: '#dobError' }],
+          errors: [{ text: 'Enter a date of birth which is in the past', href: '#dobDay' }, { href: '#dobError' }],
           formValues: req.body,
           agencyOptions,
           homeUrl: '/videolink',
@@ -214,7 +214,6 @@ describe('Prisoner search', () => {
       })
     })
 
-    // Complete as part of NN-2319
     describe('when the form entry is valid', () => {
       it('should submit the form correctly', async () => {
         req.body = {
