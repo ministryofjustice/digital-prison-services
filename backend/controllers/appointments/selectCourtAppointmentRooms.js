@@ -165,7 +165,10 @@ const selectCourtAppointmentRoomsFactory = ({
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment`, homeUrl: '/videolink' })
+      res.render('courtServiceError.njk', {
+        url: `/${agencyId}/offenders/${offenderNo}/add-appointment`,
+        homeUrl: '/videolink',
+      })
     }
   }
 
@@ -287,7 +290,7 @@ const selectCourtAppointmentRoomsFactory = ({
       return next()
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
+      return res.render('courtServiceError.njk', { url: `/${agencyId}/offenders/${offenderNo}/add-appointment` })
     }
   }
 

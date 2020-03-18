@@ -14,6 +14,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId, authSource } = req.session.userDetails
+    const prisonUser = authSource === 'nomis'
 
     try {
       const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
@@ -120,7 +121,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       if (isVideoLinkBooking(appointmentType)) {
         res.render('videolinkBookingConfirmHearing.njk', {
           title: 'The video link has been booked',
-          prisonUser: authSource === 'nomis',
+          prisonUser,
           prisonerSearchLink: '/prisoner-search',
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           offender: {
@@ -138,7 +139,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           court: {
             courtLocation: details.court,
           },
-          homeUrl: authSource === 'nomis' ? dpsUrl : '/videolink',
+          homeUrl: prisonUser ? dpsUrl : '/videolink',
         })
       } else {
         res.render('confirmAppointments.njk', {
@@ -153,10 +154,15 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       }
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.render('error.njk', {
-        url: authSource === 'nomis' ? `${dpsUrl}offenders/${offenderNo}` : '/prisoner-search',
-        homeUrl: authSource === 'nomis' ? dpsUrl : '/videolink',
-      })
+      const pageData = {
+        url: prisonUser ? `${dpsUrl}offenders/${offenderNo}` : '/prisoner-search',
+        homeUrl: prisonUser ? dpsUrl : '/videolink',
+      }
+      if (prisonUser) {
+        res.render('error.njk', pageData)
+      } else {
+        res.render('courtServiceError.njk', pageData)
+      }
     }
   }
   return { index }

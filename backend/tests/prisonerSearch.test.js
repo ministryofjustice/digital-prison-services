@@ -72,7 +72,7 @@ describe('Prisoner search', () => {
         await controller.index(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
+        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
       })
 
       it('should render the error template if there is an error retrieving agencies', async () => {
@@ -80,7 +80,7 @@ describe('Prisoner search', () => {
         await controller.index(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
+        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
       })
     })
   })

@@ -35,7 +35,7 @@ describe('Confirm appointments', () => {
 
     req.flash = jest.fn()
     req.params = { offenderNo: 'A12345' }
-    req.session = { userDetails: {} }
+    req.session = { userDetails: { authSource: 'nomis' } }
     req.originalUrl = 'http://localhost'
 
     res.render = jest.fn()
@@ -96,9 +96,10 @@ describe('Confirm appointments', () => {
     expect(res.render).toHaveBeenCalledWith(
       'videolinkBookingConfirmHearing.njk',
       expect.objectContaining({
+        homeUrl: 'http://localhost:3000/',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
         prisonerSearchLink: '/prisoner-search',
-        prisonUser: false,
+        prisonUser: true,
         title: 'The video link has been booked',
         offender: {
           name: 'John Doe',
@@ -257,6 +258,32 @@ describe('Confirm appointments', () => {
       new Error('Appointment details are missing'),
       'Sorry, the service is unavailable'
     )
-    expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner-search', homeUrl: '/videolink' })
+    expect(res.render).toHaveBeenCalledWith('error.njk', {
+      url: 'http://localhost:3000/offenders/A12345',
+      homeUrl: 'http://localhost:3000/',
+    })
+  })
+
+  it('should throw and log a court service error for a court user when appointment details are missing from flash', async () => {
+    const logError = jest.fn()
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError,
+    })
+    req.flash.mockImplementation(() => [])
+    req.session.userDetails.authSource = 'auth'
+
+    await index(req, res)
+
+    expect(logError).toHaveBeenCalledWith(
+      'http://localhost',
+      new Error('Appointment details are missing'),
+      'Sorry, the service is unavailable'
+    )
+    expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', {
+      url: '/prisoner-search',
+      homeUrl: '/videolink',
+    })
   })
 })

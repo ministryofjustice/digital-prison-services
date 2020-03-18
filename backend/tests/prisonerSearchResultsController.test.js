@@ -168,7 +168,7 @@ describe('Prisoner search results', () => {
         await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
+        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
       })
 
       it('should render the error template if there is an error with global search', async () => {
@@ -177,7 +177,7 @@ describe('Prisoner search results', () => {
         await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/videolink' })
+        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
       })
     })
   })

@@ -145,7 +145,7 @@ describe('Select court appointment rooms', () => {
         new Error('Appointment details are missing'),
         'Sorry, the service is unavailable'
       )
-      expect(res.render).toHaveBeenCalledWith('error.njk', {
+      expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', {
         url: '/MDI/offenders/A12345/add-appointment',
         homeUrl: '/videolink',
       })
@@ -292,7 +292,7 @@ describe('Select court appointment rooms', () => {
         new Error('Appointment details are missing'),
         'Sorry, the service is unavailable'
       )
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/MDI/offenders/A12345/add-appointment' })
+      expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/MDI/offenders/A12345/add-appointment' })
     })
 
     it('should pack appointment details back into flash before rendering', async () => {
