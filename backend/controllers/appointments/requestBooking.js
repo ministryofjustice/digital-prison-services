@@ -86,7 +86,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
   }
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-    return res.render('error.njk', { url: req.originalUrl })
+    return res.render('courtServiceError.njk', { url: req.originalUrl })
   }
 
   const renderTemplate = async (req, res, pageData, template) => {

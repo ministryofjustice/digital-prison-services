@@ -77,6 +77,7 @@ class LoginSpecification extends BrowserReportingSpec {
 
         then: 'My credentials are accepted and I am shown the Video Link homepage'
         at VideoLinkPage
+        courtServiceFooter.displayed
     }
 
     def "Log out"() {

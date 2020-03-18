@@ -73,7 +73,7 @@ describe('Add court appointment', () => {
 
     await controller.index(req, res)
 
-    expect(res.render).toHaveBeenCalledWith('error.njk', expect.objectContaining({}))
+    expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', expect.objectContaining({}))
     expect(logError).toHaveBeenCalledWith(undefined, new Error('Network error'), 'Sorry, the service is unavailable')
   })
 

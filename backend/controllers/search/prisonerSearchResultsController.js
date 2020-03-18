@@ -53,6 +53,6 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
-    return res.render('error.njk', { url: '/', homeUrl: '/videolink' })
+    return res.render('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
   }
 }

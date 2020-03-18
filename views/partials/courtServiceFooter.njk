@@ -1,0 +1,15 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{{ 
+  govukFooter({
+    meta: {
+      items: [
+        {
+          href: oauthUrl + 'contact',
+          text: "Contact"
+        }
+      ]
+    },
+    classes: "govuk-!-display-none-print qa-court-service-footer"
+  }) 
+}}

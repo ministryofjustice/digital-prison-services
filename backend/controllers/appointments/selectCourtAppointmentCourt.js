@@ -32,7 +32,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
     const { offenderNo, agencyId } = req.params
 
-    return res.render('error.njk', {
+    return res.render('courtServiceError.njk', {
       url: `/${agencyId}/offenders/${offenderNo}/add-appointment`,
       homeUrl: '/videolink',
     })
