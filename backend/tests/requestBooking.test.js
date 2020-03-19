@@ -7,8 +7,13 @@ const config = require('../config')
 const { requestBookingFactory } = require('../controllers/appointments/requestBooking')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { notifyClient } = require('../shared/notifyClient')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 
 const { requestBookingCourtTemplateVLBAdminId, requestBookingCourtTemplateRequesterId } = config.notifications
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 describe('Request a booking', () => {
   let req
@@ -614,6 +619,12 @@ describe('Request a booking', () => {
       }
       req.flash.mockReturnValue([details])
       await controller.confirm(req, res)
+
+      expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
+        'VLB Appointments',
+        'Video link requested for London',
+        'Pre: Yes | Post: Yes'
+      )
 
       expect(res.render).toHaveBeenCalledWith('requestBooking/requestBookingConfirmation.njk', {
         details: {

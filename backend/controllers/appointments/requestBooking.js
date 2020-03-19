@@ -6,6 +6,7 @@ const {
   notifications: { requestBookingCourtTemplateVLBAdminId, requestBookingCourtTemplateRequesterId, emails: emailConfig },
   app: { videoLinkEnabledFor },
 } = require('../../config')
+const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const isValidNumber = number => Number.isSafeInteger(Number.parseInt(number, 10))
 
@@ -361,10 +362,20 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
       endTime,
       comment,
       date,
+      preAppointmentRequired,
+      postAppointmentRequired,
       preHearingStartAndEndTime,
       postHearingStartAndEndTime,
       hearingLocation,
     } = requestDetails
+
+    raiseAnalyticsEvent(
+      'VLB Appointments',
+      `Video link requested for ${hearingLocation}`,
+      `Pre: ${preAppointmentRequired === 'yes' ? 'Yes' : 'No'} | Post: ${
+        postAppointmentRequired === 'yes' ? 'Yes' : 'No'
+      }`
+    )
 
     return res.render('requestBooking/requestBookingConfirmation.njk', {
       user: { displayName: req.session.userDetails.name },

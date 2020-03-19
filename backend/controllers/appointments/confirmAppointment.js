@@ -3,6 +3,7 @@ const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
+const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -141,6 +142,12 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           },
           homeUrl: prisonUser ? dpsUrl : '/videolink',
         })
+
+        raiseAnalyticsEvent(
+          'VLB Appointments',
+          `Video link booked for ${details.court}`,
+          `Pre: ${preAppointment ? 'Yes' : 'No'} | Post: ${postAppointment ? 'Yes' : 'No'}`
+        )
       } else {
         res.render('confirmAppointments.njk', {
           title,
