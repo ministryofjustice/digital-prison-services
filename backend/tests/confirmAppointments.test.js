@@ -1,4 +1,9 @@
 const confirmAppointments = require('../controllers/appointments/confirmAppointment')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
+
+jest.mock('../raiseAnalyticsEvent', () => ({
+  raiseAnalyticsEvent: jest.fn(),
+}))
 
 describe('Confirm appointments', () => {
   const elite2Api = {}
@@ -15,6 +20,7 @@ describe('Confirm appointments', () => {
     endTime: '2017-10-10T14:00',
     recurring: 'No',
     comment: 'Test',
+    court: 'London',
   }
 
   beforeEach(() => {
@@ -66,6 +72,7 @@ describe('Confirm appointments', () => {
           endTime: '14:00',
           recurring: 'No',
           comment: 'Test',
+          court: 'London',
         },
       })
     )
@@ -93,6 +100,12 @@ describe('Confirm appointments', () => {
 
     await index(req, res)
 
+    expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
+      'VLB Appointments',
+      'Video link booked for London',
+      'Pre: Yes | Post: No'
+    )
+
     expect(res.render).toHaveBeenCalledWith(
       'videolinkBookingConfirmHearing.njk',
       expect.objectContaining({
@@ -116,9 +129,7 @@ describe('Confirm appointments', () => {
           'post-court hearing briefing': 'None',
           'pre-court hearing briefing': 'Room 1 - 10:45 to 11:00',
         },
-        court: {
-          courtLocation: undefined,
-        },
+        court: { courtLocation: 'London' },
       })
     )
   })
@@ -157,6 +168,7 @@ describe('Confirm appointments', () => {
           howOften: 'Fortnightly',
           numberOfAppointments: '2',
           endDate: 'Tuesday 24 October 2017',
+          court: 'London',
         },
       })
     )
