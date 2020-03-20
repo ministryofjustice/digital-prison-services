@@ -12,7 +12,6 @@
     "@contentful/rich-text-types": "^13.0.0",
     "@govuk-react/back-link": "^0.7.0",
     "@govuk-react/button": "^0.7.0",
-    "@govuk-react/checkbox": "^0.6.0",
     "@govuk-react/constants": "^0.7.0",
     "@govuk-react/date-field": "^0.7.0",
     "@govuk-react/error-summary": "^0.7.1",
