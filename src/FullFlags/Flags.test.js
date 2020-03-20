@@ -107,6 +107,32 @@ describe('Flags.', () => {
         )
       ).toEqual(true)
     })
+
+    it('RNO121 alert', () => {
+      const wrapper = shallow(<Flags alerts={['RNO121']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="no-one-to-one-status">NO ONE-TO-ONE</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
+
+    it('RCON alert', () => {
+      const wrapper = shallow(<Flags alerts={['RCON']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="conflict-status">CONFLICT</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
   })
   describe('Alerts without links', () => {
     it('HA alert', () => {

@@ -35,6 +35,8 @@ const Flags = ({ alerts, category, offenderNo }) => {
       {alerts.includes('XEL') && withLink(<span className="elist-status">E&#x2011;LIST</span>)}
       {alerts.includes('XRF') && withLink(<span className="risk-females-status">RISK TO FEMALES</span>)}
       {alerts.includes('XTACT') && withLink(<span className="tact-status">TACT</span>)}
+      {alerts.includes('RNO121') && withLink(<span className="no-one-to-one-status">NO ONE-TO-ONE</span>)}
+      {alerts.includes('RCON') && withLink(<span className="conflict-status">CONFLICT</span>)}
       {(category === 'A' || category === 'E') && <span className="cata-status">CAT&nbsp;A</span>}
       {category === 'H' && <span className="cata-high-status">CAT&nbsp;A&nbsp;High</span>}
       {category === 'P' && <span className="cata-prov-status">CAT&nbsp;A&nbsp;Prov</span>}
