@@ -79,4 +79,16 @@
     color: #2b88c8;
     border-color: #2b88c8;
   }
+
+  .conflict-status {
+    @extend %status-style;
+    color: #800000;
+    border-color: #800000;
+  }
+  
+  .no-one-to-one-status {
+    @extend %status-style;
+    color: #903;
+    border-color: #903;
+  }
 }

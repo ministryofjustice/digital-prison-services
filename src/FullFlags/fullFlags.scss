@@ -92,6 +92,18 @@
     border-color: #00437B;
   }
 
+  .conflict-status {
+    @extend %status-style;
+    color: #800000;
+    border-color: #800000;
+  }
+  
+  .no-one-to-one-status {
+    @extend %status-style;
+    color: #903;
+    border-color: #903;
+  }
+
   @media (min-width: 481px) {
     .inline-header-large {
       display: inline-block;

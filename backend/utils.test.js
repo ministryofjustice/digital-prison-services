@@ -248,6 +248,14 @@ describe('isViewableFlag', () => {
     expect(isViewableFlag('PEEP')).toBe(true)
   })
 
+  it('should allow RNO121 to be a viewable flag', () => {
+    expect(isViewableFlag('RNO121')).toBe(true)
+  })
+
+  it('should allow RCON to be a viewable flag', () => {
+    expect(isViewableFlag('RCON')).toBe(true)
+  })
+
   it('should not allow any non specified alerts to be a viewable flag', () => {
     expect(isViewableFlag('ROH')).toBe(false)
   })
