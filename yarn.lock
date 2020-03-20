@@ -787,17 +787,6 @@
     govuk-colours "^1.0.3"
     polished "^2.3.3"
 
-"@govuk-react/checkbox@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/checkbox/-/checkbox-0.6.0.tgz#2d90e1a4df0639815638c7cfa4191776a06d93ef"
-  integrity sha512-hqpcTfGdF1lilDDl/CeiZWaogTstXKfra0+y5veSMhRZKEvPZlu5q0XbwrefbIoL0eqIhp03vaFtQHWXo5BsTA==
-  dependencies:
-    "@govuk-react/constants" "^0.6.0"
-    "@govuk-react/hint-text" "^0.6.0"
-    "@govuk-react/hoc" "^0.6.0"
-    "@govuk-react/lib" "^0.6.0"
-    govuk-colours "^1.0.3"
-
 "@govuk-react/constants@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@govuk-react/constants/-/constants-0.6.0.tgz#8dd84556d0524019c15e883228abf3a0707f3768"
@@ -893,15 +882,6 @@
     "@govuk-react/constants" "^0.7.1"
     "@govuk-react/lib" "^0.7.1"
 
-"@govuk-react/hint-text@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/hint-text/-/hint-text-0.6.0.tgz#c1c77a6d5d8795b79f906126c76a3921022d07d8"
-  integrity sha512-+0CEQptakmNOIZVLiA46mzHXs8x2id1BjiOvPEPxeI4cO95c4H2QBxAxJ5swGK5HVPpwUYeb8jCPdxEHL/Xa+g==
-  dependencies:
-    "@govuk-react/constants" "^0.6.0"
-    "@govuk-react/lib" "^0.6.0"
-    govuk-colours "^1.0.3"
-
 "@govuk-react/hint-text@^0.7.0", "@govuk-react/hint-text@^0.7.1":
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@govuk-react/hint-text/-/hint-text-0.7.1.tgz#5b0a920b7fb72638ecf5b2c0cb518a302b62a782"
@@ -909,17 +889,6 @@
   dependencies:
     "@govuk-react/constants" "^0.7.1"
     "@govuk-react/lib" "^0.7.1"
-    govuk-colours "^1.0.3"
-
-"@govuk-react/hoc@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/hoc/-/hoc-0.6.0.tgz#0ed10d21a3d4e74b6f7bbe3e68b43a6857243066"
-  integrity sha512-xoZi9OK//Cj6gRFEC2ORPXpnKrGAoloTnE8KM6i5Kn2yPFk7vDzK74wbWbOIFaSZWmmEghaeHPwzWHMZ1p6H5Q==
-  dependencies:
-    "@govuk-react/constants" "^0.6.0"
-    "@govuk-react/icons" "^0.6.0"
-    "@govuk-react/lib" "^0.6.0"
-    "@govuk-react/link" "^0.6.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/hoc@^0.7.1":
@@ -931,14 +900,6 @@
     "@govuk-react/icons" "^0.7.1"
     "@govuk-react/lib" "^0.7.1"
     "@govuk-react/link" "^0.7.1"
-    govuk-colours "^1.0.3"
-
-"@govuk-react/icons@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/icons/-/icons-0.6.0.tgz#5ea423fcbcd8e857708f39e84e486739443185d4"
-  integrity sha512-Dl3UjFI7OJZVmclLjg2CwLxKYI/Vnn18HwdoVFdMrPTNUruPR/vw5EJoMmniJJPiMjFAiHSpsOVDOKVGZNkPrA==
-  dependencies:
-    "@govuk-react/constants" "^0.6.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/icons@^0.7.0", "@govuk-react/icons@^0.7.1":
@@ -1017,14 +978,6 @@
   integrity sha512-JbfzTeLblTEFcA7vIisAuHFvJRaQ8VD8rHI6qkV0IFu/pTwCe/x/EtXE7SYSBS8fEgHrki6QJ83q/5sF4vTEoQ==
   dependencies:
     "@govuk-react/constants" "^0.7.1"
-    govuk-colours "^1.0.3"
-
-"@govuk-react/link@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@govuk-react/link/-/link-0.6.0.tgz#ea56d0de3ef13839e4c1663145f68323883450a3"
-  integrity sha512-dhtHFSI0uxq9XWTT9QxYkRfJNlR6+FlsxQP2ARNJNyyNnB35CmTpq2GTaXKP5a48jQ48EHx8IU15UZ+/RWd58Q==
-  dependencies:
-    "@govuk-react/lib" "^0.6.0"
     govuk-colours "^1.0.3"
 
 "@govuk-react/link@^0.7.1":
@@ -4321,11 +4274,6 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-final-form-calculate@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/final-form-calculate/-/final-form-calculate-1.3.1.tgz#463089114245afa97fea94712bfbfca11da8413e"
-  integrity sha512-vZCvQ08w9FIoHLkZMcJSIXQr5TAVLxHfLD0thmm50zcNyJESruqhgvurSjWYPLoJGnIgbIb94Rumdg5ZXX5WiQ==
-
 final-form@^4.11.0:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.11.0.tgz#81750bda11b82c3ddf7b27092f29ebe427f8a560"
@@ -5206,10 +5154,6 @@ ignore@^3.3.5:
 ignore@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
-
-immutable@^3.8.2:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
 import-fresh@^2.0.0:
   version "2.0.0"
@@ -6251,20 +6195,6 @@ jsonwebtoken@8.2.1:
     ms "^2.1.1"
     xtend "^4.0.1"
 
-jsonwebtoken@^8.2.1:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.4.0.tgz#8757f7b4cb7440d86d5e2f3becefa70536c8e46a"
-  dependencies:
-    jws "^3.1.5"
-    lodash.includes "^4.3.0"
-    lodash.isboolean "^3.0.3"
-    lodash.isinteger "^4.0.4"
-    lodash.isnumber "^3.0.3"
-    lodash.isplainobject "^4.0.6"
-    lodash.isstring "^4.0.1"
-    lodash.once "^4.0.0"
-    ms "^2.1.1"
-
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -6297,7 +6227,7 @@ jwa@^1.4.1:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
-jws@^3.1.4, jws@^3.1.5:
+jws@^3.1.4:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
   integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
@@ -6877,7 +6807,7 @@ minimist@0.0.8:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
   integrity sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=
 
-minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.2:
+minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
@@ -6944,13 +6874,7 @@ moment-business-days@^1.1.3:
   resolved "https://registry.yarnpkg.com/moment-business-days/-/moment-business-days-1.1.3.tgz#2922c3ffab8640a84dd27484336a5e0b3c07175a"
   integrity sha512-VfpcLQxVWJ9ymq4ljaqPdzoco01kOJblX9sbfOCYguBvqCvVPYDJQTdez49a2gtSoSK8AjL8JfvLvmoQlrBMiQ==
 
-moment-timezone@^0.5.21:
-  version "0.5.23"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.23.tgz#7cbb00db2c14c71b19303cb47b0fb0a6d8651463"
-  dependencies:
-    moment ">= 2.9.0"
-
-"moment@>= 2.9.0", moment@^2.10.6, moment@^2.22.2, moment@^2.24.0:
+moment@^2.10.6, moment@^2.22.2, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
