@@ -1,5 +1,5 @@
 const express = require('express')
-const { selectCourtAppointmentCourtFactory } = require('./selectCourtAppointmentCourt')
+const { selectCourtAppointmentCourtFactory } = require('../../controllers/appointments/selectCourtAppointmentCourt')
 
 const router = express.Router({ mergeParams: true })
 

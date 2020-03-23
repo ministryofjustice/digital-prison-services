@@ -1,4 +1,4 @@
-import { movementsServiceFactory } from '../controllers/attendance/movementsService'
+import { movementsServiceFactory } from '../services/movementsService'
 
 describe('Movement service', () => {
   const eliteApi = {}

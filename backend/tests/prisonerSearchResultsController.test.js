@@ -1,4 +1,4 @@
-const prisonerSearchResultsController = require('../controllers/search/prisonerSearchResultsController')
+const prisonerSearchResultsController = require('../controllers/search/prisonerSearchResults')
 const { serviceUnavailableMessage } = require('../common-messages')
 const config = require('../config')
 

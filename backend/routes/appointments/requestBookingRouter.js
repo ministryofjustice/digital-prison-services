@@ -1,5 +1,5 @@
 const express = require('express')
-const { requestBookingFactory } = require('./requestBooking')
+const { requestBookingFactory } = require('../../controllers/appointments/requestBooking')
 
 const router = express.Router({ mergeParams: true })
 

@@ -1,4 +1,4 @@
-const viewAppointmentsController = require('../controllers/appointments/viewAppointmentsController.js')
+const viewAppointmentsRouter = require('../routes/appointments/viewAppointmentsRouter.js')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('View appointments', () => {
@@ -39,7 +39,7 @@ describe('View appointments', () => {
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue([])
 
-    controller = viewAppointmentsController({ elite2Api, whereaboutsApi, logError })
+    controller = viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError })
   })
 
   beforeAll(() => {

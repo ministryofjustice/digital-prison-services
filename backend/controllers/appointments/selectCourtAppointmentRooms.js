@@ -5,7 +5,7 @@ const {
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { toAppointmentDetailsSummary } = require('./appointmentsService')
+const { toAppointmentDetailsSummary } = require('../../services/appointmentsService')
 const { properCaseName } = require('../../utils')
 
 const unpackAppointmentDetails = req => {

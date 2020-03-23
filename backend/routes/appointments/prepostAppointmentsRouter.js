@@ -1,7 +1,7 @@
 const express = require('express')
-const prepostAppointments = require('./prepostAppoinments')
-const { appointmentsServiceFactory } = require('./appointmentsService')
-const existingEventsServiceFactory = require('../attendance/existingEventsService')
+const prepostAppointments = require('../../controllers/appointments/prepostAppoinments')
+const { appointmentsServiceFactory } = require('../../services/appointmentsService')
+const existingEventsServiceFactory = require('../../services/existingEventsService')
 
 const router = express.Router({ mergeParams: true })
 

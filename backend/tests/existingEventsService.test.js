@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { DATE_ONLY_FORMAT_SPEC } = require('../../src/dateHelpers')
-const existingEventsService = require('../controllers/attendance/existingEventsService')
+const existingEventsService = require('../services/existingEventsService')
 
 describe('existing events', () => {
   const elite2Api = {}

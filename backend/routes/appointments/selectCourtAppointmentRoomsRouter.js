@@ -1,7 +1,7 @@
 const express = require('express')
-const { selectCourtAppointmentRoomsFactory } = require('./selectCourtAppointmentRooms')
-const { appointmentsServiceFactory } = require('./appointmentsService')
-const existingEventsServiceFactory = require('../attendance/existingEventsService')
+const { selectCourtAppointmentRoomsFactory } = require('../../controllers/appointments/selectCourtAppointmentRooms')
+const { appointmentsServiceFactory } = require('../../services/appointmentsService')
+const existingEventsServiceFactory = require('../../services/existingEventsService')
 const availableSlotsService = require('../../services/availableSlotsService')
 const checkAppointmentRooms = require('../../middleware/checkAppointmentRooms')
 
