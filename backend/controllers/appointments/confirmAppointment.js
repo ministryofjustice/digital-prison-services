@@ -102,21 +102,19 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           duration: prepostDurations[postAppointment.duration],
         }
 
-        prepostData['pre-court hearing briefing'] =
-          (preAppointmentData &&
-            `${preAppointmentData.locationDescription} - ${moment(
-              preAppointment.startTime,
-              DATE_TIME_FORMAT_SPEC
-            ).format('HH:mm')} to ${moment(preAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
-          'None'
+        if (preAppointmentData) {
+          prepostData['pre-court hearing briefing'] = `${preAppointmentData.locationDescription} - ${moment(
+            preAppointment.startTime,
+            DATE_TIME_FORMAT_SPEC
+          ).format('HH:mm')} to ${moment(preAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`
+        }
 
-        prepostData['post-court hearing briefing'] =
-          (postAppointmentData &&
-            `${postAppointmentData.locationDescription} - ${moment(
-              postAppointment.startTime,
-              DATE_TIME_FORMAT_SPEC
-            ).format('HH:mm')} to ${moment(postAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`) ||
-          'None'
+        if (postAppointmentData) {
+          prepostData['post-court hearing briefing'] = `${postAppointmentData.locationDescription} - ${moment(
+            postAppointment.startTime,
+            DATE_TIME_FORMAT_SPEC
+          ).format('HH:mm')} to ${moment(postAppointment.endTime, DATE_TIME_FORMAT_SPEC).format('HH:mm')}`
+        }
       }
 
       if (isVideoLinkBooking(appointmentType)) {
