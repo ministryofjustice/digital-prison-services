@@ -130,8 +130,8 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         assert startTime == '10:55'
         assert endTime == '11:55'
         assert date == date.toString()
-        assert legalBriefingBefore == 'None'
-        assert legalBriefingAfter == 'None'
+        assert $('.qa-preCourtHearingBriefing-value').displayed == false
+        assert $('.qa-postCourtHearingBriefing-value').displayed == false
         assert courtLocation == 'London'
     }
 

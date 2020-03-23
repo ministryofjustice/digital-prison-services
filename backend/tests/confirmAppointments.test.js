@@ -126,7 +126,6 @@ describe('Confirm appointments', () => {
           comments: 'Test',
         },
         prepostData: {
-          'post-court hearing briefing': 'None',
           'pre-court hearing briefing': 'Room 1 - 10:45 to 11:00',
         },
         court: { courtLocation: 'London' },
