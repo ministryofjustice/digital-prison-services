@@ -61,6 +61,8 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
         assert startTime == '10:55'
         assert endTime == '11:55'
         assert date == date.toString()
+        assert $('.qa-preCourtHearingBriefing-value').text() == '10:35 to 10:55'
+        assert $('.qa-postCourtHearingBriefing-value').text() == '11:55 to 12:15'
 
         and: "I select a court"
         selectCourtForm.court = 'london'
@@ -109,6 +111,8 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
         and: "I am redirected to select court page"
         at SelectCourtAppointmentCourtPage
+        assert $('.qa-preCourtHearingBriefing-value').displayed == false
+        assert $('.qa-postCourtHearingBriefing-value').displayed == false
 
         and: "I select a court"
         selectCourtForm.court = 'london'
