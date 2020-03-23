@@ -9,7 +9,7 @@ const { properCaseName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
 const { prepostDurations } = require('../../shared/appointmentConstants')
-const { toAppointmentDetailsSummary, isVideoLinkBooking } = require('./appointmentsService')
+const { toAppointmentDetailsSummary, isVideoLinkBooking } = require('../../services/appointmentsService')
 
 const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
   const index = async (req, res) => {

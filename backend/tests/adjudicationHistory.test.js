@@ -5,7 +5,7 @@ jest.mock('shortid', () => ({
   generate: () => '123',
 }))
 
-const adjudicationHistory = require('../controllers/adjudicationHistoryService')(elite2Api)
+const adjudicationHistory = require('../controllers/adjudicationHistory')(elite2Api)
 
 beforeEach(() => {
   elite2Api.getAdjudicationDetails = jest.fn()

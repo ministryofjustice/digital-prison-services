@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const { largePrisonersListed, largePrisonersListedWithCell } = require('./bulkAppointmentsTestData')
-const bulkAppointmentsSlipsController = require('../controllers/appointments/bulkAppointmentsSlipsController')
+const bulkAppointmentsSlipsRouter = require('../routes/appointments/bulkAppointmentsSlipsRouter')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 let req
@@ -24,7 +24,7 @@ beforeEach(() => {
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
-  controller = bulkAppointmentsSlipsController({ elite2Api, logError })
+  controller = bulkAppointmentsSlipsRouter({ elite2Api, logError })
 })
 
 const appointmentDetails = {

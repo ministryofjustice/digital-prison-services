@@ -1,4 +1,4 @@
-const existingEventsService = require('./existingEventsService')
+const existingEventsService = require('../../services/existingEventsService')
 const { properCaseName } = require('../../utils')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {

@@ -1,5 +1,5 @@
 const express = require('express')
-const { prisonerSearchFactory } = require('./prisonerSearch')
+const { prisonerSearchFactory } = require('../controllers/search/prisonerSearch')
 
 const router = express.Router({ mergeParams: true })
 

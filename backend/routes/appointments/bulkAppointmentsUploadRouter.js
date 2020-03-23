@@ -1,8 +1,8 @@
 const express = require('express')
 const { isBinaryFileSync } = require('isbinaryfile')
 const fs = require('fs')
-const { bulkAppointmentsUploadFactory } = require('./bulkAppointmentsUpload')
-const { offenderLoaderFactory } = require('../offender-loader')
+const { bulkAppointmentsUploadFactory } = require('../../controllers/appointments/bulkAppointmentsUpload')
+const { offenderLoaderFactory } = require('../../controllers/offender-loader')
 const { csvParserService } = require('../../csv-parser')
 
 const router = express.Router()

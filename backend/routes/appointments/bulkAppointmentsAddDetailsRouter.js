@@ -1,6 +1,6 @@
 const express = require('express')
-const { bulkAppointmentsAddDetailsFactory } = require('./bulkAppointmentsAddDetails')
-const { appointmentsServiceFactory } = require('./appointmentsService')
+const { bulkAppointmentsAddDetailsFactory } = require('../../controllers/appointments/bulkAppointmentsAddDetails')
+const { appointmentsServiceFactory } = require('../../services/appointmentsService')
 
 const router = express.Router()
 

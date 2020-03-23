@@ -1,5 +1,5 @@
 const nock = require('nock')
-const { serviceCheckFactory } = require('./healthCheck')
+const { serviceCheckFactory } = require('../controllers/healthCheck')
 
 describe('service healthcheck', () => {
   const healthcheck = serviceCheckFactory('externalService', 'http://test-service.com/ping')

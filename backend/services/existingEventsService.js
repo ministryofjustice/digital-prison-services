@@ -1,7 +1,7 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
-const { switchDateFormat, getTime, sortByDateTime } = require('../../utils')
-const { appointmentsServiceFactory } = require('../appointments/appointmentsService')
+const { DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { switchDateFormat, getTime, sortByDateTime } = require('../utils')
+const { appointmentsServiceFactory } = require('./appointmentsService')
 
 const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
   const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription

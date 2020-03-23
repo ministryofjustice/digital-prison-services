@@ -6,8 +6,8 @@ const { logError } = require('./logError')
 const config = require('./config')
 
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
-const adjudicationHistoryFactory = require('./controllers/adjudicationHistoryService')
-const offenderServiceFactory = require('./controllers/attendance/offenderService')
+const adjudicationHistoryFactory = require('./controllers/adjudicationHistory')
+const offenderServiceFactory = require('./services/offenderService')
 const { offenderActivitesFactory } = require('./controllers/attendance/offenderActivities')
 const { userLocationsFactory } = require('./controllers/userLocations')
 const { userMeFactory } = require('./controllers/userMe')
@@ -19,41 +19,41 @@ const iepDetailsFactory = require('./controllers/incentiveLevelDetails').getIepD
 const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
 const { attendanceFactory } = require('./controllers/attendance/attendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
-const { movementsServiceFactory } = require('./controllers/attendance/movementsService')
+const { movementsServiceFactory } = require('./services/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { prisonerImageFactory } = require('./controllers/prisonerImage')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
-const { appointmentsServiceFactory } = require('./controllers/appointments/appointmentsService')
+const { appointmentsServiceFactory } = require('./services/appointmentsService')
 const { alertFactory } = require('./controllers/alert')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 
-const bulkAppointmentsAddDetailsController = require('./controllers/appointments/bulkAppointmentsAddDetailsController')
-const bulkAppointmentsConfirmController = require('./controllers/appointments/bulkAppointmentsConfirmController')
-const bulkAppointmentsInvalidNumbersController = require('./controllers/appointments/bulkAppointmentsInvalidNumbersController')
-const bulkAppointmentsAddedController = require('./controllers/appointments/bulkAppointmentsAddedController')
-const bulkAppointmentsSlipsController = require('./controllers/appointments/bulkAppointmentsSlipsController')
-const bulkAppointmentsUploadController = require('./controllers/appointments/bulkAppointmentsUploadController')
-const bulkAppointmentsClashesController = require('./controllers/appointments/bulkAppointmentsClashesController')
+const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
+const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
+const bulkAppointmentsInvalidNumbersRouter = require('./routes/appointments/bulkAppointmentsInvalidNumbersRouter')
+const bulkAppointmentsAddedRouter = require('./routes/appointments/bulkAppointmentsAddedRouter')
+const bulkAppointmentsSlipsRouter = require('./routes/appointments/bulkAppointmentsSlipsRouter')
+const bulkAppointmentsUploadRouter = require('./routes/appointments/bulkAppointmentsUploadRouter')
+const bulkAppointmentsClashesRouter = require('./routes/appointments//bulkAppointmentsClashesRouter')
 
-const changeCaseloadController = require('./controllers/changeCaseloadController')
-const addAppointmentController = require('./controllers/appointments/addAppointmentController')
-const addCourtAppointmentController = require('./controllers/appointments/courtController')
-const confirmAppointmentController = require('./controllers/appointments/confirmAppointmentController')
-const prepostAppointmentController = require('./controllers/appointments/prepostAppointmentsController')
-const selectCourtAppointmentRooms = require('./controllers/appointments/selectCourtAppointmentRoomsController')
-const selectCourtAppointmentCourt = require('./controllers/appointments/selectCourtAppointmentCourtController')
-const viewAppointmentsController = require('./controllers/appointments/viewAppointmentsController')
+const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
+const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')
+const addCourtAppointmentRouter = require('./routes/appointments/courtRouter')
+const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
+const prepostAppointmentRouter = require('./routes/appointments/prepostAppointmentsRouter')
+const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAppointmentRoomsRouter')
+const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
+const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
 
-const prisonerSearchController = require('./controllers/search/prisonerSearchController')
-const requestBookingController = require('./controllers/appointments/requestBookingController')
-const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResultsController')
+const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
+const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
+const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResults')
 
-const getExistingEventsController = require('./controllers/attendance/getExistingEventsController')
-const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEventsController')
-const endDateController = require('./controllers/appointments/endDateController')
+const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
+const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
+const endDateController = require('./controllers/appointments/endDate')
 
 const controllerFactory = require('./controllers/controller').factory
 
@@ -170,32 +170,32 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     res.render('bulkAppointmentsNotAdded.njk', { reason })
   })
 
-  router.use('/bulk-appointments/upload-file', bulkAppointmentsUploadController({ elite2Api, logError }))
+  router.use('/bulk-appointments/upload-file', bulkAppointmentsUploadRouter({ elite2Api, logError }))
   router.use(
     '/bulk-appointments/add-appointment-details',
-    bulkAppointmentsAddDetailsController({ elite2Api, oauthApi, logError })
+    bulkAppointmentsAddDetailsRouter({ elite2Api, oauthApi, logError })
   )
-  router.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedController({ logError }))
-  router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsController({ elite2Api, logError }))
-  router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmController({ elite2Api, logError }))
-  router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesController({ elite2Api, logError }))
-  router.use('/bulk-appointments/invalid-numbers', bulkAppointmentsInvalidNumbersController({ elite2Api, logError }))
+  router.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedRouter({ logError }))
+  router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsRouter({ elite2Api, logError }))
+  router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmRouter({ elite2Api, logError }))
+  router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesRouter({ elite2Api, logError }))
+  router.use('/bulk-appointments/invalid-numbers', bulkAppointmentsInvalidNumbersRouter({ elite2Api, logError }))
 
-  router.use('/change-caseload', changeCaseloadController({ elite2Api, logError }))
+  router.use('/change-caseload', changeCaseloadRouter({ elite2Api, logError }))
 
   router.get('/terms', async (req, res) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
   })
 
-  router.use('/offenders/:offenderNo/add-appointment', addAppointmentController({ elite2Api, logError }))
-  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentController({ elite2Api, logError }))
+  router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ elite2Api, logError }))
+  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ elite2Api, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentController({ elite2Api, logError, oauthApi, notifyClient })
+    prepostAppointmentRouter({ elite2Api, logError, oauthApi, notifyClient })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
-    addCourtAppointmentController({ elite2Api, logError })
+    addCourtAppointmentRouter({ elite2Api, logError })
   )
 
   router.use(
@@ -208,7 +208,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     selectCourtAppointmentRooms({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClient })
   )
 
-  router.use('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
+  router.use('/prisoner-search', prisonerSearchRouter({ oauthApi, elite2Api, logError }))
   router.get('/prisoner-search/results', prisonerSearchResultsController({ oauthApi, elite2Api, logError }))
 
   router.get('/videolink', async (req, res) => {
@@ -218,12 +218,9 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
     })
   })
 
-  router.use(
-    '/request-booking',
-    requestBookingController({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
-  )
+  router.use('/request-booking', requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }))
 
-  router.use('/appointments', viewAppointmentsController({ elite2Api, whereaboutsApi, logError }))
+  router.use('/appointments', viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError }))
 
   return router
 }

@@ -1,6 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
-const offenderService = require('../controllers/attendance/offenderService')(elite2Api)
+const offenderService = require('../services/offenderService')(elite2Api)
 
 beforeEach(() => {
   elite2Api.getDetails = jest.fn()
