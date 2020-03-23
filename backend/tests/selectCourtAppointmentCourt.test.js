@@ -73,6 +73,30 @@ describe('Select court appoinment court', () => {
             { text: 'Westminster', value: 'westminster' },
             { text: 'Wimbledon', value: 'wimbledon' },
           ],
+          prePostData: {
+            'post-court hearing briefing': '14:00 to 14:20',
+            'pre-court hearing briefing': '10:40 to 11:00',
+          },
+        })
+      )
+    })
+
+    it('should not include pre post data if not required', async () => {
+      const { index } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
+
+      req.flash.mockImplementation(() => [
+        {
+          ...appointmentDetails,
+          preAppointmentRequired: 'no',
+          postAppointmentRequired: 'no',
+        },
+      ])
+      await index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'addAppointment/selectCourtAppointmentCourt.njk',
+        expect.objectContaining({
+          prePostData: {},
         })
       )
     })
