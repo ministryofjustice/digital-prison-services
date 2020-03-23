@@ -49,7 +49,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
       ])
       const courts = await getCourts(res.locals)
       const { firstName, lastName } = offenderDetails
-      const { startTime, endTime } = appointmentDetails
+      const { startTime, endTime, preAppointmentRequired, postAppointmentRequired } = appointmentDetails
 
       req.flash('appointmentDetails', appointmentDetails)
 
@@ -63,6 +63,20 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
         agencyDescription: agencyDetails.description,
       })
 
+      const prePostData = {}
+
+      if (preAppointmentRequired === 'yes') {
+        prePostData['pre-court hearing briefing'] = `${Time(
+          moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes')
+        )} to ${details.startTime}`
+      }
+
+      if (postAppointmentRequired === 'yes') {
+        prePostData['post-court hearing briefing'] = `${details.endTime} to ${Time(
+          moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes')
+        )}`
+      }
+
       return res.render('addAppointment/selectCourtAppointmentCourt.njk', {
         ...pageData,
         courts: Object.keys(courts).map(key => ({ value: key, text: courts[key] })),
@@ -75,14 +89,7 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
           courtHearingStartTime: details.startTime,
           courtHearingEndTime: details.endTime,
         },
-        prePostData: {
-          'pre-court hearing briefing': `${Time(moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes'))} to ${
-            details.startTime
-          }`,
-          'post-court hearing briefing': `${details.endTime} to ${Time(
-            moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes')
-          )}`,
-        },
+        prePostData,
         homeUrl: '/videolink',
       })
     } catch (error) {
