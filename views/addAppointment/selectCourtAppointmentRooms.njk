@@ -41,7 +41,7 @@
                 {{ appointment({description: "Prison room for pre-court hearing briefing", name:"selectPreAppointment",locations: preLocations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
             {% endif %}
 
-            {{ appointment({description: "Prison room for court hearing briefing", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
+            {{ appointment({description: "Prison room for court hearing", name:"selectMainAppointment",locations: mainLocations, location: formValues.mainAppointmentLocation, duration: formValues.mainAppointmentDuration}) }}
 
             {% if postAppointmentRequired %}
                 {{ appointment({description: "Prison room for post-court hearing briefing", name:"selectPostAppointment",locations: postLocations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
