@@ -128,8 +128,11 @@ module.exports = elite2Api => {
       locations,
     })
 
+    const mainStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
+      .add(1, 'minute')
+      .format(DATE_TIME_FORMAT_SPEC)
     const mainLocations = await getAvailableLocations(context, {
-      timeSlot: { startTime, endTime },
+      timeSlot: { startTime: mainStartTime, endTime },
       locations,
       eventsAtLocations,
     })

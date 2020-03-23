@@ -4,6 +4,7 @@ const existingEventsService = require('../controllers/attendance/existingEventsS
 
 describe('existing events', () => {
   const elite2Api = {}
+  const appointmentService = {}
   let service
 
   beforeEach(() => {
@@ -16,6 +17,8 @@ describe('existing events', () => {
       elite2Api.getLocations = jest.fn()
       elite2Api.getEventsAtLocations = jest.fn()
       elite2Api.getLocations.mockReturnValue(Promise.resolve([]))
+      elite2Api.getLocationsForAppointments = jest.fn()
+      elite2Api.getActivitiesAtLocation = jest.fn()
     })
 
     it('should handle time slot where location booking slightly overlap ', async () => {
@@ -181,6 +184,39 @@ describe('existing events', () => {
         {},
         { agencyId: 'MDI', date: '2019-10-10', locationId: 2, usage: 'APP' }
       )
+    })
+
+    it('should adjust the main appointment time by one minute in the future', async () => {
+      const locations = [{ locationId: 1, description: 'Location 1', locationType: 'VIDE' }]
+      const eventsAtLocations = [
+        {
+          locationId: 1,
+          startTime: '2019-10-10T10:00:00',
+          endTime: '2019-10-10T10:15:00',
+          description: 'Video booking for John',
+        },
+      ]
+
+      elite2Api.getLocationsForAppointments.mockReturnValue(locations)
+      elite2Api.getActivityList.mockReturnValue(Promise.resolve(eventsAtLocations))
+
+      const availableLocations = await service.getAvailableLocationsForVLB(
+        {},
+        {
+          agencyId: 'LEI',
+          startTime: '2019-10-10T10:15',
+          endTime: '2019-10-10T10:30',
+          date: '2019-10-10',
+          preAppointmentRequired: 'no',
+          postAppointmentRequired: 'no',
+        }
+      )
+
+      expect(availableLocations).toEqual({
+        mainLocations: [{ text: 'Location 1', value: 1 }],
+        postLocations: [],
+        preLocations: [],
+      })
     })
   })
 
