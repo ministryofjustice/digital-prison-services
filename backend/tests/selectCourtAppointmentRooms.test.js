@@ -150,6 +150,29 @@ describe('Select court appointment rooms', () => {
         homeUrl: '/videolink',
       })
     })
+
+    it('should call getAvailableLocationsForVLB with the correct parameters', async () => {
+      const { index } = selectCourtAppointmentRoomsFactory({
+        elite2Api,
+        appointmentsService,
+        existingEventsService,
+        logError,
+      })
+
+      await index(req, res)
+
+      expect(existingEventsService.getAvailableLocationsForVLB).toHaveBeenCalledWith(
+        {},
+        {
+          agencyId: 'MDI',
+          date: '10/10/2017',
+          endTime: '2017-10-10T14:00',
+          postAppointmentRequired: 'yes',
+          preAppointmentRequired: 'yes',
+          startTime: '2017-10-10T11:00',
+        }
+      )
+    })
   })
 
   describe('validateInput', () => {
