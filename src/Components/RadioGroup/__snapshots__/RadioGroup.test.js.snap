@@ -2,30 +2,30 @@
 
 exports[`<RadioGroup /> should display image if one is provided 1`] = `
 <div
-  className="sc-bxivhb fiOVKe"
+  className="sc-bxivhb dgxkrU"
 >
   <span
-    className="sc-bdVaJa fqDsBO"
+    className="sc-bdVaJa jmnRGq"
   >
     Does this test pass?
   </span>
   <span
-    className="sc-bwzfXH fnIExm"
+    className="sc-bwzfXH bXamfX"
   >
     Select an option
   </span>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         Yes
       </span>
@@ -33,16 +33,16 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
   </div>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="no"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         No
       </span>
@@ -53,25 +53,25 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
 
 exports[`<RadioGroup /> should match the default snapshot 1`] = `
 <div
-  className="sc-bxivhb eFeFfb"
+  className="sc-bxivhb hwZAGr"
 >
   <span
-    className="sc-bdVaJa fqDsBO"
+    className="sc-bdVaJa jmnRGq"
   >
     Does this test pass?
   </span>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         Yes
       </span>
@@ -79,16 +79,16 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
   </div>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="no"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         No
       </span>
@@ -99,30 +99,30 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
 
 exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
 <div
-  className="sc-bxivhb eFeFfb"
+  className="sc-bxivhb hwZAGr"
 >
   <span
-    className="sc-bdVaJa fqDsBO"
+    className="sc-bdVaJa jmnRGq"
   >
     Does this test pass?
   </span>
   <span
-    className="sc-htpNat hZRmYe"
+    className="sc-htpNat cFrViK"
   >
     Supporting text to help
   </span>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         Yes
       </span>
@@ -130,16 +130,16 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
   </div>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="no"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         No
       </span>
@@ -150,30 +150,30 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
 
 exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
 <div
-  className="sc-bxivhb fiOVKe"
+  className="sc-bxivhb dgxkrU"
 >
   <span
-    className="sc-bdVaJa fqDsBO"
+    className="sc-bdVaJa jmnRGq"
   >
     Does this test pass?
   </span>
   <span
-    className="sc-bwzfXH fnIExm"
+    className="sc-bwzfXH bXamfX"
   >
     Select an option
   </span>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="yes"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         Yes
       </span>
@@ -181,16 +181,16 @@ exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
   </div>
   <div>
     <label
-      className="sc-ifAKCX dYaoPs"
+      className="sc-ifAKCX irKPnh"
     >
       <input
         checked={false}
-        className="sc-EHOje cYRqjH"
+        className="sc-EHOje koflXw"
         type="radio"
         value="no"
       />
       <span
-        className="sc-bZQynM jAsCcR"
+        className="sc-bZQynM ldmnhp"
       >
         No
       </span>

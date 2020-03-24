@@ -5,7 +5,7 @@ exports[`Awards should render no award correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Awards
   </h3>
@@ -20,7 +20,7 @@ exports[`Awards should render present award correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Awards
   </h3>
@@ -28,10 +28,10 @@ exports[`Awards should render present award correctly 1`] = `
     className="sc-bZQynM eEnHqJ"
   >
     <div
-      className="sc-bdVaJa gkOpjT"
+      className="sc-bdVaJa iAgRsv"
     >
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -45,7 +45,7 @@ exports[`Awards should render present award correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -59,7 +59,7 @@ exports[`Awards should render present award correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -73,7 +73,7 @@ exports[`Awards should render present award correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -88,10 +88,10 @@ exports[`Awards should render present award correctly 1`] = `
       </div>
     </div>
     <div
-      className="sc-bdVaJa gkOpjT"
+      className="sc-bdVaJa iAgRsv"
     >
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gWDLqX"
       >
         <strong
           className="label"
@@ -110,10 +110,10 @@ exports[`Awards should render present award correctly 1`] = `
     className="sc-bZQynM bGQQfc"
   >
     <div
-      className="sc-bdVaJa gkOpjT"
+      className="sc-bdVaJa iAgRsv"
     >
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -127,7 +127,7 @@ exports[`Awards should render present award correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -141,7 +141,7 @@ exports[`Awards should render present award correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"
@@ -155,7 +155,7 @@ exports[`Awards should render present award correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH gDjOjU"
+        className="sc-bwzfXH mIHzr"
       >
         <strong
           className="label"

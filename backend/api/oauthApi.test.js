@@ -61,7 +61,7 @@ describe('oathApi tests', () => {
       refreshResponse.then(response => {
         expect(requestConfig.method).toEqual('post')
         expect(requestConfig.baseURL).toEqual(url)
-        expect(requestConfig.url).toEqual('/oauth/token')
+        expect(requestConfig.url).toEqual('http://localhost/oauth/token')
         expect(requestConfig.data).toEqual('refresh_token=refreshToken&grant_type=refresh_token')
         expect(requestConfig.headers.authorization).toEqual(`Basic ${encodeClientCredentials()}`)
         expect(requestConfig.headers['Content-Type']).toEqual('application/x-www-form-urlencoded')

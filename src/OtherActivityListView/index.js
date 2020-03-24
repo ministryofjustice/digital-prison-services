@@ -65,72 +65,54 @@ const OtherActivityListView = ({ offenderMainEvent }) => {
 }
 
 OtherActivityListView.propTypes = {
-  offenderNo: PropTypes.string,
-  firstName: PropTypes.string,
-  lastName: PropTypes.string,
-  eventId: PropTypes.number,
-  cellLocation: PropTypes.string,
-  event: PropTypes.string,
-  eventType: PropTypes.string,
-  eventDescription: PropTypes.string,
-  eventStatus: PropTypes.string,
-  comment: PropTypes.string,
-  startTime: PropTypes.string,
-  expired: PropTypes.bool,
-  complete: PropTypes.bool,
-  cancelled: PropTypes.bool,
-
-  releaseScheduled: PropTypes.bool,
-  courtEvents: PropTypes.arrayOf(
-    PropTypes.shape({
-      eventId: PropTypes.number,
-      eventDescription: PropTypes.string,
-      expired: PropTypes.bool,
-      complete: PropTypes.bool,
-      cancelled: PropTypes.bool,
-    }).isRequired
-  ),
-  scheduledTransfers: PropTypes.arrayOf(
-    PropTypes.shape({
-      eventId: PropTypes.number,
-      eventDescription: PropTypes.string,
-      expired: PropTypes.bool,
-      complete: PropTypes.bool,
-      cancelled: PropTypes.bool,
-    }).isRequired
-  ),
-  others: PropTypes.arrayOf(
-    PropTypes.shape({
-      offenderNo: PropTypes.string,
-      eventId: PropTypes.number,
-      event: PropTypes.string,
-      eventType: PropTypes.string,
-      eventDescription: PropTypes.string,
-      eventStatus: PropTypes.string,
-      comment: PropTypes.string,
-      startTime: PropTypes.string,
-    }).isRequired
-  ),
+  offenderMainEvent: PropTypes.shape({
+    courtEvents: PropTypes.arrayOf(
+      PropTypes.shape({
+        eventId: PropTypes.number,
+        eventDescription: PropTypes.string,
+        expired: PropTypes.bool,
+        complete: PropTypes.bool,
+        cancelled: PropTypes.bool,
+      }).isRequired
+    ),
+    scheduledTransfers: PropTypes.arrayOf(
+      PropTypes.shape({
+        eventId: PropTypes.number,
+        eventDescription: PropTypes.string,
+        expired: PropTypes.bool,
+        complete: PropTypes.bool,
+        cancelled: PropTypes.bool,
+      }).isRequired
+    ),
+    activities: PropTypes.arrayOf(
+      PropTypes.shape({
+        offenderNo: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        eventId: PropTypes.number,
+        cellLocation: PropTypes.string.isRequired,
+        others: PropTypes.array,
+        event: PropTypes.string.isRequired,
+        eventType: PropTypes.string,
+        eventDescription: PropTypes.string.isRequired,
+        eventStatus: PropTypes.string,
+        comment: PropTypes.string,
+      })
+    ),
+    others: PropTypes.arrayOf(
+      PropTypes.shape({
+        offenderNo: PropTypes.string,
+        eventId: PropTypes.number,
+        event: PropTypes.string,
+        eventType: PropTypes.string,
+        eventDescription: PropTypes.string,
+        eventStatus: PropTypes.string,
+        comment: PropTypes.string,
+        startTime: PropTypes.string,
+      }).isRequired
+    ),
+    releaseScheduled: PropTypes.bool,
+  }).isRequired,
 }
 
-OtherActivityListView.defaultProps = {
-  offenderNo: '',
-  firstName: '',
-  lastName: '',
-  eventId: null,
-  cellLocation: '',
-  event: '',
-  eventType: '',
-  eventDescription: '',
-  eventStatus: '',
-  comment: '',
-  startTime: null,
-  expired: false,
-  complete: false,
-  cancelled: false,
-  releaseScheduled: false,
-  others: null,
-  scheduledTransfers: null,
-  courtEvents: null,
-}
 export default OtherActivityListView

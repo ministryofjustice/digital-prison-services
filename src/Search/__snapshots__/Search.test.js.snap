@@ -6,23 +6,23 @@ Array [
     id="validation-message"
   >
     <div
-      className="sc-bZQynM jBLGme"
+      className="sc-bZQynM eROnot"
       tabIndex={-1}
     >
       <h2
-        className="sc-bwzfXH hbEaRv"
+        className="sc-bwzfXH jAJSnq"
         size="MEDIUM"
       >
         There is a problem
       </h2>
       <ul
-        className="sc-ifAKCX dYyvpM"
+        className="sc-ifAKCX kiYsif"
       >
         <li
-          className="sc-bxivhb etPFPc"
+          className="sc-bxivhb hemaPi"
         >
           <a
-            className="sc-bdVaJa sc-EHOje sdFTb"
+            className="sc-bdVaJa sc-EHOje cwDEfQ"
             muted={false}
             onClick={[Function]}
             tabIndex={1}
@@ -52,17 +52,17 @@ Array [
           >
             <div>
               <label
-                className="sc-htoDjs cJGBnj"
+                className="sc-htoDjs bZlJwn"
               >
                 <span
-                  className="sc-gzVnrw clQBNW"
+                  className="sc-gzVnrw hfCCNy"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-iwsKbI eFzTeJ"
+                  className="sc-iwsKbI fAKohu form-control"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -470,7 +470,7 @@ Array [
         className="sc-gqjmRU crbzUF"
       >
         <a
-          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          className="sc-bdVaJa sc-gZMcBi jVRuzN"
           href="/appointments"
           muted={false}
         >
@@ -480,7 +480,7 @@ Array [
           className="sc-VigVT hLPYRt"
         >
           <a
-            className="sc-bdVaJa sc-gZMcBi bJavgj"
+            className="sc-bdVaJa sc-gZMcBi jVRuzN"
             data-qa="prisoners-unaccounted-for"
             muted={false}
             onClick={[Function]}
@@ -489,7 +489,7 @@ Array [
           </a>
         </div>
         <a
-          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          className="sc-bdVaJa sc-gZMcBi jVRuzN"
           href="/manage-prisoner-whereabouts/attendance-reason-statistics"
           muted={false}
         >
@@ -636,23 +636,23 @@ Array [
     id="validation-message"
   >
     <div
-      className="sc-bZQynM jBLGme"
+      className="sc-bZQynM eROnot"
       tabIndex={-1}
     >
       <h2
-        className="sc-bwzfXH hbEaRv"
+        className="sc-bwzfXH jAJSnq"
         size="MEDIUM"
       >
         There is a problem
       </h2>
       <ul
-        className="sc-ifAKCX dYyvpM"
+        className="sc-ifAKCX kiYsif"
       >
         <li
-          className="sc-bxivhb etPFPc"
+          className="sc-bxivhb hemaPi"
         >
           <a
-            className="sc-bdVaJa sc-EHOje sdFTb"
+            className="sc-bdVaJa sc-EHOje cwDEfQ"
             muted={false}
             onClick={[Function]}
             tabIndex={1}
@@ -682,17 +682,17 @@ Array [
           >
             <div>
               <label
-                className="sc-htoDjs cJGBnj"
+                className="sc-htoDjs bZlJwn"
               >
                 <span
-                  className="sc-gzVnrw clQBNW"
+                  className="sc-gzVnrw hfCCNy"
                 >
                    
                   Date
                    
                 </span>
                 <input
-                  className="form-control sc-iwsKbI eFzTeJ"
+                  className="sc-iwsKbI fAKohu form-control"
                   name="search-date"
                   onChange={[Function]}
                   onClick={[Function]}
@@ -1100,7 +1100,7 @@ Array [
         className="sc-gqjmRU crbzUF"
       >
         <a
-          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          className="sc-bdVaJa sc-gZMcBi jVRuzN"
           href="/appointments"
           muted={false}
         >
@@ -1110,7 +1110,7 @@ Array [
           className="sc-VigVT hLPYRt"
         >
           <a
-            className="sc-bdVaJa sc-gZMcBi bJavgj"
+            className="sc-bdVaJa sc-gZMcBi jVRuzN"
             data-qa="prisoners-unaccounted-for"
             muted={false}
             onClick={[Function]}
@@ -1119,7 +1119,7 @@ Array [
           </a>
         </div>
         <a
-          className="sc-bdVaJa sc-gZMcBi bJavgj"
+          className="sc-bdVaJa sc-gZMcBi jVRuzN"
           href="/manage-prisoner-whereabouts/attendance-reason-statistics"
           muted={false}
         >

@@ -8,37 +8,37 @@ exports[`Incentive Level history Form should render the Incentive Level history 
     className="sc-chPdSV ddsHXB"
   >
     <div
-      className="sc-bdVaJa gkOpjT"
+      className="sc-bdVaJa iAgRsv"
     >
       <div
-        className="sc-bwzfXH cZFmYR"
+        className="sc-bwzfXH kUWxme"
       >
         <div
-          className="sc-bdVaJa gkOpjT"
+          className="sc-bdVaJa iAgRsv"
         >
           <h3
-            className="sc-kGXeez iHgsBB sc-fjdhpX TnkYd"
+            className="sc-fjdhpX dWzUoi sc-kGXeez iHgsBB"
           >
             Filters
           </h3>
         </div>
         <div
-          className="sc-bdVaJa gkOpjT"
+          className="sc-bdVaJa iAgRsv"
         >
           <div
-            className="sc-bwzfXH iXLolC"
+            className="sc-bwzfXH gWDLqX"
           >
             <label
-              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
+              className="sc-VigVT iBWXYf sc-kAzzGY drBIpO"
               id="establishment-select"
             >
               <span
-                className="sc-gqjmRU hMYAWR"
+                className="sc-gqjmRU dSGTxK"
               >
                 Establishment
               </span>
               <select
-                className="sc-cSHVUG iPEkCj"
+                className="sc-cSHVUG iCHBuG"
                 name="establishment"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -59,19 +59,19 @@ exports[`Incentive Level history Form should render the Incentive Level history 
             </label>
           </div>
           <div
-            className="sc-bwzfXH iXLolC"
+            className="sc-bwzfXH gWDLqX"
           >
             <label
-              className="sc-kAzzGY drBIpO sc-VigVT WpzbC"
+              className="sc-VigVT iBWXYf sc-kAzzGY drBIpO"
               id="iep-level-select"
             >
               <span
-                className="sc-gqjmRU hMYAWR"
+                className="sc-gqjmRU dSGTxK"
               >
                 Incentive Level
               </span>
               <select
-                className="sc-cSHVUG iPEkCj"
+                className="sc-cSHVUG iCHBuG"
                 name="level"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -94,22 +94,22 @@ exports[`Incentive Level history Form should render the Incentive Level history 
         </div>
       </div>
       <div
-        className="sc-bwzfXH cZFmYR"
+        className="sc-bwzfXH kUWxme"
       >
         <div
-          className="sc-bdVaJa gkOpjT"
+          className="sc-bdVaJa iAgRsv"
         >
           <span
-            className="sc-kpOJdX irqhhZ"
+            className="sc-kpOJdX bxPfDl"
           >
             Date range
           </span>
         </div>
         <div
-          className="sc-bdVaJa gkOpjT"
+          className="sc-bdVaJa iAgRsv"
         >
           <div
-            className="sc-bwzfXH dGugEg"
+            className="sc-bwzfXH itECxU"
             id="from-date"
           >
             <div
@@ -117,17 +117,17 @@ exports[`Incentive Level history Form should render the Incentive Level history 
             >
               <div>
                 <label
-                  className="sc-VigVT srngP"
+                  className="sc-VigVT dRnUNG"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-gqjmRU dSGTxK"
                   >
                      
                     From
                      
                   </span>
                   <input
-                    className="form-control sc-jTzLTM cLpfsp"
+                    className="sc-jTzLTM iTXUSb form-control"
                     name="fromDate"
                     onChange={[Function]}
                     onClick={[Function]}
@@ -526,7 +526,7 @@ exports[`Incentive Level history Form should render the Incentive Level history 
             </div>
           </div>
           <div
-            className="sc-bwzfXH dGugEg"
+            className="sc-bwzfXH itECxU"
             id="to-date"
           >
             <div
@@ -534,17 +534,17 @@ exports[`Incentive Level history Form should render the Incentive Level history 
             >
               <div>
                 <label
-                  className="sc-VigVT srngP"
+                  className="sc-VigVT dRnUNG"
                 >
                   <span
-                    className="sc-gqjmRU hMYAWR"
+                    className="sc-gqjmRU dSGTxK"
                   >
                      
                     To
                      
                   </span>
                   <input
-                    className="form-control sc-jTzLTM cLpfsp"
+                    className="sc-jTzLTM iTXUSb form-control"
                     name="toDate"
                     onChange={[Function]}
                     onClick={[Function]}
@@ -943,13 +943,13 @@ exports[`Incentive Level history Form should render the Incentive Level history 
             </div>
           </div>
           <div
-            className="sc-bwzfXH dGugEg"
+            className="sc-bwzfXH itECxU"
           >
             <p
               className="form-label visible-md visible-lg"
             />
             <button
-              className="sc-htpNat hfQKkJ"
+              className="sc-htpNat ljwtnZ"
               disabled={false}
               id="apply-filter"
               type="submit"
