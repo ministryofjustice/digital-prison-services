@@ -219,7 +219,7 @@ describe('Confirm appointments', () => {
     })
   })
 
-  it('should place data needed for movement slips into flash', async () => {
+  it('should place data needed for movement slips into session', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       elite2Api,
       appointmentsService,

@@ -166,7 +166,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         return res.redirect('/bulk-appointments/appointment-clashes')
       }
 
-      req.flash('appointmentSlipsData', {
+      req.session.appointmentSlipsData = {
         appointmentDetails: {
           startTime,
           endTime,
@@ -175,7 +175,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
           locationDescription,
         },
         prisonersListed: req.session.data.prisonersListed,
-      })
+      }
 
       await elite2Api.addAppointments(res.locals, request)
 
