@@ -3,10 +3,10 @@
 exports[`Global search results component should render results correctly 1`] = `
 <div>
   <div
-    className="sc-htoDjs fknHoe"
+    className="sc-htoDjs fjTtnT"
   >
     <div
-      className="sc-gzVnrw bwiLzH"
+      className="sc-gzVnrw jpnZQI"
     >
       4
        - 
@@ -23,13 +23,13 @@ exports[`Global search results component should render results correctly 1`] = `
         htmlFor="perPage"
       >
         <span
-          className="sc-dnqmqq ePgwDj"
+          className="sc-dnqmqq jvzDFl"
         >
           Results per page
         </span>
       </label>
       <select
-        className="sc-VigVT egqawv"
+        className="sc-VigVT fNFOws"
         id="perPage"
         onChange={[Function]}
         value={4}
@@ -287,10 +287,10 @@ exports[`Global search results component should render results correctly 1`] = `
 exports[`Global search results component should render results when has inactive booking role 1`] = `
 <div>
   <div
-    className="sc-htoDjs fknHoe"
+    className="sc-htoDjs fjTtnT"
   >
     <div
-      className="sc-gzVnrw bwiLzH"
+      className="sc-gzVnrw jpnZQI"
     >
       4
        - 
@@ -307,13 +307,13 @@ exports[`Global search results component should render results when has inactive
         htmlFor="perPage"
       >
         <span
-          className="sc-dnqmqq ePgwDj"
+          className="sc-dnqmqq jvzDFl"
         >
           Results per page
         </span>
       </label>
       <select
-        className="sc-VigVT egqawv"
+        className="sc-VigVT fNFOws"
         id="perPage"
         onChange={[Function]}
         value={4}

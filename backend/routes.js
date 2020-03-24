@@ -36,7 +36,7 @@ const bulkAppointmentsInvalidNumbersRouter = require('./routes/appointments/bulk
 const bulkAppointmentsAddedRouter = require('./routes/appointments/bulkAppointmentsAddedRouter')
 const bulkAppointmentsSlipsRouter = require('./routes/appointments/bulkAppointmentsSlipsRouter')
 const bulkAppointmentsUploadRouter = require('./routes/appointments/bulkAppointmentsUploadRouter')
-const bulkAppointmentsClashesRouter = require('./routes/appointments//bulkAppointmentsClashesRouter')
+const bulkAppointmentsClashesRouter = require('./routes/appointments/bulkAppointmentsClashesRouter')
 
 const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
 const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')

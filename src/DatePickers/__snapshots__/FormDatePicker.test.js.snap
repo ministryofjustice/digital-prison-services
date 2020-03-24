@@ -6,22 +6,22 @@ exports[`Form date picker should render correctly 1`] = `
 >
   <div>
     <label
-      className="sc-bwzfXH eIEKoM"
+      className="sc-bwzfXH cukpBy"
     >
       <span
-        className="sc-bdVaJa fqDsBO"
+        className="sc-bdVaJa jmnRGq"
       >
          
         
          
       </span>
       <span
-        className="sc-htpNat lbiKAP"
+        className="sc-htpNat gTYgEH"
       >
         there was an error
       </span>
       <input
-        className="form-control sc-bxivhb fCvXxf"
+        className="sc-bxivhb Qpyky form-control"
         name="date"
         onChange={[Function]}
         onClick={[Function]}

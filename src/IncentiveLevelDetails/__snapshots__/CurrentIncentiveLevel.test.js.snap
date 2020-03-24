@@ -2,13 +2,13 @@
 
 exports[`Current Incentive Level should render the current Incentive Level correctly when user can maintain Incentive Level 1`] = `
 <div
-  className="current-iep sc-ifAKCX kQggjh"
+  className="sc-ifAKCX kQggjh current-iep"
 >
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bdVaJa iAgRsv"
   >
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <strong
         className="label"
@@ -20,7 +20,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       </p>
     </div>
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <strong
         className="label"
@@ -32,7 +32,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       </p>
     </div>
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <strong
         className="label"
@@ -44,11 +44,11 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       </p>
     </div>
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <div>
         <button
-          className="sc-htpNat dZoydM"
+          className="sc-htpNat iXzDIq"
           data-qa="change-incentive-level"
           disabled={false}
           onClick={[Function]}
@@ -63,13 +63,13 @@ exports[`Current Incentive Level should render the current Incentive Level corre
 
 exports[`Current Incentive Level should render the current Incentive Level correctly when user can't maintain Incentive Level 1`] = `
 <div
-  className="current-iep sc-ifAKCX kQggjh"
+  className="sc-ifAKCX kQggjh current-iep"
 >
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bdVaJa iAgRsv"
   >
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <strong
         className="label"
@@ -81,7 +81,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       </p>
     </div>
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <strong
         className="label"
@@ -93,7 +93,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       </p>
     </div>
     <div
-      className="sc-bwzfXH gDjOjU"
+      className="sc-bwzfXH mIHzr"
     >
       <strong
         className="label"

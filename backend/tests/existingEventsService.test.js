@@ -4,7 +4,6 @@ const existingEventsService = require('../services/existingEventsService')
 
 describe('existing events', () => {
   const elite2Api = {}
-  const appointmentService = {}
   let service
 
   beforeEach(() => {

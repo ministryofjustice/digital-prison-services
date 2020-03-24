@@ -3,7 +3,7 @@
 exports[`Incentive Level history should render the Incentive Level history table correctly 1`] = `
 Array [
   <h2
-    className="sc-bZQynM ifeWwe"
+    className="sc-bZQynM fOThUN"
   >
     Incentive Level history
   </h2>,
@@ -11,7 +11,7 @@ Array [
     className="sc-htoDjs xQRkw"
   >
     <table
-      className="results sc-EHOje kCMYgv"
+      className="sc-EHOje ecdksn results"
     >
       <tbody
         className="sc-bwzfXH uTxCW"
@@ -20,27 +20,27 @@ Array [
           className="sc-ifAKCX cFlEyZ"
         >
           <th
-            className="sc-bxivhb kJKBjd"
+            className="sc-bxivhb dnVQUz"
           >
             Date and time
           </th>
           <th
-            className="sc-bxivhb crGQu"
+            className="sc-bxivhb hgtSCp"
           >
             Incentive Level
           </th>
           <th
-            className="sc-bxivhb gLzMqy"
+            className="sc-bxivhb gCiqwu"
           >
             Reason
           </th>
           <th
-            className="sc-bxivhb kJKBjd"
+            className="sc-bxivhb dnVQUz"
           >
             Establishment
           </th>
           <th
-            className="sc-bxivhb crGQu"
+            className="sc-bxivhb hgtSCp"
           >
             Staff member
           </th>
@@ -49,27 +49,27 @@ Array [
           className="sc-ifAKCX cFlEyZ"
         >
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             13/08/2017 - 16:04
           </td>
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             Standard
           </td>
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             —
           </td>
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             Leeds
           </td>
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             Staff Member
           </td>
@@ -81,7 +81,7 @@ Array [
     className="sc-gzVnrw VtCIX"
   >
     <table
-      className="sc-EHOje kCMYgv"
+      className="sc-EHOje ecdksn"
     >
       <tbody
         className="sc-bwzfXH uTxCW"
@@ -90,17 +90,17 @@ Array [
           className="sc-ifAKCX cFlEyZ"
         >
           <th
-            className="sc-bxivhb kZbmwT"
+            className="sc-bxivhb eWDuGm"
           >
             Date and time
           </th>
           <th
-            className="sc-bxivhb kZbmwT"
+            className="sc-bxivhb eWDuGm"
           >
             Incentive Level
           </th>
           <th
-            className="sc-bxivhb kZbmwT"
+            className="sc-bxivhb eWDuGm"
           >
             Establishment
           </th>
@@ -109,17 +109,17 @@ Array [
           className="sc-ifAKCX cFlEyZ"
         >
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             13/08/2017 - 16:04
           </td>
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             Standard
           </td>
           <td
-            className="sc-bxivhb jMmQxS"
+            className="sc-bxivhb ckLzJk"
           >
             Leeds
           </td>
