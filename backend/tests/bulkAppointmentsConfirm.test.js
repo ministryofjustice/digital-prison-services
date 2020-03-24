@@ -81,7 +81,7 @@ describe('when confirming bulk appointment details', () => {
         }
         await controller.post(req, res)
 
-        expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+        expect(req.session.appointmentSlipsData).toEqual({
           appointmentDetails: {
             appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
             comments: appointmentDetails.comments,
@@ -335,7 +335,7 @@ describe('when confirming bulk appointment details', () => {
       it('should submit the correct data and redirect to the appointments added page', async () => {
         await controller.post(req, res)
 
-        expect(req.flash).toBeCalledWith('appointmentSlipsData', {
+        expect(req.session.appointmentSlipsData).toEqual({
           appointmentDetails: {
             appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
             comments: appointmentDetails.comments,
