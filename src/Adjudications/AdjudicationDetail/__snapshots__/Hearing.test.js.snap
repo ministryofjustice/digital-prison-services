@@ -5,15 +5,15 @@ exports[`Hearing should render empty data correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Hearing details
   </h3>
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bdVaJa iAgRsv"
   >
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -27,7 +27,7 @@ exports[`Hearing should render empty data correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -41,7 +41,7 @@ exports[`Hearing should render empty data correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -58,7 +58,7 @@ exports[`Hearing should render empty data correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -72,7 +72,7 @@ exports[`Hearing should render empty data correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -94,7 +94,7 @@ exports[`Hearing should render missing hearing correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Hearing details
   </h3>
@@ -109,15 +109,15 @@ exports[`Hearing should render present hearing correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Hearing details
   </h3>
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bdVaJa iAgRsv"
   >
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -131,7 +131,7 @@ exports[`Hearing should render present hearing correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -145,7 +145,7 @@ exports[`Hearing should render present hearing correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -162,7 +162,7 @@ exports[`Hearing should render present hearing correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -176,7 +176,7 @@ exports[`Hearing should render present hearing correctly 1`] = `
       </p>
     </div>
     <div
-      className="sc-bwzfXH gqOtUI"
+      className="sc-bwzfXH ixikxx"
     >
       <strong
         className="label"
@@ -191,10 +191,10 @@ exports[`Hearing should render present hearing correctly 1`] = `
     </div>
   </div>
   <div
-    className="sc-bdVaJa gkOpjT"
+    className="sc-bdVaJa iAgRsv"
   >
     <div
-      className="sc-bwzfXH iXLolC"
+      className="sc-bwzfXH gWDLqX"
     >
       <strong
         className="label"

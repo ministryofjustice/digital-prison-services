@@ -5,7 +5,7 @@ exports[`Results should render no results correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Results
   </h3>
@@ -20,7 +20,7 @@ exports[`Results should render present results correctly 1`] = `
   className="sc-EHOje jyflZT"
 >
   <h3
-    className="sc-htpNat jszPot"
+    className="sc-htpNat KTbaq"
   >
     Results
   </h3>
@@ -28,10 +28,10 @@ exports[`Results should render present results correctly 1`] = `
     className="sc-bZQynM eEnHqJ"
   >
     <div
-      className="sc-bdVaJa gkOpjT"
+      className="sc-bdVaJa iAgRsv"
     >
       <div
-        className="sc-bwzfXH gqOtUI"
+        className="sc-bwzfXH ixikxx"
       >
         <strong
           className="label"
@@ -45,7 +45,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH bobXWp"
+        className="sc-bwzfXH ergde"
       >
         <strong
           className="label"
@@ -59,7 +59,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH jqxiAx"
+        className="sc-bwzfXH dHeecD"
       >
         <strong
           className="label"
@@ -73,7 +73,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gWDLqX"
       >
         <strong
           className="label"
@@ -87,7 +87,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gWDLqX"
       >
         <strong
           className="label"
@@ -106,10 +106,10 @@ exports[`Results should render present results correctly 1`] = `
     className="sc-bZQynM bGQQfc"
   >
     <div
-      className="sc-bdVaJa gkOpjT"
+      className="sc-bdVaJa iAgRsv"
     >
       <div
-        className="sc-bwzfXH gqOtUI"
+        className="sc-bwzfXH ixikxx"
       >
         <strong
           className="label"
@@ -123,7 +123,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH bobXWp"
+        className="sc-bwzfXH ergde"
       >
         <strong
           className="label"
@@ -137,7 +137,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH jqxiAx"
+        className="sc-bwzfXH dHeecD"
       >
         <strong
           className="label"
@@ -151,7 +151,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gWDLqX"
       >
         <strong
           className="label"
@@ -165,7 +165,7 @@ exports[`Results should render present results correctly 1`] = `
         </p>
       </div>
       <div
-        className="sc-bwzfXH iXLolC"
+        className="sc-bwzfXH gWDLqX"
       >
         <strong
           className="label"

@@ -432,14 +432,12 @@ class ResultsActivity extends Component {
             </td>
             {renderMainEvent(mainEvent)}
             <td className={otherActivitiesClasses}>
-              {
-                <OtherActivitiesView
-                  offenderMainEvent={{
-                    ...mainEvent,
-                    others: mainEvent.eventsElsewhere,
-                  }}
-                />
-              }
+              <OtherActivitiesView
+                offenderMainEvent={{
+                  ...mainEvent,
+                  others: mainEvent.eventsElsewhere,
+                }}
+              />
             </td>
             {!absentReason && (
               <td className={`checkbox-header no-display ${redactedHide}`}>
