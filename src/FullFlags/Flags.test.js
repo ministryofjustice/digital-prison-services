@@ -133,6 +133,19 @@ describe('Flags.', () => {
         )
       ).toEqual(true)
     })
+
+    it('RCDR alert', () => {
+      const wrapper = shallow(<Flags alerts={['RCDR']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="quarantined-status">QUARANTINED</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
   })
   describe('Alerts without links', () => {
     it('HA alert', () => {

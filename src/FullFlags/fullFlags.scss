@@ -104,6 +104,13 @@
     border-color: #903;
   }
 
+  .quarantined-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #330;
+    background-color: #330;
+  }
+
   @media (min-width: 481px) {
     .inline-header-large {
       display: inline-block;
