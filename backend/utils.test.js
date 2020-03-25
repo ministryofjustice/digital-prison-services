@@ -256,6 +256,10 @@ describe('isViewableFlag', () => {
     expect(isViewableFlag('RCON')).toBe(true)
   })
 
+  it('should allow RCDR to be a viewable flag', () => {
+    expect(isViewableFlag('RCDR')).toBe(true)
+  })
+
   it('should not allow any non specified alerts to be a viewable flag', () => {
     expect(isViewableFlag('ROH')).toBe(false)
   })

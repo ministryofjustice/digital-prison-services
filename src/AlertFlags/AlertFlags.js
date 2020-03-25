@@ -32,10 +32,11 @@ const AlertFlags = ({ alerts, category }) => {
   return (
     <div className="alerts">
       {isShown('HA') && <AlertFlag className="acct-status">ACCT</AlertFlag>}
-      {isShown('XEL') && <AlertFlag className="elist-status">E-LIST</AlertFlag>}
-      {isShown('PEEP') && <AlertFlag className="disability-status">PEEP</AlertFlag>}
-      {isShown('RNO121') && <AlertFlag className="no-one-to-one-status">NO ONE-TO-ONE</AlertFlag>}
       {isShown('RCON') && <AlertFlag className="conflict-status">CONFLICT</AlertFlag>}
+      {isShown('XEL') && <AlertFlag className="elist-status">E-LIST</AlertFlag>}
+      {isShown('RNO121') && <AlertFlag className="no-one-to-one-status">NO ONE-TO-ONE</AlertFlag>}
+      {isShown('PEEP') && <AlertFlag className="disability-status">PEEP</AlertFlag>}
+      {isShown('RCDR') && <AlertFlag className="quarantined-status">QUARANTINED</AlertFlag>}
       {(category === 'A' || category === 'E') && <AlertFlag className="cata-status">CAT A</AlertFlag>}
       {category === 'H' && <AlertFlag className="cata-high-status">CAT A High</AlertFlag>}
       {category === 'P' && <AlertFlag className="cata-prov-status">CAT A Prov</AlertFlag>}
