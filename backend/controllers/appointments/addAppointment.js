@@ -164,6 +164,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
 
       if (appointmentType === 'VLB') return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
 
+      console.log('The appointment', request.appointmentDefaults)
+
       await elite2Api.addAppointments(res.locals, request)
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
