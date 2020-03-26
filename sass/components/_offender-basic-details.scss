@@ -1,32 +1,4 @@
-.bold {
-  font-weight: bold
-}
-
-.basic-details {
-  border-top: 1px solid #b1b4b6;
-  border-bottom: 1px solid #b1b4b6;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  overflow: auto;
-  display: flex;
-  div {
-    flex-grow: 1;
-    &:first-of-type {
-      flex-grow: 0
-    }
-  }
-}
-
-p.offender-details-paragraph {
-  margin-block-start: 1em;
-  margin-block-end: 0em;
-}
-
-.basic-details {
-  border-top: 1px solid #b1b4b6;
-  border-bottom: 1px solid #b1b4b6;
-  padding-top: 15px;
-  padding-bottom: 15px;
+.offender-basic-details {
   overflow: auto;
   display: flex;
   div {

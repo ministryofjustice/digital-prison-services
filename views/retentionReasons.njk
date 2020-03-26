@@ -16,10 +16,12 @@
     href: offenderUrl
   }) }}
 
-  <div class="govuk-grid-row govuk-body">
-    <div class="govuk-grid-column-full">
+  <div class="govuk-body">
+    <hr class="govuk-section-break govuk-section-break--visible">
+    <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2">
 
-      <div class="basic-details">
+      <div class="offender-basic-details">
+
         <div class="govuk-!-margin-right-6">
           <img
                   src="/app/images/{{ offenderBasics.offenderNo }}/data"
@@ -30,31 +32,26 @@
                   data-qa="offender-image"
           />
         </div>
-  
-        <div>
-          <p class="offender-details-paragraph bold">Name</p>
-          <span class="offender-details-paragraph"
-                data-qa="displayName">{{ offenderBasics.lastName }}, {{ offenderBasics.firstName }}</span>
-        </div>
-  
-        <div>
-          <p class="offender-details-paragraph bold">Prison No.</p>
-          <span class="offender-details-paragraph"
-                data-qa="nomsId">{{ offenderBasics.offenderNo }}</span>
-        </div>
-  
-        <div>
-          <p class="offender-details-paragraph bold">Date of Birth</p>
-          <span class="offender-details-paragraph" data-qa="dob">{{ offenderBasics.dateOfBirth }}</span>
-        </div>
-  
-        <div>
-          <p class="offender-details-paragraph bold">Location</p>
-          <span class="offender-details-paragraph" data-qa="prison-description">{{ agency }}</span>
-        </div>
 
+        <div class="govuk-!-margin-right-3">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Name</p>
+            <span data-qa="displayName">{{ offenderBasics.lastName }}, {{ offenderBasics.firstName }}</span>
+        </div>
+        <div class="govuk-!-margin-right-3">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Prison No.</p>
+            <span data-qa="nomsId">{{ offenderBasics.offenderNo }}</span>
+        </div>
+        <div class="govuk-!-margin-right-3">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Date of Birth</p>
+            <span data-qa="dob">{{ offenderBasics.dateOfBirth }}</span>
+        </div>
+        <div class="govuk-!-margin-right-3">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Location</p>
+            <span data-qa="prison-description">{{ agency }}</span>
+        </div>
       </div>
     </div>
+    <hr class="govuk-section-break govuk-section-break--visible">
   </div>
 
   <div class="govuk-grid-row govuk-body">
@@ -104,7 +101,7 @@
           },
           {
             value: "MAPPA",
-            text: "MAPPA (Multi-Agency Public Protection Agreement"
+            text: "MAPPA (Multi-Agency Public Protection Agreement)"
           },
           {
             value: "FOI_SARS",
