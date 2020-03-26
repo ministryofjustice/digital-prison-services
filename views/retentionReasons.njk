@@ -1,0 +1,158 @@
+{% extends "./partials/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Prevent removal of this record' %}
+{% set subtitle = 'Reason for preventing removal' %}
+{% set instructions = 'Select all that may apply. Remove all to stop retaining the record.' %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: offenderUrl
+  }) }}
+
+  <div class="govuk-grid-row govuk-body">
+    <div class="govuk-grid-column-full">
+
+      <div class="basic-details">
+        <div class="govuk-!-margin-right-6">
+          <img
+                  src="/app/images/{{ offenderBasics.offenderNo }}/data"
+                  alt="Headshot of {{ offenderBasics.firstName }} {{ offenderBasics.lastName }}"
+                  style="float:left"
+                  height="110"
+                  width="90"
+                  data-qa="offender-image"
+          />
+        </div>
+  
+        <div>
+          <p class="offender-details-paragraph bold">Name</p>
+          <span class="offender-details-paragraph"
+                data-qa="displayName">{{ offenderBasics.lastName }}, {{ offenderBasics.firstName }}</span>
+        </div>
+  
+        <div>
+          <p class="offender-details-paragraph bold">Prison No.</p>
+          <span class="offender-details-paragraph"
+                data-qa="nomsId">{{ offenderBasics.offenderNo }}</span>
+        </div>
+  
+        <div>
+          <p class="offender-details-paragraph bold">Date of Birth</p>
+          <span class="offender-details-paragraph" data-qa="dob">{{ offenderBasics.dateOfBirth }}</span>
+        </div>
+  
+        <div>
+          <p class="offender-details-paragraph bold">Location</p>
+          <span class="offender-details-paragraph" data-qa="prison-description">{{ agency }}</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row govuk-body">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+
+      {% set otherHtml %}
+      {{ govukTextarea({
+        id: "more-detail",
+        name: "more-detail",
+        classes: "govuk-!-width-one-third",
+        label: {
+          text: "Please give details"
+        }
+      }) }}
+      {% endset -%}
+
+      {{ govukCheckboxes({
+        idPrefix: "citizenship-conditional",
+        name: "citizen",
+        fieldset: {
+          legend: {
+            text: subtitle,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        hint: {
+          text: instructions 
+        },
+        items: [
+          {
+            value: "CHILD_SEX_ABUSE",
+            text: "Child Sex Abuse Moratorium"
+          },
+          {
+            value: "HIGH_PROFILE",
+            text: "High Profile Offenders"
+          },
+          {
+            value: "LITIGATION_DISPUTE",
+            text: "Litigation/Dispute"
+          },
+          {
+            value: "LOOKED_AFTER_CHILDREN",
+            text: "Looked after children"
+          },
+          {
+            value: "MAPPA",
+            text: "MAPPA (Multi-Agency Public Protection Agreement"
+          },
+          {
+            value: "FOI_SARS",
+            text: "Subject to FOI/SARs"
+          },
+          {
+            value: "OTHER",
+            text: "Other",
+            conditional: {
+              html: otherHtml
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Update",
+        classes: "govuk-!-margin-right-1",
+        preventDoubleClick: true,
+        disabled: true
+      }) }}
+      
+      {{ govukButton({
+        text: "Cancel",
+        classes: "govuk-button--secondary",
+        preventDoubleClick: true,
+        disabled: true
+      }) }}
+
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      <h2 class="govuk-heading-m">Change history</h2>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+              <h3 class="govuk-heading-s">Date of change</h3>
+              <p>{{ dateOfChange }}</p>
+            </div>
+            <div class="govuk-grid-column-one-half">
+              <h4 class="govuk-heading-s">Staff ID</h4>
+              <p>{{ staffId }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
