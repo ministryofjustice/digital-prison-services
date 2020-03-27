@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 
 import geb.Browser
-import javafx.scene.chart.XYChart.Data
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.DataComplianceApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
