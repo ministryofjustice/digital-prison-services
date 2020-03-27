@@ -4,6 +4,7 @@ const { elite2ApiFactory } = require('./api/elite2Api')
 const { oauthApiFactory } = require('./api/oauthApi')
 const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const { communityApiFactory } = require('./api/communityApi')
+const { dataComplianceApiFactory } = require('./api/dataComplianceApi')
 
 const elite2Api = elite2ApiFactory(
   clientFactory({
@@ -35,9 +36,17 @@ const oauthApi = oauthApiFactory(
   { ...config.apis.oauth2 }
 )
 
+const dataComplianceApi = dataComplianceApiFactory(
+  clientFactory({
+    baseUrl: config.apis.datacompliance.url,
+    timeout: config.apis.datacompliance.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
   oauthApi,
   communityApi,
+  dataComplianceApi,
 }

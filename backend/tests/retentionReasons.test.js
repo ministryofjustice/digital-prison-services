@@ -6,6 +6,7 @@ config.app.notmEndpointUrl = '//dpsUrl/'
 
 describe('retention reasons', () => {
   const elite2Api = {}
+  const dataComplianceApi = {}
   const offenderNo = 'ABC123'
 
   let req
@@ -32,8 +33,9 @@ describe('retention reasons', () => {
 
     elite2Api.getDetails = jest.fn()
     elite2Api.getAgencies = jest.fn()
+    dataComplianceApi.getOffenderRetentionReasons = jest.fn()
 
-    controller = retentionReasonsFactory(elite2Api, logError)
+    controller = retentionReasonsFactory(elite2Api, dataComplianceApi, logError)
   })
 
   describe('index', () => {
@@ -53,6 +55,12 @@ describe('retention reasons', () => {
             description: 'Leeds',
           },
         ])
+        dataComplianceApi.getOffenderRetentionReasons.mockReturnValue([
+          {
+            reasonCode: 'HIGH_PROFILE',
+            displayName: 'High Profile Offenders',
+          },
+        ])
       })
 
       it('should make the correct calls for information and render the correct template', async () => {
@@ -63,6 +71,12 @@ describe('retention reasons', () => {
         expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
           agency: 'Leeds',
           offenderUrl: 'http://localhost:3000/offenders/ABC123',
+          retentionReasons: [
+            {
+              reasonCode: 'HIGH_PROFILE',
+              displayName: 'High Profile Offenders',
+            },
+          ],
           offenderBasics: {
             offenderNo: 'ABC123',
             firstName: 'BARRY',

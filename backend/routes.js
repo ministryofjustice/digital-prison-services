@@ -67,7 +67,7 @@ const { notifyClient } = require('./shared/notifyClient')
 
 const router = express.Router()
 
-const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
+const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplianceApi }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
@@ -224,7 +224,10 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi }) => {
 
   router.use('/appointments', viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError }))
 
-  router.use('/offenders/:offenderNo/retention-reasons', retentionReasonsRouter({ elite2Api, logError }))
+  router.use(
+    '/offenders/:offenderNo/retention-reasons',
+    retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
+  )
 
   return router
 }

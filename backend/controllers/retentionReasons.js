@@ -3,7 +3,7 @@ const {
 } = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-const retentionReasonsFactory = (elite2Api, logError) => {
+const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
   const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
 
   const renderError = (req, res, error) => {
@@ -20,10 +20,12 @@ const retentionReasonsFactory = (elite2Api, logError) => {
       const agencies = await elite2Api.getAgencies(res.locals)
       const agency = agencies.find(a => a.agencyId === offenderDetails.agencyId).description
       const offenderUrl = getOffenderUrl(offenderNo)
+      const retentionReasons = await dataComplianceApi.getOffenderRetentionReasons(res.locals)
 
       return res.render('retentionReasons.njk', {
         agency,
         offenderUrl,
+        retentionReasons,
         offenderBasics: {
           offenderNo: offenderDetails.offenderNo,
           firstName: offenderDetails.firstName,

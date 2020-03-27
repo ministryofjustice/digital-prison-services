@@ -8,6 +8,19 @@ class RetentionReasonsPage extends Page {
 
     static content = {
         pageTitle { $('h1').text() }
+
+        offenderImage { $('[data-qa="offender-image"]') }
+        offenderName { $('[data-qa="offender-name"]').text() }
+        offenderNumber { $('[data-qa="offender-no"]').text() }
+        offenderDob { $('[data-qa="dob"]').text() }
+        offenderAgency { $('[data-qa="agency"]').text() }
+
+        checkBoxHighProfile { $('#retention-reason-HIGH_PROFILE') }
+        checkBoxOther { $('#retention-reason-OTHER') }
+        moreDetailOther { $('#more-detail-OTHER') }
+
+        updateButton {$('button', 'text': 'Update')}
+        cancelButton {$('button', 'text': 'Cancel')}
     }
 
     static at = {
