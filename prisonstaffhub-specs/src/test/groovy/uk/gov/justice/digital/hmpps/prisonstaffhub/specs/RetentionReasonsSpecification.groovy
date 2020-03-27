@@ -23,7 +23,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
     @Rule
     DataComplianceApi dataComplianceApi = new DataComplianceApi()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi, dataComplianceApi)
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
 
     def "should load the retention reasons page"() {
         setupTests()
@@ -42,8 +42,8 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         elite2api.stubImage()
         elite2api.stubOffenderDetails(offenderNo,
-                Map.of("firstName", "john",
-                        "lastName", "doe",
+                Map.of("firstName", "John",
+                        "lastName", "Doe",
                         "dateOfBirth", "1990-01-02",
                         "offenderNo", offenderNo,
                         "agencyId", "LEI"
@@ -58,7 +58,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
     def assertInitialPageContent() {
 
         assert offenderImage
-        assert offenderName == "doe, john"
+        assert offenderName == "Doe, John"
         assert offenderNumber == offenderNo
         assert offenderDob == "1990-01-02"
         assert offenderAgency == "Leeds"
