@@ -27,6 +27,13 @@ const controller = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Ap
   router.get('/enter-offender-details', enterOffenderDetails)
   router.post('/create-booking-request', createBookingRequest)
   router.get('/confirmation', confirm)
+  router.get('/prisoner-not-listed', async (req, res) => {
+    return res.render('requestBooking/prisonerNotListed.njk', {
+      url: req.originalUrl,
+      homeUrl: '/videolink',
+      user: { displayName: req.session.userDetails.name },
+    })
+  })
 
   return router
 }
