@@ -35,11 +35,11 @@
 
         <div class="govuk-!-margin-right-3">
             <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Name</p>
-            <span data-qa="displayName">{{ offenderBasics.lastName }}, {{ offenderBasics.firstName }}</span>
+            <span data-qa="offender-name">{{ offenderBasics.lastName }}, {{ offenderBasics.firstName }}</span>
         </div>
         <div class="govuk-!-margin-right-3">
             <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Prison No.</p>
-            <span data-qa="nomsId">{{ offenderBasics.offenderNo }}</span>
+            <span data-qa="offender-no">{{ offenderBasics.offenderNo }}</span>
         </div>
         <div class="govuk-!-margin-right-3">
             <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Date of Birth</p>
@@ -47,7 +47,7 @@
         </div>
         <div class="govuk-!-margin-right-3">
             <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Location</p>
-            <span data-qa="prison-description">{{ agency }}</span>
+            <span data-qa="agency">{{ agency }}</span>
         </div>
       </div>
     </div>
@@ -59,20 +59,33 @@
 
       <h1 class="govuk-heading-l">{{ title }}</h1>
 
-      {% set otherHtml %}
-      {{ govukTextarea({
-        id: "more-detail",
-        name: "more-detail",
-        classes: "govuk-!-width-one-third",
-        label: {
-          text: "Please give details"
-        }
-      }) }}
-      {% endset -%}
+      {% set reasonOptions = [] %}
+      {% for reason in retentionReasons %}
+
+        {% set moreDetail %}
+        {{ govukTextarea({
+          id: "more-detail-" + reason.reasonCode,
+          name: "more-detail",
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Please give details"
+          }
+        }) }}
+        {% endset -%}
+
+        {% set reasonOptions = (reasonOptions.push(
+          { 
+            id: "retention-reason-" + reason.reasonCode,
+            value: reason.reasonCode, 
+            text: reason.displayName, 
+            conditional: { 
+              html: moreDetail
+            } if reason.allowReasonDetails
+          }), reasonOptions) %}
+      {% endfor %}
 
       {{ govukCheckboxes({
-        idPrefix: "citizenship-conditional",
-        name: "citizen",
+        name: "retention-reasons",
         fieldset: {
           legend: {
             text: subtitle,
@@ -82,39 +95,7 @@
         hint: {
           text: instructions 
         },
-        items: [
-          {
-            value: "CHILD_SEX_ABUSE",
-            text: "Child Sex Abuse Moratorium"
-          },
-          {
-            value: "HIGH_PROFILE",
-            text: "High Profile Offenders"
-          },
-          {
-            value: "LITIGATION_DISPUTE",
-            text: "Litigation/Dispute"
-          },
-          {
-            value: "LOOKED_AFTER_CHILDREN",
-            text: "Looked after children"
-          },
-          {
-            value: "MAPPA",
-            text: "MAPPA (Multi-Agency Public Protection Agreement)"
-          },
-          {
-            value: "FOI_SARS",
-            text: "Subject to FOI/SARs"
-          },
-          {
-            value: "OTHER",
-            text: "Other",
-            conditional: {
-              html: otherHtml
-            }
-          }
-        ]
+        items: reasonOptions 
       }) }}
 
       {{ govukButton({

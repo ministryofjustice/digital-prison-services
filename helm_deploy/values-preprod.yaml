@@ -28,6 +28,7 @@ env:
   API_COMMUNITY_ENDPOINT_URL: "https://community-api-secure.pre-prod.delius.probation.hmpps.dsd.io"
   API_COMMUNITY_API_PREFIX: "/secure"
   VIDEO_LINK_ENABLED_FOR: "WWI"
+  API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-preprod.prison.service.justice.gov.uk
 
 whitelist:
   office: "217.33.148.210/32"

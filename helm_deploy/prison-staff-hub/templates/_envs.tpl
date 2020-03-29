@@ -91,6 +91,11 @@ env:
   - name: API_WHEREABOUTS_ENDPOINT_URL
     value: {{ .Values.env.API_WHEREABOUTS_ENDPOINT_URL | quote }}
 
+  {{- if .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL }}
+  - name: API_DATA_COMPLIANCE_ENDPOINT_URL
+    value: {{ .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL | quote }}
+  {{- end }}
+
   - name: UPDATE_ATTENDANCE_PRISONS
     value: {{ .Values.env.UPDATE_ATTENDANCE_PRISONS | quote }}
 

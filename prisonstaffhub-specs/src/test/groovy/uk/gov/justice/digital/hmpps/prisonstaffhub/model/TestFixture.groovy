@@ -20,7 +20,11 @@ class TestFixture {
 
     UserAccount currentUser
 
-    TestFixture(Browser browser, Elite2Api elite2Api, OauthApi oauthApi, WhereaboutsApi whereaboutsApi) {
+    TestFixture(Browser browser,
+                Elite2Api elite2Api,
+                OauthApi oauthApi,
+                WhereaboutsApi whereaboutsApi) {
+
         this.browser = browser
         this.elite2Api = elite2Api
         this.oauthApi = oauthApi

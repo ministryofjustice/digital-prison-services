@@ -48,6 +48,10 @@ module.exports = {
       timeoutSeconds: process.env.API_COMMUNITY_ENDPOINT_TIMEOUT_SECONDS || 30,
       apiPrefix: process.env.API_COMMUNITY_API_PREFIX || '/api',
     },
+    datacompliance: {
+      url: process.env.API_DATA_COMPLIANCE_ENDPOINT_URL || 'http://localhost:8083/',
+      timeoutSeconds: process.env.API_DATA_COMPLIANCE_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
   },
   notifications: {
     notifyKey: process.env.NOTIFY_API_KEY || '',
