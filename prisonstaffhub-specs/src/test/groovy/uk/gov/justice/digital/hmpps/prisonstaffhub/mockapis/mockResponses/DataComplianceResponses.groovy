@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses
 
 import groovy.json.JsonOutput
+import org.openqa.selenium.json.Json
 
 class DataComplianceResponses {
 
@@ -22,4 +23,16 @@ class DataComplianceResponses {
             retentionReasonHighProfile,
             retentionReasonOther
     ])
+
+    static existingRetentionRecord = JsonOutput.toJson(([
+            offenderNo: 'A12345',
+            userId: 'SOME_USER',
+            modifiedDateTime: '2020-01-02T03:04:05.987654',
+            retentionReasons: [
+                    [
+                            reasonCode: 'OTHER',
+                            reasonDetails: 'Some other reason'
+                    ]
+            ]
+    ]))
 }

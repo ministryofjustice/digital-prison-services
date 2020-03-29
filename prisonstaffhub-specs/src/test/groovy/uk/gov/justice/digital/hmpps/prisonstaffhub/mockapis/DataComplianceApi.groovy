@@ -21,4 +21,49 @@ class DataComplianceApi extends WireMockRule {
                                         .withBody(DataComplianceResponses.retentionReasons)
                         ))
     }
+
+    void stubNoExistingOffenderRecord() {
+        this.stubFor(
+                get('/retention/offenders/A12345')
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(404)
+                        ))
+    }
+
+    void stubExistingOffenderRecord() {
+        this.stubFor(
+                get('/retention/offenders/A12345')
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withHeader('ETag', '"0"')
+                                        .withBody(DataComplianceResponses.existingRetentionRecord)
+                        ))
+    }
+
+    void stubCreateOffenderRecord() {
+        this.stubFor(
+                put('/retention/offenders/A12345')
+                        .withRequestBody(equalToJson('{ "retentionReasons": [ ' +
+                                '{ "reasonCode": "HIGH_PROFILE" },' +
+                                '{ "reasonCode": "OTHER", "reasonDetails": "Some other reason" }' +
+                                ']}'))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(201)
+                        ))
+    }
+
+    void stubUpdateOffenderRecord() {
+        this.stubFor(
+                put('/retention/offenders/A12345')
+                        .withHeader('if-match', equalToJson('"0"'))
+                        .withRequestBody(equalToJson('{ "retentionReasons": [ { "reasonCode": "HIGH_PROFILE" } ]}'))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(201)
+                        ))
+    }
 }

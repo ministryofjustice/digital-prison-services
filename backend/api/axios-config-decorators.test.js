@@ -27,4 +27,28 @@ describe('Axios request configuration decorator tests', () => {
     const headers = decorators.getHeaders(context)
     expect(headers).toEqual({ 'page-limit': '5' })
   })
+
+  it('should include custom headers', () => {
+    const context = {}
+    contextProperties.setTokens({ access_token: 'access', refresh_token: 'refresh' }, context)
+    contextProperties.setRequestPagination(context, { 'page-limit': '5' })
+    contextProperties.setCustomRequestHeaders(context, { 'CUSTOM-HeADer': 'Custom-Value' })
+
+    const headers = decorators.getHeaders(context)
+    expect(headers).toEqual({ authorization: 'Bearer access', 'page-limit': '5', 'custom-header': 'Custom-Value' })
+  })
+
+  it('should not override other headers with custom headers', () => {
+    const context = {}
+    contextProperties.setTokens({ access_token: 'access', refresh_token: 'refresh' }, context)
+    contextProperties.setRequestPagination(context, { 'page-limit': '5' })
+
+    contextProperties.setCustomRequestHeaders(context, {
+      authorization: 'rogue-value',
+      'page-limit': '555',
+    })
+
+    const headers = decorators.getHeaders(context)
+    expect(headers).toEqual({ authorization: 'Bearer access', 'page-limit': '5' })
+  })
 })
