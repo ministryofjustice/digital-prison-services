@@ -1,6 +1,7 @@
 const moment = require('moment')
 const querystring = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
+const prisonerSearchValidation = require('./prisonerSearchValidation')
 
 const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const renderError = (req, res, error) => {
@@ -37,59 +38,32 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const index = async (req, res) => renderTemplate(req, res)
 
   const post = async (req, res) => {
-    const { nameOrNumber, dobDay, dobMonth, dobYear, prison } = req.body
+    const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.body
     const dateOfBirth = moment({ day: dobDay, month: Number.isNaN(dobMonth) ? dobMonth : dobMonth - 1, year: dobYear })
     const dobIsValid =
       dateOfBirth.isValid() && !Number.isNaN(dobDay) && !Number.isNaN(dobMonth) && !Number.isNaN(dobYear)
-    const errors = []
-
-    if (!nameOrNumber) {
-      errors.push({ text: 'Enter a name or prison number', href: '#nameOrNumber' })
-    }
-
-    if (dobDay && dobMonth && dobYear) {
-      const dobInThePast = dobIsValid ? dateOfBirth.isBefore(moment(), 'day') : false
-      const dobIsTooEarly = dobIsValid ? dateOfBirth.isBefore(moment({ day: 1, month: 0, year: 1900 })) : true
-
-      if (!dobIsValid) {
-        errors.push({ text: 'Enter a date of birth which is a real date', href: '#dobDay' }, { href: '#dobError' })
-      }
-
-      if (dobIsValid && !dobInThePast) {
-        errors.push({ text: 'Enter a date of birth which is in the past', href: '#dobDay' }, { href: '#dobError' })
-      }
-
-      if (dobIsValid && dobIsTooEarly) {
-        errors.push({ text: 'Date of birth must be after 1900', href: '#dobDay' }, { href: '#dobError' })
-      }
-    }
-
-    if (!dobDay && (dobMonth || dobYear)) {
-      errors.push({ text: 'Date of birth must include a day', href: '#dobDay' })
-    }
-
-    if (!dobMonth && (dobDay || dobYear)) {
-      errors.push({ text: 'Date of birth must include a month', href: '#dobMonth' })
-    }
-
-    if (!dobYear && (dobDay || dobMonth)) {
-      errors.push({ text: 'Date of birth must include a year', href: '#dobYear' })
-    }
+    const errors = prisonerSearchValidation(req.body)
 
     if (errors.length > 0) {
+      const hasOtherSearchDetails = prisonNumber || dobDay || dobMonth || dobYear || prison
+
       return renderTemplate(req, res, {
         errors,
         formValues: req.body,
+        hasOtherSearchDetails,
       })
     }
 
     const searchQuery = querystring.stringify({
-      nameOrNumber,
+      firstName,
+      lastName,
+      prisonNumber,
       dob: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
       prison,
     })
 
-    return res.redirect(`/prisoner-search/results?${searchQuery}`)
+    // return res.redirect(`/prisoner-search/results?${searchQuery}`)
+    return res.send(JSON.stringify(searchQuery))
   }
 
   return { index, post }
