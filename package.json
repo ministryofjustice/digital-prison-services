@@ -62,7 +62,7 @@
     "flag": "^4.1.0",
     "govuk-colours": "^1.0.3",
     "govuk-elements-sass": "^3.1.2",
-    "govuk-frontend": "3.0.0",
+    "govuk-frontend": "^3.6.0",
     "govuk_frontend_toolkit": "^7.5.0",
     "helmet": "^3.12.1",
     "hsts": "^2.1.0",
