@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { formatName, isOffenderNumber } = require('../../utils')
+const { formatName } = require('../../utils')
 const config = require('../../config')
 
 module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
@@ -9,19 +9,19 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
     const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
 
     if (hasSearchAccess) {
-      const { nameOrNumber = '', dob, prison } = req.query
+      const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.query
 
-      const formattedNameOrNumber = nameOrNumber
-        .replace(/,/g, ' ')
-        .replace(/\s\s+/g, ' ')
-        .trim()
-
-      const [lastName, firstName] = !isOffenderNumber(formattedNameOrNumber)
-        ? formattedNameOrNumber.split(' ')
-        : [null, null]
+      const dateOfBirth = moment({
+        day: dobDay,
+        month: Number.isNaN(dobMonth) ? dobMonth : dobMonth - 1,
+        year: dobYear,
+      })
+      const dobIsValid =
+        dateOfBirth.isValid() && !Number.isNaN(dobDay) && !Number.isNaN(dobMonth) && !Number.isNaN(dobYear)
+      const dob = dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined
 
       const searchResults = await elite2Api.globalSearch(res.locals, {
-        offenderNo: isOffenderNumber(formattedNameOrNumber) ? nameOrNumber : undefined,
+        offenderNo: prisonNumber,
         lastName,
         firstName,
         dateOfBirth: dob,

@@ -1,6 +1,8 @@
 const moment = require('moment')
 const querystring = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
+const { formatName } = require('../../utils')
+const config = require('../../config')
 const prisonerSearchValidation = require('./prisonerSearchValidation')
 
 const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
@@ -20,12 +22,60 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
       const agencyOptions = agencies
         .map(agency => ({ value: agency.agencyId, text: agency.description }))
         .sort((a, b) => a.text.localeCompare(b.text))
+      const hasSearched = Object.keys(req.query).length
+      let searchResults = []
 
       if (hasSearchAccess) {
+        const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.query
+
+        if (hasSearched) {
+          const dateOfBirth = moment({
+            day: dobDay,
+            month: Number.isNaN(dobMonth) ? dobMonth : dobMonth - 1,
+            year: dobYear,
+          })
+          const dobIsValid =
+            dateOfBirth.isValid() && !Number.isNaN(dobDay) && !Number.isNaN(dobMonth) && !Number.isNaN(dobYear)
+          const dob = dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined
+
+          searchResults = await elite2Api.globalSearch(res.locals, {
+            offenderNo: prisonNumber,
+            lastName,
+            firstName,
+            dateOfBirth: dob,
+            location: 'IN',
+          })
+        }
+
+        const results = searchResults
+          .filter(result => (prison ? prison === result.latestLocationId : result))
+          .map(result => {
+            const { offenderNo, latestLocationId, pncNumber } = result
+            const name = formatName(result.firstName, result.lastName)
+
+            return {
+              name,
+              offenderNo,
+              dob: result.dateOfBirth ? moment(result.dateOfBirth).format('D MMMM YYYY') : undefined,
+              prison: result.latestLocation,
+              prisonId: latestLocationId,
+              pncNumber: pncNumber || '--',
+              addAppointmentHTML: config.app.videoLinkEnabledFor.includes(latestLocationId)
+                ? `<a href="/${latestLocationId}/offenders/${offenderNo}/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="visually-hidden"> for ${name}, prison number ${offenderNo}</span></a>`
+                : '',
+            }
+          })
+
+        const hasOtherSearchDetails = prisonNumber || dobDay || dobMonth || dobYear || prison
+
         return res.render('prisonerSearch.njk', {
           ...pageData,
           agencyOptions,
+          results,
+          hasSearched,
           homeUrl: '/videolink',
+          formValues: hasSearched ? req.query : req.body,
+          hasOtherSearchDetails,
         })
       }
 
@@ -38,32 +88,17 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const index = async (req, res) => renderTemplate(req, res)
 
   const post = async (req, res) => {
-    const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.body
-    const dateOfBirth = moment({ day: dobDay, month: Number.isNaN(dobMonth) ? dobMonth : dobMonth - 1, year: dobYear })
-    const dobIsValid =
-      dateOfBirth.isValid() && !Number.isNaN(dobDay) && !Number.isNaN(dobMonth) && !Number.isNaN(dobYear)
     const errors = prisonerSearchValidation(req.body)
 
     if (errors.length > 0) {
-      const hasOtherSearchDetails = prisonNumber || dobDay || dobMonth || dobYear || prison
-
       return renderTemplate(req, res, {
         errors,
-        formValues: req.body,
-        hasOtherSearchDetails,
       })
     }
 
-    const searchQuery = querystring.stringify({
-      firstName,
-      lastName,
-      prisonNumber,
-      dob: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
-      prison,
-    })
+    const searchQuery = querystring.stringify(req.body)
 
-    // return res.redirect(`/prisoner-search/results?${searchQuery}`)
-    return res.send(JSON.stringify(searchQuery))
+    return res.redirect(`/prisoner-search?${searchQuery}`)
   }
 
   return { index, post }
