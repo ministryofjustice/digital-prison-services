@@ -3,6 +3,7 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const { formatName } = require('../../utils')
 const config = require('../../config')
 const prisonerSearchValidation = require('./prisonerSearchValidation')
+const dobValidation = require('../../shared/dobValidation')
 
 const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
   const index = async (req, res) => {
@@ -18,20 +19,13 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
         const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.query
 
         if (hasSearched && !errors.length) {
-          const dateOfBirth = moment({
-            day: dobDay,
-            month: Number.isNaN(dobMonth) ? dobMonth : dobMonth - 1,
-            year: dobYear,
-          })
-          const dobIsValid =
-            dateOfBirth.isValid() && !Number.isNaN(dobDay) && !Number.isNaN(dobMonth) && !Number.isNaN(dobYear)
-          const dob = dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined
+          const { dobIsValid, dateOfBirth } = dobValidation(dobDay, dobMonth, dobYear)
 
           searchResults = await elite2Api.globalSearch(res.locals, {
             offenderNo: prisonNumber,
             lastName,
             firstName,
-            dateOfBirth: dob,
+            dateOfBirth: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
             location: 'IN',
           })
         }
