@@ -78,11 +78,6 @@ $govuk-page-width: 1170px;
     font-size: 12pt;
   }
 
-  // from govuk-frontend 3.6
-  .govuk-\!-display-none-print {
-    display: none !important;
-  }
-
   .printed-page {
     background: none;
   }
