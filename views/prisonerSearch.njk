@@ -89,6 +89,10 @@
       items: agencyOptions | addDefaultSelectedVale('Select') | setSelected(formValues.prison)
     }) }}
 
-    {{ govukButton({ text: "Search", isStartButton: true }) }}
+    {{ govukButton({
+      text: "Search",
+      isStartButton: true,
+      type: "submit"
+    }) }}
   </form>
 {% endblock %}
