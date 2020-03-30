@@ -130,7 +130,7 @@
     }) }}
   </form>
 
-  {% if hasSearched %}
+  {% if hasSearched and not errors.length %}
     {% set rows = [] %}
     {% for result in results %}
       {% set rows = (rows.push([
@@ -143,8 +143,8 @@
       ]), rows) %}
     {% endfor %}
 
-    {% set prisonerString = 'prisoner' if results.length === 1 else  'prisoners' %}
-    <p class="govuk-body">Showing {{results.length}} {{prisonerString}}</strong></p>
+    {% set resultString = 'result' if results.length === 1 else  'results' %}
+    <p class="govuk-body">Showing {{results.length}} {{resultString}}</strong></p>
 
     {{ govukTable({
       head: [
