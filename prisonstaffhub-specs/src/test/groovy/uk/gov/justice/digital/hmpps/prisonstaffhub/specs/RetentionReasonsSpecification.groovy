@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.NewNomisWebServer
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.NewNomisLandingPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.RetentionReasonsPage
 
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
@@ -77,6 +78,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         updateButton.click()
 
         then: "The retention reasons should be updated"
+        at NewNomisLandingPage
         dataComplianceApi.verify(putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
 
         then: "I should be redirected to the new nomis ui"
