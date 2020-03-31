@@ -113,7 +113,7 @@
         label: {
           text: "Prison (optional)"
         },
-        items: agencyOptions | addDefaultSelectedVale('Select') | setSelected(formValues.prison)
+        items: agencyOptions | addDefaultSelectedVale('Select', true) | setSelected(formValues.prison)
       }) }}
     {% endset %}
 
@@ -160,10 +160,10 @@
         rows: rows,
         attributes: { "data-qa": "search-results-table" }
       }) }}
-
-      <p class="govuk-body">
-        <a href="/request-booking/prisoner-not-listed" class="govuk-link">The prisoner is not listed</a>
-      </p>
     {% endif %}
+
+    <p class="govuk-body">
+      <a href="/request-booking/prisoner-not-listed" class="govuk-link">The prisoner is not listed</a>
+    </p>
   {% endif %}
 {% endblock %}
