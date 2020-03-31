@@ -22,11 +22,11 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
       : {}
 
   const flagReasonsAlreadySelected = (retentionReasons, existingRecord) => {
-    const existingReasons = existingRecord && existingRecord.retentionReasons
+    const existingReasons = existingRecord.retentionReasons || []
     const matchingReason = reason1 => reason2 => reason1.reasonCode === reason2.reasonCode
 
     return retentionReasons.map(reasonToDisplay => {
-      const matchedReason = existingReasons && existingReasons.find(matchingReason(reasonToDisplay))
+      const matchedReason = existingReasons.find(matchingReason(reasonToDisplay))
 
       return {
         ...reasonToDisplay,
@@ -80,12 +80,8 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
         retentionReasons: reasons.filter(reason => reason.reasonCode),
       }
 
-      return await dataComplianceApi
-        .putOffenderRetentionRecord(res.locals, offenderNo, optionsSelected, version)
-        .then(() => res.redirect(getOffenderUrl(offenderNo)))
-        .catch(error => {
-          return renderError(req, res, error)
-        })
+      await dataComplianceApi.putOffenderRetentionRecord(res.locals, offenderNo, optionsSelected, version)
+      return res.redirect(getOffenderUrl(offenderNo))
     } catch (error) {
       return renderError(req, res, error)
     }
