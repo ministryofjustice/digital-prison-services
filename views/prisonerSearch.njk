@@ -8,6 +8,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% set title = 'Search for a prisoner' %}
+{% set prisonerNotListedUrl = '/request-booking/prisoner-not-listed' %}
 
 {% macro errorClass(field) -%}
   {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
@@ -27,7 +28,7 @@
   </h1>
 
   <p class="govuk-body">
-    <a href="/request-booking" class="govuk-link">This person is not currently in prison</a>
+    <a href={{prisonerNotListedUrl}} class="govuk-link">This person is not currently in prison</a>
   </p>
 
   <form novalidate="novalidate">
@@ -120,7 +121,8 @@
     {{ govukDetails({
       summaryText: "Search using other details",
       html: otherSearchDetails,
-      open: hasOtherSearchDetails
+      open: hasOtherSearchDetails,
+      attributes: { "data-qa": "other-search-details" }
     }) }}
 
     {{ govukButton({
@@ -146,17 +148,23 @@
     {% set resultString = 'result' if results.length === 1 else  'results' %}
     <p class="govuk-body">Showing {{results.length}} {{resultString}}</strong></p>
 
-    {{ govukTable({
-      head: [
-        { text: "Name" },
-        { text: "Prison number" },
-        { text: "Date of birth" },
-        { text: "Prison name" },
-        { text: "PNC" },
-        { text: "Book appointment" }
-      ],
-      rows: rows,
-      attributes: { "data-qa": "search-results-table" }
-    }) }}
+    {% if results.length %}
+      {{ govukTable({
+        head: [
+          { text: "Name" },
+          { text: "Prison number" },
+          { text: "Date of birth" },
+          { text: "Prison name" },
+          { text: "PNC" },
+          { text: "Book appointment" }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "search-results-table" }
+      }) }}
+
+      <p class="govuk-body">
+        <a href={{prisonerNotListedUrl}} class="govuk-link">The prisoner is not listed</a>
+      </p>
+    {% endif %}
   {% endif %}
 {% endblock %}

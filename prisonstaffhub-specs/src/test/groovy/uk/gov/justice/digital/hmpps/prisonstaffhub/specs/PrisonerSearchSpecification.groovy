@@ -6,7 +6,6 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrisonerSearchPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrisonerSearchResultsPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -32,15 +31,18 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
         submitButton.click()
 
         then: "I should be presented with an error which says I need to enter prisoner name or number"
-        errorSummary.text() == 'There is a problem\nEnter a name or prison number'
+        errorSummary.text() == 'There is a problem\nYou must search using either the prisoner\'s last name or prison number'
     }
 
     def "should handle missing dob fields"() {
         setupTests()
 
-        given: "I navigate to the prisoner search screen and only enter name and dob day"
+        given: "I navigate to the prisoner search screen and only enter last name and dob day"
         to PrisonerSearchPage
-        form.nameOrNumber = "Offender, Test"
+        form.lastName = "Offender"
+
+        and: "I show other search details"
+        otherSearchDetails.click()
         form.dobDay = "1"
 
         when: "I submit"
@@ -76,13 +78,12 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
 
         given: "I navigate to the prisoner search screen"
         to PrisonerSearchPage
-        form.nameOrNumber = "Offender, Test"
+        form.lastName = "Offender"
 
         when: "I submit"
         submitButton.click()
 
-        then: "I should be presented with the the search results page"
-        at PrisonerSearchResultsPage
+        then: "I should be presented with the the search results"
         searchResultsTable.children()[1].text() == "Test Offender G0011GX 17 July 1980 Wandsworth 1/2345 Book video link\nfor Test Offender, prison number G0011GX"
         bookVlbLinks[0].attr('href') == "http://localhost:3006/WWI/offenders/G0011GX/add-court-appointment"
     }

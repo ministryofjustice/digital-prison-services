@@ -10,6 +10,9 @@ class PrisonerSearchPage extends Page {
         form { $('form')}
         submitButton { $('button', type: 'submit') }
         errorSummary {$('.govuk-error-summary')}
+        otherSearchDetails {$("[data-qa='other-search-details'] .govuk-details__summary-text")}
+        searchResultsTable {$("[data-qa='search-results-table']")}
+        bookVlbLinks {$("[data-qa='book-vlb-link']")}
     }
 
     static at = {
