@@ -54,6 +54,15 @@ describe('Test clients built by oauthEnabledClient', () => {
 
       expect(response.request.header).toEqual(expect.objectContaining({ 'page-offset': '0', 'page-limit': '500' }))
     })
+
+    it('Should set custom headers on requests', async () => {
+      const context = {}
+      contextProperties.setCustomRequestHeaders(context, { 'custom-header': 'custom-value' })
+
+      const response = await client.get(context, '/api/users/me')
+
+      expect(response.request.header).toEqual(expect.objectContaining({ 'custom-header': 'custom-value' }))
+    })
   })
 
   describe('retry and timeout behaviour', () => {

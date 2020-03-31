@@ -112,6 +112,7 @@ const factory = ({ baseUrl, timeout }) => {
           else if (response) resolve(resultLogger(response))
         })
     })
+
   const put = (context, path, body) =>
     new Promise((resolve, reject) => {
       superagent

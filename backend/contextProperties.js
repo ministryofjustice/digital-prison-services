@@ -58,6 +58,13 @@ const setResponsePagination = (context, headers) => {
 
 const getResponsePagination = context => context.responseHeaders || {}
 
+const setCustomRequestHeaders = (context, headers) => {
+  // eslint-disable-next-line no-param-reassign
+  context.customRequestHeaders = (headers && normalizeHeaderNames(headers)) || {}
+}
+
+const getCustomRequestHeaders = context => context.customRequestHeaders || {}
+
 module.exports = {
   setTokens,
   hasTokens,
@@ -67,4 +74,6 @@ module.exports = {
   getRequestPagination,
   setResponsePagination,
   getResponsePagination,
+  setCustomRequestHeaders,
+  getCustomRequestHeaders,
 }

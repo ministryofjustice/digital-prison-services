@@ -66,51 +66,57 @@ describe('Should read/write properties', () => {
     })
   })
 
-  it('Should set the request pagination properties', () => {
+  describe('Should handle pagination properties', () => {
     const context = {}
-    contextProperties.setRequestPagination(context, {
-      'Page-offset': 1,
-      'Page-Limit': 10,
-      'SORT-FIELDS': 'a,b',
-      'sort-order': 'ASC',
+
+    it('Should set the response pagination properties', () => {
+      contextProperties.setResponsePagination(context, {
+        'PAGE-offset': 1,
+        'page-LIMIT': 10,
+        'Sort-Fields': 'a,b',
+        'sort-order': 'ASC',
+        'total-records': 100,
+      })
+      expect(contextProperties.getResponsePagination(context)).to.deep.equal({
+        'page-offset': 1,
+        'page-limit': 10,
+        'sort-fields': 'a,b',
+        'sort-order': 'ASC',
+        'total-records': 100,
+      })
     })
-    expect(contextProperties.getRequestPagination(context)).to.deep.equal({
-      'page-offset': 1,
-      'page-limit': 10,
-      'sort-fields': 'a,b',
-      'sort-order': 'ASC',
+
+    it('Should return an empty responsePagination object if no values were set', () => {
+      contextProperties.setResponsePagination(context, {})
+      expect(contextProperties.getResponsePagination(context)).to.deep.equal({})
+    })
+
+    it('Should return an empty responsePagination object even when the setter has not been called', () => {
+      expect(contextProperties.getResponsePagination(context)).to.deep.equal({})
     })
   })
 
-  it('Should return an empty requestPagination object even when the setter has not been called', () => {
-    expect(contextProperties.getRequestPagination({})).to.deep.equal({})
-  })
-
-  it('Should set the response pagination properties', () => {
+  describe('Should handle custom headers', () => {
     const context = {}
-    contextProperties.setResponsePagination(context, {
-      'PAGE-offset': 1,
-      'page-LIMIT': 10,
-      'Sort-Fields': 'a,b',
-      'sort-order': 'ASC',
-      'total-records': 100,
-    })
-    expect(contextProperties.getResponsePagination(context)).to.deep.equal({
-      'page-offset': 1,
-      'page-limit': 10,
-      'sort-fields': 'a,b',
-      'sort-order': 'ASC',
-      'total-records': 100,
-    })
-  })
 
-  it('Should return an empty responsePagination object if no values were set', () => {
-    const context = {}
-    contextProperties.setResponsePagination(context, {})
-    expect(contextProperties.getResponsePagination(context)).to.deep.equal({})
-  })
+    it('Should set custom headers', () => {
+      contextProperties.setCustomRequestHeaders(context, {
+        Header1: 1,
+        HEADER2: 'value2',
+      })
+      expect(contextProperties.getCustomRequestHeaders(context)).to.deep.equal({
+        header1: 1,
+        header2: 'value2',
+      })
+    })
 
-  it('Should return an empty responsePagination object even when the setter has not been called', () => {
-    expect(contextProperties.getResponsePagination({})).to.deep.equal({})
+    it('Should return an empty custom headers object if no values were set', () => {
+      contextProperties.setCustomRequestHeaders(context, {})
+      expect(contextProperties.getCustomRequestHeaders(context)).to.deep.equal({})
+    })
+
+    it('Should return an empty custom headers object even when the setter has not been called', () => {
+      expect(contextProperties.getCustomRequestHeaders({})).to.deep.equal({})
+    })
   })
 })

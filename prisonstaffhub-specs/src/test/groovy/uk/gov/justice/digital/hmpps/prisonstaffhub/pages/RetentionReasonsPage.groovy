@@ -20,7 +20,7 @@ class RetentionReasonsPage extends Page {
         moreDetailOther { $('#more-detail-OTHER') }
 
         updateButton {$('button', 'text': 'Update')}
-        cancelButton {$('button', 'text': 'Cancel')}
+        cancelButton {$('a', 'text': 'Cancel')}
     }
 
     static at = {

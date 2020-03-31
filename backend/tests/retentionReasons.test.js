@@ -34,6 +34,7 @@ describe('retention reasons', () => {
     elite2Api.getDetails = jest.fn()
     elite2Api.getAgencies = jest.fn()
     dataComplianceApi.getOffenderRetentionReasons = jest.fn()
+    dataComplianceApi.getOffenderRetentionRecord = jest.fn()
 
     controller = retentionReasonsFactory(elite2Api, dataComplianceApi, logError)
   })
@@ -55,12 +56,27 @@ describe('retention reasons', () => {
             description: 'Leeds',
           },
         ])
-        dataComplianceApi.getOffenderRetentionReasons.mockReturnValue([
+        dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([
+          {
+            reasonCode: 'OTHER',
+            displayName: 'Other',
+            displayOrder: 1,
+          },
           {
             reasonCode: 'HIGH_PROFILE',
             displayName: 'High Profile Offenders',
+            displayOrder: 0,
           },
         ])
+        dataComplianceApi.getOffenderRetentionRecord.mockResolvedValue({
+          etag: '"0"',
+          retentionReasons: [
+            {
+              reasonCode: 'OTHER',
+              reasonDetails: 'Some other reason',
+            },
+          ],
+        })
       })
 
       it('should make the correct calls for information and render the correct template', async () => {
@@ -70,11 +86,25 @@ describe('retention reasons', () => {
         expect(elite2Api.getAgencies).toHaveBeenCalledWith(res.locals)
         expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
           agency: 'Leeds',
+          formAction: '/offenders/ABC123/retention-reasons',
+          lastUpdate: {
+            version: '"0"',
+          },
           offenderUrl: 'http://localhost:3000/offenders/ABC123',
           retentionReasons: [
             {
               reasonCode: 'HIGH_PROFILE',
               displayName: 'High Profile Offenders',
+              displayOrder: 0,
+              alreadySelected: false,
+              details: undefined,
+            },
+            {
+              reasonCode: 'OTHER',
+              displayName: 'Other',
+              displayOrder: 1,
+              alreadySelected: true,
+              details: 'Some other reason',
             },
           ],
           offenderBasics: {
@@ -91,6 +121,7 @@ describe('retention reasons', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
         elite2Api.getDetails.mockRejectedValue(new Error('Network error'))
+        dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([])
       })
 
       it('should render the error template', async () => {
