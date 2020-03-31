@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const qs = require('qs')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -11,25 +10,23 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
 
   const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
 
-  const formatDate = date => date && formatTimestampToDate(date)
-
-  const formatDateTime = dateTime => dateTime && formatTimestampToDateTime(dateTime)
-
   const getFormAction = offenderNo => `/offenders/${offenderNo}/retention-reasons`
 
   const getLastUpdate = existingRecord =>
-    existingRecord && {
-      version: existingRecord.etag,
-      timestamp: formatDateTime(existingRecord.modifiedDateTime),
-      user: existingRecord.userId,
-    }
+    existingRecord
+      ? {
+          version: existingRecord.etag,
+          timestamp: formatTimestampToDateTime(existingRecord.modifiedDateTime),
+          user: existingRecord.userId,
+        }
+      : {}
 
   const flagReasonsAlreadySelected = (retentionReasons, existingRecord) => {
-    const existingReasons = existingRecord && existingRecord.retentionReasons
+    const existingReasons = existingRecord ? existingRecord.retentionReasons : []
     const matchingReason = reason1 => reason2 => reason1.reasonCode === reason2.reasonCode
 
     return retentionReasons.map(reasonToDisplay => {
-      const matchedReason = existingReasons && existingReasons.find(matchingReason(reasonToDisplay))
+      const matchedReason = existingReasons.find(matchingReason(reasonToDisplay))
 
       return {
         ...reasonToDisplay,
@@ -65,7 +62,7 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
           offenderNo: offenderDetails.offenderNo,
           firstName: offenderDetails.firstName,
           lastName: offenderDetails.lastName,
-          dateOfBirth: formatDate(offenderDetails.dateOfBirth),
+          dateOfBirth: formatTimestampToDate(offenderDetails.dateOfBirth),
         },
       })
     } catch (error) {
@@ -83,12 +80,8 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
         retentionReasons: reasons.filter(reason => reason.reasonCode),
       }
 
-      dataComplianceApi
-        .putOffenderRetentionRecord(res.locals, offenderNo, optionsSelected, version)
-        .then(() => res.redirect(getOffenderUrl(offenderNo)))
-        .catch(error => {
-          return renderError(req, res, error)
-        })
+      await dataComplianceApi.putOffenderRetentionRecord(res.locals, offenderNo, optionsSelected, version)
+      return res.redirect(getOffenderUrl(offenderNo))
     } catch (error) {
       return renderError(req, res, error)
     }

@@ -57,7 +57,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         assertInitialPageContent()
         assert checkBoxOther.value() == "OTHER"
         assert moreDetailOther.value() == "Some other reason"
-        assert lastUpdateTimestamp == "01/02/2020 - 03:04"
+        assert lastUpdateTimestamp == "01/02/2020 - 03:04 (UTC)"
         assert lastUpdateUser == "SOME_USER"
 
     }
