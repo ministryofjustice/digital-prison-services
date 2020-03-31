@@ -137,6 +137,11 @@ describe('formatTimestampToDate', () => {
   it('should format timestamp to date', () => {
     expect(formatTimestampToDate('2018-12-23T13:21')).toEqual('23/12/2018')
   })
+
+  it('should format date only timestamp to date', () => {
+    expect(formatTimestampToDate('2018-12-23')).toEqual('23/12/2018')
+  })
+
   it('should not fail to parse absent timestamp', () => {
     expect(formatTimestampToDate(undefined)).toEqual(undefined)
   })

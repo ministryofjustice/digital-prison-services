@@ -27,7 +27,7 @@ class DataComplianceResponses {
     static existingRetentionRecord = JsonOutput.toJson(([
             offenderNo: 'A12345',
             userId: 'SOME_USER',
-            modifiedDateTime: '2020-01-02T03:04:05.987654',
+            modifiedDateTime: '2020-02-01T03:04:05.987654',
             retentionReasons: [
                     [
                             reasonCode: 'OTHER',

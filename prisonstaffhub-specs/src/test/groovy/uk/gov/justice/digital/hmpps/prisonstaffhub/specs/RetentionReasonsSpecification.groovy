@@ -57,6 +57,9 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         assertInitialPageContent()
         assert checkBoxOther.value() == "OTHER"
         assert moreDetailOther.value() == "Some other reason"
+        assert lastUpdateTimestamp == "01/02/2020 - 03:04"
+        assert lastUpdateUser == "SOME_USER"
+
     }
 
     def "should be able to create a new retention record"() {
@@ -134,16 +137,14 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         fixture.loginAs(ITAG_USER)
 
         elite2api.stubImage()
+        elite2api.stubAgencyDetails("LEI", [ description: "Leeds"])
         elite2api.stubOffenderDetails(offenderNo,
                 Map.of("firstName", "John",
                         "lastName", "Doe",
-                        "dateOfBirth", "1990-01-02",
+                        "dateOfBirth", "1990-02-01",
                         "offenderNo", offenderNo,
                         "agencyId", "LEI"
                 ))
-        elite2api.stubGetAgencies (
-                [Map.of("agencyId", "LEI",
-                        "description", "Leeds")])
 
         dataComplianceApi.stubGetOffenderRetentionReasons()
         dataComplianceApi.stubNoExistingOffenderRecord()
@@ -156,7 +157,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         assert offenderImage
         assert offenderName == "Doe, John"
         assert offenderNumber == offenderNo
-        assert offenderDob == "1990-01-02"
+        assert offenderDob == "01/02/1990"
         assert offenderAgency == "Leeds"
 
         assert checkBoxHighProfile

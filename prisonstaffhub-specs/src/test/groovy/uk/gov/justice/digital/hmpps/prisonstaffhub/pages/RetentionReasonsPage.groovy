@@ -21,6 +21,9 @@ class RetentionReasonsPage extends Page {
 
         updateButton {$('button', 'text': 'Update')}
         cancelButton {$('a', 'text': 'Cancel')}
+
+        lastUpdateTimestamp { $('#last-update-timestamp').text() }
+        lastUpdateUser { $('#last-update-user').text() }
     }
 
     static at = {

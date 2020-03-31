@@ -5,7 +5,7 @@ const dataComplianceApiFactory = client => {
 
   const includeETagInBody = response => ({
     ...response.body,
-    etag: response.headers.etag.replace('--gzip', ''),
+    etag: response.headers.etag.replace(/--gzip|W\//gi, ''),
   })
 
   const map404ToNull = error => {
@@ -26,7 +26,7 @@ const dataComplianceApiFactory = client => {
 
   const putOffenderRetentionRecord = (context, offenderNo, body, version) => {
     contextProperties.setCustomRequestHeaders(context, version ? { 'if-match': version } : {})
-    client.put(context, `/retention/offenders/${offenderNo}`, body)
+    return client.put(context, `/retention/offenders/${offenderNo}`, body)
   }
 
   return {

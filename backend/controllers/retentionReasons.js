@@ -1,24 +1,27 @@
+/* eslint-disable consistent-return */
 const qs = require('qs')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
+const { formatTimestampToDate, formatTimestampToDateTime } = require('../utils')
 
 const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
   const sortReasonsByDisplayOrder = reasons => reasons.sort((r1, r2) => (r1.displayOrder > r2.displayOrder ? 1 : -1))
 
-  const getAgencyDescription = (agencies, agencyId) => {
-    const agency = agencies.find(a => a.agencyId === agencyId)
-    return agency ? agency.description : 'Unknown'
-  }
-
   const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
+
+  const formatDate = date => date && formatTimestampToDate(date)
+
+  const formatDateTime = dateTime => dateTime && formatTimestampToDateTime(dateTime)
 
   const getFormAction = offenderNo => `/offenders/${offenderNo}/retention-reasons`
 
   const getLastUpdate = existingRecord =>
     existingRecord && {
       version: existingRecord.etag,
+      timestamp: formatDateTime(existingRecord.modifiedDateTime),
+      user: existingRecord.userId,
     }
 
   const flagReasonsAlreadySelected = (retentionReasons, existingRecord) => {
@@ -45,24 +48,24 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
   const renderTemplate = async (req, res) => {
     try {
       const { offenderNo } = req.params
-      const [offenderDetails, agencies, retentionReasons, existingRecord] = await Promise.all([
+      const [offenderDetails, retentionReasons, existingRecord] = await Promise.all([
         elite2Api.getDetails(res.locals, offenderNo),
-        elite2Api.getAgencies(res.locals),
         dataComplianceApi.getOffenderRetentionReasons(res.locals).then(sortReasonsByDisplayOrder),
         dataComplianceApi.getOffenderRetentionRecord(res.locals, offenderNo),
       ])
+      const agencyDetails = await elite2Api.getAgencyDetails(res.locals, offenderDetails.agencyId)
 
       return res.render('retentionReasons.njk', {
         lastUpdate: getLastUpdate(existingRecord),
         formAction: getFormAction(offenderNo),
-        agency: getAgencyDescription(agencies, offenderDetails.agencyId),
+        agency: agencyDetails.description,
         offenderUrl: getOffenderUrl(offenderNo),
         retentionReasons: flagReasonsAlreadySelected(retentionReasons, existingRecord),
         offenderBasics: {
           offenderNo: offenderDetails.offenderNo,
           firstName: offenderDetails.firstName,
           lastName: offenderDetails.lastName,
-          dateOfBirth: offenderDetails.dateOfBirth,
+          dateOfBirth: formatDate(offenderDetails.dateOfBirth),
         },
       })
     } catch (error) {
@@ -80,9 +83,12 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
         retentionReasons: reasons.filter(reason => reason.reasonCode),
       }
 
-      await dataComplianceApi.putOffenderRetentionRecord(res.locals, offenderNo, optionsSelected, version)
-
-      return res.redirect(getOffenderUrl(offenderNo))
+      dataComplianceApi
+        .putOffenderRetentionRecord(res.locals, offenderNo, optionsSelected, version)
+        .then(() => res.redirect(getOffenderUrl(offenderNo)))
+        .catch(error => {
+          return renderError(req, res, error)
+        })
     } catch (error) {
       return renderError(req, res, error)
     }

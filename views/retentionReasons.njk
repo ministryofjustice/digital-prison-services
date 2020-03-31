@@ -127,18 +127,18 @@
 
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-      <h2 class="govuk-heading-m">Change history</h2>
+      <h2 class="govuk-heading-m">Last update</h2>
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
-              <h3 class="govuk-heading-s">Date of change</h3>
-              <p>{{ dateOfChange }}</p>
+              <h3 class="govuk-heading-s">Date of update</h3>
+              <p id="last-update-timestamp">{{ lastUpdate.timestamp }}</p>
             </div>
             <div class="govuk-grid-column-one-half">
               <h4 class="govuk-heading-s">Staff ID</h4>
-              <p>{{ staffId }}</p>
+              <p id="last-update-user">{{ lastUpdate.user }}</p>
             </div>
           </div>
         </div>
