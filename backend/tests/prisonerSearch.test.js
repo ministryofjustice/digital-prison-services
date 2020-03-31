@@ -1,4 +1,4 @@
-const { prisonerSearchFactory } = require('../controllers/search/prisonerSearch')
+const prisonerSearchController = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
 const config = require('../config')
 
@@ -36,7 +36,7 @@ describe('Prisoner search', () => {
     ])
     elite2Api.globalSearch = jest.fn()
 
-    controller = prisonerSearchFactory(oauthApi, elite2Api, logError)
+    controller = prisonerSearchController({ oauthApi, elite2Api, logError })
   })
 
   const agencyOptions = [
@@ -55,7 +55,7 @@ describe('Prisoner search', () => {
       it('should redirect back', async () => {
         oauthApi.userRoles.mockReturnValue([])
 
-        await controller.index(req, res)
+        await controller(req, res)
 
         expect(elite2Api.getAgencies).not.toHaveBeenCalled()
         expect(elite2Api.globalSearch).not.toHaveBeenCalled()
@@ -69,7 +69,7 @@ describe('Prisoner search', () => {
       })
 
       it('should render the prisoner search template', async () => {
-        await controller.index(req, res)
+        await controller(req, res)
 
         expect(elite2Api.getAgencies).toHaveBeenCalled()
         expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
@@ -113,7 +113,7 @@ describe('Prisoner search', () => {
           it('should make the correct search', async () => {
             req.query = { prisonNumber }
 
-            await controller.index(req, res)
+            await controller(req, res)
 
             expect(elite2Api.globalSearch).toHaveBeenCalledWith(res.locals, {
               offenderNo: prisonNumber,
@@ -137,7 +137,7 @@ describe('Prisoner search', () => {
           })
 
           it('should make the correct search', async () => {
-            await controller.index(req, res)
+            await controller(req, res)
 
             expect(elite2Api.globalSearch).toHaveBeenCalledWith(res.locals, {
               lastName,
@@ -153,7 +153,7 @@ describe('Prisoner search', () => {
           })
 
           it('should return the correctly formatted results', async () => {
-            await controller.index(req, res)
+            await controller(req, res)
 
             expect(res.render).toHaveBeenCalledWith(
               'prisonerSearch.njk',
@@ -191,7 +191,7 @@ describe('Prisoner search', () => {
             it('should make the correct search and return less results', async () => {
               req.query = { lastName, prison }
 
-              await controller.index(req, res)
+              await controller(req, res)
 
               expect(res.render).toHaveBeenCalledWith(
                 'prisonerSearch.njk',
@@ -219,7 +219,7 @@ describe('Prisoner search', () => {
     describe('when there are API errors', () => {
       it('should render the error template if there is an error retrieving user roles', async () => {
         oauthApi.userRoles.mockImplementation(() => Promise.reject(new Error('Network error')))
-        await controller.index(req, res)
+        await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
@@ -228,7 +228,7 @@ describe('Prisoner search', () => {
       it('should render the error template if there is an error retrieving agencies', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
         elite2Api.getAgencies.mockImplementation(() => Promise.reject(new Error('Network error')))
-        await controller.index(req, res)
+        await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
@@ -238,7 +238,7 @@ describe('Prisoner search', () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
         elite2Api.globalSearch.mockImplementation(() => Promise.reject(new Error('Network error')))
         req.query = { lastName: 'Offender' }
-        await controller.index(req, res)
+        await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
