@@ -15,7 +15,6 @@ describe('Prisoner search', () => {
 
   beforeEach(() => {
     req = {
-      body: {},
       originalUrl: 'http://localhost',
       query: {},
     }

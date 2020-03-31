@@ -34,7 +34,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
           .map(agency => ({ value: agency.agencyId, text: agency.description }))
           .sort((a, b) => a.text.localeCompare(b.text)),
         errors,
-        formValues: hasSearched ? req.query : req.body,
+        formValues: req.query,
         homeUrl: '/videolink',
         results: searchResults.filter(result => (prison ? prison === result.latestLocationId : result)).map(result => {
           const { offenderNo, latestLocationId, pncNumber } = result
