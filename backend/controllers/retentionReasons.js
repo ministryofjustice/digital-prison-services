@@ -22,7 +22,7 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
       : {}
 
   const flagReasonsAlreadySelected = (retentionReasons, existingRecord) => {
-    const existingReasons = existingRecord.retentionReasons || []
+    const existingReasons = existingRecord ? existingRecord.retentionReasons : []
     const matchingReason = reason1 => reason2 => reason1.reasonCode === reason2.reasonCode
 
     return retentionReasons.map(reasonToDisplay => {
