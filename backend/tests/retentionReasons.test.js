@@ -32,7 +32,7 @@ describe('retention reasons', () => {
     logError = jest.fn()
 
     elite2Api.getDetails = jest.fn()
-    elite2Api.getAgencies = jest.fn()
+    elite2Api.getAgencyDetails = jest.fn()
     dataComplianceApi.getOffenderRetentionReasons = jest.fn()
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
 
@@ -47,15 +47,10 @@ describe('retention reasons', () => {
           offenderNo,
           firstName: 'BARRY',
           lastName: 'SMITH',
-          dateOfBirth: '1990-01-02',
+          dateOfBirth: '1990-02-01',
           agencyId: 'LEI',
         })
-        elite2Api.getAgencies.mockReturnValue([
-          {
-            agencyId: 'LEI',
-            description: 'Leeds',
-          },
-        ])
+        elite2Api.getAgencyDetails.mockReturnValue({ description: 'Leeds' })
         dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([
           {
             reasonCode: 'OTHER',
@@ -70,6 +65,8 @@ describe('retention reasons', () => {
         ])
         dataComplianceApi.getOffenderRetentionRecord.mockResolvedValue({
           etag: '"0"',
+          userId: 'user1',
+          modifiedDateTime: '2020-02-01T03:04:05.987654',
           retentionReasons: [
             {
               reasonCode: 'OTHER',
@@ -83,11 +80,13 @@ describe('retention reasons', () => {
         await controller.index(req, res)
 
         expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        expect(elite2Api.getAgencies).toHaveBeenCalledWith(res.locals)
+        expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'LEI')
         expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
           agency: 'Leeds',
           formAction: '/offenders/ABC123/retention-reasons',
           lastUpdate: {
+            user: 'user1',
+            timestamp: '01/02/2020 - 03:04',
             version: '"0"',
           },
           offenderUrl: 'http://localhost:3000/offenders/ABC123',
@@ -111,7 +110,7 @@ describe('retention reasons', () => {
             offenderNo: 'ABC123',
             firstName: 'BARRY',
             lastName: 'SMITH',
-            dateOfBirth: '1990-01-02',
+            dateOfBirth: '01/02/1990',
           },
         })
       })

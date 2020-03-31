@@ -42,6 +42,12 @@ describe('data compliance api', () => {
       expect(actual).toEqual(responseBody)
     })
 
+    it('handles weak etag prefix', async () => {
+      client.get = jest.fn().mockResolvedValue({ headers: { etag: 'W/"0"' }, body: { some: 'response' } })
+      actual = await dataComplianceApi.getOffenderRetentionRecord(context, 'A1234BC')
+      expect(actual).toEqual(responseBody)
+    })
+
     it('should return null if 404 received', async () => {
       client.get = jest.fn().mockRejectedValue({ response: { status: 404 } })
       const errorResponse = await dataComplianceApi.getOffenderRetentionRecord(context, 'A1234BC')
