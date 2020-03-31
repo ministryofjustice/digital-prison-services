@@ -17,6 +17,6 @@ class PrisonerSearchPage extends Page {
 
     static at = {
         pageTitle == "Search for a prisoner"
-        submitButton.text() == 'Search'
+        submitButton.text() == 'Search\nand display the results below'
     }
 }
