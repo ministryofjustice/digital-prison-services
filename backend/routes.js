@@ -51,7 +51,6 @@ const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
 
 const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
 const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
-const prisonerSearchResultsController = require('./controllers/search/prisonerSearchResults')
 
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
@@ -211,7 +210,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
   )
 
   router.use('/prisoner-search', prisonerSearchRouter({ oauthApi, elite2Api, logError }))
-  router.get('/prisoner-search/results', prisonerSearchResultsController({ oauthApi, elite2Api, logError }))
+  // router.get('/prisoner-search/results', prisonerSearchResultsController({ oauthApi, elite2Api, logError }))
 
   router.get('/videolink', async (req, res) => {
     res.render('courtsVideolink.njk', {

@@ -1,5 +1,8 @@
 const { prisonerSearchFactory } = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
+const config = require('../config')
+
+config.app.videoLinkEnabledFor = ['MDI']
 
 describe('Prisoner search', () => {
   const elite2Api = {}
@@ -14,6 +17,7 @@ describe('Prisoner search', () => {
     req = {
       body: {},
       originalUrl: 'http://localhost',
+      query: {},
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
@@ -30,6 +34,7 @@ describe('Prisoner search', () => {
         description: 'Prison 1',
       },
     ])
+    elite2Api.globalSearch = jest.fn()
 
     controller = prisonerSearchFactory(oauthApi, elite2Api, logError)
   })
@@ -52,17 +57,162 @@ describe('Prisoner search', () => {
 
         await controller.index(req, res)
 
+        expect(elite2Api.getAgencies).not.toHaveBeenCalled()
+        expect(elite2Api.globalSearch).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith('back')
       })
     })
 
     describe('when the user does have the correct roles', () => {
-      it('should render the prisoner search template', async () => {
+      beforeEach(() => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
+      })
 
+      it('should render the prisoner search template', async () => {
         await controller.index(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', { agencyOptions, homeUrl: '/videolink' })
+        expect(elite2Api.getAgencies).toHaveBeenCalled()
+        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
+          agencyOptions,
+          errors: [],
+          formValues: {},
+          hasSearched: false,
+          homeUrl: '/videolink',
+          results: [],
+        })
+      })
+
+      describe('when a search has been made', () => {
+        beforeEach(() => {
+          elite2Api.globalSearch.mockReturnValue([
+            {
+              offenderNo: 'G0011GX',
+              firstName: 'TEST',
+              middleNames: 'ING',
+              lastName: 'OFFENDER',
+              dateOfBirth: '1980-07-17',
+              latestLocationId: 'LEI',
+              latestLocation: 'Leeds',
+              pncNumber: '1/2345',
+            },
+            {
+              offenderNo: 'A0011GZ',
+              firstName: 'TEST',
+              middleNames: 'ING',
+              lastName: 'OFFENDER',
+              dateOfBirth: '1981-07-17',
+              latestLocationId: 'MDI',
+              latestLocation: 'Moorlands',
+            },
+          ])
+        })
+
+        describe('with a prison number', () => {
+          const prisonNumber = 'G0011GX'
+
+          it('should make the correct search', async () => {
+            req.query = { prisonNumber }
+
+            await controller.index(req, res)
+
+            expect(elite2Api.globalSearch).toHaveBeenCalledWith(res.locals, {
+              offenderNo: prisonNumber,
+              location: 'IN',
+            })
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerSearch.njk',
+              expect.objectContaining({
+                formValues: { prisonNumber },
+                hasSearched: true,
+              })
+            )
+          })
+        })
+
+        describe('with a name', () => {
+          const lastName = 'Offender'
+
+          beforeEach(() => {
+            req.query = { lastName }
+          })
+
+          it('should make the correct search', async () => {
+            await controller.index(req, res)
+
+            expect(elite2Api.globalSearch).toHaveBeenCalledWith(res.locals, {
+              lastName,
+              location: 'IN',
+            })
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerSearch.njk',
+              expect.objectContaining({
+                formValues: { lastName },
+                hasSearched: true,
+              })
+            )
+          })
+
+          it('should return the correctly formatted results', async () => {
+            await controller.index(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerSearch.njk',
+              expect.objectContaining({
+                formValues: { lastName },
+                hasSearched: true,
+                results: [
+                  {
+                    addAppointmentHTML: '',
+                    dob: '17 July 1980',
+                    name: 'Test Offender',
+                    offenderNo: 'G0011GX',
+                    pncNumber: '1/2345',
+                    prison: 'Leeds',
+                    prisonId: 'LEI',
+                  },
+                  {
+                    addAppointmentHTML:
+                      '<a href="/MDI/offenders/A0011GZ/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="visually-hidden"> for Test Offender, prison number A0011GZ</span></a>',
+                    dob: '17 July 1981',
+                    name: 'Test Offender',
+                    offenderNo: 'A0011GZ',
+                    pncNumber: '--',
+                    prison: 'Moorlands',
+                    prisonId: 'MDI',
+                  },
+                ],
+              })
+            )
+          })
+
+          describe('and also with a prison', () => {
+            const prison = 'MDI'
+
+            it('should make the correct search and return less results', async () => {
+              req.query = { lastName, prison }
+
+              await controller.index(req, res)
+
+              expect(res.render).toHaveBeenCalledWith(
+                'prisonerSearch.njk',
+                expect.objectContaining({
+                  results: [
+                    {
+                      name: 'Test Offender',
+                      offenderNo: 'A0011GZ',
+                      dob: '17 July 1981',
+                      prison: 'Moorlands',
+                      pncNumber: '--',
+                      prisonId: 'MDI',
+                      addAppointmentHTML:
+                        '<a href="/MDI/offenders/A0011GZ/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="visually-hidden"> for Test Offender, prison number A0011GZ</span></a>',
+                    },
+                  ],
+                })
+              )
+            })
+          })
+        })
       })
     })
 
@@ -76,159 +226,22 @@ describe('Prisoner search', () => {
       })
 
       it('should render the error template if there is an error retrieving agencies', async () => {
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
         elite2Api.getAgencies.mockImplementation(() => Promise.reject(new Error('Network error')))
         await controller.index(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
       })
-    })
-  })
 
-  describe('post', () => {
-    beforeEach(() => {
-      oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
-    })
+      it('should render the error template if there is an error with global search', async () => {
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
+        elite2Api.globalSearch.mockImplementation(() => Promise.reject(new Error('Network error')))
+        req.query = { lastName: 'Offender' }
+        await controller.index(req, res)
 
-    describe('with an empty form', () => {
-      it('should display the correct errors', async () => {
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Enter a name or prison number', href: '#nameOrNumber' }],
-          formValues: {},
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-      })
-    })
-
-    describe('date of birth validation', () => {
-      it('should error when missing the day', async () => {
-        req.body = {
-          nameOrNumber: 'Test',
-          dobMonth: '07',
-          dobYear: '1987',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Date of birth must include a day', href: '#dobDay' }],
-          formValues: req.body,
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-      })
-
-      it('should error when missing the month', async () => {
-        req.body = {
-          nameOrNumber: 'Test',
-          dobDay: '17',
-          dobYear: '1987',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Date of birth must include a month', href: '#dobMonth' }],
-          formValues: req.body,
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-      })
-
-      it('should error when missing the year', async () => {
-        req.body = {
-          nameOrNumber: 'Test',
-          dobDay: '17',
-          dobMonth: '07',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Date of birth must include a year', href: '#dobYear' }],
-          formValues: req.body,
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-      })
-
-      it('should error not a valid date', async () => {
-        req.body = {
-          nameOrNumber: 'Test',
-          dobDay: '32',
-          dobMonth: '13',
-          dobYear: '1987',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Enter a date of birth which is a real date', href: '#dobDay' }, { href: '#dobError' }],
-          formValues: req.body,
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-      })
-
-      it('should error when the date is in the future', async () => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
-
-        req.body = {
-          nameOrNumber: 'Test',
-          dobDay: '30',
-          dobMonth: '03',
-          dobYear: '2019',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Enter a date of birth which is in the past', href: '#dobDay' }, { href: '#dobError' }],
-          formValues: req.body,
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-
-        Date.now.mockRestore()
-      })
-
-      it('should error when the date too far in the past', async () => {
-        req.body = {
-          nameOrNumber: 'Test',
-          dobDay: '17',
-          dobMonth: '07',
-          dobYear: '1899',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          errors: [{ text: 'Date of birth must be after 1900', href: '#dobDay' }, { href: '#dobError' }],
-          formValues: req.body,
-          agencyOptions,
-          homeUrl: '/videolink',
-        })
-      })
-    })
-
-    describe('when the form entry is valid', () => {
-      it('should submit the form correctly', async () => {
-        req.body = {
-          nameOrNumber: 'Test',
-          dobDay: '17',
-          dobMonth: '07',
-          dobYear: '1980',
-          prison: 'MDI',
-        }
-
-        await controller.post(req, res)
-
-        expect(res.redirect).toHaveBeenCalledWith(
-          '/prisoner-search/results?nameOrNumber=Test&dob=1980-07-17&prison=MDI'
-        )
+        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
+        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
       })
     })
   })

@@ -14,8 +14,8 @@ const prisonerSearchFactory = (oauthApi, elite2Api, logError) => {
       if (hasSearchAccess) {
         const agencies = await elite2Api.getAgencies(res.locals)
         let searchResults = []
-        const hasSearched = Object.keys(req.query).length
-        const errors = hasSearched && prisonerSearchValidation(req.query)
+        const hasSearched = Boolean(Object.keys(req.query).length)
+        const errors = hasSearched ? prisonerSearchValidation(req.query) : []
         const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.query
 
         if (hasSearched && !errors.length) {

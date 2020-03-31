@@ -2,8 +2,8 @@ const dobValidation = require('../../shared/dobValidation')
 
 module.exports = formValues => {
   const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear } = formValues
-  const { validateDobInput } = dobValidation(dobDay, dobMonth, dobYear)
-  const prisonerSearchErrors = [...validateDobInput()]
+  const { dobErrors } = dobValidation(dobDay, dobMonth, dobYear)
+  const prisonerSearchErrors = [...dobErrors]
 
   if (!lastName && !prisonNumber) {
     if (firstName) {
