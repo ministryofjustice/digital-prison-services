@@ -43,6 +43,8 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         at RetentionReasonsPage
         assertInitialPageContent()
+        assert lastUpdateTimestamp == ""
+        assert lastUpdateUser == ""
     }
 
     def "should load the retention reasons page with existing reasons"() {
@@ -57,7 +59,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         assertInitialPageContent()
         assert checkBoxOther.value() == "OTHER"
         assert moreDetailOther.value() == "Some other reason"
-        assert lastUpdateTimestamp == "01/02/2020 - 03:04"
+        assert lastUpdateTimestamp == "01/02/2020 - 03:04 (UTC)"
         assert lastUpdateUser == "SOME_USER"
 
     }
@@ -129,6 +131,30 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         then: "I should be redirected to the new nomis ui"
         newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
+    }
+
+    def "should be prevented from submitting empty details"() {
+
+        setupTests()
+        dataComplianceApi.stubExistingOffenderRecord()
+
+        given: "I am on the retention reasons page"
+        to RetentionReasonsPage
+
+        when: "I provide empty details"
+        at RetentionReasonsPage
+        moreDetailOther = ""
+
+        and: "I click the update button"
+        at RetentionReasonsPage
+        updateButton.click()
+
+        then: "The retention reasons should not be updated"
+        dataComplianceApi.verify(0, putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
+
+        then: "The page is re-loaded with an error message"
+        at RetentionReasonsPage
+        assert errorSummary
     }
 
     def offenderNo = "A12345"

@@ -24,6 +24,8 @@ class RetentionReasonsPage extends Page {
 
         lastUpdateTimestamp { $('#last-update-timestamp').text() }
         lastUpdateUser { $('#last-update-user').text() }
+
+        errorSummary { $('div.govuk-error-summary') }
     }
 
     static at = {
