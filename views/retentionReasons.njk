@@ -10,12 +10,22 @@
 {% set subtitle = 'Reason for preventing removal' %}
 {% set instructions = 'Select all that may apply. Remove all to stop retaining the record.' %}
 
-{% block content %}
-
+{% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
     href: offenderUrl
   }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { 'data-qa-errors': true }
+    }) }}
+  {% endif %}
 
   <div class="govuk-body">
     <hr class="govuk-section-break govuk-section-break--visible">
@@ -54,14 +64,6 @@
     </div>
     <hr class="govuk-section-break govuk-section-break--visible">
   </div>
-
-  {% if errors.length > 0 %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errors,
-      attributes: { 'data-qa-errors': true }
-    }) }}
-  {% endif %}
 
   <div class="govuk-grid-row govuk-body">
     <div class="govuk-grid-column-full">
