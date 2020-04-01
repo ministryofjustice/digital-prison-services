@@ -74,13 +74,18 @@ const absentReasonTableViewModel = offenderData => ({
       // Return the data in the appropriate format to seed the table macro
       return [
         {
-          html: data.location ? `<a href=${quickLookUrl} target="_blank">${data.offenderName}</a>` : data.offenderName,
+          html: data.location
+            ? `<a href=${quickLookUrl} class="govuk-link" target="_blank">${data.offenderName}</a>`
+            : data.offenderName,
         },
         {
           text: data.offenderNo,
         },
         {
           text: data.location || '--',
+        },
+        {
+          html: data.suspended ? '<span class="suspended">Suspended</span>' : '',
         },
         {
           text: data.activity,
@@ -287,6 +292,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         activity: absence.eventDescription,
         comments: absence.comments,
         eventDate: readableDateFormat(absence.eventDate, 'YYYY-MM-DD'),
+        suspended: absence.suspended,
       }))
 
       const { offenders, sortOptions } = absentReasonTableViewModel(offenderData)

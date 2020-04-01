@@ -413,6 +413,7 @@ describe('Attendance reason statistics', () => {
             paid: true,
             absentReason: 'AcceptableAbsence',
             comments: 'Asked nicely.',
+            suspended: true,
           },
         ],
       })
@@ -453,9 +454,13 @@ describe('Attendance reason statistics', () => {
         displayPeriod: 'AM',
         offenders: [
           [
-            { html: '<a href=http://localhost:3000/offenders/G8974UK/quick-look target="_blank">Smith, Adam</a>' },
+            {
+              html:
+                '<a href=http://localhost:3000/offenders/G8974UK/quick-look class="govuk-link" target="_blank">Smith, Adam</a>',
+            },
             { text: 'G8974UK' },
             { text: '1' },
+            { html: '<span class="suspended">Suspended</span>' },
             { text: 'Cleaner' },
             { text: 'Asked nicely.' },
           ],
@@ -530,6 +535,7 @@ describe('Attendance reason statistics', () => {
             { html: 'Smith, Adam' },
             { text: 'G8974UK' },
             { text: '--' },
+            { html: '' },
             { text: 'Cleaner' },
             { text: 'Asked nicely.' },
           ],
