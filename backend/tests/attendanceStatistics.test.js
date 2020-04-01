@@ -31,6 +31,7 @@ describe('Attendance reason statistics', () => {
       unacceptableAbsence: 0,
       refusedIncentiveLevelWarning: 0,
     },
+    suspended: 0,
   }
 
   beforeEach(() => {
@@ -313,6 +314,7 @@ describe('Attendance reason statistics', () => {
               { id: 'UnacceptableAbsence', name: 'Unacceptable absence with warning', value: 0 },
               { id: 'RefusedIncentiveLevelWarning', name: 'Refused incentive level warning', value: 0 },
             ],
+            suspended: 0,
           },
           shouldClearFormValues: true,
           toDate: '11/10/2019',
