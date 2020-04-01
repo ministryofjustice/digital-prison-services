@@ -60,7 +60,7 @@ describe('Add court appointment', () => {
           appointmentType: 'VLB',
         },
         offenderNo: 'A12345',
-        offenderNameWithNumber: 'Lastname, Firstname (A12345)',
+        offenderNameWithNumber: 'Firstname Lastname (A12345)',
         agencyDescription: 'Moorland',
         dpsUrl: 'http://localhost:3000/',
         bookingId: 1,
@@ -94,7 +94,7 @@ describe('Add court appointment', () => {
             { href: '#pre-appointment-required', text: 'Select yes if you want to add a pre-court hearing briefing' },
             { href: '#post-appointment-required', text: 'Select yes if you want to add a post-court hearing briefing' },
           ],
-          offenderNameWithNumber: 'Lastname, Firstname (A12345)',
+          offenderNameWithNumber: 'Firstname Lastname (A12345)',
           agencyDescription: 'Moorland',
           offenderNo: 'A12345',
         })

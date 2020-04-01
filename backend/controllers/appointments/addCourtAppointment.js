@@ -3,7 +3,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
-const { properCaseName } = require('../../utils')
+const { formatName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
 const addCourtAppointmentsFactory = (elite2Api, logError) => {
@@ -74,7 +74,7 @@ const addCourtAppointmentsFactory = (elite2Api, logError) => {
         elite2Api.getAgencyDetails(res.locals, agencyId),
       ])
       const { firstName, lastName, bookingId } = offenderDetails
-      const offenderNameWithNumber = `${properCaseName(lastName)}, ${properCaseName(firstName)} (${offenderNo})`
+      const offenderNameWithNumber = `${formatName(firstName, lastName)} (${offenderNo})`
       const agencyDescription = agencyDetails.description
 
       req.session.userDetails = {
