@@ -114,7 +114,7 @@ const elite2ApiFactory = client => {
   const getPrisonerImage = (context, offenderNo) =>
     getStream(context, `/api/bookings/offenderNo/${offenderNo}/image/data`)
 
-  const globalSearch = (context, params) => {
+  const globalSearch = (context, params, resultsLimit) => {
     const { offenderNo, lastName, firstName, gender, location, dateOfBirth, includeAliases } = params
 
     const searchParams = mapToQueryString({
@@ -127,7 +127,7 @@ const elite2ApiFactory = client => {
       partialNameMatch: false,
       includeAliases,
     })
-    return get(context, `/api/prisoners?${searchParams}`)
+    return get(context, `/api/prisoners?${searchParams}`, resultsLimit)
   }
   const getLastPrison = (context, body) => post(context, `/api/movements/offenders`, body)
 
