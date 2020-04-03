@@ -20,13 +20,17 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
       if (hasSearched && !errors.length) {
         const { dobIsValid, dateOfBirth } = dobValidation(dobDay, dobMonth, dobYear)
 
-        searchResults = await elite2Api.globalSearch(res.locals, {
-          offenderNo: prisonNumber,
-          lastName,
-          firstName,
-          dateOfBirth: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
-          location: 'IN',
-        })
+        searchResults = await elite2Api.globalSearch(
+          res.locals,
+          {
+            offenderNo: prisonNumber,
+            lastName,
+            firstName,
+            dateOfBirth: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
+            location: 'IN',
+          },
+          1000
+        )
       }
 
       return res.render('prisonerSearch.njk', {

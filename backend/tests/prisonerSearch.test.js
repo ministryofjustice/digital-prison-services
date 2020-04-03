@@ -114,10 +114,14 @@ describe('Prisoner search', () => {
 
             await controller(req, res)
 
-            expect(elite2Api.globalSearch).toHaveBeenCalledWith(res.locals, {
-              offenderNo: prisonNumber,
-              location: 'IN',
-            })
+            expect(elite2Api.globalSearch).toHaveBeenCalledWith(
+              res.locals,
+              {
+                offenderNo: prisonNumber,
+                location: 'IN',
+              },
+              1000
+            )
             expect(res.render).toHaveBeenCalledWith(
               'prisonerSearch.njk',
               expect.objectContaining({
@@ -138,10 +142,14 @@ describe('Prisoner search', () => {
           it('should make the correct search', async () => {
             await controller(req, res)
 
-            expect(elite2Api.globalSearch).toHaveBeenCalledWith(res.locals, {
-              lastName,
-              location: 'IN',
-            })
+            expect(elite2Api.globalSearch).toHaveBeenCalledWith(
+              res.locals,
+              {
+                lastName,
+                location: 'IN',
+              },
+              1000
+            )
             expect(res.render).toHaveBeenCalledWith(
               'prisonerSearch.njk',
               expect.objectContaining({
