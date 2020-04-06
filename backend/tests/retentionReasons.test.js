@@ -171,16 +171,17 @@ describe('retention reasons', () => {
 
     describe('when there are validation errors', () => {
       beforeEach(() => {
+        mockApis()
+      })
+
+      it('should re-render selected reason with an error if details empty', async () => {
         req.body = {
           version: '"0"',
           'reasons[0][reasonCode]': 'HIGH_PROFILE',
           'reasons[1][reasonCode]': 'OTHER',
           'reasons[1][reasonDetails]': '',
         }
-        mockApis()
-      })
 
-      it('should re-render selected reasons with validation errors', async () => {
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
@@ -199,6 +200,38 @@ describe('retention reasons', () => {
               displayOrder: 1,
               alreadySelected: true,
               details: '',
+            },
+          ],
+          ...expectedPageDetails(),
+        })
+      })
+
+      it('should re-render selected reason with an error if details too short', async () => {
+        req.body = {
+          version: '"0"',
+          'reasons[0][reasonCode]': 'HIGH_PROFILE',
+          'reasons[1][reasonCode]': 'OTHER',
+          'reasons[1][reasonDetails]': '   a   ',
+        }
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
+          errors: [{ text: 'Enter more detail', href: `#more-detail-OTHER` }],
+          retentionReasons: [
+            {
+              reasonCode: 'HIGH_PROFILE',
+              displayName: 'High Profile Offenders',
+              displayOrder: 0,
+              alreadySelected: true,
+              details: undefined,
+            },
+            {
+              reasonCode: 'OTHER',
+              displayName: 'Other',
+              displayOrder: 1,
+              alreadySelected: true,
+              details: '   a   ',
             },
           ],
           ...expectedPageDetails(),
