@@ -1,0 +1,39 @@
+{% macro headerItem(label, content) %}
+  <li class="prisoner-header__details__item">
+    <strong>{{ label }}</strong>
+    <br>
+    {{ content | showDefault | safe}}
+  </li>
+{% endmacro %}
+
+{% set alertNumbersHtml %}
+  <a class="alerts-link" href={{ "/prisoner/" + headerDetails.offenderNo + "/alerts" }}>
+    <span class="alerts-link__active">{{ headerDetails.activeAlertCount }} active</span>
+    <span class="alerts-link__inactive">{{ headerDetails.inactiveAlertCount }} inactive</span>
+  </a>
+{% endset %}
+
+{% set locationHtml %}
+  {{ headerDetails.location}}
+  <br>
+  {{ headerDetails.agencyName}}
+{% endset %}
+
+<h1 class="govuk-heading-l">{{ headerDetails.offenderName }}</h1>
+
+<div class="prisoner-header">
+  <div class="prisoner-header__image-container">
+    <img src={{ "/app/images/" + headerDetails.offenderNo + "/data" }} alt={{ "Picture of " + title }} />
+  </div>
+
+  <ul class="govuk-list prisoner-header__details">
+    {{ headerItem('Prison number', headerDetails.offenderNo) }}
+    {{ headerItem('Key worker', headerDetails.keyWorkerName) }}
+    {{ headerItem('Last session', headerDetails.keyWorkerLastSession) }}
+    {{ headerItem('Incentive level', headerDetails.incentiveLevel) }}
+    {{ headerItem('CSRA', headerDetails.csra) }}
+    {{ headerItem('Category', headerDetails.category) }}
+    {{ headerItem('Alerts', alertNumbersHtml) }}
+    {{ headerItem('Location', locationHtml) }}
+  </ul>
+</div>
