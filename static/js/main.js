@@ -28,11 +28,10 @@ $(document).ready(function() {
   const locationSelectPostAppointment = $('#postAppointmentLocation')
 
   function getEventsForLocation() {
-    const isVLB = appointmentTypeSelect.children('option:selected').val() === 'VLB'
     const date = appointmentDateInput.val()
     const locationId = appointmentLocationSelect.val()
 
-    if (isVLB && date && locationId) {
+    if (date && locationId) {
       $.ajax({
         url: '/api/get-location-events',
         data: { date: date, locationId: locationId },

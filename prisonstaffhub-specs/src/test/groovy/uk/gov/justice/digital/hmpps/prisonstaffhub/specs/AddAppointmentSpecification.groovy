@@ -161,12 +161,6 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
     def "should load location events and again when there are form validation errors for VLB"() {
         setupTests()
 
-        elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
-        elite2api.stubLocation(1)
-        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
-
         given: "I am on the add appointment page"
         to AddAppointmentPage
 
@@ -200,6 +194,12 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
 
     def setupTests() {
         fixture.loginAs(UserAccount.ITAG_USER)
+
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
+        elite2api.stubLocation(1)
+        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
 
         elite2api.stubSentenceData(offenders, date,true)
         elite2api.stubCourtEvents(Caseload.LEI,offenders, date, true)
