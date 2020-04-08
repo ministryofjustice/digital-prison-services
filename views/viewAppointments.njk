@@ -64,7 +64,7 @@
       errorMessage: errors | findError(locationId)
     }) }}
 
-    {{ govukButton({ 
+    {{ govukButton({
       text: "Update results",
       preventDoubleClick: true,
       type: "submit"
@@ -114,7 +114,7 @@
       ],
       rows: appointmentRows,
       attributes: { "data-qa": "appointments-table" }
-    }) }} 
+    }) }}
   {% else %}
     <p class="govuk-body" data-qa="no-results-message">There are no results for the selections you have made.</p>
   {% endif %}

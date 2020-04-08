@@ -5,7 +5,7 @@ const {
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
 
-module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
   const { date, timeSlot = getCurrentPeriod(), type, locationId } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   const agencyId = req.session.userDetails.activeCaseLoadId
@@ -45,7 +45,13 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
           )
 
         const staffName = staffDetails ? formatName(staffDetails.firstName, staffDetails.lastName) : '--'
-        const addedBy = videoLinkLocation ? videoLinkLocation.court : staffName
+
+        const createdBy =
+          videoLinkLocation.createdByUsername &&
+          (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername)).name
+
+        const addedBy =
+          (videoLinkLocation && (createdBy ? `${createdBy} (court)` : videoLinkLocation.court)) || staffName
 
         return [
           {
@@ -64,7 +70,9 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             text: appointment.appointmentTypeDescription,
           },
           {
-            text: appointment.locationDescription,
+            html:
+              (videoLinkLocation && `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`) ||
+              appointment.locationDescription,
           },
           {
             text: addedBy,

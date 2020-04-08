@@ -4,6 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 describe('View appointments', () => {
   const elite2Api = {}
   const whereaboutsApi = {}
+  const oauthApi = {}
 
   let req
   let res
@@ -26,6 +27,7 @@ describe('View appointments', () => {
 
     logError = jest.fn()
 
+    oauthApi.userDetails = jest.fn()
     elite2Api.getAppointmentTypes = jest.fn()
     elite2Api.getLocationsForAppointments = jest.fn()
     elite2Api.getAppointmentsForAgency = jest.fn()
@@ -39,7 +41,11 @@ describe('View appointments', () => {
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue([])
 
-    controller = viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError })
+    oauthApi.userDetails.mockResolvedValue({
+      name: 'Bob Doe',
+    })
+
+    controller = viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError, oauthApi })
   })
 
   beforeAll(() => {
@@ -189,6 +195,7 @@ describe('View appointments', () => {
             appointmentId: 3,
             court: 'Wimbledon',
             hearingType: 'MAIN',
+            createdByUsername: 'username1',
           },
         ],
       })
@@ -210,6 +217,11 @@ describe('View appointments', () => {
       expect(elite2Api.getStaffDetails).toHaveBeenCalledTimes(3)
     })
 
+    it('should make a call to get user details', async () => {
+      await controller(req, res)
+      expect(oauthApi.userDetails).toHaveBeenCalledWith(res.locals, 'username1')
+    })
+
     it('should render the correct template information', async () => {
       await controller(req, res)
 
@@ -225,7 +237,7 @@ describe('View appointments', () => {
             },
             { text: 'ABC123' },
             { text: 'Medical - Other' },
-            { text: 'HEALTH CARE' },
+            { html: 'HEALTH CARE' },
             { text: 'Staff One' },
           ],
           [
@@ -238,7 +250,7 @@ describe('View appointments', () => {
             },
             { text: 'ABC456' },
             { text: 'Gym - Exercise' },
-            { text: 'GYM' },
+            { html: 'GYM' },
             { text: '--' },
           ],
           [
@@ -251,8 +263,8 @@ describe('View appointments', () => {
             },
             { text: 'ABC789' },
             { text: 'Video Link booking' },
-            { text: 'VCC ROOM' },
-            { text: 'Wimbledon' },
+            { html: 'VCC ROOM</br>with: Wimbledon' },
+            { text: 'Bob Doe (court)' },
           ],
         ],
         date: '02/01/2020',
@@ -285,7 +297,7 @@ describe('View appointments', () => {
               },
               { text: 'ABC456' },
               { text: 'Gym - Exercise' },
-              { text: 'GYM' },
+              { html: 'GYM' },
               { text: 'Staff One' },
             ],
           ],
