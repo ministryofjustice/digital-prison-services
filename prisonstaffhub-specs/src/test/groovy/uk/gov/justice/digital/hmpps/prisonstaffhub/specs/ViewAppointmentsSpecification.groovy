@@ -44,7 +44,7 @@ class ViewAppointmentsSpecification extends BrowserReportingSpec {
         then: "I should be presented with the correct results"
         searchResultsTableRows[1].text() == '12:30 One, Offender ABC123 Medical - Other HEALTH CARE Staff One'
         searchResultsTableRows[2].text() == '13:30 to 14:30 Two, Offender ABC456 Gym - Exercise GYM Staff Two'
-        searchResultsTableRows[3].text() == '14:30 to 15:30 Three, Offender ABC789 Video Link booking VCC ROOM Wimbledon'
+        searchResultsTableRows[3].text() == '14:30 to 15:30 Three, Offender ABC789 Video Link booking VCC ROOM\nwith: Wimbledon Wimbledon'
     }
 
     def "should filter by appointment type"() {
@@ -60,11 +60,12 @@ class ViewAppointmentsSpecification extends BrowserReportingSpec {
         then: "I should be presented with correct results"
         at ViewAppointmentsPage
         searchResultsTableRows.size() == 2
-        searchResultsTableRows[1].text() == '14:30 to 15:30 Three, Offender ABC789 Video Link booking VCC ROOM Wimbledon'
+        searchResultsTableRows[1].text() == '14:30 to 15:30 Three, Offender ABC789 Video Link booking VCC ROOM\nwith: Wimbledon Wimbledon'
     }
 
     def setupTests() {
         fixture.loginAs(ITAG_USER)
+        oauthApi.stubCustomUserDetails("username1", ["name":"Bob Doe"])
         elite2api.stubAppointmentTypes([Map.of("code", "ACTI", "description", "Activities"), Map.of("code", "VLB", "description", "Video link booking")], )
         elite2api.stubAppointmentLocations(
                 UserAccount.ITAG_USER.workingCaseload.id,
@@ -73,6 +74,7 @@ class ViewAppointmentsSpecification extends BrowserReportingSpec {
                         "description", "VLB Room 1",
                         "userDescription", "VLB Room 1",
                         "agencyId", "LEI",
+                        "createdByUsername", "username1"
 
                 ),
                  Map.of("locationId", 2,

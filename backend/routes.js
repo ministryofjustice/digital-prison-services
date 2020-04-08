@@ -221,7 +221,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
 
   router.use('/request-booking', requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }))
 
-  router.use('/appointments', viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError }))
+  router.use('/appointments', viewAppointmentsRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 
   router.use(
     '/offenders/:offenderNo/retention-reasons',
