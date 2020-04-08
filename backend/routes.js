@@ -46,10 +46,11 @@ const prepostAppointmentRouter = require('./routes/appointments/prepostAppointme
 const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAppointmentRoomsRouter')
 const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
 const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
+const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
+
+const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
 
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
-
-const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
 
 const prisonerSearchController = require('./controllers/search/prisonerSearch')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
@@ -66,7 +67,7 @@ const { notifyClient } = require('./shared/notifyClient')
 
 const router = express.Router()
 
-const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplianceApi }) => {
+const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplianceApi, keyworkerApi }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
@@ -226,6 +227,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
     '/offenders/:offenderNo/retention-reasons',
     retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
   )
+
+  router.use('/prisoner/:offenderNo', prisonerProfileRouter({ elite2Api, keyworkerApi, logError }))
 
   return router
 }

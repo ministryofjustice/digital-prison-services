@@ -5,6 +5,7 @@ const { oauthApiFactory } = require('./api/oauthApi')
 const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const { communityApiFactory } = require('./api/communityApi')
 const { dataComplianceApiFactory } = require('./api/dataComplianceApi')
+const { keyworkerApiFactory } = require('./api/keyworkerApi')
 
 const elite2Api = elite2ApiFactory(
   clientFactory({
@@ -43,10 +44,18 @@ const dataComplianceApi = dataComplianceApiFactory(
   })
 )
 
+const keyworkerApi = keyworkerApiFactory(
+  clientFactory({
+    baseUrl: config.apis.keyworker.url,
+    timeout: config.apis.keyworker.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
   oauthApi,
   communityApi,
   dataComplianceApi,
+  keyworkerApi,
 }

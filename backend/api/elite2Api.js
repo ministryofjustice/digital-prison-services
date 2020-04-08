@@ -153,7 +153,8 @@ const elite2ApiFactory = client => {
   const getIepSummaryWithDetails = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=true`)
 
-  const getDetails = (context, offenderNo) => get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=false`)
+  const getDetails = (context, offenderNo, fullInfo = false) =>
+    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`)
 
   const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
     get(context, `/api/movements/livingUnit/${livingUnitId}/currently-out`)
@@ -207,6 +208,11 @@ const elite2ApiFactory = client => {
 
   const getOffenderSummaries = (context, offenderNo) =>
     get(context, `/api/bookings?${arrayToQueryString(offenderNo, 'offenderNo')}`, 100)
+
+  const getCaseNoteSummaryByTypes = (context, params) =>
+    get(context, `/api/case-notes/summary?${mapToQueryString(params)}`)
+
+  const getMainOffence = (context, bookingId) => get(context, `/api/bookings/${bookingId}/mainOffence`)
 
   return {
     userLocations,
@@ -263,6 +269,8 @@ const elite2ApiFactory = client => {
     getOffenderActivitiesOverDateRange,
     getActivitiesAtLocation,
     addSingleAppointment,
+    getCaseNoteSummaryByTypes,
+    getMainOffence,
   }
 }
 

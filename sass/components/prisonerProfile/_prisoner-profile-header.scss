@@ -1,0 +1,40 @@
+.prisoner-header {
+  display: flex;
+  margin-bottom: 30px;
+
+  &__image-container {
+    margin-right: 30px;
+
+    img {
+      width: 160px;
+    }
+  }
+
+  &__details {
+    column-count: 3;
+
+    &__item {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.alerts-link {
+  text-decoration: none;
+
+  &__active,
+  &__inactive {
+    text-decoration: underline;
+  }
+
+  &__active {
+    padding-right: 5px;
+    color: red;
+  }
+
+  &__inactive {
+    border-left: 2px solid #000;
+    padding-left: 5px;
+    color: black;
+  }
+}
