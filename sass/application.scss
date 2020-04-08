@@ -5,10 +5,16 @@ $govuk-page-width: 1170px;
 @import 'components/sortable-table';
 @import 'components/print-link';
 @import 'components/offender-basic-details';
+@import 'components/alert-flags';
+@import 'components/prisonerProfile/prisoner-profile-header';
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
 @import 'views/components/movementSlip/movementSlip.scss';
 @import 'views/components/scheduledEvents/scheduledEvents.scss';
+
+* {
+  box-sizing: border-box;
+}
 
 .no-select {
   -webkit-touch-callout: none;
@@ -115,6 +121,6 @@ $govuk-page-width: 1170px;
 }
 
 .suspended {
-  color: #DF3034;
+  color: #df3034;
   font-weight: 700;
 }
