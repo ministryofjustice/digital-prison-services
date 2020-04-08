@@ -22,7 +22,34 @@ describe('prisoner profile service', () => {
       elite2Api.getDetails.mockReturnValue({
         activeAlertCount: 1,
         agencyId: 'MDI',
-        alerts: [],
+        alerts: [
+          {
+            alertId: 1,
+            alertType: 'X',
+            alertTypeDescription: 'Security',
+            alertCode: 'XA',
+            alertCodeDescription: 'Arsonist',
+            comment: 'Testing alerts',
+            dateCreated: '2019-09-11',
+            expired: false,
+            active: true,
+            addedByFirstName: 'OFFICER',
+            addedByLastName: 'ONE',
+          },
+          {
+            alertId: 2,
+            alertType: 'P',
+            alertTypeDescription: 'MAPPP Case',
+            alertCode: 'PC3',
+            alertCodeDescription: 'MAPPA Cat 3',
+            comment: 'Testing alerts',
+            dateCreated: '2019-09-11',
+            expired: false,
+            active: true,
+            addedByFirstName: 'OFFICER',
+            addedByLastName: 'TWO',
+          },
+        ],
         assignedLivingUnit: {
           description: 'CELL-123',
           agencyName: 'Moorland Closed',
@@ -64,7 +91,14 @@ describe('prisoner profile service', () => {
       expect(getPrisonerHeader).toEqual({
         activeAlertCount: 1,
         agencyName: 'Moorland Closed',
-        alerts: [],
+        alerts: [
+          {
+            alertCodes: ['XA'],
+            classes: 'alert-status alert-status--arsonist',
+            img: '/images/Arsonist_icon.png',
+            label: 'Arsonist',
+          },
+        ],
         category: 'Cat C',
         csra: 'High',
         inactiveAlertCount: 2,
@@ -84,20 +118,13 @@ describe('prisoner profile service', () => {
 
       const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
 
-      expect(getPrisonerHeader).toEqual({
-        activeAlertCount: 1,
-        agencyName: 'Moorland Closed',
-        alerts: [],
-        category: 'Cat C',
-        csra: 'High',
-        inactiveAlertCount: 2,
-        incentiveLevel: false,
-        keyWorkerLastSession: false,
-        keyWorkerName: false,
-        location: 'CELL-123',
-        offenderName: 'Prisoner, Test',
-        offenderNo: 'ABC123',
-      })
+      expect(getPrisonerHeader).toEqual(
+        expect.objectContaining({
+          incentiveLevel: false,
+          keyWorkerLastSession: false,
+          keyWorkerName: false,
+        })
+      )
     })
   })
 })

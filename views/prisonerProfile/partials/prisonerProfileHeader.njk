@@ -23,17 +23,34 @@
 
 <div class="prisoner-header">
   <div class="prisoner-header__image-container">
-    <img src={{ "/app/images/" + headerDetails.offenderNo + "/data" }} alt={{ "Picture of " + title }} />
+    <img src="{{ '/app/images/' + headerDetails.offenderNo + '/data' }}" alt="{{ 'Picture of ' + headerDetails.offenderName }}" />
   </div>
 
-  <ul class="govuk-list prisoner-header__details">
-    {{ headerItem('Prison number', headerDetails.offenderNo) }}
-    {{ headerItem('Key worker', headerDetails.keyWorkerName) }}
-    {{ headerItem('Last session', headerDetails.keyWorkerLastSession) }}
-    {{ headerItem('Incentive level', headerDetails.incentiveLevel) }}
-    {{ headerItem('CSRA', headerDetails.csra) }}
-    {{ headerItem('Category', headerDetails.category) }}
-    {{ headerItem('Alerts', alertNumbersHtml) }}
-    {{ headerItem('Location', locationHtml) }}
-  </ul>
+  <div>
+    {% if headerDetails.alerts.length %}
+      <ul class="govuk-list prisoner-header__alerts">
+        {% for alert in headerDetails.alerts %}
+          <li class="{{ alert.classes }}">
+            {% if alert.img %}
+              <img src="{{ alert.img }}" class="{{ alert.imgClass }}" alt="{{ alert.label }}"/>
+            {% endif %}
+            {{ alert.label }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <ul class="govuk-list prisoner-header__details">
+      {{ headerItem('Prison number', headerDetails.offenderNo) }}
+      {{ headerItem('Key worker', headerDetails.keyWorkerName) }}
+      {{ headerItem('Last session', headerDetails.keyWorkerLastSession) }}
+      {{ headerItem('Incentive level', headerDetails.incentiveLevel) }}
+      {{ headerItem('CSRA', headerDetails.csra) }}
+      {{ headerItem('Category', headerDetails.category) }}
+      {{ headerItem('Alerts', alertNumbersHtml) }}
+      {{ headerItem('Location', locationHtml) }}
+    </ul>
+  </div>
+
+  
 </div>
