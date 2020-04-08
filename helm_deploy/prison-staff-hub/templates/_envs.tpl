@@ -123,6 +123,9 @@ env:
   - name: HMPPS_COOKIE_DOMAIN
     value: {{ .Values.ingress.host | quote }}
 
+  - name: KEYWORKER_API_URL
+    value: {{ .Values.env.KEYWORKER_API_URL | quote }}
+
   - name: NODE_ENV
     value: production
 
