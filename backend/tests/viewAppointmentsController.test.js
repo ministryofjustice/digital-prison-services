@@ -170,6 +170,21 @@ describe('View appointments', () => {
           auditUserId: 'STAFF_3',
           agencyId: 'MDI',
         },
+        {
+          id: 4,
+          offenderNo: 'ABC456',
+          firstName: 'OFFENDER',
+          lastName: 'FOUR',
+          date: '2020-01-02',
+          startTime: '2020-01-02T13:30:00',
+          endTime: '2020-01-02T14:30:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          auditUserId: 'STAFF_2',
+          agencyId: 'MDI',
+        },
       ])
 
       elite2Api.getStaffDetails
@@ -213,8 +228,8 @@ describe('View appointments', () => {
         date: '2020-01-02',
         timeSlot: 'PM',
       })
-      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3])
-      expect(elite2Api.getStaffDetails).toHaveBeenCalledTimes(3)
+      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
+      expect(elite2Api.getStaffDetails).toHaveBeenCalledTimes(4)
     })
 
     it('should make a call to get user details', async () => {
@@ -225,54 +240,64 @@ describe('View appointments', () => {
     it('should render the correct template information', async () => {
       await controller(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('viewAppointments.njk', {
-        appointmentRows: [
-          [
-            { text: '12:30' },
-            {
-              html: '<a href="http://localhost:3000/offenders/ABC123" class="govuk-link">One, Offender</a>',
-              attributes: {
-                'data-sort-value': 'ONE',
+      expect(res.render).toHaveBeenCalledWith(
+        'viewAppointments.njk',
+        expect.objectContaining({
+          appointmentRows: [
+            [
+              { text: '12:30' },
+              {
+                attributes: { 'data-sort-value': 'ONE' },
+                html: '<a href="http://localhost:3000/offenders/ABC123" class="govuk-link">One, Offender</a>',
               },
-            },
-            { text: 'ABC123' },
-            { text: 'Medical - Other' },
-            { html: 'HEALTH CARE' },
-            { text: 'Staff One' },
-          ],
-          [
-            { text: '13:30 to 14:30' },
-            {
-              html: '<a href="http://localhost:3000/offenders/ABC456" class="govuk-link">Two, Offender</a>',
-              attributes: {
-                'data-sort-value': 'TWO',
+              { text: 'ABC123' },
+              { text: 'Medical - Other' },
+              { html: 'HEALTH CARE' },
+              { text: 'Staff One' },
+            ],
+            [
+              { text: '13:30 to 14:30' },
+              {
+                attributes: { 'data-sort-value': 'TWO' },
+                html: '<a href="http://localhost:3000/offenders/ABC456" class="govuk-link">Two, Offender</a>',
               },
-            },
-            { text: 'ABC456' },
-            { text: 'Gym - Exercise' },
-            { html: 'GYM' },
-            { text: '--' },
-          ],
-          [
-            { text: '14:30 to 15:30' },
-            {
-              html: '<a href="http://localhost:3000/offenders/ABC789" class="govuk-link">Three, Offender</a>',
-              attributes: {
-                'data-sort-value': 'THREE',
+              { text: 'ABC456' },
+              { text: 'Gym - Exercise' },
+              { html: 'GYM' },
+              { text: '--' },
+            ],
+            [
+              { text: '14:30 to 15:30' },
+              {
+                attributes: { 'data-sort-value': 'THREE' },
+                html: '<a href="http://localhost:3000/offenders/ABC789" class="govuk-link">Three, Offender</a>',
               },
-            },
-            { text: 'ABC789' },
-            { text: 'Video Link booking' },
-            { html: 'VCC ROOM</br>with: Wimbledon' },
-            { text: 'Bob Doe (court)' },
+              { text: 'ABC789' },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Wimbledon' },
+              { text: 'Bob Doe (court)' },
+            ],
+            [
+              { text: '13:30 to 14:30' },
+              {
+                attributes: { 'data-sort-value': 'FOUR' },
+                html: '<a href="http://localhost:3000/offenders/ABC456" class="govuk-link">Four, Offender</a>',
+              },
+              { text: 'ABC456' },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM' },
+              { text: '' },
+            ],
           ],
-        ],
-        date: '02/01/2020',
-        formattedDate: '2 January 2020',
-        locations: [{ text: 'VCC Room 1', value: '1' }],
-        timeSlot: 'PM',
-        types: [{ text: 'Video link booking', value: 'VLB' }],
-      })
+          date: '02/01/2020',
+          formattedDate: '2 January 2020',
+          locationId: undefined,
+          locations: [{ text: 'VCC Room 1', value: '1' }],
+          timeSlot: 'PM',
+          type: undefined,
+          types: [{ text: 'Video link booking', value: 'VLB' }],
+        })
+      )
     })
 
     it('should only return appointments with selected appointment type', async () => {
