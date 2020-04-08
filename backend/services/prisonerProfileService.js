@@ -1,5 +1,6 @@
 const moment = require('moment')
 const { properCaseName } = require('../utils')
+const alertFlagValues = require('../shared/alertFlagValues')
 
 module.exports = (elite2Api, keyworkerApi) => {
   const getPrisonerHeader = async (context, offenderNo) => {
@@ -15,6 +16,12 @@ module.exports = (elite2Api, keyworkerApi) => {
       inactiveAlertCount,
     } = prisonerDetails
 
+    const prisonersActiveAlertCodes = alerts.filter(alert => !alert.expired).map(alert => alert.alertCode)
+
+    const alertsToShow = alertFlagValues.filter(alertFlag =>
+      alertFlag.alertCodes.some(alert => prisonersActiveAlertCodes.includes(alert))
+    )
+
     const [iepDetails, keyworkerSessions, keyworkerDetails] = await Promise.all([
       elite2Api.getIepSummary(context, [bookingId]),
       elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
@@ -23,7 +30,7 @@ module.exports = (elite2Api, keyworkerApi) => {
 
     return {
       activeAlertCount,
-      alerts,
+      alerts: alertsToShow,
       category,
       csra,
       incentiveLevel: Boolean(iepDetails.length) && iepDetails[0].iepLevel,
