@@ -47,6 +47,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
         const staffName = staffDetails ? formatName(staffDetails.firstName, staffDetails.lastName) : '--'
 
         const createdBy =
+          videoLinkLocation &&
           videoLinkLocation.createdByUsername &&
           (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername)).name
 
