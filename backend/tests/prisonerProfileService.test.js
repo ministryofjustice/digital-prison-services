@@ -34,6 +34,9 @@ describe('prisoner profile service', () => {
         inactiveAlertCount: 2,
         lastName: 'PRISONER',
       })
+      elite2Api.getIepSummary.mockReturnValue([{ iepLevel: 'Standard' }])
+      elite2Api.getCaseNoteSummaryByTypes.mockReturnValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
+      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue({ firstName: 'STAFF', lastName: 'MEMBER' })
     })
 
     it('should make a call for the full details for a prisoner', async () => {
@@ -56,10 +59,6 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information', async () => {
-      elite2Api.getIepSummary.mockReturnValue([{ iepLevel: 'Standard' }])
-      elite2Api.getCaseNoteSummaryByTypes.mockReturnValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
-      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue({ firstName: 'STAFF', lastName: 'MEMBER' })
-
       const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
 
       expect(getPrisonerHeader).toEqual({
@@ -98,28 +97,6 @@ describe('prisoner profile service', () => {
         location: 'CELL-123',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
-      })
-    })
-
-    describe('when there are errors with elite2Api', () => {
-      it('should return the error', async () => {
-        const error = new Error('Network error')
-        elite2Api.getDetails.mockImplementation(() => Promise.reject(error))
-
-        const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
-
-        expect(getPrisonerHeader).toEqual(error)
-      })
-    })
-
-    describe('when there are errors with keyworkerApi', () => {
-      it('should return the error', async () => {
-        const error = new Error('Network error')
-        keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockImplementation(() => Promise.reject(error))
-
-        const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
-
-        expect(getPrisonerHeader).toEqual(error)
       })
     })
   })
