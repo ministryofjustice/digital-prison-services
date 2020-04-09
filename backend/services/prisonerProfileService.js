@@ -9,7 +9,11 @@ const {
 
 module.exports = (elite2Api, keyworkerApi, oauthApi) => {
   const getPrisonerHeader = async (context, offenderNo) => {
-    const prisonerDetails = await elite2Api.getDetails(context, offenderNo, true)
+    const [currentUser, prisonerDetails] = await Promise.all([
+      oauthApi.currentUser(context),
+      elite2Api.getDetails(context, offenderNo, true),
+    ])
+
     const {
       activeAlertCount,
       agencyId,
@@ -21,12 +25,13 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       inactiveAlertCount,
     } = prisonerDetails
 
-    const [iepDetails, keyworkerSessions, keyworkerDetails, userRoles, userCaseloads] = await Promise.all([
+    const [iepDetails, keyworkerSessions, userCaseloads, staffRoles, keyworkerDetails, userRoles] = await Promise.all([
       elite2Api.getIepSummary(context, [bookingId]),
       elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
+      elite2Api.userCaseLoads(context),
+      elite2Api.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
       oauthApi.userRoles(context),
-      elite2Api.userCaseLoads(context),
     ])
 
     const prisonersActiveAlertCodes = alerts.filter(alert => !alert.expired).map(alert => alert.alertCode)
@@ -49,6 +54,8 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
         )
     )
 
+    // isUseOfForce to do
+
     return {
       activeAlertCount,
       alerts: alertsToShow,
@@ -67,6 +74,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       agencyName: assignedLivingUnit.agencyName,
       offenderName: `${properCaseName(prisonerDetails.lastName)}, ${properCaseName(prisonerDetails.firstName)}`,
       offenderNo,
+      showAddKeyworkerSession: staffRoles && staffRoles.some(role => role.role === 'KW'),
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,
     }
   }

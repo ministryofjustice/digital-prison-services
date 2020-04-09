@@ -1,5 +1,4 @@
 const prisonerProfileService = require('../services/prisonerProfileService')
-const config = require('../config')
 
 describe('prisoner profile service', () => {
   const context = {}
@@ -13,8 +12,10 @@ describe('prisoner profile service', () => {
     elite2Api.getIepSummary = jest.fn()
     elite2Api.getCaseNoteSummaryByTypes = jest.fn()
     elite2Api.userCaseLoads = jest.fn()
+    elite2Api.getStaffRoles = jest.fn()
     keyworkerApi.getKeyworkerByCaseloadAndOffenderNo = jest.fn()
     oauthApi.userRoles = jest.fn()
+    oauthApi.currentUser = jest.fn()
     service = prisonerProfileService(elite2Api, keyworkerApi, oauthApi)
   })
 
@@ -68,18 +69,21 @@ describe('prisoner profile service', () => {
       elite2Api.getDetails.mockReturnValue(prisonerDetails)
       elite2Api.getIepSummary.mockReturnValue([{ iepLevel: 'Standard' }])
       elite2Api.getCaseNoteSummaryByTypes.mockReturnValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
-      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue({ firstName: 'STAFF', lastName: 'MEMBER' })
+      elite2Api.getStaffRoles.mockReturnValue([])
       elite2Api.userCaseLoads.mockReturnValue([])
+      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue({ firstName: 'STAFF', lastName: 'MEMBER' })
       oauthApi.userRoles.mockReturnValue([])
+      oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
     })
 
-    it('should make a call for the full details for a prisoner', async () => {
+    it('should make a call for the full details for a prisoner and the current user', async () => {
       await service.getPrisonerHeader(context, offenderNo)
 
+      expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
       expect(elite2Api.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
     })
 
-    it('should make calls for the additional details required for the header', async () => {
+    it('should make calls for the additional details required for the prisoner profile', async () => {
       await service.getPrisonerHeader(context, offenderNo)
 
       expect(elite2Api.getIepSummary).toHaveBeenCalledWith(context, [bookingId])
@@ -90,6 +94,9 @@ describe('prisoner profile service', () => {
         bookingId,
       })
       expect(keyworkerApi.getKeyworkerByCaseloadAndOffenderNo).toHaveBeenCalledWith(context, 'MDI', offenderNo)
+      expect(oauthApi.userRoles).toHaveBeenCalledWith(context)
+      expect(elite2Api.userCaseLoads).toHaveBeenCalledWith(context)
+      expect(elite2Api.getStaffRoles).toHaveBeenCalledWith(context, 111, 'MDI')
     })
 
     it('should return the correct prisoner information', async () => {
@@ -117,6 +124,7 @@ describe('prisoner profile service', () => {
         location: 'CELL-123',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
+        showAddKeyworkerSession: false,
         userCanEdit: false,
       })
     })
@@ -137,7 +145,7 @@ describe('prisoner profile service', () => {
       )
     })
 
-    describe('prisoner header links', () => {
+    describe('prisoner profile header links', () => {
       describe('when the the prisoner is out and user can view inactive bookings', () => {
         beforeEach(() => {
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
@@ -183,6 +191,22 @@ describe('prisoner profile service', () => {
           expect(getPrisonerHeader).toEqual(
             expect.objectContaining({
               categorisationLinkText: 'Manage category',
+            })
+          )
+        })
+      })
+
+      describe('when the user is a keyworker', () => {
+        beforeEach(() => {
+          elite2Api.getStaffRoles.mockReturnValue([{ role: 'KW' }])
+        })
+
+        it('should enable the user to add a keyworker session', async () => {
+          const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+
+          expect(getPrisonerHeader).toEqual(
+            expect.objectContaining({
+              showAddKeyworkerSession: true,
             })
           )
         })

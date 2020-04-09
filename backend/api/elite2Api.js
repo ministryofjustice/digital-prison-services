@@ -214,6 +214,8 @@ const elite2ApiFactory = client => {
 
   const getMainOffence = (context, bookingId) => get(context, `/api/bookings/${bookingId}/mainOffence`)
 
+  const getStaffRoles = (context, staffId, agencyId) => get(context, `/api/staff/${staffId}/${agencyId}/roles`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -271,6 +273,7 @@ const elite2ApiFactory = client => {
     addSingleAppointment,
     getCaseNoteSummaryByTypes,
     getMainOffence,
+    getStaffRoles,
   }
 }
 

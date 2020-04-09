@@ -75,26 +75,37 @@
     </ul>
 
     <div class="prisoner-header__details__actions">
-      {{ govukButton({
-        text: "Add case note",
-        element: "a",
-        classes: "prisoner-header__button",
-        href: "/"
-      }) }}
+      {% if prisonerProfileData.userCanEdit %}
+        {{ govukButton({
+          text: "Add case note",
+          element: "a",
+          classes: "prisoner-header__button",
+          href: "/offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
+        }) }}
 
-      {{ govukButton({
-        text: "Add appointment",
-        element: "a",
-        classes: "prisoner-header__button",
-        href: "/"
-      }) }}
+        {% if prisonerProfileData.showAddKeyworkerSession %}
+          {{ govukButton({
+            text: "Add KW session",
+            element: "a",
+            classes: "prisoner-header__button",
+            href: "/offenders/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
+          }) }}
+        {% endif %}
 
-      {{ govukButton({
-        text: "Review category",
-        element: "a",
-        classes: "prisoner-header__button",
-        href: "/"
-      }) }}
+        {{ govukButton({
+          text: "Add appointment",
+          element: "a",
+          classes: "prisoner-header__button",
+          href: "/"
+        }) }}
+
+        {{ govukButton({
+          text: "Report use of force",
+          element: "a",
+          classes: "prisoner-header__button",
+          href: "/"
+        }) }}
+      {% endif %}
     </div>
   </div>
 </div>
