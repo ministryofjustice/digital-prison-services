@@ -20,7 +20,7 @@
 
     &__information {
       @extend %govuk-list;
-      column-gap: govuk-spacing(3); //change to match grid col
+      column-gap: $govuk-gutter;
 
       @include govuk-media-query($from: mobile) {
         column-count: 2;
@@ -33,7 +33,7 @@
 
       @include govuk-media-query($from: 950px) {
         flex-basis: 75%;
-        padding-right: govuk-spacing(6);
+        padding-right: $govuk-gutter * 2;
       }
 
       > li {
@@ -55,7 +55,7 @@
     margin-bottom: govuk-spacing(3);
 
     @include govuk-media-query($from: tablet) {
-      padding-right: govuk-spacing(6); // change to match grid col
+      padding-right: $govuk-gutter * 2,
     }
   }
 
