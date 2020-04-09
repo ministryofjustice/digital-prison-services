@@ -56,6 +56,9 @@ module.exports = {
       url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
       timeoutSeconds: process.env.KEYWORKER_API_TIMEOUT_SECONDS || 30,
     },
+    categorisation: {
+      ui_url: process.env.CATEGORISATION_UI_URL || 'http://localhost:3003/',
+    },
   },
   notifications: {
     notifyKey: process.env.NOTIFY_API_KEY || '',

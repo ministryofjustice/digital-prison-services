@@ -228,7 +228,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
     retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
   )
 
-  router.use('/prisoner/:offenderNo', prisonerProfileRouter({ elite2Api, keyworkerApi, logError }))
+  router.use('/prisoner/:offenderNo', prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, logError }))
 
   return router
 }

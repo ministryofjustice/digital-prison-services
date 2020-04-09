@@ -1,5 +1,5 @@
 {% macro headerItem(label, content) %}
-  <li class="prisoner-header__details__item">
+  <li>
     <strong>{{ label }}</strong>
     <br>
     {{ content | showDefault | safe}}
@@ -7,29 +7,49 @@
 {% endmacro %}
 
 {% set alertNumbersHtml %}
-  <a class="alerts-link" href={{ "/prisoner/" + headerDetails.offenderNo + "/alerts" }}>
-    <span class="alerts-link__active">{{ headerDetails.activeAlertCount }} active</span>
-    <span class="alerts-link__inactive">{{ headerDetails.inactiveAlertCount }} inactive</span>
+  <a class="alerts-link" href={{ "/prisoner/" + prisonerProfileData.offenderNo + "/alerts" }}>
+    <span class="alerts-link__active">{{ prisonerProfileData.activeAlertCount }} active</span>
+    <span class="alerts-link__inactive">{{ prisonerProfileData.inactiveAlertCount }} inactive</span>
   </a>
 {% endset %}
 
-{% set locationHtml %}
-  {{ headerDetails.location}}
-  <br>
-  {{ headerDetails.agencyName}}
+{% set incentiveLevelHtml %}
+  <span>{{ prisonerProfileData.incentiveLevel }}</span>
+  {% if prisonerProfileData.userCanEdit %}
+    <br>
+    <a data-qa="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
+      Incentive details
+    </a>
+  {% endif %}
 {% endset %}
 
-<h1 class="govuk-heading-l">{{ headerDetails.offenderName }}</h1>
+{% set categoryHtml %}
+  <span>{{ prisonerProfileData.category }}</span>
+  {% if prisonerProfileData.categorisationLinkText %}
+    <br>
+    <a data-qa="categorisation-external-link" class="govuk-link" href="{{ prisonerProfileData.categorisationLink }}">
+      {{ prisonerProfileData.categorisationLinkText }}
+    </a>
+  {% endif %}
+{% endset %}
+
+{% set locationHtml %}
+  {{ prisonerProfileData.location}}
+  <br>
+  {{ prisonerProfileData.agencyName}}
+{% endset %}
+
+<h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
 
 <div class="prisoner-header">
   <div class="prisoner-header__image-container">
-    <img src="{{ '/app/images/' + headerDetails.offenderNo + '/data' }}" alt="{{ 'Picture of ' + headerDetails.offenderName }}" />
+    <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}" alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}" />
   </div>
 
   <div>
-    {% if headerDetails.alerts.length %}
+    {% if prisonerProfileData.alerts.length %}
       <ul class="govuk-list prisoner-header__alerts">
-        {% for alert in headerDetails.alerts %}
+        {% for alert in prisonerProfileData.alerts %}
           <li class="{{ alert.classes }}">
             {% if alert.img %}
               <img src="{{ alert.img }}" class="{{ alert.imgClass }}" alt="{{ alert.label }}"/>
@@ -39,14 +59,14 @@
         {% endfor %}
       </ul>
     {% endif %}
-
-    <ul class="govuk-list prisoner-header__details">
-      {{ headerItem('Prison number', headerDetails.offenderNo) }}
-      {{ headerItem('Key worker', headerDetails.keyWorkerName) }}
-      {{ headerItem('Last session', headerDetails.keyWorkerLastSession) }}
-      {{ headerItem('Incentive level', headerDetails.incentiveLevel) }}
-      {{ headerItem('CSRA', headerDetails.csra) }}
-      {{ headerItem('Category', headerDetails.category) }}
+    
+    <ul class="prisoner-header__details">
+      {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
+      {{ headerItem('Key worker', prisonerProfileData.keyWorkerName) }}
+      {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession) }}
+      {{ headerItem('Incentive level', incentiveLevelHtml) }}
+      {{ headerItem('CSRA', prisonerProfileData.csra) }}
+      {{ headerItem('Category', categoryHtml) }}
       {{ headerItem('Alerts', alertNumbersHtml) }}
       {{ headerItem('Location', locationHtml) }}
     </ul>

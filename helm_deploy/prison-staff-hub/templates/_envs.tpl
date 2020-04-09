@@ -126,6 +126,9 @@ env:
   - name: KEYWORKER_API_URL
     value: {{ .Values.env.KEYWORKER_API_URL | quote }}
 
+  - name: CATEGORISATION_UI_URL
+    value: {{ .Values.env.CATEGORISATION_UI_URL | quote }}
+
   - name: NODE_ENV
     value: production
 
