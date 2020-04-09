@@ -1,5 +1,5 @@
 {% macro headerItem(label, content) %}
-  <li class="prisoner-header__details__item">
+  <li>
     <strong>{{ label }}</strong>
     <br>
     {{ content | showDefault | safe}}
@@ -60,7 +60,7 @@
       </ul>
     {% endif %}
     
-    <ul class="govuk-list prisoner-header__details">
+    <ul class="prisoner-header__details">
       {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
       {{ headerItem('Key worker', prisonerProfileData.keyWorkerName) }}
       {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession) }}
