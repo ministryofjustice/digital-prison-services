@@ -31,6 +31,8 @@ env:
   API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-preprod.prison.service.justice.gov.uk
   KEYWORKER_API_URL: "https://keyworker-api-preprod.prison.service.justice.gov.uk/"
   CATEGORISATION_UI_URL: "https://preprod.offender-categorisation.service.justice.gov.uk/"
+  USE_OF_FORCE_URL: "https://preprod.use-of-force.service.justice.gov.uk"
+  USE_OF_FORCE_PRISONS: "WRI,BLI,RSI"
 
 whitelist:
   office: "217.33.148.210/32"

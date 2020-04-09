@@ -1,3 +1,5 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 {% macro headerItem(label, content) %}
   <li>
     <strong>{{ label }}</strong>
@@ -39,16 +41,17 @@
   {{ prisonerProfileData.agencyName}}
 {% endset %}
 
+
 <h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
 
 <div class="prisoner-header">
   <div class="prisoner-header__image-container">
-    <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}" alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}" />
+    <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}" alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}"  class="prisoner-image" />
   </div>
 
-  <div>
+  <div class="prisoner-header__details">
     {% if prisonerProfileData.alerts.length %}
-      <ul class="govuk-list prisoner-header__alerts">
+      <ul class="prisoner-header__details__alerts">
         {% for alert in prisonerProfileData.alerts %}
           <li class="{{ alert.classes }}">
             {% if alert.img %}
@@ -59,8 +62,8 @@
         {% endfor %}
       </ul>
     {% endif %}
-    
-    <ul class="prisoner-header__details">
+
+    <ul class="prisoner-header__details__information">
       {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
       {{ headerItem('Key worker', prisonerProfileData.keyWorkerName) }}
       {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession) }}
@@ -70,7 +73,41 @@
       {{ headerItem('Alerts', alertNumbersHtml) }}
       {{ headerItem('Location', locationHtml) }}
     </ul>
-  </div>
 
-  
+    <div class="prisoner-header__details__actions">
+      {% if prisonerProfileData.userCanEdit %}
+        {{ govukButton({
+          text: "Add case note",
+          element: "a",
+          classes: "prisoner-header__button",
+          href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
+        }) }}
+
+        {% if prisonerProfileData.showAddKeyworkerSession %}
+          {{ govukButton({
+            text: "Add KW session",
+            element: "a",
+            classes: "prisoner-header__button",
+            href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
+          }) }}
+        {% endif %}
+
+        {{ govukButton({
+          text: "Add appointment",
+          element: "a",
+          classes: "prisoner-header__button",
+          href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
+        }) }}
+
+        {% if prisonerProfileData.showReportUseOfForce %}
+          {{ govukButton({
+            text: "Report use of force",
+            element: "a",
+            classes: "prisoner-header__button",
+            href: useOfForceUrl
+          }) }}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
 </div>

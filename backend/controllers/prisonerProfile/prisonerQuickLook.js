@@ -10,7 +10,7 @@ const controller = ({ prisonerProfileService, elite2Api, logError }) => async (r
     const { bookingId } = details
 
     const [prisonerProfileData, offenceData] = await Promise.all([
-      prisonerProfileService.getPrisonerHeader(res.locals, offenderNo),
+      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getMainOffence(res.locals, bookingId),
     ])
 
