@@ -30,5 +30,6 @@ env:
   VIDEO_LINK_ENABLED_FOR: "WWI"
   API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-dev.prison.service.justice.gov.uk/
   KEYWORKER_API_URL: "https://keyworker-api-dev.prison.service.justice.gov.uk/"
+  CATEGORISATION_UI_URL: "https://dev.offender-categorisation.service.justice.gov.uk/"
 
 

@@ -30,6 +30,7 @@ env:
   VIDEO_LINK_ENABLED_FOR: "WWI"
   API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-preprod.prison.service.justice.gov.uk
   KEYWORKER_API_URL: "https://keyworker-api-preprod.prison.service.justice.gov.uk/"
+  CATEGORISATION_UI_URL: "https://preprod.offender-categorisation.service.justice.gov.uk/"
 
 whitelist:
   office: "217.33.148.210/32"

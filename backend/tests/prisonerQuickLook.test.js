@@ -3,7 +3,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner profile quick look', () => {
   const offenderNo = 'ABC123'
-  const prisonerHeaderDetails = {
+  const prisonerProfileData = {
     activeAlertCount: 1,
     agencyName: 'Moorland Closed',
     alerts: [],
@@ -35,7 +35,7 @@ describe('prisoner profile quick look', () => {
 
     logError = jest.fn()
 
-    prisonerProfileService.getPrisonerHeader = jest.fn().mockReturnValue(prisonerHeaderDetails)
+    prisonerProfileService.getPrisonerHeader = jest.fn().mockReturnValue(prisonerProfileData)
 
     elite2Api.getDetails = jest.fn()
     elite2Api.getMainOffence = jest.fn()
@@ -71,7 +71,7 @@ describe('prisoner profile quick look', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerQuickLook.njk', {
-        headerDetails: prisonerHeaderDetails,
+        prisonerProfileData,
         offenceDetails: [
           {
             key: { text: 'Main offence(s)' },

@@ -9,7 +9,7 @@ const controller = ({ prisonerProfileService, elite2Api, logError }) => async (r
     const details = await elite2Api.getDetails(res.locals, offenderNo)
     const { bookingId } = details
 
-    const [headerDetails, offenceData] = await Promise.all([
+    const [prisonerProfileData, offenceData] = await Promise.all([
       prisonerProfileService.getPrisonerHeader(res.locals, offenderNo),
       elite2Api.getMainOffence(res.locals, bookingId),
     ])
@@ -22,7 +22,7 @@ const controller = ({ prisonerProfileService, elite2Api, logError }) => async (r
     ]
 
     return res.render('prisonerProfile/prisonerQuickLook.njk', {
-      headerDetails,
+      prisonerProfileData,
       offenceDetails,
     })
   } catch (error) {

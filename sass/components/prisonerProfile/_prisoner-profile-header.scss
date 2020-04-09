@@ -12,6 +12,7 @@
 
   &__alerts {
     display: flex;
+    flex-wrap: wrap;
   }
 
   &__details {
