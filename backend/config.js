@@ -59,6 +59,10 @@ module.exports = {
     categorisation: {
       ui_url: process.env.CATEGORISATION_UI_URL || 'http://localhost:3003/',
     },
+    useOfForce: {
+      ui_url: process.env.USE_OF_FORCE_URL,
+      prisons: process.env.USE_OF_FORCE_PRISONS || '',
+    },
   },
   notifications: {
     notifyKey: process.env.NOTIFY_API_KEY || '',

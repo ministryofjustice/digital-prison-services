@@ -4,11 +4,13 @@ const alertFlagValues = require('../shared/alertFlagValues')
 const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
+    useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
   },
+  app: { notmEndpointUrl },
 } = require('../config')
 
 module.exports = (elite2Api, keyworkerApi, oauthApi) => {
-  const getPrisonerHeader = async (context, offenderNo) => {
+  const getPrisonerProfileData = async (context, offenderNo) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       elite2Api.getDetails(context, offenderNo, true),
@@ -54,10 +56,11 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
         )
     )
 
-    // isUseOfForce to do
+    const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map(prison => prison.trim().toUpperCase())
 
     return {
       activeAlertCount,
+      agencyName: assignedLivingUnit.agencyName,
       alerts: alertsToShow,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
@@ -71,15 +74,17 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
         `${properCaseName(keyworkerDetails.lastName)}, ${properCaseName(keyworkerDetails.firstName)}`,
       inactiveAlertCount,
       location: assignedLivingUnit.description,
-      agencyName: assignedLivingUnit.agencyName,
+      notmEndpointUrl,
       offenderName: `${properCaseName(prisonerDetails.lastName)}, ${properCaseName(prisonerDetails.firstName)}`,
       offenderNo,
       showAddKeyworkerSession: staffRoles && staffRoles.some(role => role.role === 'KW'),
+      showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
+      useOfForceUrl,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,
     }
   }
 
   return {
-    getPrisonerHeader,
+    getPrisonerProfileData,
   }
 }

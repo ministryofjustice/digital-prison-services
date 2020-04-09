@@ -35,7 +35,7 @@ describe('prisoner profile quick look', () => {
 
     logError = jest.fn()
 
-    prisonerProfileService.getPrisonerHeader = jest.fn().mockReturnValue(prisonerProfileData)
+    prisonerProfileService.getPrisonerProfileData = jest.fn().mockReturnValue(prisonerProfileData)
 
     elite2Api.getDetails = jest.fn()
     elite2Api.getMainOffence = jest.fn()
@@ -49,7 +49,7 @@ describe('prisoner profile quick look', () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonerProfileService.getPrisonerHeader).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
   describe('offence data', () => {

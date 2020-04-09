@@ -19,7 +19,7 @@ describe('prisoner profile service', () => {
     service = prisonerProfileService(elite2Api, keyworkerApi, oauthApi)
   })
 
-  describe('prisoner header information', () => {
+  describe('prisoner profile data', () => {
     const offenderNo = 'ABC123'
     const bookingId = '123'
     const prisonerDetails = {
@@ -77,14 +77,14 @@ describe('prisoner profile service', () => {
     })
 
     it('should make a call for the full details for a prisoner and the current user', async () => {
-      await service.getPrisonerHeader(context, offenderNo)
+      await service.getPrisonerProfileData(context, offenderNo)
 
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
       expect(elite2Api.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
     })
 
     it('should make calls for the additional details required for the prisoner profile', async () => {
-      await service.getPrisonerHeader(context, offenderNo)
+      await service.getPrisonerProfileData(context, offenderNo)
 
       expect(elite2Api.getIepSummary).toHaveBeenCalledWith(context, [bookingId])
       expect(elite2Api.getCaseNoteSummaryByTypes).toHaveBeenCalledWith(context, {
@@ -100,9 +100,9 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information', async () => {
-      const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+      const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-      expect(getPrisonerHeader).toEqual({
+      expect(getPrisonerProfileData).toEqual({
         categorisationLink: `http://localhost:3003/${bookingId}`,
         categorisationLinkText: '',
         activeAlertCount: 1,
@@ -122,9 +122,12 @@ describe('prisoner profile service', () => {
         keyWorkerLastSession: '07/04/2020',
         keyWorkerName: 'Member, Staff',
         location: 'CELL-123',
+        notmEndpointUrl: 'http://localhost:3000/',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
         showAddKeyworkerSession: false,
+        showReportUseOfForce: false,
+        useOfForceUrl: '//useOfForceUrl',
         userCanEdit: false,
       })
     })
@@ -134,9 +137,9 @@ describe('prisoner profile service', () => {
       elite2Api.getCaseNoteSummaryByTypes.mockReturnValue([])
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue(null)
 
-      const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+      const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-      expect(getPrisonerHeader).toEqual(
+      expect(getPrisonerProfileData).toEqual(
         expect.objectContaining({
           incentiveLevel: false,
           keyWorkerLastSession: false,
@@ -145,7 +148,7 @@ describe('prisoner profile service', () => {
       )
     })
 
-    describe('prisoner profile header links', () => {
+    describe('prisoner profile links', () => {
       describe('when the the prisoner is out and user can view inactive bookings', () => {
         beforeEach(() => {
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
@@ -153,9 +156,9 @@ describe('prisoner profile service', () => {
         })
 
         it('should allow the user to edit', async () => {
-          const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-          expect(getPrisonerHeader).toEqual(
+          expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               userCanEdit: true,
             })
@@ -169,9 +172,9 @@ describe('prisoner profile service', () => {
         })
 
         it('should allow the user to edit and show correct category link text', async () => {
-          const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-          expect(getPrisonerHeader).toEqual(
+          expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               categorisationLinkText: 'View category',
               userCanEdit: true,
@@ -186,9 +189,9 @@ describe('prisoner profile service', () => {
         })
 
         it('should show correct category link text', async () => {
-          const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-          expect(getPrisonerHeader).toEqual(
+          expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               categorisationLinkText: 'Manage category',
             })
@@ -202,11 +205,27 @@ describe('prisoner profile service', () => {
         })
 
         it('should enable the user to add a keyworker session', async () => {
-          const getPrisonerHeader = await service.getPrisonerHeader(context, offenderNo)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-          expect(getPrisonerHeader).toEqual(
+          expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               showAddKeyworkerSession: true,
+            })
+          )
+        })
+      })
+
+      describe('when the user is in a use of force prison', () => {
+        beforeEach(() => {
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
+        })
+
+        it('should enable the user to report use of force', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showReportUseOfForce: true,
             })
           )
         })

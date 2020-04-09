@@ -80,7 +80,7 @@
           text: "Add case note",
           element: "a",
           classes: "prisoner-header__button",
-          href: "/offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
+          href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
         }) }}
 
         {% if prisonerProfileData.showAddKeyworkerSession %}
@@ -88,7 +88,7 @@
             text: "Add KW session",
             element: "a",
             classes: "prisoner-header__button",
-            href: "/offenders/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
+            href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
           }) }}
         {% endif %}
 
@@ -96,15 +96,17 @@
           text: "Add appointment",
           element: "a",
           classes: "prisoner-header__button",
-          href: "/"
+          href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
         }) }}
 
-        {{ govukButton({
-          text: "Report use of force",
-          element: "a",
-          classes: "prisoner-header__button",
-          href: "/"
-        }) }}
+        {% if prisonerProfileData.showReportUseOfForce %}
+          {{ govukButton({
+            text: "Report use of force",
+            element: "a",
+            classes: "prisoner-header__button",
+            href: useOfForceUrl
+          }) }}
+        {% endif %}
       {% endif %}
     </div>
   </div>
