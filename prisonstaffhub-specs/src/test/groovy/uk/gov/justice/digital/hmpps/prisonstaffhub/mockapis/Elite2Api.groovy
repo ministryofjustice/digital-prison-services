@@ -569,7 +569,7 @@ class Elite2Api extends WireMockRule {
 
     void stubImage() {
         this.stubFor(
-                get(urlMatching("/api/bookings/offenderNo/.+/image/data"))
+                get(urlPathMatching("/api/bookings/offenderNo/.+/image/data"))
                         .willReturn(aResponse()
                                 .withStatus(404)))
     }
