@@ -111,8 +111,8 @@ const elite2ApiFactory = client => {
 
   const getSentenceData = (context, offenderNumbers) => post(context, `/api/offender-sentences`, offenderNumbers)
 
-  const getPrisonerImage = (context, offenderNo) =>
-    getStream(context, `/api/bookings/offenderNo/${offenderNo}/image/data`)
+  const getPrisonerImage = (context, offenderNo, fullSizeImage = false) =>
+    getStream(context, `/api/bookings/offenderNo/${offenderNo}/image/data?fullSizeImage=${fullSizeImage}`)
 
   const globalSearch = (context, params, resultsLimit) => {
     const { offenderNo, lastName, firstName, gender, location, dateOfBirth, includeAliases } = params
