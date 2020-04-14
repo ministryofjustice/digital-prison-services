@@ -16,7 +16,7 @@
 {% endset %}
 
 {% set incentiveLevelHtml %}
-  <span>{{ prisonerProfileData.incentiveLevel }}</span>
+  <span>{{ prisonerProfileData.incentiveLevel | showDefault }}</span>
   {% if prisonerProfileData.userCanEdit %}
     <br>
     <a data-qa="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
@@ -26,7 +26,7 @@
 {% endset %}
 
 {% set categoryHtml %}
-  <span>{{ prisonerProfileData.category }}</span>
+  <span>{{ prisonerProfileData.category | showDefault }}</span>
   {% if prisonerProfileData.categorisationLinkText %}
     <br>
     <a data-qa="categorisation-external-link" class="govuk-link" href="{{ prisonerProfileData.categorisationLink }}">
