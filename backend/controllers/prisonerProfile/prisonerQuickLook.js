@@ -3,7 +3,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-const controller = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   try {
     const { offenderNo } = req.params
     const details = await elite2Api.getDetails(res.locals, offenderNo)
@@ -30,5 +30,3 @@ const controller = ({ prisonerProfileService, elite2Api, logError }) => async (r
     return res.render('error.njk', { url: dpsUrl })
   }
 }
-
-module.exports = dependencies => controller(dependencies)

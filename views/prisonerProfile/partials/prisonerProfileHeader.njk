@@ -46,7 +46,9 @@
 
 <div class="prisoner-header">
   <div class="prisoner-header__image-container">
-    <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}" alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}"  class="prisoner-image" />
+    <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/image'}}">
+      <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}" alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}"  class="prisoner-image" />
+    </a>
   </div>
 
   <div class="prisoner-header__details">
