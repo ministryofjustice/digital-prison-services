@@ -102,7 +102,7 @@ describe('prisoner profile quick look', () => {
       )
     })
 
-    describe('when there is offence data missing', () => {
+    describe('when there is missing offence data', () => {
       it('should still render the quick look template', async () => {
         await controller(req, res)
 
@@ -147,7 +147,6 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook.njk',
           expect.objectContaining({
-            prisonerProfileData,
             offenceDetails: [
               {
                 label: 'Main offence(s)',
@@ -169,14 +168,13 @@ describe('prisoner profile quick look', () => {
   })
 
   describe('balance data', () => {
-    describe('when balance data is missing', () => {
-      it('should render the quick look template with the correctly formatted balance/money data', async () => {
+    describe('when there is missing balance data', () => {
+      it('should still render the quick look template', async () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook.njk',
           expect.objectContaining({
-            prisonerProfileData,
             balanceDetails: [
               { label: 'Spends', value: '' },
               { label: 'Private', value: '' },
@@ -198,11 +196,57 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook.njk',
           expect.objectContaining({
-            prisonerProfileData,
             balanceDetails: [
               { label: 'Spends', value: '£100.00' },
               { label: 'Private', value: '£75.50' },
               { label: 'Savings', value: '£50.00' },
+            ],
+          })
+        )
+      })
+    })
+  })
+
+  describe('personal data', () => {
+    describe('when there is missing personal data', () => {
+      it('should still render the quick look template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            personalDetails: [
+              { label: 'Age', value: undefined },
+              { label: 'Nationality', value: undefined },
+              { label: 'PNC number', value: undefined },
+              { label: 'CRO number', value: undefined },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when there is personal data', () => {
+      beforeEach(() => {
+        jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000)
+        elite2Api.getPrisonerDetails = jest
+          .fn()
+          .mockReturnValue([
+            { dateOfBirth: '1998-12-01', nationalities: 'Brtish', pncNumber: '12/3456A', croNumber: '12345/57B' },
+          ])
+      })
+
+      it('should render the quick look template with the correctly formatted personal details', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            personalDetails: [
+              { label: 'Age', value: 21 },
+              { label: 'Nationality', value: 'Brtish' },
+              { label: 'PNC number', value: '12/3456A' },
+              { label: 'CRO number', value: '12345/57B' },
             ],
           })
         )
