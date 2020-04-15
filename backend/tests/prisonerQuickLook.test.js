@@ -37,19 +37,28 @@ describe('prisoner profile quick look', () => {
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockReturnValue(prisonerProfileData)
 
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getMainOffence = jest.fn()
+    elite2Api.getDetails = jest.fn().mockReturnValue({})
+    elite2Api.getMainOffence = jest.fn().mockReturnValue([])
+    elite2Api.getPrisonerBalances = jest.fn().mockReturnValue({})
+    elite2Api.getPrisonerDetails = jest.fn().mockReturnValue([])
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockReturnValue({})
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
 
-  it('should make a call for the basic details of a prisoner and the prisoner header details', async () => {
+  it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
     elite2Api.getDetails.mockReturnValue({ bookingId })
 
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerQuickLook.njk',
+      expect.objectContaining({
+        prisonerProfileData,
+      })
+    )
   })
 
   describe('offence data', () => {
@@ -63,21 +72,140 @@ describe('prisoner profile quick look', () => {
       expect(elite2Api.getMainOffence).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
-    it('should render the quick look template with the offence data', async () => {
+    it('should still render the quick look template when there is offence data missing', async () => {
       elite2Api.getMainOffence.mockReturnValue([
         { offenceDescription: 'Have blade/article  which was sharply pointed in public place' },
       ])
+      elite2Api.getPrisonerDetails = jest.fn().mockReturnValue([])
+      elite2Api.getPrisonerSentenceDetails = jest.fn().mockReturnValue({})
 
       await controller(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerQuickLook.njk', {
-        prisonerProfileData,
-        offenceDetails: [
-          {
-            key: { text: 'Main offence(s)' },
-            value: { text: 'Have blade/article  which was sharply pointed in public place' },
-          },
-        ],
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook.njk',
+        expect.objectContaining({
+          offenceDetails: [
+            {
+              label: 'Main offence(s)',
+              value: 'Have blade/article  which was sharply pointed in public place',
+            },
+            {
+              label: 'Imprisonment status',
+              value: false,
+            },
+            {
+              label: 'Release date',
+              value: undefined,
+            },
+          ],
+        })
+      )
+    })
+
+    describe('when there is offence data missing', () => {
+      it('should still render the quick look template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            offenceDetails: [
+              {
+                label: 'Main offence(s)',
+                value: false,
+              },
+              {
+                label: 'Imprisonment status',
+                value: false,
+              },
+              {
+                label: 'Release date',
+                value: undefined,
+              },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when there is offence data', () => {
+      beforeEach(() => {
+        elite2Api.getMainOffence.mockReturnValue([
+          { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
+        ])
+        elite2Api.getPrisonerDetails = jest
+          .fn()
+          .mockReturnValue([{ imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' }])
+        elite2Api.getPrisonerSentenceDetails = jest
+          .fn()
+          .mockReturnValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+      })
+
+      it('should render the quick look template with the correctly formatted data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            prisonerProfileData,
+            offenceDetails: [
+              {
+                label: 'Main offence(s)',
+                value: 'Have blade/article which was sharply pointed in public place',
+              },
+              {
+                label: 'Imprisonment status',
+                value: 'Adult Imprisonment Without Option CJA03',
+              },
+              {
+                label: 'Release date',
+                value: '13/12/2020',
+              },
+            ],
+          })
+        )
+      })
+    })
+  })
+
+  describe('balance data', () => {
+    describe('when balance data is missing', () => {
+      it('should render the quick look template with the correctly formatted balance/money data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            prisonerProfileData,
+            balanceDetails: [
+              { label: 'Spends', value: '' },
+              { label: 'Private', value: '' },
+              { label: 'Savings', value: '' },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when there is balance data', () => {
+      beforeEach(() => {
+        elite2Api.getPrisonerBalances.mockReturnValue({ spends: 100, cash: 75.5, savings: 50, currency: 'GBP' })
+      })
+
+      it('should render the quick look template with the correctly formatted balance/money data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            prisonerProfileData,
+            balanceDetails: [
+              { label: 'Spends', value: '£100.00' },
+              { label: 'Private', value: '£75.50' },
+              { label: 'Savings', value: '£50.00' },
+            ],
+          })
+        )
       })
     })
   })

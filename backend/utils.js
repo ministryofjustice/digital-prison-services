@@ -196,6 +196,9 @@ const hyphenatedStringToCamel = string =>
     return char[1].toUpperCase()
   })
 
+const formatCurrency = (number, currency = 'GBP') =>
+  number ? number.toLocaleString('en-GB', { style: 'currency', currency }) : ''
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -226,4 +229,5 @@ module.exports = {
   isOffenderNumber,
   isAfterToday,
   hyphenatedStringToCamel,
+  formatCurrency,
 }

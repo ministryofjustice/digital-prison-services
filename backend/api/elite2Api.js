@@ -216,6 +216,12 @@ const elite2ApiFactory = client => {
 
   const getStaffRoles = (context, staffId, agencyId) => get(context, `/api/staff/${staffId}/${agencyId}/roles`)
 
+  const getPrisonerBalances = (context, bookingId) => get(context, `/api/bookings/${bookingId}/balances`)
+
+  const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
+
+  const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -274,6 +280,9 @@ const elite2ApiFactory = client => {
     getCaseNoteSummaryByTypes,
     getMainOffence,
     getStaffRoles,
+    getPrisonerBalances,
+    getPrisonerDetails,
+    getPrisonerSentenceDetails,
   }
 }
 

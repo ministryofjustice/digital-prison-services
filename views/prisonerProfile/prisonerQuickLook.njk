@@ -8,8 +8,47 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Offences</h3>
+      
+      {% set offenceRows = [] %}
+
+      {% for offence in offenceDetails %}
+        {% set offenceRows = (offenceRows.push(
+          {
+            key: {
+              text: offence.label
+            },
+            value: {
+              text: offence.value | showDefault
+            }
+          }
+        ), offenceRows) %}
+      {% endfor %}
+
       {{ govukSummaryList({
-        rows: offenceDetails
+        rows: offenceRows
+      }) }}
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Money</h3>
+      {% set balanceRows = [] %}
+
+      {% for balance in balanceDetails %}
+        {% set balanceRows = (balanceRows.push(
+          {
+            key: {
+              text: balance.label
+            },
+            value: {
+              text: balance.value | showDefault
+            }
+          }
+        ), balanceRows) %}
+      {% endfor %}
+
+      {{ govukSummaryList({
+        rows: balanceRows
       }) }}
     </div>
   </div>
