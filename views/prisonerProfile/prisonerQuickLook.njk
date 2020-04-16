@@ -56,10 +56,10 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <h3 class="govuk-heading-m">Case notes and adjudications in last 3 months</h3>
-      {% set caseNoteAdjudicationRows = [] %}
+      {% set caseNoteAdjudicationsRows = [] %}
 
-      {% for caseNoteAdjudication in caseNoteAdjudicationDetails %}
-        {% set caseNoteAdjudicationRows = (caseNoteAdjudicationRows.push(
+      {% for caseNoteAdjudication in caseNoteAdjudications.details %}
+        {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
           {
             key: {
               text: caseNoteAdjudication.label
@@ -68,11 +68,37 @@
               text: caseNoteAdjudication.value | showDefault
             }
           }
-        ), caseNoteAdjudicationRows) %}
+        ), caseNoteAdjudicationsRows) %}
       {% endfor %}
+ 
+      {% set activeAdjudicationsHtml %}
+        {% if caseNoteAdjudications.activeAdjudicationsDetails.value.length %}
+          {% for activeAdjudication in caseNoteAdjudications.activeAdjudicationsDetails.value %}
+            <div class="govuk-!-margin-bottom-3">
+              <strong>{{ activeAdjudication.durationText + ' ' + activeAdjudication.sanctionCodeDescription}}</strong>
+              <div>{{ activeAdjudication.comment }}</div>
+              <div>{{ activeAdjudication.effectiveDate }}</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="govuk-body">No active awards</p>
+        {% endif %}
+      {% endset %}
+
+      {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
+          {
+            key: {
+              text: caseNoteAdjudications.activeAdjudicationsDetails.label
+            },
+            value: {
+              html: activeAdjudicationsHtml
+            }
+          }
+        ), caseNoteAdjudicationsRows) %}
+
 
       {{ govukSummaryList({
-        rows: caseNoteAdjudicationRows
+        rows: caseNoteAdjudicationsRows
       }) }}
     </div>
   </div>

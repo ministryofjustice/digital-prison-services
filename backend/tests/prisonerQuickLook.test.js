@@ -245,13 +245,15 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook.njk',
           expect.objectContaining({
-            caseNoteAdjudicationDetails: [
-              { label: 'Incentive level warnings', value: undefined },
-              { label: 'Incentive Encouragements', value: undefined },
-              { label: 'Last incentive level review', value: undefined },
-              { label: 'Proven adjudications', value: undefined },
-              { label: 'Active adjudications', value: undefined },
-            ],
+            caseNoteAdjudications: {
+              details: [
+                { label: 'Incentive level warnings', value: undefined },
+                { label: 'Incentive Encouragements', value: undefined },
+                { label: 'Last incentive level review', value: undefined },
+                { label: 'Proven adjudications', value: undefined },
+              ],
+              activeAdjudicationsDetails: { label: 'Active adjudications', value: undefined },
+            },
           })
         )
       })
@@ -262,22 +264,89 @@ describe('prisoner profile quick look', () => {
         elite2Api.getIepSummaryForBooking.mockReturnValue({ daysSinceReview: 40 })
         elite2Api.getPositiveCaseNotes.mockReturnValue({ count: 2 })
         elite2Api.getNegativeCaseNotes.mockReturnValue({ count: 1 })
-        elite2Api.getAdjudicationsForBooking.mockReturnValue({ adjudicationCount: 3, awards: [] })
+        elite2Api.getAdjudicationsForBooking.mockReturnValue({
+          adjudicationCount: 3,
+          awards: [
+            {
+              sanctionCode: 'STOP_PCT',
+              sanctionCodeDescription: 'Stoppage of Earnings (%)',
+              days: 14,
+              limit: 50,
+              effectiveDate: '2020-04-16',
+              status: 'IMMEDIATE',
+              statusDescription: 'Immediate',
+            },
+            {
+              sanctionCode: 'STOP_EARN',
+              sanctionCodeDescription: 'Stoppage of Earnings (amount)',
+              days: 14,
+              limit: 50,
+              comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
+              effectiveDate: '2020-04-16',
+              status: 'IMMEDIATE',
+              statusDescription: 'Immediate',
+            },
+            {
+              sanctionCode: 'CC',
+              sanctionCodeDescription: 'Cellular Confinement',
+              days: 14,
+              effectiveDate: '2020-04-16',
+              status: 'SUSP',
+              statusDescription: 'Suspended',
+            },
+            {
+              sanctionCode: 'FORFEIT',
+              sanctionCodeDescription: 'Forfeiture of Privileges',
+              days: 7,
+              comment: '7x LOC, 7x LOA, 7x LOTV',
+              effectiveDate: '2020-04-16',
+              status: 'QUASHED',
+              statusDescription: 'Quashed',
+            },
+          ],
+        })
       })
 
-      it('should render the quick look template with the correctly formatted personal details', async () => {
+      it('should render the quick look template with the correctly formatted case note and adjucation details', async () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook.njk',
           expect.objectContaining({
-            caseNoteAdjudicationDetails: [
-              { label: 'Incentive level warnings', value: 1 },
-              { label: 'Incentive Encouragements', value: 2 },
-              { label: 'Last incentive level review', value: 40 },
-              { label: 'Proven adjudications', value: 3 },
-              { label: 'Active adjudications', value: [] },
-            ],
+            caseNoteAdjudications: {
+              details: [
+                { label: 'Incentive level warnings', value: 1 },
+                { label: 'Incentive Encouragements', value: 2 },
+                { label: 'Last incentive level review', value: 40 },
+                { label: 'Proven adjudications', value: 3 },
+              ],
+              activeAdjudicationsDetails: {
+                label: 'Active adjudications',
+                value: [
+                  {
+                    days: 14,
+                    durationText: '14 days',
+                    effectiveDate: '16/04/2020',
+                    limit: 50,
+                    sanctionCode: 'STOP_PCT',
+                    sanctionCodeDescription: 'Stoppage of Earnings (50%)',
+                    status: 'IMMEDIATE',
+                    statusDescription: 'Immediate',
+                  },
+                  {
+                    comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
+                    days: 14,
+                    durationText: '14 days',
+                    effectiveDate: '16/04/2020',
+                    limit: 50,
+                    sanctionCode: 'STOP_EARN',
+                    sanctionCodeDescription: 'Stoppage of Earnings (£50.00)',
+                    status: 'IMMEDIATE',
+                    statusDescription: 'Immediate',
+                  },
+                ],
+              },
+            },
           })
         )
       })

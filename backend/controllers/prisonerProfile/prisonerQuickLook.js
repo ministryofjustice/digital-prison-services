@@ -4,6 +4,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 const { formatTimestampToDate, formatCurrency } = require('../../utils')
+const formatAward = require('../../shared/formatAward')
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   try {
@@ -11,7 +12,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     const details = await elite2Api.getDetails(res.locals, offenderNo)
     const { bookingId } = details
 
-    const threeMonthsInThePast = moment()
+    const dateThreeMonthsAgo = moment()
       .subtract(3, 'months')
       .format('YYYY-MM-DD')
     const today = moment().format('YYYY-MM-DD')
@@ -33,51 +34,52 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       elite2Api.getPrisonerDetails(res.locals, offenderNo),
       elite2Api.getPrisonerSentenceDetails(res.locals, offenderNo),
       elite2Api.getIepSummaryForBooking(res.locals, bookingId, false),
-      elite2Api.getPositiveCaseNotes(res.locals, bookingId, threeMonthsInThePast, today),
-      elite2Api.getNegativeCaseNotes(res.locals, bookingId, threeMonthsInThePast, today),
+      elite2Api.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
+      elite2Api.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
       elite2Api.getAdjudicationsForBooking(res.locals, bookingId),
     ])
 
     const prisoner = Boolean(prisonerData.length) && prisonerData[0]
 
     const { sentenceDetail } = sentenceData
-    const offenceDetails = [
-      { label: 'Main offence(s)', value: Boolean(offenceData.length) && offenceData[0].offenceDescription },
-      { label: 'Imprisonment status', value: prisoner && prisoner.imprisonmentStatusDesc },
-      {
-        label: 'Release date',
-        value: sentenceDetail && sentenceDetail.releaseDate && formatTimestampToDate(sentenceDetail.releaseDate),
-      },
-    ]
-
-    const { currency } = balanceData
-    const balanceDetails = [
-      { label: 'Spends', value: formatCurrency(balanceData.spends, currency) },
-      { label: 'Private', value: formatCurrency(balanceData.cash, currency) },
-      { label: 'Savings', value: formatCurrency(balanceData.savings, currency) },
-    ]
-
-    const caseNoteAdjudicationDetails = [
-      { label: 'Incentive level warnings', value: negativeCaseNotes.count },
-      { label: 'Incentive Encouragements', value: positiveCaseNotes.count },
-      { label: 'Last incentive level review', value: iepSummary.daysSinceReview },
-      { label: 'Proven adjudications', value: adjudications.adjudicationCount },
-      { label: 'Active adjudications', value: adjudications.awards },
-    ]
-
-    const personalDetails = [
-      { label: 'Age', value: prisoner.dateOfBirth && moment().diff(moment(prisoner.dateOfBirth), 'years') },
-      { label: 'Nationality', value: prisoner.nationalities },
-      { label: 'PNC number', value: prisoner.pncNumber },
-      { label: 'CRO number', value: prisoner.croNumber },
-    ]
 
     return res.render('prisonerProfile/prisonerQuickLook.njk', {
       prisonerProfileData,
-      offenceDetails,
-      balanceDetails,
-      caseNoteAdjudicationDetails,
-      personalDetails,
+      offenceDetails: [
+        { label: 'Main offence(s)', value: Boolean(offenceData.length) && offenceData[0].offenceDescription },
+        { label: 'Imprisonment status', value: prisoner && prisoner.imprisonmentStatusDesc },
+        {
+          label: 'Release date',
+          value: sentenceDetail && sentenceDetail.releaseDate && formatTimestampToDate(sentenceDetail.releaseDate),
+        },
+      ],
+      balanceDetails: [
+        { label: 'Spends', value: formatCurrency(balanceData.spends, balanceData.currency) },
+        { label: 'Private', value: formatCurrency(balanceData.cash, balanceData.currency) },
+        { label: 'Savings', value: formatCurrency(balanceData.savings, balanceData.currency) },
+      ],
+      caseNoteAdjudications: {
+        details: [
+          { label: 'Incentive level warnings', value: negativeCaseNotes.count },
+          { label: 'Incentive Encouragements', value: positiveCaseNotes.count },
+          { label: 'Last incentive level review', value: iepSummary.daysSinceReview },
+          { label: 'Proven adjudications', value: adjudications.adjudicationCount },
+        ],
+        activeAdjudicationsDetails: {
+          label: 'Active adjudications',
+          value:
+            adjudications.awards &&
+            adjudications.awards
+              .map(award => formatAward(award))
+              .filter(({ status }) => status && !status.startsWith('SUSP') && status !== 'QUASHED'),
+        },
+      },
+      personalDetails: [
+        { label: 'Age', value: prisoner.dateOfBirth && moment().diff(moment(prisoner.dateOfBirth), 'years') },
+        { label: 'Nationality', value: prisoner.nationalities },
+        { label: 'PNC number', value: prisoner.pncNumber },
+        { label: 'CRO number', value: prisoner.croNumber },
+      ],
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
