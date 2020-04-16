@@ -27,7 +27,7 @@ const getIepDetailsFactory = elite2Api => {
 
   const getIepDetails = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
-    const iepSummary = await elite2Api.getIepSummaryWithDetails(context, bookingDetails.bookingId)
+    const iepSummary = await elite2Api.getIepSummaryForBooking(context, bookingDetails.bookingId, true)
 
     // Offenders are likely to have multiple IEPs at the same agency.
     // By getting a unique list of users and agencies, we reduce the duplicate

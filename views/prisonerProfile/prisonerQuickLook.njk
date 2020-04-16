@@ -2,6 +2,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set title = "Quick Look" %}
+{% set containerClasses = "prisoner-profile" %}
 
 {% block content %}
   {% include "./partials/prisonerProfileHeader.njk" %}
@@ -49,6 +50,94 @@
 
       {{ govukSummaryList({
         rows: balanceRows
+      }) }}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Case notes and adjudications in last 3 months</h3>
+      {% set caseNoteAdjudicationsRows = [] %}
+
+      {% for caseNoteAdjudication in caseNoteAdjudications.details %}
+        {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
+          {
+            key: {
+              text: caseNoteAdjudication.label
+            },
+            value: {
+              text: caseNoteAdjudication.value | showDefault
+            }
+          }
+        ), caseNoteAdjudicationsRows) %}
+      {% endfor %}
+ 
+      {% set activeAdjudicationsHtml %}
+        {% if caseNoteAdjudications.activeAdjudicationsDetails.value.length %}
+          {% for activeAdjudication in caseNoteAdjudications.activeAdjudicationsDetails.value %}
+            <div class="govuk-!-margin-bottom-3">
+              <strong>{{ activeAdjudication.durationText + ' ' + activeAdjudication.sanctionCodeDescription}}</strong>
+              <div>{{ activeAdjudication.comment }}</div>
+              <div>{{ activeAdjudication.effectiveDate }}</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="govuk-body">No active awards</p>
+        {% endif %}
+      {% endset %}
+
+      {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
+          {
+            key: {
+              text: caseNoteAdjudications.activeAdjudicationsDetails.label
+            },
+            value: {
+              html: activeAdjudicationsHtml
+            }
+          }
+        ), caseNoteAdjudicationsRows) %}
+
+
+      {{ govukSummaryList({
+        rows: caseNoteAdjudicationsRows
+      }) }}
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Visits</h3>
+      {% set visitRows = [] %}
+
+      {% for visitDetail in visits.details %}
+        {% set visitRows = (visitRows.push(
+          {
+            key: {
+              text: visitDetail.label
+            },
+            value: {
+              text: visitDetail.value | showDefault
+            }
+          }
+        ), visitRows) %}
+      {% endfor %}
+
+      {% if visits.nextVisitDetails %}
+        {% for nextVisitDetail in visits.nextVisitDetails %}
+          {% set visitRows = (visitRows.push(
+            {
+              key: {
+                text: nextVisitDetail.label,
+                classes: 'govuk-!-padding-left-9'
+              },
+              value: {
+                text: nextVisitDetail.value | showDefault
+              }
+            }
+          ), visitRows) %}
+        {% endfor %}
+      {% endif %}
+
+      {{ govukSummaryList({
+        rows: visitRows
       }) }}
     </div>
   </div>

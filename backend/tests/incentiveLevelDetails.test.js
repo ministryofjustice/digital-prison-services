@@ -54,7 +54,7 @@ function createIepDetailsReponse() {
 
 beforeEach(() => {
   elite2Api.getDetails = jest.fn()
-  elite2Api.getIepSummaryWithDetails = jest.fn()
+  elite2Api.getIepSummaryForBooking = jest.fn()
   elite2Api.getAgencyDetails = jest.fn()
   elite2Api.getStaffDetails = jest.fn()
   elite2Api.changeIepLevel = jest.fn()
@@ -67,6 +67,7 @@ describe('Incentive details controller', () => {
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
       agencyId: 'HEI',
+      bookingId: -1,
     })
 
     elite2Api.getStaffDetails.mockReturnValue({
@@ -84,7 +85,7 @@ describe('Incentive details controller', () => {
         agencyId: 'LEI',
         description: 'Leeds',
       })
-    elite2Api.getIepSummaryWithDetails.mockReturnValue({
+    elite2Api.getIepSummaryForBooking.mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -131,7 +132,8 @@ describe('Incentive details controller', () => {
     expect(response).toEqual(expected)
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith({}, -1, true)
   })
 
   it('Should filter by level', async () => {
@@ -160,7 +162,7 @@ describe('Incentive details controller', () => {
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should filter by date', async () => {
@@ -189,7 +191,7 @@ describe('Incentive details controller', () => {
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should return records if same From and To dates', async () => {
@@ -218,7 +220,7 @@ describe('Incentive details controller', () => {
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should filter by establishment', async () => {
@@ -258,7 +260,7 @@ describe('Incentive details controller', () => {
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should filter by all filters', async () => {
@@ -292,11 +294,11 @@ describe('Incentive details controller', () => {
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should return "Changed today" when 0 days since review', async () => {
-    elite2Api.getIepSummaryWithDetails.mockReturnValue({
+    elite2Api.getIepSummaryForBooking.mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -359,7 +361,7 @@ describe('Incentive details controller', () => {
     })
 
     expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryWithDetails.mock.calls.length).toBe(1)
+    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should call the right elite2 end point for update level', async () => {

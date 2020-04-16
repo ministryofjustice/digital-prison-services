@@ -1,5 +1,5 @@
 const contextProperties = require('../contextProperties')
-const { arrayToQueryString, mapToQueryString } = require('../utils')
+const { arrayToQueryString, mapToQueryString, map404ToNull } = require('../utils')
 
 const elite2ApiFactory = client => {
   const processResponse = context => response => {
@@ -48,6 +48,8 @@ const elite2ApiFactory = client => {
       `/api/schedules/${agencyId}/visits?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
       offenderNumbers
     )
+
+  const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
 
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
@@ -150,8 +152,8 @@ const elite2ApiFactory = client => {
   const getIepSummary = (context, bookings) =>
     get(context, `/api/bookings/offenders/iepSummary?${arrayToQueryString(bookings, 'bookings')}`)
 
-  const getIepSummaryWithDetails = (context, bookingId) =>
-    get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=true`)
+  const getIepSummaryForBooking = (context, bookingId, withDetails) =>
+    get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
 
   const getDetails = (context, offenderNo, fullInfo = false) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`)
@@ -180,6 +182,8 @@ const elite2ApiFactory = client => {
 
   const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
     get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
+
+  const getAdjudicationsForBooking = (context, bookingId) => get(context, `/api/bookings/${bookingId}/adjudications`)
 
   const addAppointments = (context, body) => post(context, '/api/appointments', body)
 
@@ -222,6 +226,19 @@ const elite2ApiFactory = client => {
 
   const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
 
+  const getPositiveCaseNotes = (context, bookingId, fromDate, toDate) =>
+    get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`).catch(
+      map404ToNull
+    )
+
+  const getNegativeCaseNotes = (context, bookingId, fromDate, toDate) =>
+    get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`).catch(
+      map404ToNull
+    )
+
+  const getPrisonerVisitBalances = (context, offenderNo) =>
+    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -230,6 +247,7 @@ const elite2ApiFactory = client => {
     getActivityList,
     searchActivityLocations,
     getVisits,
+    getNextVisit,
     getAppointments,
     getAppointmentsForAgency,
     getActivities,
@@ -254,7 +272,7 @@ const elite2ApiFactory = client => {
     getOffendersInReception,
     getRecentMovements,
     getIepSummary,
-    getIepSummaryWithDetails,
+    getIepSummaryForBooking,
     getDetails,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
@@ -266,6 +284,7 @@ const elite2ApiFactory = client => {
     getAdjudicationFindingTypes,
     getAdjudications,
     getAdjudicationDetails,
+    getAdjudicationsForBooking,
     addAppointments,
     changeIepLevel,
     getOffenderActivities,
@@ -283,6 +302,9 @@ const elite2ApiFactory = client => {
     getPrisonerBalances,
     getPrisonerDetails,
     getPrisonerSentenceDetails,
+    getPositiveCaseNotes,
+    getNegativeCaseNotes,
+    getPrisonerVisitBalances,
   }
 }
 
