@@ -1,5 +1,5 @@
 const contextProperties = require('../contextProperties')
-const { arrayToQueryString, mapToQueryString } = require('../utils')
+const { arrayToQueryString, mapToQueryString, map404ToNull } = require('../utils')
 
 const elite2ApiFactory = client => {
   const processResponse = context => response => {
@@ -225,12 +225,6 @@ const elite2ApiFactory = client => {
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
 
   const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
-
-  const map404ToNull = error => {
-    if (!error.response || !error.response.status || error.response.status !== 404) throw error
-
-    return null
-  }
 
   const getPositiveCaseNotes = (context, bookingId, fromDate, toDate) =>
     get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`).catch(

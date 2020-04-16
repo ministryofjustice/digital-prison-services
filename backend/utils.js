@@ -207,6 +207,12 @@ const capitalizeUppercaseString = string =>
         .join(' ')
     : null
 
+const map404ToNull = error => {
+  if (!error.response || !error.response.status || error.response.status !== 404) throw error
+
+  return null
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -239,4 +245,5 @@ module.exports = {
   hyphenatedStringToCamel,
   formatCurrency,
   capitalizeUppercaseString,
+  map404ToNull,
 }
