@@ -2,6 +2,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set title = "Quick Look" %}
+{% set containerClasses = "prisoner-profile" %}
 
 {% block content %}
   {% include "./partials/prisonerProfileHeader.njk" %}
@@ -99,6 +100,44 @@
 
       {{ govukSummaryList({
         rows: caseNoteAdjudicationsRows
+      }) }}
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Visits</h3>
+      {% set visitRows = [] %}
+
+      {% for visitDetail in visits.details %}
+        {% set visitRows = (visitRows.push(
+          {
+            key: {
+              text: visitDetail.label
+            },
+            value: {
+              text: visitDetail.value | showDefault
+            }
+          }
+        ), visitRows) %}
+      {% endfor %}
+
+      {% if visits.nextVisitDetails %}
+        {% for nextVisitDetail in visits.nextVisitDetails %}
+          {% set visitRows = (visitRows.push(
+            {
+              key: {
+                text: nextVisitDetail.label,
+                classes: 'govuk-!-padding-left-9'
+              },
+              value: {
+                text: nextVisitDetail.value | showDefault
+              }
+            }
+          ), visitRows) %}
+        {% endfor %}
+      {% endif %}
+
+      {{ govukSummaryList({
+        rows: visitRows
       }) }}
     </div>
   </div>

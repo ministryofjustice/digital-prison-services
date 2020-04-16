@@ -1,0 +1,25 @@
+// Whenever we have/want to diverge from govuk-frontend 
+.prisoner-profile {
+  .govuk-summary-list__key {
+    margin-bottom: govuk-spacing(1);
+    @include govuk-typography-weight-bold;
+    @include govuk-media-query($from: tablet) {
+      width: 50%;
+    }
+  }
+  
+  .govuk-summary-list__value {
+    @include govuk-media-query($until: tablet) {
+      margin-bottom: govuk-spacing(3);
+    }
+    @include govuk-media-query($from: tablet) {
+      width: 50%;
+    }
+  }
+
+  .govuk-summary-list__value:last-child {
+    @include govuk-media-query($from: tablet) {
+      width: 50%;
+    }
+  }
+}

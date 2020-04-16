@@ -46,6 +46,8 @@ describe('prisoner profile quick look', () => {
     elite2Api.getPositiveCaseNotes = jest.fn().mockReturnValue({})
     elite2Api.getNegativeCaseNotes = jest.fn().mockReturnValue({})
     elite2Api.getAdjudicationsForBooking = jest.fn().mockReturnValue({})
+    elite2Api.getNextVisit = jest.fn().mockReturnValue({})
+    elite2Api.getPrisonerVisitBalances = jest.fn().mockReturnValue({})
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
@@ -349,6 +351,60 @@ describe('prisoner profile quick look', () => {
             },
           })
         )
+      })
+    })
+
+    describe('visit data', () => {
+      describe('when there is missing visit data', () => {
+        it('should still render the quick look template', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerQuickLook.njk',
+            expect.objectContaining({
+              visits: {
+                details: [
+                  { label: 'Remaining visits', value: undefined },
+                  { label: 'Remaining privileged visits', value: undefined },
+                  { label: 'Next visit date', value: 'No upcoming visits' },
+                ],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when there is visit data', () => {
+        beforeEach(() => {
+          elite2Api.getNextVisit.mockReturnValue({
+            visitTypeDescription: 'Social Contact',
+            leadVisitor: 'YRUDYPETER CASSORIA',
+            relationshipDescription: 'Probation Officer',
+            startTime: '2020-04-17T13:30:00',
+          })
+          elite2Api.getPrisonerVisitBalances.mockReturnValue({ remainingVo: 24, remainingPvo: 4 })
+        })
+
+        it('should render the quick look template with the correctly formatted visit details', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerQuickLook.njk',
+            expect.objectContaining({
+              visits: {
+                details: [
+                  { label: 'Remaining visits', value: 24 },
+                  { label: 'Remaining privileged visits', value: 4 },
+                  { label: 'Next visit date', value: '17/04/2020' },
+                ],
+                nextVisitDetails: [
+                  { label: 'Type of visit', value: 'Social Contact' },
+                  { label: 'Lead visitor', value: 'Yrudypeter Cassoria (Probation Officer)' },
+                ],
+              },
+            })
+          )
+        })
       })
     })
   })

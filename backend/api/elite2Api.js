@@ -49,6 +49,8 @@ const elite2ApiFactory = client => {
       offenderNumbers
     )
 
+  const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
+
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
       context,
@@ -240,6 +242,9 @@ const elite2ApiFactory = client => {
       map404ToNull
     )
 
+  const getPrisonerVisitBalances = (context, offenderNo) =>
+    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -248,6 +253,7 @@ const elite2ApiFactory = client => {
     getActivityList,
     searchActivityLocations,
     getVisits,
+    getNextVisit,
     getAppointments,
     getAppointmentsForAgency,
     getActivities,
@@ -304,6 +310,7 @@ const elite2ApiFactory = client => {
     getPrisonerSentenceDetails,
     getPositiveCaseNotes,
     getNegativeCaseNotes,
+    getPrisonerVisitBalances,
   }
 }
 
