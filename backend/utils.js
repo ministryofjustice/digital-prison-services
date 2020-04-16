@@ -199,6 +199,12 @@ const hyphenatedStringToCamel = string =>
 const formatCurrency = (number, currency = 'GBP') =>
   number ? number.toLocaleString('en-GB', { style: 'currency', currency }) : ''
 
+const map404ToNull = error => {
+  if (!error.response || !error.response.status || error.response.status !== 404) throw error
+
+  return null
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -230,4 +236,5 @@ module.exports = {
   isAfterToday,
   hyphenatedStringToCamel,
   formatCurrency,
+  map404ToNull,
 }

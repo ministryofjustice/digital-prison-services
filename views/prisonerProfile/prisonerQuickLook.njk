@@ -55,6 +55,30 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Case notes and adjudications in last 3 months</h3>
+      {% set caseNoteAdjudicationRows = [] %}
+
+      {% for caseNoteAdjudication in caseNoteAdjudicationDetails %}
+        {% set caseNoteAdjudicationRows = (caseNoteAdjudicationRows.push(
+          {
+            key: {
+              text: caseNoteAdjudication.label
+            },
+            value: {
+              text: caseNoteAdjudication.value | showDefault
+            }
+          }
+        ), caseNoteAdjudicationRows) %}
+      {% endfor %}
+
+      {{ govukSummaryList({
+        rows: caseNoteAdjudicationRows
+      }) }}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
       <h3 class="govuk-heading-m">Personal information</h3>
       {% set personalRows = [] %}
 

@@ -42,6 +42,10 @@ describe('prisoner profile quick look', () => {
     elite2Api.getPrisonerBalances = jest.fn().mockReturnValue({})
     elite2Api.getPrisonerDetails = jest.fn().mockReturnValue([])
     elite2Api.getPrisonerSentenceDetails = jest.fn().mockReturnValue({})
+    elite2Api.getIepSummaryForBooking = jest.fn().mockReturnValue({})
+    elite2Api.getPositiveCaseNotes = jest.fn().mockReturnValue({})
+    elite2Api.getNegativeCaseNotes = jest.fn().mockReturnValue({})
+    elite2Api.getAdjudicationsForBooking = jest.fn().mockReturnValue({})
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
@@ -70,36 +74,6 @@ describe('prisoner profile quick look', () => {
       await controller(req, res)
 
       expect(elite2Api.getMainOffence).toHaveBeenCalledWith(res.locals, bookingId)
-    })
-
-    it('should still render the quick look template when there is offence data missing', async () => {
-      elite2Api.getMainOffence.mockReturnValue([
-        { offenceDescription: 'Have blade/article  which was sharply pointed in public place' },
-      ])
-      elite2Api.getPrisonerDetails = jest.fn().mockReturnValue([])
-      elite2Api.getPrisonerSentenceDetails = jest.fn().mockReturnValue({})
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerQuickLook.njk',
-        expect.objectContaining({
-          offenceDetails: [
-            {
-              label: 'Main offence(s)',
-              value: 'Have blade/article  which was sharply pointed in public place',
-            },
-            {
-              label: 'Imprisonment status',
-              value: false,
-            },
-            {
-              label: 'Release date',
-              value: undefined,
-            },
-          ],
-        })
-      )
     })
 
     describe('when there is missing offence data', () => {
@@ -133,12 +107,10 @@ describe('prisoner profile quick look', () => {
         elite2Api.getMainOffence.mockReturnValue([
           { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
         ])
-        elite2Api.getPrisonerDetails = jest
-          .fn()
-          .mockReturnValue([{ imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' }])
-        elite2Api.getPrisonerSentenceDetails = jest
-          .fn()
-          .mockReturnValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+        elite2Api.getPrisonerDetails.mockReturnValue([
+          { imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' },
+        ])
+        elite2Api.getPrisonerSentenceDetails.mockReturnValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
       })
 
       it('should render the quick look template with the correctly formatted data', async () => {
@@ -228,12 +200,10 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is personal data', () => {
       beforeEach(() => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000)
-        elite2Api.getPrisonerDetails = jest
-          .fn()
-          .mockReturnValue([
-            { dateOfBirth: '1998-12-01', nationalities: 'Brtish', pncNumber: '12/3456A', croNumber: '12345/57B' },
-          ])
+        jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
+        elite2Api.getPrisonerDetails.mockReturnValue([
+          { dateOfBirth: '1998-12-01', nationalities: 'Brtish', pncNumber: '12/3456A', croNumber: '12345/57B' },
+        ])
       })
 
       it('should render the quick look template with the correctly formatted personal details', async () => {
@@ -247,6 +217,66 @@ describe('prisoner profile quick look', () => {
               { label: 'Nationality', value: 'Brtish' },
               { label: 'PNC number', value: '12/3456A' },
               { label: 'CRO number', value: '12345/57B' },
+            ],
+          })
+        )
+      })
+    })
+  })
+
+  describe('case note and adjudications data', () => {
+    beforeEach(() => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
+    })
+
+    it('should make a request for the correct data', async () => {
+      elite2Api.getDetails.mockReturnValue({ bookingId })
+
+      await controller(req, res)
+
+      expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith({}, bookingId, false)
+      expect(elite2Api.getPositiveCaseNotes).toHaveBeenCalledWith({}, bookingId, '2019-10-13', '2020-01-13')
+    })
+
+    describe('when there is missing case note and adjudications data', () => {
+      it('should still render the quick look template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            caseNoteAdjudicationDetails: [
+              { label: 'Incentive level warnings', value: undefined },
+              { label: 'Incentive Encouragements', value: undefined },
+              { label: 'Last incentive level review', value: undefined },
+              { label: 'Proven adjudications', value: undefined },
+              { label: 'Active adjudications', value: undefined },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when there is case note and adjudications data', () => {
+      beforeEach(() => {
+        elite2Api.getIepSummaryForBooking.mockReturnValue({ daysSinceReview: 40 })
+        elite2Api.getPositiveCaseNotes.mockReturnValue({ count: 2 })
+        elite2Api.getNegativeCaseNotes.mockReturnValue({ count: 1 })
+        elite2Api.getAdjudicationsForBooking.mockReturnValue({ adjudicationCount: 3, awards: [] })
+      })
+
+      it('should render the quick look template with the correctly formatted personal details', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            caseNoteAdjudicationDetails: [
+              { label: 'Incentive level warnings', value: 1 },
+              { label: 'Incentive Encouragements', value: 2 },
+              { label: 'Last incentive level review', value: 40 },
+              { label: 'Proven adjudications', value: 3 },
+              { label: 'Active adjudications', value: [] },
             ],
           })
         )

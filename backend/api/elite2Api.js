@@ -150,8 +150,8 @@ const elite2ApiFactory = client => {
   const getIepSummary = (context, bookings) =>
     get(context, `/api/bookings/offenders/iepSummary?${arrayToQueryString(bookings, 'bookings')}`)
 
-  const getIepSummaryWithDetails = (context, bookingId) =>
-    get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=true`)
+  const getIepSummaryForBooking = (context, bookingId, withDetails) =>
+    get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
 
   const getDetails = (context, offenderNo, fullInfo = false) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`)
@@ -180,6 +180,8 @@ const elite2ApiFactory = client => {
 
   const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
     get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
+
+  const getAdjudicationsForBooking = (context, bookingId) => get(context, `/api/bookings/${bookingId}/adjudications`)
 
   const addAppointments = (context, body) => post(context, '/api/appointments', body)
 
@@ -222,6 +224,22 @@ const elite2ApiFactory = client => {
 
   const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
 
+  const map404ToNull = error => {
+    if (!error.response || !error.response.status || error.response.status !== 404) throw error
+
+    return null
+  }
+
+  const getPositiveCaseNotes = (context, bookingId, fromDate, toDate) =>
+    get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`).catch(
+      map404ToNull
+    )
+
+  const getNegativeCaseNotes = (context, bookingId, fromDate, toDate) =>
+    get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`).catch(
+      map404ToNull
+    )
+
   return {
     userLocations,
     userCaseLoads,
@@ -254,7 +272,7 @@ const elite2ApiFactory = client => {
     getOffendersInReception,
     getRecentMovements,
     getIepSummary,
-    getIepSummaryWithDetails,
+    getIepSummaryForBooking,
     getDetails,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
@@ -266,6 +284,7 @@ const elite2ApiFactory = client => {
     getAdjudicationFindingTypes,
     getAdjudications,
     getAdjudicationDetails,
+    getAdjudicationsForBooking,
     addAppointments,
     changeIepLevel,
     getOffenderActivities,
@@ -283,6 +302,8 @@ const elite2ApiFactory = client => {
     getPrisonerBalances,
     getPrisonerDetails,
     getPrisonerSentenceDetails,
+    getPositiveCaseNotes,
+    getNegativeCaseNotes,
   }
 }
 

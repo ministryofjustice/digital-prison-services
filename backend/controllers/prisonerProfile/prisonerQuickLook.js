@@ -11,12 +11,31 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     const details = await elite2Api.getDetails(res.locals, offenderNo)
     const { bookingId } = details
 
-    const [prisonerProfileData, offenceData, balanceData, prisonerData, sentenceData] = await Promise.all([
+    const threeMonthsInThePast = moment()
+      .subtract(3, 'months')
+      .format('YYYY-MM-DD')
+    const today = moment().format('YYYY-MM-DD')
+
+    const [
+      prisonerProfileData,
+      offenceData,
+      balanceData,
+      prisonerData,
+      sentenceData,
+      iepSummary,
+      positiveCaseNotes,
+      negativeCaseNotes,
+      adjudications,
+    ] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getMainOffence(res.locals, bookingId),
       elite2Api.getPrisonerBalances(res.locals, bookingId),
       elite2Api.getPrisonerDetails(res.locals, offenderNo),
       elite2Api.getPrisonerSentenceDetails(res.locals, offenderNo),
+      elite2Api.getIepSummaryForBooking(res.locals, bookingId, false),
+      elite2Api.getPositiveCaseNotes(res.locals, bookingId, threeMonthsInThePast, today),
+      elite2Api.getNegativeCaseNotes(res.locals, bookingId, threeMonthsInThePast, today),
+      elite2Api.getAdjudicationsForBooking(res.locals, bookingId),
     ])
 
     const prisoner = Boolean(prisonerData.length) && prisonerData[0]
@@ -38,6 +57,14 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       { label: 'Savings', value: formatCurrency(balanceData.savings, currency) },
     ]
 
+    const caseNoteAdjudicationDetails = [
+      { label: 'Incentive level warnings', value: negativeCaseNotes.count },
+      { label: 'Incentive Encouragements', value: positiveCaseNotes.count },
+      { label: 'Last incentive level review', value: iepSummary.daysSinceReview },
+      { label: 'Proven adjudications', value: adjudications.adjudicationCount },
+      { label: 'Active adjudications', value: adjudications.awards },
+    ]
+
     const personalDetails = [
       { label: 'Age', value: prisoner.dateOfBirth && moment().diff(moment(prisoner.dateOfBirth), 'years') },
       { label: 'Nationality', value: prisoner.nationalities },
@@ -49,6 +76,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       prisonerProfileData,
       offenceDetails,
       balanceDetails,
+      caseNoteAdjudicationDetails,
       personalDetails,
     })
   } catch (error) {
