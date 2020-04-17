@@ -48,6 +48,7 @@ describe('prisoner profile quick look', () => {
     elite2Api.getAdjudicationsForBooking = jest.fn().mockReturnValue({})
     elite2Api.getNextVisit = jest.fn().mockReturnValue({})
     elite2Api.getPrisonerVisitBalances = jest.fn().mockReturnValue({})
+    elite2Api.getEventsForToday = jest.fn().mockReturnValue([])
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
@@ -405,6 +406,158 @@ describe('prisoner profile quick look', () => {
             })
           )
         })
+      })
+    })
+
+    describe('scheduled activity data', () => {
+      describe('when there is missing scheduled activity data', () => {
+        it('should still render the quick look template', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerQuickLook.njk',
+            expect.objectContaining({
+              scheduledActivityPeriods: [
+                { label: 'Morning (AM)', value: [] },
+                { label: 'Afternoon (PM)', value: [] },
+                { label: 'Evening (ED)', value: [] },
+              ],
+            })
+          )
+        })
+      })
+    })
+
+    describe('when there is visit data', () => {
+      beforeEach(() => {
+        elite2Api.getEventsForToday.mockReturnValue([
+          {
+            bookingId,
+            eventClass: 'INT_MOV',
+            eventStatus: 'SCH',
+            eventType: 'APP',
+            eventTypeDesc: 'Appointment',
+            eventSubType: 'EDUC',
+            eventSubTypeDesc: 'Education',
+            eventDate: '2020-04-17',
+            startTime: '2020-04-17T09:00:00',
+            endTime: '2020-04-17T10:00:00',
+            eventLocation: 'BADMINTON',
+            eventSource: 'APP',
+            eventSourceCode: 'APP',
+          },
+          {
+            bookingId,
+            eventClass: 'INT_MOV',
+            eventStatus: 'SCH',
+            eventType: 'APP',
+            eventTypeDesc: 'Appointment',
+            eventSubType: 'CABE',
+            eventSubTypeDesc: 'Case - Benefits',
+            eventDate: '2020-04-17',
+            startTime: '2020-04-17T13:00:00',
+            endTime: '2020-04-17T14:00:00',
+            eventLocation: 'CIRCUIT',
+            eventSource: 'APP',
+            eventSourceCode: 'APP',
+            eventSourceDesc: 'Test Comment',
+          },
+          {
+            bookingId,
+            eventClass: 'INT_MOV',
+            eventStatus: 'CANC',
+            eventType: 'APP',
+            eventTypeDesc: 'Appointment',
+            eventSubType: 'GYMSH',
+            eventSubTypeDesc: 'Gym - Sports Halls Activity',
+            eventDate: '2020-04-17',
+            startTime: '2020-04-17T15:00:00',
+            endTime: '2020-04-17T15:30:00',
+            eventLocation: 'BASKETBALL',
+            eventSource: 'APP',
+            eventSourceCode: 'APP',
+            eventSourceDesc: 'Test comment',
+          },
+          {
+            bookingId,
+            eventClass: 'INT_MOV',
+            eventStatus: 'SCH',
+            eventType: 'APP',
+            eventTypeDesc: 'Appointment',
+            eventSubType: 'GYMF',
+            eventSubTypeDesc: 'Gym - Football',
+            eventDate: '2020-04-17',
+            startTime: '2020-04-17T20:20:00',
+            endTime: '2020-04-17T20:35:00',
+            eventLocation: 'BADMINTON',
+            eventSource: 'APP',
+            eventSourceCode: 'APP',
+            eventSourceDesc: 'Testing a really long comment which is over 40 characters',
+          },
+        ])
+      })
+
+      it('should render the quick look template with the correctly formatted activities in the correct periods', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook.njk',
+          expect.objectContaining({
+            scheduledActivityPeriods: [
+              {
+                label: 'Morning (AM)',
+                value: [
+                  {
+                    cancelled: false,
+                    comment: undefined,
+                    endTime: '2020-04-17T10:00:00',
+                    eventStatus: 'SCH',
+                    shortComment: undefined,
+                    startTime: '2020-04-17T09:00:00',
+                    type: 'Education',
+                  },
+                ],
+              },
+              {
+                label: 'Afternoon (PM)',
+                value: [
+                  {
+                    cancelled: false,
+                    comment: 'Test Comment',
+                    endTime: '2020-04-17T14:00:00',
+                    eventStatus: 'SCH',
+                    shortComment: 'Test Comment',
+                    startTime: '2020-04-17T13:00:00',
+                    type: 'Case - Benefits',
+                  },
+                  {
+                    cancelled: true,
+                    comment: 'Test comment',
+                    endTime: '2020-04-17T15:30:00',
+                    eventStatus: 'CANC',
+                    shortComment: 'Test comment',
+                    startTime: '2020-04-17T15:00:00',
+                    type: 'Gym - Sports Halls Activity',
+                  },
+                ],
+              },
+              {
+                label: 'Evening (ED)',
+                value: [
+                  {
+                    cancelled: false,
+                    comment: 'Testing a really long comment which is over 40 characters',
+                    endTime: '2020-04-17T20:35:00',
+                    eventStatus: 'SCH',
+                    shortComment: 'Testing a really long comment which is o...',
+                    startTime: '2020-04-17T20:20:00',
+                    type: 'Gym - Football',
+                  },
+                ],
+              },
+            ],
+          })
+        )
       })
     })
   })
