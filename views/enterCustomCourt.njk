@@ -1,0 +1,50 @@
+{% extends "./partials/courtServiceLayout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "What is the name of the court?" %}
+
+{% block content %}
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <div class="govuk-grid-row">
+        <div id="location-events" class="govuk-grid-column-one-third">
+            <form method="post" about="{{ links.postAppointments }}">
+                <input type="hidden" name="preAppointment" value="{{  formValues.preAppointment }}"/>
+                <input type="hidden" name="postAppointment" value="{{ formValues.postAppointment }}"/>
+
+                <input type="hidden" name="preAppointmentDuration" value="{{ formValues.preAppointmentDuration }}"/>
+                <input type="hidden" name="postAppointmentDuration" value="{{ formValues.postAppointmentDuration }}"/>
+
+                <input type="hidden" name="preAppointmentLocation" value="{{ formValues.preAppointmentLocation }}"/>
+                <input type="hidden" name="postAppointmentLocation" value="{{ formValues.postAppointmentLocation }}"/>
+                <input type="hidden" name="otherCourtForm" value="true"/>
+
+                {{ govukInput({
+                    id: "otherCourt",
+                    name: "otherCourt",
+                    value: formValues.otherCourt,
+                    errorMessage: errors | findError('otherCourt')
+                }) }}
+
+                {{ govukButton({ text: "Save and continue", type: "submit" }) }}
+
+                {{ govukButton({
+                    text: "Cancel",
+                    element: 'a',
+                    href: cancel,
+                    classes: "govuk-button--secondary"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

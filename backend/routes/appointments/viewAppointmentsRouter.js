@@ -26,33 +26,65 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
       .filter(appointment => appointment.appointmentTypeCode === 'VLB')
       .map(videoLinkAppointment => videoLinkAppointment.id)
 
-    const videoLinkAppointments = await whereaboutsApi.getVideoLinkAppointments(res.locals, videoLinkAppointmentIds)
+    const videoLinkAppointmentResponse = await whereaboutsApi.getVideoLinkAppointments(
+      res.locals,
+      videoLinkAppointmentIds
+    )
+    const videoLinkAppointments = (videoLinkAppointmentResponse && videoLinkAppointmentResponse.appointments) || []
+    const videoLinkAppointmentsMadeByTheCourt = videoLinkAppointments.filter(appointment => appointment.madeByTheCourt)
+
+    const videoLinkCourtMappings = videoLinkAppointments
+      .filter(appointment => appointment.madeByTheCourt === false)
+      .map(appointment => ({
+        appointmentId: appointment.appointmentId,
+        court: appointment.court,
+      }))
 
     const appointmentsEnhanced = appointments
       .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
       .map(async appointment => {
         const { startTime, endTime, offenderNo } = appointment
-        const staffDetails = await elite2Api.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
-          logError(req.originalUrl, error, serviceUnavailableMessage)
-          return null
-        })
         const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
         const offenderUrl = `${dpsUrl}offenders/${offenderNo}`
+
         const videoLinkLocation =
           appointment.appointmentTypeCode === 'VLB' &&
-          videoLinkAppointments.appointments.find(
+          videoLinkAppointmentsMadeByTheCourt.find(
             videoLinkAppointment => videoLinkAppointment.appointmentId === appointment.id
           )
 
-        const staffName = staffDetails ? formatName(staffDetails.firstName, staffDetails.lastName) : '--'
+        const staffDetails =
+          !videoLinkLocation &&
+          (await elite2Api.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
+            logError(req.originalUrl, error, serviceUnavailableMessage)
+            return null
+          }))
 
         const createdBy =
           videoLinkLocation &&
           videoLinkLocation.createdByUsername &&
-          (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername)).name
+          (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername).catch(error => {
+            logError(req.originalUrl, error, serviceUnavailableMessage)
+            return null
+          }))
 
-        const addedBy =
-          (videoLinkLocation && (createdBy ? `${createdBy} (court)` : videoLinkLocation.court)) || staffName
+        const getAddedBy = () => {
+          if (!videoLinkLocation)
+            return (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || '--'
+
+          return createdBy ? `${createdBy.name} (court)` : videoLinkLocation.court
+        }
+
+        const getCourtDescription = () => {
+          if (videoLinkLocation) return `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`
+
+          const courtMapping = videoLinkCourtMappings.find(mapping => mapping.appointmentId === appointment.id)
+
+          return (
+            (courtMapping && `${appointment.locationDescription}</br>with: ${courtMapping.court}`) ||
+            appointment.locationDescription
+          )
+        }
 
         return [
           {
@@ -71,12 +103,10 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
             text: appointment.appointmentTypeDescription,
           },
           {
-            html:
-              (videoLinkLocation && `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`) ||
-              appointment.locationDescription,
+            html: getCourtDescription(),
           },
           {
-            text: addedBy,
+            text: getAddedBy(),
           },
         ]
       })

@@ -39,7 +39,7 @@ describe('View appointments', () => {
     elite2Api.getStaffDetails.mockResolvedValue([])
 
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
-    whereaboutsApi.getVideoLinkAppointments.mockReturnValue([])
+    whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
 
     oauthApi.userDetails.mockResolvedValue({
       name: 'Bob Doe',
@@ -211,6 +211,7 @@ describe('View appointments', () => {
             court: 'Wimbledon',
             hearingType: 'MAIN',
             createdByUsername: 'username1',
+            madeByTheCourt: true,
           },
         ],
       })
@@ -229,7 +230,8 @@ describe('View appointments', () => {
         timeSlot: 'PM',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
-      expect(elite2Api.getStaffDetails).toHaveBeenCalledTimes(4)
+      expect(elite2Api.getStaffDetails).toHaveBeenCalledTimes(3)
+      expect(oauthApi.userDetails).toHaveBeenCalledTimes(1)
     })
 
     it('should make a call to get user details', async () => {
@@ -286,7 +288,7 @@ describe('View appointments', () => {
               { text: 'ABC456' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM' },
-              { text: '' },
+              { text: 'Staff Three' },
             ],
           ],
           date: '02/01/2020',

@@ -93,14 +93,16 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       const prepostData = {}
 
       if (appointmentType === 'VLB') {
-        const preAppointmentData = preAppointment && {
-          locationDescription: locationTypes.find(l => l.value === Number(preAppointment.locationId)).text,
-          duration: prepostDurations[preAppointment.duration],
-        }
-        const postAppointmentData = postAppointment && {
-          locationDescription: locationTypes.find(l => l.value === Number(postAppointment.locationId)).text,
-          duration: prepostDurations[postAppointment.duration],
-        }
+        const preAppointmentData = preAppointment &&
+          preAppointment.locationId && {
+            locationDescription: locationTypes.find(l => l.value === Number(preAppointment.locationId)).text,
+            duration: prepostDurations[preAppointment.duration],
+          }
+        const postAppointmentData = postAppointment &&
+          postAppointment.locationId && {
+            locationDescription: locationTypes.find(l => l.value === Number(postAppointment.locationId)).text,
+            duration: prepostDurations[postAppointment.duration],
+          }
 
         if (preAppointmentData) {
           prepostData['pre-court hearing briefing'] = `${preAppointmentData.locationDescription} - ${moment(

@@ -4,8 +4,10 @@ const { notifyClient } = require('../shared/notifyClient')
 const config = require('../config')
 
 describe('Pre post appointments', () => {
+  let body
   const elite2Api = {}
   const oauthApi = {}
+  const whereaboutsApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
 
@@ -32,13 +34,7 @@ describe('Pre post appointments', () => {
     appointmentTypeDescription: 'Videolink',
     locationTypes: [{ value: 1, text: 'Room 3' }],
     date: '10/10/2019',
-  }
-  const body = {
-    postAppointment: 'yes',
-    preAppointment: 'no',
-    postAppointmentDuration: '60',
-    preAppointmentDuration: '60',
-    preAppointmentLocation: '1',
+    court: 'london',
   }
 
   const locationEvents = [
@@ -53,6 +49,8 @@ describe('Pre post appointments', () => {
     oauthApi.userEmail = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
+    whereaboutsApi.getCourtLocations = jest.fn()
+    whereaboutsApi.addVideoLinkAppointment = jest.fn()
 
     req.flash = jest.fn()
     res.render = jest.fn()
@@ -76,9 +74,18 @@ describe('Pre post appointments', () => {
 
     elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
 
+    whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['Leeds', 'London'] })
+
     existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
 
     req.flash.mockImplementation(() => [appointmentDetails])
+
+    body = {
+      postAppointment: 'yes',
+      preAppointment: 'no',
+      postAppointmentDuration: '60',
+      court: 'london',
+    }
   })
 
   describe('index', () => {
@@ -86,6 +93,7 @@ describe('Pre post appointments', () => {
       const { index } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -106,6 +114,7 @@ describe('Pre post appointments', () => {
       const { index } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -119,10 +128,33 @@ describe('Pre post appointments', () => {
       )
     })
 
+    it('should return court locations', async () => {
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        whereaboutsApi,
+        logError: () => {},
+      })
+
+      await index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prepostAppointments.njk',
+        expect.objectContaining({
+          courts: [
+            { text: 'Leeds', value: 'leeds' },
+            { text: 'London', value: 'london' },
+            { text: 'Other', value: 'other' },
+          ],
+        })
+      )
+    })
+
     it('should return default form values', async () => {
       const { index } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -134,8 +166,8 @@ describe('Pre post appointments', () => {
           formValues: {
             postAppointment: 'yes',
             preAppointment: 'yes',
-            postAppointmentDuration: 20,
-            preAppointmentDuration: 20,
+            postAppointmentDuration: '20',
+            preAppointmentDuration: '20',
           },
         })
       )
@@ -145,6 +177,7 @@ describe('Pre post appointments', () => {
       const { index } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -153,13 +186,13 @@ describe('Pre post appointments', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prepostAppointments.njk',
         expect.objectContaining({
+          date: '10/10/2017',
           details: {
-            comment: 'Test',
+            courtHearingEndTime: '14:00',
+            courtHearingStartTime: '11:00',
             date: '10 October 2017',
-            endTime: '14:00',
             location: 'Room 3',
-            prisonerName: 'John Doe',
-            startTime: '11:00',
+            name: 'Doe, John',
           },
         })
       )
@@ -184,10 +217,86 @@ describe('Pre post appointments', () => {
   })
 
   describe('post', () => {
+    it('should redirect to the court location page when other has been selected', async () => {
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        whereaboutsApi,
+        logError: () => {},
+      })
+
+      req.body = {
+        court: 'other',
+        postAppointment: 'no',
+        preAppointment: 'no',
+      }
+
+      await post(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('appointmentDetails', {
+        appointmentType: 'VLB',
+        appointmentTypeDescription: 'Videolink',
+        bookingId: 1,
+        comment: 'Test',
+        court: 'Other',
+        date: '10/10/2019',
+        endTime: '2017-10-10T14:00',
+        firstName: 'john',
+        lastName: 'doe',
+        locationDescription: 'Room 3',
+        locationId: 1,
+        locationTypes: [{ text: 'Room 3', value: 1 }],
+        offenderNo: 'A12345',
+        postAppointment: {
+          required: 'no',
+        },
+        preAppointment: {
+          required: 'no',
+        },
+        recurring: 'No',
+        startTime: '2017-10-10T11:00',
+      })
+      expect(res.render).toHaveBeenCalledWith('enterCustomCourt.njk', {
+        date: '10/10/2019',
+        errors: [],
+        formValues: {
+          court: 'other',
+          postAppointment: 'no',
+          preAppointment: 'no',
+        },
+        cancel: '/offenders/A12345/prepost-appointments',
+      })
+    })
+
+    it('should validate the presence of other court', async () => {
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        whereaboutsApi,
+        logError: () => {},
+      })
+
+      req.body = {
+        otherCourtForm: 'true',
+        postAppointment: 'no',
+        preAppointment: 'no',
+      }
+
+      await post(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'enterCustomCourt.njk',
+        expect.objectContaining({
+          errors: [{ href: '#otherCourt', text: 'Enter the name of the court' }],
+        })
+      )
+    })
+
     it('should validate presence of room locations', async () => {
       const { post } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -205,9 +314,35 @@ describe('Pre post appointments', () => {
         'prepostAppointments.njk',
         expect.objectContaining({
           errors: [
-            { text: 'Select a room', href: '#preAppointmentLocation' },
-            { text: 'Select a room', href: '#postAppointmentLocation' },
+            { text: 'Select a room for the pre-court hearing briefing', href: '#preAppointmentLocation' },
+            { text: 'Select a room for the post-court hearing briefing', href: '#postAppointmentLocation' },
           ],
+        })
+      )
+    })
+
+    it('should validate presence of court', async () => {
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        existingEventsService,
+        whereaboutsApi,
+        logError: () => {},
+      })
+
+      req.body = {
+        ...body,
+        postAppointment: 'no',
+        preAppointment: 'no',
+        court: null,
+      }
+
+      await post(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prepostAppointments.njk',
+        expect.objectContaining({
+          errors: [{ href: '#court', text: 'Select which court the hearing is for' }],
         })
       )
     })
@@ -216,6 +351,7 @@ describe('Pre post appointments', () => {
       const { post } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -231,7 +367,7 @@ describe('Pre post appointments', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prepostAppointments.njk',
         expect.objectContaining({
-          errors: [{ text: 'Select a room', href: '#preAppointmentLocation' }],
+          errors: [{ text: 'Select a room for the pre-court hearing briefing', href: '#preAppointmentLocation' }],
         })
       )
     })
@@ -241,10 +377,17 @@ describe('Pre post appointments', () => {
         elite2Api,
         appointmentsService,
         existingEventsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
-      req.body = body
+      req.body = {
+        preAppointment: 'yes',
+        preAppointmentLocation: 2,
+        postAppointment: 'yes',
+        postAppointmentDuration: '60',
+        court: 'london',
+      }
 
       await post(req, res)
 
@@ -252,11 +395,11 @@ describe('Pre post appointments', () => {
         'prepostAppointments.njk',
         expect.objectContaining({
           formValues: {
+            preAppointment: 'yes',
+            preAppointmentLocation: 2,
             postAppointment: 'yes',
-            preAppointment: 'no',
             postAppointmentDuration: '60',
-            preAppointmentDuration: '60',
-            preAppointmentLocation: 1,
+            court: 'london',
           },
         })
       )
@@ -267,6 +410,7 @@ describe('Pre post appointments', () => {
         elite2Api,
         appointmentsService,
         existingEventsService,
+        whereaboutsApi,
         logError: () => {},
       })
 
@@ -283,12 +427,11 @@ describe('Pre post appointments', () => {
           },
           locations: [{ value: 1, text: 'Room 3' }],
           details: {
-            comment: 'Test',
+            courtHearingEndTime: '14:00',
+            courtHearingStartTime: '11:00',
             date: '10 October 2017',
-            endTime: '14:00',
             location: 'Room 3',
-            prisonerName: 'John Doe',
-            startTime: '11:00',
+            name: 'Doe, John',
           },
         })
       )
@@ -315,6 +458,8 @@ describe('Pre post appointments', () => {
       const { post } = prepostAppointmentsFactory({
         elite2Api,
         appointmentsService,
+        whereaboutsApi,
+        existingEventsService,
         logError: () => {},
       })
       req.body = body
@@ -330,6 +475,7 @@ describe('Pre post appointments', () => {
           elite2Api,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
@@ -360,6 +506,7 @@ describe('Pre post appointments', () => {
           elite2Api,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
@@ -406,6 +553,7 @@ describe('Pre post appointments', () => {
           preAppointmentDuration: '15',
           preAppointmentLocation: '2',
           postAppointmentLocation: '3',
+          court: 'london',
         }
 
         res.redirect = jest.fn()
@@ -418,18 +566,24 @@ describe('Pre post appointments', () => {
           notifyClient,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
-          comment: 'Test',
-          locationId: 1,
-          appointmentType: 'VLB',
-          startTime: '2017-10-10T11:00',
-          endTime: '2017-10-10T14:00',
-        })
+        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            comment: 'Test',
+            locationId: 1,
+            startTime: '2017-10-10T11:00',
+            endTime: '2017-10-10T14:00',
+            court: 'London',
+            madeByTheCourt: false,
+          }
+        )
       })
 
       it('should create main pre appointment', async () => {
@@ -439,18 +593,24 @@ describe('Pre post appointments', () => {
           notifyClient,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
-          comment: 'Test',
-          locationId: 2,
-          appointmentType: 'VLB',
-          startTime: '2017-10-10T10:45:00',
-          endTime: '2017-10-10T11:00:00',
-        })
+        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            comment: 'Test',
+            locationId: 2,
+            startTime: '2017-10-10T10:45:00',
+            endTime: '2017-10-10T11:00:00',
+            court: 'London',
+            madeByTheCourt: false,
+          }
+        )
       })
 
       it('should create main post appointment', async () => {
@@ -460,18 +620,24 @@ describe('Pre post appointments', () => {
           notifyClient,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment).toHaveBeenCalledWith({}, 1, {
-          comment: 'Test',
-          locationId: 3,
-          appointmentType: 'VLB',
-          startTime: '2017-10-10T14:00',
-          endTime: '2017-10-10T15:00:00',
-        })
+        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            comment: 'Test',
+            locationId: 3,
+            startTime: '2017-10-10T14:00',
+            endTime: '2017-10-10T15:00:00',
+            court: 'London',
+            madeByTheCourt: false,
+          }
+        )
       })
 
       it('should not request pre or post appointments when "no" has been selected', async () => {
@@ -481,16 +647,18 @@ describe('Pre post appointments', () => {
           notifyClient,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
         req.body = {
           postAppointment: 'no',
           preAppointment: 'no',
+          court: 'London',
         }
         await post(req, res)
 
-        expect(elite2Api.addSingleAppointment.mock.calls.length).toBe(1)
+        expect(whereaboutsApi.addVideoLinkAppointment.mock.calls.length).toBe(1)
       })
 
       it('should place pre and post appointment details into flash', async () => {
@@ -500,6 +668,7 @@ describe('Pre post appointments', () => {
           notifyClient,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
@@ -510,6 +679,7 @@ describe('Pre post appointments', () => {
           postAppointmentLocation: 2,
           preAppointmentDuration: 15,
           postAppointmentDuration: 15,
+          court: 'london',
         }
 
         await post(req, res)
@@ -540,12 +710,14 @@ describe('Pre post appointments', () => {
           elite2Api,
           oauthApi,
           appointmentsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
         req.body = {
           postAppointment: 'no',
           preAppointment: 'no',
+          court: 'london',
         }
         await post(req, res)
 
@@ -568,12 +740,14 @@ describe('Pre post appointments', () => {
           notifyClient,
           appointmentsService,
           existingEventsService,
+          whereaboutsApi,
           logError: () => {},
         })
 
         req.body = {
           postAppointment: 'no',
           preAppointment: 'no',
+          court: 'london',
         }
         await post(req, res)
 
