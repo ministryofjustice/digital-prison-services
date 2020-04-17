@@ -1,0 +1,18 @@
+{% macro scheduledActivities(activities) %}
+  {% if activities.length %}
+    {% for activity in activities %}
+      {% set containterClass = "govuk-!-margin-bottom-3" if not loop.last %}
+      <div class="{{ containterClass }}">
+        <strong>{{ activity.type }}</strong>
+        <span>{{ ' - ' + activity.shortComment if activity.shortComment }}</span>
+        {{ "<div class='highlight highlight--alert'>(cancelled)</div>" if activity.cancelled }}
+        <div>
+          {{ activity.startTime | getTime }}
+          {{ ' - ' + activity.endTime | getTime if activity.endTime }}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="govuk-body">Nothing scheduled</p>
+  {% endif %}
+{% endmacro %}

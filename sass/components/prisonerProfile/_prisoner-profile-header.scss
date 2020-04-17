@@ -39,6 +39,7 @@
       > li {
         margin-bottom: govuk-spacing(3);
         break-inside: avoid-column;
+        page-break-inside: avoid;
       }
     }
 

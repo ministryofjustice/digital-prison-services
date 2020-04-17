@@ -196,6 +196,23 @@ const hyphenatedStringToCamel = string =>
     return char[1].toUpperCase()
   })
 
+const formatCurrency = (number, currency = 'GBP') =>
+  number ? number.toLocaleString('en-GB', { style: 'currency', currency }) : ''
+
+const capitalizeUppercaseString = string =>
+  string
+    ? string
+        .split(' ')
+        .map(name => capitalize(name))
+        .join(' ')
+    : null
+
+const map404ToNull = error => {
+  if (!error.response || !error.response.status || error.response.status !== 404) throw error
+
+  return null
+}
+
 module.exports = {
   isToday,
   isTodayOrAfter,
@@ -226,4 +243,7 @@ module.exports = {
   isOffenderNumber,
   isAfterToday,
   hyphenatedStringToCamel,
+  formatCurrency,
+  capitalizeUppercaseString,
+  map404ToNull,
 }
