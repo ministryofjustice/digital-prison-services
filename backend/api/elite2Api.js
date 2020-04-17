@@ -239,6 +239,8 @@ const elite2ApiFactory = client => {
   const getPrisonerVisitBalances = (context, offenderNo) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
 
+  const getEventsForToday = (context, bookingId) => get(context, `/api/bookings/${bookingId}/events/today`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -305,6 +307,7 @@ const elite2ApiFactory = client => {
     getPositiveCaseNotes,
     getNegativeCaseNotes,
     getPrisonerVisitBalances,
+    getEventsForToday,
   }
 }
 

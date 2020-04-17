@@ -1,4 +1,5 @@
 {% extends "../partials/layout.njk" %}
+{% from "./macros/scheduledActivities.njk" import scheduledActivities %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set title = "Quick Look" %}
@@ -162,6 +163,28 @@
 
       {{ govukSummaryList({
         rows: personalRows
+      }) }}
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <h3 class="govuk-heading-m">Schedule</h3>
+      {% set scheduledActivityRows = [] %}
+
+      {% for activityPeriod in scheduledActivityPeriods %}
+        {% set scheduledActivityRows = (scheduledActivityRows.push(
+          {
+            key: {
+              text: activityPeriod.label
+            },
+            value: {
+              html: scheduledActivities(activityPeriod.value)
+            }
+          }
+        ), scheduledActivityRows) %}
+      {% endfor %}
+
+      {{ govukSummaryList({
+        rows: scheduledActivityRows
       }) }}
     </div>
   </div>

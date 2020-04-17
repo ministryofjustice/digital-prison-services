@@ -1,0 +1,7 @@
+.highlight {
+  font-weight: bold;
+
+  &--alert {
+    color: govuk-colour("red")
+  }
+}

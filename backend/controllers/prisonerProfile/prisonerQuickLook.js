@@ -5,6 +5,7 @@ const {
 } = require('../../config')
 const { formatTimestampToDate, formatCurrency, capitalizeUppercaseString } = require('../../utils')
 const formatAward = require('../../shared/formatAward')
+const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   try {
@@ -29,6 +30,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       adjudications,
       nextVisit,
       visitBalances,
+      todaysEvents,
     ] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getMainOffence(res.locals, bookingId),
@@ -41,10 +43,12 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       elite2Api.getAdjudicationsForBooking(res.locals, bookingId),
       elite2Api.getNextVisit(res.locals, bookingId),
       elite2Api.getPrisonerVisitBalances(res.locals, offenderNo),
+      elite2Api.getEventsForToday(res.locals, bookingId),
     ])
 
     const prisoner = Boolean(prisonerData.length) && prisonerData[0]
     const { sentenceDetail } = sentenceData
+    const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
 
     return res.render('prisonerProfile/prisonerQuickLook.njk', {
       prisonerProfileData,
@@ -102,6 +106,11 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           ],
         }),
       },
+      scheduledActivityPeriods: [
+        { label: 'Morning (AM)', value: morningActivities },
+        { label: 'Afternoon (PM)', value: afternoonActivities },
+        { label: 'Evening (ED)', value: eveningActivities },
+      ],
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
