@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
-
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
@@ -10,11 +9,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.mockResponses.Visits
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AddAppointmentPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmRecurringAppointmentPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmSingleAppointmentPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrePostAppointmentsPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.ConfirmVideoLinkPrisonPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.*
 
 import java.time.LocalDate
 
@@ -55,17 +50,7 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
     }
 
     def "should handle video link bookings"() {
-        setupTests()
-
-        oauthApi.stubGetEmail('ITAG_USER')
-
-        elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
-        elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
-        elite2api.stubLocation(1)
-        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
-        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
-        elite2api.stubSingleAppointment(1)
+        setupVideoLikBookings()
 
         given: "I am on the add appointment page"
         to AddAppointmentPage
@@ -92,11 +77,177 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
         prePostForm.preAppointmentLocation = 1
         prePostForm.preAppointmentDuration = 20
         prePostForm.postAppointment = "no"
+        prePostForm.court = "Leeds"
 
         prePostSubmitButton.click()
 
         then: "I should be presented with the video link confirmation page for prison staff"
         at ConfirmVideoLinkPrisonPage
+        courtLocation == "Leeds"
+    }
+
+    def "should display correct validation errors for video link bookings"() {
+        setupVideoLikBookings()
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.startTimeHours = 22
+        form.startTimeMinutes = 55
+        form.endTimeHours = 23
+        form.endTimeMinutes = 55
+        form.recurring = "no"
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        and: "I am redirected to the Pre/Post appointments page"
+        at PrePostAppointmentsPage
+
+        and: "I submit, leaving required fields empty"
+        prePostSubmitButton.click()
+
+        then:
+        at PrePostAppointmentsPage
+        errorSummary.text() == 'There is a problem\n' +
+                'Select a room for the pre-court hearing briefing\n' +
+                'Select a room for the post-court hearing briefing\n' +
+                'Select which court the hearing is for'
+    }
+
+    def "should handle custom court entry for video link bookings"() {
+        setupVideoLikBookings()
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.startTimeHours = 22
+        form.startTimeMinutes = 55
+        form.endTimeHours = 23
+        form.endTimeMinutes = 55
+        form.recurring = "no"
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        and: "I am redirected to the Pre/Post appointments page"
+        at PrePostAppointmentsPage
+
+        and: "I fill out the form"
+        prePostForm.preAppointment = "yes"
+        prePostForm.preAppointmentLocation = 1
+        prePostForm.preAppointmentDuration = 20
+        prePostForm.postAppointment = "no"
+        prePostForm.court = "other"
+
+        prePostSubmitButton.click()
+
+        and: "I should be presented with other court form"
+        at OtherCourtPage
+        form.otherCourt = "test"
+        submitButton.click()
+
+        then: "I should be presented with the video link confirmation page for prison staff"
+        at ConfirmVideoLinkPrisonPage
+    }
+
+    def "should display correct validation message on the other court form"() {
+        setupVideoLikBookings()
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.startTimeHours = 22
+        form.startTimeMinutes = 55
+        form.endTimeHours = 23
+        form.endTimeMinutes = 55
+        form.recurring = "no"
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        and: "I am redirected to the Pre/Post appointments page"
+        at PrePostAppointmentsPage
+
+        and: "I fill out the form"
+        prePostForm.preAppointment = "yes"
+        prePostForm.preAppointmentLocation = 1
+        prePostForm.preAppointmentDuration = 20
+        prePostForm.postAppointment = "no"
+        prePostForm.court = "other"
+
+        prePostSubmitButton.click()
+
+        and: "I should be presented with other court form"
+        at OtherCourtPage
+        submitButton.click()
+
+        then:
+        at OtherCourtPage
+        errorSummary.text() == 'There is a problem\n' +
+                'Enter the name of the court'
+
+    }
+
+
+    def "should handle retain all previously entered information on cancel whilst inside the other court form"() {
+        setupVideoLikBookings()
+
+        given: "I am on the add appointment page"
+        to AddAppointmentPage
+
+        when: "I fill out the form"
+        at AddAppointmentPage
+        form.appointmentType = "VLB"
+        form.location = 1
+        form.startTimeHours = 22
+        form.startTimeMinutes = 55
+        form.endTimeHours = 23
+        form.endTimeMinutes = 55
+        form.recurring = "no"
+        form.comments = "Test comment."
+        form.date = LocalDate.now().format("dd/MM/YYYY")
+
+        submitButton.click()
+
+        and: "I am redirected to the Pre/Post appointments page"
+        at PrePostAppointmentsPage
+
+        and: "I fill out the form"
+        prePostForm.preAppointment = "yes"
+        prePostForm.preAppointmentLocation = 1
+        prePostForm.preAppointmentDuration = 20
+        prePostForm.postAppointment = "no"
+        prePostForm.court = "other"
+
+        prePostSubmitButton.click()
+
+        and: "I should be presented with other court form"
+        at OtherCourtPage
+        cancelButton.click()
+
+        then: "I should be back on the pre post page with the previously captured info played back"
+        at PrePostAppointmentsPage
+        prePostForm.preAppointment == "yes"
+        prePostForm.preAppointmentLocation == "1"
+        prePostForm.preAppointmentDuration == "20"
+        prePostForm.postAppointment == "no"
+        prePostForm.court == ""
     }
 
     def "should post appointment and redirect to the recurring confirmation page"() {
@@ -223,5 +374,22 @@ class AddAppointmentSpecification extends BrowserReportingSpec {
 
                 )])
         elite2api.stubAppointmentTypes([Map.of("code", "ACTI", "description", "Activities"), Map.of("code", "VLB", "description", "Video link booking")], )
+    }
+
+    def setupVideoLikBookings() {
+        setupTests()
+
+        oauthApi.stubGetEmail('ITAG_USER')
+
+        whereaboutsApi.stubCourtLocations()
+        whereaboutsApi.stubAddVideoLinkAppointment()
+
+        elite2api.stubVisits(Caseload.LEI, null, date, offenders, VisitsResponse.visits)
+        elite2api.stubAgencyDetails('LEI', [agencyId: "LEI", description: "Leeds", agencyType: "INST"])
+        elite2api.stubLocation(1)
+        elite2api.stubProgEventsAtLocation(1, null, date, ActivityResponse.appointments, false)
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'APP')
+        elite2api.stubUsageAtLocation(Caseload.LEI, 1, null, date, 'VISIT')
+        elite2api.stubSingleAppointment(1)
     }
 }

@@ -1,12 +1,12 @@
 const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
+
 const {
   app: { notmEndpointUrl: dpsUrl },
   notifications: { confirmBookingPrisonTemplateId, emails },
 } = require('../../config')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { toAppointmentDetailsSummary } = require('../../services/appointmentsService')
 const { properCaseName } = require('../../utils')
 
 const unpackAppointmentDetails = req => {
@@ -26,14 +26,26 @@ const packAppointmentDetails = (req, details) => {
   req.flash('appointmentDetails', details)
 }
 
-const validate = ({ postAppointment, preAppointment, preAppointmentLocation, postAppointmentLocation }) => {
+const validate = ({
+  postAppointment,
+  preAppointment,
+  preAppointmentLocation,
+  postAppointmentLocation,
+  court,
+  otherCourtForm,
+  otherCourt,
+}) => {
   const errors = []
 
   if (preAppointment === 'yes' && !preAppointmentLocation)
-    errors.push({ text: 'Select a room', href: '#preAppointmentLocation' })
+    errors.push({ text: 'Select a room for the pre-court hearing briefing', href: '#preAppointmentLocation' })
 
   if (postAppointment === 'yes' && !postAppointmentLocation)
-    errors.push({ text: 'Select a room', href: '#postAppointmentLocation' })
+    errors.push({ text: 'Select a room for the post-court hearing briefing', href: '#postAppointmentLocation' })
+
+  if (!otherCourtForm && !court) errors.push({ text: 'Select which court the hearing is for', href: '#court' })
+
+  if (otherCourtForm && !otherCourt) errors.push({ text: 'Enter the name of the court', href: '#otherCourt' })
 
   return errors
 }
@@ -46,6 +58,7 @@ const getLinks = offenderNo => ({
 const prepostAppointmentsFactory = ({
   elite2Api,
   oauthApi,
+  whereaboutsApi,
   notifyClient,
   appointmentsService,
   existingEventsService,
@@ -55,13 +68,31 @@ const prepostAppointmentsFactory = ({
     unpackAppointmentDetails(req)
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
   }
+
+  const getCourts = async locals => {
+    const { courtLocations } = await whereaboutsApi.getCourtLocations(locals)
+    const formattedLocations = courtLocations.sort().reduce((courtList, court) => {
+      const key = court.replace(/\W+/g, '-').toLowerCase()
+      return { ...courtList, [key]: court }
+    }, {})
+
+    return {
+      ...formattedLocations,
+      other: 'Other',
+    }
+  }
+  const getCourtDropdownValues = async locals => {
+    const courts = await getCourts(locals)
+    return Object.keys(courts).map(key => ({ value: key, text: courts[key] }))
+  }
+
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId, authSource } = req.session.userDetails
 
     try {
       const appointmentDetails = unpackAppointmentDetails(req)
-      const { locationId, appointmentType, startTime, endTime, comment, recurring, times, repeats } = appointmentDetails
+      const { locationId, appointmentType, startTime, endTime, postAppointment, preAppointment } = appointmentDetails
 
       const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
         res.locals,
@@ -73,6 +104,8 @@ const prepostAppointmentsFactory = ({
       const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
 
       const date = moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
+
+      const courts = await getCourtDropdownValues(res.locals)
 
       packAppointmentDetails(req, {
         ...appointmentDetails,
@@ -88,27 +121,23 @@ const prepostAppointmentsFactory = ({
       res.render('prepostAppointments.njk', {
         links: getLinks(offenderNo),
         locations: locationTypes,
+        courts,
         formValues: {
-          postAppointment: 'yes',
-          preAppointment: 'yes',
-          postAppointmentDuration: 20,
-          preAppointmentDuration: 20,
+          postAppointment: (postAppointment && postAppointment.required) || 'yes',
+          preAppointment: (preAppointment && preAppointment.required) || 'yes',
+          preAppointmentDuration: (preAppointment && preAppointment.duration) || '20',
+          postAppointmentDuration: (postAppointment && postAppointment.duration) || '20',
+          preAppointmentLocation: preAppointment && preAppointment.locationId,
+          postAppointmentLocation: postAppointment && postAppointment.locationId,
         },
         date,
-        details: toAppointmentDetailsSummary({
-          firstName,
-          lastName,
-          offenderNo,
-          appointmentType,
-          appointmentTypeDescription,
+        details: {
+          name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
           location: locationDescription,
-          startTime,
-          endTime,
-          comment,
-          recurring,
-          times,
-          repeats,
-        }),
+          date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('D MMMM YYYY'),
+          courtHearingStartTime: Time(startTime),
+          courtHearingEndTime: endTime && Time(endTime),
+        },
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
@@ -118,57 +147,39 @@ const prepostAppointmentsFactory = ({
     }
   }
   const createAppointment = async (context, appointmentDetails) => {
-    const { startTime, endTime, comment, bookingId, locationId, appointmentType } = appointmentDetails
+    const { startTime, endTime, comment, bookingId, locationId, court } = appointmentDetails
 
-    await elite2Api.addSingleAppointment(context, bookingId, {
-      appointmentType,
+    await whereaboutsApi.addVideoLinkAppointment(context, {
+      bookingId,
       locationId: Number(locationId),
       startTime,
       endTime,
       comment,
+      court,
+      madeByTheCourt: false,
     })
   }
 
-  const createPreAppointment = async (
-    context,
-    { appointmentDetails, startTime, preAppointmentDuration, preAppointmentLocation }
-  ) => {
+  const toPreAppointment = ({ startTime, preAppointmentDuration, preAppointmentLocation }) => {
     const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(Number(preAppointmentDuration), 'minutes')
     const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(Number(preAppointmentDuration), 'minutes')
-    const preDetails = {
+    return {
       startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
       endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(preAppointmentLocation),
       duration: preAppointmentDuration,
     }
-
-    await createAppointment(context, {
-      ...appointmentDetails,
-      ...preDetails,
-    })
-
-    return preDetails
   }
 
-  const createPostAppointment = async (
-    context,
-    { appointmentDetails, endTime, postAppointmentDuration, postAppointmentLocation }
-  ) => {
+  const toPostAppointment = ({ endTime, postAppointmentDuration, postAppointmentLocation }) => {
     const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(Number(postAppointmentDuration), 'minutes')
 
-    const postDetails = {
+    return {
       startTime: endTime,
       endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(postAppointmentLocation),
       duration: postAppointmentDuration,
     }
-
-    await createAppointment(context, {
-      ...appointmentDetails,
-      ...postDetails,
-    })
-
-    return postDetails
   }
 
   const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {
@@ -183,6 +194,31 @@ const prepostAppointmentsFactory = ({
     }
   }
 
+  const handleLocationEventsIfRequired = async (
+    locals,
+    { activeCaseLoadId, preAppointmentLocation, postAppointmentLocation, date }
+  ) => {
+    const locationEvents = {}
+    if (preAppointmentLocation) {
+      const { locationName, events } = await getLocationEvents(locals, {
+        activeCaseLoadId,
+        locationId: preAppointmentLocation,
+        date,
+      })
+      locationEvents.preAppointment = { locationName, events }
+    }
+
+    if (postAppointmentLocation) {
+      const { locationName, events } = await getLocationEvents(locals, {
+        activeCaseLoadId,
+        locationId: postAppointmentLocation,
+        date,
+      })
+      locationEvents.postAppointment = { locationName, events }
+    }
+
+    return locationEvents
+  }
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId, username, authSource } = req.session.userDetails
@@ -194,6 +230,9 @@ const prepostAppointmentsFactory = ({
       preAppointmentDuration,
       preAppointmentLocation,
       postAppointmentLocation,
+      court,
+      otherCourt,
+      otherCourtForm,
     } = req.body
 
     try {
@@ -202,79 +241,80 @@ const prepostAppointmentsFactory = ({
         startTime,
         endTime,
         comment,
-        recurring,
-        times,
-        repeats,
         locationDescription,
-        appointmentType,
-        appointmentTypeDescription,
         locationTypes,
         firstName,
         lastName,
         date,
       } = appointmentDetails
 
-      let locationEvents = {}
+      const errors = validate({
+        preAppointment,
+        postAppointment,
+        preAppointmentLocation,
+        postAppointmentLocation,
+        court,
+        otherCourt,
+        otherCourtForm,
+      })
 
-      if (preAppointment === 'yes' && preAppointmentLocation) {
-        const { locationName, events } = await getLocationEvents(res.locals, {
-          activeCaseLoadId,
-          locationId: preAppointmentLocation,
-          date,
-        })
-        locationEvents.preAppointment = {
-          locationName,
-          events,
-        }
-      }
+      const locationEvents = await handleLocationEventsIfRequired(res.locals, {
+        activeCaseLoadId,
+        preAppointmentLocation,
+        postAppointmentLocation,
+        date,
+      })
 
-      if (postAppointment === 'yes' && postAppointmentLocation) {
-        const { locationName, events } = await getLocationEvents(res.locals, {
-          activeCaseLoadId,
-          locationId: postAppointmentLocation,
-          date,
-        })
-        locationEvents.postAppointment = {
-          locationName,
-          events,
-        }
-      }
+      const courts = await getCourts(res.locals)
+      const courtValue = otherCourt || courts[court]
 
-      const errors = validate({ preAppointment, postAppointment, preAppointmentLocation, postAppointmentLocation })
+      const preDetails = (preAppointment === 'yes' &&
+        toPreAppointment({
+          startTime,
+          preAppointmentLocation,
+          preAppointmentDuration,
+        })) || { required: 'no' }
+
+      const postDetails = (postAppointment === 'yes' &&
+        toPostAppointment({
+          endTime,
+          postAppointmentLocation,
+          postAppointmentDuration,
+        })) || { required: 'no' }
+
+      packAppointmentDetails(req, {
+        ...appointmentDetails,
+        preAppointment: preDetails,
+        postAppointment: postDetails,
+        court: courtValue,
+      })
 
       if (errors.length) {
         packAppointmentDetails(req, appointmentDetails)
 
-        locationEvents = {}
+        const courtDropDownValues = await getCourtDropdownValues(res.locals)
 
-        if (preAppointmentLocation) {
-          const { locationName, events } = await getLocationEvents(res.locals, {
-            activeCaseLoadId,
-            locationId: preAppointmentLocation,
-            date,
+        if (otherCourtForm) {
+          return res.render('enterCustomCourt.njk', {
+            cancel: `/offenders/${offenderNo}/prepost-appointments`,
+            formValues: {
+              postAppointment,
+              preAppointment,
+              postAppointmentDuration,
+              preAppointmentDuration,
+              preAppointmentLocation,
+              postAppointmentLocation,
+              court,
+            },
+            errors,
           })
-          locationEvents.preAppointment = {
-            locationName,
-            events,
-          }
-        }
-
-        if (postAppointmentLocation) {
-          const { locationName, events } = await getLocationEvents(res.locals, {
-            activeCaseLoadId,
-            locationId: postAppointmentLocation,
-            date,
-          })
-          locationEvents.postAppointment = {
-            locationName,
-            events,
-          }
         }
 
         return res.render('prepostAppointments.njk', {
           locationEvents,
           links: getLinks(offenderNo),
           locations: locationTypes,
+          courts: courtDropDownValues,
           formValues: {
             postAppointment,
             preAppointment,
@@ -282,55 +322,59 @@ const prepostAppointmentsFactory = ({
             preAppointmentDuration,
             preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
             postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
+            court,
           },
           errors,
           date,
-          details: toAppointmentDetailsSummary({
-            firstName,
-            lastName,
-            offenderNo,
-            appointmentType,
-            appointmentTypeDescription,
+          details: {
+            name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
             location: locationDescription,
-            startTime,
-            endTime,
-            comment,
-            recurring,
-            times,
-            repeats,
-          }),
+            date: moment(startTime, DATE_TIME_FORMAT_SPEC).format('D MMMM YYYY'),
+            courtHearingStartTime: Time(startTime),
+            courtHearingEndTime: endTime && Time(endTime),
+          },
         })
       }
 
-      await createAppointment(res.locals, appointmentDetails)
+      if (court === 'other') {
+        return res.render('enterCustomCourt.njk', {
+          cancel: `/offenders/${offenderNo}/prepost-appointments`,
+          formValues: {
+            postAppointment,
+            preAppointment,
+            postAppointmentDuration,
+            preAppointmentDuration,
+            preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
+            postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
+            court,
+          },
+          errors,
+          date,
+        })
+      }
 
-      const prepostAppointments = {}
+      await createAppointment(res.locals, {
+        ...appointmentDetails,
+        court: courtValue,
+      })
 
       if (preAppointment === 'yes') {
-        prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
-          appointmentDetails,
-          startTime,
-          preAppointmentLocation,
-          preAppointmentDuration,
+        await createAppointment(res.locals, {
+          ...appointmentDetails,
+          ...preDetails,
+          court: courtValue,
         })
       }
 
       if (postAppointment === 'yes') {
-        prepostAppointments.postAppointment = await createPostAppointment(res.locals, {
-          appointmentDetails,
-          endTime,
-          postAppointmentLocation,
-          postAppointmentDuration,
+        await createAppointment(res.locals, {
+          ...appointmentDetails,
+          ...postDetails,
+          court: courtValue,
         })
       }
 
-      packAppointmentDetails(req, {
-        ...appointmentDetails,
-        ...prepostAppointments,
-      })
-
       const agencyDetails = await elite2Api.getAgencyDetails(res.locals, activeCaseLoadId)
-
       const userEmailData = await oauthApi.userEmail(res.locals, username)
 
       const preAppointmentInfo =

@@ -5,8 +5,9 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = "Pre and post appointment" %}
+{% set title = "Video link booking details" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
 {% macro appointment(params) %}
@@ -56,8 +57,15 @@
 {% endset -%}
 
 {% block content %}
-    <div class="govuk-width-container">
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
 
+    <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
@@ -73,11 +81,6 @@
 
         <form method="post" about="{{ links.postAppointments }}">
             <input type="hidden" id="appointment-date" value="{{ date }}"/>
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <h2 class="govuk-heading-m">Pre and post appointment</h2>
-                </div>
-            </div>
 
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
@@ -87,7 +90,7 @@
                         name: "preAppointment",
                         fieldset: {
                             legend: {
-                                text: "Add pre-appointment session?",
+                                text: "Do you want to add a pre-court hearing briefing?",
                                 classes: "govuk-fieldset__legend--s"
                             }
                         },
@@ -117,7 +120,7 @@
                         name: "postAppointment",
                         fieldset: {
                             legend: {
-                                text: "Add post-appointment session?",
+                                text: "Do you want to add a post-court hearing briefing?",
                                 classes: "govuk-fieldset__legend--s"
                             }
                         },
@@ -135,6 +138,20 @@
                                 checked: formValues.postAppointment == 'no'
                             }
                         ]
+                    }) }}
+                </div>
+            </div>
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    {{ govukSelect({
+                        name: "court",
+                        id: "court",
+                        label: {
+                            text: "Which court is the booking for?"
+                        },
+                        items: courts | addDefaultSelectedVale('Select') | setSelected(formValues.court),
+                        errorMessage: errors | findError("court")
                     }) }}
                 </div>
             </div>

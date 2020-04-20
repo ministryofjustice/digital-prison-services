@@ -9,6 +9,7 @@ class PrePostAppointmentsPage extends Page {
         pageTitle { $('h1').text() }
         prePostForm { $('form')}
         prePostSubmitButton { $('button', type: 'submit') }
+        errorSummary {$('.govuk-error-summary')}
     }
 
     static at = {
