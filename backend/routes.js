@@ -105,7 +105,10 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
   router.use('/api/me', userMeFactory(oauthApi).userMe)
   router.use('/api/usercaseloads', userCaseLoadsFactory(elite2Api).userCaseloads)
   router.use('/api/userLocations', userLocationsFactory(elite2Api).userLocations)
-  router.use('/api/houseblockLocations', houseblockLocationsFactory(whereaboutsApi).getHouseblockLocations)
+  router.use(
+    '/api/houseblockLocations',
+    houseblockLocationsFactory({ whereaboutsApi, logError }).getHouseblockLocations
+  )
   router.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
   router.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
   router.use('/api/houseblocklist', controller.getHouseblockList)

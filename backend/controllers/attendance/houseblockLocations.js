@@ -1,14 +1,14 @@
-const asyncMiddleware = require('../../middleware/asyncHandler')
-
-const getHouseblockLocationsFactory = whereaboutsApi => {
-  const getHouseblockLocations = asyncMiddleware(async (req, res) => {
-    const response = await whereaboutsApi.searchGroups(res.locals, req.query.agencyId)
-    res.json(response)
-  })
-
-  return {
-    getHouseblockLocations,
+const getHouseblockLocationsFactory = ({ whereaboutsApi, logError }) => {
+  const getHouseblockLocations = async (req, res) => {
+    try {
+      const response = await whereaboutsApi.searchGroups(res.locals, req.query.agencyId)
+      res.json(response)
+    } catch (error) {
+      logError(req.originalUrl, error, 'Error trying to retrieve groups')
+    }
   }
+
+  return { getHouseblockLocations }
 }
 
 module.exports = { getHouseblockLocationsFactory }
