@@ -56,16 +56,7 @@
     margin-bottom: govuk-spacing(3);
 
     @include govuk-media-query($from: tablet) {
-      padding-right: $govuk-gutter * 2,
-    }
-  }
-
-  &__button {
-    margin-bottom: govuk-spacing(3);
-    background: #005ea5;
-
-    &:hover {
-      background: #004f8c;
+      padding-right: $govuk-gutter * 2;
     }
   }
 }
@@ -80,16 +71,29 @@
   &__active,
   &__inactive {
     text-decoration: underline;
+
+    &:focus {
+      text-decoration: none;
+    }
   }
 
   &__active {
     padding-right: govuk-spacing(1);
-    color: red;
+    color: govuk-colour('red');
   }
 
   &__inactive {
     border-left: 2px solid #000;
     padding-left: govuk-spacing(1);
-    color: black;
+    color: govuk-colour('black');
+  }
+
+  &:focus {
+    @include govuk-focused-text;
+
+    .alerts-link__active,
+    .alerts-link__inactive {
+      text-decoration: none;
+    }
   }
 }

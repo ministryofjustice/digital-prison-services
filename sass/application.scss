@@ -6,6 +6,7 @@ $govuk-page-width: 1170px;
 @import 'components/print-link';
 @import 'components/offender-basic-details';
 @import 'components/alert-flags';
+@import 'components/buttons';
 @import 'components/prisonerProfile/prisoner-profile-header';
 @import 'components/prisonerProfile/prisoner-full-image';
 @import 'views/components/datePicker/datePicker.scss';
@@ -58,18 +59,6 @@ $govuk-page-width: 1170px;
       margin-bottom: $govuk-border-width-form-element;
     }
   }
-}
-
-// Useful for hiding content, but not from screen readers
-.visually-hidden {
-  position: absolute;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  width: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
 }
 
 // Print

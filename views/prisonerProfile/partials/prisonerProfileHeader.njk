@@ -81,7 +81,7 @@
         {{ govukButton({
           text: "Add case note",
           element: "a",
-          classes: "prisoner-header__button",
+          classes: "govuk-button--link govuk-!-margin-bottom-3",
           href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
         }) }}
 
@@ -89,7 +89,7 @@
           {{ govukButton({
             text: "Add KW session",
             element: "a",
-            classes: "prisoner-header__button",
+            classes: "govuk-button--link govuk-!-margin-bottom-3",
             href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
           }) }}
         {% endif %}
@@ -97,7 +97,7 @@
         {{ govukButton({
           text: "Add appointment",
           element: "a",
-          classes: "prisoner-header__button",
+          classes: "govuk-button--link govuk-!-margin-bottom-3",
           href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
         }) }}
 
@@ -105,7 +105,7 @@
           {{ govukButton({
             text: "Report use of force",
             element: "a",
-            classes: "prisoner-header__button",
+            classes: "govuk-button--link govuk-!-margin-bottom-3",
             href: useOfForceUrl
           }) }}
         {% endif %}

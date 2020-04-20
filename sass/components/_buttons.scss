@@ -1,0 +1,12 @@
+.govuk-button {
+  // Custom link button style modifier
+  &--link {
+    $link-button-colour: govuk-colour('blue');
+
+    background: $link-button-colour;
+
+    &:hover {
+      background: govuk-shade($link-button-colour, 30%);
+    }
+  }
+}

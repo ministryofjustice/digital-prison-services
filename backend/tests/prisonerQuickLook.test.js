@@ -63,6 +63,7 @@ describe('prisoner profile quick look', () => {
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook.njk',
       expect.objectContaining({
+        dpsUrl: 'http://localhost:3000/',
         prisonerProfileData,
       })
     )
