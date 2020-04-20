@@ -193,7 +193,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ elite2Api, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentRouter({ elite2Api, logError, oauthApi, notifyClient })
+    prepostAppointmentRouter({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClient })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
