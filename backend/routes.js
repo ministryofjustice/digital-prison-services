@@ -46,6 +46,7 @@ const prepostAppointmentRouter = require('./routes/appointments/prepostAppointme
 const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAppointmentRoomsRouter')
 const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
 const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
+const viewCourtBookingsRouter = require('./routes/appointments/viewCourtBookings')
 const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
 
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
@@ -221,6 +222,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
       homeUrl: '/videolink',
     })
   })
+
+  router.use('/videolink/bookings', viewCourtBookingsRouter({ elite2Api, whereaboutsApi, logError }))
 
   router.use('/request-booking', requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }))
 
