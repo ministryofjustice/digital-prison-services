@@ -6,6 +6,9 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
   const { date, courtOption } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   const agencyId = req.session.userDetails.activeCaseLoadId
+  const user = {
+    displayName: req.session.userDetails.name,
+  }
 
   try {
     const getCourts = async context => {
@@ -66,6 +69,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       courts: Object.keys(courts).map(key => ({ value: key, text: courts[key] })),
       courtOption,
       appointmentRows,
+      user,
       homeUrl: '/videolink',
       date: moment(searchDate).format('DD/MM/YYYY'),
       title: courtOption ? `${title} - ${courtOption}` : title,
