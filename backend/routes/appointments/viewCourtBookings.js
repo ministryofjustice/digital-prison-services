@@ -39,8 +39,17 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     )
     const videoLinkAppointments = (videoLinkAppointmentResponse && videoLinkAppointmentResponse.appointments) || []
 
+    const filterVideoLinkCourt = (option, videoLinkCourt) => {
+      if (option === 'Other') {
+        // If the user has selected Other, return the video links for courts
+        // that are not part of our list
+        return !Object.keys(courts).includes(videoLinkCourt)
+      }
+      return option === videoLinkCourt
+    }
+
     const appointmentsEnhanced = videoLinkAppointments
-      .filter(videoLink => (courtOption ? videoLink.court === courtOption : true))
+      .filter(videoLink => (courtOption ? filterVideoLinkCourt(courtOption, videoLink.court) : true))
       .map(async videoLink => {
         const appointmentData = appointments.find(appointment => appointment.id === videoLink.appointmentId)
         const { startTime, endTime } = appointmentData
@@ -65,8 +74,11 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const appointmentRows = await Promise.all(appointmentsEnhanced)
     const title = `Video link bookings for ${moment(searchDate).format('D MMMM YYYY')}`
 
+    const courtOptions = Object.keys(courts).map(key => ({ value: key, text: courts[key] }))
+    courtOptions.push({ value: 'Other', text: 'Other' })
+
     return res.render('viewCourtBookings.njk', {
-      courts: Object.keys(courts).map(key => ({ value: key, text: courts[key] })),
+      courts: courtOptions,
       courtOption,
       appointmentRows,
       user,
