@@ -66,6 +66,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       courts: Object.keys(courts).map(key => ({ value: key, text: courts[key] })),
       courtOption,
       appointmentRows,
+      homeUrl: '/videolink',
       date: moment(searchDate).format('DD/MM/YYYY'),
       title: courtOption ? `${title} - ${courtOption}` : title,
     })
