@@ -5,7 +5,7 @@ const existingEventsServiceFactory = require('../../services/existingEventsServi
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClient }) => {
+const controller = ({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent }) => {
   const appointmentsService = appointmentsServiceFactory(elite2Api)
   const existingEventsService = existingEventsServiceFactory(elite2Api)
   const { index, post, cancel } = prepostAppointments.prepostAppointmentsFactory({
@@ -16,6 +16,7 @@ const controller = ({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClien
     logError,
     appointmentsService,
     existingEventsService,
+    raiseAnalyticsEvent,
   })
 
   router.get('/', index)

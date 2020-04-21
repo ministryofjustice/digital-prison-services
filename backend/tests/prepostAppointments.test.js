@@ -73,9 +73,7 @@ describe('Pre post appointments', () => {
     })
 
     elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
-
     whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['Leeds', 'London'] })
-
     existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
 
     req.flash.mockImplementation(() => [appointmentDetails])
@@ -213,6 +211,50 @@ describe('Pre post appointments', () => {
         'Sorry, the service is unavailable'
       )
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-appointment' })
+    })
+
+    it('should display locationEvents is present in flash', async () => {
+      req.flash.mockImplementation(() => [
+        {
+          ...appointmentDetails,
+          preAppointment: {
+            locationId: 1,
+          },
+          postAppointment: {
+            locationId: 1,
+          },
+        },
+      ])
+
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        existingEventsService,
+        whereaboutsApi,
+        logError: () => {},
+      })
+
+      await index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prepostAppointments.njk',
+        expect.objectContaining({
+          locationEvents: {
+            postAppointment: {
+              events: [
+                { endTime: '13:00', eventDescription: 'Doctors - An appointment', locationId: 3, startTime: '12:00' },
+              ],
+              locationName: 'Test location',
+            },
+            preAppointment: {
+              events: [
+                { endTime: '13:00', eventDescription: 'Doctors - An appointment', locationId: 3, startTime: '12:00' },
+              ],
+              locationName: 'Test location',
+            },
+          },
+        })
+      )
     })
   })
 
@@ -469,6 +511,36 @@ describe('Pre post appointments', () => {
       expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
     })
 
+    it('should raise a telemetry event on appointment creation', async () => {
+      elite2Api.getAgencyDetails.mockReturnValue({
+        description: 'Leeds',
+      })
+
+      const raiseAnalyticsEvent = jest.fn()
+
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        oauthApi,
+        appointmentsService,
+        whereaboutsApi,
+        existingEventsService,
+        raiseAnalyticsEvent,
+        logError: () => {},
+      })
+
+      req.body = {
+        ...body,
+        preAppointment: 'no',
+        postAppointment: 'no',
+      }
+      res.redirect = () => {}
+
+      await post(req, res)
+
+      expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
+      expect(raiseAnalyticsEvent).toHaveBeenCalledWith('VLB Appointments', 'Video link booked', 'Leeds -  London')
+    })
+
     describe('Events at location', () => {
       it('should return events at the pre appointment location on validation errors', async () => {
         const { post } = prepostAppointmentsFactory({
@@ -712,6 +784,7 @@ describe('Pre post appointments', () => {
           appointmentsService,
           whereaboutsApi,
           logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         req.body = {
@@ -742,6 +815,7 @@ describe('Pre post appointments', () => {
           existingEventsService,
           whereaboutsApi,
           logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         req.body = {
