@@ -65,6 +65,8 @@ const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
 const { notifyClient } = require('./shared/notifyClient')
 
+const telemetry = require('./azure-appinsights')
+
 const router = express.Router()
 
 const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplianceApi, keyworkerApi }) => {
@@ -196,7 +198,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ elite2Api, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentRouter({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClient })
+    prepostAppointmentRouter({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClient, telemetry })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
