@@ -56,6 +56,8 @@ describe('Request a booking', () => {
     oauthApi.userDetails.mockReturnValue({ name: 'Staff member' })
 
     controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
+
+    raiseAnalyticsEvent.mockRestore()
   })
 
   describe('Start of journey', () => {
@@ -601,7 +603,7 @@ describe('Request a booking', () => {
   })
 
   describe('confirm', () => {
-    it('should submit an email and render the confirmation template', async () => {
+    it('should submit an email and render the confirmation template', () => {
       const details = {
         comment: 'test',
         date: 'Tuesday 1 January 2019',
@@ -618,7 +620,7 @@ describe('Request a booking', () => {
         startTime: '10:00',
       }
       req.flash.mockReturnValue([details])
-      await controller.confirm(req, res)
+      controller.confirm(req, res)
 
       expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
         'VLB Appointments',
@@ -649,6 +651,15 @@ describe('Request a booking', () => {
         title: 'The video link has been requested',
         user: { displayName: 'Test User' },
       })
+    })
+
+    it('should render an error and not raise analytics event if there are no request details', () => {
+      const details = {}
+      req.flash.mockReturnValue([details])
+      controller.confirm(req, res)
+
+      expect(raiseAnalyticsEvent).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: 'http://localhost' })
     })
   })
 })
