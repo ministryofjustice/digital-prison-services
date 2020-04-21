@@ -214,6 +214,50 @@ describe('Pre post appointments', () => {
       )
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-appointment' })
     })
+
+    it('should display locationEvents is present in flash', async () => {
+      req.flash.mockImplementation(() => [
+        {
+          ...appointmentDetails,
+          preAppointment: {
+            locationId: 1,
+          },
+          postAppointment: {
+            locationId: 1,
+          },
+        },
+      ])
+
+      const { index } = prepostAppointmentsFactory({
+        elite2Api,
+        appointmentsService,
+        existingEventsService,
+        whereaboutsApi,
+        logError: () => {},
+      })
+
+      await index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prepostAppointments.njk',
+        expect.objectContaining({
+          locationEvents: {
+            postAppointment: {
+              events: [
+                { endTime: '13:00', eventDescription: 'Doctors - An appointment', locationId: 3, startTime: '12:00' },
+              ],
+              locationName: 'Test location',
+            },
+            preAppointment: {
+              events: [
+                { endTime: '13:00', eventDescription: 'Doctors - An appointment', locationId: 3, startTime: '12:00' },
+              ],
+              locationName: 'Test location',
+            },
+          },
+        })
+      )
+    })
   })
 
   describe('post', () => {
