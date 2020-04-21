@@ -69,6 +69,18 @@ const prepostAppointmentsFactory = ({
     res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
   }
 
+  const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {
+    const [locationDetails, locationEvents] = await Promise.all([
+      elite2Api.getLocation(context, Number(locationId)),
+      existingEventsService.getExistingEventsForLocation(context, activeCaseLoadId, Number(locationId), date),
+    ])
+
+    return {
+      locationName: locationDetails && locationDetails.userDescription,
+      events: locationEvents,
+    }
+  }
+
   const getCourts = async locals => {
     const { courtLocations } = await whereaboutsApi.getCourtLocations(locals)
     const formattedLocations = courtLocations.sort().reduce((courtList, court) => {
@@ -84,6 +96,32 @@ const prepostAppointmentsFactory = ({
   const getCourtDropdownValues = async locals => {
     const courts = await getCourts(locals)
     return Object.keys(courts).map(key => ({ value: key, text: courts[key] }))
+  }
+
+  const handleLocationEventsIfRequired = async (
+    locals,
+    { activeCaseLoadId, preAppointmentLocation, postAppointmentLocation, date }
+  ) => {
+    const locationEvents = {}
+    if (preAppointmentLocation) {
+      const { locationName, events } = await getLocationEvents(locals, {
+        activeCaseLoadId,
+        locationId: preAppointmentLocation,
+        date,
+      })
+      locationEvents.preAppointment = { locationName, events }
+    }
+
+    if (postAppointmentLocation) {
+      const { locationName, events } = await getLocationEvents(locals, {
+        activeCaseLoadId,
+        locationId: postAppointmentLocation,
+        date,
+      })
+      locationEvents.postAppointment = { locationName, events }
+    }
+
+    return locationEvents
   }
 
   const index = async (req, res) => {
@@ -107,6 +145,13 @@ const prepostAppointmentsFactory = ({
 
       const courts = await getCourtDropdownValues(res.locals)
 
+      const locationEvents = await handleLocationEventsIfRequired(res.locals, {
+        activeCaseLoadId,
+        preAppointmentLocation: preAppointment && preAppointment.locationId,
+        postAppointmentLocation: postAppointment && postAppointment.locationId,
+        date,
+      })
+
       packAppointmentDetails(req, {
         ...appointmentDetails,
         locationDescription,
@@ -121,14 +166,15 @@ const prepostAppointmentsFactory = ({
       res.render('prepostAppointments.njk', {
         links: getLinks(offenderNo),
         locations: locationTypes,
+        locationEvents,
         courts,
         formValues: {
           postAppointment: (postAppointment && postAppointment.required) || 'yes',
           preAppointment: (preAppointment && preAppointment.required) || 'yes',
           preAppointmentDuration: (preAppointment && preAppointment.duration) || '20',
           postAppointmentDuration: (postAppointment && postAppointment.duration) || '20',
-          preAppointmentLocation: preAppointment && preAppointment.locationId,
-          postAppointmentLocation: postAppointment && postAppointment.locationId,
+          preAppointmentLocation: preAppointment && Number(preAppointment.locationId),
+          postAppointmentLocation: postAppointment && Number(postAppointment.locationId),
         },
         date,
         details: {
@@ -182,43 +228,6 @@ const prepostAppointmentsFactory = ({
     }
   }
 
-  const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {
-    const [locationDetails, locationEvents] = await Promise.all([
-      elite2Api.getLocation(context, Number(locationId)),
-      existingEventsService.getExistingEventsForLocation(context, activeCaseLoadId, Number(locationId), date),
-    ])
-
-    return {
-      locationName: locationDetails && locationDetails.userDescription,
-      events: locationEvents,
-    }
-  }
-
-  const handleLocationEventsIfRequired = async (
-    locals,
-    { activeCaseLoadId, preAppointmentLocation, postAppointmentLocation, date }
-  ) => {
-    const locationEvents = {}
-    if (preAppointmentLocation) {
-      const { locationName, events } = await getLocationEvents(locals, {
-        activeCaseLoadId,
-        locationId: preAppointmentLocation,
-        date,
-      })
-      locationEvents.preAppointment = { locationName, events }
-    }
-
-    if (postAppointmentLocation) {
-      const { locationName, events } = await getLocationEvents(locals, {
-        activeCaseLoadId,
-        locationId: postAppointmentLocation,
-        date,
-      })
-      locationEvents.postAppointment = { locationName, events }
-    }
-
-    return locationEvents
-  }
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId, username, authSource } = req.session.userDetails
