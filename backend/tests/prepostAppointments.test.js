@@ -73,9 +73,7 @@ describe('Pre post appointments', () => {
     })
 
     elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
-
     whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['Leeds', 'London'] })
-
     existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
 
     req.flash.mockImplementation(() => [appointmentDetails])
@@ -513,6 +511,36 @@ describe('Pre post appointments', () => {
       expect(req.flash).toHaveBeenCalledWith('appointmentDetails', appointmentDetails)
     })
 
+    it('should raise a telemetry event on appointment creation', async () => {
+      elite2Api.getAgencyDetails.mockReturnValue({
+        description: 'Leeds',
+      })
+
+      const raiseAnalyticsEvent = jest.fn()
+
+      const { post } = prepostAppointmentsFactory({
+        elite2Api,
+        oauthApi,
+        appointmentsService,
+        whereaboutsApi,
+        existingEventsService,
+        raiseAnalyticsEvent,
+        logError: () => {},
+      })
+
+      req.body = {
+        ...body,
+        preAppointment: 'no',
+        postAppointment: 'no',
+      }
+      res.redirect = () => {}
+
+      await post(req, res)
+
+      expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
+      expect(raiseAnalyticsEvent).toHaveBeenCalledWith('VLB Appointments', 'Video link booked', 'Leeds -  London')
+    })
+
     describe('Events at location', () => {
       it('should return events at the pre appointment location on validation errors', async () => {
         const { post } = prepostAppointmentsFactory({
@@ -756,6 +784,7 @@ describe('Pre post appointments', () => {
           appointmentsService,
           whereaboutsApi,
           logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         req.body = {
@@ -786,6 +815,7 @@ describe('Pre post appointments', () => {
           existingEventsService,
           whereaboutsApi,
           logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         req.body = {

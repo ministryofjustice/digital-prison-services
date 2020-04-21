@@ -62,6 +62,7 @@ const prepostAppointmentsFactory = ({
   notifyClient,
   appointmentsService,
   existingEventsService,
+  raiseAnalyticsEvent,
   logError,
 }) => {
   const cancel = async (req, res) => {
@@ -385,6 +386,8 @@ const prepostAppointmentsFactory = ({
 
       const agencyDetails = await elite2Api.getAgencyDetails(res.locals, activeCaseLoadId)
       const userEmailData = await oauthApi.userEmail(res.locals, username)
+
+      raiseAnalyticsEvent('VLB Appointments', 'Video link booked', `${agencyDetails.description} -  ${courtValue}`)
 
       const preAppointmentInfo =
         preAppointment === 'yes'
