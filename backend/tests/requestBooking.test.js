@@ -603,7 +603,7 @@ describe('Request a booking', () => {
   })
 
   describe('confirm', () => {
-    it('should submit an email and render the confirmation template', async () => {
+    it('should submit an email and render the confirmation template', () => {
       const details = {
         comment: 'test',
         date: 'Tuesday 1 January 2019',
@@ -620,7 +620,7 @@ describe('Request a booking', () => {
         startTime: '10:00',
       }
       req.flash.mockReturnValue([details])
-      await controller.confirm(req, res)
+      controller.confirm(req, res)
 
       expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
         'VLB Appointments',
