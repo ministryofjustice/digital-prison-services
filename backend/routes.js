@@ -46,7 +46,7 @@ const prepostAppointmentRouter = require('./routes/appointments/prepostAppointme
 const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAppointmentRoomsRouter')
 const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
 const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
-const viewCourtBookingsRouter = require('./routes/appointments/viewCourtBookings')
+const viewCourtBookingsRouter = require('./routes/appointments/viewCourtBookingsRouter')
 const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
 
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')

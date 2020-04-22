@@ -10,17 +10,17 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     displayName: req.session.userDetails.name,
   }
 
+  const getCourts = async context => {
+    const { courtLocations } = await whereaboutsApi.getCourtLocations(context)
+
+    const courts = courtLocations.sort().reduce((courtList, court) => {
+      return { ...courtList, [court]: court }
+    }, {})
+
+    return courts
+  }
+
   try {
-    const getCourts = async context => {
-      const { courtLocations } = await whereaboutsApi.getCourtLocations(context)
-
-      const courts = courtLocations.sort().reduce((courtList, court) => {
-        return { ...courtList, [court]: court }
-      }, {})
-
-      return courts
-    }
-
     const [courts, appointments] = await Promise.all([
       getCourts(res.locals),
       elite2Api.getAppointmentsForAgency(res.locals, {
@@ -39,6 +39,14 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     )
     const videoLinkAppointments = (videoLinkAppointmentResponse && videoLinkAppointmentResponse.appointments) || []
 
+    const videoLinkAppointmentsEnhanced = videoLinkAppointments.map(videoLink => {
+      const originalApp = appointments.find(appointment => appointment.id === videoLink.appointmentId)
+      return {
+        ...videoLink,
+        ...originalApp,
+      }
+    })
+
     const filterVideoLinkCourt = (option, videoLinkCourt) => {
       if (option === 'Other') {
         // If the user has selected Other, return the video links for courts
@@ -48,12 +56,12 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       return option === videoLinkCourt
     }
 
-    const appointmentsEnhanced = videoLinkAppointments
+    const appointmentsEnhanced = videoLinkAppointmentsEnhanced
       .filter(videoLink => (courtOption ? filterVideoLinkCourt(courtOption, videoLink.court) : true))
+      .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
       .map(async videoLink => {
-        const appointmentData = appointments.find(appointment => appointment.id === videoLink.appointmentId)
-        const { startTime, endTime } = appointmentData
-        const offenderName = `${properCaseName(appointmentData.firstName)} ${properCaseName(appointmentData.lastName)}`
+        const { startTime, endTime, locationDescription, court } = videoLink
+        const offenderName = `${properCaseName(videoLink.firstName)} ${properCaseName(videoLink.lastName)}`
 
         return [
           {
@@ -63,10 +71,10 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             text: offenderName,
           },
           {
-            text: appointmentData.locationDescription,
+            text: locationDescription,
           },
           {
-            text: videoLink.court,
+            text: court || '--',
           },
         ]
       })
