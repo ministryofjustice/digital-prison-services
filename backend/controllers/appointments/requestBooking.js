@@ -350,56 +350,60 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
   }
 
   const confirm = async (req, res) => {
-    const requestDetails = getBookingDetails(req)
-    if (!requestDetails) throw new Error('Request details are missing')
+    try {
+      const requestDetails = getBookingDetails(req)
+      if (!Object.keys(requestDetails).length) throw new Error('Request details are missing')
 
-    const {
-      firstName,
-      lastName,
-      dateOfBirth,
-      prison,
-      startTime,
-      endTime,
-      comment,
-      date,
-      preAppointmentRequired,
-      postAppointmentRequired,
-      preHearingStartAndEndTime,
-      postHearingStartAndEndTime,
-      hearingLocation,
-    } = requestDetails
-
-    raiseAnalyticsEvent(
-      'VLB Appointments',
-      `Video link requested for ${hearingLocation}`,
-      `Pre: ${preAppointmentRequired === 'yes' ? 'Yes' : 'No'} | Post: ${
-        postAppointmentRequired === 'yes' ? 'Yes' : 'No'
-      }`
-    )
-
-    return res.render('requestBooking/requestBookingConfirmation.njk', {
-      user: { displayName: req.session.userDetails.name },
-      homeUrl: '/videolink',
-      title: 'The video link has been requested',
-      details: {
-        prison,
-        name: `${firstName} ${lastName}`,
+      const {
+        firstName,
+        lastName,
         dateOfBirth,
-      },
-      hearingDetails: {
-        date,
-        courtHearingStartTime: startTime,
-        courtHearingEndTime: endTime,
+        prison,
+        startTime,
+        endTime,
         comment,
-      },
-      prePostDetails: {
-        'pre-court hearing briefing': preHearingStartAndEndTime,
-        'post-court hearing briefing': postHearingStartAndEndTime,
-      },
-      courtDetails: {
-        courtLocation: hearingLocation,
-      },
-    })
+        date,
+        preAppointmentRequired,
+        postAppointmentRequired,
+        preHearingStartAndEndTime,
+        postHearingStartAndEndTime,
+        hearingLocation,
+      } = requestDetails
+
+      raiseAnalyticsEvent(
+        'VLB Appointments',
+        `Video link requested for ${hearingLocation}`,
+        `Pre: ${preAppointmentRequired === 'yes' ? 'Yes' : 'No'} | Post: ${
+          postAppointmentRequired === 'yes' ? 'Yes' : 'No'
+        }`
+      )
+
+      return res.render('requestBooking/requestBookingConfirmation.njk', {
+        user: { displayName: req.session.userDetails.name },
+        homeUrl: '/videolink',
+        title: 'The video link has been requested',
+        details: {
+          prison,
+          name: `${firstName} ${lastName}`,
+          dateOfBirth,
+        },
+        hearingDetails: {
+          date,
+          courtHearingStartTime: startTime,
+          courtHearingEndTime: endTime,
+          comment,
+        },
+        prePostDetails: {
+          'pre-court hearing briefing': preHearingStartAndEndTime,
+          'post-court hearing briefing': postHearingStartAndEndTime,
+        },
+        courtDetails: {
+          courtLocation: hearingLocation,
+        },
+      })
+    } catch (error) {
+      return renderError(req, res, error)
+    }
   }
   return {
     startOfJourney,
