@@ -59,7 +59,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const appointmentsEnhanced = videoLinkAppointmentsEnhanced
       .filter(videoLink => (courtOption ? filterVideoLinkCourt(courtOption, videoLink.court) : true))
       .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
-      .map(async videoLink => {
+      .map(videoLink => {
         const { startTime, endTime, locationDescription, court } = videoLink
         const offenderName = `${properCaseName(videoLink.firstName)} ${properCaseName(videoLink.lastName)}`
 
@@ -79,7 +79,6 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         ]
       })
 
-    const appointmentRows = await Promise.all(appointmentsEnhanced)
     const title = `Video link bookings for ${moment(searchDate).format('D MMMM YYYY')}`
 
     const courtOptions = Object.keys(courts).map(key => ({ value: key, text: courts[key] }))
@@ -88,7 +87,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     return res.render('viewCourtBookings.njk', {
       courts: courtOptions,
       courtOption,
-      appointmentRows,
+      appointmentRows: appointmentsEnhanced,
       user,
       homeUrl: '/videolink',
       date: moment(searchDate).format('DD/MM/YYYY'),
