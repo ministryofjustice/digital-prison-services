@@ -74,7 +74,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             text: locationDescription,
           },
           {
-            text: court || '--',
+            text: court || 'Not available',
           },
         ]
       })
