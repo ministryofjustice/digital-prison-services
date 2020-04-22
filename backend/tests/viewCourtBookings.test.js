@@ -136,6 +136,21 @@ describe('View court bookings', () => {
             auditUserId: 'STAFF_2',
             agencyId: 'MDI',
           },
+          {
+            id: 5,
+            offenderNo: 'ABC456',
+            firstName: 'OFFENDER',
+            lastName: 'FIVE',
+            date: '2020-01-02',
+            startTime: '2020-01-02T15:30:00',
+            endTime: '2020-01-02T16:30:00',
+            appointmentTypeDescription: 'Video Link booking',
+            appointmentTypeCode: 'VLB',
+            locationDescription: 'VCC ROOM',
+            locationId: 456,
+            auditUserId: 'STAFF_2',
+            agencyId: 'MDI',
+          },
         ])
 
         whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
@@ -158,6 +173,14 @@ describe('View court bookings', () => {
               createdByUsername: 'username1',
               madeByTheCourt: true,
             },
+            {
+              id: 3,
+              bookingId: 1,
+              appointmentId: 5,
+              hearingType: 'MAIN',
+              createdByUsername: 'username1',
+              madeByTheCourt: true,
+            },
           ],
         })
 
@@ -176,7 +199,7 @@ describe('View court bookings', () => {
           agencyId: activeCaseLoadId,
           date: '2020-01-02',
         })
-        expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
+        expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5])
         expect(whereaboutsApi.getCourtLocations).toHaveBeenCalledWith(res.locals)
       })
 
@@ -202,6 +225,14 @@ describe('View court bookings', () => {
                 },
                 { text: 'VCC ROOM' },
                 { text: 'Wimbledon' },
+              ],
+              [
+                { text: '15:30 to 16:30' },
+                {
+                  text: 'Offender Five',
+                },
+                { text: 'VCC ROOM' },
+                { text: 'Not available' },
               ],
             ],
             date: '02/01/2020',
@@ -264,6 +295,14 @@ describe('View court bookings', () => {
                 },
                 { text: 'VCC ROOM' },
                 { text: 'A Different Court' },
+              ],
+              [
+                { text: '15:30 to 16:30' },
+                {
+                  text: 'Offender Five',
+                },
+                { text: 'VCC ROOM' },
+                { text: 'Not available' },
               ],
             ],
             title: 'Video link bookings for 2 January 2020 - Other',
