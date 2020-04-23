@@ -23,6 +23,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       assignedLivingUnit,
       bookingId,
       category,
+      categoryCode,
       csra,
       inactiveAlertCount,
     } = prisonerDetails
@@ -65,6 +66,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
+      categoryCode,
       csra,
       incentiveLevel: Boolean(iepDetails.length) && iepDetails[0].iepLevel,
       keyWorkerLastSession:

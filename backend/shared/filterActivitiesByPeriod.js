@@ -1,14 +1,17 @@
 const moment = require('moment')
 const formatEvent = require('./formatEvent')
 
-const filterMorning = activities => activities.filter(activity => moment(activity.startTime).get('hour') < 12)
+const filterMorning = activities =>
+  activities && activities.filter(activity => moment(activity.startTime).get('hour') < 12)
 
 const filterAfternoon = activities =>
+  activities &&
   activities.filter(
     activity => moment(activity.startTime).get('hour') > 11 && moment(activity.startTime).get('hour') < 17
   )
 
-const filterEveningDuties = activities => activities.filter(activity => moment(activity.startTime).get('hour') >= 17)
+const filterEveningDuties = activities =>
+  activities && activities.filter(activity => moment(activity.startTime).get('hour') >= 17)
 
 const byStartTimeThenByEndTime = (a, b) => {
   if (moment(a.startTime).isBefore(moment(b.startTime))) return -1

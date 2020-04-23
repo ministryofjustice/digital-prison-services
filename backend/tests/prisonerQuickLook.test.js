@@ -35,26 +35,26 @@ describe('prisoner profile quick look', () => {
 
     logError = jest.fn()
 
-    prisonerProfileService.getPrisonerProfileData = jest.fn().mockReturnValue(prisonerProfileData)
+    prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
-    elite2Api.getDetails = jest.fn().mockReturnValue({})
-    elite2Api.getMainOffence = jest.fn().mockReturnValue([])
-    elite2Api.getPrisonerBalances = jest.fn().mockReturnValue({})
-    elite2Api.getPrisonerDetails = jest.fn().mockReturnValue([])
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockReturnValue({})
-    elite2Api.getIepSummaryForBooking = jest.fn().mockReturnValue({})
-    elite2Api.getPositiveCaseNotes = jest.fn().mockReturnValue({})
-    elite2Api.getNegativeCaseNotes = jest.fn().mockReturnValue({})
-    elite2Api.getAdjudicationsForBooking = jest.fn().mockReturnValue({})
-    elite2Api.getNextVisit = jest.fn().mockReturnValue({})
-    elite2Api.getPrisonerVisitBalances = jest.fn().mockReturnValue({})
-    elite2Api.getEventsForToday = jest.fn().mockReturnValue([])
+    elite2Api.getDetails = jest.fn().mockResolvedValue({})
+    elite2Api.getMainOffence = jest.fn().mockResolvedValue([])
+    elite2Api.getPrisonerBalances = jest.fn().mockResolvedValue({})
+    elite2Api.getPrisonerDetails = jest.fn().mockResolvedValue([])
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
+    elite2Api.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
+    elite2Api.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
+    elite2Api.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
+    elite2Api.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+    elite2Api.getNextVisit = jest.fn().mockResolvedValue({})
+    elite2Api.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
+    elite2Api.getEventsForToday = jest.fn().mockResolvedValue([])
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
-    elite2Api.getDetails.mockReturnValue({ bookingId })
+    elite2Api.getDetails.mockResolvedValue({ bookingId })
 
     await controller(req, res)
 
@@ -71,7 +71,7 @@ describe('prisoner profile quick look', () => {
 
   describe('offence data', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockReturnValue({ bookingId })
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for offence data', async () => {
@@ -90,11 +90,11 @@ describe('prisoner profile quick look', () => {
             offenceDetails: [
               {
                 label: 'Main offence(s)',
-                value: false,
+                value: undefined,
               },
               {
                 label: 'Imprisonment status',
-                value: false,
+                value: undefined,
               },
               {
                 label: 'Release date',
@@ -108,13 +108,13 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is offence data', () => {
       beforeEach(() => {
-        elite2Api.getMainOffence.mockReturnValue([
+        elite2Api.getMainOffence.mockResolvedValue([
           { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
         ])
-        elite2Api.getPrisonerDetails.mockReturnValue([
+        elite2Api.getPrisonerDetails.mockResolvedValue([
           { imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' },
         ])
-        elite2Api.getPrisonerSentenceDetails.mockReturnValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+        elite2Api.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
       })
 
       it('should render the quick look template with the correctly formatted data', async () => {
@@ -163,7 +163,7 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is balance data', () => {
       beforeEach(() => {
-        elite2Api.getPrisonerBalances.mockReturnValue({ spends: 100, cash: 75.5, savings: 50, currency: 'GBP' })
+        elite2Api.getPrisonerBalances.mockResolvedValue({ spends: 100, cash: 75.5, savings: 50, currency: 'GBP' })
       })
 
       it('should render the quick look template with the correctly formatted balance/money data', async () => {
@@ -205,7 +205,7 @@ describe('prisoner profile quick look', () => {
     describe('when there is personal data', () => {
       beforeEach(() => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
-        elite2Api.getPrisonerDetails.mockReturnValue([
+        elite2Api.getPrisonerDetails.mockResolvedValue([
           { dateOfBirth: '1998-12-01', nationalities: 'Brtish', pncNumber: '12/3456A', croNumber: '12345/57B' },
         ])
       })
@@ -234,7 +234,7 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should make a request for the correct data', async () => {
-      elite2Api.getDetails.mockReturnValue({ bookingId })
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
 
       await controller(req, res)
 
@@ -265,10 +265,10 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is case note and adjudications data', () => {
       beforeEach(() => {
-        elite2Api.getIepSummaryForBooking.mockReturnValue({ daysSinceReview: 40 })
-        elite2Api.getPositiveCaseNotes.mockReturnValue({ count: 2 })
-        elite2Api.getNegativeCaseNotes.mockReturnValue({ count: 1 })
-        elite2Api.getAdjudicationsForBooking.mockReturnValue({
+        elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 40 })
+        elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
+        elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
+        elite2Api.getAdjudicationsForBooking.mockResolvedValue({
           adjudicationCount: 3,
           awards: [
             {
@@ -378,13 +378,13 @@ describe('prisoner profile quick look', () => {
 
       describe('when there is visit data', () => {
         beforeEach(() => {
-          elite2Api.getNextVisit.mockReturnValue({
+          elite2Api.getNextVisit.mockResolvedValue({
             visitTypeDescription: 'Social Contact',
             leadVisitor: 'YRUDYPETER CASSORIA',
             relationshipDescription: 'Probation Officer',
             startTime: '2020-04-17T13:30:00',
           })
-          elite2Api.getPrisonerVisitBalances.mockReturnValue({ remainingVo: 24, remainingPvo: 4 })
+          elite2Api.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 24, remainingPvo: 4 })
         })
 
         it('should render the quick look template with the correctly formatted visit details', async () => {
@@ -431,7 +431,7 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is visit data', () => {
       beforeEach(() => {
-        elite2Api.getEventsForToday.mockReturnValue([
+        elite2Api.getEventsForToday.mockResolvedValue([
           {
             bookingId,
             eventClass: 'INT_MOV',
@@ -563,10 +563,10 @@ describe('prisoner profile quick look', () => {
     })
   })
 
-  describe('when there are errors with elite2Api', () => {
+  describe('when there are errors with getDetails', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      elite2Api.getDetails.mockRejectedValue(new Error('Network error'))
     })
 
     it('should render the error template', async () => {
@@ -574,6 +574,71 @@ describe('prisoner profile quick look', () => {
 
       expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: 'http://localhost:3000/' })
+    })
+  })
+
+  describe('when there are errors with getMainOffence', () => {
+    beforeEach(() => {
+      req.params.offenderNo = offenderNo
+      elite2Api.getMainOffence.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerBalances.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerDetails.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerSentenceDetails.mockRejectedValue(new Error('Network error'))
+      elite2Api.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
+      elite2Api.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
+      elite2Api.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
+      elite2Api.getNextVisit.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
+      elite2Api.getEventsForToday.mockRejectedValue(new Error('Network error'))
+    })
+
+    it('should still render the quick look template with missing data', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook.njk',
+        expect.objectContaining({
+          balanceDetails: [
+            { label: 'Spends', value: null },
+            { label: 'Private', value: null },
+            { label: 'Savings', value: null },
+          ],
+          caseNoteAdjudications: {
+            activeAdjudicationsDetails: { label: 'Active adjudications' },
+            details: [
+              { label: 'Incentive level warnings', value: null },
+              { label: 'Incentive Encouragements', value: null },
+              { label: 'Last incentive level review', value: null },
+              { label: 'Proven adjudications', value: null },
+            ],
+          },
+          dpsUrl: 'http://localhost:3000/',
+          offenceDetails: [
+            { label: 'Main offence(s)', value: null },
+            { label: 'Imprisonment status', value: null },
+            { label: 'Release date', value: null },
+          ],
+          personalDetails: [
+            { label: 'Age', value: null },
+            { label: 'Nationality', value: null },
+            { label: 'PNC number', value: null },
+            { label: 'CRO number', value: null },
+          ],
+          scheduledActivityPeriods: [
+            { label: 'Morning (AM)', value: null },
+            { label: 'Afternoon (PM)', value: null },
+            { label: 'Evening (ED)', value: null },
+          ],
+          visits: {
+            details: [
+              { label: 'Remaining visits', value: null },
+              { label: 'Remaining privileged visits', value: null },
+              { label: 'Next visit date', value: 'No upcoming visits' },
+            ],
+          },
+        })
+      )
     })
   })
 })
