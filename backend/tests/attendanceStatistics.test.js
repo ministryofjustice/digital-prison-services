@@ -37,12 +37,15 @@ describe('Attendance reason statistics', () => {
   beforeEach(() => {
     oauthApi.currentUser = jest.fn()
     elite2Api.userCaseLoads = jest.fn()
+    elite2Api.getOffenderActivitiesOverDateRange = jest.fn()
     oauthApi.userRoles = jest.fn()
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
     whereaboutsApi.getAbsenceReasons = jest.fn()
+    whereaboutsApi.getAttendanceForBookings = jest.fn()
 
     elite2Api.userCaseLoads.mockReturnValue([{ caseLoadId: 'LEI', description: 'Leeds (HMP)', currentlyActive: true }])
+    elite2Api.getOffenderActivitiesOverDateRange.mockReturnValue([])
     oauthApi.currentUser.mockReturnValue({
       username: 'USER_ADM',
       active: true,
@@ -53,6 +56,8 @@ describe('Attendance reason statistics', () => {
     whereaboutsApi.getAbsenceReasons.mockReturnValue({
       triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWaring'],
     })
+
+    whereaboutsApi.getAttendanceForBookings.mockReturnValue({ attendances: [] })
   })
 
   afterEach(() => {
@@ -603,6 +608,169 @@ describe('Attendance reason statistics', () => {
         new Error('something is wrong'),
         'Sorry, the service is unavailable'
       )
+    })
+  })
+
+  describe('Suspended Controller', () => {
+    it('should render the list of offenders who are suspended on the given date and period', async () => {
+      elite2Api.getOffenderActivitiesOverDateRange.mockReturnValue([
+        {
+          bookingId: 1133341,
+          offenderNo: 'G8974UK',
+          eventId: 3,
+          cellLocation: 'LEI-1',
+          startTime: '2019-10-10T14:00:00',
+          timeSlot: 'AM',
+          firstName: 'Adam',
+          lastName: 'Smith',
+          comment: 'Cleaner',
+          suspended: true,
+        },
+        {
+          bookingId: 1133342,
+          offenderNo: 'G8975UK',
+          eventId: 4,
+          cellLocation: 'LEI-2',
+          startTime: '2019-10-10T14:00:00',
+          timeSlot: 'AM',
+          firstName: 'Offender',
+          lastName: 'Two',
+          comment: 'Cleaner',
+          suspended: true,
+        },
+        {
+          bookingId: 1133343,
+          offenderNo: 'G8976UK',
+          eventId: 4,
+          cellLocation: 'LEI-3',
+          startTime: '2019-10-10T14:00:00',
+          timeSlot: 'AM',
+          firstName: 'Offender',
+          lastName: 'Three',
+          comment: 'Cleaner',
+          suspended: true,
+        },
+        {
+          bookingId: 1133344,
+          offenderNo: 'G8977UK',
+          eventId: 5,
+          cellLocation: 'LEI-4',
+          startTime: '2019-10-10T14:00:00',
+          timeSlot: 'AM',
+          firstName: 'Offender',
+          lastName: 'Four',
+          comment: 'Cleaner',
+          suspended: false,
+        },
+      ])
+      whereaboutsApi.getAttendanceForBookings.mockReturnValue({
+        attendances: [
+          {
+            eventId: 3,
+            bookingId: 1133341,
+            eventDate: '2019-10-10',
+            attended: false,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Asked nicely.',
+          },
+          {
+            eventId: 4,
+            bookingId: 1133342,
+            eventDate: '2019-10-10',
+            attended: false,
+            paid: false,
+            absentReason: 'Refused',
+            comments: 'Did not ask nicely',
+          },
+          {
+            eventId: 4,
+            bookingId: 1133343,
+            eventDate: '2019-10-10',
+            attended: true,
+            paid: true,
+            absentReason: undefined,
+            comments: '',
+          },
+        ],
+      })
+
+      const { attendanceStatisticsSuspendedList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        jest.fn()
+      )
+
+      const req = { query: { agencyId, fromDate, toDate, period } }
+      const res = { render: jest.fn() }
+
+      await attendanceStatisticsSuspendedList(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('attendanceStatisticsSuspendedList.njk', {
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        dashboardUrl:
+          '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM&fromDate=10/10/2019&toDate=11/10/2019',
+        caseLoadId: 'LEI',
+        title: 'Suspended',
+        displayDate: '10 October 2019 to 11 October 2019',
+        displayPeriod: 'AM',
+        offendersData: [
+          [
+            {
+              html: '<a href="http://localhost:3000/offenders/G8974UK/quick-look" class="govuk-link">Smith, Adam</a>',
+              attributes: {
+                'data-sort-value': 'Smith',
+              },
+            },
+            { text: 'G8974UK' },
+            { text: 'LEI-1' },
+            { text: 'Cleaner' },
+            { text: 'Yes - acceptable absence' },
+          ],
+          [
+            {
+              html: '<a href="http://localhost:3000/offenders/G8975UK/quick-look" class="govuk-link">Two, Offender</a>',
+              attributes: {
+                'data-sort-value': 'Two',
+              },
+            },
+            { text: 'G8975UK' },
+            { text: 'LEI-2' },
+            { text: 'Cleaner' },
+            { text: 'No - refused' },
+          ],
+          [
+            {
+              html:
+                '<a href="http://localhost:3000/offenders/G8976UK/quick-look" class="govuk-link">Three, Offender</a>',
+              attributes: {
+                'data-sort-value': 'Three',
+              },
+            },
+            { text: 'G8976UK' },
+            { text: 'LEI-3' },
+            { text: 'Cleaner' },
+            { text: 'Yes' },
+          ],
+        ],
+        totalRecords: 3,
+        totalOffenders: 3,
+        userRoles: undefined,
+      })
     })
   })
 })

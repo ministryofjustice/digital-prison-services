@@ -157,6 +157,14 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
       attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsOffendersList
     )
   )
+
+  router.get(
+    '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
+    handleErrors(
+      attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsSuspendedList
+    )
+  )
+
   router.get(
     '/offenders/:offenderNo/probation-documents',
     handleErrors(

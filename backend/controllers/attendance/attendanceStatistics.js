@@ -11,6 +11,7 @@ const {
   pascalToString,
   readableDateFormat,
   stripAgencyPrefix,
+  properCaseName,
 } = require('../../utils')
 
 const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
@@ -326,9 +327,139 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     }
   }
 
+  const attendanceStatisticsSuspendedList = async (req, res) => {
+    const { agencyId, period, fromDate, toDate } = req.query || {}
+
+    const formattedFromDate = switchDateFormat(fromDate, 'DD/MM/YYYY')
+    const formattedToDate = toDate ? switchDateFormat(toDate, 'DD/MM/YYYY') : switchDateFormat(fromDate, 'DD/MM/YYYY')
+    const currentPeriod = getCurrentPeriod(moment().format())
+    const today = moment().format('DD/MM/YYYY')
+    const periods = period.split('_')
+
+    try {
+      const [user, caseloads, roles] = await Promise.all([
+        oauthApi.currentUser(res.locals),
+        elite2Api.userCaseLoads(res.locals),
+        oauthApi.userRoles(res.locals),
+      ])
+
+      const { activeCaseLoad, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
+
+      if (!period || !fromDate) {
+        return res.redirect(
+          `${attendanceReasonStatsUrl}/suspended?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}&toDate=${today}`
+        )
+      }
+
+      const scheduledActivities = await elite2Api.getOffenderActivitiesOverDateRange(res.locals, {
+        agencyId,
+        fromDate: formattedFromDate,
+        toDate: formattedToDate,
+        period: period === 'AM_PM' ? '' : period,
+      })
+
+      const suspendedActivites = scheduledActivities.filter(activity => activity.suspended)
+
+      const suspendedBookingsPerEventDate = {}
+
+      suspendedActivites.forEach(activity => {
+        const date = moment(activity.startTime).format('YYYY-MM-DD')
+        if (!suspendedBookingsPerEventDate[date]) {
+          suspendedBookingsPerEventDate[date] = []
+        }
+        suspendedBookingsPerEventDate[date].push(activity.bookingId)
+      })
+
+      const getAttendances = async (periodsList, data) => {
+        const suspendedAttendancesList = []
+        await Promise.all(
+          periodsList.map(async periodItem => {
+            await Promise.all(
+              Object.keys(data).map(async date => {
+                const attendances = await whereaboutsApi.getAttendanceForBookings(res.locals, {
+                  agencyId,
+                  period: periodItem,
+                  bookings: data[date],
+                  date,
+                })
+                suspendedAttendancesList.push(...attendances.attendances)
+              })
+            )
+          })
+        )
+        return suspendedAttendancesList
+      }
+
+      const suspendedAttendances = await getAttendances(periods, suspendedBookingsPerEventDate)
+
+      const formatAttendedData = data => {
+        if (data.attended) {
+          return 'Yes'
+        }
+
+        return `${data.paid ? 'Yes' : 'No'} - ${pascalToString(data.absentReason).toLowerCase()}`
+      }
+
+      const totalOffenders = new Set(suspendedActivites.map(activity => activity.bookingId)).size
+      const offendersData = suspendedActivites.map(activity => {
+        const attendanceDetails = suspendedAttendances.find(
+          attendance =>
+            activity.bookingId === attendance.bookingId &&
+            moment(activity.startTime).format('YYYY-MM-DD') === attendance.eventDate &&
+            activity.eventId === attendance.eventId
+        )
+
+        const { offenderNo, firstName, lastName, comment, cellLocation } = activity
+        const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
+
+        const offenderUrl = `${config.app.notmEndpointUrl}offenders/${offenderNo}/quick-look`
+
+        return [
+          {
+            html: `<a href="${offenderUrl}" class="govuk-link">${offenderName}</a>`,
+            attributes: {
+              'data-sort-value': lastName,
+            },
+          },
+          { text: offenderNo },
+          { text: cellLocation },
+          { text: comment },
+          { text: attendanceDetails ? formatAttendedData(attendanceDetails) : 'Not recorded' },
+        ]
+      })
+
+      return res.render('attendanceStatisticsSuspendedList.njk', {
+        title: 'Suspended',
+        user: {
+          displayName: user.name,
+          activeCaseLoad: {
+            description: activeCaseLoad.description,
+            id: activeCaseLoadId,
+          },
+        },
+        displayDate: formatDatesForDisplay({ fromDate, toDate }),
+        displayPeriod: periodDisplayLookup[period],
+        dashboardUrl: `${attendanceReasonStatsUrl}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate ||
+          ''}`,
+        offendersData,
+        caseLoadId: activeCaseLoad.caseLoadId,
+        allCaseloads: caseloads,
+        userRoles: roles,
+        totalRecords: suspendedActivites.length,
+        totalOffenders,
+      })
+    } catch (error) {
+      logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      return res.render('error.njk', {
+        url: `${attendanceReasonStatsUrl}/suspended`,
+      })
+    }
+  }
+
   return {
     attendanceStatistics,
     attendanceStatisticsOffendersList,
+    attendanceStatisticsSuspendedList,
   }
 }
 
