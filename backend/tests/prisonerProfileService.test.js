@@ -141,9 +141,9 @@ describe('prisoner profile service', () => {
 
       expect(getPrisonerProfileData).toEqual(
         expect.objectContaining({
-          incentiveLevel: false,
-          keyWorkerLastSession: false,
-          keyWorkerName: false,
+          incentiveLevel: undefined,
+          keyWorkerLastSession: undefined,
+          keyWorkerName: null,
         })
       )
     })
@@ -229,6 +229,30 @@ describe('prisoner profile service', () => {
             })
           )
         })
+      })
+    })
+
+    describe('when there are errors with retrieving information', () => {
+      beforeEach(() => {
+        elite2Api.getIepSummary.mockRejectedValue(new Error('Network error'))
+        elite2Api.getCaseNoteSummaryByTypes.mockRejectedValue(new Error('Network error'))
+        elite2Api.userCaseLoads.mockRejectedValue(new Error('Network error'))
+        elite2Api.getStaffRoles.mockRejectedValue(new Error('Network error'))
+        keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockRejectedValue(new Error('Network error'))
+        oauthApi.userRoles.mockRejectedValue(new Error('Network error'))
+      })
+
+      it('should still pass those values as null', async () => {
+        const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(getPrisonerProfileData).toEqual(
+          expect.objectContaining({
+            incentiveLevel: null,
+            keyWorkerLastSession: null,
+            showAddKeyworkerSession: null,
+            userCanEdit: null,
+          })
+        )
       })
     })
   })

@@ -46,7 +46,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
     )
 
     const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
-    const offenderInCaseload = userCaseloads.some(caseload => caseload.caseLoadId === agencyId)
+    const offenderInCaseload = userCaseloads && userCaseloads.some(caseload => caseload.caseLoadId === agencyId)
 
     const isCatToolUser = Boolean(
       userRoles &&
@@ -71,11 +71,11 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       category,
       categoryCode,
       csra,
-      incentiveLevel: Boolean(iepDetails.length) && iepDetails[0].iepLevel,
+      incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
-        Boolean(keyworkerSessions.length) && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
+        keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
       keyWorkerName:
-        Boolean(keyworkerDetails) &&
+        keyworkerDetails &&
         `${properCaseName(keyworkerDetails.lastName)}, ${properCaseName(keyworkerDetails.firstName)}`,
       inactiveAlertCount,
       location: assignedLivingUnit.description,
