@@ -12,9 +12,6 @@
     }
 
     &__alerts {
-      @extend %govuk-list;
-      display: flex;
-      flex-wrap: wrap;
       flex-basis: 100%;
     }
 

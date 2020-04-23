@@ -1,4 +1,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
+{% from "../macros/categoryFlag.njk" import categoryFlag %}
 
 {% macro headerItem(label, content) %}
   <li>
@@ -26,7 +28,8 @@
 {% endset %}
 
 {% set categoryHtml %}
-  <span>{{ prisonerProfileData.category | showDefault }}</span>
+  {{ categoryFlag(prisonerProfileData.category, prisonerProfileData.categoryCode) }}
+
   {% if prisonerProfileData.categorisationLinkText %}
     <br>
     <a data-qa="categorisation-external-link" class="govuk-link" href="{{ prisonerProfileData.categorisationLink }}">
@@ -52,18 +55,9 @@
   </div>
 
   <div class="prisoner-header__details">
-    {% if prisonerProfileData.alerts.length %}
-      <ul class="prisoner-header__details__alerts">
-        {% for alert in prisonerProfileData.alerts %}
-          <li class="{{ alert.classes }}">
-            {% if alert.img %}
-              <img src="{{ alert.img }}" class="{{ alert.imgClass }}" alt="{{ alert.label }}"/>
-            {% endif %}
-            {{ alert.label }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+    <div class="prisoner-header__details__alerts">
+      {{ alertFlags(prisonerProfileData.alerts) }}
+    </div>
 
     <ul class="prisoner-header__details__information">
       {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}

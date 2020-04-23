@@ -1,0 +1,14 @@
+{% macro alertFlags(alerts) %}
+  {% if alerts.length %}
+    <ul class="alerts-list">
+        {% for alert in alerts %}
+          <li class="{{ alert.classes }}">
+            {% if alert.img %}
+              <img src="{{ alert.img }}" class="{{ alert.imgClass }}" alt="{{ alert.label }}"/>
+            {% endif %}
+            {{ alert.label }}
+          </li>
+        {% endfor %}
+      </ul>
+  {% endif %}
+{% endmacro %}

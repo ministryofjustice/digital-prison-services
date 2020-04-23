@@ -20,6 +20,12 @@
   }
 }
 
+.alerts-list {
+  @extend %govuk-list;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .alert-status {
   @extend %status-style;
   text-transform: uppercase;
@@ -44,7 +50,7 @@
   &--disability {
     color: #2b88c8;
     border-color: #2b88c8;
- }
+  }
 
   &--arsonist {
     color: #df3034;
@@ -140,5 +146,27 @@
     color: #fff;
     border-color: #330;
     background-color: #330;
+  }
+}
+
+.cat-a-status {
+  @extend %status-style;
+
+  &--a,
+  &--e {
+    color: #00437b;
+    border-color: #00437b;
+  }
+
+  &--h {
+    background-color: #00437b;
+    color: white;
+    border-color: #00437b;
+  }
+
+  &--p {
+    border: 3px dashed;
+    color: #00437b;
+    border-color: #00437b;
   }
 }
