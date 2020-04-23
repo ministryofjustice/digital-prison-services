@@ -1,5 +1,5 @@
 const contextProperties = require('../contextProperties')
-const { arrayToQueryString, mapToQueryString, map404ToNull } = require('../utils')
+const { arrayToQueryString, mapToQueryString } = require('../utils')
 
 const elite2ApiFactory = client => {
   const processResponse = context => response => {
@@ -227,14 +227,10 @@ const elite2ApiFactory = client => {
   const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
 
   const getPositiveCaseNotes = (context, bookingId, fromDate, toDate) =>
-    get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`).catch(
-      map404ToNull
-    )
+    get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getNegativeCaseNotes = (context, bookingId, fromDate, toDate) =>
-    get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`).catch(
-      map404ToNull
-    )
+    get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getPrisonerVisitBalances = (context, offenderNo) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
