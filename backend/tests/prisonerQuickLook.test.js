@@ -577,7 +577,7 @@ describe('prisoner profile quick look', () => {
     })
   })
 
-  describe('when there are errors with getMainOffence', () => {
+  describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
       elite2Api.getMainOffence.mockRejectedValue(new Error('Network error'))
