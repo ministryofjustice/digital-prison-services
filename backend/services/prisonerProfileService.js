@@ -8,6 +8,7 @@ const {
   },
   app: { notmEndpointUrl },
 } = require('../config')
+const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
 module.exports = (elite2Api, keyworkerApi, oauthApi) => {
   const getPrisonerProfileData = async (context, offenderNo) => {
@@ -28,14 +29,16 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       inactiveAlertCount,
     } = prisonerDetails
 
-    const [iepDetails, keyworkerSessions, userCaseloads, staffRoles, keyworkerDetails, userRoles] = await Promise.all([
-      elite2Api.getIepSummary(context, [bookingId]),
-      elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
-      elite2Api.userCaseLoads(context),
-      elite2Api.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
-      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
-      oauthApi.userRoles(context),
-    ])
+    const [iepDetails, keyworkerSessions, userCaseloads, staffRoles, keyworkerDetails, userRoles] = await Promise.all(
+      [
+        elite2Api.getIepSummary(context, [bookingId]),
+        elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
+        elite2Api.userCaseLoads(context),
+        elite2Api.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
+        keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
+        oauthApi.userRoles(context),
+      ].map(apiCall => logErrorAndContinue(apiCall))
+    )
 
     const prisonersActiveAlertCodes = alerts.filter(alert => !alert.expired).map(alert => alert.alertCode)
     const alertsToShow = alertFlagValues.filter(alertFlag =>

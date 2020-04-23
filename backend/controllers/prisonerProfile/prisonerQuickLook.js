@@ -6,16 +6,9 @@ const {
 const { formatTimestampToDate, formatCurrency, capitalizeUppercaseString } = require('../../utils')
 const formatAward = require('../../shared/formatAward')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
+const logErrorAndContinue = require('../../shared/logErrorAndContinue')
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
-  const logErrorAndContinue = apiCall =>
-    new Promise(resolve => {
-      apiCall.then(response => resolve(response)).catch(error => {
-        logError(req.originalUrl, error, serviceUnavailableMessage)
-        resolve(null)
-      })
-    })
-
   const { offenderNo } = req.params
   const details = await elite2Api
     .getDetails(res.locals, offenderNo)
