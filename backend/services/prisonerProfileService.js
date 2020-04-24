@@ -8,6 +8,7 @@ const {
   },
   app: { notmEndpointUrl },
 } = require('../config')
+const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
 module.exports = (elite2Api, keyworkerApi, oauthApi) => {
   const getPrisonerProfileData = async (context, offenderNo) => {
@@ -23,18 +24,21 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       assignedLivingUnit,
       bookingId,
       category,
+      categoryCode,
       csra,
       inactiveAlertCount,
     } = prisonerDetails
 
-    const [iepDetails, keyworkerSessions, userCaseloads, staffRoles, keyworkerDetails, userRoles] = await Promise.all([
-      elite2Api.getIepSummary(context, [bookingId]),
-      elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
-      elite2Api.userCaseLoads(context),
-      elite2Api.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
-      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
-      oauthApi.userRoles(context),
-    ])
+    const [iepDetails, keyworkerSessions, userCaseloads, staffRoles, keyworkerDetails, userRoles] = await Promise.all(
+      [
+        elite2Api.getIepSummary(context, [bookingId]),
+        elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
+        elite2Api.userCaseLoads(context),
+        elite2Api.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
+        keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
+        oauthApi.userRoles(context),
+      ].map(apiCall => logErrorAndContinue(apiCall))
+    )
 
     const prisonersActiveAlertCodes = alerts.filter(alert => !alert.expired).map(alert => alert.alertCode)
     const alertsToShow = alertFlagValues.filter(alertFlag =>
@@ -42,7 +46,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
     )
 
     const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
-    const offenderInCaseload = userCaseloads.some(caseload => caseload.caseLoadId === agencyId)
+    const offenderInCaseload = userCaseloads && userCaseloads.some(caseload => caseload.caseLoadId === agencyId)
 
     const isCatToolUser = Boolean(
       userRoles &&
@@ -65,12 +69,13 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
+      categoryCode,
       csra,
-      incentiveLevel: Boolean(iepDetails.length) && iepDetails[0].iepLevel,
+      incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
-        Boolean(keyworkerSessions.length) && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
+        keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
       keyWorkerName:
-        Boolean(keyworkerDetails) &&
+        keyworkerDetails &&
         `${properCaseName(keyworkerDetails.lastName)}, ${properCaseName(keyworkerDetails.firstName)}`,
       inactiveAlertCount,
       location: assignedLivingUnit.description,

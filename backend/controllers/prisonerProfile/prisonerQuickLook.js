@@ -6,32 +6,39 @@ const {
 const { formatTimestampToDate, formatCurrency, capitalizeUppercaseString } = require('../../utils')
 const formatAward = require('../../shared/formatAward')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
+const logErrorAndContinue = require('../../shared/logErrorAndContinue')
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
-  try {
-    const { offenderNo } = req.params
-    const details = await elite2Api.getDetails(res.locals, offenderNo)
-    const { bookingId } = details
+  const { offenderNo } = req.params
+  const details = await elite2Api
+    .getDetails(res.locals, offenderNo)
+    .then(data => data)
+    .catch(error => {
+      logError(req.originalUrl, error, serviceUnavailableMessage)
+      return res.render('error.njk', { url: dpsUrl })
+    })
+  const { bookingId } = details || {}
 
-    const dateThreeMonthsAgo = moment()
-      .subtract(3, 'months')
-      .format('YYYY-MM-DD')
-    const today = moment().format('YYYY-MM-DD')
+  const dateThreeMonthsAgo = moment()
+    .subtract(3, 'months')
+    .format('YYYY-MM-DD')
+  const today = moment().format('YYYY-MM-DD')
 
-    const [
-      prisonerProfileData,
-      offenceData,
-      balanceData,
-      prisonerData,
-      sentenceData,
-      iepSummary,
-      positiveCaseNotes,
-      negativeCaseNotes,
-      adjudications,
-      nextVisit,
-      visitBalances,
-      todaysEvents,
-    ] = await Promise.all([
+  const [
+    prisonerProfileData,
+    offenceData,
+    balanceData,
+    prisonerData,
+    sentenceData,
+    iepSummary,
+    positiveCaseNotes,
+    negativeCaseNotes,
+    adjudications,
+    nextVisit,
+    visitBalances,
+    todaysEvents,
+  ] = await Promise.all(
+    [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getMainOffence(res.locals, bookingId),
       elite2Api.getPrisonerBalances(res.locals, bookingId),
@@ -44,60 +51,70 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       elite2Api.getNextVisit(res.locals, bookingId),
       elite2Api.getPrisonerVisitBalances(res.locals, offenderNo),
       elite2Api.getEventsForToday(res.locals, bookingId),
-    ])
+    ].map(apiCall => logErrorAndContinue(apiCall))
+  )
 
-    const prisoner = Boolean(prisonerData.length) && prisonerData[0]
-    const { sentenceDetail } = sentenceData
-    const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
+  const prisoner = prisonerData && prisonerData[0]
+  const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
 
-    return res.render('prisonerProfile/prisonerQuickLook.njk', {
-      dpsUrl,
-      prisonerProfileData,
-      offenceDetails: [
-        { label: 'Main offence(s)', value: Boolean(offenceData.length) && offenceData[0].offenceDescription },
-        { label: 'Imprisonment status', value: prisoner && prisoner.imprisonmentStatusDesc },
-        {
-          label: 'Release date',
-          value: sentenceDetail && sentenceDetail.releaseDate && formatTimestampToDate(sentenceDetail.releaseDate),
-        },
+  return res.render('prisonerProfile/prisonerQuickLook.njk', {
+    dpsUrl,
+    prisonerProfileData,
+    offenceDetails: [
+      {
+        label: 'Main offence(s)',
+        value: offenceData && offenceData[0] && offenceData[0].offenceDescription,
+      },
+      { label: 'Imprisonment status', value: prisoner && prisoner.imprisonmentStatusDesc },
+      {
+        label: 'Release date',
+        value:
+          sentenceData &&
+          sentenceData.sentenceDetail &&
+          sentenceData.sentenceDetail.releaseDate &&
+          formatTimestampToDate(sentenceData.sentenceDetail.releaseDate),
+      },
+    ],
+    balanceDetails: [
+      { label: 'Spends', value: balanceData && formatCurrency(balanceData.spends, balanceData.currency) },
+      { label: 'Private', value: balanceData && formatCurrency(balanceData.cash, balanceData.currency) },
+      { label: 'Savings', value: balanceData && formatCurrency(balanceData.savings, balanceData.currency) },
+    ],
+    caseNoteAdjudications: {
+      details: [
+        { label: 'Incentive level warnings', value: negativeCaseNotes && negativeCaseNotes.count },
+        { label: 'Incentive Encouragements', value: positiveCaseNotes && positiveCaseNotes.count },
+        { label: 'Last incentive level review', value: iepSummary && iepSummary.daysSinceReview },
+        { label: 'Proven adjudications', value: adjudications && adjudications.adjudicationCount },
       ],
-      balanceDetails: [
-        { label: 'Spends', value: formatCurrency(balanceData.spends, balanceData.currency) },
-        { label: 'Private', value: formatCurrency(balanceData.cash, balanceData.currency) },
-        { label: 'Savings', value: formatCurrency(balanceData.savings, balanceData.currency) },
-      ],
-      caseNoteAdjudications: {
-        details: [
-          { label: 'Incentive level warnings', value: negativeCaseNotes.count },
-          { label: 'Incentive Encouragements', value: positiveCaseNotes.count },
-          { label: 'Last incentive level review', value: iepSummary.daysSinceReview },
-          { label: 'Proven adjudications', value: adjudications.adjudicationCount },
-        ],
-        activeAdjudicationsDetails: {
-          label: 'Active adjudications',
+      activeAdjudicationsDetails: {
+        label: 'Active adjudications',
+        ...(adjudications && {
           value:
             adjudications.awards &&
             adjudications.awards
               .map(award => formatAward(award))
               .filter(({ status }) => status && !status.startsWith('SUSP') && status !== 'QUASHED'),
-        },
+        }),
       },
-      personalDetails: [
-        { label: 'Age', value: prisoner.dateOfBirth && moment().diff(moment(prisoner.dateOfBirth), 'years') },
-        { label: 'Nationality', value: prisoner.nationalities },
-        { label: 'PNC number', value: prisoner.pncNumber },
-        { label: 'CRO number', value: prisoner.croNumber },
+    },
+    personalDetails: [
+      { label: 'Age', value: prisoner && prisoner.dateOfBirth && moment().diff(moment(prisoner.dateOfBirth), 'years') },
+      { label: 'Nationality', value: prisoner && prisoner.nationalities },
+      { label: 'PNC number', value: prisoner && prisoner.pncNumber },
+      { label: 'CRO number', value: prisoner && prisoner.croNumber },
+    ],
+    visits: {
+      details: [
+        { label: 'Remaining visits', value: visitBalances && visitBalances.remainingVo },
+        { label: 'Remaining privileged visits', value: visitBalances && visitBalances.remainingPvo },
+        {
+          label: 'Next visit date',
+          value: nextVisit && nextVisit.startTime ? formatTimestampToDate(nextVisit.startTime) : 'No upcoming visits',
+        },
       ],
-      visits: {
-        details: [
-          { label: 'Remaining visits', value: visitBalances.remainingVo },
-          { label: 'Remaining privileged visits', value: visitBalances.remainingPvo },
-          {
-            label: 'Next visit date',
-            value: nextVisit.startTime ? formatTimestampToDate(nextVisit.startTime) : 'No upcoming visits',
-          },
-        ],
-        ...(nextVisit.startTime && {
+      ...(nextVisit &&
+        nextVisit.startTime && {
           nextVisitDetails: [
             { label: 'Type of visit', value: nextVisit.visitTypeDescription },
             {
@@ -106,15 +123,11 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
             },
           ],
         }),
-      },
-      scheduledActivityPeriods: [
-        { label: 'Morning (AM)', value: morningActivities },
-        { label: 'Afternoon (PM)', value: afternoonActivities },
-        { label: 'Evening (ED)', value: eveningActivities },
-      ],
-    })
-  } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    return res.render('error.njk', { url: dpsUrl })
-  }
+    },
+    scheduledActivityPeriods: [
+      { label: 'Morning (AM)', value: morningActivities },
+      { label: 'Afternoon (PM)', value: afternoonActivities },
+      { label: 'Evening (ED)', value: eveningActivities },
+    ],
+  })
 }

@@ -9,12 +9,10 @@
     @include govuk-media-query($from: mobile) {
       display: flex;
       flex-wrap: wrap;
+      flex-basis: 100%;
     }
 
     &__alerts {
-      @extend %govuk-list;
-      display: flex;
-      flex-wrap: wrap;
       flex-basis: 100%;
     }
 

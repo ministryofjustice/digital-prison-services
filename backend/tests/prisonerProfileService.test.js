@@ -67,12 +67,12 @@ describe('prisoner profile service', () => {
 
     beforeEach(() => {
       elite2Api.getDetails.mockReturnValue(prisonerDetails)
-      elite2Api.getIepSummary.mockReturnValue([{ iepLevel: 'Standard' }])
-      elite2Api.getCaseNoteSummaryByTypes.mockReturnValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
-      elite2Api.getStaffRoles.mockReturnValue([])
-      elite2Api.userCaseLoads.mockReturnValue([])
-      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue({ firstName: 'STAFF', lastName: 'MEMBER' })
-      oauthApi.userRoles.mockReturnValue([])
+      elite2Api.getIepSummary.mockResolvedValue([{ iepLevel: 'Standard' }])
+      elite2Api.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
+      elite2Api.getStaffRoles.mockResolvedValue([])
+      elite2Api.userCaseLoads.mockResolvedValue([])
+      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
+      oauthApi.userRoles.mockResolvedValue([])
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
     })
 
@@ -133,17 +133,17 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {
-      elite2Api.getIepSummary.mockReturnValue([])
-      elite2Api.getCaseNoteSummaryByTypes.mockReturnValue([])
-      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockReturnValue(null)
+      elite2Api.getIepSummary.mockResolvedValue([])
+      elite2Api.getCaseNoteSummaryByTypes.mockResolvedValue([])
+      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
 
       const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
       expect(getPrisonerProfileData).toEqual(
         expect.objectContaining({
-          incentiveLevel: false,
-          keyWorkerLastSession: false,
-          keyWorkerName: false,
+          incentiveLevel: undefined,
+          keyWorkerLastSession: undefined,
+          keyWorkerName: null,
         })
       )
     })
@@ -151,7 +151,7 @@ describe('prisoner profile service', () => {
     describe('prisoner profile links', () => {
       describe('when the the prisoner is out and user can view inactive bookings', () => {
         beforeEach(() => {
-          oauthApi.userRoles.mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
           elite2Api.getDetails.mockReturnValue({ ...prisonerDetails, agencyId: 'OUT' })
         })
 
@@ -168,7 +168,7 @@ describe('prisoner profile service', () => {
 
       describe('when the prisoner is in the users caseload', () => {
         beforeEach(() => {
-          elite2Api.userCaseLoads.mockReturnValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+          elite2Api.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
         })
 
         it('should allow the user to edit and show correct category link text', async () => {
@@ -185,7 +185,7 @@ describe('prisoner profile service', () => {
 
       describe('when the user has categorisation roles', () => {
         beforeEach(() => {
-          oauthApi.userRoles.mockReturnValue([{ roleCode: 'CREATE_CATEGORISATION' }])
+          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CREATE_CATEGORISATION' }])
         })
 
         it('should show correct category link text', async () => {
@@ -201,7 +201,7 @@ describe('prisoner profile service', () => {
 
       describe('when the user is a keyworker', () => {
         beforeEach(() => {
-          elite2Api.getStaffRoles.mockReturnValue([{ role: 'KW' }])
+          elite2Api.getStaffRoles.mockResolvedValue([{ role: 'KW' }])
         })
 
         it('should enable the user to add a keyworker session', async () => {
@@ -229,6 +229,30 @@ describe('prisoner profile service', () => {
             })
           )
         })
+      })
+    })
+
+    describe('when there are errors with retrieving information', () => {
+      beforeEach(() => {
+        elite2Api.getIepSummary.mockRejectedValue(new Error('Network error'))
+        elite2Api.getCaseNoteSummaryByTypes.mockRejectedValue(new Error('Network error'))
+        elite2Api.userCaseLoads.mockRejectedValue(new Error('Network error'))
+        elite2Api.getStaffRoles.mockRejectedValue(new Error('Network error'))
+        keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockRejectedValue(new Error('Network error'))
+        oauthApi.userRoles.mockRejectedValue(new Error('Network error'))
+      })
+
+      it('should still pass those values as null', async () => {
+        const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(getPrisonerProfileData).toEqual(
+          expect.objectContaining({
+            incentiveLevel: null,
+            keyWorkerLastSession: null,
+            showAddKeyworkerSession: null,
+            userCanEdit: null,
+          })
+        )
       })
     })
   })

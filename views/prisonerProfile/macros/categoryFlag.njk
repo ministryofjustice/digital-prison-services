@@ -1,0 +1,18 @@
+{% macro categoryFlag(categoryText, categoryCode) %}
+  {% set classes = 'cat-a-status cat-a-status--' + categoryCode if categoryCode in ['A', 'E', 'H', 'P'] %}
+  {% set text %}
+    {% if categoryCode in ['A', 'E'] %}
+      CAT A
+    {% elif categoryCode === 'H' %}
+      CAT A High
+    {% elif categoryCode === 'P' %}
+      CAT A Prov
+    {% else %}
+      {{ categoryText | showDefault }}
+    {% endif %}
+  {% endset %}
+
+  <span class="{{ classes | lower }}">
+    {{ text }}
+  </span>
+{% endmacro %}
