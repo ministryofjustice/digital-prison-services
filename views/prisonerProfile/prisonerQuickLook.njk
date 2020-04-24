@@ -1,14 +1,11 @@
-{% extends "../partials/layout.njk" %}
-{% from "./macros/scheduledActivities.njk" import scheduledActivities %}
+{% extends "./layouts/prisonerLayout.njk" %}
+{% from "./macros/prisonerScheduledActivities.njk" import scheduledActivities %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set title = "Quick Look" %}
 {% set containerClasses = "prisoner-profile" %}
 
-{% block content %}
-  {% include "./partials/prisonerProfileHeader.njk" %}
-  {% include "./partials/prisonerProfileTabs.njk" %}
-
+{% block prisonerProfileSection %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <div class="govuk-!-margin-bottom-6">
