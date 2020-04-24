@@ -359,15 +359,17 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       })
 
       const suspendedActivites = scheduledActivities.filter(activity => activity.suspended)
+      const totalOffenders = new Set(suspendedActivites.map(activity => activity.bookingId)).size
 
+      // Create mapping between date and a set of bookings with suspended activities on that date
+      // This mapping will be used to get the relevant attendances for each date
       const suspendedBookingsPerEventDate = {}
-
       suspendedActivites.forEach(activity => {
         const date = moment(activity.startTime).format('YYYY-MM-DD')
         if (!suspendedBookingsPerEventDate[date]) {
-          suspendedBookingsPerEventDate[date] = []
+          suspendedBookingsPerEventDate[date] = new Set()
         }
-        suspendedBookingsPerEventDate[date].push(activity.bookingId)
+        suspendedBookingsPerEventDate[date].add(activity.bookingId)
       })
 
       const getAttendances = async (periodsList, data) => {
@@ -400,7 +402,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         return `${data.paid ? 'Yes' : 'No'} - ${pascalToString(data.absentReason).toLowerCase()}`
       }
 
-      const totalOffenders = new Set(suspendedActivites.map(activity => activity.bookingId)).size
       const offendersData = suspendedActivites.map(activity => {
         const attendanceDetails = suspendedAttendances.find(
           attendance =>
