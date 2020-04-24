@@ -198,7 +198,7 @@ const elite2ApiFactory = client => {
   const getOffenderActivitiesOverDateRange = (context, { agencyId, fromDate, toDate, period }) =>
     get(
       context,
-      `/api/schedules/${agencyId}/activities-over-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}`
+      `/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`
     )
 
   const getAlertTypes = context => get(context, '/api/reference-domains/alertTypes', 1000)

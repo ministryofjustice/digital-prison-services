@@ -111,13 +111,22 @@
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-
-    <h2 class="govuk-heading-m">Not recorded</h2>
-
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-quarter">
         <p class="govuk-body">Unaccounted for</p>
         <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.notRecorded}}</span>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <p class="govuk-body">Suspended</p>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
+            {% if dashboardStats.suspended > 0 %}
+              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/suspended?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
+                {{dashboardStats.suspended}}
+              </a>
+            {% else %}
+              {{dashboardStats.suspended}}
+            {% endif %}
+        </span>
       </div>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -164,14 +173,6 @@
           </span>
         </div>
       {% endfor %}
-    </div>
-
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    <h2 class="govuk-heading-m">Suspended</h2>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-quarter">
-        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">{{dashboardStats.suspended}}</span>
-      </div>
     </div>
 
 {% endblock %}
