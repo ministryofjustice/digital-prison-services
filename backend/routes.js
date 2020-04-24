@@ -94,6 +94,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
     if (!userDetails) {
       req.session.userDetails = await oauthApi.currentUser(res.locals)
     }
+    res.locals.currentUrlPath = req.originalUrl
     next()
   })
 
