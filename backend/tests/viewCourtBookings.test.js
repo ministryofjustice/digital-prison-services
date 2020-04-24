@@ -10,15 +10,12 @@ describe('View court bookings', () => {
   let logError
   let controller
 
-  const activeCaseLoadId = 'MDI'
-
   beforeEach(() => {
     req = {
       query: {},
       originalUrl: 'http://localhost',
       session: {
         userDetails: {
-          activeCaseLoadId,
           name: 'Test User',
         },
       },
@@ -53,7 +50,7 @@ describe('View court bookings', () => {
       await controller(req, res)
 
       expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
-        agencyId: activeCaseLoadId,
+        agencyId: 'WWI',
         date: '2020-01-01',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
@@ -89,7 +86,7 @@ describe('View court bookings', () => {
             locationDescription: 'HEALTH CARE',
             locationId: 123,
             auditUserId: 'STAFF_1',
-            agencyId: 'MDI',
+            agencyId: 'WWI',
           },
           {
             id: 2,
@@ -104,7 +101,7 @@ describe('View court bookings', () => {
             locationDescription: 'GYM',
             locationId: 456,
             auditUserId: 'STAFF_2',
-            agencyId: 'MDI',
+            agencyId: 'WWI',
           },
           {
             id: 3,
@@ -119,7 +116,7 @@ describe('View court bookings', () => {
             locationDescription: 'VCC ROOM',
             locationId: 789,
             auditUserId: 'STAFF_3',
-            agencyId: 'MDI',
+            agencyId: 'WWI',
           },
           {
             id: 4,
@@ -134,7 +131,7 @@ describe('View court bookings', () => {
             locationDescription: 'VCC ROOM',
             locationId: 456,
             auditUserId: 'STAFF_2',
-            agencyId: 'MDI',
+            agencyId: 'WWI',
           },
           {
             id: 5,
@@ -149,7 +146,7 @@ describe('View court bookings', () => {
             locationDescription: 'VCC ROOM',
             locationId: 456,
             auditUserId: 'STAFF_2',
-            agencyId: 'MDI',
+            agencyId: 'WWI',
           },
         ])
 
@@ -196,7 +193,7 @@ describe('View court bookings', () => {
         await controller(req, res)
 
         expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
-          agencyId: activeCaseLoadId,
+          agencyId: 'WWI',
           date: '2020-01-02',
         })
         expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5])
