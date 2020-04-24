@@ -5,7 +5,8 @@ const { getTime, properCaseName } = require('../../utils')
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { date, courtOption } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
-  const agencyId = req.session.userDetails.activeCaseLoadId
+  // FIXME: Temporary fix while waiting for new API
+  const agencyId = 'WWI'
   const user = {
     displayName: req.session.userDetails.name,
   }
@@ -21,6 +22,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
   }
 
   try {
+    // FIXME: Replace with API with returns appointments for whole estate
     const [courts, appointments] = await Promise.all([
       getCourts(res.locals),
       elite2Api.getAppointmentsForAgency(res.locals, {
