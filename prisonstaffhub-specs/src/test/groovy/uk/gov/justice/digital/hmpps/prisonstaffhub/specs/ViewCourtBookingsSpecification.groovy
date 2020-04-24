@@ -25,7 +25,7 @@ class ViewCourtBookingsSpecification extends BrowserReportingSpec {
     def "should display no results"() {
         setupTests()
 
-        elite2api.stubGetAppointmentsForAgency(UserAccount.ITAG_USER.workingCaseload.id, [])
+        elite2api.stubGetAppointmentsForAgency("WWI", [])
         whereaboutsApi.getVideoLinkAppointments([])
 
         when: "I navigate to the view bookings list page"
@@ -87,7 +87,7 @@ class ViewCourtBookingsSpecification extends BrowserReportingSpec {
     def setupTestsWithData() {
         setupTests()
 
-        elite2api.stubGetAppointmentsForAgency(UserAccount.ITAG_USER.workingCaseload.id, [
+        elite2api.stubGetAppointmentsForAgency("WWI", [
                 [
                         id                        : 1,
                         offenderNo                : 'ABC123',
@@ -100,7 +100,7 @@ class ViewCourtBookingsSpecification extends BrowserReportingSpec {
                         locationDescription       : 'HEALTH CARE',
                         locationId                : 123,
                         createUserId              : 'STAFF_1',
-                        agencyId                  : 'MDI'
+                        agencyId                  : 'WWI'
                 ],
                 [
                         id                        : 2,
@@ -115,7 +115,7 @@ class ViewCourtBookingsSpecification extends BrowserReportingSpec {
                         locationDescription       : 'GYM',
                         locationId                : 456,
                         createUserId              : 'STAFF_2',
-                        agencyId                  : 'MDI',
+                        agencyId                  : 'WWI',
                 ],
                 [
                         id                        : 3,
@@ -130,7 +130,7 @@ class ViewCourtBookingsSpecification extends BrowserReportingSpec {
                         locationDescription       : 'VCC ROOM',
                         locationId                : 789,
                         createUserId              : 'API_PROXY_USER',
-                        agencyId                  : 'MDI',
+                        agencyId                  : 'WWI',
                 ],
                 [
                         id                        : 4,
@@ -145,7 +145,7 @@ class ViewCourtBookingsSpecification extends BrowserReportingSpec {
                         locationDescription       : 'VCC ROOM',
                         locationId                : 789,
                         createUserId              : 'API_PROXY_USER',
-                        agencyId                  : 'MDI',
+                        agencyId                  : 'WWI',
                 ],
         ])
         whereaboutsApi.getVideoLinkAppointments([
