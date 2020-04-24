@@ -612,7 +612,7 @@ describe('Attendance reason statistics', () => {
   })
 
   describe('Suspended Controller', () => {
-    it('should render the list of offenders who are suspended on the given date and period', async () => {
+    beforeEach(() => {
       elite2Api.getOffenderActivitiesOverDateRange.mockReturnValue([
         {
           bookingId: 1133341,
@@ -694,7 +694,36 @@ describe('Attendance reason statistics', () => {
           },
         ],
       })
+    })
 
+    it('should call the right APIs with the right data', async () => {
+      const req = { query: { agencyId, fromDate, toDate, period } }
+      const res = { locals: {}, render: jest.fn() }
+
+      const { attendanceStatisticsSuspendedList } = attendanceStatisticsFactory(
+        oauthApi,
+        elite2Api,
+        whereaboutsApi,
+        jest.fn()
+      )
+
+      await attendanceStatisticsSuspendedList(req, res)
+
+      expect(elite2Api.getOffenderActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
+        agencyId,
+        fromDate: '2019-10-10',
+        toDate: '2019-10-11',
+        period,
+      })
+      expect(whereaboutsApi.getAttendanceForBookings).toHaveBeenCalledWith(res.locals, {
+        bookings: [1133341, 1133342, 1133343],
+        agencyId,
+        date: '2019-10-10',
+        period,
+      })
+    })
+
+    it('should render the list of offenders who are suspended on the given date and period', async () => {
       const { attendanceStatisticsSuspendedList } = attendanceStatisticsFactory(
         oauthApi,
         elite2Api,
