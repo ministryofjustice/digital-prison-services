@@ -7,12 +7,12 @@
 
 {% block content %}
   {% include "./partials/prisonerProfileHeader.njk" %}
+  {% include "./partials/prisonerProfileTabs.njk" %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <div class="govuk-!-margin-bottom-6">
         <h3 class="govuk-heading-m">Offences</h3>
-        
         {% set offenceRows = [] %}
 
         {% for offence in offenceDetails %}
