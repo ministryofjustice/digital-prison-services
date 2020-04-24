@@ -26,8 +26,8 @@
 {% endblock %}
 {% block content %}
 
-<span class="govuk-caption-xl">{{displayDate}} - {{displayPeriod}}</span>
-<h1 class="govuk-heading-xl">{{title}}</h1>
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{title}}</h1>
+<p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}}</p>
 
 {{ govukSelect({
         id: "sortingOptions",
