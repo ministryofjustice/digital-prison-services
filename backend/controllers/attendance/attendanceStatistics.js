@@ -381,7 +381,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
                 const attendances = await whereaboutsApi.getAttendanceForBookings(res.locals, {
                   agencyId,
                   period: periodItem,
-                  bookings: data[date],
+                  bookings: [...data[date]],
                   date,
                 })
                 suspendedAttendancesList.push(...attendances.attendances)
