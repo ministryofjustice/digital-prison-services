@@ -1,4 +1,4 @@
-const prisonerQuickLook = require('../controllers/prisonerProfile/prisonerQuickLook.js')
+const prisonerQuickLook = require('../controllers/prisonerProfile/prisonerQuickLook')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner profile quick look', () => {

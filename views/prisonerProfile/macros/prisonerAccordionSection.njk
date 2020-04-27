@@ -1,0 +1,15 @@
+{% macro accordionSection(title, html, number) %}
+  {% set controllerId = "prisoner-accordion-heading-" + number %}
+  <div class="govuk-accordion__section ">
+    <div class="govuk-accordion__section-header">
+      <h2 class="govuk-accordion__section-heading">
+        <span class="govuk-accordion__section-button" id="{{ controllerId }}">
+          {{ title }}
+        </span>
+      </h2>
+    </div>
+    <div id="{{ 'prisoner-accordion-content-' + number }} " class="govuk-accordion__section-content" aria-labelledby="{{ controllerId }}">
+      {{ html | safe }}
+    </div>
+  </div>
+{% endmacro %}
