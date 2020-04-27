@@ -1,4 +1,4 @@
-// Whenever we have/want to diverge from govuk-frontend 
+// Whenever we have/want to diverge from govuk-frontend
 .prisoner-profile {
   .govuk-summary-list__key {
     margin-bottom: govuk-spacing(1);
@@ -7,7 +7,7 @@
       width: 50%;
     }
   }
-  
+
   .govuk-summary-list__value {
     @include govuk-media-query($until: tablet) {
       margin-bottom: govuk-spacing(3);
