@@ -1,9 +1,32 @@
 {% extends "./layouts/prisonerLayout.njk" %}
 {% from "./macros/prisonerAccordionSection.njk" import accordionSection %}
 {% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set title = "Personal" %}
 {% set containerClasses = "prisoner-profile" %}
+
+{% set identifierContent %}
+  {% set identifierRows = [] %}
+
+  {% for identifier in identifiers %}
+    {% set identifierRows = (identifierRows.push(
+      {
+        key: {
+          text: identifier.label
+        },
+        value: {
+          text: identifier.value | showDefault
+        }
+      }
+    ), identifierRows) %}
+  {% endfor %}
+
+  {{ govukSummaryList({
+    rows: identifierRows,
+    classes: "govuk-!-margin-bottom-2"
+  }) }}
+{% endset %}
 
 {% set leftSections = [
     { heading: 'Personal details', html: '<p class="govuk-body">Personal details content</p>' },
@@ -16,7 +39,7 @@
 
 {% set rightSections = [
     { heading: 'Aliases', html: '<p class="govuk-body">Aliases content</p>' },
-    { heading: 'Identifiers', html: '<p class="govuk-body">Identifiers content</p>' },
+    { heading: 'Identifiers', html: identifierContent },
     { heading: 'Addresses', html: '<p class="govuk-body">Addresses content</p>' },
     { heading: 'Active contacts', html: '<p class="govuk-body">Active contacts content</p>' }
   ]

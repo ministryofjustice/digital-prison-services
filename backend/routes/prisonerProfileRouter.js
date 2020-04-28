@@ -11,7 +11,7 @@ const controller = ({ elite2Api, keyworkerApi, oauthApi, logError }) => {
 
   router.get('/', prisonerQuickLook({ prisonerProfileService, elite2Api, logError }))
   router.get('/image', prisonerFullImage({ elite2Api, logError }))
-  router.get('/personal', prisonerPersonal({ prisonerProfileService }))
+  router.get('/personal', prisonerPersonal({ prisonerProfileService, elite2Api, logError }))
 
   return router
 }
