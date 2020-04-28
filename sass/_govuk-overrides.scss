@@ -22,4 +22,17 @@
       width: 50%;
     }
   }
+
+  // Handle borders on govukuk-accordions split over 2 columns
+  .govuk-accordion--split {
+    @include govuk-media-query($from: tablet) {
+      border-bottom: none;
+
+      .govuk-accordion__section {
+        &:last-of-type {
+          border-bottom: 1px solid $govuk-border-colour;
+        }
+      }
+    }
+  }
 }
