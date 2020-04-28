@@ -54,8 +54,6 @@ describe('prisoner profile quick look', () => {
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
-    elite2Api.getDetails.mockResolvedValue({ bookingId })
-
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)

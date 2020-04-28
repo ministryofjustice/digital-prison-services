@@ -237,6 +237,8 @@ const elite2ApiFactory = client => {
 
   const getEventsForToday = (context, bookingId) => get(context, `/api/bookings/${bookingId}/events/today`)
 
+  const getIdentifiers = (context, bookingId) => get(context, `/api/bookings/${bookingId}/identifiers`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -304,6 +306,7 @@ const elite2ApiFactory = client => {
     getNegativeCaseNotes,
     getPrisonerVisitBalances,
     getEventsForToday,
+    getIdentifiers,
   }
 }
 
