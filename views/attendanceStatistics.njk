@@ -2,6 +2,7 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
@@ -43,10 +44,9 @@
     }) }}
   {% endif %}
 
-  <form action="/manage-prisoner-whereabouts/attendance-reason-statistics">
-    <div class="govuk-grid-row">
+  <form action="/manage-prisoner-whereabouts/attendance-reason-statistics" class="horizontal-form govuk-!-display-none-print govuk-!-margin-bottom-2">
       <input type="hidden" name="agencyId" value="{{caseLoadId}}"/>
-      <div class="govuk-grid-column-one-quarter">
+      
         {{ datePicker({
             id: 'fromDate',
             label: 'Date',
@@ -56,43 +56,42 @@
             attributes: {'data-disable-future-date':'true'},
             errorMessage: errors | findError('fromDate')
         }) }}
-      </div>
 
-      <div class="govuk-grid-column-one-quarter">
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="period">
-            Period
-          </label>
+        {{ govukSelect({
+            name: 'period',
+            id: 'period',
+            label: {
+                text: "Period"
+            },
+            items: [
+              {
+                text: 'AM',
+                value: 'AM'
+              },
+              {
+                text: 'PM',
+                value: 'PM'
+              },
+              {
+                text: 'ED',
+                value: 'ED'
+              },
+              {
+                text: 'AM and PM',
+                value: 'AM_PM'
+              }
+            ] | addDefaultSelectedVale('Select', true) | setSelected(period),
+            errorMessage: errors | findError(period)
+          }) }}
 
-          <select class="govuk-select govuk-!-width-full" id="period" name="period" value={{ periodToSet }}>
-            <option hidden selected value="">
-             Select
-            </option>
-            <option value="AM" {% if period === "AM" %} selected {%endif%}>
-              AM
-            </option>
-            <option value="PM" {% if period === "PM" %} selected {%endif%}>
-              PM
-            </option>
-            <option value="ED" {% if period === "ED" %} selected {%endif%}>
-              ED
-            </option>
-            <option value="AM_PM" {% if period === "AM_PM" %} selected {%endif%}>
-              AM and PM
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="govuk-grid-column-one-quarter">
+  
         {{
           govukButton({
             type: submit,
             text: 'Update results',
-            classes: 'govuk-button govuk-!-margin-top-6'
+            classes: 'govuk-button'
           })
         }}
-      </div>
-    </div>
   </form>
 
   <div class="govuk-grid-row">
