@@ -37,16 +37,18 @@
   {% set identifierRows = [] %}
 
   {% for identifier in identifiers %}
-    {% set identifierRows = (identifierRows.push(
-      {
-        key: {
-          text: identifier.label
-        },
-        value: {
-          text: identifier.value | showDefault
+    {% if identifier.value or identifier.alwaysShow %}
+      {% set identifierRows = (identifierRows.push(
+        {
+          key: {
+            text: identifier.label
+          },
+          value: {
+            text: identifier.value | showDefault('Not entered')
+          }
         }
-      }
-    ), identifierRows) %}
+      ), identifierRows) %}
+    {% endif %}
   {% endfor %}
 
   {{ govukSummaryList({

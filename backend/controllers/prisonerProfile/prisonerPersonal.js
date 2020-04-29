@@ -34,7 +34,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
   return res.render('prisonerProfile/prisonerPersonal.njk', {
     prisonerProfileData,
     identifiers: [
-      { label: 'PNC number', value: getIdentifierValue('PNC', identifierData) },
+      { label: 'PNC number', value: getIdentifierValue('PNC', identifierData), alwaysShow: true },
       { label: 'CRO number', value: getIdentifierValue('CRO', identifierData) },
       { label: 'National insurance number', value: getIdentifierValue('NINO', identifierData) },
       { label: 'Home office reference number', value: getIdentifierValue('HOREF', identifierData) },
