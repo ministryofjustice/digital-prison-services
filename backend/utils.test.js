@@ -14,6 +14,7 @@ import {
   getDate,
   getTime,
   chunkArray,
+  putLastNameFirst,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -303,5 +304,23 @@ describe('chunkArray()', () => {
     const arrayWithFourThings = ['Item 1', 'Item 2', 'Item 3', 'Item 4']
 
     expect(chunkArray(arrayWithFourThings, 2)).toEqual([['Item 1', 'Item 2'], ['Item 3', 'Item 4']])
+  })
+})
+
+describe('putLastNameFirst()', () => {
+  it('should return null if no names specified', () => {
+    expect(putLastNameFirst()).toEqual(null)
+  })
+
+  it('should return correctly formatted last name if no first name specified', () => {
+    expect(putLastNameFirst('', 'LASTNAME')).toEqual('Lastname')
+  })
+
+  it('should return correctly formatted first name if no last name specified', () => {
+    expect(putLastNameFirst('FIRSTNAME')).toEqual('Firstname')
+  })
+
+  it('should return correctly formatted last name and first name if both specified', () => {
+    expect(putLastNameFirst('FIRSTNAME', 'LASTNAME')).toEqual('Lastname, Firstname')
   })
 })

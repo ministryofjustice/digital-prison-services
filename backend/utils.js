@@ -207,10 +207,12 @@ const capitalizeUppercaseString = string =>
         .join(' ')
     : null
 
-const map404ToNull = error => {
-  if (!error.response || !error.response.status || error.response.status !== 404) throw error
+const putLastNameFirst = (firstName, lastName) => {
+  if (!firstName && !lastName) return null
+  if (!firstName && lastName) return properCaseName(lastName)
+  if (firstName && !lastName) return properCaseName(firstName)
 
-  return null
+  return `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 }
 
 module.exports = {
@@ -245,5 +247,5 @@ module.exports = {
   hyphenatedStringToCamel,
   formatCurrency,
   capitalizeUppercaseString,
-  map404ToNull,
+  putLastNameFirst,
 }
