@@ -43,7 +43,7 @@ const periodDisplayLookup = {
   AM: 'AM',
   PM: 'PM',
   ED: 'ED',
-  AM_PM: 'AM + PM',
+  AM_PM: 'AM and PM',
 }
 
 const extractCaseLoadInfo = caseloads => {
