@@ -71,7 +71,7 @@ describe('prisoner personal', () => {
           'prisonerProfile/prisonerPersonal.njk',
           expect.objectContaining({
             identifiers: [
-              { label: 'PNC number', value: undefined },
+              { label: 'PNC number', value: undefined, alwaysShow: true },
               { label: 'CRO number', value: undefined },
               { label: 'National insurance number', value: undefined },
               { label: 'Home office reference number', value: undefined },
@@ -102,7 +102,7 @@ describe('prisoner personal', () => {
           'prisonerProfile/prisonerPersonal.njk',
           expect.objectContaining({
             identifiers: [
-              { label: 'PNC number', value: '1234' },
+              { label: 'PNC number', value: '1234', alwaysShow: true },
               { label: 'CRO number', value: '2345' },
               { label: 'National insurance number', value: '3456' },
               { label: 'Home office reference number', value: '4567' },
@@ -175,7 +175,7 @@ describe('prisoner personal', () => {
         'prisonerProfile/prisonerPersonal.njk',
         expect.objectContaining({
           identifiers: [
-            { label: 'PNC number', value: null },
+            { label: 'PNC number', value: null, alwaysShow: true },
             { label: 'CRO number', value: null },
             { label: 'National insurance number', value: null },
             { label: 'Home office reference number', value: null },
