@@ -56,7 +56,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
     const eventIds = [...new Set(changes.map(change => change.eventId))]
     const activities = await elite2Api.getScheduledActivities(res.locals, { agencyId: 'MDI', eventIds })
 
-    const userNames = [...new Set(changes.map(change => oauthApi.userDetails(res.locals, change.changedBy)))]
+    const userNames = [...new Set(changes.map(change => change.changedBy))]
     const userDetails = await Promise.all(userNames.map(username => oauthApi.userDetails(res.locals, username)))
 
     const activitiesMap = toActivitiesMap(activities)
