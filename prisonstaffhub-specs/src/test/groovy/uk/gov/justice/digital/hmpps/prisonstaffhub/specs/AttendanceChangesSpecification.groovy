@@ -54,6 +54,6 @@ class AttendanceChangesSpecification extends BrowserReportingSpec {
         at AttendanceChangesPage
 
         then: "There should be changes displayed"
-        assert tableRows[1].text() == 'Bob Sut A123456 Houseblock 1 Attended Refused 10 October 2010 - 20:00 staff user'
+        assert tableRows[1].text() == 'Sut, Bob A123456 Houseblock 1 Attended Refused 10 October 2010 - 20:00 staff user'
     }
 }

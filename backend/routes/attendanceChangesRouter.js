@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { formatName, capitalize, pascalToString } = require('../utils')
+const { properCaseName, capitalize, pascalToString } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 const {
@@ -77,7 +77,9 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
 
       return [
         {
-          html: `<a href="${dpsUrl}offenders/${offenderNo}" class="govuk-link">${formatName(firstName, lastName)}</a>`,
+          html: `<a href="${dpsUrl}offenders/${offenderNo}" class="govuk-link">${properCaseName(
+            lastName
+          )}, ${properCaseName(firstName)}</a>`,
           attributes: {
             'data-sort-value': lastName,
           },
