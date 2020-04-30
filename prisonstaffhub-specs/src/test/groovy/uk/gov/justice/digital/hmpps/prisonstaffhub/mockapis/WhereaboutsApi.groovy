@@ -4,7 +4,13 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonOutput
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.put
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 
 public class WhereaboutsApi extends WireMockRule {
 
