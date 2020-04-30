@@ -49,7 +49,7 @@ describe('Attendance change router', () => {
 
   it('should make a request for scheduled activity that has been changed', async () => {
     whereaboutsApi.getAttendanceChanges.mockReturnValue({
-      changes: [{ eventId: 1 }, { eventId: 2 }],
+      changes: [{ eventId: 1 }, { eventId: 1 }, { eventId: 2 }],
     })
 
     await router(req, res)
@@ -59,7 +59,11 @@ describe('Attendance change router', () => {
 
   it('should make a request to get user details', async () => {
     whereaboutsApi.getAttendanceChanges.mockReturnValue({
-      changes: [{ eventId: 1, changedBy: 'username1' }, { eventId: 2, changedBy: 'username2' }],
+      changes: [
+        { eventId: 1, changedBy: 'username1' },
+        { eventId: 2, changedBy: 'username2' },
+        { eventId: 3, changedBy: 'username2' },
+      ],
     })
 
     await router(req, res)
