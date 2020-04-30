@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { properCaseName } = require('../utils')
+const { putLastNameFirst } = require('../utils')
 const alertFlagValues = require('../shared/alertFlagValues')
 const {
   apis: {
@@ -74,13 +74,11 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
-      keyWorkerName:
-        keyworkerDetails &&
-        `${properCaseName(keyworkerDetails.lastName)}, ${properCaseName(keyworkerDetails.firstName)}`,
+      keyWorkerName: keyworkerDetails && putLastNameFirst(keyworkerDetails.firstName, keyworkerDetails.lastName),
       inactiveAlertCount,
       location: assignedLivingUnit.description,
       notmEndpointUrl,
-      offenderName: `${properCaseName(prisonerDetails.lastName)}, ${properCaseName(prisonerDetails.firstName)}`,
+      offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       showAddKeyworkerSession: staffRoles && staffRoles.some(role => role.role === 'KW'),
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),

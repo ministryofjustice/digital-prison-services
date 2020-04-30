@@ -324,7 +324,7 @@ describe('Attendance reason statistics', () => {
           shouldClearFormValues: true,
           toDate: '11/10/2019',
           displayDate: '10 October 2019 to 11 October 2019',
-          displayPeriod: 'AM + PM',
+          displayPeriod: 'AM and PM',
           inactiveCaseLoads: [],
           title: 'Attendance reason statistics',
           user: {
@@ -536,7 +536,7 @@ describe('Attendance reason statistics', () => {
         title: 'Acceptable absence',
         reason: 'Acceptable absence',
         displayDate: '10 October 2019 to 11 October 2019',
-        displayPeriod: 'AM + PM',
+        displayPeriod: 'AM and PM',
         offenders: [
           [
             { html: 'Smith, Adam' },

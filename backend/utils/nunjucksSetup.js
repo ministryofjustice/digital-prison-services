@@ -123,10 +123,10 @@ module.exports = (app, path) => {
       }))
   )
 
-  njkEnv.addFilter('showDefault', value => {
+  njkEnv.addFilter('showDefault', (value, specifiedText) => {
     if (value === 0) return value
 
-    return value || '--'
+    return value || specifiedText || '--'
   })
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)

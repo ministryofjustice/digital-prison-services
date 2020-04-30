@@ -35,6 +35,7 @@ describe('prisoner personal', () => {
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({})
     elite2Api.getIdentifiers = jest.fn().mockResolvedValue([])
+    elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
     controller = prisonerPersonal({ prisonerProfileService, elite2Api, logError })
   })
 
@@ -70,7 +71,7 @@ describe('prisoner personal', () => {
           'prisonerProfile/prisonerPersonal.njk',
           expect.objectContaining({
             identifiers: [
-              { label: 'PNC number', value: undefined },
+              { label: 'PNC number', value: undefined, alwaysShow: true },
               { label: 'CRO number', value: undefined },
               { label: 'National insurance number', value: undefined },
               { label: 'Home office reference number', value: undefined },
@@ -101,7 +102,7 @@ describe('prisoner personal', () => {
           'prisonerProfile/prisonerPersonal.njk',
           expect.objectContaining({
             identifiers: [
-              { label: 'PNC number', value: '1234' },
+              { label: 'PNC number', value: '1234', alwaysShow: true },
               { label: 'CRO number', value: '2345' },
               { label: 'National insurance number', value: '3456' },
               { label: 'Home office reference number', value: '4567' },
@@ -113,10 +114,58 @@ describe('prisoner personal', () => {
     })
   })
 
+  describe('aliases', () => {
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    it('should make a call for identifiers data', async () => {
+      await controller(req, res)
+
+      expect(elite2Api.getOffenderAliases).toHaveBeenCalledWith(res.locals, bookingId)
+    })
+
+    describe('when there is missing aliases data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            aliases: [],
+          })
+        )
+      })
+    })
+
+    describe('when there is aliases data', () => {
+      beforeEach(() => {
+        elite2Api.getOffenderAliases = jest
+          .fn()
+          .mockResolvedValue([
+            { firstName: 'First', lastName: 'Alias', dob: '1985-08-31' },
+            { firstName: 'Second', lastName: 'Alias', dob: '1986-05-20' },
+          ])
+      })
+
+      it('should render the personal template with the correctly formatted data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            aliases: [{ label: 'Alias, First', value: '31/08/1985' }, { label: 'Alias, Second', value: '20/05/1986' }],
+          })
+        )
+      })
+    })
+  })
+
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
       elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
+      elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -126,12 +175,13 @@ describe('prisoner personal', () => {
         'prisonerProfile/prisonerPersonal.njk',
         expect.objectContaining({
           identifiers: [
-            { label: 'PNC number', value: null },
+            { label: 'PNC number', value: null, alwaysShow: true },
             { label: 'CRO number', value: null },
             { label: 'National insurance number', value: null },
             { label: 'Home office reference number', value: null },
             { label: 'Driving licence number', value: null },
           ],
+          aliases: null,
         })
       )
     })

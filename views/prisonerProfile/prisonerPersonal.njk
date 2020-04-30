@@ -6,20 +6,49 @@
 {% set title = "Personal" %}
 {% set containerClasses = "prisoner-profile" %}
 
+{% set aliasesContent %}
+  {% set aliasesRows = [] %}
+
+  {% for alias in aliases %}
+    {% set aliasesRows = (aliasesRows.push(
+      {
+        key: {
+          text: alias.label,
+          classes: "govuk-!-font-weight-regular"
+        },
+        value: {
+          text: alias.value | showDefault
+        }
+      }
+    ), aliasesRows) %}
+  {% endfor %}
+  
+  {% if aliasesRows.length %}
+    {{ govukSummaryList({
+      rows: aliasesRows,
+      classes: "govuk-!-margin-bottom-2"
+    }) }}
+  {% else %}
+    <p class="govuk-body">None</p>
+  {% endif %}
+{% endset %}
+
 {% set identifierContent %}
   {% set identifierRows = [] %}
 
   {% for identifier in identifiers %}
-    {% set identifierRows = (identifierRows.push(
-      {
-        key: {
-          text: identifier.label
-        },
-        value: {
-          text: identifier.value | showDefault
+    {% if identifier.value or identifier.alwaysShow %}
+      {% set identifierRows = (identifierRows.push(
+        {
+          key: {
+            text: identifier.label
+          },
+          value: {
+            text: identifier.value | showDefault('Not entered')
+          }
         }
-      }
-    ), identifierRows) %}
+      ), identifierRows) %}
+    {% endif %}
   {% endfor %}
 
   {{ govukSummaryList({
@@ -38,7 +67,7 @@
 %}
 
 {% set rightSections = [
-    { heading: 'Aliases', html: '<p class="govuk-body">Aliases content</p>' },
+    { heading: 'Aliases', html: aliasesContent },
     { heading: 'Identifiers', html: identifierContent },
     { heading: 'Addresses', html: '<p class="govuk-body">Addresses content</p>' },
     { heading: 'Active contacts', html: '<p class="govuk-body">Active contacts content</p>' }
