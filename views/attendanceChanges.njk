@@ -1,0 +1,90 @@
+{% extends "./partials/layout.njk" %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set title = "Changes to attendance reasons" %}
+{% set htmlClasses = "printed-page" %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: dpsUrl
+            },
+            {
+                text: "Manage prisoner whereabouts",
+                href: "/manage-prisoner-whereabouts"
+            },
+            {
+                text: "Attendance reason statistics",
+                href: "/manage-prisoner-whereabouts/attendance-reason-statistics"
+            },
+            {
+                text: "Changes to attendance reasons"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{title}}</h1>
+    <p class="govuk-body-l govuk-!-font-size-24">{{subHeading}} </p>
+        {{ govukTable({
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Prison no."
+                },
+                {
+                    text: "Activity",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Changed from",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Change to",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Date and time of change",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Changed by",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                }
+            ],
+            rows: attendanceChanges
+        }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $('table')[0],
+      })
+    </script>
+{% endblock %}

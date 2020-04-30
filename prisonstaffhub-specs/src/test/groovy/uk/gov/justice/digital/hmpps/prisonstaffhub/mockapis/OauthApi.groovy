@@ -189,6 +189,7 @@ class OauthApi extends WireMockRule {
                                         .withHeader('Content-Type', 'application/json')
                                         .withBody(JsonOutput.toJson([
                                                 name           : staffName,
+                                                username       : username
                                         ]))))
     }
 

@@ -239,6 +239,9 @@ const elite2ApiFactory = client => {
 
   const getIdentifiers = (context, bookingId) => get(context, `/api/bookings/${bookingId}/identifiers`)
 
+  const getScheduledActivities = (context, { agencyId, eventIds }) =>
+    post(context, `/api/schedules/${agencyId}/activities-by-event-ids`, eventIds)
+
   return {
     userLocations,
     userCaseLoads,
@@ -307,6 +310,7 @@ const elite2ApiFactory = client => {
     getPrisonerVisitBalances,
     getEventsForToday,
     getIdentifiers,
+    getScheduledActivities,
   }
 }
 

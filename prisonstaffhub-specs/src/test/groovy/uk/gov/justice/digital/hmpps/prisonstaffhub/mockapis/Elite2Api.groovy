@@ -924,5 +924,18 @@ class Elite2Api extends WireMockRule {
                         )
     }
 
+    void stubScheduledActivities(agencyId, response) {
+        this.stubFor(
+                post(urlPathEqualTo("/api/schedules/${agencyId}/activities-by-event-ids"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(response))
+                        )
+
+        )
+    }
+
 
 }
