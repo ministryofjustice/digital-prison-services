@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { formatName } = require('../utils')
+const { formatName, capitalize, pascalToString } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 const {
@@ -84,8 +84,8 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
         },
         { text: offenderNo },
         { text: activity },
-        { text: change.changedFrom },
-        { text: change.changedTo },
+        { text: capitalize(pascalToString(change.changedFrom)) },
+        { text: capitalize(pascalToString(change.changedTo)) },
         {
           text: moment(change.changedOn).format('D MMMM YYYY - HH:mm'),
           attributes: {

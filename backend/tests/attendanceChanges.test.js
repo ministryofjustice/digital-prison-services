@@ -116,7 +116,7 @@ describe('Attendance change router', () => {
             },
             { text: 'A23457' },
             { text: 'Kitchen' },
-            { text: 'AcceptableAbsence' },
+            { text: 'Acceptable absence' },
             { text: 'Refused' },
             { attributes: { 'data-sort-value': 1601632800 }, text: '2 October 2020 - 11:00' },
             { text: 'staff full name' },
