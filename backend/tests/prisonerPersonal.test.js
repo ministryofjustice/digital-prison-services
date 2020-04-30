@@ -39,10 +39,10 @@ describe('prisoner personal', () => {
     controller = prisonerPersonal({ prisonerProfileService, elite2Api, logError })
   })
 
-  it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
+  it('should make a call for the full details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal.njk',
@@ -155,6 +155,76 @@ describe('prisoner personal', () => {
           'prisonerProfile/prisonerPersonal.njk',
           expect.objectContaining({
             aliases: [{ label: 'Alias, First', value: '31/08/1985' }, { label: 'Alias, Second', value: '20/05/1986' }],
+          })
+        )
+      })
+    })
+  })
+
+  describe('physical characteristics', () => {
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    describe('when there is missing physical characteristic data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            physicalCharacteristics: [
+              { label: 'Height', value: undefined },
+              { label: 'Weight', value: undefined },
+              { label: 'Hair colour', value: undefined },
+              { label: 'Left eye colour', value: undefined },
+              { label: 'Right eye colour', value: undefined },
+              { label: 'Facial hair', value: undefined },
+              { label: 'Shape of face', value: undefined },
+              { label: 'Build', value: undefined },
+              { label: 'Shoe size', value: undefined },
+            ],
+          })
+        )
+      })
+    })
+
+    describe.skip('when there is physical characteristic data', () => {
+      beforeEach(() => {
+        elite2Api.getDetails = jest.fn().mockResolvedValue({
+          physicalAttributes: {
+            heightMetres: 1.91,
+            weightKilograms: 86,
+          },
+          physicalCharacteristics: [
+            { type: 'HAIR', detail: 'Brown' },
+            { type: 'R_EYE_C', detail: 'Green' },
+            { type: 'L_EYE_C', detail: 'Blue' },
+            { type: 'FACIAL_HAIR', detail: 'Moustache' },
+            { type: 'FACE', detail: 'Round' },
+            { type: 'BUILD', detail: 'Athletic' },
+            { type: 'SHOESIZE', detail: '12' },
+          ],
+        })
+      })
+
+      it('should render the personal template with the correctly formatted data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            physicalCharacteristics: [
+              { label: 'Height', value: '1.91m' },
+              { label: 'Weight', value: '86kg' },
+              { label: 'Hair colour', value: 'Brown' },
+              { label: 'Left eye colour', value: 'Green' },
+              { label: 'Right eye colour', value: 'Blue' },
+              { label: 'Facial hair', value: 'Moustache' },
+              { label: 'Shape of face', value: 'Round' },
+              { label: 'Build', value: 'Athletic' },
+              { label: 'Shoe size', value: '12' },
+            ],
           })
         )
       })

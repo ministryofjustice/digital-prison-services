@@ -6,22 +6,22 @@ const {
 } = require('../../config')
 const { putLastNameFirst } = require('../../utils')
 
-const getIdentifierValue = (type, identifiers) => {
-  const identifier = identifiers && identifiers.length > 0 ? identifiers.find(id => id.type === type) : identifiers
+const getValueByType = (type, array, key) => {
+  const value = array && array.length > 0 ? array.find(item => item.type === type) : array
 
-  return identifier && identifier.value
+  return value && value[key]
 }
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const details = await elite2Api
-    .getDetails(res.locals, offenderNo)
+    .getDetails(res.locals, offenderNo, true)
     .then(data => data)
     .catch(error => {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: dpsUrl })
     })
-  const { bookingId } = details || {}
+  const { bookingId, physicalAttributes, physicalCharacteristics } = details || {}
 
   const [prisonerProfileData, identifierData, aliasesData] = await Promise.all(
     [
@@ -34,11 +34,11 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
   return res.render('prisonerProfile/prisonerPersonal.njk', {
     prisonerProfileData,
     identifiers: [
-      { label: 'PNC number', value: getIdentifierValue('PNC', identifierData), alwaysShow: true },
-      { label: 'CRO number', value: getIdentifierValue('CRO', identifierData) },
-      { label: 'National insurance number', value: getIdentifierValue('NINO', identifierData) },
-      { label: 'Home office reference number', value: getIdentifierValue('HOREF', identifierData) },
-      { label: 'Driving licence number', value: getIdentifierValue('DL', identifierData) },
+      { label: 'PNC number', value: getValueByType('PNC', identifierData, 'value'), alwaysShow: true },
+      { label: 'CRO number', value: getValueByType('CRO', identifierData, 'value') },
+      { label: 'National insurance number', value: getValueByType('NINO', identifierData, 'value') },
+      { label: 'Home office reference number', value: getValueByType('HOREF', identifierData, 'value') },
+      { label: 'Driving licence number', value: getValueByType('DL', identifierData, 'value') },
     ],
     aliases:
       aliasesData &&
@@ -46,5 +46,22 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         label: putLastNameFirst(alias.firstName, alias.lastName),
         value: alias.dob && moment(alias.dob).format('DD/MM/YYYY'),
       })),
+    physicalCharacteristics: [
+      {
+        label: 'Height',
+        value: physicalAttributes && physicalAttributes.heightMetres && `${physicalAttributes.heightMetres}m`,
+      },
+      {
+        label: 'Weight',
+        value: physicalAttributes && physicalAttributes.weightKilograms && `${physicalAttributes.weightKilograms}kg`,
+      },
+      { label: 'Hair colour', value: getValueByType('HAIR', physicalCharacteristics, 'detail') },
+      { label: 'Left eye colour', value: getValueByType('L_EYE_C', physicalCharacteristics, 'detail') },
+      { label: 'Right eye colour', value: getValueByType('R_EYE_C', physicalCharacteristics, 'detail') },
+      { label: 'Facial hair', value: getValueByType('FACIAL_HAIR', physicalCharacteristics, 'detail') },
+      { label: 'Shape of face', value: getValueByType('FACE', physicalCharacteristics, 'detail') },
+      { label: 'Build', value: getValueByType('BUILD', physicalCharacteristics, 'detail') },
+      { label: 'Shoe size', value: getValueByType('SHOESIZE', physicalCharacteristics, 'detail') },
+    ],
   })
 }

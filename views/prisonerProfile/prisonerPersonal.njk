@@ -5,6 +5,33 @@
 
 {% set title = "Personal" %}
 {% set containerClasses = "prisoner-profile" %}
+{% set missingEntry = "Not entered" %}
+
+{% set physicalCharacteristicsContent %}
+  {% set physicalCharacteristicsRows = [] %}
+
+  {% for characteristic in physicalCharacteristics %}
+    {% set physicalCharacteristicsRows = (physicalCharacteristicsRows.push(
+      {
+        key: {
+          text: characteristic.label
+        },
+        value: {
+          text: characteristic.value | showDefault(missingEntry)
+        }
+      }
+    ), physicalCharacteristicsRows) %}
+  {% endfor %}
+
+  {% if physicalCharacteristicsRows.length%}
+    {{ govukSummaryList({
+      rows: physicalCharacteristicsRows,
+      classes: "govuk-!-margin-bottom-2"
+    }) }}
+  {% else %}
+    <p class="govuk-body">{{ missingEntry }}</p>
+  {% endif %}
+{% endset %}
 
 {% set aliasesContent %}
   {% set aliasesRows = [] %}
@@ -44,7 +71,7 @@
             text: identifier.label
           },
           value: {
-            text: identifier.value | showDefault('Not entered')
+            text: identifier.value | showDefault(missingEntry)
           }
         }
       ), identifierRows) %}
@@ -59,7 +86,7 @@
 
 {% set leftSections = [
     { heading: 'Personal details', html: '<p class="govuk-body">Personal details content</p>' },
-    { heading: 'Physical characteristics', html: '<p class="govuk-body">Physical characteristics content</p>' },
+    { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
     { heading: 'Distinguishing marks', html: '<p class="govuk-body">Distinguishing marks content</p>' },
     { heading: 'Personal care needs', html: '<p class="govuk-body">Personal care needs content</p>' },
     { heading: 'Languages', html: '<p class="govuk-body">Languages content</p>' }
