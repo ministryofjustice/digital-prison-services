@@ -118,7 +118,7 @@ describe('Attendance change router', () => {
             { text: 'Kitchen' },
             { text: 'Acceptable absence' },
             { text: 'Refused' },
-            { attributes: { 'data-sort-value': 1601632800 }, text: '2 October 2020 - 11:00' },
+            { attributes: { 'data-sort-value': expect.any(Number) }, text: '2 October 2020 - 11:00' },
             { text: 'staff full name' },
           ],
           [
@@ -130,7 +130,7 @@ describe('Attendance change router', () => {
             { text: 'Wood work' },
             { text: 'Refused' },
             { text: 'Attended' },
-            { attributes: { 'data-sort-value': 1601654400 }, text: '2 October 2020 - 17:00' },
+            { attributes: { 'data-sort-value': expect.any(Number) }, text: '2 October 2020 - 17:00' },
             { text: 'staff full name' },
           ],
         ],
