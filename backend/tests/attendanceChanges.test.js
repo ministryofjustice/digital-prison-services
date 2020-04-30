@@ -4,18 +4,11 @@ describe('Attendance change router', () => {
   const elite2Api = {}
   const whereaboutsApi = {}
   const oauthApi = {}
-  const req = {
-    originalUrl: 'http://localhost',
-    query: {
-      fromDateTime: '2020-10-03T00:00',
-      toDateTime: '2020-10-03T12:00',
-      subHeading: '3 November 2020 - AM + PM',
-    },
-  }
   const res = {
     locals: {},
   }
 
+  let req
   let router
   let logError
 
@@ -33,6 +26,15 @@ describe('Attendance change router', () => {
     router = attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError })
     res.render = jest.fn()
     res.redirect = jest.fn()
+
+    req = {
+      originalUrl: 'http://localhost',
+      query: {
+        fromDateTime: '2020-10-03T00:00',
+        toDateTime: '2020-10-03T12:00',
+        subHeading: '3 November 2020 - AM + PM',
+      },
+    }
   })
 
   it('should request changes for a given date time range', async () => {
@@ -154,5 +156,19 @@ describe('Attendance change router', () => {
     await router(req, res)
 
     expect(res.redirect).toHaveBeenCalledWith('/manage-prisoner-whereabouts/attendance-reason-statistics')
+  })
+
+  it('should render page when there are no changes', async () => {
+    await router(req, res)
+
+    expect(res.redirect).toHaveBeenCalledTimes(0)
+    expect(res.render).toHaveBeenCalledWith(
+      'attendanceChanges.njk',
+      expect.objectContaining({
+        attendanceChanges: [],
+        dpsUrl: 'http://localhost:3000/',
+        subHeading: '3 November 2020 - AM + PM',
+      })
+    )
   })
 })

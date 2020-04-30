@@ -53,6 +53,14 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
 
     const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, { fromDateTime, toDateTime })
 
+    if (!changes.length) {
+      return res.render('attendanceChanges.njk', {
+        dpsUrl,
+        subHeading,
+        attendanceChanges: [],
+      })
+    }
+
     const eventIds = [...new Set(changes.map(change => change.eventId))]
     const activities = await elite2Api.getScheduledActivities(res.locals, { agencyId: 'MDI', eventIds })
 
