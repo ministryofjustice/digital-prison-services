@@ -4,10 +4,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import groovy.json.JsonOutput
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
-import java.util.stream.Collectors
-
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static com.github.tomakehurst.wiremock.client.WireMock.post
 import static com.github.tomakehurst.wiremock.client.WireMock.put
@@ -243,6 +240,18 @@ public class WhereaboutsApi extends WireMockRule {
                         .willReturn(
                         aResponse()
                                 .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+        )
+    }
+
+    void stubAttendanceChanges(fromDateTime, toDateTime, response) {
+        this.stubFor(
+                get("/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}")
+                .willReturn(
+                        aResponse()
+                        .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson(response))
                 )

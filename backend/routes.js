@@ -48,10 +48,9 @@ const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAp
 const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
 const viewCourtBookingsRouter = require('./routes/appointments/viewCourtBookingsRouter')
 const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
-
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
-
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
+const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
 
 const prisonerSearchController = require('./controllers/search/prisonerSearch')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
@@ -246,6 +245,8 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
   )
 
   router.use('/prisoner/:offenderNo', prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, logError }))
+
+  router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 
   return router
 }
