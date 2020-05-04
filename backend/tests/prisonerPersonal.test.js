@@ -36,10 +36,12 @@ describe('prisoner personal', () => {
     elite2Api.getDetails = jest.fn().mockResolvedValue({})
     elite2Api.getIdentifiers = jest.fn().mockResolvedValue([])
     elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
+    elite2Api.getPhysicalAttributes = jest.fn().mockResolvedValue({})
+    elite2Api.getPhysicalCharacteristics = jest.fn().mockResolvedValue([])
     controller = prisonerPersonal({ prisonerProfileService, elite2Api, logError })
   })
 
-  it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
+  it('should make a call for the full details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
@@ -161,11 +163,81 @@ describe('prisoner personal', () => {
     })
   })
 
+  describe('physical characteristics', () => {
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    describe('when there is missing physical characteristic data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            physicalCharacteristics: [
+              { label: 'Height', value: undefined },
+              { label: 'Weight', value: undefined },
+              { label: 'Hair colour', value: undefined },
+              { label: 'Left eye colour', value: undefined },
+              { label: 'Right eye colour', value: undefined },
+              { label: 'Facial hair', value: undefined },
+              { label: 'Shape of face', value: undefined },
+              { label: 'Build', value: undefined },
+              { label: 'Shoe size', value: undefined },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when there is physical characteristic data', () => {
+      beforeEach(() => {
+        elite2Api.getPhysicalAttributes.mockResolvedValue({
+          heightMetres: 1.91,
+          weightKilograms: 86,
+        })
+        elite2Api.getPhysicalCharacteristics.mockResolvedValue([
+          { type: 'HAIR', detail: 'Brown' },
+          { type: 'R_EYE_C', detail: 'Green' },
+          { type: 'L_EYE_C', detail: 'Blue' },
+          { type: 'FACIAL_HAIR', detail: 'Moustache' },
+          { type: 'FACE', detail: 'Round' },
+          { type: 'BUILD', detail: 'Athletic' },
+          { type: 'SHOESIZE', detail: '12' },
+        ])
+      })
+
+      it('should render the personal template with the correctly formatted data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            physicalCharacteristics: [
+              { label: 'Height', value: '1.91m' },
+              { label: 'Weight', value: '86kg' },
+              { label: 'Hair colour', value: 'Brown' },
+              { label: 'Left eye colour', value: 'Blue' },
+              { label: 'Right eye colour', value: 'Green' },
+              { label: 'Facial hair', value: 'Moustache' },
+              { label: 'Shape of face', value: 'Round' },
+              { label: 'Build', value: 'Athletic' },
+              { label: 'Shoe size', value: '12' },
+            ],
+          })
+        )
+      })
+    })
+  })
+
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
       elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
       elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPhysicalAttributes.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPhysicalCharacteristics.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -182,6 +254,17 @@ describe('prisoner personal', () => {
             { label: 'Driving licence number', value: null },
           ],
           aliases: null,
+          physicalCharacteristics: [
+            { label: 'Height', value: null },
+            { label: 'Weight', value: null },
+            { label: 'Hair colour', value: null },
+            { label: 'Left eye colour', value: null },
+            { label: 'Right eye colour', value: null },
+            { label: 'Facial hair', value: null },
+            { label: 'Shape of face', value: null },
+            { label: 'Build', value: null },
+            { label: 'Shoe size', value: null },
+          ],
         })
       )
     })
