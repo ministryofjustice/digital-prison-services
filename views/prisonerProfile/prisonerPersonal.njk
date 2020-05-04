@@ -23,13 +23,43 @@
     ), physicalCharacteristicsRows) %}
   {% endfor %}
 
-  {% if physicalCharacteristicsRows.length%}
+  {% if physicalCharacteristicsRows.length %}
     {{ govukSummaryList({
-      rows: physicalCharacteristicsRows,
-      classes: "govuk-!-margin-bottom-2"
+      rows: physicalCharacteristicsRows
     }) }}
   {% else %}
     <p class="govuk-body">{{ missingEntry }}</p>
+  {% endif %}
+{% endset %}
+
+
+{% set distinguishingMarksContent %}
+  {% if distinguishingMarks.length %}
+    {% for distinguishingMark in distinguishingMarks %}
+      {% set distinguishingMarksRows = [] %}
+
+      {% for distinguishingMarkDetail in distinguishingMark.details %}
+        {% if distinguishingMarkDetail.value %}
+          {% set distinguishingMarksRows = (distinguishingMarksRows.push(
+            {
+              key: {
+                text: distinguishingMarkDetail.label
+              },
+              value: {
+                text: distinguishingMarkDetail.value
+              }
+            }
+          ), distinguishingMarksRows) %}
+        {% endif %}
+      {% endfor %}
+
+      <h3 class="govuk-summary-list-title govuk-heading-s">{{ distinguishingMark.label }}</h3>
+      {{ govukSummaryList({
+        rows: distinguishingMarksRows
+      }) }}
+    {% endfor%}
+  {% else %}
+    <p class="govuk-body">None</p>
   {% endif %}
 {% endset %}
 
@@ -52,8 +82,7 @@
   
   {% if aliasesRows.length %}
     {{ govukSummaryList({
-      rows: aliasesRows,
-      classes: "govuk-!-margin-bottom-2"
+      rows: aliasesRows
     }) }}
   {% else %}
     <p class="govuk-body">None</p>
@@ -79,15 +108,14 @@
   {% endfor %}
 
   {{ govukSummaryList({
-    rows: identifierRows,
-    classes: "govuk-!-margin-bottom-2"
+    rows: identifierRows
   }) }}
 {% endset %}
 
 {% set leftSections = [
     { heading: 'Personal details', html: '<p class="govuk-body">Personal details content</p>' },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
-    { heading: 'Distinguishing marks', html: '<p class="govuk-body">Distinguishing marks content</p>' },
+    { heading: 'Distinguishing marks', html: distinguishingMarksContent },
     { heading: 'Personal care needs', html: '<p class="govuk-body">Personal care needs content</p>' },
     { heading: 'Languages', html: '<p class="govuk-body">Languages content</p>' }
   ]

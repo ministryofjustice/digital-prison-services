@@ -246,6 +246,8 @@ const elite2ApiFactory = client => {
   const getPhysicalCharacteristics = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/physicalCharacteristics`)
 
+  const getPhysicalMarks = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalMarks`)
+
   const getScheduledActivities = (context, { agencyId, eventIds }) =>
     post(context, `/api/schedules/${agencyId}/activities-by-event-ids`, eventIds)
 
@@ -321,6 +323,7 @@ const elite2ApiFactory = client => {
     getOffenderAliases,
     getPhysicalAttributes,
     getPhysicalCharacteristics,
+    getPhysicalMarks,
   }
 }
 
