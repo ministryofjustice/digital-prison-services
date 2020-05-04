@@ -1,5 +1,11 @@
 // Whenever we have/want to diverge from govuk-frontend
 .prisoner-profile {
+  .govuk-summary-list-title {
+    margin: 0;
+    padding: govuk-spacing(2) 0;
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
   .govuk-summary-list__key {
     margin-bottom: govuk-spacing(1);
     @include govuk-typography-weight-bold;
