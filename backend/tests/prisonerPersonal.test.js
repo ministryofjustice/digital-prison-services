@@ -36,13 +36,15 @@ describe('prisoner personal', () => {
     elite2Api.getDetails = jest.fn().mockResolvedValue({})
     elite2Api.getIdentifiers = jest.fn().mockResolvedValue([])
     elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
+    elite2Api.getPhysicalAttributes = jest.fn().mockResolvedValue({})
+    elite2Api.getPhysicalCharacteristics = jest.fn().mockResolvedValue([])
     controller = prisonerPersonal({ prisonerProfileService, elite2Api, logError })
   })
 
   it('should make a call for the full details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
+    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal.njk',
@@ -189,23 +191,21 @@ describe('prisoner personal', () => {
       })
     })
 
-    describe.skip('when there is physical characteristic data', () => {
+    describe('when there is physical characteristic data', () => {
       beforeEach(() => {
-        elite2Api.getDetails = jest.fn().mockResolvedValue({
-          physicalAttributes: {
-            heightMetres: 1.91,
-            weightKilograms: 86,
-          },
-          physicalCharacteristics: [
-            { type: 'HAIR', detail: 'Brown' },
-            { type: 'R_EYE_C', detail: 'Green' },
-            { type: 'L_EYE_C', detail: 'Blue' },
-            { type: 'FACIAL_HAIR', detail: 'Moustache' },
-            { type: 'FACE', detail: 'Round' },
-            { type: 'BUILD', detail: 'Athletic' },
-            { type: 'SHOESIZE', detail: '12' },
-          ],
+        elite2Api.getPhysicalAttributes.mockResolvedValue({
+          heightMetres: 1.91,
+          weightKilograms: 86,
         })
+        elite2Api.getPhysicalCharacteristics.mockResolvedValue([
+          { type: 'HAIR', detail: 'Brown' },
+          { type: 'R_EYE_C', detail: 'Green' },
+          { type: 'L_EYE_C', detail: 'Blue' },
+          { type: 'FACIAL_HAIR', detail: 'Moustache' },
+          { type: 'FACE', detail: 'Round' },
+          { type: 'BUILD', detail: 'Athletic' },
+          { type: 'SHOESIZE', detail: '12' },
+        ])
       })
 
       it('should render the personal template with the correctly formatted data', async () => {
@@ -218,8 +218,8 @@ describe('prisoner personal', () => {
               { label: 'Height', value: '1.91m' },
               { label: 'Weight', value: '86kg' },
               { label: 'Hair colour', value: 'Brown' },
-              { label: 'Left eye colour', value: 'Green' },
-              { label: 'Right eye colour', value: 'Blue' },
+              { label: 'Left eye colour', value: 'Blue' },
+              { label: 'Right eye colour', value: 'Green' },
               { label: 'Facial hair', value: 'Moustache' },
               { label: 'Shape of face', value: 'Round' },
               { label: 'Build', value: 'Athletic' },
@@ -236,6 +236,8 @@ describe('prisoner personal', () => {
       req.params.offenderNo = offenderNo
       elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
       elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPhysicalAttributes.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPhysicalCharacteristics.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -252,6 +254,17 @@ describe('prisoner personal', () => {
             { label: 'Driving licence number', value: null },
           ],
           aliases: null,
+          physicalCharacteristics: [
+            { label: 'Height', value: null },
+            { label: 'Weight', value: null },
+            { label: 'Hair colour', value: null },
+            { label: 'Left eye colour', value: null },
+            { label: 'Right eye colour', value: null },
+            { label: 'Facial hair', value: null },
+            { label: 'Shape of face', value: null },
+            { label: 'Build', value: null },
+            { label: 'Shoe size', value: null },
+          ],
         })
       )
     })

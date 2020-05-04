@@ -15,21 +15,31 @@ const getValueByType = (type, array, key) => {
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const details = await elite2Api
-    .getDetails(res.locals, offenderNo, true)
+    .getDetails(res.locals, offenderNo)
     .then(data => data)
     .catch(error => {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: dpsUrl })
     })
-  const { bookingId, physicalAttributes, physicalCharacteristics } = details || {}
+  const { bookingId } = details || {}
 
-  const [prisonerProfileData, identifierData, aliasesData] = await Promise.all(
+  const [
+    prisonerProfileData,
+    identifierData,
+    aliasesData,
+    physicalAttributesData,
+    physicalCharacteristicsData,
+  ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getIdentifiers(res.locals, bookingId),
       elite2Api.getOffenderAliases(res.locals, bookingId),
+      elite2Api.getPhysicalAttributes(res.locals, bookingId),
+      elite2Api.getPhysicalCharacteristics(res.locals, bookingId),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
+
+  const { heightMetres, weightKilograms } = physicalAttributesData || {}
 
   return res.render('prisonerProfile/prisonerPersonal.njk', {
     prisonerProfileData,
@@ -49,19 +59,19 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     physicalCharacteristics: [
       {
         label: 'Height',
-        value: physicalAttributes && physicalAttributes.heightMetres && `${physicalAttributes.heightMetres}m`,
+        value: physicalAttributesData && heightMetres && `${heightMetres}m`,
       },
       {
         label: 'Weight',
-        value: physicalAttributes && physicalAttributes.weightKilograms && `${physicalAttributes.weightKilograms}kg`,
+        value: physicalAttributesData && weightKilograms && `${weightKilograms}kg`,
       },
-      { label: 'Hair colour', value: getValueByType('HAIR', physicalCharacteristics, 'detail') },
-      { label: 'Left eye colour', value: getValueByType('L_EYE_C', physicalCharacteristics, 'detail') },
-      { label: 'Right eye colour', value: getValueByType('R_EYE_C', physicalCharacteristics, 'detail') },
-      { label: 'Facial hair', value: getValueByType('FACIAL_HAIR', physicalCharacteristics, 'detail') },
-      { label: 'Shape of face', value: getValueByType('FACE', physicalCharacteristics, 'detail') },
-      { label: 'Build', value: getValueByType('BUILD', physicalCharacteristics, 'detail') },
-      { label: 'Shoe size', value: getValueByType('SHOESIZE', physicalCharacteristics, 'detail') },
+      { label: 'Hair colour', value: getValueByType('HAIR', physicalCharacteristicsData, 'detail') },
+      { label: 'Left eye colour', value: getValueByType('L_EYE_C', physicalCharacteristicsData, 'detail') },
+      { label: 'Right eye colour', value: getValueByType('R_EYE_C', physicalCharacteristicsData, 'detail') },
+      { label: 'Facial hair', value: getValueByType('FACIAL_HAIR', physicalCharacteristicsData, 'detail') },
+      { label: 'Shape of face', value: getValueByType('FACE', physicalCharacteristicsData, 'detail') },
+      { label: 'Build', value: getValueByType('BUILD', physicalCharacteristicsData, 'detail') },
+      { label: 'Shoe size', value: getValueByType('SHOESIZE', physicalCharacteristicsData, 'detail') },
     ],
   })
 }
