@@ -41,6 +41,8 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
+  console.log({ physicalMarksData })
+
   const { heightMetres, weightKilograms } = physicalAttributesData || {}
 
   return res.render('prisonerProfile/prisonerPersonal.njk', {
@@ -80,8 +82,9 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       physicalMarksData.map(physicalMark => ({
         label: physicalMark.type,
         details: [
-          { label: 'Side', value: physicalMark.side },
           { label: 'Body part', value: physicalMark.bodyPart },
+          { label: 'Side', value: physicalMark.side },
+          { label: 'Orientation', value: physicalMark.orentiation },
           { label: 'Comment', value: physicalMark.comment },
         ],
       })),

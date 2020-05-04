@@ -253,8 +253,8 @@ describe('prisoner personal', () => {
     describe('when there is distinguishing physical marks data', () => {
       beforeEach(() => {
         elite2Api.getPhysicalMarks.mockResolvedValue([
-          { type: 'Tattoo', side: 'Left', bodyPart: 'Arm', comment: 'Childs name' },
-          { type: 'Tattoo', side: 'Right', bodyPart: 'Arm', comment: 'Face' },
+          { type: 'Tattoo', side: 'Left', bodyPart: 'Arm', comment: 'Childs name', orentiation: 'Facing up' },
+          { type: 'Tattoo', side: 'Right', bodyPart: 'Arm', comment: 'Face', orentiation: 'Facing down' },
         ])
       })
 
@@ -267,16 +267,18 @@ describe('prisoner personal', () => {
             distinguishingMarks: [
               {
                 details: [
-                  { label: 'Side', value: 'Left' },
                   { label: 'Body part', value: 'Arm' },
+                  { label: 'Side', value: 'Left' },
+                  { label: 'Orientation', value: 'Facing up' },
                   { label: 'Comment', value: 'Childs name' },
                 ],
                 label: 'Tattoo',
               },
               {
                 details: [
-                  { label: 'Side', value: 'Right' },
                   { label: 'Body part', value: 'Arm' },
+                  { label: 'Side', value: 'Right' },
+                  { label: 'Orientation', value: 'Facing down' },
                   { label: 'Comment', value: 'Face' },
                 ],
                 label: 'Tattoo',
