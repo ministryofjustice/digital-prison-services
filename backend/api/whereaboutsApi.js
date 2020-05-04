@@ -49,6 +49,9 @@ const whereaboutsApiFactory = client => {
 
   const getVideoLinkAppointments = (context, body) => post(context, '/court/video-link-appointments', body)
 
+  const getAttendanceChanges = (context, { fromDateTime, toDateTime }) =>
+    get(context, `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}`)
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -64,6 +67,7 @@ const whereaboutsApiFactory = client => {
     getCourtLocations,
     addVideoLinkAppointment,
     getVideoLinkAppointments,
+    getAttendanceChanges,
   }
 }
 
