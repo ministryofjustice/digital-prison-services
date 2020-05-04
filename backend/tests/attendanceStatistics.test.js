@@ -43,9 +43,6 @@ describe('Attendance reason statistics', () => {
     whereaboutsApi.getAbsences = jest.fn()
     whereaboutsApi.getAbsenceReasons = jest.fn()
     whereaboutsApi.getAttendanceForBookings = jest.fn()
-    whereaboutsApi.getAttendanceChanges = jest.fn()
-
-    whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
 
     elite2Api.userCaseLoads.mockReturnValue([{ caseLoadId: 'LEI', description: 'Leeds (HMP)', currentlyActive: true }])
     elite2Api.getOffenderActivitiesOverDateRange.mockReturnValue([])
@@ -260,45 +257,6 @@ describe('Attendance reason statistics', () => {
       })
     })
 
-    it('should call whereabouts attendance changes api with the correct parameters for AM+PM', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
-      const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
-      const res = { render: jest.fn(), locals: context }
-
-      await attendanceStatistics(req, res)
-
-      expect(whereaboutsApi.getAttendanceChanges).toHaveBeenCalledWith(
-        {},
-        { fromDateTime: '2019-10-10T00:00', toDateTime: '2019-10-11T23:59' }
-      )
-    })
-
-    it('should call whereabouts attendance changes api with the correct parameters for AM', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
-      const req = { query: { agencyId, fromDate, toDate, period: 'AM' } }
-      const res = { render: jest.fn(), locals: context }
-
-      await attendanceStatistics(req, res)
-
-      expect(whereaboutsApi.getAttendanceChanges).toHaveBeenCalledWith(
-        {},
-        { fromDateTime: '2019-10-10T00:00', toDateTime: '2019-10-11T11:59' }
-      )
-    })
-
-    it('should call whereabouts attendance changes api with the correct parameters for PM', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
-      const req = { query: { agencyId, fromDate, toDate, period: 'PM' } }
-      const res = { render: jest.fn(), locals: context }
-
-      await attendanceStatistics(req, res)
-
-      expect(whereaboutsApi.getAttendanceChanges).toHaveBeenCalledWith(
-        {},
-        { fromDateTime: '2019-10-10T12:00', toDateTime: '2019-10-11T16:59' }
-      )
-    })
-
     it('should remove the leading zeros from display date', async () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
@@ -343,11 +301,6 @@ describe('Attendance reason statistics', () => {
             },
           ],
           caseLoadId: 'LEI',
-          changeClickThrough: {
-            fromDateTime: '2019-10-10T00:00',
-            subHeading: '10 October 2019  to 11 October 2019  - AM and PM',
-            toDateTime: '2019-10-11T23:59',
-          },
           dashboardStats: {
             notRecorded: 0,
             attended: 0,
@@ -367,7 +320,6 @@ describe('Attendance reason statistics', () => {
               { id: 'RefusedIncentiveLevelWarning', name: 'Refused incentive level warning', value: 0 },
             ],
             suspended: 0,
-            changes: 0,
           },
           shouldClearFormValues: true,
           toDate: '11/10/2019',
