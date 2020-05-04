@@ -41,8 +41,6 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
-  console.log({ physicalMarksData })
-
   const { heightMetres, weightKilograms } = physicalAttributesData || {}
 
   return res.render('prisonerProfile/prisonerPersonal.njk', {
