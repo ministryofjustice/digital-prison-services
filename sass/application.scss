@@ -62,6 +62,25 @@ $govuk-page-width: 1170px;
   }
 }
 
+.horizontal-links {
+  > a {
+    margin-right: govuk-spacing(2);
+  }
+
+  @include govuk-media-query($from: desktop) {
+    display: flex;
+
+    * {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    > a {
+      margin-right: govuk-spacing(3);
+    }
+  }
+}
+
 // Print
 @page {
   margin: 0;

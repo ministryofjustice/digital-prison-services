@@ -21,7 +21,7 @@ const formatReason = ({ name, triggersIEPWarning }) =>
     ? `${stripWarning(capitalize(pascalToString(name)))} with warning`
     : capitalize(pascalToString(name))
 
-const buildStatsViewModel = (dashboardStats, triggersIEPWarning) => {
+const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
   const mapReasons = reasons =>
     Object.keys(reasons).map(name => ({
       id: capitalizeStart(name),
@@ -36,6 +36,7 @@ const buildStatsViewModel = (dashboardStats, triggersIEPWarning) => {
       nvp => nvp.name && nvp.name.toLowerCase() !== 'attended'
     ),
     unpaidReasons: mapReasons(dashboardStats.unpaidReasons),
+    changes,
   }
 }
 
@@ -173,6 +174,39 @@ const urlWithDefaultParameters = ({ activeCaseLoadId, currentPeriod }) => {
   return `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}`
 }
 
+const getDateTimes = ({ fromDateValue, toDateValue, period }) => {
+  switch (period) {
+    case 'AM':
+      return {
+        fromDateTime: `${fromDateValue}T00:00`,
+        toDateTime: `${toDateValue || fromDateValue}T11:59`,
+      }
+    case 'PM':
+      return {
+        fromDateTime: `${fromDateValue}T12:00`,
+        toDateTime: `${toDateValue || fromDateValue}T16:59`,
+      }
+    case 'ED':
+      return {
+        fromDateTime: `${fromDateValue}T17:00`,
+        toDateTime: `${toDateValue || fromDateValue}T23:59`,
+      }
+    default:
+      return {
+        fromDateTime: `${fromDateValue}T00:00`,
+        toDateTime: `${toDateValue || fromDateValue}T23:59`,
+      }
+  }
+}
+
+const getSubheading = ({ fromDate, toDate, displayPeriod }) => {
+  if (!toDate) return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')} - ${displayPeriod}`
+
+  return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')}  to ${moment(toDate, 'DD/MM/YYYY').format(
+    'D MMMM YYYY'
+  )}  - ${displayPeriod}`
+}
+
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
   const attendanceStatistics = async (req, res) => {
     const currentPeriod = getCurrentPeriod(moment().format())
@@ -192,6 +226,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       if (!period || !fromDate) return res.redirect(urlWithDefaultParameters({ activeCaseLoadId, currentPeriod }))
 
       const shouldClearFormValues = Boolean(fromDate && toDate)
+      const displayPeriod = periodDisplayLookup[period]
+      const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
+      const toDateValue = toDate && switchDateFormat(toDate, 'DD/MM/YYYY')
+
+      const dateRange = getDateTimes({ fromDateValue, toDateValue, period })
 
       const mainViewModel = {
         title: 'Attendance reason statistics',
@@ -216,7 +255,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
           toDate,
           period,
         },
-        displayPeriod: periodDisplayLookup[period],
+        displayPeriod,
+        changeClickThrough: {
+          ...dateRange,
+          subHeading: getSubheading({ fromDate, toDate, displayPeriod }),
+        },
         ...getStatPresetsLinks({ activeCaseLoadId }),
       }
 
@@ -230,8 +273,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
           })
       }
 
-      const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
-      const toDateValue = toDate && switchDateFormat(toDate, 'DD/MM/YYYY')
+      const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
 
       const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
         agencyId,
@@ -244,7 +286,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       return res.render('attendanceStatistics.njk', {
         ...mainViewModel,
-        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning),
+        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changes.length),
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
