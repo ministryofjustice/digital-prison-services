@@ -1,0 +1,60 @@
+{% extends "../layouts/prisonerLayout.njk" %}
+{% from "../macros/prisonerAccordionSection.njk" import accordionSection %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Personal" %}
+{% set containerClasses = "prisoner-profile" %}
+{% set missingEntry = "Not entered" %}
+
+{% set physicalCharacteristicsContent %}
+  {% include "./partials/physicalCharacteristics.njk" %}
+{% endset %}
+
+{% set distinguishingMarksContent %}
+  {% include "./partials/distinguishingMarks.njk" %}
+{% endset %}
+
+{% set aliasesContent %}
+  {% include "./partials/aliases.njk" %}
+{% endset %}
+
+{% set identifierContent %}
+  {% include "./partials/identifiers.njk" %}
+{% endset %}
+
+{% set leftSections = [
+    { heading: 'Personal details', html: '<p class="govuk-body">Personal details content</p>' },
+    { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
+    { heading: 'Distinguishing marks', html: distinguishingMarksContent },
+    { heading: 'Personal care needs', html: '<p class="govuk-body">Personal care needs content</p>' },
+    { heading: 'Languages', html: '<p class="govuk-body">Languages content</p>' }
+  ]
+%}
+
+{% set rightSections = [
+    { heading: 'Aliases', html: aliasesContent },
+    { heading: 'Identifiers', html: identifierContent },
+    { heading: 'Addresses', html: '<p class="govuk-body">Addresses content</p>' },
+    { heading: 'Active contacts', html: '<p class="govuk-body">Active contacts content</p>' }
+  ]
+%}
+
+{% block prisonerProfileSection %}
+  <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-accordion">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        {% for section in leftSections %}
+          {{ accordionSection(section.heading, section.html, loop.index) }}
+        {% endfor %}
+      </div>
+
+      <div class="govuk-grid-column-one-half">
+        {% for section in rightSections %}
+          {% set overallIndex = leftSections.length + loop.index %}
+          {{ accordionSection(section.heading, section.html, overallIndex) }}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

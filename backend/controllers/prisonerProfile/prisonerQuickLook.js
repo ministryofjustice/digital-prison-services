@@ -57,7 +57,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
   const prisoner = prisonerData && prisonerData[0]
   const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
 
-  return res.render('prisonerProfile/prisonerQuickLook.njk', {
+  return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
     dpsUrl,
     prisonerProfileData,
     offenceDetails: [

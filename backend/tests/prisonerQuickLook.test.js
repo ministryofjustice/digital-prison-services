@@ -59,7 +59,7 @@ describe('prisoner profile quick look', () => {
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
-      'prisonerProfile/prisonerQuickLook.njk',
+      'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
       expect.objectContaining({
         dpsUrl: 'http://localhost:3000/',
         prisonerProfileData,
@@ -83,7 +83,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             offenceDetails: [
               {
@@ -119,7 +119,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             offenceDetails: [
               {
@@ -147,7 +147,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
               { label: 'Spends', value: '' },
@@ -168,7 +168,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
               { label: 'Spends', value: '£100.00' },
@@ -187,7 +187,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             personalDetails: [
               { label: 'Age', value: undefined },
@@ -212,7 +212,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             personalDetails: [
               { label: 'Age', value: 21 },
@@ -245,7 +245,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             caseNoteAdjudications: {
               details: [
@@ -313,7 +313,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             caseNoteAdjudications: {
               details: [
@@ -360,7 +360,7 @@ describe('prisoner profile quick look', () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
-            'prisonerProfile/prisonerQuickLook.njk',
+            'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
                 details: [
@@ -389,7 +389,7 @@ describe('prisoner profile quick look', () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
-            'prisonerProfile/prisonerQuickLook.njk',
+            'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
                 details: [
@@ -414,7 +414,7 @@ describe('prisoner profile quick look', () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
-            'prisonerProfile/prisonerQuickLook.njk',
+            'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               scheduledActivityPeriods: [
                 { label: 'Morning (AM)', value: [] },
@@ -500,7 +500,7 @@ describe('prisoner profile quick look', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerQuickLook.njk',
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             scheduledActivityPeriods: [
               {
@@ -595,7 +595,7 @@ describe('prisoner profile quick look', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerQuickLook.njk',
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
           balanceDetails: [
             { label: 'Spends', value: null },
