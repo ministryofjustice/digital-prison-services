@@ -46,7 +46,7 @@
 
   <form action="/manage-prisoner-whereabouts/attendance-reason-statistics" class="horizontal-form govuk-!-display-none-print govuk-!-margin-bottom-6">
       <input type="hidden" name="agencyId" value="{{caseLoadId}}"/>
-
+      
         {{ datePicker({
             id: 'fromDate',
             label: 'Date',
@@ -84,7 +84,7 @@
             errorMessage: errors | findError(period)
           }) }}
 
-
+  
         {{
           govukButton({
             type: submit,
@@ -119,7 +119,7 @@
         <p class="govuk-body">Suspended</p>
         <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
             {% if dashboardStats.suspended > 0 %}
-              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/suspended?&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
+              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/suspended?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{dashboardStats.suspended}}
               </a>
             {% else %}
@@ -127,20 +127,6 @@
             {% endif %}
         </span>
       </div>
-
-        <div class="govuk-grid-column-one-quarter">
-            <p class="govuk-body">Reason changes</p>
-            <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold">
-            {% if dashboardStats.changes > 0 %}
-                <a href="/attendance-changes?&fromDateTime={{changeCLickThrough.fromDateTime}}&toDateTime={{changeCLickThrough.toDateTime}}&subHeading={{changeCLickThrough.subHeading}}" class="govuk-link--no-visited-state">
-                {{dashboardStats.changes}}
-              </a>
-            {% else %}
-                {{dashboardStats.changes}}
-            {% endif %}
-        </span>
-        </div>
-
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <h2 class="govuk-heading-m">Paid reasons</h2>
