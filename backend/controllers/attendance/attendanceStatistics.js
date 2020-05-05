@@ -21,7 +21,7 @@ const formatReason = ({ name, triggersIEPWarning }) =>
     ? `${stripWarning(capitalize(pascalToString(name)))} with warning`
     : capitalize(pascalToString(name))
 
-const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
+const buildStatsViewModel = (dashboardStats, triggersIEPWarning) => {
   const mapReasons = reasons =>
     Object.keys(reasons).map(name => ({
       id: capitalizeStart(name),
@@ -36,7 +36,6 @@ const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
       nvp => nvp.name && nvp.name.toLowerCase() !== 'attended'
     ),
     unpaidReasons: mapReasons(dashboardStats.unpaidReasons),
-    changes,
   }
 }
 
@@ -174,41 +173,6 @@ const urlWithDefaultParameters = ({ activeCaseLoadId, currentPeriod }) => {
   return `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}`
 }
 
-const getDateTimes = ({ fromDateTime, toDateTime, period }) => {
-  switch (period) {
-    case 'AM':
-      return {
-        fromDateTime: `${fromDateTime}T00:00`,
-        toDateTime: `${toDateTime || fromDateTime}T11:59`,
-      }
-    case 'PM':
-      return {
-        fromDateTime: `${fromDateTime}T12:00`,
-        toDateTime: `${toDateTime || fromDateTime}T16:59`,
-      }
-    case 'ED':
-      return {
-        fromDateTime: `${fromDateTime}T17:00`,
-        toDateTime: `${toDateTime || fromDateTime}T23:59`,
-      }
-    default:
-      return {
-        fromDateTime: `${fromDateTime}T00:00`,
-        toDateTime: `${toDateTime || fromDateTime}T23:59`,
-      }
-  }
-}
-
-const getSubheading = ({ fromDate, toDate, period }) => {
-  const periodText = periodDisplayLookup[period]
-
-  if (!toDate) return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')} - ${periodText}`
-
-  return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')}  to ${moment(toDate, 'DD/MM/YYYY').format(
-    'D MMMM YYYY'
-  )}  - ${periodText}`
-}
-
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
   const attendanceStatistics = async (req, res) => {
     const currentPeriod = getCurrentPeriod(moment().format())
@@ -269,10 +233,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
       const toDateValue = toDate && switchDateFormat(toDate, 'DD/MM/YYYY')
 
-      const dateRange = getDateTimes({ fromDateTime: fromDateValue, toDateTime: toDateValue, period })
-
-      const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
-
       const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
         agencyId,
         fromDate: fromDateValue,
@@ -284,11 +244,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       return res.render('attendanceStatistics.njk', {
         ...mainViewModel,
-        changeClickThrough: {
-          ...dateRange,
-          subHeading: getSubheading({ fromDate, toDate, period }),
-        },
-        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changes.length),
+        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning),
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
