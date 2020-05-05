@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
 import static com.github.tomakehurst.wiremock.client.WireMock.post
 import static com.github.tomakehurst.wiremock.client.WireMock.put
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
@@ -255,6 +256,22 @@ public class WhereaboutsApi extends WireMockRule {
                                 .withHeader('Content-Type', 'application/json')
                                 .withBody(JsonOutput.toJson(response))
                 )
+        )
+    }
+
+    void verifyAttendanceChanges(fromDateTime, toDateTime) {
+        this.verify(getRequestedFor(urlEqualTo("/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}")))
+    }
+
+    void stubAttendanceStats(agencyId, period, fromDate, response) {
+        this.stubFor(
+                get("/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${fromDate}&period=${period}")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(response))
+                        )
         )
     }
 
