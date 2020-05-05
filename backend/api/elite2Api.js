@@ -251,6 +251,8 @@ const elite2ApiFactory = client => {
   const getScheduledActivities = (context, { agencyId, eventIds }) =>
     post(context, `/api/schedules/${agencyId}/activities-by-event-ids`, eventIds)
 
+  const getImage = (context, imageId) => getStream(context, `/api/images/${imageId}/data`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -324,6 +326,7 @@ const elite2ApiFactory = client => {
     getPhysicalAttributes,
     getPhysicalCharacteristics,
     getPhysicalMarks,
+    getImage,
   }
 }
 

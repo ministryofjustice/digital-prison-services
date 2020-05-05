@@ -2,9 +2,29 @@ const path = require('path')
 const asyncMiddleware = require('../middleware/asyncHandler')
 const log = require('../log')
 
-const prisonerImageFactory = elite2Api => {
+const placeHolder = path.join(__dirname, '../assets/images/image-missing.jpg')
+
+const imageFactory = elite2Api => {
+  const image = asyncMiddleware(async (req, res) => {
+    const { imageId } = req.params
+
+    if (!imageId) {
+      res.sendFile(placeHolder)
+    } else {
+      elite2Api
+        .getImage(res.locals, imageId)
+        .then(data => {
+          res.type('image/jpeg')
+          data.pipe(res)
+        })
+        .catch(error => {
+          log.error(error)
+          res.sendFile(placeHolder)
+        })
+    }
+  })
+
   const prisonerImage = asyncMiddleware(async (req, res) => {
-    const placeHolder = path.join(__dirname, '../assets/images/image-missing.jpg')
     const { offenderNo } = req.params
     const { fullSizeImage } = req.query
 
@@ -25,10 +45,11 @@ const prisonerImageFactory = elite2Api => {
   })
 
   return {
+    image,
     prisonerImage,
   }
 }
 
 module.exports = {
-  prisonerImageFactory,
+  imageFactory,
 }
