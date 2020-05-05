@@ -29,6 +29,8 @@ const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
       value: Number(reasons[name]),
     }))
 
+  console.error(mapReasons(dashboardStats.paidReasons))
+
   return {
     ...dashboardStats,
     attended: dashboardStats.paidReasons.attended,
@@ -174,39 +176,37 @@ const urlWithDefaultParameters = ({ activeCaseLoadId, currentPeriod }) => {
   return `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=${currentPeriod}&fromDate=${today}`
 }
 
-const getDateTimes = ({ fromDateTime, toDateTime, period }) => {
+const getDateTimes = ({ fromDateValue, toDateValue, period }) => {
   switch (period) {
     case 'AM':
       return {
-        fromDateTime: `${fromDateTime}T00:00`,
-        toDateTime: `${toDateTime || fromDateTime}T11:59`,
+        fromDateTime: `${fromDateValue}T00:00`,
+        toDateTime: `${toDateValue || fromDateValue}T11:59`,
       }
     case 'PM':
       return {
-        fromDateTime: `${fromDateTime}T12:00`,
-        toDateTime: `${toDateTime || fromDateTime}T16:59`,
+        fromDateTime: `${fromDateValue}T12:00`,
+        toDateTime: `${toDateValue || fromDateValue}T16:59`,
       }
     case 'ED':
       return {
-        fromDateTime: `${fromDateTime}T17:00`,
-        toDateTime: `${toDateTime || fromDateTime}T23:59`,
+        fromDateTime: `${fromDateValue}T17:00`,
+        toDateTime: `${toDateValue || fromDateValue}T23:59`,
       }
     default:
       return {
-        fromDateTime: `${fromDateTime}T00:00`,
-        toDateTime: `${toDateTime || fromDateTime}T23:59`,
+        fromDateTime: `${fromDateValue}T00:00`,
+        toDateTime: `${toDateValue || fromDateValue}T23:59`,
       }
   }
 }
 
-const getSubheading = ({ fromDate, toDate, period }) => {
-  const periodText = periodDisplayLookup[period]
-
-  if (!toDate) return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')} - ${periodText}`
+const getSubheading = ({ fromDate, toDate, displayPeriod }) => {
+  if (!toDate) return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')} - ${displayPeriod}`
 
   return `${moment(fromDate, 'DD/MM/YYYY').format('D MMMM YYYY')}  to ${moment(toDate, 'DD/MM/YYYY').format(
     'D MMMM YYYY'
-  )}  - ${periodText}`
+  )}  - ${displayPeriod}`
 }
 
 const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
@@ -223,11 +223,22 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         oauthApi.userRoles(res.locals),
       ])
 
+      console.error({
+        user,
+        caseloads,
+        roles,
+      })
+
       const { activeCaseLoad, inactiveCaseLoads, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
 
       if (!period || !fromDate) return res.redirect(urlWithDefaultParameters({ activeCaseLoadId, currentPeriod }))
 
       const shouldClearFormValues = Boolean(fromDate && toDate)
+      const displayPeriod = periodDisplayLookup[period]
+      const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
+      const toDateValue = toDate && switchDateFormat(toDate, 'DD/MM/YYYY')
+
+      const dateRange = getDateTimes({ fromDateValue, toDateValue, period })
 
       const mainViewModel = {
         title: 'Attendance reason statistics',
@@ -252,7 +263,11 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
           toDate,
           period,
         },
-        displayPeriod: periodDisplayLookup[period],
+        displayPeriod,
+        changeClickThrough: {
+          ...dateRange,
+          subHeading: getSubheading({ fromDate, toDate, displayPeriod }),
+        },
         ...getStatPresetsLinks({ activeCaseLoadId }),
       }
 
@@ -266,12 +281,8 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
           })
       }
 
-      const fromDateValue = switchDateFormat(fromDate, 'DD/MM/YYYY')
-      const toDateValue = toDate && switchDateFormat(toDate, 'DD/MM/YYYY')
-
-      const dateRange = getDateTimes({ fromDateTime: fromDateValue, toDateTime: toDateValue, period })
-
       const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
+      console.error({ changes })
 
       const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
         agencyId,
@@ -280,17 +291,18 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         period: period === 'AM_PM' ? '' : period,
       })
 
+      console.error({ dashboardStats })
+
       const { triggersIEPWarning } = await whereaboutsApi.getAbsenceReasons(res.locals)
+
+      console.error({ triggersIEPWarning })
 
       return res.render('attendanceStatistics.njk', {
         ...mainViewModel,
-        changeClickThrough: {
-          ...dateRange,
-          subHeading: getSubheading({ fromDate, toDate, period }),
-        },
         dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changes.length),
       })
     } catch (error) {
+      console.error({ error })
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       return res.render('error.njk', {
         url: attendanceReasonStatsUrl,
