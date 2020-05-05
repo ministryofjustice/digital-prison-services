@@ -254,7 +254,7 @@ describe('prisoner personal', () => {
       beforeEach(() => {
         elite2Api.getPhysicalMarks.mockResolvedValue([
           { type: 'Tattoo', side: 'Left', bodyPart: 'Arm', comment: 'Childs name', orentiation: 'Facing up' },
-          { type: 'Tattoo', side: 'Right', bodyPart: 'Arm', comment: 'Face', orentiation: 'Facing down' },
+          { type: 'Tattoo', side: 'Right', bodyPart: 'Arm', comment: 'Face', orentiation: 'Facing down', imageId: 123 },
         ])
       })
 
@@ -282,6 +282,7 @@ describe('prisoner personal', () => {
                   { label: 'Comment', value: 'Face' },
                 ],
                 label: 'Tattoo',
+                imageId: 123,
               },
             ],
           })

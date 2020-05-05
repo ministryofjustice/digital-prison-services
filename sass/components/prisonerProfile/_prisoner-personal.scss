@@ -1,0 +1,8 @@
+.distinguishing-mark-image {
+  max-width: 200px;
+  margin-bottom: govuk-spacing(4);
+
+  @include govuk-media-query($from: desktop) {
+    margin-left: govuk-spacing(9);
+  }
+}

@@ -85,6 +85,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           { label: 'Orientation', value: physicalMark.orentiation },
           { label: 'Comment', value: physicalMark.comment },
         ],
+        imageId: physicalMark.imageId,
       })),
   })
 }
