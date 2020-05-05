@@ -29,8 +29,6 @@ const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
       value: Number(reasons[name]),
     }))
 
-  console.error(mapReasons(dashboardStats.paidReasons))
-
   return {
     ...dashboardStats,
     attended: dashboardStats.paidReasons.attended,
@@ -223,12 +221,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         oauthApi.userRoles(res.locals),
       ])
 
-      console.error({
-        user,
-        caseloads,
-        roles,
-      })
-
       const { activeCaseLoad, inactiveCaseLoads, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
 
       if (!period || !fromDate) return res.redirect(urlWithDefaultParameters({ activeCaseLoadId, currentPeriod }))
@@ -282,7 +274,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       }
 
       const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
-      console.error({ changes })
 
       const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
         agencyId,
@@ -291,18 +282,13 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         period: period === 'AM_PM' ? '' : period,
       })
 
-      console.error({ dashboardStats })
-
       const { triggersIEPWarning } = await whereaboutsApi.getAbsenceReasons(res.locals)
-
-      console.error({ triggersIEPWarning })
 
       return res.render('attendanceStatistics.njk', {
         ...mainViewModel,
         dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changes.length),
       })
     } catch (error) {
-      console.error({ error })
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
       return res.render('error.njk', {
         url: attendanceReasonStatsUrl,
