@@ -38,6 +38,7 @@ describe('prisoner personal', () => {
     elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
     elite2Api.getPhysicalAttributes = jest.fn().mockResolvedValue({})
     elite2Api.getPhysicalCharacteristics = jest.fn().mockResolvedValue([])
+    elite2Api.getPhysicalMarks = jest.fn().mockResolvedValue([])
     controller = prisonerPersonal({ prisonerProfileService, elite2Api, logError })
   })
 
@@ -231,6 +232,64 @@ describe('prisoner personal', () => {
     })
   })
 
+  describe('distinguishing physical marks', () => {
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    describe('when there is missing distinguishing physical marks data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            distinguishingMarks: [],
+          })
+        )
+      })
+    })
+
+    describe('when there is distinguishing physical marks data', () => {
+      beforeEach(() => {
+        elite2Api.getPhysicalMarks.mockResolvedValue([
+          { type: 'Tattoo', side: 'Left', bodyPart: 'Arm', comment: 'Childs name', orentiation: 'Facing up' },
+          { type: 'Tattoo', side: 'Right', bodyPart: 'Arm', comment: 'Face', orentiation: 'Facing down' },
+        ])
+      })
+
+      it('should render the personal template with the correctly formatted data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal.njk',
+          expect.objectContaining({
+            distinguishingMarks: [
+              {
+                details: [
+                  { label: 'Body part', value: 'Arm' },
+                  { label: 'Side', value: 'Left' },
+                  { label: 'Orientation', value: 'Facing up' },
+                  { label: 'Comment', value: 'Childs name' },
+                ],
+                label: 'Tattoo',
+              },
+              {
+                details: [
+                  { label: 'Body part', value: 'Arm' },
+                  { label: 'Side', value: 'Right' },
+                  { label: 'Orientation', value: 'Facing down' },
+                  { label: 'Comment', value: 'Face' },
+                ],
+                label: 'Tattoo',
+              },
+            ],
+          })
+        )
+      })
+    })
+  })
+
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
@@ -238,6 +297,7 @@ describe('prisoner personal', () => {
       elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
       elite2Api.getPhysicalAttributes.mockRejectedValue(new Error('Network error'))
       elite2Api.getPhysicalCharacteristics.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPhysicalMarks.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -265,6 +325,7 @@ describe('prisoner personal', () => {
             { label: 'Build', value: null },
             { label: 'Shoe size', value: null },
           ],
+          distinguishingMarks: null,
         })
       )
     })
