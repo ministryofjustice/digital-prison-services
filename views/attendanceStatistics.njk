@@ -111,7 +111,7 @@
         <p class="govuk-body">Suspended</p>
         <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="suspended">
             {% if dashboardStats.suspended > 0 %}
-              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/suspended?&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
+              <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/suspended?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{dashboardStats.suspended}}
               </a>
             {% else %}
