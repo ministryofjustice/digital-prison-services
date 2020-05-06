@@ -42,7 +42,7 @@ describe('Attendance reason statistics', () => {
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
     whereaboutsApi.getAbsenceReasons = jest.fn()
-    whereaboutsApi.getAttendanceForBookings = jest.fn()
+    whereaboutsApi.getAttendanceForBookingsOverDateRange = jest.fn()
     whereaboutsApi.getAttendanceChanges = jest.fn()
 
     whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
@@ -60,7 +60,7 @@ describe('Attendance reason statistics', () => {
       triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWaring'],
     })
 
-    whereaboutsApi.getAttendanceForBookings.mockReturnValue({ attendances: [] })
+    whereaboutsApi.getAttendanceForBookingsOverDateRange.mockReturnValue({ attendances: [] })
   })
 
   afterEach(() => {
@@ -711,7 +711,7 @@ describe('Attendance reason statistics', () => {
           suspended: false,
         },
       ])
-      whereaboutsApi.getAttendanceForBookings.mockReturnValue({
+      whereaboutsApi.getAttendanceForBookingsOverDateRange.mockReturnValue({
         attendances: [
           {
             eventId: 3,
@@ -763,11 +763,12 @@ describe('Attendance reason statistics', () => {
         toDate: '2019-10-11',
         period,
       })
-      expect(whereaboutsApi.getAttendanceForBookings).toHaveBeenCalledWith(res.locals, {
-        bookings: [1133341, 1133342, 1133343],
+      expect(whereaboutsApi.getAttendanceForBookingsOverDateRange).toHaveBeenCalledWith(res.locals, {
         agencyId,
-        date: '2019-10-10',
         period,
+        bookings: [1133341, 1133342, 1133343],
+        fromDate: '2019-10-10',
+        toDate: '2019-10-11',
       })
     })
 

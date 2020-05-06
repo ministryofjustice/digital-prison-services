@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AttendanceChangesPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AttendanceSuspendedPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.AttendanceStatsDashboardPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
@@ -206,6 +207,85 @@ class AttendanceStatsDashboardSpecification extends BrowserReportingSpec {
 
         then: "A attendance changes request has been made with the correct parameters"
         whereaboutsApi.verifyAttendanceChanges(fromDateTime, toDateTime)
+    }
+
+    def "clicking the suspended count should take you to the suspended screen"() {
+        fixture.loginAs(UserAccount.ITAG_USER)
+        def fromDateTime = "2019-10-10T00:00"
+        def toDateTime = "2019-10-10T11:59"
+        def agencyId = "LEI"
+        def period = "AM"
+        def fromDate = "10/10/2019"
+
+        def stats = [
+                "notRecorded": 1,
+                "paidReasons": [
+                        "acceptableAbsence": 1,
+                        "approvedCourse": 1,
+                        "attended": 1,
+                        "notRequired": 1
+                ],
+                "scheduleActivities": 1,
+                "suspended": 1,
+                "unpaidReasons": [
+                        "refused": 1,
+                        "refusedIncentiveLevelWarning": 1,
+                        "restDay": 1,
+                        "restInCellOrSick": 1,
+                        "sessionCancelled": 1,
+                        "unacceptableAbsence": 1
+                ]
+        ]
+
+        def suspendedResponse = [ "attendances": [[
+                                                  "eventId": 3,
+                                                  "bookingId": 1133341,
+                                                  "eventDate": "2019-10-10",
+                                                  "attended": false,
+                                                  "paid": true,
+                                                  "absentReason": "AcceptableAbsence",
+                                                  "comments": "Asked nicely.",
+                                            ]]
+        ]
+
+        def changesResponse = [ "changes": [[
+                                                    "eventId" : 1,
+                                                    "changedBy": "ITAG_USER",
+                                                    "changedOn": "2010-10-10T20:00",
+                                                    "changedFrom": "Attended",
+                                                    "changedTo": "Refused"
+                                            ]]
+        ]
+
+        oauthApi.stubGetMyRoles()
+        oauthApi.stubGetUserDetails("ITAG_USER", "staff")
+        elite2api.stubGetMyCaseloads(ITAG_USER.caseloads)
+        elite2api.stubActivitiesByDateRange(agencyId, "2019-10-10", "2019-10-10", period, [
+                [ "eventId" :1, "comment": "Houseblock 1", "firstName": "bob", "lastName": "sut", "offenderNo": "A123456"  ]
+        ])
+        elite2api.stubScheduledActivities(agencyId, [
+                [ "eventId" :1, "comment": "Houseblock 1", "firstName": "bob", "lastName": "sut", "offenderNo": "A123456"  ]
+        ])
+        whereaboutsApi.stubAttendanceStats(agencyId,period, "2019-10-10", stats)
+        whereaboutsApi.stubAttendanceChanges(fromDateTime, toDateTime, changesResponse)
+        whereaboutsApi.stubGetAttendanceForBookingsOverDateRange(agencyId, period, "2019-10-10", "2019-10-10", suspendedResponse)
+        whereaboutsApi.stubGetAbsenceReasons()
+
+        given: "I navigate to the dashboard page"
+        go "/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}"
+        at AttendanceStatsDashboardPage
+
+        when: "I am on the dashboard page"
+        at AttendanceStatsDashboardPage
+
+        and: "I click the changes count link"
+        suspended.click()
+
+        and: "I should be on the attendance changes page"
+        at AttendanceSuspendedPage
+
+        then: "A attendance changes request has been made with the correct parameters"
+        whereaboutsApi.verifyAttendanceSuspended(agencyId, period, "2019-10-10", "2019-10-10")
     }
 
 }
