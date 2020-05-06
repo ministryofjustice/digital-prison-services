@@ -1,0 +1,33 @@
+{% if distinguishingMarks.length %}
+  {% for distinguishingMark in distinguishingMarks %}
+    {% set distinguishingMarksRows = [] %}
+
+    {% for distinguishingMarkDetail in distinguishingMark.details %}
+      {% if distinguishingMarkDetail.value %}
+        {% set distinguishingMarksRows = (distinguishingMarksRows.push(
+          {
+            key: {
+              text: distinguishingMarkDetail.label,
+              classes: 'govuk-summary-list__key--indent'
+            },
+            value: {
+              text: distinguishingMarkDetail.value
+            }
+          }
+        ), distinguishingMarksRows) %}
+      {% endif %}
+    {% endfor %}
+
+    <h3 class="govuk-summary-list-title govuk-heading-s">{{ distinguishingMark.label }}</h3>
+
+    {{ govukSummaryList({
+      rows: distinguishingMarksRows
+    }) }}
+
+    {% if distinguishingMark.imageId %}
+      <img src="{{ '/app/image/' + distinguishingMark.imageId + '/data' }}" alt="{{ 'Picture of ' + distinguishingMark.label }}" class="distinguishing-mark-image" />
+    {% endif %}
+  {% endfor%}
+{% else %}
+  <p class="govuk-body">None</p>
+{% endif %}

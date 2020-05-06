@@ -1,0 +1,22 @@
+<h3 class="govuk-heading-m">Money</h3>
+{% set balanceRows = [] %}
+
+{% for balance in balanceDetails %}
+  {% set balanceRows = (balanceRows.push(
+    {
+      key: {
+        text: balance.label
+      },
+      value: {
+        text: balance.value | showDefault
+      }
+    }
+  ), balanceRows) %}
+{% endfor %}
+
+{{ govukSummaryList({
+  rows: balanceRows,
+  classes: "govuk-!-margin-bottom-2"
+}) }}
+
+<a href="#" class="govuk-link govuk-!-font-size-19">Payment history</a>

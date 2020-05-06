@@ -1,0 +1,22 @@
+<h3 class="govuk-heading-m">Offences</h3>
+{% set offenceRows = [] %}
+
+{% for offence in offenceDetails %}
+  {% set offenceRows = (offenceRows.push(
+    {
+      key: {
+        text: offence.label
+      },
+      value: {
+        text: offence.value | showDefault
+      }
+    }
+  ), offenceRows) %}
+{% endfor %}
+
+{{ govukSummaryList({
+  rows: offenceRows,
+  classes: "govuk-!-margin-bottom-2"
+}) }}
+
+<a href="#" class="govuk-link govuk-!-font-size-19">Offence information</a>

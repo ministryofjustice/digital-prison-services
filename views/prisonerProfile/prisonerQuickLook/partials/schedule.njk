@@ -1,0 +1,24 @@
+<h3 class="govuk-heading-m">Schedule</h3>
+{% set scheduledActivityRows = [] %}
+
+{% for activityPeriod in scheduledActivityPeriods %}
+  {% set scheduledActivityRows = (scheduledActivityRows.push(
+    {
+      key: {
+        text: activityPeriod.label
+      },
+      value: {
+        html: scheduledActivities(activityPeriod.value)
+      }
+    }
+  ), scheduledActivityRows) %}
+{% endfor %}
+
+{{ govukSummaryList({
+  rows: scheduledActivityRows,
+  classes: "govuk-!-margin-bottom-2"
+}) }}
+
+<a href="{{ dpsUrl + 'offenders/' + prisonerProfileData.offenderNo + '/schedule' }}" class="govuk-link govuk-!-font-size-19">
+  14 day schedule
+</a>

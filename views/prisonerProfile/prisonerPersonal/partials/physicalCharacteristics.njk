@@ -1,0 +1,23 @@
+{% set physicalCharacteristicsRows = [] %}
+
+{% for characteristic in physicalCharacteristics %}
+  {% set physicalCharacteristicsRows = (physicalCharacteristicsRows.push(
+    {
+      key: {
+        text: characteristic.label
+      },
+      value: {
+        text: characteristic.value | showDefault(missingEntry)
+      }
+    }
+  ), physicalCharacteristicsRows) %}
+{% endfor %}
+
+{% if physicalCharacteristicsRows.length %}
+  {{ govukSummaryList({
+    rows: physicalCharacteristicsRows
+  }) }}
+{% else %}
+  <p class="govuk-body">{{ missingEntry }}</p>
+{% endif %}
+

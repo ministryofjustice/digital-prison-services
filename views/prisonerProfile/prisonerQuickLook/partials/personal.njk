@@ -1,0 +1,20 @@
+<h3 class="govuk-heading-m">Personal information</h3>
+{% set personalRows = [] %}
+
+{% for personal in personalDetails %}
+  {% set personalRows = (personalRows.push(
+    {
+      key: {
+        text: personal.label
+      },
+      value: {
+        text: personal.value | showDefault
+      }
+    }
+  ), personalRows) %}
+{% endfor %}
+
+{{ govukSummaryList({
+  rows: personalRows,
+  classes: "govuk-!-margin-bottom-2"
+}) }}

@@ -43,7 +43,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
 
   const { heightMetres, weightKilograms } = physicalAttributesData || {}
 
-  return res.render('prisonerProfile/prisonerPersonal.njk', {
+  return res.render('prisonerProfile/prisonerPersonal/prisonerPersonal.njk', {
     prisonerProfileData,
     identifiers: [
       { label: 'PNC number', value: getValueByType('PNC', identifierData, 'value'), alwaysShow: true },

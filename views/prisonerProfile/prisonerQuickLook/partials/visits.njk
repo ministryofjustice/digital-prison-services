@@ -1,0 +1,38 @@
+<h3 class="govuk-heading-m">Visits</h3>
+{% set visitRows = [] %}
+
+{% for visitDetail in visits.details %}
+  {% set visitRows = (visitRows.push(
+    {
+      key: {
+        text: visitDetail.label
+      },
+      value: {
+        text: visitDetail.value | showDefault
+      }
+    }
+  ), visitRows) %}
+{% endfor %}
+
+{% if visits.nextVisitDetails %}
+  {% for nextVisitDetail in visits.nextVisitDetails %}
+    {% set visitRows = (visitRows.push(
+      {
+        key: {
+          text: nextVisitDetail.label,
+          classes: 'govuk-summary-list__key--indent'
+        },
+        value: {
+          text: nextVisitDetail.value | showDefault
+        }
+      }
+    ), visitRows) %}
+  {% endfor %}
+{% endif %}
+
+{{ govukSummaryList({
+  rows: visitRows,
+  classes: "govuk-!-margin-bottom-2"
+}) }}
+
+<a href="#" class="govuk-link govuk-!-font-size-19">Visits information</a>
