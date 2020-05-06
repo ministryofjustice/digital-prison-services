@@ -323,6 +323,19 @@ class Elite2Api extends WireMockRule {
                                         .withStatus(200)))
     }
 
+    def stubActivitiesByDateRange(agencyId, fromDate, toDate, period, response) {
+        this.stubFor(
+                get("/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader('Content-Type', 'application/json')
+                                        .withBody(JsonOutput.toJson(response))
+                        )
+
+        )
+    }
+
     def stubExternalTransfers(Caseload caseload, List offenderNumbers, String date, Boolean emptyResponse = false) {
         def json = emptyResponse ? JsonOutput.toJson([]) : HouseblockResponse.externalTransfersResponse
 
