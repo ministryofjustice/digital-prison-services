@@ -80,7 +80,7 @@ class AddCourtAppointmentSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with the video link confirmation page for prison staff"
         at ConfirmVideoLinkPrisonPage
-        assert offenderName == 'John Doe'
+        assert offenderName == 'Doe, John'
         assert prison == 'Leeds'
         assert room == 'Room 2'
         assert startTime == '10:55'

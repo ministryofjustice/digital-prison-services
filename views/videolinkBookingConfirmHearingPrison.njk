@@ -1,8 +1,4 @@
-{% if prisonUser %}
-    {% extends "./partials/layout.njk" %}
-{% else %}
-    {% extends "./partials/courtServiceLayout.njk" %}
-{% endif %}
+{% extends "./partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -17,9 +13,7 @@
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
-            {% if not prisonUser %}
                 <p class="govuk-body">We have sent you an email with the video link details. An email has also been sent to the prison.</p>
-            {% endif %}
 
             <h3 class="govuk-heading-m">Video link details</h3>
         </div>
@@ -45,35 +39,19 @@
         rows: court | toSummaryViewModel | removePaddingBottom
     }) }}
 
-    {% if prisonUser %}
-        <p class="govuk-body">
-            <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
-                Print movement slip
-            </a>
-        </p>
-            
-        {{ govukButton({
-            text: "Back to prisoner profile",
-            element: 'a',
-            href: prisonerProfileLink,
-            classes: "govuk-button--secondary",
-            attributes: {
-                'data-qa': 'back-to-profile'
-            }
-        }) }}
-    {% else %}
-        <p class="govuk-body">
-            <a href={{ prisonerSearchLink }} class="govuk-link" data-qa="back-to-prisoner-search">Book another video link</a>
-        </p>
-
-        {{ govukButton({
-            text: "Exit",
-            element: 'a',
-            href: '/videolink',
-            classes: "govuk-button--primary",
-            attributes: {
-                'data-qa': 'back-to-video-link'
-            }
-        }) }}
-    {% endif %}
+    <p class="govuk-body">
+        <a href="/bulk-appointments/appointments-movement-slips" class="govuk-link govuk-link--no-visited-state" target="_blank" data-qa="print-movement-slips">
+            Print movement slip
+        </a>
+    </p>
+        
+    {{ govukButton({
+        text: "Back to prisoner profile",
+        element: 'a',
+        href: prisonerProfileLink,
+        classes: "govuk-button--secondary",
+        attributes: {
+            'data-qa': 'back-to-profile'
+        }
+    }) }}
 {% endblock %}

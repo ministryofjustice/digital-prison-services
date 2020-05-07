@@ -120,28 +120,48 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       }
 
       if (isVideoLinkBooking(appointmentType)) {
-        res.render('videolinkBookingConfirmHearing.njk', {
-          title: 'The video link has been booked',
-          prisonUser,
-          prisonerSearchLink: '/prisoner-search',
-          prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
-          offender: {
-            name: details.prisonerName,
-            prison: agencyDescription,
-            prisonRoom: details.location,
-          },
-          details: {
-            date: details.date,
-            courtHearingStartTime: details.startTime,
-            courtHearingEndTime: details.endTime,
-            comments: details.comment,
-          },
-          prepostData,
-          court: {
-            courtLocation: details.court,
-          },
-          homeUrl: prisonUser ? dpsUrl : '/videolink',
-        })
+        if (prisonUser) {
+          res.render('videolinkBookingConfirmHearingPrison.njk', {
+            title: 'The video link has been booked',
+            prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+            offender: {
+              name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
+              prison: agencyDescription,
+              prisonRoom: details.location,
+            },
+            details: {
+              date: details.date,
+              courtHearingStartTime: details.startTime,
+              courtHearingEndTime: details.endTime,
+              comments: details.comment,
+            },
+            prepostData,
+            court: {
+              courtLocation: details.court,
+            },
+          })
+        } else {
+          res.render('videolinkBookingConfirmHearingCourt.njk', {
+            title: 'The video link has been booked',
+            prisonerSearchLink: '/prisoner-search',
+            offender: {
+              name: details.prisonerName,
+              prison: agencyDescription,
+              prisonRoom: details.location,
+            },
+            details: {
+              date: details.date,
+              courtHearingStartTime: details.startTime,
+              courtHearingEndTime: details.endTime,
+              comments: details.comment,
+            },
+            prepostData,
+            court: {
+              courtLocation: details.court,
+            },
+            homeUrl: '/videolink',
+          })
+        }
 
         raiseAnalyticsEvent(
           'VLB Appointments',
