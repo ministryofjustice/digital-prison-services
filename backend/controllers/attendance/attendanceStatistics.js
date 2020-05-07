@@ -376,7 +376,6 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     const formattedToDate = toDate ? switchDateFormat(toDate, 'DD/MM/YYYY') : switchDateFormat(fromDate, 'DD/MM/YYYY')
     const currentPeriod = getCurrentPeriod(moment().format())
     const today = moment().format('DD/MM/YYYY')
-    const periods = period.split('_')
 
     try {
       const [user, caseloads, roles] = await Promise.all([
@@ -403,38 +402,13 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       const suspendedActivites = scheduledActivities.filter(activity => activity.suspended)
       const totalOffenders = new Set(suspendedActivites.map(activity => activity.bookingId)).size
 
-      // Create mapping between date and a set of bookings with suspended activities on that date
-      // This mapping will be used to get the relevant attendances for each date
-      const suspendedBookingsPerEventDate = {}
-      suspendedActivites.forEach(activity => {
-        const date = moment(activity.startTime).format('YYYY-MM-DD')
-        if (!suspendedBookingsPerEventDate[date]) {
-          suspendedBookingsPerEventDate[date] = new Set()
-        }
-        suspendedBookingsPerEventDate[date].add(activity.bookingId)
+      const suspendedAttendances = await whereaboutsApi.getAttendanceForBookingsOverDateRange(res.locals, {
+        agencyId,
+        period: period === 'AM_PM' ? '' : period,
+        bookings: suspendedActivites.map(activity => activity.bookingId),
+        fromDate: formattedFromDate,
+        toDate: formattedToDate,
       })
-
-      const getAttendances = async (periodsList, data) => {
-        const suspendedAttendancesList = []
-        await Promise.all(
-          periodsList.map(async periodItem => {
-            await Promise.all(
-              Object.keys(data).map(async date => {
-                const attendances = await whereaboutsApi.getAttendanceForBookings(res.locals, {
-                  agencyId,
-                  period: periodItem,
-                  bookings: [...data[date]],
-                  date,
-                })
-                suspendedAttendancesList.push(...attendances.attendances)
-              })
-            )
-          })
-        )
-        return suspendedAttendancesList
-      }
-
-      const suspendedAttendances = await getAttendances(periods, suspendedBookingsPerEventDate)
 
       const formatAttendedData = data => {
         if (data.attended) {
@@ -445,7 +419,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       }
 
       const offendersData = suspendedActivites.map(activity => {
-        const attendanceDetails = suspendedAttendances.find(
+        const attendanceDetails = suspendedAttendances.attendances.find(
           attendance =>
             activity.bookingId === attendance.bookingId &&
             moment(activity.startTime).format('YYYY-MM-DD') === attendance.eventDate &&

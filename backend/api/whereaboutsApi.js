@@ -13,6 +13,13 @@ const whereaboutsApiFactory = client => {
   const getAttendanceForBookings = (context, { agencyId, period, bookings, date }) =>
     post(context, `/attendances/${agencyId}?date=${date}&period=${period}`, bookings)
 
+  const getAttendanceForBookingsOverDateRange = (context, { agencyId, period, bookings, fromDate, toDate }) =>
+    post(
+      context,
+      `/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}`,
+      bookings
+    )
+
   const postAttendance = (context, body) => post(context, '/attendance', body)
 
   const putAttendance = (context, body, id) => put(context, `/attendance/${id}`, body)
@@ -55,6 +62,7 @@ const whereaboutsApiFactory = client => {
   return {
     getAttendance,
     getAttendanceForBookings,
+    getAttendanceForBookingsOverDateRange,
     postAttendance,
     putAttendance,
     getAbsenceReasons,

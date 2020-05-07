@@ -48,7 +48,7 @@ describe('prisoner personal', () => {
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
-      'prisonerProfile/prisonerPersonal.njk',
+      'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
         prisonerProfileData,
       })
@@ -71,7 +71,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             identifiers: [
               { label: 'PNC number', value: undefined, alwaysShow: true },
@@ -102,7 +102,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             identifiers: [
               { label: 'PNC number', value: '1234', alwaysShow: true },
@@ -133,7 +133,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             aliases: [],
           })
@@ -155,7 +155,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             aliases: [{ label: 'Alias, First', value: '31/08/1985' }, { label: 'Alias, Second', value: '20/05/1986' }],
           })
@@ -174,7 +174,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             physicalCharacteristics: [
               { label: 'Height', value: undefined },
@@ -213,7 +213,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             physicalCharacteristics: [
               { label: 'Height', value: '1.91m' },
@@ -242,7 +242,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             distinguishingMarks: [],
           })
@@ -262,7 +262,7 @@ describe('prisoner personal', () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerPersonal.njk',
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
             distinguishingMarks: [
               {
@@ -305,7 +305,7 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerPersonal.njk',
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
         expect.objectContaining({
           identifiers: [
             { label: 'PNC number', value: null, alwaysShow: true },

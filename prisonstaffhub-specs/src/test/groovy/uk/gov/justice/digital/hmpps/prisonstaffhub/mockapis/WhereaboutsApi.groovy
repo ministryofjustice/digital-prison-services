@@ -122,13 +122,23 @@ public class WhereaboutsApi extends WireMockRule {
                         .withBody(JsonOutput.toJson(data))))
     }
 
-    void stubGetAttendanceForBookings(Caseload caseload, String timeSlot, String date, data = attendanceForBookingsResponse) {
+    void stubGetAttendanceForBookingsOverDateRange(agencyId, String timeSlot, String fromDate, String toDate, data = attendance) {
         this.stubFor(
-                post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
+                post("/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${timeSlot}")
                         .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson(data))))
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(data))))
+    }
+
+
+    void stubGetAttendanceForBookings(Caseload caseload, String timeSlot, String date, data = attendanceForBookingsResponse) {
+    this.stubFor(
+            post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
+                    .willReturn(aResponse()
+                    .withStatus(200)
+                    .withHeader('Content-Type', 'application/json')
+                    .withBody(JsonOutput.toJson(data))))
     }
 
     void stubGetAbsenceReasons() {
@@ -261,6 +271,10 @@ public class WhereaboutsApi extends WireMockRule {
 
     void verifyAttendanceChanges(fromDateTime, toDateTime) {
         this.verify(getRequestedFor(urlEqualTo("/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}")))
+    }
+
+    void verifyAttendanceSuspended(agencyId, period, fromDate, toDate) {
+        this.verify(postRequestedFor(urlEqualTo("/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}")))
     }
 
     void stubAttendanceStats(agencyId, period, fromDate, response) {
