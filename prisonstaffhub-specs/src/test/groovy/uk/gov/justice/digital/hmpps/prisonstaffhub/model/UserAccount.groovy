@@ -10,7 +10,7 @@ import static Caseload.*
 enum UserAccount {
 
     ELITE2_API_USER('ELITE2_API_USER', SM_1, GENERAL, NWEB, []),
-    ITAG_USER('ITAG_USER', SM_2, GENERAL, LEI, [BXI, LEI, MDI, SYI, WAI]),
+    ITAG_USER('ITAG_USER', SM_2, GENERAL, LEI, [BXI, LEI, MDI, SYI, WAI, NWEB]),
     API_TEST_USER('API_TEST_USER', SM_4, GENERAL, MUL, [MUL]),
     EXOFF5('EXOFF5', SM_10, GENERAL, LEI, []),
     COURT_USER('COURT_USER', null, null, null, []),

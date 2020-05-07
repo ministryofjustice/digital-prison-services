@@ -107,12 +107,64 @@ describe('Confirm appointments', () => {
     )
 
     expect(res.render).toHaveBeenCalledWith(
-      'videolinkBookingConfirmHearing.njk',
+      'videolinkBookingConfirmHearingPrison.njk',
       expect.objectContaining({
-        homeUrl: 'http://localhost:3000/',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
+        title: 'The video link has been booked',
+        offender: {
+          name: 'Doe, John',
+          prisonRoom: 'Room 3',
+          prison: undefined,
+        },
+        details: {
+          date: '10 October 2017',
+          courtHearingStartTime: '11:00',
+          courtHearingEndTime: '14:00',
+          comments: 'Test',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Room 1 - 10:45 to 11:00',
+        },
+        court: { courtLocation: 'London' },
+      })
+    )
+  })
+
+  it('should load court confirmation page when user is not prison staff', async () => {
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError: () => {},
+    })
+
+    req.session = { userDetails: { authSource: '' } }
+
+    req.flash.mockImplementation(() => [
+      {
+        ...appointmentDetails,
+        preAppointment: {
+          endTime: '2017-10-10T11:00:00',
+          locationId: 2,
+          startTime: '2017-10-10T10:45:00',
+          duration: 30,
+        },
+        appointmentType: 'VLB',
+      },
+    ])
+
+    await index(req, res)
+
+    expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
+      'VLB Appointments',
+      'Video link booked for London',
+      'Pre: Yes | Post: No'
+    )
+
+    expect(res.render).toHaveBeenCalledWith(
+      'videolinkBookingConfirmHearingCourt.njk',
+      expect.objectContaining({
         prisonerSearchLink: '/prisoner-search',
-        prisonUser: true,
+        homeUrl: '/videolink',
         title: 'The video link has been booked',
         offender: {
           name: 'John Doe',
