@@ -39,6 +39,7 @@ describe('prisoner personal', () => {
     elite2Api.getPhysicalAttributes = jest.fn().mockResolvedValue({})
     elite2Api.getPhysicalCharacteristics = jest.fn().mockResolvedValue([])
     elite2Api.getPhysicalMarks = jest.fn().mockResolvedValue([])
+    elite2Api.getPrisonerProperty = jest.fn().mockResolvedValue([])
     controller = prisonerPersonal({ prisonerProfileService, elite2Api, logError })
   })
 
@@ -291,6 +292,64 @@ describe('prisoner personal', () => {
     })
   })
 
+  describe('property', () => {
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    describe('when there is missing property data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            property: [],
+          })
+        )
+      })
+    })
+
+    describe('when there is property data', () => {
+      beforeEach(() => {
+        elite2Api.getPrisonerProperty.mockResolvedValue([
+          {
+            containerType: 'Valuables',
+            location: { userDescription: 'Property Box 123' },
+            sealMark: 123,
+          },
+          {
+            containerType: 'Bulk',
+            location: { userDescription: 'Property Box 456' },
+            sealMark: 456,
+          },
+        ])
+      })
+
+      it('should render the personal template with the correctly formatted data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            property: [
+              {
+                details: [{ label: 'Seal mark', value: 123 }, { label: 'Location', value: 'Property Box 123' }],
+                label: 'Property',
+                value: 'Valuables',
+              },
+              {
+                details: [{ label: 'Seal mark', value: 456 }, { label: 'Location', value: 'Property Box 456' }],
+                label: 'Property',
+                value: 'Bulk',
+              },
+            ],
+          })
+        )
+      })
+    })
+  })
+
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
@@ -299,6 +358,7 @@ describe('prisoner personal', () => {
       elite2Api.getPhysicalAttributes.mockRejectedValue(new Error('Network error'))
       elite2Api.getPhysicalCharacteristics.mockRejectedValue(new Error('Network error'))
       elite2Api.getPhysicalMarks.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerProperty.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -327,6 +387,7 @@ describe('prisoner personal', () => {
             { label: 'Shoe size', value: null },
           ],
           distinguishingMarks: null,
+          property: null,
         })
       )
     })
