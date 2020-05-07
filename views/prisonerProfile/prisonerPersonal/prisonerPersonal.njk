@@ -23,8 +23,12 @@
   {% include "./partials/identifiers.njk" %}
 {% endset %}
 
+{% set personalContent %}
+  {% include "./partials/property.njk" %}
+{% endset %}
+
 {% set leftSections = [
-    { heading: 'Personal details', html: '<p class="govuk-body">Personal details content</p>' },
+    { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
     { heading: 'Distinguishing marks', html: distinguishingMarksContent },
     { heading: 'Personal care needs', html: '<p class="govuk-body">Personal care needs content</p>' },

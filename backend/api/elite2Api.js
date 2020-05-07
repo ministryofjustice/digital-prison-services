@@ -253,6 +253,8 @@ const elite2ApiFactory = client => {
 
   const getImage = (context, imageId) => getStream(context, `/api/images/${imageId}/data`)
 
+  const getPrisonerProperty = (context, bookingId) => get(context, `/api/bookings/${bookingId}/property`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -327,6 +329,7 @@ const elite2ApiFactory = client => {
     getPhysicalCharacteristics,
     getPhysicalMarks,
     getImage,
+    getPrisonerProperty,
   }
 }
 
