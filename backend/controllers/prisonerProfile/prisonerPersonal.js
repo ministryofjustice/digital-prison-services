@@ -30,6 +30,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     physicalAttributesData,
     physicalCharacteristicsData,
     physicalMarksData,
+    propertyData,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -38,6 +39,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       elite2Api.getPhysicalAttributes(res.locals, bookingId),
       elite2Api.getPhysicalCharacteristics(res.locals, bookingId),
       elite2Api.getPhysicalMarks(res.locals, bookingId),
+      elite2Api.getPrisonerProperty(res.locals, bookingId),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
@@ -86,6 +88,16 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           { label: 'Comment', value: physicalMark.comment },
         ],
         imageId: physicalMark.imageId,
+      })),
+    property:
+      propertyData &&
+      propertyData.map(property => ({
+        label: 'Property',
+        value: property.containerType,
+        details: [
+          { label: 'Seal mark', value: property.sealMark },
+          { label: 'Location', value: property.location && property.location.userDescription },
+        ],
       })),
   })
 }
