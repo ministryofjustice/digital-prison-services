@@ -5,6 +5,8 @@ const { putLastNameFirst } = require('../../utils')
 module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { fromDate, toDate, alertType } = req.query
+  const fomattedFromDate = fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
+  const fomattedToDate = toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
 
   try {
     const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
@@ -13,7 +15,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
     const fromQuery = date => (date ? `dateCreated:gteq:DATE'${date}'` : '')
     const toQuery = date => (date ? `dateCreated:lteq:DATE'${date}'` : '')
 
-    const queryParts = [alertTypeQuery(alertType), fromQuery(fromDate), toQuery(toDate)]
+    const queryParts = [alertTypeQuery(alertType), fromQuery(fomattedFromDate), toQuery(fomattedToDate)]
       .filter(value => value)
       .join(',and:')
 
@@ -21,7 +23,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
 
     const [prisonerProfileData, alerts, alertTypes] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      elite2Api.getAlertsForBooking(res.locals, bookingId, query),
+      elite2Api.getAlertsForBooking(res.locals, { bookingId, query }),
       referenceCodesService.getAlertTypes(res.locals),
     ])
 
@@ -33,7 +35,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
         { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY') },
         { text: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}` },
         {
-          html: `<a class="govuk-button-secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
+          html: `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
             alert.alertId
           }">Edit or close</a>`,
         },
@@ -59,13 +61,23 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
       ]
     })
 
-    const alertTypeValues = alertTypes
-      .filter(type => type.activeFlag === 'Y')
-      .map(type => ({ value: type.value, text: type.description }))
-      .sort((a, b) => a.description - b.description)
+    const totalAlerts = prisonerProfileData.activeAlertCount + prisonerProfileData.inactiveAlertCount
+
+    const alertTypeValues =
+      (alertTypes &&
+        alertTypes.alertTypes &&
+        alertTypes.alertTypes
+          .filter(type => type.activeFlag === 'Y')
+          .map(type => ({ value: type.value, text: type.description }))
+          .sort((a, b) => a.description - b.description)) ||
+      []
 
     return res.render('prisonerProfile/prisonerAlerts.njk', {
       prisonerProfileData,
+      totalAlerts,
+      alertType,
+      fromDate,
+      toDate,
       activeAlerts,
       inactiveAlerts,
       alertTypeValues,

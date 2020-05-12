@@ -55,7 +55,7 @@ $govuk-page-width: 1170px;
       margin-bottom: govuk-spacing(1);
     }
 
-    button {
+    button, a {
       align-self: flex-end;
       margin-bottom: $govuk-border-width-form-element;
     }

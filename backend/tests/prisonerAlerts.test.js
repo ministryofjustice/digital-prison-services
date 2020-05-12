@@ -38,12 +38,12 @@ describe('prisoner personal', () => {
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({})
-    referenceCodesService.getAlertTypes = jest
-      .fn()
-      .mockResolvedValue([
+    referenceCodesService.getAlertTypes = jest.fn().mockResolvedValue({
+      alertTypes: [
         { activeFlag: 'Y', description: 'Child Communication Measures', value: 'C' },
         { activeFlag: 'Y', description: 'Social Care', value: 'A' },
-      ])
+      ],
+    })
     elite2Api.getAlertsForBooking = jest.fn().mockResolvedValue([])
     controller = prisonerAlerts({ prisonerProfileService, referenceCodesService, elite2Api, logError })
   })
@@ -53,7 +53,10 @@ describe('prisoner personal', () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, bookingId, '')
+    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, {
+      bookingId: '14',
+      query: '',
+    })
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
     expect(res.render).toHaveBeenCalledWith(
@@ -70,17 +73,16 @@ describe('prisoner personal', () => {
   it('should correctly combine filters and pass on to API call', async () => {
     elite2Api.getDetails.mockResolvedValue({ bookingId })
     req.query = {
-      fromDate: '2019-10-10',
-      toDate: '2019-10-11',
+      fromDate: '10/10/2019',
+      toDate: '11/10/2019',
       alertType: 'X',
     }
     await controller(req, res)
 
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(
-      res.locals,
-      bookingId,
-      "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11'"
-    )
+    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, {
+      bookingId: '14',
+      query: "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11'",
+    })
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
@@ -88,6 +90,11 @@ describe('prisoner personal', () => {
         prisonerProfileData,
         activeAlerts: [],
         inactiveAlerts: [],
+        alertTypeValues: [{ text: 'Child Communication Measures', value: 'C' }, { text: 'Social Care', value: 'A' }],
+        totalAlerts: 3,
+        alertType: 'X',
+        fromDate: '10/10/2019',
+        toDate: '11/10/2019',
       })
     )
   })
@@ -150,7 +157,7 @@ describe('prisoner personal', () => {
               { text: 'Smith, John' },
               {
                 html:
-                  '<a class="govuk-button-secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Edit or close</a>',
+                  '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Edit or close</a>',
               },
             ],
           ],
