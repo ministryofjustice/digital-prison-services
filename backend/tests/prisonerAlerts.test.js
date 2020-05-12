@@ -20,6 +20,7 @@ describe('prisoner personal', () => {
   const bookingId = '14'
   const elite2Api = {}
   const prisonerProfileService = {}
+  const referenceCodesService = {}
 
   let req
   let res
@@ -27,7 +28,7 @@ describe('prisoner personal', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo } }
+    req = { params: { offenderNo }, query: {} }
     res = { locals: {}, render: jest.fn() }
 
     logError = jest.fn()
@@ -37,8 +38,14 @@ describe('prisoner personal', () => {
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({})
+    referenceCodesService.getAlertTypes = jest
+      .fn()
+      .mockResolvedValue([
+        { activeFlag: 'Y', description: 'Child Communication Measures', value: 'C' },
+        { activeFlag: 'Y', description: 'Social Care', value: 'A' },
+      ])
     elite2Api.getAlertsForBooking = jest.fn().mockResolvedValue([])
-    controller = prisonerAlerts({ prisonerProfileService, elite2Api, logError })
+    controller = prisonerAlerts({ prisonerProfileService, referenceCodesService, elite2Api, logError })
   })
 
   it('should make a call for the prisoner alerts and the prisoner header details and render them', async () => {
@@ -46,12 +53,41 @@ describe('prisoner personal', () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, bookingId)
+    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, bookingId, '')
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerAlerts.njk',
+      expect.objectContaining({
+        prisonerProfileData,
+        activeAlerts: [],
+        inactiveAlerts: [],
+        alertTypeValues: [{ text: 'Child Communication Measures', value: 'C' }, { text: 'Social Care', value: 'A' }],
+      })
+    )
+  })
+
+  it('should correctly combine filters and pass on to API call', async () => {
+    elite2Api.getDetails.mockResolvedValue({ bookingId })
+    req.query = {
+      fromDate: '2019-10-10',
+      toDate: '2019-10-11',
+      alertType: 'X',
+    }
+    await controller(req, res)
+
+    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(
+      res.locals,
+      bookingId,
+      "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11'"
+    )
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
       expect.objectContaining({
         prisonerProfileData,
+        activeAlerts: [],
+        inactiveAlerts: [],
       })
     )
   })
