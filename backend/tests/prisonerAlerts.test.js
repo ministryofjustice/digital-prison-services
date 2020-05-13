@@ -170,7 +170,7 @@ describe('prisoner personal', () => {
         expect.objectContaining({
           activeAlerts: [
             [
-              { text: 'Security' },
+              { text: 'Security', classes: 'active-alert govuk-!-font-weight-bold' },
               { text: 'Risk to females' },
               { text: 'has a large poster on cell wall' },
               { text: '20/08/2019' },
@@ -183,11 +183,11 @@ describe('prisoner personal', () => {
           ],
           inactiveAlerts: [
             [
-              { text: 'Security' },
-              { text: 'Risk to females' },
-              { text: 'has a large poster on cell wall' },
-              { html: '20/08/2019<br>21/08/2019' },
-              { html: 'Smith, John<br>Smith, John' },
+              { text: 'Security', classes: 'inactive-alert govuk-!-font-weight-bold' },
+              { text: 'Risk to females', classes: 'inactive-alert' },
+              { text: 'has a large poster on cell wall', classes: 'inactive-alert' },
+              { html: '20/08/2019<br>21/08/2019', classes: 'inactive-alert' },
+              { html: 'Smith, John<br>Smith, John', classes: 'inactive-alert' },
             ],
           ],
         })

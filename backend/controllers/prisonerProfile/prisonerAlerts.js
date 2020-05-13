@@ -104,7 +104,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
 
     const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => {
       return [
-        { text: alert.alertTypeDescription },
+        { text: alert.alertTypeDescription, classes: 'active-alert govuk-!-font-weight-bold' },
         { text: alert.alertCodeDescription },
         { text: alert.comment || 'None' },
         { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY') },
@@ -118,20 +118,22 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
     })
     const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => {
       return [
-        { text: alert.alertTypeDescription },
-        { text: alert.alertCodeDescription },
-        { text: alert.comment || 'None' },
+        { text: alert.alertTypeDescription, classes: 'inactive-alert govuk-!-font-weight-bold' },
+        { text: alert.alertCodeDescription, classes: 'inactive-alert' },
+        { text: alert.comment || 'None', classes: 'inactive-alert' },
         {
           html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY')}<br>${moment(
             alert.dateExpires,
             'YYYY-MM-DD'
           ).format('DD/MM/YYYY')}`,
+          classes: 'inactive-alert',
         },
         {
           html: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}<br>${putLastNameFirst(
             alert.expiredByFirstName,
             alert.expiredByLastName
           )}`,
+          classes: 'inactive-alert',
         },
       ]
     })
