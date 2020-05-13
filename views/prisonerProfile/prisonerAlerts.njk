@@ -13,6 +13,19 @@
   <h2 class="govuk-heading-m">View by</h2>
   <form class="horizontal-form govuk-!-display-none-print govuk-body govuk-!-margin-bottom-3">
     {{ govukSelect({
+        name: 'active',
+        id: 'active',
+        label: {
+            text: "Active or inactive"
+        },
+        items: [
+          {text: "Active", value: "ACTIVE"}, 
+        {text: "Inactive", value: "INACTIVE"}
+        ] | setSelected(active),
+        errorMessage: errors | findError(active)
+      }) }}
+
+    {{ govukSelect({
       name: 'alertType',
       id: 'alertType',
       label: {
@@ -49,54 +62,59 @@
 
   {{ mojPagination(pagination) }} 
 
-  <h2 class="govuk-heading-m">Active alerts</h2>
+  {% if activeAlerts.length %}
+    <h2 class="govuk-heading-m">Active alerts</h2>
 
-    {{ govukTable({
-      head: [
-        {
-          text: "Type of alert"
-        },
-        {
-          text: "Alert"
-        },
-        {
-          text: "Comments"
-        },
-        {
-          text: "Date from"
-        },
-        {
-          text: "Created by"
-        },
-        {
-          text: " "
-        }
-      ],
-      rows: activeAlerts,
-      attributes: { "data-qa": "active-alerts-table" }
-    }) }}
+      {{ govukTable({
+        head: [
+          {
+            text: "Type of alert"
+          },
+          {
+            text: "Alert"
+          },
+          {
+            text: "Comments"
+          },
+          {
+            text: "Date from"
+          },
+          {
+            text: "Created by"
+          },
+          {
+            text: " "
+          }
+        ],
+        rows: activeAlerts,
+        attributes: { "data-qa": "active-alerts-table" }
+      }) }}
+  {% endif %}
 
-  <h2 class="govuk-heading-m">Inactive alerts</h2>
-    {{ govukTable({
-      head: [
-        {
-          text: "Type of alert"
-        },
-        {
-          text: "Details"
-        },
-        {
-          text: "Comments"
-        },
-        {
-          html: "Date from /<br>date closed"
-        },
-        {
-          html: "Created by /<br>closed by"
-        }
-      ],
-      rows: inactiveAlerts,
-      attributes: { "data-qa": "inactive-alerts-table" }
-    }) }}
+  {% if inactiveAlerts.length %}
+    <h2 class="govuk-heading-m">Inactive alerts</h2>
+      {{ govukTable({
+        head: [
+          {
+            text: "Type of alert"
+          },
+          {
+            text: "Details"
+          },
+          {
+            text: "Comments"
+          },
+          {
+            html: "Date from /<br>date closed"
+          },
+          {
+            html: "Created by /<br>closed by"
+          }
+        ],
+        rows: inactiveAlerts,
+        attributes: { "data-qa": "inactive-alerts-table" }
+      }) }}
+  {% endif %}
   
+  {{ mojPagination(pagination) }}
 {% endblock %}

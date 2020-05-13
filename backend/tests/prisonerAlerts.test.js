@@ -28,12 +28,14 @@ describe('prisoner personal', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo }, query: {} }
+    req = { params: { offenderNo }, query: {}, protocol: 'http' }
     res = { locals: {}, render: jest.fn() }
 
     logError = jest.fn()
 
-    req.originalUrl = 'http://localhost'
+    req.originalUrl = '/alerts'
+    req.get = jest.fn()
+    req.get.mockReturnValue('localhost')
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
@@ -57,7 +59,7 @@ describe('prisoner personal', () => {
       res.locals,
       {
         bookingId: '14',
-        query: '',
+        query: "?query=active:eq:'ACTIVE'",
       },
       { 'Page-Limit': 20, 'Page-Offset': 0, 'Sort-Fields': 'dateCreated', 'Sort-Order': 'DESC' }
     )
@@ -80,6 +82,7 @@ describe('prisoner personal', () => {
       fromDate: '10/10/2019',
       toDate: '11/10/2019',
       alertType: 'X',
+      active: 'ACTIVE',
     }
     await controller(req, res)
 
@@ -87,7 +90,8 @@ describe('prisoner personal', () => {
       res.locals,
       {
         bookingId: '14',
-        query: "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11'",
+        query:
+          "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11',and:active:eq:'ACTIVE'",
       },
       { 'Page-Limit': 20, 'Page-Offset': 0, 'Sort-Fields': 'dateCreated', 'Sort-Order': 'DESC' }
     )
@@ -99,10 +103,18 @@ describe('prisoner personal', () => {
         activeAlerts: [],
         inactiveAlerts: [],
         alertTypeValues: [{ text: 'Child Communication Measures', value: 'C' }, { text: 'Social Care', value: 'A' }],
-        totalAlerts: 3,
+        totalAlerts: 1,
         alertType: 'X',
+        active: 'ACTIVE',
         fromDate: '10/10/2019',
         toDate: '11/10/2019',
+        pagination: {
+          classes: 'govuk-!-font-size-19',
+          items: [],
+          next: undefined,
+          previous: undefined,
+          results: { count: 1, from: 1, to: 1 },
+        },
       })
     )
   })
@@ -189,7 +201,7 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       expect(logError).toHaveBeenCalledWith(
-        'http://localhost',
+        '/alerts',
         new Error('Problem retrieving alerts'),
         serviceUnavailableMessage
       )
