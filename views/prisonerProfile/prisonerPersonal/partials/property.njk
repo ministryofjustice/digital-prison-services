@@ -1,7 +1,7 @@
 {% set propertyRows = [] %}
 
-{% if property.length %}
-  {% for item in property %}
+{% if personalDetails.property.length %}
+  {% for item in personalDetails.property %}
     {% set propertyRows = (propertyRows.push(
       {
         key: {
@@ -22,7 +22,7 @@
               classes: 'govuk-summary-list__key--indent'
             },
             value: {
-              text: itemDetail.value | showDefault('Not entered')
+              text: itemDetail.value | showDefault(missingEntry)
             }
           }
         ), propertyRows) %}
