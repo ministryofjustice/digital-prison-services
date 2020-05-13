@@ -5,3 +5,12 @@
 .inactive-alert {
     color:  govuk-colour("dark-grey")
 }
+
+.fixed-table {
+    table-layout: fixed;
+}
+
+.clip-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

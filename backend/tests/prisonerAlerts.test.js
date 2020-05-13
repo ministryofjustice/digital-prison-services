@@ -172,7 +172,7 @@ describe('prisoner personal', () => {
             [
               { text: 'Security', classes: 'active-alert govuk-!-font-weight-bold' },
               { text: 'Risk to females' },
-              { text: 'has a large poster on cell wall' },
+              { text: 'has a large poster on cell wall', classes: 'clip-overflow' },
               { text: '20/08/2019' },
               { text: 'Smith, John' },
               {
@@ -185,7 +185,7 @@ describe('prisoner personal', () => {
             [
               { text: 'Security', classes: 'inactive-alert govuk-!-font-weight-bold' },
               { text: 'Risk to females', classes: 'inactive-alert' },
-              { text: 'has a large poster on cell wall', classes: 'inactive-alert' },
+              { text: 'has a large poster on cell wall', classes: 'inactive-alert clip-overflow' },
               { html: '20/08/2019<br>21/08/2019', classes: 'inactive-alert' },
               { html: 'Smith, John<br>Smith, John', classes: 'inactive-alert' },
             ],
