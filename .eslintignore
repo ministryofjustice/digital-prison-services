@@ -6,3 +6,4 @@ docs
 bin
 static
 audit-ci.json
+package-lock.json

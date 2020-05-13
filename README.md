@@ -3,8 +3,8 @@
 Application can be built with for dev mode
 
 ```bash
-yarn
-yarn start
+npm
+npm start
 ```
 
 The application will automatically pick up front end changes, but you will need to restart the app to pick up any
@@ -13,8 +13,8 @@ changes within the backend folder.
 For production
 
 ```bash
-yarn build
-node-env mode=PRODUCTION yarn start
+npm build
+node-env mode=PRODUCTION npm start
 ```
 
 Run locally as docker
@@ -61,7 +61,7 @@ https://sites.google.com/a/chromium.org/chromedriver/getting-started
 A separate node instance needs to be started for the feature tests. This will run on port 3006 and won't conflict
 with any of the api services, e.g. elite2-api or oauth.
 
-`yarn start-feature`
+`npm start-feature`
 
 **To run the tests using Gradle:**
 Ensure that chromedriver is on your path. Run `./gradlew build` from the root of this project.

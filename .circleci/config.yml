@@ -86,23 +86,23 @@ jobs:
           command: helm lint prison-staff-hub --values=values-dev.yaml --values=secrets-example.yaml
           working_directory: helm_deploy
       - restore_cache:
-          key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
+          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
           name: Install Dependencies
-          command: yarn --frozen-lockfile
+          command: npm ci --no-audit
       - save_cache:
-          key: node_modules-{{ checksum "yarn.lock" }}-{{ checksum "package.json" }}
+          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
           name: Run eslint
-          command: yarn lint
+          command: npm run lint
       - run:
           name: Run Tests
           command: |
              set -e
-             yarn test --maxWorkers=2
-      - run: NODE_ENV=production yarn build
+             npm test --maxWorkers=2
+      - run: NODE_ENV=production npm run build
       - persist_to_workspace:
           root: .
           paths:
@@ -119,7 +119,7 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: yarn start-feature
+          command: npm run start-feature
           background: true
 #      - run:
 #          name: Wait for node app to start
@@ -209,16 +209,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-yarn
-          command: 'sudo yarn global add yarn'
+          name: update-npm
+          command: 'sudo npm install -g npm'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: install-yarn
-          command: 'yarn --frozen-lockfile --no-audit'
+          command: 'npm ci --no-audit'
       - run:
           name: run-security-audit
-          command: 'yarn security_audit'
+          command: 'npm run security_audit'
 workflows:
   version: 2
   build-test-and-deploy:
