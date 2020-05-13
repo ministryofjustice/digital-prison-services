@@ -158,6 +158,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
       inactiveAlerts,
       alertTypeValues,
       pagination: getPagination(totalAlerts, pageOffset, pageLimit, fullUrl),
+      createLink: `/offenders/${offenderNo}/create-alert`,
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
