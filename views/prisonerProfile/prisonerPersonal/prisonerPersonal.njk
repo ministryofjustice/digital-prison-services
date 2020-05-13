@@ -1,4 +1,5 @@
 {% extends "../layouts/prisonerLayout.njk" %}
+{% from "../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
 {% from "../macros/prisonerAccordionSection.njk" import accordionSection %}
 {% from "govuk/components/accordion/macro.njk" import govukAccordion %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -20,10 +21,16 @@
 {% endset %}
 
 {% set identifierContent %}
-  {% include "./partials/identifiers.njk" %}
+  {{ prisonerSummarySection(identifiers) }}
 {% endset %}
 
 {% set personalContent %}
+  {{ prisonerSummarySection(personalDetails.primary) }}
+  {{ prisonerSummarySection(personalDetails.secondary) }}
+  {{ prisonerSummarySection(personalDetails.tertiary) }}
+  {{ prisonerSummarySection(personalDetails.receptionWarnings, 'Needs to be warned') }}
+  {{ prisonerSummarySection(personalDetails.listener) }}
+  {{ prisonerSummarySection(personalDetails.domesticAbuse) }}
   {% include "./partials/property.njk" %}
 {% endset %}
 
