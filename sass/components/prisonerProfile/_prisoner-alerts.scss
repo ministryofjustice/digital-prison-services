@@ -10,6 +10,9 @@
     table-layout: fixed;
 }
 
+.form-background {
+    background-color: govuk-colour("light-grey");
+}
 .clip-overflow {
     text-overflow: ellipsis;
     overflow: hidden;

@@ -10,57 +10,57 @@
 
 
 {% block prisonerProfileSection %}
-  <h2 class="govuk-heading-m">View by</h2>
-  <form class="horizontal-form govuk-!-display-none-print govuk-body govuk-!-margin-bottom-3">
-    {{ govukSelect({
-        name: 'active',
-        id: 'active',
+  <div class="govuk-width-container govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+    <h2 class="govuk-heading-m">View by</h2>
+    <form class="horizontal-form govuk-!-display-none-print govuk-body govuk-!-margin-bottom-3">
+      {{ govukSelect({
+          name: 'active',
+          id: 'active',
+          label: {
+              text: "Active or inactive"
+          },
+          items: [
+            {text: "Active", value: "ACTIVE"}, 
+          {text: "Inactive", value: "INACTIVE"}
+          ] | setSelected(active),
+          errorMessage: errors | findError(active)
+        }) }}
+
+      {{ govukSelect({
+        name: 'alertType',
+        id: 'alertType',
         label: {
-            text: "Active or inactive"
+            text: "Type of alert"
         },
-        items: [
-          {text: "Active", value: "ACTIVE"}, 
-        {text: "Inactive", value: "INACTIVE"}
-        ] | setSelected(active),
-        errorMessage: errors | findError(active)
+        items: alertTypeValues | addDefaultSelectedVale('Select', true) | setSelected(alertType),
+        errorMessage: errors | findError(alertType)
       }) }}
 
-    {{ govukSelect({
-      name: 'alertType',
-      id: 'alertType',
-      label: {
-          text: "Type of alert"
-      },
-      items: alertTypeValues | addDefaultSelectedVale('Select', true) | setSelected(alertType),
-      errorMessage: errors | findError(alertType)
-    }) }}
+      {{ datePicker({
+        id: 'fromDate',
+        label: 'Date from',
+        name: 'fromDate',
+        date: fromDate,
+        errorMessage: errors | findError('fromDate')
+      }) }}
 
-    {{ datePicker({
-      id: 'fromDate',
-      label: 'Date from',
-      name: 'fromDate',
-      date: fromDate,
-      errorMessage: errors | findError('fromDate')
-    }) }}
+      {{ datePicker({
+        id: 'toDate',
+        label: 'Date to',
+        name: 'toDate',
+        date: toDate,
+        errorMessage: errors | findError('toDate')
+      }) }}
 
-    {{ datePicker({
-      id: 'toDate',
-      label: 'Date to',
-      name: 'toDate',
-      date: toDate,
-      errorMessage: errors | findError('toDate')
-    }) }}
+      {{ govukButton({
+        text: "Apply",
+        preventDoubleClick: true,
+        type: "submit"
+      }) }}
 
-    {{ govukButton({
-      text: "Apply",
-      preventDoubleClick: true,
-      type: "submit"
-    }) }}
-
-    <a href="./alerts" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
-  </form>
-
-  {{ mojPagination(pagination) }} 
+      <a href="./alerts" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
+    </form>
+  </div> 
 
   {% if activeAlerts.length %}
     <div class="govuk-grid-row">
@@ -76,6 +76,8 @@
         }) }}
       </div>
     </div>
+
+    {{ mojPagination(pagination) }}
 
       {{ govukTable({
         head: [
@@ -119,6 +121,9 @@
         }) }}
       </div>
     </div>
+
+    {{ mojPagination(pagination) }}
+
       {{ govukTable({
         head: [
           {
