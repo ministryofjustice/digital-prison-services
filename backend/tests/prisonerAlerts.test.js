@@ -53,10 +53,14 @@ describe('prisoner personal', () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, {
-      bookingId: '14',
-      query: '',
-    })
+    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(
+      res.locals,
+      {
+        bookingId: '14',
+        query: '',
+      },
+      { 'Page-Limit': 20, 'Page-Offset': 0, 'Sort-Fields': 'dateCreated', 'Sort-Order': 'DESC' }
+    )
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
     expect(res.render).toHaveBeenCalledWith(
@@ -79,10 +83,14 @@ describe('prisoner personal', () => {
     }
     await controller(req, res)
 
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(res.locals, {
-      bookingId: '14',
-      query: "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11'",
-    })
+    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(
+      res.locals,
+      {
+        bookingId: '14',
+        query: "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11'",
+      },
+      { 'Page-Limit': 20, 'Page-Offset': 0, 'Sort-Fields': 'dateCreated', 'Sort-Order': 'DESC' }
+    )
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',

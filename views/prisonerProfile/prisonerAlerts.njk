@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
 {% set title = "Alerts" %}
 {% set containerClasses = "prisoner-profile" %}
@@ -10,7 +11,7 @@
 
 {% block prisonerProfileSection %}
   <h2 class="govuk-heading-m">View by</h2>
-  <form class="horizontal-form govuk-!-display-none-print">
+  <form class="horizontal-form govuk-!-display-none-print govuk-body govuk-!-margin-bottom-3">
     {{ govukSelect({
       name: 'alertType',
       id: 'alertType',
@@ -46,21 +47,7 @@
     <a href="./alerts" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
   </form>
 
-  <div class="govuk-grid-row govuk-!-margin-top-5">
-    <div class="govuk-grid-column-one-quarter">
-      <h3 class="govuk-heading-m">1 - {{totalAlerts}} of {{totalAlerts}}</h3>
-    </div>
-    <div class="govuk-grid-column-one-quarter">
-    </div>
-    <div class="govuk-grid-column-one-quarter">
-    </div>
-    <div class="govuk-grid-column-one-quarter">
-      {{ govukButton({
-      href: "./create-alert",
-      text: "Create alert"
-      }) }}
-    </div>
-  </div>
+  {{ mojPagination(pagination) }} 
 
   <h2 class="govuk-heading-m">Active alerts</h2>
 

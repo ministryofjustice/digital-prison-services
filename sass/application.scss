@@ -1,6 +1,7 @@
 $govuk-page-width: 1170px;
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
+@import 'node_modules/@ministryofjustice/frontend/moj/all';
 @import 'components/header';
 @import 'components/sortable-table';
 @import 'components/print-link';
