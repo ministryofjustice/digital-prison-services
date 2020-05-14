@@ -53,6 +53,8 @@ whitelist:
   ark-nps-hmcts-ttp5: "194.33.197.0/25"
   oakwood-1: "217.161.76.187/32"
   oakwood-2: "217.161.76.195/32"
+  oakwood-3: "217.161.76.186/32"
+  oakwood-4: "217.161.76.194/32"
   durham-tees-valley: "51.179.197.1/32"
   interservfls: "51.179.196.131/32"
   sodexo1: "80.86.46.16/32"
