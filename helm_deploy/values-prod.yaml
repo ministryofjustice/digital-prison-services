@@ -32,6 +32,7 @@ env:
   CATEGORISATION_UI_URL: "https://offender-categorisation.service.justice.gov.uk/"
   USE_OF_FORCE_URL: "https://use-of-force.service.justice.gov.uk"
   USE_OF_FORCE_PRISONS: "WRI,BLI,RSI"
+  TOKENVERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
 
 whitelist:
   office: "217.33.148.210/32"
