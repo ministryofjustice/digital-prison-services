@@ -18,8 +18,7 @@ module.exports = ({ prisonerDetails, property }) => {
   const socialCareNeededValue = getValueByType('PERSC', profileInformation, 'resultValue')
 
   const showListenerSuitable =
-    (listenerSuitableValue && !listenerRecognisedValue) ||
-    (listenerSuitableValue === 'Yes' && listenerRecognisedValue === 'No')
+    listenerSuitableValue && listenerSuitableValue !== 'No' && listenerRecognisedValue !== 'Yes'
   const showListenerRecognised = listenerSuitableValue === 'Yes'
   const showDomesticAbusePerp = domesticAbusePerpValue && domesticAbusePerpValue !== 'NO'
   const showDomesticAbuseVictim = domesticAbuseVictimValue && domesticAbuseVictimValue !== 'NO'
