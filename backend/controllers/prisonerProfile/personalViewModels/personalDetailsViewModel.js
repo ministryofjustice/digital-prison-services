@@ -1,5 +1,5 @@
 const moment = require('moment')
-
+const { capitalize } = require('../../../utils')
 const getValueByType = require('../../../shared/getValueByType')
 
 module.exports = ({ prisonerDetails, property }) => {
@@ -28,7 +28,7 @@ module.exports = ({ prisonerDetails, property }) => {
     primary: [
       { label: 'Age', value: age },
       { label: 'Date of Birth', value: dateOfBirth && moment(dateOfBirth).format('DD/MM/YYYY') },
-      { label: 'Place of Birth', value: birthPlace },
+      { label: 'Place of Birth', value: birthPlace && capitalize(birthPlace) },
       { label: 'Gender', value: gender },
       { label: 'Ethnicity', value: ethnicity },
       { label: 'Religion', value: getValueByType('RELF', profileInformation, 'resultValue') },
