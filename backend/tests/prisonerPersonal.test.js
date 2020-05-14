@@ -480,8 +480,8 @@ describe('prisoner personal', () => {
             expect.objectContaining({
               personalDetails: expect.objectContaining({
                 receptionWarnings: [
-                  { label: 'Warned about tatooing', value: undefined },
-                  { label: 'Warned not to change appearance', value: undefined },
+                  { label: 'Warned about tattooing', value: 'Needs to be warned' },
+                  { label: 'Warned not to change appearance', value: 'Needs to be warned' },
                 ],
               }),
             })
@@ -489,7 +489,7 @@ describe('prisoner personal', () => {
         })
       })
 
-      describe('when there is reception warnings data', () => {
+      describe('when the prisoner has been warned about tattooing and their appearance', () => {
         beforeEach(() => {
           elite2Api.getPrisonerDetail.mockResolvedValue({
             profileInformation: [{ type: 'TAT', resultValue: 'Yes' }, { type: 'APPEAR', resultValue: 'Yes' }],
@@ -504,8 +504,32 @@ describe('prisoner personal', () => {
             expect.objectContaining({
               personalDetails: expect.objectContaining({
                 receptionWarnings: [
-                  { label: 'Warned about tatooing', value: 'Yes' },
+                  { label: 'Warned about tattooing', value: 'Yes' },
                   { label: 'Warned not to change appearance', value: 'Yes' },
+                ],
+              }),
+            })
+          )
+        })
+      })
+
+      describe('when the prisoner has not been warned about tattooing and their appearance', () => {
+        beforeEach(() => {
+          elite2Api.getPrisonerDetail.mockResolvedValue({
+            profileInformation: [{ type: 'TAT', resultValue: 'No' }, { type: 'APPEAR', resultValue: 'No' }],
+          })
+        })
+
+        it('should render the personal template with the correctly formatted data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              personalDetails: expect.objectContaining({
+                receptionWarnings: [
+                  { label: 'Warned about tattooing', value: 'Needs to be warned' },
+                  { label: 'Warned not to change appearance', value: 'Needs to be warned' },
                 ],
               }),
             })
