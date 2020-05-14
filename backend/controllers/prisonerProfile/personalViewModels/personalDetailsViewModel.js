@@ -24,6 +24,8 @@ module.exports = ({ prisonerDetails, property }) => {
   const showDomesticAbusePerp = domesticAbusePerpValue && domesticAbusePerpValue !== 'NO'
   const showDomesticAbuseVictim = domesticAbuseVictimValue && domesticAbuseVictimValue !== 'NO'
 
+  const needsWarning = value => (value === 'Yes' ? value : 'Needs to be warned')
+
   return {
     primary: [
       { label: 'Age', value: age },
@@ -50,8 +52,14 @@ module.exports = ({ prisonerDetails, property }) => {
       ...(dnaRequiredValue ? [{ label: 'DNA required', value: dnaRequiredValue }] : []),
     ],
     receptionWarnings: [
-      { label: 'Warned about tatooing', value: getValueByType('TAT', profileInformation, 'resultValue') },
-      { label: 'Warned not to change appearance', value: getValueByType('APPEAR', profileInformation, 'resultValue') },
+      {
+        label: 'Warned about tattooing',
+        value: needsWarning(getValueByType('TAT', profileInformation, 'resultValue')),
+      },
+      {
+        label: 'Warned not to change appearance',
+        value: needsWarning(getValueByType('APPEAR', profileInformation, 'resultValue')),
+      },
     ],
     listener: [
       ...(showListenerSuitable ? [{ label: 'Listener suitable', value: listenerSuitableValue }] : []),
