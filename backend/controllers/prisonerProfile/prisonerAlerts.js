@@ -40,14 +40,13 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
       'Page-Limit': pageLimit,
     }
 
-    const [prisonerProfileData, alertTypes, alerts] = await Promise.all([
+    const [prisonerProfileData, alertTypes] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       referenceCodesService.getAlertTypes(res.locals),
-      elite2Api.getAlertsForBooking(res.locals, { bookingId, query }, headers),
     ])
 
-    const totalAlerts =
-      active === 'INACTIVE' ? prisonerProfileData.inactiveAlertCount : prisonerProfileData.activeAlertCount
+    const alerts = await elite2Api.getAlertsForBooking(res.locals, { bookingId, query }, headers)
+    const totalAlerts = res.locals.responseHeaders['total-records']
 
     const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => {
       return [

@@ -30,7 +30,7 @@ describe('prisoner alerts', () => {
 
   beforeEach(() => {
     req = { params: { offenderNo }, query: {}, protocol: 'http' }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: { responseHeaders: { 'total-records': 0 } }, render: jest.fn() }
 
     logError = jest.fn()
 
@@ -92,6 +92,8 @@ describe('prisoner alerts', () => {
       alertType: 'X',
       active: 'ACTIVE',
     }
+
+    res.locals.responseHeaders['total-records'] = 1
 
     paginationService.getPagination.mockReturnValue({
       classes: 'govuk-!-font-size-19',
@@ -179,6 +181,7 @@ describe('prisoner alerts', () => {
     })
 
     it('should render the alerts template with the correctly formatted data', async () => {
+      res.locals.responseHeaders['total-records'] = 1
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
