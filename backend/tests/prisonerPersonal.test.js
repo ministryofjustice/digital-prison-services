@@ -644,6 +644,27 @@ describe('prisoner personal', () => {
             )
           })
         })
+
+        describe('when suitable is No and recognised is Yes', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'Yes' }],
+            })
+          })
+
+          it('should display nothing', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  listener: [],
+                }),
+              })
+            )
+          })
+        })
       })
     })
 
