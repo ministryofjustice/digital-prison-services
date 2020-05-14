@@ -2,63 +2,10 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst } = require('../../utils')
 
-const getPagination = (totalResults, offset, limit, url) => {
-  const numberOfPages =
-    totalResults % limit > 0 ? Math.floor(totalResults / limit) + 1 : Math.floor(totalResults / limit)
-
-  const calculateNextUrl = () => {
-    const newOffset = offset + limit > totalResults ? offset : offset + limit
-    url.searchParams.set('pageOffsetOption', newOffset)
-    return url.href
-  }
-
-  const calculatePreviousUrl = () => {
-    const newOffset = offset > 0 ? offset - limit : 0
-    url.searchParams.set('pageOffsetOption', newOffset)
-    return url.href
-  }
-
-  const pageList =
-    numberOfPages > 1
-      ? [...Array(numberOfPages).keys()].map(page => {
-          url.searchParams.set('pageOffsetOption', limit * page)
-          return {
-            text: page + 1,
-            href: url.href,
-            selected: offset === limit * page,
-          }
-        })
-      : []
-
-  const previousPage =
-    numberOfPages > 1
-      ? {
-          text: 'Previous',
-          href: calculatePreviousUrl(offset, limit, url),
-        }
-      : undefined
-  const nextPage =
-    numberOfPages > 1
-      ? {
-          text: 'Next',
-          href: calculateNextUrl(offset, limit, url, totalResults, numberOfPages),
-        }
-      : undefined
-
-  return {
-    items: pageList,
-    previous: previousPage,
-    next: nextPage,
-    results: {
-      from: offset + 1,
-      to: numberOfPages > 1 && offset + limit < totalResults ? offset + limit : totalResults,
-      count: totalResults,
-    },
-    classes: 'govuk-!-font-size-19',
-  }
-}
-
-module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, logError }) => async (
+  req,
+  res
+) => {
   const { offenderNo } = req.params
   const { fromDate, toDate, alertType, active, pageOffsetOption } = req.query
   const fomattedFromDate = fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
@@ -157,7 +104,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, elite2Api, lo
       activeAlerts,
       inactiveAlerts,
       alertTypeValues,
-      pagination: getPagination(totalAlerts, pageOffset, pageLimit, fullUrl),
+      pagination: paginationService.getPagination(totalAlerts, pageOffset, pageLimit, fullUrl),
       createLink: `/offenders/${offenderNo}/create-alert`,
     })
   } catch (error) {

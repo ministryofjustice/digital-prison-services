@@ -1,7 +1,7 @@
 const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-describe('prisoner personal', () => {
+describe('prisoner alerts', () => {
   const offenderNo = 'G3878UK'
   const prisonerProfileData = {
     activeAlertCount: 1,
@@ -21,6 +21,7 @@ describe('prisoner personal', () => {
   const elite2Api = {}
   const prisonerProfileService = {}
   const referenceCodesService = {}
+  const paginationService = {}
 
   let req
   let res
@@ -46,8 +47,15 @@ describe('prisoner personal', () => {
         { activeFlag: 'Y', description: 'Social Care', value: 'A' },
       ],
     })
+    paginationService.getPagination = jest.fn().mockReturnValue([])
     elite2Api.getAlertsForBooking = jest.fn().mockResolvedValue([])
-    controller = prisonerAlerts({ prisonerProfileService, referenceCodesService, elite2Api, logError })
+    controller = prisonerAlerts({
+      prisonerProfileService,
+      referenceCodesService,
+      paginationService,
+      elite2Api,
+      logError,
+    })
   })
 
   it('should make a call for the prisoner alerts and the prisoner header details and render them', async () => {
@@ -84,6 +92,14 @@ describe('prisoner personal', () => {
       alertType: 'X',
       active: 'ACTIVE',
     }
+
+    paginationService.getPagination.mockReturnValue({
+      classes: 'govuk-!-font-size-19',
+      items: [],
+      next: undefined,
+      previous: undefined,
+      results: { count: 1, from: 1, to: 1 },
+    })
     await controller(req, res)
 
     expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(

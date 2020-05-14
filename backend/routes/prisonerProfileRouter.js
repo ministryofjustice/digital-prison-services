@@ -4,6 +4,7 @@ const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullIm
 const prisonerPersonal = require('../controllers/prisonerProfile/prisonerPersonal')
 const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
+const paginationService = require('../services/paginationService')
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
 
 const router = express.Router({ mergeParams: true })
@@ -15,7 +16,10 @@ const controller = ({ elite2Api, keyworkerApi, oauthApi, logError }) => {
   router.get('/', prisonerQuickLook({ prisonerProfileService, elite2Api, logError }))
   router.get('/image', prisonerFullImage({ elite2Api, logError }))
   router.get('/personal', prisonerPersonal({ prisonerProfileService, elite2Api, logError }))
-  router.get('/alerts', prisonerAlerts({ prisonerProfileService, referenceCodesService, elite2Api, logError }))
+  router.get(
+    '/alerts',
+    prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, logError })
+  )
 
   return router
 }
