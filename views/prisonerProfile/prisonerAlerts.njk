@@ -1,0 +1,153 @@
+{% extends "./layouts/prisonerLayout.njk" %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+{% set title = "Alerts" %}
+{% set containerClasses = "prisoner-profile" %}
+
+
+{% block prisonerProfileSection %}
+  <div class="govuk-width-container govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+    <h2 class="govuk-heading-m">View by</h2>
+    <form class="horizontal-form govuk-!-display-none-print govuk-body govuk-!-margin-bottom-3">
+      {{ govukSelect({
+          name: 'active',
+          id: 'active',
+          label: {
+              text: "Active or inactive"
+          },
+          items: [
+            {text: "Active", value: "ACTIVE"}, 
+          {text: "Inactive", value: "INACTIVE"}
+          ] | setSelected(active),
+          errorMessage: errors | findError(active)
+        }) }}
+
+      {{ govukSelect({
+        name: 'alertType',
+        id: 'alertType',
+        label: {
+            text: "Type of alert"
+        },
+        items: alertTypeValues | addDefaultSelectedVale('Select', true) | setSelected(alertType),
+        errorMessage: errors | findError(alertType)
+      }) }}
+
+      {{ datePicker({
+        id: 'fromDate',
+        label: 'Date from',
+        name: 'fromDate',
+        date: fromDate,
+        errorMessage: errors | findError('fromDate')
+      }) }}
+
+      {{ datePicker({
+        id: 'toDate',
+        label: 'Date to',
+        name: 'toDate',
+        date: toDate,
+        errorMessage: errors | findError('toDate')
+      }) }}
+
+      {{ govukButton({
+        text: "Apply",
+        preventDoubleClick: true,
+        type: "submit"
+      }) }}
+
+      <a href="./alerts" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
+    </form>
+  </div> 
+
+  {% if activeAlerts.length %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h2 class="govuk-heading-m">Active alerts</h2>
+      </div>
+      <div class="govuk-grid-column-one-half pull-right">
+        {{ govukButton({
+        href: createLink,
+        text: "Create alert",
+        preventDoubleClick: true,
+        classes: "govuk-button--link"
+        }) }}
+      </div>
+    </div>
+
+    {{ mojPagination(pagination) }}
+
+      {{ govukTable({
+        head: [
+          {
+            text: "Type of alert"
+          },
+          {
+            text: "Alert"
+          },
+          {
+            text: "Comments",
+            classes: "govuk-!-width-one-quarter"
+          },
+          {
+            text: "Date from"
+          },
+          {
+            text: "Created by"
+          },
+          {
+            text: " "
+          }
+        ],
+        rows: activeAlerts,
+        attributes: { "data-qa": "active-alerts-table" },
+        classes: "fixed-table"
+      }) }}
+  {% endif %}
+
+  {% if inactiveAlerts.length %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h2 class="govuk-heading-m">Inactive alerts</h2>
+      </div>
+      <div class="govuk-grid-column-one-half pull-right">
+        {{ govukButton({
+        href: createLink,
+        text: "Create alert",
+        preventDoubleClick: true,
+        classes: "govuk-button--link"
+        }) }}
+      </div>
+    </div>
+
+    {{ mojPagination(pagination) }}
+
+      {{ govukTable({
+        head: [
+          {
+            text: "Type of alert"
+          },
+          {
+            text: "Details"
+          },
+          {
+            text: "Comments",
+            classes: "govuk-!-width-one-quarter"
+          },
+          {
+            html: "Date from /<br>date closed"
+          },
+          {
+            html: "Created by /<br>closed by"
+          }
+        ],
+        rows: inactiveAlerts,
+        attributes: { "data-qa": "inactive-alerts-table" },
+        classes: "fixed-table"
+      }) }}
+  {% endif %}
+  
+  {{ mojPagination(pagination) }}
+{% endblock %}
