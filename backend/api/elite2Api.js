@@ -93,6 +93,11 @@ const elite2ApiFactory = client => {
   const getAlerts = (context, { agencyId, offenderNumbers }) =>
     post(context, `/api/bookings/offenderNo/${agencyId}/alerts`, offenderNumbers)
 
+  const getAlertsForBooking = (context, { bookingId, query }, headers) => {
+    contextProperties.setCustomRequestHeaders(context, headers)
+    return get(context, `/api/bookings/${bookingId}/alerts${query}`)
+  }
+
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
 
@@ -278,6 +283,7 @@ const elite2ApiFactory = client => {
     globalSearch,
     getExternalTransfers,
     getAlerts,
+    getAlertsForBooking,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,

@@ -3,10 +3,13 @@ const config = require('../config')
 const { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel } = require('../utils')
 
 module.exports = (app, path) => {
-  const njkEnv = nunjucks.configure([path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/'], {
-    autoescape: true,
-    express: app,
-  })
+  const njkEnv = nunjucks.configure(
+    [path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/', 'node_modules/@ministryofjustice/frontend/'],
+    {
+      autoescape: true,
+      express: app,
+    }
+  )
 
   njkEnv.addFilter('findError', (array, formFieldId) => {
     if (!array) return null
