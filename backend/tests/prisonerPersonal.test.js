@@ -352,7 +352,7 @@ describe('prisoner personal', () => {
                 primary: [
                   { label: 'Age', value: 29 },
                   { label: 'Date of Birth', value: '12/10/1990' },
-                  { label: 'Place of Birth', value: 'DONCASTER' },
+                  { label: 'Place of Birth', value: 'Doncaster' },
                   { label: 'Gender', value: 'Male' },
                   { label: 'Ethnicity', value: 'White: Eng./Welsh/Scot./N.Irish/British' },
                   { label: 'Religion', value: 'Christian' },
