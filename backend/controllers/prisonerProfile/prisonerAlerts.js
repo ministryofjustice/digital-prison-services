@@ -107,7 +107,6 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
       createLink: `/offenders/${offenderNo}/create-alert`,
     })
   } catch (error) {
-    console.log(error)
     logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}/alerts` })
   }
