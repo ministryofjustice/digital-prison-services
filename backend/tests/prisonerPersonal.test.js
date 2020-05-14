@@ -540,7 +540,7 @@ describe('prisoner personal', () => {
 
     describe('listener', () => {
       describe('when there is missing listener data', () => {
-        it('should still render the personal template', async () => {
+        it('should display nothing', async () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
@@ -555,6 +555,27 @@ describe('prisoner personal', () => {
       })
 
       describe('listener suitable and recognised', () => {
+        describe('when suitable is No and recognised is No', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'No' }],
+            })
+          })
+
+          it('should display nothing', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  listener: [],
+                }),
+              })
+            )
+          })
+        })
+
         describe('when suitable is Yes and recognised is No', () => {
           beforeEach(() => {
             elite2Api.getPrisonerDetail.mockResolvedValue({
