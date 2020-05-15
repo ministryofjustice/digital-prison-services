@@ -146,6 +146,8 @@ jobs:
           path: prisonstaffhub-specs/build/test-results
 
   cypress_integration_tests:
+    docker:
+      - image: circleci/node:12.16.1-buster-browsers
     steps:
       - checkout
       - attach_workspace:
