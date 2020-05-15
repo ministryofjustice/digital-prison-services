@@ -11,7 +11,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 class OauthApi extends WireMockRule {
 
     OauthApi() {
-        super(wireMockConfig().port(9191).extensions(new ResponseTemplateTransformer(true)))
+        super(wireMockConfig().port(19090).extensions(new ResponseTemplateTransformer(true)))
     }
 
     void stubAuthorizeRequest() {
