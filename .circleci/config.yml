@@ -164,7 +164,10 @@ jobs:
           command: java -jar wiremock.jar --port 9192
           background: true
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci --no-audit
       - run:
           name: Run the node app.
           command: npm run start-feature
