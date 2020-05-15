@@ -54,7 +54,7 @@ class Elite2Api extends WireMockRule {
 
     void stubHealth() {
         this.stubFor(
-                get('/ping')
+                get('/health/ping')
                         .willReturn(
                                 aResponse()
                                         .withStatus(200)

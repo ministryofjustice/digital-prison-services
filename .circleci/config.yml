@@ -214,7 +214,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: install-yarn
+          name: install-npm
           command: 'npm ci --no-audit'
       - run:
           name: run-security-audit
