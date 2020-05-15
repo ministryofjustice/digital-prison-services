@@ -1,0 +1,17 @@
+{
+  "chromeWebSecurity": false,
+  "baseUrl": "http://localhost:3008",
+  "fixturesFolder": "integration-tests/fixtures",
+  "ignoreTestFiles": "**/!(*.spec).js",
+  "integrationFolder": "integration-tests/integration",
+  "pluginsFile": "integration-tests/plugins/index.js",
+  "screenshotsFolder": "integration-tests/screenshots",
+  "supportFile": "integration-tests/support/index.js",
+  "videosFolder": "integration-tests/videos",
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "configFile": "cypress-reporter-config.json"
+  },
+  "videoUploadOnPasses": false,
+  "taskTimeout": 60000
+}

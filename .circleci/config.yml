@@ -119,11 +119,8 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: npm run start-feature
+          command: npm run start-feature --env=feature.env
           background: true
-#      - run:
-#          name: Wait for node app to start
-#          command: sleep 5
       - restore_cache:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - restore_cache:
@@ -147,6 +144,39 @@ jobs:
           destination: integration/geb
       - store_test_results:
           path: prisonstaffhub-specs/build/test-results
+
+  cypress_integration_tests:
+    docker:
+      - image: circleci/node:12.16.1-buster-browsers
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Get wiremock
+          command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.26.3/wiremock-standalone-2.26.3.jar
+      - run:
+          name: Run auth wiremock
+          command: java -jar wiremock.jar --port 9191
+          background: true
+      - restore_cache:
+          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci --no-audit
+      - run:
+          name: Run the node app.
+          command: npm run start-feature --env=cypress.env
+          background: true
+      - run:
+          name: integration tests
+          command: npm run int-test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: integration-tests/videos
+      - store_artifacts:
+          path: integration-tests/screenshots
 
   build:
     executor: deployer
@@ -228,6 +258,9 @@ workflows:
             tags:
               ignore: /.*/
       - integration_tests:
+          requires:
+            - validate
+      - cypress_integration_tests:
           requires:
             - validate
       - build:

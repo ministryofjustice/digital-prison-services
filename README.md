@@ -38,14 +38,46 @@ docker run -p 3000:3000 -d \
      mojdigitalstudio/prisonstaffhub:latest
 ```
 
-## Integration tests
+## Cypress integration tests
 
-The `prisonstaffhub-specs` directory contains a set of integration tests for the `prisonstaffhub` application.
+The `integration-tests` directory contains a set of Cypress integration tests for the `prisonstaffhub` application.
+These tests WireMock to stub the application's dependencies on the elite2, ouath and whreabouts RESTful APIs.
+
+### Running the Cypress tests
+
+You need to fire up the wiremock server first:
+```docker-compose -f docker-compose-test.yaml up```
+
+This will give you useful feedback if the app is making requests that you haven't mocked out. You can see
+the reqest log at `localhost:9191/__admin/requests/` and a JSON representation of the mocks `localhost:9191/__admin/mappings`.
+
+### Starting feature tests node instance
+
+A separate node instance needs to be started for the feature tests. This will run on port 3008 and won't conflict
+with any of the api services, e.g. elite2-api or oauth. It will also not conflict with the Groovy integration tests.
+
+```npm start-feature --env=cypress.env```
+
+### Running the tests
+
+With the UI:
+```
+npm run int-test-ui
+```
+
+Just on the command line (any console log outputs will not be visible, they appear in the browser the Cypress UI fires up):
+```
+npm run int-test
+```
+
+## Groovy integration tests
+
+The `prisonstaffhub-specs` directory contains a set of Groovy integration tests for the `prisonstaffhub` application.
 These tests are written in the Groovy programming language using a test framework called Spock. The tests drive
 the UI using 'Geb', a Groovy wrapper for Selenium Webdriver, and use WireMock to stub the application's dependencies
 on the elite2 and keyworker-service RESTful APIs.
 
-### Running the tests
+### Running the Groovy tests
 
 The tests may be run from an IDE such as IntelliJ IDEA or from the Gradle build.  
 The tests may be configured to drive a range of web-browsers including Chrome headless and PhantomJS.  
@@ -61,7 +93,7 @@ https://sites.google.com/a/chromium.org/chromedriver/getting-started
 A separate node instance needs to be started for the feature tests. This will run on port 3006 and won't conflict
 with any of the api services, e.g. elite2-api or oauth.
 
-`npm start-feature`
+`npm start-feature --env=feature.env`
 
 **To run the tests using Gradle:**
 Ensure that chromedriver is on your path. Run `./gradlew build` from the root of this project.
