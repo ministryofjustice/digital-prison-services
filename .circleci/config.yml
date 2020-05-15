@@ -145,7 +145,7 @@ jobs:
       - store_test_results:
           path: prisonstaffhub-specs/build/test-results
 
-  cypress_integration_test:
+  cypress_integration_tests:
     executor: integration-tests
     steps:
       - checkout
@@ -258,6 +258,9 @@ workflows:
             tags:
               ignore: /.*/
       - integration_tests:
+          requires:
+            - validate
+      - cypress_integration_tests:
           requires:
             - validate
       - build:
