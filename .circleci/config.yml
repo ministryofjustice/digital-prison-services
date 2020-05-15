@@ -119,7 +119,7 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: npm run start-feature
+          command: npm run start-feature --env=feature.env
           background: true
       - restore_cache:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
@@ -159,10 +159,6 @@ jobs:
           name: Run auth wiremock
           command: java -jar wiremock.jar --port 9191
           background: true
-      - run:
-          name: Run elite2 wiremock
-          command: java -jar wiremock.jar --port 9192
-          background: true
       - restore_cache:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
@@ -170,7 +166,7 @@ jobs:
           command: npm ci --no-audit
       - run:
           name: Run the node app.
-          command: npm run start-feature
+          command: npm run start-feature --env=cypress.env
           background: true
       - run:
           name: integration tests

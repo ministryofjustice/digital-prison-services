@@ -6,10 +6,10 @@ const stubFor = mapping => superagent.post(`${url}/mappings`).send(mapping)
 
 const getRequests = () => superagent.get(`${url}/requests`)
 
-const resetAuthStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
+const resetStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
 module.exports = {
   stubFor,
   getRequests,
-  resetAuthStubs,
+  resetStubs,
 }

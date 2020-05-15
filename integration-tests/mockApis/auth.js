@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { stubFor, getRequests } = require('./wiremock/auth')
+const { stubFor, getRequests } = require('./wiremock')
 
 const createToken = () => {
   const payload = {

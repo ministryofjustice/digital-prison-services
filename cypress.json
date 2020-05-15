@@ -1,6 +1,6 @@
 {
   "chromeWebSecurity": false,
-  "baseUrl": "http://localhost:3006",
+  "baseUrl": "http://localhost:3008",
   "fixturesFolder": "integration-tests/fixtures",
   "ignoreTestFiles": "**/!(*.spec).js",
   "integrationFolder": "integration-tests/integration",

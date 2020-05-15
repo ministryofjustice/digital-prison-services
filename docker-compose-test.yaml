@@ -1,15 +1,8 @@
 version: '3.1'
 services:
-  prisonstaffhub-wiremock-oauth:
+  prisonstaffhub-wiremock:
     image: rodolpheche/wiremock
-    container_name: prisonstaffhub-oauth
+    container_name: prisonstaffhub
     restart: always
     ports:
       - "9191:8080"
-
-  prisonstaffhub-wiremock-elite2:
-    image: rodolpheche/wiremock
-    container_name: prisonstaffhub-elite2
-    restart: always
-    ports:
-      - "9192:8080"

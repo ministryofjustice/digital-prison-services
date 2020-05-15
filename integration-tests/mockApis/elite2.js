@@ -1,4 +1,4 @@
-const { stubFor } = require('./wiremock/elite2')
+const { stubFor } = require('./wiremock')
 
 module.exports = {
   stubUser: () => {
