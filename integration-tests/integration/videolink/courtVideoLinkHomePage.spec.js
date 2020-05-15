@@ -5,7 +5,6 @@ context('A user can view the video link home page', () => {
     cy.task('reset')
     cy.task('stubLoginCourt')
     cy.login()
-    cy.visit('/videolink')
   })
 
   it('A user can view the video link home page', () => {

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { stubFor, getRequests } = require('./wiremock')
+const { stubFor, getRequests } = require('./wiremock/auth')
 
 const createToken = () => {
   const payload = {
@@ -38,7 +38,7 @@ const redirect = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/oauth/authorize\\?response_type=code&redirect_uri=.+?&state=.+?&client_id=dev',
+      urlPattern: '/auth/oauth/authorize\\?response_type=code&redirect_uri=.+?&state=.+?&client_id=.+?',
     },
     response: {
       status: 200,

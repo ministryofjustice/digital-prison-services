@@ -1,11 +1,11 @@
-const { stubFor } = require('./wiremock')
+const { stubFor } = require('./wiremock/elite2')
 
 module.exports = {
   stubUser: () => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/elite2api/api/users/me',
+        urlPattern: '/api/users/me',
       },
       response: {
         status: 200,
@@ -24,7 +24,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/elite2api/api/users/me/caseLoads',
+        urlPattern: '/api/users/me/caseLoads',
       },
       response: {
         status: 200,

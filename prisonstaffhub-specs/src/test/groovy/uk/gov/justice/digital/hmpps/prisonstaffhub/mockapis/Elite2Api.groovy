@@ -14,7 +14,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*
 class Elite2Api extends WireMockRule {
 
     Elite2Api() {
-        super(18080)
+        super(9192)
     }
 
     void stubUpdateActiveCaseload() {
