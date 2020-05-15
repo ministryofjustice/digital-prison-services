@@ -20,7 +20,7 @@ RUN mkdir -p /app
 WORKDIR /app
 ADD . .
 
-RUN npm install && \
+RUN npm ci --no-audit && \
     npm run build && \
     export BUILD_NUMBER=${BUILD_NUMBER} && \
     export GIT_REF=${GIT_REF} && \
@@ -31,4 +31,4 @@ ENV PORT=3000
 EXPOSE 3000
 RUN chown -R appuser:appgroup /app
 USER 2000
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "start" ]
