@@ -1,4 +1,4 @@
 Cypress.Commands.add('login', () => {
-  cy.request('/videolink')
+  cy.request('/')
   cy.task('getLoginUrl').then(cy.visit)
 })

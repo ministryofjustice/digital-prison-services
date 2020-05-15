@@ -112,11 +112,31 @@ const stubUser = username =>
     },
   })
 
-const stubUserRoles = (username, roles) =>
+const stubUserMe = () => {
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/auth/api/user/me',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        firstName: 'JAMES',
+        lastName: 'STUART',
+        activeCaseLoadId: 'MDI',
+      },
+    },
+  })
+}
+
+const stubUserMeRoles = roles =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/auth/api/user/${encodeURI(username)}/roles`,
+      urlPattern: `/auth/api/user/me/roles`,
     },
     response: {
       status: 200,
@@ -162,15 +182,15 @@ const stubUnverifiedEmail = username =>
 
 module.exports = {
   getLoginUrl,
-  stubLogin: options =>
+  stubLogin: () => Promise.all([favicon(), redirect(), logout(), token(), stubUserMe(), stubUserMeRoles([])]),
+  stubLoginCourt: () =>
     Promise.all([
       favicon(),
       redirect(),
       logout(),
-      token(options),
-      stubUser('me'),
-      stubUserRoles('me', []),
-      stubEmail('me'),
+      token(),
+      stubUserMe(),
+      stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
     ]),
   stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
