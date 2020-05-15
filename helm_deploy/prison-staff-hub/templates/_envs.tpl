@@ -135,6 +135,9 @@ env:
   - name: USE_OF_FORCE_PRISONS
     value: {{ .Values.env.USE_OF_FORCE_PRISONS | quote }}
 
+  - name: TOKENVERIFICATION_API_URL
+    value: {{ .Values.env.TOKENVERIFICATION_API_URL | quote }}
+
   - name: NODE_ENV
     value: production
 
