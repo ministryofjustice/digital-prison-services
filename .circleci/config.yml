@@ -146,7 +146,6 @@ jobs:
           path: prisonstaffhub-specs/build/test-results
 
   cypress_integration_tests:
-    executor: integration-tests
     steps:
       - checkout
       - attach_workspace:
