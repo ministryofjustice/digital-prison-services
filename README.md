@@ -56,7 +56,7 @@ the reqest log at `localhost:9191/__admin/requests/` and a JSON representation o
 A separate node instance needs to be started for the feature tests. This will run on port 3008 and won't conflict
 with any of the api services, e.g. elite2-api or oauth. It will also not conflict with the Groovy integration tests.
 
-```npm start-feature --env=cypress.env```
+```npm run start-feature --env=cypress.env```
 
 ### Running the tests
 
