@@ -24,7 +24,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
   integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
   crossorigin="anonymous"></script>
-  
+
 <link href = "https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
 <link href="/stylesheets/application.css" rel="stylesheet" />
 <title>{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}} - Digital Prison Services{% endblock %}</title>
@@ -51,4 +51,7 @@
 <script src="/static/js/main.js"></script>
 <script>window.GOVUKFrontend.initAll();</script>
 <script>var MOJFrontend = {};</script>
+    {# Javascript block for individual pages #}
+    {% block pageScripts %}
+    {%  endblock %}
 {% endblock %}

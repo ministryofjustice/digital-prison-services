@@ -63,6 +63,10 @@ module.exports = {
       ui_url: process.env.USE_OF_FORCE_URL,
       prisons: process.env.USE_OF_FORCE_PRISONS || '',
     },
+    caseNotes: {
+      url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
   },
   notifications: {
     notifyKey: process.env.NOTIFY_API_KEY || '',

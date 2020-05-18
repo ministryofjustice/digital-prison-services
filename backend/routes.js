@@ -69,7 +69,15 @@ const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 
 const router = express.Router()
 
-const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplianceApi, keyworkerApi }) => {
+const setup = ({
+  elite2Api,
+  whereaboutsApi,
+  oauthApi,
+  communityApi,
+  dataComplianceApi,
+  keyworkerApi,
+  caseNotesApi,
+}) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
@@ -245,7 +253,10 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, communityApi, dataComplian
     retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
   )
 
-  router.use('/prisoner/:offenderNo', prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, logError }))
+  router.use(
+    '/prisoner/:offenderNo',
+    prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
+  )
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 
