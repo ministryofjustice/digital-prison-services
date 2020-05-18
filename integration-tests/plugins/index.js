@@ -10,7 +10,7 @@ module.exports = on => {
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username, caseload }) =>
       Promise.all([auth.stubLogin(username, caseload), elite2api.stubUserMe(), elite2api.stubUserCaseloads()]),
-    stubLoginCourt: () => Promise.all([auth.stubLoginCourt({}), elite2api.stubUser(), elite2api.stubUserCaseloads()]),
+    stubLoginCourt: () => Promise.all([auth.stubLoginCourt({}), elite2api.stubUserCaseloads()]),
 
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
 
