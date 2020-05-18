@@ -7,8 +7,8 @@ module.exports = ({ prisonerDetails, property }) => {
   const { gender, ethnicity } = physicalAttributes || {}
 
   const dietValue = getValueByType('DIET', profileInformation, 'resultValue')
-  const domesticAbusePerpValue = getValueByType('DOMESTIC', profileInformation, 'resultValue')
-  const domesticAbuseVictimValue = getValueByType('DOMVIC', profileInformation, 'resultValue')
+  const domesticAbusePerpValue = capitalize(getValueByType('DOMESTIC', profileInformation, 'resultValue'))
+  const domesticAbuseVictimValue = capitalize(getValueByType('DOMVIC', profileInformation, 'resultValue'))
   const listenerSuitableValue = getValueByType('LIST_SUIT', profileInformation, 'resultValue')
   const listenerRecognisedValue = getValueByType('LIST_REC', profileInformation, 'resultValue')
   const otherNationalitiesValue = getValueByType('NATIO', profileInformation, 'resultValue')
@@ -16,12 +16,12 @@ module.exports = ({ prisonerDetails, property }) => {
   const youthOffenderValue = getValueByType('YOUTH', profileInformation, 'resultValue')
   const dnaRequiredValue = getValueByType('DNA', profileInformation, 'resultValue')
   const socialCareNeededValue = getValueByType('PERSC', profileInformation, 'resultValue')
+  const interestToImmigrationValue = getValueByType('IMM', profileInformation, 'resultValue')
 
   const showListenerSuitable =
     listenerSuitableValue && listenerSuitableValue !== 'No' && listenerRecognisedValue !== 'Yes'
-  const showListenerRecognised = listenerSuitableValue === 'Yes'
-  const showDomesticAbusePerp = domesticAbusePerpValue && domesticAbusePerpValue !== 'NO'
-  const showDomesticAbuseVictim = domesticAbuseVictimValue && domesticAbuseVictimValue !== 'NO'
+  const showListenerRecognised =
+    listenerSuitableValue === 'Yes' || (!listenerSuitableValue && listenerRecognisedValue === 'Yes')
 
   const needsWarning = value => (value === 'Yes' ? value : 'Needs to be warned')
 
@@ -44,11 +44,11 @@ module.exports = ({ prisonerDetails, property }) => {
       ...(dietValue ? [{ label: 'Type of diet', value: dietValue }] : []),
     ],
     tertiary: [
-      { label: 'Interest to immigration', value: getValueByType('IMM', profileInformation, 'resultValue') },
+      { label: 'Interest to immigration', value: interestToImmigrationValue },
       ...(travelRestrictionsValue ? [{ label: 'Travel restrictions', value: travelRestrictionsValue }] : []),
-      ...(socialCareNeededValue ? [{ label: 'Social care needed', value: socialCareNeededValue }] : []),
-      ...(youthOffenderValue ? [{ label: 'Youth offender', value: youthOffenderValue }] : []),
-      ...(dnaRequiredValue ? [{ label: 'DNA required', value: dnaRequiredValue }] : []),
+      ...(socialCareNeededValue === 'Yes' ? [{ label: 'Social care needed', value: socialCareNeededValue }] : []),
+      ...(youthOffenderValue === 'Yes' ? [{ label: 'Youth offender', value: youthOffenderValue }] : []),
+      ...(dnaRequiredValue === 'Yes' ? [{ label: 'DNA required', value: dnaRequiredValue }] : []),
     ],
     receptionWarnings: [
       {
@@ -61,12 +61,16 @@ module.exports = ({ prisonerDetails, property }) => {
       },
     ],
     listener: [
-      ...(showListenerSuitable ? [{ label: 'Listener suitable', value: listenerSuitableValue }] : []),
+      ...(showListenerSuitable ? [{ label: 'Listener - suitable', value: listenerSuitableValue }] : []),
       ...(showListenerRecognised ? [{ label: 'Listener - recognised', value: listenerRecognisedValue }] : []),
     ],
     domesticAbuse: [
-      ...(showDomesticAbusePerp ? [{ label: 'Domestic abuse perpetrator', value: domesticAbusePerpValue }] : []),
-      ...(showDomesticAbuseVictim ? [{ label: 'Domestic abuse victim', value: domesticAbuseVictimValue }] : []),
+      ...(domesticAbusePerpValue === 'Yes'
+        ? [{ label: 'Domestic abuse perpetrator', value: domesticAbusePerpValue }]
+        : []),
+      ...(domesticAbuseVictimValue === 'Yes'
+        ? [{ label: 'Domestic abuse victim', value: domesticAbuseVictimValue }]
+        : []),
     ],
     property:
       property &&
