@@ -437,35 +437,64 @@ describe('prisoner personal', () => {
       })
 
       describe('when there is tertiary data', () => {
-        beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
-            profileInformation: [
-              { type: 'IMM', resultValue: 'No' },
-              { type: 'TRAVEL', resultValue: 'Cannot travel to Sheffield' },
-              { type: 'PERSC', resultValue: 'No' },
-              { type: 'YOUTH', resultValue: 'No' },
-              { type: 'DNA', resultValue: 'No' },
-            ],
+        describe('when travel restrictions does not have a value and other values are No', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [
+                { type: 'IMM', resultValue: 'No' },
+                { type: 'TRAVEL', resultValue: '' },
+                { type: 'PERSC', resultValue: 'No' },
+                { type: 'YOUTH', resultValue: 'No' },
+                { type: 'DNA', resultValue: 'No' },
+              ],
+            })
+          })
+
+          it('should not display the other tertiary data items', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  tertiary: [{ label: 'Interest to immigration', value: 'No' }],
+                }),
+              })
+            )
           })
         })
 
-        it('should render the personal template with the correctly formatted data', async () => {
-          await controller(req, res)
-
-          expect(res.render).toHaveBeenCalledWith(
-            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-            expect.objectContaining({
-              personalDetails: expect.objectContaining({
-                tertiary: [
-                  { label: 'Interest to immigration', value: 'No' },
-                  { label: 'Travel restrictions', value: 'Cannot travel to Sheffield' },
-                  { label: 'Social care needed', value: 'No' },
-                  { label: 'Youth offender', value: 'No' },
-                  { label: 'DNA required', value: 'No' },
-                ],
-              }),
+        describe('when travel restrictions does have a value and other values are Yes', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [
+                { type: 'IMM', resultValue: 'Yes' },
+                { type: 'TRAVEL', resultValue: 'Cannot travel to Sheffield' },
+                { type: 'PERSC', resultValue: 'Yes' },
+                { type: 'YOUTH', resultValue: 'Yes' },
+                { type: 'DNA', resultValue: 'Yes' },
+              ],
             })
-          )
+          })
+
+          it('should display the other tertiary data items', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  tertiary: [
+                    { label: 'Interest to immigration', value: 'Yes' },
+                    { label: 'Travel restrictions', value: 'Cannot travel to Sheffield' },
+                    { label: 'Social care needed', value: 'Yes' },
+                    { label: 'Youth offender', value: 'Yes' },
+                    { label: 'DNA required', value: 'Yes' },
+                  ],
+                }),
+              })
+            )
+          })
         })
       })
     })
