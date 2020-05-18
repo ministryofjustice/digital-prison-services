@@ -713,10 +713,10 @@ describe('prisoner personal', () => {
         })
       })
 
-      describe('when there is domestic abuse data', () => {
+      describe('when the domestic abuse values are YES', () => {
         beforeEach(() => {
           elite2Api.getPrisonerDetail.mockResolvedValue({
-            profileInformation: [{ type: 'DOMESTIC', resultValue: 'Yes' }, { type: 'DOMVIC', resultValue: 'Yes' }],
+            profileInformation: [{ type: 'DOMESTIC', resultValue: 'YES' }, { type: 'DOMVIC', resultValue: 'YES' }],
           })
         })
 

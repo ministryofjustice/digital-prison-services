@@ -7,8 +7,8 @@ module.exports = ({ prisonerDetails, property }) => {
   const { gender, ethnicity } = physicalAttributes || {}
 
   const dietValue = getValueByType('DIET', profileInformation, 'resultValue')
-  const domesticAbusePerpValue = getValueByType('DOMESTIC', profileInformation, 'resultValue')
-  const domesticAbuseVictimValue = getValueByType('DOMVIC', profileInformation, 'resultValue')
+  const domesticAbusePerpValue = capitalize(getValueByType('DOMESTIC', profileInformation, 'resultValue'))
+  const domesticAbuseVictimValue = capitalize(getValueByType('DOMVIC', profileInformation, 'resultValue'))
   const listenerSuitableValue = getValueByType('LIST_SUIT', profileInformation, 'resultValue')
   const listenerRecognisedValue = getValueByType('LIST_REC', profileInformation, 'resultValue')
   const otherNationalitiesValue = getValueByType('NATIO', profileInformation, 'resultValue')
@@ -20,9 +20,6 @@ module.exports = ({ prisonerDetails, property }) => {
 
   const showListenerSuitable =
     listenerSuitableValue && listenerSuitableValue !== 'No' && listenerRecognisedValue !== 'Yes'
-  const showListenerRecognised = listenerSuitableValue === 'Yes'
-  const showDomesticAbusePerp = domesticAbusePerpValue && domesticAbusePerpValue !== 'NO'
-  const showDomesticAbuseVictim = domesticAbuseVictimValue && domesticAbuseVictimValue !== 'NO'
 
   const needsWarning = value => (value === 'Yes' ? value : 'Needs to be warned')
 
@@ -63,11 +60,15 @@ module.exports = ({ prisonerDetails, property }) => {
     ],
     listener: [
       ...(showListenerSuitable ? [{ label: 'Listener suitable', value: listenerSuitableValue }] : []),
-      ...(showListenerRecognised ? [{ label: 'Listener - recognised', value: listenerRecognisedValue }] : []),
+      ...(listenerSuitableValue === 'Yes' ? [{ label: 'Listener - recognised', value: listenerRecognisedValue }] : []),
     ],
     domesticAbuse: [
-      ...(showDomesticAbusePerp ? [{ label: 'Domestic abuse perpetrator', value: domesticAbusePerpValue }] : []),
-      ...(showDomesticAbuseVictim ? [{ label: 'Domestic abuse victim', value: domesticAbuseVictimValue }] : []),
+      ...(domesticAbusePerpValue === 'Yes'
+        ? [{ label: 'Domestic abuse perpetrator', value: domesticAbusePerpValue }]
+        : []),
+      ...(domesticAbuseVictimValue === 'Yes'
+        ? [{ label: 'Domestic abuse victim', value: domesticAbuseVictimValue }]
+        : []),
     ],
     property:
       property &&
