@@ -149,7 +149,7 @@ class AttendanceStatsDashboardSpecification extends BrowserReportingSpec {
         fixture.loginAs(UserAccount.ITAG_USER)
         def fromDateTime = "2019-10-10T00:00"
         def toDateTime = "2019-10-10T11:59"
-        def agencyId = "MDI"
+        def agencyId = "LEI"
         def period = "AM"
         def fromDate = "10/10/2019"
 
@@ -182,7 +182,7 @@ class AttendanceStatsDashboardSpecification extends BrowserReportingSpec {
                                             ]]
         ]
 
-        elite2api.stubScheduledActivities("MDI", [
+        elite2api.stubScheduledActivities(agencyId, [
                 [ "eventId" :1, "comment": "Houseblock 1", "firstName": "bob", "lastName": "sut", "offenderNo": "A123456"  ]
         ])
         oauthApi.stubGetMyRoles()
