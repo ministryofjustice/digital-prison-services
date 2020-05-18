@@ -20,6 +20,8 @@ module.exports = ({ prisonerDetails, property }) => {
 
   const showListenerSuitable =
     listenerSuitableValue && listenerSuitableValue !== 'No' && listenerRecognisedValue !== 'Yes'
+  const showListenerRecognised =
+    listenerSuitableValue === 'Yes' || (!listenerSuitableValue && listenerRecognisedValue === 'Yes')
 
   const needsWarning = value => (value === 'Yes' ? value : 'Needs to be warned')
 
@@ -59,8 +61,8 @@ module.exports = ({ prisonerDetails, property }) => {
       },
     ],
     listener: [
-      ...(showListenerSuitable ? [{ label: 'Listener suitable', value: listenerSuitableValue }] : []),
-      ...(listenerSuitableValue === 'Yes' ? [{ label: 'Listener - recognised', value: listenerRecognisedValue }] : []),
+      ...(showListenerSuitable ? [{ label: 'Listener - suitable', value: listenerSuitableValue }] : []),
+      ...(showListenerRecognised ? [{ label: 'Listener - recognised', value: listenerRecognisedValue }] : []),
     ],
     domesticAbuse: [
       ...(domesticAbusePerpValue === 'Yes'

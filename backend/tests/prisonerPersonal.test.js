@@ -620,7 +620,7 @@ describe('prisoner personal', () => {
               expect.objectContaining({
                 personalDetails: expect.objectContaining({
                   listener: [
-                    { label: 'Listener suitable', value: 'Yes' },
+                    { label: 'Listener - suitable', value: 'Yes' },
                     { label: 'Listener - recognised', value: 'No' },
                   ],
                 }),
@@ -665,7 +665,7 @@ describe('prisoner personal', () => {
               expect.objectContaining({
                 personalDetails: expect.objectContaining({
                   listener: [
-                    { label: 'Listener suitable', value: 'Yes' },
+                    { label: 'Listener - suitable', value: 'Yes' },
                     { label: 'Listener - recognised', value: undefined },
                   ],
                 }),
@@ -689,6 +689,27 @@ describe('prisoner personal', () => {
               expect.objectContaining({
                 personalDetails: expect.objectContaining({
                   listener: [],
+                }),
+              })
+            )
+          })
+        })
+
+        describe('when suitable has no value and recognised is Yes', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [{ type: 'LIST_REC', resultValue: 'Yes' }],
+            })
+          })
+
+          it('should display recognised only', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  listener: [{ label: 'Listener - recognised', value: 'Yes' }],
                 }),
               })
             )
