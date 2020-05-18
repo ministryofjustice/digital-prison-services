@@ -1,7 +1,7 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubUser: () => {
+  stubUserMe: () => {
     return stubFor({
       request: {
         method: 'GET',
@@ -37,6 +37,21 @@ module.exports = {
             description: 'Moorland',
           },
         ],
+      },
+    })
+  },
+  stubUserScheduledActivities: activities => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/schedules/.+?/activities-by-event-ids',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: activities,
       },
     })
   },

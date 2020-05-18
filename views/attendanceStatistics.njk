@@ -124,7 +124,7 @@
             <p class="govuk-body">Reason changes</p>
             <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="changes">
             {% if dashboardStats.changes > 0 %}
-                <a href="/attendance-changes?&fromDateTime={{changeClickThrough.fromDateTime}}&toDateTime={{changeClickThrough.toDateTime}}&subHeading={{changeClickThrough.subHeading}}" class="govuk-link--no-visited-state">
+                <a href="/attendance-changes?agencyId={{caseLoadId}}&fromDateTime={{changeClickThrough.fromDateTime}}&toDateTime={{changeClickThrough.toDateTime}}&subHeading={{changeClickThrough.subHeading}}" class="govuk-link--no-visited-state">
                 {{dashboardStats.changes}}
               </a>
             {% else %}

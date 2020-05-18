@@ -89,11 +89,13 @@ const token = () =>
     },
   })
 
-const stubUser = username =>
-  stubFor({
+const stubUser = (username, caseload) => {
+  const user = username || 'ITAG_USER'
+  const activeCaseLoadId = caseload || 'MDI'
+  return stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/auth/api/user/${encodeURI(username)}`,
+      urlPattern: `/auth/api/user/${encodeURI(user)}`,
     },
     response: {
       status: 200,
@@ -101,16 +103,17 @@ const stubUser = username =>
         'Content-Type': 'application/json;charset=UTF-8',
       },
       jsonBody: {
-        user_name: username,
+        user_name: user,
         staffId: 231232,
-        username,
+        username: user,
         active: true,
-        name: `${username} name`,
+        name: `${user} name`,
         authSource: 'nomis',
-        activeCaseLoadId: 'MDI',
+        activeCaseLoadId,
       },
     },
   })
+}
 
 const stubUserMe = () => {
   return stubFor({
@@ -182,7 +185,16 @@ const stubUnverifiedEmail = username =>
 
 module.exports = {
   getLoginUrl,
-  stubLogin: () => Promise.all([favicon(), redirect(), logout(), token(), stubUserMe(), stubUserMeRoles([])]),
+  stubLogin: (username, caseloadId) =>
+    Promise.all([
+      favicon(),
+      redirect(),
+      logout(),
+      token(),
+      stubUserMe(),
+      stubUserMeRoles([]),
+      stubUser(username, caseloadId),
+    ]),
   stubLoginCourt: () =>
     Promise.all([
       favicon(),
