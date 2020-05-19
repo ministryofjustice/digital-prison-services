@@ -1,14 +1,8 @@
 const page = require('../page')
 
-const activeRow = i => cy.get('[data-qa="active-alerts-table"] tbody tr').eq(i)
-const activeCol = (i, j) =>
-  activeRow(i)
-    .find('td')
-    .eq(j)
-
-const inactiveRow = i => cy.get('[data-qa="inactive-alerts-table"] tbody tr').eq(i)
-const inactiveCol = (i, j) =>
-  inactiveRow(i)
+const tableRow = i => cy.get('tbody tr').eq(i)
+const tableCol = (i, j) =>
+  tableRow(i)
     .find('td')
     .eq(j)
 
@@ -16,7 +10,7 @@ const prisonerAlertsPage = offenderName =>
   page(offenderName, {
     getFilterForm: () => ({
       getTitle: () => cy.get('h2').first(),
-      activeFilter: () => cy.get('[data-qa="actve-filter"]'),
+      activeFilter: () => cy.get('[data-qa="active-filter"]'),
       typeFilter: () => cy.get('[data-qa="type-filter"]'),
       fromFilter: () => cy.get('[data-qa="from-filter"]'),
       toFilter: () => cy.get('[data-qa="to-filter"]'),
@@ -26,19 +20,19 @@ const prisonerAlertsPage = offenderName =>
     createAlertButton: () => cy.get('[data-qa="create-alert"]'),
     tableTitle: () => cy.get('[data-qa="alerts-table-title"]'),
     getActiveAlertsRows: i => ({
-      typeOfAlert: () => activeCol(i, 0),
-      alert: () => activeCol(i, 1),
-      comments: () => activeCol(i, 2),
-      dateFrom: () => activeCol(i, 3),
-      createdBy: () => activeCol(i, 4),
-      editCreateButton: () => activeCol(i, 5),
+      typeOfAlert: () => tableCol(i, 0),
+      alert: () => tableCol(i, 1),
+      comments: () => tableCol(i, 2),
+      dateFrom: () => tableCol(i, 3),
+      createdBy: () => tableCol(i, 4),
+      editCreateButton: () => tableCol(i, 5),
     }),
     getInactiveAlertsRows: i => ({
-      typeOfAlert: () => inactiveCol(i, 0),
-      details: () => inactiveCol(i, 1),
-      comments: () => inactiveCol(i, 2),
-      dateFromDateClosed: () => inactiveCol(i, 3),
-      createdByClosedBy: () => inactiveCol(i, 4),
+      typeOfAlert: () => tableCol(i, 0),
+      details: () => tableCol(i, 1),
+      comments: () => tableCol(i, 2),
+      dateFromDateClosed: () => tableCol(i, 3),
+      createdByClosedBy: () => tableCol(i, 4),
     }),
     getPagination: () => ({
       getPaginationList: () => cy.get('.moj-pagination__list'),
