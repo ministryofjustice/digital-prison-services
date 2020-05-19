@@ -5,8 +5,7 @@ $(function() {
   var subTypesUrl = $('#subTypesUrl').val()
 
   typeSelect.on('change', function(e) {
-    var selectedTypeOption =
-      e.target && e.target.options && e.target.options && e.target.options[e.target.options.selectedIndex]
+    var selectedTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
     if (!selectedTypeOption) return
 
     subTypeSelect.prop('disabled', true)
