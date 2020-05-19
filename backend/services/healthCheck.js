@@ -1,7 +1,8 @@
 const { serviceCheckFactory } = require('../controllers/healthCheck')
 
 const service = (name, url) => {
-  const check = serviceCheckFactory(name, url)
+  const healthUrl = `${url.replace(/\/$/, '')}/health/ping`
+  const check = serviceCheckFactory(name, healthUrl)
   return () =>
     check()
       .then(result => ({ name, status: 'UP', message: result }))
@@ -30,12 +31,21 @@ const addAppInfo = result => {
   return { ...result, ...buildInfo }
 }
 
-module.exports = function healthcheckFactory(authUrl, elite2Url, whereaboutsUrl, communityUrl) {
+module.exports = function healthcheckFactory(
+  authUrl,
+  elite2Url,
+  whereaboutsUrl,
+  communityUrl,
+  keyworkerUrl,
+  tokenverificationUrl
+) {
   const checks = [
-    service('auth', `${authUrl}ping`),
-    service('elite2', `${elite2Url}ping`),
-    service('whereabouts', `${whereaboutsUrl}ping`),
-    service('community', `${communityUrl}/ping`),
+    service('auth', authUrl),
+    service('elite2', elite2Url),
+    service('whereabouts', whereaboutsUrl),
+    service('community', communityUrl),
+    service('keyworker', keyworkerUrl),
+    service('tokenverification', tokenverificationUrl),
   ]
 
   return callback =>

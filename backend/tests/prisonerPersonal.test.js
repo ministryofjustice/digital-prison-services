@@ -352,7 +352,7 @@ describe('prisoner personal', () => {
                 primary: [
                   { label: 'Age', value: 29 },
                   { label: 'Date of Birth', value: '12/10/1990' },
-                  { label: 'Place of Birth', value: 'DONCASTER' },
+                  { label: 'Place of Birth', value: 'Doncaster' },
                   { label: 'Gender', value: 'Male' },
                   { label: 'Ethnicity', value: 'White: Eng./Welsh/Scot./N.Irish/British' },
                   { label: 'Religion', value: 'Christian' },
@@ -437,35 +437,64 @@ describe('prisoner personal', () => {
       })
 
       describe('when there is tertiary data', () => {
-        beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
-            profileInformation: [
-              { type: 'IMM', resultValue: 'No' },
-              { type: 'TRAVEL', resultValue: 'Cannot travel to Sheffield' },
-              { type: 'PERSC', resultValue: 'No' },
-              { type: 'YOUTH', resultValue: 'No' },
-              { type: 'DNA', resultValue: 'No' },
-            ],
+        describe('when travel restrictions does not have a value and other values are No', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [
+                { type: 'IMM', resultValue: 'No' },
+                { type: 'TRAVEL', resultValue: '' },
+                { type: 'PERSC', resultValue: 'No' },
+                { type: 'YOUTH', resultValue: 'No' },
+                { type: 'DNA', resultValue: 'No' },
+              ],
+            })
+          })
+
+          it('should not display the other tertiary data items', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  tertiary: [{ label: 'Interest to immigration', value: 'No' }],
+                }),
+              })
+            )
           })
         })
 
-        it('should render the personal template with the correctly formatted data', async () => {
-          await controller(req, res)
-
-          expect(res.render).toHaveBeenCalledWith(
-            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-            expect.objectContaining({
-              personalDetails: expect.objectContaining({
-                tertiary: [
-                  { label: 'Interest to immigration', value: 'No' },
-                  { label: 'Travel restrictions', value: 'Cannot travel to Sheffield' },
-                  { label: 'Social care needed', value: 'No' },
-                  { label: 'Youth offender', value: 'No' },
-                  { label: 'DNA required', value: 'No' },
-                ],
-              }),
+        describe('when travel restrictions does have a value and other values are Yes', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [
+                { type: 'IMM', resultValue: 'Yes' },
+                { type: 'TRAVEL', resultValue: 'Cannot travel to Sheffield' },
+                { type: 'PERSC', resultValue: 'Yes' },
+                { type: 'YOUTH', resultValue: 'Yes' },
+                { type: 'DNA', resultValue: 'Yes' },
+              ],
             })
-          )
+          })
+
+          it('should display the other tertiary data items', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  tertiary: [
+                    { label: 'Interest to immigration', value: 'Yes' },
+                    { label: 'Travel restrictions', value: 'Cannot travel to Sheffield' },
+                    { label: 'Social care needed', value: 'Yes' },
+                    { label: 'Youth offender', value: 'Yes' },
+                    { label: 'DNA required', value: 'Yes' },
+                  ],
+                }),
+              })
+            )
+          })
         })
       })
     })
@@ -480,8 +509,8 @@ describe('prisoner personal', () => {
             expect.objectContaining({
               personalDetails: expect.objectContaining({
                 receptionWarnings: [
-                  { label: 'Warned about tatooing', value: undefined },
-                  { label: 'Warned not to change appearance', value: undefined },
+                  { label: 'Warned about tattooing', value: 'Needs to be warned' },
+                  { label: 'Warned not to change appearance', value: 'Needs to be warned' },
                 ],
               }),
             })
@@ -489,7 +518,7 @@ describe('prisoner personal', () => {
         })
       })
 
-      describe('when there is reception warnings data', () => {
+      describe('when the prisoner has been warned about tattooing and their appearance', () => {
         beforeEach(() => {
           elite2Api.getPrisonerDetail.mockResolvedValue({
             profileInformation: [{ type: 'TAT', resultValue: 'Yes' }, { type: 'APPEAR', resultValue: 'Yes' }],
@@ -504,8 +533,32 @@ describe('prisoner personal', () => {
             expect.objectContaining({
               personalDetails: expect.objectContaining({
                 receptionWarnings: [
-                  { label: 'Warned about tatooing', value: 'Yes' },
+                  { label: 'Warned about tattooing', value: 'Yes' },
                   { label: 'Warned not to change appearance', value: 'Yes' },
+                ],
+              }),
+            })
+          )
+        })
+      })
+
+      describe('when the prisoner has not been warned about tattooing and their appearance', () => {
+        beforeEach(() => {
+          elite2Api.getPrisonerDetail.mockResolvedValue({
+            profileInformation: [{ type: 'TAT', resultValue: 'No' }, { type: 'APPEAR', resultValue: 'No' }],
+          })
+        })
+
+        it('should render the personal template with the correctly formatted data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              personalDetails: expect.objectContaining({
+                receptionWarnings: [
+                  { label: 'Warned about tattooing', value: 'Needs to be warned' },
+                  { label: 'Warned not to change appearance', value: 'Needs to be warned' },
                 ],
               }),
             })
@@ -516,7 +569,7 @@ describe('prisoner personal', () => {
 
     describe('listener', () => {
       describe('when there is missing listener data', () => {
-        it('should still render the personal template', async () => {
+        it('should display nothing', async () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
@@ -531,6 +584,27 @@ describe('prisoner personal', () => {
       })
 
       describe('listener suitable and recognised', () => {
+        describe('when suitable is No and recognised is No', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'No' }],
+            })
+          })
+
+          it('should display nothing', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  listener: [],
+                }),
+              })
+            )
+          })
+        })
+
         describe('when suitable is Yes and recognised is No', () => {
           beforeEach(() => {
             elite2Api.getPrisonerDetail.mockResolvedValue({
@@ -546,7 +620,7 @@ describe('prisoner personal', () => {
               expect.objectContaining({
                 personalDetails: expect.objectContaining({
                   listener: [
-                    { label: 'Listener suitable', value: 'Yes' },
+                    { label: 'Listener - suitable', value: 'Yes' },
                     { label: 'Listener - recognised', value: 'No' },
                   ],
                 }),
@@ -591,9 +665,51 @@ describe('prisoner personal', () => {
               expect.objectContaining({
                 personalDetails: expect.objectContaining({
                   listener: [
-                    { label: 'Listener suitable', value: 'Yes' },
+                    { label: 'Listener - suitable', value: 'Yes' },
                     { label: 'Listener - recognised', value: undefined },
                   ],
+                }),
+              })
+            )
+          })
+        })
+
+        describe('when suitable is No and recognised is Yes', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'Yes' }],
+            })
+          })
+
+          it('should display nothing', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  listener: [],
+                }),
+              })
+            )
+          })
+        })
+
+        describe('when suitable has no value and recognised is Yes', () => {
+          beforeEach(() => {
+            elite2Api.getPrisonerDetail.mockResolvedValue({
+              profileInformation: [{ type: 'LIST_REC', resultValue: 'Yes' }],
+            })
+          })
+
+          it('should display recognised only', async () => {
+            await controller(req, res)
+
+            expect(res.render).toHaveBeenCalledWith(
+              'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+              expect.objectContaining({
+                personalDetails: expect.objectContaining({
+                  listener: [{ label: 'Listener - recognised', value: 'Yes' }],
                 }),
               })
             )
@@ -618,10 +734,10 @@ describe('prisoner personal', () => {
         })
       })
 
-      describe('when there is domestic abuse data', () => {
+      describe('when the domestic abuse values are YES', () => {
         beforeEach(() => {
           elite2Api.getPrisonerDetail.mockResolvedValue({
-            profileInformation: [{ type: 'DOMESTIC', resultValue: 'Yes' }, { type: 'DOMVIC', resultValue: 'Yes' }],
+            profileInformation: [{ type: 'DOMESTIC', resultValue: 'YES' }, { type: 'DOMVIC', resultValue: 'YES' }],
           })
         })
 

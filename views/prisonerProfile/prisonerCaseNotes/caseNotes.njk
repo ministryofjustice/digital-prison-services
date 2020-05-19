@@ -5,6 +5,8 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
 
 {% set title = "Case notes" %}
 {% set containerClasses = "prisoner-profile" %}
@@ -15,54 +17,64 @@
 
 {% block prisonerProfileSection %}
     <input type="hidden" name="subTypeUrl" value="{{ caseNotesRootUrl }}"/>
-    <form class="horizontal-form-clear-link " method="GET">
-        {{ govukSelect({
-            name: 'type',
-            id: 'type',
-            label: {
-                text: "Type"
-            },
-            items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
-            errorMessage: errors | findError(type)
-        }) }}
 
-        <div id="subTypes">
+    <div class="govuk-width-container govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+        <h2 class="govuk-heading-m">View by</h2>
+        <form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
+            <input type="hidden" name="pageOffsetOption" value="{{ pageOffsetOption }}"/>
+
             {{ govukSelect({
-                name: 'subType',
-                id: 'subType',
+                name: 'type',
+                id: 'type',
                 label: {
-                    text: "Sub-type"
+                    text: "Type"
                 },
-                items: subTypes | addDefaultSelectedVale('Select') | setSelected(formValues.subType)
+                items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
+                errorMessage: errors | findError(type)
             }) }}
-        </div>
 
-        {{ datePicker({
-            id: 'fromDate',
-            label: 'From',
-            name: 'fromDate',
-            date: formValues.fromDate,
-            errorMessage: errors | findError('fromDate')
-        }) }}
+            <div id="subTypes">
+                {{ govukSelect({
+                    name: 'subType',
+                    id: 'subType',
+                    label: {
+                        text: "Sub-type"
+                    },
+                    items: subTypes | addDefaultSelectedVale('Select') | setSelected(formValues.subType)
+                }) }}
+            </div>
 
-        {{ datePicker({
-            id: 'toDate',
-            label: 'To',
-            name: 'toDate',
-            date: formValues.toDate,
-            errorMessage: errors | findError('toDate')
-        }) }}
+            {{ datePicker({
+                id: 'fromDate',
+                label: 'From',
+                name: 'fromDate',
+                date: formValues.fromDate,
+                errorMessage: errors | findError('fromDate')
+            }) }}
 
-        {{ govukButton({
-            text: "Apply",
-            preventDoubleClick: true,
-            type: "submit"
-        }) }}
+            {{ datePicker({
+                id: 'toDate',
+                label: 'To',
+                name: 'toDate',
+                date: formValues.toDate,
+                errorMessage: errors | findError('toDate')
+            }) }}
 
-        <a href="{{caseNotesRootUrl }}"class="govuk-link">Clear</a>
-    </form>
+            {{ govukButton({
+                text: "Apply",
+                preventDoubleClick: true,
+                type: "submit"
+            }) }}
 
-    <div class="govuk-!-padding-top-8">
+            <a href="{{ caseNotesRootUrl }}" class="govuk-link">Clear</a>
+        </form>
+    </div>
+
+
+    {{ mojPagination(pagination) }}
+
+
+    <div>
         {{ govukTable({
             head: [
                 {
@@ -75,6 +87,8 @@
             rows: caseNoteRows
         }) }}
     </div>
+
+    {{ mojPagination(pagination) }}
 
 {% endblock %}
 

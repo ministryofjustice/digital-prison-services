@@ -1,6 +1,7 @@
 $govuk-page-width: 1170px;
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
+@import 'node_modules/@ministryofjustice/frontend/moj/all';
 @import 'components/header';
 @import 'components/sortable-table';
 @import 'components/print-link';
@@ -10,6 +11,7 @@ $govuk-page-width: 1170px;
 @import 'components/prisonerProfile/prisoner-profile-header';
 @import 'components/prisonerProfile/prisoner-full-image';
 @import 'components/prisonerProfile/prisoner-personal';
+@import 'components/prisonerProfile/prisoner-alerts';
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
 @import 'views/components/movementSlip/movementSlip.scss';
@@ -41,6 +43,8 @@ $govuk-page-width: 1170px;
 
   @include govuk-media-query($from: desktop) {
     display: flex;
+    flex-flow: row wrap;
+
 
     * {
       width: auto;
@@ -51,44 +55,15 @@ $govuk-page-width: 1170px;
       margin-right: govuk-spacing(3);
     }
 
-    label {
-      margin-bottom: govuk-spacing(1);
-    }
-
-    button {
-      align-self: flex-end;
-      margin-bottom: $govuk-border-width-form-element;
-    }
-  }
-}
-
-.horizontal-form-clear-link {
-  * {
-    width: 100%;
-  }
-
-  @include govuk-media-query($from: desktop) {
-    display: flex;
-
-    * {
-      width: auto;
-      margin-bottom: 0;
-    }
-
-    > div {
-      margin-right: govuk-spacing(3);
+    .date-picker-container input {
+      width: 130px !important;
     }
 
     label {
       margin-bottom: govuk-spacing(1);
     }
 
-    button {
-      align-self: flex-end;
-      margin-right: govuk-spacing(3);
-    }
-
-    a {
+    button, a {
       align-self: flex-end;
       margin-bottom: $govuk-border-width-form-element;
     }

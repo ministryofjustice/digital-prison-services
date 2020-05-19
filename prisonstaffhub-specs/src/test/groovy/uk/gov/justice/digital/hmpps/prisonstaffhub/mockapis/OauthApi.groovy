@@ -206,7 +206,7 @@ class OauthApi extends WireMockRule {
 
     void stubHealth() {
         this.stubFor(
-                get('/auth/ping')
+                get('/auth/health/ping')
                         .willReturn(
                                 aResponse()
                                         .withStatus(200)

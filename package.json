@@ -50,10 +50,12 @@
     "contentful": "^7.3.0",
     "cookie-session": "^2.0.0-beta.3",
     "csv-parse": "^4.4.6",
+    "cypress-multi-reporters": "^1.4.0",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
     "enzyme-to-json": "^3.3.5",
+    "eslint-plugin-cypress": "^2.10.3",
     "express": "^4.16.3",
     "express-form-data": "^2.0.7",
     "express-session": "^1.16.2",
@@ -66,6 +68,7 @@
     "helmet": "^3.12.1",
     "hsts": "^2.1.0",
     "isbinaryfile": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "moment-business-days": "^1.1.3",
@@ -124,6 +127,7 @@
     "chai": "^4.1.2",
     "copy-webpack-plugin": "^5.0.0",
     "css-loader": "^1.0.0",
+    "cypress": "^4.5.0",
     "dotenv-expand": "^4.2.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
@@ -163,7 +167,7 @@
   },
   "scripts": {
     "start": "node backend/index.js",
-    "start-feature": "PORT=3006 OAUTH_ENDPOINT_URL=http://localhost:19090/auth/ API_ENDPOINT_URL=http://localhost:18080/ NN_ENDPOINT_URL=http://localhost:20200/ API_DATA_COMPLIANCE_ENDPOINT_URL=http://localhost:18084 API_COMMUNITY_ENDPOINT_URL=http://localhost:18083 API_WHEREABOUTS_ENDPOINT_URL=http://localhost:18082/ VIDEO_LINK_ENABLED_FOR=WWI WANDSWORTH_OMU_EMAIL=test@local WANDSWORTH_VLB_EMAIL=test@local node backend/index.js",
+    "start-feature": "export $(cat $npm_config_env) && node backend/index.js",
     "build": "webpack --mode=production",
     "build:analyse": "BUNDLE_ANALYSE=true npm run build",
     "test": "jest --env=jsdom",
@@ -171,7 +175,9 @@
     "record-build-info": "node scripts/record-build-info",
     "lint": "node node_modules/eslint/bin/eslint.js src backend",
     "verify": "npm run lint && npm test",
-    "security_audit": "npx audit-ci --config audit-ci.json"
+    "security_audit": "npx audit-ci --config audit-ci.json",
+    "int-test": "cypress run",
+    "int-test-ui": "cypress open"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -188,6 +194,9 @@
       "enzyme-to-json/serializer"
     ],
     "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/integration-tests/"
+    ],
     "testURL": "http://localhost",
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "babel-jest",

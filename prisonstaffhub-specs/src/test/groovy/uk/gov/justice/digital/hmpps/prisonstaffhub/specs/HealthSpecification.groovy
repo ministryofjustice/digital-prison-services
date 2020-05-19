@@ -6,7 +6,9 @@ import org.junit.Rule
 import spock.lang.Specification
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.CommunityApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.KeyWorkerApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.TokenVerificationApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 
 import static groovyx.net.http.HttpBuilder.configure
@@ -25,6 +27,12 @@ class HealthSpecification extends Specification {
     @Rule
     CommunityApi communityApi = new CommunityApi()
 
+    @Rule
+    TokenVerificationApi tokenVerificationApi = new TokenVerificationApi()
+
+    @Rule
+    KeyWorkerApi keyWorkerApi = new KeyWorkerApi()
+
     HttpBuilder http
 
     def setup() {
@@ -40,6 +48,8 @@ class HealthSpecification extends Specification {
         elite2Api.stubHealth()
         oauthApi.stubHealth()
         communityApi.stubHealth()
+        keyWorkerApi.stubHealth()
+        tokenVerificationApi.stubHealth()
 
         when:
         def response = this.http.get()
@@ -47,16 +57,18 @@ class HealthSpecification extends Specification {
         response.uptime > 0.0
         response.name == "prisonstaffhub"
         !response.version.isEmpty()
-        response.api == [auth:'UP', elite2:'UP', whereabouts:'UP', community:'UP']
+        response.api == [auth: 'UP', elite2: 'UP', whereabouts: 'UP', community: 'UP', keyworker: 'UP', tokenverification: 'UP']
     }
 
     def "Health page reports API down"() {
 
         given:
         whereaboutsApi.stubHealth()
-        elite2Api.stubDelayedError('/ping', 500)
+        elite2Api.stubDelayedError('/health/ping', 500)
         oauthApi.stubHealth()
         communityApi.stubHealth()
+        keyWorkerApi.stubHealth()
+        tokenVerificationApi.stubHealth()
 
         when:
         def response
@@ -70,7 +82,11 @@ class HealthSpecification extends Specification {
         response.name == "prisonstaffhub"
         !response.version.isEmpty()
         response.api == [
-                auth:'UP',
-                elite2:[timeout:1000, code:'ECONNABORTED', errno:'ETIMEDOUT', retries:2], whereabouts:'UP', community:'UP']
+                auth  : 'UP',
+                elite2: [timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2],
+                whereabouts: 'UP',
+                community: 'UP',
+                keyworker: 'UP',
+                tokenverification: 'UP']
     }
 }

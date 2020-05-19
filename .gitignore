@@ -76,3 +76,7 @@ static/stylesheets/
 gradle
 Dockerrun.aws.json
 prisonstaffhub-specs/out
+
+# Cypress
+integration-tests/videos
+integration-tests/screenshots

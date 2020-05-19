@@ -30,6 +30,7 @@ describe('Attendance change router', () => {
     req = {
       originalUrl: 'http://localhost',
       query: {
+        agencyId: 'MDI',
         fromDateTime: '2020-10-03T00:00',
         toDateTime: '2020-10-03T12:00',
         subHeading: '3 November 2020 - AM + PM',

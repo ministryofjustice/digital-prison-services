@@ -8,13 +8,20 @@ const {
 } = require('../../../src/dateHelpers')
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
+const perPage = 10
 
-module.exports = ({ caseNotesApi, prisonerProfileService, nunjucks }) => async (req, res) => {
+module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks }) => async (req, res) => {
+  const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
   const { offenderNo } = req.params
-  const { perPage, pageNumber, type, subType, fromDate, toDate } = req.query
+
+  if (!req.xhr && !req.query.pageOffsetOption)
+    return res.redirect(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
+
+  const { pageOffsetOption, type, subType, fromDate, toDate } = req.query
+
+  const pageNumber = Math.floor(pageOffsetOption / perPage) || 0
 
   const caseNotes = await caseNotesApi.getCaseNotes(res.locals, offenderNo, {
-    perPage,
     pageNumber,
     type,
     subType,
@@ -23,6 +30,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, nunjucks }) => async (
   })
 
   const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(res.locals)
+
   const types = caseNoteTypes.map(caseNoteType => ({
     value: caseNoteType.code,
     text: caseNoteType.description,
@@ -83,11 +91,13 @@ module.exports = ({ caseNotesApi, prisonerProfileService, nunjucks }) => async (
     types,
     subTypes: selectedSubTypes,
     caseNotesRootUrl: `/prisoner/${offenderNo}/case-notes`,
+    pageOffsetOption,
     formValues: {
       type,
       subType,
       fromDate,
       toDate,
     },
+    pagination: paginationService.getPagination(caseNotes.totalElements, Number(pageOffsetOption), perPage, fullUrl),
   })
 }
