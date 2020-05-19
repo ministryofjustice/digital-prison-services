@@ -24,7 +24,7 @@ module.exports = on => {
     stubPrisonerProfileHeaderData: ({ offenderBasicDetails, offenderFullDetails, iepSummary, caseNoteSummary }) =>
       Promise.all([
         auth.stubUserMe(),
-        auth.stubUserMeRoles(),
+        auth.stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }]),
         elite2api.stubOffenderBasicDetails(offenderBasicDetails),
         elite2api.stubOffenderFullDetails(offenderFullDetails),
         elite2api.stubIepSummaryForBookingIds(iepSummary),

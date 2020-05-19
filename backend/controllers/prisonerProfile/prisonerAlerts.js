@@ -2,10 +2,14 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst } = require('../../utils')
 
-module.exports = ({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, logError }) => async (
-  req,
-  res
-) => {
+module.exports = ({
+  prisonerProfileService,
+  referenceCodesService,
+  paginationService,
+  elite2Api,
+  oauthApi,
+  logError,
+}) => async (req, res) => {
   const { offenderNo } = req.params
   const { fromDate, toDate, alertType, active, pageOffsetOption } = req.query
   const fomattedFromDate = fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
@@ -40,11 +44,12 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
       'Page-Limit': pageLimit,
     }
 
-    const [prisonerProfileData, alertTypes] = await Promise.all([
+    const [prisonerProfileData, alertTypes, roles] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       referenceCodesService.getAlertTypes(res.locals),
+      oauthApi.userRoles(res.locals),
     ])
-
+    const canUpdateAlerts = roles && roles.some(role => role.roleCode === 'UPDATE_ALERT')
     const alerts = await elite2Api.getAlertsForBooking(res.locals, { bookingId, query }, headers)
     const totalAlerts = res.locals.responseHeaders['total-records']
 
@@ -59,9 +64,11 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
         { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY') },
         { text: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}` },
         {
-          html: `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
-            alert.alertId
-          }">Edit or close</a>`,
+          html: canUpdateAlerts
+            ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
+                alert.alertId
+              }">Edit or close</a>`
+            : '',
         },
       ]
     })
@@ -106,6 +113,7 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
       alertTypeValues,
       pagination: paginationService.getPagination(totalAlerts, pageOffset, pageLimit, fullUrl),
       createLink: `/offenders/${offenderNo}/create-alert`,
+      canUpdateAlerts,
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)

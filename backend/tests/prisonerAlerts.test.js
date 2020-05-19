@@ -19,6 +19,7 @@ describe('prisoner alerts', () => {
   }
   const bookingId = '14'
   const elite2Api = {}
+  const oauthApi = {}
   const prisonerProfileService = {}
   const referenceCodesService = {}
   const paginationService = {}
@@ -49,11 +50,13 @@ describe('prisoner alerts', () => {
     })
     paginationService.getPagination = jest.fn().mockReturnValue([])
     elite2Api.getAlertsForBooking = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'UPDATE_ALERT' }])
     controller = prisonerAlerts({
       prisonerProfileService,
       referenceCodesService,
       paginationService,
       elite2Api,
+      oauthApi,
       logError,
     })
   })

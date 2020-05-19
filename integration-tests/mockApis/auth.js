@@ -192,7 +192,7 @@ module.exports = {
       logout(),
       token(),
       stubUserMe(),
-      stubUserMeRoles([]),
+      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }]),
       stubUser(username, caseloadId),
     ]),
   stubLoginCourt: () =>

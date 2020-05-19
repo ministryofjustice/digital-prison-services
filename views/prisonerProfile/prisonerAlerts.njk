@@ -71,15 +71,16 @@
       <div class="govuk-grid-column-one-half">
         <h2 class="govuk-heading-m" data-qa="alerts-table-title">Active alerts</h2>
       </div>
-      <div class="govuk-grid-column-one-half pull-right">
-        {{ govukButton({
-        href: createLink,
-        text: "Create alert",
-        preventDoubleClick: true,
-        classes: "govuk-button--link",
-        attributes: { "data-qa": "create-alert" }
-        }) }}
-      </div>
+      {% if canUpdateAlerts %}
+        <div class="govuk-grid-column-one-half pull-right">
+          {{ govukButton({
+          href: createLink,
+          text: "Create alert",
+          preventDoubleClick: true,
+          classes: "govuk-button--link"
+          }) }}
+        </div>
+      {% endif %}
     </div>
 
     {{ mojPagination(pagination) }}
@@ -117,14 +118,16 @@
       <div class="govuk-grid-column-one-half">
         <h2 class="govuk-heading-m" data-qa="alerts-table-title">Inactive alerts</h2>
       </div>
-      <div class="govuk-grid-column-one-half pull-right">
-        {{ govukButton({
-        href: createLink,
-        text: "Create alert",
-        preventDoubleClick: true,
-        classes: "govuk-button--link"
-        }) }}
-      </div>
+      {% if canUpdateAlerts %}
+        <div class="govuk-grid-column-one-half pull-right">
+          {{ govukButton({
+          href: createLink,
+          text: "Create alert",
+          preventDoubleClick: true,
+          classes: "govuk-button--link"
+          }) }}
+        </div>
+      {% endif %}
     </div>
 
     {{ mojPagination(pagination) }}
