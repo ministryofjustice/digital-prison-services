@@ -6,6 +6,7 @@ const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const { communityApiFactory } = require('./api/communityApi')
 const { dataComplianceApiFactory } = require('./api/dataComplianceApi')
 const { keyworkerApiFactory } = require('./api/keyworkerApi')
+const { caseNotesApiFactory } = require('./api/caseNotesApi')
 
 const elite2Api = elite2ApiFactory(
   clientFactory({
@@ -51,6 +52,13 @@ const keyworkerApi = keyworkerApiFactory(
   })
 )
 
+const caseNotesApi = caseNotesApiFactory(
+  clientFactory({
+    baseUrl: config.apis.caseNotes.url,
+    timeout: config.apis.caseNotes.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
@@ -58,4 +66,5 @@ module.exports = {
   communityApi,
   dataComplianceApi,
   keyworkerApi,
+  caseNotesApi,
 }

@@ -43,6 +43,8 @@ $govuk-page-width: 1170px;
 
   @include govuk-media-query($from: desktop) {
     display: flex;
+    flex-flow: row wrap;
+
 
     * {
       width: auto;
@@ -53,8 +55,16 @@ $govuk-page-width: 1170px;
       margin-right: govuk-spacing(3);
     }
 
+    .date-picker-container input {
+      width: 130px !important;
+    }
+
     label {
       margin-bottom: govuk-spacing(1);
+    }
+
+    a {
+      margin-left: govuk-spacing(3);
     }
 
     button, a {

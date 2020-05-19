@@ -34,6 +34,7 @@ env:
   USE_OF_FORCE_URL: "https://preprod.use-of-force.service.justice.gov.uk"
   USE_OF_FORCE_PRISONS: "WRI,BLI,RSI"
   TOKENVERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
+  CASENOTES_API_URL: "https://preprod.offender-case-notes.service.justice.gov.uk/"
 
 whitelist:
   office: "217.33.148.210/32"

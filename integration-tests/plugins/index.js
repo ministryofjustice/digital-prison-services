@@ -2,6 +2,8 @@ const auth = require('../mockApis/auth')
 const elite2api = require('../mockApis/elite2')
 const whereabouts = require('../mockApis/whereabouts')
 const keyworker = require('../mockApis/keyworker')
+const caseNotes = require('../mockApis/caseNotes')
+
 const { resetStubs } = require('../mockApis/wiremock')
 
 module.exports = on => {
@@ -16,6 +18,8 @@ module.exports = on => {
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
+    stubCaseNotes: response => caseNotes.stubCaseNotes(response),
+    stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
 
     stubPrisonerProfileHeaderData: ({ offenderBasicDetails, offenderFullDetails, iepSummary, caseNoteSummary }) =>
       Promise.all([
