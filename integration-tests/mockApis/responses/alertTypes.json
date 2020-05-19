@@ -1,0 +1,128 @@
+[
+  {
+    "domain": "ALERT",
+    "code": "A",
+    "description": "Social Care",
+    "activeFlag": "Y",
+    "listSeq": 13,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "C",
+    "description": "Child Communication Measures",
+    "activeFlag": "Y",
+    "listSeq": 3,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "F1",
+    "description": "Ex Armed Forces",
+    "activeFlag": "Y",
+    "listSeq": 21,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "H",
+    "description": "Self Harm",
+    "activeFlag": "Y",
+    "listSeq": 1,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "L",
+    "description": "Care Leaver",
+    "activeFlag": "Y",
+    "listSeq": 11,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "M",
+    "description": "Medical",
+    "activeFlag": "Y",
+    "listSeq": 5,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "O",
+    "description": "Other",
+    "activeFlag": "Y",
+    "listSeq": 10,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "P",
+    "description": "MAPPP Case",
+    "activeFlag": "Y",
+    "listSeq": 4,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "R",
+    "description": "Risk",
+    "activeFlag": "Y",
+    "listSeq": 3,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "S",
+    "description": "Sexual Offence",
+    "activeFlag": "Y",
+    "listSeq": 7,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "T",
+    "description": "Hold Against Transfer",
+    "activeFlag": "Y",
+    "listSeq": 8,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "V",
+    "description": "Vulnerability",
+    "activeFlag": "Y",
+    "listSeq": 6,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "W",
+    "description": "Warrant",
+    "activeFlag": "Y",
+    "listSeq": 9,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "ALERT",
+    "code": "X",
+    "description": "Security",
+    "activeFlag": "Y",
+    "listSeq": 2,
+    "systemDataFlag": "N",
+    "subCodes": []
+  }
+]
