@@ -206,4 +206,6 @@ module.exports = {
     ]),
   stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
+  stubUserMe,
+  stubUserMeRoles,
 }
