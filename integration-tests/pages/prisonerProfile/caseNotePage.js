@@ -7,9 +7,9 @@ const column = (i, j) =>
     .find('td')
     .eq(j)
 
-const caseNotePage = () =>
-  page('Prisoners case notes', {
-    getCaseNotes: i => ({
+const caseNotePage = offenderName =>
+  page(offenderName, {
+    getRows: i => ({
       createdBy: () => column(i, 0),
       caseNoteDetails: () => column(i, 1),
     }),

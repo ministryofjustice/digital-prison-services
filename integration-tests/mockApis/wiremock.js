@@ -8,11 +8,12 @@ const getRequests = () => superagent.get(`${url}/requests`)
 
 const resetStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
-const getFor = ({ body, urlPattern }) =>
+const getFor = ({ body, urlPattern, urlPath }) =>
   stubFor({
     request: {
       method: 'GET',
       urlPattern,
+      urlPath,
     },
     response: {
       status: 200,

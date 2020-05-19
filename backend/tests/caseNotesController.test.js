@@ -33,18 +33,22 @@ const caseNotesApiResponse = [
 describe('Case notes controller', () => {
   const caseNotesApi = {}
   const prisonerProfileService = {}
+  const paginationService = {}
   const nunjucks = {}
 
   let controller
   const res = { locals: {} }
-  const params = {
-    offenderNo: 'A12345',
-  }
+
+  const reqDefault = { params: { offenderNo: 'A12345' }, get: () => {}, query: { pageOffsetOption: '0' } }
 
   beforeEach(() => {
     caseNotesApi.getCaseNotes = jest.fn()
     caseNotesApi.getCaseNoteTypes = jest.fn()
     prisonerProfileService.getPrisonerProfileData = jest.fn()
+
+    paginationService.getPagination = jest.fn()
+
+    paginationService.getPagination.mockReturnValue({})
 
     caseNotesApi.getCaseNoteTypes.mockReturnValue([
       {
@@ -58,25 +62,40 @@ describe('Case notes controller', () => {
     prisonerProfileService.getPrisonerProfileData.mockReturnValue({})
 
     res.render = jest.fn()
+    res.redirect = jest.fn()
     res.send = jest.fn()
     nunjucks.render = jest.fn()
 
-    controller = controllerFactory({ caseNotesApi, prisonerProfileService, nunjucks })
+    controller = controllerFactory({ caseNotesApi, prisonerProfileService, nunjucks, paginationService })
   })
 
   it('should request case notes without filters', async () => {
-    const req = { params, query: {} }
+    await controller(reqDefault, res)
+
+    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
+      endDate: undefined,
+      pageNumber: 0,
+      startDate: undefined,
+      subType: undefined,
+      type: undefined,
+    })
+  })
+
+  it('should redirect when pageOffsetOption is not supplied', async () => {
+    const req = {
+      ...reqDefault,
+      query: {},
+    }
     await controller(req, res)
 
-    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {})
+    expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes?pageOffsetOption=0')
   })
 
   it('should request case notes with filters', async () => {
     const req = {
-      params,
+      ...reqDefault,
       query: {
-        perPage: 100,
-        pageNumber: 10,
+        pageOffsetOption: 10,
         type: 'type1',
         subType: 'subType2',
         fromDate: '10/10/2010',
@@ -90,8 +109,7 @@ describe('Case notes controller', () => {
       'A12345',
       expect.objectContaining({
         endDate: '11/10/2020',
-        pageNumber: 10,
-        perPage: 100,
+        pageNumber: 1,
         startDate: '10/10/2010',
         subType: 'subType2',
         type: 'type1',
@@ -102,7 +120,7 @@ describe('Case notes controller', () => {
   it('should handle ajax request', async () => {
     nunjucks.render.mockReturnValue('<div>test</div>')
     const req = {
-      params,
+      ...reqDefault,
       query: {
         typeCode: 'type1',
       },
@@ -128,10 +146,9 @@ describe('Case notes controller', () => {
     nunjucks.render.mockReturnValue('<div>Test</div>')
 
     const req = {
-      params,
+      ...reqDefault,
       query: {
-        perPage: 100,
-        pageNumber: 10,
+        pageOffsetOption: '0',
         type: 'type1',
         subType: 'subType2',
         fromDate: '10/10/2010',
@@ -162,6 +179,8 @@ describe('Case notes controller', () => {
       caseNotesRootUrl: '/prisoner/A12345/case-notes',
       formValues: { fromDate: '10/10/2010', subType: 'subType2', toDate: '11/10/2020', type: 'type1' },
       prisonerProfileData: {},
+      pageOffsetOption: '0',
+      pagination: {},
       subTypes: [
         {
           text: 'Sub type',
