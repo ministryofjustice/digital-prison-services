@@ -13,6 +13,8 @@
 {% set alertNumbersHtml %}
   <a class="alerts-link" href={{ "/prisoner/" + prisonerProfileData.offenderNo + "/alerts" }}>
     <span class="alerts-link__active">{{ prisonerProfileData.activeAlertCount }} active</span>
+  </a>
+  <a class="alerts-link" href={{ "/prisoner/" + prisonerProfileData.offenderNo + "/alerts?active=INACTIVE" }}>
     <span class="alerts-link__inactive">{{ prisonerProfileData.inactiveAlertCount }} inactive</span>
   </a>
 {% endset %}

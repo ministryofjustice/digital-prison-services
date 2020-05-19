@@ -23,7 +23,8 @@
             {text: "Active", value: "ACTIVE"}, 
           {text: "Inactive", value: "INACTIVE"}
           ] | setSelected(active),
-          errorMessage: errors | findError(active)
+          errorMessage: errors | findError(active),
+          attributes: { "data-qa": "active-filter" }
         }) }}
 
       {{ govukSelect({
@@ -33,7 +34,8 @@
             text: "Type of alert"
         },
         items: alertTypeValues | addDefaultSelectedVale('Select', true) | setSelected(alertType),
-        errorMessage: errors | findError(alertType)
+        errorMessage: errors | findError(alertType),
+        attributes: { "data-qa": "type-filter" }
       }) }}
 
       {{ datePicker({
@@ -41,7 +43,8 @@
         label: 'Date from',
         name: 'fromDate',
         date: fromDate,
-        errorMessage: errors | findError('fromDate')
+        errorMessage: errors | findError('fromDate'),
+        attributes: { "data-qa": "from-filter" }
       }) }}
 
       {{ datePicker({
@@ -49,7 +52,8 @@
         label: 'Date to',
         name: 'toDate',
         date: toDate,
-        errorMessage: errors | findError('toDate')
+        errorMessage: errors | findError('toDate'),
+        attributes: { "data-qa": "to-filter" }
       }) }}
 
       {{ govukButton({
@@ -58,21 +62,22 @@
         type: "submit"
       }) }}
 
-      <a href="./alerts" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
+      <a href="./alerts" data-qa="clear-link" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
     </form>
   </div> 
 
   {% if activeAlerts.length %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <h2 class="govuk-heading-m">Active alerts</h2>
+        <h2 class="govuk-heading-m" data-qa="alerts-table-title">Active alerts</h2>
       </div>
       <div class="govuk-grid-column-one-half pull-right">
         {{ govukButton({
         href: createLink,
         text: "Create alert",
         preventDoubleClick: true,
-        classes: "govuk-button--link"
+        classes: "govuk-button--link",
+        attributes: { "data-qa": "create-alert" }
         }) }}
       </div>
     </div>

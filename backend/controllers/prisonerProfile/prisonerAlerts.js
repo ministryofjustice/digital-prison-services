@@ -50,8 +50,11 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
 
     const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => {
       return [
-        { text: alert.alertTypeDescription, classes: 'active-alert govuk-!-font-weight-bold' },
-        { text: alert.alertCodeDescription },
+        {
+          text: `${alert.alertTypeDescription} (${alert.alertType})`,
+          classes: 'active-alert govuk-!-font-weight-bold',
+        },
+        { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
         { text: alert.comment || 'None', classes: 'clip-overflow' },
         { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY') },
         { text: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}` },
@@ -64,22 +67,20 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
     })
     const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => {
       return [
-        { text: alert.alertTypeDescription, classes: 'inactive-alert govuk-!-font-weight-bold' },
-        { text: alert.alertCodeDescription, classes: 'inactive-alert' },
-        { text: alert.comment || 'None', classes: 'inactive-alert clip-overflow' },
+        { text: `${alert.alertTypeDescription} (${alert.alertType})`, classes: 'govuk-!-font-weight-bold' },
+        { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
+        { text: alert.comment || 'None', classes: 'clip-overflow' },
         {
           html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY')}<br>${moment(
             alert.dateExpires,
             'YYYY-MM-DD'
           ).format('DD/MM/YYYY')}`,
-          classes: 'inactive-alert',
         },
         {
           html: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}<br>${putLastNameFirst(
             alert.expiredByFirstName,
             alert.expiredByLastName
           )}`,
-          classes: 'inactive-alert',
         },
       ]
     })
