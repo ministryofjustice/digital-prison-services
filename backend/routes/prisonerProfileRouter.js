@@ -26,7 +26,7 @@ const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError 
   )
   router.get(
     '/case-notes',
-    prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationService, nunjucks })
+    prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationService, nunjucks, logError })
   )
 
   return router

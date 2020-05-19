@@ -37,9 +37,15 @@ describe('Case notes controller', () => {
   const nunjucks = {}
 
   let controller
+  let logError
   const res = { locals: {} }
 
-  const reqDefault = { params: { offenderNo: 'A12345' }, get: () => {}, query: { pageOffsetOption: '0' } }
+  const reqDefault = {
+    originalUrl: 'http://localhost',
+    params: { offenderNo: 'A12345' },
+    get: () => {},
+    query: { pageOffsetOption: '0' },
+  }
 
   beforeEach(() => {
     caseNotesApi.getCaseNotes = jest.fn()
@@ -65,8 +71,17 @@ describe('Case notes controller', () => {
     res.redirect = jest.fn()
     res.send = jest.fn()
     nunjucks.render = jest.fn()
+    logError = jest.fn()
 
-    controller = controllerFactory({ caseNotesApi, prisonerProfileService, nunjucks, paginationService })
+    controller = controllerFactory({ caseNotesApi, prisonerProfileService, nunjucks, paginationService, logError })
+  })
+
+  it('should render error template', async () => {
+    caseNotesApi.getCaseNotes.mockRejectedValue(new Error('test'))
+    await controller(reqDefault, res)
+
+    expect(logError).toHaveBeenCalledWith('http://localhost', new Error('test'), 'Sorry, the service is unavailable')
+    expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
   })
 
   it('should request case notes without filters', async () => {
