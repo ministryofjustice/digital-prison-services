@@ -49,9 +49,6 @@ const caseNotesApiFactory = client => {
       startDate: toFormatStartOfDay(startDate),
       endDate: toFormatEndOfDay(endDate),
     }
-    console.info({ offenderNo })
-    console.info({ query })
-
     return client
       .get(context, `/case-notes/${offenderNo}?${qs.stringify(query)}`)
       .then(processResponse(context))
