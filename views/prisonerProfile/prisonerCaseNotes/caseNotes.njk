@@ -1,0 +1,97 @@
+{% extends "../layouts/prisonerLayout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+
+{% set title = "Case notes" %}
+{% set containerClasses = "prisoner-profile" %}
+
+{% set subTypesSelect %}
+    {% include "./partials/subTypesSelect.njk" %}
+{% endset %}
+
+{% block prisonerProfileSection %}
+    <input type="hidden" name="subTypeUrl" value="{{ caseNotesRootUrl }}"/>
+
+    <div class="govuk-width-container govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+        <h2 class="govuk-heading-m">View by</h2>
+        <form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
+            <input type="hidden" name="pageOffsetOption" value="{{ pageOffsetOption }}"/>
+
+            {{ govukSelect({
+                name: 'type',
+                id: 'type',
+                label: {
+                    text: "Type"
+                },
+                items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
+                errorMessage: errors | findError(type)
+            }) }}
+
+            <div id="subTypes">
+                {{ govukSelect({
+                    name: 'subType',
+                    id: 'subType',
+                    label: {
+                        text: "Sub-type"
+                    },
+                    items: subTypes | addDefaultSelectedVale('Select') | setSelected(formValues.subType)
+                }) }}
+            </div>
+
+            {{ datePicker({
+                id: 'fromDate',
+                label: 'From',
+                name: 'fromDate',
+                date: formValues.fromDate,
+                errorMessage: errors | findError('fromDate')
+            }) }}
+
+            {{ datePicker({
+                id: 'toDate',
+                label: 'To',
+                name: 'toDate',
+                date: formValues.toDate,
+                errorMessage: errors | findError('toDate')
+            }) }}
+
+            {{ govukButton({
+                text: "Apply",
+                preventDoubleClick: true,
+                type: "submit"
+            }) }}
+
+            <a href="{{ caseNotesRootUrl }}" class="govuk-link">Clear</a>
+        </form>
+    </div>
+
+
+    {{ mojPagination(pagination) }}
+
+
+    <div>
+        {{ govukTable({
+            head: [
+                {
+                    text: "Created"
+                },
+                {
+                    text: "Case note detail"
+                }
+            ],
+            rows: caseNoteRows
+        }) }}
+    </div>
+
+    {{ mojPagination(pagination) }}
+
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/static/js/caseNotes.js"></script>
+{% endblock %}

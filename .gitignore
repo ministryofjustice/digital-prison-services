@@ -2,8 +2,6 @@
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 lib-cov
 
@@ -44,9 +42,6 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
-
 # dotenv environment variables file
 .env*
 
@@ -69,8 +64,6 @@ typings/
 .env.production.local
 
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # sass compilations
 static/stylesheets/
@@ -83,3 +76,7 @@ static/stylesheets/
 gradle
 Dockerrun.aws.json
 prisonstaffhub-specs/out
+
+# Cypress
+integration-tests/videos
+integration-tests/screenshots

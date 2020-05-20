@@ -85,6 +85,9 @@ env:
   - name: NN_ENDPOINT_URL
     value: {{ .Values.env.NN_ENDPOINT_URL | quote }}
 
+  - name: CASENOTES_API_URL
+    value: {{ .Values.env.CASENOTES_API_URL | quote }}
+
   - name: PRISON_STAFF_HUB_UI_URL
     value: "https://{{ .Values.ingress.host }}/"
 
@@ -134,6 +137,9 @@ env:
 
   - name: USE_OF_FORCE_PRISONS
     value: {{ .Values.env.USE_OF_FORCE_PRISONS | quote }}
+
+  - name: TOKENVERIFICATION_API_URL
+    value: {{ .Values.env.TOKENVERIFICATION_API_URL | quote }}
 
   - name: NODE_ENV
     value: production

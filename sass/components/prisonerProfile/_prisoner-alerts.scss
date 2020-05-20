@@ -1,0 +1,19 @@
+.active-alert {
+    color: govuk-colour("red")
+}
+
+.inactive-alert {
+    color:  govuk-colour("dark-grey")
+}
+
+.fixed-table {
+    table-layout: fixed;
+}
+
+.form-background {
+    background-color: govuk-colour("light-grey");
+}
+.clip-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

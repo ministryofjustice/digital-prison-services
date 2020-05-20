@@ -33,6 +33,8 @@ env:
   CATEGORISATION_UI_URL: "https://preprod.offender-categorisation.service.justice.gov.uk/"
   USE_OF_FORCE_URL: "https://preprod.use-of-force.service.justice.gov.uk"
   USE_OF_FORCE_PRISONS: "WRI,BLI,RSI"
+  TOKENVERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
+  CASENOTES_API_URL: "https://preprod.offender-case-notes.service.justice.gov.uk/"
 
 whitelist:
   office: "217.33.148.210/32"
@@ -53,6 +55,8 @@ whitelist:
   ark-nps-hmcts-ttp5: "194.33.197.0/25"
   oakwood-1: "217.161.76.187/32"
   oakwood-2: "217.161.76.195/32"
+  oakwood-3: "217.161.76.186/32"
+  oakwood-4: "217.161.76.194/32"
   durham-tees-valley: "51.179.197.1/32"
   interservfls: "51.179.196.131/32"
   sodexo1: "80.86.46.16/32"

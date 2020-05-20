@@ -1,0 +1,5 @@
+exports.personalDetailsViewModel = require('./personalDetailsViewModel')
+exports.physicalCharacteristicsViewModel = require('./physicalCharacteristicsViewModel')
+exports.identifiersViewModel = require('./identifiersViewModel')
+exports.distinguishingMarksViewModel = require('./distinguishingMarksViewModel')
+exports.aliasesViewModel = require('./aliasesViewModel')

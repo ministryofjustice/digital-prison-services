@@ -1,22 +1,7 @@
-{% set physicalCharacteristicsRows = [] %}
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
 
-{% for characteristic in physicalCharacteristics %}
-  {% set physicalCharacteristicsRows = (physicalCharacteristicsRows.push(
-    {
-      key: {
-        text: characteristic.label
-      },
-      value: {
-        text: characteristic.value | showDefault(missingEntry)
-      }
-    }
-  ), physicalCharacteristicsRows) %}
-{% endfor %}
-
-{% if physicalCharacteristicsRows.length %}
-  {{ govukSummaryList({
-    rows: physicalCharacteristicsRows
-  }) }}
+{% if physicalCharacteristics.length %}
+  {{ prisonerSummarySection(physicalCharacteristics) }}
 {% else %}
   <p class="govuk-body">{{ missingEntry }}</p>
 {% endif %}

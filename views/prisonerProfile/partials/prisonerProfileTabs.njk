@@ -14,7 +14,7 @@
   <ul class="govuk-tabs__list">
     {% for tab in tabs %}
       {% set fullTabPath = '/prisoner/' + prisonerProfileData.offenderNo + tab.path %}
-      {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath === fullTabPath %}
+      {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath.split('?')[0] === fullTabPath %}
       <li class="{{'govuk-tabs__list-item' + isSelected }}">
         <a class="govuk-tabs__tab" href="{{ fullTabPath }}">
         {{ tab.text }}

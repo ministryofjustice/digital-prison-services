@@ -56,12 +56,20 @@ module.exports = {
       url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
       timeoutSeconds: process.env.KEYWORKER_API_TIMEOUT_SECONDS || 30,
     },
+    tokenverification: {
+      url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
+      timeoutSeconds: process.env.TOKENVERIFICATION_API_URL || 30,
+    },
     categorisation: {
       ui_url: process.env.CATEGORISATION_UI_URL || 'http://localhost:3003/',
     },
     useOfForce: {
       ui_url: process.env.USE_OF_FORCE_URL,
       prisons: process.env.USE_OF_FORCE_PRISONS || '',
+    },
+    caseNotes: {
+      url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
   },
   notifications: {

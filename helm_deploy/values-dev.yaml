@@ -33,5 +33,5 @@ env:
   CATEGORISATION_UI_URL: "https://dev.offender-categorisation.service.justice.gov.uk/"
   USE_OF_FORCE_URL: "https://dev.use-of-force.service.justice.gov.uk"
   USE_OF_FORCE_PRISONS: "WRI"
-
-
+  TOKENVERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+  CASENOTES_API_URL: "https://dev.offender-case-notes.service.justice.gov.uk/"

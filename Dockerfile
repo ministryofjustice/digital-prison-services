@@ -20,15 +20,15 @@ RUN mkdir -p /app
 WORKDIR /app
 ADD . .
 
-RUN yarn --frozen-lockfile && \
-    yarn build && \
+RUN npm ci --no-audit && \
+    npm run build && \
     export BUILD_NUMBER=${BUILD_NUMBER} && \
     export GIT_REF=${GIT_REF} && \
-    yarn record-build-info
+    npm run record-build-info
 
 ENV PORT=3000
 
 EXPOSE 3000
 RUN chown -R appuser:appgroup /app
 USER 2000
-CMD [ "yarn", "start" ]
+CMD [ "npm", "start" ]

@@ -8,7 +8,9 @@ const health = healthFactory(
   config.apis.oauth2.url,
   config.apis.elite2.url,
   config.apis.whereabouts.url,
-  config.apis.community.url
+  config.apis.community.url,
+  config.apis.keyworker.url,
+  config.apis.tokenverification.url
 )
 
 module.exports = () => {

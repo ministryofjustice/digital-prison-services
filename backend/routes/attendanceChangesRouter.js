@@ -46,7 +46,7 @@ const sortByLastNameThenByDate = activitiesMap => (left, right) => {
 }
 module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
   try {
-    const { fromDateTime, toDateTime, subHeading } = req.query
+    const { agencyId, fromDateTime, toDateTime, subHeading } = req.query
 
     if (!fromDateTime || !toDateTime || !subHeading)
       return res.redirect('/manage-prisoner-whereabouts/attendance-reason-statistics')
@@ -62,7 +62,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
     }
 
     const eventIds = [...new Set(changes.map(change => change.eventId))]
-    const activities = await elite2Api.getScheduledActivities(res.locals, { agencyId: 'MDI', eventIds })
+    const activities = await elite2Api.getScheduledActivities(res.locals, { agencyId, eventIds })
 
     const userNames = [...new Set(changes.map(change => change.changedBy))]
     const userDetails = await Promise.all(userNames.map(username => oauthApi.userDetails(res.locals, username)))
