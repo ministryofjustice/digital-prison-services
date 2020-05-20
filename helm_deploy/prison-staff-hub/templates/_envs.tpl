@@ -85,6 +85,9 @@ env:
   - name: NN_ENDPOINT_URL
     value: {{ .Values.env.NN_ENDPOINT_URL | quote }}
 
+  - name: CASENOTES_API_URL
+    value: {{ .Values.env.CASENOTES_API_URL | quote }}
+
   - name: PRISON_STAFF_HUB_UI_URL
     value: "https://{{ .Values.ingress.host }}/"
 
