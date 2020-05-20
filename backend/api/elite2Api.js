@@ -262,6 +262,14 @@ const elite2ApiFactory = client => {
 
   const getPrisonerDetail = (context, bookingId) => get(context, `/api/bookings/${bookingId}`)
 
+  const getPrisonerContacts = (context, bookingId) => get(context, `/api/bookings/${bookingId}/contacts`)
+
+  const getPersonAddresses = (context, personId) => get(context, `/api/persons/${personId}/addresses`)
+
+  const getPersonEmails = (context, personId) => get(context, `/api/persons/${personId}/emails`)
+
+  const getPersonPhones = (context, personId) => get(context, `/api/persons/${personId}/phones`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -339,6 +347,10 @@ const elite2ApiFactory = client => {
     getImage,
     getPrisonerProperty,
     getPrisonerDetail,
+    getPrisonerContacts,
+    getPersonAddresses,
+    getPersonEmails,
+    getPersonPhones,
   }
 }
 

@@ -3,3 +3,4 @@ exports.physicalCharacteristicsViewModel = require('./physicalCharacteristicsVie
 exports.identifiersViewModel = require('./identifiersViewModel')
 exports.distinguishingMarksViewModel = require('./distinguishingMarksViewModel')
 exports.aliasesViewModel = require('./aliasesViewModel')
+exports.activeContactsViewModel = require('./activeContactsViewModel')
