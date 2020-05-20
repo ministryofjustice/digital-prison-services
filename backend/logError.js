@@ -8,7 +8,6 @@ const logError = (url, error, msg) => {
         status: error.response.status,
         statusText: error.response.statusText,
         headers: error.response.headers,
-        config: error.response.config,
         stack: error.stack,
         data: error.response.body,
         message: error.message,
