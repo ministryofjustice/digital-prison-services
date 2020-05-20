@@ -32,7 +32,7 @@ module.exports = ({ prisonerDetails, property }) => {
       { label: 'Place of Birth', value: birthPlace && capitalize(birthPlace) },
       { label: 'Gender', value: gender },
       { label: 'Ethnicity', value: ethnicity },
-      { label: 'Religion', value: getValueByType('RELF', profileInformation, 'resultValue') },
+      { label: 'Religion or belief', value: getValueByType('RELF', profileInformation, 'resultValue') },
       { label: 'Nationality', value: getValueByType('NAT', profileInformation, 'resultValue') },
       ...(otherNationalitiesValue ? [{ label: 'Other nationalities', value: otherNationalitiesValue }] : []),
     ],
