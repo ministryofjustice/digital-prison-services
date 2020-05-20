@@ -97,6 +97,10 @@ $govuk-page-width: 1170px;
   }
 }
 
+.word-break {
+  word-break: break-word
+}
+
 // Print
 @page {
   margin: 0;
