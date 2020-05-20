@@ -194,7 +194,6 @@ describe('Case notes controller', () => {
       caseNotesRootUrl: '/prisoner/A12345/case-notes',
       formValues: { fromDate: '10/10/2010', subType: 'subType2', toDate: '11/10/2020', type: 'type1' },
       prisonerProfileData: {},
-      pageOffsetOption: '0',
       pagination: {},
       subTypes: [
         {
