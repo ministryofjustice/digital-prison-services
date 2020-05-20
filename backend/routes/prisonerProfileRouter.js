@@ -22,7 +22,7 @@ const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError 
   router.get('/personal', prisonerPersonal({ prisonerProfileService, elite2Api, logError }))
   router.get(
     '/alerts',
-    prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, logError })
+    prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, oauthApi, logError })
   )
   router.get(
     '/case-notes',

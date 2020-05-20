@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const row = i => cy.get(`tbody tr`).eq(i)
+const row = i => cy.get('tbody tr').eq(i)
 
 const changeCol = (i, j) =>
   row(i)
