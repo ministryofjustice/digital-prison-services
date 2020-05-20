@@ -49,6 +49,7 @@
                 text: "Repeats"
             },
             items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(repeats),
+            classes: "js-appointment-repeats",
             errorMessage: errors | findError('repeats')
         }) }}
 
@@ -64,18 +65,15 @@
             hint: {
                 text: "This includes the first appointment you have already added above. You can add appointments up to a maximum of 1 year."
             },
-            classes: "govuk-input--width-3"
+            classes: "govuk-input--width-3 js-appointment-repeats-times"
         }) }}
 
-        {% if endOfPeriod %}
-            <h4 class="govuk-heading-s">
-                Ends on
-            </h4>
-
-            <p class="govuk-body ovuk-!-font-weight-bold">
-                {{  endOfPeriod }}
-            </p>
-        {% endif -%}
+        <div class="govuk-form-group">
+            <span class="govuk-body">Last appointment on</span>
+            <div id="appointment-end-date" class=" govuk-body govuk-!-font-weight-bold">
+                {{ endOfPeriod or '' }}
+            </div>
+        </div>
     </div>
 {% endset -%}
 
@@ -122,6 +120,7 @@
                         name: 'date',
                         date: date,
                         errorMessage: errors | findError('date'),
+                        classes: 'js-appointment-date',
                         attributes: {'data-disable-past-date':'true'}
                     }) }}
 
@@ -189,7 +188,7 @@
                         }
                     }) }}
 
-                {{ govukButton({ text: "Continue", type: "submit" }) }}
+                {{ govukButton({ text: "Continue", type: "submit", classes: "govuk-!-margin-right-2" }) }}
 
                 {{ govukButton({
                         text: "Cancel",

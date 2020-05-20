@@ -39,6 +39,17 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
     return uploadedList.filter(x => matchingPrisonerNumbers.indexOf(x) < 0)
   }
 
+  const getLocations = async (context, prisonerList) => {
+    return Promise.all(
+      prisonerList.map(async prisoner => {
+        const prisonerToUpdate = prisoner
+        const location = await offenderLoader.offenderLocation(context, prisoner.assignedLivingUnitId)
+        prisonerToUpdate.cellNo = location.description
+        return prisonerToUpdate
+      })
+    )
+  }
+
   const post = async (req, res) => {
     const { file } = req.files
     const { activeCaseLoadId } = req.session.userDetails
@@ -48,7 +59,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
         .loadAndParseCsvFile(file)
         .then(async fileContent => {
           const fileContentWithNoHeader = fileContent[0][0] === 'Prison number' ? fileContent.slice(1) : fileContent
-          const prisonersDetails = await offenderLoader.loadFromCsvContent(
+          let prisonersDetails = await offenderLoader.loadFromCsvContent(
             res.locals,
             fileContentWithNoHeader,
             activeCaseLoadId
@@ -63,11 +74,14 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
             [[], []]
           )
 
+          prisonersDetails = await getLocations(res.locals, prisonersDetails)
+
           const prisonerList = prisonersDetails.map(prisoner => ({
             bookingId: prisoner.bookingId,
             offenderNo: prisoner.offenderNo,
             firstName: prisoner.firstName,
             lastName: prisoner.lastName,
+            cellNo: prisoner.cellNo,
           }))
 
           const offenderNosNotFound = getNonExistingOffenderNumbers(nonDuplicatedPrisoners, prisonerList)

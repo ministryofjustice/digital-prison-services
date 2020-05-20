@@ -2,11 +2,11 @@ const logger = require('../log')
 
 const removeDuplicates = array => [...new Set(array)]
 
-const offenderLoaderFactory = eliteApi => {
+const offenderLoaderFactory = elite2Api => {
   const loadFromCsvContent = async (context, rows, agencyId) => {
     logger.debug(`Csv file was imported with ${rows.length} rows of data`)
     const offenderNumbers = removeDuplicates(rows.map(row => row[0]))
-    const offenders = await eliteApi.getBasicInmateDetailsForOffenders(context, offenderNumbers)
+    const offenders = await elite2Api.getBasicInmateDetailsForOffenders(context, offenderNumbers)
 
     if (!offenders) return []
 
@@ -14,8 +14,12 @@ const offenderLoaderFactory = eliteApi => {
       .map(number => offenders.find(offender => offender.offenderNo === number))
       .filter(offender => Boolean(offender) && offender.agencyId === agencyId)
   }
+  const offenderLocation = async (context, assignedLivingUnitId) => {
+    return elite2Api.getLocation(context, assignedLivingUnitId)
+  }
   return {
     loadFromCsvContent,
+    offenderLocation,
   }
 }
 

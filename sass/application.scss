@@ -140,3 +140,20 @@ $govuk-page-width: 1170px;
 .pull-right {
   text-align: right;
 }
+
+@include govuk-media-query($from: desktop) {
+  .table-compact {
+    th {
+      white-space: nowrap;
+      padding-right: 40px;
+    }
+    tr td {
+      padding-right: 40px;
+      white-space: nowrap;
+    }
+    tr td:last-child {
+      width: 100%;
+    }
+  }
+}
+
