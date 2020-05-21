@@ -1,13 +1,9 @@
 const express = require('express')
 const path = require('path')
 
-const nunjucksSetup = require('./utils/nunjucksSetup')
-
 const router = express.Router()
 
-module.exports = ({ app }) => {
-  nunjucksSetup(app, path)
-
+module.exports = () => {
   router.use(express.static(path.join(__dirname, '../build'))) // << this needed?
   router.use(express.static(path.join(__dirname, '../build/static')))
 
