@@ -34,6 +34,10 @@
   {% include "./partials/property.njk" %}
 {% endset %}
 
+{% set activeContactsContent %}
+  {% include "./partials/activeContacts.njk" %}
+{% endset %}
+
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
@@ -47,7 +51,7 @@
     { heading: 'Aliases', html: aliasesContent },
     { heading: 'Identifiers', html: identifierContent },
     { heading: 'Addresses', html: '<p class="govuk-body">Addresses content</p>' },
-    { heading: 'Active contacts', html: '<p class="govuk-body">Active contacts content</p>' }
+    { heading: 'Active contacts', html: activeContactsContent }
   ]
 %}
 

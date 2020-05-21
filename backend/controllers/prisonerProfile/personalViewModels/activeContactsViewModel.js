@@ -1,47 +1,32 @@
+const { capitalize, formatName } = require('../../../utils')
+
 module.exports = ({ personal }) => {
+  const getPhone = phones => phones && phones.length > 0 && phones.map(phone => phone.number).join(', ')
+
+  const getAddress = address => {
+    return [
+      { label: 'Address', value: address.street },
+      { label: 'Town', value: address.town },
+      ...(address.county ? [{ label: 'County', value: address.county }] : []),
+      { label: 'Postcode', value: address.postalCode },
+      ...(address.country ? [{ label: 'Country', value: address.country }] : []),
+      { label: 'Address phone', value: getPhone(address.phones) },
+      { label: 'Address type', value: address.addressType && capitalize(address.addressType) },
+    ]
+  }
 
   const personalContacts =
     personal &&
     personal.map(contact => ({
-      label: contact.type,
+      name: formatName(contact.firstName, contact.lastName),
+      emergencyContact: contact.emergencyContact,
       details: [
-        { label: 'Relationship', value: contact.relationship },
-        { label: 'Phone number', value: contact.side },
-        { label: 'Email', value: contact.orentiation },
-        { label: 'Address', value: contact.comment },
-        { label: 'Town', value: contact.comment },
-        { label: 'County', value: contact.comment },
-        { label: 'Postcode', value: contact.comment },
-        { label: 'Country', value: contact.comment },
-        { label: 'Address phone', value: contact.comment },
-        { label: 'Address type', value: contact.comment },
+        { label: 'Relationship', value: contact.relationshipDescription },
+        { label: 'Phone number', value: getPhone(contact.phones) },
+        { label: 'Email', value: contact.emails && contact.emails.map(email => email.email).join(', ') },
+        ...getAddress(contact.addresses.find(address => address.primary)),
       ],
     }))
 
-  return [personalContacts]
+  return { personal: personalContacts, professional: [] }
 }
-
-// personal
-// [
-//   {
-//     lastName: 'VICTETRIS',
-//     firstName: 'ALVRULEMEKA',
-//     contactType: 'S',
-//     contactTypeDescription: 'Social/ Family',
-//     relationship: 'OTHER',
-//     relationshipDescription: 'Other - Social',
-//     emergencyContact: true,
-//     nextOfKin: true,
-//     relationshipId: 6694648,
-//     personId: 1674445,
-//     activeFlag: true,
-//     approvedVisitorFlag: false,
-//     canBeContactedFlag: false,
-//     awareOfChargesFlag: false,
-//     contactRootOffenderId: 0,
-//     bookingId: 1102484,
-//     addresses: [],
-//     emails: [],
-//     phones: [{ number: '1', type: 'MOB' }]
-//   }
-// ]

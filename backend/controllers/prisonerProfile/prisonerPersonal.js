@@ -37,19 +37,17 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
 
   const { nextOfKin } = contacts || {}
 
-  const activeNextOfKins =
-    nextOfKin && nextOfKin.filter(kin => kin.activeFlag && kin.nextOfKin && kin.canBeContactedFlag)
+  const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
 
-  const nextOfKinsWithContact = activeNextOfKins.map(async kin => {
-    const { addresses, emails, phones } = await personService.getPersonContactDetails(res.locals, kin.personId)
-
-    return {
-      ...kin,
-      addresses,
-      emails,
-      phones,
-    }
-  })
+  const nextOfKinsWithContact =
+    activeNextOfKins &&
+    activeNextOfKins.length &&
+    (await Promise.all(
+      activeNextOfKins.map(async kin => ({
+        ...kin,
+        ...(await personService.getPersonContactDetails(res.locals, kin.personId)),
+      }))
+    ))
 
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails
 
@@ -63,28 +61,3 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     activeContacts: activeContactsViewModel({ personal: nextOfKinsWithContact }),
   })
 }
-
-// nextOfKinsWithContact
-// [
-//   {
-//     lastName: 'VICTETRIS',
-//     firstName: 'ALVRULEMEKA',
-//     contactType: 'S',
-//     contactTypeDescription: 'Social/ Family',
-//     relationship: 'OTHER',
-//     relationshipDescription: 'Other - Social',
-//     emergencyContact: true,
-//     nextOfKin: true,
-//     relationshipId: 6694648,
-//     personId: 1674445,
-//     activeFlag: true,
-//     approvedVisitorFlag: false,
-//     canBeContactedFlag: false,
-//     awareOfChargesFlag: false,
-//     contactRootOffenderId: 0,
-//     bookingId: 1102484,
-//     addresses: [],
-//     emails: [],
-//     phones: [{ number: '1', type: 'MOB' }]
-//   }
-// ]
