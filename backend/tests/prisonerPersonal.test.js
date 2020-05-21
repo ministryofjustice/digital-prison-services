@@ -42,6 +42,7 @@ describe('prisoner personal', () => {
     elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerProperty = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
+
     controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
   })
 
@@ -1016,6 +1017,39 @@ describe('prisoner personal', () => {
                       { label: 'Address phone', value: '011111111111' },
                       { label: 'Address type', value: 'Home' },
                     ],
+                  },
+                ],
+                professional: [],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when the contact is missing phone and email', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails.mockResolvedValue({
+            addresses: [{ ...primaryAddress, county: undefined, country: undefined }, nonPrimaryAddress],
+            emails: [],
+            phones: [],
+          })
+        })
+
+        it('should not return related labels and empty values', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: {
+                personal: [
+                  {
+                    name: 'John Smith',
+                    emergencyContact: true,
+                    details: expect.arrayContaining([
+                      { label: 'Phone number', value: '' },
+                      { label: 'Email', value: '' },
+                    ]),
                   },
                 ],
                 professional: [],

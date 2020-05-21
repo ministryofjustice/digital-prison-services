@@ -41,7 +41,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
 
   const nextOfKinsWithContact =
     activeNextOfKins &&
-    activeNextOfKins.length &&
+    activeNextOfKins.length > 0 &&
     (await Promise.all(
       activeNextOfKins.map(async kin => ({
         ...kin,

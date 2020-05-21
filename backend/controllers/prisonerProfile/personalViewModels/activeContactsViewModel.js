@@ -1,9 +1,9 @@
 const { capitalize, formatName } = require('../../../utils')
 
 module.exports = ({ personal }) => {
-  const getPhone = phones => phones && phones.length > 0 && phones.map(phone => phone.number).join(', ')
+  const getPhone = phones => phones && phones.map(phone => phone.number).join(', ')
 
-  const getAddress = address => {
+  const getAddress = (address = {}) => {
     return [
       { label: 'Address', value: address.street },
       { label: 'Town', value: address.town },
