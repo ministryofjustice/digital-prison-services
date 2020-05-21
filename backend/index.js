@@ -34,9 +34,9 @@ app.use(setupWebSecurity())
 app.use(setupRedirects())
 app.use(setupSass())
 app.use(setupStaticContent({ app }))
-app.use(setupWebpackForDev())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi }))
+app.use(setupWebpackForDev())
 
 app.use(setupRedirects())
 
