@@ -20,9 +20,6 @@ RUN mkdir -p /app
 WORKDIR /app
 ADD . .
 
-# Remove cypress as it takes ~1 minute to download and install
-RUN sed -ie 's/"cypress[^ ].*//g' /app/package.json
-
 RUN npm ci --no-audit && \
     npm run build && \
     export BUILD_NUMBER=${BUILD_NUMBER} && \
