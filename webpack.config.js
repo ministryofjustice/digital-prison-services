@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const isDevelopment = process.env.NODE_ENV === 'development'
@@ -24,10 +23,6 @@ const plugins = [
       to: 'static',
     },
   ]),
-  new HtmlWebpackPlugin({
-    template: 'html-template/index.html',
-    publicUrl: process.env.PUBLIC_URL,
-  }),
 ]
 
 if (isDevelopment) plugins.push(new webpack.HotModuleReplacementPlugin())
