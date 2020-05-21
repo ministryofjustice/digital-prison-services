@@ -31,17 +31,17 @@ app.set('view engine', 'njk')
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
 app.use(setupWebSecurity())
+app.use(setupRedirects())
+app.use(setupSass())
+app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi }))
-app.use(setupSass())
 app.use(setupWebpackForDev())
 
 app.use(setupRedirects())
 
 const njkEnv = nunjucksSetup(app, path)
 app.use(routes({ ...apis, njkEnv }))
-
-app.use(setupStaticContent())
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
