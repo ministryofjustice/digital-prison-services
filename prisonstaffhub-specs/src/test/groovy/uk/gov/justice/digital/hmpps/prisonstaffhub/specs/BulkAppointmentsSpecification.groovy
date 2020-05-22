@@ -58,7 +58,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         appointmentLocation.text() == "Adj"
         appointmentStartDate.text() == startDate.format(longDatePattern)
         appointmentStartTime.text() == "10:10"
-        prisonersFound.children()[1].text() == "Doe John A12345"
+        prisonersFound.children()[1].text() == "Doe John A12345 HB1"
 
         and: "I confirm the appointments I want to create"
         submitButton.click()
@@ -94,7 +94,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         appointmentType.text() == "Activities"
         appointmentLocation.text() == "Adj"
         appointmentStartDate.text() == startDate.format(longDatePattern)
-        prisonersFound.children()[1].text().contains("Doe John A12345")
+        prisonersFound.children()[1].text().contains("Doe John A12345 HB1")
 
         when: "I set the individual start and end time for the offenders"
         form.A12345startTimeHours = 10
@@ -143,7 +143,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         appointmentLocation.text() == "Adj"
         appointmentStartDate.text() == startDate.format(longDatePattern)
         appointmentStartTime.text() == "10:10"
-        prisonersFound.children()[1].text() == "Doe John A12345"
+        prisonersFound.children()[1].text() == "Doe John A12345 HB1"
         appointmentsHowOften.text() == 'Weekly'
         appointmentsOccurrences.text() == occurrenceValue.toString()
         appointmentsEndDate.text() == startDate.plusWeeks(occurrenceValue - 1).format(longDatePattern)
@@ -273,7 +273,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         appointmentLocation.text() == "Adj"
         appointmentStartDate.text() == startDate.format(longDatePattern)
         appointmentStartTime.text() == "10:10"
-        prisonersFound.children()[1].text() == "Doe John A12345"
+        prisonersFound.children()[1].text() == "Doe John A12345 HB1"
 
         and: "I confirm the appointments I want to create"
         submitButton.click()
@@ -319,7 +319,7 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
         appointmentLocation.text() == "Adj"
         appointmentStartDate.text() == startDate.format(longDatePattern)
         appointmentStartTime.text() == "10:10"
-        prisonersFound.children()[1].text() == "Doe John A12345"
+        prisonersFound.children()[1].text() == "Doe John A12345 HB1"
 
         and: "I confirm the appointments I want to create"
         submitButton.click()
@@ -348,9 +348,11 @@ class BulkAppointmentsSpecification extends BrowserReportingSpec {
                 "offenderNo", "A12345",
                 "firstName", "John",
                 "lastName", " Doe",
-                "agencyId", "LEI"
+                "agencyId", "LEI",
+                "assignedLivingUnitId", 123456L
         )])
         elite2api.stubPostAppointments()
+        elite2api.stubLocation(123456L)
     }
 
     def setupNoClashes() {

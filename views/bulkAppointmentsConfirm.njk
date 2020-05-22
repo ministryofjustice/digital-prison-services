@@ -41,12 +41,14 @@
     Appointments will be created for these prisoners.
   </p>
   <form method="POST" id="confirmBulkAppointments">
-    <table class="govuk-table" data-qa="prisoners-found">
+    <table class="govuk-table table-compact" data-qa="prisoners-found">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Last name</th>
           <th scope="col" class="govuk-table__header">First name</th>
-          <th scope="col" class="govuk-table__header">Prison number</th>
+          <th scope="col" class="govuk-table__header">Prison number</th> 
+          <th scope="col" class="govuk-table__header">Cell</th> 
+
           {% if appointmentDetails.sameTimeAppointments === 'no' %}
             <th scope="col" class="govuk-table__header">Start time</th>
             <th scope="col" class="govuk-table__header">End time (optional)</th>
@@ -59,6 +61,7 @@
             <td class="govuk-table__cell">{{prisoner.lastName}}</td>
             <td class="govuk-table__cell">{{prisoner.firstName}}</td>
             <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+            <td class="govuk-table__cell">{{prisoner.cellNo}}</td>
             {% if appointmentDetails.sameTimeAppointments === 'no' %}
               <td class="govuk-table__cell">
                 {{ timePicker({
