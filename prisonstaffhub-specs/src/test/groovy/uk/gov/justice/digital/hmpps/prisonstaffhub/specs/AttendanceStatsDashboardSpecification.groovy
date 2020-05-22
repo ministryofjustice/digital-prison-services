@@ -110,6 +110,7 @@ class AttendanceStatsDashboardSpecification extends BrowserReportingSpec {
 
         def changesResponse = [ "changes": [[
                         "eventId" : 1,
+                        "prisonId": "MDI",
                         "changedBy": "ITAG_USER",
                         "changedOn": "2010-10-10T20:00",
                         "changedFrom": "Attended",
@@ -175,6 +176,7 @@ class AttendanceStatsDashboardSpecification extends BrowserReportingSpec {
 
         def changesResponse = [ "changes": [[
                                                     "eventId" : 1,
+                                                    "prisonId" : "LEI",
                                                     "changedBy": "ITAG_USER",
                                                     "changedOn": "2010-10-10T20:00",
                                                     "changedFrom": "Attended",

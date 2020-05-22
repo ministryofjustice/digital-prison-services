@@ -55,4 +55,17 @@ describe('Current user', () => {
       displayName: 'Bob Smith',
     })
   })
+
+  it('ignore xhr requests', async () => {
+    const controller = currentUser({ elite2Api, oauthApi, njkEnv })
+    req.xhr = true
+
+    const next = jest.fn()
+
+    await controller(req, {}, next)
+
+    expect(oauthApi.currentUser.mock.calls.length).toEqual(0)
+    expect(elite2Api.userCaseLoads.mock.calls.length).toEqual(0)
+    expect(next).toHaveBeenCalled()
+  })
 })

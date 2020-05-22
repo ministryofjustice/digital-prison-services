@@ -325,6 +325,7 @@ describe('Attendance reason statistics', () => {
 
     it('should render the attendance reasons statistics view with the correctly formatted parameters', async () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
+      whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [{ prisonId: 'MDI' }, { prisonId: 'LEI' }] })
 
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
@@ -367,7 +368,7 @@ describe('Attendance reason statistics', () => {
               { id: 'RefusedIncentiveLevelWarning', name: 'Refused incentive level warning', value: 0 },
             ],
             suspended: 0,
-            changes: 0,
+            changes: 1,
           },
           shouldClearFormValues: true,
           toDate: '11/10/2019',

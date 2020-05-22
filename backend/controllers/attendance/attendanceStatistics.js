@@ -274,6 +274,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
       }
 
       const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
+      const changesForAgency = (changes && changes.filter(change => change.prisonId === agencyId).length) || 0
 
       const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
         agencyId,
@@ -286,7 +287,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
 
       return res.render('attendanceStatistics.njk', {
         ...mainViewModel,
-        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changes.length),
+        dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changesForAgency),
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
