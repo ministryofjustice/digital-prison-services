@@ -58,6 +58,9 @@ with any of the api services, e.g. elite2-api or oauth. It will also not conflic
 
 ```npm run start-feature --env=cypress.env```
 
+Note that the circleci will run `start-feature-no-webpack` instead, which will rely on a production webpack build
+rather than using the dev webpack against the assets.
+
 ### Running the tests
 
 With the UI:
@@ -79,8 +82,8 @@ on the elite2 and keyworker-service RESTful APIs.
 
 ### Running the Groovy tests
 
-The tests may be run from an IDE such as IntelliJ IDEA or from the Gradle build.  
-The tests may be configured to drive a range of web-browsers including Chrome headless and PhantomJS.  
+The tests may be run from an IDE such as IntelliJ IDEA or from the Gradle build.
+The tests may be configured to drive a range of web-browsers including Chrome headless and PhantomJS.
 Currently the tests use Chrome and / or Chrome headless.
 To drive the tests through Chrome you must install Chrome (obviously) and a Selenium Webdriver adapter called ChromeDriver.
 ChromeDriver is a standalone server which implements WebDriver's wire protocol for
@@ -93,7 +96,7 @@ https://sites.google.com/a/chromium.org/chromedriver/getting-started
 A separate node instance needs to be started for the feature tests. This will run on port 3006 and won't conflict
 with any of the api services, e.g. elite2-api or oauth.
 
-`npm start-feature --env=feature.env`
+```npm start-feature --env=feature.env```
 
 **To run the tests using Gradle:**
 Ensure that chromedriver is on your path. Run `./gradlew build` from the root of this project.

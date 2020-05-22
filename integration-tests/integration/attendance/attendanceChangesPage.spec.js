@@ -8,6 +8,7 @@ context('A user can view attendance changes', () => {
     cy.task('stubAttendanceChanges', [
       {
         eventId: 1,
+        prisonId: 'WWI',
         changedBy: 'ITAG_USER',
         changedOn: '2010-10-10T20:00',
         changedFrom: 'Attended',
