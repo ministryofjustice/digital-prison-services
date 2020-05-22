@@ -119,7 +119,7 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: npm run start-feature --env=feature.env
+          command: npm run start-feature-no-webpack --env=feature.env
           background: true
       - restore_cache:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
@@ -146,6 +146,7 @@ jobs:
           path: prisonstaffhub-specs/build/test-results
 
   cypress_integration_tests:
+    working_directory: ~/app
     docker:
       - image: circleci/node:12.16.1-buster-browsers
     steps:
@@ -163,7 +164,7 @@ jobs:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
           name: Run the node app.
-          command: npm run start-feature --env=cypress.env
+          command: npm run start-feature-no-webpack --env=cypress.env
           background: true
       - run:
           name: integration tests
