@@ -63,9 +63,9 @@ describe('Attendance change router', () => {
   it('should make a request to get user details', async () => {
     whereaboutsApi.getAttendanceChanges.mockReturnValue({
       changes: [
-        { eventId: 1, changedBy: 'username1' },
-        { eventId: 2, changedBy: 'username2' },
-        { eventId: 3, changedBy: 'username2' },
+        { eventId: 1, changedBy: 'username1', prisonId: 'MDI' },
+        { eventId: 2, changedBy: 'username2', prisonId: 'MDI' },
+        { eventId: 3, changedBy: 'username2', prisonId: 'MDI' },
       ],
     })
 
@@ -84,6 +84,7 @@ describe('Attendance change router', () => {
           changedFrom: 'Refused',
           changedTo: 'Attended',
           changedOn: '2020-10-02T17:00',
+          prisonId: 'MDI',
         },
         {
           eventId: 2,
@@ -91,6 +92,7 @@ describe('Attendance change router', () => {
           changedFrom: 'AcceptableAbsence',
           changedTo: 'Refused',
           changedOn: '2020-10-02T11:00',
+          prisonId: 'MDI',
         },
       ],
     })
@@ -169,6 +171,60 @@ describe('Attendance change router', () => {
         attendanceChanges: [],
         dpsUrl: 'http://localhost:3000/',
         subHeading: '3 November 2020 - AM + PM',
+      })
+    )
+  })
+
+  it('should only show changes from the requested agency', async () => {
+    whereaboutsApi.getAttendanceChanges.mockReturnValue({
+      changes: [
+        {
+          eventId: 1,
+          prisonId: 'LEI',
+          changedBy: 'username',
+          changedFrom: 'Refused',
+          changedTo: 'Attended',
+          changedOn: '2020-10-02T17:00',
+        },
+        {
+          eventId: 2,
+          prisonId: 'MDI',
+          changedBy: 'username',
+          changedFrom: 'AcceptableAbsence',
+          changedTo: 'Refused',
+          changedOn: '2020-10-02T11:00',
+        },
+      ],
+    })
+
+    elite2Api.getScheduledActivities.mockReturnValue([
+      { eventId: 1, firstName: 'first name 1', lastName: 'last name', comment: 'Wood work', offenderNo: 'A123456' },
+      { eventId: 2, firstName: 'first name 2', lastName: 'last name', comment: 'Kitchen', offenderNo: 'A23457' },
+    ])
+
+    oauthApi.userDetails.mockReturnValue({ name: 'staff full name', username: 'username' })
+
+    await router(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'attendanceChanges.njk',
+      expect.objectContaining({
+        dpsUrl: 'http://localhost:3000/',
+        subHeading: '3 November 2020 - AM + PM',
+        attendanceChanges: [
+          [
+            {
+              attributes: { 'data-sort-value': 'last name' },
+              html: '<a href="http://localhost:3000/offenders/A23457" class="govuk-link">Last name, First name 2</a>',
+            },
+            { text: 'A23457' },
+            { text: 'Kitchen' },
+            { text: 'Acceptable absence' },
+            { text: 'Refused' },
+            { attributes: { 'data-sort-value': expect.any(Number) }, text: '2 October 2020 - 11:00' },
+            { text: 'staff full name' },
+          ],
+        ],
       })
     )
   })

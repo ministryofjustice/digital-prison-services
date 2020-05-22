@@ -72,7 +72,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
 
     changes.sort(sortByLastNameThenByDate(activitiesMap))
 
-    const attendanceChanges = changes.map(change => {
+    const attendanceChanges = changes.filter(change => change.prisonId === agencyId).map(change => {
       const { firstName, lastName, offenderNo, activity } = activitiesMap[change.eventId]
 
       return [
