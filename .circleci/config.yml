@@ -89,7 +89,7 @@ jobs:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
       - save_cache:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
           paths:
