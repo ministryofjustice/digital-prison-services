@@ -20,6 +20,7 @@ const setupWebSecurity = require('./setupWebSecurity')
 const setupAuth = require('./setupAuth')
 const setupSass = require('./setupSass')
 const setupStaticContent = require('./setupStaticContent')
+const nunjucksSetup = require('./utils/nunjucksSetup')
 const setupWebpackForDev = require('./setupWebpackForDev')
 const setupRedirects = require('./setupRedirects')
 
@@ -36,9 +37,11 @@ app.use(setupSass())
 app.use(setupWebpackForDev())
 
 app.use(setupRedirects())
-app.use(routes(apis))
 
-app.use(setupStaticContent({ app }))
+const njkEnv = nunjucksSetup(app, path)
+app.use(routes({ ...apis, njkEnv }))
+
+app.use(setupStaticContent())
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))

@@ -57,6 +57,8 @@ const getExistingEventsController = require('./controllers/attendance/getExistin
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
 const endDateController = require('./controllers/appointments/endDate')
 
+const currentUser = require('./middleware/currentUser')
+
 const controllerFactory = require('./controllers/controller').factory
 
 const contextProperties = require('./contextProperties')
@@ -77,6 +79,7 @@ const setup = ({
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
+  njkEnv,
 }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
@@ -96,11 +99,9 @@ const setup = ({
     elite2Api,
   })
 
+  router.use(currentUser({ elite2Api, oauthApi, njkEnv }))
+
   router.use(async (req, res, next) => {
-    const { userDetails } = req.session
-    if (!userDetails) {
-      req.session.userDetails = await oauthApi.currentUser(res.locals)
-    }
     res.locals.currentUrlPath = req.originalUrl
     next()
   })

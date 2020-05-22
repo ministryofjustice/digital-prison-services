@@ -137,4 +137,6 @@ module.exports = (app, path) => {
   njkEnv.addGlobal('notmUrl', config.app.notmEndpointUrl)
   njkEnv.addGlobal('oauthUrl', config.apis.oauth2.url)
   njkEnv.addGlobal('googleAnalyticsId', config.analytics.googleAnalyticsId)
+
+  return njkEnv
 }

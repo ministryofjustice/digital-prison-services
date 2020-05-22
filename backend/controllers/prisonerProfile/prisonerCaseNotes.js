@@ -98,7 +98,6 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       types,
       subTypes: selectedSubTypes,
       caseNotesRootUrl: `/prisoner/${offenderNo}/case-notes`,
-      pageOffsetOption,
       formValues: {
         type,
         subType,
