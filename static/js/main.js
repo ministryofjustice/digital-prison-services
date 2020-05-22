@@ -110,10 +110,7 @@ $(document).ready(function() {
     })
 
   appointmentDateInput.change(function() {
-    const offenderNo = $('#offenderNo').text()
-    if (offenderNo) {
-      getEventsForOffender(offenderNo, $(this).val())
-    }
+    getEventsForOffender($('#offenderNo').text(), $(this).val())
   })
 
   appointmentRepeatsSelect.add(appointmentDateInput).change(function() {
