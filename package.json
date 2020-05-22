@@ -168,6 +168,7 @@
   "scripts": {
     "start": "node backend/index.js",
     "start-feature": "export $(cat $npm_config_env) && node backend/index.js",
+    "start-feature-no-webpack": "export $(cat $npm_config_env) && DISABLE_WEBPACK=true node backend/index.js",
     "build": "webpack --mode=production",
     "build:analyse": "BUNDLE_ANALYSE=true npm run build",
     "test": "jest --env=jsdom",

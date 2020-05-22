@@ -2,6 +2,7 @@ module.exports = {
   app: {
     port: process.env.PORT || 3002,
     production: process.env.NODE_ENV === 'production',
+    disableWebpack: process.env.DISABLE_WEBPACK === 'true',
     notmEndpointUrl: process.env.NN_ENDPOINT_URL || 'http://localhost:3000/',
     licencesUrl: process.env.LICENCES_URL || 'http://localhost:3003/',
     mailTo: process.env.MAIL_TO || 'feedback@digital.justice.gov.uk',

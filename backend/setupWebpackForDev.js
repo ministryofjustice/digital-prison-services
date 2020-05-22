@@ -9,9 +9,8 @@ const config = require('./config')
 const router = express.Router()
 
 module.exports = () => {
-  const compiler = webpack(webpackConfig)
-
-  if (config.app.production === false) {
+  if (config.app.production === false && config.app.disableWebpack === false) {
+    const compiler = webpack(webpackConfig)
     router.use(middleware(compiler, { writeToDisk: true }))
     router.use(hrm(compiler, {}))
   }
