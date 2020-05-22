@@ -15,18 +15,19 @@ module.exports = ({ personal }) => {
     ]
   }
 
-  const personalContacts =
-    personal &&
-    personal.map(contact => ({
-      name: formatName(contact.firstName, contact.lastName),
-      emergencyContact: contact.emergencyContact,
-      details: [
-        { label: 'Relationship', value: contact.relationshipDescription },
-        { label: 'Phone number', value: getPhone(contact.phones) },
-        { label: 'Email', value: contact.emails && contact.emails.map(email => email.email).join(', ') },
-        ...getAddress(contact.addresses.find(address => address.primary)),
-      ],
-    }))
-
-  return { personal: personalContacts, professional: [] }
+  return {
+    personal:
+      personal &&
+      personal.map(contact => ({
+        name: formatName(contact.firstName, contact.lastName),
+        emergencyContact: contact.emergencyContact,
+        details: [
+          { label: 'Relationship', value: contact.relationshipDescription },
+          { label: 'Phone number', value: getPhone(contact.phones) },
+          { label: 'Email', value: contact.emails && contact.emails.map(email => email.email).join(', ') },
+          ...getAddress(contact.addresses.find(address => address.primary)),
+        ],
+      })),
+    professional: [],
+  }
 }
