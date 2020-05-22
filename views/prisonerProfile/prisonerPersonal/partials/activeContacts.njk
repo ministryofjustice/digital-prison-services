@@ -1,0 +1,33 @@
+<h3 class="govuk-heading-m">Personal</h3>
+
+{% if activeContacts.personal.length %}
+  {% for contact in activeContacts.personal %}
+    {% set activeContactsPersonalRows = [] %}
+
+    {% for contactDetail in contact.details %}
+      {% set activeContactsPersonalRows = (activeContactsPersonalRows.push(
+        {
+          key: {
+            text: contactDetail.label,
+            classes: 'govuk-summary-list__key--indent'
+          },
+          value: {
+            text: contactDetail.value | showDefault(missingEntry)
+          }
+        }
+      ), activeContactsPersonalRows) %}
+    {% endfor %}
+
+    <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ contact.name }}</h3>
+    <p class="govuk-body govuk-!-margin-bottom-1">Next of kin</p>
+    {% if contact.emergencyContact %}
+      <p class="govuk-body govuk-!-margin-bottom-1">Emergency contact</p>
+    {% endif %}
+
+    {{ govukSummaryList({
+      rows: activeContactsPersonalRows
+    }) }}
+  {% endfor%}
+{% else %}
+  <p class="govuk-body">None</p>
+{% endif %}
