@@ -424,6 +424,8 @@ class ActivitySpecification extends BrowserReportingSpec {
         then: "Mark as attended"
         attendRadioElements.getAt(0).click()
 
+        waitFor { attendRadioElements.getAt(0) }
+
         then: "An attendance record should of been created then updated"
         whereaboutsApi.verifyPostAttendance()
         whereaboutsApi.verifyPutAttendance(attendanceToReturn.id)
