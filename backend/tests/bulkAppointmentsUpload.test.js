@@ -5,7 +5,8 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const logError = jest.fn()
 const csvParser = {}
 const offenderLoader = {}
-const controller = bulkAppointmentsUploadFactory(csvParser, offenderLoader, logError)
+const elite2api = {}
+const controller = bulkAppointmentsUploadFactory(csvParser, offenderLoader, elite2api, logError)
 
 describe('bulk appointments upload', () => {
   const appointmentDetails = {
@@ -67,6 +68,10 @@ describe('bulk appointments upload', () => {
     beforeEach(() => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
+      elite2api.getLocation = jest.fn()
+      elite2api.getLocation.mockImplementation((context, livingUnitId) => {
+        return { description: `${livingUnitId}_cell_no` }
+      })
     })
     let fileContent = [['Prison number'], ['G1683VN'], ['G4803UT'], ['G4346UT']]
 
@@ -125,18 +130,21 @@ describe('bulk appointments upload', () => {
               offenderNo: 'G1683VN',
               firstName: 'Elton',
               lastName: 'Abbatiello',
+              cellNo: '26113_cell_no',
             },
             {
               bookingId: 1053607,
               offenderNo: 'G4803UT',
               firstName: 'Bobby',
               lastName: 'Abdulkadir',
+              cellNo: '25764_cell_no',
             },
             {
               bookingId: 1054729,
               offenderNo: 'G4346UT',
               firstName: 'Dewey',
               lastName: 'Affolter',
+              cellNo: '25990_cell_no',
             },
           ],
           prisonersNotFound: [],

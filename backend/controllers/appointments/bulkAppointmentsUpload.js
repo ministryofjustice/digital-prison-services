@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 
-const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logError) => {
+const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, elite2api, logError) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
 
@@ -63,12 +63,18 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, logErro
             [[], []]
           )
 
-          const prisonerList = prisonersDetails.map(prisoner => ({
-            bookingId: prisoner.bookingId,
-            offenderNo: prisoner.offenderNo,
-            firstName: prisoner.firstName,
-            lastName: prisoner.lastName,
-          }))
+          const prisonerList = await Promise.all(
+            prisonersDetails.map(async prisoner => {
+              const location = await elite2api.getLocation(res.locals, prisoner.assignedLivingUnitId)
+              return {
+                bookingId: prisoner.bookingId,
+                offenderNo: prisoner.offenderNo,
+                firstName: prisoner.firstName,
+                lastName: prisoner.lastName,
+                cellNo: location.description,
+              }
+            })
+          )
 
           const offenderNosNotFound = getNonExistingOffenderNumbers(nonDuplicatedPrisoners, prisonerList)
 
