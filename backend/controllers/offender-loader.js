@@ -14,12 +14,8 @@ const offenderLoaderFactory = elite2Api => {
       .map(number => offenders.find(offender => offender.offenderNo === number))
       .filter(offender => Boolean(offender) && offender.agencyId === agencyId)
   }
-  const offenderLocation = async (context, assignedLivingUnitId) => {
-    return elite2Api.getLocation(context, assignedLivingUnitId)
-  }
   return {
     loadFromCsvContent,
-    offenderLocation,
   }
 }
 
