@@ -11,7 +11,6 @@ const controller = ({ elite2Api, logError }) => {
   const { index, post } = bulkAppointmentsUploadFactory(
     csvParserService({ fs, isBinaryFileSync }),
     offenderLoaderFactory(elite2Api),
-    elite2Api,
     logError
   )
 
