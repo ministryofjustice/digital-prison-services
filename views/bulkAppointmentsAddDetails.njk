@@ -48,7 +48,7 @@
             label: {
                 text: "Repeats"
             },
-            items: repeatTypes | addDefaultSelectedVale('Select') | setSelected(repeats),
+            items: repeatTypes | addDefaultSelectedVale('Select', true) | setSelected(repeats),
             classes: "js-appointment-repeats",
             errorMessage: errors | findError('repeats')
         }) }}
