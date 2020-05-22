@@ -971,7 +971,7 @@ describe('prisoner personal', () => {
                     { label: 'Relationship', value: 'Cousin' },
                     { label: 'Phone number', value: '02222222222, 033333333333' },
                     { label: 'Email', value: 'test1@email.com, test2@email.com' },
-                    { label: 'Address', value: 'High Street' },
+                    { label: 'Address', value: 'A, 13, High Street' },
                     { label: 'Town', value: 'Ulverston' },
                     { label: 'County', value: 'West Yorkshire' },
                     { label: 'Postcode', value: 'LS1 AAA' },
@@ -1011,7 +1011,7 @@ describe('prisoner personal', () => {
                       { label: 'Relationship', value: 'Cousin' },
                       { label: 'Phone number', value: '02222222222, 033333333333' },
                       { label: 'Email', value: 'test1@email.com, test2@email.com' },
-                      { label: 'Address', value: 'High Street' },
+                      { label: 'Address', value: 'A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'Postcode', value: 'LS1 AAA' },
                       { label: 'Address phone', value: '011111111111' },
@@ -1026,7 +1026,7 @@ describe('prisoner personal', () => {
         })
       })
 
-      describe('when the contact is missing phone and email', () => {
+      describe('when the contact does not have phone and email', () => {
         beforeEach(() => {
           personService.getPersonContactDetails.mockResolvedValue({
             addresses: [{ ...primaryAddress, county: undefined, country: undefined }, nonPrimaryAddress],
@@ -1050,6 +1050,36 @@ describe('prisoner personal', () => {
                       { label: 'Phone number', value: '' },
                       { label: 'Email', value: '' },
                     ]),
+                  },
+                ],
+                professional: [],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when the contact does not have a flat number', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails.mockResolvedValue({
+            addresses: [{ ...primaryAddress, flat: undefined }, nonPrimaryAddress],
+            emails: [],
+            phones: [],
+          })
+        })
+
+        it('should not return it as part of the address field', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: {
+                personal: [
+                  {
+                    name: 'John Smith',
+                    emergencyContact: true,
+                    details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
                   },
                 ],
                 professional: [],
