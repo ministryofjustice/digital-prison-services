@@ -7,6 +7,7 @@ const { formatTimestampToDate, formatCurrency, capitalizeUppercaseString } = req
 const formatAward = require('../../shared/formatAward')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
+const getValueByType = require('../../shared/getValueByType')
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -37,6 +38,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     nextVisit,
     visitBalances,
     todaysEvents,
+    profileInformation,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -51,6 +53,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       elite2Api.getNextVisit(res.locals, bookingId),
       elite2Api.getPrisonerVisitBalances(res.locals, offenderNo),
       elite2Api.getEventsForToday(res.locals, bookingId),
+      elite2Api.getProfileInformation(res.locals, bookingId),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
@@ -100,7 +103,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     },
     personalDetails: [
       { label: 'Age', value: prisoner && prisoner.dateOfBirth && moment().diff(moment(prisoner.dateOfBirth), 'years') },
-      { label: 'Nationality', value: prisoner && prisoner.nationalities },
+      { label: 'Nationality', value: getValueByType('NAT', profileInformation, 'resultValue') },
       { label: 'PNC number', value: prisoner && prisoner.pncNumber },
       { label: 'CRO number', value: prisoner && prisoner.croNumber },
     ],

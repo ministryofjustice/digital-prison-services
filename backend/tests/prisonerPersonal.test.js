@@ -339,11 +339,7 @@ describe('prisoner personal', () => {
               gender: 'Male',
               ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
             },
-            profileInformation: [
-              { type: 'RELF', resultValue: 'Christian' },
-              { type: 'NAT', resultValue: 'British' },
-              { type: 'NAT', resultValue: 'British' },
-            ],
+            profileInformation: [{ type: 'RELF', resultValue: 'Christian' }, { type: 'NAT', resultValue: 'British' }],
           })
         })
 

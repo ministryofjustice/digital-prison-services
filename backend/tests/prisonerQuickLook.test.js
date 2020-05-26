@@ -49,6 +49,7 @@ describe('prisoner profile quick look', () => {
     elite2Api.getNextVisit = jest.fn().mockResolvedValue({})
     elite2Api.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     elite2Api.getEventsForToday = jest.fn().mockResolvedValue([])
+    elite2Api.getProfileInformation = jest.fn().mockResolvedValue([])
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
@@ -204,8 +205,9 @@ describe('prisoner profile quick look', () => {
       beforeEach(() => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
         elite2Api.getPrisonerDetails.mockResolvedValue([
-          { dateOfBirth: '1998-12-01', nationalities: 'Brtish', pncNumber: '12/3456A', croNumber: '12345/57B' },
+          { dateOfBirth: '1998-12-01', pncNumber: '12/3456A', croNumber: '12345/57B' },
         ])
+        elite2Api.getProfileInformation.mockResolvedValue([{ type: 'NAT', resultValue: 'British' }])
       })
 
       it('should render the quick look template with the correctly formatted personal details', async () => {
@@ -216,7 +218,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             personalDetails: [
               { label: 'Age', value: 21 },
-              { label: 'Nationality', value: 'Brtish' },
+              { label: 'Nationality', value: 'British' },
               { label: 'PNC number', value: '12/3456A' },
               { label: 'CRO number', value: '12345/57B' },
             ],
@@ -589,6 +591,7 @@ describe('prisoner profile quick look', () => {
       elite2Api.getNextVisit.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
       elite2Api.getEventsForToday.mockRejectedValue(new Error('Network error'))
+      elite2Api.getProfileInformation.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the quick look template with missing data', async () => {
