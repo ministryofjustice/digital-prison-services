@@ -4,7 +4,8 @@ module.exports = ({ personal }) => {
   const getPhone = phones => phones && phones.map(phone => phone.number).join(', ')
 
   const getAddress = (address = {}) => {
-    const streetWithNumber = [address.flat, address.premise, address.street].filter(value => value)
+    const flat = address.flat && `Flat ${address.flat}`
+    const streetWithNumber = [flat, address.premise, address.street].filter(value => value)
 
     return [
       { label: 'Address', value: streetWithNumber.join(', ') },
