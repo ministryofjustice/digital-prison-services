@@ -42,6 +42,7 @@ describe('prisoner personal', () => {
     elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerProperty = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
+    elite2Api.getPrisonerAddresses = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
   })
@@ -1080,6 +1081,174 @@ describe('prisoner personal', () => {
                 ],
                 professional: [],
               },
+            })
+          )
+        })
+      })
+    })
+  })
+
+  describe('addresses', () => {
+    const primaryAddress = {
+      addressType: 'HOME',
+      flat: 'A',
+      premise: '13',
+      street: 'High Street',
+      town: 'Ulverston',
+      postalCode: 'LS1 AAA',
+      county: 'West Yorkshire',
+      country: 'England',
+      comment: 'address comment field',
+      primary: true,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      phones: [{ number: '011111111111', type: 'MOB' }],
+    }
+
+    const nonPrimaryAddress = {
+      addressType: 'HOME',
+      flat: 'B',
+      premise: '13',
+      street: 'Another Street',
+      town: 'Leeds',
+      postalCode: 'LS2 BBB',
+      county: 'West Yorkshire',
+      country: 'England',
+      comment: 'address comment field',
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      phones: [{ number: '011111111111', type: 'MOB' }],
+    }
+
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    it('should make a call for prisoners addresses', async () => {
+      await controller(req, res)
+
+      expect(elite2Api.getPrisonerAddresses).toHaveBeenCalledWith(res.locals, offenderNo)
+    })
+
+    describe('when there is missing prisoner address data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            addresses: [
+              {
+                label: 'Primary address',
+                type: undefined,
+                noFixedAddress: undefined,
+                noAddressMessage: 'No active, primary address entered',
+                details: undefined,
+              },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when there is prisoner address data', () => {
+      beforeEach(() => {
+        elite2Api.getPrisonerAddresses.mockResolvedValue([primaryAddress, nonPrimaryAddress])
+      })
+
+      it('should render the template with the correct primary address data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            addresses: [
+              {
+                label: 'Primary address',
+                type: 'HOME',
+                noFixedAddress: false,
+                noAddressMessage: false,
+                details: [
+                  { label: 'Address', value: 'Flat A, 13, High Street' },
+                  { label: 'Town', value: 'Ulverston' },
+                  { label: 'County', value: 'West Yorkshire' },
+                  { label: 'Postcode', value: 'LS1 AAA' },
+                  { label: 'Country', value: 'England' },
+                  { label: 'Address phone', value: '011111111111' },
+                  { label: 'Added', value: 'May 2020' },
+                  { label: 'Comments', value: 'address comment field' },
+                ],
+              },
+            ],
+          })
+        )
+      })
+
+      describe('when the address is missing county and/or country', () => {
+        beforeEach(() => {
+          elite2Api.getPrisonerAddresses.mockResolvedValue([
+            { ...primaryAddress, county: undefined, country: undefined },
+            nonPrimaryAddress,
+          ])
+        })
+
+        it('should not return related labels and empty values', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              addresses: [
+                {
+                  label: 'Primary address',
+                  type: 'HOME',
+                  noFixedAddress: false,
+                  noAddressMessage: false,
+                  details: [
+                    { label: 'Address', value: 'Flat A, 13, High Street' },
+                    { label: 'Town', value: 'Ulverston' },
+                    { label: 'Postcode', value: 'LS1 AAA' },
+                    { label: 'Address phone', value: '011111111111' },
+                    { label: 'Added', value: 'May 2020' },
+                    { label: 'Comments', value: 'address comment field' },
+                  ],
+                },
+              ],
+            })
+          )
+        })
+      })
+
+      describe('when the prisoners address does not have a flat number', () => {
+        beforeEach(() => {
+          elite2Api.getPrisonerAddresses.mockResolvedValue([{ ...primaryAddress, flat: undefined }, nonPrimaryAddress])
+        })
+
+        it('should not return it as part of the address field', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              addresses: [
+                {
+                  label: 'Primary address',
+                  type: 'HOME',
+                  noFixedAddress: false,
+                  noAddressMessage: false,
+                  details: [
+                    { label: 'Address', value: '13, High Street' },
+                    { label: 'Town', value: 'Ulverston' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS1 AAA' },
+                    { label: 'Country', value: 'England' },
+                    { label: 'Address phone', value: '011111111111' },
+                    { label: 'Added', value: 'May 2020' },
+                    { label: 'Comments', value: 'address comment field' },
+                  ],
+                },
+              ],
             })
           )
         })

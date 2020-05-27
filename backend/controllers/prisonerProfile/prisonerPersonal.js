@@ -11,6 +11,7 @@ const {
   personalDetailsViewModel,
   physicalCharacteristicsViewModel,
   activeContactsViewModel,
+  addressesViewModel,
 } = require('./personalViewModels')
 
 module.exports = ({ prisonerProfileService, personService, elite2Api, logError }) => async (req, res) => {
@@ -24,7 +25,15 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     })
   const { bookingId } = basicPrisonerDetails || {}
 
-  const [prisonerProfileData, fullPrisonerDetails, identifiers, aliases, property, contacts] = await Promise.all(
+  const [
+    prisonerProfileData,
+    fullPrisonerDetails,
+    identifiers,
+    aliases,
+    property,
+    contacts,
+    addresses,
+  ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getPrisonerDetail(res.locals, bookingId),
@@ -32,6 +41,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       elite2Api.getOffenderAliases(res.locals, bookingId),
       elite2Api.getPrisonerProperty(res.locals, bookingId),
       elite2Api.getPrisonerContacts(res.locals, bookingId),
+      elite2Api.getPrisonerAddresses(res.locals, offenderNo),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
@@ -59,5 +69,6 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     personalDetails: personalDetailsViewModel({ prisonerDetails: fullPrisonerDetails, property }),
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     activeContacts: activeContactsViewModel({ personal: nextOfKinsWithContact }),
+    addresses: addressesViewModel({ addresses }),
   })
 }
