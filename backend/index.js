@@ -28,6 +28,8 @@ app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
 app.set('view engine', 'njk')
 
+nunjucksSetup(app, path)
+
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
 app.use(setupWebSecurity())
@@ -35,11 +37,8 @@ app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi }))
 app.use(setupSass())
 app.use(setupWebpackForDev())
-
 app.use(setupRedirects())
-
-const njkEnv = nunjucksSetup(app, path)
-app.use(routes({ ...apis, njkEnv }))
+app.use(routes({ ...apis }))
 
 app.use(setupStaticContent())
 
