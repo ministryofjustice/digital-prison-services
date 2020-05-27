@@ -1,4 +1,4 @@
-module.exports = ({ elite2Api, oauthApi, njkEnv }) => async (req, res, next) => {
+module.exports = ({ elite2Api, oauthApi }) => async (req, res, next) => {
   if (!req.xhr) {
     if (!req.session.userDetails) {
       const userDetails = await oauthApi.currentUser(res.locals)
@@ -11,11 +11,12 @@ module.exports = ({ elite2Api, oauthApi, njkEnv }) => async (req, res, next) => 
     const caseloads = req.session.allCaseloads
     const { name, activeCaseLoadId } = req.session.userDetails
 
-    njkEnv.addGlobal('allCaseloads', caseloads)
-    njkEnv.addGlobal('user', {
+    res.locals.user = {
+      ...res.locals.user,
+      allCaseloads: caseloads,
       displayName: name,
       activeCaseLoad: caseloads.find(cl => cl.caseLoadId === activeCaseLoadId),
-    })
+    }
   }
   next()
 }
