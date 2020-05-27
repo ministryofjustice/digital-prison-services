@@ -47,8 +47,8 @@ describe('Current user', () => {
 
     await controller(req, res, () => {})
 
-    expect(res.locals.headerData).toEqual({
-      caseloads: [
+    expect(res.locals.user).toEqual({
+      allCaseloads: [
         {
           caseLoadId: 'MDI',
           description: 'Moorland',

@@ -11,8 +11,9 @@ module.exports = ({ elite2Api, oauthApi }) => async (req, res, next) => {
     const caseloads = req.session.allCaseloads
     const { name, activeCaseLoadId } = req.session.userDetails
 
-    res.locals.headerData = {
-      caseloads,
+    res.locals.user = {
+      ...res.locals.user,
+      allCaseloads: caseloads,
       displayName: name,
       activeCaseLoad: caseloads.find(cl => cl.caseLoadId === activeCaseLoadId),
     }
