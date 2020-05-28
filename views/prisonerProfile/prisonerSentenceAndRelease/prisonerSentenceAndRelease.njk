@@ -7,11 +7,38 @@
 {% set title = "Sentence and Release" %}
 {% set containerClasses = "prisoner-profile" %}
 
+{% set noDates = not (releaseDates.currentExpectedReleaseDates.length or 
+                releaseDates.earlyAndTemporaryReleaseEligibilityDates.length or 
+                releaseDates.licenceDates.length or 
+                releaseDates.otherReleaseDates.length) %}
+
 {% set releaseDatesContent %}
-  {{ prisonerSummarySection(releaseDates.currentExpectedReleaseDates) }}
-  {{ prisonerSummarySection(releaseDates.earlyAndTemporaryReleaseEligibilityDates) }}
-  {{ prisonerSummarySection(releaseDates.otherReleaseDates) }}
+  {% if noDates %}
+    <p class="govuk-body">There are no recorded release dates for this prisoner</p>
+  {% else %}
+    {% if releaseDates.currentExpectedReleaseDates.length %}
+    <h3 class="govuk-heading-m">Current expected release dates</h2>
+    {{ prisonerSummarySection(releaseDates.currentExpectedReleaseDates) }}
+    {% endif %}
+    
+    {% if releaseDates.earlyAndTemporaryReleaseEligibilityDates.length %}
+      <h3 class="govuk-heading-m">Early and temporary release dates</h2>
+      {{ prisonerSummarySection(releaseDates.earlyAndTemporaryReleaseEligibilityDates) }}
+    {% endif %}
+
+    {% if releaseDates.licenceDates.length %}
+      <h3 class="govuk-heading-m">Licence dates</h2>
+      {{ prisonerSummarySection(releaseDates.licenceDates) }}
+    {% endif %}
+    
+    {% if releaseDates.otherReleaseDates.length %}
+      <h3 class="govuk-heading-m">Other dates</h2>
+      {{ prisonerSummarySection(releaseDates.otherReleaseDates) }}
+    {% endif %}
+  {% endif %}
 {% endset %}
+
+
 
 
 {% block prisonerProfileSection %}

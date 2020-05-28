@@ -1,6 +1,4 @@
-const moment = require('moment')
 const { readableDateFormat } = require('../../../utils')
-const getValueByType = require('../../../shared/getValueByType')
 
 module.exports = sentenceDetails => {
   const conditionalRelease = sentenceDetails.conditionalReleaseOverrideDate || sentenceDetails.conditionalReleaseDate

@@ -1,47 +1,7 @@
-{% set propertyRows = [] %}
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
 
-{% if personalDetails.property.length %}
-  {% for item in personalDetails.property %}
-    {% set propertyRows = (propertyRows.push(
-      {
-        key: {
-          text: item.label
-        },
-        value: {
-          text: item.value | showDefault
-        }
-      }
-    ), propertyRows) %}
-
-    {% if item.details.length %}
-      {% for itemDetail in item.details %}
-        {% set propertyRows = (propertyRows.push(
-          {
-            key: {
-              text: itemDetail.label,
-              classes: 'govuk-summary-list__key--indent'
-            },
-            value: {
-              text: itemDetail.value | showDefault(missingEntry)
-            }
-          }
-        ), propertyRows) %}
-      {% endfor %}
-    {% endif %}
-  {% endfor%}
+{% if releaseDates.currentExpectedReleaseDates.length %}
+  {{ prisonerSummarySection(releaseDates) }}
 {% else %}
-  {% set propertyRows = (propertyRows.push(
-    {
-      key: {
-        text: 'Property'
-      },
-      value: {
-        text: 'None'
-      }
-    }
-  ), propertyRows) %}
+  <p class="govuk-body">{{ missingEntry }}</p>
 {% endif %}
-
-{{ govukSummaryList({
-  rows: propertyRows
-}) }}
