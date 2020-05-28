@@ -170,9 +170,189 @@ module.exports = {
       response: {
         status: 200,
         headers: {
-          'Content-Type': 'image/jped',
+          'Content-Type': 'image/jpeg',
         },
         body: data || '',
+      },
+    })
+  },
+  stubMainOffence: offence => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/mainOffence',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offence || [],
+      },
+    })
+  },
+  stubPrisonerDetails: prisonerDetails => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/prisoners/.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: prisonerDetails || [],
+      },
+    })
+  },
+  stubPrisonerSentenceDetails: sentenceDetails => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/offenders/.+?/sentences',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: sentenceDetails || {},
+      },
+    })
+  },
+  stubPrisonerBalances: balances => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/balances',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: balances || {},
+      },
+    })
+  },
+  stubIepSummaryForBooking: iepSummary => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/iepSummary\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: iepSummary || {},
+      },
+    })
+  },
+  stubPositiveCaseNotes: positiveCaseNotes => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/caseNotes/POS/IEP_ENC/count\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: positiveCaseNotes || {},
+      },
+    })
+  },
+  stubNegativeCaseNotes: negativeCaseNotes => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/caseNotes/NEG/IEP_WARN/count\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: negativeCaseNotes || {},
+      },
+    })
+  },
+  stubAdjudicationsForBooking: adjudications => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/adjudications',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: adjudications || {},
+      },
+    })
+  },
+  stubNextVisit: nextVisit => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/visits/next',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: nextVisit || {},
+      },
+    })
+  },
+  stubPrisonerVisitBalances: visitBalances => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/offenderNo/.+?/visit/balances',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: visitBalances || {},
+      },
+    })
+  },
+  stubEventsForToday: events => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/events/today',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: events || [],
+      },
+    })
+  },
+  stubProfileInformation: profileInfo => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/.+?/profileInformation',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: profileInfo || [],
       },
     })
   },

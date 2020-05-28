@@ -16,7 +16,8 @@
 
 {{ govukSummaryList({
   rows: scheduledActivityRows,
-  classes: "govuk-!-margin-bottom-2"
+  classes: "govuk-!-margin-bottom-2",
+  attributes: { "data-test": "schedule-summary" }
 }) }}
 
 <a href="{{ dpsUrl + 'offenders/' + prisonerProfileData.offenderNo + '/schedule' }}" class="govuk-link govuk-!-font-size-19">
