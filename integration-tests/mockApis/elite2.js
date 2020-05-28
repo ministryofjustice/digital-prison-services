@@ -150,7 +150,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/alerts\\?query=.+?',
+        urlPattern: '/api/bookings/[0-9]+?/alerts\\?query=.+?',
       },
       response: {
         status: 200,
@@ -180,7 +180,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/mainOffence',
+        urlPattern: '/api/bookings/[0-9]+?/mainOffence',
       },
       response: {
         status: 200,
@@ -225,7 +225,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/balances',
+        urlPattern: '/api/bookings/[0-9]+?/balances',
       },
       response: {
         status: 200,
@@ -240,7 +240,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/iepSummary\\?.+?',
+        urlPattern: '/api/bookings/[0-9]+?/iepSummary\\?.+?',
       },
       response: {
         status: 200,
@@ -255,7 +255,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/caseNotes/POS/IEP_ENC/count\\?.+?',
+        urlPattern: '/api/bookings/[0-9]+?/caseNotes/POS/IEP_ENC/count\\?.+?',
       },
       response: {
         status: 200,
@@ -270,7 +270,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/caseNotes/NEG/IEP_WARN/count\\?.+?',
+        urlPattern: '/api/bookings/[0-9]+?/caseNotes/NEG/IEP_WARN/count\\?.+?',
       },
       response: {
         status: 200,
@@ -285,7 +285,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/adjudications',
+        urlPattern: '/api/bookings/[0-9]+?/adjudications',
       },
       response: {
         status: 200,
@@ -300,7 +300,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/visits/next',
+        urlPattern: '/api/bookings/[0-9]+?/visits/next',
       },
       response: {
         status: 200,
@@ -330,7 +330,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/events/today',
+        urlPattern: '/api/bookings/[0-9]+?/events/today',
       },
       response: {
         status: 200,
@@ -345,7 +345,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/.+?/profileInformation',
+        urlPattern: '/api/bookings/[0-9]+?/profileInformation',
       },
       response: {
         status: 200,
