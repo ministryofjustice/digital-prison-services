@@ -16,37 +16,9 @@ describe('prisoner sentence and release', () => {
     location: 'CELL-123',
     offenderName: 'Prisoner, Test',
     offenderNo,
-    sentenceDetail: {
-      sentenceStartDate: '2010-02-03',
-      confirmedReleaseDate: '2020-04-20',
-      releaseDate: '2020-04-01',
-      nonDtoReleaseDateType: 'CRD',
-      additionalDaysAwarded: 5,
-      automaticReleaseOverrideDate: '2020-02-03',
-      conditionalReleaseOverrideDate: '2020-02-03',
-      nonParoleOverrideDate: '2020-02-03',
-      postRecallReleaseOverrideDate: '2020-04-01',
-      nonDtoReleaseDate: '2020-04-01',
-      sentenceExpiryDate: '2020-02-03',
-      automaticReleaseDate: '2020-02-03',
-      conditionalReleaseDate: '2020-02-03',
-      nonParoleDate: '2020-02-03',
-      postRecallReleaseDate: '2020-02-03',
-      licenceExpiryDate: '2020-02-03',
-      homeDetentionCurfewEligibilityDate: '2020-02-03',
-      paroleEligibilityDate: '2020-02-03',
-      homeDetentionCurfewActualDate: '2020-02-03',
-      actualParoleDate: '2020-02-03',
-      releaseOnTemporaryLicenceDate: '2020-02-03',
-      earlyRemovalSchemeEligibilityDate: '2020-02-03',
-      earlyTermDate: '2020-02-03',
-      midTermDate: '2020-02-03',
-      lateTermDate: '2020-02-03',
-      topupSupervisionExpiryDate: '2020-02-03',
-      tariffDate: '2020-02-03',
-    },
   }
   const prisonerProfileService = {}
+  const elite2Api = {}
 
   let req
   let res
@@ -55,7 +27,7 @@ describe('prisoner sentence and release', () => {
 
   beforeEach(() => {
     req = { params: { offenderNo } }
-    res = { render: jest.fn() }
+    res = { locals: {}, render: jest.fn() }
 
     logError = jest.fn()
 
@@ -64,8 +36,40 @@ describe('prisoner sentence and release', () => {
     req.get.mockReturnValue('localhost')
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+        nonDtoReleaseDateType: 'CRD',
+        additionalDaysAwarded: 5,
+        automaticReleaseOverrideDate: '2020-02-03',
+        conditionalReleaseOverrideDate: '2020-02-03',
+        nonParoleOverrideDate: '2020-02-03',
+        postRecallReleaseOverrideDate: '2020-04-01',
+        nonDtoReleaseDate: '2020-04-01',
+        sentenceExpiryDate: '2020-02-03',
+        automaticReleaseDate: '2020-02-03',
+        conditionalReleaseDate: '2020-02-03',
+        nonParoleDate: '2020-02-03',
+        postRecallReleaseDate: '2020-02-03',
+        licenceExpiryDate: '2020-02-03',
+        homeDetentionCurfewEligibilityDate: '2020-02-03',
+        paroleEligibilityDate: '2020-02-03',
+        homeDetentionCurfewActualDate: '2020-02-03',
+        actualParoleDate: '2020-02-03',
+        releaseOnTemporaryLicenceDate: '2020-02-03',
+        earlyRemovalSchemeEligibilityDate: '2020-02-03',
+        earlyTermDate: '2020-02-03',
+        midTermDate: '2020-02-03',
+        lateTermDate: '2020-02-03',
+        topupSupervisionExpiryDate: '2020-02-03',
+        tariffDate: '2020-02-03',
+      },
+    })
     controller = prisonerSentenceAndRelease({
       prisonerProfileService,
+      elite2Api,
       logError,
     })
   })
@@ -74,6 +78,7 @@ describe('prisoner sentence and release', () => {
     await controller(req, res)
 
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(elite2Api.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
