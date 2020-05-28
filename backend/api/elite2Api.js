@@ -160,8 +160,8 @@ const elite2ApiFactory = client => {
   const getIepSummaryForBooking = (context, bookingId, withDetails) =>
     get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
 
-  const getDetails = (context, offenderNo, fullInfo = false) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`)
+  const getDetails = (context, offenderNo, fullInfo = false, extraInfo = false) =>
+    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&extraInfo=${extraInfo}`)
 
   const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
     get(context, `/api/movements/livingUnit/${livingUnitId}/currently-out`)

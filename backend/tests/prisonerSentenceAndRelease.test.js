@@ -16,7 +16,7 @@ describe('prisoner sentence and release', () => {
     location: 'CELL-123',
     offenderName: 'Prisoner, Test',
     offenderNo,
-    setenceDetails: {
+    sentenceDetail: {
       sentenceStartDate: '2010-02-03',
       confirmedReleaseDate: '2020-04-20',
       releaseDate: '2020-04-01',
@@ -75,7 +75,7 @@ describe('prisoner sentence and release', () => {
 
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
-      'prisonerProfile/prisonerSentenceAndRelease.njk',
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
         prisonerProfileData,
       })

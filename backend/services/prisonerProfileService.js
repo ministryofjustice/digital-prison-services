@@ -14,7 +14,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
   const getPrisonerProfileData = async (context, offenderNo) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
-      elite2Api.getDetails(context, offenderNo, true),
+      elite2Api.getDetails(context, offenderNo, true, true),
     ])
 
     const {

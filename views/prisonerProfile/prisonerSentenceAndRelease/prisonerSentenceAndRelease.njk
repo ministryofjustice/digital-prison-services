@@ -1,0 +1,28 @@
+{% extends "../layouts/prisonerLayout.njk" %}
+{% from "../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "../macros/prisonerAccordionSection.njk" import accordionSection %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Sentence and Release" %}
+{% set containerClasses = "prisoner-profile" %}
+
+{% set releaseDatesContent %}
+  {{ prisonerSummarySection(releaseDates.currentExpectedReleaseDates) }}
+  {{ prisonerSummarySection(releaseDates.earlyAndTemporaryReleaseEligibilityDates) }}
+  {{ prisonerSummarySection(releaseDates.otherReleaseDates) }}
+{% endset %}
+
+
+{% block prisonerProfileSection %}
+  <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-accordion">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        {{ accordionSection("Current sentence details", "", 0) }}
+      </div>
+      <div class="govuk-grid-column-one-half">
+        {{ accordionSection("Release dates", releaseDatesContent, 1) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
