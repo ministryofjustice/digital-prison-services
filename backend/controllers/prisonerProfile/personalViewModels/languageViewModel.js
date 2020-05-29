@@ -15,8 +15,6 @@ const getSecondaryLanguageLabel = lang => {
 module.exports = ({ language, writtenLanguage, interpreterRequired, secondaryLanguages }) => {
   const writesDifferentToSpeaks = language !== writtenLanguage
 
-  const languages = [writesDifferentToSpeaks ? `${language} speaks` : language]
-
   return {
     language,
     writtenLanguage,
