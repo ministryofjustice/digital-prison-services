@@ -38,6 +38,10 @@
   {% include "./partials/activeContacts.njk" %}
 {% endset %}
 
+{% set languages %}
+    {%  include "./partials/languages.njk" %}
+{%  endset %}
+
 {% set addressesContent %}
   {% include "./partials/addresses.njk" %}
 {% endset %}
@@ -47,7 +51,7 @@
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
     { heading: 'Distinguishing marks', html: distinguishingMarksContent },
     { heading: 'Personal care needs', html: '<p class="govuk-body">Personal care needs content</p>' },
-    { heading: 'Languages', html: '<p class="govuk-body">Languages content</p>' }
+    { heading: 'Languages', html: languages }
   ]
 %}
 

@@ -42,7 +42,8 @@
 
 {{ govukSummaryList({
   rows: caseNoteAdjudicationsRows,
-  classes: "govuk-!-margin-bottom-2"
+  classes: "govuk-!-margin-bottom-2",
+  attributes: { "data-test": "case-notes-summary" }
 }) }}
 
 <a href="{{'/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}" class="govuk-link govuk-!-font-size-19">Adjudication history</a>

@@ -37,5 +37,33 @@ module.exports = on => {
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
     stubAlertsForBooking: alerts => Promise.all([elite2api.stubAlertsForBooking(alerts)]),
+    stubQuickLook: ({
+      offence,
+      prisonerDetails,
+      sentenceDetails,
+      balances,
+      iepSummary,
+      positiveCaseNotes,
+      negativeCaseNotes,
+      adjudications,
+      nextVisit,
+      visitBalances,
+      todaysEvents,
+      profileInformation,
+    }) =>
+      Promise.all([
+        elite2api.stubMainOffence(offence),
+        elite2api.stubPrisonerDetails(prisonerDetails),
+        elite2api.stubPrisonerSentenceDetails(sentenceDetails),
+        elite2api.stubPrisonerBalances(balances),
+        elite2api.stubIepSummaryForBooking(iepSummary),
+        elite2api.stubPositiveCaseNotes(positiveCaseNotes),
+        elite2api.stubNegativeCaseNotes(negativeCaseNotes),
+        elite2api.stubAdjudicationsForBooking(adjudications),
+        elite2api.stubNextVisit(nextVisit),
+        elite2api.stubPrisonerVisitBalances(visitBalances),
+        elite2api.stubEventsForToday(todaysEvents),
+        elite2api.stubProfileInformation(profileInformation),
+      ]),
   })
 }

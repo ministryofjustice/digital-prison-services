@@ -16,7 +16,8 @@
 
 {{ govukSummaryList({
   rows: balanceRows,
-  classes: "govuk-!-margin-bottom-2"
+  classes: "govuk-!-margin-bottom-2",
+  attributes: { "data-test": "money-summary" }
 }) }}
 
 <a href="#" class="govuk-link govuk-!-font-size-19">Payment history</a>
