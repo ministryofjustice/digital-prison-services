@@ -1,7 +1,0 @@
-{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
-
-{% if releaseDates.currentExpectedReleaseDates.length %}
-  {{ prisonerSummarySection(releaseDates) }}
-{% else %}
-  <p class="govuk-body">{{ missingEntry }}</p>
-{% endif %}
