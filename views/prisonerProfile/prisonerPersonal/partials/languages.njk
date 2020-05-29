@@ -1,12 +1,29 @@
-{% if languages.language == languages.writtenLanguage %}
+{% if languages.noPreferredLanguageEntered %}
+    <p class="govuk-body">No language entered </p>
+{% endif %}
+
+{% if languages.speaksAndWritesSamePreferredLanguage %}
     <strong class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ languages.language }}</strong>
 {% endif %}
 
-{% if languages.language != languages.writtenLanguage %}
+{% if languages.writesOnlyInPreferredLanguage %}
+    <div class="govuk-body govuk-!-font-size-19">
+        <b>{{ languages.writtenLanguage }}</b> (writes)
+    </div>
+{% endif %}
+
+{% if languages.speaksOnlyInPreferredLanguage %}
+    <div class="govuk-body govuk-!-font-size-19">
+        <b>{{ languages.language }}</b>
+    </div>
+{% endif %}
+
+{% if languages.speaksAndWritesDifferentPreferredLanguages %}
     <div class="govuk-body govuk-!-font-size-19">
         <b>{{ languages.language }}</b>
         (speaks) {% if languages.interpreterRequired %} - interpreter required {% endif %}
     </div>
+
     <div class="govuk-body govuk-!-font-size-19">
         <b>{{ languages.writtenLanguage }}</b> (writes)
     </div>
