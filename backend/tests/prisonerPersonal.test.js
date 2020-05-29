@@ -85,17 +85,14 @@ describe('prisoner personal', () => {
         languages: {
           interpreterRequired: true,
           language: 'English',
+          noPreferredLanguageEntered: false,
           secondaryLanguages: [
-            {
-              key: {
-                classes: 'govuk-summary-list__key--indent',
-                text: 'English',
-              },
-              value: {
-                text: null,
-              },
-            },
+            { key: { classes: 'govuk-summary-list__key--indent', text: 'English' }, value: { text: null } },
           ],
+          speaksAndWritesDifferentPreferredLanguages: true,
+          speaksAndWritesSamePreferredLanguage: false,
+          speaksOnlyInPreferredLanguage: false,
+          writesOnlyInPreferredLanguage: false,
           writtenLanguage: 'Russian',
         },
       })
