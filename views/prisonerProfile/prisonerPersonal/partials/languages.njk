@@ -3,7 +3,9 @@
 {% endif %}
 
 {% if languages.speaksAndWritesSamePreferredLanguage %}
-    <b class="govuk-body govuk-!-font-size-19">{{ languages.language }}</b>  {% if languages.interpreterRequired %} - interpreter required {% endif %}
+    <div class="govuk-body govuk-!-font-size-19">
+        <b>{{ languages.language }}</b> {% if languages.interpreterRequired %} - interpreter required {% endif %}
+    </div>
 {% endif %}
 
 {% if languages.writesOnlyInPreferredLanguage %}
@@ -20,8 +22,7 @@
 
 {% if languages.speaksAndWritesDifferentPreferredLanguages %}
     <div class="govuk-body govuk-!-font-size-19">
-        <b>{{ languages.language }}</b>
-        (speaks) {% if languages.interpreterRequired %} - interpreter required {% endif %}
+        <b>{{ languages.language }}</b> {% if languages.interpreterRequired %} - interpreter required {% endif %}
     </div>
 
     <div class="govuk-body govuk-!-font-size-19">
