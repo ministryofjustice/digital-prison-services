@@ -42,6 +42,10 @@
     {%  include "./partials/languages.njk" %}
 {%  endset %}
 
+{% set addressesContent %}
+  {% include "./partials/addresses.njk" %}
+{% endset %}
+
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
@@ -54,7 +58,7 @@
 {% set rightSections = [
     { heading: 'Aliases', html: aliasesContent },
     { heading: 'Identifiers', html: identifierContent },
-    { heading: 'Addresses', html: '<p class="govuk-body">Addresses content</p>' },
+    { heading: 'Addresses', html: addressesContent },
     { heading: 'Active contacts', html: activeContactsContent }
   ]
 %}

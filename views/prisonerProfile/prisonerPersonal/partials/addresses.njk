@@ -1,0 +1,14 @@
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+
+{% for address in addresses %}
+  <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ address.label }}</h3>
+  <p class="govuk-body govuk-!-margin-bottom-1">{{ address.addressType }}</p>
+
+  {% if address.noFixedAddress %}
+    <p class="govuk-body">No fixed abode</p>
+  {% elif address.details.length %}
+    {{ prisonerSummarySection(address.details) }}
+  {% else %}
+    <p class="govuk-body">{{ address.noAddressMessage }}</p>
+  {% endif %}
+{% endfor %}

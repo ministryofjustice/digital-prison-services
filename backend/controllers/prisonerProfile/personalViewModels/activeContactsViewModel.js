@@ -1,23 +1,7 @@
-const { capitalize, formatName } = require('../../../utils')
+const { formatName } = require('../../../utils')
+const { getPhone, getAddress } = require('../../../shared/addressHelpers')
 
 module.exports = ({ personal }) => {
-  const getPhone = phones => phones && phones.map(phone => phone.number).join(', ')
-
-  const getAddress = (address = {}) => {
-    const flat = address.flat && `Flat ${address.flat}`
-    const streetWithNumber = [flat, address.premise, address.street].filter(value => value)
-
-    return [
-      { label: 'Address', value: streetWithNumber.join(', ') },
-      { label: 'Town', value: address.town },
-      ...(address.county ? [{ label: 'County', value: address.county }] : []),
-      { label: 'Postcode', value: address.postalCode },
-      ...(address.country ? [{ label: 'Country', value: address.country }] : []),
-      { label: 'Address phone', value: getPhone(address.phones) },
-      { label: 'Address type', value: address.addressType && capitalize(address.addressType) },
-    ]
-  }
-
   return {
     personal:
       personal &&
