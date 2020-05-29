@@ -1,75 +1,8 @@
 const prisonerQuickLookPage = require('../../pages/prisonerProfile/prisonerQuickLookPage')
+const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
+const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
 const bookingId = 14
-const offenderBasicDetails = { bookingId, firstName: 'John', lastName: 'Smith' }
-const offenderFullDetails = {
-  bookingId: 14,
-  firstName: 'John',
-  lastName: 'Smith',
-  offenderNo: 'G3878UK',
-  alerts: [
-    {
-      active: true,
-      addedByFirstName: 'John',
-      addedByLastName: 'Smith',
-      alertCode: 'XC',
-      alertCodeDescription: 'Risk to females',
-      alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
-      bookingId: 14,
-      comment: 'has a large poster on cell wall',
-      dateCreated: '2019-08-20',
-      dateExpires: null,
-      expired: false,
-      expiredByFirstName: 'John',
-      expiredByLastName: 'Smith',
-      offenderNo: 'G3878UK',
-    },
-    {
-      active: false,
-      addedByFirstName: 'John',
-      addedByLastName: 'Smith',
-      alertCode: 'XC',
-      alertCodeDescription: 'Risk to females',
-      alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
-      bookingId: 14,
-      comment: 'has a small poster on cell wall',
-      dateCreated: '2019-08-20',
-      dateExpires: '2019-12-20',
-      expired: true,
-      expiredByFirstName: 'Jane',
-      expiredByLastName: 'Smith',
-      offenderNo: 'G3878UK',
-    },
-    {
-      active: false,
-      addedByFirstName: 'John',
-      addedByLastName: 'Smith',
-      alertCode: 'XC',
-      alertCodeDescription: 'Risk to females',
-      alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
-      bookingId: 14,
-      comment: 'silly',
-      dateCreated: '2019-08-25',
-      dateExpires: '2019-09-20',
-      expired: true,
-      expiredByFirstName: 'Jane',
-      expiredByLastName: 'Smith',
-      offenderNo: 'G3878UK',
-    },
-  ],
-  assignedLivingUnit: {
-    agencyId: 'MDI',
-    agencyName: 'HMP Moorland',
-    description: 'HMP Moorland',
-    locationId: 12,
-  },
-}
 
 context('Prisoner quick look', () => {
   before(() => {
