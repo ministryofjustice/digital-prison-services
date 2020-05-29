@@ -65,5 +65,6 @@ module.exports = on => {
         elite2api.stubEventsForToday(todaysEvents),
         elite2api.stubProfileInformation(profileInformation),
       ]),
+    stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
   })
 }

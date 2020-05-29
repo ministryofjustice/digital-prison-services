@@ -6,6 +6,7 @@ const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullIm
 const prisonerPersonal = require('../controllers/prisonerProfile/prisonerPersonal')
 const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
 const prisonerCaseNotes = require('../controllers/prisonerProfile/prisonerCaseNotes')
+const prisonerSentenceAndRelease = require('../controllers/prisonerProfile/prisonerSentenceAndRelease')
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
@@ -30,6 +31,8 @@ const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError 
     '/case-notes',
     prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationService, nunjucks, logError })
   )
+
+  router.get('/sentence-and-release', prisonerSentenceAndRelease({ prisonerProfileService, elite2Api, logError }))
 
   return router
 }

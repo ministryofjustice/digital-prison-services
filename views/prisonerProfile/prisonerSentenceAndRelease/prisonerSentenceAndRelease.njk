@@ -1,0 +1,55 @@
+{% extends "../layouts/prisonerLayout.njk" %}
+{% from "../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "../macros/prisonerAccordionSection.njk" import accordionSection %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Sentence and Release" %}
+{% set containerClasses = "prisoner-profile" %}
+
+{% set noReleaseDates = not (releaseDates.currentExpectedReleaseDates.length or 
+                releaseDates.earlyAndTemporaryReleaseEligibilityDates.length or 
+                releaseDates.licenceDates.length or 
+                releaseDates.otherReleaseDates.length) %}
+
+{% set releaseDatesContent %}
+  {% if noReleaseDates %}
+    <p class="govuk-body" data-test="no-release-dates-message">There are no recorded release dates for this prisoner</p>
+  {% else %}
+    {% if releaseDates.currentExpectedReleaseDates.length %}
+    <h3 class="govuk-heading-m" data-test="current-expected-heading">Current expected release dates</h2>
+    {{ prisonerSummarySection(releaseDates.currentExpectedReleaseDates, 'Not entered', { "data-test": "current-expected" }) }}
+    {% endif %}
+    
+    {% if releaseDates.earlyAndTemporaryReleaseEligibilityDates.length %}
+      <h3 class="govuk-heading-m" data-test="early-temporary-heading">Early and temporary release dates</h2>
+      {{ prisonerSummarySection(releaseDates.earlyAndTemporaryReleaseEligibilityDates, 'Not entered', { "data-test": "early-temporary" }) }}
+    {% endif %}
+
+    {% if releaseDates.licenceDates.length %}
+      <h3 class="govuk-heading-m" data-test="licence-dates-heading">Licence dates</h2>
+      {{ prisonerSummarySection(releaseDates.licenceDates, 'Not entered', { "data-test": "licence-dates" }) }}
+    {% endif %}
+    
+    {% if releaseDates.otherReleaseDates.length %}
+      <h3 class="govuk-heading-m" data-test="other-release-dates-heading">Other dates</h2>
+      {{ prisonerSummarySection(releaseDates.otherReleaseDates, 'Not entered', { "data-test": "other-release-dates" }) }}
+    {% endif %}
+  {% endif %}
+{% endset %}
+
+
+
+
+{% block prisonerProfileSection %}
+  <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-accordion">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        {{ accordionSection("Current sentence details", "", 0) }}
+      </div>
+      <div class="govuk-grid-column-one-half">
+        {{ accordionSection("Release dates", releaseDatesContent, 1) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
