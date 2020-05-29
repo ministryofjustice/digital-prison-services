@@ -64,7 +64,7 @@ describe('prisoner personal', () => {
     )
   })
 
-  it('should make a call to request a prisoner secondary languages', async () => {
+  it('should make a call to request the prisoners secondary languages', async () => {
     elite2Api.getDetails.mockResolvedValue({ bookingId: 123 })
     elite2Api.getSecondaryLanguages.mockResolvedValue([
       {
