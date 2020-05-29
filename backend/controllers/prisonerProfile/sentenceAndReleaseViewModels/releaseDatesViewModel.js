@@ -4,7 +4,9 @@ module.exports = sentenceDetails => {
   const conditionalRelease = sentenceDetails.conditionalReleaseOverrideDate || sentenceDetails.conditionalReleaseDate
   const postRecallDate = sentenceDetails.postRecallReleaseOverrideDate || sentenceDetails.postRecallReleaseDate
   const automaticReleaseDate = sentenceDetails.automaticReleaseOverrideDate || sentenceDetails.automaticReleaseDate
-  const nonParoleDate = sentenceDetails.nonParoleDate || sentenceDetails.nonParoleOverrideDate
+  const nonParoleDate = sentenceDetails.nonParoleOverrideDate || sentenceDetails.nonParoleDate
+  const detentionTrainingOrderPostRecallDate =
+    sentenceDetails.dtoPostRecallReleaseDateOverride || sentenceDetails.dtoPostRecallReleaseDate
 
   return {
     currentExpectedReleaseDates: [
@@ -64,6 +66,14 @@ module.exports = sentenceDetails => {
             },
           ]
         : []),
+      ...(detentionTrainingOrderPostRecallDate
+        ? [
+            {
+              label: 'Detention training post recall date',
+              value: readableDateFormat(detentionTrainingOrderPostRecallDate, 'YYYY-MM-DD'),
+            },
+          ]
+        : []),
     ],
     earlyAndTemporaryReleaseEligibilityDates: [
       ...(sentenceDetails.homeDetentionCurfewActualDate
@@ -77,7 +87,7 @@ module.exports = sentenceDetails => {
       ...(sentenceDetails.releaseOnTemporaryLicenceDate
         ? [
             {
-              label: 'Release on temporary license',
+              label: 'Release on temporary licence',
               value: readableDateFormat(sentenceDetails.releaseOnTemporaryLicenceDate, 'YYYY-MM-DD'),
             },
           ]
@@ -138,7 +148,7 @@ module.exports = sentenceDetails => {
         ? [
             {
               label: 'Late transfer',
-              value: readableDateFormat(sentenceDetails.lateTermDatee, 'YYYY-MM-DD'),
+              value: readableDateFormat(sentenceDetails.lateTermDate, 'YYYY-MM-DD'),
             },
           ]
         : []),

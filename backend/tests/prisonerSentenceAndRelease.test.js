@@ -43,28 +43,30 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
         nonDtoReleaseDateType: 'CRD',
         additionalDaysAwarded: 5,
-        automaticReleaseOverrideDate: '2020-02-03',
+        automaticReleaseOverrideDate: '2020-02-02',
         conditionalReleaseOverrideDate: '2020-02-03',
-        nonParoleOverrideDate: '2020-02-03',
+        nonParoleOverrideDate: '2020-10-03',
         postRecallReleaseOverrideDate: '2020-04-01',
         nonDtoReleaseDate: '2020-04-01',
-        sentenceExpiryDate: '2020-02-03',
-        automaticReleaseDate: '2020-02-03',
-        conditionalReleaseDate: '2020-02-03',
-        nonParoleDate: '2020-02-03',
-        postRecallReleaseDate: '2020-02-03',
-        licenceExpiryDate: '2020-02-03',
-        homeDetentionCurfewEligibilityDate: '2020-02-03',
-        paroleEligibilityDate: '2020-02-03',
-        homeDetentionCurfewActualDate: '2020-02-03',
-        actualParoleDate: '2020-02-03',
-        releaseOnTemporaryLicenceDate: '2020-02-03',
-        earlyRemovalSchemeEligibilityDate: '2020-02-03',
-        earlyTermDate: '2020-02-03',
-        midTermDate: '2020-02-03',
-        lateTermDate: '2020-02-03',
-        topupSupervisionExpiryDate: '2020-02-03',
-        tariffDate: '2020-02-03',
+        sentenceExpiryDate: '2020-02-19',
+        automaticReleaseDate: '2020-01-01',
+        conditionalReleaseDate: '2020-02-01',
+        nonParoleDate: '2019-02-03',
+        postRecallReleaseDate: '2021-02-03',
+        licenceExpiryDate: '2020-02-04',
+        homeDetentionCurfewEligibilityDate: '2019-07-03',
+        paroleEligibilityDate: '2022-02-03',
+        homeDetentionCurfewActualDate: '2021-06-02',
+        actualParoleDate: '2020-04-03',
+        releaseOnTemporaryLicenceDate: '2025-02-03',
+        earlyRemovalSchemeEligibilityDate: '2018-11-12',
+        earlyTermDate: '2019-08-09',
+        midTermDate: '2020-08-10',
+        lateTermDate: '2021-08-11',
+        topupSupervisionExpiryDate: '2020-10-14',
+        tariffDate: '2021-05-07',
+        dtoPostRecallReleaseDate: '2020-10-16',
+        dtoPostRecallReleaseDateOverride: '2021-10-16',
       },
     })
     controller = prisonerSentenceAndRelease({
@@ -74,7 +76,7 @@ describe('prisoner sentence and release', () => {
     })
   })
 
-  it('should make a call for the prisoner details and render the right template', async () => {
+  it('should make a call for the prisoner details and the sentence details and render the right template', async () => {
     await controller(req, res)
 
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
@@ -83,6 +85,131 @@ describe('prisoner sentence and release', () => {
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
         prisonerProfileData,
+        releaseDates: {
+          currentExpectedReleaseDates: [
+            { label: 'Approved for home detention curfew', value: '3 July 2019' },
+            { label: 'Approved for parole', value: '3 February 2022' },
+            { label: 'Conditional release', value: '3 February 2020' },
+            { label: 'Post recall release', value: '1 April 2020' },
+            { label: 'Mid transfer', value: '10 August 2020' },
+            { label: 'Automatic release', value: '2 February 2020' },
+            { label: 'Non parole', value: '3 October 2020' },
+            { label: 'Detention training post recall date', value: '16 October 2021' },
+          ],
+          earlyAndTemporaryReleaseEligibilityDates: [
+            { label: 'Home detention curfew', value: '2 June 2021' },
+            { label: 'Release on temporary licence', value: '3 February 2025' },
+            { label: 'Early removal scheme', value: '12 November 2018' },
+            { label: 'Parole', value: '3 April 2020' },
+            { label: 'Early transfer', value: '9 August 2019' },
+          ],
+          licenceDates: [
+            { label: 'Licence expiry date', value: '4 February 2020' },
+            { label: 'Sentence expiry', value: '19 February 2020' },
+            { label: 'Top up supervision expiry', value: '14 October 2020' },
+          ],
+          otherReleaseDates: [
+            { label: 'Late transfer', value: '11 August 2021' },
+            { label: 'Tariff', value: '7 May 2021' },
+          ],
+        },
+      })
+    )
+  })
+
+  it('should return the right data when no overrides', async () => {
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+        nonDtoReleaseDateType: 'CRD',
+        additionalDaysAwarded: 5,
+        nonDtoReleaseDate: '2020-04-01',
+        sentenceExpiryDate: '2020-02-19',
+        automaticReleaseDate: '2020-01-01',
+        conditionalReleaseDate: '2020-02-01',
+        nonParoleDate: '2019-02-03',
+        postRecallReleaseDate: '2021-02-03',
+        licenceExpiryDate: '2020-02-04',
+        homeDetentionCurfewEligibilityDate: '2019-07-03',
+        paroleEligibilityDate: '2022-02-03',
+        homeDetentionCurfewActualDate: '2021-06-02',
+        actualParoleDate: '2020-04-03',
+        releaseOnTemporaryLicenceDate: '2025-02-03',
+        earlyRemovalSchemeEligibilityDate: '2018-11-12',
+        earlyTermDate: '2019-08-09',
+        midTermDate: '2020-08-10',
+        lateTermDate: '2021-08-11',
+        topupSupervisionExpiryDate: '2020-10-14',
+        tariffDate: '2021-05-07',
+        dtoPostRecallReleaseDate: '2020-10-16',
+      },
+    })
+    await controller(req, res)
+
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(elite2Api.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        prisonerProfileData,
+        releaseDates: {
+          currentExpectedReleaseDates: [
+            { label: 'Approved for home detention curfew', value: '3 July 2019' },
+            { label: 'Approved for parole', value: '3 February 2022' },
+            { label: 'Conditional release', value: '1 February 2020' },
+            { label: 'Post recall release', value: '3 February 2021' },
+            { label: 'Mid transfer', value: '10 August 2020' },
+            { label: 'Automatic release', value: '1 January 2020' },
+            { label: 'Non parole', value: '3 February 2019' },
+            { label: 'Detention training post recall date', value: '16 October 2020' },
+          ],
+          earlyAndTemporaryReleaseEligibilityDates: [
+            { label: 'Home detention curfew', value: '2 June 2021' },
+            { label: 'Release on temporary licence', value: '3 February 2025' },
+            { label: 'Early removal scheme', value: '12 November 2018' },
+            { label: 'Parole', value: '3 April 2020' },
+            { label: 'Early transfer', value: '9 August 2019' },
+          ],
+          licenceDates: [
+            { label: 'Licence expiry date', value: '4 February 2020' },
+            { label: 'Sentence expiry', value: '19 February 2020' },
+            { label: 'Top up supervision expiry', value: '14 October 2020' },
+          ],
+          otherReleaseDates: [
+            { label: 'Late transfer', value: '11 August 2021' },
+            { label: 'Tariff', value: '7 May 2021' },
+          ],
+        },
+      })
+    )
+  })
+
+  it('should return the right data when sections are empty', async () => {
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+        nonDtoReleaseDateType: 'CRD',
+        additionalDaysAwarded: 5,
+      },
+    })
+    await controller(req, res)
+
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(elite2Api.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        prisonerProfileData,
+        releaseDates: {
+          currentExpectedReleaseDates: [],
+          earlyAndTemporaryReleaseEligibilityDates: [],
+          licenceDates: [],
+          otherReleaseDates: [],
+        },
       })
     )
   })
