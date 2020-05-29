@@ -32,7 +32,8 @@
 
 {{ govukSummaryList({
   rows: visitRows,
-  classes: "govuk-!-margin-bottom-2"
+  classes: "govuk-!-margin-bottom-2",
+  attributes: { "data-test": "visits-summary" }
 }) }}
 
 <a href="#" class="govuk-link govuk-!-font-size-19">Visits information</a>

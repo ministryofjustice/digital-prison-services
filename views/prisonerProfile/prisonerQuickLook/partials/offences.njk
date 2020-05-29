@@ -16,7 +16,8 @@
 
 {{ govukSummaryList({
   rows: offenceRows,
-  classes: "govuk-!-margin-bottom-2"
+  classes: "govuk-!-margin-bottom-2",
+  attributes: { "data-test": "offence-summary" }
 }) }}
 
 <a href="#" class="govuk-link govuk-!-font-size-19">Offence information</a>
