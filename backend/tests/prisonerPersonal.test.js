@@ -15,6 +15,9 @@ describe('prisoner personal', () => {
     location: 'CELL-123',
     offenderName: 'Prisoner, Test',
     offenderNo,
+    interpreterRequired: true,
+    language: 'English',
+    writtenLanguage: 'Russian',
   }
   const bookingId = '123'
   const elite2Api = {}
@@ -43,6 +46,7 @@ describe('prisoner personal', () => {
     elite2Api.getPrisonerProperty = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerAddresses = jest.fn().mockResolvedValue([])
+    elite2Api.getSecondaryLanguages = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
   })
@@ -56,6 +60,44 @@ describe('prisoner personal', () => {
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
         prisonerProfileData,
+      })
+    )
+  })
+
+  it('should make a call to request the prisoners secondary languages', async () => {
+    elite2Api.getDetails.mockResolvedValue({ bookingId: 123 })
+    elite2Api.getSecondaryLanguages.mockResolvedValue([
+      {
+        bookingId: 10000,
+        canRead: true,
+        canSpeak: true,
+        canWrite: true,
+        code: 'ENG',
+        description: 'English',
+      },
+    ])
+    await controller(req, res)
+
+    expect(elite2Api.getSecondaryLanguages).toHaveBeenCalledWith({}, 123)
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+      expect.objectContaining({
+        languages: {
+          interpreterRequired: true,
+          language: 'English',
+          secondaryLanguages: [
+            {
+              key: {
+                classes: 'govuk-summary-list__key--indent',
+                text: 'English',
+              },
+              value: {
+                text: null,
+              },
+            },
+          ],
+          writtenLanguage: 'Russian',
+        },
       })
     )
   })

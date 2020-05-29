@@ -27,6 +27,9 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       categoryCode,
       csra,
       inactiveAlertCount,
+      interpreterRequired,
+      writtenLanguage,
+      language,
     } = prisonerDetails
 
     const [iepDetails, keyworkerSessions, userCaseloads, staffRoles, keyworkerDetails, userRoles] = await Promise.all(
@@ -84,6 +87,9 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,
+      language,
+      interpreterRequired,
+      writtenLanguage,
     }
   }
 
