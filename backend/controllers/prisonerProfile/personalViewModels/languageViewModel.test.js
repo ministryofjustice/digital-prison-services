@@ -4,6 +4,11 @@ const defaults = {
   interpreterRequired: false,
   language: '',
   writtenLanguage: '',
+  speaksAndWritesSamePreferredLanguage: false,
+  writesOnlyInPreferredLanguage: false,
+  noPreferredLanguageEntered: true,
+  speaksAndWritesDifferentPreferredLanguages: false,
+  speaksOnlyInPreferredLanguage: false,
 }
 
 const getEntryWith = (key, value) => ({
@@ -119,5 +124,55 @@ describe('Language view model', () => {
       ...defaults,
       secondaryLanguages: [getEntryWith('english', null)],
     })
+  })
+
+  it('should return speaks and writes for preferred language', () => {
+    const model = languageViewModel({ language: 'english', writtenLanguage: 'english' })
+
+    expect(model).toEqual(
+      expect.objectContaining({
+        speaksAndWritesSamePreferredLanguage: true,
+      })
+    )
+  })
+
+  it('should return speaks and writes for different preferred languages', () => {
+    const model = languageViewModel({ language: 'english', writtenLanguage: 'russian' })
+
+    expect(model).toEqual(
+      expect.objectContaining({
+        speaksAndWritesDifferentPreferredLanguages: true,
+      })
+    )
+  })
+
+  it('should return writes only in preferred language', () => {
+    const model = languageViewModel({ language: null, writtenLanguage: 'english' })
+
+    expect(model).toEqual(
+      expect.objectContaining({
+        writesOnlyInPreferredLanguage: true,
+      })
+    )
+  })
+
+  it('should return speaks only in preferred language', () => {
+    const model = languageViewModel({ language: 'english', writtenLanguage: null })
+
+    expect(model).toEqual(
+      expect.objectContaining({
+        speaksOnlyInPreferredLanguage: true,
+      })
+    )
+  })
+
+  it('should return no preferred language entered', () => {
+    const model = languageViewModel({ language: null, writtenLanguage: null })
+
+    expect(model).toEqual(
+      expect.objectContaining({
+        noPreferredLanguageEntered: true,
+      })
+    )
   })
 })

@@ -12,13 +12,24 @@ const getSecondaryLanguageLabel = lang => {
   return null
 }
 
-module.exports = ({ language, writtenLanguage, interpreterRequired, secondaryLanguages }) => {
-  const writesDifferentToSpeaks = language !== writtenLanguage
+module.exports = ({ language, writtenLanguage, interpreterRequired, secondaryLanguages = [] }) => {
+  const speaksAndWritesSamePreferredLanguage = Boolean(language && writtenLanguage && language === writtenLanguage)
+  const writesOnlyInPreferredLanguage = Boolean(writtenLanguage && !language)
+  const speaksOnlyInPreferredLanguage = Boolean(language && !writtenLanguage)
+  const noPreferredLanguageEntered = Boolean(!language && !writtenLanguage)
+  const speaksAndWritesDifferentPreferredLanguages = Boolean(
+    language && writtenLanguage && language !== writtenLanguage
+  )
 
   return {
     language,
     writtenLanguage,
     interpreterRequired,
+    speaksAndWritesSamePreferredLanguage,
+    writesOnlyInPreferredLanguage,
+    speaksOnlyInPreferredLanguage,
+    noPreferredLanguageEntered,
+    speaksAndWritesDifferentPreferredLanguages,
     secondaryLanguages: secondaryLanguages.map(lang => ({
       key: { text: lang.description, classes: 'govuk-summary-list__key--indent' },
       value: { text: getSecondaryLanguageLabel(lang) },
