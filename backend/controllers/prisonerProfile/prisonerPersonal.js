@@ -11,6 +11,7 @@ const {
   personalDetailsViewModel,
   physicalCharacteristicsViewModel,
   activeContactsViewModel,
+  languageViewModel,
 } = require('./personalViewModels')
 
 module.exports = ({ prisonerProfileService, personService, elite2Api, logError }) => async (req, res) => {
@@ -24,7 +25,15 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     })
   const { bookingId } = basicPrisonerDetails || {}
 
-  const [prisonerProfileData, fullPrisonerDetails, identifiers, aliases, property, contacts] = await Promise.all(
+  const [
+    prisonerProfileData,
+    fullPrisonerDetails,
+    identifiers,
+    aliases,
+    property,
+    contacts,
+    secondaryLanguages,
+  ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getPrisonerDetail(res.locals, bookingId),
@@ -32,6 +41,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       elite2Api.getOffenderAliases(res.locals, bookingId),
       elite2Api.getPrisonerProperty(res.locals, bookingId),
       elite2Api.getPrisonerContacts(res.locals, bookingId),
+      elite2Api.getSecondaryLanguages(res.locals, bookingId),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
@@ -50,9 +60,11 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     ))
 
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails
+  const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
 
   return res.render('prisonerProfile/prisonerPersonal/prisonerPersonal.njk', {
     prisonerProfileData,
+    languages: languageViewModel({ language, writtenLanguage, interpreterRequired, secondaryLanguages }),
     aliases: aliasesViewModel({ aliases }),
     distinguishingMarks: distinguishingMarksViewModel({ physicalMarks }),
     identifiers: identifiersViewModel({ identifiers }),

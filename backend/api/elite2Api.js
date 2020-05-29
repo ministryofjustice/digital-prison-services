@@ -272,6 +272,8 @@ const elite2ApiFactory = client => {
 
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 
+  const getSecondaryLanguages = (context, bookingId) => get(context, `/api/bookings/${bookingId}/secondary-languages`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -354,6 +356,7 @@ const elite2ApiFactory = client => {
     getPersonEmails,
     getPersonPhones,
     getProfileInformation,
+    getSecondaryLanguages,
   }
 }
 
