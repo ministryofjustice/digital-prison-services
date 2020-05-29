@@ -3,7 +3,7 @@
 {% endif %}
 
 {% if languages.speaksAndWritesSamePreferredLanguage %}
-    <strong class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ languages.language }}</strong>
+    <b class="govuk-body govuk-!-font-size-19">{{ languages.language }}</b>  {% if languages.interpreterRequired %} - interpreter required {% endif %}
 {% endif %}
 
 {% if languages.writesOnlyInPreferredLanguage %}
@@ -14,7 +14,7 @@
 
 {% if languages.speaksOnlyInPreferredLanguage %}
     <div class="govuk-body govuk-!-font-size-19">
-        <strong class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ languages.language }}</strong>
+        <b>{{ languages.language }}</b>  {% if languages.interpreterRequired %} - interpreter required {% endif %}
     </div>
 {% endif %}
 
