@@ -4,7 +4,7 @@ const path = require('path')
 const router = express.Router()
 
 module.exports = () => {
-  router.use(express.static(path.join(__dirname, '../build'))) // << this needed?
+  router.use('/bundle.js', express.static(path.join(__dirname, '../build/bundle.js')))
   router.use(express.static(path.join(__dirname, '../build/static')))
 
   const assetPaths = [
