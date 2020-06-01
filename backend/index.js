@@ -39,7 +39,6 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi }))
 app.use(setupWebpackForDev())
-app.use(setupRedirects())
 app.use(routes({ ...apis }))
 
 app.get('*', (req, res) => {
