@@ -9,41 +9,57 @@
 {% set missingEntry = "Not entered" %}
 
 {% set physicalCharacteristicsContent %}
-  {% include "./partials/physicalCharacteristics.njk" %}
+  <div data-test="physical-characteristics-summary">
+    {% include "./partials/physicalCharacteristics.njk" %}
+  </div>
 {% endset %}
 
 {% set distinguishingMarksContent %}
-  {% include "./partials/distinguishingMarks.njk" %}
+  <div data-test="distinguishing-marks-summary">
+    {% include "./partials/distinguishingMarks.njk" %}
+  </div>
 {% endset %}
 
 {% set aliasesContent %}
-  {% include "./partials/aliases.njk" %}
+  <div data-test="aliases-summary">
+    {% include "./partials/aliases.njk" %}
+  </div>
 {% endset %}
 
 {% set identifierContent %}
-  {{ prisonerSummarySection(identifiers) }}
+  <div data-test="identifiers-summary">
+    {{ prisonerSummarySection(identifiers) }}
+  </div>
 {% endset %}
 
 {% set personalContent %}
-  {{ prisonerSummarySection(personalDetails.primary) }}
-  {{ prisonerSummarySection(personalDetails.secondary) }}
-  {{ prisonerSummarySection(personalDetails.tertiary) }}
-  {{ prisonerSummarySection(personalDetails.receptionWarnings) }}
-  {{ prisonerSummarySection(personalDetails.listener) }}
-  {{ prisonerSummarySection(personalDetails.domesticAbuse) }}
-  {% include "./partials/property.njk" %}
+  <div data-test="personal-summary">
+    {{ prisonerSummarySection(personalDetails.primary) }}
+    {{ prisonerSummarySection(personalDetails.secondary) }}
+    {{ prisonerSummarySection(personalDetails.tertiary) }}
+    {{ prisonerSummarySection(personalDetails.receptionWarnings) }}
+    {{ prisonerSummarySection(personalDetails.listener) }}
+    {{ prisonerSummarySection(personalDetails.domesticAbuse) }}
+    {% include "./partials/property.njk" %}
+  </div>
 {% endset %}
 
 {% set activeContactsContent %}
-  {% include "./partials/activeContacts.njk" %}
+  <div data-test="active-contacts-summary">
+    {% include "./partials/activeContacts.njk" %}
+  </div>
 {% endset %}
 
 {% set languages %}
-    {%  include "./partials/languages.njk" %}
+  <div data-test="languages-summary">
+    {% include "./partials/languages.njk" %}
+  </div>
 {%  endset %}
 
 {% set addressesContent %}
-  {% include "./partials/addresses.njk" %}
+  <div data-test="addresses-summary">
+    {% include "./partials/addresses.njk" %}
+  </div>
 {% endset %}
 
 {% set leftSections = [

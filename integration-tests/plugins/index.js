@@ -65,6 +65,16 @@ module.exports = on => {
         elite2api.stubEventsForToday(todaysEvents),
         elite2api.stubProfileInformation(profileInformation),
       ]),
+    stubPersonal: ({ prisonerDetails, identifiers, aliases, property, contacts, addresses, secondaryLanguages }) =>
+      Promise.all([
+        elite2api.stubPrisonerDetails(prisonerDetails),
+        elite2api.stubIdentifiers(identifiers),
+        elite2api.stubOffenderAliases(aliases),
+        elite2api.stubPrisonerProperty(property),
+        elite2api.stubPrisonerContacts(contacts),
+        elite2api.stubPrisonerAddresses(addresses),
+        elite2api.stubSecondaryLanguages(secondaryLanguages),
+      ]),
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
   })
 }

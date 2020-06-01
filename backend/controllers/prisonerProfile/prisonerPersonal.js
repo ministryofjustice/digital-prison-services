@@ -62,7 +62,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       }))
     ))
 
-  const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails
+  const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
 
   return res.render('prisonerProfile/prisonerPersonal/prisonerPersonal.njk', {

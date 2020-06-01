@@ -356,4 +356,94 @@ module.exports = {
       },
     })
   },
+  stubIdentifiers: identifiers => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/identifiers',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: identifiers || [],
+      },
+    })
+  },
+  stubOffenderAliases: aliases => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/aliases',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: aliases || [],
+      },
+    })
+  },
+  stubPrisonerProperty: property => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/property',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: property || [],
+      },
+    })
+  },
+  stubPrisonerContacts: contacts => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/contacts',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: contacts || [],
+      },
+    })
+  },
+  stubSecondaryLanguages: secondaryLanguages => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/secondary-languages',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: secondaryLanguages || [],
+      },
+    })
+  },
+  stubPrisonerAddresses: addresses => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/offenders/.+?/addresses',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: addresses || [],
+      },
+    })
+  },
 }
