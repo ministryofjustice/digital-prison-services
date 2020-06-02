@@ -22,11 +22,11 @@
 {% endif %}
 
 {% if languages.speaksAndWritesDifferentPreferredLanguages %}
-    <div class="govuk-body govuk-!-font-size-19">
+    <div class="govuk-body govuk-!-font-size-19" data-test="language-speaks-different">
         <b>{{ languages.language }}</b> {% if languages.interpreterRequired %} - interpreter required {% endif %}
     </div>
 
-    <div class="govuk-body govuk-!-font-size-19">
+    <div class="govuk-body govuk-!-font-size-19" data-test="language-written-different">
         <b>{{ languages.writtenLanguage }}</b> (writes)
     </div>
 {% endif %}
