@@ -160,7 +160,7 @@ describe('prisoner personal', () => {
       elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
 
-    it('should make a call for identifiers data', async () => {
+    it('should make a call for aliases data', async () => {
       await controller(req, res)
 
       expect(elite2Api.getOffenderAliases).toHaveBeenCalledWith(res.locals, bookingId)

@@ -191,6 +191,21 @@ module.exports = {
       },
     })
   },
+  stubPrisonerDetail: prisonerDetail => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: prisonerDetail || {},
+      },
+    })
+  },
   stubPrisonerDetails: prisonerDetails => {
     return stubFor({
       request: {
@@ -443,6 +458,51 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: addresses || [],
+      },
+    })
+  },
+  stubPersonAddresses: addresses => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/persons/.+?/addresses',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: addresses || [],
+      },
+    })
+  },
+  stubPersonEmails: emails => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/persons/.+?/emails',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: emails || [],
+      },
+    })
+  },
+  stubPersonPhones: phones => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/persons/.+?/phones',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: phones || [],
       },
     })
   },
