@@ -8,7 +8,7 @@ const config = require('./config')
 
 const router = express.Router()
 
-module.exports = ({ oauthApi }) => {
+module.exports = ({ oauthApi, tokenVerificationApi }) => {
   auth.init()
   const tokenRefresher = tokenRefresherFactory(oauthApi.refresh, config.app.tokenRefreshThresholdSeconds)
 
@@ -20,6 +20,7 @@ module.exports = ({ oauthApi }) => {
   sessionManagementRoutes.configureRoutes({
     app: router,
     tokenRefresher,
+    tokenVerifier: tokenVerificationApi.verifyToken,
     mailTo: config.app.mailTo,
     homeLink: config.app.notmEndpointUrl,
   })
