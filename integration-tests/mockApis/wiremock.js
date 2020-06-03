@@ -6,6 +6,8 @@ const stubFor = mapping => superagent.post(`${url}/mappings`).send(mapping)
 
 const getRequests = () => superagent.get(`${url}/requests`)
 
+const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send(body)
+
 const resetStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
 const getFor = ({ body, urlPattern, urlPath }) =>
@@ -27,6 +29,7 @@ const getFor = ({ body, urlPattern, urlPath }) =>
 module.exports = {
   stubFor,
   getRequests,
+  getMatchingRequests,
   resetStubs,
   getFor,
 }

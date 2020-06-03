@@ -1,7 +1,8 @@
 const CourtVideoLinkHomePage = require('../../pages/videolink/courtVideoLinkHomePage')
 
 context('A user can view the video link home page', () => {
-  beforeEach(() => {
+  before(() => {
+    cy.clearCookies()
     cy.task('reset')
     cy.task('stubLoginCourt')
     cy.login()

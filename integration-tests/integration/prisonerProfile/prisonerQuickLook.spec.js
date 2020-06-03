@@ -6,6 +6,8 @@ const bookingId = 14
 
 context('Prisoner quick look', () => {
   before(() => {
+    cy.clearCookies()
+    cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
 
