@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { stubFor, getRequests } = require('./wiremock')
+const { stubFor, getMatchingRequests } = require('./wiremock')
 
 const createToken = () => {
   const payload = {
@@ -16,10 +16,12 @@ const createToken = () => {
 }
 
 const getLoginUrl = () =>
-  getRequests().then(data => {
+  getMatchingRequests({
+    method: 'GET',
+    urlPath: '/auth/oauth/authorize',
+  }).then(data => {
     const { requests } = data.body
-    const stateParam = requests[0].request.queryParams.state
-    const stateValue = stateParam ? stateParam.values[0] : requests[1].request.queryParams.state.values[0]
+    const stateValue = requests[0].queryParams.state.values[0]
     return `/login/callback?code=codexxxx&state=${stateValue}`
   })
 

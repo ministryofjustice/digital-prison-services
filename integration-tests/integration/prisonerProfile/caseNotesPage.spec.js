@@ -33,7 +33,8 @@ const caseNotes = [
 ]
 
 context('A user can view prisoner case notes', () => {
-  beforeEach(() => {
+  before(() => {
+    cy.clearCookies()
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
     cy.login()

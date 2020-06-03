@@ -1,6 +1,7 @@
 const auth = require('../mockApis/auth')
 const elite2api = require('../mockApis/elite2')
 const whereabouts = require('../mockApis/whereabouts')
+const tokenverification = require('../mockApis/tokenverification')
 const keyworker = require('../mockApis/keyworker')
 const caseNotes = require('../mockApis/caseNotes')
 
@@ -8,12 +9,21 @@ const { resetStubs } = require('../mockApis/wiremock')
 
 module.exports = on => {
   on('task', {
-    reset: () => Promise.all([resetStubs()]),
-
+    reset: resetStubs,
+    resetAndStubTokenVerification: async () => {
+      await resetStubs()
+      return tokenverification.stubVerifyToken(true)
+    },
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username, caseload }) =>
-      Promise.all([auth.stubLogin(username, caseload), elite2api.stubUserMe(), elite2api.stubUserCaseloads()]),
-    stubLoginCourt: () => Promise.all([auth.stubLoginCourt({}), elite2api.stubUserCaseloads()]),
+      Promise.all([
+        auth.stubLogin(username, caseload),
+        elite2api.stubUserMe(),
+        elite2api.stubUserCaseloads(),
+        tokenverification.stubVerifyToken(true),
+      ]),
+    stubLoginCourt: () =>
+      Promise.all([auth.stubLoginCourt({}), elite2api.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
 
@@ -90,5 +100,6 @@ module.exports = on => {
         elite2api.stubPersonPhones(personPhones),
       ]),
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
+    stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
   })
 }

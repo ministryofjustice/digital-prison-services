@@ -4,13 +4,15 @@ const offenderFullDetails = require('../../mockApis/responses/offenderFullDetail
 
 context('A user can view alerts for a prisoner', () => {
   before(() => {
+    cy.clearCookies()
+    cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     // Maintain session between the two tests.
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     const iepSummary = {}
     const caseNoteSummary = {}
     cy.task('stubPrisonerProfileHeaderData', { offenderBasicDetails, offenderFullDetails, iepSummary, caseNoteSummary })

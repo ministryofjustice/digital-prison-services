@@ -5,13 +5,15 @@ context('Prisoner personal', () => {
   const offenderNo = 'A12345'
 
   before(() => {
+    cy.clearCookies()
+    cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
   })
 
   context('When there is no data', () => {
