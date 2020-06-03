@@ -37,7 +37,7 @@ app.use(setupRedirects())
 app.use(setupSass())
 app.use(setupStaticContent())
 app.use(setupWebSession())
-app.use(setupAuth({ oauthApi: apis.oauthApi }))
+app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 app.use(setupWebpackForDev())
 app.use(routes({ ...apis }))
 

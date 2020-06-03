@@ -7,6 +7,7 @@ const { communityApiFactory } = require('./api/communityApi')
 const { dataComplianceApiFactory } = require('./api/dataComplianceApi')
 const { keyworkerApiFactory } = require('./api/keyworkerApi')
 const { caseNotesApiFactory } = require('./api/caseNotesApi')
+const { tokenVerificationApiFactory } = require('./api/tokenVerificationApi')
 
 const elite2Api = elite2ApiFactory(
   clientFactory({
@@ -59,6 +60,13 @@ const caseNotesApi = caseNotesApiFactory(
   })
 )
 
+const tokenVerificationApi = tokenVerificationApiFactory(
+  clientFactory({
+    baseUrl: config.apis.tokenverification.url,
+    timeout: config.apis.tokenverification.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
@@ -67,4 +75,5 @@ module.exports = {
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
+  tokenVerificationApi,
 }

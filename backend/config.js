@@ -60,6 +60,7 @@ module.exports = {
     tokenverification: {
       url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
       timeoutSeconds: process.env.TOKENVERIFICATION_API_URL || 30,
+      enabled: process.env.TOKENVERIFICATION_API_ENABLED || false,
     },
     categorisation: {
       ui_url: process.env.CATEGORISATION_UI_URL || 'http://localhost:3003/',
