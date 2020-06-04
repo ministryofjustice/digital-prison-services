@@ -216,6 +216,26 @@ context('Prisoner personal', () => {
           noFixedAddress: false,
           startDate: '2020-05-01',
           phones: [{ number: '011111111111', type: 'MOB' }],
+          addressUsages: [
+            {
+              addressId: 123,
+              addressUsage: 'DAP',
+              addressUsageDescription: 'Discharge - Approved Premises',
+              activeFlag: false,
+            },
+            {
+              addressId: 123,
+              addressUsage: 'HDC',
+              addressUsageDescription: 'HDC Address',
+              activeFlag: true,
+            },
+            {
+              addressId: 123,
+              addressUsage: 'HOST',
+              addressUsageDescription: 'Approved Premises',
+              activeFlag: true,
+            },
+          ],
         },
         {
           addressType: 'HOME',
@@ -231,6 +251,7 @@ context('Prisoner personal', () => {
           noFixedAddress: false,
           startDate: '2020-05-01',
           phones: [{ number: '011111111111', type: 'MOB' }],
+          addressUsages: [],
         },
       ]
 
@@ -627,6 +648,16 @@ context('Prisoner personal', () => {
                 .its('length')
                 .should('eq', 1)
               expect($headings.get(0).innerText).to.contain('Primary address')
+            })
+
+          cy.get($section)
+            .find('[data-test="address-type"]')
+            .then($addressTypes => {
+              cy.get($addressTypes)
+                .its('length')
+                .should('eq', 2)
+              expect($addressTypes.get(0).innerText).to.contain('HDC Address')
+              expect($addressTypes.get(1).innerText).to.contain('Approved Premises')
             })
 
           cy.get($section)

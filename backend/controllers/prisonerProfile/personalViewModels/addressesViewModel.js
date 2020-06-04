@@ -4,9 +4,11 @@ const { getAddress } = require('../../../shared/addressHelpers')
 module.exports = ({ addresses }) => {
   const primaryAddress = addresses.find(address => address.primary)
 
+  const { addressUsages } = primaryAddress || {}
+
   const formattedPrimaryAddress = {
     label: 'Primary address',
-    type: primaryAddress && primaryAddress.addressType,
+    types: addressUsages && addressUsages.filter(usage => usage.activeFlag).map(usage => usage.addressUsageDescription),
     noFixedAddress: primaryAddress && primaryAddress.noFixedAddress,
     noAddressMessage: !primaryAddress && 'No active, primary address entered',
     details: primaryAddress && [

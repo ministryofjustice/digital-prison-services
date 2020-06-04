@@ -1142,6 +1142,26 @@ describe('prisoner personal', () => {
       noFixedAddress: false,
       startDate: '2020-05-01',
       phones: [{ number: '011111111111', type: 'MOB' }],
+      addressUsages: [
+        {
+          addressId: 123,
+          addressUsage: 'DAP',
+          addressUsageDescription: 'Discharge - Approved Premises',
+          activeFlag: false,
+        },
+        {
+          addressId: 123,
+          addressUsage: 'HDC',
+          addressUsageDescription: 'HDC Address',
+          activeFlag: true,
+        },
+        {
+          addressId: 123,
+          addressUsage: 'HOST',
+          addressUsageDescription: 'Approved Premises',
+          activeFlag: true,
+        },
+      ],
     }
 
     const nonPrimaryAddress = {
@@ -1158,6 +1178,7 @@ describe('prisoner personal', () => {
       noFixedAddress: false,
       startDate: '2020-05-01',
       phones: [{ number: '011111111111', type: 'MOB' }],
+      addressUsages: [],
     }
 
     beforeEach(() => {
@@ -1205,7 +1226,7 @@ describe('prisoner personal', () => {
             addresses: [
               {
                 label: 'Primary address',
-                type: 'HOME',
+                types: ['HDC Address', 'Approved Premises'],
                 noFixedAddress: false,
                 noAddressMessage: false,
                 details: [
@@ -1241,7 +1262,7 @@ describe('prisoner personal', () => {
               addresses: [
                 {
                   label: 'Primary address',
-                  type: 'HOME',
+                  types: ['HDC Address', 'Approved Premises'],
                   noFixedAddress: false,
                   noAddressMessage: false,
                   details: [
@@ -1273,7 +1294,7 @@ describe('prisoner personal', () => {
               addresses: [
                 {
                   label: 'Primary address',
-                  type: 'HOME',
+                  types: ['HDC Address', 'Approved Premises'],
                   noFixedAddress: false,
                   noAddressMessage: false,
                   details: [
