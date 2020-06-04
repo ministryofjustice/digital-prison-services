@@ -31,7 +31,7 @@ const globalSearchFactory = elite2Api => {
     const data = await (isOffenderNumber(text)
       ? searchByOffender(context, text, gender, location, dateOfBirth)
       : searchByName(context, text, gender, location, dateOfBirth))
-    log.info(data, 'globalSearch data received')
+    log.info(data.size, 'globalSearch data received')
 
     const offenderOutIds = data
       .filter(offender => offender.latestLocationId === 'OUT')
