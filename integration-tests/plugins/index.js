@@ -15,7 +15,7 @@ module.exports = on => {
       return tokenverification.stubVerifyToken(true)
     },
     getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username, caseload }) =>
+    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI' }) =>
       Promise.all([
         auth.stubLogin(username, caseload),
         elite2api.stubUserMe(),
@@ -101,5 +101,6 @@ module.exports = on => {
       ]),
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
+    stubLoginPage: auth.redirect,
   })
 }

@@ -1,7 +1,8 @@
 const AttendanceChangesPage = require('../../pages/attendance/attendanceChangesPage')
 
 context('A user can view attendance changes', () => {
-  beforeEach(() => {
+  before(() => {
+    cy.clearCookies()
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
     cy.login()
