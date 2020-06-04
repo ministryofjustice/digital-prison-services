@@ -1140,8 +1140,29 @@ describe('prisoner personal', () => {
       comment: 'address comment field',
       primary: true,
       noFixedAddress: false,
-      startDate: '2020-05-01',
+      startDate: '2019-01-13',
+      endDate: '2020-01-13',
       phones: [{ number: '011111111111', type: 'MOB' }],
+      addressUsages: [
+        {
+          addressId: 123,
+          addressUsage: 'DAP',
+          addressUsageDescription: 'Discharge - Approved Premises',
+          activeFlag: false,
+        },
+        {
+          addressId: 123,
+          addressUsage: 'HDC',
+          addressUsageDescription: 'HDC Address',
+          activeFlag: true,
+        },
+        {
+          addressId: 123,
+          addressUsage: 'HOST',
+          addressUsageDescription: 'Approved Premises',
+          activeFlag: true,
+        },
+      ],
     }
 
     const nonPrimaryAddress = {
@@ -1158,6 +1179,7 @@ describe('prisoner personal', () => {
       noFixedAddress: false,
       startDate: '2020-05-01',
       phones: [{ number: '011111111111', type: 'MOB' }],
+      addressUsages: [],
     }
 
     beforeEach(() => {
@@ -1194,6 +1216,11 @@ describe('prisoner personal', () => {
     describe('when there is prisoner address data', () => {
       beforeEach(() => {
         elite2Api.getPrisonerAddresses.mockResolvedValue([primaryAddress, nonPrimaryAddress])
+        jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
+      })
+
+      afterEach(() => {
+        Date.now.mockRestore()
       })
 
       it('should render the template with the correct primary address data', async () => {
@@ -1205,7 +1232,7 @@ describe('prisoner personal', () => {
             addresses: [
               {
                 label: 'Primary address',
-                type: 'HOME',
+                types: ['HDC Address', 'Approved Premises'],
                 noFixedAddress: false,
                 noAddressMessage: false,
                 details: [
@@ -1215,7 +1242,7 @@ describe('prisoner personal', () => {
                   { label: 'Postcode', value: 'LS1 AAA' },
                   { label: 'Country', value: 'England' },
                   { label: 'Address phone', value: '011111111111' },
-                  { label: 'Added', value: 'May 2020' },
+                  { label: 'Added', value: 'January 2019' },
                   { label: 'Comments', value: 'address comment field' },
                 ],
               },
@@ -1241,7 +1268,7 @@ describe('prisoner personal', () => {
               addresses: [
                 {
                   label: 'Primary address',
-                  type: 'HOME',
+                  types: ['HDC Address', 'Approved Premises'],
                   noFixedAddress: false,
                   noAddressMessage: false,
                   details: [
@@ -1249,7 +1276,7 @@ describe('prisoner personal', () => {
                     { label: 'Town', value: 'Ulverston' },
                     { label: 'Postcode', value: 'LS1 AAA' },
                     { label: 'Address phone', value: '011111111111' },
-                    { label: 'Added', value: 'May 2020' },
+                    { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],
                 },
@@ -1273,7 +1300,7 @@ describe('prisoner personal', () => {
               addresses: [
                 {
                   label: 'Primary address',
-                  type: 'HOME',
+                  types: ['HDC Address', 'Approved Premises'],
                   noFixedAddress: false,
                   noAddressMessage: false,
                   details: [
@@ -1283,9 +1310,37 @@ describe('prisoner personal', () => {
                     { label: 'Postcode', value: 'LS1 AAA' },
                     { label: 'Country', value: 'England' },
                     { label: 'Address phone', value: '011111111111' },
-                    { label: 'Added', value: 'May 2020' },
+                    { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],
+                },
+              ],
+            })
+          )
+        })
+      })
+
+      describe('when the primary address has an end date in the past', () => {
+        beforeEach(() => {
+          elite2Api.getPrisonerAddresses.mockResolvedValue([
+            { ...primaryAddress, endDate: '2020-1-11' },
+            nonPrimaryAddress,
+          ])
+        })
+
+        it('should not return any of the addresses', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              addresses: [
+                {
+                  label: 'Primary address',
+                  type: undefined,
+                  noFixedAddress: undefined,
+                  noAddressMessage: 'No active, primary address entered',
+                  details: undefined,
                 },
               ],
             })
