@@ -147,6 +147,30 @@
     border-color: #330;
     background-color: #330;
   }
+
+  &--reverse-cohorting-unit {
+    color: #FFF;
+    border-color: mix(white, #00703C, 20%);
+    background-color: mix(white, #00703C, 20%);
+  }
+  
+  &--protective-isolation-unit {
+    color: #FFF;
+    border-color: #006637;
+    background-color: #006637;
+  }
+  
+  &--shielding-unit {
+    color: #FFF;
+    border-color: #004424;
+    background-color: #004424;
+  }
+  
+  &--refusing-to-shield {
+    color: #FFF;
+    border-color: #B58840;
+    background-color: #B58840;
+  }
 }
 
 .cat-a-status {
