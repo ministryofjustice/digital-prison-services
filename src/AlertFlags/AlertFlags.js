@@ -37,6 +37,10 @@ const AlertFlags = ({ alerts, category }) => {
       {isShown('RNO121') && <AlertFlag className="no-one-to-one-status">NO ONE-TO-ONE</AlertFlag>}
       {isShown('PEEP') && <AlertFlag className="disability-status">PEEP</AlertFlag>}
       {isShown('RCDR') && <AlertFlag className="quarantined-status">QUARANTINED</AlertFlag>}
+      {isShown('URCU') && <AlertFlag className="reverse-cohorting-unit-status">REVERSE COHORTING UNIT</AlertFlag>}
+      {isShown('UPIU') && <AlertFlag className="protective-isolation-unit-status">PROTECTIVE ISOLATION UNIT</AlertFlag>}
+      {isShown('USU') && <AlertFlag className="shielding-unit-status">SHIELDING UNIT</AlertFlag>}
+      {isShown('URS') && <AlertFlag className="refusing-to-shield-status">REFUSING TO SHIELD</AlertFlag>}
       {(category === 'A' || category === 'E') && <AlertFlag className="cata-status">CAT A</AlertFlag>}
       {category === 'H' && <AlertFlag className="cata-high-status">CAT A High</AlertFlag>}
       {category === 'P' && <AlertFlag className="cata-prov-status">CAT A Prov</AlertFlag>}

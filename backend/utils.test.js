@@ -266,6 +266,22 @@ describe('isViewableFlag', () => {
     expect(isViewableFlag('RCDR')).toBe(true)
   })
 
+  it('should allow URCU to be a viewable flag', () => {
+    expect(isViewableFlag('URCU')).toBe(true)
+  })
+
+  it('should allow UPIU to be a viewable flag', () => {
+    expect(isViewableFlag('UPIU')).toBe(true)
+  })
+
+  it('should allow USU to be a viewable flag', () => {
+    expect(isViewableFlag('USU')).toBe(true)
+  })
+
+  it('should allow URS to be a viewable flag', () => {
+    expect(isViewableFlag('URS')).toBe(true)
+  })
+
   it('should not allow any non specified alerts to be a viewable flag', () => {
     expect(isViewableFlag('ROH')).toBe(false)
   })

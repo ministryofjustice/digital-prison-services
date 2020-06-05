@@ -84,4 +84,16 @@ module.exports = [
     classes: 'alert-status alert-status--quarantined',
     label: 'Quarantined',
   },
+  {
+    alertCodes: ['URCU'],
+    classes: 'alert-status reverse-cohorting-unit',
+    label: 'Reverse Cohorting Unit',
+  },
+  {
+    alertCodes: ['UPIU'],
+    classes: 'alert-status protective-isolation-unit',
+    label: 'Protective Isolation Unit',
+  },
+  { alertCodes: ['USU'], classes: 'alert-status shielding-unit', label: 'Shielding Unit' },
+  { alertCodes: ['URS'], classes: 'alert-status refusing-to-shield', label: 'Refusing to shield' },
 ].sort((a, b) => a.label.localeCompare(b.label))
