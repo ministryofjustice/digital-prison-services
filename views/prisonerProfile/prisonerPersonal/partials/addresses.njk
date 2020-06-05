@@ -10,7 +10,7 @@
       <p class="govuk-body govuk-!-margin-bottom-1" data-test="address-type">{{ addressType }}</p>
     {% endfor %}
 
-    {{ prisonerSummarySection(address.details) }}
+    {{ prisonerSummarySection(address.details, indentKey = true) }}
   {% else %}
     <p class="govuk-body">{{ address.noAddressMessage }}</p>
   {% endif %}
