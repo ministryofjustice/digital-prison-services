@@ -13,7 +13,7 @@ module.exports = ({ addresses }) => {
     noFixedAddress: primaryAddress && primaryAddress.noFixedAddress,
     noAddressMessage: !primaryAddress && 'No active, primary address entered',
     details: primaryAddress && [
-      ...getAddress(primaryAddress, false),
+      ...getAddress({ address: primaryAddress, showType: false, phoneLabel: 'Phone' }),
       { label: 'Added', value: primaryAddress.startDate && moment(primaryAddress.startDate).format('MMMM YYYY') },
       ...(primaryAddress.comment ? [{ label: 'Comments', value: primaryAddress.comment }] : []),
     ],
