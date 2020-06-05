@@ -672,7 +672,7 @@ context('Prisoner personal', () => {
                 expect($summaryLabels.get(2).innerText).to.contain('County')
                 expect($summaryLabels.get(3).innerText).to.contain('Postcode')
                 expect($summaryLabels.get(4).innerText).to.contain('Country')
-                expect($summaryLabels.get(5).innerText).to.contain('Address phone')
+                expect($summaryLabels.get(5).innerText).to.contain('Phone')
                 expect($summaryLabels.get(6).innerText).to.contain('Added')
                 expect($summaryLabels.get(7).innerText).to.contain('Comments')
               })
