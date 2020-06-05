@@ -1,8 +1,14 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const { clickIfExist } = require('../../test-helpers')
 
 context('Prisoner personal', () => {
   const offenderNo = 'A12345'
+
+  const visitPersonalAndExpandAccordions = () => {
+    cy.visit(`/prisoner/${offenderNo}/personal`)
+    clickIfExist('.govuk-accordion__open-all[aria-expanded="false"]') // Not needed to check values but useful for viewing cypress snapshots
+  }
 
   before(() => {
     cy.clearCookies()
@@ -27,7 +33,7 @@ context('Prisoner personal', () => {
         caseNoteSummary: {},
       })
       cy.task('stubPersonal', {})
-      cy.visit(`/prisoner/${offenderNo}/personal`)
+      visitPersonalAndExpandAccordions()
     })
 
     context('Personal section', () => {
@@ -382,7 +388,8 @@ context('Prisoner personal', () => {
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
           personPhones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
         })
-        cy.visit(`/prisoner/${offenderNo}/personal`)
+
+        visitPersonalAndExpandAccordions()
       })
       context('Personal section', () => {
         it('Should show correct labels and values', () => {
@@ -763,7 +770,7 @@ context('Prisoner personal', () => {
       before(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', { addresses: [{ ...primaryAddress, noFixedAddress: true }] })
-        cy.visit(`/prisoner/${offenderNo}/personal`)
+        visitPersonalAndExpandAccordions()
       })
 
       it('Should show the correct content in the address section', () => {
