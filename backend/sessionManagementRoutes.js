@@ -84,6 +84,7 @@ const configureRoutes = ({ app, tokenRefresher, tokenVerifier, mailTo, homeLink 
       next()
       return
     }
+    req.logout() // need logout as want session recreated from latest auth credentials
     if (isXHRRequest(req)) {
       res.status(401)
       res.json({ reason: 'session-expired' })
