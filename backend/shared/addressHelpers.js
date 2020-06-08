@@ -2,7 +2,7 @@ const { capitalize } = require('../utils')
 
 const getPhone = phones => phones && phones.map(phone => phone.number).join(', ')
 
-const getAddress = (address = {}, showType = true) => {
+const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone' }) => {
   const flat = address.flat && `Flat ${address.flat}`
   const streetWithNumber = [flat, address.premise, address.street].filter(value => value)
 
@@ -12,7 +12,7 @@ const getAddress = (address = {}, showType = true) => {
     ...(address.county ? [{ label: 'County', value: address.county }] : []),
     { label: 'Postcode', value: address.postalCode },
     ...(address.country ? [{ label: 'Country', value: address.country }] : []),
-    { label: 'Address phone', value: getPhone(address.phones) },
+    { label: phoneLabel, value: getPhone(address.phones) },
     ...(showType ? [{ label: 'Address type', value: address.addressType && capitalize(address.addressType) }] : []),
   ]
 }

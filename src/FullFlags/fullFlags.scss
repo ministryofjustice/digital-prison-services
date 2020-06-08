@@ -111,6 +111,34 @@
     background-color: #330;
   }
 
+  .reverse-cohorting-unit-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: mix(white, #00703C, 20%);
+    background-color: mix(white, #00703C, 20%);
+  }
+  
+  .protective-isolation-unit-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #006637;
+    background-color: #006637;
+  }
+  
+  .shielding-unit-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #004424;
+    background-color: #004424;
+  }
+  
+  .refusing-to-shield-status {
+    @extend %status-style;
+    color: #FFF;
+    border-color: #B58840;
+    background-color: #B58840;
+  }
+
   @media (min-width: 481px) {
     .inline-header-large {
       display: inline-block;
