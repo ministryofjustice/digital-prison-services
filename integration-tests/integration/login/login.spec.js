@@ -10,28 +10,28 @@ context('Login functionality', () => {
     cy.task('reset')
   })
 
-  it.skip('Root (/) redirects to the auth login page if not logged in', () => {
+  it('Root (/) redirects to the auth login page if not logged in', () => {
     cy.task('stubLoginPage')
     cy.visit('/')
     cy.url().should('include', 'authorize')
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
-  it.skip('Login page redirects to the auth login page if not logged in', () => {
+  it('Login page redirects to the auth login page if not logged in', () => {
     cy.task('stubLoginPage')
     cy.visit('/login')
     cy.url().should('include', 'authorize')
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
-  it.skip('Page redirects to the auth login page if not logged in', () => {
+  it('Page redirects to the auth login page if not logged in', () => {
     cy.task('stubLogin', {})
     cy.visit('/login')
     cy.url().should('include', 'authorize')
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
-  it.skip('Logout takes user to login page', () => {
+  it('Logout takes user to login page', () => {
     cy.task('stubLogin', {})
     cy.login()
     SearchPage.verifyOnPage()
@@ -54,13 +54,13 @@ context('Login functionality', () => {
       .should('contain', 'Sign in')
   })
 
-  it.skip('Log in as ordinary user', () => {
+  it('Log in as ordinary user', () => {
     cy.task('stubLogin', {})
     cy.login()
     SearchPage.verifyOnPage()
   })
 
-  it.skip('Log in as video link court user', () => {
+  it('Log in as video link court user', () => {
     cy.task('stubLoginCourt')
     cy.login()
     CourtVideoLinkHomePage.verifyOnPage()
