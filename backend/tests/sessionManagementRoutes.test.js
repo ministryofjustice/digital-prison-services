@@ -68,13 +68,13 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   // because the outcome of each test depends upon the successful completion of the previous tests.
   const agent = request.agent(app)
 
-  it('GET "/" with no cooke (not authenticated) redirects to /login', () =>
+  it('GET "/" with no cookie (not authenticated) redirects to /login', () =>
     agent
       .get('/')
       .expect(302)
       .expect('location', '/login?returnTo=%2F'))
 
-  it('GET "/some-page" with no cooke (not authenticated) redirects to /login?returnTo=some-page', () =>
+  it('GET "/some-page" with no cookie (not authenticated) redirects to /login?returnTo=some-page', () =>
     agent
       .get('/some-page')
       .expect(302)

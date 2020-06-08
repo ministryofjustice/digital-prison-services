@@ -23,7 +23,7 @@ const tokenVerificationApiFactory = client => {
         log.debug(`Token verification result is ${result}`)
         return result
       })
-      .catch(processError)
+      .catch(() => false)
   }
 
   return { verifyToken }
