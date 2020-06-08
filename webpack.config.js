@@ -137,7 +137,4 @@ module.exports = {
     ],
   },
   plugins,
-  resolve: {
-    alias: { path: false },
-  },
 }
