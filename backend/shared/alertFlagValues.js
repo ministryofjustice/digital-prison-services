@@ -86,14 +86,14 @@ module.exports = [
   },
   {
     alertCodes: ['URCU'],
-    classes: 'alert-status reverse-cohorting-unit',
+    classes: 'alert-status alert-status--reverse-cohorting-unit',
     label: 'Reverse Cohorting Unit',
   },
   {
     alertCodes: ['UPIU'],
-    classes: 'alert-status protective-isolation-unit',
+    classes: 'alert-status alert-status--protective-isolation-unit',
     label: 'Protective Isolation Unit',
   },
-  { alertCodes: ['USU'], classes: 'alert-status shielding-unit', label: 'Shielding Unit' },
-  { alertCodes: ['URS'], classes: 'alert-status refusing-to-shield', label: 'Refusing to shield' },
+  { alertCodes: ['USU'], classes: 'alert-status alert-status--shielding-unit', label: 'Shielding Unit' },
+  { alertCodes: ['URS'], classes: 'alert-status alert-status--refusing-to-shield', label: 'Refusing to shield' },
 ].sort((a, b) => a.label.localeCompare(b.label))
