@@ -32,7 +32,6 @@ const plugins = [
   new HtmlWebpackPlugin({
     template: 'html-template/index.html',
     filename: 'index.html',
-    publicUrl: process.env.PUBLIC_URL,
   }),
 ]
 
@@ -137,4 +136,7 @@ module.exports = {
     ],
   },
   plugins,
+  resolve: {
+    alias: { path: false },
+  },
 }
