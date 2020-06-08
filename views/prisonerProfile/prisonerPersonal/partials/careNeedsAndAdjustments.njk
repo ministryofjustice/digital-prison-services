@@ -1,0 +1,17 @@
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+
+{% for personalCareNeed in careNeedsAndAdjustments.personalCareNeeds %}
+  <h3 class="govuk-summary-list-title govuk-heading-s">{{ personalCareNeed.type }} <span class="govuk-!-font-weight-regular govuk-!-padding-left-3">{{ personalCareNeed.description }}</span></h3>
+
+  {{ prisonerSummarySection(personalCareNeed.details, indentKey = true) }}
+{% endfor %}
+
+{% for reasonableAdjustment in careNeedsAndAdjustments.reasonableAdjustments %}
+  <h3 class="govuk-summary-list-title govuk-heading-s">Reasonable adjustment <span class="govuk-!-font-weight-regular govuk-!-padding-left-3">{{ reasonableAdjustment.type }}</span></h3>
+
+  {{ prisonerSummarySection(reasonableAdjustment.details, indentKey = true) }}
+{% endfor %}
+
+{% if not careNeedsAndAdjustments.personalCareNeeds.length and not careNeedsAndAdjustments.reasonableAdjustment.length %}
+  <p class="govuk-body">None</p>
+{% endif %}

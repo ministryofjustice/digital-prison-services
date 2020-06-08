@@ -86,6 +86,11 @@ module.exports = on => {
       personAddresses,
       personEmails,
       personPhones,
+      treatmentTypes,
+      healthTypes,
+      careNeeds,
+      reasonableAdjustments,
+      agencies,
     }) =>
       Promise.all([
         elite2api.stubPrisonerDetail(prisonerDetail),
@@ -98,6 +103,11 @@ module.exports = on => {
         elite2api.stubPersonAddresses(personAddresses),
         elite2api.stubPersonEmails(personEmails),
         elite2api.stubPersonPhones(personPhones),
+        elite2api.stubTreatmentTypes(treatmentTypes),
+        elite2api.stubHealthTypes(healthTypes),
+        elite2api.stubPersonalCareNeeds(careNeeds),
+        elite2api.stubReasonableAdjustments(reasonableAdjustments),
+        elite2api.stubAgencies(agencies),
       ]),
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
