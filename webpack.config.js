@@ -18,6 +18,9 @@ const developmentEntries = isDevelopment
 
 const plugins = [
   new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+  new webpack.ProvidePlugin({
+    process: 'process/browser',
+  }),
   new CopyWebpackPlugin({
     patterns: [
       {
@@ -45,7 +48,6 @@ module.exports = {
     path: path.join(__dirname, 'build'),
     publicPath: process.env.PUBLIC_URL || '/',
   },
-
   module: {
     rules: [
       {
