@@ -2,8 +2,9 @@ const moment = require('moment')
 const { getAddress } = require('../../../shared/addressHelpers')
 
 module.exports = ({ addresses }) => {
-  const activeAddresses = addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
-  const primaryAddress = activeAddresses.find(address => address.primary)
+  const activeAddresses =
+    addresses && addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
+  const primaryAddress = activeAddresses && activeAddresses.find(address => address.primary)
 
   const { addressUsages } = primaryAddress || {}
 
