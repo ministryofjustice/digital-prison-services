@@ -10,7 +10,7 @@ const getValueByType = require('../../shared/getValueByType')
 
 const log = require('../../log')
 
-const logMarkErrorAndContinue = apiCall =>
+const captureErrorAndContinue = apiCall =>
   new Promise(resolve => {
     apiCall.then(response => resolve({ response })).catch(error => {
       log.error(error)
@@ -71,7 +71,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         elite2Api.getPrisonerVisitBalances(res.locals, offenderNo),
         elite2Api.getEventsForToday(res.locals, bookingId),
         elite2Api.getProfileInformation(res.locals, bookingId),
-      ].map(apiCall => logMarkErrorAndContinue(apiCall))
+      ].map(apiCall => captureErrorAndContinue(apiCall))
     )
 
     const [
