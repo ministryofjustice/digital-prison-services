@@ -250,12 +250,14 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             caseNoteAdjudications: {
+              caseNoteAdjudicationsSectionError: false,
               details: [
                 { label: 'Incentive level warnings', value: undefined },
                 { label: 'Incentive Encouragements', value: undefined },
                 { label: 'Last incentive level review', value: undefined },
                 { label: 'Proven adjudications', value: undefined },
               ],
+              activeAdjudicationsDetailsSectionError: false,
               activeAdjudicationsDetails: { label: 'Active adjudications', value: undefined },
             },
           })
@@ -311,19 +313,21 @@ describe('prisoner profile quick look', () => {
         })
       })
 
-      it('should render the quick look template with the correctly formatted case note and adjucation details', async () => {
+      it('should render the quick look template with the correctly formatted case note and adjudication details', async () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             caseNoteAdjudications: {
+              caseNoteAdjudicationsSectionError: false,
               details: [
                 { label: 'Incentive level warnings', value: 1 },
                 { label: 'Incentive Encouragements', value: 2 },
                 { label: 'Last incentive level review', value: 40 },
                 { label: 'Proven adjudications', value: 3 },
               ],
+              activeAdjudicationsDetailsSectionError: false,
               activeAdjudicationsDetails: {
                 label: 'Active adjudications',
                 value: [
@@ -365,6 +369,7 @@ describe('prisoner profile quick look', () => {
             'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
+                visitSectionError: false,
                 details: [
                   { label: 'Remaining visits', value: undefined },
                   { label: 'Remaining privileged visits', value: undefined },
@@ -394,6 +399,7 @@ describe('prisoner profile quick look', () => {
             'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
+                visitSectionError: false,
                 details: [
                   { label: 'Remaining visits', value: 24 },
                   { label: 'Remaining privileged visits', value: 4 },
@@ -594,52 +600,562 @@ describe('prisoner profile quick look', () => {
       elite2Api.getProfileInformation.mockRejectedValue(new Error('Network error'))
     })
 
-    it('should still render the quick look template with missing data', async () => {
+    it('should handle api errors when requesting main offence', async () => {
+      elite2Api.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+      elite2Api.getPrisonerDetails.mockResolvedValue([
+        { imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' },
+      ])
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          balanceDetails: [
-            { label: 'Spends', value: null },
-            { label: 'Private', value: null },
-            { label: 'Savings', value: null },
-          ],
-          caseNoteAdjudications: {
-            activeAdjudicationsDetails: { label: 'Active adjudications' },
-            details: [
-              { label: 'Incentive level warnings', value: null },
-              { label: 'Incentive Encouragements', value: null },
-              { label: 'Last incentive level review', value: null },
-              { label: 'Proven adjudications', value: null },
-            ],
-          },
-          dpsUrl: 'http://localhost:3000/',
           offenceDetails: [
-            { label: 'Main offence(s)', value: null },
-            { label: 'Imprisonment status', value: null },
-            { label: 'Release date', value: null },
+            { label: 'Main offence(s)', value: 'Unable to show this detail.' },
+            { label: 'Imprisonment status', value: 'Adult Imprisonment Without Option CJA03' },
+            { label: 'Release date', value: '13/12/2020' },
           ],
-          personalDetails: [
-            { label: 'Age', value: null },
-            { label: 'Nationality', value: null },
-            { label: 'PNC number', value: null },
-            { label: 'CRO number', value: null },
+          offenceDetailsSectionError: false,
+        })
+      )
+    })
+
+    it('should handle api errors when requesting imprisonment status', async () => {
+      elite2Api.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+      elite2Api.getMainOffence.mockResolvedValue([
+        { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
+      ])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          offenceDetails: [
+            { label: 'Main offence(s)', value: 'Have blade/article which was sharply pointed in public place' },
+            { label: 'Imprisonment status', value: 'Unable to show this detail.' },
+            { label: 'Release date', value: '13/12/2020' },
           ],
-          scheduledActivityPeriods: [
-            { label: 'Morning (AM)', value: null },
-            { label: 'Afternoon (PM)', value: null },
-            { label: 'Evening (ED)', value: null },
+          offenceDetailsSectionError: false,
+        })
+      )
+    })
+
+    it('should handle api error when requesting the release date', async () => {
+      elite2Api.getMainOffence.mockResolvedValue([
+        { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
+      ])
+      elite2Api.getPrisonerDetails.mockResolvedValue([
+        {
+          imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
+        },
+      ])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          offenceDetails: [
+            { label: 'Main offence(s)', value: 'Have blade/article which was sharply pointed in public place' },
+            { label: 'Imprisonment status', value: 'Adult Imprisonment Without Option CJA03' },
+            { label: 'Release date', value: 'Unable to show this detail.' },
           ],
-          visits: {
+          offenceDetailsSectionError: false,
+        })
+      )
+    })
+
+    it('should handle api errors for all data required for the offences section', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          offenceDetailsSectionError: true,
+        })
+      )
+    })
+
+    it('should handle api errors when requesting spends', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          balanceDetailsSectionError: true,
+        })
+      )
+    })
+
+    it('should handle api errors when requesting incentive level warnings', async () => {
+      elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
+      elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+        adjudicationCount: 2,
+        awards: [
+          {
+            sanctionCode: 'STOP_PCT',
+            sanctionCodeDescription: 'Stoppage of Earnings (%)',
+            days: 14,
+            limit: 50,
+            effectiveDate: '2020-04-16',
+            status: 'IMMEDIATE',
+            statusDescription: 'Immediate',
+          },
+        ],
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          caseNoteAdjudications: {
+            caseNoteAdjudicationsSectionError: false,
+            activeAdjudicationsDetailsSectionError: false,
+            activeAdjudicationsDetails: {
+              label: 'Active adjudications',
+              value: [
+                {
+                  days: 14,
+                  durationText: '14 days',
+                  effectiveDate: '16/04/2020',
+                  limit: 50,
+                  sanctionCode: 'STOP_PCT',
+                  sanctionCodeDescription: 'Stoppage of Earnings (50%)',
+                  status: 'IMMEDIATE',
+                  statusDescription: 'Immediate',
+                },
+              ],
+            },
             details: [
-              { label: 'Remaining visits', value: null },
-              { label: 'Remaining privileged visits', value: null },
-              { label: 'Next visit date', value: 'No upcoming visits' },
+              { label: 'Incentive level warnings', value: 'Unable to show this detail.' },
+              { label: 'Incentive Encouragements', value: 10 },
+              { label: 'Last incentive level review', value: 10 },
+              { label: 'Proven adjudications', value: 2 },
             ],
           },
         })
       )
     })
+
+    it('should handle api errors when requesting incentive encouragements', async () => {
+      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
+      elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+        adjudicationCount: 2,
+        awards: [
+          {
+            sanctionCode: 'STOP_PCT',
+            sanctionCodeDescription: 'Stoppage of Earnings (%)',
+            days: 14,
+            limit: 50,
+            effectiveDate: '2020-04-16',
+            status: 'IMMEDIATE',
+            statusDescription: 'Immediate',
+          },
+        ],
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          caseNoteAdjudications: {
+            caseNoteAdjudicationsSectionError: false,
+            activeAdjudicationsDetailsSectionError: false,
+            activeAdjudicationsDetails: {
+              label: 'Active adjudications',
+              value: [
+                {
+                  days: 14,
+                  durationText: '14 days',
+                  effectiveDate: '16/04/2020',
+                  limit: 50,
+                  sanctionCode: 'STOP_PCT',
+                  sanctionCodeDescription: 'Stoppage of Earnings (50%)',
+                  status: 'IMMEDIATE',
+                  statusDescription: 'Immediate',
+                },
+              ],
+            },
+            details: [
+              { label: 'Incentive level warnings', value: 10 },
+              { label: 'Incentive Encouragements', value: 'Unable to show this detail.' },
+              { label: 'Last incentive level review', value: 10 },
+              { label: 'Proven adjudications', value: 2 },
+            ],
+          },
+        })
+      )
+    })
+
+    it('should handle api errors when requesting last incentive level review', async () => {
+      elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
+      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
+      elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+        adjudicationCount: 2,
+        awards: [
+          {
+            sanctionCode: 'STOP_PCT',
+            sanctionCodeDescription: 'Stoppage of Earnings (%)',
+            days: 14,
+            limit: 50,
+            effectiveDate: '2020-04-16',
+            status: 'IMMEDIATE',
+            statusDescription: 'Immediate',
+          },
+        ],
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          caseNoteAdjudications: {
+            caseNoteAdjudicationsSectionError: false,
+            activeAdjudicationsDetailsSectionError: false,
+            activeAdjudicationsDetails: {
+              label: 'Active adjudications',
+              value: [
+                {
+                  days: 14,
+                  durationText: '14 days',
+                  effectiveDate: '16/04/2020',
+                  limit: 50,
+                  sanctionCode: 'STOP_PCT',
+                  sanctionCodeDescription: 'Stoppage of Earnings (50%)',
+                  status: 'IMMEDIATE',
+                  statusDescription: 'Immediate',
+                },
+              ],
+            },
+            details: [
+              { label: 'Incentive level warnings', value: 10 },
+              { label: 'Incentive Encouragements', value: 10 },
+              { label: 'Last incentive level review', value: 'Unable to show this detail.' },
+              { label: 'Proven adjudications', value: 2 },
+            ],
+          },
+        })
+      )
+    })
+
+    it('should handle api errors when requesting adjudications', async () => {
+      elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
+      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
+      elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          caseNoteAdjudications: {
+            caseNoteAdjudicationsSectionError: false,
+            activeAdjudicationsDetailsSectionError: true,
+            activeAdjudicationsDetails: { label: 'Active adjudications' },
+            details: [
+              { label: 'Incentive level warnings', value: 10 },
+              { label: 'Incentive Encouragements', value: 10 },
+              { label: 'Last incentive level review', value: 10 },
+              { label: 'Proven adjudications', value: 'Unable to show this detail.' },
+            ],
+          },
+        })
+      )
+    })
+
+    it('should handle api errors for all data required for the adjudications section', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          caseNoteAdjudications: {
+            caseNoteAdjudicationsSectionError: true,
+            activeAdjudicationsDetailsSectionError: true,
+            activeAdjudicationsDetails: {
+              label: 'Active adjudications',
+            },
+            details: [
+              {
+                label: 'Incentive level warnings',
+                value: 'Unable to show this detail.',
+              },
+              {
+                label: 'Incentive Encouragements',
+                value: 'Unable to show this detail.',
+              },
+              {
+                label: 'Last incentive level review',
+                value: 'Unable to show this detail.',
+              },
+              { label: 'Proven adjudications', value: 'Unable to show this detail.' },
+            ],
+          },
+          dpsUrl: 'http://localhost:3000/',
+          offenceDetails: [
+            {
+              label: 'Main offence(s)',
+              value: 'Unable to show this detail.',
+            },
+            { label: 'Imprisonment status', value: 'Unable to show this detail.' },
+            {
+              label: 'Release date',
+              value: 'Unable to show this detail.',
+            },
+          ],
+        })
+      )
+    })
+
+    it('should handle errors when requesting prisoner data', async () => {
+      elite2Api.getProfileInformation.mockResolvedValue([{ type: 'NAT', resultValue: 'British' }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          personalDetails: [
+            {
+              label: 'Age',
+              value: 'Unable to show this detail.',
+            },
+            { label: 'Nationality', value: 'British' },
+            { label: 'PNC number', value: 'Unable to show this detail.' },
+            { label: 'CRO number', value: 'Unable to show this detail.' },
+          ],
+        })
+      )
+    })
+
+    it('should handle errors when requesting profile data', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
+      elite2Api.getPrisonerDetails.mockResolvedValue([
+        { dateOfBirth: '1998-12-01', pncNumber: '12/3456A', croNumber: '12345/57B' },
+      ])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          personalDetails: [
+            {
+              label: 'Age',
+              value: 21,
+            },
+            { label: 'Nationality', value: 'Unable to show this detail.' },
+            { label: 'PNC number', value: '12/3456A' },
+            { label: 'CRO number', value: '12345/57B' },
+          ],
+        })
+      )
+    })
+
+    it('should handle api errors for all data required for the personal details section', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          personalDetailsSectionError: true,
+        })
+      )
+    })
+
+    it('should handle api errors when requesting visit balances', async () => {
+      elite2Api.getNextVisit.mockResolvedValue({
+        startTime: '2020-04-17T13:30:00',
+        visitTypeDescription: 'room 1',
+        leadVisitor: 'mum',
+        relationshipDescription: 'parent',
+      })
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          visits: {
+            visitSectionError: false,
+            details: [
+              { label: 'Remaining visits', value: 'Unable to show this detail.' },
+              { label: 'Remaining privileged visits', value: 'Unable to show this detail.' },
+              { label: 'Next visit date', value: '17/04/2020' },
+            ],
+            nextVisitDetails: [
+              { label: 'Type of visit', value: 'room 1' },
+              { label: 'Lead visitor', value: 'Mum (parent)' },
+            ],
+          },
+        })
+      )
+    })
+
+    it('should handle api errors when requesting next visit', async () => {
+      elite2Api.getPrisonerVisitBalances.mockResolvedValue({
+        remainingVo: 20,
+        remainingPvo: 10,
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          visits: {
+            visitSectionError: false,
+            details: [
+              { label: 'Remaining visits', value: 20 },
+              { label: 'Remaining privileged visits', value: 10 },
+              { label: 'Next visit date', value: 'Unable to show this detail.' },
+            ],
+          },
+        })
+      )
+    })
+
+    it('should handle api errors for all data required for the personal visits section', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          visits: {
+            details: [
+              { label: 'Remaining visits', value: 'Unable to show this detail.' },
+              { label: 'Remaining privileged visits', value: 'Unable to show this detail.' },
+              { label: 'Next visit date', value: 'Unable to show this detail.' },
+            ],
+            visitSectionError: true,
+          },
+        })
+      )
+    })
+
+    it('should handle api errors for all data required for the schedules section', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          scheduledActivityPeriodsSectionError: true,
+        })
+      )
+    })
+
+    it('should load schedules without section error', async () => {
+      elite2Api.getEventsForToday.mockResolvedValue([
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'SCH',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'EDUC',
+          eventSubTypeDesc: 'Education',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T09:00:00',
+          endTime: '2020-04-17T10:00:00',
+          eventLocation: 'BADMINTON',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+        },
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'CANC',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'GYMSH',
+          eventSubTypeDesc: 'Gym - Sports Halls Activity',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T15:00:00',
+          endTime: '2020-04-17T15:30:00',
+          eventLocation: 'BASKETBALL',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+          eventSourceDesc: 'Test comment',
+        },
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'SCH',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'GYMF',
+          eventSubTypeDesc: 'Gym - Football',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T20:20:00',
+          endTime: '2020-04-17T20:35:00',
+          eventLocation: 'BADMINTON',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+          eventSourceDesc: 'Testing a really long comment which is over 40 characters',
+        },
+      ])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          scheduledActivityPeriodsSectionError: false,
+        })
+      )
+    })
+
+    // it('should still render the quick look template with the correct error messages', async () => {
+    //   await controller(req, res)
+    //
+    //   expect(res.render).toHaveBeenCalledWith(
+    //     'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+    //     expect.objectContaining({
+    //       balanceDetails: [
+    //         { label: 'Spends', value: null },
+    //         { label: 'Private', value: null },
+    //         { label: 'Savings', value: null },
+    //       ],
+    //       caseNoteAdjudications: {
+    //         activeAdjudicationsDetails: { label: 'Active adjudications' },
+    //         details: [
+    //           { label: 'Incentive level warnings', value: null },
+    //           { label: 'Incentive Encouragements', value: null },
+    //           { label: 'Last incentive level review', value: null },
+    //           { label: 'Proven adjudications', value: null },
+    //         ],
+    //       },
+    //       dpsUrl: 'http://localhost:3000/',
+    //       offenceDetails: [
+    //         { label: 'Main offence(s)', value: null },
+    //         { label: 'Imprisonment status', value: null },
+    //         { label: 'Release date', value: null },
+    //       ],
+    //       personalDetails: [
+    //         { label: 'Age', value: null },
+    //         { label: 'Nationality', value: null },
+    //         { label: 'PNC number', value: null },
+    //         { label: 'CRO number', value: null },
+    //       ],
+    //       scheduledActivityPeriods: [
+    //         { label: 'Morning (AM)', value: null },
+    //         { label: 'Afternoon (PM)', value: null },
+    //         { label: 'Evening (ED)', value: null },
+    //       ],
+    //       visits: {
+    //         details: [
+    //           { label: 'Remaining visits', value: null },
+    //           { label: 'Remaining privileged visits', value: null },
+    //           { label: 'Next visit date', value: 'No upcoming visits' },
+    //         ],
+    //       },
+    //     })
+    //   )
+    // })
   })
 })

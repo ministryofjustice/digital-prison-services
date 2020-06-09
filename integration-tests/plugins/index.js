@@ -75,6 +75,21 @@ module.exports = on => {
         elite2api.stubEventsForToday(todaysEvents),
         elite2api.stubProfileInformation(profileInformation),
       ]),
+    stubQuickLookApiErrors: () =>
+      Promise.all([
+        elite2api.stubMainOffence(null, 500),
+        elite2api.stubPrisonerDetails([], 500),
+        elite2api.stubPrisonerSentenceDetails(null, 500),
+        elite2api.stubPrisonerBalances(null, 500),
+        elite2api.stubIepSummaryForBooking(null, 500),
+        elite2api.stubPositiveCaseNotes(null, 500),
+        elite2api.stubNegativeCaseNotes(null, 500),
+        elite2api.stubAdjudicationsForBooking(null, 500),
+        elite2api.stubNextVisit(null, 500),
+        elite2api.stubPrisonerVisitBalances(null, 500),
+        elite2api.stubEventsForToday([], 500),
+        elite2api.stubProfileInformation(null, 500),
+      ]),
     stubPersonal: ({
       prisonerDetail,
       identifiers,

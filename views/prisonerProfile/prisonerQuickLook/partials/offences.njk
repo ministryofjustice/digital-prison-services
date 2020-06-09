@@ -1,23 +1,35 @@
 <h3 class="govuk-heading-m">Offences</h3>
-{% set offenceRows = [] %}
+<div data-test="offender-offences">
 
-{% for offence in offenceDetails %}
-  {% set offenceRows = (offenceRows.push(
-    {
-      key: {
-        text: offence.label
-      },
-      value: {
-        text: offence.value | showDefault
-      }
-    }
-  ), offenceRows) %}
-{% endfor %}
+    {% if offenceDetailsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
 
-{{ govukSummaryList({
-  rows: offenceRows,
-  classes: "govuk-!-margin-bottom-2",
-  attributes: { "data-test": "offence-summary" }
-}) }}
+    {% if offenceDetailsSectionError == false %}
+        {% set offenceRows = [] %}
 
-<a href="#" class="govuk-link govuk-!-font-size-19">Offence information</a>
+        {% for offence in offenceDetails %}
+            {% set offenceRows = (offenceRows.push(
+                {
+                    key: {
+                    text: offence.label
+                },
+                    value: {
+                    text: offence.value | showDefault
+                }
+                }
+                ), offenceRows) %}
+        {% endfor %}
+
+        {{ govukSummaryList({
+            rows: offenceRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "offence-summary" }
+        }) }}
+
+        <a href="#" class="govuk-link govuk-!-font-size-19">Offence information</a>
+
+    {% endif %}
+</div>

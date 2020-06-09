@@ -177,14 +177,14 @@ module.exports = {
       },
     })
   },
-  stubMainOffence: offence => {
+  stubMainOffence: (offence, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/mainOffence',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -207,14 +207,14 @@ module.exports = {
       },
     })
   },
-  stubPrisonerDetails: prisonerDetails => {
+  stubPrisonerDetails: (prisonerDetails, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/prisoners/.+?',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -222,14 +222,14 @@ module.exports = {
       },
     })
   },
-  stubPrisonerSentenceDetails: sentenceDetails => {
+  stubPrisonerSentenceDetails: (sentenceDetails, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/offenders/.+?/sentences',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -237,14 +237,14 @@ module.exports = {
       },
     })
   },
-  stubPrisonerBalances: balances => {
+  stubPrisonerBalances: (balances, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/balances',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -252,14 +252,14 @@ module.exports = {
       },
     })
   },
-  stubIepSummaryForBooking: iepSummary => {
+  stubIepSummaryForBooking: (iepSummary, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/iepSummary\\?.+?',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -267,14 +267,14 @@ module.exports = {
       },
     })
   },
-  stubPositiveCaseNotes: positiveCaseNotes => {
+  stubPositiveCaseNotes: (positiveCaseNotes, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/caseNotes/POS/IEP_ENC/count\\?.+?',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -282,14 +282,14 @@ module.exports = {
       },
     })
   },
-  stubNegativeCaseNotes: negativeCaseNotes => {
+  stubNegativeCaseNotes: (negativeCaseNotes, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/caseNotes/NEG/IEP_WARN/count\\?.+?',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -297,14 +297,14 @@ module.exports = {
       },
     })
   },
-  stubAdjudicationsForBooking: adjudications => {
+  stubAdjudicationsForBooking: (adjudications, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/adjudications',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -312,14 +312,14 @@ module.exports = {
       },
     })
   },
-  stubNextVisit: nextVisit => {
+  stubNextVisit: (nextVisit, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/visits/next',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -327,14 +327,14 @@ module.exports = {
       },
     })
   },
-  stubPrisonerVisitBalances: visitBalances => {
+  stubPrisonerVisitBalances: (visitBalances, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/offenderNo/.+?/visit/balances',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -342,14 +342,14 @@ module.exports = {
       },
     })
   },
-  stubEventsForToday: events => {
+  stubEventsForToday: (events, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/events/today',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -357,14 +357,14 @@ module.exports = {
       },
     })
   },
-  stubProfileInformation: profileInfo => {
+  stubProfileInformation: (profileInfo, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/profileInformation',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -372,14 +372,14 @@ module.exports = {
       },
     })
   },
-  stubIdentifiers: identifiers => {
+  stubIdentifiers: (identifiers, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/identifiers',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -387,14 +387,14 @@ module.exports = {
       },
     })
   },
-  stubOffenderAliases: aliases => {
+  stubOffenderAliases: (aliases, status) => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/aliases',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
