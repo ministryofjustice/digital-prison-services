@@ -507,4 +507,79 @@ module.exports = {
       },
     })
   },
+  stubTreatmentTypes: treatmentTyes => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/HEALTH_TREAT',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: treatmentTyes || [],
+      },
+    })
+  },
+  stubHealthTypes: healthTypes => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/HEALTH',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: healthTypes || [],
+      },
+    })
+  },
+  stubPersonalCareNeeds: careNeeds => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/personal-care-needs\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: careNeeds || {},
+      },
+    })
+  },
+  stubReasonableAdjustments: reasonableAdjustments => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/reasonable-adjustments\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: reasonableAdjustments || {},
+      },
+    })
+  },
+  stubAgencies: agencies => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/agencies/prison',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: agencies || [],
+      },
+    })
+  },
 }

@@ -136,6 +136,14 @@ context('Prisoner personal', () => {
       })
     })
 
+    context('Personal care needs section', () => {
+      it('Should show correct missing content text', () => {
+        cy.get('[data-test="care-needs-summary"]').then($section => {
+          expect($section).to.contain.text('None')
+        })
+      })
+    })
+
     context('Languages section', () => {
       it('Should show correct missing content text', () => {
         cy.get('[data-test="languages-summary"]').then($section => {
@@ -387,6 +395,85 @@ context('Prisoner personal', () => {
           personAddresses: addresses,
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
           personPhones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
+          treatmentTypes: [
+            {
+              domain: 'HEALTH_TREAT',
+              code: 'AMP TEL',
+              description: 'Amplified telephone',
+            },
+            {
+              domain: 'HEALTH_TREAT',
+              code: 'FLEX_REFRESH',
+              description: 'Flexible refreshment breaks',
+            },
+          ],
+          healthTypes: [
+            {
+              domain: 'HEALTH',
+              code: 'DISAB',
+              description: 'Disability',
+            },
+            {
+              domain: 'HEALTH',
+              code: 'PSYCH',
+              description: 'Psychological',
+            },
+          ],
+          careNeeds: {
+            personalCareNeeds: [
+              {
+                problemType: 'DISAB',
+                problemCode: 'ND',
+                problemStatus: null,
+                problemDescription: 'No Disability',
+                commentText: null,
+                startDate: '2013-10-29',
+                endDate: null,
+              },
+              {
+                problemType: 'PSYCH',
+                problemCode: 'BIP',
+                problemStatus: 'ON',
+                problemDescription: 'Bi-Polar',
+                commentText: 'Bi polar comment text',
+                startDate: '2020-05-19',
+                endDate: null,
+              },
+              {
+                problemType: 'PHY',
+                problemCode: 'ASTH',
+                problemStatus: 'ON',
+                problemDescription: 'Asthmatic',
+                commentText: 'Asthmatic comment text',
+                startDate: '2020-05-01',
+                endDate: null,
+              },
+            ],
+          },
+          reasonableAdjustments: {
+            reasonableAdjustments: [
+              {
+                treatmentCode: 'AMP TEL',
+                commentText: 'Amped telephone comment',
+                startDate: '2020-05-19',
+                endDate: null,
+                agencyId: 'MDI',
+              },
+              {
+                treatmentCode: 'FLEX_REFRESH',
+                commentText: 'Flexible drinks comments',
+                startDate: '2020-05-01',
+                endDate: null,
+                agencyId: 'MDI',
+              },
+            ],
+          },
+          agencies: [
+            {
+              agencyId: 'MDI',
+              description: 'MOORLAND (HMP & YOI)',
+            },
+          ],
         })
 
         visitPersonalAndExpandAccordions()
@@ -556,6 +643,56 @@ context('Prisoner personal', () => {
         })
       })
 
+      context('Personal care needs section', () => {
+        it('Should show correct headings, images, labels and values', () => {
+          cy.get('[data-test="care-needs-summary"]').then($section => {
+            cy.get($section)
+              .find('h3')
+              .then($headings => {
+                cy.get($headings)
+                  .its('length')
+                  .should('eq', 3)
+                expect($headings.get(0).innerText).to.contain('Psychological Bi-Polar')
+                expect($headings.get(1).innerText).to.contain('Reasonable adjustment Flexible refreshment breaks')
+                expect($headings.get(2).innerText).to.contain('Reasonable adjustment Amplified telephone')
+              })
+
+            cy.get($section)
+              .find('dt')
+              .then($summaryLabels => {
+                cy.get($summaryLabels)
+                  .its('length')
+                  .should('eq', 9)
+                expect($summaryLabels.get(0).innerText).to.contain('Description')
+                expect($summaryLabels.get(1).innerText).to.contain('From')
+                expect($summaryLabels.get(2).innerText).to.contain('Status')
+                expect($summaryLabels.get(3).innerText).to.contain('Establishment')
+                expect($summaryLabels.get(4).innerText).to.contain('Date provided')
+                expect($summaryLabels.get(5).innerText).to.contain('Comment')
+                expect($summaryLabels.get(6).innerText).to.contain('Establishment')
+                expect($summaryLabels.get(7).innerText).to.contain('Date provided')
+                expect($summaryLabels.get(8).innerText).to.contain('Comment')
+              })
+
+            cy.get($section)
+              .find('dd')
+              .then($summaryValues => {
+                cy.get($summaryValues)
+                  .its('length')
+                  .should('eq', 9)
+                expect($summaryValues.get(0).innerText).to.contain('Bi polar comment text')
+                expect($summaryValues.get(1).innerText).to.contain('19 May 2020')
+                expect($summaryValues.get(2).innerText).to.contain('Ongoing')
+                expect($summaryValues.get(3).innerText).to.contain('MOORLAND (HMP & YOI)')
+                expect($summaryValues.get(4).innerText).to.contain('01 May 2020')
+                expect($summaryValues.get(5).innerText).to.contain('Flexible drinks comments')
+                expect($summaryValues.get(6).innerText).to.contain('MOORLAND (HMP & YOI)')
+                expect($summaryValues.get(7).innerText).to.contain('19 May 2020')
+                expect($summaryValues.get(8).innerText).to.contain('Amped telephone comment')
+              })
+          })
+        })
+      })
       context('Languages section', () => {
         it('Should show correct languages content', () => {
           cy.get('[data-test="languages-summary"]').then($section => {
