@@ -56,7 +56,7 @@ const logout = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/logout.*',
+      urlPath: '/auth/logout',
     },
     response: {
       status: 200,
@@ -117,7 +117,7 @@ const stubUser = (username, caseload) => {
   })
 }
 
-const stubUserMe = () => {
+const stubUserMe = (username = 'ITAG_USER') => {
   return stubFor({
     request: {
       method: 'GET',
@@ -131,6 +131,7 @@ const stubUserMe = () => {
       jsonBody: {
         firstName: 'JAMES',
         lastName: 'STUART',
+        username,
         activeCaseLoadId: 'MDI',
       },
     },
@@ -210,4 +211,5 @@ module.exports = {
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
   stubUserMeRoles,
+  redirect,
 }

@@ -35,6 +35,12 @@ const Flags = ({ alerts, category, offenderNo }) => {
           </span>
         )}
       {alerts.includes('RCDR') && withLink(<span className="quarantined-status">QUARANTINED</span>)}
+      {alerts.includes('URCU') &&
+        withLink(<span className="reverse-cohorting-unit-status">REVERSE COHORTING UNIT</span>)}
+      {alerts.includes('UPIU') &&
+        withLink(<span className="protective-isolation-unit-status">PROTECTIVE ISOLATION UNIT</span>)}
+      {alerts.includes('USU') && withLink(<span className="shielding-unit-status">SHIELDING UNIT</span>)}
+      {alerts.includes('URS') && withLink(<span className="refusing-to-shield-status">REFUSING TO SHIELD</span>)}
       {alerts.includes('XRF') && withLink(<span className="risk-females-status">RISK TO FEMALES</span>)}
       {alerts.includes('XSA') && withLink(<span className="assault-status">STAFF ASSAULTER</span>)}
       {alerts.includes('XTACT') && withLink(<span className="tact-status">TACT</span>)}

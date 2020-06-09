@@ -18,15 +18,20 @@ const developmentEntries = isDevelopment
 
 const plugins = [
   new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-  new CopyWebpackPlugin([
-    {
-      from: 'static',
-      to: 'static',
-    },
-  ]),
+  new webpack.ProvidePlugin({
+    process: 'process/browser',
+  }),
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: 'static',
+        to: 'static',
+      },
+    ],
+  }),
   new HtmlWebpackPlugin({
     template: 'html-template/index.html',
-    publicUrl: process.env.PUBLIC_URL,
+    filename: 'index.html',
   }),
 ]
 
@@ -42,7 +47,6 @@ module.exports = {
     path: path.join(__dirname, 'build'),
     publicPath: process.env.PUBLIC_URL || '/',
   },
-
   module: {
     rules: [
       {
@@ -132,4 +136,7 @@ module.exports = {
     ],
   },
   plugins,
+  resolve: {
+    alias: { path: false },
+  },
 }

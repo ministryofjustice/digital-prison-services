@@ -146,6 +146,58 @@ describe('Flags.', () => {
         )
       ).toEqual(true)
     })
+
+    it('URCU alert', () => {
+      const wrapper = shallow(<Flags alerts={['URCU']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="reverse-cohorting-unit-status">REVERSE COHORTING UNIT</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
+
+    it('UPIU alert', () => {
+      const wrapper = shallow(<Flags alerts={['UPIU']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="protective-isolation-unit-status">PROTECTIVE ISOLATION UNIT</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
+
+    it('USU alert', () => {
+      const wrapper = shallow(<Flags alerts={['USU']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="shielding-unit-status">SHIELDING UNIT</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
+
+    it('URS alert', () => {
+      const wrapper = shallow(<Flags alerts={['URS']} offenderNo="X0000XX" />)
+      expect(
+        wrapper.equals(
+          <div className="full-flags">
+            <OffenderLink offenderNo="X0000XX" alerts>
+              <span className="refusing-to-shield-status">REFUSING TO SHIELD</span>
+            </OffenderLink>
+          </div>
+        )
+      ).toEqual(true)
+    })
   })
   describe('Alerts without links', () => {
     it('HA alert', () => {

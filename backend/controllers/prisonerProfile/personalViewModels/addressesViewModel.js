@@ -2,8 +2,9 @@ const moment = require('moment')
 const { getAddress } = require('../../../shared/addressHelpers')
 
 module.exports = ({ addresses }) => {
-  const activeAddresses = addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
-  const primaryAddress = activeAddresses.find(address => address.primary)
+  const activeAddresses =
+    addresses && addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
+  const primaryAddress = activeAddresses && activeAddresses.find(address => address.primary)
 
   const { addressUsages } = primaryAddress || {}
 
@@ -13,7 +14,7 @@ module.exports = ({ addresses }) => {
     noFixedAddress: primaryAddress && primaryAddress.noFixedAddress,
     noAddressMessage: !primaryAddress && 'No active, primary address entered',
     details: primaryAddress && [
-      ...getAddress(primaryAddress, false),
+      ...getAddress({ address: primaryAddress, showType: false, phoneLabel: 'Phone' }),
       { label: 'Added', value: primaryAddress.startDate && moment(primaryAddress.startDate).format('MMMM YYYY') },
       ...(primaryAddress.comment ? [{ label: 'Comments', value: primaryAddress.comment }] : []),
     ],
