@@ -276,6 +276,16 @@ const elite2ApiFactory = client => {
 
   const getPrisonerAddresses = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/addresses`)
 
+  const getPersonalCareNeeds = (context, bookingId, types) =>
+    get(context, `/api/bookings/${bookingId}/personal-care-needs?type=${types}`)
+
+  const getReasonableAdjustments = (context, bookingId, types) =>
+    get(context, `/api/bookings/${bookingId}/reasonable-adjustments?type=${types}`)
+
+  const getTreatmentTypes = context => get(context, '/api/reference-domains/domains/HEALTH_TREAT', 1000)
+
+  const getHealthTypes = context => get(context, '/api/reference-domains/domains/HEALTH', 1000)
+
   return {
     userLocations,
     userCaseLoads,
@@ -360,6 +370,10 @@ const elite2ApiFactory = client => {
     getProfileInformation,
     getPrisonerAddresses,
     getSecondaryLanguages,
+    getPersonalCareNeeds,
+    getReasonableAdjustments,
+    getTreatmentTypes,
+    getHealthTypes,
   }
 }
 

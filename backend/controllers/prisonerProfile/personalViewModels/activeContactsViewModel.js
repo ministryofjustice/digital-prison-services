@@ -12,7 +12,7 @@ module.exports = ({ personal }) => {
           { label: 'Relationship', value: contact.relationshipDescription },
           { label: 'Phone number', value: getPhone(contact.phones) },
           { label: 'Email', value: contact.emails && contact.emails.map(email => email.email).join(', ') },
-          ...getAddress(contact.addresses.find(address => address.primary)),
+          ...getAddress({ address: contact.addresses.find(address => address.primary) }),
         ],
       })),
     professional: [],

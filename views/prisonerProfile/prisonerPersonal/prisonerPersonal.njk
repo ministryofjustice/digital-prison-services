@@ -62,11 +62,17 @@
   </div>
 {% endset %}
 
+{% set careNeedsContent %}
+  <div data-test="care-needs-summary">
+    {% include "./partials/careNeedsAndAdjustments.njk" %}
+  </div>
+{% endset %}
+
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
     { heading: 'Distinguishing marks', html: distinguishingMarksContent },
-    { heading: 'Personal care needs', html: '<p class="govuk-body">Personal care needs content</p>' },
+    { heading: 'Personal care needs', html: careNeedsContent },
     { heading: 'Languages', html: languages }
   ]
 %}

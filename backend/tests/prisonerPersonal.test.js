@@ -47,6 +47,11 @@ describe('prisoner personal', () => {
     elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerAddresses = jest.fn().mockResolvedValue([])
     elite2Api.getSecondaryLanguages = jest.fn().mockResolvedValue([])
+    elite2Api.getPersonalCareNeeds = jest.fn().mockResolvedValue([])
+    elite2Api.getReasonableAdjustments = jest.fn().mockResolvedValue([])
+    elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([])
+    elite2Api.getHealthTypes = jest.fn().mockResolvedValue([])
+    elite2Api.getAgencies = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
   })
@@ -1241,7 +1246,7 @@ describe('prisoner personal', () => {
                   { label: 'County', value: 'West Yorkshire' },
                   { label: 'Postcode', value: 'LS1 AAA' },
                   { label: 'Country', value: 'England' },
-                  { label: 'Address phone', value: '011111111111' },
+                  { label: 'Phone', value: '011111111111' },
                   { label: 'Added', value: 'January 2019' },
                   { label: 'Comments', value: 'address comment field' },
                 ],
@@ -1275,7 +1280,7 @@ describe('prisoner personal', () => {
                     { label: 'Address', value: 'Flat A, 13, High Street' },
                     { label: 'Town', value: 'Ulverston' },
                     { label: 'Postcode', value: 'LS1 AAA' },
-                    { label: 'Address phone', value: '011111111111' },
+                    { label: 'Phone', value: '011111111111' },
                     { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],
@@ -1309,7 +1314,7 @@ describe('prisoner personal', () => {
                     { label: 'County', value: 'West Yorkshire' },
                     { label: 'Postcode', value: 'LS1 AAA' },
                     { label: 'Country', value: 'England' },
-                    { label: 'Address phone', value: '011111111111' },
+                    { label: 'Phone', value: '011111111111' },
                     { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],
@@ -1350,12 +1355,188 @@ describe('prisoner personal', () => {
     })
   })
 
+  describe('personal care needs', () => {
+    it('should make a call for treatment and health types', async () => {
+      await controller(req, res)
+
+      expect(elite2Api.getTreatmentTypes).toHaveBeenCalledWith(res.locals)
+      expect(elite2Api.getHealthTypes).toHaveBeenCalledWith(res.locals)
+    })
+
+    beforeEach(() => {
+      elite2Api.getDetails.mockResolvedValue({ bookingId })
+    })
+
+    it('should make a call for care needs, adjustments and agencies data', async () => {
+      await controller(req, res)
+
+      expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
+      expect(elite2Api.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
+      expect(elite2Api.getAgencies).toHaveBeenCalledWith(res.locals)
+    })
+
+    describe('when there is no care needs and adjustments data', () => {
+      it('should still render the personal template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            careNeedsAndAdjustments: {
+              personalCareNeeds: undefined,
+              reasonableAdjustments: undefined,
+            },
+          })
+        )
+      })
+    })
+
+    describe('when there is care needs and adjustments data', () => {
+      beforeEach(() => {
+        elite2Api.getPersonalCareNeeds = jest.fn().mockResolvedValue({
+          personalCareNeeds: [
+            {
+              problemType: 'DISAB',
+              problemCode: 'ND',
+              problemStatus: null,
+              problemDescription: 'No Disability',
+              commentText: null,
+              startDate: '2013-10-29',
+              endDate: null,
+            },
+            {
+              problemType: 'PSYCH',
+              problemCode: 'BIP',
+              problemStatus: 'ON',
+              problemDescription: 'Bi-Polar',
+              commentText: 'Bi polar comment text',
+              startDate: '2020-05-19',
+              endDate: null,
+            },
+            {
+              problemType: 'PHY',
+              problemCode: 'ASTH',
+              problemStatus: 'ON',
+              problemDescription: 'Asthmatic',
+              commentText: 'Asthmatic comment text',
+              startDate: '2020-05-01',
+              endDate: null,
+            },
+          ],
+        })
+        elite2Api.getHealthTypes = jest.fn().mockResolvedValue([
+          {
+            domain: 'HEALTH',
+            code: 'DISAB',
+            description: 'Disability',
+          },
+          {
+            domain: 'HEALTH',
+            code: 'PSYCH',
+            description: 'Psychological',
+          },
+        ])
+        elite2Api.getReasonableAdjustments = jest.fn().mockResolvedValue({
+          reasonableAdjustments: [
+            {
+              treatmentCode: 'AMP TEL',
+              commentText: 'Amped telephone comment',
+              startDate: '2020-05-19',
+              endDate: null,
+              agencyId: 'MDI',
+            },
+            {
+              treatmentCode: 'FLEX_REFRESH',
+              commentText: 'Flexible drinks comments',
+              startDate: '2020-05-01',
+              endDate: null,
+              agencyId: 'MDI',
+            },
+          ],
+        })
+        elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([
+          {
+            domain: 'HEALTH_TREAT',
+            code: 'AMP TEL',
+            description: 'Amplified telephone',
+          },
+          {
+            domain: 'HEALTH_TREAT',
+            code: 'FLEX_REFRESH',
+            description: 'Flexible refreshment breaks',
+          },
+        ])
+
+        elite2Api.getAgencies = jest.fn().mockResolvedValue([
+          {
+            agencyId: 'MDI',
+            description: 'MOORLAND (HMP & YOI)',
+          },
+        ])
+      })
+
+      it('should make a call for care needs and adjustments with the available treatment and health types', async () => {
+        await controller(req, res)
+
+        expect(elite2Api.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, 'AMP TEL,FLEX_REFRESH')
+        expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,PSYCH')
+      })
+
+      it('should render the personal template with the correct personal care need and reasonable adjustment data', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            careNeedsAndAdjustments: {
+              personalCareNeeds: [
+                {
+                  type: 'Psychological',
+                  description: 'Bi-Polar',
+                  details: [
+                    { label: 'Description', value: 'Bi polar comment text' },
+                    { label: 'From', value: '19 May 2020' },
+                    { label: 'Status', value: 'Ongoing' },
+                  ],
+                },
+              ],
+              reasonableAdjustments: [
+                {
+                  type: 'Flexible refreshment breaks',
+                  details: [
+                    { label: 'Establishment', value: 'MOORLAND (HMP & YOI)' },
+                    { label: 'Date provided', value: '01 May 2020' },
+                    { label: 'Comment', value: 'Flexible drinks comments' },
+                  ],
+                },
+                {
+                  type: 'Amplified telephone',
+                  details: [
+                    { label: 'Establishment', value: 'MOORLAND (HMP & YOI)' },
+                    { label: 'Date provided', value: '19 May 2020' },
+                    { label: 'Comment', value: 'Amped telephone comment' },
+                  ],
+                },
+              ],
+            },
+          })
+        )
+      })
+    })
+  })
+
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
+      elite2Api.getPrisonerDetail.mockRejectedValue(new Error('Network error'))
       elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
       elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerProperty.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerContacts.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerAddresses.mockRejectedValue(new Error('Network error'))
+      elite2Api.getSecondaryLanguages.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPersonalCareNeeds.mockRejectedValue(new Error('Network error'))
+      elite2Api.getReasonableAdjustments.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -1366,9 +1547,19 @@ describe('prisoner personal', () => {
         expect.objectContaining({
           aliases: null,
           identifiers: [{ label: 'PNC number', value: null }],
-          personalDetails: expect.objectContaining({
-            property: null,
-          }),
+          personalDetails: expect.objectContaining({ property: null }),
+          activeContacts: { personal: undefined, professional: [] },
+          addresses: [
+            {
+              details: null,
+              label: 'Primary address',
+              noAddressMessage: 'No active, primary address entered',
+              noFixedAddress: null,
+              types: undefined,
+            },
+          ],
+          languages: expect.objectContaining({ secondaryLanguages: null }),
+          careNeedsAndAdjustments: { personalCareNeeds: null, reasonableAdjustments: null },
         })
       )
     })
