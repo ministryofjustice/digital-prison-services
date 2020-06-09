@@ -1524,12 +1524,18 @@ describe('prisoner personal', () => {
     })
   })
 
-  describe('when there are errors with retrieving information', () => {
+  describe.only('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
+      elite2Api.getPrisonerDetail.mockRejectedValue(new Error('Network error'))
       elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
       elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerProperty.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerContacts.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPrisonerAddresses.mockRejectedValue(new Error('Network error'))
+      elite2Api.getSecondaryLanguages.mockRejectedValue(new Error('Network error'))
+      elite2Api.getPersonalCareNeeds.mockRejectedValue(new Error('Network error'))
+      elite2Api.getReasonableAdjustments.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -1540,9 +1546,19 @@ describe('prisoner personal', () => {
         expect.objectContaining({
           aliases: null,
           identifiers: [{ label: 'PNC number', value: null }],
-          personalDetails: expect.objectContaining({
-            property: null,
-          }),
+          personalDetails: expect.objectContaining({ property: null }),
+          activeContacts: { personal: undefined, professional: [] },
+          addresses: [
+            {
+              details: null,
+              label: 'Primary address',
+              noAddressMessage: 'No active, primary address entered',
+              noFixedAddress: null,
+              types: undefined,
+            },
+          ],
+          languages: expect.objectContaining({ secondaryLanguages: null }),
+          careNeedsAndAdjustments: { personalCareNeeds: null, reasonableAdjustments: null },
         })
       )
     })

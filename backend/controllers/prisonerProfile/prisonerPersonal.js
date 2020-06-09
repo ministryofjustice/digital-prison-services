@@ -88,8 +88,8 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     activeContacts: activeContactsViewModel({ personal: nextOfKinsWithContact }),
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({
-      personalCareNeeds: careNeeds.personalCareNeeds,
-      reasonableAdjustments: adjustments.reasonableAdjustments,
+      personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,
+      reasonableAdjustments: adjustments && adjustments.reasonableAdjustments,
       treatmentTypes,
       healthTypes,
       agencies,
