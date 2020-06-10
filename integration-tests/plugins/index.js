@@ -4,8 +4,17 @@ const whereabouts = require('../mockApis/whereabouts')
 const tokenverification = require('../mockApis/tokenverification')
 const keyworker = require('../mockApis/keyworker')
 const caseNotes = require('../mockApis/caseNotes')
+const { pastActivities, activities, visits, appointments } = require('../mockApis/responses/activityResponse')
+const { courtEventsWithDifferentStatusResponse } = require('../mockApis/responses/houseBlockResponse')
 
 const { resetStubs } = require('../mockApis/wiremock')
+
+const extractOffenderNumbers = activityList => {
+  const result = Object.keys(activityList).reduce((r, k) => {
+    return r.concat(activityList[k])
+  }, [])
+  return [...new Set(result.map(item => item.offenderNo))]
+}
 
 module.exports = on => {
   on('task', {
@@ -30,6 +39,27 @@ module.exports = on => {
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
+
+    stubOffenderBasicDetails: response => Promise.all([elite2api.stubOffenderBasicDetails(response)]),
+
+    stubGetActivityList: ({ caseload, locationId, timeSlot, date, inThePast = false }) => {
+      const activityResponse = inThePast ? pastActivities : activities
+      const offenderNumbers = extractOffenderNumbers(activityResponse)
+
+      return Promise.all([
+        elite2api.stubProgEventsAtLocation(locationId, timeSlot, date, activityResponse),
+        elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP'),
+        elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'VISIT'),
+        elite2api.stubVisits(caseload, timeSlot, date, offenderNumbers, visits),
+        elite2api.stubAppointments(caseload, timeSlot, date, offenderNumbers, appointments),
+        elite2api.stubActivities(caseload, timeSlot, date, offenderNumbers, activities),
+        elite2api.stubCourtEvents(caseload, offenderNumbers, date, courtEventsWithDifferentStatusResponse),
+        elite2api.stubExternalTransfers(caseload, offenderNumbers, date),
+        elite2api.stubAlerts(offenderNumbers),
+        elite2api.stubAssessments(offenderNumbers),
+      ])
+    },
+    stubActivityLocations: () => Promise.all([elite2api.stubActivityLocations()]),
 
     stubPrisonerProfileHeaderData: ({ offenderBasicDetails, offenderFullDetails, iepSummary, caseNoteSummary }) =>
       Promise.all([
@@ -112,5 +142,8 @@ module.exports = on => {
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
     stubLoginPage: auth.redirect,
+    stubGetAbsenceReasons: response => Promise.all([whereabouts.stubGetAbsenceReasons()]),
+    stubGetAttendance: (caseload, locationId, timeSlot, date) =>
+      Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date)]),
   })
 }

@@ -41,7 +41,7 @@ docker run -p 3000:3000 -d \
 ## Cypress integration tests
 
 The `integration-tests` directory contains a set of Cypress integration tests for the `prisonstaffhub` application.
-These tests WireMock to stub the application's dependencies on the elite2, ouath and whreabouts RESTful APIs.
+These tests use WireMock to stub the application's dependencies on the elite2, oauth and whereabouts RESTful APIs.
 
 ### Running the Cypress tests
 
@@ -49,7 +49,7 @@ You need to fire up the wiremock server first:
 ```docker-compose -f docker-compose-test.yaml up```
 
 This will give you useful feedback if the app is making requests that you haven't mocked out. You can see
-the reqest log at `localhost:9191/__admin/requests/` and a JSON representation of the mocks `localhost:9191/__admin/mappings`.
+the request log at `localhost:9191/__admin/requests/` and a JSON representation of the mocks `localhost:9191/__admin/mappings`.
 
 ### Starting feature tests node instance
 

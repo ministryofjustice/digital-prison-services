@@ -1,0 +1,38 @@
+{
+  "attendances": [
+    {
+      "id": 1,
+      "bookingId": 3,
+      "eventId": 102,
+      "eventLocationId": 1,
+      "period": "PM",
+      "prisonId": "LEI",
+      "attended": true,
+      "paid": true,
+      "eventDate": "2019-05-15"
+    },
+    {
+      "id": 2,
+      "bookingId": 2,
+      "eventId": 101,
+      "eventLocationId": 1,
+      "period": "PM",
+      "prisonId": "LEI",
+      "attended": true,
+      "paid": false,
+      "eventDate": "2019-05-15"
+    },
+    {
+      "id": 3,
+      "bookingId": 1,
+      "eventId": 100,
+      "eventLocationId": 2,
+      "period": "PM",
+      "prisonId": "LEI",
+      "attended": false,
+      "paid": false,
+      "absenceReasons": "UnacceptableAbsence",
+      "eventDate": "2019-05-15"
+    }
+  ]
+}
