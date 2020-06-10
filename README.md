@@ -4,7 +4,7 @@ Application can be built with for dev mode
 
 ```bash
 npm
-npm start:dec
+npm start:dev
 ```
 
 The application will automatically pick up front end changes and it will restart if there are any changes in /backend or /views.

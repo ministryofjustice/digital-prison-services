@@ -192,6 +192,8 @@ const isAfterToday = date => {
   return daysDifference >= 0
 }
 
+const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
+
 const hyphenatedStringToCamel = string =>
   string.replace(/[-\s]([a-z])/g, char => {
     return char[1].toUpperCase()
@@ -217,6 +219,7 @@ const putLastNameFirst = (firstName, lastName) => {
 }
 
 module.exports = {
+  isBeforeToday,
   isToday,
   isTodayOrAfter,
   switchDateFormat,

@@ -29,6 +29,7 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
+const { covidServiceFactory } = require('./services/covidService')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -58,6 +59,7 @@ const getLocationExistingEventsController = require('./controllers/attendance/ge
 const endDateController = require('./controllers/appointments/endDate')
 
 const covidDashboardController = require('./controllers/covid/covidDashboard')
+const reverseCohortingListController = require('./controllers/covid/reverseCohortingUnit')
 
 const currentUser = require('./middleware/currentUser')
 
@@ -260,7 +262,9 @@ const setup = ({
     prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
   )
 
-  router.use('/current-covid-units/', covidDashboardController({ elite2Api, logError }))
+  const covidService = covidServiceFactory(elite2Api)
+  router.use('/current-covid-units/', covidDashboardController({ covidService, logError }))
+  router.use('/reverse-cohorting-unit/', reverseCohortingListController({ covidService, logError }))
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 
