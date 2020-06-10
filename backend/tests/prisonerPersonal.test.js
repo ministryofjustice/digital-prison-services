@@ -1356,23 +1356,23 @@ describe('prisoner personal', () => {
   })
 
   describe('personal care needs', () => {
-    it('should make a call for treatment types', async () => {
+    it('should make a call for treatment and health types', async () => {
       await controller(req, res)
 
       expect(elite2Api.getTreatmentTypes).toHaveBeenCalledWith(res.locals)
+      expect(elite2Api.getHealthTypes).toHaveBeenCalledWith(res.locals)
     })
 
     beforeEach(() => {
       elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
 
-    it('should make a call for care needs, adjustments, agencies and health types data', async () => {
+    it('should make a call for care needs, adjustments and agencies data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,MATSTAT,PHY,PSYCH')
+      expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
       expect(elite2Api.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
       expect(elite2Api.getAgencies).toHaveBeenCalledWith(res.locals)
-      expect(elite2Api.getHealthTypes).toHaveBeenCalledWith(res.locals)
     })
 
     describe('when there is no care needs and adjustments data', () => {
@@ -1475,10 +1475,11 @@ describe('prisoner personal', () => {
         ])
       })
 
-      it('should make a call for all the available treatment types', async () => {
+      it('should make a call for care needs and adjustments with the available treatment and health types', async () => {
         await controller(req, res)
 
         expect(elite2Api.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, 'AMP TEL,FLEX_REFRESH')
+        expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,PSYCH')
       })
 
       it('should render the personal template with the correct personal care need and reasonable adjustment data', async () => {
@@ -1524,7 +1525,7 @@ describe('prisoner personal', () => {
     })
   })
 
-  describe.only('when there are errors with retrieving information', () => {
+  describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
       elite2Api.getPrisonerDetail.mockRejectedValue(new Error('Network error'))

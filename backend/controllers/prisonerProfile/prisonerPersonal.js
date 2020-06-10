@@ -18,9 +18,10 @@ const {
 
 module.exports = ({ prisonerProfileService, personService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const [basicPrisonerDetails, treatmentTypes] = await Promise.all([
+  const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
     elite2Api.getDetails(res.locals, offenderNo),
     elite2Api.getTreatmentTypes(res.locals),
+    elite2Api.getHealthTypes(res.locals),
   ])
     .then(data => data)
     .catch(error => {
@@ -28,7 +29,8 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       return res.render('error.njk', { url: dpsUrl })
     })
   const { bookingId } = basicPrisonerDetails || {}
-  const treatmentCodes = treatmentTypes.map(treatment => treatment.code).join()
+  const treatmentCodes = treatmentTypes && treatmentTypes.map(type => type.code).join()
+  const healthCodes = healthTypes && healthTypes.map(type => type.code).join()
 
   const [
     prisonerProfileData,
@@ -42,7 +44,6 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     careNeeds,
     adjustments,
     agencies,
-    healthTypes,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -53,10 +54,9 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       elite2Api.getPrisonerContacts(res.locals, bookingId),
       elite2Api.getPrisonerAddresses(res.locals, offenderNo),
       elite2Api.getSecondaryLanguages(res.locals, bookingId),
-      elite2Api.getPersonalCareNeeds(res.locals, bookingId, 'DISAB,MATSTAT,PHY,PSYCH'),
+      elite2Api.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
       elite2Api.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
       elite2Api.getAgencies(res.locals),
-      elite2Api.getHealthTypes(res.locals),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
