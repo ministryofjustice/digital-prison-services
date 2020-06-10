@@ -195,7 +195,25 @@ context('Prisoner personal', () => {
     context('Active contacts section', () => {
       it('Should show correct missing content text', () => {
         cy.get('[data-test="active-contacts-summary"]').then($section => {
-          expect($section).to.contain.text('None')
+          cy.get($section)
+            .find('h3')
+            .then($headings => {
+              cy.get($headings)
+                .its('length')
+                .should('eq', 2)
+              expect($headings.get(0).innerText).to.contain('Personal')
+              expect($headings.get(1).innerText).to.contain('Professional')
+            })
+
+          cy.get($section)
+            .find('p')
+            .then($text => {
+              cy.get($text)
+                .its('length')
+                .should('eq', 2)
+              expect($text.get(0).innerText).to.contain('None')
+              expect($text.get(1).innerText).to.contain('None')
+            })
         })
       })
     })
@@ -391,10 +409,48 @@ context('Prisoner personal', () => {
                 bookingId: 123,
               },
             ],
+            otherContacts: [
+              {
+                lastName: 'KIMBUR',
+                firstName: 'ARENENG',
+                contactType: 'O',
+                contactTypeDescription: 'Official',
+                relationship: 'PROB',
+                relationshipDescription: 'Probation Officer',
+                emergencyContact: false,
+                nextOfKin: false,
+                relationshipId: 6865390,
+                personId: 111,
+                activeFlag: true,
+                approvedVisitorFlag: false,
+                canBeContactedFlag: false,
+                awareOfChargesFlag: false,
+                contactRootOffenderId: 0,
+                bookingId: 123,
+              },
+              {
+                lastName: 'LYDYLE',
+                firstName: 'URIUALCHE',
+                contactType: 'O',
+                contactTypeDescription: 'Official',
+                relationship: 'CA',
+                relationshipDescription: 'Case Administrator',
+                emergencyContact: false,
+                nextOfKin: false,
+                relationshipId: 7350143,
+                personId: 222,
+                activeFlag: true,
+                approvedVisitorFlag: false,
+                canBeContactedFlag: false,
+                awareOfChargesFlag: false,
+                contactRootOffenderId: 0,
+                bookingId: 123,
+              },
+            ],
           },
           personAddresses: addresses,
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-          personPhones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
+          personPhones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'BUS', ext: '123' }],
           treatmentTypes: [
             {
               domain: 'HEALTH_TREAT',
@@ -840,7 +896,7 @@ context('Prisoner personal', () => {
         })
       })
 
-      context('Active contacts section', () => {
+      context.only('Active contacts section', () => {
         it('Should show correct headings, labels and values', () => {
           cy.get('[data-test="active-contacts-summary"]').then($section => {
             cy.get($section)
@@ -848,9 +904,11 @@ context('Prisoner personal', () => {
               .then($headings => {
                 cy.get($headings)
                   .its('length')
-                  .should('eq', 2)
+                  .should('eq', 4)
                 expect($headings.get(0).innerText).to.contain('Personal')
                 expect($headings.get(1).innerText).to.contain('John Smith')
+                expect($headings.get(2).innerText).to.contain('Professional')
+                expect($headings.get(3).innerText).to.contain('Uriualche Lydyle')
               })
 
             cy.get($section)
@@ -868,7 +926,7 @@ context('Prisoner personal', () => {
               .then($summaryLabels => {
                 cy.get($summaryLabels)
                   .its('length')
-                  .should('eq', 10)
+                  .should('eq', 20)
                 expect($summaryLabels.get(0).innerText).to.contain('Relationship')
                 expect($summaryLabels.get(1).innerText).to.contain('Phone number')
                 expect($summaryLabels.get(2).innerText).to.contain('Email')
@@ -879,6 +937,16 @@ context('Prisoner personal', () => {
                 expect($summaryLabels.get(7).innerText).to.contain('Country')
                 expect($summaryLabels.get(8).innerText).to.contain('Address phone')
                 expect($summaryLabels.get(9).innerText).to.contain('Address type')
+                expect($summaryLabels.get(10).innerText).to.contain('Relationship')
+                expect($summaryLabels.get(11).innerText).to.contain('Phone number')
+                expect($summaryLabels.get(12).innerText).to.contain('Email')
+                expect($summaryLabels.get(13).innerText).to.contain('Address')
+                expect($summaryLabels.get(14).innerText).to.contain('Town')
+                expect($summaryLabels.get(15).innerText).to.contain('County')
+                expect($summaryLabels.get(16).innerText).to.contain('Postcode')
+                expect($summaryLabels.get(17).innerText).to.contain('Country')
+                expect($summaryLabels.get(18).innerText).to.contain('Address phone')
+                expect($summaryLabels.get(19).innerText).to.contain('Address type')
               })
 
             cy.get($section)
@@ -886,9 +954,9 @@ context('Prisoner personal', () => {
               .then($summaryValues => {
                 cy.get($summaryValues)
                   .its('length')
-                  .should('eq', 10)
+                  .should('eq', 20)
                 expect($summaryValues.get(0).innerText).to.contain('Cousin')
-                expect($summaryValues.get(1).innerText).to.contain('02222222222, 033333333333')
+                expect($summaryValues.get(1).innerText).to.contain('02222222222, 033333333333, extension number 123')
                 expect($summaryValues.get(2).innerText).to.contain('test1@email.com, test2@email.com')
                 expect($summaryValues.get(3).innerText).to.contain('Flat A, 13, High Street')
                 expect($summaryValues.get(4).innerText).to.contain('Ulverston')
@@ -897,6 +965,16 @@ context('Prisoner personal', () => {
                 expect($summaryValues.get(7).innerText).to.contain('England')
                 expect($summaryValues.get(8).innerText).to.contain('011111111111')
                 expect($summaryValues.get(9).innerText).to.contain('Home')
+                expect($summaryValues.get(10).innerText).to.contain('Case Administrator')
+                expect($summaryValues.get(11).innerText).to.contain('02222222222, 033333333333, extension number 123')
+                expect($summaryValues.get(12).innerText).to.contain('test1@email.com, test2@email.com')
+                expect($summaryValues.get(13).innerText).to.contain('Flat A, 13, High Street')
+                expect($summaryValues.get(14).innerText).to.contain('Ulverston')
+                expect($summaryValues.get(15).innerText).to.contain('West Yorkshire')
+                expect($summaryValues.get(16).innerText).to.contain('LS1 AAA')
+                expect($summaryValues.get(17).innerText).to.contain('England')
+                expect($summaryValues.get(18).innerText).to.contain('011111111111')
+                expect($summaryValues.get(19).innerText).to.contain('Home')
               })
           })
         })

@@ -1,7 +1,7 @@
 const { formatName } = require('../../../utils')
 const { getPhone, getAddress } = require('../../../shared/addressHelpers')
 
-module.exports = ({ personal }) => {
+module.exports = ({ personal, professional }) => {
   return {
     personal:
       personal &&
@@ -15,6 +15,16 @@ module.exports = ({ personal }) => {
           ...getAddress({ address: contact.addresses.find(address => address.primary) }),
         ],
       })),
-    professional: [],
+    professional:
+      professional &&
+      professional.map(contact => ({
+        name: formatName(contact.firstName, contact.lastName),
+        details: [
+          { label: 'Relationship', value: contact.relationshipDescription },
+          { label: 'Phone number', value: getPhone(contact.phones) },
+          { label: 'Email', value: contact.emails && contact.emails.map(email => email.email).join(', ') },
+          ...getAddress({ address: contact.addresses[0] }),
+        ],
+      })),
   }
 }
