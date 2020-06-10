@@ -47,6 +47,7 @@ module.exports = on => {
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
     stubAlertsForBooking: alerts => Promise.all([elite2api.stubAlertsForBooking(alerts)]),
+    stubInmates: elite2api.stubInmates,
     stubQuickLook: ({
       offence,
       prisonerDetails,
