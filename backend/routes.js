@@ -57,6 +57,8 @@ const getExistingEventsController = require('./controllers/attendance/getExistin
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
 const endDateController = require('./controllers/appointments/endDate')
 
+const covidDashboardController = require('./controllers/covid/covidDashboard')
+
 const currentUser = require('./middleware/currentUser')
 
 const controllerFactory = require('./controllers/controller').factory
@@ -257,6 +259,8 @@ const setup = ({
     '/prisoner/:offenderNo',
     prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
   )
+
+  router.use('/current-covid-units/', covidDashboardController({ elite2Api, logError }))
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 

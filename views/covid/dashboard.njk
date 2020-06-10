@@ -1,0 +1,73 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: notmUrl
+            },
+            {
+                text: "COVID units"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">
+        Current breakdown of COVID units
+    </h1>
+    
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        <p class="govuk-body">Total prison population</p>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="prisonPopulation">{{dashboardStats.prisonPopulation}}</span>
+      </div>
+    </div>
+    
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        <p class="govuk-body">Reverse Cohorting Unit</p>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="reverseCohortingUnit">{{dashboardStats.reverseCohortingUnit}}</span>
+      </div>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        <p class="govuk-body">Protective Isolation Unit</p>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="protectiveIsolationUnit">{{dashboardStats.protectiveIsolationUnit}}</span>
+      </div>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    
+    <div class="govuk-grid-row">
+      <div class="stat-with-warning">
+        <p class="govuk-body">Shielding Unit</p>
+        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="shieldingUnit">{{dashboardStats.shieldingUnit}}</span>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        {% if dashboardStats.refusingToShield > 0 %}
+          {% set message = "There is " + dashboardStats.refusingToShield + " prisoner refusing to shield" 
+                  if dashboardStats.refusingToShield == 1 
+                  else "There are " + dashboardStats.refusingToShield + " prisoners who are refusing to shield" %}
+          {{ govukWarningText({
+            text: message,
+            iconFallbackText: "Warning",
+            classes: "govuk-!-padding-top-9",
+            attributes: {
+              "data-qa": "refusingToShield"
+            }
+          }) }}
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}

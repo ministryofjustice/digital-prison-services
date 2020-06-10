@@ -3,9 +3,84 @@ const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDeta
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
 const bookingId = 14
+const offenderNo = 'A12345'
+
+context('Prisoner quick look data retrieval errors', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.login()
+
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+    })
+
+    cy.task('stubQuickLookApiErrors')
+    cy.visit(`/prisoner/${offenderNo}`)
+  })
+
+  it('should display the appropriate message when there was an error requesting offence data', () => {
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+    cy.get('[data-test="offender-offences"]')
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
+      })
+  })
+
+  it('should display the appropriate message when there was an error requesting balance data', () => {
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+    cy.get('[data-test="offender-balances"]')
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
+      })
+  })
+
+  it('should display the appropriate message when there was an error requesting case note adjudications', () => {
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+    cy.get('[data-test="case-note-adjudications"]')
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
+      })
+  })
+
+  it('should display the appropriate message when there was an error requesting personal details', async () => {
+    cy.get('[data-test="personal-details"]')
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
+      })
+  })
+
+  it('should display the appropriate message when there was an error requesting visits', async () => {
+    cy.get('[data-test="visit-details"]')
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
+      })
+  })
+
+  it('should display the appropriate message when there was an error requesting schedules', async () => {
+    cy.get('[data-test="schedules"]')
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
+      })
+  })
+})
 
 context('Prisoner quick look', () => {
   before(() => {
+    cy.task('reset')
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
@@ -149,7 +224,6 @@ context('Prisoner quick look', () => {
       profileInformation: [{ type: 'NAT', resultValue: 'British' }],
     })
 
-    const offenderNo = 'A12345'
     cy.visit(`/prisoner/${offenderNo}`)
   })
 
