@@ -127,5 +127,12 @@ module.exports = on => {
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
     stubLoginPage: auth.redirect,
+    stubOffenderBasicDetails: basicDetails => Promise.all([elite2api.stubOffenderBasicDetails(basicDetails)]),
+    stubAppointmentTypes: types => Promise.all([elite2api.stubAppointmentTypes(types)]),
+    stubAppointmentsAtAgency: (agency, locations) =>
+      Promise.all([elite2api.stubUsageAtAgency(agency, 'APP', locations)]),
+    stubVisitsAtAgency: (agency, locations) => Promise.all([elite2api.stubUsageAtAgency(agency, 'VISIT', locations)]),
+    stubActivityLocations: () => Promise.all([elite2api.stubActivityLocations()]),
+    stubPostAppointments: () => Promise.all([elite2api.stubPostAppointments()]),
   })
 }
