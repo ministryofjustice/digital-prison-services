@@ -1030,7 +1030,10 @@ describe('prisoner personal', () => {
               phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
             })
             .mockResolvedValueOnce({
-              addresses: [{ ...primaryAddress, addressType: 'Business' }],
+              addresses: [
+                { ...primaryAddress, endDate: '2020-01-01', addressType: 'Business' },
+                { ...nonPrimaryAddress, addressType: 'Business' },
+              ],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
@@ -1078,10 +1081,10 @@ describe('prisoner personal', () => {
                       { label: 'Relationship', value: 'Case Administrator' },
                       { label: 'Phone number', value: '04444444444, 055555555555, extension number 123' },
                       { label: 'Email', value: 'test3@email.com, test4@email.com' },
-                      { label: 'Address', value: 'Flat A, 13, High Street' },
-                      { label: 'Town', value: 'Ulverston' },
+                      { label: 'Address', value: 'Flat B, 13, Another Street' },
+                      { label: 'Town', value: 'Leeds' },
                       { label: 'County', value: 'West Yorkshire' },
-                      { label: 'Postcode', value: 'LS1 AAA' },
+                      { label: 'Postcode', value: 'LS2 BBB' },
                       { label: 'Country', value: 'England' },
                       { label: 'Address phone', value: '011111111111' },
                       { label: 'Address type', value: 'Business' },
@@ -1195,6 +1198,35 @@ describe('prisoner personal', () => {
                   },
                 ],
               },
+            })
+          )
+        })
+      })
+
+      describe('when the professional contact does not have an active address', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [primaryAddress],
+              emails: [],
+              phones: [],
+            })
+            .mockResolvedValueOnce({
+              addresses: [{ ...primaryAddress, endDate: '2020-01-01', addressType: 'Business' }],
+              emails: [],
+              phones: [],
+            })
+        })
+
+        it('should not return the professional contact', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: expect.objectContaining({
+                professional: [],
+              }),
             })
           )
         })
