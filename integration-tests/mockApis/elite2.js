@@ -598,6 +598,280 @@ module.exports = {
       },
     })
   },
+  stubVisits: (visits, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/schedules/[A-Z].+?/visits.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: visits || [],
+      },
+    })
+  },
+  stubLocation: (locationId, locationData, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/locations/[0-9]+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locationData || {
+          locationId,
+          locationType: 'WING',
+          description: 'HB1',
+          agencyId: 'RNI',
+          currentOccupancy: 243,
+          locaitionPrefix: 'RNI-HB1',
+          internalLocationCode: 'HB1',
+        },
+      },
+    })
+  },
+  stubSentenceData: (offenderSentenceDetail, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/offender-sentences',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offenderSentenceDetail || [],
+      },
+    })
+  },
+  stubCourtEvents: (courtEvents, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/schedules/.+?/courtEvents.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: courtEvents || [],
+      },
+    })
+  },
+  stubActivities: (activities, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: activities || [],
+      },
+    })
+  },
+  stubPostAppointments: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/appointments',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
+  stubAppointments: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
+  stubExternalTransfers: (transfers, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/schedules/[A-Z].+?/externalTransfers.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: transfers || [],
+      },
+    })
+  },
+  stubAppointmentLocations: (locations, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/agencies/.+?/locations?eventType=APP',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations || [],
+      },
+    })
+  },
+  stubAppointmentTypes: (types, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: '/api/reference-domains/scheduleReasons?eventType=APP',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: types || [],
+      },
+    })
+  },
+  stubAgencyDetails: (agencyId, details, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/agencies/${agencyId}?activeOnly=false`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: details || {},
+      },
+    })
+  },
+  stubAppointmentsForBooking: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/bookings/[0-9]+?/appointments',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
+  stubUsageAtAgency: (agency, type, locations, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/agencies/${agency}/locations?eventType=${type}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations || [
+          {
+            locationId: 1,
+            userDescription: 'loc1',
+          },
+          {
+            locationId: 2,
+            userDescription: 'loc2',
+          },
+          {
+            locationId: 3,
+            userDescription: 'loc3',
+          },
+        ],
+      },
+    })
+  },
+  stubSchedulesAtAgency: (agency, location, type, date, schedules, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/schedules/${agency}/locations/${location}/usage/${type}?date=${date}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: schedules || [],
+      },
+    })
+  },
+  stubSchedulesAtLocation: (location, type, date, schedules, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/schedules/locations/${location}/usage/${type}?date=${date}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: schedules || [],
+      },
+    })
+  },
+  stubActivityLocations: (locations, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/agencies/.+?/eventLocationsBooked.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations || [
+          {
+            locationId: 1,
+            userDescription: 'loc1',
+          },
+          {
+            locationId: 2,
+            userDescription: 'loc2',
+          },
+          {
+            locationId: 3,
+            userDescription: 'loc3',
+          },
+        ],
+      },
+    })
+  },
   stubInmates: ({ locationId, params, count, data = [] }) =>
     stubFor({
       request: {
@@ -612,6 +886,20 @@ module.exports = {
           'total-records': `${count}`,
         },
         jsonBody: data,
+      },
+    }),
+  stubActivitySchedules: (location, date, activities, status = 200) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/schedules/locations/${location}/activities?date=${date}&includeSuspended=false`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: activities || [],
       },
     }),
 }
