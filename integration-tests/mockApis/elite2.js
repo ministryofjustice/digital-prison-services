@@ -161,6 +161,22 @@ module.exports = {
       },
     })
   },
+
+  stubAlerts: ({ locationId, alerts }) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/api/bookings/offenderNo/${locationId}/alerts`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: alerts || [],
+      },
+    })
+  },
   stubOffenderImage: () => {
     return stubFor({
       request: {
@@ -856,7 +872,7 @@ module.exports = {
       },
     })
   },
-  stubInmates: ({ locationId, params, count }) =>
+  stubInmates: ({ locationId, params, count, data = [] }) =>
     stubFor({
       request: {
         method: 'GET',
@@ -869,7 +885,7 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
           'total-records': `${count}`,
         },
-        jsonBody: [],
+        jsonBody: data,
       },
     }),
   stubActivitySchedules: (location, date, activities, status = 200) =>

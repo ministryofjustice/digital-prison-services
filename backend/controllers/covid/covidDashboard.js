@@ -1,21 +1,6 @@
-module.exports = ({ elite2Api, logError }) => {
-  const alerts = {
-    protectiveIsolationUnit: 'UPIU',
-    reverseCohortingUnit: 'URCU',
-    shieldingUnit: 'USU',
-    refusingToShield: 'URS',
-  }
+const { alerts } = require('../../services/covidService')
 
-  const getCount = async (res, alert) => {
-    const { caseLoadId } = res.locals.user.activeCaseLoad
-
-    const context = { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 1 } }
-
-    await elite2Api.getInmates(context, caseLoadId, alert ? { alerts: alert } : {})
-
-    return context.responseHeaders['total-records']
-  }
-
+module.exports = ({ covidService, logError }) => {
   const loadStats = async res => {
     const [
       prisonPopulation,
@@ -24,11 +9,11 @@ module.exports = ({ elite2Api, logError }) => {
       shieldingUnit,
       refusingToShield,
     ] = await Promise.all([
-      getCount(res),
-      getCount(res, alerts.reverseCohortingUnit),
-      getCount(res, alerts.protectiveIsolationUnit),
-      getCount(res, alerts.shieldingUnit),
-      getCount(res, alerts.refusingToShield),
+      covidService.getCount(res),
+      covidService.getCount(res, alerts.reverseCohortingUnit),
+      covidService.getCount(res, alerts.protectiveIsolationUnit),
+      covidService.getCount(res, alerts.shieldingUnit),
+      covidService.getCount(res, alerts.refusingToShield),
     ])
 
     return {
@@ -43,7 +28,7 @@ module.exports = ({ elite2Api, logError }) => {
   return async (req, res) => {
     try {
       const dashboardStats = await loadStats(res)
-      return res.render('covid/dashboard.njk', { dashboardStats })
+      return res.render('covid/dashboard.njk', { title: 'Current breakdown of COVID units', dashboardStats })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load dashboard stats')
       return res.render('error.njk', { url: '/current-covid-units' })
