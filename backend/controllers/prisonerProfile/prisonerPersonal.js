@@ -60,19 +60,24 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
-  const { nextOfKin } = contacts || {}
-
+  const { nextOfKin, otherContacts } = contacts || {}
   const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
+  const activeCaseAdministrator =
+    otherContacts && otherContacts.find(contact => contact.activeFlag && contact.relationship === 'CA')
 
   const nextOfKinsWithContact =
     activeNextOfKins &&
-    activeNextOfKins.length > 0 &&
     (await Promise.all(
       activeNextOfKins.map(async kin => ({
         ...kin,
         ...(await personService.getPersonContactDetails(res.locals, kin.personId)),
       }))
     ))
+
+  const activeCaseAdministratorWithContact = activeCaseAdministrator && {
+    ...activeCaseAdministrator,
+    ...(await personService.getPersonContactDetails(res.locals, activeCaseAdministrator.personId)),
+  }
 
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
@@ -85,7 +90,10 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     identifiers: identifiersViewModel({ identifiers }),
     personalDetails: personalDetailsViewModel({ prisonerDetails: fullPrisonerDetails, property }),
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
-    activeContacts: activeContactsViewModel({ personal: nextOfKinsWithContact }),
+    activeContacts: activeContactsViewModel({
+      personal: nextOfKinsWithContact,
+      professional: [...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : [])],
+    }),
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({
       personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,

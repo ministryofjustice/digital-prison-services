@@ -826,4 +826,20 @@ module.exports = {
       },
     })
   },
+  stubInmates: ({ locationId, params, count }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/api/locations/description/${locationId}/inmates`,
+        queryParameters: params,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'total-records': `${count}`,
+        },
+        jsonBody: [],
+      },
+    }),
 }

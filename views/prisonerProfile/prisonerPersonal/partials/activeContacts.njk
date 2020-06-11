@@ -31,3 +31,33 @@
 {% else %}
   <p class="govuk-body">None</p>
 {% endif %}
+
+<h3 class="govuk-heading-m">Professional</h3>
+
+{% if activeContacts.professional.length %}
+  {% for contact in activeContacts.professional %}
+    {% set activeContactsProfessionalRows = [] %}
+
+    {% for contactDetail in contact.details %}
+      {% set activeContactsProfessionalRows = (activeContactsProfessionalRows.push(
+        {
+          key: {
+            text: contactDetail.label,
+            classes: 'govuk-summary-list__key--indent'
+          },
+          value: {
+            text: contactDetail.value | showDefault(missingEntry)
+          }
+        }
+      ), activeContactsProfessionalRows) %}
+    {% endfor %}
+
+    <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ contact.name }}</h3>
+
+    {{ govukSummaryList({
+      rows: activeContactsProfessionalRows
+    }) }}
+  {% endfor%}
+{% else %}
+  <p class="govuk-body">None</p>
+{% endif %}
