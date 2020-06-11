@@ -25,9 +25,12 @@ module.exports = on => {
     stubLoginCourt: () =>
       Promise.all([auth.stubLoginCourt({}), elite2api.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
+    stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
+    stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
+    stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
 
@@ -135,5 +138,21 @@ module.exports = on => {
     stubVisitsAtAgency: (agency, locations) => Promise.all([elite2api.stubUsageAtAgency(agency, 'VISIT', locations)]),
     stubActivityLocations: () => Promise.all([elite2api.stubActivityLocations()]),
     stubPostAppointments: () => Promise.all([elite2api.stubPostAppointments()]),
+    stubSchedules: ({ agency, location, date, appointments, visits, activities }) =>
+      Promise.all([
+        elite2api.stubSchedulesAtAgency(agency, location, 'APP', date, appointments),
+        elite2api.stubSchedulesAtLocation(location, 'APP', date, appointments),
+        elite2api.stubSchedulesAtAgency(agency, location, 'VISIT', date, visits),
+        elite2api.stubSchedulesAtLocation(location, 'VISIT', date, visits),
+        elite2api.stubCourtEvents(),
+        elite2api.stubActivitySchedules(activities),
+        elite2api.stubVisits(visits),
+        elite2api.stubExternalTransfers(),
+        elite2api.stubAppointments(appointments),
+        elite2api.stubActivities(activities),
+      ]),
+    stubSentenceData: details => Promise.all([elite2api.stubSentenceData(details)]),
+    stubLocation: (locationId, locationData) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
+    stubAgencyDetails: (agencyId, details) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
   })
 }

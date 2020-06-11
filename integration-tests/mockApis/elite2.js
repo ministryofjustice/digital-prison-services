@@ -586,7 +586,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/.+?/visits.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/visits.+?',
       },
       response: {
         status,
@@ -600,7 +600,7 @@ module.exports = {
   stubLocation: (locationId, locationData, status = 200) => {
     return stubFor({
       request: {
-        method: 'POST',
+        method: 'GET',
         urlPattern: '/api/locations/[0-9]+?',
       },
       response: {
@@ -654,7 +654,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/.+?/activities.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
       },
       response: {
         status,
@@ -684,7 +684,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/.+?/appointments.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
       },
       response: {
         status,
@@ -699,7 +699,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/.+?/externalTransfers.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/externalTransfers.+?',
       },
       response: {
         status,
@@ -798,6 +798,36 @@ module.exports = {
       },
     })
   },
+  stubSchedulesAtAgency: (agency, location, type, date, schedules, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/schedules/${agency}/locations/${location}/usage/${type}?date=${date}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: schedules || [],
+      },
+    })
+  },
+  stubSchedulesAtLocation: (location, type, date, schedules, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/schedules/locations/${location}/usage/${type}?date=${date}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: schedules || [],
+      },
+    })
+  },
   stubActivityLocations: (locations, status = 200) => {
     return stubFor({
       request: {
@@ -840,6 +870,20 @@ module.exports = {
           'total-records': `${count}`,
         },
         jsonBody: [],
+      },
+    }),
+  stubActivitySchedules: (activities, status = 200) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/schedules/locations/[0-9].+?/activities\\?date=.+?\\&includeSuspended=false',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: activities || [],
       },
     }),
 }

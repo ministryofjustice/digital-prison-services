@@ -23,6 +23,20 @@ context('A user can add an appointment', () => {
     cy.task('stubAppointmentsAtAgency', 'MDI', [])
     cy.task('stubVisitsAtAgency', 'MDI', [])
     cy.task('stubPostAppointments')
+    cy.task('stubSchedules', {
+      agency: 'MDI',
+      location: 1,
+      date: moment().format('yyyy-MM-DD'),
+      appointments: [],
+      visits: [],
+      activities: [],
+    })
+    cy.task('stubSentenceData')
+    cy.task('stubLocation', 1)
+    cy.task('stubCourts')
+    cy.task('stubAddVideoLinkAppointment')
+    cy.task('stubAgencyDetails', 'MDI')
+    cy.task('stubUserEmail', 'ITAG_USER')
 
     const offenderNo = 'A12345'
     cy.visit(`/offenders/${offenderNo}/add-appointment`)
@@ -49,8 +63,8 @@ context('A user can add an appointment', () => {
     form.location().select('1')
     form.startTimeHours().select('22')
     form.startTimeMinutes().select('55')
-    form.startTimeHours().select('23')
-    form.startTimeMinutes().select('55')
+    form.endTimeHours().select('23')
+    form.endTimeMinutes().select('55')
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.date().type(moment().format('DD/MM/yyyy'))

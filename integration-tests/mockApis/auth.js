@@ -157,7 +157,7 @@ const stubEmail = username =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/auth/api/user/${encodeURI(username)}/email`,
+      url: `/auth/api/user/${encodeURI(username)}/email`,
     },
     response: {
       status: 200,
@@ -211,5 +211,6 @@ module.exports = {
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
   stubUserMeRoles,
+  stubEmail,
   redirect,
 }
