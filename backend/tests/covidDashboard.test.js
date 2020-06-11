@@ -4,13 +4,8 @@ describe('covid dashboard', () => {
   let req
   let res
   let logError
-  let elite2Api
+  let covidService
   let controller
-
-  const requestHeaders = {
-    'page-limit': 1,
-    'page-offset': 0,
-  }
 
   beforeEach(() => {
     req = {
@@ -20,48 +15,39 @@ describe('covid dashboard', () => {
 
     logError = jest.fn()
 
-    elite2Api = {
-      getInmates: jest.fn(),
+    covidService = {
+      getCount: jest.fn(),
     }
-    controller = covidDashboard({ elite2Api, logError })
+    controller = covidDashboard({ covidService, logError })
   })
 
-  const returnSize = count => context => {
-    // eslint-disable-next-line no-param-reassign,
-    context.responseHeaders = { 'total-records': count }
-  }
-
   it('should render view with counts', async () => {
-    elite2Api.getInmates
-      .mockImplementationOnce(returnSize(21))
-      .mockImplementationOnce(returnSize(5))
-      .mockImplementationOnce(returnSize(16))
-      .mockImplementationOnce(returnSize(14))
-      .mockImplementationOnce(returnSize(9))
+    covidService.getCount
+      .mockResolvedValueOnce(21)
+      .mockResolvedValueOnce(16)
+      .mockResolvedValueOnce(9)
+      .mockResolvedValueOnce(5)
+      .mockResolvedValueOnce(14)
 
     await controller(req, res)
 
     expect(logError).not.toHaveBeenCalled()
 
-    const expectedContext = expect.objectContaining({ requestHeaders })
-
-    expect(logError).not.toHaveBeenCalled()
-
-    expect(elite2Api.getInmates).toHaveBeenCalledWith(expectedContext, 'MDI', {})
-    expect(elite2Api.getInmates).toHaveBeenCalledWith(expectedContext, 'MDI', { alerts: 'URCU' })
-    expect(elite2Api.getInmates).toHaveBeenCalledWith(expectedContext, 'MDI', { alerts: 'UPIU' })
-    expect(elite2Api.getInmates).toHaveBeenCalledWith(expectedContext, 'MDI', { alerts: 'USU' })
-    expect(elite2Api.getInmates).toHaveBeenCalledWith(expectedContext, 'MDI', { alerts: 'URS' })
+    expect(covidService.getCount).toHaveBeenCalledWith(res)
+    expect(covidService.getCount).toHaveBeenCalledWith(res, 'URCU')
+    expect(covidService.getCount).toHaveBeenCalledWith(res, 'UPIU')
+    expect(covidService.getCount).toHaveBeenCalledWith(res, 'USU')
+    expect(covidService.getCount).toHaveBeenCalledWith(res, 'URS')
 
     expect(res.render).toHaveBeenCalledWith(
       'covid/dashboard.njk',
       expect.objectContaining({
         dashboardStats: {
           prisonPopulation: 21,
-          protectiveIsolationUnit: 16,
-          refusingToShield: 9,
-          reverseCohortingUnit: 5,
-          shieldingUnit: 14,
+          reverseCohortingUnit: 16,
+          protectiveIsolationUnit: 9,
+          shieldingUnit: 5,
+          refusingToShield: 14,
         },
       })
     )
@@ -69,7 +55,7 @@ describe('covid dashboard', () => {
 
   it('should handle errors', async () => {
     const error = Error('unexpected err')
-    elite2Api.getInmates.mockRejectedValue(error)
+    covidService.getCount.mockRejectedValue(error)
 
     await controller(req, res)
 

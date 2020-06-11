@@ -1,3 +1,4 @@
+const moment = require('moment')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel } = require('../utils')
@@ -31,6 +32,10 @@ module.exports = (app, path) => {
       return { text: errors.find(error => error.href === firstPresentFieldError).text }
     }
     return null
+  })
+
+  njkEnv.addFilter('formatDate', (value, format) => {
+    return value ? moment(value).format(format) : null
   })
 
   njkEnv.addFilter('hasErrorWithPrefix', (errorsArray, prefixes) => {
