@@ -872,11 +872,11 @@ module.exports = {
         jsonBody: [],
       },
     }),
-  stubActivitySchedules: (activities, status = 200) =>
+  stubActivitySchedules: (location, date, activities, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/schedules/locations/[0-9].+?/activities\\?date=.+?\\&includeSuspended=false',
+        url: `/api/schedules/locations/${location}/activities?date=${date}&includeSuspended=false`,
       },
       response: {
         status,

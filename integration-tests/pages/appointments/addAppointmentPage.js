@@ -23,6 +23,7 @@ const addAppointmentPage = () =>
     offenderEvents: () => cy.get('[data-qa="offender-events"]'),
     locationEvents: () => cy.get('[data-qa="location-events"]'),
     errorSummary: () => cy.get('.govuk-error-summary'),
+    lastAppointmentDate: () => cy.get('.js-appointment-last-appointment'),
   })
 
 export default {

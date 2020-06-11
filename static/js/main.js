@@ -38,6 +38,7 @@ $(document).ready(function() {
         data: { date: date, locationId: locationId },
       })
         .done(function(data) {
+          console.log(data)
           locationEventsContainer.html(data).show()
         })
         .fail(function() {

@@ -145,7 +145,7 @@ module.exports = on => {
         elite2api.stubSchedulesAtAgency(agency, location, 'VISIT', date, visits),
         elite2api.stubSchedulesAtLocation(location, 'VISIT', date, visits),
         elite2api.stubCourtEvents(),
-        elite2api.stubActivitySchedules(activities),
+        elite2api.stubActivitySchedules(location, date, activities),
         elite2api.stubVisits(visits),
         elite2api.stubExternalTransfers(),
         elite2api.stubAppointments(appointments),
