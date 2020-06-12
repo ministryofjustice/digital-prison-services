@@ -55,8 +55,7 @@
         {% endif %}
 
         {% if sentenceAdjustments.unusedRemandTime.length > 0 %}
-            <h3 class="govuk-heading-s" data-test="other-release-dates-heading">Unused remand time</h3>
-            {{ prisonerSummarySection(sentenceAdjustments.unusedRemandTime, 'Not entered', { "data-test": "sentence-adjustments-days-remaining-section" }, true) }}
+            {{ prisonerSummarySection(sentenceAdjustments.unusedRemandTime, 'Not entered', { "data-test": "sentence-adjustments-days-remaining-section" }) }}
         {% endif %}
     {% endif %}
 {% endset %}
