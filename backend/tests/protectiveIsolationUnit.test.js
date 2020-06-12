@@ -1,12 +1,14 @@
 const moment = require('moment')
-const reverseCohortingUnit = require('../controllers/covid/reverseCohortingUnit')
+const protectiveIsolationUnit = require('../controllers/covid/protectiveIsolationUnitController')
 
-describe('reverse cohorting unit', () => {
+describe('protective isolation unit', () => {
   let req
   let res
   let logError
   let covidService
   let controller
+
+  const now = moment('2020-01-10')
 
   beforeEach(() => {
     req = {
@@ -19,13 +21,15 @@ describe('reverse cohorting unit', () => {
     covidService = {
       getAlertList: jest.fn(),
     }
-    controller = reverseCohortingUnit({ covidService, logError })
+    controller = protectiveIsolationUnit({ covidService, logError, nowGetter: () => now })
   })
 
   it('should render view with results', async () => {
     const results = [
       {
-        alertCreated: '2020-01-03',
+        alertCreated: moment(now)
+          .subtract(3, 'days')
+          .format('YYYY-MM-DD'),
         assignedLivingUnitDesc: '1-2-017',
         bookingId: 123,
         name: 'Stewart, James',
@@ -39,17 +43,16 @@ describe('reverse cohorting unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'URCU')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'UPIU')
 
-    expect(res.render).toHaveBeenCalledWith('covid/reverseCohortingUnit.njk', {
-      title: 'Prisoners in the Reverse Cohorting Unit',
+    expect(res.render).toHaveBeenCalledWith('covid/protectiveIsolationUnit.njk', {
+      title: 'Prisoners in the Protective Isolation Unit',
       results: [
         {
-          alertCreated: moment('2020-01-03'),
+          alertCreated: moment(now.subtract(3, 'days').format('YYYY-MM-DD')),
           assignedLivingUnitDesc: '1-2-017',
           bookingId: 123,
-          expectedMoveDate: moment('2020-01-03').add(14, 'days'),
-          isOverdue: true,
+          daysInUnit: 3,
           name: 'Stewart, James',
           offenderNo: 'AA1234A',
         },
@@ -63,12 +66,12 @@ describe('reverse cohorting unit', () => {
 
     await controller(req, res)
 
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load reverse cohorting list')
+    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load protective isolation list')
 
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({
-        url: '/reverse-cohorting-unit',
+        url: '/protective-isolation-unit',
       })
     )
   })
