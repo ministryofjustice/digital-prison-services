@@ -7,7 +7,7 @@ const col = (i, j) =>
     .find('td')
     .eq(j)
 
-const viewReverseCohortingUnitPage = () =>
+const reverseCohortingUnitPage = () =>
   page('Prisoners in the Reverse Cohorting Unit', {
     prisonerCount: () => cy.get('[data-qa="prisonerCount"]'),
     getRow: i => ({
@@ -22,9 +22,9 @@ const viewReverseCohortingUnitPage = () =>
   })
 
 export default {
-  verifyOnPage: viewReverseCohortingUnitPage,
+  verifyOnPage: reverseCohortingUnitPage,
   goTo: () => {
     cy.visit('/reverse-cohorting-unit')
-    return viewReverseCohortingUnitPage()
+    return reverseCohortingUnitPage()
   },
 }

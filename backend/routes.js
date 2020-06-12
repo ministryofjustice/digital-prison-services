@@ -61,6 +61,7 @@ const endDateController = require('./controllers/appointments/endDate')
 const covidDashboardController = require('./controllers/covid/covidDashboard')
 const reverseCohortingUnitController = require('./controllers/covid/reverseCohortingUnit')
 const protectiveIsolationUnitController = require('./controllers/covid/protectiveIsolationUnitController')
+const shieldingUnitController = require('./controllers/covid/shieldingUnitController')
 
 const currentUser = require('./middleware/currentUser')
 
@@ -267,6 +268,7 @@ const setup = ({
   router.use('/current-covid-units/', covidDashboardController({ covidService, logError }))
   router.use('/reverse-cohorting-unit/', reverseCohortingUnitController({ covidService, logError }))
   router.use('/protective-isolation-unit/', protectiveIsolationUnitController({ covidService, logError }))
+  router.use('/shielding-unit/', shieldingUnitController({ covidService, logError }))
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 
