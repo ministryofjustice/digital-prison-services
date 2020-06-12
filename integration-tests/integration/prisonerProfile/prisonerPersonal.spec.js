@@ -896,7 +896,7 @@ context('Prisoner personal', () => {
         })
       })
 
-      context.only('Active contacts section', () => {
+      context('Active contacts section', () => {
         it('Should show correct headings, labels and values', () => {
           cy.get('[data-test="active-contacts-summary"]').then($section => {
             cy.get($section)

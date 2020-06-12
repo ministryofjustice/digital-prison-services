@@ -1182,7 +1182,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
-                    details: expect.arrayContaining([
+                    details: expect.not.arrayContaining([
                       { label: 'Phone number', value: '' },
                       { label: 'Email', value: '' },
                     ]),
@@ -1191,7 +1191,7 @@ describe('prisoner personal', () => {
                 professional: [
                   {
                     name: 'Uriualche Lydyle',
-                    details: expect.arrayContaining([
+                    details: expect.not.arrayContaining([
                       { label: 'Phone number', value: '' },
                       { label: 'Email', value: '' },
                     ]),
