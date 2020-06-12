@@ -54,3 +54,12 @@
     }
   }
 }
+
+.govuk-summary-list {
+  .govuk-summary-list__row:last-child {
+    .govuk-summary-list__key,
+    .govuk-summary-list__value {
+      border-bottom: none;
+    }
+  }
+}
