@@ -69,6 +69,10 @@ describe('prisoner sentence and release', () => {
         dtoPostRecallReleaseDateOverride: '2021-10-16',
       },
     })
+
+    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
+    elite2Api.getSentenceAdjustments = jest.fn()
+
     controller = prisonerSentenceAndRelease({
       prisonerProfileService,
       elite2Api,
@@ -209,6 +213,95 @@ describe('prisoner sentence and release', () => {
           earlyAndTemporaryReleaseEligibilityDates: [],
           licenceDates: [],
           otherReleaseDates: [],
+        },
+      })
+    )
+  })
+
+  it('should make a call to retrieve an offenders booking id', async () => {
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {},
+    })
+    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({})
+
+    await controller(req, res)
+
+    expect(elite2Api.getDetails).toHaveBeenCalledWith({}, offenderNo)
+  })
+
+  it('should make a call for sentence adjustments', async () => {
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {},
+    })
+    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({})
+
+    await controller(req, res)
+
+    expect(elite2Api.getSentenceAdjustments).toHaveBeenCalledWith({}, 1)
+  })
+
+  it('should return the right data when values are available', async () => {
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {},
+    })
+    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({
+      additionalDaysAwarded: 1,
+      lawfullyAtLarge: 2,
+      recallSentenceRemand: 3,
+      recallSentenceTaggedBail: 4,
+      remand: 5,
+      restoredAdditionalDaysAwarded: 6,
+      specialRemission: 7,
+      taggedBail: 8,
+      unlawfullyAtLarge: 9,
+      unusedRemand: 10,
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        sentenceAdjustments: {
+          daysRemovedFromSentence: [
+            { label: 'Remand', value: 5 },
+            { label: 'Recall renamed', value: 3 },
+            { label: 'Recall tagged bail', value: 4 },
+            { label: 'Restored additional days awarded', value: 6 },
+            { label: 'Special remission', value: 7 },
+            { label: 'Tagged bail', value: 8 },
+          ],
+          daysAddedToSentence: [
+            { label: 'Additional days awarded', value: 1 },
+            { label: 'Unlawfully at large', value: 9 },
+          ],
+          unusedRemandTime: [{ label: 'Unused remand time', value: 10 }],
+          noSentenceAdjustments: false,
+        },
+      })
+    )
+  })
+
+  it('should return the right data when no values are available', async () => {
+    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {},
+    })
+    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({
+      additionalDaysAwarded: 0,
+      lawfullyAtLarge: 0,
+      recallSentenceRemand: 0,
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        sentenceAdjustments: {
+          daysRemovedFromSentence: [],
+          daysAddedToSentence: [],
+          unusedRemandTime: [],
+          noSentenceAdjustments: true,
         },
       })
     )

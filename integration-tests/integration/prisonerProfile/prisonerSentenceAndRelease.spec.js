@@ -20,9 +20,11 @@ context('Prisoner sentence and release', () => {
       iepSummary: {},
       caseNoteSummary: {},
     })
+    cy.task('stubOffenderBasicDetails', { bookingId: 1 })
   })
 
   it('Should show correct release dates with overrides', () => {
+    cy.task('stubSentenceAdjustments', {})
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -147,6 +149,7 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should show no data message when no dates', () => {
+    cy.task('stubSentenceAdjustments', {})
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {},
     })
@@ -168,6 +171,7 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should only show sections with data in them', () => {
+    cy.task('stubSentenceAdjustments', {})
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {
         lateTermDate: '2021-08-11',
@@ -202,6 +206,125 @@ context('Prisoner sentence and release', () => {
       .then($summaryValues => {
         expect($summaryValues.get(0).innerText).to.eq('\n          11 August 2021\n        ')
         expect($summaryValues.get(1).innerText).to.eq('\n          7 May 2021\n        ')
+      })
+  })
+
+  it('Should show appropriate message when no sentence adjustments are populated', () => {
+    cy.task('stubReleaseDatesOffenderNo', {
+      sentenceDetail: {},
+    })
+    cy.task('stubSentenceAdjustments', {
+      additionalDaysAwarded: 0,
+      lawfullyAtLarge: 0,
+      recallSentenceRemand: 0,
+      recallSentenceTaggedBail: 0,
+      remand: 0,
+      restoredAdditionalDaysAwarded: 0,
+      specialRemission: 0,
+      taggedBail: 0,
+      unlawfullyAtLarge: 0,
+      unusedRemand: 0,
+    })
+
+    cy.visit('/prisoner/A12345/sentence-and-release')
+    const prisonerSentenceAndReleasePage = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    prisonerSentenceAndReleasePage.noSentenceAdjustmentsMessage().contains('There are no sentence adjustments')
+  })
+
+  it('Should show the days removed section', () => {
+    cy.task('stubReleaseDatesOffenderNo', {
+      sentenceDetail: {},
+    })
+    cy.task('stubSentenceAdjustments', {
+      additionalDaysAwarded: 0,
+      recallSentenceRemand: 3,
+      recallSentenceTaggedBail: 4,
+      remand: 1,
+      restoredAdditionalDaysAwarded: 5,
+      specialRemission: 6,
+      taggedBail: 2,
+      unlawfullyAtLarge: 0,
+      unusedRemand: 0,
+    })
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const prisonerSentenceAndReleasePage = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    prisonerSentenceAndReleasePage.sentenceAdjustmentsDaysAddedSection().should('not.exist')
+    prisonerSentenceAndReleasePage.sentenceAdjustmentsDaysRemainingSection().should('not.exist')
+
+    prisonerSentenceAndReleasePage
+      .sentenceAdjustmentsDaysRemovedSection()
+      .find('dd')
+      .then($summaryValues => {
+        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
+        expect($summaryValues.get(1).innerText.trim()).to.eq('3')
+        expect($summaryValues.get(2).innerText.trim()).to.eq('4')
+        expect($summaryValues.get(3).innerText.trim()).to.eq('5')
+        expect($summaryValues.get(4).innerText.trim()).to.eq('6')
+        expect($summaryValues.get(5).innerText.trim()).to.eq('2')
+      })
+  })
+
+  it('Should show the days added section', () => {
+    cy.task('stubReleaseDatesOffenderNo', {
+      sentenceDetail: {},
+    })
+    cy.task('stubSentenceAdjustments', {
+      additionalDaysAwarded: 1,
+      recallSentenceRemand: 0,
+      recallSentenceTaggedBail: 0,
+      remand: 0,
+      restoredAdditionalDaysAwarded: 0,
+      specialRemission: 0,
+      taggedBail: 0,
+      unlawfullyAtLarge: 2,
+      unusedRemand: 0,
+    })
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const prisonerSentenceAndReleasePage = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    prisonerSentenceAndReleasePage.sentenceAdjustmentsDaysRemovedSection().should('not.exist')
+    prisonerSentenceAndReleasePage.sentenceAdjustmentsDaysRemainingSection().should('not.exist')
+
+    prisonerSentenceAndReleasePage
+      .sentenceAdjustmentsDaysAddedSection()
+      .find('dd')
+      .then($summaryValues => {
+        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
+        expect($summaryValues.get(1).innerText.trim()).to.eq('2')
+      })
+  })
+
+  it('Should show the unused remand time section', () => {
+    cy.task('stubReleaseDatesOffenderNo', {
+      sentenceDetail: {},
+    })
+    cy.task('stubSentenceAdjustments', {
+      additionalDaysAwarded: 0,
+      recallSentenceRemand: 0,
+      recallSentenceTaggedBail: 0,
+      remand: 0,
+      restoredAdditionalDaysAwarded: 0,
+      specialRemission: 0,
+      taggedBail: 0,
+      unlawfullyAtLarge: 0,
+      unusedRemand: 1,
+    })
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const prisonerSentenceAndReleasePage = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    prisonerSentenceAndReleasePage.sentenceAdjustmentsDaysRemovedSection().should('not.exist')
+    prisonerSentenceAndReleasePage.sentenceAdjustmentsDaysAddedSection().should('not.exist')
+
+    prisonerSentenceAndReleasePage
+      .sentenceAdjustmentsDaysRemainingSection()
+      .find('dd')
+      .then($summaryValues => {
+        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
       })
   })
 })
