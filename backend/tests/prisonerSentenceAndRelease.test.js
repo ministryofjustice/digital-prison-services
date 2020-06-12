@@ -265,7 +265,7 @@ describe('prisoner sentence and release', () => {
         sentenceAdjustments: {
           daysRemovedFromSentence: [
             { label: 'Remand', value: 5 },
-            { label: 'Recall renamed', value: 3 },
+            { label: 'Recall remand', value: 3 },
             { label: 'Recall tagged bail', value: 4 },
             { label: 'Restored additional days awarded', value: 6 },
             { label: 'Special remission', value: 7 },
