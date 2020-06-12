@@ -54,11 +54,11 @@ module.exports = {
       },
     })
   },
-  stubGetAttendance: (caseload, locationId, timeSlot, date, data = attendance) => {
+  stubGetAttendance: ({ locationId, timeSlot, date, data = attendance }) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/attendances/${caseload}/${locationId}?date=${date}&period=${timeSlot}`,
+        urlPattern: `/attendances/.+?/${locationId}\\?date=${date}&period=${timeSlot}`,
       },
       response: {
         status: 200,

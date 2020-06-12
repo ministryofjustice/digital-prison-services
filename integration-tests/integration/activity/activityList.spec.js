@@ -1,6 +1,6 @@
-const AttendanceChangesPage = require('../../pages/attendance/attendanceChangesPage')
+const searchPage = require('../../pages/whereabouts/searchPage')
 
-const caseload = 'WWI'
+const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
 
 context('Activity list page', () => {
@@ -10,9 +10,6 @@ context('Activity list page', () => {
     cy.login()
     cy.task('stubActivityLocations')
 
-    // cy.task('stubScheduledActivities', [
-    //   { eventId: 1, comment: 'Houseblock 1', firstName: 'bob', lastName: 'sut', offenderNo: 'A123456' },
-    // ])
     const offenders = [
       {
         bookingId: 1,
@@ -38,12 +35,18 @@ context('Activity list page', () => {
     offenders.forEach(offender => {
       cy.task('stubOffenderBasicDetails', offender)
     })
-    cy.task('stubGetActivityList', caseload, 2, 'AM', date)
+    cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
   })
 
   it('A user can view the activity list', () => {
     cy.task('stubGetAbsenceReasons')
-    cy.task('stubGetAttendance', caseload, 2, 'AM', date)
+    cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
     cy.visit(`/manage-prisoner-whereabouts`)
+
+    const page = searchPage.verifyOnPage()
+
+    page.period().select('AM')
+    page.activity().select('loc2')
+    page.continueActivityButton().click()
   })
 })

@@ -1,6 +1,7 @@
 const { stubFor } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
 const assessmentsResponse = require('./responses/assessmentsResponse')
+const activity3 = require('./responses/activity3')
 
 module.exports = {
   stubUserMe: () => {
@@ -61,7 +62,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/schedules/locations/${locationId}/activities?${
+        urlPattern: `/api/schedules/locations/${locationId}/activities\\?${
           timeSlot ? `timeSlot=${timeSlot}&` : ''
         }date=${date}&includeSuspended=${suspended}`,
       },
@@ -74,11 +75,11 @@ module.exports = {
       },
     })
   },
-  stubUsageAtLocation: (caseload, locationId, timeSlot, date, usage, json = '{}') => {
+  stubUsageAtLocation: (caseload, locationId, timeSlot, date, usage, json = []) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/schedules/${caseload}/${locationId}/usage/${usage}?${
+        urlPattern: `/api/schedules/.+?/${locationId}/usage/${usage}\\?${
           timeSlot ? `timeSlot=${timeSlot}&` : ''
         }date=${date}`,
       },
@@ -230,6 +231,27 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: results,
+      },
+    })
+  },
+  stubOffenderSentences: (offenderNumbers, date) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/api/offender-sentences`,
+        bodyPatterns: [{ equalToJson: offenderNumbers }],
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: [
+          {
+            offenderNo: activity3.offenderNo,
+            sentenceDetail: { releaseDate: date },
+          },
+        ],
       },
     })
   },

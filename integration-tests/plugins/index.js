@@ -52,6 +52,7 @@ module.exports = on => {
       const offenderNumbers = extractOffenderNumbers(activity)
 
       return Promise.all([
+        elite2api.stubUserCaseloads(),
         elite2api.stubProgEventsAtLocation(locationId, timeSlot, date, activity),
         elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP'),
         elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'VISIT'),
@@ -63,6 +64,7 @@ module.exports = on => {
         elite2api.stubExternalTransfers(externalTransfersResponse),
         elite2api.stubAlerts({ locationId, alertsResponse }),
         elite2api.stubAssessments(offenderNumbers),
+        elite2api.stubOffenderSentences(offenderNumbers, date),
       ])
     },
 

@@ -7,8 +7,9 @@ const appointment1 = require('./appointment1')
 const visit1 = require('./visit1')
 
 module.exports = {
-  activities: { activity1_1, activity1_2, activity1_3, activity2, activity3 },
-  pastActivities: { activity1_1, activity1_2, activity2 },
+  activities: [activity1_1, activity1_2, activity1_3, activity2, activity3],
+  pastActivities: [activity1_1, activity1_2, activity2],
+  activity3,
   visits: visit1,
   appointments: appointment1,
 }
