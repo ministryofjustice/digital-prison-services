@@ -1,6 +1,17 @@
 const { capitalize } = require('../utils')
 
-const getPhone = phones => phones && phones.map(phone => phone.number).join(', ')
+const getPhone = phones =>
+  phones &&
+  phones
+    .map(phone => {
+      const { type, ext, number } = phone
+      if (type === 'BUS' && ext) {
+        return `${number}, extension number ${ext}`
+      }
+
+      return number
+    })
+    .join(', ')
 
 const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone' }) => {
   const flat = address.flat && `Flat ${address.flat}`
