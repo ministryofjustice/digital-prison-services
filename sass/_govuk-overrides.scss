@@ -13,6 +13,16 @@
     > .govuk-summary-list:not(:first-child) {
       border-top: 1px solid $govuk-border-colour;
     }
+
+    // Remove last line of last summary within an accordion section
+    .govuk-summary-list {
+      .govuk-summary-list__row:last-child {
+        .govuk-summary-list__key,
+        .govuk-summary-list__value {
+          border-bottom: none;
+        }
+      }
+    }
   }
 
   .govuk-summary-list__key {
@@ -55,11 +65,5 @@
   }
 }
 
-.govuk-summary-list {
-  .govuk-summary-list__row:last-child {
-    .govuk-summary-list__key,
-    .govuk-summary-list__value {
-      border-bottom: none;
-    }
-  }
-}
+
+
