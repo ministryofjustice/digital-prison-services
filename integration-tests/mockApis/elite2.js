@@ -582,4 +582,19 @@ module.exports = {
       },
     })
   },
+  stubGetSentenceAdjustments: response => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/sentenceAdjustments',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    })
+  },
 }

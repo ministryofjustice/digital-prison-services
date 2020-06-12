@@ -286,6 +286,8 @@ const elite2ApiFactory = client => {
 
   const getHealthTypes = context => get(context, '/api/reference-domains/domains/HEALTH', 1000)
 
+  const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -374,6 +376,7 @@ const elite2ApiFactory = client => {
     getReasonableAdjustments,
     getTreatmentTypes,
     getHealthTypes,
+    getSentenceAdjustments,
   }
 }
 

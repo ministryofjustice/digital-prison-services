@@ -127,5 +127,7 @@ module.exports = on => {
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
     stubLoginPage: auth.redirect,
+    stubSentenceAdjustments: response => elite2api.stubGetSentenceAdjustments(response),
+    stubPrisonerDetail: response => elite2api.stubPrisonerDetail(response),
   })
 }
