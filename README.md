@@ -4,11 +4,11 @@ Application can be built with for dev mode
 
 ```bash
 npm
-npm start
+npm start:dev
 ```
 
-The application will automatically pick up front end changes, but you will need to restart the app to pick up any
-changes within the backend folder.
+The application will automatically pick up front end changes and it will restart if there are any changes in /backend or /views.
+Other changes will require a manual restart.
 
 For production
 

@@ -1,25 +1,36 @@
 <h3 class="govuk-heading-m">Schedule</h3>
 {% set scheduledActivityRows = [] %}
 
-{% for activityPeriod in scheduledActivityPeriods %}
-  {% set scheduledActivityRows = (scheduledActivityRows.push(
-    {
-      key: {
-        text: activityPeriod.label
-      },
-      value: {
-        html: scheduledActivities(activityPeriod.value)
-      }
-    }
-  ), scheduledActivityRows) %}
-{% endfor %}
+<div data-test="schedules">
+    {% if scheduledActivityPeriodsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
 
-{{ govukSummaryList({
-  rows: scheduledActivityRows,
-  classes: "govuk-!-margin-bottom-2",
-  attributes: { "data-test": "schedule-summary" }
-}) }}
+    {% if scheduledActivityPeriodsSectionError == false %}
+        {% for activityPeriod in scheduledActivityPeriods %}
+            {% set scheduledActivityRows = (scheduledActivityRows.push(
+                {
+                    key: {
+                    text: activityPeriod.label
+                },
+                    value: {
+                    html: scheduledActivities(activityPeriod.value)
+                }
+                }
+                ), scheduledActivityRows) %}
+        {% endfor %}
 
-<a href="{{ dpsUrl + 'offenders/' + prisonerProfileData.offenderNo + '/schedule' }}" class="govuk-link govuk-!-font-size-19">
-  14 day schedule
-</a>
+        {{ govukSummaryList({
+            rows: scheduledActivityRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "schedule-summary" }
+        }) }}
+
+        <a href="{{ dpsUrl + 'offenders/' + prisonerProfileData.offenderNo + '/schedule' }}"
+           class="govuk-link govuk-!-font-size-19">
+            14 day schedule
+        </a>
+    {% endif %}
+</div>

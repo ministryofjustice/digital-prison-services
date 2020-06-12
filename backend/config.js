@@ -60,7 +60,7 @@ module.exports = {
     tokenverification: {
       url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
       timeoutSeconds: process.env.TOKENVERIFICATION_API_URL || 5,
-      enabled: process.env.TOKENVERIFICATION_API_ENABLED || false,
+      enabled: process.env.TOKENVERIFICATION_API_ENABLED === 'true',
     },
     categorisation: {
       ui_url: process.env.CATEGORISATION_UI_URL || 'http://localhost:3003/',
@@ -75,6 +75,7 @@ module.exports = {
     },
   },
   notifications: {
+    enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
     notifyKey: process.env.NOTIFY_API_KEY || '',
     confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',
     confirmBookingCourtTemplateId: '7f44cd94-4a74-4b9d-aff8-386fec34bd2e',

@@ -1,21 +1,32 @@
 <h3 class="govuk-heading-m">Personal information</h3>
-{% set personalRows = [] %}
+<div data-test="personal-details">
+    {% set personalRows = [] %}
 
-{% for personal in personalDetails %}
-  {% set personalRows = (personalRows.push(
-    {
-      key: {
-        text: personal.label
-      },
-      value: {
-        text: personal.value | showDefault
-      }
-    }
-  ), personalRows) %}
-{% endfor %}
+    {% if personalDetailsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
 
-{{ govukSummaryList({
-  rows: personalRows,
-  classes: "govuk-!-margin-bottom-2",
-  attributes: { "data-test": "personal-info-summary" }
-}) }}
+    {% if personalDetailsSectionError == false %}
+        {% for personal in personalDetails %}
+            {% set personalRows = (personalRows.push(
+                {
+                    key: {
+                    text: personal.label
+                },
+                    value: {
+                    text: personal.value | showDefault
+                }
+                }
+                ), personalRows) %}
+        {% endfor %}
+
+        {{ govukSummaryList({
+            rows: personalRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "personal-info-summary" }
+        }) }}
+
+    {% endif %}
+</div>

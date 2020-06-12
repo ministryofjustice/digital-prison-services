@@ -29,6 +29,7 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
+const { covidServiceFactory } = require('./services/covidService')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -56,6 +57,10 @@ const prisonerSearchController = require('./controllers/search/prisonerSearch')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
 const endDateController = require('./controllers/appointments/endDate')
+
+const covidDashboardController = require('./controllers/covid/covidDashboard')
+const reverseCohortingUnitController = require('./controllers/covid/reverseCohortingUnit')
+const protectiveIsolationUnitController = require('./controllers/covid/protectiveIsolationUnitController')
 
 const currentUser = require('./middleware/currentUser')
 
@@ -257,6 +262,11 @@ const setup = ({
     '/prisoner/:offenderNo',
     prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
   )
+
+  const covidService = covidServiceFactory(elite2Api)
+  router.use('/current-covid-units/', covidDashboardController({ covidService, logError }))
+  router.use('/reverse-cohorting-unit/', reverseCohortingUnitController({ covidService, logError }))
+  router.use('/protective-isolation-unit/', protectiveIsolationUnitController({ covidService, logError }))
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 

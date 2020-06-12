@@ -1,23 +1,35 @@
 <h3 class="govuk-heading-m">Money</h3>
-{% set balanceRows = [] %}
+<div data-test="offender-balances">
 
-{% for balance in balanceDetails %}
-  {% set balanceRows = (balanceRows.push(
-    {
-      key: {
-        text: balance.label
-      },
-      value: {
-        text: balance.value | showDefault
-      }
-    }
-  ), balanceRows) %}
-{% endfor %}
+    {% if balanceDetailsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
 
-{{ govukSummaryList({
-  rows: balanceRows,
-  classes: "govuk-!-margin-bottom-2",
-  attributes: { "data-test": "money-summary" }
-}) }}
+    {% if balanceDetailsSectionError == false %}
 
-<a href="#" class="govuk-link govuk-!-font-size-19">Payment history</a>
+        {% set balanceRows = [] %}
+
+        {% for balance in balanceDetails %}
+            {% set balanceRows = (balanceRows.push(
+                {
+                    key: {
+                    text: balance.label
+                },
+                    value: {
+                    text: balance.value | showDefault
+                }
+                }
+                ), balanceRows) %}
+        {% endfor %}
+
+        {{ govukSummaryList({
+            rows: balanceRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "money-summary" }
+        }) }}
+
+        <a href="#" class="govuk-link govuk-!-font-size-19">Payment history</a>
+    {% endif %}
+</div>

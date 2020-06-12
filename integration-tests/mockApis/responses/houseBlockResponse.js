@@ -13,11 +13,6 @@ externalTransfer3.startTime = startTime
 externalTransfer4.startTime = startTime
 
 module.exports = {
-  courtEventsWithDifferentStatusResponse: { courtEvent1, courtEvent2, courtEvent3 },
-  externalTransfersResponse: {
-    externalTransfer1,
-    externalTransfer2,
-    externalTransfer3,
-    externalTransfer4,
-  },
+  courtEventsWithDifferentStatusResponse: [courtEvent1, courtEvent2, courtEvent3],
+  externalTransfersResponse: [externalTransfer1, externalTransfer2, externalTransfer3, externalTransfer4],
 }

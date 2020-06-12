@@ -192,6 +192,8 @@ const isAfterToday = date => {
   return daysDifference >= 0
 }
 
+const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
+
 const hyphenatedStringToCamel = string =>
   string.replace(/[-\s]([a-z])/g, char => {
     return char[1].toUpperCase()
@@ -216,7 +218,10 @@ const putLastNameFirst = (firstName, lastName) => {
   return `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 }
 
+const hasLength = array => array && array.length > 0
+
 module.exports = {
+  isBeforeToday,
   isToday,
   isTodayOrAfter,
   switchDateFormat,
@@ -249,4 +254,5 @@ module.exports = {
   formatCurrency,
   capitalizeUppercaseString,
   putLastNameFirst,
+  hasLength,
 }

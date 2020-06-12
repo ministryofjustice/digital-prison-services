@@ -1,49 +1,68 @@
 <h3 class="govuk-heading-m">Case notes and adjudications in last 3 months</h3>
 {% set caseNoteAdjudicationsRows = [] %}
 
-{% for caseNoteAdjudication in caseNoteAdjudications.details %}
-  {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
-    {
-      key: {
-        text: caseNoteAdjudication.label
-      },
-      value: {
-        text: caseNoteAdjudication.value | showDefault
-      }
-    }
-  ), caseNoteAdjudicationsRows) %}
-{% endfor %}
+<div data-test="case-note-adjudications">
+    {% if caseNoteAdjudications.caseNoteAdjudicationsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
 
-{% set activeAdjudicationsHtml %}
-  {% if caseNoteAdjudications.activeAdjudicationsDetails.value.length %}
-    {% for activeAdjudication in caseNoteAdjudications.activeAdjudicationsDetails.value %}
-      <div class="govuk-!-margin-bottom-6">
-        <strong>{{ activeAdjudication.durationText + ' ' + activeAdjudication.sanctionCodeDescription}}</strong>
-        <div>{{ activeAdjudication.comment }}</div>
-        <div>{{ activeAdjudication.effectiveDate }}</div>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p class="govuk-body">No active awards</p>
-  {% endif %}
-{% endset %}
+    {% if caseNoteAdjudications.caseNoteAdjudicationsSectionError == false %}
+        {% for caseNoteAdjudication in caseNoteAdjudications.details %}
+            {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
+                {
+                    key: {
+                        text: caseNoteAdjudication.label
+                    },
+                    value: {
+                      text: caseNoteAdjudication.value | showDefault
+                    }
+                }
+                ), caseNoteAdjudicationsRows) %}
+        {% endfor %}
 
-{% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
-    {
-      key: {
-        text: caseNoteAdjudications.activeAdjudicationsDetails.label
-      },
-      value: {
-        html: activeAdjudicationsHtml
-      }
-    }
-  ), caseNoteAdjudicationsRows) %}
+        {% set activeAdjudicationsHtml %}
+            {% if caseNoteAdjudications.activeAdjudicationsDetailsSectionError %}
+            <p class="govuk-body">
+                Unable to show this detail.
+            </p>
+            {% endif %}
+            {% if caseNoteAdjudications.activeAdjudicationsDetailsSectionError == false %}
+                {% if caseNoteAdjudications.activeAdjudicationsDetails.value.length %}
+                    {% for activeAdjudication in caseNoteAdjudications.activeAdjudicationsDetails.value %}
+                        <div class="govuk-!-margin-bottom-6">
+                            <strong>{{ activeAdjudication.durationText + ' ' + activeAdjudication.sanctionCodeDescription }}</strong>
+                            <div>{{ activeAdjudication.comment }}</div>
+                            <div>{{ activeAdjudication.effectiveDate }}</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="govuk-body">No active awards</p>
+                {% endif %}
+            {% endif %}
+        {% endset %}
 
 
-{{ govukSummaryList({
-  rows: caseNoteAdjudicationsRows,
-  classes: "govuk-!-margin-bottom-2",
-  attributes: { "data-test": "case-notes-summary" }
-}) }}
+        {% set caseNoteAdjudicationsRows = (caseNoteAdjudicationsRows.push(
+            {
+                key: {
+                text: caseNoteAdjudications.activeAdjudicationsDetails.label
+            },
+                value: {
+                html: activeAdjudicationsHtml
+            }
+            }
+            ), caseNoteAdjudicationsRows) %}
 
-<a href="{{'/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}" class="govuk-link govuk-!-font-size-19">Adjudication history</a>
+
+        {{ govukSummaryList({
+            rows: caseNoteAdjudicationsRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "case-notes-summary" }
+        }) }}
+
+        <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}"
+           class="govuk-link govuk-!-font-size-19">Adjudication history</a>
+    {% endif %}
+</div>

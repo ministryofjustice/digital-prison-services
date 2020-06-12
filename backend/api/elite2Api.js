@@ -270,6 +270,9 @@ const elite2ApiFactory = client => {
 
   const getPersonPhones = (context, personId) => get(context, `/api/persons/${personId}/phones`)
 
+  const getInmates = (context, locationId, params) =>
+    get(context, `/api/locations/description/${locationId}/inmates?${mapToQueryString(params)}`)
+
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 
   const getSecondaryLanguages = (context, bookingId) => get(context, `/api/bookings/${bookingId}/secondary-languages`)
@@ -285,6 +288,8 @@ const elite2ApiFactory = client => {
   const getTreatmentTypes = context => get(context, '/api/reference-domains/domains/HEALTH_TREAT', 1000)
 
   const getHealthTypes = context => get(context, '/api/reference-domains/domains/HEALTH', 1000)
+
+  const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
   return {
     userLocations,
@@ -313,6 +318,7 @@ const elite2ApiFactory = client => {
     getEstablishmentRollBlocksCount,
     getEstablishmentRollMovementsCount,
     getEstablishmentRollEnrouteCount,
+    getInmates,
     getPrisonerImage,
     getLastPrison,
     getMovementsIn,
@@ -374,6 +380,7 @@ const elite2ApiFactory = client => {
     getReasonableAdjustments,
     getTreatmentTypes,
     getHealthTypes,
+    getSentenceAdjustments,
   }
 }
 

@@ -18,6 +18,7 @@ $(document).ready(function() {
   const appointmentTypeSelect = $('.js-appointment-type')
   const appointmentRepeatsSelect = $('.js-appointment-repeats')
   const appointmentRepeatsTimesInput = $('.js-appointment-repeats-times')
+  const lastAppointmentDate = $('.js-appointment-last-appointment')
 
   const appointmentEndDateContainer = $('#appointment-end-date')
   const locationEventsContainer = $('#location-events')
@@ -86,18 +87,21 @@ $(document).ready(function() {
     const repeats = appointmentRepeatsSelect.children('option:selected').val()
     const times = appointmentRepeatsTimesInput.val()
 
-    if (date) {
+    if (date && times) {
       $.ajax({
         url: '/api/get-recurring-end-date',
         data: { date: date, repeats: repeats, times: times },
       })
         .done(function(data) {
+          lastAppointmentDate.show()
           appointmentEndDateContainer.text(data)
         })
         .fail(function() {
+          lastAppointmentDate.hide()
           appointmentEndDateContainer.text('--')
         })
     } else {
+      lastAppointmentDate.hide()
       appointmentEndDateContainer.text('--')
     }
   }
