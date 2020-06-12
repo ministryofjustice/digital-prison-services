@@ -218,6 +218,8 @@ const putLastNameFirst = (firstName, lastName) => {
   return `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 }
 
+const hasLength = array => array && array.length > 0
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -252,4 +254,5 @@ module.exports = {
   formatCurrency,
   capitalizeUppercaseString,
   putLastNameFirst,
+  hasLength,
 }
