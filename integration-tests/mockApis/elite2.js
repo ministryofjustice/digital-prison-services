@@ -350,7 +350,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/api/bookings/offenderNo/${locationId}/alerts`,
+        urlPattern: `/api/bookings/offenderNo/.+?/alerts`,
       },
       response: {
         status: 200,
@@ -801,7 +801,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Z].+?/visits.+?',
+        urlPattern: '/api/schedules/[A-Za-z].+?/visits.+?',
       },
       response: {
         status,
@@ -869,7 +869,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
+        urlPattern: '/api/schedules/[A-Za-z].+?/activities.+?',
       },
       response: {
         status,
@@ -899,7 +899,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
+        urlPattern: '/api/schedules/[A-Za-z].+?/appointments.+?',
       },
       response: {
         status,
@@ -914,7 +914,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Z].+?/externalTransfers.+?',
+        urlPattern: '/api/schedules/[A-Za-z].+?/externalTransfers.+?',
       },
       response: {
         status,

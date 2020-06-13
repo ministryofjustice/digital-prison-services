@@ -10,6 +10,6 @@ module.exports = {
   activities: [activity1_1, activity1_2, activity1_3, activity2, activity3],
   pastActivities: [activity1_1, activity1_2, activity2],
   activity3,
-  visits: visit1,
-  appointments: appointment1,
+  visits: [visit1],
+  appointments: [appointment1],
 }
