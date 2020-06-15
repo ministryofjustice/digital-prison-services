@@ -1,90 +1,19 @@
 version: 2.1
-commands:
-  setup:
-    description: "Install tools and configure kubectl"
-    steps:
-      - aws-cli/install
-      - kubernetes/install
-      - helm/install-helm-client:
-          version: v3.0.2
-      - run:
-          name: Setup kubectl
-          command: |
-            echo -n "${KUBE_ENV_CACERT}" | base64 -d > /tmp/cluster_ca.crt
-            kubectl config set-cluster "${KUBE_ENV_NAME}" \
-              --certificate-authority="/tmp/cluster_ca.crt" \
-              --server="https://api.${KUBE_ENV_NAME}"
-            kubectl config set-credentials circleci \
-              --token="${KUBE_ENV_TOKEN}"
-            kubectl config set-context circleci \
-              --cluster="${KUBE_ENV_NAME}" \
-              --user="circleci" \
-              --namespace="${KUBE_ENV_NAMESPACE}"
-            # confirm setup is ok
-            kubectl config use-context circleci
-  deploy_to_env:
-    parameters:
-      env:
-        type: string
-      slack_notification:
-        type: boolean
-        default: false
-    steps:
-      - setup
-      - checkout:
-          path: ~/git
-      - attach_workspace:
-          at: ~/app
-      - deploy:
-          name: Deploy to << parameters.env >>
-          command: |
-            APP=prison-staff-hub
-            APP_VERSION=$(egrep buildNumber build-info.json  | awk -F"\"" '{print $4}')
-            echo "export APP_VERSION=$APP_VERSION;export APP=$APP" >> $BASH_ENV
-            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/${APP}/Chart.yaml
-            aws secretsmanager get-secret-value --secret-id ${AWS_SECRET_NAME} | jq -r .SecretString | \
-            helm upgrade ${APP} ~/git/helm_deploy/${APP}/. \
-              --install --wait --reset-values --timeout 5m --history-max 10 \
-              --namespace=${KUBE_ENV_NAMESPACE} \
-              --values ~/git/helm_deploy/values-<< parameters.env >>.yaml \
-              --values - \
-              --set image.tag="${APP_VERSION}"
-      - when:
-          condition: <<parameters.slack_notification>>
-          steps:
-            - slack/notify:
-                message: "*${APP}* version:*${APP_VERSION}* deployed to << parameters.env >>"
-                include_project_field: false
-                include_job_number_field: false
+
+orbs:
+  hmpps: ministryofjustice/hmpps@1.0.0
 
 executors:
-  deployer:
-    docker:
-      - image: circleci/python:3
-    working_directory: ~/app
   builder:
     docker:
       - image: circleci/node:12.16.1-buster-browsers
     working_directory: ~/app
 
-orbs:
-  aws-cli: circleci/aws-cli@0.1.18
-  kubernetes: circleci/kubernetes@0.10.1
-  helm: circleci/helm@0.2.3
-  gradle: circleci/gradle@2.0.0
-  slack: circleci/slack@3.4.2
-
 jobs:
-  validate:
+  build:
     executor: builder
     steps:
       - checkout
-      - helm/install-helm-client:
-          version: v2.13.1
-      - run:
-          name: Run helm lint
-          command: helm lint prison-staff-hub --values=values-dev.yaml --values=secrets-example.yaml
-          working_directory: helm_deploy
       - restore_cache:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
@@ -178,97 +107,31 @@ jobs:
           path: integration-tests/videos
       - store_artifacts:
           path: integration-tests/screenshots
-
-  build:
-    executor: deployer
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build container and publish to docker hub
-          command: |
-            DATE=$(date '+%Y-%m-%d')
-            APP_VERSION=${DATE}.${CIRCLE_BUILD_NUM}
-
-            docker build --rm=false . \
-              --build-arg BUILD_NUMBER=$APP_VERSION \
-              --build-arg GIT_REF=$CIRCLE_SHA1 \
-              --tag "mojdigitalstudio/prisonstaffhub:$APP_VERSION" \
-              --label "maintainer=dps-hmpps@digital.justice.gov.uk" \
-              --label "app.version=$APP_VERSION" \
-              --label "build.version=$APP_VERSION" \
-              --label "build.number=$CIRCLE_BUILD_NUM" \
-              --label "build.url=$CIRCLE_BUILD_URL" \
-              --label "build.gitref=$CIRCLE_SHA1"
-
-            # Copy build-info.json from image
-            docker run -it --rm mojdigitalstudio/prisonstaffhub:$APP_VERSION cat /app/build-info.json > build-info.json
-
-            # Publish to docker hub
-            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker tag mojdigitalstudio/prisonstaffhub:$APP_VERSION mojdigitalstudio/prisonstaffhub:latest
-            docker push mojdigitalstudio/prisonstaffhub:$APP_VERSION
-            docker push mojdigitalstudio/prisonstaffhub:latest
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - build-info.json
-
-  deploy_dev:
-    executor: deployer
-    steps:
-      - deploy_to_env:
-          env: "dev"
-  deploy_preprod:
-    executor: deployer
-    steps:
-      - deploy_to_env:
-          env: "preprod"
-  deploy_prod:
-    executor: deployer
-    steps:
-      - deploy_to_env:
-          env: "prod"
-          slack_notification: true
-
-  security_audit:
-    executor: builder
-    steps:
-      - checkout
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: install-npm
-          command: 'npm ci --no-audit'
-      - run:
-          name: run-security-audit
-          command: 'npm run security_audit'
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - validate:
+      - build:
           filters:
             tags:
               ignore: /.*/
       - integration_tests:
           requires:
-            - validate
+            - build
       - cypress_integration_tests:
           requires:
-            - validate
+            - build
       - build:
           filters:
             branches:
               only: master
-      - deploy_dev:
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - build
             - integration_tests
@@ -280,7 +143,9 @@ workflows:
           type: approval
           requires:
             - deploy_dev
-      - deploy_preprod:
+      - hmpps/deploy_env:
+          name: deploy_preprod
+          env: "preprod"
           context: prison-staff-hub-preprod
           requires:
             - request-preprod-approval
@@ -288,7 +153,9 @@ workflows:
           type: approval
           requires:
             - deploy_preprod
-      - deploy_prod:
+      - hmpps/deploy_env:
+          name: deploy_prod
+          env: "prod"
           context: prison-staff-hub-prod
           requires:
             - request-prod-approval
@@ -301,4 +168,4 @@ workflows:
               only:
                 - master
     jobs:
-      - security_audit
+      - hmpps/npm_security_audit
