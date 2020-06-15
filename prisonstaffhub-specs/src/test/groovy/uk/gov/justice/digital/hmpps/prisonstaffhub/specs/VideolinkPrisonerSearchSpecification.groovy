@@ -4,12 +4,12 @@ import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.PrisonerSearchPage
+import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.VideolinkPrisonerSearchPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
-class PrisonerSearchSpecification extends BrowserReportingSpec {
+class VideolinkPrisonerSearchSpecification extends BrowserReportingSpec {
     @Rule
     Elite2Api elite2api = new Elite2Api()
 
@@ -25,7 +25,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
         setupTests()
 
         given: "I navigate to the prisoner search screen and do not fill in any fields"
-        to PrisonerSearchPage
+        to VideolinkPrisonerSearchPage
 
         when: "I submit"
         submitButton.click()
@@ -38,7 +38,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
         setupTests()
 
         given: "I navigate to the prisoner search screen and only enter last name and dob day"
-        to PrisonerSearchPage
+        to VideolinkPrisonerSearchPage
         form.lastName = "Offender"
 
         and: "I show other search details"
@@ -77,7 +77,7 @@ class PrisonerSearchSpecification extends BrowserReportingSpec {
         ])
 
         given: "I navigate to the prisoner search screen"
-        to PrisonerSearchPage
+        to VideolinkPrisonerSearchPage
         form.lastName = "Offender"
 
         when: "I submit"
