@@ -1,4 +1,4 @@
-const prisonerSearchController = require('../controllers/search/prisonerSearch')
+const videolinkPrisonerSearchController = require('../controllers/videolink/search/videolinkPrisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
 const config = require('../config')
 
@@ -35,7 +35,7 @@ describe('Prisoner search', () => {
     ])
     elite2Api.globalSearch = jest.fn()
 
-    controller = prisonerSearchController({ oauthApi, elite2Api, logError })
+    controller = videolinkPrisonerSearchController({ oauthApi, elite2Api, logError })
   })
 
   const agencyOptions = [
@@ -71,7 +71,7 @@ describe('Prisoner search', () => {
         await controller(req, res)
 
         expect(elite2Api.getAgencies).toHaveBeenCalled()
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
+        expect(res.render).toHaveBeenCalledWith('videolinkPrisonerSearch.njk', {
           agencyOptions,
           errors: [],
           formValues: {},
@@ -123,7 +123,7 @@ describe('Prisoner search', () => {
               1000
             )
             expect(res.render).toHaveBeenCalledWith(
-              'prisonerSearch.njk',
+              'videolinkPrisonerSearch.njk',
               expect.objectContaining({
                 formValues: { prisonNumber },
                 hasSearched: true,
@@ -151,7 +151,7 @@ describe('Prisoner search', () => {
               1000
             )
             expect(res.render).toHaveBeenCalledWith(
-              'prisonerSearch.njk',
+              'videolinkPrisonerSearch.njk',
               expect.objectContaining({
                 formValues: { lastName },
                 hasSearched: true,
@@ -163,7 +163,7 @@ describe('Prisoner search', () => {
             await controller(req, res)
 
             expect(res.render).toHaveBeenCalledWith(
-              'prisonerSearch.njk',
+              'videolinkPrisonerSearch.njk',
               expect.objectContaining({
                 formValues: { lastName },
                 hasSearched: true,
@@ -201,7 +201,7 @@ describe('Prisoner search', () => {
               await controller(req, res)
 
               expect(res.render).toHaveBeenCalledWith(
-                'prisonerSearch.njk',
+                'videolinkPrisonerSearch.njk',
                 expect.objectContaining({
                   results: [
                     {

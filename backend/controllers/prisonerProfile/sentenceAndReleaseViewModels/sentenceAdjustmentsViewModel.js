@@ -15,7 +15,7 @@ module.exports = sentenceAdjustments => {
 
   const daysRemovedFromSentence = [
     { label: 'Remand', value: remand },
-    { label: 'Recall renamed', value: recallSentenceRemand },
+    { label: 'Recall remand', value: recallSentenceRemand },
     { label: 'Recall tagged bail', value: recallSentenceTaggedBail },
     { label: 'Restored additional days awarded', value: restoredAdditionalDaysAwarded },
     { label: 'Special remission', value: specialRemission },

@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-const ViewProtectiveIsolationUnitPage = require('../../pages/covid/viewProtectiveIsolationUnitPage')
+const ProtectiveIsolationUnitPage = require('../../pages/covid/protectiveIsolationUnitPage')
 
 const alert = val => ({ alerts: { equalTo: val } })
 
@@ -50,11 +50,11 @@ context('A user can view the protective isolation list', () => {
   })
 
   it('A user can view the reverse cohorting list', () => {
-    const viewProtectiveIsolationUnitPage = ViewProtectiveIsolationUnitPage.goTo()
-    viewProtectiveIsolationUnitPage.prisonerCount().contains(2)
+    const protectiveIsolationUnitPage = ProtectiveIsolationUnitPage.goTo()
+    protectiveIsolationUnitPage.prisonerCount().contains(2)
 
     {
-      const { prisoner, prisonNumber, location, dateAdded, daysInUnit } = viewProtectiveIsolationUnitPage.getRow(0)
+      const { prisoner, prisonNumber, location, dateAdded, daysInUnit } = protectiveIsolationUnitPage.getRow(0)
 
       prisoner().contains('Read, Donna')
       prisonNumber().contains('BB1234A')
@@ -64,7 +64,7 @@ context('A user can view the protective isolation list', () => {
     }
 
     {
-      const { prisoner, prisonNumber, location, dateAdded, daysInUnit } = viewProtectiveIsolationUnitPage.getRow(1)
+      const { prisoner, prisonNumber, location, dateAdded, daysInUnit } = protectiveIsolationUnitPage.getRow(1)
 
       prisoner().contains('Stewart, James')
       prisonNumber().contains('AA1234A')
