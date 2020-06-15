@@ -1128,21 +1128,6 @@ describe('prisoner profile quick look', () => {
       elite2Api.getProfileInformation = jest.fn().mockResolvedValue([])
     })
 
-    it('should display correct defaults for balances', async () => {
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
-        expect.objectContaining({
-          balanceDetails: [
-            { label: 'Spends', value: '£0.00' },
-            { label: 'Private', value: '£0.00' },
-            { label: 'Savings', value: '£0.00' },
-          ],
-        })
-      )
-    })
-
     it('should display correct defaults for offences', async () => {
       await controller(req, res)
 
