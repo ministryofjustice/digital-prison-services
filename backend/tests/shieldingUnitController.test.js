@@ -1,5 +1,5 @@
 const moment = require('moment')
-const refusingToShieldController = require('../controllers/covid/refusingToShieldController')
+const shieldingUnitController = require('../controllers/covid/shieldingUnitController')
 
 describe('shielding unit', () => {
   let req
@@ -21,7 +21,7 @@ describe('shielding unit', () => {
     covidService = {
       getAlertList: jest.fn(),
     }
-    controller = refusingToShieldController({ covidService, logError, nowGetter: () => now })
+    controller = shieldingUnitController({ covidService, logError, nowGetter: () => now })
   })
 
   it('should render view with results', async () => {
