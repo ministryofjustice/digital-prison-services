@@ -31,7 +31,7 @@ module.exports = ({ covidService, logError, nowGetter = moment }) => {
       })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load protective isolation list')
-      return res.render('error.njk', { url: '/protective-isolation-unit' })
+      return res.render('error.njk', { url: '/current-covid-units/protective-isolation-unit' })
     }
   }
 }

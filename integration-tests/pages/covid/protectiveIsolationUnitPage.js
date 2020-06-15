@@ -23,7 +23,7 @@ const protectiveIsolationUnitPage = () =>
 export default {
   verifyOnPage: protectiveIsolationUnitPage,
   goTo: () => {
-    cy.visit('/protective-isolation-unit')
+    cy.visit('/current-covid-units/protective-isolation-unit')
     return protectiveIsolationUnitPage()
   },
 }
