@@ -134,7 +134,7 @@ workflows:
           name: deploy_dev
           env: "dev"
           requires:
-            - build
+            - build_docker
             - integration_tests
             - cypress_integration_tests
           filters:
