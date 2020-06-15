@@ -122,6 +122,13 @@ workflows:
       - cypress_integration_tests:
           requires:
             - build
+      - hmpps/build_docker:
+        name: build_docker
+        image_name: "quay.io/hmpps/prisonstaffhub"
+        filters:
+          branches:
+            only:
+              - master
       - hmpps/deploy_env:
           chart_name: prison-staff-hub
           name: deploy_dev
