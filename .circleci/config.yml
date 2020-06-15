@@ -131,6 +131,7 @@ workflows:
                 - master
       - hmpps/deploy_env:
           chart_name: prison-staff-hub
+          release_name: prison-staff-hub
           name: deploy_dev
           env: "dev"
           requires:
@@ -146,6 +147,7 @@ workflows:
             - deploy_dev
       - hmpps/deploy_env:
           chart_name: prison-staff-hub
+          release_name: prison-staff-hub
           name: deploy_preprod
           env: "preprod"
           context: prison-staff-hub-preprod
@@ -157,6 +159,7 @@ workflows:
             - deploy_preprod
       - hmpps/deploy_env:
           chart_name: prison-staff-hub
+          release_name: prison-staff-hub
           name: deploy_prod
           env: "prod"
           context: prison-staff-hub-prod
