@@ -96,7 +96,7 @@ const addCourtAppointmentsFactory = (elite2Api, logError) => {
       })
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('courtServiceError.njk', { url: `/prisoner-search`, homeUrl: '/videolink' })
+      return res.render('courtServiceError.njk', { url: `/videolink/prisoner-search`, homeUrl: '/videolink' })
     }
   }
 
