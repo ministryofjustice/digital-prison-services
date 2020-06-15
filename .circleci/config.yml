@@ -122,10 +122,6 @@ workflows:
       - cypress_integration_tests:
           requires:
             - build
-      - build:
-          filters:
-            branches:
-              only: master
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
