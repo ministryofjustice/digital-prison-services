@@ -68,7 +68,7 @@ describe('reverse cohorting unit', () => {
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({
-        url: '/reverse-cohorting-unit',
+        url: '/current-covid-units/reverse-cohorting-unit',
       })
     )
   })

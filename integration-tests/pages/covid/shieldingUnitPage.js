@@ -22,7 +22,7 @@ const shieldingUnitPage = () =>
 export default {
   verifyOnPage: shieldingUnitPage,
   goTo: () => {
-    cy.visit('/shielding-unit')
+    cy.visit('/current-covid-units/shielding-unit')
     return shieldingUnitPage()
   },
 }
