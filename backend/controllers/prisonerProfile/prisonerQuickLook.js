@@ -108,9 +108,17 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
     const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
     const unableToShowDetailMessage = 'Unable to show this detail.'
 
+    const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
+
     return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
       dpsUrl,
-      prisonerProfileData,
+      prisonerProfileData: {
+        ...prisonerProfileData,
+        keyWorkerName: prisonerProfileData.keyWorkerName || 'None assigned',
+        keyWorkerLastSession: prisonerProfileData.keyWorkerLastSession || 'No previous session',
+        csra: prisonerProfileData.csra || 'Not entered',
+        category: prisonerProfileData.category || 'Not entered',
+      },
       offenceDetailsSectionError: Boolean(
         offenceDataResponse.error && prisonerDataResponse.error && sentenceDataResponse.error
       ),
@@ -119,27 +127,39 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           label: 'Main offence(s)',
           value: offenceDataResponse.error
             ? unableToShowDetailMessage
-            : offenceData && offenceData[0] && offenceData[0].offenceDescription,
+            : (offenceData && offenceData[0] && offenceData[0].offenceDescription) || 'Not entered',
         },
         {
           label: 'Imprisonment status',
-          value: prisonerDataResponse.error ? unableToShowDetailMessage : prisoner && prisoner.imprisonmentStatusDesc,
+          value: prisonerDataResponse.error
+            ? unableToShowDetailMessage
+            : (prisoner && prisoner.imprisonmentStatusDesc) || 'Not entered',
         },
         {
           label: 'Release date',
           value: sentenceDataResponse.error
             ? unableToShowDetailMessage
-            : sentenceData &&
-              sentenceData.sentenceDetail &&
-              sentenceData.sentenceDetail.releaseDate &&
-              formatTimestampToDate(sentenceData.sentenceDetail.releaseDate),
+            : (sentenceData &&
+                sentenceData.sentenceDetail &&
+                sentenceData.sentenceDetail.releaseDate &&
+                formatTimestampToDate(sentenceData.sentenceDetail.releaseDate)) ||
+              'Not entered',
         },
       ],
       balanceDetailsSectionError: Boolean(balanceDataResponse.error),
       balanceDetails: [
-        { label: 'Spends', value: balanceData && formatCurrency(balanceData.spends, balanceData.currency) },
-        { label: 'Private', value: balanceData && formatCurrency(balanceData.cash, balanceData.currency) },
-        { label: 'Savings', value: balanceData && formatCurrency(balanceData.savings, balanceData.currency) },
+        {
+          label: 'Spends',
+          value: formatCurrency((balanceData && balanceData.spends) || 0, balanceData && balanceData.currency),
+        },
+        {
+          label: 'Private',
+          value: formatCurrency((balanceData && balanceData.cash) || 0, balanceData && balanceData.currency),
+        },
+        {
+          label: 'Savings',
+          value: formatCurrency((balanceData && balanceData.savings) || 0, balanceData && balanceData.currency),
+        },
       ],
       caseNoteAdjudications: {
         caseNoteAdjudicationsSectionError: Boolean(
@@ -153,23 +173,25 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
             label: 'Incentive level warnings',
             value: negativeCaseNotesResponse.error
               ? unableToShowDetailMessage
-              : negativeCaseNotes && negativeCaseNotes.count,
+              : (negativeCaseNotes && negativeCaseNotes.count) || 0,
           },
           {
-            label: 'Incentive Encouragements',
+            label: 'Incentive encouragements',
             value: positiveCaseNotesResponse.error
               ? unableToShowDetailMessage
-              : positiveCaseNotes && positiveCaseNotes.count,
+              : (positiveCaseNotes && positiveCaseNotes.count) || 0,
           },
           {
             label: 'Last incentive level review',
-            value: iepSummaryResponse.error ? unableToShowDetailMessage : iepSummary && iepSummary.daysSinceReview,
+            value: iepSummaryResponse.error
+              ? unableToShowDetailMessage
+              : `${daysSinceReview} ${daysSinceReview === 1 ? 'day' : 'days'} ago`,
           },
           {
             label: 'Proven adjudications',
             value: adjudicationsResponse.error
               ? unableToShowDetailMessage
-              : adjudications && adjudications.adjudicationCount,
+              : (adjudications && adjudications.adjudicationCount) || 0,
           },
         ],
         activeAdjudicationsDetailsSectionError: Boolean(adjudicationsResponse.error),
@@ -196,15 +218,19 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           label: 'Nationality',
           value: profileInformationResponse.error
             ? unableToShowDetailMessage
-            : getValueByType('NAT', profileInformation, 'resultValue'),
+            : getValueByType('NAT', profileInformation, 'resultValue') || 'Not entered',
         },
         {
           label: 'PNC number',
-          value: prisonerDataResponse.error ? unableToShowDetailMessage : prisoner && prisoner.pncNumber,
+          value: prisonerDataResponse.error
+            ? unableToShowDetailMessage
+            : (prisoner && prisoner.pncNumber) || 'Not entered',
         },
         {
           label: 'CRO number',
-          value: prisonerDataResponse.error ? unableToShowDetailMessage : prisoner && prisoner.croNumber,
+          value: prisonerDataResponse.error
+            ? unableToShowDetailMessage
+            : (prisoner && prisoner.croNumber) || 'Not entered',
         },
       ],
       visits: {
@@ -212,13 +238,15 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         details: [
           {
             label: 'Remaining visits',
-            value: visitBalancesResponse.error ? unableToShowDetailMessage : visitBalances && visitBalances.remainingVo,
+            value: visitBalancesResponse.error
+              ? unableToShowDetailMessage
+              : (visitBalances && visitBalances.remainingVo) || 'Not entered',
           },
           {
             label: 'Remaining privileged visits',
             value: visitBalancesResponse.error
               ? unableToShowDetailMessage
-              : visitBalances && visitBalances.remainingPvo,
+              : (visitBalances && visitBalances.remainingPvo) || 'Not entered',
           },
           {
             label: 'Next visit date',
@@ -246,6 +274,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       ],
     })
   } catch (error) {
+    console.error({ error })
     logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
   }
