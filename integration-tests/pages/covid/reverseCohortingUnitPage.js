@@ -24,7 +24,7 @@ const reverseCohortingUnitPage = () =>
 export default {
   verifyOnPage: reverseCohortingUnitPage,
   goTo: () => {
-    cy.visit('/reverse-cohorting-unit')
+    cy.visit('/current-covid-units/reverse-cohorting-unit')
     return reverseCohortingUnitPage()
   },
 }

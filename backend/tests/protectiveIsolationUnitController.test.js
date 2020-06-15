@@ -71,7 +71,7 @@ describe('protective isolation unit', () => {
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({
-        url: '/protective-isolation-unit',
+        url: '/current-covid-units/protective-isolation-unit',
       })
     )
   })
