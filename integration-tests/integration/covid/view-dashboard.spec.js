@@ -2,6 +2,7 @@ const DashboardPage = require('../../pages/covid/dashboardPage')
 const ReverseCohortingUnitPage = require('../../pages/covid/reverseCohortingUnitPage')
 const ProtectiveIsolationUnitPage = require('../../pages/covid/protectiveIsolationUnitPage')
 const ShieldingUnitPage = require('../../pages/covid/shieldingUnitPage')
+const RefusingToShieldPage = require('../../pages/covid/refusingToShieldPage')
 
 const alert = val => ({ alerts: { equalTo: val } })
 
@@ -67,5 +68,7 @@ context('Covid dashboard page', () => {
     DashboardPage.goTo()
       .refusingToShieldLink()
       .click()
+
+    RefusingToShieldPage.verifyOnPage()
   })
 })

@@ -1,14 +1,11 @@
-const moment = require('moment')
-const refusingToShieldController = require('../controllers/covid/refusingToShieldController')
+const shieldingUnitController = require('../controllers/covid/refusingToShieldController')
 
-describe('shielding unit', () => {
+describe('refusing to shield', () => {
   let req
   let res
   let logError
   let covidService
   let controller
-
-  const now = moment('2020-01-10')
 
   beforeEach(() => {
     req = {
@@ -21,13 +18,13 @@ describe('shielding unit', () => {
     covidService = {
       getAlertList: jest.fn(),
     }
-    controller = refusingToShieldController({ covidService, logError, nowGetter: () => now })
+    controller = shieldingUnitController({ covidService, logError })
   })
 
   it('should render view with results', async () => {
     const results = [
       {
-        alertCreated: moment(now).format('YYYY-MM-DD'),
+        alertCreated: '2020-01-02',
         assignedLivingUnitDesc: '1-2-017',
         bookingId: 123,
         name: 'Stewart, James',
@@ -41,13 +38,12 @@ describe('shielding unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'USU')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'URS')
 
-    expect(res.render).toHaveBeenCalledWith('covid/shieldingUnit.njk', {
-      title: 'Prisoners in the Shielding Unit',
+    expect(res.render).toHaveBeenCalledWith('covid/refusingToShield.njk', {
+      title: 'Prisoners refusing to shield',
       results: [
         {
-          alertCreated: now,
           assignedLivingUnitDesc: '1-2-017',
           bookingId: 123,
           name: 'Stewart, James',
@@ -63,12 +59,16 @@ describe('shielding unit', () => {
 
     await controller(req, res)
 
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load shielding list')
+    expect(logError).toHaveBeenCalledWith(
+      'http://localhost',
+      error,
+      'Failed to load list of prisoners refusing to shield'
+    )
 
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({
-        url: '/current-covid-units/shielding-unit',
+        url: '/current-covid-units/refusing-to-shield',
       })
     )
   })
