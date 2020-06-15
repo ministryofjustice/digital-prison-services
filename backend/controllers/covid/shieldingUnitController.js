@@ -23,7 +23,7 @@ module.exports = ({ covidService, logError }) => {
       })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load shielding list')
-      return res.render('error.njk', { url: '/shielding-unit' })
+      return res.render('error.njk', { url: '/current-covid-units/shielding-unit' })
     }
   }
 }

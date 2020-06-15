@@ -68,7 +68,7 @@ describe('shielding unit', () => {
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({
-        url: '/shielding-unit',
+        url: '/current-covid-units/shielding-unit',
       })
     )
   })
