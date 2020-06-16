@@ -14,7 +14,7 @@
                 href: '/current-covid-units'
             },
             {
-                text: "Prisoners in the Protective Isolation Unit"
+                text: "Prisoners in the Shielding Unit"
             }
         ]
     }) }}
@@ -40,20 +40,14 @@
           }
         },
         {
-          text: result.daysInUnit
-        },
-        {
           html: '<a class="govuk-link govuk-link--no-visited-state" href="' + notmUrl + 'offenders/' + result.offenderNo +'/alerts">Change alert</a>'
-        },
-        {
-          html: '<span data-qa=overdue class="govuk-body moj-badge moj-badge--red"><strong>MOVE OVERDUE</strong></span>' if result.isOverdue
         }
       ]), rows) %}
     {% endfor %}
 
 {% block content %}
     <h1 class="govuk-heading-l">
-        Prisoners in the Protective Isolation Unit
+        Prisoners in the Shielding Unit
     </h1>
     
   {% if rows.length %}
@@ -64,7 +58,7 @@
         {
           text: "Name",
           attributes: {
-            "aria-sort": "none"
+            "aria-sort": "ascending"
           }
         },
         {
@@ -79,12 +73,6 @@
         {
           text: "Date added to unit",
           attributes: {
-            "aria-sort": "ascending"
-          }
-        },
-        {
-          text: "Days in unit",
-          attributes: {
             "aria-sort": "none"
           }
         },
@@ -93,7 +81,7 @@
         }
       ],
       rows: rows,
-      attributes: { "data-qa": "protective-isolation-table" }
+      attributes: { "data-qa": "shielding-table" }
     }) }}
   {% else %}
     <p class="govuk-body" data-qa="no-results-message">There are no results.</p>

@@ -1,9 +1,9 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
-const { formatName } = require('../../utils')
-const config = require('../../config')
-const prisonerSearchValidation = require('./prisonerSearchValidation')
-const dobValidation = require('../../shared/dobValidation')
+const { serviceUnavailableMessage } = require('../../../common-messages')
+const { formatName } = require('../../../utils')
+const config = require('../../../config')
+const videolinkPrisonerSearchValidation = require('./videolinkPrisonerSearchValidation')
+const dobValidation = require('../../../shared/dobValidation')
 
 module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
   try {
@@ -14,7 +14,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
       const agencies = await elite2Api.getAgencies(res.locals)
       let searchResults = []
       const hasSearched = Boolean(Object.keys(req.query).length)
-      const errors = hasSearched ? prisonerSearchValidation(req.query) : []
+      const errors = hasSearched ? videolinkPrisonerSearchValidation(req.query) : []
       const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.query
 
       if (hasSearched && !errors.length) {
@@ -33,7 +33,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
         )
       }
 
-      return res.render('prisonerSearch.njk', {
+      return res.render('videolinkPrisonerSearch.njk', {
         agencyOptions: agencies
           .map(agency => ({ value: agency.agencyId, text: agency.description }))
           .sort((a, b) => a.text.localeCompare(b.text)),

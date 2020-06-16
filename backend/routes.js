@@ -29,7 +29,6 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
-const { covidServiceFactory } = require('./services/covidService')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -52,15 +51,12 @@ const requestBookingRouter = require('./routes/appointments/requestBookingRouter
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
 const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
+const covidRouter = require('./routes/covidRouter')
 
-const prisonerSearchController = require('./controllers/search/prisonerSearch')
+const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
 const endDateController = require('./controllers/appointments/endDate')
-
-const covidDashboardController = require('./controllers/covid/covidDashboard')
-const reverseCohortingUnitController = require('./controllers/covid/reverseCohortingUnit')
-const protectiveIsolationUnitController = require('./controllers/covid/protectiveIsolationUnitController')
 
 const currentUser = require('./middleware/currentUser')
 
@@ -238,7 +234,7 @@ const setup = ({
     selectCourtAppointmentRooms({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClient })
   )
 
-  router.get('/prisoner-search', prisonerSearchController({ oauthApi, elite2Api, logError }))
+  router.get('/videolink/prisoner-search', videolinkPrisonerSearchController({ oauthApi, elite2Api, logError }))
 
   router.get('/videolink', async (req, res) => {
     res.render('courtsVideolink.njk', {
@@ -263,10 +259,7 @@ const setup = ({
     prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
   )
 
-  const covidService = covidServiceFactory(elite2Api)
-  router.use('/current-covid-units/', covidDashboardController({ covidService, logError }))
-  router.use('/reverse-cohorting-unit/', reverseCohortingUnitController({ covidService, logError }))
-  router.use('/protective-isolation-unit/', protectiveIsolationUnitController({ covidService, logError }))
+  router.use('/current-covid-units', covidRouter(elite2Api, logError))
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 

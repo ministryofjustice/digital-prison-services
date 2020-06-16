@@ -4,7 +4,7 @@
 replicaCount: 2
 
 image:
-  repository: docker.io/mojdigitalstudio/prisonstaffhub
+  repository: quay.io/hmpps/prisonstaffhub
   tag: latest
   pullPolicy: IfNotPresent
   port: 3000

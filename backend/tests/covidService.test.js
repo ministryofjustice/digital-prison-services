@@ -56,9 +56,9 @@ describe('Covid Service', () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
       elite2Api.getAlerts.mockResolvedValue([
-        { offenderNo: 'AA1234A', alertCode: 'AA1', dateCreated: '2020-01-02' },
-        { offenderNo: 'AA1234A', alertCode: 'UPIU', dateCreated: '2020-01-03' },
-        { offenderNo: 'BB1234A', alertCode: 'UPIU', dateCreated: '2020-01-04' },
+        { offenderNo: 'AA1234A', alertCode: 'AA1', expired: false, dateCreated: '2020-01-02' },
+        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
+        { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
       ])
 
       elite2Api.getInmates.mockResolvedValue([
@@ -105,6 +105,52 @@ describe('Covid Service', () => {
         agencyId: 'MDI',
         offenderNumbers: ['AA1234A', 'BB1234A'],
       })
+    })
+
+    it('expired alerts are not displayed', async () => {
+      const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+
+      elite2Api.getAlerts.mockResolvedValue([
+        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
+        { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: true, dateCreated: '2020-01-05' },
+        { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
+      ])
+
+      elite2Api.getInmates.mockResolvedValue([
+        {
+          offenderNo: 'AA1234A',
+          bookingId: 123,
+          assignedLivingUnitDesc: '1-2-017',
+          firstName: 'JAMES',
+          lastName: 'STEWART',
+        },
+        {
+          offenderNo: 'BB1234A',
+          bookingId: 234,
+          assignedLivingUnitDesc: '1-2-018',
+          firstName: 'DONNA',
+          lastName: 'READ',
+        },
+      ])
+
+      const response = await covidService.getAlertList(context, 'UPIU')
+
+      expect(response).toEqual([
+        {
+          alertCreated: '2020-01-03',
+          assignedLivingUnitDesc: '1-2-017',
+          bookingId: 123,
+          name: 'Stewart, James',
+          offenderNo: 'AA1234A',
+        },
+        {
+          alertCreated: '2020-01-04',
+          assignedLivingUnitDesc: '1-2-018',
+          bookingId: 234,
+          name: 'Read, Donna',
+          offenderNo: 'BB1234A',
+        },
+      ])
     })
   })
 })

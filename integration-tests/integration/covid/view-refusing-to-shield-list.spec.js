@@ -1,13 +1,13 @@
 const moment = require('moment')
 
-const ProtectiveIsolationUnitPage = require('../../pages/covid/protectiveIsolationUnitPage')
+const RefusingToShieldPage = require('../../pages/covid/refusingToShieldPage')
 
 const alert = val => ({ alerts: { equalTo: val } })
 
 const dayBeforeYesterday = moment().subtract(2, 'day')
 
-context('A user can view the protective isolation list', () => {
-  before(() => {
+context('A user can view the refusing to shield list', () => {
+  beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
@@ -17,10 +17,10 @@ context('A user can view the protective isolation list', () => {
       locationId: 'MDI',
       alerts: [
         { offenderNo: 'AA1234A', alertCode: 'AA1', dateCreated: '2020-01-02' },
-        { offenderNo: 'AA1234A', alertCode: 'UPIU', dateCreated: moment().format('YYYY-MM-DD') },
+        { offenderNo: 'AA1234A', alertCode: 'URS', dateCreated: moment().format('YYYY-MM-DD') },
         {
           offenderNo: 'BB1234A',
-          alertCode: 'UPIU',
+          alertCode: 'URS',
           dateCreated: dayBeforeYesterday.format('YYYY-MM-DD'),
         },
       ],
@@ -28,7 +28,7 @@ context('A user can view the protective isolation list', () => {
 
     cy.task('stubInmates', {
       locationId: 'MDI',
-      params: alert('UPIU'),
+      params: alert('URS'),
       count: 3,
       data: [
         {
@@ -49,28 +49,24 @@ context('A user can view the protective isolation list', () => {
     })
   })
 
-  it('A user can view the reverse cohorting list', () => {
-    const protectiveIsolationUnitPage = ProtectiveIsolationUnitPage.goTo()
-    protectiveIsolationUnitPage.prisonerCount().contains(2)
+  it('A user can view the shielding list', () => {
+    const refusingToShieldPage = RefusingToShieldPage.goTo()
+    refusingToShieldPage.prisonerCount().contains(2)
 
     {
-      const { prisoner, prisonNumber, location, dateAdded, daysInUnit } = protectiveIsolationUnitPage.getRow(0)
+      const { prisoner, prisonNumber, location } = refusingToShieldPage.getRow(0)
 
       prisoner().contains('Read, Donna')
       prisonNumber().contains('BB1234A')
       location().contains('1-2-018')
-      dateAdded().contains(dayBeforeYesterday.format('D MMM YYYY'))
-      daysInUnit().contains(2)
     }
 
     {
-      const { prisoner, prisonNumber, location, dateAdded, daysInUnit } = protectiveIsolationUnitPage.getRow(1)
+      const { prisoner, prisonNumber, location } = refusingToShieldPage.getRow(1)
 
       prisoner().contains('Stewart, James')
       prisonNumber().contains('AA1234A')
       location().contains('1-2-017')
-      dateAdded().contains(moment().format('D MMM YYYY'))
-      daysInUnit().contains(0)
     }
   })
 })
