@@ -25,7 +25,10 @@
     {% for result in results %}
       {% set rows = (rows.push([
         {
-          html: '<a class="govuk-link govuk-link--no-visited-state" href="'+ notmUrl + 'offenders/' + result.offenderNo +'/quick-look">' + result.name + '</a>'
+          html: '<a class="govuk-link govuk-link--no-visited-state" href="'+ notmUrl + 'offenders/' + result.offenderNo +'/quick-look">' + result.name + '</a>',
+          attributes: {
+            "data-sort-value": result.name
+          }
         },
         {
           text: result.offenderNo
