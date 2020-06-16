@@ -13,12 +13,14 @@ $govuk-page-width: 1170px;
 @import 'components/prisonerProfile/prisoner-personal';
 @import 'components/prisonerProfile/prisoner-alerts';
 @import 'components/covid/dashboard';
+@import 'components/prisonerSearch/prisoner-search';
 
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
 @import 'views/components/movementSlip/movementSlip.scss';
 @import 'views/components/scheduledEvents/scheduledEvents.scss';
 @import 'govuk-overrides';
+@import 'moj-overrides';
 @import 'typography';
 
 * {

@@ -62,12 +62,15 @@ const formatName = (firstName, lastName) =>
 const isViewableFlag = code =>
   ['HA', 'XEL', 'PEEP', 'RNO121', 'RCON', 'RCDR', 'URCU', 'UPIU', 'USU', 'URS'].includes(code)
 
-const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${item}`).join('&')
+const arrayToQueryString = (array, key) => array && array.map(item => `${key}=${encodeURIComponent(item)}`).join('&')
 
 const mapToQueryString = params =>
   Object.keys(params)
     .filter(key => params[key])
-    .map(key => `${key}=${encodeURIComponent(params[key])}`)
+    .map(key => {
+      if (Array.isArray(params[key])) return arrayToQueryString(params[key], key)
+      return `${key}=${encodeURIComponent(params[key])}`
+    })
     .join('&')
 
 const toMap = (key, array) =>

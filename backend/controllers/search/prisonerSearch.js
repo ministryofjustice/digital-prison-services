@@ -6,8 +6,11 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
   try {
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
     const { location, keywords, alerts, pageOffsetOption, pageLimit = 50 } = req.query
+
     const pageOffset = parseInt(pageOffsetOption, 10) || 0
+
     const hasSearched = Boolean(Object.keys(req.query).length)
+
     const context = {
       ...res.locals,
       requestHeaders: { 'page-offset': pageOffset, 'page-limit': pageLimit },
@@ -26,23 +29,30 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
 
     const totalPrisoners = context.responseHeaders['total-records']
 
-    const locationOptions = locations.map(loc => ({ value: loc.locationPrefix, text: loc.description }))
+    const locationOptions = locations && locations.map(loc => ({ value: loc.locationPrefix, text: loc.description }))
 
-    const results = prisoners.map(prisoner => ({
-      ...prisoner,
-      offenderName: putLastNameFirst(prisoner.firstName, prisoner.lastName),
-      alerts: alertFlagValues.filter(alertFlag =>
-        alertFlag.alertCodes.some(alert => prisoner.alertsDetails && prisoner.alertsDetails.includes(alert))
-      ),
-    }))
+    const results =
+      prisoners &&
+      prisoners.map(prisoner => ({
+        ...prisoner,
+        offenderName: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+        alerts: alertFlagValues.filter(alertFlag =>
+          alertFlag.alertCodes.some(alert => prisoner.alertsDetails && prisoner.alertsDetails.includes(alert))
+        ),
+      }))
 
     return res.render('prisonerSearch/prisonerSearch.njk', {
+      alertOptions: alertFlagValues.map(alertFlag => ({
+        value: alertFlag.alertCodes,
+        text: alertFlag.label,
+        checked: alertFlag.alertCodes.some(alert => alerts && alerts.includes(alert)),
+      })),
       errors: [],
-      hasSearched,
-      results,
-      locationOptions,
       formValues: req.query,
+      hasSearched,
+      locationOptions,
       pagination: paginationService.getPagination(totalPrisoners, pageOffset, pageLimit, fullUrl),
+      results,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

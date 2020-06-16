@@ -1,31 +1,53 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
-<form novalidate="novalidate">
-  {{ govukInput({
-    id: "keywords",
-    name: "keywords",
-    value: formValues.keywords,
-    errorMessage: errors | findError('keywords'),
-    label: {
-        text: "Enter name or prison number"
-    },
-    classes: 'govuk-!-width-one-third'
-  }) }}
+<form novalidate="novalidate" class="prisoner-search__form">
+  <div class="horizontal-form govuk-!-margin-bottom-3">
+    {{ govukInput({
+      id: "keywords",
+      name: "keywords",
+      value: formValues.keywords,
+      errorMessage: errors | findError('keywords'),
+      label: {
+          text: "Enter name or prison number"
+      },
+      classes: 'govuk-!-width-full'
+    }) }}
 
-  {{ govukSelect({
-    id: "location",
-    name: "location",
-    label: {
-      text: "Select location"
-    },
-    items: locationOptions | setSelected(formValues.location)
-  }) }}
+    {{ govukSelect({
+      id: "location",
+      name: "location",
+      label: {
+        text: "Select location"
+      },
+      items: locationOptions | setSelected(formValues.location)
+    }) }}
 
-  {{ govukButton({
+    {{ govukButton({
     text: "Search",
     type: "submit"
+  }) }}
+  </div>
+
+  {{ govukDetails({
+    summaryText: "Show alerts",
+    classes: 'govuk-!-margin-bottom-0',
+    open: formValues.alerts.length,
+    html: govukCheckboxes({
+      idPrefix: "alerts",
+      name: "alerts",
+      classes: "prisoner-search__alerts govuk-checkboxes--small",
+      fieldset: {
+        legend: {
+          text: "Select alerts to view",
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      items: alertOptions
+    })
   }) }}
 </form>
 

@@ -1,0 +1,32 @@
+.prisoner-search__form {
+  margin-bottom: govuk-spacing(6);
+  padding: govuk-spacing(3);
+  background-color: govuk-colour('light-grey');
+}
+
+.prisoner-search__alerts {
+  column-gap: $govuk-gutter;
+
+  @include govuk-media-query($from: mobile) {
+    column-count: 2;
+  }
+
+  @include govuk-media-query($from: desktop) {
+    column-count: 4;
+  }
+
+  // not a fan
+  .govuk-checkboxes__item {
+    page-break-inside: avoid;
+  }
+}
+
+.prisoner-search__results {
+  &__image {
+    width: 90px;
+  }
+
+  .govuk-table__cell {
+    vertical-align: middle;
+  }
+}

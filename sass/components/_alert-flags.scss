@@ -22,6 +22,7 @@
 
 .alerts-list {
   @extend %govuk-list;
+  margin-bottom: 0;
   display: flex;
   flex-wrap: wrap;
 }
@@ -29,7 +30,6 @@
 .alert-status {
   @extend %status-style;
   text-transform: uppercase;
-  cursor: pointer;
   height: 30px;
 
   img {
