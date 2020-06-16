@@ -46,6 +46,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.join(__dirname, 'build'),
     publicPath: process.env.PUBLIC_URL || '/',
+    ecmaVersion: 5,
   },
   module: {
     rules: [
