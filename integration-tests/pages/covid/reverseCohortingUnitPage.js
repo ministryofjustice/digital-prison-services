@@ -10,6 +10,7 @@ const col = (i, j) =>
 const reverseCohortingUnitPage = () =>
   page('Prisoners in the Reverse Cohorting Unit', {
     prisonerCount: () => cy.get('[data-qa="prisonerCount"]'),
+    nameSort: () => cy.get('[data-qa="sort-name"]').find('button'),
     getRow: i => ({
       prisoner: () => col(i, 0).find('a'),
       prisonNumber: () => col(i, 1),
