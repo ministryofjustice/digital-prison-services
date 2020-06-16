@@ -389,7 +389,7 @@ describe('prisoner profile quick look', () => {
             relationshipDescription: 'Probation Officer',
             startTime: '2020-04-17T13:30:00',
           })
-          elite2Api.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 24, remainingPvo: 4 })
+          elite2Api.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 0, remainingPvo: 0 })
         })
 
         it('should render the quick look template with the correctly formatted visit details', async () => {
@@ -401,8 +401,8 @@ describe('prisoner profile quick look', () => {
               visits: {
                 visitSectionError: false,
                 details: [
-                  { label: 'Remaining visits', value: 24 },
-                  { label: 'Remaining privileged visits', value: 4 },
+                  { label: 'Remaining visits', value: 0 },
+                  { label: 'Remaining privileged visits', value: 0 },
                   { label: 'Next visit date', value: '17/04/2020' },
                 ],
                 nextVisitDetails: [
