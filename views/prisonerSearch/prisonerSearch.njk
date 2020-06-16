@@ -1,0 +1,52 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+{% set title = 'Prisoner search results' %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    {{title}}
+  </h1>
+
+  {% include './partials/prisonerSearchForm.njk' %}
+
+  {% if hasSearched and not errors.length %}
+    {% set rows = [] %}
+    {% for prisoner in results %}
+      {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Picture of" class="prisoner-image" />' %}
+      {% set rows = (rows.push([
+        { html: prisonerImage },
+        { text: prisoner.offenderName },
+        { text: prisoner.offenderNo },
+        { text: prisoner.assignedLivingUnitDesc },
+        { text: prisoner.iepLevel },
+        { text: prisoner.age },
+        { html: alertFlags(prisoner.alerts) }
+      ]), rows) %}
+    {% endfor %}
+
+    {% if results.length %}
+      {{ mojPagination(pagination) }}
+
+      {{ govukTable({
+        head: [
+          { text: "Picture" },
+          { text: "Name" },
+          { text: "Prison number" },
+          { text: "Location" },
+          { text: "Incentive level" },
+          { text: "Age" },
+          { text: "Relavent alerts" }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "prisoner-search-results-table" }
+      }) }}
+      
+      {{ mojPagination(pagination) }}
+    {% else %}
+    <p class="govuk-body">No records found matching search criteria.</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

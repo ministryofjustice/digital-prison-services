@@ -1,3 +1,4 @@
+const qs = require('querystring')
 const contextProperties = require('../contextProperties')
 const { arrayToQueryString, mapToQueryString } = require('../utils')
 
@@ -270,8 +271,16 @@ const elite2ApiFactory = client => {
 
   const getPersonPhones = (context, personId) => get(context, `/api/persons/${personId}/phones`)
 
-  const getInmates = (context, locationId, params) =>
-    get(context, `/api/locations/description/${locationId}/inmates?${mapToQueryString(params)}`)
+  const getInmates = (context, locationId, params) => {
+    const { alerts, ...queries } = params
+
+    return get(
+      context,
+      `/api/locations/description/${locationId}/inmates?${mapToQueryString(queries)}${
+        alerts ? `&${arrayToQueryString(alerts, 'alerts')}` : ''
+      }`
+    )
+  }
 
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 

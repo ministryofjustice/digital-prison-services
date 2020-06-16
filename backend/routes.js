@@ -20,6 +20,7 @@ const houseblockListFactory = require('./controllers/attendance/houseblockList')
 const { attendanceFactory } = require('./controllers/attendance/attendance')
 const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
 const { movementsServiceFactory } = require('./services/movementsService')
+const paginationService = require('./services/paginationService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { imageFactory } = require('./controllers/images')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
@@ -53,6 +54,7 @@ const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
 const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
 const covidRouter = require('./routes/covidRouter')
 
+const prisonerSearchController = require('./controllers/search/prisonerSearch')
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
@@ -262,6 +264,8 @@ const setup = ({
   router.use('/current-covid-units', covidRouter(elite2Api, logError))
 
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
+
+  router.use('/prisoner-search', prisonerSearchController({ paginationService, elite2Api, logError }))
 
   return router
 }

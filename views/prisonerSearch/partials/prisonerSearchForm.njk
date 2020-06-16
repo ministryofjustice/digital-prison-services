@@ -1,0 +1,31 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<form novalidate="novalidate">
+  {{ govukInput({
+    id: "keywords",
+    name: "keywords",
+    value: formValues.keywords,
+    errorMessage: errors | findError('keywords'),
+    label: {
+        text: "Enter name or prison number"
+    },
+    classes: 'govuk-!-width-one-third'
+  }) }}
+
+  {{ govukSelect({
+    id: "location",
+    name: "location",
+    label: {
+      text: "Select location"
+    },
+    items: locationOptions | setSelected(formValues.location)
+  }) }}
+
+  {{ govukButton({
+    text: "Search",
+    type: "submit"
+  }) }}
+</form>
+
