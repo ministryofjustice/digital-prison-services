@@ -89,15 +89,15 @@ describe('prisoner profile quick look', () => {
             offenceDetails: [
               {
                 label: 'Main offence(s)',
-                value: undefined,
+                value: 'Not entered',
               },
               {
                 label: 'Imprisonment status',
-                value: undefined,
+                value: 'Not entered',
               },
               {
                 label: 'Release date',
-                value: undefined,
+                value: 'Not entered',
               },
             ],
           })
@@ -151,9 +151,9 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', value: '' },
-              { label: 'Private', value: '' },
-              { label: 'Savings', value: '' },
+              { label: 'Spends', value: '£0.00' },
+              { label: 'Private', value: '£0.00' },
+              { label: 'Savings', value: '£0.00' },
             ],
           })
         )
@@ -192,9 +192,9 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             personalDetails: [
               { label: 'Age', value: undefined },
-              { label: 'Nationality', value: undefined },
-              { label: 'PNC number', value: undefined },
-              { label: 'CRO number', value: undefined },
+              { label: 'Nationality', value: 'Not entered' },
+              { label: 'PNC number', value: 'Not entered' },
+              { label: 'CRO number', value: 'Not entered' },
             ],
           })
         )
@@ -252,10 +252,10 @@ describe('prisoner profile quick look', () => {
             caseNoteAdjudications: {
               caseNoteAdjudicationsSectionError: false,
               details: [
-                { label: 'Incentive level warnings', value: undefined },
-                { label: 'Incentive Encouragements', value: undefined },
-                { label: 'Last incentive level review', value: undefined },
-                { label: 'Proven adjudications', value: undefined },
+                { label: 'Incentive level warnings', value: 0 },
+                { label: 'Incentive encouragements', value: 0 },
+                { label: 'Last incentive level review', value: '0 days ago' },
+                { label: 'Proven adjudications', value: 0 },
               ],
               activeAdjudicationsDetailsSectionError: false,
               activeAdjudicationsDetails: { label: 'Active adjudications', value: undefined },
@@ -323,8 +323,8 @@ describe('prisoner profile quick look', () => {
               caseNoteAdjudicationsSectionError: false,
               details: [
                 { label: 'Incentive level warnings', value: 1 },
-                { label: 'Incentive Encouragements', value: 2 },
-                { label: 'Last incentive level review', value: 40 },
+                { label: 'Incentive encouragements', value: 2 },
+                { label: 'Last incentive level review', value: '40 days ago' },
                 { label: 'Proven adjudications', value: 3 },
               ],
               activeAdjudicationsDetailsSectionError: false,
@@ -369,12 +369,12 @@ describe('prisoner profile quick look', () => {
             'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
-                visitSectionError: false,
                 details: [
-                  { label: 'Remaining visits', value: undefined },
-                  { label: 'Remaining privileged visits', value: undefined },
+                  { label: 'Remaining visits', value: 'Not entered' },
+                  { label: 'Remaining privileged visits', value: 'Not entered' },
                   { label: 'Next visit date', value: 'No upcoming visits' },
                 ],
+                visitSectionError: false,
               },
             })
           )
@@ -731,8 +731,8 @@ describe('prisoner profile quick look', () => {
             },
             details: [
               { label: 'Incentive level warnings', value: 'Unable to show this detail.' },
-              { label: 'Incentive Encouragements', value: 10 },
-              { label: 'Last incentive level review', value: 10 },
+              { label: 'Incentive encouragements', value: 10 },
+              { label: 'Last incentive level review', value: '10 days ago' },
               { label: 'Proven adjudications', value: 2 },
             ],
           },
@@ -783,8 +783,8 @@ describe('prisoner profile quick look', () => {
             },
             details: [
               { label: 'Incentive level warnings', value: 10 },
-              { label: 'Incentive Encouragements', value: 'Unable to show this detail.' },
-              { label: 'Last incentive level review', value: 10 },
+              { label: 'Incentive encouragements', value: 'Unable to show this detail.' },
+              { label: 'Last incentive level review', value: '10 days ago' },
               { label: 'Proven adjudications', value: 2 },
             ],
           },
@@ -835,7 +835,7 @@ describe('prisoner profile quick look', () => {
             },
             details: [
               { label: 'Incentive level warnings', value: 10 },
-              { label: 'Incentive Encouragements', value: 10 },
+              { label: 'Incentive encouragements', value: 10 },
               { label: 'Last incentive level review', value: 'Unable to show this detail.' },
               { label: 'Proven adjudications', value: 2 },
             ],
@@ -860,8 +860,8 @@ describe('prisoner profile quick look', () => {
             activeAdjudicationsDetails: { label: 'Active adjudications' },
             details: [
               { label: 'Incentive level warnings', value: 10 },
-              { label: 'Incentive Encouragements', value: 10 },
-              { label: 'Last incentive level review', value: 10 },
+              { label: 'Incentive encouragements', value: 10 },
+              { label: 'Last incentive level review', value: '10 days ago' },
               { label: 'Proven adjudications', value: 'Unable to show this detail.' },
             ],
           },
@@ -887,7 +887,7 @@ describe('prisoner profile quick look', () => {
                 value: 'Unable to show this detail.',
               },
               {
-                label: 'Incentive Encouragements',
+                label: 'Incentive encouragements',
                 value: 'Unable to show this detail.',
               },
               {
@@ -1109,53 +1109,109 @@ describe('prisoner profile quick look', () => {
         })
       )
     })
+  })
 
-    // it('should still render the quick look template with the correct error messages', async () => {
-    //   await controller(req, res)
-    //
-    //   expect(res.render).toHaveBeenCalledWith(
-    //     'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
-    //     expect.objectContaining({
-    //       balanceDetails: [
-    //         { label: 'Spends', value: null },
-    //         { label: 'Private', value: null },
-    //         { label: 'Savings', value: null },
-    //       ],
-    //       caseNoteAdjudications: {
-    //         activeAdjudicationsDetails: { label: 'Active adjudications' },
-    //         details: [
-    //           { label: 'Incentive level warnings', value: null },
-    //           { label: 'Incentive Encouragements', value: null },
-    //           { label: 'Last incentive level review', value: null },
-    //           { label: 'Proven adjudications', value: null },
-    //         ],
-    //       },
-    //       dpsUrl: 'http://localhost:3000/',
-    //       offenceDetails: [
-    //         { label: 'Main offence(s)', value: null },
-    //         { label: 'Imprisonment status', value: null },
-    //         { label: 'Release date', value: null },
-    //       ],
-    //       personalDetails: [
-    //         { label: 'Age', value: null },
-    //         { label: 'Nationality', value: null },
-    //         { label: 'PNC number', value: null },
-    //         { label: 'CRO number', value: null },
-    //       ],
-    //       scheduledActivityPeriods: [
-    //         { label: 'Morning (AM)', value: null },
-    //         { label: 'Afternoon (PM)', value: null },
-    //         { label: 'Evening (ED)', value: null },
-    //       ],
-    //       visits: {
-    //         details: [
-    //           { label: 'Remaining visits', value: null },
-    //           { label: 'Remaining privileged visits', value: null },
-    //           { label: 'Next visit date', value: 'No upcoming visits' },
-    //         ],
-    //       },
-    //     })
-    //   )
-    // })
+  describe('When data is missing', () => {
+    beforeEach(() => {
+      elite2Api.getDetails = jest.fn().mockResolvedValue({})
+      elite2Api.getMainOffence = jest.fn().mockResolvedValue([])
+      elite2Api.getPrisonerBalances = jest.fn().mockResolvedValue({})
+      elite2Api.getPrisonerDetails = jest.fn().mockResolvedValue([])
+      elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
+      elite2Api.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
+      elite2Api.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
+      elite2Api.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
+      elite2Api.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+      elite2Api.getNextVisit = jest.fn().mockResolvedValue({})
+      elite2Api.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
+      elite2Api.getEventsForToday = jest.fn().mockResolvedValue([])
+      elite2Api.getProfileInformation = jest.fn().mockResolvedValue([])
+    })
+
+    it('should display correct defaults for offences', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          offenceDetails: [
+            { label: 'Main offence(s)', value: 'Not entered' },
+            { label: 'Imprisonment status', value: 'Not entered' },
+            { label: 'Release date', value: 'Not entered' },
+          ],
+        })
+      )
+    })
+
+    it('should display correct defaults for case note adjudications for 1 warning', async () => {
+      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          caseNoteAdjudications: {
+            activeAdjudicationsDetails: { label: 'Active adjudications', value: undefined },
+            activeAdjudicationsDetailsSectionError: false,
+            caseNoteAdjudicationsSectionError: false,
+            details: [
+              { label: 'Incentive level warnings', value: 1 },
+              { label: 'Incentive encouragements', value: 0 },
+              { label: 'Last incentive level review', value: '0 days ago' },
+              { label: 'Proven adjudications', value: 0 },
+            ],
+          },
+        })
+      )
+    })
+
+    it('should display correct default personal details', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          personalDetails: [
+            { label: 'Age', value: undefined },
+            { label: 'Nationality', value: 'Not entered' },
+            { label: 'PNC number', value: 'Not entered' },
+            { label: 'CRO number', value: 'Not entered' },
+          ],
+        })
+      )
+    })
+
+    it('should display correct defaults for offender profile data', async () => {
+      prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+        ...prisonerProfileData,
+        keyWorkerName: null,
+        keyWorkerLastSession: null,
+        category: null,
+        csra: null,
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          prisonerProfileData: {
+            activeAlertCount: 1,
+            agencyName: 'Moorland Closed',
+            alerts: [],
+            category: 'Not entered',
+            csra: 'Not entered',
+            inactiveAlertCount: 2,
+            incentiveLevel: 'Standard',
+            keyWorkerLastSession: 'No previous session',
+            keyWorkerName: 'None assigned',
+            location: 'CELL-123',
+            offenderName: 'Prisoner, Test',
+            offenderNo: 'ABC123',
+          },
+        })
+      )
+    })
   })
 })

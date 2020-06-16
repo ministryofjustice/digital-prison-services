@@ -199,8 +199,8 @@ const hyphenatedStringToCamel = string =>
     return char[1].toUpperCase()
   })
 
-const formatCurrency = (number, currency = 'GBP') =>
-  number ? number.toLocaleString('en-GB', { style: 'currency', currency }) : ''
+const formatCurrency = (number, currency) =>
+  number === 0 || number ? number.toLocaleString('en-GB', { style: 'currency', currency: currency || 'GBP' }) : ''
 
 const capitalizeUppercaseString = string =>
   string
