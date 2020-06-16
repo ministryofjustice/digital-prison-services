@@ -1,0 +1,90 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: notmUrl
+            },
+            {
+                text: "COVID units",
+                href: '/current-covid-units'
+            },
+            {
+                text: "Prisoners refusing to shield"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+  {% set rows = [] %}
+
+  {% for result in results %}
+    {% set rows = (rows.push([
+      {
+        html: '<a class="govuk-link govuk-link--no-visited-state" href="'+ notmUrl + 'offenders/' + result.offenderNo +'/quick-look">' + result.name + '</a>'
+      },
+      {
+        text: result.offenderNo
+      },
+      {
+        text: result.assignedLivingUnitDesc
+      },
+      {
+        html: '<a class="govuk-link govuk-link--no-visited-state" href="' + notmUrl + 'offenders/' + result.offenderNo +'/alerts">Change alert</a>'
+      }
+    ]), rows) %}
+  {% endfor %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">
+        Prisoners refusing to shield
+    </h1>
+    <p class = 'govuk-body'> 
+      These are prisoners who have been identified as needing to shield but have refused to. They should be asked every 3 days if they want to shield. 
+    </p>
+
+  {% if rows.length %}
+    <p class="govuk-body right-content">Prisoners listed: <strong><span data-qa="prisonerCount">{{ rows.length }}</span></strong></p>
+
+    {{ govukTable({
+      head: [
+        {
+          text: "Name",
+          attributes: {
+            "aria-sort": "ascending"
+          }
+        },
+        {
+          text: "Prison number"
+        },
+        {
+          text: "Location",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        {
+          text: ""
+        }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "refusing-to-shield-table" }
+    }) }}
+  {% else %}
+    <p class="govuk-body" data-qa="no-results-message">There are no results.</p>
+  {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+{{ super() }}
+<script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+<script>
+new MOJFrontend.SortableTable({
+  table: $('table')[0],
+})
+</script>
+{% endblock %}

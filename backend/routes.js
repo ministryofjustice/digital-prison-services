@@ -29,7 +29,6 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
-const { covidServiceFactory } = require('./services/covidService')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
