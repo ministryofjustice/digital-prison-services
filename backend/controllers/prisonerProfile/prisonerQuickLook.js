@@ -240,13 +240,13 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
             label: 'Remaining visits',
             value: visitBalancesResponse.error
               ? unableToShowDetailMessage
-              : (visitBalances && visitBalances.remainingVo) || 'Not entered',
+              : visitBalances && (visitBalances.remainingVo === 0 ? 0 : visitBalances.remainingVo || 'Not entered'),
           },
           {
             label: 'Remaining privileged visits',
             value: visitBalancesResponse.error
               ? unableToShowDetailMessage
-              : (visitBalances && visitBalances.remainingPvo) || 'Not entered',
+              : visitBalances && (visitBalances.remainingPvo === 0 ? 0 : visitBalances.remainingPvo || 'Not entered'),
           },
           {
             label: 'Next visit date',
