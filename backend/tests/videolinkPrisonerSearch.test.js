@@ -4,7 +4,7 @@ const config = require('../config')
 
 config.app.videoLinkEnabledFor = ['MDI']
 
-describe('Prisoner search', () => {
+describe('Video link prisoner search', () => {
   const elite2Api = {}
   const oauthApi = {}
 

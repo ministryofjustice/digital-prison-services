@@ -12,16 +12,14 @@
 
   {% include './partials/prisonerSearchForm.njk' %}
 
-  {% if hasSearched %}
-    {% if results.length %}
-      {{ mojPagination(pagination) }}
+  {% if results.length %}
+    {{ mojPagination(pagination) }}
 
-      {% include './partials/prisonerSearchList.njk' %}
-      
-      {{ mojPagination(pagination) }}
-    {% else %}
-    <p class="govuk-body">No records found matching search criteria.</p>
-    {% endif %}
+    {% include './partials/prisonerSearchList.njk' %}
+    
+    {{ mojPagination(pagination) }}
+  {% else %}
+  <p class="govuk-body">No records found matching search criteria.</p>
   {% endif %}
 {% endblock %}
 

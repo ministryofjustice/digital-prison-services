@@ -3,20 +3,23 @@ const alertFlagValues = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
 
 module.exports = ({ paginationService, elite2Api, logError }) => async (req, res) => {
+  const {
+    user: { activeCaseLoad },
+  } = res.locals
+  const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+  const { location, keywords, alerts, pageOffsetOption } = req.query
+
+  const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
+  const pageLimit = 50
+
+  const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
+
   try {
-    const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
-    const { location, keywords, alerts, pageOffsetOption } = req.query
-
-    const pageOffset = parseInt(pageOffsetOption, 10) || 0
-    const pageLimit = 50
-
-    const hasSearched = Boolean(Object.keys(req.query).length)
-
     const context = { ...res.locals, requestHeaders: { 'page-offset': pageOffset, 'page-limit': pageLimit } }
 
     const [locations, prisoners] = await Promise.all([
       elite2Api.userLocations(res.locals),
-      elite2Api.getInmates(context, location, {
+      elite2Api.getInmates(context, location || currentUserCaseLoad, {
         keywords,
         alerts,
         returnIep: 'true',
@@ -44,7 +47,6 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
         checked: alertFlag.alertCodes.some(alert => alerts && alerts.includes(alert)),
       })),
       formValues: req.query,
-      hasSearched,
       locationOptions,
       pagination: paginationService.getPagination(
         context.responseHeaders['total-records'],
@@ -60,47 +62,3 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
     return res.render('error.njk', { url: '/', homeUrl: '/' })
   }
 }
-
-// ;[
-//   {
-//     bookingId: 1102484,
-//     bookingNo: 'W21339',
-//     offenderNo: 'G6123VU',
-//     firstName: 'JOHN',
-//     lastName: 'SAUNDERS',
-//     dateOfBirth: '1990-10-12',
-//     age: 29,
-//     agencyId: 'MDI',
-//     assignedLivingUnitId: 27136,
-//     assignedLivingUnitDesc: 'MCASU-CASU1-C1-010',
-//     facialImageId: 1412890,
-//     iepLevel: 'Standard',
-//     categoryCode: 'C',
-//     imprisonmentStatus: 'LR_HDC',
-//     alertsCodes: [],
-//     alertsDetails: [
-//       'XA',
-//       'XVL',
-//       'RSS',
-//       'XC',
-//       'XCU',
-//       'XSA',
-//       'XHT',
-//       'XGANG',
-//       'XTACT',
-//       'LFC21',
-//       'XSC',
-//       'XOCGN',
-//       'F1',
-//       'PC1',
-//       'HPI',
-//       'HA',
-//       'RCDR',
-//       'URS',
-//       'URCU',
-//       'USU',
-//       'UPIU',
-//     ],
-//     convictedStatus: 'Convicted',
-//   },
-// ]
