@@ -128,7 +128,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
       - hmpps/deploy_env:
           chart_name: prison-staff-hub
           release_name: prison-staff-hub
@@ -140,7 +140,7 @@ workflows:
             - cypress_integration_tests
           filters:
             branches:
-              only: master
+              only: main
       - request-preprod-approval:
           type: approval
           requires:
@@ -173,6 +173,6 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - hmpps/npm_security_audit
