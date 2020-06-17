@@ -53,6 +53,7 @@ module.exports = on => {
     stubAlerts: elite2api.stubAlerts,
 
     stubInmates: elite2api.stubInmates,
+    stubUserLocations: elite2api.stubUserLocations,
 
     stubQuickLook: ({
       offence,

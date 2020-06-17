@@ -41,6 +41,45 @@ module.exports = {
       },
     })
   },
+  stubUserLocations: locations => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/users/me/locations',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations || [
+          {
+            locationId: 1,
+            locationType: 'INST',
+            description: 'Moorland (HMP & YOI)',
+            agencyId: 'MDI',
+            locationPrefix: 'MDI',
+          },
+          {
+            locationId: 2,
+            locationType: 'WING',
+            description: 'Houseblock 1',
+            agencyId: 'MDI',
+            locationPrefix: 'MDI-1',
+            userDescription: 'Houseblock 1',
+          },
+          {
+            locationId: 3,
+            locationType: 'WING',
+            description: 'Houseblock 2',
+            agencyId: 'MDI',
+            locationPrefix: 'MDI-2',
+            userDescription: 'Houseblock 2',
+          },
+        ],
+      },
+    })
+  },
   stubUserScheduledActivities: activities => {
     return stubFor({
       request: {

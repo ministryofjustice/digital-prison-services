@@ -15,15 +15,18 @@
       classes: "govuk-fieldset__legend--m"
     }
   },
-  items: alertOptions
+  items: alertOptions,
+  attributes: {
+    'data-test': 'prisoner-search-alerts'
+  }
 }) }}
 
-<a href="#" class="govuk-link govuk-link--no-visited-state js-prisoner-search-clear-alerts">
+<a href="#" class="govuk-link govuk-link--no-visited-state js-prisoner-search-clear-alerts" data-test="prisoner-search-clear-alerts">
   Clear selected alerts
 </a>
 {% endset %}
 
-<form novalidate="novalidate" class="prisoner-search__form">
+<form novalidate="novalidate" class="prisoner-search__form" data-test="prisoner-search-form">
   <div class="horizontal-form govuk-!-margin-bottom-3">
     {{ govukInput({
       id: "keywords",
@@ -33,7 +36,10 @@
       label: {
           text: "Enter name or prison number"
       },
-      classes: 'govuk-!-width-full'
+      classes: 'govuk-!-width-full',
+      attributes: {
+        'data-test': 'prisoner-search-keywords'
+      }
     }) }}
 
     {{ govukSelect({
@@ -42,7 +48,10 @@
       label: {
         text: "Select location"
       },
-      items: locationOptions | setSelected(formValues.location)
+      items: locationOptions | setSelected(formValues.location),
+      attributes: {
+        'data-test': 'prisoner-search-location'
+      }
     }) }}
 
     {{ govukButton({
@@ -55,7 +64,10 @@
     summaryText: "Show alerts",
     classes: 'govuk-!-margin-bottom-0',
     open: formValues.alerts.length,
-    html: alertCheckboxes
+    html: alertCheckboxes,
+    attributes: {
+      'data-test': 'prisoner-search-alerts-container'
+    }
   }) }}
 </form>
 
