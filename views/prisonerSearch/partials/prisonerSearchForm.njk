@@ -4,6 +4,25 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
+{% set alertCheckboxes %}
+ {{ govukCheckboxes({
+  idPrefix: "alerts",
+  name: "alerts",
+  classes: "prisoner-search__alerts govuk-checkboxes--small js-prisoner-search-alerts",
+  fieldset: {
+    legend: {
+      text: "Select alerts to view",
+      classes: "govuk-fieldset__legend--m"
+    }
+  },
+  items: alertOptions
+}) }}
+
+<a href="#" class="govuk-link govuk-link--no-visited-state js-prisoner-search-clear-alerts">
+  Clear selected alerts
+</a>
+{% endset %}
+
 <form novalidate="novalidate" class="prisoner-search__form">
   <div class="horizontal-form govuk-!-margin-bottom-3">
     {{ govukInput({
@@ -36,18 +55,7 @@
     summaryText: "Show alerts",
     classes: 'govuk-!-margin-bottom-0',
     open: formValues.alerts.length,
-    html: govukCheckboxes({
-      idPrefix: "alerts",
-      name: "alerts",
-      classes: "prisoner-search__alerts govuk-checkboxes--small",
-      fieldset: {
-        legend: {
-          text: "Select alerts to view",
-          classes: "govuk-fieldset__legend--m"
-        }
-      },
-      items: alertOptions
-    })
+    html: alertCheckboxes
   }) }}
 </form>
 

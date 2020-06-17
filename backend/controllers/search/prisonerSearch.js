@@ -35,7 +35,7 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       prisoners &&
       prisoners.map(prisoner => ({
         ...prisoner,
-        offenderName: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+        name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
         alerts: alertFlagValues.filter(alertFlag =>
           alertFlag.alertCodes.some(alert => prisoner.alertsDetails && prisoner.alertsDetails.includes(alert))
         ),
