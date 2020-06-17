@@ -1,4 +1,3 @@
-const qs = require('querystring')
 const contextProperties = require('../contextProperties')
 const { arrayToQueryString, mapToQueryString } = require('../utils')
 

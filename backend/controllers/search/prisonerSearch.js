@@ -28,7 +28,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       }),
     ])
 
-    const locationOptions = locations && locations.map(loc => ({ value: loc.locationPrefix, text: loc.description }))
+    const locationOptions =
+      locations && locations.map(option => ({ value: option.locationPrefix, text: option.description }))
 
     const results =
       prisoners &&
