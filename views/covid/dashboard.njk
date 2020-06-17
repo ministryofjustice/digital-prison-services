@@ -17,8 +17,8 @@
 
 {% macro conditionalCountLink(params) %}
     {% if params.count > 0 %}
-      <a class="govuk-link govuk-body govuk-link--no-visited-state" data-qa="{{ params.name }}-link" href="{{params.page}}">
-        <span class="govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ params.name }}">{{params.count}}</span>
+      <a class="govuk-link govuk-body govuk-link--no-visited-state govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ params.name }}-link" href="{{params.page}}">
+        <span data-qa="{{ params.name }}">{{params.count}}</span>
       </a>
     {% else %}
       <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ params.name }}">{{params.count}}</span>
