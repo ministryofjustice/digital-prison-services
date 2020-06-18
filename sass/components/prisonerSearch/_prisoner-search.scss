@@ -8,15 +8,18 @@
   column-gap: $govuk-gutter;
 
   @include govuk-media-query($from: mobile) {
-    column-count: 2;
-  }
-
-  @include govuk-media-query($from: desktop) {
-    column-count: 4;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .govuk-checkboxes__item {
-    page-break-inside: avoid;
+    @include govuk-media-query($from: mobile) {
+      flex-basis: 50%;
+    }
+
+    @include govuk-media-query($from: desktop) {
+      flex-basis: 25%;
+    }
   }
 }
 
