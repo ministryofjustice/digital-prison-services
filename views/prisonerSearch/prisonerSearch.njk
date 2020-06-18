@@ -5,6 +5,21 @@
 
 {% set title = 'Prisoner search results' %}
 
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: notmUrl
+      },
+      {
+        text: title
+      }
+    ]
+  })
+  }}
+{% endblock %}
+
 {% block content %}
   <h1 class="govuk-heading-l">
     {{title}}

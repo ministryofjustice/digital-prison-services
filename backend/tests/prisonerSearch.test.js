@@ -81,7 +81,7 @@ describe('Prisoner search', () => {
     )
   })
 
-  it('should render the prisoner search template with the correct alert and location options', async () => {
+  it('should render the prisoner search template with the correct alert, location options and notm url', async () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -120,6 +120,7 @@ describe('Prisoner search', () => {
           { text: 'Houseblock 1', value: 'MDI-1' },
           { text: 'Houseblock 2', value: 'MDI-2' },
         ],
+        notmUrl: 'http://localhost:3000/',
       })
     )
   })

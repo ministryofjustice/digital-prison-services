@@ -1,6 +1,7 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const alertFlagValues = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
+const config = require('../../config')
 
 module.exports = ({ paginationService, elite2Api, logError }) => async (req, res) => {
   const {
@@ -49,6 +50,7 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       })),
       formValues: req.query,
       locationOptions,
+      notmUrl: config.app.notmEndpointUrl,
       pagination: paginationService.getPagination(
         context.responseHeaders['total-records'],
         pageOffset,
