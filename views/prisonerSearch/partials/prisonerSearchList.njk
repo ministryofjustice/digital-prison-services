@@ -1,6 +1,6 @@
 {% set rows = [] %}
 {% for prisoner in results %}
-  {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results__image" />' %}
+  {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
   {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
   {% set rows = (rows.push([
     { html: prisonerImage },
@@ -18,7 +18,7 @@
   ]), rows) %}
 {% endfor %}
 
-<div class="prisoner-search__results">
+<div class="prisoner-search__results-list">
   {{ govukTable({
     head: [
       { html: '<span class="govuk-visually-hidden">Picture</span>' },

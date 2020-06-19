@@ -1,3 +1,4 @@
+const qs = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const alertFlagValues = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
@@ -8,7 +9,7 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
     user: { activeCaseLoad },
   } = res.locals
   const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
-  const { location, keywords, alerts, pageOffsetOption } = req.query
+  const { location, keywords, alerts, pageOffsetOption, view } = req.query
 
   const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
   const pageLimit = 50
@@ -58,6 +59,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
         fullUrl
       ),
       results,
+      searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, alerts, pageOffsetOption })}`,
+      view,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

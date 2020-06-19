@@ -226,6 +226,25 @@ describe('Prisoner search', () => {
     )
   })
 
+  it('should render template with search url and current view type so they can be used for the toggle links', async () => {
+    req.baseUrl = '/prisoner-search'
+    req.query = {
+      alerts: ['HA', 'HA1'],
+      keywords: 'Smith',
+      view: 'grid',
+    }
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        searchUrl: '/prisoner-search?location=&keywords=Smith&alerts=HA&alerts=HA1&pageOffsetOption=',
+        view: 'grid',
+      })
+    )
+  })
+
   it('should render the error template if there is a problem', async () => {
     elite2Api.getInmates.mockImplementation(() => Promise.reject(new Error('Network error')))
 

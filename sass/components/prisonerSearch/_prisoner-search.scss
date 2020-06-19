@@ -1,40 +1,100 @@
-.prisoner-search__form {
-  margin-bottom: govuk-spacing(6);
-  padding: govuk-spacing(3);
-  background-color: govuk-colour('light-grey');
-}
-
-.prisoner-search__alerts {
-  column-gap: $govuk-gutter;
-
-  @include govuk-media-query($from: mobile) {
-    display: flex;
-    flex-wrap: wrap;
+.prisoner-search {
+  &__form {
+    margin-bottom: govuk-spacing(6);
+    padding: govuk-spacing(3);
+    background-color: govuk-colour('light-grey');
   }
 
-  .govuk-checkboxes__item {
+  &__alerts {
     @include govuk-media-query($from: mobile) {
-      flex-basis: 50%;
+      display: flex;
+      flex-wrap: wrap;
     }
 
-    @include govuk-media-query($from: desktop) {
-      flex-basis: 25%;
+    .govuk-checkboxes__item {
+      @include govuk-media-query($from: mobile) {
+        flex-basis: 50%;
+      }
+
+      @include govuk-media-query($from: desktop) {
+        flex-basis: 25%;
+      }
     }
   }
-}
 
-.prisoner-search__results {
-  overflow: auto;
+  &__toggles {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: govuk-spacing(3);
 
-  &__image {
-    width: 90px;
+    &__toggle {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+
+      &--list {
+        border-right: 1px solid $govuk-text-colour;
+        padding-right: govuk-spacing(2);
+      }
+
+      &--grid {
+        padding-left: govuk-spacing(2);
+      }
+
+      path {
+        fill: $govuk-text-colour;
+      }
+
+      &--active {
+        color: $govuk-link-colour;
+
+        path {
+          fill: $govuk-link-colour;
+        }
+      }
+    }
   }
 
-  .govuk-table__header {
-    vertical-align: bottom;
-  }
+  &__results {
+    &-list {
+      overflow: auto;
 
-  .govuk-table__cell {
-    vertical-align: middle;
+      &__image {
+        width: 90px;
+      }
+
+      .govuk-table__header {
+        vertical-align: bottom;
+      }
+
+      .govuk-table__cell {
+        vertical-align: middle;
+      }
+    }
+
+    &-grid {
+      margin: 0 (-$govuk-gutter-half) govuk-spacing(3);
+
+      @include govuk-media-query($from: mobile) {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      &__prisoner {
+        @include govuk-media-query($from: mobile) {
+          flex-basis: 50%;
+        }
+
+        @include govuk-media-query($from: desktop) {
+          flex-basis: 33.333%;
+        }
+
+        @include govuk-media-query($from: 950px) {
+          flex-basis: 20%;
+        }
+
+        padding: $govuk-gutter-half;
+      }
+    }
   }
 }
