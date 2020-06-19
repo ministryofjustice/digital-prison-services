@@ -30,7 +30,7 @@
     &__toggle {
       display: flex;
       align-items: center;
-      text-decoration: none;
+      color: $govuk-link-colour;
 
       &--list {
         border-right: 1px solid $govuk-text-colour;
@@ -42,14 +42,15 @@
       }
 
       path {
-        fill: $govuk-text-colour;
+        fill: $govuk-link-colour;
       }
 
       &--active {
-        color: $govuk-link-colour;
+        text-decoration: none;
+        color: $govuk-text-colour;
 
         path {
-          fill: $govuk-link-colour;
+          fill: $govuk-text-colour;
         }
       }
     }
