@@ -27,10 +27,16 @@
 
   {% include './partials/prisonerSearchForm.njk' %}
 
+  {% include './partials/prisonerSearchToggles.njk' %}
+
   {% if results.length %}
     {{ mojPagination(pagination) }}
 
-    {% include './partials/prisonerSearchList.njk' %}
+    {% if view === 'grid' %}
+      {% include './partials/prisonerSearchGrid.njk' %}
+    {% else %}
+      {% include './partials/prisonerSearchList.njk' %}
+    {% endif %}
     
     {{ mojPagination(pagination) }}
   {% else %}

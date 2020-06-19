@@ -1,0 +1,19 @@
+.prisoner-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: govuk-colour('light-grey');
+
+  &__image {
+    width: 100%;
+
+    @include govuk-media-query($from: mobile) {
+      height: 250px;
+      object-fit: cover;
+    }
+  }
+
+  &__details {
+    padding: govuk-spacing(3);
+  }
+}
