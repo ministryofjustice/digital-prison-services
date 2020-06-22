@@ -1,0 +1,55 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+{% set title = 'Prisoner search results' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: notmUrl
+      },
+      {
+        text: title
+      }
+    ]
+  })
+  }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">
+    {{title}}
+  </h1>
+
+  {% include './partials/prisonerSearchForm.njk' %}
+
+  {% include './partials/prisonerSearchToggles.njk' %}
+
+  {% if results.length %}
+    {{ mojPagination(pagination) }}
+
+    {% if view === 'grid' %}
+      {% include './partials/prisonerSearchGrid.njk' %}
+    {% else %}
+      {% include './partials/prisonerSearchList.njk' %}
+    {% endif %}
+    
+    {{ mojPagination(pagination) }}
+  {% else %}
+  <p class="govuk-body">No records found matching search criteria.</p>
+  {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+    new MOJFrontend.SortableTable({
+      table: $('table')[0],
+    })
+  </script>
+{% endblock %}

@@ -35,6 +35,7 @@ module.exports = {
 
       return alerts
         .filter(({ alertCode }) => alertCode === code)
+        .filter(({ expired }) => !expired)
         .map(alert => [alert, inmateFor(alert.offenderNo)])
         .map(([alert, inmate]) => ({
           bookingId: inmate.bookingId,

@@ -1,0 +1,9 @@
+{% from "../macros/prisonerPanel.njk" import prisonerPanel %}
+
+<div class="prisoner-search__results-grid">
+  {% for prisoner in results %}  
+    <div class="prisoner-search__results-grid__prisoner">
+      {{ prisonerPanel(prisoner.offenderNo, prisoner.name, prisoner.assignedLivingUnitDesc) }}
+    </div>
+  {% endfor %}
+</div>

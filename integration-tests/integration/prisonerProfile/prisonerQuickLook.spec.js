@@ -255,7 +255,7 @@ context('Prisoner quick look', () => {
       .then($summaryValues => {
         expect($summaryValues.get(0).innerText).to.eq('1')
         expect($summaryValues.get(1).innerText).to.eq('2')
-        expect($summaryValues.get(2).innerText).to.eq('40')
+        expect($summaryValues.get(2).innerText).to.eq('40 days ago')
         expect($summaryValues.get(3).innerText).to.eq('3')
         expect($summaryValues.get(4).innerText).to.eq(
           '14 days Stoppage of Earnings (50%)\n16/04/2020\n14 days Stoppage of Earnings (£50.00)\n14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC\n16/04/2020'

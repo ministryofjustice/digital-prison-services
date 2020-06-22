@@ -1,12 +1,9 @@
 const prisonerSearchController = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
-const config = require('../config')
-
-config.app.videoLinkEnabledFor = ['MDI']
 
 describe('Prisoner search', () => {
   const elite2Api = {}
-  const oauthApi = {}
+  const paginationService = {}
 
   let req
   let res
@@ -15,241 +12,245 @@ describe('Prisoner search', () => {
 
   beforeEach(() => {
     req = {
-      originalUrl: 'http://localhost',
+      protocol: 'http',
+      get: jest.fn().mockReturnValue('localhost'),
+      originalUrl: '/prisoner-search',
       query: {},
     }
-    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
+    res = {
+      locals: {
+        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+        responseHeaders: {
+          'total-records': 0,
+        },
+      },
+      render: jest.fn(),
+      redirect: jest.fn(),
+    }
 
     logError = jest.fn()
 
-    oauthApi.userRoles = jest.fn()
-    elite2Api.getAgencies = jest.fn().mockReturnValue([
+    elite2Api.userLocations = jest.fn().mockReturnValue([
       {
-        agencyId: 'PRISON2',
-        description: 'Prison 2',
+        locationId: 1,
+        locationType: 'INST',
+        description: 'Moorland (HMP & YOI)',
+        agencyId: 'MDI',
+        locationPrefix: 'MDI',
       },
       {
-        agencyId: 'PRISON1',
-        description: 'Prison 1',
+        locationId: 2,
+        locationType: 'WING',
+        description: 'Houseblock 1',
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-1',
+        userDescription: 'Houseblock 1',
+      },
+      {
+        locationId: 3,
+        locationType: 'WING',
+        description: 'Houseblock 2',
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-2',
+        userDescription: 'Houseblock 2',
       },
     ])
-    elite2Api.globalSearch = jest.fn()
+    elite2Api.getInmates = jest.fn().mockReturnValue([])
 
-    controller = prisonerSearchController({ oauthApi, elite2Api, logError })
+    paginationService.getPagination = jest.fn()
+
+    controller = prisonerSearchController({ paginationService, elite2Api, logError })
   })
 
-  const agencyOptions = [
-    {
-      value: 'PRISON1',
-      text: 'Prison 1',
-    },
-    {
-      value: 'PRISON2',
-      text: 'Prison 2',
-    },
-  ]
+  it('should make a call for the users current caseload locations', async () => {
+    await controller(req, res)
 
-  describe('index', () => {
-    describe('when the user does not have the correct roles', () => {
-      it('should redirect back', async () => {
-        oauthApi.userRoles.mockReturnValue([])
+    expect(elite2Api.userLocations).toHaveBeenCalledWith(res.locals)
+  })
 
-        await controller(req, res)
+  it('should request the current users active case load prisoners if no location specified in the query', async () => {
+    await controller(req, res)
 
-        expect(elite2Api.getAgencies).not.toHaveBeenCalled()
-        expect(elite2Api.globalSearch).not.toHaveBeenCalled()
-        expect(res.redirect).toHaveBeenCalledWith('back')
+    expect(elite2Api.getInmates).toHaveBeenCalledWith(
+      {
+        ...res.locals,
+        requestHeaders: { 'page-offset': 0, 'page-limit': 50 },
+      },
+      'MDI',
+      { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
+    )
+  })
+
+  it('should render the prisoner search template with the correct alert, location options and notm url', async () => {
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        alertOptions: [
+          { checked: false, text: 'ACCT open', value: ['HA'] },
+          { checked: false, text: 'ACCT post closure', value: ['HA1'] },
+          { checked: false, text: 'Arsonist', value: ['XA'] },
+          { checked: false, text: 'Care experienced', value: ['LCE'] },
+          { checked: false, text: 'Chemical attacker', value: ['XCA'] },
+          { checked: false, text: 'Concerted indiscipline', value: ['XCI'] },
+          { checked: false, text: 'Conflict', value: ['RCON'] },
+          { checked: false, text: 'Controlled unlock', value: ['XCU'] },
+          { checked: false, text: 'Corruptor', value: ['XCO'] },
+          { checked: false, text: 'CSIP', value: ['CSIP'] },
+          { checked: false, text: 'E-list', value: ['XEL'] },
+          { checked: false, text: 'Gang member', value: ['XGANG'] },
+          { checked: false, text: 'Hostage taker', value: ['XHT'] },
+          { checked: false, text: 'No one-to-one', value: ['RNO121'] },
+          { checked: false, text: 'PEEP', value: ['PEEP'] },
+          { checked: false, text: 'Protective Isolation Unit', value: ['UPIU'] },
+          { checked: false, text: 'Quarantined', value: ['RCDR'] },
+          { checked: false, text: 'Racist', value: ['XR'] },
+          { checked: false, text: 'Refusing to shield', value: ['URS'] },
+          { checked: false, text: 'Reverse Cohorting Unit', value: ['URCU'] },
+          { checked: false, text: 'Risk to females', value: ['XRF'] },
+          { checked: false, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
+          { checked: false, text: 'Shielding Unit', value: ['USU'] },
+          { checked: false, text: 'Staff assaulter', value: ['XSA'] },
+          { checked: false, text: 'TACT', value: ['XTACT'] },
+          { checked: false, text: 'Veteran', value: ['F1'] },
+        ],
+        locationOptions: [
+          { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+          { text: 'Houseblock 1', value: 'MDI-1' },
+          { text: 'Houseblock 2', value: 'MDI-2' },
+        ],
+        notmUrl: 'http://localhost:3000/',
       })
-    })
+    )
+  })
 
-    describe('when the user does have the correct roles', () => {
-      beforeEach(() => {
-        oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
+  it('should return correctly checked alert options', async () => {
+    req.query.alerts = ['HA', 'HA1']
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        formValues: req.query,
+        alertOptions: expect.arrayContaining([
+          { checked: true, text: 'ACCT open', value: ['HA'] },
+          { checked: true, text: 'ACCT post closure', value: ['HA1'] },
+        ]),
       })
+    )
+  })
 
-      it('should render the prisoner search template', async () => {
-        await controller(req, res)
+  it('should call pagination service and return the correctly formatted results', async () => {
+    const inmates = [
+      {
+        bookingId: 1,
+        offenderNo: 'A1234BC',
+        firstName: 'JOHN',
+        lastName: 'SAUNDERS',
+        dateOfBirth: '1990-10-12',
+        age: 29,
+        agencyId: 'MDI',
+        assignedLivingUnitId: 1,
+        assignedLivingUnitDesc: 'UNIT-1',
+        iepLevel: 'Standard',
+        categoryCode: 'C',
+        alertsDetails: ['XA', 'XVL'],
+      },
+      {
+        bookingId: 2,
+        offenderNo: 'B4567CD',
+        firstName: 'STEVE',
+        lastName: 'SMITH',
+        dateOfBirth: '1989-11-12',
+        age: 30,
+        agencyId: 'MDI',
+        assignedLivingUnitId: 2,
+        assignedLivingUnitDesc: 'UNIT-2',
+        iepLevel: 'Standard',
+        categoryCode: 'C',
+        alertsDetails: ['RSS', 'XC'],
+      },
+    ]
+    res.locals.responseHeaders['total-records'] = inmates.length
+    elite2Api.getInmates = jest.fn().mockReturnValue(inmates)
 
-        expect(elite2Api.getAgencies).toHaveBeenCalled()
-        expect(res.render).toHaveBeenCalledWith('prisonerSearch.njk', {
-          agencyOptions,
-          errors: [],
-          formValues: {},
-          hasSearched: false,
-          homeUrl: '/videolink',
-          results: [],
-        })
-      })
-
-      describe('when a search has been made', () => {
-        beforeEach(() => {
-          elite2Api.globalSearch.mockReturnValue([
-            {
-              offenderNo: 'G0011GX',
-              firstName: 'TEST',
-              middleNames: 'ING',
-              lastName: 'OFFENDER',
-              dateOfBirth: '1980-07-17',
-              latestLocationId: 'LEI',
-              latestLocation: 'Leeds',
-              pncNumber: '1/2345',
-            },
-            {
-              offenderNo: 'A0011GZ',
-              firstName: 'TEST',
-              middleNames: 'ING',
-              lastName: 'OFFENDER',
-              dateOfBirth: '1981-07-17',
-              latestLocationId: 'MDI',
-              latestLocation: 'Moorlands',
-            },
-          ])
-        })
-
-        describe('with a prison number', () => {
-          const prisonNumber = 'G0011GX'
-
-          it('should make the correct search', async () => {
-            req.query = { prisonNumber }
-
-            await controller(req, res)
-
-            expect(elite2Api.globalSearch).toHaveBeenCalledWith(
-              res.locals,
+    await controller(req, res)
+    expect(paginationService.getPagination).toHaveBeenCalledWith(2, 0, 50, new URL('http://localhost/prisoner-search'))
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        results: [
+          {
+            age: 29,
+            agencyId: 'MDI',
+            alerts: [
               {
-                offenderNo: prisonNumber,
-                location: 'IN',
+                alertCodes: ['XA'],
+                classes: 'alert-status alert-status--arsonist',
+                img: '/images/Arsonist_icon.png',
+                label: 'Arsonist',
               },
-              1000
-            )
-            expect(res.render).toHaveBeenCalledWith(
-              'prisonerSearch.njk',
-              expect.objectContaining({
-                formValues: { prisonNumber },
-                hasSearched: true,
-              })
-            )
-          })
-        })
-
-        describe('with a name', () => {
-          const lastName = 'Offender'
-
-          beforeEach(() => {
-            req.query = { lastName }
-          })
-
-          it('should make the correct search', async () => {
-            await controller(req, res)
-
-            expect(elite2Api.globalSearch).toHaveBeenCalledWith(
-              res.locals,
-              {
-                lastName,
-                location: 'IN',
-              },
-              1000
-            )
-            expect(res.render).toHaveBeenCalledWith(
-              'prisonerSearch.njk',
-              expect.objectContaining({
-                formValues: { lastName },
-                hasSearched: true,
-              })
-            )
-          })
-
-          it('should return the correctly formatted results', async () => {
-            await controller(req, res)
-
-            expect(res.render).toHaveBeenCalledWith(
-              'prisonerSearch.njk',
-              expect.objectContaining({
-                formValues: { lastName },
-                hasSearched: true,
-                results: [
-                  {
-                    addAppointmentHTML: '',
-                    dob: '17 July 1980',
-                    name: 'Test Offender',
-                    offenderNo: 'G0011GX',
-                    pncNumber: '1/2345',
-                    prison: 'Leeds',
-                    prisonId: 'LEI',
-                  },
-                  {
-                    addAppointmentHTML:
-                      '<a href="/MDI/offenders/A0011GZ/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="govuk-visually-hidden"> for Test Offender, prison number A0011GZ</span></a>',
-                    dob: '17 July 1981',
-                    name: 'Test Offender',
-                    offenderNo: 'A0011GZ',
-                    pncNumber: '--',
-                    prison: 'Moorlands',
-                    prisonId: 'MDI',
-                  },
-                ],
-              })
-            )
-          })
-
-          describe('and also with a prison', () => {
-            const prison = 'MDI'
-
-            it('should make the correct search and return less results', async () => {
-              req.query = { lastName, prison }
-
-              await controller(req, res)
-
-              expect(res.render).toHaveBeenCalledWith(
-                'prisonerSearch.njk',
-                expect.objectContaining({
-                  results: [
-                    {
-                      name: 'Test Offender',
-                      offenderNo: 'A0011GZ',
-                      dob: '17 July 1981',
-                      prison: 'Moorlands',
-                      pncNumber: '--',
-                      prisonId: 'MDI',
-                      addAppointmentHTML:
-                        '<a href="/MDI/offenders/A0011GZ/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="govuk-visually-hidden"> for Test Offender, prison number A0011GZ</span></a>',
-                    },
-                  ],
-                })
-              )
-            })
-          })
-        })
+            ],
+            alertsDetails: ['XA', 'XVL'],
+            assignedLivingUnitDesc: 'UNIT-1',
+            assignedLivingUnitId: 1,
+            bookingId: 1,
+            categoryCode: 'C',
+            dateOfBirth: '1990-10-12',
+            firstName: 'JOHN',
+            iepLevel: 'Standard',
+            lastName: 'SAUNDERS',
+            name: 'Saunders, John',
+            offenderNo: 'A1234BC',
+          },
+          {
+            age: 30,
+            agencyId: 'MDI',
+            alerts: [],
+            alertsDetails: ['RSS', 'XC'],
+            assignedLivingUnitDesc: 'UNIT-2',
+            assignedLivingUnitId: 2,
+            bookingId: 2,
+            categoryCode: 'C',
+            dateOfBirth: '1989-11-12',
+            firstName: 'STEVE',
+            iepLevel: 'Standard',
+            lastName: 'SMITH',
+            name: 'Smith, Steve',
+            offenderNo: 'B4567CD',
+          },
+        ],
       })
-    })
+    )
+  })
 
-    describe('when there are API errors', () => {
-      it('should render the error template if there is an error retrieving user roles', async () => {
-        oauthApi.userRoles.mockImplementation(() => Promise.reject(new Error('Network error')))
-        await controller(req, res)
+  it('should render template with search url and current view type so they can be used for the toggle links', async () => {
+    req.baseUrl = '/prisoner-search'
+    req.query = {
+      alerts: ['HA', 'HA1'],
+      keywords: 'Smith',
+      view: 'grid',
+    }
 
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        searchUrl: '/prisoner-search?location=&keywords=Smith&alerts=HA&alerts=HA1&pageOffsetOption=',
+        view: 'grid',
       })
+    )
+  })
 
-      it('should render the error template if there is an error retrieving agencies', async () => {
-        oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
-        elite2Api.getAgencies.mockImplementation(() => Promise.reject(new Error('Network error')))
-        await controller(req, res)
+  it('should render the error template if there is a problem', async () => {
+    elite2Api.getInmates.mockImplementation(() => Promise.reject(new Error('Network error')))
 
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
-      })
+    await controller(req, res)
 
-      it('should render the error template if there is an error with global search', async () => {
-        oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
-        elite2Api.globalSearch.mockImplementation(() => Promise.reject(new Error('Network error')))
-        req.query = { lastName: 'Offender' }
-        await controller(req, res)
-
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
-      })
-    })
+    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
+    expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/' })
   })
 })

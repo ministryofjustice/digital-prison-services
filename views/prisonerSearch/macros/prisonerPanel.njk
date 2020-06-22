@@ -1,0 +1,10 @@
+{% macro prisonerPanel(offenderNo, name, cell) %}
+  <div class="prisoner-panel">
+    <img src="{{ '/app/images/' + offenderNo + '/data' }}" alt="{{ 'Image of ' + name }}" class="prisoner-panel__image" />
+    <div class="prisoner-panel__details">
+      <a href="#" class="govuk-link govuk-!-font-size-19">{{ name }}</a>
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ offenderNo }}</p>
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ cell }}</p>
+    </div>
+  </div>
+{% endmacro %}

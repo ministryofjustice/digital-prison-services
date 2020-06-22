@@ -1,7 +1,7 @@
 const moment = require('moment')
-const protectiveIsolationUnit = require('../controllers/covid/protectiveIsolationUnitController')
+const shieldingUnitController = require('../controllers/covid/shieldingUnitController')
 
-describe('protective isolation unit', () => {
+describe('shielding unit', () => {
   let req
   let res
   let logError
@@ -21,15 +21,13 @@ describe('protective isolation unit', () => {
     covidService = {
       getAlertList: jest.fn(),
     }
-    controller = protectiveIsolationUnit({ covidService, logError, nowGetter: () => now })
+    controller = shieldingUnitController({ covidService, logError, nowGetter: () => now })
   })
 
   it('should render view with results', async () => {
     const results = [
       {
-        alertCreated: moment(now)
-          .subtract(3, 'days')
-          .format('YYYY-MM-DD'),
+        alertCreated: moment(now).format('YYYY-MM-DD'),
         assignedLivingUnitDesc: '1-2-017',
         bookingId: 123,
         name: 'Stewart, James',
@@ -43,16 +41,15 @@ describe('protective isolation unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'UPIU')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'USU')
 
-    expect(res.render).toHaveBeenCalledWith('covid/protectiveIsolationUnit.njk', {
-      title: 'Prisoners in the Protective Isolation Unit',
+    expect(res.render).toHaveBeenCalledWith('covid/shieldingUnit.njk', {
+      title: 'Prisoners in the Shielding Unit',
       results: [
         {
-          alertCreated: moment(now.subtract(3, 'days').format('YYYY-MM-DD')),
+          alertCreated: now,
           assignedLivingUnitDesc: '1-2-017',
           bookingId: 123,
-          daysInUnit: 3,
           name: 'Stewart, James',
           offenderNo: 'AA1234A',
         },
@@ -66,12 +63,12 @@ describe('protective isolation unit', () => {
 
     await controller(req, res)
 
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load protective isolation list')
+    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load shielding list')
 
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({
-        url: '/protective-isolation-unit',
+        url: '/current-covid-units/shielding-unit',
       })
     )
   })

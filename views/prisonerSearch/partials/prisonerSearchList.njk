@@ -1,0 +1,55 @@
+{% set rows = [] %}
+{% for prisoner in results %}
+  {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
+  {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
+  {% set rows = (rows.push([
+    { html: prisonerImage },
+    { 
+      html: prisonerLink,
+      attributes: {
+        "data-sort-value": prisoner.name
+      }
+    },
+    { text: prisoner.offenderNo },
+    { text: prisoner.assignedLivingUnitDesc },
+    { text: prisoner.iepLevel },
+    { text: prisoner.age },
+    { html: alertFlags(prisoner.alerts) }
+  ]), rows) %}
+{% endfor %}
+
+<div class="prisoner-search__results-list">
+  {{ govukTable({
+    head: [
+      { html: '<span class="govuk-visually-hidden">Picture</span>' },
+      { 
+        text: "Name",
+        attributes: {
+          "aria-sort": "ascending"
+        }
+      },
+      { text: "Prison number" },
+      { 
+        text: "Location",
+        attributes: {
+          "aria-sort": "ascending"
+        }
+      },
+      { 
+        text: "Incentive level",
+        attributes: {
+          "aria-sort": "ascending"
+        }
+      },
+      { 
+        text: "Age",
+        attributes: {
+          "aria-sort": "ascending"
+        }
+      },
+      { text: "Relavent alerts" }
+    ],
+    rows: rows,
+    attributes: { "data-test": "prisoner-search-results-table" }
+  }) }}
+</div>

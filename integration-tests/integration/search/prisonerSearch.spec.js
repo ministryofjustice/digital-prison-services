@@ -1,0 +1,119 @@
+context('Prisoner search', () => {
+  const inmate1 = {
+    bookingId: 1,
+    offenderNo: 'A1234BC',
+    firstName: 'JOHN',
+    lastName: 'SAUNDERS',
+    dateOfBirth: '1990-10-12',
+    age: 29,
+    agencyId: 'MDI',
+    assignedLivingUnitId: 1,
+    assignedLivingUnitDesc: 'UNIT-1',
+    iepLevel: 'Standard',
+    categoryCode: 'C',
+    alertsDetails: ['XA', 'XVL'],
+  }
+  const inmate2 = {
+    bookingId: 2,
+    offenderNo: 'B4567CD',
+    firstName: 'STEVE',
+    lastName: 'SMITH',
+    dateOfBirth: '1989-11-12',
+    age: 30,
+    agencyId: 'MDI',
+    assignedLivingUnitId: 2,
+    assignedLivingUnitDesc: 'UNIT-2',
+    iepLevel: 'Standard',
+    categoryCode: 'C',
+    alertsDetails: ['RSS', 'XC'],
+  }
+
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.login()
+  })
+
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('resetAndStubTokenVerification')
+  })
+
+  context('When there are no search values', () => {
+    beforeEach(() => {
+      cy.task('stubUserLocations')
+    })
+
+    it('should display correct prisoner information', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1, inmate2],
+      })
+      cy.visit(`/prisoner-search`)
+
+      cy.get('[data-test="prisoner-search-results-table"]').then($table => {
+        cy.get($table)
+          .find('tr')
+          .then($tableRows => {
+            cy.get($tableRows)
+              .its('length')
+              .should('eq', 3) // 2 results plus table header
+            expect($tableRows.get(1).innerText).to.contain(
+              '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nARSONIST'
+            )
+            expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\tStandard\t30\t')
+          })
+      })
+    })
+
+    it('should have correct data pre filled from search query', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 1,
+        data: [inmate1],
+      })
+      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts=XA`)
+
+      cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
+      cy.get('[data-test="prisoner-search-location"]').should('have.value', 'MDI')
+      cy.get('[data-test="prisoner-search-alerts-container"]').should('have.attr', 'open')
+      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+        cy.get($alerts)
+          .find('input')
+          .then($inputs => {
+            cy.get($inputs.get(2)).should('have.attr', 'checked')
+          })
+      })
+    })
+
+    it('should clear be able to clear selected alerts', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 1,
+        data: [inmate1],
+      })
+      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts=XA`)
+
+      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+        cy.get($alerts)
+          .find('input')
+          .then($inputs => {
+            cy.get($inputs.get(2)).should('have.attr', 'checked')
+          })
+      })
+
+      cy.get('[data-test="prisoner-search-clear-alerts"]').click()
+      cy.get('[data-test="prisoner-search-form"]').submit()
+      cy.get('[data-test="prisoner-search-alerts-container"]').should('not.have.attr', 'open')
+      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+        cy.get($alerts)
+          .find('input')
+          .then($inputs => {
+            cy.get($inputs.get(2)).should('not.have.attr', 'checked')
+          })
+      })
+    })
+  })
+})

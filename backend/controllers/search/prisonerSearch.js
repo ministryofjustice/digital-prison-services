@@ -1,70 +1,70 @@
-const moment = require('moment')
+const qs = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { formatName } = require('../../utils')
+const alertFlagValues = require('../../shared/alertFlagValues')
+const { putLastNameFirst } = require('../../utils')
 const config = require('../../config')
-const prisonerSearchValidation = require('./prisonerSearchValidation')
-const dobValidation = require('../../shared/dobValidation')
 
-module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ paginationService, elite2Api, logError }) => async (req, res) => {
+  const {
+    user: { activeCaseLoad },
+  } = res.locals
+  const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+  const { location, keywords, alerts, pageOffsetOption, view } = req.query
+
+  const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
+  const pageLimit = 50
+
+  const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
+
   try {
-    const userRoles = await oauthApi.userRoles(res.locals)
-    const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
+    const context = { ...res.locals, requestHeaders: { 'page-offset': pageOffset, 'page-limit': pageLimit } }
 
-    if (hasSearchAccess) {
-      const agencies = await elite2Api.getAgencies(res.locals)
-      let searchResults = []
-      const hasSearched = Boolean(Object.keys(req.query).length)
-      const errors = hasSearched ? prisonerSearchValidation(req.query) : []
-      const { firstName, lastName, prisonNumber, dobDay, dobMonth, dobYear, prison } = req.query
+    const [locations, prisoners] = await Promise.all([
+      elite2Api.userLocations(res.locals),
+      elite2Api.getInmates(context, location || currentUserCaseLoad, {
+        keywords,
+        alerts,
+        returnIep: 'true',
+        returnAlerts: 'true',
+        returnCategory: 'true',
+      }),
+    ])
 
-      if (hasSearched && !errors.length) {
-        const { dobIsValid, dateOfBirth } = dobValidation(dobDay, dobMonth, dobYear)
+    const locationOptions =
+      locations && locations.map(option => ({ value: option.locationPrefix, text: option.description }))
 
-        searchResults = await elite2Api.globalSearch(
-          res.locals,
-          {
-            offenderNo: prisonNumber,
-            lastName,
-            firstName,
-            dateOfBirth: dobIsValid ? dateOfBirth.format('YYYY-MM-DD') : undefined,
-            location: 'IN',
-          },
-          1000
-        )
-      }
+    const results =
+      prisoners &&
+      prisoners.map(prisoner => ({
+        ...prisoner,
+        name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+        alerts: alertFlagValues.filter(alertFlag =>
+          alertFlag.alertCodes.some(alert => prisoner.alertsDetails && prisoner.alertsDetails.includes(alert))
+        ),
+      }))
 
-      return res.render('prisonerSearch.njk', {
-        agencyOptions: agencies
-          .map(agency => ({ value: agency.agencyId, text: agency.description }))
-          .sort((a, b) => a.text.localeCompare(b.text)),
-        errors,
-        formValues: req.query,
-        homeUrl: '/videolink',
-        results: searchResults.filter(result => (prison ? prison === result.latestLocationId : result)).map(result => {
-          const { offenderNo, latestLocationId, pncNumber } = result
-          const name = formatName(result.firstName, result.lastName)
-
-          return {
-            name,
-            offenderNo,
-            dob: result.dateOfBirth ? moment(result.dateOfBirth).format('D MMMM YYYY') : undefined,
-            prison: result.latestLocation,
-            prisonId: latestLocationId,
-            pncNumber: pncNumber || '--',
-            addAppointmentHTML: config.app.videoLinkEnabledFor.includes(latestLocationId)
-              ? `<a href="/${latestLocationId}/offenders/${offenderNo}/add-court-appointment" class="govuk-link" data-qa="book-vlb-link">Book video link<span class="govuk-visually-hidden"> for ${name}, prison number ${offenderNo}</span></a>`
-              : '',
-          }
-        }),
-        hasSearched,
-        hasOtherSearchDetails: prisonNumber || dobDay || dobMonth || dobYear || prison,
-      })
-    }
-
-    return res.redirect('back')
+    return res.render('prisonerSearch/prisonerSearch.njk', {
+      alertOptions: alertFlagValues.map(alertFlag => ({
+        value: alertFlag.alertCodes,
+        text: alertFlag.label,
+        checked: alertFlag.alertCodes.some(alert => alerts && alerts.includes(alert)),
+      })),
+      formValues: req.query,
+      locationOptions,
+      notmUrl: config.app.notmEndpointUrl,
+      pagination: paginationService.getPagination(
+        context.responseHeaders['total-records'],
+        pageOffset,
+        pageLimit,
+        fullUrl
+      ),
+      results,
+      searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, alerts, pageOffsetOption })}`,
+      view,
+    })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
-    return res.render('courtServiceError.njk', { url: '/', homeUrl: '/videolink' })
+    return res.render('error.njk', { url: '/', homeUrl: '/' })
   }
 }

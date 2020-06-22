@@ -2,8 +2,8 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.pages
 
 import geb.Page
 
-class PrisonerSearchPage extends Page {
-    static url = "/prisoner-search"
+class VideolinkPrisonerSearchPage extends Page {
+    static url = "/videolink/prisoner-search"
 
     static content = {
         pageTitle { $('h1').first().text() }

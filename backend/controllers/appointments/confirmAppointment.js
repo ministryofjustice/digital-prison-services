@@ -143,7 +143,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
         } else {
           res.render('videolinkBookingConfirmHearingCourt.njk', {
             title: 'The video link has been booked',
-            prisonerSearchLink: '/prisoner-search',
+            videolinkPrisonerSearchLink: '/videolink/prisoner-search',
             offender: {
               name: details.prisonerName,
               prison: agencyDescription,
@@ -182,7 +182,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       const pageData = {
-        url: prisonUser ? `${dpsUrl}offenders/${offenderNo}` : '/prisoner-search',
+        url: prisonUser ? `${dpsUrl}offenders/${offenderNo}` : '/videolink/prisoner-search',
         homeUrl: prisonUser ? dpsUrl : '/videolink',
       }
       if (prisonUser) {

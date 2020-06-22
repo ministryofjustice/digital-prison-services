@@ -1,0 +1,73 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set alertCheckboxes %}
+ {{ govukCheckboxes({
+  idPrefix: "alerts",
+  name: "alerts",
+  classes: "prisoner-search__alerts govuk-checkboxes--small js-prisoner-search-alerts",
+  fieldset: {
+    legend: {
+      text: "Select alerts to view",
+      classes: "govuk-fieldset__legend--m"
+    }
+  },
+  items: alertOptions,
+  attributes: {
+    'data-test': 'prisoner-search-alerts'
+  }
+}) }}
+
+<a href="#" class="govuk-link govuk-link--no-visited-state js-prisoner-search-clear-alerts" data-test="prisoner-search-clear-alerts">
+  Clear selected alerts
+</a>
+{% endset %}
+
+<form novalidate="novalidate" class="prisoner-search__form" data-test="prisoner-search-form">
+  <div class="horizontal-form govuk-!-margin-bottom-3">
+    {{ govukInput({
+      id: "keywords",
+      name: "keywords",
+      value: formValues.keywords,
+      errorMessage: errors | findError('keywords'),
+      label: {
+          text: "Enter name or prison number"
+      },
+      classes: 'govuk-!-width-full',
+      attributes: {
+        'data-test': 'prisoner-search-keywords'
+      }
+    }) }}
+
+    {{ govukSelect({
+      id: "location",
+      name: "location",
+      label: {
+        text: "Select location"
+      },
+      items: locationOptions | setSelected(formValues.location),
+      attributes: {
+        'data-test': 'prisoner-search-location'
+      }
+    }) }}
+
+    {{ govukButton({
+    text: "Search",
+    type: "submit"
+  }) }}
+  </div>
+
+  {{ govukDetails({
+    summaryText: "View by alerts",
+    classes: 'govuk-!-margin-bottom-0',
+    open: formValues.alerts.length,
+    html: alertCheckboxes,
+    attributes: {
+      'data-test': 'prisoner-search-alerts-container'
+    }
+  }) }}
+</form>
+
