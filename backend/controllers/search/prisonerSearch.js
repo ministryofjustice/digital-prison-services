@@ -9,15 +9,31 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
     user: { activeCaseLoad },
   } = res.locals
   const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
-  const { location, keywords, alerts, pageOffsetOption, view } = req.query
+  const {
+    location,
+    keywords,
+    alerts,
+    pageOffsetOption,
+    view,
+    sortFieldsWithOrder = 'lastName,firstName:ASC',
+  } = req.query
 
   const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
   const pageLimit = 50
+  const [sortFields, sortOrder] = sortFieldsWithOrder.split(':')
 
   const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
   try {
-    const context = { ...res.locals, requestHeaders: { 'page-offset': pageOffset, 'page-limit': pageLimit } }
+    const context = {
+      ...res.locals,
+      requestHeaders: {
+        'Page-Offset': pageOffset,
+        'Page-Limit': pageLimit,
+        'Sort-Fields': sortFields,
+        'Sort-Order': sortOrder,
+      },
+    }
 
     const [locations, prisoners] = await Promise.all([
       elite2Api.userLocations(res.locals),
@@ -29,6 +45,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
         returnCategory: 'true',
       }),
     ])
+
+    const totalRecords = context.responseHeaders['total-records']
 
     const locationOptions =
       locations && locations.map(option => ({ value: option.locationPrefix, text: option.description }))
@@ -52,14 +70,10 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       formValues: req.query,
       locationOptions,
       notmUrl: config.app.notmEndpointUrl,
-      pagination: paginationService.getPagination(
-        context.responseHeaders['total-records'],
-        pageOffset,
-        pageLimit,
-        fullUrl
-      ),
+      pagination: paginationService.getPagination(totalRecords, pageOffset, pageLimit, fullUrl),
       results,
       searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, alerts, pageOffsetOption })}`,
+      totalRecords,
       view,
     })
   } catch (error) {

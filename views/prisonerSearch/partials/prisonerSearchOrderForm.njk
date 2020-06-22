@@ -1,0 +1,36 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set orderOptions = [
+  { value: 'lastName,firstName:ASC', text: 'Last name, First name - A to Z' },
+  { value: 'lastName,firstName:DESC', text: 'Last name, First name - Z to A' },
+  { value: 'assignedLivingUnitDesc:ASC', text: 'Location - Numbers then A to Z' },
+  { value: 'assignedLivingUnitDesc:DESC', text: 'Location - Z to A then numbers' }
+] %}
+
+{% if view !== 'grid' %}
+  {% set orderOptions = (orderOptions.push(
+      { value: 'dateOfBirth:DESC', text: 'Age - youngest to oldest' },
+      { value: 'dateOfBirth:ASC', text: 'Age - oldest to youngest' }
+    ), orderOptions) %}
+{% endif %}
+
+<form method="POST" class="horizontal-form" data-test="prisoner-search-order-form">
+  {{ govukSelect({
+    id: "sortFieldsWithOrder",
+    name: "sortFieldsWithOrder",
+    label: {
+      text: "Order " + totalRecords +  " results by"
+    },
+    items: orderOptions | setSelected(formValues.sortFieldsWithOrder),
+    attributes: {
+      'data-test': 'prisoner-search-order'
+    }
+  }) }}
+
+  {{ govukButton({
+    text: "Update",
+    type: "submit",
+    classes: "govuk-button--secondary"
+  }) }}
+</form>

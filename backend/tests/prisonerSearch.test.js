@@ -74,7 +74,12 @@ describe('Prisoner search', () => {
     expect(elite2Api.getInmates).toHaveBeenCalledWith(
       {
         ...res.locals,
-        requestHeaders: { 'page-offset': 0, 'page-limit': 50 },
+        requestHeaders: {
+          'Page-Limit': 50,
+          'Page-Offset': 0,
+          'Sort-Fields': 'lastName,firstName',
+          'Sort-Order': 'ASC',
+        },
       },
       'MDI',
       { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
@@ -222,6 +227,7 @@ describe('Prisoner search', () => {
             offenderNo: 'B4567CD',
           },
         ],
+        totalRecords: 2,
       })
     )
   })
@@ -242,6 +248,24 @@ describe('Prisoner search', () => {
         searchUrl: '/prisoner-search?location=&keywords=Smith&alerts=HA&alerts=HA1&pageOffsetOption=',
         view: 'grid',
       })
+    )
+  })
+
+  it('should make make a call using the specified sorting options', async () => {
+    req.query.sortFieldsWithOrder = 'assignedLivingUnitDesc:DESC'
+
+    await controller(req, res)
+
+    expect(elite2Api.getInmates).toHaveBeenCalledWith(
+      {
+        ...res.locals,
+        requestHeaders: expect.objectContaining({
+          'Sort-Fields': 'assignedLivingUnitDesc',
+          'Sort-Order': 'DESC',
+        }),
+      },
+      'MDI',
+      { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
     )
   })
 

@@ -27,7 +27,11 @@
 
   {% include './partials/prisonerSearchForm.njk' %}
 
-  {% include './partials/prisonerSearchToggles.njk' %}
+  <div class="prisoner-search__results-options">
+    {% include './partials/prisonerSearchOrderForm.njk' %}
+
+    {% include './partials/prisonerSearchToggles.njk' %}
+  </div>
 
   {% if results.length %}
     {{ mojPagination(pagination) }}
