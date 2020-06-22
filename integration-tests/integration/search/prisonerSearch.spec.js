@@ -115,5 +115,82 @@ context('Prisoner search', () => {
           })
       })
     })
+
+    it('should show correct order options for list view', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1, inmate2],
+      })
+      cy.visit(`/prisoner-search`)
+
+      cy.get('[data-test="prisoner-search-order"]').then($select => {
+        cy.get($select)
+          .find('option')
+          .then($options => {
+            cy.get($options)
+              .its('length')
+              .should('eq', 6)
+            cy.get($options.get(0)).should('have.value', 'lastName,firstName:ASC')
+            cy.get($options.get(1)).should('have.value', 'lastName,firstName:DESC')
+            cy.get($options.get(2)).should('have.value', 'assignedLivingUnitDesc:ASC')
+            cy.get($options.get(3)).should('have.value', 'assignedLivingUnitDesc:DESC')
+            cy.get($options.get(4)).should('have.value', 'dateOfBirth:DESC')
+            cy.get($options.get(5)).should('have.value', 'dateOfBirth:ASC')
+          })
+      })
+    })
+
+    it('should show correct order options for grid view', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1, inmate2],
+      })
+      cy.visit(`/prisoner-search?view=grid`)
+
+      cy.get('[data-test="prisoner-search-order"]').then($select => {
+        cy.get($select)
+          .find('option')
+          .then($options => {
+            cy.get($options)
+              .its('length')
+              .should('eq', 4)
+            cy.get($options.get(0)).should('have.value', 'lastName,firstName:ASC')
+            cy.get($options.get(1)).should('have.value', 'lastName,firstName:DESC')
+            cy.get($options.get(2)).should('have.value', 'assignedLivingUnitDesc:ASC')
+            cy.get($options.get(3)).should('have.value', 'assignedLivingUnitDesc:DESC')
+          })
+      })
+    })
+
+    it('should maintain search options when sorting', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1, inmate2],
+      })
+      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts=XA`)
+
+      cy.get('[data-test="prisoner-search-order"]').select('assignedLivingUnitDesc:ASC')
+      cy.get('[data-test="prisoner-search-order-form"]').submit()
+
+      cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
+      cy.get('[data-test="prisoner-search-location"]').should('have.value', 'MDI')
+      cy.get('[data-test="prisoner-search-alerts-container"]').should('have.attr', 'open')
+      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+        cy.get($alerts)
+          .find('input')
+          .then($inputs => {
+            cy.get($inputs.get(2)).should('have.attr', 'checked')
+          })
+      })
+
+      cy.location().should(loc => {
+        expect(loc.search).to.eq(
+          '?keywords=Saunders&location=MDI&alerts=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
+        )
+      })
+    })
   })
 })
