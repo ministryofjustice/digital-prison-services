@@ -12,14 +12,14 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
   const {
     location,
     keywords,
-    alerts: queryAlerts,
+    alerts,
     pageOffsetOption,
     view,
     sortFieldsWithOrder = 'lastName,firstName:ASC',
   } = req.query
 
-  const multipleAlertsSelected = Array.isArray(queryAlerts)
-  const alerts = multipleAlertsSelected ? queryAlerts.map(alert => alert.split(',')).flat() : queryAlerts
+  const multipleAlertsSelected = Array.isArray(alerts)
+  const selectedAlerts = multipleAlertsSelected ? alerts.map(alert => alert.split(',')).flat() : alerts
 
   const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
   const pageLimit = 50
@@ -42,7 +42,7 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       elite2Api.userLocations(res.locals),
       elite2Api.getInmates(context, location || currentUserCaseLoad, {
         keywords,
-        alerts,
+        alerts: selectedAlerts,
         returnIep: 'true',
         returnAlerts: 'true',
         returnCategory: 'true',
@@ -65,12 +65,12 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       }))
 
     return res.render('prisonerSearch/prisonerSearch.njk', {
-      alertOptions: alertFlagValues.map(alertFlag => ({
-        value: alertFlag.alertCodes,
-        text: alertFlag.label,
+      alertOptions: alertFlagValues.map(({ alertCodes, label }) => ({
+        value: alertCodes,
+        text: label,
         checked: multipleAlertsSelected
-          ? alerts.some(alert => alertFlag.alertCodes.includes(alert))
-          : Boolean(alerts) && alertFlag.alertCodes.includes(alerts.split(',')[0]),
+          ? selectedAlerts.some(alert => alertCodes.includes(alert))
+          : Boolean(selectedAlerts) && alertCodes.includes(selectedAlerts.split(',')[0]),
       })),
       formValues: req.query,
       locationOptions,
