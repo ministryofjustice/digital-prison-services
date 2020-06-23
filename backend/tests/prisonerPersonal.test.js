@@ -899,7 +899,7 @@ describe('prisoner personal', () => {
       primary: true,
       noFixedAddress: false,
       startDate: '2020-05-01',
-      phones: [{ number: '011111111111', type: 'MOB' }],
+      phones: [{ number: '011111111111', type: 'MOB' }, { number: '011333444', type: 'HOME', ext: '777' }],
     }
 
     const nonPrimaryAddress = {
@@ -1027,7 +1027,7 @@ describe('prisoner personal', () => {
             .mockResolvedValueOnce({
               addresses: [primaryAddress, nonPrimaryAddress],
               emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
+              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
             })
             .mockResolvedValueOnce({
               addresses: [
@@ -1062,14 +1062,20 @@ describe('prisoner personal', () => {
                     emergencyContact: true,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
-                      { label: 'Phone number', value: '02222222222, 033333333333' },
+                      {
+                        label: 'Phone number',
+                        html: '02222222222,<br>033333333333 extension number 777',
+                      },
                       { label: 'Email', value: 'test1@email.com, test2@email.com' },
                       { label: 'Address', value: 'Flat A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'County', value: 'West Yorkshire' },
                       { label: 'Postcode', value: 'LS1 AAA' },
                       { label: 'Country', value: 'England' },
-                      { label: 'Address phone', value: '011111111111' },
+                      {
+                        label: 'Address phone',
+                        html: '011111111111,<br>011333444 extension number 777',
+                      },
                       { label: 'Address type', value: 'Home' },
                     ],
                   },
@@ -1079,14 +1085,17 @@ describe('prisoner personal', () => {
                     name: 'Uriualche Lydyle',
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
-                      { label: 'Phone number', value: '04444444444, 055555555555, extension number 123' },
+                      {
+                        label: 'Phone number',
+                        html: '04444444444,<br>055555555555 extension number 123',
+                      },
                       { label: 'Email', value: 'test3@email.com, test4@email.com' },
                       { label: 'Address', value: 'Flat B, 13, Another Street' },
                       { label: 'Town', value: 'Leeds' },
                       { label: 'County', value: 'West Yorkshire' },
                       { label: 'Postcode', value: 'LS2 BBB' },
                       { label: 'Country', value: 'England' },
-                      { label: 'Address phone', value: '011111111111' },
+                      { label: 'Address phone', html: '011111111111' },
                       { label: 'Address type', value: 'Business' },
                     ],
                   },
@@ -1125,12 +1134,15 @@ describe('prisoner personal', () => {
                     emergencyContact: true,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
-                      { label: 'Phone number', value: '02222222222, 033333333333' },
+                      { label: 'Phone number', html: '02222222222,<br>033333333333' },
                       { label: 'Email', value: 'test1@email.com, test2@email.com' },
                       { label: 'Address', value: 'Flat A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'Postcode', value: 'LS1 AAA' },
-                      { label: 'Address phone', value: '011111111111' },
+                      {
+                        label: 'Address phone',
+                        html: '011111111111,<br>011333444 extension number 777',
+                      },
                       { label: 'Address type', value: 'Home' },
                     ],
                   },
@@ -1140,12 +1152,18 @@ describe('prisoner personal', () => {
                     name: 'Uriualche Lydyle',
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
-                      { label: 'Phone number', value: '04444444444, 055555555555, extension number 123' },
+                      {
+                        label: 'Phone number',
+                        html: '04444444444,<br>055555555555 extension number 123',
+                      },
                       { label: 'Email', value: 'test3@email.com, test4@email.com' },
                       { label: 'Address', value: 'Flat A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'Postcode', value: 'LS1 AAA' },
-                      { label: 'Address phone', value: '011111111111' },
+                      {
+                        label: 'Address phone',
+                        html: '011111111111,<br>011333444 extension number 777',
+                      },
                       { label: 'Address type', value: 'Business' },
                     ],
                   },
@@ -1183,7 +1201,7 @@ describe('prisoner personal', () => {
                     name: 'John Smith',
                     emergencyContact: true,
                     details: expect.not.arrayContaining([
-                      { label: 'Phone number', value: '' },
+                      { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
                     ]),
                   },
@@ -1192,7 +1210,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'Uriualche Lydyle',
                     details: expect.not.arrayContaining([
-                      { label: 'Phone number', value: '' },
+                      { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
                     ]),
                   },
@@ -1389,7 +1407,7 @@ describe('prisoner personal', () => {
                   { label: 'County', value: 'West Yorkshire' },
                   { label: 'Postcode', value: 'LS1 AAA' },
                   { label: 'Country', value: 'England' },
-                  { label: 'Phone', value: '011111111111' },
+                  { label: 'Phone', html: '011111111111' },
                   { label: 'Added', value: 'January 2019' },
                   { label: 'Comments', value: 'address comment field' },
                 ],
@@ -1423,7 +1441,7 @@ describe('prisoner personal', () => {
                     { label: 'Address', value: 'Flat A, 13, High Street' },
                     { label: 'Town', value: 'Ulverston' },
                     { label: 'Postcode', value: 'LS1 AAA' },
-                    { label: 'Phone', value: '011111111111' },
+                    { label: 'Phone', html: '011111111111' },
                     { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],
@@ -1457,7 +1475,7 @@ describe('prisoner personal', () => {
                     { label: 'County', value: 'West Yorkshire' },
                     { label: 'Postcode', value: 'LS1 AAA' },
                     { label: 'Country', value: 'England' },
-                    { label: 'Phone', value: '011111111111' },
+                    { label: 'Phone', html: '011111111111' },
                     { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],

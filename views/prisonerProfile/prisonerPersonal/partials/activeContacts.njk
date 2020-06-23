@@ -5,15 +5,20 @@
     {% set activeContactsPersonalRows = [] %}
 
     {% for contactDetail in contact.details %}
+
+      {% if contactDetail.html %}
+        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
+      {% else %}
+        {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
+      {% endif %}
+
       {% set activeContactsPersonalRows = (activeContactsPersonalRows.push(
         {
           key: {
             text: contactDetail.label,
             classes: 'govuk-summary-list__key--indent'
           },
-          value: {
-            text: contactDetail.value | showDefault(missingEntry)
-          }
+          value: value
         }
       ), activeContactsPersonalRows) %}
     {% endfor %}
@@ -39,15 +44,20 @@
     {% set activeContactsProfessionalRows = [] %}
 
     {% for contactDetail in contact.details %}
+
+      {% if contactDetail.html %}
+        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
+      {% else %}
+        {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
+      {% endif %}
+
       {% set activeContactsProfessionalRows = (activeContactsProfessionalRows.push(
         {
           key: {
             text: contactDetail.label,
             classes: 'govuk-summary-list__key--indent'
           },
-          value: {
-            text: contactDetail.value | showDefault(missingEntry)
-          }
+          value: value
         }
       ), activeContactsProfessionalRows) %}
     {% endfor %}
