@@ -12,11 +12,14 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
   const {
     location,
     keywords,
-    alerts,
+    alerts: queryAlerts,
     pageOffsetOption,
     view,
     sortFieldsWithOrder = 'lastName,firstName:ASC',
   } = req.query
+
+  const multipleAlertsSelected = Array.isArray(queryAlerts)
+  const alerts = multipleAlertsSelected ? queryAlerts.map(alert => alert.split(',')).flat() : queryAlerts
 
   const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
   const pageLimit = 50
@@ -65,7 +68,9 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       alertOptions: alertFlagValues.map(alertFlag => ({
         value: alertFlag.alertCodes,
         text: alertFlag.label,
-        checked: alertFlag.alertCodes.some(alert => alerts && alerts.includes(alert)),
+        checked: multipleAlertsSelected
+          ? alerts.some(alert => alertFlag.alertCodes.includes(alert))
+          : Boolean(alerts) && alertFlag.alertCodes.includes(alerts.split(',')[0]),
       })),
       formValues: req.query,
       locationOptions,

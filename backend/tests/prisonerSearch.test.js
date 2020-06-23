@@ -130,8 +130,8 @@ describe('Prisoner search', () => {
     )
   })
 
-  it('should return correctly checked alert options', async () => {
-    req.query.alerts = ['HA', 'HA1']
+  it('should return correctly checked alert options when there is only one alert in the query', async () => {
+    req.query.alerts = 'HA'
 
     await controller(req, res)
 
@@ -141,8 +141,39 @@ describe('Prisoner search', () => {
         formValues: req.query,
         alertOptions: expect.arrayContaining([
           { checked: true, text: 'ACCT open', value: ['HA'] },
-          { checked: true, text: 'ACCT post closure', value: ['HA1'] },
+          { checked: false, text: 'ACCT post closure', value: ['HA1'] },
         ]),
+      })
+    )
+  })
+
+  it('should return correctly checked alert options when there are multiple alerts in the query', async () => {
+    req.query.alerts = ['HA1', 'RTP,RLG']
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        formValues: req.query,
+        alertOptions: expect.arrayContaining([
+          { checked: true, text: 'ACCT post closure', value: ['HA1'] },
+          { checked: true, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
+        ]),
+      })
+    )
+  })
+
+  it('should return correctly checked alert option when one checkbox has multiple associated alert codes', async () => {
+    req.query.alerts = 'RTP,RLG'
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerSearch/prisonerSearch.njk',
+      expect.objectContaining({
+        formValues: req.query,
+        alertOptions: expect.arrayContaining([{ checked: true, text: 'Risk to LGBT', value: ['RTP', 'RLG'] }]),
       })
     )
   })
@@ -251,8 +282,12 @@ describe('Prisoner search', () => {
     )
   })
 
-  it('should make make a call using the specified sorting options', async () => {
-    req.query.sortFieldsWithOrder = 'assignedLivingUnitDesc:DESC'
+  it('should make make a call to get inmates using the specified search and sorting options', async () => {
+    req.query = {
+      alerts: ['HA1', 'RTP,RLG'],
+      keywords: 'Smith',
+      sortFieldsWithOrder: 'assignedLivingUnitDesc:DESC',
+    }
 
     await controller(req, res)
 
@@ -265,7 +300,13 @@ describe('Prisoner search', () => {
         }),
       },
       'MDI',
-      { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
+      {
+        alerts: ['HA1', 'RTP', 'RLG'],
+        keywords: 'Smith',
+        returnAlerts: 'true',
+        returnCategory: 'true',
+        returnIep: 'true',
+      }
     )
   })
 
