@@ -23,7 +23,7 @@ const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone
     ...(address.county ? [{ label: 'County', value: address.county }] : []),
     { label: 'Postcode', value: address.postalCode },
     ...(address.country ? [{ label: 'Country', value: address.country }] : []),
-    { label: phoneLabel, value: getPhone(address.phones), useHtml: true },
+    { label: phoneLabel, html: getPhone(address.phones) },
     ...(showType ? [{ label: 'Address type', value: address.addressType && capitalize(address.addressType) }] : []),
   ]
 }

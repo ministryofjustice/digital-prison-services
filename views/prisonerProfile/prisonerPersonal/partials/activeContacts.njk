@@ -6,8 +6,8 @@
 
     {% for contactDetail in contact.details %}
 
-      {% if contactDetail.useHtml %}
-        {% set value = {html: contactDetail.value | showDefault(missingValueText)} %}
+      {% if contactDetail.html %}
+        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
       {% else %}
         {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
       {% endif %}
@@ -45,8 +45,8 @@
 
     {% for contactDetail in contact.details %}
 
-      {% if contactDetail.useHtml %}
-        {% set value = {html: contactDetail.value | showDefault(missingValueText)} %}
+      {% if contactDetail.html %}
+        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
       {% else %}
         {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
       {% endif %}
