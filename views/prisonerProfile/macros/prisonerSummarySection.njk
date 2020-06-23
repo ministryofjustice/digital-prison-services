@@ -5,15 +5,20 @@
   {% set indentClass = "govuk-summary-list__key--indent" if indentKey %}
 
   {% for detail in array %}
+
+    {% if detail.useHtml %}
+      {% set value = {html: detail.value | showDefault(missingValueText)} %}
+    {% else %}
+      {% set value = {text: detail.value | showDefault(missingValueText)} %}
+    {% endif %}
+
     {% set rows = (rows.push(
       {
         key: {
           text: detail.label,
           classes: indentClass
         },
-        value: {
-          text: detail.value | showDefault(missingValueText)
-        }
+        value: value
       }
     ), rows) %}
   {% endfor %}

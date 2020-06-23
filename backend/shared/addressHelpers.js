@@ -4,14 +4,14 @@ const getPhone = phones =>
   phones &&
   phones
     .map(phone => {
-      const { type, ext, number } = phone
-      if (type === 'BUS' && ext) {
-        return `${number}, extension number ${ext}`
+      const { ext, number } = phone
+      if (ext) {
+        return `${number} extension number ${ext}`
       }
 
       return number
     })
-    .join(', ')
+    .join(',<br>')
 
 const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone' }) => {
   const flat = address.flat && `Flat ${address.flat}`
@@ -23,7 +23,7 @@ const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone
     ...(address.county ? [{ label: 'County', value: address.county }] : []),
     { label: 'Postcode', value: address.postalCode },
     ...(address.country ? [{ label: 'Country', value: address.country }] : []),
-    { label: phoneLabel, value: getPhone(address.phones) },
+    { label: phoneLabel, value: getPhone(address.phones), useHtml: true },
     ...(showType ? [{ label: 'Address type', value: address.addressType && capitalize(address.addressType) }] : []),
   ]
 }
