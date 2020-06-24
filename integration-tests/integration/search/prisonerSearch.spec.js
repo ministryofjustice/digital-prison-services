@@ -74,7 +74,7 @@ context('Prisoner search', () => {
         count: 1,
         data: [inmate1],
       })
-      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts=XA`)
+      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
       cy.get('[data-test="prisoner-search-location"]').should('have.value', 'MDI')
@@ -94,7 +94,7 @@ context('Prisoner search', () => {
         count: 1,
         data: [inmate1],
       })
-      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts=XA`)
+      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
         cy.get($alerts)
@@ -170,7 +170,7 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts=XA`)
+      cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-order"]').select('assignedLivingUnitDesc:ASC')
       cy.get('[data-test="prisoner-search-order-form"]').submit()
@@ -188,7 +188,7 @@ context('Prisoner search', () => {
 
       cy.location().should(loc => {
         expect(loc.search).to.eq(
-          '?keywords=Saunders&location=MDI&alerts=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
+          '?keywords=Saunders&location=MDI&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
         )
       })
     })
