@@ -18,6 +18,9 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
     sortFieldsWithOrder = 'lastName,firstName:ASC',
   } = req.query
 
+  const multipleAlertsSelected = Array.isArray(alerts)
+  const selectedAlerts = multipleAlertsSelected ? alerts.map(alert => alert.split(',')).flat() : alerts
+
   const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
   const pageLimit = 50
   const [sortFields, sortOrder] = sortFieldsWithOrder.split(':')
@@ -39,7 +42,7 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       elite2Api.userLocations(res.locals),
       elite2Api.getInmates(context, location || currentUserCaseLoad, {
         keywords,
-        alerts,
+        alerts: selectedAlerts,
         returnIep: 'true',
         returnAlerts: 'true',
         returnCategory: 'true',
@@ -62,10 +65,12 @@ module.exports = ({ paginationService, elite2Api, logError }) => async (req, res
       }))
 
     return res.render('prisonerSearch/prisonerSearch.njk', {
-      alertOptions: alertFlagValues.map(alertFlag => ({
-        value: alertFlag.alertCodes,
-        text: alertFlag.label,
-        checked: alertFlag.alertCodes.some(alert => alerts && alerts.includes(alert)),
+      alertOptions: alertFlagValues.map(({ alertCodes, label }) => ({
+        value: alertCodes,
+        text: label,
+        checked: multipleAlertsSelected
+          ? selectedAlerts.some(alert => alertCodes.includes(alert))
+          : Boolean(selectedAlerts) && alertCodes.includes(selectedAlerts.split(',')[0]),
       })),
       formValues: req.query,
       locationOptions,
