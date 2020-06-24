@@ -7,9 +7,17 @@ const router = express.Router()
 
 const controller = ({ elite2Api, logError }) => {
   router.get('/', prisonerSearchController({ paginationService, elite2Api, logError }))
-  router.post('/', (req, res) =>
-    res.redirect(`${req.baseUrl}?${qs.stringify({ ...req.query, sortFieldsWithOrder: req.body.sortFieldsWithOrder })}`)
-  )
+  router.post('/', (req, res) => {
+    const { alerts, ...queries } = req.query
+
+    return res.redirect(
+      `${req.baseUrl}?${qs.stringify({
+        ...queries,
+        'alerts[]': alerts,
+        sortFieldsWithOrder: req.body.sortFieldsWithOrder,
+      })}`
+    )
+  })
   return router
 }
 
