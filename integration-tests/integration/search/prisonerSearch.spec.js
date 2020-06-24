@@ -173,6 +173,7 @@ context('Prisoner search', () => {
       cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-order"]').select('assignedLivingUnitDesc:ASC')
+      cy.get('[data-test="prisoner-search-order-form-submit"]').should('contain.text', 'Order')
       cy.get('[data-test="prisoner-search-order-form"]').submit()
 
       cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')

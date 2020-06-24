@@ -29,8 +29,11 @@
   }) }}
 
   {{ govukButton({
-    text: "Update",
+    text: "Order",
     type: "submit",
-    classes: "govuk-button--secondary"
+    classes: "govuk-button--secondary",
+    attributes: {
+      'data-test': 'prisoner-search-order-form-submit'
+    }
   }) }}
 </form>
