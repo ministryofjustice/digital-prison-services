@@ -131,7 +131,7 @@ describe('Prisoner search', () => {
   })
 
   it('should return correctly checked alert options when there is only one alert in the query', async () => {
-    req.query.alerts = 'HA'
+    req.query.alerts = ['HA']
 
     await controller(req, res)
 
@@ -165,7 +165,7 @@ describe('Prisoner search', () => {
   })
 
   it('should return correctly checked alert option when one checkbox has multiple associated alert codes', async () => {
-    req.query.alerts = 'RTP,RLG'
+    req.query.alerts = ['RTP,RLG']
 
     await controller(req, res)
 
