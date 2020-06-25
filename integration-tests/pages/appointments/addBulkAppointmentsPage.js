@@ -21,22 +21,20 @@ const addBulkAppointmentsAppointmentPage = () =>
       submitButton: () => cy.get('button[type="submit"]'),
     }),
     datePicker: () => cy.get('#ui-datepicker-div'),
-    activeDate: () => cy.get('.ui-state-active'),
     recurringInputs: () => cy.get('[data-qa="recurring-inputs"]'),
     offenderEvents: () => cy.get('[data-qa="offender-events"]'),
     locationEvents: () => cy.get('[data-qa="location-events"]'),
     errorSummary: () => cy.get('.govuk-error-summary'),
     lastAppointmentDate: () => cy.get('.js-appointment-last-appointment'),
-    enterBasicAppointmentDetails: (form, activeDate, datePicker) => {
+    enterBasicAppointmentDetails: form => {
       form.appointmentType().select('ACTI')
-      form.location().select(1)
+      form.location().select('1')
       form.date().type(
         moment()
           .add(10, 'days')
           .format('DD/MM/YYYY')
       )
-      activeDate.click()
-      cy.wait(datePicker.should('not.be.visible'))
+      cy.get('.ui-state-active').click()
     },
   })
 

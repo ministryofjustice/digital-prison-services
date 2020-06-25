@@ -780,11 +780,11 @@ module.exports = {
       },
     })
   },
-  stubAppointmentLocations: (locations, status = 200) => {
+  stubAppointmentLocations: (agency, locations, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/agencies/.+?/locations?eventType=APP',
+        url: `/api/agencies/${agency}/locations?eventType=APP`,
       },
       response: {
         status,
@@ -960,7 +960,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'POST',
-        url: '/api/bookings/offendrs',
+        url: '/api/bookings/offenders',
       },
       response: {
         status,
