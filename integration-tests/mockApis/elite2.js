@@ -956,4 +956,18 @@ module.exports = {
         jsonBody: activities || [],
       },
     }),
+  stubBookingOffenders: (offenders, status = 200) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: '/api/bookings/offendrs',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offenders || [],
+      },
+    }),
 }
