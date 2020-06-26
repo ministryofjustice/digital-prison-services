@@ -26,6 +26,7 @@ module.exports = on => {
       Promise.all([auth.stubLoginCourt({}), elite2api.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
+    stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
@@ -158,9 +159,10 @@ module.exports = on => {
       ]),
     stubSentenceData: details => Promise.all([elite2api.stubSentenceData(details)]),
     stubLocation: (locationId, locationData) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
-    stubAgencyDetails: (agencyId, details) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
+    stubAgencyDetails: ({ agencyId, details }) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
     stubAppointmentLocations: ({ agency, locations }) =>
       Promise.all([elite2api.stubAppointmentLocations(agency, locations)]),
     stubBookingOffenders: offenders => Promise.all([elite2api.stubBookingOffenders(offenders)]),
+    stubAgencies: agencies => Promise.all([elite2api.stubAgencies(agencies)]),
   })
 }
