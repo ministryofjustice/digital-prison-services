@@ -1,0 +1,93 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "moj/components/pagination/macro.njk" import mojPagination %}
+
+{% set title = prisonerName + '`s visits' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: '/prisoner/' + offenderNo
+      },
+      {
+        text: 'Visits'
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% macro list(array) %}
+<ul class="govuk-list govuk-!-margin-bottom-0">
+  {% for item in array %}
+    <li>{{ item }}</li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% set rows = [] %}
+{% for visit in results %}
+  {% set rows = (rows.push([  
+    {
+      text: visit.date | getDate('D MMMM YYYY'),
+      attributes: {
+        "data-sort-value": visit.date
+      }
+    },
+    { text: list(visit.names) },
+    { text: list(visit.ages) },
+    { text: list(visit.relationships) },
+    { text: visit.status }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  <div class="prisoner-visits">
+    {% include './partials/prisonerVisitsSearchForm.njk' %}
+
+    <div class="prisoner-visits__results">
+      {{ mojPagination(pagination) }}
+
+      {{ govukTable({
+        head: [
+          { 
+            text: "Date",
+            attributes: {
+              "aria-sort": "descending"
+            }
+          },
+          { text: "Visitor`s name" },
+          { text: "Visitor`s age" },
+          { text: "Relationship to prisoner" },
+          { 
+            text: "Visit status",
+            attributes: {
+              "aria-sort": "ascending"
+            }
+          }
+        ],
+        rows: rows,
+        attributes: { "data-test": "prisoner-visits-results" }
+      }) }}
+    
+      {{ mojPagination(pagination) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+    new MOJFrontend.SortableTable({
+      table: $('table')[0],
+    })
+  </script>
+{% endblock %}

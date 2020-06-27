@@ -274,7 +274,6 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       ],
     })
   } catch (error) {
-    console.error({ error })
     logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
   }

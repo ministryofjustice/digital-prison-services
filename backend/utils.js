@@ -151,10 +151,10 @@ const getCurrentPeriod = date => {
 
 const isValidDateTimeFormat = dateTimeString => moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
-const getDate = dateTimeString => {
+const getDate = (dateTimeString, format = 'dddd D MMMM YYYY') => {
   if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
 
-  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('dddd D MMMM YYYY')
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(format)
 }
 
 const getTime = dateTimeString => {
