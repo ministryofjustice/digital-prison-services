@@ -79,158 +79,159 @@ context('Prisoner quick look data retrieval errors', () => {
 })
 
 context('Prisoner quick look', () => {
-  const quickLookData = {
-    offence: [{ offenceDescription: 'Have blade/article which was sharply pointed in public place' }],
-    prisonerDetails: [
-      {
-        imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
-        dateOfBirth: '1998-12-01',
-        pncNumber: '12/3456A',
-        croNumber: '12345/57B',
-      },
-    ],
-    sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
-    balances: { spends: 100, cash: 75.5, savings: 50, currency: 'GBP' },
-    iepSummary: { daysSinceReview: 40 },
-    positiveCaseNotes: { count: 2 },
-    negativeCaseNotes: { count: 1 },
-    adjudications: {
-      adjudicationCount: 3,
-      awards: [
+  before(() => {
+    cy.task('reset')
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.login()
+
+    cy.task('stubQuickLook', {
+      offence: [{ offenceDescription: 'Have blade/article which was sharply pointed in public place' }],
+      prisonerDetails: [
         {
-          sanctionCode: 'STOP_PCT',
-          sanctionCodeDescription: 'Stoppage of Earnings (%)',
-          days: 14,
-          limit: 50,
-          effectiveDate: '2020-04-16',
-          status: 'IMMEDIATE',
-          statusDescription: 'Immediate',
-        },
-        {
-          sanctionCode: 'STOP_EARN',
-          sanctionCodeDescription: 'Stoppage of Earnings (amount)',
-          days: 14,
-          limit: 50,
-          comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
-          effectiveDate: '2020-04-16',
-          status: 'IMMEDIATE',
-          statusDescription: 'Immediate',
-        },
-        {
-          sanctionCode: 'CC',
-          sanctionCodeDescription: 'Cellular Confinement',
-          days: 14,
-          effectiveDate: '2020-04-16',
-          status: 'SUSP',
-          statusDescription: 'Suspended',
-        },
-        {
-          sanctionCode: 'FORFEIT',
-          sanctionCodeDescription: 'Forfeiture of Privileges',
-          days: 7,
-          comment: '7x LOC, 7x LOA, 7x LOTV',
-          effectiveDate: '2020-04-16',
-          status: 'QUASHED',
-          statusDescription: 'Quashed',
+          imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
+          dateOfBirth: '1998-12-01',
+          pncNumber: '12/3456A',
+          croNumber: '12345/57B',
         },
       ],
-    },
-    nextVisit: {
-      visitTypeDescription: 'Social Contact',
-      leadVisitor: 'YRUDYPETER CASSORIA',
-      relationshipDescription: 'Probation Officer',
-      startTime: '2020-04-17T13:30:00',
-    },
-    visitBalances: { remainingVo: 24, remainingPvo: 4 },
-    todaysEvents: [
-      {
-        bookingId,
-        eventClass: 'INT_MOV',
-        eventStatus: 'SCH',
-        eventType: 'APP',
-        eventTypeDesc: 'Appointment',
-        eventSubType: 'EDUC',
-        eventSubTypeDesc: 'Education',
-        eventDate: '2020-04-17',
-        startTime: '2020-04-17T09:00:00',
-        endTime: '2020-04-17T10:00:00',
-        eventLocation: 'BADMINTON',
-        eventSource: 'APP',
-        eventSourceCode: 'APP',
+      sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
+      balances: { spends: 100, cash: 75.5, savings: 50, currency: 'GBP' },
+      iepSummary: { daysSinceReview: 40 },
+      positiveCaseNotes: { count: 2 },
+      negativeCaseNotes: { count: 1 },
+      adjudications: {
+        adjudicationCount: 3,
+        awards: [
+          {
+            sanctionCode: 'STOP_PCT',
+            sanctionCodeDescription: 'Stoppage of Earnings (%)',
+            days: 14,
+            limit: 50,
+            effectiveDate: '2020-04-16',
+            status: 'IMMEDIATE',
+            statusDescription: 'Immediate',
+          },
+          {
+            sanctionCode: 'STOP_EARN',
+            sanctionCodeDescription: 'Stoppage of Earnings (amount)',
+            days: 14,
+            limit: 50,
+            comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
+            effectiveDate: '2020-04-16',
+            status: 'IMMEDIATE',
+            statusDescription: 'Immediate',
+          },
+          {
+            sanctionCode: 'CC',
+            sanctionCodeDescription: 'Cellular Confinement',
+            days: 14,
+            effectiveDate: '2020-04-16',
+            status: 'SUSP',
+            statusDescription: 'Suspended',
+          },
+          {
+            sanctionCode: 'FORFEIT',
+            sanctionCodeDescription: 'Forfeiture of Privileges',
+            days: 7,
+            comment: '7x LOC, 7x LOA, 7x LOTV',
+            effectiveDate: '2020-04-16',
+            status: 'QUASHED',
+            statusDescription: 'Quashed',
+          },
+        ],
       },
-      {
-        bookingId,
-        eventClass: 'INT_MOV',
-        eventStatus: 'SCH',
-        eventType: 'APP',
-        eventTypeDesc: 'Appointment',
-        eventSubType: 'CABE',
-        eventSubTypeDesc: 'Case - Benefits',
-        eventDate: '2020-04-17',
-        startTime: '2020-04-17T13:00:00',
-        endTime: '2020-04-17T14:00:00',
-        eventLocation: 'CIRCUIT',
-        eventSource: 'APP',
-        eventSourceCode: 'APP',
-        eventSourceDesc: 'Test Comment',
+      nextVisit: {
+        visitTypeDescription: 'Social Contact',
+        leadVisitor: 'YRUDYPETER CASSORIA',
+        relationshipDescription: 'Probation Officer',
+        startTime: '2020-04-17T13:30:00',
       },
-      {
-        bookingId,
-        eventClass: 'INT_MOV',
-        eventStatus: 'CANC',
-        eventType: 'APP',
-        eventTypeDesc: 'Appointment',
-        eventSubType: 'GYMSH',
-        eventSubTypeDesc: 'Gym - Sports Halls Activity',
-        eventDate: '2020-04-17',
-        startTime: '2020-04-17T15:00:00',
-        endTime: '2020-04-17T15:30:00',
-        eventLocation: 'BASKETBALL',
-        eventSource: 'APP',
-        eventSourceCode: 'APP',
-        eventSourceDesc: 'Test comment',
-      },
-      {
-        bookingId,
-        eventClass: 'INT_MOV',
-        eventStatus: 'SCH',
-        eventType: 'APP',
-        eventTypeDesc: 'Appointment',
-        eventSubType: 'GYMF',
-        eventSubTypeDesc: 'Gym - Football',
-        eventDate: '2020-04-17',
-        startTime: '2020-04-17T20:20:00',
-        endTime: '2020-04-17T20:35:00',
-        eventLocation: 'BADMINTON',
-        eventSource: 'APP',
-        eventSourceCode: 'APP',
-        eventSourceDesc: 'Testing a really long comment which is over 40 characters',
-      },
-    ],
-    profileInformation: [{ type: 'NAT', resultValue: 'British' }],
-  }
+      visitBalances: { remainingVo: 24, remainingPvo: 4 },
+      todaysEvents: [
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'SCH',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'EDUC',
+          eventSubTypeDesc: 'Education',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T09:00:00',
+          endTime: '2020-04-17T10:00:00',
+          eventLocation: 'BADMINTON',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+        },
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'SCH',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'CABE',
+          eventSubTypeDesc: 'Case - Benefits',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T13:00:00',
+          endTime: '2020-04-17T14:00:00',
+          eventLocation: 'CIRCUIT',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+          eventSourceDesc: 'Test Comment',
+        },
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'CANC',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'GYMSH',
+          eventSubTypeDesc: 'Gym - Sports Halls Activity',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T15:00:00',
+          endTime: '2020-04-17T15:30:00',
+          eventLocation: 'BASKETBALL',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+          eventSourceDesc: 'Test comment',
+        },
+        {
+          bookingId,
+          eventClass: 'INT_MOV',
+          eventStatus: 'SCH',
+          eventType: 'APP',
+          eventTypeDesc: 'Appointment',
+          eventSubType: 'GYMF',
+          eventSubTypeDesc: 'Gym - Football',
+          eventDate: '2020-04-17',
+          startTime: '2020-04-17T20:20:00',
+          endTime: '2020-04-17T20:35:00',
+          eventLocation: 'BADMINTON',
+          eventSource: 'APP',
+          eventSourceCode: 'APP',
+          eventSourceDesc: 'Testing a really long comment which is over 40 characters',
+        },
+      ],
+      profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+    })
+  })
 
   context('When a prisoner is in users caseload', () => {
-    before(() => {
-      cy.task('reset')
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
-
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
       })
-
-      cy.task('stubQuickLook', quickLookData)
-
-      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should show correct Offence details', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
       prisonerQuickLookPage.verifyOnPage('Smith, John')
 
       cy.get('[data-test="offence-summary"]')
@@ -315,26 +316,19 @@ context('Prisoner quick look', () => {
   })
 
   context('When a prisoner is NOT in users caseload', () => {
-    before(() => {
-      cy.task('reset')
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
-
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
         iepSummary: {},
         caseNoteSummary: {},
       })
-
-      cy.task('stubQuickLook', quickLookData)
-
-      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should not display conditionally displayed links to other pages', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
       cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
       cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
       cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
@@ -342,13 +336,8 @@ context('Prisoner quick look', () => {
   })
 
   context('When a user can view inactive bookings', () => {
-    before(() => {
-      cy.task('reset')
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
-
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -356,13 +345,11 @@ context('Prisoner quick look', () => {
         caseNoteSummary: {},
         userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
       })
-
-      cy.task('stubQuickLook', quickLookData)
-
-      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should display conditionally displayed links to other pages', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
       cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
       cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
       cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
@@ -370,26 +357,19 @@ context('Prisoner quick look', () => {
   })
 
   context('When a user CANNOT view inactive bookings', () => {
-    before(() => {
-      cy.task('reset')
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
-
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
         iepSummary: {},
         caseNoteSummary: {},
       })
-
-      cy.task('stubQuickLook', quickLookData)
-
-      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should not display conditionally displayed links to other pages', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
       cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
       cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
       cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
