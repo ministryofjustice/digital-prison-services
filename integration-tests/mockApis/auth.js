@@ -188,24 +188,25 @@ const stubUnverifiedEmail = username =>
 
 module.exports = {
   getLoginUrl,
-  stubLogin: (username, caseloadId) =>
+  stubLogin: (username, caseloadId, roles = []) =>
     Promise.all([
       favicon(),
       redirect(),
       logout(),
       token(),
       stubUserMe(),
-      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }]),
+      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
     ]),
-  stubLoginCourt: () =>
+  stubLoginCourt: (username, roles = []) =>
     Promise.all([
       favicon(),
       redirect(),
       logout(),
       token(),
       stubUserMe(),
-      stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
+      stubUser(username, null),
+      stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }, ...roles]),
     ]),
   stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),

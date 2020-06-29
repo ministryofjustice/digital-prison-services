@@ -15,15 +15,19 @@ module.exports = on => {
       return tokenverification.stubVerifyToken(true)
     },
     getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI' }) =>
+    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
       Promise.all([
-        auth.stubLogin(username, caseload),
+        auth.stubLogin(username, caseload, roles),
         elite2api.stubUserMe(),
         elite2api.stubUserCaseloads(),
         tokenverification.stubVerifyToken(true),
       ]),
-    stubLoginCourt: () =>
-      Promise.all([auth.stubLoginCourt({}), elite2api.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
+    stubLoginCourt: ({ username = 'COURT_USER', roles = [] }) =>
+      Promise.all([
+        auth.stubLoginCourt(username, roles),
+        elite2api.stubUserCaseloads(),
+        tokenverification.stubVerifyToken(true),
+      ]),
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
@@ -164,5 +168,7 @@ module.exports = on => {
       Promise.all([elite2api.stubAppointmentLocations(agency, locations)]),
     stubBookingOffenders: offenders => Promise.all([elite2api.stubBookingOffenders(offenders)]),
     stubAgencies: agencies => Promise.all([elite2api.stubAgencies(agencies)]),
+    stubAppointmentsAtAgencyLocation: ({ agency, location, date, appointments }) =>
+      Promise.all([elite2api.stubSchedulesAtAgency(agency, location, 'APP', date, appointments)]),
   })
 }
