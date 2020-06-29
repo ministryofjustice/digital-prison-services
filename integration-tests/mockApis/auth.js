@@ -205,7 +205,6 @@ module.exports = {
       logout(),
       token(),
       stubUserMe(),
-      stubUser(username, null),
       stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }, ...roles]),
     ]),
   stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
