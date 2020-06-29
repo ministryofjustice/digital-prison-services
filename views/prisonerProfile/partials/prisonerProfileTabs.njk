@@ -1,9 +1,9 @@
 {% set tabs = [
-    { text: 'Quick look', path: '' },
-    { text: 'Personal', path: '/personal' },
-    { text: 'Alerts', path: '/alerts' },
-    { text: 'Case notes', path: '/case-notes' },
-    { text: 'Sentence and release', path: '/sentence-and-release' }
+    { text: 'Quick look', path: '', visible: true, testId: 'quick-look' },
+    { text: 'Personal', path: '/personal', visible: true, testId: 'personal' },
+    { text: 'Alerts', path: '/alerts', visible: true, testId: 'alerts' },
+    { text: 'Case notes', path: '/case-notes', visible: prisonerProfileData.userCanEdit, testId: 'case-notes' },
+    { text: 'Sentence and release', path: '/sentence-and-release', visible: true, testId: 'sentence-release' }
   ]
 %}
 
@@ -13,13 +13,15 @@
   </h2>
   <ul class="govuk-tabs__list">
     {% for tab in tabs %}
-      {% set fullTabPath = '/prisoner/' + prisonerProfileData.offenderNo + tab.path %}
-      {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath.split('?')[0] === fullTabPath %}
-      <li class="{{'govuk-tabs__list-item' + isSelected }}">
-        <a class="govuk-tabs__tab" href="{{ fullTabPath }}">
-        {{ tab.text }}
-        </a>
-      </li>
+      {% if tab.visible %}
+        {% set fullTabPath = '/prisoner/' + prisonerProfileData.offenderNo + tab.path %}
+        {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath.split('?')[0] === fullTabPath %}
+        <li class="{{'govuk-tabs__list-item' + isSelected }}">
+          <a class="govuk-tabs__tab" href="{{ fullTabPath }}" data-test="{{'tabs-' + tab.testId }}">
+          {{ tab.text }}
+          </a>
+        </li>
+      {% endif %}
     {% endfor %}
   </ul>
 </div>
