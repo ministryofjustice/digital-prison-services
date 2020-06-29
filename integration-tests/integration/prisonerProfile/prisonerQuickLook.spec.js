@@ -23,7 +23,7 @@ context('Prisoner quick look data retrieval errors', () => {
     cy.visit(`/prisoner/${offenderNo}`)
   })
 
-  it('should display the appropriate message when there was an error requesting offence data', () => {
+  it('Should display the appropriate message when there was an error requesting offence data', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="offender-offences"]')
@@ -33,7 +33,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting balance data', () => {
+  it('Should display the appropriate message when there was an error requesting balance data', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="offender-balances"]')
@@ -43,7 +43,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting case note adjudications', () => {
+  it('Should display the appropriate message when there was an error requesting case note adjudications', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="case-note-adjudications"]')
@@ -53,7 +53,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting personal details', async () => {
+  it('Should display the appropriate message when there was an error requesting personal details', async () => {
     cy.get('[data-test="personal-details"]')
       .find('p')
       .then($element => {
@@ -61,7 +61,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting visits', async () => {
+  it('Should display the appropriate message when there was an error requesting visits', async () => {
     cy.get('[data-test="visit-details"]')
       .find('p')
       .then($element => {
@@ -69,7 +69,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting schedules', async () => {
+  it('Should display the appropriate message when there was an error requesting schedules', async () => {
     cy.get('[data-test="schedules"]')
       .find('p')
       .then($element => {
@@ -210,7 +210,7 @@ context('Prisoner quick look', () => {
     profileInformation: [{ type: 'NAT', resultValue: 'British' }],
   }
 
-  context('When prisoner is in users caseload', () => {
+  context('When a prisoner is in users caseload', () => {
     before(() => {
       cy.task('reset')
       cy.clearCookies()
@@ -303,7 +303,7 @@ context('Prisoner quick look', () => {
         })
     })
 
-    it('should show the correct tabs and links', () => {
+    it('Should show the correct tabs and links', () => {
       cy.get('[data-test="tabs-quick-look"]').should('contain.text', 'Quick look')
       cy.get('[data-test="tabs-personal"]').should('contain.text', 'Personal')
       cy.get('[data-test="tabs-alerts"]').should('contain.text', 'Alerts')
@@ -314,7 +314,7 @@ context('Prisoner quick look', () => {
     })
   })
 
-  context('When prisoner is NOT in users caseload', () => {
+  context('When a prisoner is NOT in users caseload', () => {
     before(() => {
       cy.task('reset')
       cy.clearCookies()
@@ -334,7 +334,62 @@ context('Prisoner quick look', () => {
       cy.visit(`/prisoner/${offenderNo}`)
     })
 
-    it('should handle links for users not in a case load', () => {
+    it('Should not display conditionally displayed links to other pages', () => {
+      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
+      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
+      cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
+    })
+  })
+
+  context('When a user can view inactive bookings', () => {
+    before(() => {
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+      })
+
+      cy.task('stubQuickLook', quickLookData)
+
+      cy.visit(`/prisoner/${offenderNo}`)
+    })
+
+    it('Should display conditionally displayed links to other pages', () => {
+      cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
+      cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
+      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+    })
+  })
+
+  context('When a user CANNOT view inactive bookings', () => {
+    before(() => {
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+        iepSummary: {},
+        caseNoteSummary: {},
+      })
+
+      cy.task('stubQuickLook', quickLookData)
+
+      cy.visit(`/prisoner/${offenderNo}`)
+    })
+
+    it('Should not display conditionally displayed links to other pages', () => {
       cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
       cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
       cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
