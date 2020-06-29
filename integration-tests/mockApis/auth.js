@@ -198,14 +198,14 @@ module.exports = {
       stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
     ]),
-  stubLoginCourt: (username, roles = []) =>
+  stubLoginCourt: () =>
     Promise.all([
       favicon(),
       redirect(),
       logout(),
       token(),
       stubUserMe(),
-      stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }, ...roles]),
+      stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
     ]),
   stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),

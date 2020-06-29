@@ -22,12 +22,8 @@ module.exports = on => {
         elite2api.stubUserCaseloads(),
         tokenverification.stubVerifyToken(true),
       ]),
-    stubLoginCourt: ({ username = 'COURT_USER', roles = [] }) =>
-      Promise.all([
-        auth.stubLoginCourt(username, roles),
-        elite2api.stubUserCaseloads(),
-        tokenverification.stubVerifyToken(true),
-      ]),
+    stubLoginCourt: () =>
+      Promise.all([auth.stubLoginCourt(), elite2api.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
