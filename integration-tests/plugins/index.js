@@ -35,10 +35,16 @@ module.exports = on => {
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
 
-    stubPrisonerProfileHeaderData: ({ offenderBasicDetails, offenderFullDetails, iepSummary, caseNoteSummary }) =>
+    stubPrisonerProfileHeaderData: ({
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary,
+      caseNoteSummary,
+      userRoles = [],
+    }) =>
       Promise.all([
         auth.stubUserMe(),
-        auth.stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }]),
+        auth.stubUserMeRoles([...userRoles, { roleCode: 'UPDATE_ALERT' }]),
         elite2api.stubOffenderBasicDetails(offenderBasicDetails),
         elite2api.stubOffenderFullDetails(offenderFullDetails),
         elite2api.stubIepSummaryForBookingIds(iepSummary),
