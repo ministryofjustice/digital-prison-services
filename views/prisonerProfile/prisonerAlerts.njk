@@ -77,7 +77,10 @@
           href: createLink,
           text: "Create alert",
           preventDoubleClick: true,
-          classes: "govuk-button--link"
+          classes: "govuk-button--link",
+          attributes: {
+            "data-test": 'active-create-alerts-link'
+          }
           }) }}
         </div>
       {% endif %}
@@ -124,7 +127,10 @@
           href: createLink,
           text: "Create alert",
           preventDoubleClick: true,
-          classes: "govuk-button--link"
+          classes: "govuk-button--link",
+          attributes: {
+            "data-test": 'inactive-create-alerts-link'
+          }
           }) }}
         </div>
       {% endif %}

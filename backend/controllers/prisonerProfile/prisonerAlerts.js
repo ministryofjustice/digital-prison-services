@@ -49,7 +49,8 @@ module.exports = ({
       referenceCodesService.getAlertTypes(res.locals),
       oauthApi.userRoles(res.locals),
     ])
-    const canUpdateAlerts = roles && roles.some(role => role.roleCode === 'UPDATE_ALERT')
+    const { userCanEdit } = prisonerProfileData
+    const canUpdateAlerts = roles && roles.some(role => role.roleCode === 'UPDATE_ALERT') && userCanEdit
     const alerts = await elite2Api.getAlertsForBooking(res.locals, { bookingId, query }, headers)
     const totalAlerts = res.locals.responseHeaders['total-records']
 
