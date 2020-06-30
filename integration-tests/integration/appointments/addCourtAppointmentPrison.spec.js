@@ -419,29 +419,6 @@ context('A user can add a video link', () => {
       date: tomorrow.format('yyyy-MM-DD'),
     })
 
-    // cy.task('stubAppointmentsAtAgency', 'MDI', [
-    //   {
-    //     offenderNo: 'A12345',
-    //     firstName: 'TEST',
-    //     lastName: 'USER',
-    //     cellLocation: 'MDI-A-1-1',
-    //     comment: 'Appt details',
-    //     event: 'MEDE',
-    //     eventId: 106,
-    //     eventDescription: 'Medical - Dentist',
-    //     eventLocation: 'Medical Room1',
-    //     startTime: tomorrow
-    //       .hours(8)
-    //       .minutes(0)
-    //       .format('YYYY-MM-DDThh:mm:ss'),
-    //     endTime: tomorrow
-    //       .hours(15)
-    //       .minutes(0)
-    //       .format('YYYY-MM-DDThh:mm:ss'),
-    //     locationId: 2,
-    //   },
-    // ])
-
     const addCourtAppointmentPage = AddCourtAppointmentPage.verifyOnPage()
     const addAppointmentForm = addCourtAppointmentPage.form()
     addAppointmentForm.date().type(tomorrow.format('DD/MM/YYYY'))
