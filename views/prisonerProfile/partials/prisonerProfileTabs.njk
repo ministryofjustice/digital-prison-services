@@ -15,7 +15,7 @@
     {% for tab in tabs %}
       {% if tab.visible %}
         {% set fullTabPath = '/prisoner/' + prisonerProfileData.offenderNo + tab.path %}
-        {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath.split('?')[0] === fullTabPath %}
+        {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath.split('?')[0].replace(r/\/$/, '') === fullTabPath %}
         <li class="{{'govuk-tabs__list-item' + isSelected }}">
           <a class="govuk-tabs__tab" href="{{ fullTabPath }}" data-test="{{'tabs-' + tab.testId }}">
           {{ tab.text }}
