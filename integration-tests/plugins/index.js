@@ -172,5 +172,8 @@ module.exports = on => {
     stubAgencies: agencies => Promise.all([elite2api.stubAgencies(agencies)]),
     stubAppointmentsAtAgencyLocation: ({ agency, location, date, appointments }) =>
       Promise.all([elite2api.stubSchedulesAtAgency(agency, location, 'APP', date, appointments)]),
+    stubCourtCases: courtCases => elite2api.stubCourtCases(courtCases),
+    stubOffenceHistory: offenceHistory => elite2api.stubOffenceHistory(offenceHistory),
+    stubSentenceTerms: sentenceTerms => elite2api.stubSentenceTerms(sentenceTerms),
   })
 }

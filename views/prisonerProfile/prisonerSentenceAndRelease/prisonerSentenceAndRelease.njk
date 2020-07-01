@@ -39,7 +39,33 @@
     {% endif %}
 {% endset %}
 
-{% set sentenceAdjustmentsContent %}
+{% set currentSentenceDetails %}
+    <div>
+        <span class="govuk-caption-m govuk-!-margin-bottom-4">Contact your Offender Management Unit for specific sentence breakdown.</span>
+    </div>
+    {{ prisonerSummarySection([{label: 'Effective sentence end date', value: effectiveSentenceEndDate}], 'Not entered', { "data-test": "effective-sentence-end-date" },false) }}
+
+    {% for courtCase in courtCases %}
+        <h2 class="govuk-heading-m" data-test="case-number">Case Number - {{ courtCase.caseInfoNumber }}</h2>
+        <b class="govuk-body govuk-!-font-weight-bold"> Sentence date </b>  <span
+            class="govuk-body" data-test="sentence-date"> {{ courtCase.sentenceDate }} </span>
+
+        <div>
+            <h3 class="govuk-heading-s govuk-!-margin-top-3"> Offences </h3>
+            {% for offence in courtCase.offences %}
+                <p class="govuk-body govuk-!-margin-left-9" data-test="offence-description"> {{ offence }} </p>
+            {% endfor %}
+        </div>
+
+        {% for sentence in courtCase.sentenceTerms %}
+            <b class="govuk-body govuk-!-font-weight-bold" data-test="sentence-header"> {{ sentence.sentenceHeader }}</b>  <span
+                class="govuk-body govuk-!-margin-left-1" data-test="sentence-description"> {{ sentence.sentenceTypeDescription }} </span>
+
+            {{ prisonerSummarySection(sentence.summaryDetailRows, 'Not entered', { "data-test": "sentence-terms" },true) }}
+
+        {% endfor %}
+    {% endfor %}
+
     <h2 class="govuk-heading-m">Sentence adjustments</h2>
     {% if sentenceAdjustments.noSentenceAdjustments %}
         <p class="govuk-body" data-test="no-sentence-adjustments-message">There are no sentence adjustments</p>
@@ -66,7 +92,7 @@
     <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-accordion">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
-                {{ accordionSection("Current sentence details", sentenceAdjustmentsContent, 0) }}
+                {{ accordionSection("Current sentence details", currentSentenceDetails, 0) }}
             </div>
             <div class="govuk-grid-column-one-half">
                 {{ accordionSection("Release dates", releaseDatesContent, 1) }}
