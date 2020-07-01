@@ -4,6 +4,7 @@ const whereabouts = require('../mockApis/whereabouts')
 const tokenverification = require('../mockApis/tokenverification')
 const keyworker = require('../mockApis/keyworker')
 const caseNotes = require('../mockApis/caseNotes')
+const allocationManager = require('../mockApis/allocationManager')
 
 const { resetStubs } = require('../mockApis/wiremock')
 
@@ -121,6 +122,7 @@ module.exports = on => {
       careNeeds,
       reasonableAdjustments,
       agencies,
+      prisonOffenderManagers,
     }) =>
       Promise.all([
         elite2api.stubPrisonerDetail(prisonerDetail),
@@ -138,6 +140,7 @@ module.exports = on => {
         elite2api.stubPersonalCareNeeds(careNeeds),
         elite2api.stubReasonableAdjustments(reasonableAdjustments),
         elite2api.stubAgencies(agencies),
+        allocationManager.stubGetPomForOffender(prisonOffenderManagers),
       ]),
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),

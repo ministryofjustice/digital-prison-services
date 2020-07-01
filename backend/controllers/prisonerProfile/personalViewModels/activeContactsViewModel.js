@@ -21,7 +21,7 @@ module.exports = ({ personal, professional }) => {
         { label: 'Relationship', value: contact.relationshipDescription },
         ...(hasLength(phones) ? [{ label: 'Phone number', html: getPhone(phones) }] : []),
         ...(hasLength(emails) ? [{ label: 'Email', value: emails.map(email => email.email).join(', ') }] : []),
-        ...(address ? getAddress({ address }) : []),
+        ...(!contact.noAddressRequired ? getAddress({ address }) : []),
       ],
     }
   }

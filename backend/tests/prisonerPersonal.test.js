@@ -930,7 +930,7 @@ describe('prisoner personal', () => {
       expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
-    it('should make a call for prisoner offender managers', async () => {
+    it('should make a call for prison offender managers', async () => {
       await controller(req, res)
 
       expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
@@ -1047,8 +1047,8 @@ describe('prisoner personal', () => {
             })
 
           allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
-            primary_pom: 'SMITH, JANE',
-            secondary_pom: 'DOE, JOHN',
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
           })
         })
 
@@ -1095,6 +1095,14 @@ describe('prisoner personal', () => {
                 ],
                 professional: [
                   {
+                    name: 'Jane Smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
+                    name: 'John Doe',
+                    details: [{ label: 'Relationship', value: 'Co-working Prison Offender Manager' }],
+                  },
+                  {
                     name: 'Uriualche Lydyle',
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
@@ -1111,14 +1119,6 @@ describe('prisoner personal', () => {
                       { label: 'Address phone', html: '011111111111' },
                       { label: 'Address type', value: 'Business' },
                     ],
-                  },
-                  {
-                    name: 'Jane Smith',
-                    details: [{ label: 'Relationship', value: 'Prisoner Offender Manager' }],
-                  },
-                  {
-                    name: 'John Doe',
-                    details: [{ label: 'Relationship', value: 'Coworking Prisoner Offender Manager' }],
                   },
                 ],
               },
@@ -1141,7 +1141,7 @@ describe('prisoner personal', () => {
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
           allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
-            primary_pom: 'Jane smith',
+            primary_pom: { staffId: 1, name: 'Jane smith' },
           })
         })
 
@@ -1173,6 +1173,10 @@ describe('prisoner personal', () => {
                 ],
                 professional: [
                   {
+                    name: 'Jane smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
                     name: 'Uriualche Lydyle',
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
@@ -1190,10 +1194,6 @@ describe('prisoner personal', () => {
                       },
                       { label: 'Address type', value: 'Business' },
                     ],
-                  },
-                  {
-                    name: 'Jane smith',
-                    details: [{ label: 'Relationship', value: 'Prisoner Offender Manager' }],
                   },
                 ],
               },

@@ -344,14 +344,14 @@ describe('putLastNameFirst()', () => {
 
 describe('getPrisonOffenderManagerName()', () => {
   it('should split correctly when name is in LAST_NAME, FIRST_NAME format', () => {
-    expect(getPrisonOffenderManagerNames('SMITH, JOHN')).toEqual(['John', 'Smith'])
+    expect(getPrisonOffenderManagerNames({ name: 'SMITH, JOHN' })).toEqual(['John', 'Smith'])
   })
 
   it('should return the passed name if it doesn not match format', () => {
-    expect(getPrisonOffenderManagerNames('John smith')).toEqual(['John smith'])
+    expect(getPrisonOffenderManagerNames({ name: 'John smith' })).toEqual(['John smith'])
   })
 
   it('should return undefined if nothing passed', () => {
-    expect(getPrisonOffenderManagerNames()).toEqual(undefined)
+    expect(getPrisonOffenderManagerNames({})).toEqual(undefined)
   })
 })

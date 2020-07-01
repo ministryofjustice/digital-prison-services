@@ -93,7 +93,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
       names && {
         firstName: names[0],
         lastName: names[1],
-        relationshipDescription: 'Prisoner Offender Manager',
+        relationshipDescription: 'Prison Offender Manager',
         noAddressRequired: true,
       }
     )
@@ -107,7 +107,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
       names && {
         firstName: names[0],
         lastName: names[1],
-        relationshipDescription: 'Coworking Prisoner Offender Manager',
+        relationshipDescription: 'Co-working Prison Offender Manager',
         noAddressRequired: true,
       }
     )
@@ -127,9 +127,9 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     activeContacts: activeContactsViewModel({
       personal: nextOfKinsWithContact,
       professional: [
-        ...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : []),
         ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
         ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
+        ...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : []),
       ],
     }),
     addresses: addressesViewModel({ addresses }),

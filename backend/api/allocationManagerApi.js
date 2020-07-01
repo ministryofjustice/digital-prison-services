@@ -19,7 +19,7 @@ const allocationManagerApiFactory = client => {
       .then(processResponse(context))
       .catch(processError)
 
-  const getPomByOffenderNo = (context, offenderNo) => get(context, `api/allocation/${offenderNo}`)
+  const getPomByOffenderNo = (context, offenderNo) => get(context, `/api/allocation/${offenderNo}`)
 
   return {
     getPomByOffenderNo,

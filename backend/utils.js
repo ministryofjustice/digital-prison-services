@@ -226,7 +226,8 @@ const hasLength = array => array && array.length > 0
 const getPrisonOffenderManagerNames = pom => {
   return (
     pom &&
-    pom
+    pom.name &&
+    pom.name
       .split(', ')
       .reverse()
       .map(name => properCaseName(name))
