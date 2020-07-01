@@ -4,7 +4,7 @@ const { formatCurrency, readableDateFormat } = require('../../../utils')
 
 const onlyValidValues = value => Boolean(value)
 
-const rollSentencesUp = sentences =>
+const mergeMostRecentLicenceTerm = sentences =>
   sentences.reduce((result, current) => {
     if (current.sentenceTermCode === 'IMP' && !result) return current
     if (current.sentenceTermCode === 'LIC' && !result.licence) {
@@ -59,7 +59,7 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
       caseInfoNumber: courtCase.caseInfoNumber,
       sentenceTerms: groupSentencesBySequence(sentenceTermsData)
         .filter(group => Number(group.caseId) === courtCase.id)
-        .map(groupedSentence => rollSentencesUp(groupedSentence.items))
+        .map(groupedSentence => mergeMostRecentLicenceTerm(groupedSentence.items))
         .sort(sortBySentenceDateThenByImprisonmentLength)
         .map(sentence => ({
           sentenceHeader: `Sentence ${sentence.sentenceSequence}`,
