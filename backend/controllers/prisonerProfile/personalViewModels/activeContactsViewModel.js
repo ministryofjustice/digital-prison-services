@@ -4,7 +4,9 @@ const { getPhone, getAddress } = require('../../../shared/addressHelpers')
 
 module.exports = ({ personal, professional }) => {
   const contactHasActiveAddress = contact =>
-    contact.addresses.find(address => !address.endDate || moment(address.endDate).isAfter())
+    contact.addresses && contact.addresses.find(address => !address.endDate || moment(address.endDate).isAfter())
+
+  const professionalContactsFilter = contact => Boolean(contact.noAddressRequired) || contactHasActiveAddress(contact)
 
   const getContactView = (useActiveAddress, showEmergencyContact) => contact => {
     const { phones, emails } = contact
@@ -19,13 +21,13 @@ module.exports = ({ personal, professional }) => {
         { label: 'Relationship', value: contact.relationshipDescription },
         ...(hasLength(phones) ? [{ label: 'Phone number', html: getPhone(phones) }] : []),
         ...(hasLength(emails) ? [{ label: 'Email', value: emails.map(email => email.email).join(', ') }] : []),
-        ...getAddress({ address }),
+        ...(address ? getAddress({ address }) : []),
       ],
     }
   }
 
   return {
     personal: personal && personal.map(getContactView(false, true)),
-    professional: professional && professional.filter(contactHasActiveAddress).map(getContactView(true, false)),
+    professional: professional && professional.filter(professionalContactsFilter).map(getContactView(true, false)),
   }
 }

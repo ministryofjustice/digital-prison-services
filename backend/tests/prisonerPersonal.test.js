@@ -930,6 +930,12 @@ describe('prisoner personal', () => {
       expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
+    it('should make a call for prisoner offender managers', async () => {
+      await controller(req, res)
+
+      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
+    })
+
     describe('when there is missing prisoner contacts data', () => {
       it('should still render the personal template', async () => {
         await controller(req, res)
@@ -1039,6 +1045,11 @@ describe('prisoner personal', () => {
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: 'SMITH, JANE',
+            secondary_pom: 'DOE, JOHN',
+          })
         })
 
         it('should make calls for contact details of active personal contacts and case administrators', async () => {
@@ -1101,6 +1112,14 @@ describe('prisoner personal', () => {
                       { label: 'Address type', value: 'Business' },
                     ],
                   },
+                  {
+                    name: 'Jane Smith',
+                    details: [{ label: 'Relationship', value: 'Prisoner Offender Manager' }],
+                  },
+                  {
+                    name: 'John Doe',
+                    details: [{ label: 'Relationship', value: 'Coworking Prisoner Offender Manager' }],
+                  },
                 ],
               },
             })
@@ -1121,6 +1140,9 @@ describe('prisoner personal', () => {
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: 'Jane smith',
+          })
         })
 
         it('should not return related labels and empty values', async () => {
@@ -1168,6 +1190,10 @@ describe('prisoner personal', () => {
                       },
                       { label: 'Address type', value: 'Business' },
                     ],
+                  },
+                  {
+                    name: 'Jane smith',
+                    details: [{ label: 'Relationship', value: 'Prisoner Offender Manager' }],
                   },
                 ],
               },

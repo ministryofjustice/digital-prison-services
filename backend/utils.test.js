@@ -15,7 +15,7 @@ import {
   getTime,
   chunkArray,
   putLastNameFirst,
-  getPrisonOffenderManagerName,
+  getPrisonOffenderManagerNames,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -344,14 +344,14 @@ describe('putLastNameFirst()', () => {
 
 describe('getPrisonOffenderManagerName()', () => {
   it('should split correctly when name is in LAST_NAME, FIRST_NAME format', () => {
-    expect(getPrisonOffenderManagerName('SMITH, JOHN')).toEqual('John Smith')
+    expect(getPrisonOffenderManagerNames('SMITH, JOHN')).toEqual(['John', 'Smith'])
   })
 
   it('should return the passed name if it doesn not match format', () => {
-    expect(getPrisonOffenderManagerName('John smith')).toEqual('John smith')
+    expect(getPrisonOffenderManagerNames('John smith')).toEqual(['John smith'])
   })
 
   it('should return undefined if nothing passed', () => {
-    expect(getPrisonOffenderManagerName()).toEqual(undefined)
+    expect(getPrisonOffenderManagerNames()).toEqual(undefined)
   })
 })

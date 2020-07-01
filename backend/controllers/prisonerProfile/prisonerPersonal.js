@@ -15,6 +15,7 @@ const {
   addressesViewModel,
   careNeedsViewModel,
 } = require('./personalViewModels')
+const { getPrisonOffenderManagerNames } = require('../../utils')
 
 module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
   req,
@@ -84,6 +85,34 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     ...(await personService.getPersonContactDetails(res.locals, activeCaseAdministrator.personId)),
   }
 
+  const primaryPrisonOffenderManager = () => {
+    const names = allocationManager && getPrisonOffenderManagerNames(allocationManager.primary_pom)
+    return (
+      allocationManager &&
+      allocationManager.primary_pom &&
+      names && {
+        firstName: names[0],
+        lastName: names[1],
+        relationshipDescription: 'Prisoner Offender Manager',
+        noAddressRequired: true,
+      }
+    )
+  }
+
+  const coworkingPrisonOffenderManager = () => {
+    const names = allocationManager && getPrisonOffenderManagerNames(allocationManager.secondary_pom)
+    return (
+      allocationManager &&
+      allocationManager.secondary_pom &&
+      names && {
+        firstName: names[0],
+        lastName: names[1],
+        relationshipDescription: 'Coworking Prisoner Offender Manager',
+        noAddressRequired: true,
+      }
+    )
+  }
+
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
 
@@ -97,7 +126,11 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     activeContacts: activeContactsViewModel({
       personal: nextOfKinsWithContact,
-      professional: [...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : [])],
+      professional: [
+        ...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : []),
+        ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
+        ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
+      ],
     }),
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({
