@@ -2,6 +2,21 @@ const { stubFor } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
 
 module.exports = {
+  stubHealth: (status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/health/ping',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        body: 'pong',
+      },
+    })
+  },
   stubUserMe: () => {
     return stubFor({
       request: {

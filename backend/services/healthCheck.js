@@ -37,6 +37,8 @@ module.exports = function healthcheckFactory(
   whereaboutsUrl,
   communityUrl,
   keyworkerUrl,
+  caseNotesUrl,
+  allocationManagerUrl,
   tokenverificationUrl
 ) {
   const checks = [
@@ -45,6 +47,8 @@ module.exports = function healthcheckFactory(
     service('whereabouts', whereaboutsUrl),
     service('community', communityUrl),
     service('keyworker', keyworkerUrl),
+    service('allocationManager', allocationManagerUrl),
+    service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
   ]
 

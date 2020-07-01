@@ -5,6 +5,7 @@ const tokenverification = require('../mockApis/tokenverification')
 const keyworker = require('../mockApis/keyworker')
 const caseNotes = require('../mockApis/caseNotes')
 const allocationManager = require('../mockApis/allocationManager')
+const community = require('../mockApis/community')
 
 const { resetStubs } = require('../mockApis/wiremock')
 
@@ -15,6 +16,26 @@ module.exports = on => {
       await resetStubs()
       return tokenverification.stubVerifyToken(true)
     },
+    stubHealth: ({
+      elite2Status,
+      whereaboutsStatus,
+      authStatus,
+      allocationManagerStatus,
+      caseNotesStatus,
+      keyworkerStatus,
+      tokenverificationStatus,
+      communityStatus,
+    }) =>
+      Promise.all([
+        auth.stubHealth(authStatus),
+        elite2api.stubHealth(elite2Status),
+        whereabouts.stubHealth(whereaboutsStatus),
+        keyworker.stubHealth(keyworkerStatus),
+        allocationManager.stubHealth(allocationManagerStatus),
+        caseNotes.stubHealth(caseNotesStatus),
+        tokenverification.stubHealth(tokenverificationStatus),
+        community.stubHealth(communityStatus),
+      ]),
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
       Promise.all([

@@ -186,7 +186,23 @@ const stubUnverifiedEmail = username =>
     },
   })
 
+const stubHealth = (status = 200) =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: '/api/health/ping',
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: 'pong',
+    },
+  })
+
 module.exports = {
+  stubHealth,
   getLoginUrl,
   stubLogin: (username, caseloadId, roles = []) =>
     Promise.all([
