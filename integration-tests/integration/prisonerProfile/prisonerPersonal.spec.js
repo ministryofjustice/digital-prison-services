@@ -4,6 +4,44 @@ const { clickIfExist } = require('../../test-helpers')
 
 context('Prisoner personal', () => {
   const offenderNo = 'A12345'
+  const nextOfKin = [
+    {
+      lastName: 'SMITH',
+      firstName: 'JOHN',
+      contactType: 'S',
+      contactTypeDescription: 'Social/Family',
+      relationship: 'COU',
+      relationshipDescription: 'Cousin',
+      emergencyContact: true,
+      nextOfKin: true,
+      relationshipId: 1,
+      personId: 12345,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+    {
+      lastName: 'JONES',
+      firstName: 'TERRY',
+      contactType: 'S',
+      contactTypeDescription: 'Social/Family',
+      relationship: 'OTHER',
+      relationshipDescription: 'Other - Social',
+      emergencyContact: true,
+      nextOfKin: true,
+      relationshipId: 2,
+      personId: 67890,
+      activeFlag: false,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+  ]
 
   const visitPersonalAndExpandAccordions = () => {
     cy.visit(`/prisoner/${offenderNo}/personal`)
@@ -193,27 +231,99 @@ context('Prisoner personal', () => {
     })
 
     context('Active contacts section', () => {
-      it('Should show correct missing content text', () => {
-        cy.get('[data-test="active-contacts-summary"]').then($section => {
-          cy.get($section)
-            .find('h3')
-            .then($headings => {
-              cy.get($headings)
-                .its('length')
-                .should('eq', 2)
-              expect($headings.get(0).innerText).to.contain('Personal')
-              expect($headings.get(1).innerText).to.contain('Professional')
-            })
+      context('When there is no data at all', () => {
+        it('Should show correct missing content text', () => {
+          cy.get('[data-test="active-contacts-summary"]').then($section => {
+            cy.get($section)
+              .find('h3')
+              .then($headings => {
+                cy.get($headings)
+                  .its('length')
+                  .should('eq', 2)
+                expect($headings.get(0).innerText).to.contain('Personal')
+                expect($headings.get(1).innerText).to.contain('Professional')
+              })
 
-          cy.get($section)
-            .find('p')
-            .then($text => {
-              cy.get($text)
-                .its('length')
-                .should('eq', 2)
-              expect($text.get(0).innerText).to.contain('None')
-              expect($text.get(1).innerText).to.contain('None')
-            })
+            cy.get($section)
+              .find('p')
+              .then($text => {
+                cy.get($text)
+                  .its('length')
+                  .should('eq', 2)
+                expect($text.get(0).innerText).to.contain('None')
+                expect($text.get(1).innerText).to.contain('None')
+              })
+          })
+        })
+      })
+
+      context('When there is some but not all data', () => {
+        before(() => {
+          cy.task('stubPrisonerProfileHeaderData', {
+            offenderBasicDetails,
+            offenderFullDetails,
+            iepSummary: {},
+            caseNoteSummary: {},
+          })
+
+          cy.task('stubPersonal', {
+            contacts: { nextOfKin },
+          })
+          visitPersonalAndExpandAccordions()
+        })
+
+        it('Should show correct missing value text', () => {
+          cy.get('[data-test="active-contacts-summary"]').then($section => {
+            cy.get($section)
+              .find('h3')
+              .then($headings => {
+                cy.get($headings)
+                  .its('length')
+                  .should('eq', 3)
+                expect($headings.get(0).innerText).to.contain('Personal')
+                expect($headings.get(1).innerText).to.contain('John Smith')
+                expect($headings.get(2).innerText).to.contain('Professional')
+              })
+
+            cy.get($section)
+              .find('p')
+              .then($text => {
+                cy.get($text)
+                  .its('length')
+                  .should('eq', 3)
+                expect($text.get(0).innerText).to.contain('Next of kin')
+                expect($text.get(1).innerText).to.contain('Emergency contact')
+                expect($text.get(2).innerText).to.contain('None')
+              })
+
+            cy.get($section)
+              .find('dt')
+              .then($summaryLabels => {
+                cy.get($summaryLabels)
+                  .its('length')
+                  .should('eq', 6)
+                expect($summaryLabels.get(0).innerText).to.contain('Relationship')
+                expect($summaryLabels.get(1).innerText).to.contain('Address')
+                expect($summaryLabels.get(2).innerText).to.contain('Town')
+                expect($summaryLabels.get(3).innerText).to.contain('Postcode')
+                expect($summaryLabels.get(4).innerText).to.contain('Address phone')
+                expect($summaryLabels.get(5).innerText).to.contain('Address type')
+              })
+
+            cy.get($section)
+              .find('dd')
+              .then($summaryValues => {
+                cy.get($summaryValues)
+                  .its('length')
+                  .should('eq', 6)
+                expect($summaryValues.get(0).innerText).to.contain('Cousin')
+                expect($summaryValues.get(1).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(2).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(3).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(4).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(5).innerText).to.contain(notEnteredText)
+              })
+          })
         })
       })
     })
@@ -371,44 +481,7 @@ context('Prisoner personal', () => {
           ],
           addresses,
           contacts: {
-            nextOfKin: [
-              {
-                lastName: 'SMITH',
-                firstName: 'JOHN',
-                contactType: 'S',
-                contactTypeDescription: 'Social/Family',
-                relationship: 'COU',
-                relationshipDescription: 'Cousin',
-                emergencyContact: true,
-                nextOfKin: true,
-                relationshipId: 1,
-                personId: 12345,
-                activeFlag: true,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-              {
-                lastName: 'JONES',
-                firstName: 'TERRY',
-                contactType: 'S',
-                contactTypeDescription: 'Social/Family',
-                relationship: 'OTHER',
-                relationshipDescription: 'Other - Social',
-                emergencyContact: true,
-                nextOfKin: true,
-                relationshipId: 2,
-                personId: 67890,
-                activeFlag: false,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-            ],
+            nextOfKin,
             otherContacts: [
               {
                 lastName: 'KIMBUR',
