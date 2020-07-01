@@ -188,14 +188,14 @@ const stubUnverifiedEmail = username =>
 
 module.exports = {
   getLoginUrl,
-  stubLogin: (username, caseloadId) =>
+  stubLogin: (username, caseloadId, roles = []) =>
     Promise.all([
       favicon(),
       redirect(),
       logout(),
       token(),
       stubUserMe(),
-      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }]),
+      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
     ]),
   stubLoginCourt: () =>
@@ -211,6 +211,7 @@ module.exports = {
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
   stubUserMeRoles,
+  stubUser,
   stubEmail,
   redirect,
 }

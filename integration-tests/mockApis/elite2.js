@@ -780,11 +780,11 @@ module.exports = {
       },
     })
   },
-  stubAppointmentLocations: (locations, status = 200) => {
+  stubAppointmentLocations: (agency, locations, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/agencies/.+?/locations?eventType=APP',
+        url: `/api/agencies/${agency}/locations?eventType=APP`,
       },
       response: {
         status,
@@ -954,6 +954,20 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: activities || [],
+      },
+    }),
+  stubBookingOffenders: (offenders, status = 200) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: '/api/bookings/offenders',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offenders || [],
       },
     }),
   stubCourtCases: courtCases =>

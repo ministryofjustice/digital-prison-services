@@ -184,6 +184,10 @@ describe('prisoner alerts', () => {
     })
 
     it('should render the alerts template with the correctly formatted data', async () => {
+      prisonerProfileService.getPrisonerProfileData = jest
+        .fn()
+        .mockResolvedValue({ prisonerProfileData, userCanEdit: true })
+
       res.locals.responseHeaders['total-records'] = 1
       await controller(req, res)
 
