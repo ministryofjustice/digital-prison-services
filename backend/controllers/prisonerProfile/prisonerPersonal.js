@@ -16,7 +16,10 @@ const {
   careNeedsViewModel,
 } = require('./personalViewModels')
 
-module.exports = ({ prisonerProfileService, personService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
+  req,
+  res
+) => {
   const { offenderNo } = req.params
   const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
     elite2Api.getDetails(res.locals, offenderNo),
@@ -44,6 +47,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     careNeeds,
     adjustments,
     agencies,
+    allocationManager,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -57,6 +61,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       elite2Api.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
       elite2Api.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
       elite2Api.getAgencies(res.locals),
+      allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 

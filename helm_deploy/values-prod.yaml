@@ -35,6 +35,7 @@ env:
   TOKENVERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: "https://offender-case-notes.service.justice.gov.uk/"
+  ALLOCATION_MANAGER_ENDPOINT_URL: "https://moic.service.justice.gov.uk/"
 
 whitelist:
   office: "217.33.148.210/32"

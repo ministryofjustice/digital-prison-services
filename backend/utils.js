@@ -223,6 +223,10 @@ const putLastNameFirst = (firstName, lastName) => {
 
 const hasLength = array => array && array.length > 0
 
+const getPrisonOffenderManagerName = name => {
+  return name && formatName(...name.split(', ').reverse())
+}
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -258,4 +262,5 @@ module.exports = {
   capitalizeUppercaseString,
   putLastNameFirst,
   hasLength,
+  getPrisonOffenderManagerName,
 }

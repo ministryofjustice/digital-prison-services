@@ -10,6 +10,8 @@ const health = healthFactory(
   config.apis.whereabouts.url,
   config.apis.community.url,
   config.apis.keyworker.url,
+  config.apis.caseNotes.url,
+  config.apis.allocationManager.url,
   config.apis.tokenverification.url
 )
 

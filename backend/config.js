@@ -73,6 +73,10 @@ module.exports = {
       url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
+    allocationManager: {
+      url: process.env.ALLOCATION_MANAGER_ENDPOINT_URL || '',
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
   },
   notifications: {
     enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,

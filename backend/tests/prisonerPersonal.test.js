@@ -21,6 +21,7 @@ describe('prisoner personal', () => {
   }
   const bookingId = '123'
   const elite2Api = {}
+  const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
 
@@ -52,8 +53,9 @@ describe('prisoner personal', () => {
     elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([])
     elite2Api.getHealthTypes = jest.fn().mockResolvedValue([])
     elite2Api.getAgencies = jest.fn().mockResolvedValue([])
+    allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
+    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
