@@ -956,4 +956,46 @@ module.exports = {
         jsonBody: activities || [],
       },
     }),
+  stubCourtCases: courtCases =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/bookings/[0-9]+?/court-cases',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: courtCases || [],
+      },
+    }),
+  stubOffenceHistory: offenceHistory =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/bookings/offenderNo/.+?/offenceHistory',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offenceHistory || [],
+      },
+    }),
+  stubSentenceTerms: sentenceTerms =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/offender-sentences/booking/[0-9]+?/sentenceTerms',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: sentenceTerms || [],
+      },
+    }),
 }

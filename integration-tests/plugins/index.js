@@ -159,5 +159,8 @@ module.exports = on => {
     stubSentenceData: details => Promise.all([elite2api.stubSentenceData(details)]),
     stubLocation: (locationId, locationData) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
     stubAgencyDetails: (agencyId, details) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
+    stubCourtCases: courtCases => elite2api.stubCourtCases(courtCases),
+    stubOffenceHistory: offenceHistory => elite2api.stubOffenceHistory(offenceHistory),
+    stubSentenceTerms: sentenceTerms => elite2api.stubSentenceTerms(sentenceTerms),
   })
 }

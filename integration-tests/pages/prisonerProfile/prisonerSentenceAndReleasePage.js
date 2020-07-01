@@ -16,6 +16,13 @@ const prisonerSentenceAndReleasePage = offenderName =>
     sentenceAdjustmentsDaysAddedSection: () => cy.get('[data-test="sentence-adjustments-days-added-section"]'),
     sentenceAdjustmentsDaysRemovedSection: () => cy.get('[data-test="sentence-adjustments-days-removed-section"]'),
     sentenceAdjustmentsDaysRemainingSection: () => cy.get('[data-test="sentence-adjustments-days-remaining-section"]'),
+    caseNumber: () => cy.get('[data-test="case-number"]'),
+    sentenceDate: () => cy.get('[data-test="sentence-date"]'),
+    sentenceHeader: () => cy.get('[data-test="sentence-header"]'),
+    sentenceTerms: () => cy.get('[data-test="sentence-terms"]'),
+    offenceDescriptions: () => cy.get('[data-test="offence-description"]'),
+    sentenceDescriptions: () => cy.get('[data-test="sentence-description"]'),
+    effectiveSentenceEndDate: () => cy.get('[data-test="effective-sentence-end-date"]'),
   })
 
 export default {
