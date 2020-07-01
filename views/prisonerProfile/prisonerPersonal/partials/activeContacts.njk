@@ -7,9 +7,9 @@
     {% for contactDetail in contact.details %}
 
       {% if contactDetail.html %}
-        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
+        {% set value = {html: contactDetail.html | showDefault(missingEntry)} %}
       {% else %}
-        {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
+        {% set value = {text: contactDetail.value | showDefault(missingEntry)} %}
       {% endif %}
 
       {% set activeContactsPersonalRows = (activeContactsPersonalRows.push(
@@ -46,9 +46,9 @@
     {% for contactDetail in contact.details %}
 
       {% if contactDetail.html %}
-        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
+        {% set value = {html: contactDetail.html | showDefault(missingEntry)} %}
       {% else %}
-        {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
+        {% set value = {text: contactDetail.value | showDefault(missingEntry)} %}
       {% endif %}
 
       {% set activeContactsProfessionalRows = (activeContactsProfessionalRows.push(
