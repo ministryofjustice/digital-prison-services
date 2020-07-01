@@ -126,7 +126,7 @@ describe('prisoner sentence and release', () => {
 
   it('should only return sentence, offences and court cases where they result in imprisonment', async () => {
     elite2Api.getCourtCases.mockResolvedValue([
-      { id: 1, caseInfoNumber: 'T12345' },
+      { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
       { id: 2, caseInfoNumber: 'T56789' },
     ])
 
@@ -181,6 +181,7 @@ describe('prisoner sentence and release', () => {
             caseInfoNumber: 'T12345',
             offences: ['Offence 1'],
             sentenceDate: '31 December 2018',
+            courtName: 'Leeds',
             sentenceTerms: [
               {
                 sentenceHeader: 'Sentence 1',

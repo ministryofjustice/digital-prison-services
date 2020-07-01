@@ -356,7 +356,18 @@ context('Prisoner sentence and release', () => {
       },
     })
     cy.task('stubSentenceAdjustments', {})
-    cy.task('stubCourtCases', [{ id: 1, caseInfoNumber: 'T12345' }])
+    cy.task('stubCourtCases', [
+      {
+        id: 1,
+        caseInfoNumber: 'T12345',
+        agency: {
+          agencyId: 'SHEFCC',
+          description: 'Sheffield Crown Court',
+          agencyType: 'CRT',
+          active: true,
+        },
+      },
+    ])
     cy.task('stubOffenceHistory', [
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
@@ -393,6 +404,7 @@ context('Prisoner sentence and release', () => {
 
     page.caseNumber().contains('T12345')
     page.sentenceDate().contains('1 January 2017')
+    page.courtName().contains('Sheffield Crown Court')
     page.sentenceHeader().contains('Sentence 1')
     page.sentenceHeader().contains('Sentence 6')
     page.sentenceDescriptions().contains('Some sentence info 1')
@@ -419,5 +431,33 @@ context('Prisoner sentence and release', () => {
       .then($value => {
         expect($value.get(0).innerText.trim()).to.eq('19 March 2022')
       })
+  })
+
+  it('should change the offences label to offence, and inline the offence description', () => {
+    cy.task('stubReleaseDatesOffenderNo', { sentenceDetail: {} })
+    cy.task('stubSentenceAdjustments', {})
+    cy.task('stubCourtCases', [{ id: 1, caseInfoNumber: 'T12345' }])
+    cy.task('stubOffenceHistory', [{ offenceDescription: 'Offence test', primaryResultCode: '1002', caseId: 1 }])
+    cy.task('stubSentenceTerms', [
+      {
+        sentenceSequence: 6,
+        termSequence: 1,
+        startDate: '2018-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 6',
+      },
+    ])
+
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const page = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    page.offenceHeader().contains('Offence')
+    page.inlineOffenceDescription().contains('Offence test')
+    page.offenceDescriptions().should('not.exist')
   })
 })

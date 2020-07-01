@@ -57,6 +57,7 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
     .filter(courtCase => caseIds.includes(courtCase.id))
     .map(courtCase => ({
       caseInfoNumber: courtCase.caseInfoNumber,
+      courtName: courtCase.agency && courtCase.agency && courtCase.agency.description,
       sentenceTerms: groupSentencesBySequence(sentenceTermsData)
         .filter(group => Number(group.caseId) === courtCase.id)
         .map(groupedSentence => mergeMostRecentLicenceTerm(groupedSentence.items))
