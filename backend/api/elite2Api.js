@@ -291,6 +291,17 @@ const elite2ApiFactory = client => {
 
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
+  const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
+
+  const getOffenceHistory = (context, offenderNo) =>
+    get(context, `/api/bookings/offenderNo/${offenderNo}/offenceHistory`)
+
+  const getSentenceTerms = (context, bookingId) =>
+    get(
+      context,
+      `/api/offender-sentences/booking/${bookingId}/sentenceTerms?filterBySentenceTermCodes=IMP&filterBySentenceTermCodes=LIC`
+    )
+
   return {
     userLocations,
     userCaseLoads,
@@ -381,6 +392,9 @@ const elite2ApiFactory = client => {
     getTreatmentTypes,
     getHealthTypes,
     getSentenceAdjustments,
+    getCourtCases,
+    getOffenceHistory,
+    getSentenceTerms,
   }
 }
 
