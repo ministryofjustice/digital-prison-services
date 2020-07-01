@@ -18,12 +18,13 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
 
     const { bookingId } = bookingDetails
 
-    const sentenceAdjustmentsData = await elite2Api.getSentenceAdjustments(res.locals, bookingId)
-    const courtCaseData = await elite2Api.getCourtCases(res.locals, bookingId)
-    const sentenceTermsData = await elite2Api.getSentenceTerms(res.locals, bookingId)
+    const [sentenceAdjustmentsData, courtCaseData, sentenceTermsData] = await Promise.all([
+      elite2Api.getSentenceAdjustments(res.locals, bookingId),
+      elite2Api.getCourtCases(res.locals, bookingId),
+      elite2Api.getSentenceTerms(res.locals, bookingId),
+    ])
 
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
-
     const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
     return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
