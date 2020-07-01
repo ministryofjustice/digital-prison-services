@@ -30,6 +30,8 @@ app.set('view engine', 'njk')
 
 nunjucksSetup(app, path)
 
+app.use((req, res, next) => setImmediate(next, 2000))
+
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
 app.use(setupWebSecurity())
