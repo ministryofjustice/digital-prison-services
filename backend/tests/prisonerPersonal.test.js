@@ -1066,11 +1066,7 @@ describe('prisoner personal', () => {
               phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
             })
             .mockResolvedValueOnce({
-              addresses: [
-                // { ...businessPrimary, endDate: '2020-01-01', addressType: 'Business' },
-                businessPrimary,
-                businessNonPrimary,
-              ],
+              addresses: [businessPrimary, businessNonPrimary],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
