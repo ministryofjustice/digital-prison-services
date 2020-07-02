@@ -22,6 +22,15 @@
     }
   }
 
+  &__results-options {
+    @include govuk-media-query($from: desktop) {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: govuk-spacing(6);
+      align-items: baseline;
+    }
+  }
+
   &__toggles {
     display: flex;
     justify-content: flex-end;

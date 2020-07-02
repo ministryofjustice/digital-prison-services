@@ -23,7 +23,7 @@ context('Prisoner quick look data retrieval errors', () => {
     cy.visit(`/prisoner/${offenderNo}`)
   })
 
-  it('should display the appropriate message when there was an error requesting offence data', () => {
+  it('Should display the appropriate message when there was an error requesting offence data', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="offender-offences"]')
@@ -33,7 +33,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting balance data', () => {
+  it('Should display the appropriate message when there was an error requesting balance data', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="offender-balances"]')
@@ -43,7 +43,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting case note adjudications', () => {
+  it('Should display the appropriate message when there was an error requesting case note adjudications', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="case-note-adjudications"]')
@@ -53,7 +53,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting personal details', async () => {
+  it('Should display the appropriate message when there was an error requesting personal details', async () => {
     cy.get('[data-test="personal-details"]')
       .find('p')
       .then($element => {
@@ -61,7 +61,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting visits', async () => {
+  it('Should display the appropriate message when there was an error requesting visits', async () => {
     cy.get('[data-test="visit-details"]')
       .find('p')
       .then($element => {
@@ -69,7 +69,7 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('should display the appropriate message when there was an error requesting schedules', async () => {
+  it('Should display the appropriate message when there was an error requesting schedules', async () => {
     cy.get('[data-test="schedules"]')
       .find('p')
       .then($element => {
@@ -85,13 +85,6 @@ context('Prisoner quick look', () => {
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
-
-    cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails,
-      iepSummary: {},
-      caseNoteSummary: {},
-    })
 
     cy.task('stubQuickLook', {
       offence: [{ offenceDescription: 'Have blade/article which was sharply pointed in public place' }],
@@ -223,80 +216,163 @@ context('Prisoner quick look', () => {
       ],
       profileInformation: [{ type: 'NAT', resultValue: 'British' }],
     })
-
-    cy.visit(`/prisoner/${offenderNo}`)
   })
 
-  it('Should show correct Offence details', () => {
-    prisonerQuickLookPage.verifyOnPage('Smith, John')
-
-    cy.get('[data-test="offence-summary"]')
-      .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('Have blade/article which was sharply pointed in public place')
-        expect($summaryValues.get(1).innerText).to.eq('Adult Imprisonment Without Option CJA03')
-        expect($summaryValues.get(2).innerText).to.eq('13/12/2020')
+  context('When a prisoner is in users caseload', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
       })
+    })
+
+    it('Should show correct Offence details', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+      cy.get('[data-test="offence-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('Have blade/article which was sharply pointed in public place')
+          expect($summaryValues.get(1).innerText).to.eq('Adult Imprisonment Without Option CJA03')
+          expect($summaryValues.get(2).innerText).to.eq('13/12/2020')
+        })
+    })
+
+    it('Should show correct Money details', () => {
+      cy.get('[data-test="money-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('£100.00')
+          expect($summaryValues.get(1).innerText).to.eq('£75.50')
+          expect($summaryValues.get(2).innerText).to.eq('£50.00')
+        })
+    })
+
+    it('Should show correct Case notes and adjudications details', () => {
+      cy.get('[data-test="case-notes-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('1')
+          expect($summaryValues.get(1).innerText).to.eq('2')
+          expect($summaryValues.get(2).innerText).to.eq('40 days ago')
+          expect($summaryValues.get(3).innerText).to.eq('3')
+          expect($summaryValues.get(4).innerText).to.eq(
+            '14 days Stoppage of Earnings (50%)\n16/04/2020\n14 days Stoppage of Earnings (£50.00)\n14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC\n16/04/2020'
+          )
+        })
+    })
+
+    it('Should show correct Visits details', () => {
+      cy.get('[data-test="visits-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('24')
+          expect($summaryValues.get(1).innerText).to.eq('4')
+          expect($summaryValues.get(2).innerText).to.eq('17/04/2020')
+          expect($summaryValues.get(3).innerText).to.eq('Social Contact')
+          expect($summaryValues.get(4).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
+        })
+    })
+
+    it('Should show correct Personal information details', () => {
+      cy.get('[data-test="personal-info-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('21')
+          expect($summaryValues.get(1).innerText).to.eq('British')
+          expect($summaryValues.get(2).innerText).to.eq('12/3456A')
+          expect($summaryValues.get(3).innerText).to.eq('12345/57B')
+        })
+    })
+
+    it('Should show correct Schedule details', () => {
+      cy.get('[data-test="schedule-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('Education\n09:00 - 10:00')
+          expect($summaryValues.get(1).innerText).to.eq(
+            "Case - Benefits - Test Comment\n13:00 - 14:00\nGym - Sports Halls Activity - Test comment <div class='highlight highlight--alert'>(cancelled)</div>\n15:00 - 15:30"
+          )
+          expect($summaryValues.get(2).innerText).to.eq(
+            'Gym - Football - Testing a really long comment which is o...\n20:20 - 20:35'
+          )
+        })
+    })
+
+    it('Should show the correct tabs and links', () => {
+      cy.get('[data-test="tabs-quick-look"]').should('contain.text', 'Quick look')
+      cy.get('[data-test="tabs-personal"]').should('contain.text', 'Personal')
+      cy.get('[data-test="tabs-alerts"]').should('contain.text', 'Alerts')
+      cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
+      cy.get('[data-test="tabs-sentence-release"]').should('contain.text', 'Sentence and release')
+      cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
+      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+    })
   })
 
-  it('Should show correct Money details', () => {
-    cy.get('[data-test="money-summary"]')
-      .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('£100.00')
-        expect($summaryValues.get(1).innerText).to.eq('£75.50')
-        expect($summaryValues.get(2).innerText).to.eq('£50.00')
+  context('When a prisoner is NOT in users caseload', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
+        iepSummary: {},
+        caseNoteSummary: {},
       })
+    })
+
+    it('Should not display conditionally displayed links to other pages', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
+      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
+      cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
+    })
   })
 
-  it('Should show correct Case notes and adjudications details', () => {
-    cy.get('[data-test="case-notes-summary"]')
-      .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('1')
-        expect($summaryValues.get(1).innerText).to.eq('2')
-        expect($summaryValues.get(2).innerText).to.eq('40 days ago')
-        expect($summaryValues.get(3).innerText).to.eq('3')
-        expect($summaryValues.get(4).innerText).to.eq(
-          '14 days Stoppage of Earnings (50%)\n16/04/2020\n14 days Stoppage of Earnings (£50.00)\n14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC\n16/04/2020'
-        )
+  context('When a user can view inactive bookings', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
       })
+    })
+
+    it('Should display conditionally displayed links to other pages', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
+      cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
+      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+    })
   })
 
-  it('Should show correct Visits details', () => {
-    cy.get('[data-test="visits-summary"]')
-      .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('24')
-        expect($summaryValues.get(1).innerText).to.eq('4')
-        expect($summaryValues.get(2).innerText).to.eq('17/04/2020')
-        expect($summaryValues.get(3).innerText).to.eq('Social Contact')
-        expect($summaryValues.get(4).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
+  context('When a user CANNOT view inactive bookings', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+        iepSummary: {},
+        caseNoteSummary: {},
       })
-  })
+    })
 
-  it('Should show correct Personal information details', () => {
-    cy.get('[data-test="personal-info-summary"]')
-      .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('21')
-        expect($summaryValues.get(1).innerText).to.eq('British')
-        expect($summaryValues.get(2).innerText).to.eq('12/3456A')
-        expect($summaryValues.get(3).innerText).to.eq('12345/57B')
-      })
-  })
+    it('Should not display conditionally displayed links to other pages', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
 
-  it('Should show correct Schedule details', () => {
-    cy.get('[data-test="schedule-summary"]')
-      .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('Education\n09:00 - 10:00')
-        expect($summaryValues.get(1).innerText).to.eq(
-          "Case - Benefits - Test Comment\n13:00 - 14:00\nGym - Sports Halls Activity - Test comment <div class='highlight highlight--alert'>(cancelled)</div>\n15:00 - 15:30"
-        )
-        expect($summaryValues.get(2).innerText).to.eq(
-          'Gym - Football - Testing a really long comment which is o...\n20:20 - 20:35'
-        )
-      })
+      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
+      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
+      cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
+    })
   })
 })

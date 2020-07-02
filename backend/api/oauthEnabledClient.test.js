@@ -1,6 +1,7 @@
 const nock = require('nock')
 const clientFactory = require('./oauthEnabledClient')
 const contextProperties = require('../contextProperties')
+const logger = require('../log')
 
 const hostname = 'http://localhost:8080'
 
@@ -312,6 +313,34 @@ describe('Test clients built by oauthEnabledClient', () => {
       const response = await client.get(context, '/api/users/me')
 
       expect(response.request.url).toEqual('http://localhost:8080/api/users/me')
+    })
+  })
+
+  describe('Logging', () => {
+    const client = clientFactory({ baseUrl: `${hostname}/`, timeout: 2000 })
+    logger.warn = jest.fn()
+    afterEach(() => {
+      nock.cleanAll()
+    })
+
+    it('Should log 404 correctly', async () => {
+      nock(hostname)
+        .get('/api/users/me')
+        .reply(404)
+
+      client.get({}, '/api/users/me').catch(e => {
+        expect(logger.warn).toHaveBeenCalledWith('GET /api/users/me No record found')
+      })
+    })
+
+    it('Should log 500 correctly', async () => {
+      nock(hostname)
+        .get('/api/users/me')
+        .reply(500)
+
+      client.get({}, '/api/users/me').catch(e => {
+        expect(logger.warn).toHaveBeenCalledWith('API error in GET /api/users/me 500 Something went very wrong -')
+      })
     })
   })
 })

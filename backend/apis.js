@@ -7,6 +7,7 @@ const { communityApiFactory } = require('./api/communityApi')
 const { dataComplianceApiFactory } = require('./api/dataComplianceApi')
 const { keyworkerApiFactory } = require('./api/keyworkerApi')
 const { caseNotesApiFactory } = require('./api/caseNotesApi')
+const { allocationManagerApiFactory } = require('./api/allocationManagerApi')
 const { tokenVerificationApiFactory } = require('./api/tokenVerificationApi')
 
 const elite2Api = elite2ApiFactory(
@@ -67,6 +68,13 @@ const tokenVerificationApi = tokenVerificationApiFactory(
   })
 )
 
+const allocationManagerApi = allocationManagerApiFactory(
+  clientFactory({
+    baseUrl: config.apis.allocationManager.url,
+    timeout: config.apis.allocationManager.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
@@ -76,4 +84,5 @@ module.exports = {
   keyworkerApi,
   caseNotesApi,
   tokenVerificationApi,
+  allocationManagerApi,
 }

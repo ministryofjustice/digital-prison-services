@@ -62,7 +62,8 @@
             attributes: { "data-test": "case-notes-summary" }
         }) }}
 
-        <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}"
-           class="govuk-link govuk-!-font-size-19">View adjudication history</a>
+        {% if prisonerProfileData.userCanEdit %}
+            <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}" class="govuk-link govuk-!-font-size-19" data-test="adjudication-history-link">View adjudication history</a>
+        {% endif%}
     {% endif %}
 </div>

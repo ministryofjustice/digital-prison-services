@@ -21,6 +21,7 @@ describe('prisoner personal', () => {
   }
   const bookingId = '123'
   const elite2Api = {}
+  const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
 
@@ -52,8 +53,9 @@ describe('prisoner personal', () => {
     elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([])
     elite2Api.getHealthTypes = jest.fn().mockResolvedValue([])
     elite2Api.getAgencies = jest.fn().mockResolvedValue([])
+    allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
+    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -899,7 +901,7 @@ describe('prisoner personal', () => {
       primary: true,
       noFixedAddress: false,
       startDate: '2020-05-01',
-      phones: [{ number: '011111111111', type: 'MOB' }],
+      phones: [{ number: '011111111111', type: 'MOB' }, { number: '011333444', type: 'HOME', ext: '777' }],
     }
 
     const nonPrimaryAddress = {
@@ -918,6 +920,42 @@ describe('prisoner personal', () => {
       phones: [{ number: '011111111111', type: 'MOB' }],
     }
 
+    const businessPrimary = {
+      addressType: 'Business',
+      flat: '222',
+      premise: '999',
+      street: 'Business street',
+      town: 'London',
+      postalCode: 'W1 ABC',
+      county: 'London',
+      country: 'England',
+      comment: null,
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      endDate: null,
+      phones: [],
+      addressUsages: [],
+    }
+
+    const businessNonPrimary = {
+      addressType: 'Business',
+      flat: '222',
+      premise: '000',
+      street: 'Business street',
+      town: 'Manchester',
+      postalCode: 'W2 DEF',
+      county: 'Greater Manchester',
+      country: 'England',
+      comment: null,
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      endDate: null,
+      phones: [],
+      addressUsages: [],
+    }
+
     beforeEach(() => {
       elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
@@ -926,6 +964,12 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
+    })
+
+    it('should make a call for prison offender managers', async () => {
+      await controller(req, res)
+
+      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
     })
 
     describe('when there is missing prisoner contacts data', () => {
@@ -1027,16 +1071,18 @@ describe('prisoner personal', () => {
             .mockResolvedValueOnce({
               addresses: [primaryAddress, nonPrimaryAddress],
               emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
+              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
             })
             .mockResolvedValueOnce({
-              addresses: [
-                { ...primaryAddress, endDate: '2020-01-01', addressType: 'Business' },
-                { ...nonPrimaryAddress, addressType: 'Business' },
-              ],
+              addresses: [businessPrimary, businessNonPrimary],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
+          })
         })
 
         it('should make calls for contact details of active personal contacts and case administrators', async () => {
@@ -1062,14 +1108,97 @@ describe('prisoner personal', () => {
                     emergencyContact: true,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
-                      { label: 'Phone number', value: '02222222222, 033333333333' },
+                      {
+                        label: 'Phone number',
+                        html: '02222222222,<br>033333333333 extension number 777',
+                      },
                       { label: 'Email', value: 'test1@email.com, test2@email.com' },
                       { label: 'Address', value: 'Flat A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'County', value: 'West Yorkshire' },
                       { label: 'Postcode', value: 'LS1 AAA' },
                       { label: 'Country', value: 'England' },
-                      { label: 'Address phone', value: '011111111111' },
+                      {
+                        label: 'Address phone',
+                        html: '011111111111,<br>011333444 extension number 777',
+                      },
+                      { label: 'Address type', value: 'Home' },
+                    ],
+                  },
+                ],
+                professional: [
+                  {
+                    name: 'Jane Smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
+                    name: 'John Doe',
+                    details: [{ label: 'Relationship', value: 'Co-working Prison Offender Manager' }],
+                  },
+                  {
+                    name: 'Uriualche Lydyle',
+                    details: [
+                      { label: 'Relationship', value: 'Case Administrator' },
+                      { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
+                      { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                      { label: 'Address', value: 'Flat 222, 999, Business street' },
+                      { label: 'Town', value: 'London' },
+                      { label: 'County', value: 'London' },
+                      { label: 'Postcode', value: 'W1 ABC' },
+                      { label: 'Country', value: 'England' },
+                      { html: '', label: 'Address phone' },
+                      { label: 'Address type', value: 'Business' },
+                    ],
+                  },
+                ],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when there are multiple active addresses but no primary', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...nonPrimaryAddress, startDate: '2020-01-01', premise: 'Not latest active' },
+                { ...nonPrimaryAddress, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
+              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+            })
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...businessNonPrimary, startDate: '2020-01-01', premise: 'Not latest active' },
+                { ...businessNonPrimary, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
+              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+            })
+        })
+
+        it('should render the template with the most recently added active address data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: {
+                personal: [
+                  {
+                    name: 'John Smith',
+                    emergencyContact: true,
+                    details: [
+                      { label: 'Relationship', value: 'Cousin' },
+                      { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                      { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                      { label: 'Address', value: 'Flat B, Latest active, Another Street' },
+                      { label: 'Town', value: 'Leeds' },
+                      { label: 'County', value: 'West Yorkshire' },
+                      { label: 'Postcode', value: 'LS2 BBB' },
+                      { label: 'Country', value: 'England' },
+                      { html: '011111111111', label: 'Address phone' },
                       { label: 'Address type', value: 'Home' },
                     ],
                   },
@@ -1079,14 +1208,14 @@ describe('prisoner personal', () => {
                     name: 'Uriualche Lydyle',
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
-                      { label: 'Phone number', value: '04444444444, 055555555555, extension number 123' },
+                      { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
                       { label: 'Email', value: 'test3@email.com, test4@email.com' },
-                      { label: 'Address', value: 'Flat B, 13, Another Street' },
-                      { label: 'Town', value: 'Leeds' },
-                      { label: 'County', value: 'West Yorkshire' },
-                      { label: 'Postcode', value: 'LS2 BBB' },
+                      { label: 'Address', value: 'Flat 222, Latest active, Business street' },
+                      { label: 'Town', value: 'Manchester' },
+                      { label: 'County', value: 'Greater Manchester' },
+                      { label: 'Postcode', value: 'W2 DEF' },
                       { label: 'Country', value: 'England' },
-                      { label: 'Address phone', value: '011111111111' },
+                      { html: '', label: 'Address phone' },
                       { label: 'Address type', value: 'Business' },
                     ],
                   },
@@ -1110,6 +1239,9 @@ describe('prisoner personal', () => {
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: { staffId: 1, name: 'Jane smith' },
+          })
         })
 
         it('should not return related labels and empty values', async () => {
@@ -1125,27 +1257,40 @@ describe('prisoner personal', () => {
                     emergencyContact: true,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
-                      { label: 'Phone number', value: '02222222222, 033333333333' },
+                      { label: 'Phone number', html: '02222222222,<br>033333333333' },
                       { label: 'Email', value: 'test1@email.com, test2@email.com' },
                       { label: 'Address', value: 'Flat A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'Postcode', value: 'LS1 AAA' },
-                      { label: 'Address phone', value: '011111111111' },
+                      {
+                        label: 'Address phone',
+                        html: '011111111111,<br>011333444 extension number 777',
+                      },
                       { label: 'Address type', value: 'Home' },
                     ],
                   },
                 ],
                 professional: [
                   {
+                    name: 'Jane smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
                     name: 'Uriualche Lydyle',
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
-                      { label: 'Phone number', value: '04444444444, 055555555555, extension number 123' },
+                      {
+                        label: 'Phone number',
+                        html: '04444444444,<br>055555555555 extension number 123',
+                      },
                       { label: 'Email', value: 'test3@email.com, test4@email.com' },
                       { label: 'Address', value: 'Flat A, 13, High Street' },
                       { label: 'Town', value: 'Ulverston' },
                       { label: 'Postcode', value: 'LS1 AAA' },
-                      { label: 'Address phone', value: '011111111111' },
+                      {
+                        label: 'Address phone',
+                        html: '011111111111,<br>011333444 extension number 777',
+                      },
                       { label: 'Address type', value: 'Business' },
                     ],
                   },
@@ -1183,7 +1328,7 @@ describe('prisoner personal', () => {
                     name: 'John Smith',
                     emergencyContact: true,
                     details: expect.not.arrayContaining([
-                      { label: 'Phone number', value: '' },
+                      { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
                     ]),
                   },
@@ -1192,7 +1337,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'Uriualche Lydyle',
                     details: expect.not.arrayContaining([
-                      { label: 'Phone number', value: '' },
+                      { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
                     ]),
                   },
@@ -1218,14 +1363,26 @@ describe('prisoner personal', () => {
             })
         })
 
-        it('should not return the professional contact', async () => {
+        it('should still return the professional contact', async () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
               activeContacts: expect.objectContaining({
-                professional: [],
+                professional: [
+                  {
+                    name: 'Uriualche Lydyle',
+                    details: [
+                      { label: 'Relationship', value: 'Case Administrator' },
+                      { label: 'Address', value: '' },
+                      { label: 'Town', value: undefined },
+                      { label: 'Postcode', value: undefined },
+                      { html: undefined, label: 'Address phone' },
+                      { label: 'Address type', value: undefined },
+                    ],
+                  },
+                ],
               }),
             })
           )
@@ -1389,7 +1546,7 @@ describe('prisoner personal', () => {
                   { label: 'County', value: 'West Yorkshire' },
                   { label: 'Postcode', value: 'LS1 AAA' },
                   { label: 'Country', value: 'England' },
-                  { label: 'Phone', value: '011111111111' },
+                  { label: 'Phone', html: '011111111111' },
                   { label: 'Added', value: 'January 2019' },
                   { label: 'Comments', value: 'address comment field' },
                 ],
@@ -1423,7 +1580,7 @@ describe('prisoner personal', () => {
                     { label: 'Address', value: 'Flat A, 13, High Street' },
                     { label: 'Town', value: 'Ulverston' },
                     { label: 'Postcode', value: 'LS1 AAA' },
-                    { label: 'Phone', value: '011111111111' },
+                    { label: 'Phone', html: '011111111111' },
                     { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],
@@ -1457,7 +1614,7 @@ describe('prisoner personal', () => {
                     { label: 'County', value: 'West Yorkshire' },
                     { label: 'Postcode', value: 'LS1 AAA' },
                     { label: 'Country', value: 'England' },
-                    { label: 'Phone', value: '011111111111' },
+                    { label: 'Phone', html: '011111111111' },
                     { label: 'Added', value: 'January 2019' },
                     { label: 'Comments', value: 'address comment field' },
                   ],

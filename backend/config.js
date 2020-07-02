@@ -59,7 +59,7 @@ module.exports = {
     },
     tokenverification: {
       url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
-      timeoutSeconds: process.env.TOKENVERIFICATION_API_URL || 5,
+      timeoutSeconds: process.env.TOKENVERIFICATION_API_TIMEOUT_SECONDS || 10,
       enabled: process.env.TOKENVERIFICATION_API_ENABLED === 'true',
     },
     categorisation: {
@@ -71,6 +71,10 @@ module.exports = {
     },
     caseNotes: {
       url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
+    allocationManager: {
+      url: process.env.ALLOCATION_MANAGER_ENDPOINT_URL || '',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
   },

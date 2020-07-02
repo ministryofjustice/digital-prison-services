@@ -15,14 +15,17 @@ const referenceCodesServiceFactory = require('../controllers/reference-codes-ser
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError }) => {
+const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, allocationManagerApi, logError }) => {
   const prisonerProfileService = prisonerProfileServiceFactory(elite2Api, keyworkerApi, oauthApi)
   const personService = personServiceFactory(elite2Api)
   const referenceCodesService = referenceCodesServiceFactory(elite2Api)
 
   router.get('/', prisonerQuickLook({ prisonerProfileService, elite2Api, logError }))
   router.get('/image', prisonerFullImage({ elite2Api, logError }))
-  router.get('/personal', prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError }))
+  router.get(
+    '/personal',
+    prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
+  )
   router.get(
     '/alerts',
     prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, oauthApi, logError })

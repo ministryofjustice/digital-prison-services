@@ -3,11 +3,25 @@ const absenceReasons = require('./responses/absenceReasons')
 const attendance = require('./responses/attendance')
 
 module.exports = {
+  stubHealth: (status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: '/whereabouts/health/ping',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      },
+    })
+  },
   stubAttendanceChanges: (changes, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/attendances/changes\\?fromDateTime=.+?&toDateTime=.+?',
+        urlPattern: '/whereabouts/attendances/changes\\?fromDateTime=.+?&toDateTime=.+?',
       },
       response: {
         status,
@@ -39,7 +53,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/court/all-courts',
+        url: '/whereabouts/court/all-courts',
       },
       response: {
         status,
@@ -101,7 +115,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        url: '/court/add-video-link-appointment',
+        url: '/whereabouts/court/add-video-link-appointment',
       },
       response: {
         status,

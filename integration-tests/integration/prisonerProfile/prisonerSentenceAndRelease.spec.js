@@ -25,6 +25,9 @@ context('Prisoner sentence and release', () => {
 
   it('Should show correct release dates with overrides', () => {
     cy.task('stubSentenceAdjustments', {})
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -149,6 +152,9 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should show no data message when no dates', () => {
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubSentenceAdjustments', {})
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {},
@@ -172,6 +178,9 @@ context('Prisoner sentence and release', () => {
 
   it('Should only show sections with data in them', () => {
     cy.task('stubSentenceAdjustments', {})
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {
         lateTermDate: '2021-08-11',
@@ -210,6 +219,9 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should show appropriate message when no sentence adjustments are populated', () => {
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {},
     })
@@ -233,6 +245,9 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should show the days removed section', () => {
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {},
     })
@@ -268,6 +283,9 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should show the days added section', () => {
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {},
     })
@@ -299,6 +317,9 @@ context('Prisoner sentence and release', () => {
   })
 
   it('Should show the unused remand time section', () => {
+    cy.task('stubCourtCases', [])
+    cy.task('stubOffenceHistory', [])
+    cy.task('stubSentenceTerms', [])
     cy.task('stubReleaseDatesOffenderNo', {
       sentenceDetail: {},
     })
@@ -326,5 +347,131 @@ context('Prisoner sentence and release', () => {
       .then($summaryValues => {
         expect($summaryValues.get(0).innerText.trim()).to.eq('1')
       })
+  })
+
+  it('should show court cases, offences and sentences', () => {
+    cy.task('stubReleaseDatesOffenderNo', {
+      sentenceDetail: {
+        effectiveSentenceEndDate: '2022-03-19',
+      },
+    })
+    cy.task('stubSentenceAdjustments', {})
+    cy.task('stubCourtCases', [
+      {
+        id: 1,
+        caseInfoNumber: 'T12345',
+        agency: {
+          agencyId: 'SHEFCC',
+          description: 'Sheffield Crown Court',
+          agencyType: 'CRT',
+          active: true,
+        },
+      },
+    ])
+    cy.task('stubOffenceHistory', [
+      { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
+    ])
+    cy.task('stubSentenceTerms', [
+      {
+        sentenceSequence: 6,
+        termSequence: 1,
+        startDate: '2018-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 6',
+      },
+      {
+        sentenceSequence: 1,
+        termSequence: 1,
+        startDate: '2017-01-01',
+        years: 12,
+        months: 2,
+        days: 1,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+    ])
+
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const page = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    page.caseNumber().contains('T12345')
+    page.sentenceDate().contains('1 January 2017')
+    page.courtName().contains('Sheffield Crown Court')
+    page.sentenceHeader().contains('Sentence 1')
+    page.sentenceHeader().contains('Sentence 6')
+    page.sentenceDescriptions().contains('Some sentence info 1')
+    page.sentenceDescriptions().contains('Some sentence info 6')
+
+    page.offenceDescriptions().contains('a')
+    page.offenceDescriptions().contains('b')
+    page.offenceDescriptions().contains('C')
+
+    page
+      .sentenceTerms()
+      .find('dd')
+      .then($termValues => {
+        expect($termValues.get(0).innerText.trim()).to.eq('1 January 2017')
+        expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 1 days')
+
+        expect($termValues.get(2).innerText.trim()).to.eq('1 January 2018')
+        expect($termValues.get(3).innerText.trim()).to.eq('12 years, 0 months, 0 days')
+      })
+
+    page
+      .effectiveSentenceEndDate()
+      .find('dd')
+      .then($value => {
+        expect($value.get(0).innerText.trim()).to.eq('19 March 2022')
+      })
+  })
+
+  it('should change the offences label to offence, and inline the offence description', () => {
+    cy.task('stubReleaseDatesOffenderNo', { sentenceDetail: {} })
+    cy.task('stubSentenceAdjustments', {})
+    cy.task('stubCourtCases', [{ id: 1, caseInfoNumber: 'T12345' }])
+    cy.task('stubOffenceHistory', [{ offenceDescription: 'Offence test', primaryResultCode: '1002', caseId: 1 }])
+    cy.task('stubSentenceTerms', [
+      {
+        sentenceSequence: 6,
+        termSequence: 1,
+        startDate: '2018-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 6',
+      },
+    ])
+
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const page = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    page.offenceHeader().contains('Offence')
+    page.inlineOffenceDescription().contains('Offence test')
+    page.offenceDescriptions().should('not.exist')
+  })
+
+  it('should show default no data message for sentences', () => {
+    cy.task('stubReleaseDatesOffenderNo', { sentenceDetail: { effectiveSentenceEndDate: '2020-10-10' } })
+    cy.task('stubSentenceAdjustments', {})
+    cy.task('stubCourtCases', [{ id: 1, caseInfoNumber: 'T12345' }])
+    cy.task('stubOffenceHistory', [{ offenceDescription: 'Offence test', primaryResultCode: '1002', caseId: 1 }])
+    cy.task('stubSentenceTerms', [])
+
+    cy.visit('/prisoner/A12345/sentence-and-release')
+
+    const page = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
+
+    page.noSentenceDataMessage().contains('There are no current sentence details for this prisoner.')
   })
 })

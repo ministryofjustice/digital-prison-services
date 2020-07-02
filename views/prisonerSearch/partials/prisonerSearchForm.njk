@@ -7,7 +7,7 @@
 {% set alertCheckboxes %}
  {{ govukCheckboxes({
   idPrefix: "alerts",
-  name: "alerts",
+  name: "alerts[]",
   classes: "prisoner-search__alerts govuk-checkboxes--small js-prisoner-search-alerts",
   fieldset: {
     legend: {
@@ -55,9 +55,9 @@
     }) }}
 
     {{ govukButton({
-    text: "Search",
-    type: "submit"
-  }) }}
+      text: "Search",
+      type: "submit"
+    }) }}
   </div>
 
   {{ govukDetails({
