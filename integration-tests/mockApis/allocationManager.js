@@ -5,30 +5,29 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/tokenverification/health/ping',
+        url: '/allocation/health/',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
+        body: 'ping',
       },
     })
   },
-  stubVerifyToken: active => {
+  stubGetPomForOffender: (response, status = 200) => {
     return stubFor({
       request: {
-        method: 'POST',
-        urlPattern: '/tokenverification/token/verify',
+        method: 'GET',
+        urlPattern: '/allocation/api/allocation/.+?',
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: {
-          active,
-        },
+        jsonBody: response || {},
       },
     })
   },

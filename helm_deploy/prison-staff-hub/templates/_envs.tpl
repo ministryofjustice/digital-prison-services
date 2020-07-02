@@ -144,6 +144,9 @@ env:
   - name: TOKENVERIFICATION_API_ENABLED
     value: {{ .Values.env.TOKENVERIFICATION_API_ENABLED | quote }}
 
+  - name: ALLOCATION_MANAGER_ENDPOINT_URL
+    value: {{ .Values.env.ALLOCATION_MANAGER_ENDPOINT_URL | quote }}
+
   - name: NODE_ENV
     value: production
 

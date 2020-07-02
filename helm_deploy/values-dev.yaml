@@ -36,3 +36,4 @@ env:
   TOKENVERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: "https://dev.offender-case-notes.service.justice.gov.uk/"
+  ALLOCATION_MANAGER_ENDPOINT_URL: "https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk/"

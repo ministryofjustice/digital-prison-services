@@ -4,6 +4,8 @@ const whereabouts = require('../mockApis/whereabouts')
 const tokenverification = require('../mockApis/tokenverification')
 const keyworker = require('../mockApis/keyworker')
 const caseNotes = require('../mockApis/caseNotes')
+const allocationManager = require('../mockApis/allocationManager')
+const community = require('../mockApis/community')
 
 const { resetStubs } = require('../mockApis/wiremock')
 
@@ -14,6 +16,26 @@ module.exports = on => {
       await resetStubs()
       return tokenverification.stubVerifyToken(true)
     },
+    stubAuthHealth: status => Promise.all([auth.stubHealth(status)]),
+    stubElite2Health: status => Promise.all([elite2api.stubHealth(status)]),
+    stubWhereaboutsHealth: status => Promise.all([whereabouts.stubHealth(status)]),
+    stubAllocationManagerHealth: status => Promise.all([allocationManager.stubHealth(status)]),
+    stubKeyworkerHealth: status => Promise.all([keyworker.stubHealth(status)]),
+    stubCaseNotesHealth: status => Promise.all([caseNotes.stubHealth(status)]),
+    stubCommunityHealth: status => Promise.all([community.stubHealth(status)]),
+    stubTokenverificationHealth: status => Promise.all([tokenverification.stubHealth(status)]),
+
+    stubHealthAllHealthy: () =>
+      Promise.all([
+        auth.stubHealth(),
+        elite2api.stubHealth(),
+        whereabouts.stubHealth(),
+        keyworker.stubHealth(),
+        allocationManager.stubHealth(),
+        caseNotes.stubHealth(),
+        tokenverification.stubHealth(),
+        community.stubHealth(),
+      ]),
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
       Promise.all([
@@ -121,6 +143,7 @@ module.exports = on => {
       careNeeds,
       reasonableAdjustments,
       agencies,
+      prisonOffenderManagers,
     }) =>
       Promise.all([
         elite2api.stubPrisonerDetail(prisonerDetail),
@@ -138,6 +161,7 @@ module.exports = on => {
         elite2api.stubPersonalCareNeeds(careNeeds),
         elite2api.stubReasonableAdjustments(reasonableAdjustments),
         elite2api.stubAgencies(agencies),
+        allocationManager.stubGetPomForOffender(prisonOffenderManagers),
       ]),
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([elite2api.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),

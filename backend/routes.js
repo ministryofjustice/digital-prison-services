@@ -81,6 +81,7 @@ const setup = ({
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
+  allocationManagerApi,
 }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
@@ -257,7 +258,7 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo',
-    prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
+    prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, allocationManagerApi, logError })
   )
 
   router.use('/current-covid-units', covidRouter(elite2Api, logError))

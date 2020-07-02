@@ -21,6 +21,7 @@ describe('prisoner personal', () => {
   }
   const bookingId = '123'
   const elite2Api = {}
+  const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
 
@@ -52,8 +53,9 @@ describe('prisoner personal', () => {
     elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([])
     elite2Api.getHealthTypes = jest.fn().mockResolvedValue([])
     elite2Api.getAgencies = jest.fn().mockResolvedValue([])
+    allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
+    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -964,6 +966,12 @@ describe('prisoner personal', () => {
       expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
+    it('should make a call for prison offender managers', async () => {
+      await controller(req, res)
+
+      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
+    })
+
     describe('when there is missing prisoner contacts data', () => {
       it('should still render the personal template', async () => {
         await controller(req, res)
@@ -1070,6 +1078,11 @@ describe('prisoner personal', () => {
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
+          })
         })
 
         it('should make calls for contact details of active personal contacts and case administrators', async () => {
@@ -1114,6 +1127,14 @@ describe('prisoner personal', () => {
                   },
                 ],
                 professional: [
+                  {
+                    name: 'Jane Smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
+                    name: 'John Doe',
+                    details: [{ label: 'Relationship', value: 'Co-working Prison Offender Manager' }],
+                  },
                   {
                     name: 'Uriualche Lydyle',
                     details: [
@@ -1218,6 +1239,9 @@ describe('prisoner personal', () => {
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: { staffId: 1, name: 'Jane smith' },
+          })
         })
 
         it('should not return related labels and empty values', async () => {
@@ -1247,6 +1271,10 @@ describe('prisoner personal', () => {
                   },
                 ],
                 professional: [
+                  {
+                    name: 'Jane smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
                   {
                     name: 'Uriualche Lydyle',
                     details: [

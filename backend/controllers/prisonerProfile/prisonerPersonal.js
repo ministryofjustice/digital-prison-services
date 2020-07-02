@@ -15,8 +15,12 @@ const {
   addressesViewModel,
   careNeedsViewModel,
 } = require('./personalViewModels')
+const { getPrisonOffenderManagerNames } = require('../../utils')
 
-module.exports = ({ prisonerProfileService, personService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
+  req,
+  res
+) => {
   const { offenderNo } = req.params
   const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
     elite2Api.getDetails(res.locals, offenderNo),
@@ -44,6 +48,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     careNeeds,
     adjustments,
     agencies,
+    allocationManager,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -57,6 +62,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       elite2Api.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
       elite2Api.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
       elite2Api.getAgencies(res.locals),
+      allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
@@ -79,6 +85,34 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     ...(await personService.getPersonContactDetails(res.locals, activeCaseAdministrator.personId)),
   }
 
+  const primaryPrisonOffenderManager = () => {
+    const names = allocationManager && getPrisonOffenderManagerNames(allocationManager.primary_pom)
+    return (
+      allocationManager &&
+      allocationManager.primary_pom &&
+      names && {
+        firstName: names[0],
+        lastName: names[1],
+        relationshipDescription: 'Prison Offender Manager',
+        noAddressRequired: true,
+      }
+    )
+  }
+
+  const coworkingPrisonOffenderManager = () => {
+    const names = allocationManager && getPrisonOffenderManagerNames(allocationManager.secondary_pom)
+    return (
+      allocationManager &&
+      allocationManager.secondary_pom &&
+      names && {
+        firstName: names[0],
+        lastName: names[1],
+        relationshipDescription: 'Co-working Prison Offender Manager',
+        noAddressRequired: true,
+      }
+    )
+  }
+
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
 
@@ -92,7 +126,11 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     activeContacts: activeContactsViewModel({
       personal: nextOfKinsWithContact,
-      professional: [...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : [])],
+      professional: [
+        ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
+        ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
+        ...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : []),
+      ],
     }),
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({

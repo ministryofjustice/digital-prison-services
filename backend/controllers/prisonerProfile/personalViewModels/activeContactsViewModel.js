@@ -6,11 +6,13 @@ module.exports = ({ personal, professional }) => {
   const getContactView = showEmergencyContact => contact => {
     const { phones, emails } = contact
 
-    const activeAddresses = contact.addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
+    const activeAddresses =
+      contact.addresses && contact.addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
 
     const address =
-      activeAddresses.find(contactAddress => contactAddress.primary) ||
-      activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0]
+      activeAddresses &&
+      (activeAddresses.find(contactAddress => contactAddress.primary) ||
+        activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0])
 
     return {
       name: formatName(contact.firstName, contact.lastName),
@@ -19,7 +21,7 @@ module.exports = ({ personal, professional }) => {
         { label: 'Relationship', value: contact.relationshipDescription },
         ...(hasLength(phones) ? [{ label: 'Phone number', html: getPhone(phones) }] : []),
         ...(hasLength(emails) ? [{ label: 'Email', value: emails.map(email => email.email).join(', ') }] : []),
-        ...getAddress({ address }),
+        ...(!contact.noAddressRequired ? getAddress({ address }) : []),
       ],
     }
   }
