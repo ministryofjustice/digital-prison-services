@@ -32,6 +32,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       releaseDates,
       sentenceAdjustments,
       courtCases,
+      showSentences: Boolean(courtCases.find(courtCase => courtCase.sentenceTerms.length)),
       effectiveSentenceEndDate:
         sentenceData &&
         sentenceData.sentenceDetail &&
