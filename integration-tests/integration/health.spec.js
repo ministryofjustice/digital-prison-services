@@ -1,7 +1,9 @@
 context('Health page reports health correctly', () => {
   it('Reports correctly when some down', () => {
     cy.task('reset')
-    cy.task('stubHealth', { authStatus: 500 })
+    cy.task('stubHealthAllHealthy')
+    cy.task('stubAuthHealth', 500)
+    cy.task('stubElite2Health', 500)
     cy.request({ url: '/health', method: 'GET', failOnStatusCode: false }).then(response => {
       expect(response.body.name).to.equal('prisonstaffhub')
       // eslint-disable-next-line no-unused-expressions
@@ -11,7 +13,7 @@ context('Health page reports health correctly', () => {
         auth: { timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2 },
         casenotes: 'UP',
         community: 'UP',
-        elite2: 'UP',
+        elite2: { timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2 },
         keyworker: 'UP',
         tokenverification: 'UP',
         whereabouts: 'UP',
@@ -21,7 +23,7 @@ context('Health page reports health correctly', () => {
 
   it('Reports correctly when all are up', () => {
     cy.task('reset')
-    cy.task('stubHealth', {})
+    cy.task('stubHealthAllHealthy')
     cy.request('/health').then(response => {
       expect(response.body.uptime).to.be.greaterThan(0.0)
       expect(response.body.name).to.equal('prisonstaffhub')

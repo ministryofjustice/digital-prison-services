@@ -197,7 +197,7 @@ const stubHealth = (status = 200) =>
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      fixedDelayMilliseconds: status === 500 ? 5000 : '',
+      fixedDelayMilliseconds: status === 500 ? 3000 : '',
     },
   })
 

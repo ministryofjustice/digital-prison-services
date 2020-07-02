@@ -16,25 +16,25 @@ module.exports = on => {
       await resetStubs()
       return tokenverification.stubVerifyToken(true)
     },
-    stubHealth: ({
-      elite2Status,
-      whereaboutsStatus,
-      authStatus,
-      allocationManagerStatus,
-      caseNotesStatus,
-      keyworkerStatus,
-      tokenverificationStatus,
-      communityStatus,
-    }) =>
+    stubAuthHealth: status => Promise.all([auth.stubHealth(status)]),
+    stubElite2Health: status => Promise.all([elite2api.stubHealth(status)]),
+    stubWhereaboutsHealth: status => Promise.all([whereabouts.stubHealth(status)]),
+    stubAllocationManagerHealth: status => Promise.all([allocationManager.stubHealth(status)]),
+    stubKeyworkerHealth: status => Promise.all([keyworker.stubHealth(status)]),
+    stubCaseNotesHealth: status => Promise.all([caseNotes.stubHealth(status)]),
+    stubCommunityHealth: status => Promise.all([community.stubHealth(status)]),
+    stubTokenverificationHealth: status => Promise.all([tokenverification.stubHealth(status)]),
+
+    stubHealthAllHealthy: () =>
       Promise.all([
-        auth.stubHealth(authStatus),
-        elite2api.stubHealth(elite2Status),
-        whereabouts.stubHealth(whereaboutsStatus),
-        keyworker.stubHealth(keyworkerStatus),
-        allocationManager.stubHealth(allocationManagerStatus),
-        caseNotes.stubHealth(caseNotesStatus),
-        tokenverification.stubHealth(tokenverificationStatus),
-        community.stubHealth(communityStatus),
+        auth.stubHealth(),
+        elite2api.stubHealth(),
+        whereabouts.stubHealth(),
+        keyworker.stubHealth(),
+        allocationManager.stubHealth(),
+        caseNotes.stubHealth(),
+        tokenverification.stubHealth(),
+        community.stubHealth(),
       ]),
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
