@@ -190,14 +190,14 @@ const stubHealth = (status = 200) =>
   stubFor({
     request: {
       method: 'GET',
-      url: '/api/health/ping',
+      url: '/auth/health/ping',
     },
     response: {
       status,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: 'pong',
+      fixedDelayMilliseconds: status === 500 ? 5000 : '',
     },
   })
 

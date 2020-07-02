@@ -5,14 +5,13 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/api/health/ping',
+        url: '/tokenverification/health/ping',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        body: 'ping',
       },
     })
   },
@@ -20,7 +19,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/token/verify',
+        urlPattern: '/tokenverification/token/verify',
       },
       response: {
         status: 200,

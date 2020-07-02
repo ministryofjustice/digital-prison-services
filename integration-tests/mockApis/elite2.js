@@ -6,14 +6,14 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/health/ping',
+        urlPattern: '/health/ping',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        body: 'pong',
+        fixedDelayMilliseconds: status === 500 ? 5000 : '',
       },
     })
   },

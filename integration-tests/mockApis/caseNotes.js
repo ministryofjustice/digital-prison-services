@@ -20,20 +20,19 @@ module.exports = {
     return getFor({
       request: {
         method: 'GET',
-        url: '/api/health/ping',
+        url: '/casenotes/health/ping',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        body: 'pong',
       },
     })
   },
   stubCaseNotes: body => {
     return getFor({
-      urlPath: '/case-notes/A12345',
+      urlPath: '/casenotes/case-notes/A12345',
       body,
     })
   },

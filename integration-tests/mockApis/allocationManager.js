@@ -5,7 +5,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/api/health/ping',
+        url: '/allocation/health/',
       },
       response: {
         status,
@@ -20,7 +20,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/allocation/.+?',
+        urlPattern: '/allocation/api/allocation/.+?',
       },
       response: {
         status,

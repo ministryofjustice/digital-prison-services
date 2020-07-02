@@ -1,7 +1,8 @@
 const { serviceCheckFactory } = require('../controllers/healthCheck')
 
 const service = (name, url) => {
-  const healthUrl = `${url.replace(/\/$/, '')}/health/ping`
+  const healthUrl =
+    name === 'allocationManager' ? `${url.replace(/\/$/, '')}/health` : `${url.replace(/\/$/, '')}/health/ping`
   const check = serviceCheckFactory(name, healthUrl)
   return () =>
     check()
