@@ -6,6 +6,7 @@ const searchPage = () =>
     period: () => cy.get('#period-select'),
     location: () => cy.get('#housing-location-select'),
     continueActivityButton: () => cy.get('#continue-activity'),
+    datePicker: () => cy.get('[name=search-date]'),
   })
 
 export default {

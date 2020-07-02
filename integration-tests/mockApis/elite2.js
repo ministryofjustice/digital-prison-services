@@ -131,115 +131,6 @@ module.exports = {
       },
     })
   },
-  // stubVisits: (caseload, timeSlot, date, offenderNumbers, data = '{}') => {
-  //   return stubFor({
-  //     request: {
-  //       method: 'POST',
-  //       urlPattern: `/api/schedules/${caseload}/visits?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
-  //       bodyPatterns: [
-  //         {
-  //           equalToJson: offenderNumbers,
-  //         },
-  //       ],
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: data,
-  //     },
-  //   })
-  // },
-  // stubAppointments: (caseload, timeSlot, date, offenderNumbers, data = '{}') => {
-  //   return stubFor({
-  //     request: {
-  //       method: 'POST',
-  //       urlPattern: `/api/schedules/${caseload}/appointments?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
-  //       bodyPatterns: [
-  //         {
-  //           equalToJson: offenderNumbers,
-  //         },
-  //       ],
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: data,
-  //     },
-  //   })
-  // },
-  // stubActivities: (caseload, timeSlot, date, offenderNumbers, data = '{}') => {
-  //   return stubFor({
-  //     request: {
-  //       method: 'POST',
-  //       urlPattern: `/api/schedules/${caseload}/activities?${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}`,
-  //       bodyPatterns: [
-  //         {
-  //           equalToJson: offenderNumbers,
-  //         },
-  //       ],
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: data,
-  //     },
-  //   })
-  // },
-  // stubActivityLocations: () => {
-  //   return stubFor({
-  //     request: {
-  //       method: 'GET',
-  //       urlPattern: `.+eventLocationsBooked\\?bookedOnDay=....-..-..&timeSlot=..`,
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: activityLocationsResponse,
-  //     },
-  //   })
-  // },
-  // stubCourtEvents: (caseload, offenderNumbers, date, data = []) => {
-  //   return stubFor({
-  //     request: {
-  //       method: 'POST',
-  //       urlPattern: `/api/schedules/${caseload}/courtEvents?date=${date}`,
-  //       bodyPatterns: [{ equalToJson: offenderNumbers, ignoreArrayOrder: true, ignoreExtraElements: false }],
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: data,
-  //     },
-  //   })
-  // },
-  // stubExternalTransfers: (caseload, offenderNumbers, date, emptyResponse = false) => {
-  //   const json = emptyResponse ? [] : externalTransfersResponse
-  //
-  //   return stubFor({
-  //     request: {
-  //       method: 'POST',
-  //       urlPattern: `/api/schedules/${caseload}/courtEvents?date=${date}`,
-  //       bodyPatterns: [{ equalToJson: offenderNumbers, ignoreArrayOrder: true, ignoreExtraElements: false }],
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json;charset=UTF-8',
-  //       },
-  //       jsonBody: json,
-  //     },
-  //   })
-  // },
   stubAssessments: (offenderNumbers, emptyResponse = false) => {
     const json = emptyResponse ? [] : assessmentsResponse
 
@@ -294,22 +185,22 @@ module.exports = {
       },
     })
   },
-  stubOffenderFullDetails: details => {
+  stubOffenderDetails: (details = false, offender) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true`,
+        urlPattern: `/api/bookings/offenderNo/${offender.offenderNo}\\?fullInfo=${details}`,
       },
       response: {
         status: 200,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: details || {},
+        jsonBody: offender || {},
       },
     })
   },
-  stubOffenderBasicDetails: details => {
+  stubOffenderBasicDetails: offender => {
     return stubFor({
       request: {
         method: 'GET',
@@ -320,7 +211,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: details || {},
+        jsonBody: offender || {},
       },
     })
   },
@@ -1126,11 +1017,13 @@ module.exports = {
         jsonBody: data,
       },
     }),
-  stubActivitySchedules: (location, date, activities, status = 200) =>
+  stubActivitySchedules: (location, date, activities, status = 200, timeSlot, suspended = false) =>
     stubFor({
       request: {
         method: 'GET',
-        url: `/api/schedules/locations/${location}/activities?date=${date}&includeSuspended=false`,
+        url: `/api/schedules/locations/${location}/activities?${
+          timeSlot ? `timeSlot=${timeSlot}&` : ''
+        }date=${date}&includeSuspended=${suspended}`,
       },
       response: {
         status,

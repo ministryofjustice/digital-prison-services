@@ -40,17 +40,43 @@ module.exports = on => {
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
+    stubProgEventsAtLocation: ({ caseload, locationId, timeSlot, date, activities }) =>
+      Promise.all([elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activities)]),
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
     stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
+    stubGroups: caseload => Promise.all([whereabouts.stubGroups(caseload)]),
     stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
 
-    stubGetActivityList: ({ caseload, locationId, timeSlot, date, inThePast = false }) => {
-      const activity = inThePast ? activityResponse.pastActivities : activityResponse.activities
-      const offenderNumbers = extractOffenderNumbers(activity)
+    stubForAttendance: ({ caseload, locationId, timeSlot, date, activities }) => {
+      const offenderNumbers = extractOffenderNumbers(activities)
+      return Promise.all([
+        elite2api.stubUserCaseloads(),
+        elite2api.stubProgEventsAtLocation(locationId, timeSlot, date, activities),
+        elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP'),
+        elite2api.stubUsageAtLocation(caseload, locationId, timeSlot, date, 'VISIT'),
+        elite2api.stubVisits(activityResponse.visits),
+        elite2api.stubActivityLocations(),
+        elite2api.stubAppointments(),
+        elite2api.stubActivities(),
+        elite2api.stubCourtEvents(),
+        elite2api.stubExternalTransfers(),
+        elite2api.stubAlerts({ locationId, alertsResponse }),
+        elite2api.stubAssessments(offenderNumbers),
+        elite2api.stubOffenderSentences(offenderNumbers, date),
+      ])
+    },
 
+    stubGetActivityList: ({ caseload, locationId, timeSlot, date, inThePast = false, activities }) => {
+      let activity
+      if (activities) {
+        activity = activities
+      } else {
+        activity = inThePast ? activityResponse.pastActivities : activityResponse.activities
+      }
+      const offenderNumbers = extractOffenderNumbers(activity)
       return Promise.all([
         elite2api.stubUserCaseloads(),
         elite2api.stubProgEventsAtLocation(locationId, timeSlot, date, activity),
@@ -170,8 +196,11 @@ module.exports = on => {
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
     stubLoginPage: auth.redirect,
     stubGetAbsenceReasons: response => Promise.all([whereabouts.stubGetAbsenceReasons()]),
-    stubGetAttendance: (caseload, locationId, timeSlot, date) =>
-      Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date)]),
+    stubGetAttendance: ({ caseload, locationId, timeSlot, date, data }) =>
+      Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date, data)]),
+    stubPostAttendance: response => whereabouts.stubPostAttendance(response),
+    stubPutAttendance: response => whereabouts.stubPutAttendance(response),
+    verifyPostAttendance: () => whereabouts.verifyPostAttendance(),
     stubSentenceAdjustments: response => elite2api.stubGetSentenceAdjustments(response),
     stubOffenderBasicDetails: basicDetails => Promise.all([elite2api.stubOffenderBasicDetails(basicDetails)]),
     stubAppointmentTypes: types => Promise.all([elite2api.stubAppointmentTypes(types)]),
