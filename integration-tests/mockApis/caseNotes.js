@@ -38,7 +38,7 @@ module.exports = {
   },
   stubCaseNoteTypes: () => {
     return getFor({
-      urlPattern: '/case-notes/types',
+      urlPattern: '/casenotes/case-notes/types',
       body: caseNoteTypes,
     })
   },
