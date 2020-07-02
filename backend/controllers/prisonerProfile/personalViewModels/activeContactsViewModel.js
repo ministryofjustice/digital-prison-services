@@ -1,16 +1,16 @@
 const moment = require('moment')
-const { formatName, hasLength } = require('../../../utils')
+const { formatName, hasLength, sortByDateTime } = require('../../../utils')
 const { getPhone, getAddress } = require('../../../shared/addressHelpers')
 
 module.exports = ({ personal, professional }) => {
-  const contactHasActiveAddress = contact =>
-    contact.addresses.find(address => !address.endDate || moment(address.endDate).isAfter())
-
-  const getContactView = (useActiveAddress, showEmergencyContact) => contact => {
+  const getContactView = showEmergencyContact => contact => {
     const { phones, emails } = contact
-    const address = useActiveAddress
-      ? contactHasActiveAddress(contact)
-      : contact.addresses.find(contactAddress => contactAddress.primary)
+
+    const activeAddresses = contact.addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
+
+    const address =
+      activeAddresses.find(contactAddress => contactAddress.primary) ||
+      activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0]
 
     return {
       name: formatName(contact.firstName, contact.lastName),
@@ -25,7 +25,7 @@ module.exports = ({ personal, professional }) => {
   }
 
   return {
-    personal: personal && personal.map(getContactView(false, true)),
-    professional: professional && professional.filter(contactHasActiveAddress).map(getContactView(true, false)),
+    personal: personal && personal.map(getContactView(true)),
+    professional: professional && professional.map(getContactView(false)),
   }
 }
