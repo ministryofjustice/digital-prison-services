@@ -1106,6 +1106,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
                       {
@@ -1137,6 +1138,7 @@ describe('prisoner personal', () => {
                   },
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
                       { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
@@ -1189,6 +1191,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
                       { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
@@ -1206,6 +1209,7 @@ describe('prisoner personal', () => {
                 professional: [
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
                       { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
@@ -1255,6 +1259,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
                       { label: 'Phone number', html: '02222222222,<br>033333333333' },
@@ -1277,6 +1282,7 @@ describe('prisoner personal', () => {
                   },
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
                       {
@@ -1327,6 +1333,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: expect.not.arrayContaining([
                       { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
@@ -1336,6 +1343,7 @@ describe('prisoner personal', () => {
                 professional: [
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: expect.not.arrayContaining([
                       { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
@@ -1415,13 +1423,58 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
                   },
                 ],
                 professional: [
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
+                  },
+                ],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when the personal and professional contacts have no fixed addresses', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [{ ...primaryAddress, noFixedAddress: true }],
+              emails: [],
+              phones: [],
+            })
+            .mockResolvedValueOnce({
+              addresses: [{ ...primaryAddress, noFixedAddress: true }],
+              emails: [],
+              phones: [],
+            })
+        })
+
+        it('should not return the address and also mark them as having no fixed address', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: {
+                personal: [
+                  {
+                    name: 'John Smith',
+                    emergencyContact: true,
+                    noFixedAddress: true,
+                    details: [{ label: 'Relationship', value: 'Cousin' }],
+                  },
+                ],
+                professional: [
+                  {
+                    name: 'Uriualche Lydyle',
+                    noFixedAddress: true,
+                    details: [{ label: 'Relationship', value: 'Case Administrator' }],
                   },
                 ],
               },
