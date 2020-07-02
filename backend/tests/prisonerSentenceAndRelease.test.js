@@ -176,6 +176,7 @@ describe('prisoner sentence and release', () => {
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
+        showSentences: true,
         courtCases: [
           {
             caseInfoNumber: 'T12345',
@@ -195,6 +196,24 @@ describe('prisoner sentence and release', () => {
             ],
           },
         ],
+      })
+    )
+  })
+  it('should set showSentence to false', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([
+      { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
+      { id: 2, caseInfoNumber: 'T56789' },
+    ])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([])
+    elite2Api.getSentenceTerms.mockResolvedValue([])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        showSentences: false,
       })
     )
   })

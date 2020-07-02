@@ -26,6 +26,7 @@ const prisonerSentenceAndReleasePage = offenderName =>
     courtName: () => cy.get('[data-test="court-name"]'),
     offenceHeader: () => cy.get('[data-test="offence-header"]'),
     inlineOffenceDescription: () => cy.get('[data-test="inline-offence-description"]'),
+    noSentenceDataMessage: () => cy.get('[data-test="no-sentence-data-message"]'),
   })
 
 export default {

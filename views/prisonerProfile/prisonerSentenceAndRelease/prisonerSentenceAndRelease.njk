@@ -40,6 +40,12 @@
 {% endset %}
 
 {% set currentSentenceDetails %}
+    {%  if showSentences == false %}
+        <p class="govuk-body" data-test="no-sentence-data-message">
+            There are no current sentence details for this prisoner.
+        </p>
+    {% endif %}
+    {% if showSentences  %}
     <div>
         <span class="govuk-caption-m govuk-!-margin-bottom-4">Contact your Offender Management Unit for specific sentence breakdown.</span>
     </div>
@@ -84,6 +90,7 @@
 
         {% endfor %}
     {% endfor %}
+    {% endif %}
 
     <h2 class="govuk-heading-m">Sentence adjustments</h2>
     {% if sentenceAdjustments.noSentenceAdjustments %}
