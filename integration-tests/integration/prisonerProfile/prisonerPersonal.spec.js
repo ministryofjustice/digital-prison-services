@@ -1090,7 +1090,7 @@ context('Prisoner personal', () => {
       })
     })
 
-    context.only('When there is no fixed abode for contacts', () => {
+    context('When there is no fixed abode for contacts', () => {
       before(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
