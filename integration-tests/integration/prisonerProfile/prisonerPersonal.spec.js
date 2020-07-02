@@ -42,6 +42,44 @@ context('Prisoner personal', () => {
       bookingId: 123,
     },
   ]
+  const otherContacts = [
+    {
+      lastName: 'KIMBUR',
+      firstName: 'ARENENG',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'PROB',
+      relationshipDescription: 'Probation Officer',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 6865390,
+      personId: 111,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+    {
+      lastName: 'LYDYLE',
+      firstName: 'URIUALCHE',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'CA',
+      relationshipDescription: 'Case Administrator',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 7350143,
+      personId: 222,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+  ]
 
   const visitPersonalAndExpandAccordions = () => {
     cy.visit(`/prisoner/${offenderNo}/personal`)
@@ -482,44 +520,7 @@ context('Prisoner personal', () => {
           addresses,
           contacts: {
             nextOfKin,
-            otherContacts: [
-              {
-                lastName: 'KIMBUR',
-                firstName: 'ARENENG',
-                contactType: 'O',
-                contactTypeDescription: 'Official',
-                relationship: 'PROB',
-                relationshipDescription: 'Probation Officer',
-                emergencyContact: false,
-                nextOfKin: false,
-                relationshipId: 6865390,
-                personId: 111,
-                activeFlag: true,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-              {
-                lastName: 'LYDYLE',
-                firstName: 'URIUALCHE',
-                contactType: 'O',
-                contactTypeDescription: 'Official',
-                relationship: 'CA',
-                relationshipDescription: 'Case Administrator',
-                emergencyContact: false,
-                nextOfKin: false,
-                relationshipId: 7350143,
-                personId: 222,
-                activeFlag: true,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-            ],
+            otherContacts,
           },
           personAddresses: addresses,
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
@@ -1085,6 +1086,65 @@ context('Prisoner personal', () => {
           cy.get($section)
             .find('[data-test="no-fixed-abode"]')
             .should('have.text', 'No fixed abode')
+        })
+      })
+    })
+
+    context.only('When there is no fixed abode for contacts', () => {
+      before(() => {
+        cy.task('stubPrisonerProfileHeaderData', headerDetails)
+        cy.task('stubPersonal', {
+          personAddresses: [{ ...primaryAddress, noFixedAddress: true }],
+          contacts: { nextOfKin, otherContacts },
+        })
+        visitPersonalAndExpandAccordions()
+      })
+
+      it('Should show the correct content in the active contacts section', () => {
+        cy.get('[data-test="active-contacts-summary"]').then($section => {
+          cy.get($section)
+            .find('h3')
+            .then($headings => {
+              cy.get($headings)
+                .its('length')
+                .should('eq', 4)
+              expect($headings.get(0).innerText).to.contain('Personal')
+              expect($headings.get(1).innerText).to.contain('John Smith')
+              expect($headings.get(2).innerText).to.contain('Professional')
+              expect($headings.get(3).innerText).to.contain('Uriualche Lydyle')
+            })
+
+          cy.get($section)
+            .find('p')
+            .then($text => {
+              cy.get($text)
+                .its('length')
+                .should('eq', 4)
+              expect($text.get(0).innerText).to.contain('Next of kin')
+              expect($text.get(1).innerText).to.contain('Emergency contact')
+              expect($text.get(2).innerText).to.contain('No fixed abode')
+              expect($text.get(3).innerText).to.contain('No fixed abode')
+            })
+
+          cy.get($section)
+            .find('dt')
+            .then($summaryLabels => {
+              cy.get($summaryLabels)
+                .its('length')
+                .should('eq', 2)
+              expect($summaryLabels.get(0).innerText).to.contain('Relationship')
+              expect($summaryLabels.get(1).innerText).to.contain('Relationship')
+            })
+
+          cy.get($section)
+            .find('dd')
+            .then($summaryValues => {
+              cy.get($summaryValues)
+                .its('length')
+                .should('eq', 2)
+              expect($summaryValues.get(0).innerText).to.contain('Cousin')
+              expect($summaryValues.get(1).innerText).to.contain('Case Administrator')
+            })
         })
       })
     })

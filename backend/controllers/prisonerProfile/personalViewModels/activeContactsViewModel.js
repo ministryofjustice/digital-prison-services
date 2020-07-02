@@ -14,14 +14,17 @@ module.exports = ({ personal, professional }) => {
       (activeAddresses.find(contactAddress => contactAddress.primary) ||
         activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0])
 
+    const { noFixedAddress } = address || {}
+
     return {
       name: formatName(contact.firstName, contact.lastName),
       ...(showEmergencyContact ? { emergencyContact: contact.emergencyContact } : {}),
+      noFixedAddress,
       details: [
         { label: 'Relationship', value: contact.relationshipDescription },
         ...(hasLength(phones) ? [{ label: 'Phone number', html: getPhone(phones) }] : []),
         ...(hasLength(emails) ? [{ label: 'Email', value: emails.map(email => email.email).join(', ') }] : []),
-        ...(!contact.noAddressRequired ? getAddress({ address }) : []),
+        ...(!contact.noAddressRequired && !noFixedAddress ? getAddress({ address }) : []),
       ],
     }
   }
