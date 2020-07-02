@@ -103,6 +103,7 @@ describe('prisoner profile service', () => {
       const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
       expect(getPrisonerProfileData).toEqual({
+        canViewProbationDocuments: false,
         categorisationLink: `http://localhost:3003/${bookingId}`,
         categorisationLinkText: '',
         activeAlertCount: 1,
@@ -226,6 +227,38 @@ describe('prisoner profile service', () => {
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               showReportUseOfForce: true,
+            })
+          )
+        })
+      })
+
+      describe('when the user has the VIEW_PROBATION_DOCUMENTS role', () => {
+        beforeEach(() => {
+          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
+        })
+
+        it('should let the user view probation documents', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              canViewProbationDocuments: true,
+            })
+          )
+        })
+      })
+
+      describe('when the user has the POM role', () => {
+        beforeEach(() => {
+          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'POM' }])
+        })
+
+        it('should let the user view probation documents', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              canViewProbationDocuments: true,
             })
           )
         })

@@ -63,12 +63,17 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
         )
     )
 
+    const canViewProbationDocuments = Boolean(
+      userRoles && userRoles.some(role => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
+    )
+
     const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map(prison => prison.trim().toUpperCase())
 
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
       alerts: alertsToShow,
+      canViewProbationDocuments,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
