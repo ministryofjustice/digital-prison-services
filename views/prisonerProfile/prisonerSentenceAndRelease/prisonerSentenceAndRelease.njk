@@ -40,31 +40,57 @@
 {% endset %}
 
 {% set currentSentenceDetails %}
+    {%  if showSentences == false %}
+        <p class="govuk-body" data-test="no-sentence-data-message">
+            There are no current sentence details for this prisoner.
+        </p>
+    {% endif %}
+    {% if showSentences  %}
     <div>
         <span class="govuk-caption-m govuk-!-margin-bottom-4">Contact your Offender Management Unit for specific sentence breakdown.</span>
     </div>
     {{ prisonerSummarySection([{label: 'Effective sentence end date', value: effectiveSentenceEndDate}], 'Not entered', { "data-test": "effective-sentence-end-date" },false) }}
 
     {% for courtCase in courtCases %}
-        <h2 class="govuk-heading-m" data-test="case-number">Case Number - {{ courtCase.caseInfoNumber }}</h2>
-        <b class="govuk-body govuk-!-font-weight-bold"> Sentence date </b>  <span
-            class="govuk-body" data-test="sentence-date"> {{ courtCase.sentenceDate }} </span>
-
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1" data-test="case-number">Case Number
+            - {{ courtCase.caseInfoNumber }}</h2>
+        <div class="govuk-!-margin-bottom-1">
+            <b class="govuk-body govuk-!-font-weight-bold"
+               data-test="court-name"> {{ courtCase.courtName }} </b>
+            </div>
         <div>
-            <h3 class="govuk-heading-s govuk-!-margin-top-3"> Offences </h3>
-            {% for offence in courtCase.offences %}
-                <p class="govuk-body govuk-!-margin-left-9" data-test="offence-description"> {{ offence }} </p>
-            {% endfor %}
+            <b class="govuk-body govuk-!-font-weight-bold"> Sentence date </b>
+            <span class="govuk-body" data-test="sentence-date"> {{ courtCase.sentenceDate }} </span>
         </div>
 
+        {% if courtCase.offences.length == 1 %}
+            <div class="govuk-!-margin-top-3 govuk-!-margin-bottom-3">
+                <b class="govuk-body govuk-!-font-weight-bold govuk-!-margin-right-1" data-test="offence-header"> Offence</b> <span class="govuk-body" data-test="inline-offence-description"> {{ courtCase.offences[0] }} </span>
+            </div>
+        {% endif %}
+
+        {% if courtCase.offences.length > 1 %}
+            <div>
+                <h3 class="govuk-heading-s govuk-!-margin-top-3"> Offences </h3>
+                {% for offence in courtCase.offences %}
+                    <p class="govuk-body govuk-!-margin-left-9" data-test="offence-description"> {{ offence }} </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% for sentence in courtCase.sentenceTerms %}
-            <b class="govuk-body govuk-!-font-weight-bold" data-test="sentence-header"> {{ sentence.sentenceHeader }}</b>  <span
-                class="govuk-body govuk-!-margin-left-1" data-test="sentence-description"> {{ sentence.sentenceTypeDescription }} </span>
+            <div class="govuk-!-margin-bottom-4">
+                <b class="govuk-body govuk-!-font-weight-bold"
+                   data-test="sentence-header"> {{ sentence.sentenceHeader }}</b> <span
+                        class="govuk-body govuk-!-margin-left-1"
+                        data-test="sentence-description"> {{ sentence.sentenceTypeDescription }} </span>
+            </div>
 
             {{ prisonerSummarySection(sentence.summaryDetailRows, 'Not entered', { "data-test": "sentence-terms" },true) }}
 
         {% endfor %}
     {% endfor %}
+    {% endif %}
 
     <h2 class="govuk-heading-m">Sentence adjustments</h2>
     {% if sentenceAdjustments.noSentenceAdjustments %}
