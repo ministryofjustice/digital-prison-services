@@ -38,7 +38,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/absence-reasons',
+        urlPattern: '/whereabouts/absence-reasons',
       },
       response: {
         status: 200,
@@ -70,7 +70,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/attendances/.+?/${locationId}\\?date=${date}&period=${timeSlot}`,
+        urlPattern: `/whereabouts/attendances/.+?/${locationId}\\?date=${date}&period=${timeSlot}`,
       },
       response: {
         status: 200,
@@ -85,7 +85,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/attendances`,
+        urlPattern: `/whereabouts/attendances`,
       },
       response: {
         status: 200,
@@ -100,7 +100,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/attendances/${attendanceToReturn.id}`,
+        urlPattern: `/whereabouts/attendances/${attendanceToReturn.id}`,
       },
       response: {
         status: 200,
@@ -127,7 +127,7 @@ module.exports = {
     })
   },
   verifyPostAttendance: () => {
-    return verifyPosts('/attendance')
+    return verifyPosts('/whereabouts/attendance')
   },
   stubGroups: (caseload, status = 200) => {
     const json = [
@@ -227,7 +227,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: `/agencies/[A-Za-z].+?/locations/groups`,
+        url: `/whereabouts/agencies/[A-Za-z].+?/locations/groups`,
       },
       response: {
         status,
