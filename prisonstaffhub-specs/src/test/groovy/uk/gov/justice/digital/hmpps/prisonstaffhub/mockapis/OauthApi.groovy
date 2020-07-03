@@ -133,7 +133,7 @@ class OauthApi extends WireMockRule {
 
     void stubSystemUserTokenRequest() {
         this.stubFor(
-                post('/auth/oauth/token')
+                post(urlEqualTo('/auth/oauth/token'))
                         .withHeader('authorization', equalTo('Basic cHJpc29uc3RhZmZodWJjbGllbnQ6Y2xpZW50c2VjcmV0'))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
                         .withRequestBody(equalTo("grant_type=client_credentials"))

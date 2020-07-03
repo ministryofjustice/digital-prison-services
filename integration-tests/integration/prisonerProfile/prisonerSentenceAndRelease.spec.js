@@ -21,6 +21,7 @@ context('Prisoner sentence and release', () => {
       caseNoteSummary: {},
     })
     cy.task('stubOffenderBasicDetails', { bookingId: 1 })
+    cy.task('stubClientCredentialsRequest')
   })
 
   it('Should show correct release dates with overrides', () => {

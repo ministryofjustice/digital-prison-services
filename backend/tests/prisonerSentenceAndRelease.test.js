@@ -19,6 +19,7 @@ describe('prisoner sentence and release', () => {
   }
   const prisonerProfileService = {}
   const elite2Api = {}
+  const systemOauthClient = {}
 
   let req
   let res
@@ -26,7 +27,7 @@ describe('prisoner sentence and release', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo } }
+    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
     res = { locals: {}, render: jest.fn() }
 
     logError = jest.fn()
@@ -75,10 +76,12 @@ describe('prisoner sentence and release', () => {
     elite2Api.getOffenceHistory = jest.fn().mockResolvedValue([])
     elite2Api.getCourtCases = jest.fn().mockResolvedValue([])
     elite2Api.getSentenceTerms = jest.fn().mockResolvedValue([])
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
     controller = prisonerSentenceAndRelease({
       prisonerProfileService,
       elite2Api,
+      systemOauthClient,
       logError,
     })
   })
@@ -633,6 +636,15 @@ describe('prisoner sentence and release', () => {
         ],
       })
     )
+  })
+
+  it('should make a system to system call when requesting offences', async () => {
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+
+    await controller(req, res)
+
+    expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('ITAG_USER')
+    expect(elite2Api.getOffenceHistory).toHaveBeenCalledWith({ system: true }, 'G3878UK')
   })
 
   it('should return the right data when no overrides', async () => {

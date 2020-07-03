@@ -202,6 +202,17 @@ const stubHealth = (status = 200) =>
     },
   })
 
+const stubClientCredentialsRequest = () =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: '/auth/oauth/token',
+    },
+    response: {
+      status: 200,
+    },
+  })
+
 module.exports = {
   stubHealth,
   getLoginUrl,
@@ -231,4 +242,5 @@ module.exports = {
   stubUser,
   stubEmail,
   redirect,
+  stubClientCredentialsRequest,
 }
