@@ -139,7 +139,7 @@ const stubUserMe = (username = 'ITAG_USER', staffId = 12345) => {
   })
 }
 
-const stubUserMeRoles = roles =>
+const stubUserMeRoles = (roles = ['ROLE']) =>
   stubFor({
     request: {
       method: 'GET',
