@@ -12,6 +12,7 @@ const caseNotePage = offenderName =>
     getRows: i => ({
       createdBy: () => column(i, 0),
       caseNoteDetails: () => column(i, 1),
+      caseNoteAmendButton: () => column(i, 2),
     }),
   })
 

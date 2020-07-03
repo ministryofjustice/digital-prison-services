@@ -130,6 +130,7 @@ describe('prisoner profile service', () => {
         showReportUseOfForce: false,
         useOfForceUrl: '//useOfForceUrl',
         userCanEdit: false,
+        staffId: 111,
       })
     })
 
