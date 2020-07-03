@@ -27,7 +27,7 @@ describe('prisoner sentence and release', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo } }
+    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
     res = { locals: {}, render: jest.fn() }
 
     logError = jest.fn()
@@ -643,7 +643,7 @@ describe('prisoner sentence and release', () => {
 
     await controller(req, res)
 
-    expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalled()
+    expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('ITAG_USER')
     expect(elite2Api.getOffenceHistory).toHaveBeenCalledWith({ system: true }, 'G3878UK')
   })
 

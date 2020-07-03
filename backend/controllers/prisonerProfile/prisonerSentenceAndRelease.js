@@ -8,7 +8,8 @@ module.exports = ({ prisonerProfileService, elite2Api, systemOauthClient, logErr
   const { offenderNo } = req.params
 
   try {
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const { username } = req.session.userDetails
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
     const [prisonerProfileData, sentenceData, bookingDetails, offenceHistory] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
