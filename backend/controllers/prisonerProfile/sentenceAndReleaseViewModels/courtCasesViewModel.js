@@ -56,7 +56,7 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
   return courtCaseData
     .filter(courtCase => caseIds.includes(courtCase.id))
     .map(courtCase => ({
-      caseInfoNumber: courtCase.caseInfoNumber,
+      caseInfoNumber: courtCase.caseInfoNumber || 'Not entered',
       courtName: courtCase.agency && courtCase.agency.description,
       sentenceTerms: groupSentencesBySequence(sentenceTermsData)
         .filter(group => Number(group.caseId) === courtCase.id)

@@ -117,7 +117,7 @@ const stubUser = (username, caseload) => {
   })
 }
 
-const stubUserMe = (username = 'ITAG_USER') => {
+const stubUserMe = (username = 'ITAG_USER', staffId = 12345) => {
   return stubFor({
     request: {
       method: 'GET',
@@ -133,12 +133,13 @@ const stubUserMe = (username = 'ITAG_USER') => {
         lastName: 'STUART',
         username,
         activeCaseLoadId: 'MDI',
+        staffId,
       },
     },
   })
 }
 
-const stubUserMeRoles = roles =>
+const stubUserMeRoles = (roles = ['ROLE']) =>
   stubFor({
     request: {
       method: 'GET',
