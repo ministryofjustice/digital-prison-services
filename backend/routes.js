@@ -64,7 +64,7 @@ const currentUser = require('./middleware/currentUser')
 const controllerFactory = require('./controllers/controller').factory
 
 const contextProperties = require('./contextProperties')
-const oauthClientId = require('./api/oauthClientId')
+const systemOauthClient = require('./api/systemOauthClient')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
 const { notifyClient } = require('./shared/notifyClient')
@@ -91,7 +91,7 @@ const setup = ({
     attendanceService: attendanceFactory(whereaboutsApi),
     establishmentRollService: establishmentRollFactory(elite2Api),
     globalSearchService: globalSearchFactory(elite2Api),
-    movementsService: movementsServiceFactory(elite2Api, oauthClientId),
+    movementsService: movementsServiceFactory(elite2Api, systemOauthClient),
     offenderLoader: offenderLoaderFactory(elite2Api),
     appointmentsService: appointmentsServiceFactory(elite2Api),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
@@ -180,12 +180,12 @@ const setup = ({
   router.get(
     '/offenders/:offenderNo/probation-documents',
     handleErrors(
-      probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
+      probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient).displayProbationDocumentsPage
     )
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
-    handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, oauthClientId).downloadDocument)
+    handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient).downloadDocument)
   )
 
   router.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
@@ -258,7 +258,15 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo',
-    prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, allocationManagerApi, logError })
+    prisonerProfileRouter({
+      elite2Api,
+      keyworkerApi,
+      oauthApi,
+      caseNotesApi,
+      allocationManagerApi,
+      systemOauthClient,
+      logError,
+    })
   )
 
   router.use('/current-covid-units', covidRouter(elite2Api, logError))

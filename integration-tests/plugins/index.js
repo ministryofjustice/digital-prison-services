@@ -266,5 +266,6 @@ module.exports = on => {
     stubCourtCases: courtCases => elite2api.stubCourtCases(courtCases),
     stubOffenceHistory: offenceHistory => elite2api.stubOffenceHistory(offenceHistory),
     stubSentenceTerms: sentenceTerms => elite2api.stubSentenceTerms(sentenceTerms),
+    stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
   })
 }

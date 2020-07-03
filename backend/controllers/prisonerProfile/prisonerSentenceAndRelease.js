@@ -4,15 +4,17 @@ const courtCasesViewModel = require('./sentenceAndReleaseViewModels/courtCasesVi
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { readableDateFormat } = require('../../utils')
 
-module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, elite2Api, systemOauthClient, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+
     const [prisonerProfileData, sentenceData, bookingDetails, offenceHistory] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
       elite2Api.getPrisonerSentenceDetails(res.locals, offenderNo),
       elite2Api.getDetails(res.locals, offenderNo),
-      elite2Api.getOffenceHistory(res.locals, offenderNo),
+      elite2Api.getOffenceHistory(systemContext, offenderNo),
     ])
     const releaseDates = releaseDatesViewModel(sentenceData.sentenceDetail)
 
