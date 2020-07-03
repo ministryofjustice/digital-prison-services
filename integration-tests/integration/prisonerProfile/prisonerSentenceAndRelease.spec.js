@@ -475,35 +475,7 @@ context('Prisoner sentence and release', () => {
     page.noSentenceDataMessage().contains('There are no current sentence details for this prisoner.')
   })
 
-  it('should display default no data message for court number', () => {
-    cy.task('stubReleaseDatesOffenderNo', { sentenceDetail: {} })
-    cy.task('stubSentenceAdjustments', {})
-    cy.task('stubCourtCases', [{ id: 1, caseInfoNumber: 'T12345' }])
-    cy.task('stubOffenceHistory', [{ offenceDescription: 'Offence test', primaryResultCode: '1002', caseId: 1 }])
-    cy.task('stubSentenceTerms', [
-      {
-        sentenceSequence: 6,
-        termSequence: 1,
-        startDate: '2018-01-01',
-        years: 12,
-        months: 0,
-        days: 0,
-        caseId: 1,
-        sentenceTermCode: 'IMP',
-        sentenceTypeDescription: 'Some sentence info 6',
-      },
-    ])
-
-    cy.visit('/prisoner/A12345/sentence-and-release')
-
-    const page = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
-
-    page.offenceHeader().contains('Offence')
-    page.inlineOffenceDescription().contains('Offence test')
-    page.offenceDescriptions().should('not.exist')
-  })
-
-  it('should show default no data message for sentences', () => {
+  it('should show default no data message for case number', () => {
     cy.task('stubReleaseDatesOffenderNo', { sentenceDetail: { effectiveSentenceEndDate: '2020-10-10' } })
     cy.task('stubSentenceAdjustments', {})
     cy.task('stubCourtCases', [{ id: 1 }])
