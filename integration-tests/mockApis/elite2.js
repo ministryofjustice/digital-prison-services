@@ -747,7 +747,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Za-z].+?/visits.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/visits.+?',
       },
       response: {
         status,
@@ -815,7 +815,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Za-z].+?/activities.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
       },
       response: {
         status,
@@ -845,7 +845,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Za-z].+?/appointments.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
       },
       response: {
         status,
@@ -860,7 +860,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/schedules/[A-Za-z].+?/externalTransfers.+?',
+        urlPattern: '/api/schedules/[A-Z].+?/externalTransfers.+?',
       },
       response: {
         status,

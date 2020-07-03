@@ -9,7 +9,7 @@ const {
   courtEventsWithDifferentStatusResponse,
   externalTransfersResponse,
 } = require('../mockApis/responses/houseBlockResponse')
-const { alertsResponse } = require('../mockApis/responses/alertsResponse')
+const alertsResponse = require('../mockApis/responses/alertsResponse')
 const allocationManager = require('../mockApis/allocationManager')
 const community = require('../mockApis/community')
 
@@ -86,7 +86,7 @@ module.exports = on => {
         elite2api.stubActivities(),
         elite2api.stubCourtEvents(),
         elite2api.stubExternalTransfers(),
-        elite2api.stubAlerts({ locationId, alertsResponse }),
+        elite2api.stubAlerts({ locationId: 'MDI', alerts: alertsResponse }),
         elite2api.stubAssessments(offenderNumbers),
         elite2api.stubOffenderSentences(offenderNumbers, date),
       ])
@@ -111,7 +111,7 @@ module.exports = on => {
         elite2api.stubActivities(activityResponse.activities),
         elite2api.stubCourtEvents(courtEventsWithDifferentStatusResponse),
         elite2api.stubExternalTransfers(externalTransfersResponse),
-        elite2api.stubAlerts({ locationId, alertsResponse }),
+        elite2api.stubAlerts({ locationId: 'MDI', alerts: alertsResponse }),
         elite2api.stubAssessments(offenderNumbers),
         elite2api.stubOffenderSentences(offenderNumbers, date),
       ])

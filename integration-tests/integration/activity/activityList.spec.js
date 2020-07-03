@@ -1,6 +1,6 @@
 const searchPage = require('../../pages/whereabouts/searchPage')
 const activityPage = require('../../pages/whereabouts/activityPage')
-const { verifyPosts, verifyPuts } = require('../../mockApis/wiremock')
+const { verifyPosts } = require('../../mockApis/wiremock')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
@@ -83,6 +83,12 @@ context('Activity list page', () => {
     const locations = ['A-1-1', 'A-1-3', 'A-1-2', 'A-1-1', 'A-1-1']
     aPage.getResultLocations().each(($el, index) => {
       expect($el.text()).to.equal(locations[index])
+    })
+
+    const arthurAlerts = 'ACCT E-LIST CAT A '
+    const alerts = [arthurAlerts, 'CAT A Prov ', 'CAT A High ', arthurAlerts, arthurAlerts]
+    aPage.getResultAlerts().each(($el, index) => {
+      expect($el.text()).to.equal(alerts[index])
     })
 
     const arthurEvents = [
@@ -377,7 +383,7 @@ context('Activity list page', () => {
         eventLocationId: 1,
         firstName: 'ARTHUR',
         lastName: 'ANDERSON',
-        cellLocation: 'LEI-A-1-1',
+        cellLocation: 'MDI-A-1-1',
         comment: 'Activity 3',
         startTime: '2017-10-15T17:00:00',
         endTime: '2017-10-15T18:30:00',

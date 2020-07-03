@@ -16,12 +16,6 @@ const verifyPosts = requestUrl =>
     url: requestUrl,
   })
 
-const verifyPuts = requestUrl =>
-  superagent.post(`${url}/requests/count`).send({
-    method: 'PUT',
-    url: requestUrl,
-  })
-
 const getFor = ({ body, urlPattern, urlPath }) =>
   stubFor({
     request: {
@@ -45,5 +39,4 @@ module.exports = {
   resetStubs,
   getFor,
   verifyPosts,
-  verifyPuts,
 }
