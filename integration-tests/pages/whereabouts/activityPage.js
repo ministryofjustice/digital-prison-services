@@ -6,6 +6,7 @@ const activityPage = title =>
     getAllResultRows: () => cy.get('table.row-gutters'),
     getResultBodyRows: () => cy.get('table.row-gutters > tbody > tr'),
     getResultActivity: () => cy.get('table.row-gutters > tbody > tr td:nth-child(7)'),
+    getResultLocations: () => cy.get('table.row-gutters > tbody > tr td:nth-child(3)'),
     getResultEventsElsewhere: () => cy.get('table.row-gutters > tbody > tr td:nth-child(8)'),
     getResultNomsIds: () => cy.get('table.row-gutters > tbody > tr td:nth-child(4)'),
     sortSelect: () => cy.get('#sort-select'),

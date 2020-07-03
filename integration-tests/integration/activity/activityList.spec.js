@@ -70,56 +70,33 @@ context('Activity list page', () => {
     const resultRows = aPage.getResultBodyRows()
     resultRows.should('have.length', 5)
     const activities = [
+      '17:00 - Activity 1',
       '11:45 - Activity 1',
       '17:45 - Activity 1',
       '17:00 - Activity 2',
       '17:00 - Activity 3',
-      '15:30 - Medical - Dentist - Appt details',
     ]
     aPage.getResultActivity().each(($el, index) => {
       expect($el.text()).to.equal(activities[index])
     })
 
-    const eventsElsewhere = [
-      ['Release scheduled'],
-      [],
-      [
-        'Court visit scheduled',
-        'Court visit scheduled (expired)',
-        'Court visit scheduled (complete)',
-        'Transfer scheduled',
-        'Transfer scheduled (complete)',
-        'Transfer scheduled (cancelled)',
-        'Transfer scheduled (expired)',
-        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
-        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
-        '18:00 - Visits - Friends',
-      ],
-      [
-        'Court visit scheduled',
-        'Court visit scheduled (expired)',
-        'Court visit scheduled (complete)',
-        'Transfer scheduled',
-        'Transfer scheduled (complete)',
-        'Transfer scheduled (cancelled)',
-        'Transfer scheduled (expired)',
-        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
-        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
-        '18:00 - Visits - Friends',
-      ],
-      [
-        'Court visit scheduled',
-        'Court visit scheduled (expired)',
-        'Court visit scheduled (complete)',
-        'Transfer scheduled',
-        'Transfer scheduled (complete)',
-        'Transfer scheduled (cancelled)',
-        'Transfer scheduled (expired)',
-        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
-        '15:30 - Medical - Dentist - Medical Room1 - Appt details',
-        '18:00 - Visits - Friends',
-      ],
+    const locations = ['A-1-1', 'A-1-3', 'A-1-2', 'A-1-1', 'A-1-1']
+    aPage.getResultLocations().each(($el, index) => {
+      expect($el.text()).to.equal(locations[index])
+    })
+
+    const arthurEvents = [
+      'Court visit scheduled',
+      'Court visit scheduled (expired)',
+      'Court visit scheduled (complete)',
+      'Transfer scheduled',
+      'Transfer scheduled (complete)',
+      'Transfer scheduled (cancelled)',
+      'Transfer scheduled (expired)',
+      '15:30 - Medical - Dentist - Medical Room1 - Appt details',
+      '18:00 - Visits - Friends',
     ]
+    const eventsElsewhere = [arthurEvents, ['Release scheduled'], [], arthurEvents, arthurEvents]
     aPage.getResultEventsElsewhere().each(($el, index) => {
       expect($el.text()).to.equal(eventsElsewhere[index].join(''))
     })
@@ -142,7 +119,7 @@ context('Activity list page', () => {
       .find('tr')
       .should('have.length', 6)
 
-    const nomsIds = ['A1234AC', 'A1234AB', 'A1234AA', 'A1234AA', 'A1234AA']
+    const nomsIds = ['A1234AA', 'A1234AC', 'A1234AB', 'A1234AA', 'A1234AA']
 
     aPage.getResultNomsIds().each(($el, index) => {
       expect($el.text()).to.equal(nomsIds[index])

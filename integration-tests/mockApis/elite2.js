@@ -53,6 +53,7 @@ module.exports = {
           {
             caseLoadId: 'MDI',
             description: 'Moorland',
+            currentlyActive: true,
           },
         ],
       },
@@ -200,18 +201,18 @@ module.exports = {
       },
     })
   },
-  stubOffenderDetails: (details = false, offender) => {
+  stubOffenderFullDetails: details => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/${offender.offenderNo}\\?fullInfo=${details}`,
+        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true`,
       },
       response: {
         status: 200,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: offender || {},
+        jsonBody: details || {},
       },
     })
   },

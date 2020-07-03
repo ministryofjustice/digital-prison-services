@@ -234,6 +234,7 @@ module.exports = on => {
     verifyPostAttendance: () => whereabouts.verifyPostAttendance(),
     stubSentenceAdjustments: response => elite2api.stubGetSentenceAdjustments(response),
     stubOffenderBasicDetails: basicDetails => Promise.all([elite2api.stubOffenderBasicDetails(basicDetails)]),
+    stubOffenderFullDetails: fullDetails => Promise.all([elite2api.stubOffenderFullDetails(fullDetails)]),
     stubAppointmentTypes: types => Promise.all([elite2api.stubAppointmentTypes(types)]),
     stubAppointmentsAtAgency: (agency, locations) =>
       Promise.all([elite2api.stubUsageAtAgency(agency, 'APP', locations)]),
