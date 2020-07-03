@@ -14,7 +14,7 @@ const caseNotes = [
     creationDateTime: '2017-10-31T01:30:00',
     occurrenceDateTime: '2017-10-31T01:30:00',
     authorName: 'John Smith',
-    authorUserId: 12345,
+    authorUserId: '12345',
     text: 'This is some text',
     locationId: 'MDI',
     amendments: [
@@ -64,5 +64,9 @@ context('A user can view prisoner case notes', () => {
     tableDataRow
       .caseNoteDetails()
       .contains('Key Worker: Key Worker Session This is some text Happened: 31/10/2017 - 01:30')
+    tableDataRow
+      .caseNoteAmendButton()
+      .contains('Make amendment')
+      .should('have.attr', 'href', 'http://localhost:20200/offenders/A12345/case-notes/12311312/amend-case-note')
   })
 })
