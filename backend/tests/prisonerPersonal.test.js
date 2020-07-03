@@ -1044,6 +1044,25 @@ describe('prisoner personal', () => {
               bookingId,
             },
             {
+              lastName: 'SMITH',
+              firstName: 'TREVOR',
+              contactType: 'O',
+              contactTypeDescription: 'Official',
+              relationship: 'CA',
+              relationshipDescription: 'Case Administrator',
+              emergencyContact: false,
+              nextOfKin: false,
+              relationshipId: 7550160,
+              personId: 333,
+              activeFlag: true,
+              approvedVisitorFlag: false,
+              canBeContactedFlag: false,
+              awareOfChargesFlag: false,
+              contactRootOffenderId: 0,
+              bookingId,
+              createDateTime: '2019-01-01T12:00:00', // Previous Case Administrator
+            },
+            {
               lastName: 'LYDYLE',
               firstName: 'URIUALCHE',
               contactType: 'O',
@@ -1060,6 +1079,7 @@ describe('prisoner personal', () => {
               awareOfChargesFlag: false,
               contactRootOffenderId: 0,
               bookingId,
+              createDateTime: '2020-01-01T12:00:00', // Current, most recently added Case Administrator
             },
           ],
         })

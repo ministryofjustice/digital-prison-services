@@ -1,5 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
+const { sortByDateTime } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -68,8 +69,12 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
 
   const { nextOfKin, otherContacts } = contacts || {}
   const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
+
   const activeCaseAdministrator =
-    otherContacts && otherContacts.find(contact => contact.activeFlag && contact.relationship === 'CA')
+    otherContacts &&
+    otherContacts
+      .sort((left, right) => sortByDateTime(right.createDateTime, left.createDateTime))
+      .find(contact => contact.activeFlag && contact.relationship === 'CA')
 
   const nextOfKinsWithContact =
     activeNextOfKins &&
