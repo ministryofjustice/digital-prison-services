@@ -99,6 +99,11 @@ env:
     value: {{ .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL | quote }}
   {{- end }}
 
+  {{- if .Values.env.DISPLAY_RETENTION_LINK }}
+  - name: DISPLAY_RETENTION_LINK
+    value: {{ .Values.env.DISPLAY_RETENTION_LINK | quote }}
+  {{- end }}
+
   - name: UPDATE_ATTENDANCE_PRISONS
     value: {{ .Values.env.UPDATE_ATTENDANCE_PRISONS | quote }}
 

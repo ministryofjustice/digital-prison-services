@@ -265,6 +265,7 @@ const setup = ({
       caseNotesApi,
       allocationManagerApi,
       systemOauthClient,
+      dataComplianceApi,
       logError,
     })
   )
