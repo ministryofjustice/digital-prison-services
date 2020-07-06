@@ -463,11 +463,8 @@ context('Prisoner quick look', () => {
         iepSummary: {},
         caseNoteSummary: {},
         retentionRecord: {
-          offenderNo: 'G6123VU',
-          userId: 'JROBERTSON_GEN',
-          modifiedDateTime: '2020-07-06T10:52:47.964242',
+          offenderNo: 'A12345',
           retentionReasons: ['Reason1'],
-          etag: '"0"',
         },
       })
     })
