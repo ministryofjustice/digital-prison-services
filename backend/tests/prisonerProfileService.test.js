@@ -1,3 +1,7 @@
+const config = require('../config')
+
+config.app.displayRetentionLink = true
+
 const prisonerProfileService = require('../services/prisonerProfileService')
 
 describe('prisoner profile service', () => {
@@ -5,6 +9,7 @@ describe('prisoner profile service', () => {
   const elite2Api = {}
   const keyworkerApi = {}
   const oauthApi = {}
+  const dataComplianceApi = {}
   let service
 
   beforeEach(() => {
@@ -16,7 +21,8 @@ describe('prisoner profile service', () => {
     keyworkerApi.getKeyworkerByCaseloadAndOffenderNo = jest.fn()
     oauthApi.userRoles = jest.fn()
     oauthApi.currentUser = jest.fn()
-    service = prisonerProfileService(elite2Api, keyworkerApi, oauthApi)
+    dataComplianceApi.getOffenderRetentionRecord = jest.fn()
+    service = prisonerProfileService(elite2Api, keyworkerApi, oauthApi, dataComplianceApi)
   })
 
   describe('prisoner profile data', () => {
@@ -74,6 +80,7 @@ describe('prisoner profile service', () => {
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
       oauthApi.userRoles.mockResolvedValue([])
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
     })
 
     it('should make a call for the full details for a prisoner and the current user', async () => {
@@ -118,6 +125,7 @@ describe('prisoner profile service', () => {
         ],
         category: 'Cat C',
         csra: 'High',
+        displayRetentionLink: true,
         inactiveAlertCount: 2,
         incentiveLevel: 'Standard',
         keyWorkerLastSession: '07/04/2020',
@@ -126,6 +134,7 @@ describe('prisoner profile service', () => {
         notmEndpointUrl: 'http://localhost:3000/',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
+        offenderRecordRetained: undefined,
         showAddKeyworkerSession: false,
         showReportUseOfForce: false,
         useOfForceUrl: '//useOfForceUrl',
@@ -263,6 +272,22 @@ describe('prisoner profile service', () => {
             })
           )
         })
+      })
+    })
+
+    describe('when the prisoner has a data retention record', () => {
+      beforeEach(() => {
+        dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({ retentionReasons: ['Reason 1'] })
+      })
+
+      it('should let the template know there is a record retained', async () => {
+        const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(getPrisonerProfileData).toEqual(
+          expect.objectContaining({
+            offenderRecordRetained: true,
+          })
+        )
       })
     })
 

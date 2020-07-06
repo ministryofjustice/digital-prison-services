@@ -1,21 +1,24 @@
 const moment = require('moment')
-const { putLastNameFirst } = require('../utils')
+const { putLastNameFirst, hasLength } = require('../utils')
 const alertFlagValues = require('../shared/alertFlagValues')
 const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
   },
-  app: { notmEndpointUrl },
+  app: { notmEndpointUrl, displayRetentionLink },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
-module.exports = (elite2Api, keyworkerApi, oauthApi) => {
+module.exports = (elite2Api, keyworkerApi, oauthApi, dataComplianceApi) => {
   const getPrisonerProfileData = async (context, offenderNo) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       elite2Api.getDetails(context, offenderNo, true),
     ])
+
+    const offenderRetentionRecord =
+      displayRetentionLink && (await dataComplianceApi.getOffenderRetentionRecord(context, offenderNo))
 
     const {
       activeAlertCount,
@@ -79,6 +82,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       category,
       categoryCode,
       csra,
+      displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
@@ -88,6 +92,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi) => {
       notmEndpointUrl,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
+      offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && staffRoles.some(role => role.role === 'KW'),
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl,

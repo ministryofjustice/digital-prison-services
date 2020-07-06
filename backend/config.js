@@ -11,6 +11,7 @@ module.exports = {
     maximumFileUploadSizeInMb: process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB || 200,
     featureFlags: {},
     videoLinkEnabledFor: (process.env.VIDEO_LINK_ENABLED_FOR || '').split(','),
+    displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,

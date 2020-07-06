@@ -427,4 +427,63 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
     })
   })
+
+  context('When a prisoner does NOT have a record retention record', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
+        iepSummary: {},
+        caseNoteSummary: {},
+      })
+    })
+
+    it('Should display the correct text and link to retention records', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="data-retention-record-details"]').should(
+        'contain.text',
+        'Prevent removal of this offender record:\n      Not set - \n      \n        Update'
+      )
+      cy.get('[data-test="data-retention-record-details"] a').should(
+        'have.attr',
+        'href',
+        '/offenders/A12345/retention-reasons'
+      )
+    })
+  })
+
+  context('When a prisoner does have a record retention record', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
+        iepSummary: {},
+        caseNoteSummary: {},
+        retentionRecord: {
+          offenderNo: 'G6123VU',
+          userId: 'JROBERTSON_GEN',
+          modifiedDateTime: '2020-07-06T10:52:47.964242',
+          retentionReasons: ['Reason1'],
+          etag: '"0"',
+        },
+      })
+    })
+
+    it('Should display the correct text and link to retention records', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="data-retention-record-details"]').should(
+        'contain.text',
+        'Prevent removal of this offender record:\n      Yes - \n      \n        View reasons / update'
+      )
+      cy.get('[data-test="data-retention-record-details"] a').should(
+        'have.attr',
+        'href',
+        '/offenders/A12345/retention-reasons'
+      )
+    })
+  })
 })

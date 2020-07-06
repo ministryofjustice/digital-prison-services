@@ -1,5 +1,6 @@
 const auth = require('../mockApis/auth')
 const elite2api = require('../mockApis/elite2')
+const dataComplianceApi = require('../mockApis/dataCompliance')
 const whereabouts = require('../mockApis/whereabouts')
 const tokenverification = require('../mockApis/tokenverification')
 const keyworker = require('../mockApis/keyworker')
@@ -123,6 +124,7 @@ module.exports = on => {
       iepSummary,
       caseNoteSummary,
       userRoles = [],
+      retentionRecord,
     }) =>
       Promise.all([
         auth.stubUserMe(),
@@ -135,6 +137,7 @@ module.exports = on => {
         elite2api.stubStaffRoles(),
         elite2api.stubOffenderImage(),
         keyworker.stubKeyworkerByCaseloadAndOffenderNo(),
+        dataComplianceApi.stubRetentionRecord(retentionRecord),
       ]),
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
