@@ -49,6 +49,7 @@ context('Prisoner sentence and release', () => {
         actualParoleDate: '2020-04-03',
         releaseOnTemporaryLicenceDate: '2025-02-03',
         earlyRemovalSchemeEligibilityDate: '2018-11-12',
+        tariffEarlyRemovalSchemeEligibilityDate: '2017-10-10',
         earlyTermDate: '2019-08-09',
         midTermDate: '2020-08-10',
         lateTermDate: '2021-08-11',
@@ -102,8 +103,9 @@ context('Prisoner sentence and release', () => {
         expect($summaryKeys.get(0).innerText).to.eq('\n          Home detention curfew\n        ')
         expect($summaryKeys.get(1).innerText).to.eq('\n          Release on temporary licence\n        ')
         expect($summaryKeys.get(2).innerText).to.eq('\n          Early removal scheme\n        ')
-        expect($summaryKeys.get(3).innerText).to.eq('\n          Parole\n        ')
-        expect($summaryKeys.get(4).innerText).to.eq('\n          Early transfer\n        ')
+        expect($summaryKeys.get(3).innerText).to.eq('\n          Tariff early removal scheme\n        ')
+        expect($summaryKeys.get(4).innerText).to.eq('\n          Parole\n        ')
+        expect($summaryKeys.get(5).innerText).to.eq('\n          Early transfer\n        ')
       })
 
     prisonerSentenceAndReleasePage
@@ -113,8 +115,9 @@ context('Prisoner sentence and release', () => {
         expect($summaryValues.get(0).innerText).to.eq('\n          2 June 2021\n        ')
         expect($summaryValues.get(1).innerText).to.eq('\n          3 February 2025\n        ')
         expect($summaryValues.get(2).innerText).to.eq('\n          12 November 2018\n        ')
-        expect($summaryValues.get(3).innerText).to.eq('\n          3 April 2020\n        ')
-        expect($summaryValues.get(4).innerText).to.eq('\n          9 August 2019\n        ')
+        expect($summaryValues.get(3).innerText).to.eq('\n          10 October 2017\n        ')
+        expect($summaryValues.get(4).innerText).to.eq('\n          3 April 2020\n        ')
+        expect($summaryValues.get(5).innerText).to.eq('\n          9 August 2019\n        ')
       })
 
     prisonerSentenceAndReleasePage
