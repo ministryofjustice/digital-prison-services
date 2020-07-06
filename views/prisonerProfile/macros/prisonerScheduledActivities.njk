@@ -5,7 +5,9 @@
       <div class="{{ containterClass }}">
         <strong>{{ activity.type }}</strong>
         <span>{{ ' - ' + activity.shortComment if activity.shortComment }}</span>
-        {{ "<div class='highlight highlight--alert'>(cancelled)</div>" if activity.cancelled }}
+        {% if activity.cancelled %}
+          <div class='highlight highlight--alert'>(cancelled)</div>
+        {% endif %}
         <div>
           {{ activity.startTime | getTime }}
           {{ ' - ' + activity.endTime | getTime if activity.endTime }}
