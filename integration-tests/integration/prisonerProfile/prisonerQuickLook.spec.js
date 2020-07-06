@@ -296,7 +296,7 @@ context('Prisoner quick look', () => {
         .then($summaryValues => {
           expect($summaryValues.get(0).innerText).to.eq('Education\n09:00 - 10:00')
           expect($summaryValues.get(1).innerText).to.eq(
-            "Case - Benefits - Test Comment\n13:00 - 14:00\nGym - Sports Halls Activity - Test comment <div class='highlight highlight--alert'>(cancelled)</div>\n15:00 - 15:30"
+            'Case - Benefits - Test Comment\n13:00 - 14:00\nGym - Sports Halls Activity - Test comment\n(cancelled)\n15:00 - 15:30'
           )
           expect($summaryValues.get(2).innerText).to.eq(
             'Gym - Football - Testing a really long comment which is o...\n20:20 - 20:35'
