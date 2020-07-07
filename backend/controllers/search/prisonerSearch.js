@@ -27,6 +27,10 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
+    const hasSearched = Boolean(Object.keys(req.query).length)
+
+    if (hasSearched) req.session.prisonerSearchUrl = req.originalUrl
+
     try {
       const context = {
         ...res.locals,

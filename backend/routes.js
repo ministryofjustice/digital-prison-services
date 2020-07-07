@@ -104,7 +104,11 @@ const setup = ({
   router.use(currentUser({ elite2Api, oauthApi }))
 
   router.use(async (req, res, next) => {
-    res.locals.currentUrlPath = req.originalUrl
+    res.locals = {
+      ...res.locals,
+      currentUrlPath: req.originalUrl,
+      prisonerSearchUrl: req.session.prisonerSearchUrl,
+    }
     next()
   })
 
