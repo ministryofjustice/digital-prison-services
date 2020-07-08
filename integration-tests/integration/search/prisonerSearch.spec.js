@@ -1,3 +1,7 @@
+const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
+const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const { quickLookFullDetails } = require('../prisonerProfile/prisonerQuickLook.spec')
+
 context('Prisoner search', () => {
   const inmate1 = {
     bookingId: 1,
@@ -66,6 +70,12 @@ context('Prisoner search', () => {
             expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\tStandard\t30\t')
           })
       })
+    })
+  })
+
+  context('When there are search values', () => {
+    beforeEach(() => {
+      cy.task('stubUserLocations')
     })
 
     it('should have correct data pre filled from search query', () => {
@@ -192,6 +202,37 @@ context('Prisoner search', () => {
           '?keywords=Saunders&location=MDI&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
         )
       })
+    })
+
+    it('should show the correct most recent search link when visiting a profile page from search', () => {
+      const searchUrl = '/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA'
+
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1],
+      })
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+      })
+      cy.task('stubQuickLook', quickLookFullDetails)
+
+      cy.visit(searchUrl)
+
+      cy.get('[data-test="prisoner-search-results-table"]').then($table => {
+        cy.get($table)
+          .find('tr')
+          .then($tableRows => {
+            cy.get($tableRows)
+              .find('a')
+              .click()
+          })
+      })
+
+      cy.get('[data-test="recent-search-link"]').should('have.attr', 'href', searchUrl)
     })
   })
 })

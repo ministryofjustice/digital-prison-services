@@ -1,5 +1,35 @@
 {% extends "../../partials/layout.njk" %}
 
+{% block beforeContent %}
+  <div class="prisoner-profile-breadcrumbs">
+    {% if prisonerSearchUrl %}
+      <div class="prisoner-profile-breadcrumbs__search">
+        <a href="{{ prisonerSearchUrl }}" class="govuk-link govuk-link--no-visited-state" data-test="recent-search-link">
+          View most recent search
+        </a>
+      </div>
+    {% endif %}
+
+    <div class="prisoner-profile-breadcrumbs__breadcrumbs">
+      {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: prisonerProfileData.notmEndpointUrl
+            },
+            {
+                text: prisonerProfileData.offenderName,
+                href: '/prisoner/' + prisonerProfileData.offenderNo
+            },
+            {
+                text: title
+            }
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
   {% include "../partials/prisonerProfileHeader.njk" %}
   {% include "../partials/prisonerProfileTabs.njk" %}

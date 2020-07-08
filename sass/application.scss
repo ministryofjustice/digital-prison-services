@@ -8,6 +8,7 @@ $govuk-page-width: 1170px;
 @import 'components/offender-basic-details';
 @import 'components/alert-flags';
 @import 'components/buttons';
+@import 'components/prisonerProfile/prisoner-profile';
 @import 'components/prisonerProfile/prisoner-profile-header';
 @import 'components/prisonerProfile/prisoner-profile-footer';
 @import 'components/prisonerProfile/prisoner-full-image';
@@ -51,7 +52,6 @@ $govuk-page-width: 1170px;
     display: flex;
     flex-flow: row wrap;
 
-
     * {
       width: auto;
       margin-bottom: 0;
@@ -77,7 +77,8 @@ $govuk-page-width: 1170px;
       margin-top: govuk-spacing(3);
     }
 
-    button, a {
+    button,
+    a {
       align-self: flex-end;
       margin-bottom: $govuk-border-width-form-element;
     }
@@ -104,7 +105,7 @@ $govuk-page-width: 1170px;
 }
 
 .word-break {
-  word-break: break-word
+  word-break: break-word;
 }
 
 // Print
@@ -184,5 +185,6 @@ $govuk-page-width: 1170px;
 }
 
 .moj-pagination__results {
-  font-family: "GDS Transport",Arial,sans-serif;
+  font-family: 'GDS Transport', Arial, sans-serif;
 }
+
