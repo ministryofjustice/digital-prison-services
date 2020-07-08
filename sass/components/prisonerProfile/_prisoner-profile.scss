@@ -1,0 +1,15 @@
+.prisoner-profile-breadcrumbs {
+  @include govuk-clearfix;
+
+  &__search {
+    @include govuk-font($size: 16);
+    float: left;
+    margin: govuk-spacing(3) govuk-spacing(3) govuk-spacing(2) 0;
+    border-right: 1px solid $govuk-secondary-text-colour;
+    padding-right: govuk-spacing(3);
+  }
+
+  &__breadcrumbs {
+    float: left;
+  }
+}

@@ -18,6 +18,7 @@ describe('Prisoner search', () => {
       originalUrl: '/prisoner-search',
       query: {},
       body: { sortFieldsWithOrder: 'lastName,firstName:ASC ' },
+      session: {},
     }
     res = {
       locals: {
@@ -325,6 +326,20 @@ describe('Prisoner search', () => {
 
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/' })
+    })
+
+    it('should NOT set prisonerSearchUrl to the originalUrl if there has NOT been a search', async () => {
+      await controller.index(req, res)
+
+      expect(req.session).toEqual({})
+    })
+
+    it('should set prisonerSearchUrl to the originalUrl if there has been a search', async () => {
+      req.query.alerts = ['HA']
+
+      await controller.index(req, res)
+
+      expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl })
     })
   })
 
