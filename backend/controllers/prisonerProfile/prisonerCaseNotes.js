@@ -9,6 +9,7 @@ const {
   MOMENT_TIME,
 } = require('../../../src/dateHelpers')
 const config = require('../../config')
+const { getNamesFromString } = require('../../utils')
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 10
@@ -68,12 +69,13 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       const day = creationDateTime.format(MOMENT_DAY_OF_THE_WEEK)
       const date = creationDateTime.format(DAY_MONTH_YEAR)
       const time = creationDateTime.format(MOMENT_TIME)
+      const authorNames = getNamesFromString(caseNote.authorName)
 
       const createdByColumn = nunjucks.render(`${templatePath}/partials/createdColumn.njk`, {
         day,
         date,
         time,
-        authorName: caseNote.authorName,
+        authorName: `${authorNames.join(' ')}`,
       })
 
       const occurrenceDateTime = moment(caseNote.occurrenceDateTime, DATE_TIME_FORMAT_SPEC)
@@ -81,25 +83,18 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
         MOMENT_TIME
       )}`
 
+      const canAmend = prisonerProfileData.staffId && prisonerProfileData.staffId.toString() === caseNote.authorUserId
       const caseNoteDetailColumn = nunjucks.render(`${templatePath}/partials/caseNoteDetailColumn.njk`, {
         occurrenceDateTime: occurrenceDateTimeText,
         typeDescription: caseNote.typeDescription,
         subTypeDescription: caseNote.subTypeDescription,
         text: caseNote.text,
+        amendLink:
+          canAmend &&
+          `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${caseNote.caseNoteId}/amend-case-note`,
       })
 
-      const canAmend = prisonerProfileData.staffId && prisonerProfileData.staffId.toString() === caseNote.authorUserId
-      const caseNoteMakeAmendmentColumn = nunjucks.render(`${templatePath}/partials/caseNoteMakeAmendmentColumn.njk`, {
-        amendLink: `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${
-          caseNote.caseNoteId
-        }/amend-case-note`,
-      })
-
-      return [
-        { html: createdByColumn },
-        { html: caseNoteDetailColumn },
-        { html: canAmend ? caseNoteMakeAmendmentColumn : '' },
-      ]
+      return [{ html: createdByColumn }, { html: caseNoteDetailColumn }]
     })
 
     const selectedSubTypes = subTypes.filter(sub => sub.type === type)

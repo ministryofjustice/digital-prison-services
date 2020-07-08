@@ -91,6 +91,7 @@ context('A user can add an appointment', () => {
     const addAppointmentPage = AddAppointmentPage.verifyOnPage()
     const form = addAppointmentPage.form()
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.appointmentType().select('ACTI')
     form.location().select('1')
     form.startTimeHours().select('23')
@@ -107,6 +108,7 @@ context('A user can add an appointment', () => {
     const addAppointmentPage = AddAppointmentPage.verifyOnPage()
     const form = addAppointmentPage.form()
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.appointmentType().select('ACTI')
     form.location().select('1')
     addAppointmentPage.offenderEvents().contains('Visiting room - Visits - Friends')
@@ -126,6 +128,7 @@ context('A user can add an appointment', () => {
     form.startTimeHours().select('23')
     form.startTimeMinutes().select('55')
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.recurringYes().click()
     form.repeats().select('DAILY')
 
@@ -160,6 +163,7 @@ context('A user can add an appointment', () => {
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.submitButton().click()
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
@@ -185,6 +189,7 @@ context('A user can add an appointment', () => {
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.submitButton().click()
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
@@ -212,6 +217,7 @@ context('A user can add an appointment', () => {
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.submitButton().click()
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
@@ -243,6 +249,7 @@ context('A user can add an appointment', () => {
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.submitButton().click()
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
@@ -277,6 +284,7 @@ context('A user can add an appointment', () => {
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.date().type(moment().format('DD/MM/yyyy'))
+    addAppointmentPage.activeDate().click()
     form.submitButton().click()
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
