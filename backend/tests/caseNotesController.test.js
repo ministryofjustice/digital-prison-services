@@ -190,7 +190,7 @@ describe('Case notes controller', () => {
     )
 
     expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCaseNotes/caseNotes.njk', {
-      caseNoteRows: [[{ html: '<div>Test</div>' }, { html: '<div>Test</div>' }, { html: '' }]],
+      caseNoteRows: [[{ html: '<div>Test</div>' }, { html: '<div>Test</div>' }]],
       caseNotesRootUrl: '/prisoner/A12345/case-notes',
       formValues: { fromDate: '10/10/2010', subType: 'subType2', toDate: '11/10/2020', type: 'type1' },
       prisonerProfileData: {},

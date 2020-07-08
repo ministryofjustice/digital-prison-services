@@ -83,25 +83,18 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
         MOMENT_TIME
       )}`
 
+      const canAmend = prisonerProfileData.staffId && prisonerProfileData.staffId.toString() === caseNote.authorUserId
       const caseNoteDetailColumn = nunjucks.render(`${templatePath}/partials/caseNoteDetailColumn.njk`, {
         occurrenceDateTime: occurrenceDateTimeText,
         typeDescription: caseNote.typeDescription,
         subTypeDescription: caseNote.subTypeDescription,
         text: caseNote.text,
+        amendLink:
+          canAmend &&
+          `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${caseNote.caseNoteId}/amend-case-note`,
       })
 
-      const canAmend = prisonerProfileData.staffId && prisonerProfileData.staffId.toString() === caseNote.authorUserId
-      const caseNoteMakeAmendmentColumn = nunjucks.render(`${templatePath}/partials/caseNoteMakeAmendmentColumn.njk`, {
-        amendLink: `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${
-          caseNote.caseNoteId
-        }/amend-case-note`,
-      })
-
-      return [
-        { html: createdByColumn },
-        { html: caseNoteDetailColumn },
-        { html: canAmend ? caseNoteMakeAmendmentColumn : '' },
-      ]
+      return [{ html: createdByColumn }, { html: caseNoteDetailColumn }]
     })
 
     const selectedSubTypes = subTypes.filter(sub => sub.type === type)
