@@ -84,6 +84,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       )}`
 
       const canAmend = prisonerProfileData.staffId && prisonerProfileData.staffId.toString() === caseNote.authorUserId
+      const showPrintIncentiveLink = ['IEP_WARN', 'IEP_ENC'].includes(caseNote.subType)
       const caseNoteDetailColumn = nunjucks.render(`${templatePath}/partials/caseNoteDetailColumn.njk`, {
         occurrenceDateTime: occurrenceDateTimeText,
         typeDescription: caseNote.typeDescription,
@@ -92,6 +93,9 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
         amendLink:
           canAmend &&
           `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${caseNote.caseNoteId}/amend-case-note`,
+        printIncentiveLink:
+          showPrintIncentiveLink &&
+          `/iep-slip?offender=${offenderNo}&casenote=${caseNote.caseNoteId}&user=${prisonerProfileData.staffId}`,
       })
 
       return [{ html: createdByColumn }, { html: caseNoteDetailColumn }]

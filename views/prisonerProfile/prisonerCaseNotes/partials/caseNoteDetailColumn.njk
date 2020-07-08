@@ -15,3 +15,11 @@
 <p class="govuk-body">
     Happened: {{ occurrenceDateTime }}
 </p>
+
+{% if printIncentiveLink %}
+  <p class="govuk-body">
+    <a class="govuk-link" data-test="add-more-details" href={{printIncentiveLink}}>
+      Print Incentive Level Slip
+    </a>
+  <p>
+{% endif %}
