@@ -9,6 +9,7 @@ const {
   MOMENT_TIME,
 } = require('../../../src/dateHelpers')
 const config = require('../../config')
+const { getNamesFromString } = require('../../utils')
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 10
@@ -68,12 +69,13 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       const day = creationDateTime.format(MOMENT_DAY_OF_THE_WEEK)
       const date = creationDateTime.format(DAY_MONTH_YEAR)
       const time = creationDateTime.format(MOMENT_TIME)
+      const authorNames = getNamesFromString(caseNote.authorName)
 
       const createdByColumn = nunjucks.render(`${templatePath}/partials/createdColumn.njk`, {
         day,
         date,
         time,
-        authorName: caseNote.authorName,
+        authorName: `${authorNames.join(' ')}`,
       })
 
       const occurrenceDateTime = moment(caseNote.occurrenceDateTime, DATE_TIME_FORMAT_SPEC)

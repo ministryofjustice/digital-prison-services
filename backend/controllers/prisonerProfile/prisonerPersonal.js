@@ -1,6 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
-const { sortByDateTime } = require('../../utils')
+const { getNamesFromString, sortByDateTime } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -16,7 +16,6 @@ const {
   addressesViewModel,
   careNeedsViewModel,
 } = require('./personalViewModels')
-const { getPrisonOffenderManagerNames } = require('../../utils')
 
 module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
   req,
@@ -91,10 +90,12 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   }
 
   const primaryPrisonOffenderManager = () => {
-    const names = allocationManager && getPrisonOffenderManagerNames(allocationManager.primary_pom)
-    return (
+    const names =
       allocationManager &&
       allocationManager.primary_pom &&
+      allocationManager.primary_pom.name &&
+      getNamesFromString(allocationManager.primary_pom.name)
+    return (
       names && {
         firstName: names[0],
         lastName: names[1],
@@ -105,10 +106,12 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   }
 
   const coworkingPrisonOffenderManager = () => {
-    const names = allocationManager && getPrisonOffenderManagerNames(allocationManager.secondary_pom)
-    return (
+    const names =
       allocationManager &&
       allocationManager.secondary_pom &&
+      allocationManager.secondary_pom.name &&
+      getNamesFromString(allocationManager.secondary_pom.name)
+    return (
       names && {
         firstName: names[0],
         lastName: names[1],
