@@ -53,6 +53,7 @@ context('A user can view prisoner case notes', () => {
     })
 
     const offenderNo = 'A12345'
+    cy.stub(window, 'print')
     cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
   })
 
@@ -78,15 +79,5 @@ context('A user can view prisoner case notes', () => {
         'href',
         '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=undefined'
       )
-
-    tableDataRow.caseNotePrintIncentiveLevelSlipLink().click()
-
-    tableDataRow
-      .caseNotePrintIncentiveLevelSlipLink()
-      .invoke('removeAttr', 'target')
-      .click()
-
-    cy.url().should('include', 'iep-slip')
-    cy.get('h2').contains('Incentive Level warning')
   })
 })
