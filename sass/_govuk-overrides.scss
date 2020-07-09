@@ -69,3 +69,11 @@
 .govuk-warning-text__icon {
   box-sizing: content-box;
 }
+
+.header-with-link {
+  h1 {
+    display: inline;
+    margin-right: 15px;
+  }
+  margin-bottom: 30px;
+}
