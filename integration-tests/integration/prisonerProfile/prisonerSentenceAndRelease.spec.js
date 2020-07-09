@@ -379,8 +379,7 @@ context('Prisoner sentence and release', () => {
     ])
     cy.task('stubSentenceTerms', [
       {
-        sentenceSequence: 6,
-        termSequence: 1,
+        lineSeq: 6,
         startDate: '2018-01-01',
         years: 12,
         months: 0,
@@ -390,8 +389,7 @@ context('Prisoner sentence and release', () => {
         sentenceTypeDescription: 'Some sentence info 6',
       },
       {
-        sentenceSequence: 1,
-        termSequence: 1,
+        lineSeq: 1,
         startDate: '2017-01-01',
         years: 12,
         months: 2,
@@ -423,10 +421,10 @@ context('Prisoner sentence and release', () => {
       .find('dd')
       .then($termValues => {
         expect($termValues.get(0).innerText.trim()).to.eq('1 January 2017')
-        expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 1 days')
+        expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 0 weeks, 1 days')
 
         expect($termValues.get(2).innerText.trim()).to.eq('1 January 2018')
-        expect($termValues.get(3).innerText.trim()).to.eq('12 years, 0 months, 0 days')
+        expect($termValues.get(3).innerText.trim()).to.eq('12 years, 0 months, 0 weeks, 0 days')
       })
 
     page
@@ -444,7 +442,7 @@ context('Prisoner sentence and release', () => {
     cy.task('stubOffenceHistory', [{ offenceDescription: 'Offence test', primaryResultCode: '1002', caseId: 1 }])
     cy.task('stubSentenceTerms', [
       {
-        sentenceSequence: 6,
+        lineSeq: 6,
         termSequence: 1,
         startDate: '2018-01-01',
         years: 12,
@@ -486,7 +484,7 @@ context('Prisoner sentence and release', () => {
     cy.task('stubOffenceHistory', [{ offenceDescription: 'Offence test', primaryResultCode: '1002', caseId: 1 }])
     cy.task('stubSentenceTerms', [
       {
-        sentenceSequence: 6,
+        lineSeq: 6,
         termSequence: 1,
         startDate: '2018-01-01',
         years: 12,
