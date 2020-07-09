@@ -66,6 +66,8 @@ context('A user can view alerts for a prisoner', () => {
         caseNoteSummary,
       })
       cy.task('stubAlertTypes')
+      cy.task('stubPathFinderOffenderDetails', null)
+      cy.task('stubClientCredentialsRequest')
     })
 
     it('Users can view inactive alerts', () => {
@@ -120,6 +122,8 @@ context('A user can view alerts for a prisoner', () => {
         caseNoteSummary,
       })
       cy.task('stubAlertTypes')
+      cy.task('stubPathFinderOffenderDetails', null)
+      cy.task('stubClientCredentialsRequest')
     })
 
     it('Users should not be able to see create alert for inactive alerts display', () => {
@@ -129,7 +133,7 @@ context('A user can view alerts for a prisoner', () => {
       cy.get('[data-test="inactive-create-alerts-link"]').should('not.be.visible')
     })
 
-    it('Users should not be able to see Create or Edit / close buttons for active alerts display', () => {
+    it.only('Users should not be able to see Create or Edit / close buttons for active alerts display', () => {
       cy.task('stubAlertsForBooking', activeAlerts)
       cy.visit('/prisoner/G3878UK/alerts')
 
