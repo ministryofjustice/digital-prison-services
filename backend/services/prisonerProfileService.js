@@ -101,6 +101,7 @@ module.exports = (elite2Api, keyworkerApi, oauthApi, dataComplianceApi) => {
       interpreterRequired,
       writtenLanguage,
       staffId: currentUser.staffId,
+      staffName: currentUser.name,
     }
   }
 

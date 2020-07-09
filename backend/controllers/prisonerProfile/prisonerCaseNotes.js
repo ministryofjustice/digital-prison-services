@@ -95,7 +95,11 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
           `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${caseNote.caseNoteId}/amend-case-note`,
         printIncentiveLink:
           showPrintIncentiveLink &&
-          `/iep-slip?offender=${offenderNo}&casenote=${caseNote.caseNoteId}&user=${prisonerProfileData.staffId}`,
+          `/iep-slip?offenderNo=${offenderNo}&offenderName=${encodeURIComponent(
+            prisonerProfileData.offenderName
+          )}&location=${encodeURIComponent(prisonerProfileData.location)}&casenoteId=${
+            caseNote.caseNoteId
+          }&issuedBy=${encodeURIComponent(prisonerProfileData.staffName)}`,
       })
 
       return [{ html: createdByColumn }, { html: caseNoteDetailColumn }]

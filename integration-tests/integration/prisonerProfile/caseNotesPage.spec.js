@@ -6,10 +6,10 @@ const caseNotes = [
   {
     caseNoteId: 12311312,
     offenderIdentifier: 'A1234AA',
-    type: 'KA',
-    typeDescription: 'Key Worker',
-    subType: 'KS',
-    subTypeDescription: 'Key Worker Session',
+    type: 'IEP',
+    typeDescription: 'Incentive Level',
+    subType: 'IEP_WARN',
+    subTypeDescription: 'Incentive Level Warning',
     source: 'INST',
     creationDateTime: '2017-10-31T01:30:00',
     occurrenceDateTime: '2017-10-31T01:30:00',
@@ -63,10 +63,30 @@ context('A user can view prisoner case notes', () => {
     tableDataRow.createdBy().contains('Tuesday 31/10/2017 01:30 Mickey Mouse')
     tableDataRow
       .caseNoteDetails()
-      .contains('Key Worker: Key Worker Session This is some text Add more details Happened: 31/10/2017 - 01:30')
+      .contains(
+        'Incentive Level: Incentive Level Warning This is some text Add more details Happened: 31/10/2017 - 01:30'
+      )
     tableDataRow
       .caseNoteAddMoreDetailsLink()
       .contains('Add more details')
       .should('have.attr', 'href', 'http://localhost:20200/offenders/A12345/case-notes/12311312/amend-case-note')
+    tableDataRow
+      .caseNotePrintIncentiveLevelSlipLink()
+      .contains('Print Incentive Level Slip')
+      .should(
+        'have.attr',
+        'href',
+        '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=undefined'
+      )
+
+    tableDataRow.caseNotePrintIncentiveLevelSlipLink().click()
+
+    tableDataRow
+      .caseNotePrintIncentiveLevelSlipLink()
+      .invoke('removeAttr', 'target')
+      .click()
+
+    cy.url().should('include', 'iep-slip')
+    cy.get('h2').contains('Incentive Level warning')
   })
 })
