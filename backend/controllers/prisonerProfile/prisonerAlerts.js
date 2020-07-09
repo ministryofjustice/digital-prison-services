@@ -117,7 +117,6 @@ module.exports = ({
       canUpdateAlerts,
     })
   } catch (error) {
-    console.error({ error })
     logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}/alerts` })
   }
