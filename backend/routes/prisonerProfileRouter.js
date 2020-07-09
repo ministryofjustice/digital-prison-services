@@ -23,9 +23,17 @@ const controller = ({
   allocationManagerApi,
   systemOauthClient,
   dataComplianceApi,
+  pathfinderApi,
   logError,
 }) => {
-  const prisonerProfileService = prisonerProfileServiceFactory(elite2Api, keyworkerApi, oauthApi, dataComplianceApi)
+  const prisonerProfileService = prisonerProfileServiceFactory({
+    elite2Api,
+    keyworkerApi,
+    oauthApi,
+    dataComplianceApi,
+    pathfinderApi,
+    systemOauthClient,
+  })
   const personService = personServiceFactory(elite2Api)
   const referenceCodesService = referenceCodesServiceFactory(elite2Api)
 

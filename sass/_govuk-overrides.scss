@@ -69,3 +69,11 @@
 .govuk-warning-text__icon {
   box-sizing: content-box;
 }
+
+.header-with-link {
+  h1 {
+    display: inline;
+    margin-right: govuk-spacing(3);
+  }
+  margin-bottom: govuk-spacing(6);
+}

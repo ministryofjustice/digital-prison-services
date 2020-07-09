@@ -21,20 +21,22 @@ env:
   OAUTH_ENDPOINT_URL: https://gateway.t3.nomis-api.hmpps.dsd.io/auth/
   NN_ENDPOINT_URL: https://digital-dev.prison.service.justice.gov.uk/
   API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/
-  LICENCES_URL: "https://licences-dev.prison.service.justice.gov.uk/"
+  LICENCES_URL: https://licences-dev.prison.service.justice.gov.uk/
   HMPPS_COOKIE_NAME: hmpps-session-dev
   REMOTE_AUTH_STRATEGY: "true"
   WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
-  API_COMMUNITY_ENDPOINT_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
+  API_COMMUNITY_ENDPOINT_URL: https://community-api-secure.test.delius.probation.hmpps.dsd.io
   API_COMMUNITY_API_PREFIX: "/secure"
   VIDEO_LINK_ENABLED_FOR: "WWI"
   API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-dev.prison.service.justice.gov.uk/
   DISPLAY_RETENTION_LINK: "true"
-  KEYWORKER_API_URL: "https://keyworker-api-dev.prison.service.justice.gov.uk/"
-  CATEGORISATION_UI_URL: "https://dev.offender-categorisation.service.justice.gov.uk/"
-  USE_OF_FORCE_URL: "https://dev.use-of-force.service.justice.gov.uk"
+  KEYWORKER_API_URL: https://keyworker-api-dev.prison.service.justice.gov.uk/
+  CATEGORISATION_UI_URL: https://dev.offender-categorisation.service.justice.gov.uk/
+  USE_OF_FORCE_URL: https://dev.use-of-force.service.justice.gov.uk
   USE_OF_FORCE_PRISONS: "WRI"
-  TOKENVERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+  TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
-  CASENOTES_API_URL: "https://dev.offender-case-notes.service.justice.gov.uk/"
-  ALLOCATION_MANAGER_ENDPOINT_URL: "https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk/"
+  CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
+  ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk/
+  PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk
+  PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk

@@ -96,6 +96,8 @@ context('Prisoner personal', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('resetAndStubTokenVerification')
+    cy.task('stubPathFinderOffenderDetails', null)
+    cy.task('stubClientCredentialsRequest')
   })
 
   context('When there is no data', () => {
