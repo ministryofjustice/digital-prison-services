@@ -12,6 +12,7 @@ const mergeMostRecentLicenceTerm = sentences =>
         licence: {
           years: current.years,
           months: current.months,
+          weeks: current.weeks,
           days: current.days,
         },
         ...result,
@@ -23,7 +24,7 @@ const mergeMostRecentLicenceTerm = sentences =>
 
 const groupSentencesBySequence = sentences =>
   sentences.reduce((result, current) => {
-    const key = current.sentenceSequence
+    const key = current.lineSeq
     const existing = result.find(sentence => sentence.key === key)
 
     if (existing) {
@@ -45,6 +46,9 @@ const sortBySentenceDateThenByImprisonmentLength = (left, right) => {
   if (left.months < right.months) return 1
   if (left.months > right.months) return -1
 
+  if (left.weeks < right.weeks) return 1
+  if (left.weeks > right.weeks) return -1
+
   return right.days - left.days
 }
 
@@ -63,20 +67,21 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
         .map(groupedSentence => mergeMostRecentLicenceTerm(groupedSentence.items))
         .sort(sortBySentenceDateThenByImprisonmentLength)
         .map(sentence => ({
-          sentenceHeader: `Sentence ${sentence.sentenceSequence}`,
+          sentenceHeader: `Sentence ${sentence.lineSeq}`,
           sentenceTypeDescription: sentence.sentenceTypeDescription,
           summaryDetailRows: [
             { label: 'Start date', value: sentence.startDate && readableDateFormat(sentence.startDate, 'YYYY-MM-DD') },
             {
               label: 'Imprisonment',
-              value: `${sentence.years || 0} years, ${sentence.months || 0} months, ${sentence.days || 0} days`,
+              value: `${sentence.years || 0} years, ${sentence.months || 0} months, ${sentence.weeks ||
+                0} weeks, ${sentence.days || 0} days`,
             },
             sentence.consecutiveTo && { label: 'Consecutive to', value: sentence.consecutiveTo },
             sentence.fineAmount && { label: 'Fine', value: formatCurrency(sentence.fineAmount) },
             sentence.licence && {
               label: 'License',
               value: `${sentence.licence.years || 0} years, ${sentence.licence.months || 0} months, ${sentence.licence
-                .days || 0} days`,
+                .weeks || 0} weeks, ${sentence.licence.days || 0} days`,
             },
           ].filter(onlyValidValues),
         })),
