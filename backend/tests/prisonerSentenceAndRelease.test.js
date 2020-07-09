@@ -150,8 +150,9 @@ describe('prisoner sentence and release', () => {
     elite2Api.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
+        sentenceSequence: 1,
         termSequence: 1,
-        consecutiveTo: 2,
+        consecutiveTo: 3,
         startDate: '2018-12-31',
         years: 11,
         months: 0,
@@ -163,8 +164,8 @@ describe('prisoner sentence and release', () => {
       },
       {
         lineSeq: 2,
+        sentenceSequence: 3,
         termSequence: 1,
-        consecutiveTo: 2,
         startDate: '2018-12-31',
         years: 11,
         months: 0,
@@ -234,7 +235,6 @@ describe('prisoner sentence and release', () => {
       {
         lineSeq: 1,
         termSequence: 1,
-        consecutiveTo: 2,
         startDate: '2018-12-31',
         years: 11,
         months: 0,
@@ -264,7 +264,6 @@ describe('prisoner sentence and release', () => {
                 summaryDetailRows: [
                   { label: 'Start date', value: '31 December 2018' },
                   { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
-                  { label: 'Consecutive to', value: 2 },
                   { label: 'Fine', value: '£200.00' },
                 ],
               },
@@ -286,6 +285,7 @@ describe('prisoner sentence and release', () => {
     elite2Api.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
+        sentenceSequence: 1,
         termSequence: 1,
         consecutiveTo: 2,
         startDate: '2018-12-31',
@@ -312,6 +312,7 @@ describe('prisoner sentence and release', () => {
 
       {
         lineSeq: 2,
+        sentenceSequence: 2,
         termSequence: 1,
         startDate: '2018-12-31',
         years: 20,
