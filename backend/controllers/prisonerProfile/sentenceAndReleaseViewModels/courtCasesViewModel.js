@@ -52,6 +52,12 @@ const sortBySentenceDateThenByImprisonmentLength = (left, right) => {
   return right.days - left.days
 }
 
+const findConsecutiveSentence = ({ sentences, consecutiveTo }) => {
+  const sentence = sentences.find(s => s.sentenceSequence === consecutiveTo)
+
+  return sentence && sentence.lineSeq
+}
+
 module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
   const caseIds = [
     ...new Set(offenceHistory.filter(offence => offence.primaryResultCode === '1002').map(offence => offence.caseId)),
@@ -76,7 +82,10 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
               value: `${sentence.years || 0} years, ${sentence.months || 0} months, ${sentence.weeks ||
                 0} weeks, ${sentence.days || 0} days`,
             },
-            sentence.consecutiveTo && { label: 'Consecutive to', value: sentence.consecutiveTo },
+            sentence.consecutiveTo && {
+              label: 'Consecutive to',
+              value: findConsecutiveSentence({ sentences: sentenceTermsData, consecutiveTo: sentence.consecutiveTo }),
+            },
             sentence.fineAmount && { label: 'Fine', value: formatCurrency(sentence.fineAmount) },
             sentence.licence && {
               label: 'License',
