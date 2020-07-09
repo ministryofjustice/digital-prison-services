@@ -219,7 +219,8 @@ context('Prisoner search', () => {
         caseNoteSummary: {},
       })
       cy.task('stubQuickLook', quickLookFullDetails)
-
+      cy.task('stubPathFinderOffenderDetails', null)
+      cy.task('stubClientCredentialsRequest')
       cy.visit(searchUrl)
 
       cy.get('[data-test="prisoner-search-results-table"]').then($table => {

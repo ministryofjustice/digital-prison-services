@@ -30,6 +30,11 @@ describe('prisoner profile quick look', () => {
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
+      session: {
+        userDetails: {
+          username: 'user1',
+        },
+      },
     }
     res = { locals: {}, render: jest.fn() }
 
@@ -58,7 +63,7 @@ describe('prisoner profile quick look', () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1')
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
       expect.objectContaining({

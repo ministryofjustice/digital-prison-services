@@ -46,8 +46,14 @@
   {{ prisonerProfileData.agencyName}}
 {% endset %}
 
-
-<h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
+<div class="header-with-link">
+    <h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
+    {%  if prisonerProfileData.canViewPathfinderLink %}
+        <span class="govuk-body">
+            <a class="govuk-link" data-qa="path-finder-link" href="{{ prisonerProfileData.pathfinderProfileUrl }}">View Pathfinder profile</a>
+        </span>
+    {% endif %}
+</div>
 
 <div class="prisoner-header">
   <div class="prisoner-header__image-container">
@@ -73,13 +79,22 @@
     </ul>
 
     <div class="prisoner-header__details__actions">
-      {% if prisonerProfileData.userCanEdit %}
-        {{ govukButton({
-          text: "Add case note",
-          element: "a",
-          classes: "govuk-button--link govuk-!-margin-bottom-3",
-          href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
-        }) }}
+        {% if prisonerProfileData.showPathfinderReferButton %}
+            {{ govukButton({
+                text: "Refer to Pathfinder",
+                element: "a",
+                classes: "govuk-button--link govuk-!-margin-bottom-3",
+                href: prisonerProfileData.pathfinderReferUrl
+            }) }}
+        {% endif %}
+
+        {% if prisonerProfileData.userCanEdit %}
+            {{ govukButton({
+              text: "Add case note",
+              element: "a",
+              classes: "govuk-button--link govuk-!-margin-bottom-3",
+              href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
+            }) }}
 
         {% if prisonerProfileData.showAddKeyworkerSession %}
           {{ govukButton({
@@ -96,6 +111,7 @@
           classes: "govuk-button--link govuk-!-margin-bottom-3",
           href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
         }) }}
+
 
         {% if prisonerProfileData.showReportUseOfForce %}
           {{ govukButton({

@@ -9,6 +9,7 @@ const { keyworkerApiFactory } = require('./api/keyworkerApi')
 const { caseNotesApiFactory } = require('./api/caseNotesApi')
 const { allocationManagerApiFactory } = require('./api/allocationManagerApi')
 const { tokenVerificationApiFactory } = require('./api/tokenVerificationApi')
+const { pathfinderApiFactory } = require('./api/pathfinderApi')
 
 const elite2Api = elite2ApiFactory(
   clientFactory({
@@ -75,6 +76,13 @@ const allocationManagerApi = allocationManagerApiFactory(
   })
 )
 
+const pathfinderApi = pathfinderApiFactory(
+  clientFactory({
+    baseUrl: config.apis.pathfinder.url,
+    timeout: config.apis.pathfinder.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
@@ -85,4 +93,5 @@ module.exports = {
   caseNotesApi,
   tokenVerificationApi,
   allocationManagerApi,
+  pathfinderApi,
 }

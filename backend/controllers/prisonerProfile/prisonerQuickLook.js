@@ -26,6 +26,7 @@ const extractResponse = (complexData, key) => {
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
+  const { username } = req.session.userDetails
 
   try {
     const details = await elite2Api.getDetails(res.locals, offenderNo)
@@ -54,7 +55,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         profileInformationResponse,
       ] = await Promise.all(
         [
-          prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
+          prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
           elite2Api.getMainOffence(res.locals, bookingId),
           elite2Api.getPrisonerBalances(res.locals, bookingId),
           elite2Api.getPrisonerDetails(res.locals, offenderNo),
