@@ -155,4 +155,7 @@ env:
   - name: NODE_ENV
     value: production
 
+  - name: REDIS_ENABLED
+    value: {{ .Values.env.REDIS_ENABLED | quote }}
+
 {{- end -}}
