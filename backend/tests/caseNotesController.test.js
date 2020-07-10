@@ -186,6 +186,7 @@ describe('Case notes controller', () => {
         subTypeDescription: 'Key Worker Session',
         text: 'This is some text',
         typeDescription: 'Key Worker',
+        printIncentiveLink: false,
       }
     )
 

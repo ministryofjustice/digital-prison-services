@@ -129,6 +129,7 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
       interpreterRequired,
       writtenLanguage,
       staffId: currentUser.staffId,
+      staffName: currentUser.name,
     }
   }
 
