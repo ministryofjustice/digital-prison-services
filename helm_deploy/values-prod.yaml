@@ -38,6 +38,7 @@ env:
   ALLOCATION_MANAGER_ENDPOINT_URL: https://moic.service.justice.gov.uk/
   PATHFINDER_UI_URL: https://pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://api.pathfinder.service.justice.gov.uk/
+  REDIS_ENABLED: true
 
 whitelist:
   office: "217.33.148.210/32"
