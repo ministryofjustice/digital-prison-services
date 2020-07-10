@@ -80,12 +80,9 @@
 
     <div class="prisoner-header__details__actions">
         {% if prisonerProfileData.showPathfinderReferButton %}
-            {{ govukButton({
-                text: "Refer to Pathfinder",
-                element: "a",
-                classes: "govuk-button--link govuk-!-margin-bottom-3",
-                href: prisonerProfileData.pathfinderReferUrl
-            }) }}
+            <a  href="{{ prisonerProfileData.pathfinderReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank">
+                Refer to Pathfinder
+            </a>
         {% endif %}
 
         {% if prisonerProfileData.userCanEdit %}

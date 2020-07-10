@@ -39,6 +39,7 @@ env:
   ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk/
   PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
+  REDIS_ENABLED: true
 
 whitelist:
   office: "217.33.148.210/32"
