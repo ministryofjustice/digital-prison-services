@@ -100,6 +100,7 @@ const setup = ({
     offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
     referenceCodesService: referenceCodesService(elite2Api),
     elite2Api,
+    caseNotesApi,
   })
 
   router.use(currentUser({ elite2Api, oauthApi }))
@@ -155,6 +156,7 @@ const setup = ({
   router.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
   router.get('/api/get-alert-types', controller.getAlertTypes)
+  router.get('/api/get-case-note/:offenderNumber/:caseNoteId', handleErrors(controller.getCaseNote))
   router.get('/api/get-offender-events', getExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-location-events', getLocationExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-recurring-end-date', endDateController)

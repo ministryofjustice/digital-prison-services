@@ -1,5 +1,4 @@
 const express = require('express')
-const qs = require('querystring')
 const prisonerSearchController = require('../controllers/search/prisonerSearch')
 const paginationService = require('../services/paginationService')
 
