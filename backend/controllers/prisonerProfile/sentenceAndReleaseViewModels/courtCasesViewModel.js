@@ -34,8 +34,8 @@ const groupSentencesBySequence = sentences =>
   }, [])
 
 const sortBySentenceDateThenByImprisonmentLength = (left, right) => {
-  const startDateLeft = moment(left.startDate, 'YYYY-MM-DD')
-  const startDateRight = moment(right.startDate, 'YYYY-MM-DD')
+  const startDateLeft = moment(left.sentenceStartDate, 'YYYY-MM-DD')
+  const startDateRight = moment(right.sentenceStartDate, 'YYYY-MM-DD')
 
   if (startDateLeft.isAfter(startDateRight)) return 1
   if (startDateLeft.isBefore(startDateRight)) return -1
@@ -76,7 +76,10 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
           sentenceHeader: `Sentence ${sentence.lineSeq}`,
           sentenceTypeDescription: sentence.sentenceTypeDescription,
           summaryDetailRows: [
-            { label: 'Start date', value: sentence.startDate && readableDateFormat(sentence.startDate, 'YYYY-MM-DD') },
+            {
+              label: 'Start date',
+              value: sentence.sentenceStartDate && readableDateFormat(sentence.sentenceStartDate, 'YYYY-MM-DD'),
+            },
             {
               label: 'Imprisonment',
               value: `${sentence.years || 0} years, ${sentence.months || 0} months, ${sentence.weeks ||
