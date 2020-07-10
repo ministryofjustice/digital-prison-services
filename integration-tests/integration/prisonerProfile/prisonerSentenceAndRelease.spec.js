@@ -380,7 +380,7 @@ context('Prisoner sentence and release', () => {
     cy.task('stubSentenceTerms', [
       {
         lineSeq: 6,
-        startDate: '2018-01-01',
+        sentenceStartDate: '2018-01-01',
         years: 12,
         months: 0,
         days: 0,
@@ -390,7 +390,7 @@ context('Prisoner sentence and release', () => {
       },
       {
         lineSeq: 1,
-        startDate: '2017-01-01',
+        sentenceStartDate: '2017-01-01',
         years: 12,
         months: 2,
         days: 1,
