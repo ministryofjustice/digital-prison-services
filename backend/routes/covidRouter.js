@@ -5,6 +5,7 @@ const reverseCohortingUnitController = require('../controllers/covid/reverseCoho
 const protectiveIsolationUnitController = require('../controllers/covid/protectiveIsolationUnitController')
 const shieldingUnitController = require('../controllers/covid/shieldingUnitController')
 const refusingToShieldController = require('../controllers/covid/refusingToShieldController')
+const notInUnitController = require('../controllers/covid/notInUnitController')
 
 const router = express.Router({ mergeParams: true })
 
@@ -16,5 +17,6 @@ module.exports = (elite2Api, logError) => {
   router.get('/protective-isolation-unit', protectiveIsolationUnitController({ covidService, logError }))
   router.get('/shielding-unit', shieldingUnitController({ covidService, logError }))
   router.get('/refusing-to-shield', refusingToShieldController({ covidService, logError }))
+  router.get('/not-in-unit', notInUnitController({ covidService, logError }))
   return router
 }
