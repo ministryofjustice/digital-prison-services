@@ -24,6 +24,7 @@ context('A user can view the reverse cohorting list', () => {
         },
         { offenderNo: 'BB1234A', alertCode: 'AA1', dateCreated: '2020-01-02' },
         { offenderNo: 'BB1234A', alertCode: 'URCU', dateCreated: '2020-01-03' },
+        { offenderNo: 'CC1234A', alertCode: 'AA2', dateCreated: '2020-01-03' },
       ],
     })
 
@@ -48,12 +49,48 @@ context('A user can view the reverse cohorting list', () => {
         },
       ],
     })
+
+    cy.task('stubMovementsBetween', {
+      locationId: 'MDI',
+      fromDate: moment()
+        .startOf('day')
+        .subtract(14, 'days')
+        .format('YYYY-MM-DDTHH:mm:ss'),
+      movements: [
+        {
+          offenderNo: 'AA1234A',
+          bookingId: 123,
+          location: '1-2-017',
+          firstName: 'JAMES',
+          lastName: 'STEWART',
+          movementDateTime: '2020-01-04',
+        },
+        {
+          offenderNo: 'CC1234A',
+          bookingId: 234,
+          location: '1-2-018',
+          firstName: 'BOB',
+          lastName: 'SMITH',
+          movementDateTime: '2020-01-05',
+        },
+        {
+          offenderNo: 'DD1234A',
+          bookingId: 234,
+          location: '1-2-018',
+          firstName: 'JIM',
+          lastName: 'SMITH',
+          movementDateTime: '2020-01-05',
+        },
+      ],
+    })
   })
 
   it('A user can view the reverse cohorting list', () => {
     const reverseCohortingUnitPage = ReverseCohortingUnitPage.goTo()
     reverseCohortingUnitPage.prisonerCount().contains(2)
-
+    reverseCohortingUnitPage
+      .notInUnit()
+      .contains('There are 2 newly arrived prisoners who have not been added to this unit')
     {
       const { prisoner, prisonNumber, location, dateAdded, dateOverdue, overdue } = reverseCohortingUnitPage.getRow(0)
 
