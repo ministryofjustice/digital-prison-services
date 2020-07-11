@@ -148,6 +148,9 @@ const elite2ApiFactory = client => {
   const getMovementsIn = (context, agencyId, movementDate) =>
     get(context, `/api/movements/${agencyId}/in/${movementDate}`)
 
+  const getMovementsInBetween = (context, agencyId, params) =>
+    get(context, `/api/movements/${agencyId}/in?${mapToQueryString(params)}`)
+
   const getMovementsOut = (context, agencyId, movementDate) =>
     get(context, `/api/movements/${agencyId}/out/${movementDate}`)
 
@@ -333,6 +336,7 @@ const elite2ApiFactory = client => {
     getPrisonerImage,
     getLastPrison,
     getMovementsIn,
+    getMovementsInBetween,
     getMovementsOut,
     getOffendersInReception,
     getRecentMovements,

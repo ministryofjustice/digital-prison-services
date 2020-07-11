@@ -238,6 +238,7 @@ module.exports = on => {
     stubPutAttendance: response => whereabouts.stubPutAttendance(response),
     verifyPostAttendance: () => whereabouts.verifyPostAttendance(),
     stubSentenceAdjustments: response => elite2api.stubGetSentenceAdjustments(response),
+    stubMovementsBetween: elite2api.stubMovementsBetween,
     stubOffenderBasicDetails: basicDetails => Promise.all([elite2api.stubOffenderBasicDetails(basicDetails)]),
     stubOffenderFullDetails: fullDetails => Promise.all([elite2api.stubOffenderFullDetails(fullDetails)]),
     stubAppointmentTypes: types => Promise.all([elite2api.stubAppointmentTypes(types)]),

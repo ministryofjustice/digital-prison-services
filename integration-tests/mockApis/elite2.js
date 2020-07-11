@@ -307,6 +307,21 @@ module.exports = {
       },
     })
   },
+  stubMovementsBetween: ({ locationId, fromDate, movements }) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/movements/${locationId}/in\\?fromDateTime=${encodeURIComponent(fromDate)}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || [],
+      },
+    })
+  },
   stubOffenderImage: () => {
     return stubFor({
       request: {
