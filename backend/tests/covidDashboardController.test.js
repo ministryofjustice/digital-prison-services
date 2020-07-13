@@ -1,4 +1,4 @@
-const covidDashboard = require('../controllers/covid/covidDashboard')
+const covidDashboard = require('../controllers/covid/covidDashboardController')
 
 describe('covid dashboard', () => {
   let req
