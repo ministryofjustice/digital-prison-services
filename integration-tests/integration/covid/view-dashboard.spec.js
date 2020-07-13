@@ -1,3 +1,4 @@
+const moment = require('moment')
 const DashboardPage = require('../../pages/covid/dashboardPage')
 const ReverseCohortingUnitPage = require('../../pages/covid/reverseCohortingUnitPage')
 const ProtectiveIsolationUnitPage = require('../../pages/covid/protectiveIsolationUnitPage')
@@ -20,6 +21,15 @@ context('Covid dashboard page', () => {
     cy.task('stubInmates', { locationId: 'MDI', params: alert('URCU'), count: 12 })
     cy.task('stubInmates', { locationId: 'MDI', params: alert('USU'), count: 14 })
     cy.task('stubInmates', { locationId: 'MDI', params: alert('URS'), count: 5 })
+
+    cy.task('stubMovementsBetween', {
+      locationId: 'MDI',
+      fromDate: moment()
+        .startOf('day')
+        .subtract(14, 'days')
+        .format('YYYY-MM-DDTHH:mm:ss'),
+      movements: [],
+    })
   })
 
   it('A user can view the covid dashboard', () => {

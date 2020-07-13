@@ -6,15 +6,15 @@ const caseNotes = [
   {
     caseNoteId: 12311312,
     offenderIdentifier: 'A1234AA',
-    type: 'KA',
-    typeDescription: 'Key Worker',
-    subType: 'KS',
-    subTypeDescription: 'Key Worker Session',
+    type: 'IEP',
+    typeDescription: 'Incentive Level',
+    subType: 'IEP_WARN',
+    subTypeDescription: 'Incentive Level Warning',
     source: 'INST',
     creationDateTime: '2017-10-31T01:30:00',
     occurrenceDateTime: '2017-10-31T01:30:00',
-    authorName: 'John Smith',
-    authorUserId: 12345,
+    authorName: 'Mouse, Mickey',
+    authorUserId: '12345',
     text: 'This is some text',
     locationId: 'MDI',
     amendments: [
@@ -23,7 +23,7 @@ const caseNotes = [
         sequence: 1,
         creationDateTime: '2018-12-01T13:45:00',
         authorUserName: 'USER1',
-        authorName: 'Mickey Mouse',
+        authorName: 'Mouse, Mickey',
         additionalNoteText: 'Some Additional Text',
         authorUserId: 12345,
       },
@@ -60,9 +60,38 @@ context('A user can view prisoner case notes', () => {
     const page = CaseNotesPage.verifyOnPage('Smith, John')
     const tableDataRow = page.getRows(0)
 
-    tableDataRow.createdBy().contains('Tuesday 31/10/2017 01:30 John Smith')
+    tableDataRow.createdBy().contains('Tuesday 31/10/2017 01:30 Mickey Mouse')
     tableDataRow
       .caseNoteDetails()
-      .contains('Key Worker: Key Worker Session This is some text Happened: 31/10/2017 - 01:30')
+      .contains(
+        'Incentive Level: Incentive Level Warning This is some text Add more details Happened: 31/10/2017 - 01:30'
+      )
+    tableDataRow
+      .caseNoteAddMoreDetailsLink()
+      .contains('Add more details')
+      .should('have.attr', 'href', 'http://localhost:20200/offenders/A12345/case-notes/12311312/amend-case-note')
+    tableDataRow
+      .caseNotePrintIncentiveLevelSlipLink()
+      .contains('Print Incentive Level Slip')
+      .should(
+        'have.attr',
+        'href',
+        '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=undefined'
+      )
+
+    const form = page.filterForm()
+    form.typeSelect().select('Observations')
+    form
+      .subTypeSelect()
+      .get('option')
+      .should('contain', 'Test')
+    form.subTypeSelect().select('Test')
+    form.applyButton().click()
+
+    CaseNotesPage.verifyOnPage('Smith, John')
+
+    form.subTypeSelect().select('Select')
+    form.applyButton().click()
+    CaseNotesPage.verifyOnPage('Smith, John')
   })
 })

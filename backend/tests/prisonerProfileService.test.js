@@ -1,3 +1,11 @@
+const config = require('../config')
+
+config.app.displayRetentionLink = true
+config.apis.pathfinder = {
+  ui_url: 'http://pathfinder-ui',
+  url: 'http://pathfinder-api',
+}
+
 const prisonerProfileService = require('../services/prisonerProfileService')
 
 describe('prisoner profile service', () => {
@@ -5,6 +13,9 @@ describe('prisoner profile service', () => {
   const elite2Api = {}
   const keyworkerApi = {}
   const oauthApi = {}
+  const pathfinderApi = {}
+  const dataComplianceApi = {}
+  const systemOauthClient = {}
   let service
 
   beforeEach(() => {
@@ -16,7 +27,19 @@ describe('prisoner profile service', () => {
     keyworkerApi.getKeyworkerByCaseloadAndOffenderNo = jest.fn()
     oauthApi.userRoles = jest.fn()
     oauthApi.currentUser = jest.fn()
-    service = prisonerProfileService(elite2Api, keyworkerApi, oauthApi)
+    dataComplianceApi.getOffenderRetentionRecord = jest.fn()
+    pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
+
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+
+    service = prisonerProfileService({
+      elite2Api,
+      keyworkerApi,
+      oauthApi,
+      dataComplianceApi,
+      pathfinderApi,
+      systemOauthClient,
+    })
   })
 
   describe('prisoner profile data', () => {
@@ -74,6 +97,7 @@ describe('prisoner profile service', () => {
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
       oauthApi.userRoles.mockResolvedValue([])
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
     })
 
     it('should make a call for the full details for a prisoner and the current user', async () => {
@@ -103,6 +127,11 @@ describe('prisoner profile service', () => {
       const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
       expect(getPrisonerProfileData).toEqual({
+        canViewPathfinderLink: false,
+        canViewProbationDocuments: false,
+        pathfinderProfileUrl: null,
+        pathfinderReferUrl: 'http:/pathfinder-ui/refer/offender/ABC123',
+        showPathfinderReferButton: false,
         categorisationLink: `http://localhost:3003/${bookingId}`,
         categorisationLinkText: '',
         activeAlertCount: 1,
@@ -117,6 +146,7 @@ describe('prisoner profile service', () => {
         ],
         category: 'Cat C',
         csra: 'High',
+        displayRetentionLink: true,
         inactiveAlertCount: 2,
         incentiveLevel: 'Standard',
         keyWorkerLastSession: '07/04/2020',
@@ -125,10 +155,12 @@ describe('prisoner profile service', () => {
         notmEndpointUrl: 'http://localhost:3000/',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
+        offenderRecordRetained: undefined,
         showAddKeyworkerSession: false,
         showReportUseOfForce: false,
         useOfForceUrl: '//useOfForceUrl',
         userCanEdit: false,
+        staffId: 111,
       })
     })
 
@@ -230,6 +262,54 @@ describe('prisoner profile service', () => {
           )
         })
       })
+
+      describe('when the user has the VIEW_PROBATION_DOCUMENTS role', () => {
+        beforeEach(() => {
+          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
+        })
+
+        it('should let the user view probation documents', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              canViewProbationDocuments: true,
+            })
+          )
+        })
+      })
+
+      describe('when the user has the POM role', () => {
+        beforeEach(() => {
+          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'POM' }])
+        })
+
+        it('should let the user view probation documents', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              canViewProbationDocuments: true,
+            })
+          )
+        })
+      })
+    })
+
+    describe('when the prisoner has a data retention record', () => {
+      beforeEach(() => {
+        dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({ retentionReasons: ['Reason 1'] })
+      })
+
+      it('should let the template know there is a record retained', async () => {
+        const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(getPrisonerProfileData).toEqual(
+          expect.objectContaining({
+            offenderRecordRetained: true,
+          })
+        )
+      })
     })
 
     describe('when there are errors with retrieving information', () => {
@@ -253,6 +333,72 @@ describe('prisoner profile service', () => {
             userCanEdit: null,
           })
         )
+      })
+    })
+
+    describe('when a pathfinder prisoner exists and the current user has the correct role', () => {
+      beforeEach(() => {
+        pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue({ id: 1 })
+      })
+
+      it('should make client credentials call passing the username', async () => {
+        await service.getPrisonerProfileData(context, offenderNo, 'user1')
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('user1')
+      })
+
+      it('should make a call to the path finder api', async () => {
+        systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(pathfinderApi.getPathfinderDetails).toHaveBeenCalledWith({ system: true }, offenderNo)
+        expect(profileData.canViewPathfinderLink).toBe(false)
+      })
+
+      it('should enable pathfinder when the user has the PF_STD_PRISON role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PRISON' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewPathfinderLink).toBe(true)
+        expect(profileData.pathfinderProfileUrl).toBe('http:/pathfinder-ui/nominal/1')
+      })
+      it('should enable pathfinder when the user has the PF_STD_PROBATION role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewPathfinderLink).toBe(true)
+      })
+      it('should enable pathfinder when the user has the PF_APPROVAL role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_APPROVAL' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewPathfinderLink).toBe(true)
+      })
+      it('should enable pathfinder when the user has the PF_STD_PRISON_RO role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PRISON_RO' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewPathfinderLink).toBe(true)
+      })
+      it('should enable pathfinder when the user has the PF_STD_PROBATION_RO role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION_RO' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewPathfinderLink).toBe(true)
+      })
+
+      it('should not enable pathfinder link when the offender does not exists on pathfinder', async () => {
+        pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION_RO' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewPathfinderLink).toBe(false)
       })
     })
   })

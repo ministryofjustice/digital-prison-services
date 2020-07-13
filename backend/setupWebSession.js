@@ -9,8 +9,8 @@ const router = express.Router()
 
 module.exports = () => {
   const getSessionStore = () => {
-    const { host, port, password } = config.redis
-    if (!host) return null
+    const { enabled, host, port, password } = config.redis
+    if (!enabled || !host) return null
 
     const client = redis.createClient({
       host,

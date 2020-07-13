@@ -29,7 +29,7 @@
                 label: {
                     text: "Type"
                 },
-                items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
+                items: types | addDefaultSelectedVale('Select', true) | setSelected(formValues.type),
                 errorMessage: errors | findError(type)
             }) }}
 
@@ -40,7 +40,7 @@
                     label: {
                         text: "Sub-type"
                     },
-                    items: subTypes | addDefaultSelectedVale('Select') | setSelected(formValues.subType)
+                    items: subTypes | addDefaultSelectedVale('Select', true) | setSelected(formValues.subType)
                 }) }}
             </div>
 
@@ -78,10 +78,14 @@
         {{ govukTable({
             head: [
                 {
-                    text: "Created"
+                    text: "Created",
+                    classes: 'govuk-!-width-one-quarter'
                 },
                 {
                     text: "Case note detail"
+                },
+                {
+                    text: " "
                 }
             ],
             rows: caseNoteRows

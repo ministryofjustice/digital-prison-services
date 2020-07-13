@@ -16,15 +16,29 @@ const caseNoteTypes = [
 ]
 
 module.exports = {
+  stubHealth: (status = 200) => {
+    return getFor({
+      request: {
+        method: 'GET',
+        url: '/casenotes/health/ping',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      },
+    })
+  },
   stubCaseNotes: body => {
     return getFor({
-      urlPath: '/case-notes/A12345',
+      urlPath: '/casenotes/case-notes/A12345',
       body,
     })
   },
   stubCaseNoteTypes: () => {
     return getFor({
-      urlPattern: '/case-notes/types',
+      urlPattern: '/casenotes/case-notes/types',
       body: caseNoteTypes,
     })
   },

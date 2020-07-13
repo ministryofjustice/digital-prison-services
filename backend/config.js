@@ -11,6 +11,7 @@ module.exports = {
     maximumFileUploadSizeInMb: process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB || 200,
     featureFlags: {},
     videoLinkEnabledFor: (process.env.VIDEO_LINK_ENABLED_FOR || '').split(','),
+    displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
@@ -22,6 +23,7 @@ module.exports = {
     sessionSecret: process.env.SESSION_COOKIE_SECRET || 'notm-insecure-session',
   },
   redis: {
+    enabled: process.env.REDIS_ENABLED === 'true',
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT || 6379,
     password: process.env.REDIS_PASSWORD,
@@ -59,7 +61,7 @@ module.exports = {
     },
     tokenverification: {
       url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
-      timeoutSeconds: process.env.TOKENVERIFICATION_API_URL || 5,
+      timeoutSeconds: process.env.TOKENVERIFICATION_API_TIMEOUT_SECONDS || 10,
       enabled: process.env.TOKENVERIFICATION_API_ENABLED === 'true',
     },
     categorisation: {
@@ -71,6 +73,15 @@ module.exports = {
     },
     caseNotes: {
       url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
+    allocationManager: {
+      url: process.env.ALLOCATION_MANAGER_ENDPOINT_URL || '',
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
+    pathfinder: {
+      url: process.env.PATHFINDER_ENDPOINT_API_URL || '',
+      ui_url: process.env.PATHFINDER_UI_URL,
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
   },

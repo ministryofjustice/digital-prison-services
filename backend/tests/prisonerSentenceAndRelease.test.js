@@ -19,6 +19,7 @@ describe('prisoner sentence and release', () => {
   }
   const prisonerProfileService = {}
   const elite2Api = {}
+  const systemOauthClient = {}
 
   let req
   let res
@@ -26,7 +27,7 @@ describe('prisoner sentence and release', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo } }
+    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
     res = { locals: {}, render: jest.fn() }
 
     logError = jest.fn()
@@ -60,6 +61,7 @@ describe('prisoner sentence and release', () => {
         actualParoleDate: '2020-04-03',
         releaseOnTemporaryLicenceDate: '2025-02-03',
         earlyRemovalSchemeEligibilityDate: '2018-11-12',
+        tariffEarlyRemovalSchemeEligibilityDate: '2017-10-10',
         earlyTermDate: '2019-08-09',
         midTermDate: '2020-08-10',
         lateTermDate: '2021-08-11',
@@ -72,10 +74,15 @@ describe('prisoner sentence and release', () => {
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
     elite2Api.getSentenceAdjustments = jest.fn()
+    elite2Api.getOffenceHistory = jest.fn().mockResolvedValue([])
+    elite2Api.getCourtCases = jest.fn().mockResolvedValue([])
+    elite2Api.getSentenceTerms = jest.fn().mockResolvedValue([])
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
     controller = prisonerSentenceAndRelease({
       prisonerProfileService,
       elite2Api,
+      systemOauthClient,
       logError,
     })
   })
@@ -104,6 +111,7 @@ describe('prisoner sentence and release', () => {
             { label: 'Home detention curfew', value: '2 June 2021' },
             { label: 'Release on temporary licence', value: '3 February 2025' },
             { label: 'Early removal scheme', value: '12 November 2018' },
+            { label: 'Tariff early removal scheme', value: '10 October 2017' },
             { label: 'Parole', value: '3 April 2020' },
             { label: 'Early transfer', value: '9 August 2019' },
           ],
@@ -119,6 +127,547 @@ describe('prisoner sentence and release', () => {
         },
       })
     )
+  })
+
+  it('should only return sentence, offences and court cases where they result in imprisonment', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([
+      { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
+      { id: 2, caseInfoNumber: 'T56789' },
+    ])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      {
+        offenceDescription: 'Offence 1',
+        primaryResultCode: '1002',
+        caseId: 1,
+      },
+      {
+        offenceDescription: 'Offence 2',
+        caseId: 2,
+      },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 1,
+        sentenceSequence: 1,
+        termSequence: 1,
+        consecutiveTo: 3,
+        sentenceStartDate: '2018-12-31',
+        years: 11,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+      {
+        lineSeq: 2,
+        sentenceSequence: 3,
+        termSequence: 1,
+        sentenceStartDate: '2018-12-31',
+        years: 11,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 2,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 2',
+      },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        showSentences: true,
+        courtCases: [
+          {
+            caseInfoNumber: 'T12345',
+            offences: ['Offence 1'],
+            sentenceDate: '31 December 2018',
+            courtName: 'Leeds',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 1',
+                sentenceTypeDescription: 'Some sentence info 1',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Consecutive to', value: 2 },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    )
+  })
+  it('should set showSentence to false', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([
+      { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
+      { id: 2, caseInfoNumber: 'T56789' },
+    ])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([])
+    elite2Api.getSentenceTerms.mockResolvedValue([])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        showSentences: false,
+      })
+    )
+  })
+
+  it('should show fine amount with sentence terms', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 1,
+        termSequence: 1,
+        sentenceStartDate: '2018-12-31',
+        years: 11,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 1,
+        fineAmount: 200,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        courtCases: [
+          {
+            caseInfoNumber: 'T12345',
+            offences: ['Offence 1'],
+            sentenceDate: '31 December 2018',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 1',
+                sentenceTypeDescription: 'Some sentence info 1',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Fine', value: '£200.00' },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    )
+  })
+
+  it('should show licence length with sentence terms', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 1,
+        sentenceSequence: 1,
+        termSequence: 1,
+        consecutiveTo: 2,
+        sentenceStartDate: '2018-12-31',
+        years: 11,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+      {
+        lineSeq: 1,
+        termSequence: 2,
+        consecutiveTo: 2,
+        sentenceStartDate: '2018-12-31',
+        years: 5,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'LIC',
+      },
+
+      {
+        lineSeq: 2,
+        sentenceSequence: 2,
+        termSequence: 1,
+        sentenceStartDate: '2018-12-31',
+        years: 20,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 3',
+      },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        courtCases: [
+          {
+            caseInfoNumber: 'T12345',
+            offences: ['Offence 1'],
+            sentenceDate: '31 December 2018',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 2',
+                sentenceTypeDescription: 'Some sentence info 3',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '20 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 1',
+                sentenceTypeDescription: 'Some sentence info 1',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Consecutive to', value: 2 },
+                  { label: 'License', value: '5 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    )
+  })
+
+  it('should order sentences by sentence date, then by sentence length', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 2,
+        termSequence: 1,
+        sentenceStartDate: '2018-02-01',
+        years: 11,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 2',
+      },
+      {
+        lineSeq: 3,
+        termSequence: 1,
+        sentenceStartDate: '2018-03-01',
+        years: 11,
+        months: 1,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 3',
+      },
+      {
+        lineSeq: 1,
+        termSequence: 1,
+        sentenceStartDate: '2018-01-01',
+        years: 11,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+      {
+        lineSeq: 6,
+        termSequence: 1,
+        sentenceStartDate: '2018-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 6',
+      },
+      {
+        lineSeq: 5,
+        termSequence: 1,
+        sentenceStartDate: '2018-01-01',
+        years: 11,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 5',
+      },
+      {
+        lineSeq: 4,
+        termSequence: 1,
+        sentenceStartDate: '2018-03-01',
+        years: 11,
+        months: 1,
+        days: 10,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 4',
+      },
+      {
+        lineSeq: 10,
+        termSequence: 1,
+        sentenceStartDate: '2018-03-01',
+        years: 11,
+        months: 1,
+        weeks: 1,
+        days: 10,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 10',
+      },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        courtCases: [
+          {
+            caseInfoNumber: 'T12345',
+            offences: ['Offence 1'],
+            sentenceDate: '1 January 2018',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 6',
+                sentenceTypeDescription: 'Some sentence info 6',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 January 2018' },
+                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 5',
+                sentenceTypeDescription: 'Some sentence info 5',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 January 2018' },
+                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 1',
+                sentenceTypeDescription: 'Some sentence info 1',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 January 2018' },
+                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 2',
+                sentenceTypeDescription: 'Some sentence info 2',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 February 2018' },
+                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 10',
+                sentenceTypeDescription: 'Some sentence info 10',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 March 2018' },
+                  { label: 'Imprisonment', value: '11 years, 1 months, 1 weeks, 10 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 4',
+                sentenceTypeDescription: 'Some sentence info 4',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 March 2018' },
+                  { label: 'Imprisonment', value: '11 years, 1 months, 0 weeks, 10 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 3',
+                sentenceTypeDescription: 'Some sentence info 3',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 March 2018' },
+                  { label: 'Imprisonment', value: '11 years, 1 months, 0 weeks, 0 days' },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    )
+  })
+
+  it('should order offences alphabetically', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 6,
+        termSequence: 1,
+        sentenceStartDate: '2018-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 6',
+      },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        courtCases: [
+          {
+            caseInfoNumber: 'T12345',
+            offences: ['a', 'b', 'C'],
+            sentenceDate: '1 January 2018',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 6',
+                sentenceTypeDescription: 'Some sentence info 6',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 January 2018' },
+                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    )
+  })
+
+  it('should not show court cases and offences when there are no active sentences', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        courtCases: [],
+      })
+    )
+  })
+
+  it('should return the sentence date using the oldest sentence start date', async () => {
+    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+
+    elite2Api.getOffenceHistory.mockResolvedValue([
+      { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
+      { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
+    ])
+
+    elite2Api.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 6,
+        termSequence: 1,
+        sentenceStartDate: '2018-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 6',
+      },
+      {
+        lineSeq: 1,
+        termSequence: 1,
+        sentenceStartDate: '2017-01-01',
+        years: 12,
+        months: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        courtCases: [
+          {
+            caseInfoNumber: 'T12345',
+            offences: ['a', 'b', 'C'],
+            sentenceDate: '1 January 2017',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 1',
+                sentenceTypeDescription: 'Some sentence info 1',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 January 2017' },
+                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+              {
+                sentenceHeader: 'Sentence 6',
+                sentenceTypeDescription: 'Some sentence info 6',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '1 January 2018' },
+                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    )
+  })
+
+  it('should make a system to system call when requesting offences', async () => {
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+
+    await controller(req, res)
+
+    expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('ITAG_USER')
+    expect(elite2Api.getOffenceHistory).toHaveBeenCalledWith({ system: true }, 'G3878UK')
   })
 
   it('should return the right data when no overrides', async () => {

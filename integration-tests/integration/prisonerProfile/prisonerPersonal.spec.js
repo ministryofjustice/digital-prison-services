@@ -4,6 +4,82 @@ const { clickIfExist } = require('../../test-helpers')
 
 context('Prisoner personal', () => {
   const offenderNo = 'A12345'
+  const nextOfKin = [
+    {
+      lastName: 'SMITH',
+      firstName: 'JOHN',
+      contactType: 'S',
+      contactTypeDescription: 'Social/Family',
+      relationship: 'COU',
+      relationshipDescription: 'Cousin',
+      emergencyContact: true,
+      nextOfKin: true,
+      relationshipId: 1,
+      personId: 12345,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+    {
+      lastName: 'JONES',
+      firstName: 'TERRY',
+      contactType: 'S',
+      contactTypeDescription: 'Social/Family',
+      relationship: 'OTHER',
+      relationshipDescription: 'Other - Social',
+      emergencyContact: true,
+      nextOfKin: true,
+      relationshipId: 2,
+      personId: 67890,
+      activeFlag: false,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+  ]
+  const otherContacts = [
+    {
+      lastName: 'KIMBUR',
+      firstName: 'ARENENG',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'PROB',
+      relationshipDescription: 'Probation Officer',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 6865390,
+      personId: 111,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+    {
+      lastName: 'LYDYLE',
+      firstName: 'URIUALCHE',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'CA',
+      relationshipDescription: 'Case Administrator',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 7350143,
+      personId: 222,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+  ]
 
   const visitPersonalAndExpandAccordions = () => {
     cy.visit(`/prisoner/${offenderNo}/personal`)
@@ -20,6 +96,8 @@ context('Prisoner personal', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('resetAndStubTokenVerification')
+    cy.task('stubPathFinderOffenderDetails', null)
+    cy.task('stubClientCredentialsRequest')
   })
 
   context('When there is no data', () => {
@@ -193,27 +271,99 @@ context('Prisoner personal', () => {
     })
 
     context('Active contacts section', () => {
-      it('Should show correct missing content text', () => {
-        cy.get('[data-test="active-contacts-summary"]').then($section => {
-          cy.get($section)
-            .find('h3')
-            .then($headings => {
-              cy.get($headings)
-                .its('length')
-                .should('eq', 2)
-              expect($headings.get(0).innerText).to.contain('Personal')
-              expect($headings.get(1).innerText).to.contain('Professional')
-            })
+      context('When there is no data at all', () => {
+        it('Should show correct missing content text', () => {
+          cy.get('[data-test="active-contacts-summary"]').then($section => {
+            cy.get($section)
+              .find('h3')
+              .then($headings => {
+                cy.get($headings)
+                  .its('length')
+                  .should('eq', 2)
+                expect($headings.get(0).innerText).to.contain('Personal')
+                expect($headings.get(1).innerText).to.contain('Professional')
+              })
 
-          cy.get($section)
-            .find('p')
-            .then($text => {
-              cy.get($text)
-                .its('length')
-                .should('eq', 2)
-              expect($text.get(0).innerText).to.contain('None')
-              expect($text.get(1).innerText).to.contain('None')
-            })
+            cy.get($section)
+              .find('p')
+              .then($text => {
+                cy.get($text)
+                  .its('length')
+                  .should('eq', 2)
+                expect($text.get(0).innerText).to.contain('None')
+                expect($text.get(1).innerText).to.contain('None')
+              })
+          })
+        })
+      })
+
+      context('When there is some but not all data', () => {
+        before(() => {
+          cy.task('stubPrisonerProfileHeaderData', {
+            offenderBasicDetails,
+            offenderFullDetails,
+            iepSummary: {},
+            caseNoteSummary: {},
+          })
+
+          cy.task('stubPersonal', {
+            contacts: { nextOfKin },
+          })
+          visitPersonalAndExpandAccordions()
+        })
+
+        it('Should show correct missing value text', () => {
+          cy.get('[data-test="active-contacts-summary"]').then($section => {
+            cy.get($section)
+              .find('h3')
+              .then($headings => {
+                cy.get($headings)
+                  .its('length')
+                  .should('eq', 3)
+                expect($headings.get(0).innerText).to.contain('Personal')
+                expect($headings.get(1).innerText).to.contain('John Smith')
+                expect($headings.get(2).innerText).to.contain('Professional')
+              })
+
+            cy.get($section)
+              .find('p')
+              .then($text => {
+                cy.get($text)
+                  .its('length')
+                  .should('eq', 3)
+                expect($text.get(0).innerText).to.contain('Next of kin')
+                expect($text.get(1).innerText).to.contain('Emergency contact')
+                expect($text.get(2).innerText).to.contain('None')
+              })
+
+            cy.get($section)
+              .find('dt')
+              .then($summaryLabels => {
+                cy.get($summaryLabels)
+                  .its('length')
+                  .should('eq', 6)
+                expect($summaryLabels.get(0).innerText).to.contain('Relationship')
+                expect($summaryLabels.get(1).innerText).to.contain('Address')
+                expect($summaryLabels.get(2).innerText).to.contain('Town')
+                expect($summaryLabels.get(3).innerText).to.contain('Postcode')
+                expect($summaryLabels.get(4).innerText).to.contain('Address phone')
+                expect($summaryLabels.get(5).innerText).to.contain('Address type')
+              })
+
+            cy.get($section)
+              .find('dd')
+              .then($summaryValues => {
+                cy.get($summaryValues)
+                  .its('length')
+                  .should('eq', 6)
+                expect($summaryValues.get(0).innerText).to.contain('Cousin')
+                expect($summaryValues.get(1).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(2).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(3).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(4).innerText).to.contain(notEnteredText)
+                expect($summaryValues.get(5).innerText).to.contain(notEnteredText)
+              })
+          })
         })
       })
     })
@@ -371,82 +521,8 @@ context('Prisoner personal', () => {
           ],
           addresses,
           contacts: {
-            nextOfKin: [
-              {
-                lastName: 'SMITH',
-                firstName: 'JOHN',
-                contactType: 'S',
-                contactTypeDescription: 'Social/Family',
-                relationship: 'COU',
-                relationshipDescription: 'Cousin',
-                emergencyContact: true,
-                nextOfKin: true,
-                relationshipId: 1,
-                personId: 12345,
-                activeFlag: true,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-              {
-                lastName: 'JONES',
-                firstName: 'TERRY',
-                contactType: 'S',
-                contactTypeDescription: 'Social/Family',
-                relationship: 'OTHER',
-                relationshipDescription: 'Other - Social',
-                emergencyContact: true,
-                nextOfKin: true,
-                relationshipId: 2,
-                personId: 67890,
-                activeFlag: false,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-            ],
-            otherContacts: [
-              {
-                lastName: 'KIMBUR',
-                firstName: 'ARENENG',
-                contactType: 'O',
-                contactTypeDescription: 'Official',
-                relationship: 'PROB',
-                relationshipDescription: 'Probation Officer',
-                emergencyContact: false,
-                nextOfKin: false,
-                relationshipId: 6865390,
-                personId: 111,
-                activeFlag: true,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-              {
-                lastName: 'LYDYLE',
-                firstName: 'URIUALCHE',
-                contactType: 'O',
-                contactTypeDescription: 'Official',
-                relationship: 'CA',
-                relationshipDescription: 'Case Administrator',
-                emergencyContact: false,
-                nextOfKin: false,
-                relationshipId: 7350143,
-                personId: 222,
-                activeFlag: true,
-                approvedVisitorFlag: false,
-                canBeContactedFlag: false,
-                awareOfChargesFlag: false,
-                contactRootOffenderId: 0,
-                bookingId: 123,
-              },
-            ],
+            nextOfKin,
+            otherContacts,
           },
           personAddresses: addresses,
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
@@ -530,6 +606,10 @@ context('Prisoner personal', () => {
               description: 'MOORLAND (HMP & YOI)',
             },
           ],
+          prisonOffenderManagers: {
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'John doe' },
+          },
         })
 
         visitPersonalAndExpandAccordions()
@@ -904,11 +984,13 @@ context('Prisoner personal', () => {
               .then($headings => {
                 cy.get($headings)
                   .its('length')
-                  .should('eq', 4)
+                  .should('eq', 6)
                 expect($headings.get(0).innerText).to.contain('Personal')
                 expect($headings.get(1).innerText).to.contain('John Smith')
                 expect($headings.get(2).innerText).to.contain('Professional')
-                expect($headings.get(3).innerText).to.contain('Uriualche Lydyle')
+                expect($headings.get(3).innerText).to.contain('Jane Smith')
+                expect($headings.get(4).innerText).to.contain('John doe')
+                expect($headings.get(5).innerText).to.contain('Uriualche Lydyle')
               })
 
             cy.get($section)
@@ -926,7 +1008,7 @@ context('Prisoner personal', () => {
               .then($summaryLabels => {
                 cy.get($summaryLabels)
                   .its('length')
-                  .should('eq', 20)
+                  .should('eq', 22)
                 expect($summaryLabels.get(0).innerText).to.contain('Relationship')
                 expect($summaryLabels.get(1).innerText).to.contain('Phone number')
                 expect($summaryLabels.get(2).innerText).to.contain('Email')
@@ -938,15 +1020,17 @@ context('Prisoner personal', () => {
                 expect($summaryLabels.get(8).innerText).to.contain('Address phone')
                 expect($summaryLabels.get(9).innerText).to.contain('Address type')
                 expect($summaryLabels.get(10).innerText).to.contain('Relationship')
-                expect($summaryLabels.get(11).innerText).to.contain('Phone number')
-                expect($summaryLabels.get(12).innerText).to.contain('Email')
-                expect($summaryLabels.get(13).innerText).to.contain('Address')
-                expect($summaryLabels.get(14).innerText).to.contain('Town')
-                expect($summaryLabels.get(15).innerText).to.contain('County')
-                expect($summaryLabels.get(16).innerText).to.contain('Postcode')
-                expect($summaryLabels.get(17).innerText).to.contain('Country')
-                expect($summaryLabels.get(18).innerText).to.contain('Address phone')
-                expect($summaryLabels.get(19).innerText).to.contain('Address type')
+                expect($summaryLabels.get(11).innerText).to.contain('Relationship')
+                expect($summaryLabels.get(12).innerText).to.contain('Relationship')
+                expect($summaryLabels.get(13).innerText).to.contain('Phone number')
+                expect($summaryLabels.get(14).innerText).to.contain('Email')
+                expect($summaryLabels.get(15).innerText).to.contain('Address')
+                expect($summaryLabels.get(16).innerText).to.contain('Town')
+                expect($summaryLabels.get(17).innerText).to.contain('County')
+                expect($summaryLabels.get(18).innerText).to.contain('Postcode')
+                expect($summaryLabels.get(19).innerText).to.contain('Country')
+                expect($summaryLabels.get(20).innerText).to.contain('Address phone')
+                expect($summaryLabels.get(21).innerText).to.contain('Address type')
               })
 
             cy.get($section)
@@ -954,7 +1038,7 @@ context('Prisoner personal', () => {
               .then($summaryValues => {
                 cy.get($summaryValues)
                   .its('length')
-                  .should('eq', 20)
+                  .should('eq', 22)
                 expect($summaryValues.get(0).innerText).to.contain('Cousin')
                 expect($summaryValues.get(1).innerText).to.contain('02222222222,\n033333333333 extension number 123')
                 expect($summaryValues.get(2).innerText).to.contain('test1@email.com, test2@email.com')
@@ -965,16 +1049,18 @@ context('Prisoner personal', () => {
                 expect($summaryValues.get(7).innerText).to.contain('England')
                 expect($summaryValues.get(8).innerText).to.contain('011111111111')
                 expect($summaryValues.get(9).innerText).to.contain('Home')
-                expect($summaryValues.get(10).innerText).to.contain('Case Administrator')
-                expect($summaryValues.get(11).innerText).to.contain('02222222222,\n033333333333 extension number 123')
-                expect($summaryValues.get(12).innerText).to.contain('test1@email.com, test2@email.com')
-                expect($summaryValues.get(13).innerText).to.contain('Flat A, 13, High Street')
-                expect($summaryValues.get(14).innerText).to.contain('Ulverston')
-                expect($summaryValues.get(15).innerText).to.contain('West Yorkshire')
-                expect($summaryValues.get(16).innerText).to.contain('LS1 AAA')
-                expect($summaryValues.get(17).innerText).to.contain('England')
-                expect($summaryValues.get(18).innerText).to.contain('011111111111')
-                expect($summaryValues.get(19).innerText).to.contain('Home')
+                expect($summaryValues.get(10).innerText).to.contain('Prison Offender Manager')
+                expect($summaryValues.get(11).innerText).to.contain('Co-working Prison Offender Manager')
+                expect($summaryValues.get(12).innerText).to.contain('Case Administrator')
+                expect($summaryValues.get(13).innerText).to.contain('02222222222,\n033333333333 extension number 123')
+                expect($summaryValues.get(14).innerText).to.contain('test1@email.com, test2@email.com')
+                expect($summaryValues.get(15).innerText).to.contain('Flat A, 13, High Street')
+                expect($summaryValues.get(16).innerText).to.contain('Ulverston')
+                expect($summaryValues.get(17).innerText).to.contain('West Yorkshire')
+                expect($summaryValues.get(18).innerText).to.contain('LS1 AAA')
+                expect($summaryValues.get(19).innerText).to.contain('England')
+                expect($summaryValues.get(20).innerText).to.contain('011111111111')
+                expect($summaryValues.get(21).innerText).to.contain('Home')
               })
           })
         })
@@ -1002,6 +1088,65 @@ context('Prisoner personal', () => {
           cy.get($section)
             .find('[data-test="no-fixed-abode"]')
             .should('have.text', 'No fixed abode')
+        })
+      })
+    })
+
+    context('When there is no fixed abode for contacts', () => {
+      before(() => {
+        cy.task('stubPrisonerProfileHeaderData', headerDetails)
+        cy.task('stubPersonal', {
+          personAddresses: [{ ...primaryAddress, noFixedAddress: true }],
+          contacts: { nextOfKin, otherContacts },
+        })
+        visitPersonalAndExpandAccordions()
+      })
+
+      it('Should show the correct content in the active contacts section', () => {
+        cy.get('[data-test="active-contacts-summary"]').then($section => {
+          cy.get($section)
+            .find('h3')
+            .then($headings => {
+              cy.get($headings)
+                .its('length')
+                .should('eq', 4)
+              expect($headings.get(0).innerText).to.contain('Personal')
+              expect($headings.get(1).innerText).to.contain('John Smith')
+              expect($headings.get(2).innerText).to.contain('Professional')
+              expect($headings.get(3).innerText).to.contain('Uriualche Lydyle')
+            })
+
+          cy.get($section)
+            .find('p')
+            .then($text => {
+              cy.get($text)
+                .its('length')
+                .should('eq', 4)
+              expect($text.get(0).innerText).to.contain('Next of kin')
+              expect($text.get(1).innerText).to.contain('Emergency contact')
+              expect($text.get(2).innerText).to.contain('No fixed abode')
+              expect($text.get(3).innerText).to.contain('No fixed abode')
+            })
+
+          cy.get($section)
+            .find('dt')
+            .then($summaryLabels => {
+              cy.get($summaryLabels)
+                .its('length')
+                .should('eq', 2)
+              expect($summaryLabels.get(0).innerText).to.contain('Relationship')
+              expect($summaryLabels.get(1).innerText).to.contain('Relationship')
+            })
+
+          cy.get($section)
+            .find('dd')
+            .then($summaryValues => {
+              cy.get($summaryValues)
+                .its('length')
+                .should('eq', 2)
+              expect($summaryValues.get(0).innerText).to.contain('Cousin')
+              expect($summaryValues.get(1).innerText).to.contain('Case Administrator')
+            })
         })
       })
     })

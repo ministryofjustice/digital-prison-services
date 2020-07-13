@@ -1,31 +1,36 @@
 const moment = require('moment')
-const { formatName, hasLength } = require('../../../utils')
+const { formatName, hasLength, sortByDateTime } = require('../../../utils')
 const { getPhone, getAddress } = require('../../../shared/addressHelpers')
 
 module.exports = ({ personal, professional }) => {
-  const contactHasActiveAddress = contact =>
-    contact.addresses.find(address => !address.endDate || moment(address.endDate).isAfter())
-
-  const getContactView = (useActiveAddress, showEmergencyContact) => contact => {
+  const getContactView = showEmergencyContact => contact => {
     const { phones, emails } = contact
-    const address = useActiveAddress
-      ? contactHasActiveAddress(contact)
-      : contact.addresses.find(contactAddress => contactAddress.primary)
+
+    const activeAddresses =
+      contact.addresses && contact.addresses.filter(address => !address.endDate || moment(address.endDate).isAfter())
+
+    const address =
+      activeAddresses &&
+      (activeAddresses.find(contactAddress => contactAddress.primary) ||
+        activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0])
+
+    const { noFixedAddress } = address || {}
 
     return {
       name: formatName(contact.firstName, contact.lastName),
       ...(showEmergencyContact ? { emergencyContact: contact.emergencyContact } : {}),
+      noFixedAddress,
       details: [
         { label: 'Relationship', value: contact.relationshipDescription },
         ...(hasLength(phones) ? [{ label: 'Phone number', html: getPhone(phones) }] : []),
         ...(hasLength(emails) ? [{ label: 'Email', value: emails.map(email => email.email).join(', ') }] : []),
-        ...getAddress({ address }),
+        ...(!contact.noAddressRequired && !noFixedAddress ? getAddress({ address }) : []),
       ],
     }
   }
 
   return {
-    personal: personal && personal.map(getContactView(false, true)),
-    professional: professional && professional.filter(contactHasActiveAddress).map(getContactView(true, false)),
+    personal: personal && personal.map(getContactView(true)),
+    professional: professional && professional.map(getContactView(false)),
   }
 }

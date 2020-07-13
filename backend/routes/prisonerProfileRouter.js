@@ -16,14 +16,34 @@ const referenceCodesServiceFactory = require('../controllers/reference-codes-ser
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError }) => {
-  const prisonerProfileService = prisonerProfileServiceFactory(elite2Api, keyworkerApi, oauthApi)
+const controller = ({
+  elite2Api,
+  keyworkerApi,
+  oauthApi,
+  caseNotesApi,
+  allocationManagerApi,
+  systemOauthClient,
+  dataComplianceApi,
+  pathfinderApi,
+  logError,
+}) => {
+  const prisonerProfileService = prisonerProfileServiceFactory({
+    elite2Api,
+    keyworkerApi,
+    oauthApi,
+    dataComplianceApi,
+    pathfinderApi,
+    systemOauthClient,
+  })
   const personService = personServiceFactory(elite2Api)
   const referenceCodesService = referenceCodesServiceFactory(elite2Api)
 
   router.get('/', prisonerQuickLook({ prisonerProfileService, elite2Api, logError }))
   router.get('/image', prisonerFullImage({ elite2Api, logError }))
-  router.get('/personal', prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError }))
+  router.get(
+    '/personal',
+    prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
+  )
   router.get(
     '/alerts',
     prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, oauthApi, logError })
@@ -32,8 +52,11 @@ const controller = ({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError 
     '/case-notes',
     prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationService, nunjucks, logError })
   )
-  router.get('/sentence-and-release', prisonerSentenceAndRelease({ prisonerProfileService, elite2Api, logError }))
   router.get('/visits', prisonerVisits({ paginationService, elite2Api, logError }))
+  router.get(
+    '/sentence-and-release',
+    prisonerSentenceAndRelease({ prisonerProfileService, elite2Api, systemOauthClient, logError })
+  )
 
   return router
 }

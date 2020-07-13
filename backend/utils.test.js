@@ -15,6 +15,7 @@ import {
   getTime,
   chunkArray,
   putLastNameFirst,
+  getNamesFromString,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -338,5 +339,19 @@ describe('putLastNameFirst()', () => {
 
   it('should return correctly formatted last name and first name if both specified', () => {
     expect(putLastNameFirst('FIRSTNAME', 'LASTNAME')).toEqual('Lastname, Firstname')
+  })
+})
+
+describe('getNamesFromString()', () => {
+  it('should split correctly when name is in LAST_NAME, FIRST_NAME format', () => {
+    expect(getNamesFromString('SMITH, JOHN')).toEqual(['John', 'Smith'])
+  })
+
+  it('should return the passed name if it doesn not match format', () => {
+    expect(getNamesFromString('John smith')).toEqual(['John smith'])
+  })
+
+  it('should return undefined if nothing passed', () => {
+    expect(getNamesFromString()).toEqual(undefined)
   })
 })

@@ -7,9 +7,9 @@
     {% for contactDetail in contact.details %}
 
       {% if contactDetail.html %}
-        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
+        {% set value = {html: contactDetail.html | showDefault(missingEntry)} %}
       {% else %}
-        {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
+        {% set value = {text: contactDetail.value | showDefault(missingEntry)} %}
       {% endif %}
 
       {% set activeContactsPersonalRows = (activeContactsPersonalRows.push(
@@ -29,6 +29,10 @@
       <p class="govuk-body govuk-!-margin-bottom-1">Emergency contact</p>
     {% endif %}
 
+    {% if contact.noFixedAddress %}
+      <p class="govuk-body">No fixed abode</p>
+    {% endif %}
+
     {{ govukSummaryList({
       rows: activeContactsPersonalRows
     }) }}
@@ -46,9 +50,9 @@
     {% for contactDetail in contact.details %}
 
       {% if contactDetail.html %}
-        {% set value = {html: contactDetail.html | showDefault(missingValueText)} %}
+        {% set value = {html: contactDetail.html | showDefault(missingEntry)} %}
       {% else %}
-        {% set value = {text: contactDetail.value | showDefault(missingValueText)} %}
+        {% set value = {text: contactDetail.value | showDefault(missingEntry)} %}
       {% endif %}
 
       {% set activeContactsProfessionalRows = (activeContactsProfessionalRows.push(
@@ -63,6 +67,10 @@
     {% endfor %}
 
     <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ contact.name }}</h3>
+
+    {% if contact.noFixedAddress %}
+      <p class="govuk-body">No fixed abode</p>
+    {% endif %}
 
     {{ govukSummaryList({
       rows: activeContactsProfessionalRows

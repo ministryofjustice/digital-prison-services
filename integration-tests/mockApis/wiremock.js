@@ -10,6 +10,12 @@ const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send
 
 const resetStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
+const verifyPosts = requestUrl =>
+  superagent.post(`${url}/requests/count`).send({
+    method: 'POST',
+    url: requestUrl,
+  })
+
 const getFor = ({ body, urlPattern, urlPath }) =>
   stubFor({
     request: {
@@ -32,4 +38,5 @@ module.exports = {
   getMatchingRequests,
   resetStubs,
   getFor,
+  verifyPosts,
 }

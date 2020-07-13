@@ -14,6 +14,15 @@ const resultLogger = result => {
 const errorLogger = error => {
   const status = error.response ? error.response.status : '-'
   const responseData = error.response ? error.response.body : '-'
+
+  // Not Found 404 is a valid response when querying for data.
+  // Log it for information and pass it down the line
+  // in case controllers want to do something specific.
+  if (status === 404) {
+    logger.warn(`${error.response.req.method} ${error.response.req.path} No record found`)
+    return error
+  }
+
   if (error.response && error.response.req) {
     logger.warn(
       `API error in ${error.response.req.method} ${error.response.req.path} ${status} ${error.message} ${responseData}`

@@ -99,6 +99,11 @@ env:
     value: {{ .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL | quote }}
   {{- end }}
 
+  {{- if .Values.env.DISPLAY_RETENTION_LINK }}
+  - name: DISPLAY_RETENTION_LINK
+    value: {{ .Values.env.DISPLAY_RETENTION_LINK | quote }}
+  {{- end }}
+
   - name: UPDATE_ATTENDANCE_PRISONS
     value: {{ .Values.env.UPDATE_ATTENDANCE_PRISONS | quote }}
 
@@ -144,7 +149,19 @@ env:
   - name: TOKENVERIFICATION_API_ENABLED
     value: {{ .Values.env.TOKENVERIFICATION_API_ENABLED | quote }}
 
+  - name: ALLOCATION_MANAGER_ENDPOINT_URL
+    value: {{ .Values.env.ALLOCATION_MANAGER_ENDPOINT_URL | quote }}
+
   - name: NODE_ENV
     value: production
 
+  - name: REDIS_ENABLED
+    value: {{ .Values.env.REDIS_ENABLED | quote }}
+
+  - name: PATHFINDER_UI_URL
+    value: {{ .Values.env.PATHFINDER_UI_URL | quote }}
+
+  - name: PATHFINDER_ENDPOINT_API_URL
+    value: {{ .Values.env.PATHFINDER_ENDPOINT_API_URL | quote }}
+      
 {{- end -}}

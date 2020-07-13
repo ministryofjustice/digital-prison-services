@@ -64,7 +64,9 @@ const caseNotesApiFactory = client => {
   const getCaseNoteTypes = context => get(context, '/case-notes/types')
   const myCaseNoteTypes = context => get(context, '/case-notes/types-for-user')
 
-  return { getCaseNotes, getCaseNoteTypes, myCaseNoteTypes, addCaseNote, amendCaseNote }
+  const getCaseNote = (context, offenderNo, caseNoteId) => get(context, `/case-notes/${offenderNo}/${caseNoteId}`)
+
+  return { getCaseNotes, getCaseNoteTypes, myCaseNoteTypes, addCaseNote, amendCaseNote, getCaseNote }
 }
 
 module.exports = { caseNotesApiFactory }

@@ -1,5 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
+const { getNamesFromString, sortByDateTime } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -16,7 +17,10 @@ const {
   careNeedsViewModel,
 } = require('./personalViewModels')
 
-module.exports = ({ prisonerProfileService, personService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
+  req,
+  res
+) => {
   const { offenderNo } = req.params
   const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
     elite2Api.getDetails(res.locals, offenderNo),
@@ -44,6 +48,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     careNeeds,
     adjustments,
     agencies,
+    allocationManager,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -57,13 +62,18 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
       elite2Api.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
       elite2Api.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
       elite2Api.getAgencies(res.locals),
+      allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
   const { nextOfKin, otherContacts } = contacts || {}
   const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
+
   const activeCaseAdministrator =
-    otherContacts && otherContacts.find(contact => contact.activeFlag && contact.relationship === 'CA')
+    otherContacts &&
+    otherContacts
+      .sort((left, right) => sortByDateTime(right.createDateTime, left.createDateTime))
+      .find(contact => contact.activeFlag && contact.relationship === 'CA')
 
   const nextOfKinsWithContact =
     activeNextOfKins &&
@@ -79,6 +89,38 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     ...(await personService.getPersonContactDetails(res.locals, activeCaseAdministrator.personId)),
   }
 
+  const primaryPrisonOffenderManager = () => {
+    const names =
+      allocationManager &&
+      allocationManager.primary_pom &&
+      allocationManager.primary_pom.name &&
+      getNamesFromString(allocationManager.primary_pom.name)
+    return (
+      names && {
+        firstName: names[0],
+        lastName: names[1],
+        relationshipDescription: 'Prison Offender Manager',
+        noAddressRequired: true,
+      }
+    )
+  }
+
+  const coworkingPrisonOffenderManager = () => {
+    const names =
+      allocationManager &&
+      allocationManager.secondary_pom &&
+      allocationManager.secondary_pom.name &&
+      getNamesFromString(allocationManager.secondary_pom.name)
+    return (
+      names && {
+        firstName: names[0],
+        lastName: names[1],
+        relationshipDescription: 'Co-working Prison Offender Manager',
+        noAddressRequired: true,
+      }
+    )
+  }
+
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
 
@@ -92,7 +134,11 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, logError }
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     activeContacts: activeContactsViewModel({
       personal: nextOfKinsWithContact,
-      professional: [...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : [])],
+      professional: [
+        ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
+        ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
+        ...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : []),
+      ],
     }),
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({

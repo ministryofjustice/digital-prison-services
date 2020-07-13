@@ -9,9 +9,16 @@ const column = (i, j) =>
 
 const caseNotePage = offenderName =>
   page(offenderName, {
+    filterForm: () => ({
+      typeSelect: () => cy.get('#type'),
+      subTypeSelect: () => cy.get('#subType'),
+      applyButton: () => cy.get('button'),
+    }),
     getRows: i => ({
       createdBy: () => column(i, 0),
       caseNoteDetails: () => column(i, 1),
+      caseNoteAddMoreDetailsLink: () => cy.get('[data-test="add-more-details"]'),
+      caseNotePrintIncentiveLevelSlipLink: () => cy.get('[data-test="print-slip"]'),
     }),
   })
 

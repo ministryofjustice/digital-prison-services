@@ -1,7 +1,24 @@
 const { stubFor } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
+const assessmentsResponse = require('./responses/assessmentsResponse')
+const activity3 = require('./responses/activity3')
 
 module.exports = {
+  stubHealth: (status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/health/ping',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        fixedDelayMilliseconds: status === 500 ? 5000 : '',
+      },
+    })
+  },
   stubUserMe: () => {
     return stubFor({
       request: {
@@ -36,6 +53,7 @@ module.exports = {
           {
             caseLoadId: 'MDI',
             description: 'Moorland',
+            currentlyActive: true,
           },
         ],
       },
@@ -95,6 +113,58 @@ module.exports = {
       },
     })
   },
+  stubProgEventsAtLocation: (locationId, timeSlot, date, activities, suspended = true) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/schedules/locations/${locationId}/activities\\?${
+          timeSlot ? `timeSlot=${timeSlot}&` : ''
+        }date=${date}&includeSuspended=${suspended}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: activities,
+      },
+    })
+  },
+  stubUsageAtLocation: (caseload, locationId, timeSlot, date, usage, json = []) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/schedules/.+?/${locationId}/usage/${usage}\\?${
+          timeSlot ? `timeSlot=${timeSlot}&` : ''
+        }date=${date}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: json,
+      },
+    })
+  },
+  stubAssessments: (offenderNumbers, emptyResponse = false) => {
+    const json = emptyResponse ? [] : assessmentsResponse
+
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/api/offender-assessments/CATEGORY`,
+        bodyPatterns: [{ equalToJson: offenderNumbers, ignoreArrayOrder: true, ignoreExtraElements: false }],
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: json,
+      },
+    })
+  },
   stubIepSummaryForBookingIds: results => {
     return stubFor({
       request: {
@@ -107,6 +177,27 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: results,
+      },
+    })
+  },
+  stubOffenderSentences: (offenderNumbers, date) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/api/offender-sentences`,
+        bodyPatterns: [{ equalToJson: offenderNumbers }],
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: [
+          {
+            offenderNo: activity3.offenderNo,
+            sentenceDetail: { releaseDate: date },
+          },
+        ],
       },
     })
   },
@@ -125,7 +216,7 @@ module.exports = {
       },
     })
   },
-  stubOffenderBasicDetails: details => {
+  stubOffenderBasicDetails: offender => {
     return stubFor({
       request: {
         method: 'GET',
@@ -136,7 +227,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: details || {},
+        jsonBody: offender || {},
       },
     })
   },
@@ -205,7 +296,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/api/bookings/offenderNo/${locationId}/alerts`,
+        urlPattern: `/api/bookings/offenderNo/.+?/alerts`,
       },
       response: {
         status: 200,
@@ -213,6 +304,21 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: alerts || [],
+      },
+    })
+  },
+  stubMovementsBetween: ({ locationId, fromDate, movements }) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/movements/${locationId}/in\\?fromDateTime=${encodeURIComponent(fromDate)}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || [],
       },
     })
   },
@@ -562,7 +668,7 @@ module.exports = {
       },
     })
   },
-  stubTreatmentTypes: treatmentTyes => {
+  stubTreatmentTypes: treatmentTypes => {
     return stubFor({
       request: {
         method: 'GET',
@@ -573,7 +679,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: treatmentTyes || [],
+        jsonBody: treatmentTypes || [],
       },
     })
   },
@@ -780,11 +886,11 @@ module.exports = {
       },
     })
   },
-  stubAppointmentLocations: (locations, status = 200) => {
+  stubAppointmentLocations: (agency, locations, status = 200) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/agencies/.+?/locations?eventType=APP',
+        url: `/api/agencies/${agency}/locations?eventType=APP`,
       },
       response: {
         status,
@@ -942,11 +1048,13 @@ module.exports = {
         jsonBody: data,
       },
     }),
-  stubActivitySchedules: (location, date, activities, status = 200) =>
+  stubActivitySchedules: (location, date, activities, status = 200, timeSlot, suspended = false) =>
     stubFor({
       request: {
         method: 'GET',
-        url: `/api/schedules/locations/${location}/activities?date=${date}&includeSuspended=false`,
+        url: `/api/schedules/locations/${location}/activities?${
+          timeSlot ? `timeSlot=${timeSlot}&` : ''
+        }date=${date}&includeSuspended=${suspended}`,
       },
       response: {
         status,
@@ -954,6 +1062,62 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: activities || [],
+      },
+    }),
+  stubBookingOffenders: (offenders, status = 200) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: '/api/bookings/offenders',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offenders || [],
+      },
+    }),
+  stubCourtCases: courtCases =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/bookings/[0-9]+?/court-cases',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: courtCases || [],
+      },
+    }),
+  stubOffenceHistory: offenceHistory =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/bookings/offenderNo/.+?/offenceHistory',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: offenceHistory || [],
+      },
+    }),
+  stubSentenceTerms: sentenceTerms =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/offender-sentences/booking/[0-9]+?/sentenceTerms',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: sentenceTerms || [],
       },
     }),
 }

@@ -64,7 +64,7 @@ const currentUser = require('./middleware/currentUser')
 const controllerFactory = require('./controllers/controller').factory
 
 const contextProperties = require('./contextProperties')
-const oauthClientId = require('./api/oauthClientId')
+const systemOauthClient = require('./api/systemOauthClient')
 const { csvParserService } = require('./csv-parser')
 const handleErrors = require('./middleware/asyncHandler')
 const { notifyClient } = require('./shared/notifyClient')
@@ -81,6 +81,8 @@ const setup = ({
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
+  allocationManagerApi,
+  pathfinderApi,
 }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
@@ -90,7 +92,7 @@ const setup = ({
     attendanceService: attendanceFactory(whereaboutsApi),
     establishmentRollService: establishmentRollFactory(elite2Api),
     globalSearchService: globalSearchFactory(elite2Api),
-    movementsService: movementsServiceFactory(elite2Api, oauthClientId),
+    movementsService: movementsServiceFactory(elite2Api, systemOauthClient),
     offenderLoader: offenderLoaderFactory(elite2Api),
     appointmentsService: appointmentsServiceFactory(elite2Api),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
@@ -98,12 +100,17 @@ const setup = ({
     offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
     referenceCodesService: referenceCodesService(elite2Api),
     elite2Api,
+    caseNotesApi,
   })
 
   router.use(currentUser({ elite2Api, oauthApi }))
 
   router.use(async (req, res, next) => {
-    res.locals.currentUrlPath = req.originalUrl
+    res.locals = {
+      ...res.locals,
+      currentUrlPath: req.originalUrl,
+      prisonerSearchUrl: req.session.prisonerSearchUrl,
+    }
     next()
   })
 
@@ -149,6 +156,7 @@ const setup = ({
   router.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
   router.get('/api/get-alert-types', controller.getAlertTypes)
+  router.get('/api/get-case-note/:offenderNumber/:caseNoteId', handleErrors(controller.getCaseNote))
   router.get('/api/get-offender-events', getExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-location-events', getLocationExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-recurring-end-date', endDateController)
@@ -179,12 +187,12 @@ const setup = ({
   router.get(
     '/offenders/:offenderNo/probation-documents',
     handleErrors(
-      probationDocumentsFactory(oauthApi, elite2Api, communityApi, oauthClientId).displayProbationDocumentsPage
+      probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient).displayProbationDocumentsPage
     )
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
-    handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, oauthClientId).downloadDocument)
+    handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient).downloadDocument)
   )
 
   router.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
@@ -257,7 +265,17 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo',
-    prisonerProfileRouter({ elite2Api, keyworkerApi, oauthApi, caseNotesApi, logError })
+    prisonerProfileRouter({
+      elite2Api,
+      keyworkerApi,
+      oauthApi,
+      caseNotesApi,
+      allocationManagerApi,
+      systemOauthClient,
+      pathfinderApi,
+      dataComplianceApi,
+      logError,
+    })
   )
 
   router.use('/current-covid-units', covidRouter(elite2Api, logError))

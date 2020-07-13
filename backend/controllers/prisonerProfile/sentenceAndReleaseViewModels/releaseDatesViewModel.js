@@ -100,6 +100,14 @@ module.exports = sentenceDetails => {
             },
           ]
         : []),
+      ...(sentenceDetails.tariffEarlyRemovalSchemeEligibilityDate
+        ? [
+            {
+              label: 'Tariff early removal scheme',
+              value: readableDateFormat(sentenceDetails.tariffEarlyRemovalSchemeEligibilityDate, 'YYYY-MM-DD'),
+            },
+          ]
+        : []),
       ...(sentenceDetails.actualParoleDate
         ? [
             {

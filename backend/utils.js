@@ -223,6 +223,16 @@ const putLastNameFirst = (firstName, lastName) => {
 
 const hasLength = array => array && array.length > 0
 
+const getNamesFromString = string => {
+  return (
+    string &&
+    string
+      .split(', ')
+      .reverse()
+      .map(name => properCaseName(name))
+  )
+}
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -258,4 +268,5 @@ module.exports = {
   capitalizeUppercaseString,
   putLastNameFirst,
   hasLength,
+  getNamesFromString,
 }

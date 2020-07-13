@@ -16,6 +16,7 @@ const factory = ({
   offenderActivitesService,
   referenceCodesService,
   elite2Api,
+  caseNotesApi,
 }) => {
   const getActivityList = asyncMiddleware(async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
@@ -209,6 +210,12 @@ const factory = ({
     res.end()
   }
 
+  const getCaseNote = asyncMiddleware(async (req, res) => {
+    const { offenderNumber, caseNoteId } = req.params
+    const caseNote = await caseNotesApi.getCaseNote(res.locals, offenderNumber, caseNoteId)
+    res.json(caseNote)
+  })
+
   return {
     getActivityList,
     getAdjudications,
@@ -235,6 +242,7 @@ const factory = ({
     getPrisonersUnaccountedFor,
     getAlertTypes,
     createAlert,
+    getCaseNote,
   }
 }
 

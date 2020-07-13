@@ -21,6 +21,7 @@ describe('prisoner personal', () => {
   }
   const bookingId = '123'
   const elite2Api = {}
+  const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
 
@@ -52,8 +53,9 @@ describe('prisoner personal', () => {
     elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([])
     elite2Api.getHealthTypes = jest.fn().mockResolvedValue([])
     elite2Api.getAgencies = jest.fn().mockResolvedValue([])
+    allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, logError })
+    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -918,6 +920,42 @@ describe('prisoner personal', () => {
       phones: [{ number: '011111111111', type: 'MOB' }],
     }
 
+    const businessPrimary = {
+      addressType: 'Business',
+      flat: '222',
+      premise: '999',
+      street: 'Business street',
+      town: 'London',
+      postalCode: 'W1 ABC',
+      county: 'London',
+      country: 'England',
+      comment: null,
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      endDate: null,
+      phones: [],
+      addressUsages: [],
+    }
+
+    const businessNonPrimary = {
+      addressType: 'Business',
+      flat: '222',
+      premise: '000',
+      street: 'Business street',
+      town: 'Manchester',
+      postalCode: 'W2 DEF',
+      county: 'Greater Manchester',
+      country: 'England',
+      comment: null,
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      endDate: null,
+      phones: [],
+      addressUsages: [],
+    }
+
     beforeEach(() => {
       elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
@@ -926,6 +964,12 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
+    })
+
+    it('should make a call for prison offender managers', async () => {
+      await controller(req, res)
+
+      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
     })
 
     describe('when there is missing prisoner contacts data', () => {
@@ -1000,6 +1044,25 @@ describe('prisoner personal', () => {
               bookingId,
             },
             {
+              lastName: 'SMITH',
+              firstName: 'TREVOR',
+              contactType: 'O',
+              contactTypeDescription: 'Official',
+              relationship: 'CA',
+              relationshipDescription: 'Case Administrator',
+              emergencyContact: false,
+              nextOfKin: false,
+              relationshipId: 7550160,
+              personId: 333,
+              activeFlag: true,
+              approvedVisitorFlag: false,
+              canBeContactedFlag: false,
+              awareOfChargesFlag: false,
+              contactRootOffenderId: 0,
+              bookingId,
+              createDateTime: '2019-01-01T12:00:00', // Previous Case Administrator
+            },
+            {
               lastName: 'LYDYLE',
               firstName: 'URIUALCHE',
               contactType: 'O',
@@ -1016,6 +1079,7 @@ describe('prisoner personal', () => {
               awareOfChargesFlag: false,
               contactRootOffenderId: 0,
               bookingId,
+              createDateTime: '2020-01-01T12:00:00', // Current, most recently added Case Administrator
             },
           ],
         })
@@ -1030,13 +1094,15 @@ describe('prisoner personal', () => {
               phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
             })
             .mockResolvedValueOnce({
-              addresses: [
-                { ...primaryAddress, endDate: '2020-01-01', addressType: 'Business' },
-                { ...nonPrimaryAddress, addressType: 'Business' },
-              ],
+              addresses: [businessPrimary, businessNonPrimary],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
+          })
         })
 
         it('should make calls for contact details of active personal contacts and case administrators', async () => {
@@ -1060,6 +1126,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
                       {
@@ -1082,20 +1149,97 @@ describe('prisoner personal', () => {
                 ],
                 professional: [
                   {
+                    name: 'Jane Smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
+                    name: 'John Doe',
+                    details: [{ label: 'Relationship', value: 'Co-working Prison Offender Manager' }],
+                  },
+                  {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
-                      {
-                        label: 'Phone number',
-                        html: '04444444444,<br>055555555555 extension number 123',
-                      },
+                      { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
                       { label: 'Email', value: 'test3@email.com, test4@email.com' },
-                      { label: 'Address', value: 'Flat B, 13, Another Street' },
+                      { label: 'Address', value: 'Flat 222, 999, Business street' },
+                      { label: 'Town', value: 'London' },
+                      { label: 'County', value: 'London' },
+                      { label: 'Postcode', value: 'W1 ABC' },
+                      { label: 'Country', value: 'England' },
+                      { html: '', label: 'Address phone' },
+                      { label: 'Address type', value: 'Business' },
+                    ],
+                  },
+                ],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when there are multiple active addresses but no primary', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...nonPrimaryAddress, startDate: '2020-01-01', premise: 'Not latest active' },
+                { ...nonPrimaryAddress, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
+              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+            })
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...businessNonPrimary, startDate: '2020-01-01', premise: 'Not latest active' },
+                { ...businessNonPrimary, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
+              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+            })
+        })
+
+        it('should render the template with the most recently added active address data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: {
+                personal: [
+                  {
+                    name: 'John Smith',
+                    emergencyContact: true,
+                    noFixedAddress: false,
+                    details: [
+                      { label: 'Relationship', value: 'Cousin' },
+                      { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                      { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                      { label: 'Address', value: 'Flat B, Latest active, Another Street' },
                       { label: 'Town', value: 'Leeds' },
                       { label: 'County', value: 'West Yorkshire' },
                       { label: 'Postcode', value: 'LS2 BBB' },
                       { label: 'Country', value: 'England' },
-                      { label: 'Address phone', html: '011111111111' },
+                      { html: '011111111111', label: 'Address phone' },
+                      { label: 'Address type', value: 'Home' },
+                    ],
+                  },
+                ],
+                professional: [
+                  {
+                    name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
+                    details: [
+                      { label: 'Relationship', value: 'Case Administrator' },
+                      { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
+                      { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                      { label: 'Address', value: 'Flat 222, Latest active, Business street' },
+                      { label: 'Town', value: 'Manchester' },
+                      { label: 'County', value: 'Greater Manchester' },
+                      { label: 'Postcode', value: 'W2 DEF' },
+                      { label: 'Country', value: 'England' },
+                      { html: '', label: 'Address phone' },
                       { label: 'Address type', value: 'Business' },
                     ],
                   },
@@ -1119,6 +1263,9 @@ describe('prisoner personal', () => {
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
+          allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
+            primary_pom: { staffId: 1, name: 'Jane smith' },
+          })
         })
 
         it('should not return related labels and empty values', async () => {
@@ -1132,6 +1279,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Cousin' },
                       { label: 'Phone number', html: '02222222222,<br>033333333333' },
@@ -1149,7 +1297,12 @@ describe('prisoner personal', () => {
                 ],
                 professional: [
                   {
+                    name: 'Jane smith',
+                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                  },
+                  {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: [
                       { label: 'Relationship', value: 'Case Administrator' },
                       {
@@ -1200,6 +1353,7 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: expect.not.arrayContaining([
                       { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
@@ -1209,6 +1363,7 @@ describe('prisoner personal', () => {
                 professional: [
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: expect.not.arrayContaining([
                       { label: 'Phone number', html: '' },
                       { label: 'Email', value: '' },
@@ -1236,14 +1391,26 @@ describe('prisoner personal', () => {
             })
         })
 
-        it('should not return the professional contact', async () => {
+        it('should still return the professional contact', async () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
               activeContacts: expect.objectContaining({
-                professional: [],
+                professional: [
+                  {
+                    name: 'Uriualche Lydyle',
+                    details: [
+                      { label: 'Relationship', value: 'Case Administrator' },
+                      { label: 'Address', value: '' },
+                      { label: 'Town', value: undefined },
+                      { label: 'Postcode', value: undefined },
+                      { html: undefined, label: 'Address phone' },
+                      { label: 'Address type', value: undefined },
+                    ],
+                  },
+                ],
               }),
             })
           )
@@ -1276,13 +1443,58 @@ describe('prisoner personal', () => {
                   {
                     name: 'John Smith',
                     emergencyContact: true,
+                    noFixedAddress: false,
                     details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
                   },
                 ],
                 professional: [
                   {
                     name: 'Uriualche Lydyle',
+                    noFixedAddress: false,
                     details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
+                  },
+                ],
+              },
+            })
+          )
+        })
+      })
+
+      describe('when the personal and professional contacts have no fixed addresses', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [{ ...primaryAddress, noFixedAddress: true }],
+              emails: [],
+              phones: [],
+            })
+            .mockResolvedValueOnce({
+              addresses: [{ ...primaryAddress, noFixedAddress: true }],
+              emails: [],
+              phones: [],
+            })
+        })
+
+        it('should not return the address and also mark them as having no fixed address', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              activeContacts: {
+                personal: [
+                  {
+                    name: 'John Smith',
+                    emergencyContact: true,
+                    noFixedAddress: true,
+                    details: [{ label: 'Relationship', value: 'Cousin' }],
+                  },
+                ],
+                professional: [
+                  {
+                    name: 'Uriualche Lydyle',
+                    noFixedAddress: true,
+                    details: [{ label: 'Relationship', value: 'Case Administrator' }],
                   },
                 ],
               },

@@ -19,7 +19,7 @@ services:
       - REDIS_PORT=6379
       - PORT=3002
   oauth:
-    image: quay.io/hmpps/nomis-oauth2-server:latest
+    image: quay.io/hmpps/hmpps-auth:latest
     container_name: oauth_psh
     ports:
       - '9090:8080'
@@ -30,7 +30,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   elite2:
-    image: quay.io/hmpps/elite2-api:latest
+    image: quay.io/hmpps/prison-api:latest
     container_name: elite2_psf
     depends_on:
       - oauth

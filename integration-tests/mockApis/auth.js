@@ -117,7 +117,7 @@ const stubUser = (username, caseload) => {
   })
 }
 
-const stubUserMe = (username = 'ITAG_USER') => {
+const stubUserMe = (username = 'ITAG_USER', staffId = 12345) => {
   return stubFor({
     request: {
       method: 'GET',
@@ -133,12 +133,13 @@ const stubUserMe = (username = 'ITAG_USER') => {
         lastName: 'STUART',
         username,
         activeCaseLoadId: 'MDI',
+        staffId,
       },
     },
   })
 }
 
-const stubUserMeRoles = roles =>
+const stubUserMeRoles = (roles = ['ROLE']) =>
   stubFor({
     request: {
       method: 'GET',
@@ -186,16 +187,43 @@ const stubUnverifiedEmail = username =>
     },
   })
 
+const stubHealth = (status = 200) =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: '/auth/health/ping',
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      fixedDelayMilliseconds: status === 500 ? 3000 : '',
+    },
+  })
+
+const stubClientCredentialsRequest = () =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: '/auth/oauth/token',
+    },
+    response: {
+      status: 200,
+    },
+  })
+
 module.exports = {
+  stubHealth,
   getLoginUrl,
-  stubLogin: (username, caseloadId) =>
+  stubLogin: (username, caseloadId, roles = []) =>
     Promise.all([
       favicon(),
       redirect(),
       logout(),
       token(),
       stubUserMe(),
-      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }]),
+      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
     ]),
   stubLoginCourt: () =>
@@ -211,6 +239,8 @@ module.exports = {
   stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
   stubUserMeRoles,
+  stubUser,
   stubEmail,
   redirect,
+  stubClientCredentialsRequest,
 }
