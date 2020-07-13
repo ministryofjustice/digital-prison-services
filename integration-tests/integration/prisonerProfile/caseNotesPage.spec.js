@@ -53,7 +53,6 @@ context('A user can view prisoner case notes', () => {
     })
 
     const offenderNo = 'A12345'
-    cy.stub(window, 'print')
     cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
   })
 
@@ -79,5 +78,20 @@ context('A user can view prisoner case notes', () => {
         'href',
         '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=undefined'
       )
+
+    const form = page.filterForm()
+    form.typeSelect().select('Observations')
+    form
+      .subTypeSelect()
+      .get('option')
+      .should('contain', 'Test')
+    form.subTypeSelect().select('Test')
+    form.applyButton().click()
+
+    CaseNotesPage.verifyOnPage('Smith, John')
+
+    form.subTypeSelect().select('Select')
+    form.applyButton().click()
+    CaseNotesPage.verifyOnPage('Smith, John')
   })
 })
