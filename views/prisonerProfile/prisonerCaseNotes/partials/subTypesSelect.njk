@@ -6,6 +6,6 @@
     label: {
         text: "Sub-type"
     },
-    items: subTypes | addDefaultSelectedVale('Select'),
+    items: subTypes | addDefaultSelectedVale('Select', true),
     errorMessage: errors | findError(subType)
 }) }}
