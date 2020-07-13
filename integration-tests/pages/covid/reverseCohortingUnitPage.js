@@ -20,6 +20,9 @@ const reverseCohortingUnitPage = () =>
       changeAlertLink: () => col(i, 5),
       overdue: () => col(i, 6).find('[data-qa=overdue]'),
     }),
+
+    notInUnit: () => cy.get('[data-qa="notInUnit"]'),
+    notInUnitLink: () => cy.get('[data-qa="notInUnit-link"]'),
   })
 
 export default {
