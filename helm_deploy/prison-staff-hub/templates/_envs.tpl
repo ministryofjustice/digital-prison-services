@@ -158,4 +158,10 @@ env:
   - name: REDIS_ENABLED
     value: {{ .Values.env.REDIS_ENABLED | quote }}
 
+  - name: PATHFINDER_UI_URL
+      value: {{ .Values.env.PATHFINDER_UI_URL | quote }}
+
+  - name: PATHFINDER_ENDPOINT_API_URL
+      value: {{ .Values.env.PATHFINDER_ENDPOINT_API_URL | quote }}
+      
 {{- end -}}
