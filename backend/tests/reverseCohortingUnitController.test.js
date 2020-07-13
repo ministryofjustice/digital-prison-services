@@ -1,5 +1,5 @@
 const moment = require('moment')
-const reverseCohortingUnit = require('../controllers/covid/reverseCohortingUnit')
+const reverseCohortingUnit = require('../controllers/covid/reverseCohortingUnitController')
 
 describe('reverse cohorting unit', () => {
   let req
@@ -18,6 +18,7 @@ describe('reverse cohorting unit', () => {
 
     covidService = {
       getAlertList: jest.fn(),
+      getUnassignedNewEntrants: jest.fn(),
     }
     controller = reverseCohortingUnit({ covidService, logError })
   })
@@ -34,6 +35,7 @@ describe('reverse cohorting unit', () => {
     ]
 
     covidService.getAlertList.mockResolvedValueOnce(results)
+    covidService.getUnassignedNewEntrants.mockResolvedValueOnce([{}, {}, {}])
 
     await controller(req, res)
 
@@ -54,6 +56,7 @@ describe('reverse cohorting unit', () => {
           offenderNo: 'AA1234A',
         },
       ],
+      notInUnitCount: 3,
     })
   })
 

@@ -21,6 +21,7 @@ module.exports = ({ covidService, logError }) => {
   return async (req, res) => {
     try {
       const results = await covidService.getAlertList(res, alerts.reverseCohortingUnit)
+      const notInUnit = await covidService.getUnassignedNewEntrants(res)
 
       const formattedResults = results
         .map(formatResult)
@@ -29,6 +30,7 @@ module.exports = ({ covidService, logError }) => {
       return res.render('covid/reverseCohortingUnit.njk', {
         title: 'Prisoners in the Reverse Cohorting Unit',
         results: formattedResults,
+        notInUnitCount: notInUnit.length,
       })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load reverse cohorting list')

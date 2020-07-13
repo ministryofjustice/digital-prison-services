@@ -1,9 +1,9 @@
 const moment = require('moment')
 
+const ReverseCohortingUnitPage = require('../../pages/covid/reverseCohortingUnitPage')
 const NotInUnitPage = require('../../pages/covid/notInUnitPage')
 
 const alert = val => ({ alerts: { equalTo: val } })
-
 const dayBeforeYesterday = moment().subtract(2, 'day')
 
 context('A user can view the protective isolation list', () => {
@@ -13,6 +13,42 @@ context('A user can view the protective isolation list', () => {
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
 
     cy.login()
+
+    cy.task('stubAlerts', {
+      locationId: 'MDI',
+      alerts: [
+        {
+          offenderNo: 'AA1234A',
+          alertCode: 'URCU',
+          dateCreated: dayBeforeYesterday.format('YYYY-MM-DD'),
+        },
+        { offenderNo: 'BB1234A', alertCode: 'AA1', dateCreated: '2020-01-02' },
+        { offenderNo: 'BB1234A', alertCode: 'URCU', dateCreated: '2020-01-03' },
+        { offenderNo: 'CC1234A', alertCode: 'AA2', dateCreated: '2020-01-03' },
+      ],
+    })
+
+    cy.task('stubInmates', {
+      locationId: 'MDI',
+      params: alert('URCU'),
+      count: 3,
+      data: [
+        {
+          offenderNo: 'BB1234A',
+          bookingId: 123,
+          assignedLivingUnitDesc: '1-2-017',
+          firstName: 'JAMES',
+          lastName: 'STEWART',
+        },
+        {
+          offenderNo: 'AA1234A',
+          bookingId: 234,
+          assignedLivingUnitDesc: '1-2-018',
+          firstName: 'DONNA',
+          lastName: 'READ',
+        },
+      ],
+    })
 
     cy.task('stubAlerts', {
       locationId: 'MDI',
@@ -53,7 +89,10 @@ context('A user can view the protective isolation list', () => {
   })
 
   it('A user can view the shielding list', () => {
-    const notInUnitPage = NotInUnitPage.goTo()
+    const reverseCohortingUnitPage = ReverseCohortingUnitPage.goTo()
+    reverseCohortingUnitPage.notInUnitLink().click()
+
+    const notInUnitPage = NotInUnitPage.verifyOnPage()
     notInUnitPage.prisonerCount().contains(2)
 
     {
