@@ -421,10 +421,10 @@ context('Prisoner sentence and release', () => {
       .find('dd')
       .then($termValues => {
         expect($termValues.get(0).innerText.trim()).to.eq('1 January 2017')
-        expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 0 weeks, 1 days')
+        expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 1 day')
 
         expect($termValues.get(2).innerText.trim()).to.eq('1 January 2018')
-        expect($termValues.get(3).innerText.trim()).to.eq('12 years, 0 months, 0 weeks, 0 days')
+        expect($termValues.get(3).innerText.trim()).to.eq('12 years')
       })
 
     page

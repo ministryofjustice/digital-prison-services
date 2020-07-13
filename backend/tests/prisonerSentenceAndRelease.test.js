@@ -195,7 +195,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 1',
                 summaryDetailRows: [
                   { label: 'Start date', value: '31 December 2018' },
-                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years' },
                   { label: 'Consecutive to', value: 2 },
                 ],
               },
@@ -263,7 +263,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 1',
                 summaryDetailRows: [
                   { label: 'Start date', value: '31 December 2018' },
-                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years' },
                   { label: 'Fine', value: '£200.00' },
                 ],
               },
@@ -341,7 +341,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 3',
                 summaryDetailRows: [
                   { label: 'Start date', value: '31 December 2018' },
-                  { label: 'Imprisonment', value: '20 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '20 years' },
                 ],
               },
               {
@@ -349,9 +349,9 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 1',
                 summaryDetailRows: [
                   { label: 'Start date', value: '31 December 2018' },
-                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years' },
                   { label: 'Consecutive to', value: 2 },
-                  { label: 'License', value: '5 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'License', value: '5 years' },
                 ],
               },
             ],
@@ -465,7 +465,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 6',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 January 2018' },
-                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '12 years' },
                 ],
               },
               {
@@ -473,7 +473,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 5',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 January 2018' },
-                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years' },
                 ],
               },
               {
@@ -481,7 +481,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 1',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 January 2018' },
-                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years' },
                 ],
               },
               {
@@ -489,7 +489,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 2',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 February 2018' },
-                  { label: 'Imprisonment', value: '11 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years' },
                 ],
               },
               {
@@ -497,7 +497,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 10',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 March 2018' },
-                  { label: 'Imprisonment', value: '11 years, 1 months, 1 weeks, 10 days' },
+                  { label: 'Imprisonment', value: '11 years, 1 month, 1 week, 10 days' },
                 ],
               },
               {
@@ -505,7 +505,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 4',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 March 2018' },
-                  { label: 'Imprisonment', value: '11 years, 1 months, 0 weeks, 10 days' },
+                  { label: 'Imprisonment', value: '11 years, 1 month, 10 days' },
                 ],
               },
               {
@@ -513,7 +513,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 3',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 March 2018' },
-                  { label: 'Imprisonment', value: '11 years, 1 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '11 years, 1 month' },
                 ],
               },
             ],
@@ -562,7 +562,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 6',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 January 2018' },
-                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '12 years' },
                 ],
               },
             ],
@@ -643,7 +643,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 1',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 January 2017' },
-                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '12 years' },
                 ],
               },
               {
@@ -651,7 +651,7 @@ describe('prisoner sentence and release', () => {
                 sentenceTypeDescription: 'Some sentence info 6',
                 summaryDetailRows: [
                   { label: 'Start date', value: '1 January 2018' },
-                  { label: 'Imprisonment', value: '12 years, 0 months, 0 weeks, 0 days' },
+                  { label: 'Imprisonment', value: '12 years' },
                 ],
               },
             ],
