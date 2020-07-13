@@ -4,6 +4,17 @@ const { formatCurrency, readableDateFormat } = require('../../../utils')
 
 const onlyValidValues = value => Boolean(value)
 
+const getLengthTextLabels = data => {
+  const { years, months, weeks, days } = data
+
+  const yearsLabel = years > 0 && `${years} ${years === 1 ? 'year' : 'years'}`
+  const monthsLabel = months > 0 && `${months} ${months === 1 ? 'month' : 'months'}`
+  const weeksLabel = weeks > 0 && `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
+  const daysLabel = days > 0 && `${days} ${days === 1 ? 'day' : 'days'}`
+
+  return [yearsLabel, monthsLabel, weeksLabel, daysLabel].filter(label => label).join(', ')
+}
+
 const mergeMostRecentLicenceTerm = sentences =>
   sentences.reduce((result, current) => {
     if (current.sentenceTermCode === 'IMP' && !result) return current
@@ -82,8 +93,7 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
             },
             {
               label: 'Imprisonment',
-              value: `${sentence.years || 0} years, ${sentence.months || 0} months, ${sentence.weeks ||
-                0} weeks, ${sentence.days || 0} days`,
+              value: getLengthTextLabels(sentence),
             },
             sentence.consecutiveTo && {
               label: 'Consecutive to',
@@ -92,8 +102,7 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
             sentence.fineAmount && { label: 'Fine', value: formatCurrency(sentence.fineAmount) },
             sentence.licence && {
               label: 'License',
-              value: `${sentence.licence.years || 0} years, ${sentence.licence.months || 0} months, ${sentence.licence
-                .weeks || 0} weeks, ${sentence.licence.days || 0} days`,
+              value: getLengthTextLabels(sentence.licence),
             },
           ].filter(onlyValidValues),
         })),
