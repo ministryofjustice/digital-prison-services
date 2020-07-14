@@ -10,4 +10,4 @@ services:
   prisonstaffhub-test-redis:
     image: redis
     ports:
-      - 6380:6379
+      - 6379:6379

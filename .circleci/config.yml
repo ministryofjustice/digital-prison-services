@@ -79,8 +79,6 @@ jobs:
     docker:
       - image: circleci/node:12.16.1-buster-browsers
       - image: circleci/redis:buster
-        ports:
-          - 6380:6379
     steps:
       - checkout
       - attach_workspace:
