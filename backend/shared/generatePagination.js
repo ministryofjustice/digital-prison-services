@@ -1,13 +1,13 @@
-const calculatePreviousUrl = (currentPageNumber, newUrl) => {
+const calculatePreviousUrl = (currentPageNumber, url) => {
   const newPageNumber = currentPageNumber > 0 ? currentPageNumber - 1 : 0
-  newUrl.searchParams.set('page', newPageNumber)
-  return newUrl.href
+  url.searchParams.set('page', newPageNumber)
+  return url.href
 }
 
-const calculateNextUrl = (currentPageNumber, totalPages, newUrl) => {
+const calculateNextUrl = (currentPageNumber, totalPages, url) => {
   const newPageNumber = currentPageNumber >= totalPages ? currentPageNumber : currentPageNumber + 1
-  newUrl.searchParams.set('page', newPageNumber)
-  return newUrl.href
+  url.searchParams.set('page', newPageNumber)
+  return url.href
 }
 
 module.exports = ({ totalPages, totalElements, pageNumber, offset, pageSize, url }) => {

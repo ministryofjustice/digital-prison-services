@@ -52,11 +52,11 @@ const controller = ({
     '/case-notes',
     prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationService, nunjucks, logError })
   )
-  router.get('/visits', prisonerVisits({ paginationService, elite2Api, logError }))
   router.get(
     '/sentence-and-release',
     prisonerSentenceAndRelease({ prisonerProfileService, elite2Api, systemOauthClient, logError })
   )
+  router.get('/visits', prisonerVisits({ elite2Api, logError }))
 
   return router
 }

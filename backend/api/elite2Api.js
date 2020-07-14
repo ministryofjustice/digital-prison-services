@@ -49,8 +49,6 @@ const elite2ApiFactory = client => {
       offenderNumbers
     )
 
-  const getVisitsForBooking = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits`)
-
   const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
     get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
 
@@ -320,7 +318,6 @@ const elite2ApiFactory = client => {
     getActivityList,
     searchActivityLocations,
     getVisits,
-    getVisitsForBooking,
     getVisitsForBookingWithVisitors,
     getNextVisit,
     getAppointments,
