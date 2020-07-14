@@ -22,27 +22,33 @@
   }) }}
 {% endblock %}
 
-{% macro list(array) %}
-<ul class="govuk-list govuk-!-margin-bottom-0">
-  {% for item in array %}
-    <li>{{ item }}</li>
-  {% endfor %}
-</ul>
+{% macro hideIfNotFirst(text, first) %}
+  <span class="{{ 'govuk-visually-hidden' if not first }}">{{ text }}</span>
 {% endmacro %}
 
 {% set rows = [] %}
 {% for visit in results %}
   {% set rows = (rows.push([  
     {
-      text: visit.date | getDate('D MMMM YYYY'),
-      attributes: {
-        "data-sort-value": visit.date
-      }
+      html: hideIfNotFirst(visit.date | getDate('D MMMM YYYY'), visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast 
     },
-    { text: list(visit.names) },
-    { text: list(visit.ages) },
-    { text: list(visit.relationships) },
-    { text: visit.status }
+    {
+      text: visit.name,
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: visit.age,
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: visit.relationship,
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      html: hideIfNotFirst(visit.status, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
+    }
   ]), rows) %}
 {% endfor %}
 
@@ -57,37 +63,18 @@
 
       {{ govukTable({
         head: [
-          { 
-            text: "Date",
-            attributes: {
-              "aria-sort": "descending"
-            }
-          },
+          { text: "Date" },
           { text: "Visitor`s name" },
           { text: "Visitor`s age" },
           { text: "Relationship to prisoner" },
-          { 
-            text: "Visit status",
-            attributes: {
-              "aria-sort": "ascending"
-            }
-          }
+          { text: "Visit status" }
         ],
         rows: rows,
-        attributes: { "data-test": "prisoner-visits-results" }
+        attributes: { "data-test": "prisoner-visits-results" },
+        classes: 'govuk-table--with-child-rows'
       }) }}
     
       {{ mojPagination(pagination) }}
     </div>
   </div>
-{% endblock %}
-
-{% block bodyEnd %}
-  {{ super() }}
-  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
-  <script>
-    new MOJFrontend.SortableTable({
-      table: $('table')[0],
-    })
-  </script>
 {% endblock %}

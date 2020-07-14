@@ -18,7 +18,7 @@
       id: 'fromDate',
       label: 'Date from',
       name: 'fromDate',
-      date: fromDate,
+      date: formValues.fromDate,
       errorMessage: errors | findError('fromDate'),
       attributes: { "data-test": "from-filter" }
     }) }}
@@ -27,7 +27,7 @@
       id: 'toDate',
       label: 'Date to',
       name: 'toDate',
-      date: toDate,
+      date: formValues.toDate,
       errorMessage: errors | findError('toDate'),
       attributes: { "data-test": "to-filter" }
     }) }}
