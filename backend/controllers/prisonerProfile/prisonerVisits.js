@@ -6,11 +6,10 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ elite2Api, logError, pageSize = 20 }) => async (req, res) => {
   const { offenderNo } = req.params
   const { visitType, fromDate, toDate, page = 0 } = req.query
   const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
-  const pageSize = 20
 
   try {
     const [details, visitTypes] = await Promise.all([
@@ -49,22 +48,6 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       return sortByDateTime(left.dateOfBirth, right.dateOfBirth)
     }
 
-    const results =
-      hasLength(visits) &&
-      visits
-        .map(visit =>
-          visit.visitors.sort(sortByLeadThenAge).map((visitor, i, arr) => ({
-            age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
-            date: visit.visitDetails.startTime,
-            isFirst: i === 0,
-            isLast: i + 1 === arr.length,
-            name: `${formatName(visitor.firstName, visitor.lastName)} ${visitor.leadVisitor ? '(lead visitor)' : ''}`,
-            relationship: visitor.relationship,
-            status: visit.visitDetails.eventOutcomeDescription,
-          }))
-        )
-        .flat()
-
     return res.render('prisonerProfile/prisonerVisits/prisonerVisits.njk', {
       breadcrumbPrisonerName: putLastNameFirst(details.firstName, details.lastName),
       dpsUrl,
@@ -79,7 +62,22 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         url,
       }),
       prisonerName: formatName(details.firstName, details.lastName),
-      results,
+      results:
+        hasLength(visits) &&
+        visits
+          .sort((left, right) => sortByDateTime(right.visitDetails.startTime, left.visitDetails.startTime))
+          .map(visit =>
+            visit.visitors.sort(sortByLeadThenAge).map((visitor, i, arr) => ({
+              age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
+              date: visit.visitDetails.startTime,
+              isFirst: i === 0,
+              isLast: i + 1 === arr.length,
+              name: `${formatName(visitor.firstName, visitor.lastName)} ${visitor.leadVisitor ? '(lead visitor)' : ''}`,
+              relationship: visitor.relationship,
+              status: visit.visitDetails.eventOutcomeDescription,
+            }))
+          )
+          .flat(),
       visitTypes: hasLength(visitTypes) && visitTypes.map(type => ({ value: type.code, text: type.description })),
     })
   } catch (error) {
