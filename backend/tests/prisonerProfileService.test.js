@@ -2,8 +2,8 @@ const config = require('../config')
 
 config.app.displayRetentionLink = true
 config.apis.pathfinder = {
-  ui_url: 'http://pathfinder-ui',
-  url: 'http://pathfinder-api',
+  ui_url: 'http://pathfinder-ui/',
+  url: 'http://pathfinder-api/',
 }
 
 const prisonerProfileService = require('../services/prisonerProfileService')
@@ -130,7 +130,7 @@ describe('prisoner profile service', () => {
         canViewPathfinderLink: false,
         canViewProbationDocuments: false,
         pathfinderProfileUrl: null,
-        pathfinderReferUrl: 'http:/pathfinder-ui/refer/offender/ABC123',
+        pathfinderReferUrl: 'http://pathfinder-ui/refer/offender/ABC123',
         showPathfinderReferButton: false,
         categorisationLink: `http://localhost:3003/${bookingId}`,
         categorisationLinkText: '',
@@ -361,7 +361,7 @@ describe('prisoner profile service', () => {
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
         expect(profileData.canViewPathfinderLink).toBe(true)
-        expect(profileData.pathfinderProfileUrl).toBe('http:/pathfinder-ui/nominal/1')
+        expect(profileData.pathfinderProfileUrl).toBe('http://pathfinder-ui/nominal/1')
       })
       it('should enable pathfinder when the user has the PF_STD_PROBATION role', async () => {
         oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION' }])

@@ -102,9 +102,9 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
       canViewProbationDocuments,
       canViewPathfinderLink,
       pathfinderProfileUrl:
-        pathfinderUrl && pathfinderDetails && path.join(pathfinderUrl, 'nominal', String(pathfinderDetails.id)),
+        pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String(pathfinderDetails.id)}`,
       showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderUser),
-      pathfinderReferUrl: pathfinderUrl && path.join(pathfinderUrl, 'refer/offender', offenderNo),
+      pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
