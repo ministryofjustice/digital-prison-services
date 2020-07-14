@@ -77,3 +77,10 @@
   }
   margin-bottom: govuk-spacing(6);
 }
+
+// Table with child rows and cells
+.govuk-table--with-child-rows {
+  .govuk-table__cell:not(.govuk-table__cell--last) {
+    border: 0;
+  }
+}
