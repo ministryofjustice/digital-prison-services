@@ -8,12 +8,14 @@ module.exports = ({ covidService, logError }) => {
       protectiveIsolationUnit,
       shieldingUnit,
       refusingToShield,
+      notInUnit,
     ] = await Promise.all([
       covidService.getCount(res),
       covidService.getCount(res, alerts.reverseCohortingUnit),
       covidService.getCount(res, alerts.protectiveIsolationUnit),
       covidService.getCount(res, alerts.shieldingUnit),
       covidService.getCount(res, alerts.refusingToShield),
+      covidService.getUnassignedNewEntrants(res),
     ])
 
     return {
@@ -22,6 +24,7 @@ module.exports = ({ covidService, logError }) => {
       protectiveIsolationUnit,
       shieldingUnit,
       refusingToShield,
+      notInUnitCount: notInUnit.length,
     }
   }
 
