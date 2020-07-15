@@ -17,6 +17,7 @@ describe('covid dashboard', () => {
 
     covidService = {
       getCount: jest.fn(),
+      getUnassignedNewEntrants: jest.fn(),
     }
     controller = covidDashboard({ covidService, logError })
   })
@@ -29,6 +30,8 @@ describe('covid dashboard', () => {
       .mockResolvedValueOnce(5)
       .mockResolvedValueOnce(14)
 
+    covidService.getUnassignedNewEntrants.mockResolvedValueOnce([{}, {}, {}])
+
     await controller(req, res)
 
     expect(logError).not.toHaveBeenCalled()
@@ -38,6 +41,7 @@ describe('covid dashboard', () => {
     expect(covidService.getCount).toHaveBeenCalledWith(res, 'UPIU')
     expect(covidService.getCount).toHaveBeenCalledWith(res, 'USU')
     expect(covidService.getCount).toHaveBeenCalledWith(res, 'URS')
+    expect(covidService.getUnassignedNewEntrants).toHaveBeenCalled()
 
     expect(res.render).toHaveBeenCalledWith(
       'covid/dashboard.njk',
@@ -48,6 +52,7 @@ describe('covid dashboard', () => {
           protectiveIsolationUnit: 9,
           shieldingUnit: 5,
           refusingToShield: 14,
+          notInUnitCount: 3,
         },
       })
     )
