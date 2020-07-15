@@ -922,6 +922,21 @@ module.exports = {
       },
     })
   },
+  stubAppointmentsGet: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
   stubExternalTransfers: (transfers, status = 200) => {
     return stubFor({
       request: {

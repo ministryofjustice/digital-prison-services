@@ -126,6 +126,21 @@ module.exports = {
       },
     })
   },
+  stubVideoLinkAppointments: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        url: '/whereabouts/court/video-link-appointments',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
   verifyPostAttendance: () => {
     return verifyPosts('/whereabouts/attendance')
   },

@@ -281,5 +281,7 @@ module.exports = on => {
         elite2api.stubOffenderBasicDetails(offenderBasicDetails),
         elite2api.stubVisitTypes(visitTypes),
       ]),
+    stubAppointmentsGet: appointments => Promise.all([elite2api.stubAppointmentsGet(appointments)]),
+    stubVideoLinkAppointments: appointments => Promise.all([whereabouts.stubVideoLinkAppointments(appointments)]),
   })
 }
