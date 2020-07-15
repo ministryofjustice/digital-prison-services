@@ -2,12 +2,7 @@ const moment = require('moment')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 
-const {
-  DATE_TIME_FORMAT_SPEC,
-  DAY_MONTH_YEAR,
-  MOMENT_DAY_OF_THE_WEEK,
-  MOMENT_TIME,
-} = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } = require('../../../src/dateHelpers')
 const config = require('../../config')
 const { getNamesFromString } = require('../../utils')
 
@@ -63,29 +58,41 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
 
     const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
 
-    const caseNoteRows = caseNotes.content.map(caseNote => {
+    const caseNoteViewData = caseNotes.content.map(caseNote => {
       const creationDateTime = moment(caseNote.creationDateTime, DATE_TIME_FORMAT_SPEC)
 
       const day = creationDateTime.format(MOMENT_DAY_OF_THE_WEEK)
-      const date = creationDateTime.format(DAY_MONTH_YEAR)
+      const date = creationDateTime.format('D MMMM YYYY')
       const time = creationDateTime.format(MOMENT_TIME)
       const authorNames = getNamesFromString(caseNote.authorName)
 
-      const createdByColumn = nunjucks.render(`${templatePath}/partials/createdColumn.njk`, {
+      const amendments = caseNote.amendments.map(amendment => {
+        const amendmentCreatedDateTime = moment(amendment.creationDateTime, DATE_TIME_FORMAT_SPEC)
+        return {
+          day: amendmentCreatedDateTime.format(MOMENT_DAY_OF_THE_WEEK),
+          date: amendmentCreatedDateTime.format('D MMMM YYYY'),
+          time: amendmentCreatedDateTime.format(MOMENT_TIME),
+          authorName: `${authorNames.join(' ')}`,
+          text: amendment.additionalNoteText,
+        }
+      })
+
+      const createdByColumn = {
         day,
         date,
         time,
         authorName: `${authorNames.join(' ')}`,
-      })
+      }
 
       const occurrenceDateTime = moment(caseNote.occurrenceDateTime, DATE_TIME_FORMAT_SPEC)
-      const occurrenceDateTimeText = `${occurrenceDateTime.format(DAY_MONTH_YEAR)} - ${occurrenceDateTime.format(
+      const occurrenceDateTimeText = `${occurrenceDateTime.format('dddd D MMMM YYYY')} - ${occurrenceDateTime.format(
         MOMENT_TIME
       )}`
 
       const canAmend = prisonerProfileData.staffId && prisonerProfileData.staffId.toString() === caseNote.authorUserId
       const showPrintIncentiveLink = ['IEP_WARN', 'IEP_ENC'].includes(caseNote.subType)
-      const caseNoteDetailColumn = nunjucks.render(`${templatePath}/partials/caseNoteDetailColumn.njk`, {
+      const caseNoteDetailColumn = {
+        amendments,
         occurrenceDateTime: occurrenceDateTimeText,
         typeDescription: caseNote.typeDescription,
         subTypeDescription: caseNote.subTypeDescription,
@@ -100,16 +107,16 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
           )}&location=${encodeURIComponent(prisonerProfileData.location)}&casenoteId=${
             caseNote.caseNoteId
           }&issuedBy=${encodeURIComponent(prisonerProfileData.staffName)}`,
-      })
+      }
 
-      return [{ html: createdByColumn }, { html: caseNoteDetailColumn }]
+      return { createdByColumn, caseNoteDetailColumn }
     })
 
     const selectedSubTypes = subTypes.filter(sub => sub.type === type)
 
     return res.render(`${templatePath}/caseNotes.njk`, {
       prisonerProfileData,
-      caseNoteRows,
+      caseNoteViewData,
       types,
       subTypes: selectedSubTypes,
       caseNotesRootUrl: `/prisoner/${offenderNo}/case-notes`,

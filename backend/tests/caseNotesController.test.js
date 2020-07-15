@@ -172,30 +172,43 @@ describe('Case notes controller', () => {
     }
     await controller(req, res)
 
-    expect(nunjucks.render).toHaveBeenCalledWith('prisonerProfile/prisonerCaseNotes/partials/createdColumn.njk', {
-      authorName: 'John Smith',
-      date: '31/10/2017',
-      day: 'Tuesday',
-      time: '01:30',
-    })
-
-    expect(nunjucks.render).toHaveBeenCalledWith(
-      'prisonerProfile/prisonerCaseNotes/partials/caseNoteDetailColumn.njk',
-      {
-        occurrenceDateTime: '31/10/2017 - 01:30',
-        subTypeDescription: 'Key Worker Session',
-        text: 'This is some text',
-        typeDescription: 'Key Worker',
-        printIncentiveLink: false,
-      }
-    )
-
     expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCaseNotes/caseNotes.njk', {
-      caseNoteRows: [[{ html: '<div>Test</div>' }, { html: '<div>Test</div>' }]],
+      caseNoteViewData: [
+        {
+          caseNoteDetailColumn: {
+            amendLink: undefined,
+            amendments: [
+              {
+                authorName: 'John Smith',
+                date: '1 December 2018',
+                day: 'Saturday',
+                text: 'Some Additional Text',
+                time: '13:45',
+              },
+            ],
+            occurrenceDateTime: 'Tuesday 31 October 2017 - 01:30',
+            printIncentiveLink: false,
+            subTypeDescription: 'Key Worker Session',
+            text: 'This is some text',
+            typeDescription: 'Key Worker',
+          },
+          createdByColumn: {
+            authorName: 'John Smith',
+            date: '31 October 2017',
+            day: 'Tuesday',
+            time: '01:30',
+          },
+        },
+      ],
       caseNotesRootUrl: '/prisoner/A12345/case-notes',
-      formValues: { fromDate: '10/10/2010', subType: 'subType2', toDate: '11/10/2020', type: 'type1' },
-      prisonerProfileData: {},
+      formValues: {
+        fromDate: '10/10/2010',
+        subType: 'subType2',
+        toDate: '11/10/2020',
+        type: 'type1',
+      },
       pagination: {},
+      prisonerProfileData: {},
       subTypes: [
         {
           text: 'Sub type',
