@@ -76,6 +76,9 @@ describe('Prisoner visits', () => {
               startTime: '2020-08-21T09:00:00',
               endTime: '2020-08-21T11:45:00',
               eventOutcomeDescription: 'Attended',
+              eventStatus: 'CANC',
+              eventStatusDescription: 'Cancelled',
+              cancelReasonDescription: 'Operational Reasons-All Visits Cancelled',
             },
           },
           {
@@ -146,7 +149,6 @@ describe('Prisoner visits', () => {
         page: 0,
         paged: true,
         size: 2,
-        sorted: false,
         toDate: '2020-02-13',
         visitType: 'OFFI',
       })
@@ -194,7 +196,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Bloby Blob (lead visitor)',
             relationship: 'Brother',
-            status: 'Attended',
+            status: 'Cancelled: Operational Reasons-All Visits Cancelled',
           },
           {
             age: '12',

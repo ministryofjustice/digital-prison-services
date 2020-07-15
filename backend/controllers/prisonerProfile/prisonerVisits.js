@@ -29,7 +29,6 @@ module.exports = ({ elite2Api, logError, pageSize = 20 }) => async (req, res) =>
       page,
       paged: true,
       size: pageSize,
-      sorted: false,
       toDate: toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
       visitType,
     })
@@ -48,6 +47,38 @@ module.exports = ({ elite2Api, logError, pageSize = 20 }) => async (req, res) =>
       return sortByDateTime(left.dateOfBirth, right.dateOfBirth)
     }
 
+    const results =
+      hasLength(visits) &&
+      visits
+        .sort((left, right) => sortByDateTime(right.visitDetails.startTime, left.visitDetails.startTime))
+        .map(visit =>
+          visit.visitors.sort(sortByLeadThenAge).map((visitor, i, arr) => {
+            const {
+              visitDetails: {
+                eventStatus,
+                eventStatusDescription,
+                cancelReasonDescription,
+                eventOutcomeDescription,
+                startTime,
+              },
+            } = visit
+
+            const status =
+              eventStatus === 'CANC' ? `${eventStatusDescription}: ${cancelReasonDescription}` : eventOutcomeDescription
+
+            return {
+              age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
+              date: startTime,
+              isFirst: i === 0,
+              isLast: i + 1 === arr.length,
+              name: `${formatName(visitor.firstName, visitor.lastName)} ${visitor.leadVisitor ? '(lead visitor)' : ''}`,
+              relationship: visitor.relationship,
+              status,
+            }
+          })
+        )
+        .flat()
+
     return res.render('prisonerProfile/prisonerVisits/prisonerVisits.njk', {
       breadcrumbPrisonerName: putLastNameFirst(details.firstName, details.lastName),
       dpsUrl,
@@ -62,22 +93,7 @@ module.exports = ({ elite2Api, logError, pageSize = 20 }) => async (req, res) =>
         url,
       }),
       prisonerName: formatName(details.firstName, details.lastName),
-      results:
-        hasLength(visits) &&
-        visits
-          .sort((left, right) => sortByDateTime(right.visitDetails.startTime, left.visitDetails.startTime))
-          .map(visit =>
-            visit.visitors.sort(sortByLeadThenAge).map((visitor, i, arr) => ({
-              age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
-              date: visit.visitDetails.startTime,
-              isFirst: i === 0,
-              isLast: i + 1 === arr.length,
-              name: `${formatName(visitor.firstName, visitor.lastName)} ${visitor.leadVisitor ? '(lead visitor)' : ''}`,
-              relationship: visitor.relationship,
-              status: visit.visitDetails.eventOutcomeDescription,
-            }))
-          )
-          .flat(),
+      results,
       visitTypes: hasLength(visitTypes) && visitTypes.map(type => ({ value: type.code, text: type.description })),
     })
   } catch (error) {
