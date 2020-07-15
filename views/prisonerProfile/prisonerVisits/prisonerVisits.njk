@@ -59,22 +59,26 @@
     {% include './partials/prisonerVisitsSearchForm.njk' %}
 
     <div class="prisoner-visits__results">
-      {{ mojPagination(pagination) }}
+      {% if rows.length %}
+        {{ mojPagination(pagination) }}
 
-      {{ govukTable({
-        head: [
-          { text: "Date" },
-          { text: "Visitor`s name" },
-          { text: "Visitor`s age" },
-          { text: "Relationship to prisoner" },
-          { text: "Visit status" }
-        ],
-        rows: rows,
-        attributes: { "data-test": "prisoner-visits-results" },
-        classes: 'govuk-table--with-child-rows'
-      }) }}
-    
-      {{ mojPagination(pagination) }}
-    </div>
+        {{ govukTable({
+          head: [
+            { text: "Date" },
+            { text: "Visitor`s name" },
+            { text: "Visitor`s age" },
+            { text: "Relationship to prisoner" },
+            { text: "Visit status" }
+          ],
+          rows: rows,
+          attributes: { "data-test": "prisoner-visits-results" },
+          classes: 'govuk-table--with-child-rows'
+        }) }}
+      
+        {{ mojPagination(pagination) }}
+      </div>
+    {% else %}
+      <p class="govuk-body" data-test="no-visit-results">There are no visits for this prisoner</p>
+    {% endif %}
   </div>
 {% endblock %}
