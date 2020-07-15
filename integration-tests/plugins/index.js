@@ -275,5 +275,11 @@ module.exports = on => {
     stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
     stubUserMeRoles: roles => auth.stubUserMeRoles(roles),
     stubPathFinderOffenderDetails: details => pathfinder.getOffenderDetails(details),
+    stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
+      Promise.all([
+        elite2api.stubVisitsWithVisitors(visitsWithVisitors),
+        elite2api.stubOffenderBasicDetails(offenderBasicDetails),
+        elite2api.stubVisitTypes(visitTypes),
+      ]),
   })
 }

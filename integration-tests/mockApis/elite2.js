@@ -292,7 +292,7 @@ module.exports = {
     })
   },
 
-  stubAlerts: ({ locationId, alerts }) => {
+  stubAlerts: ({ alerts }) => {
     return stubFor({
       request: {
         method: 'POST',
@@ -485,6 +485,57 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: nextVisit || {},
+      },
+    })
+  },
+  stubVisitsWithVisitors: (visitsWithVisitors, status) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/visits-with-visitors\\?.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: visitsWithVisitors || {
+          content: [],
+          pageable: {
+            sort: {},
+            offset: 0,
+            pageNumber: 0,
+            pageSize: 20,
+            paged: true,
+            unpaged: false,
+          },
+          totalPages: 0,
+          totalElements: 0,
+          last: false,
+          first: true,
+          number: 0,
+          size: 0,
+          numberOfElements: 0,
+          empty: false,
+        },
+      },
+    })
+  },
+  stubVisitTypes: (visitTypes, status) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/VISIT_TYPE',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: visitTypes || [
+          { code: 'OFFI', description: 'Official visit' },
+          { code: 'SCON', description: 'Social contact' },
+        ],
       },
     })
   },
