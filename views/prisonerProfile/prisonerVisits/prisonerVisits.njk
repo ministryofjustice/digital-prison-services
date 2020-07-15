@@ -1,0 +1,80 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "moj/components/pagination/macro.njk" import mojPagination %}
+
+{% set title = prisonerName + ' visits' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: '/prisoner/' + offenderNo
+      },
+      {
+        text: 'Visits'
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% macro hideIfNotFirst(text, first) %}
+  <span class="{{ 'govuk-visually-hidden' if not first }}">{{ text }}</span>
+{% endmacro %}
+
+{% set rows = [] %}
+{% for visit in results %}
+  {% set rows = (rows.push([  
+    {
+      html: hideIfNotFirst(visit.date | getDate('D MMMM YYYY'), visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: visit.name,
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: visit.age,
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: visit.relationship,
+      classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      html: hideIfNotFirst(visit.status, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
+    }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  <div class="prisoner-visits">
+    {% include './partials/prisonerVisitsSearchForm.njk' %}
+
+    <div class="prisoner-visits__results">
+      {{ mojPagination(pagination) }}
+
+      {{ govukTable({
+        head: [
+          { text: "Date" },
+          { text: "Visitor`s name" },
+          { text: "Visitor`s age" },
+          { text: "Relationship to prisoner" },
+          { text: "Visit status" }
+        ],
+        rows: rows,
+        attributes: { "data-test": "prisoner-visits-results" },
+        classes: 'govuk-table--with-child-rows'
+      }) }}
+    
+      {{ mojPagination(pagination) }}
+    </div>
+  </div>
+{% endblock %}

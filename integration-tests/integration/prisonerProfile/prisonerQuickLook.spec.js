@@ -3,7 +3,7 @@ const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDeta
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
 const bookingId = 14
-const offenderNo = 'A12345'
+const offenderNo = 'A1234A'
 const quickLookFullDetails = {
   offence: [{ offenceDescription: 'Have blade/article which was sharply pointed in public place' }],
   prisonerDetails: [
@@ -230,6 +230,22 @@ context('Prisoner quick look', () => {
       })
     })
 
+    it('Should show correct tabs', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+      cy.get('ul.govuk-tabs__list')
+        .find('li')
+        .then($tabs => {
+          expect($tabs.get(0).innerText).to.contain('Quick look')
+          expect($tabs.get(1).innerText).to.contain('Personal')
+          expect($tabs.get(2).innerText).to.contain('Alerts')
+          expect($tabs.get(3).innerText).to.contain('Case notes')
+          expect($tabs.get(4).innerText).to.contain('Sentence and release')
+        })
+    })
+
     it('Should show correct Offence details', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
@@ -450,7 +466,7 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="data-retention-record-details"] a').should(
         'have.attr',
         'href',
-        '/offenders/A12345/retention-reasons'
+        `/offenders/${offenderNo}/retention-reasons`
       )
     })
   })
@@ -464,7 +480,7 @@ context('Prisoner quick look', () => {
         iepSummary: {},
         caseNoteSummary: {},
         retentionRecord: {
-          offenderNo: 'A12345',
+          offenderNo,
           retentionReasons: ['Reason1'],
         },
       })
@@ -480,7 +496,7 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="data-retention-record-details"] a').should(
         'have.attr',
         'href',
-        '/offenders/A12345/retention-reasons'
+        `/offenders/${offenderNo}/retention-reasons`
       )
     })
   })

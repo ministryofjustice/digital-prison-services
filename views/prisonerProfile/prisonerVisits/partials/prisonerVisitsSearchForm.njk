@@ -1,0 +1,40 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<form novalidate="novalidate" class="prisoner-visits__form" data-test="prisoner-visits-form">
+  <div class="horizontal-form govuk-!-margin-bottom-3">
+    {{ govukSelect({
+      id: "visitType",
+      name: "visitType",
+      label: {
+        text: "Visit type"
+      },
+      items: visitTypes | addDefaultSelectedVale('All', true) | setSelected(formValues.visitType),
+      attributes: { 'data-test': 'prisoner-visits-type' }
+    }) }}
+
+    {{ datePicker({
+      id: 'fromDate',
+      label: 'Date from',
+      name: 'fromDate',
+      date: formValues.fromDate,
+      errorMessage: errors | findError('fromDate'),
+      attributes: { "data-test": "from-filter" }
+    }) }}
+
+    {{ datePicker({
+      id: 'toDate',
+      label: 'Date to',
+      name: 'toDate',
+      date: formValues.toDate,
+      errorMessage: errors | findError('toDate'),
+      attributes: { "data-test": "to-filter" }
+    }) }}
+
+    {{ govukButton({
+      text: "Apply",
+      type: "submit"
+    }) }}
+  </div>
+</form>
