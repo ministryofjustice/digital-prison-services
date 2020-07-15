@@ -58,19 +58,38 @@ context('A user can view prisoner case notes', () => {
 
   it('A user can view a prisoners case notes', () => {
     const page = CaseNotesPage.verifyOnPage('Smith, John')
-    const tableDataRow = page.getRows(0)
+    const rows = page.getRows(0)
 
-    tableDataRow.createdBy().contains('Tuesday 31/10/2017 01:30 Mickey Mouse')
-    tableDataRow
+    rows
+      .createdBy()
+      .find('span')
+      .then($element => {
+        expect($element.get(0).innerText.trim()).to.eq('Tuesday')
+        expect($element.get(1).innerText.trim()).to.eq('31 October 2017')
+        expect($element.get(2).innerText.trim()).to.eq('01:30')
+        expect($element.get(3).innerText.trim()).to.eq('Mickey Mouse')
+      })
+
+    rows
       .caseNoteDetails()
-      .contains(
-        'Incentive Level: Incentive Level Warning This is some text Add more details Happened: 31/10/2017 - 01:30'
-      )
-    tableDataRow
+      .find('h3')
+      .then($element => {
+        expect($element.get(0).innerText.trim()).to.eq('Incentive Level : Incentive Level Warning')
+      })
+
+    rows
+      .caseNoteDetails()
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText.trim()).to.eq('This is some text')
+      })
+
+    rows
       .caseNoteAddMoreDetailsLink()
       .contains('Add more details')
       .should('have.attr', 'href', 'http://localhost:20200/offenders/A12345/case-notes/12311312/amend-case-note')
-    tableDataRow
+
+    rows
       .caseNotePrintIncentiveLevelSlipLink()
       .contains('Print Incentive Level Slip')
       .should(
@@ -80,15 +99,16 @@ context('A user can view prisoner case notes', () => {
       )
 
     const form = page.filterForm()
+
     form.typeSelect().select('Observations')
+
     form
       .subTypeSelect()
       .get('option')
       .should('contain', 'Test')
+
     form.subTypeSelect().select('Test')
     form.applyButton().click()
-
-    CaseNotesPage.verifyOnPage('Smith, John')
 
     form.subTypeSelect().select('Select')
     form.applyButton().click()

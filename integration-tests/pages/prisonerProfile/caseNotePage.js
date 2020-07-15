@@ -1,12 +1,5 @@
 const page = require('../page')
 
-const row = i => cy.get(`tbody tr`).eq(i)
-
-const column = (i, j) =>
-  row(i)
-    .find('td')
-    .eq(j)
-
 const caseNotePage = offenderName =>
   page(offenderName, {
     filterForm: () => ({
@@ -14,9 +7,9 @@ const caseNotePage = offenderName =>
       subTypeSelect: () => cy.get('#subType'),
       applyButton: () => cy.get('button'),
     }),
-    getRows: i => ({
-      createdBy: () => column(i, 0),
-      caseNoteDetails: () => column(i, 1),
+    getRows: () => ({
+      createdBy: () => cy.get('.case-notes-created'),
+      caseNoteDetails: () => cy.get('.case-notes-details'),
       caseNoteAddMoreDetailsLink: () => cy.get('[data-test="add-more-details"]'),
       caseNotePrintIncentiveLevelSlipLink: () => cy.get('[data-test="print-slip"]'),
     }),
