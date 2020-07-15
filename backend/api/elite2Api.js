@@ -49,6 +49,9 @@ const elite2ApiFactory = client => {
       offenderNumbers
     )
 
+  const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
+    get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
+
   const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
 
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
@@ -292,6 +295,8 @@ const elite2ApiFactory = client => {
 
   const getHealthTypes = context => get(context, '/api/reference-domains/domains/HEALTH', 1000)
 
+  const getVisitTypes = context => get(context, '/api/reference-domains/domains/VISIT_TYPE', 1000)
+
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
   const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
@@ -313,6 +318,7 @@ const elite2ApiFactory = client => {
     getActivityList,
     searchActivityLocations,
     getVisits,
+    getVisitsForBookingWithVisitors,
     getNextVisit,
     getAppointments,
     getAppointmentsForAgency,
@@ -395,6 +401,7 @@ const elite2ApiFactory = client => {
     getReasonableAdjustments,
     getTreatmentTypes,
     getHealthTypes,
+    getVisitTypes,
     getSentenceAdjustments,
     getCourtCases,
     getOffenceHistory,
