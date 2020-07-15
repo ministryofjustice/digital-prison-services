@@ -188,12 +188,9 @@ $govuk-page-width: 1170px;
   font-family: 'GDS Transport', Arial, sans-serif;
 }
 
-.case-notes {}
-
 .case-note-entry {
   display: flex;
   flex-direction: row;
-  //flex-wrap: wrap;
   margin-bottom: govuk-spacing(3);
 
 }
