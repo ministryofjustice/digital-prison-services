@@ -1,6 +1,7 @@
 const moment = require('moment')
 const DashboardPage = require('../../pages/covid/dashboardPage')
 const ReverseCohortingUnitPage = require('../../pages/covid/reverseCohortingUnitPage')
+const NotInUnitPage = require('../../pages/covid/notInUnitPage')
 const ProtectiveIsolationUnitPage = require('../../pages/covid/protectiveIsolationUnitPage')
 const ShieldingUnitPage = require('../../pages/covid/shieldingUnitPage')
 const RefusingToShieldPage = require('../../pages/covid/refusingToShieldPage')
@@ -28,7 +29,32 @@ context('Covid dashboard page', () => {
         .startOf('day')
         .subtract(14, 'days')
         .format('YYYY-MM-DDTHH:mm:ss'),
-      movements: [],
+      movements: [
+        {
+          offenderNo: 'AA1234A',
+          bookingId: 123,
+          location: '1-2-017',
+          firstName: 'JAMES',
+          lastName: 'STEWART',
+          movementDateTime: '2020-01-04',
+        },
+        {
+          offenderNo: 'CC1234A',
+          bookingId: 234,
+          location: '1-2-018',
+          firstName: 'BOB',
+          lastName: 'SMITH',
+          movementDateTime: '2020-01-05',
+        },
+        {
+          offenderNo: 'DD1234A',
+          bookingId: 234,
+          location: '1-2-018',
+          firstName: 'JIM',
+          lastName: 'SMITH',
+          movementDateTime: '2020-01-05',
+        },
+      ],
     })
   })
 
@@ -39,6 +65,9 @@ context('Covid dashboard page', () => {
 
     dashboardPage.reverseCohortingUnit().contains(12)
     dashboardPage.reverseCohortingUnitLink().should('be.visible')
+
+    dashboardPage.notInUnit().contains(3)
+    dashboardPage.notInUnitLink().should('be.visible')
 
     dashboardPage.protectiveIsolationUnit().contains(8)
     dashboardPage.protectiveIsolationUnitLink().should('be.visible')
@@ -56,6 +85,14 @@ context('Covid dashboard page', () => {
       .click()
 
     ReverseCohortingUnitPage.verifyOnPage()
+  })
+
+  it('A user can navigate to the not in unit page', () => {
+    DashboardPage.goTo()
+      .notInUnitLink()
+      .click()
+
+    NotInUnitPage.verifyOnPage()
   })
 
   it('A user can navigate to the protective isolation unit', () => {
