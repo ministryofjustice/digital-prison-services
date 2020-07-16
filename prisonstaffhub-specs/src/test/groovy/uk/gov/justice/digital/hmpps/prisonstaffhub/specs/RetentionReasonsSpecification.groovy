@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.NewNomisWebServer
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
+import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.RetentionReasonsPage
 
@@ -149,17 +150,39 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
     def offenderNo = "A12345"
 
     def setupTests() {
+        oauthApi.stubValidOAuthTokenLogin()
+        oauthApi.stubSystemUserTokenRequest()
+
         fixture.loginAs(ITAG_USER)
 
+        elite2api.stubGetMyCaseloads([Caseload.LEI])
         elite2api.stubImage()
         elite2api.stubAgencyDetails("LEI", [ description: "Leeds"])
         elite2api.stubOffenderDetails(offenderNo,
-                Map.of("firstName", "John",
+                Map.of(
+                        "bookingId", 1,
+                        "firstName", "John",
                         "lastName", "Doe",
                         "dateOfBirth", "1990-02-01",
                         "offenderNo", offenderNo,
                         "agencyId", "LEI"
                 ))
+        elite2api.stubAlertTypes()
+        elite2api.stubIepSummariesForBookings([1])
+        elite2api.stubStaffRoles(-2, 'LEI')
+        elite2api.stubCaseNotesSummary()
+        elite2api.stubMainOffence(1)
+        elite2api.stubPrisonerBalances(1)
+        elite2api.stubPrisonerDetails(offenderNo)
+        elite2api.stubPrisonerSentences(offenderNo)
+        elite2api.stubPositiveCaseNotes(1)
+        elite2api.stubNegativeCaseNotes(1)
+        elite2api.stubAdjudications(1)
+        elite2api.stubNextVisit(1)
+        elite2api.stubPrisonerVisitBalances(offenderNo)
+        elite2api.stubEventsForToday(1)
+        elite2api.stubProfileInformation(1)
+        elite2api.stubGetIepSummaryWithDetails(1, false)
 
         dataComplianceApi.stubGetOffenderRetentionReasons()
         dataComplianceApi.stubNoExistingOffenderRecord()

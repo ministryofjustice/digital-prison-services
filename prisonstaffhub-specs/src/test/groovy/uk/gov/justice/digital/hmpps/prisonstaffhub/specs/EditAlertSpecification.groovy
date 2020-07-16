@@ -3,8 +3,8 @@ package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 import com.github.tomakehurst.wiremock.client.WireMock
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.NewNomisWebServer
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
+
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
 
@@ -22,17 +22,14 @@ class EditAlertSpecification extends BrowserReportingSpec {
     @Rule
     WhereaboutsApi whereaboutsApi = new WhereaboutsApi()
 
-    @Rule
-    NewNomisWebServer newNomisWebServer = new NewNomisWebServer()
-
     def "should update an existing alert"() {
         def offenderNo = "A12345"
 
-        newNomisWebServer.stubLandingPage()
         elite2api.stubOffenderDetails(false,
                 Map.of("bookingId", 1, "firstName", "john", "lastName", "doe", "offenderNo", offenderNo))
 
         oauthApi.stubValidOAuthTokenLogin()
+        oauthApi.stubSystemUserTokenRequest()
         oauthApi.stubGetMyDetails(ITAG_USER)
         oauthApi.stubGetMyRoles(['ROLE_UPDATE_ALERT'])
         elite2api.stubGetMyCaseloads([Caseload.LEI])
@@ -41,6 +38,10 @@ class EditAlertSpecification extends BrowserReportingSpec {
                 "alertId", 1,
                "comment", "test"
         ))
+        elite2api.stubAlertTypes()
+        elite2api.stubIepSummariesForBookings([1])
+        elite2api.stubStaffRoles(-2, 'LEI')
+        elite2api.stubCaseNotesSummary()
 
         given: "I am on the edit / close alert form"
         to EditAlertPage
@@ -52,5 +53,8 @@ class EditAlertSpecification extends BrowserReportingSpec {
 
         then: "The alert should be updated"
         elite2api.verify(WireMock.putRequestedFor(WireMock.urlEqualTo("/api/bookings/1/alert/1")))
+
+        // then: "I should be redirected to the prisoner profile alerts page"
+        // newNomisWebServer.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/offenders/${offenderNo}/alerts?alertStatus=open")))
     }
 }

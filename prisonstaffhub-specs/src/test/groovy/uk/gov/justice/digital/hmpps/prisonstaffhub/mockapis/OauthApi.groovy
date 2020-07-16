@@ -136,7 +136,7 @@ class OauthApi extends WireMockRule {
                 post(urlEqualTo('/auth/oauth/token'))
                         .withHeader('authorization', equalTo('Basic cHJpc29uc3RhZmZodWJjbGllbnQ6Y2xpZW50c2VjcmV0'))
                         .withHeader('Content-Type', equalTo('application/x-www-form-urlencoded'))
-                        .withRequestBody(equalTo("grant_type=client_credentials"))
+                        .withRequestBody(containing("grant_type=client_credentials"))
                         .willReturn(aResponse().withStatus(200)))
     }
 
