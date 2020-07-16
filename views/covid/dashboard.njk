@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "./macros.njk" import notInUnitWarning %}
 
 {% block beforeContent %}
     {{ govukBreadcrumbs({
@@ -42,10 +43,17 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-quarter">
+      <div class="govuk-grid-column-one-third">
         <p class="govuk-body">Reverse Cohorting Unit</p>
-        {{ conditionalCountLink({ name: 'reverseCohortingUnit' , count: dashboardStats.reverseCohortingUnit, page: '/current-covid-units/reverse-cohorting-unit'}) }}
       </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="stat-with-warning">
+            {{ conditionalCountLink({ name: 'reverseCohortingUnit' , count: dashboardStats.reverseCohortingUnit, page: '/current-covid-units/reverse-cohorting-unit'}) }}
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+            {{ notInUnitWarning(dashboardStats.notInUnitCount) }}
+        </div>
     </div>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -60,25 +68,28 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     
     <div class="govuk-grid-row">
-      <div class="stat-with-warning">
+      <div class="govuk-grid-column-one-third">
         <p class="govuk-body">Shielding Unit</p>
-          {{ conditionalCountLink({ name: 'shieldingUnit' , count: dashboardStats.shieldingUnit, page: '/current-covid-units/shielding-unit'}) }}
       </div>
-      <div class="govuk-grid-column-two-thirds">
-        {% if dashboardStats.refusingToShield > 0 %}
-          {% set message = "There is " + dashboardStats.refusingToShield + " prisoner refusing to shield" 
-                  if dashboardStats.refusingToShield == 1 
-                  else "There are " + dashboardStats.refusingToShield + " prisoners who are refusing to shield" %}
-          {% set messageAndLink = message + '<br/><a class="link govuk-body govuk-link--no-visited-state" data-qa="refusingToShield-link" href="/current-covid-units/refusing-to-shield">View prisoners</a>' %}        
-          {{ govukWarningText({
-            html: messageAndLink,
-            iconFallbackText: "Warning",
-            classes: "govuk-!-padding-top-9",
-            attributes: {
-              "data-qa": "refusingToShield"
-            }
-          }) }}
-          {% endif %}
-      </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="stat-with-warning">
+            {{ conditionalCountLink({ name: 'shieldingUnit' , count: dashboardStats.shieldingUnit, page: '/current-covid-units/shielding-unit'}) }}
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+            {% if dashboardStats.refusingToShield > 0 %}
+                {% set message = "There is " + dashboardStats.refusingToShield + " prisoner refusing to shield"
+                    if dashboardStats.refusingToShield == 1
+                    else "There are " + dashboardStats.refusingToShield + " prisoners who are refusing to shield" %}
+                {% set messageAndLink = message + '<br/><a class="link govuk-body govuk-link--no-visited-state" data-qa="refusingToShield-link" href="/current-covid-units/refusing-to-shield">View prisoners</a>' %}
+                {{ govukWarningText({
+                    html: messageAndLink,
+                    iconFallbackText: "Warning",
+                    attributes: {
+                        "data-qa": "refusingToShield"
+                    }
+                }) }}
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

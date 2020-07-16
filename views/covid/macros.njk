@@ -1,0 +1,17 @@
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% macro notInUnitWarning(notInUnitCount) %}
+    {% if notInUnitCount > 0 %}
+        {% set message = "There is 1 newly arrived prisoner who has not been added to this unit"
+            if notInUnitCount == 1
+            else "There are " + notInUnitCount + " newly arrived prisoners who have not been added to this unit" %}
+        {% set messageAndLink = message + '<br/><a class="link govuk-body govuk-link--no-visited-state" data-qa="notInUnit-link" href="/current-covid-units/not-in-unit">View prisoners</a>' %}
+        {{ govukWarningText({
+            html: messageAndLink,
+            iconFallbackText: "Warning",
+            attributes: {
+                "data-qa": "notInUnit"
+            }
+        }) }}
+    {% endif %}
+{% endmacro %}

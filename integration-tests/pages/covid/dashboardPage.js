@@ -7,6 +7,9 @@ const dashboardPage = () =>
     reverseCohortingUnit: () => cy.get('[data-qa="reverseCohortingUnit"]'),
     reverseCohortingUnitLink: () => cy.get('[data-qa="reverseCohortingUnit-link"]'),
 
+    notInUnit: () => cy.get('[data-qa=notInUnit]'),
+    notInUnitLink: () => cy.get('[data-qa=notInUnit-link]'),
+
     protectiveIsolationUnit: () => cy.get('[data-qa="protectiveIsolationUnit"]'),
     protectiveIsolationUnitLink: () => cy.get('[data-qa="protectiveIsolationUnit-link"]'),
 
