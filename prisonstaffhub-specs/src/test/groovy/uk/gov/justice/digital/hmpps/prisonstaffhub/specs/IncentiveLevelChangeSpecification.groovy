@@ -82,7 +82,7 @@ class IncentiveLevelChangeSpecification extends BrowserReportingSpec {
         then: "I should be presented with the form"
 
         breadcrumb == [['Home', NOTM_URL],
-                       ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
+                       ['Bates, Norman', "http://localhost:3006/prisoner/A1234AC"],
                        ['Incentive details', 'http://localhost:3006/offenders/A1234AC/incentive-level-details'],
                        ['Change Incentive Level', '']]
 

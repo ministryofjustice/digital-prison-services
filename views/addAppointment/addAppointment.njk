@@ -11,7 +11,7 @@
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
 {% set title = 'Add new appointment' %}
-{% set offenderUrl = dpsUrl + 'offenders/' + offenderNo %}
+{% set offenderUrl = '/prisoner/' + offenderNo %}
 {% set recurringHtml %}
   <div data-qa="recurring-inputs">
       {{ govukSelect({

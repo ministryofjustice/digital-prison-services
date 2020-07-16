@@ -82,7 +82,7 @@ describe('retention reasons', () => {
       timestamp: '01/02/2020 - 03:04',
       version: '"0"',
     },
-    offenderUrl: 'http://localhost:3000/offenders/ABC123',
+    offenderUrl: '/prisoner/ABC123',
     offenderBasics: {
       offenderNo: 'ABC123',
       firstName: 'BARRY',

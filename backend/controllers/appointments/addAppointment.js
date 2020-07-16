@@ -19,7 +19,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
     }
   }
 
-  const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
+  const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
   const renderError = (req, res, error) => {
     const { offenderNo } = req.params

@@ -63,7 +63,7 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
         then: "I should be presented with results"
 
         breadcrumb == [['Home', NOTM_URL],
-                       ['Bates, Norman', "${NOTM_URL}offenders/A1234AC/quick-look"],
+                       ['Bates, Norman', "http://localhost:3006/prisoner/A1234AC"],
                        ['Incentive details', '']]
 
         tableRows.size() == 5 // Including header row

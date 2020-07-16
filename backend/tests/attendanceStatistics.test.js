@@ -511,8 +511,7 @@ describe('Attendance reason statistics', () => {
         offenders: [
           [
             {
-              html:
-                '<a href=http://localhost:3000/offenders/G8974UK/quick-look class="govuk-link" target="_blank">Smith, Adam</a>',
+              html: '<a href=/prisoner/G8974UK class="govuk-link" target="_blank">Smith, Adam</a>',
             },
             { text: 'G8974UK' },
             { text: '1' },
@@ -810,7 +809,7 @@ describe('Attendance reason statistics', () => {
         offendersData: [
           [
             {
-              html: '<a href="http://localhost:3000/offenders/G8974UK/quick-look" class="govuk-link">Smith, Adam</a>',
+              html: '<a href="/prisoner/G8974UK" class="govuk-link">Smith, Adam</a>',
               attributes: {
                 'data-sort-value': 'Smith',
               },
@@ -822,7 +821,7 @@ describe('Attendance reason statistics', () => {
           ],
           [
             {
-              html: '<a href="http://localhost:3000/offenders/G8975UK/quick-look" class="govuk-link">Two, Offender</a>',
+              html: '<a href="/prisoner/G8975UK" class="govuk-link">Two, Offender</a>',
               attributes: {
                 'data-sort-value': 'Two',
               },
@@ -834,8 +833,7 @@ describe('Attendance reason statistics', () => {
           ],
           [
             {
-              html:
-                '<a href="http://localhost:3000/offenders/G8976UK/quick-look" class="govuk-link">Three, Offender</a>',
+              html: '<a href="/prisoner/G8976UK" class="govuk-link">Three, Offender</a>',
               attributes: {
                 'data-sort-value': 'Three',
               },

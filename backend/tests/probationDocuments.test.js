@@ -210,7 +210,7 @@ describe('Probation documents', () => {
               bookingId: 1234,
               name: 'User, Test',
               offenderNo: 'G9542VP',
-              profileUrl: 'http://localhost:3000/offenders/G9542VP',
+              profileUrl: '/prisoner/G9542VP',
             },
             user: {
               activeCaseLoad: {

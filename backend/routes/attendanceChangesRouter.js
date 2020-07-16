@@ -77,9 +77,9 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
 
       return [
         {
-          html: `<a href="${dpsUrl}offenders/${offenderNo}" class="govuk-link">${properCaseName(
-            lastName
-          )}, ${properCaseName(firstName)}</a>`,
+          html: `<a href="/prisoner/${offenderNo}" class="govuk-link">${properCaseName(lastName)}, ${properCaseName(
+            firstName
+          )}</a>`,
           attributes: {
             'data-sort-value': lastName,
           },

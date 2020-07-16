@@ -115,7 +115,7 @@ describe('Attendance change router', () => {
           [
             {
               attributes: { 'data-sort-value': 'last name' },
-              html: '<a href="http://localhost:3000/offenders/A23457" class="govuk-link">Last name, First name 2</a>',
+              html: '<a href="/prisoner/A23457" class="govuk-link">Last name, First name 2</a>',
             },
             { text: 'A23457' },
             { text: 'Kitchen' },
@@ -127,7 +127,7 @@ describe('Attendance change router', () => {
           [
             {
               attributes: { 'data-sort-value': 'last name' },
-              html: '<a href="http://localhost:3000/offenders/A123456" class="govuk-link">Last name, First name 1</a>',
+              html: '<a href="/prisoner/A123456" class="govuk-link">Last name, First name 1</a>',
             },
             { text: 'A123456' },
             { text: 'Wood work' },
@@ -215,7 +215,7 @@ describe('Attendance change router', () => {
           [
             {
               attributes: { 'data-sort-value': 'last name' },
-              html: '<a href="http://localhost:3000/offenders/A23457" class="govuk-link">Last name, First name 2</a>',
+              html: '<a href="/prisoner/A23457" class="govuk-link">Last name, First name 2</a>',
             },
             { text: 'A23457' },
             { text: 'Kitchen' },

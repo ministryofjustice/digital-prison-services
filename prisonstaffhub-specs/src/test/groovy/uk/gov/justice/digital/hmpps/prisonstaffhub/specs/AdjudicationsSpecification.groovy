@@ -49,7 +49,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         then: "I should be presented with results"
 
         breadcrumb == [['Home', NOTM_URL],
-                       ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
+                       ['Smith, Harry', "http://localhost:3006/prisoner/AA00112"],
                        ['Adjudications', '']]
 
         tableRows.size() == 4 // Including header row
@@ -153,7 +153,7 @@ class AdjudicationsSpecification extends BrowserReportingSpec {
         at new AdjudicationDetailPage(adjudicationNumber: '1492249')
 
         breadcrumb == [['Home', NOTM_URL],
-                       ['Smith, Harry', "${NOTM_URL}offenders/AA00112/quick-look"],
+                       ['Smith, Harry', "http://localhost:3006/prisoner/AA00112"],
                        ['Adjudications', 'http://localhost:3006/offenders/AA00112/adjudications'],
                        ['Details', '']]
 

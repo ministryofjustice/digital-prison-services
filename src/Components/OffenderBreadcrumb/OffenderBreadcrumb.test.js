@@ -7,7 +7,7 @@ describe('Offender Breadcrumb', () => {
     const match = { params: { offenderNo: 'AAAA111222' } }
     const renderer = new ShallowRenderer()
     renderer.render(<OffenderBreadcrumb match={match} firstName="Bob" lastName="Smith" />)
-    expect(renderer.getRenderOutput()).toEqual(<a href="offenders/AAAA111222/quick-look">Smith, Bob</a>)
+    expect(renderer.getRenderOutput()).toEqual(<a href="/prisoner/AAAA111222">Smith, Bob</a>)
   })
 
   it('should render correctly when values are not present', () => {
