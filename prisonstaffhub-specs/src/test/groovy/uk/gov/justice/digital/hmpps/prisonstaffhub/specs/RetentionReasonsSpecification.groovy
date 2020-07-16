@@ -84,6 +84,9 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         then: "The retention reasons should be updated"
         dataComplianceApi.verify(putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
+
+        // then: "I should be redirected to the prisoner profile page"
+        // newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
     }
 
     def "should be able to update a select retention record"() {
@@ -106,6 +109,9 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         then: "The retention reasons should be updated"
         dataComplianceApi.verify(putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
+
+        // then: "I should be redirected to the prisoner profile page"
+        // newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
     }
 
     def "should be able to cancel an update of retention reasons"() {
@@ -121,6 +127,9 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         then: "The retention reasons are not updated"
         dataComplianceApi.verify(0, putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
+
+        // then: "I should be redirected to the prisoner profile page"
+        // newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
     }
 
     def "should be prevented from submitting empty details"() {
