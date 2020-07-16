@@ -41,3 +41,5 @@ env:
   PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk/
   REDIS_ENABLED: true
+  SOC_UI_URL: https://manage-soc-cases-dev.service.justice.gov.uk/
+  SOC_ENDPOINT_API_URL: https://manage-soc-cases-dev.service.justice.gov.uk/api/

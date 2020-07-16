@@ -84,6 +84,11 @@ module.exports = {
       ui_url: process.env.PATHFINDER_UI_URL,
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
+    soc: {
+      url: process.env.SOC_ENDPOINT_API_URL || '',
+      ui_url: process.env.SOC_UI_URL,
+      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+    },
   },
   notifications: {
     enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,

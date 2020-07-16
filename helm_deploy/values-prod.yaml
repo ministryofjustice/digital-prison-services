@@ -39,6 +39,8 @@ env:
   PATHFINDER_UI_URL: https://pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://api.pathfinder.service.justice.gov.uk/
   REDIS_ENABLED: true
+  SOC_UI_URL: ''
+  SOC_ENDPOINT_API_URL: ''
 
 whitelist:
   office: "217.33.148.210/32"
