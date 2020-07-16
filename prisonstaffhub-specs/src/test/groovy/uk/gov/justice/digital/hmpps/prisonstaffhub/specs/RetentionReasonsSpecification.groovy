@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.specs
 
+import com.github.tomakehurst.wiremock.client.WireMock
 import org.junit.Rule
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.DataComplianceApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
@@ -7,10 +8,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.NewNomisWebServer
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.TestFixture
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.NewNomisLandingPage
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.RetentionReasonsPage
 
-import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
 import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
@@ -83,11 +82,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         updateButton.click()
 
         then: "The retention reasons should be updated"
-        at NewNomisLandingPage
         dataComplianceApi.verify(putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
-
-        then: "I should be redirected to the new nomis ui"
-        newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
     }
 
     def "should be able to update a select retention record"() {
@@ -110,9 +105,6 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         then: "The retention reasons should be updated"
         dataComplianceApi.verify(putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
-
-        then: "I should be redirected to the new nomis ui"
-        newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
     }
 
     def "should be able to cancel an update of retention reasons"() {
@@ -128,9 +120,6 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         then: "The retention reasons are not updated"
         dataComplianceApi.verify(0, putRequestedFor(urlEqualTo("/retention/offenders/A12345")))
-
-        then: "I should be redirected to the new nomis ui"
-        newNomisWebServer.verify(getRequestedFor(urlEqualTo("/offenders/${offenderNo}")))
     }
 
     def "should be prevented from submitting empty details"() {

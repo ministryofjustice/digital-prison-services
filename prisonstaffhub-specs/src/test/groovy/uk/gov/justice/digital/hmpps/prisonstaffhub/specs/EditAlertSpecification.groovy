@@ -7,8 +7,8 @@ import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.NewNomisWebServer
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.model.Caseload
+
 import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.EditAlertPage
-import uk.gov.justice.digital.hmpps.prisonstaffhub.pages.NewNomisLandingPage
 
 import static uk.gov.justice.digital.hmpps.prisonstaffhub.model.UserAccount.ITAG_USER
 
@@ -49,13 +49,8 @@ class EditAlertSpecification extends BrowserReportingSpec {
         form.comment = "Test"
         form.alertStatus = 'No'
         submit.click()
-        at NewNomisLandingPage
 
         then: "The alert should be updated"
         elite2api.verify(WireMock.putRequestedFor(WireMock.urlEqualTo("/api/bookings/1/alert/1")))
-
-        then: "I should be redirected to the new nomis ui"
-        newNomisWebServer.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/offenders/${offenderNo}/alerts?alertStatus=open")))
-
     }
 }
