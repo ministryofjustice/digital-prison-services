@@ -38,6 +38,25 @@ module.exports = {
       },
     })
   },
+  stubStaff: (staffId, details) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/users/${encodeURIComponent(staffId)}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: details || {
+          firstName: 'JAMES',
+          lastName: 'STUART',
+          activeCaseLoadId: 'MDI',
+        },
+      },
+    })
+  },
   stubUserCaseloads: caseloads => {
     return stubFor({
       request: {
@@ -911,6 +930,21 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
+        urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
+  stubAppointmentsGet: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
         urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
       },
       response: {

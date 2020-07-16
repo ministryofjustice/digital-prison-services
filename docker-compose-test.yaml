@@ -9,5 +9,6 @@ services:
 
   prisonstaffhub-test-redis:
     image: redis
+    container_name: prisonstaffhub-test-redis
     ports:
       - 6379:6379
