@@ -1,14 +1,11 @@
 const qs = require('qs')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { formatTimestampToDate, formatTimestampToDateTime } = require('../utils')
 
 const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
   const sortReasonsByDisplayOrder = reasons => reasons.sort((r1, r2) => (r1.displayOrder > r2.displayOrder ? 1 : -1))
 
-  const getOffenderUrl = offenderNo => `${dpsUrl}offenders/${offenderNo}`
+  const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
   const getRetentionReasonsUrl = offenderNo => `/offenders/${offenderNo}/retention-reasons`
 

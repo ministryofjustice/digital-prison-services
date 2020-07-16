@@ -384,7 +384,7 @@ class Elite2Api extends WireMockRule {
 
     void stubOffenderDetails(boolean fullInfo, def offender) {
         this.stubFor(
-                get("/api/bookings/offenderNo/${offender.offenderNo}?fullInfo=${fullInfo}")
+                any(urlPathEqualTo("/api/bookings/offenderNo/${offender.offenderNo}"))
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
@@ -691,9 +691,9 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubGetIepSummaryWithDetails(bookingId) {
+    void stubGetIepSummaryWithDetails(bookingId, withDetails = true) {
         this.stubFor(
-                get("/api/bookings/${bookingId}/iepSummary?withDetails=true")
+                get("/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}")
                         .willReturn(
                                 aResponse()
                                         .withStatus(200)
@@ -797,7 +797,7 @@ class Elite2Api extends WireMockRule {
 
     void stubOffenderDetails(offenderNo, response) {
         this.stubFor(
-                get("/api/bookings/offenderNo/${offenderNo}?fullInfo=false")
+                get(urlPathEqualTo("/api/bookings/offenderNo/${offenderNo}"))
                         .willReturn(
                                 aResponse()
                                         .withStatus(200)
@@ -946,6 +946,188 @@ class Elite2Api extends WireMockRule {
                                         .withHeader('Content-Type', 'application/json')
                                         .withBody(JsonOutput.toJson(response))
                         )
+
+        )
+    }
+
+    void stubAlertTypes(response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/reference-domains/alertTypes"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubStaffRoles(staffId, agencyId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/staff/${staffId}/${agencyId}/roles"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubCaseNotesSummary(response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/case-notes/summary"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubMainOffence(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/mainOffence"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubPrisonerBalances(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/balances"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubPrisonerDetails(offenderNo, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/prisoners/${offenderNo}"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubPrisonerSentences(offenderNo, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/offenders/${offenderNo}/sentences"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubPositiveCaseNotes(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubNegativeCaseNotes(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubAdjudications(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/adjudications"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubNextVisit(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/visits/next"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubPrisonerVisitBalances(offenderNo, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/offenderNo/${offenderNo}/visit/balances"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubEventsForToday(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/events/today"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
+
+        )
+    }
+
+    void stubProfileInformation(bookingId, response = []) {
+        this.stubFor(
+                get(urlPathEqualTo("/api/bookings/${bookingId}/profileInformation"))
+                        .willReturn(
+                        aResponse()
+                                .withStatus(200)
+                                .withHeader('Content-Type', 'application/json')
+                                .withBody(JsonOutput.toJson(response))
+                )
 
         )
     }

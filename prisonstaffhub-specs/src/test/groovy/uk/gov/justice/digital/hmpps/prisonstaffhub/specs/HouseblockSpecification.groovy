@@ -159,7 +159,7 @@ class HouseblockSpecification extends BrowserReportingSpec {
         texts[1].contains("Anderson, Arthur A-1-1 A1234AA")
         row1[activityColumn].text().contains('17:00 - Woodwork')
         row1[otherActivityColumn].text().contains('16:50 - 18:30 - conflict activity')
-        row1[0].find("a", href: endsWith('/offenders/A1234AA/quick-look')).size() == 1
+        row1[0].find("a", href: endsWith('/prisoner/A1234AA')).size() == 1
     }
 
     def "A prisoner with 0 activities should be displayed correctly"() {

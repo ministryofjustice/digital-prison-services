@@ -1,5 +1,4 @@
 const moment = require('moment')
-const config = require('../../config')
 
 const { stripWarning } = require('../../mappers')
 
@@ -71,7 +70,7 @@ const absentReasonTableViewModel = offenderData => ({
   offenders: offenderData
     .sort((a, b) => a.offenderName.localeCompare(b.offenderName, 'en', { ignorePunctuation: true }))
     .map(data => {
-      const quickLookUrl = `${config.app.notmEndpointUrl}offenders/${data.offenderNo}/quick-look`
+      const quickLookUrl = `/prisoner/${data.offenderNo}`
 
       // Return the data in the appropriate format to seed the table macro
       return [
@@ -430,7 +429,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         const { offenderNo, firstName, lastName, comment, cellLocation } = activity
         const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 
-        const offenderUrl = `${config.app.notmEndpointUrl}offenders/${offenderNo}/quick-look`
+        const offenderUrl = `/prisoner/${offenderNo}`
 
         return [
           {

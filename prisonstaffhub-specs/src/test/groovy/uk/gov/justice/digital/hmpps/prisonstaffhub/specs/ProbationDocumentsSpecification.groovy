@@ -219,7 +219,7 @@ class ProbationDocumentsSpecification extends BrowserReportingSpec {
 
         then: "I should be presented with the probation documents page"
         breadcrumb == [['Home', NOTM_URL],
-                       ['Bates, Norman', "${NOTM_URL}offenders/A1234AC"],
+                       ['Bates, Norman', "http://localhost:3006/prisoner/A1234AC"],
                        ['Probation documents', null]]
 
         and: "shown a break down of convictions"

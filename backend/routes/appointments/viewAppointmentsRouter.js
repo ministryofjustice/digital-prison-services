@@ -1,7 +1,4 @@
 const moment = require('moment')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
 
@@ -45,7 +42,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
       .map(async appointment => {
         const { startTime, endTime, offenderNo } = appointment
         const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
-        const offenderUrl = `${dpsUrl}offenders/${offenderNo}`
+        const offenderUrl = `/prisoner/${offenderNo}`
 
         const videoLinkLocation =
           appointment.appointmentTypeCode === 'VLB' &&
