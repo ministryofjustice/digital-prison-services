@@ -38,6 +38,25 @@ module.exports = {
       },
     })
   },
+  stubStaff: (staffId, details) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/users/${encodeURIComponent(staffId)}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: details || {
+          firstName: 'JAMES',
+          lastName: 'STUART',
+          activeCaseLoadId: 'MDI',
+        },
+      },
+    })
+  },
   stubUserCaseloads: caseloads => {
     return stubFor({
       request: {

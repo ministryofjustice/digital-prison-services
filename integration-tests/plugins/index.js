@@ -65,6 +65,7 @@ module.exports = on => {
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
+    stubStaff: (staffId, details) => Promise.all([elite2api.stubStaff(staffId, details)]),
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
     stubProgEventsAtLocation: ({ caseload, locationId, timeSlot, date, activities }) =>
       Promise.all([elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activities)]),
