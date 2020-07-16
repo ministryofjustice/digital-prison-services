@@ -243,7 +243,7 @@ describe('alert management', () => {
 
         expect(raiseAnalyticsEvent).toBeCalledWith('Alert Closed', 'Alert closed for LEI', 'Alert type - LFC21')
 
-        expect(res.redirect).toBeCalledWith('//newNomisEndPointUrl/offenders/ABC123/alerts?alertStatus=closed')
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/alerts?alertStatus=closed')
 
         Date.now.mockRestore()
       })
@@ -264,9 +264,7 @@ describe('alert management', () => {
 
         expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test', expiryDate: '2019-03-29' })
 
-        expect(res.redirect).toBeCalledWith(
-          `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=closed`
-        )
+        expect(res.redirect).toBeCalledWith(`/prisoner/${req.body.offenderNo}/alerts?alertStatus=closed`)
 
         Date.now.mockRestore()
       })
@@ -288,9 +286,7 @@ describe('alert management', () => {
         await handleEditAlertForm(req, res)
 
         expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test' })
-        expect(res.redirect).toBeCalledWith(
-          `//newNomisEndPointUrl/offenders/${req.body.offenderNo}/alerts?alertStatus=open`
-        )
+        expect(res.redirect).toBeCalledWith(`/prisoner/${req.body.offenderNo}/alerts?alertStatus=open`)
       })
 
       it('should raise an analytics even changes to the comment have been made', async () => {

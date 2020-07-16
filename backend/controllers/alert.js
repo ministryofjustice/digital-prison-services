@@ -1,11 +1,10 @@
 const moment = require('moment')
 const { formatTimestampToDate, properCaseName, formatName } = require('../utils')
-const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-const getOffenderUrl = offenderNo => `${config.app.notmEndpointUrl}offenders/${offenderNo}`
+const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
 const getUpdateParameters = ({ comment, expiryDate }) => {
   if (comment && expiryDate) return { comment, expiryDate }

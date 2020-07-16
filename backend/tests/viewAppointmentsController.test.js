@@ -250,7 +250,7 @@ describe('View appointments', () => {
               { text: '12:30' },
               {
                 attributes: { 'data-sort-value': 'ONE' },
-                html: '<a href="http://localhost:3000/offenders/ABC123" class="govuk-link">One, Offender</a>',
+                html: '<a href="/prisoner/ABC123" class="govuk-link">One, Offender</a>',
               },
               { text: 'ABC123' },
               { text: 'Medical - Other' },
@@ -261,7 +261,7 @@ describe('View appointments', () => {
               { text: '13:30 to 14:30' },
               {
                 attributes: { 'data-sort-value': 'TWO' },
-                html: '<a href="http://localhost:3000/offenders/ABC456" class="govuk-link">Two, Offender</a>',
+                html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender</a>',
               },
               { text: 'ABC456' },
               { text: 'Gym - Exercise' },
@@ -272,7 +272,7 @@ describe('View appointments', () => {
               { text: '14:30 to 15:30' },
               {
                 attributes: { 'data-sort-value': 'THREE' },
-                html: '<a href="http://localhost:3000/offenders/ABC789" class="govuk-link">Three, Offender</a>',
+                html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender</a>',
               },
               { text: 'ABC789' },
               { text: 'Video Link booking' },
@@ -283,7 +283,7 @@ describe('View appointments', () => {
               { text: '13:30 to 14:30' },
               {
                 attributes: { 'data-sort-value': 'FOUR' },
-                html: '<a href="http://localhost:3000/offenders/ABC456" class="govuk-link">Four, Offender</a>',
+                html: '<a href="/prisoner/ABC456" class="govuk-link">Four, Offender</a>',
               },
               { text: 'ABC456' },
               { text: 'Video Link booking' },
@@ -317,7 +317,7 @@ describe('View appointments', () => {
             [
               { text: '13:30 to 14:30' },
               {
-                html: '<a href="http://localhost:3000/offenders/ABC456" class="govuk-link">Two, Offender</a>',
+                html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender</a>',
                 attributes: {
                   'data-sort-value': 'TWO',
                 },
