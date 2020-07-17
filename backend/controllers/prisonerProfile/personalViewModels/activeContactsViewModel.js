@@ -30,7 +30,7 @@ module.exports = ({ personal, professional }) => {
   }
 
   return {
-    personal: personal && personal.map(getContactView(true)),
-    professional: professional && professional.map(getContactView(false)),
+    personalContacts: personal && personal.map(getContactView(true)),
+    professionalContacts: professional && professional.map(getContactView(false)),
   }
 }
