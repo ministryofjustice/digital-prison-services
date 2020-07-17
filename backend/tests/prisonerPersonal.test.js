@@ -956,6 +956,24 @@ describe('prisoner personal', () => {
       addressUsages: [],
     }
 
+    const homeNonPrimary = {
+      addressType: 'Home',
+      flat: '222',
+      premise: '000',
+      street: 'Business street',
+      town: 'Manchester',
+      postalCode: 'W2 DEF',
+      county: 'Greater Manchester',
+      country: 'England',
+      comment: null,
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      endDate: null,
+      phones: [],
+      addressUsages: [],
+    }
+
     beforeEach(() => {
       elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
@@ -978,7 +996,7 @@ describe('prisoner personal', () => {
 
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-          expect.objectContaining({ activeContacts: { personal: undefined, professional: [] } })
+          expect.objectContaining({ personalContacts: undefined, professionalContacts: [] })
         )
       })
     })
@@ -1121,59 +1139,57 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: {
-                personal: [
-                  {
-                    name: 'John Smith',
-                    emergencyContact: true,
-                    noFixedAddress: false,
-                    details: [
-                      { label: 'Relationship', value: 'Cousin' },
-                      {
-                        label: 'Phone number',
-                        html: '02222222222,<br>033333333333 extension number 777',
-                      },
-                      { label: 'Email', value: 'test1@email.com, test2@email.com' },
-                      { label: 'Address', value: 'Flat A, 13, High Street' },
-                      { label: 'Town', value: 'Ulverston' },
-                      { label: 'County', value: 'West Yorkshire' },
-                      { label: 'Postcode', value: 'LS1 AAA' },
-                      { label: 'Country', value: 'England' },
-                      {
-                        label: 'Address phone',
-                        html: '011111111111,<br>011333444 extension number 777',
-                      },
-                      { label: 'Address type', value: 'Home' },
-                    ],
-                  },
-                ],
-                professional: [
-                  {
-                    name: 'Jane Smith',
-                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
-                  },
-                  {
-                    name: 'John Doe',
-                    details: [{ label: 'Relationship', value: 'Co-working Prison Offender Manager' }],
-                  },
-                  {
-                    name: 'Uriualche Lydyle',
-                    noFixedAddress: false,
-                    details: [
-                      { label: 'Relationship', value: 'Case Administrator' },
-                      { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
-                      { label: 'Email', value: 'test3@email.com, test4@email.com' },
-                      { label: 'Address', value: 'Flat 222, 999, Business street' },
-                      { label: 'Town', value: 'London' },
-                      { label: 'County', value: 'London' },
-                      { label: 'Postcode', value: 'W1 ABC' },
-                      { label: 'Country', value: 'England' },
-                      { html: '', label: 'Address phone' },
-                      { label: 'Address type', value: 'Business' },
-                    ],
-                  },
-                ],
-              },
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    {
+                      label: 'Phone number',
+                      html: '02222222222,<br>033333333333 extension number 777',
+                    },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat A, 13, High Street' },
+                    { label: 'Town', value: 'Ulverston' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS1 AAA' },
+                    { label: 'Country', value: 'England' },
+                    {
+                      label: 'Address phone',
+                      html: '011111111111,<br>011333444 extension number 777',
+                    },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Jane Smith',
+                  details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                },
+                {
+                  name: 'John Doe',
+                  details: [{ label: 'Relationship', value: 'Co-working Prison Offender Manager' }],
+                },
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Case Administrator' },
+                    { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
+                    { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                    { label: 'Address', value: 'Flat 222, 999, Business street' },
+                    { label: 'Town', value: 'London' },
+                    { label: 'County', value: 'London' },
+                    { label: 'Postcode', value: 'W1 ABC' },
+                    { label: 'Country', value: 'England' },
+                    { html: '', label: 'Address phone' },
+                    { label: 'Address type', value: 'Business' },
+                  ],
+                },
+              ],
             })
           )
         })
@@ -1206,45 +1222,112 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: {
-                personal: [
-                  {
-                    name: 'John Smith',
-                    emergencyContact: true,
-                    noFixedAddress: false,
-                    details: [
-                      { label: 'Relationship', value: 'Cousin' },
-                      { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
-                      { label: 'Email', value: 'test1@email.com, test2@email.com' },
-                      { label: 'Address', value: 'Flat B, Latest active, Another Street' },
-                      { label: 'Town', value: 'Leeds' },
-                      { label: 'County', value: 'West Yorkshire' },
-                      { label: 'Postcode', value: 'LS2 BBB' },
-                      { label: 'Country', value: 'England' },
-                      { html: '011111111111', label: 'Address phone' },
-                      { label: 'Address type', value: 'Home' },
-                    ],
-                  },
-                ],
-                professional: [
-                  {
-                    name: 'Uriualche Lydyle',
-                    noFixedAddress: false,
-                    details: [
-                      { label: 'Relationship', value: 'Case Administrator' },
-                      { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
-                      { label: 'Email', value: 'test3@email.com, test4@email.com' },
-                      { label: 'Address', value: 'Flat 222, Latest active, Business street' },
-                      { label: 'Town', value: 'Manchester' },
-                      { label: 'County', value: 'Greater Manchester' },
-                      { label: 'Postcode', value: 'W2 DEF' },
-                      { label: 'Country', value: 'England' },
-                      { html: '', label: 'Address phone' },
-                      { label: 'Address type', value: 'Business' },
-                    ],
-                  },
-                ],
-              },
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat B, Latest active, Another Street' },
+                    { label: 'Town', value: 'Leeds' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS2 BBB' },
+                    { label: 'Country', value: 'England' },
+                    { html: '011111111111', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Case Administrator' },
+                    { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
+                    { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                    { label: 'Address', value: 'Flat 222, Latest active, Business street' },
+                    { label: 'Town', value: 'Manchester' },
+                    { label: 'County', value: 'Greater Manchester' },
+                    { label: 'Postcode', value: 'W2 DEF' },
+                    { label: 'Country', value: 'England' },
+                    { html: '', label: 'Address phone' },
+                    { label: 'Address type', value: 'Business' },
+                  ],
+                },
+              ],
+            })
+          )
+        })
+      })
+
+      describe('when there are multiple active addresses home active is highest priority', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...nonPrimaryAddress, startDate: '2020-01-01', premise: 'Not latest active' },
+                { ...nonPrimaryAddress, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
+              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+            })
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...homeNonPrimary, startDate: '2020-01-01', premise: 'Home active' },
+                { ...businessNonPrimary, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
+              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+            })
+        })
+
+        it('should render the template with the most recently added active address data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat B, Latest active, Another Street' },
+                    { label: 'Town', value: 'Leeds' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS2 BBB' },
+                    { label: 'Country', value: 'England' },
+                    { html: '011111111111', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Case Administrator' },
+                    { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
+                    { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                    { label: 'Address', value: 'Flat 222, Home active, Business street' },
+                    { label: 'Town', value: 'Manchester' },
+                    { label: 'County', value: 'Greater Manchester' },
+                    { label: 'Postcode', value: 'W2 DEF' },
+                    { label: 'Country', value: 'England' },
+                    { html: '', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
             })
           )
         })
@@ -1274,54 +1357,52 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: {
-                personal: [
-                  {
-                    name: 'John Smith',
-                    emergencyContact: true,
-                    noFixedAddress: false,
-                    details: [
-                      { label: 'Relationship', value: 'Cousin' },
-                      { label: 'Phone number', html: '02222222222,<br>033333333333' },
-                      { label: 'Email', value: 'test1@email.com, test2@email.com' },
-                      { label: 'Address', value: 'Flat A, 13, High Street' },
-                      { label: 'Town', value: 'Ulverston' },
-                      { label: 'Postcode', value: 'LS1 AAA' },
-                      {
-                        label: 'Address phone',
-                        html: '011111111111,<br>011333444 extension number 777',
-                      },
-                      { label: 'Address type', value: 'Home' },
-                    ],
-                  },
-                ],
-                professional: [
-                  {
-                    name: 'Jane smith',
-                    details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
-                  },
-                  {
-                    name: 'Uriualche Lydyle',
-                    noFixedAddress: false,
-                    details: [
-                      { label: 'Relationship', value: 'Case Administrator' },
-                      {
-                        label: 'Phone number',
-                        html: '04444444444,<br>055555555555 extension number 123',
-                      },
-                      { label: 'Email', value: 'test3@email.com, test4@email.com' },
-                      { label: 'Address', value: 'Flat A, 13, High Street' },
-                      { label: 'Town', value: 'Ulverston' },
-                      { label: 'Postcode', value: 'LS1 AAA' },
-                      {
-                        label: 'Address phone',
-                        html: '011111111111,<br>011333444 extension number 777',
-                      },
-                      { label: 'Address type', value: 'Business' },
-                    ],
-                  },
-                ],
-              },
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    { label: 'Phone number', html: '02222222222,<br>033333333333' },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat A, 13, High Street' },
+                    { label: 'Town', value: 'Ulverston' },
+                    { label: 'Postcode', value: 'LS1 AAA' },
+                    {
+                      label: 'Address phone',
+                      html: '011111111111,<br>011333444 extension number 777',
+                    },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Jane smith',
+                  details: [{ label: 'Relationship', value: 'Prison Offender Manager' }],
+                },
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Case Administrator' },
+                    {
+                      label: 'Phone number',
+                      html: '04444444444,<br>055555555555 extension number 123',
+                    },
+                    { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                    { label: 'Address', value: 'Flat A, 13, High Street' },
+                    { label: 'Town', value: 'Ulverston' },
+                    { label: 'Postcode', value: 'LS1 AAA' },
+                    {
+                      label: 'Address phone',
+                      html: '011111111111,<br>011333444 extension number 777',
+                    },
+                    { label: 'Address type', value: 'Business' },
+                  ],
+                },
+              ],
             })
           )
         })
@@ -1348,29 +1429,27 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: {
-                personal: [
-                  {
-                    name: 'John Smith',
-                    emergencyContact: true,
-                    noFixedAddress: false,
-                    details: expect.not.arrayContaining([
-                      { label: 'Phone number', html: '' },
-                      { label: 'Email', value: '' },
-                    ]),
-                  },
-                ],
-                professional: [
-                  {
-                    name: 'Uriualche Lydyle',
-                    noFixedAddress: false,
-                    details: expect.not.arrayContaining([
-                      { label: 'Phone number', html: '' },
-                      { label: 'Email', value: '' },
-                    ]),
-                  },
-                ],
-              },
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: expect.not.arrayContaining([
+                    { label: 'Phone number', html: '' },
+                    { label: 'Email', value: '' },
+                  ]),
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: expect.not.arrayContaining([
+                    { label: 'Phone number', html: '' },
+                    { label: 'Email', value: '' },
+                  ]),
+                },
+              ],
             })
           )
         })
@@ -1397,21 +1476,19 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: expect.objectContaining({
-                professional: [
-                  {
-                    name: 'Uriualche Lydyle',
-                    details: [
-                      { label: 'Relationship', value: 'Case Administrator' },
-                      { label: 'Address', value: '' },
-                      { label: 'Town', value: undefined },
-                      { label: 'Postcode', value: undefined },
-                      { html: undefined, label: 'Address phone' },
-                      { label: 'Address type', value: undefined },
-                    ],
-                  },
-                ],
-              }),
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  details: [
+                    { label: 'Relationship', value: 'Case Administrator' },
+                    { label: 'Address', value: '' },
+                    { label: 'Town', value: undefined },
+                    { label: 'Postcode', value: undefined },
+                    { html: undefined, label: 'Address phone' },
+                    { label: 'Address type', value: undefined },
+                  ],
+                },
+              ],
             })
           )
         })
@@ -1438,23 +1515,21 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: {
-                personal: [
-                  {
-                    name: 'John Smith',
-                    emergencyContact: true,
-                    noFixedAddress: false,
-                    details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
-                  },
-                ],
-                professional: [
-                  {
-                    name: 'Uriualche Lydyle',
-                    noFixedAddress: false,
-                    details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
-                  },
-                ],
-              },
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: expect.arrayContaining([{ label: 'Address', value: '13, High Street' }]),
+                },
+              ],
             })
           )
         })
@@ -1481,23 +1556,21 @@ describe('prisoner personal', () => {
           expect(res.render).toHaveBeenCalledWith(
             'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
             expect.objectContaining({
-              activeContacts: {
-                personal: [
-                  {
-                    name: 'John Smith',
-                    emergencyContact: true,
-                    noFixedAddress: true,
-                    details: [{ label: 'Relationship', value: 'Cousin' }],
-                  },
-                ],
-                professional: [
-                  {
-                    name: 'Uriualche Lydyle',
-                    noFixedAddress: true,
-                    details: [{ label: 'Relationship', value: 'Case Administrator' }],
-                  },
-                ],
-              },
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: true,
+                  details: [{ label: 'Relationship', value: 'Cousin' }],
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: true,
+                  details: [{ label: 'Relationship', value: 'Case Administrator' }],
+                },
+              ],
             })
           )
         })
@@ -1921,7 +1994,8 @@ describe('prisoner personal', () => {
           aliases: null,
           identifiers: [{ label: 'PNC number', value: null }],
           personalDetails: expect.objectContaining({ property: null }),
-          activeContacts: { personal: undefined, professional: [] },
+          personalContacts: undefined,
+          professionalContacts: [],
           addresses: [
             {
               details: null,

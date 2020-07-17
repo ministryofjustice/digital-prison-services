@@ -44,9 +44,15 @@
   </div>
 {% endset %}
 
-{% set activeContactsContent %}
-  <div data-test="active-contacts-summary">
-    {% include "./partials/activeContacts.njk" %}
+{% set personalContactsContent %}
+  <div data-test="personal-contacts-summary">
+    {% include "./partials/personalContacts.njk" %}
+  </div>
+{% endset %}
+
+{% set professionalContactsContent %}
+  <div data-test="professional-contacts-summary">
+    {% include "./partials/professionalContacts.njk" %}
   </div>
 {% endset %}
 
@@ -80,8 +86,9 @@
 {% set rightSections = [
     { heading: 'Aliases', html: aliasesContent },
     { heading: 'Identifiers', html: identifierContent },
-    { heading: 'Addresses', html: addressesContent },
-    { heading: 'Active contacts', html: activeContactsContent }
+    { heading: "Prisoner's addresses", html: addressesContent },
+    { heading: 'Personal contacts', html: personalContactsContent },
+    { heading: 'Professional contacts', html: professionalContactsContent }
   ]
 %}
 

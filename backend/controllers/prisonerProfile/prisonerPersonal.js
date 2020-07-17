@@ -132,7 +132,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     identifiers: identifiersViewModel({ identifiers }),
     personalDetails: personalDetailsViewModel({ prisonerDetails: fullPrisonerDetails, property }),
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
-    activeContacts: activeContactsViewModel({
+    ...activeContactsViewModel({
       personal: nextOfKinsWithContact,
       professional: [
         ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),

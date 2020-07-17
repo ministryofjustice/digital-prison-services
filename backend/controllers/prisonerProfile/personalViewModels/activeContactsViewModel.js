@@ -12,7 +12,10 @@ module.exports = ({ personal, professional }) => {
     const address =
       activeAddresses &&
       (activeAddresses.find(contactAddress => contactAddress.primary) ||
-        activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0])
+        (activeAddresses
+          .filter(contactAddress => contactAddress.addressType.toLowerCase() === 'home')
+          .sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0] ||
+          activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0]))
 
     const { noFixedAddress } = address || {}
 
@@ -30,7 +33,7 @@ module.exports = ({ personal, professional }) => {
   }
 
   return {
-    personal: personal && personal.map(getContactView(true)),
-    professional: professional && professional.map(getContactView(false)),
+    personalContacts: personal && personal.map(getContactView(true)),
+    professionalContacts: professional && professional.map(getContactView(false)),
   }
 }
