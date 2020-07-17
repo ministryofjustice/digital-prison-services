@@ -5,6 +5,10 @@ config.apis.pathfinder = {
   ui_url: 'http://pathfinder-ui/',
   url: 'http://pathfinder-api/',
 }
+config.apis.soc = {
+  ui_url: 'http://soc-ui/',
+  url: 'http://soc-api/',
+}
 
 const prisonerProfileService = require('../services/prisonerProfileService')
 
@@ -16,6 +20,7 @@ describe('prisoner profile service', () => {
   const pathfinderApi = {}
   const dataComplianceApi = {}
   const systemOauthClient = {}
+  const socApi = {}
   let service
 
   beforeEach(() => {
@@ -29,6 +34,7 @@ describe('prisoner profile service', () => {
     oauthApi.currentUser = jest.fn()
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
     pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
+    socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
 
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
@@ -39,6 +45,7 @@ describe('prisoner profile service', () => {
       dataComplianceApi,
       pathfinderApi,
       systemOauthClient,
+      socApi,
     })
   })
 
@@ -136,6 +143,10 @@ describe('prisoner profile service', () => {
         categorisationLinkText: '',
         activeAlertCount: 1,
         agencyName: 'Moorland Closed',
+        socProfileUrl: null,
+        canViewSocLink: false,
+        showSocReferButton: false,
+        socReferUrl: 'http://soc-ui/refer/offender/ABC123',
         alerts: [
           {
             alertCodes: ['XA'],
@@ -161,6 +172,11 @@ describe('prisoner profile service', () => {
         useOfForceUrl: '//useOfForceUrl',
         userCanEdit: false,
         staffId: 111,
+        categoryCode: undefined,
+        interpreterRequired: undefined,
+        language: undefined,
+        staffName: undefined,
+        writtenLanguage: undefined,
       })
     })
 

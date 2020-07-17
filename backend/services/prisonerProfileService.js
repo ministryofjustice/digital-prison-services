@@ -6,13 +6,22 @@ const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
     pathfinder: { ui_url: pathfinderUrl },
+    soc: { ui_url: socUrl },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
   },
   app: { notmEndpointUrl, displayRetentionLink },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
-module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfinderApi, systemOauthClient }) => {
+module.exports = ({
+  elite2Api,
+  keyworkerApi,
+  oauthApi,
+  dataComplianceApi,
+  pathfinderApi,
+  socApi,
+  systemOauthClient,
+}) => {
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
@@ -47,6 +56,7 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
       keyworkerDetails,
       userRoles,
       pathfinderDetails,
+      socDetails,
     ] = await Promise.all(
       [
         elite2Api.getIepSummary(context, [bookingId]),
@@ -56,6 +66,7 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
         oauthApi.userRoles(context),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
+        socApi.getSocDetails(systemContext, offenderNo),
       ].map(apiCall => logErrorAndContinue(apiCall))
     )
 
@@ -95,6 +106,17 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
     const canViewPathfinderLink = Boolean(isPathfinderUser && pathfinderDetails)
     const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map(prison => prison.trim().toUpperCase())
 
+    const isSocUser = Boolean(
+      userRoles &&
+        userRoles.some(role =>
+          ['ROLE_SOC_CUSTODY', 'ROLE_SOC_COMMUNITY', 'ROLE_SOC_EXTERNAL_RO', 'ROLE_SOC_EXTERNAL'].includes(
+            role.roleCode
+          )
+        )
+    )
+
+    const canViewSocLink = Boolean(isSocUser && socDetails)
+
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
@@ -105,6 +127,10 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
         pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String(pathfinderDetails.id)}`,
       showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderUser),
       pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
+      canViewSocLink,
+      socProfileUrl: socUrl && socDetails && `${socUrl}nominal/${String(socDetails.id)}`,
+      showSocReferButton: Boolean(!socDetails && isSocUser),
+      socReferUrl: socUrl && `${socUrl}refer/offender/${offenderNo}`,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,

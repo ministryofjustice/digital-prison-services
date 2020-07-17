@@ -83,6 +83,7 @@ const setup = ({
   caseNotesApi,
   allocationManagerApi,
   pathfinderApi,
+  socApi,
 }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
@@ -275,6 +276,7 @@ const setup = ({
       pathfinderApi,
       dataComplianceApi,
       logError,
+      socApi,
     })
   )
 

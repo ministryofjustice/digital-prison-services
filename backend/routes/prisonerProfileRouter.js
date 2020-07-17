@@ -26,6 +26,7 @@ const controller = ({
   dataComplianceApi,
   pathfinderApi,
   logError,
+  socApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     elite2Api,
@@ -34,6 +35,7 @@ const controller = ({
     dataComplianceApi,
     pathfinderApi,
     systemOauthClient,
+    socApi,
   })
   const personService = personServiceFactory(elite2Api)
   const referenceCodesService = referenceCodesServiceFactory(elite2Api)
