@@ -956,6 +956,24 @@ describe('prisoner personal', () => {
       addressUsages: [],
     }
 
+    const homeNonPrimary = {
+      addressType: 'Home',
+      flat: '222',
+      premise: '000',
+      street: 'Business street',
+      town: 'Manchester',
+      postalCode: 'W2 DEF',
+      county: 'Greater Manchester',
+      country: 'England',
+      comment: null,
+      primary: false,
+      noFixedAddress: false,
+      startDate: '2020-05-01',
+      endDate: null,
+      phones: [],
+      addressUsages: [],
+    }
+
     beforeEach(() => {
       elite2Api.getDetails.mockResolvedValue({ bookingId })
     })
@@ -1238,6 +1256,75 @@ describe('prisoner personal', () => {
                     { label: 'Country', value: 'England' },
                     { html: '', label: 'Address phone' },
                     { label: 'Address type', value: 'Business' },
+                  ],
+                },
+              ],
+            })
+          )
+        })
+      })
+
+      describe('when there are multiple active addresses home active is highest priority', () => {
+        beforeEach(() => {
+          personService.getPersonContactDetails
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...nonPrimaryAddress, startDate: '2020-01-01', premise: 'Not latest active' },
+                { ...nonPrimaryAddress, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
+              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+            })
+            .mockResolvedValueOnce({
+              addresses: [
+                { ...homeNonPrimary, startDate: '2020-01-01', premise: 'Home active' },
+                { ...businessNonPrimary, startDate: '2020-01-02', premise: 'Latest active' },
+              ],
+              emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
+              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+            })
+        })
+
+        it('should render the template with the most recently added active address data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat B, Latest active, Another Street' },
+                    { label: 'Town', value: 'Leeds' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS2 BBB' },
+                    { label: 'Country', value: 'England' },
+                    { html: '011111111111', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+              professionalContacts: [
+                {
+                  name: 'Uriualche Lydyle',
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Case Administrator' },
+                    { html: '04444444444,<br>055555555555 extension number 123', label: 'Phone number' },
+                    { label: 'Email', value: 'test3@email.com, test4@email.com' },
+                    { label: 'Address', value: 'Flat 222, Home active, Business street' },
+                    { label: 'Town', value: 'Manchester' },
+                    { label: 'County', value: 'Greater Manchester' },
+                    { label: 'Postcode', value: 'W2 DEF' },
+                    { label: 'Country', value: 'England' },
+                    { html: '', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
                   ],
                 },
               ],
