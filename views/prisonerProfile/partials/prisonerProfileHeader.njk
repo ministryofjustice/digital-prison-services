@@ -109,13 +109,12 @@
           href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
         }) }}
 
-
         {% if prisonerProfileData.showReportUseOfForce %}
           {{ govukButton({
             text: "Report use of force",
             element: "a",
             classes: "govuk-button--link govuk-!-margin-bottom-3",
-            href: useOfForceUrl
+            href: prisonerProfileData.useOfForceUrl
           }) }}
         {% endif %}
       {% endif %}

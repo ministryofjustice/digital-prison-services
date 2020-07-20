@@ -13,6 +13,7 @@ const caseNotePage = offenderName =>
       caseNoteAddMoreDetailsLink: () => cy.get('[data-test="add-more-details"]'),
       caseNotePrintIncentiveLevelSlipLink: () => cy.get('[data-test="print-slip"]'),
     }),
+    noDataMessage: () => cy.get('[data-test="no-case-notes"]'),
   })
 
 export default {

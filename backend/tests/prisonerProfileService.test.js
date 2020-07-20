@@ -169,7 +169,7 @@ describe('prisoner profile service', () => {
         offenderRecordRetained: undefined,
         showAddKeyworkerSession: false,
         showReportUseOfForce: false,
-        useOfForceUrl: '//useOfForceUrl',
+        useOfForceUrl: '//useOfForceUrl/report/123/report-use-of-force',
         userCanEdit: false,
         staffId: 111,
         categoryCode: undefined,

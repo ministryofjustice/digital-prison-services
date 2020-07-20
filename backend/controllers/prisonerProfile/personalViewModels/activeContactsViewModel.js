@@ -13,7 +13,9 @@ module.exports = ({ personal, professional }) => {
       activeAddresses &&
       (activeAddresses.find(contactAddress => contactAddress.primary) ||
         (activeAddresses
-          .filter(contactAddress => contactAddress.addressType.toLowerCase() === 'home')
+          .filter(
+            contactAddress => contactAddress.addressType && contactAddress.addressType.toLowerCase().includes('home')
+          )
           .sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0] ||
           activeAddresses.sort((left, right) => sortByDateTime(right.startDate, left.startDate))[0]))
 

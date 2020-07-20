@@ -1,3 +1,4 @@
+const moment = require('moment')
 const prisonerVisits = require('../controllers/prisonerProfile/prisonerVisits')
 const { serviceUnavailableMessage } = require('../common-messages')
 
@@ -199,7 +200,9 @@ describe('Prisoner visits', () => {
             status: 'Cancelled: Operational Reasons-All Visits Cancelled',
           },
           {
-            age: '12',
+            age: moment()
+              .diff('2008-01-01', 'years')
+              .toString(),
             date: '2020-08-01T13:30:00',
             isFirst: true,
             isLast: true,
@@ -217,7 +220,9 @@ describe('Prisoner visits', () => {
             status: 'Absence',
           },
           {
-            age: '50',
+            age: moment()
+              .diff('1970-04-21', 'years')
+              .toString(),
             date: '2020-07-22T09:00:00',
             isFirst: false,
             isLast: false,
@@ -235,7 +240,9 @@ describe('Prisoner visits', () => {
             status: 'Absence',
           },
           {
-            age: '39',
+            age: moment()
+              .diff('1980-07-20', 'years')
+              .toString(),
             date: '2020-06-25T13:30:00',
             isFirst: true,
             isLast: true,
