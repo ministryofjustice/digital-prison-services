@@ -34,7 +34,6 @@ import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IncentiveLevelSlipContainer from './IncentiveLevelSlipContainer'
 import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
-import CreateAlertContainer from './CreateAlert/CreateAlertContainer'
 
 import {
   resetError,
@@ -476,22 +475,6 @@ class App extends React.Component {
                 setOffenderPaymentDataDispatch={setOffenderPaymentDataDispatch}
                 getAbsentReasonsDispatch={getAbsentReasonsDispatch}
                 history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.createAlert}
-            render={({ history, match: { params } }) => (
-              <CreateAlertContainer
-                agencyId={agencyId}
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                history={history}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
               />
             )}
           />

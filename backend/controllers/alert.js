@@ -1,4 +1,5 @@
 const moment = require('moment')
+const nunjucks = require('nunjucks')
 const { formatTimestampToDate, properCaseName, formatName } = require('../utils')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
@@ -46,7 +47,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
   return errors
 }
 
-const alertFactory = (oauthApi, elite2Api) => {
+const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
     const formAction = offenderDetails && alert && `/api/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
@@ -171,7 +172,138 @@ const alertFactory = (oauthApi, elite2Api) => {
     return res.redirect(`${getOffenderUrl(offenderNo)}/alerts?alertStatus=${closeAlert ? 'closed' : 'open'}`)
   }
 
-  return { displayEditAlertPage, handleEditAlertForm }
+  const displayCreateAlertPage = async (req, res) => {
+    const { offenderNo } = req.params
+    try {
+      const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+
+      const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
+
+      const offenderDetails = {
+        bookingId,
+        offenderNo,
+        profileUrl: getOffenderUrl(offenderNo),
+        name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
+      }
+
+      if (req.xhr) {
+        const { typeCode } = req.query
+        const filteredSubTypes = alertTypes.alertSubTypes
+          .filter(st => st.parentValue === typeCode)
+          .filter(st => st.activeFlag === 'Y')
+          .map(st => ({
+            value: st.value,
+            text: st.description,
+          }))
+        return res.send(nunjucks.render('alerts/partials/subTypesSelect.njk', { alertCodes: filteredSubTypes }))
+      }
+
+      return res.render('createAlertForm.njk', {
+        offenderDetails,
+        offenderNo,
+        bookingId,
+        formValues: { effectiveDate: moment().format('DD/MM/YYYY'), ...req.body },
+        alertTypes: alertTypes.alertTypes
+          .filter(type => type.activeFlag === 'Y')
+          .map(type => ({ value: type.value, text: type.description })),
+        alertCodes: alertTypes.alertSubTypes.filter(type => type.activeFlag === 'Y').map(type => ({
+          value: type.value,
+          text: type.description,
+        })),
+        homeUrl: `${getOffenderUrl(offenderNo)}/alerts`,
+        alertsRootUrl: `/prisoner/${offenderNo}/create-alert`,
+      })
+    } catch (error) {
+      logError(req.originalUrl, error, serviceUnavailableMessage)
+      return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/alerts` })
+    }
+  }
+
+  const handleCreateAlertForm = async (req, res) => {
+    const { offenderNo } = req.params
+    const { bookingId, alertType, alertCode, comments, effectiveDate: alertDate } = req.body
+    const errors = []
+
+    if (!alertType) {
+      errors.push({
+        text: 'Select the type of alert',
+        href: '#alert-type',
+      })
+    }
+
+    if (!alertCode) {
+      errors.push({
+        text: 'Select the alert',
+        href: '#alert-code',
+      })
+    }
+
+    if (comments && comments.length > 4000) {
+      errors.push({
+        text: 'Enter why you are creating this alert using 4,000 characters or less',
+        href: '#comments',
+      })
+    }
+
+    if (!comments) {
+      errors.push({
+        text: 'Enter why you are creating this alert',
+        href: '#comments',
+      })
+    }
+
+    if (!alertDate) {
+      errors.push({
+        text: 'Select when you want this alert to start',
+        href: '#effective-date',
+      })
+    }
+
+    if (errors.length > 0) {
+      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+
+      const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
+
+      const offenderDetails = {
+        bookingId,
+        offenderNo,
+        profileUrl: getOffenderUrl(offenderNo),
+        name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
+      }
+      return res.render('createAlertForm.njk', {
+        errors,
+        bookingId,
+        offenderNo,
+        formValues: { ...req.body },
+        offenderDetails,
+        alertTypes: alertTypes.alertTypes
+          .filter(type => type.activeFlag === 'Y')
+          .map(type => ({ value: type.value, text: type.description })),
+        alertCodes: alertTypes.alertSubTypes.filter(type => type.activeFlag === 'Y').map(type => ({
+          value: type.value,
+          text: type.description,
+        })),
+        homeUrl: `${getOffenderUrl(offenderNo)}/alerts`,
+        alertsRootUrl: `/prisoner/${offenderNo}/create-alert`,
+      })
+    }
+
+    try {
+      await elite2Api.createAlert(res.locals, bookingId, {
+        alertType,
+        alertCode,
+        comment: comments,
+        alertDate: moment(alertDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+      })
+    } catch (error) {
+      logError(req.originalUrl, error, serviceUnavailableMessage)
+      return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/create-alert` })
+    }
+
+    return res.redirect(`${getOffenderUrl(offenderNo)}/alerts`)
+  }
+
+  return { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm }
 }
 
 module.exports = { alertFactory }
