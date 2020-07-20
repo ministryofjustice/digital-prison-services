@@ -2,6 +2,7 @@ const CaseNotesPage = require('../../pages/prisonerProfile/caseNotePage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
+const offenderNo = 'A12345'
 const caseNotes = [
   {
     caseNoteId: 12311312,
@@ -51,13 +52,12 @@ context('A user can view prisoner case notes', () => {
       iepSummary: {},
       caseNoteSummary: {},
     })
-
-    const offenderNo = 'A12345'
-    cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
   })
 
   it('A user can view a prisoners case notes', () => {
+    cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
     const page = CaseNotesPage.verifyOnPage('Smith, John')
+    page.noDataMessage().should('not.be.visible')
     const rows = page.getRows(0)
 
     rows
@@ -113,5 +113,15 @@ context('A user can view prisoner case notes', () => {
     form.subTypeSelect().select('Select')
     form.applyButton().click()
     CaseNotesPage.verifyOnPage('Smith, John')
+  })
+
+  it('A user see the no case notes message when there are no results', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 0,
+      content: [],
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+    page.noDataMessage().should('be.visible')
   })
 })

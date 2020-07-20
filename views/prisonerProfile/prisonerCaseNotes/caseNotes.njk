@@ -95,98 +95,102 @@
         </form>
     </div>
 
+    {% if caseNoteViewData.length %}
 
-    {{ mojPagination(pagination) }}
+        {{ mojPagination(pagination) }}
 
-    <div class="case-note-entry">
-        <div class="case-notes-created">
-            <b class="govuk-heading-s">Created</b>
-        </div>
-
-        <div class="case-notes-details">
-            <b class="govuk-heading-s">Case note detail</b>
-        </div>
-    </div>
-
-    {% for caseNote in caseNoteViewData %}
-        <div class="{{ 'case-note-entry bottom-line' if caseNote.caseNoteDetailColumn.amendments.length == 0 else 'case-note-entry'}}">
+        <div class="case-note-entry">
             <div class="case-notes-created">
-                <div class="govuk-!-margin-bottom-3">
-                    <div class="govuk-!-padding-bottom-1">
-                        <span class="govuk-body">{{ caseNote.createdByColumn.day }} </span>
-                    </div>
-
-                    <div class="govuk-!-padding-bottom-1">
-                        <span class="govuk-body"> {{ caseNote.createdByColumn.date }} </span>
-                    </div>
-
-                    <div class="govuk-!-padding-bottom-1">
-                        <span class="govuk-body">{{ caseNote.createdByColumn.time }} </span>
-                    </div>
-
-                    <div class="govuk-!-padding-bottom-1">
-                        <span class="govuk-body"> {{ caseNote.createdByColumn.authorName }} </span>
-                    </div>
-                </div>
-
+                <b class="govuk-heading-s">Created</b>
             </div>
 
             <div class="case-notes-details">
-                <h3 class="govuk-heading-s">{{ caseNote.caseNoteDetailColumn.typeDescription }}
-                    : {{ caseNote.caseNoteDetailColumn.subTypeDescription }}</h3>
+                <b class="govuk-heading-s">Case note detail</b>
+            </div>
+        </div>
 
-                <p class="govuk-body">
-                    {{ caseNote.caseNoteDetailColumn.text }}
-                </p>
-
-                {% if caseNote.caseNoteDetailColumn.amendments.length == 0 %}
-                    {{ links(caseNote) }}
-                {% endif %}
-
-          </div>
-       </div>
-
-        {% for amendment in caseNote.caseNoteDetailColumn.amendments %}
-            <div class="{{ "case-note-entry bottom-line" if loop.index === caseNote.caseNoteDetailColumn.amendments.length else "case-note-entry"  }}">
+        {% for caseNote in caseNoteViewData %}
+            <div class="{{ 'case-note-entry bottom-line' if caseNote.caseNoteDetailColumn.amendments.length == 0 else 'case-note-entry'}}">
                 <div class="case-notes-created">
                     <div class="govuk-!-margin-bottom-3">
                         <div class="govuk-!-padding-bottom-1">
-                            <span class="govuk-body">{{ amendment.day }} </span>
+                            <span class="govuk-body">{{ caseNote.createdByColumn.day }} </span>
                         </div>
 
                         <div class="govuk-!-padding-bottom-1">
-                            <span class="govuk-body"> {{ amendment.date }} </span>
+                            <span class="govuk-body"> {{ caseNote.createdByColumn.date }} </span>
                         </div>
 
                         <div class="govuk-!-padding-bottom-1">
-                            <span class="govuk-body">{{ amendment.time }} </span>
+                            <span class="govuk-body">{{ caseNote.createdByColumn.time }} </span>
                         </div>
 
                         <div class="govuk-!-padding-bottom-1">
-                            <span class="govuk-body"> {{ amendment.authorName }} </span>
+                            <span class="govuk-body"> {{ caseNote.createdByColumn.authorName }} </span>
                         </div>
                     </div>
+
                 </div>
-                <div class="case-notes-details">
-                    <div class="govuk-!-margin-bottom-3">
-                        <p class="govuk-body govuk-!-margin-bottom-1">
-                            More details added:
-                        </p>
-                        <div class="govuk-!-padding-bottom-1">
-                            <span class="govuk-body">{{ amendment.text }} </span>
-                        </div>
-                    </div>
 
-                    {% if loop.index === caseNote.caseNoteDetailColumn.amendments.length %}
+                <div class="case-notes-details">
+                    <h3 class="govuk-heading-s">{{ caseNote.caseNoteDetailColumn.typeDescription }}
+                        : {{ caseNote.caseNoteDetailColumn.subTypeDescription }}</h3>
+
+                    <p class="govuk-body">
+                        {{ caseNote.caseNoteDetailColumn.text }}
+                    </p>
+
+                    {% if caseNote.caseNoteDetailColumn.amendments.length == 0 %}
                         {{ links(caseNote) }}
                     {% endif %}
-                </div>
+
             </div>
+        </div>
+
+            {% for amendment in caseNote.caseNoteDetailColumn.amendments %}
+                <div class="{{ "case-note-entry bottom-line" if loop.index === caseNote.caseNoteDetailColumn.amendments.length else "case-note-entry"  }}">
+                    <div class="case-notes-created">
+                        <div class="govuk-!-margin-bottom-3">
+                            <div class="govuk-!-padding-bottom-1">
+                                <span class="govuk-body">{{ amendment.day }} </span>
+                            </div>
+
+                            <div class="govuk-!-padding-bottom-1">
+                                <span class="govuk-body"> {{ amendment.date }} </span>
+                            </div>
+
+                            <div class="govuk-!-padding-bottom-1">
+                                <span class="govuk-body">{{ amendment.time }} </span>
+                            </div>
+
+                            <div class="govuk-!-padding-bottom-1">
+                                <span class="govuk-body"> {{ amendment.authorName }} </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="case-notes-details">
+                        <div class="govuk-!-margin-bottom-3">
+                            <p class="govuk-body govuk-!-margin-bottom-1">
+                                More details added:
+                            </p>
+                            <div class="govuk-!-padding-bottom-1">
+                                <span class="govuk-body">{{ amendment.text }} </span>
+                            </div>
+                        </div>
+
+                        {% if loop.index === caseNote.caseNoteDetailColumn.amendments.length %}
+                            {{ links(caseNote) }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
         {% endfor %}
 
-    {% endfor %}
-
-    {{ mojPagination(pagination) }}
+        {{ mojPagination(pagination) }}
+    {% else %}
+        <p class="govuk-body" data-test="no-case-notes">There are no case notes of this type</p>
+    {% endif %}
 
 {% endblock %}
 
