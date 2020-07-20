@@ -1,10 +1,16 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2api = {}
 const oauthApi = {}
+const referenceCodesService = {}
 const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-const { displayEditAlertPage, handleEditAlertForm } = require('../controllers/alert').alertFactory(oauthApi, elite2api)
+const {
+  handleCreateAlertForm,
+  displayCreateAlertPage,
+  displayEditAlertPage,
+  handleEditAlertForm,
+} = require('../controllers/alert').alertFactory(oauthApi, elite2api, referenceCodesService)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -16,8 +22,15 @@ jest.mock('../logError', () => ({
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('alert management', () => {
-  const res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-  const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/close-alert/', get: jest.fn(), body: {} }
+  let mockReq
+  let res
+
+  const mockCreateReq = {
+    flash: jest.fn().mockReturnValue([]),
+    originalUrl: '/create-alert/',
+    get: jest.fn(),
+    body: {},
+  }
   const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
   const alert = {
     alertId: 1,
@@ -34,6 +47,8 @@ describe('alert management', () => {
   const offenderNo = 'ABC123'
 
   beforeEach(() => {
+    res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
+    mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/close-alert/', get: jest.fn(), body: {} }
     elite2api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
     oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
     elite2api.userCaseLoads = jest.fn().mockReturnValue([
@@ -297,6 +312,191 @@ describe('alert management', () => {
           'Alert comment updated for ALI',
           'Alert type - LFC21'
         )
+      })
+    })
+  })
+
+  describe('displayCreateAlertPage()', () => {
+    it('should return an error when there is a problem loading the form', async () => {
+      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
+        throw new Error('There has been an error')
+      })
+
+      const req = { ...mockCreateReq, params: { offenderNo } }
+
+      await displayCreateAlertPage(req, res)
+
+      expect(res.render).toBeCalledWith('error.njk', {
+        url: '/prisoner/ABC123/alerts',
+      })
+      expect(logError).toBeCalledWith(
+        '/create-alert/',
+        new Error('There has been an error'),
+        'Sorry, the service is unavailable'
+      )
+    })
+
+    it('should render the createAlertForm with the correctly formatted information', async () => {
+      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
+        return {
+          alertTypes: [
+            {
+              value: 'P',
+              description: 'MAPP',
+              activeFlag: 'Y',
+            },
+          ],
+          alertSubTypes: [
+            {
+              value: 'PI',
+              description: 'MAPP 1',
+              activeFlag: 'Y',
+              parentValue: 'P',
+            },
+          ],
+        }
+      })
+      const req = { ...mockCreateReq, params: { offenderNo } }
+
+      await displayCreateAlertPage(req, res)
+
+      expect(res.render).toBeCalledWith('createAlertForm.njk', {
+        offenderDetails: {
+          bookingId: 1234,
+          name: 'Test User',
+          offenderNo: 'ABC123',
+          profileUrl: '/prisoner/ABC123',
+        },
+        offenderNo,
+        homeUrl: '/prisoner/ABC123/alerts',
+        alertsRootUrl: '/prisoner/ABC123/create-alert',
+        bookingId: 1234,
+        formValues: { effectiveDate: '20/07/2020' },
+        alertTypes: [{ value: 'P', text: 'MAPP' }],
+        alertCodes: [{ value: 'PI', text: 'MAPP 1' }],
+      })
+    })
+  })
+
+  describe('handleCreateAlertForm()', () => {
+    beforeEach(() => {
+      elite2api.createAlert = jest.fn()
+      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
+        return {
+          alertTypes: [
+            {
+              value: 'P',
+              description: 'MAPP',
+              activeFlag: 'Y',
+            },
+          ],
+          alertSubTypes: [
+            {
+              value: 'PI',
+              description: 'MAPP 1',
+              activeFlag: 'Y',
+              parentValue: 'P',
+            },
+          ],
+        }
+      })
+    })
+
+    describe('when there are errors', () => {
+      it('should return an error when there is a problem updating the alert', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            alertType: 'P',
+            alertCode: 'PI',
+            effectiveDate: '2020-07-20',
+            bookingId: 1234,
+            offenderNo,
+            comments: 'test',
+          },
+        }
+
+        elite2api.createAlert = jest.fn().mockImplementationOnce(() => {
+          throw new Error('There has been an error')
+        })
+
+        await handleCreateAlertForm(req, res)
+
+        expect(res.render).toBeCalledWith('error.njk', {
+          url: '/prisoner/ABC123/create-alert',
+        })
+      })
+
+      it('should return an error if missing data', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: { offenderNo, comments: 'test' },
+        }
+
+        await handleCreateAlertForm(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'createAlertForm.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#alert-type', text: 'Select the type of alert' },
+              { href: '#alert-code', text: 'Select the alert' },
+              { href: '#effective-date', text: 'Select when you want this alert to start' },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when comment triggers validation errors', () => {
+      const comments = Array.from(Array(1001).keys())
+        .map(_ => 'A')
+        .join('')
+
+      it('should validate maximum length does not exceed 1000', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: { offenderNo, comments },
+        }
+
+        await handleCreateAlertForm(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'createAlertForm.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#alert-type', text: 'Select the type of alert' },
+              { href: '#alert-code', text: 'Select the alert' },
+              { href: '#comments', text: 'Enter why you are creating this alert using 1,000 characters or less' },
+              { href: '#effective-date', text: 'Select when you want this alert to start' },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when the form is filled correctly', () => {
+      it('should submit and redired', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            alertType: 'P',
+            alertCode: 'PI',
+            effectiveDate: '2020-07-20',
+            bookingId: 1234,
+            offenderNo,
+            comments: 'test',
+          },
+        }
+
+        elite2api.createAlert = jest.fn()
+
+        await handleCreateAlertForm(req, res)
+
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/alerts')
       })
     })
   })

@@ -238,9 +238,9 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
       })
     }
 
-    if (comments && comments.length > 4000) {
+    if (comments && comments.length > 1000) {
       errors.push({
-        text: 'Enter why you are creating this alert using 4,000 characters or less',
+        text: 'Enter why you are creating this alert using 1,000 characters or less',
         href: '#comments',
       })
     }
