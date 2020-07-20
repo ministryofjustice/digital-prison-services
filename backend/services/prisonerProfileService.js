@@ -123,7 +123,7 @@ module.exports = ({ elite2Api, keyworkerApi, oauthApi, dataComplianceApi, pathfi
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && staffRoles.some(role => role.role === 'KW'),
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
-      useOfForceUrl,
+      useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,
       language,
       interpreterRequired,
