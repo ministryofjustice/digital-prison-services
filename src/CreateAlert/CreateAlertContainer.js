@@ -77,7 +77,7 @@ export class CreateAlertContainer extends Component {
           <GridCol setWidth="one-half">
             <OffenderPage
               alwaysRender
-              title={() => `Create alert`}
+              title={() => `Create an alert`}
               handleError={handleError}
               offenderNumber={offenderNo}
               setLoaded={setLoadedDispatch}

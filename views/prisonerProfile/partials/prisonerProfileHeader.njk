@@ -11,11 +11,9 @@
 {% endmacro %}
 
 {% set alertNumbersHtml %}
-  <a class="alerts-link" href={{ "/prisoner/" + prisonerProfileData.offenderNo + "/alerts" }}>
-    <span class="alerts-link__active">{{ prisonerProfileData.activeAlertCount }} active</span>
-  </a>
-  <a class="alerts-link" href={{ "/prisoner/" + prisonerProfileData.offenderNo + "/alerts?active=INACTIVE" }}>
-    <span class="alerts-link__inactive">{{ prisonerProfileData.inactiveAlertCount }} inactive</span>
+  <span>{{ prisonerProfileData.activeAlertCount }} active, {{ prisonerProfileData.inactiveAlertCount }} inactive</span>
+  <a data-qa="view-alerts-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/alerts' }}">
+    View details
   </a>
 {% endset %}
 
@@ -24,7 +22,7 @@
   {% if prisonerProfileData.userCanEdit %}
     <br>
     <a data-qa="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
-      Incentive details
+      View details
     </a>
   {% endif %}
 {% endset %}
