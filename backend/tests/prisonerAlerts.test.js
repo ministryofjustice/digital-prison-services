@@ -204,7 +204,7 @@ describe('prisoner alerts', () => {
               {
                 classes: 'govuk-table__cell--numeric',
                 html:
-                  '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Change or close</a>',
+                  '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Change or close alert</a>',
               },
             ],
           ],
