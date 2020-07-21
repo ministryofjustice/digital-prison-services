@@ -12,8 +12,9 @@
 
 {% set alertNumbersHtml %}
   <span>{{ prisonerProfileData.activeAlertCount }} active, {{ prisonerProfileData.inactiveAlertCount }} inactive</span>
-  <a data-qa="view-alerts-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/alerts' }}">
-    View details
+  <br>
+  <a data-test="view-alerts-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/alerts' }}">
+    View alerts
   </a>
 {% endset %}
 

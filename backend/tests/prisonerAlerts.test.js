@@ -204,13 +204,13 @@ describe('prisoner alerts', () => {
               {
                 classes: 'govuk-table__cell--numeric',
                 html:
-                  '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Change or close</a>',
+                  '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Change or close alert</a>',
               },
             ],
           ],
           inactiveAlerts: [
             [
-              { text: 'Security (X)', classes: 'govuk-!-font-weight-bold' },
+              { text: 'Security (X)' },
               { text: 'Risk to females (XC)' },
               { text: 'has a large poster on cell wall', classes: 'clip-overflow' },
               { html: '20 August 2019<br>21 August 2019' },
