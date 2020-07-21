@@ -15,7 +15,7 @@ const getOffenderDetails = details =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/api/offender/A1234A',
+      urlPattern: `/soc/api/offender/${details.offenderNumber}`,
     },
     response: {
       headers: {
