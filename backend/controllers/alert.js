@@ -66,7 +66,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
       addedByLastName,
     } = alert || {}
 
-    res.render('editAlertForm.njk', {
+    res.render('alerts/editAlertForm.njk', {
       title: 'Edit / close alert - Digital Prison Services',
       errors: [...req.flash('errors'), ...pageErrors],
       offenderDetails,
@@ -198,7 +198,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         return res.send(nunjucks.render('alerts/partials/subTypesSelect.njk', { alertCodes: filteredSubTypes }))
       }
 
-      return res.render('createAlertForm.njk', {
+      return res.render('alerts/createAlertForm.njk', {
         offenderDetails,
         offenderNo,
         bookingId,
@@ -284,7 +284,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         profileUrl: getOffenderUrl(offenderNo),
         name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
       }
-      return res.render('createAlertForm.njk', {
+      return res.render('alerts/createAlertForm.njk', {
         errors,
         bookingId,
         offenderNo,

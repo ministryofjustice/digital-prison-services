@@ -89,7 +89,7 @@ describe('alert management', () => {
 
         await displayEditAlertPage(req, res)
 
-        expect(res.render).toBeCalledWith('editAlertForm.njk', {
+        expect(res.render).toBeCalledWith('alerts/editAlertForm.njk', {
           title: 'Edit / close alert - Digital Prison Services',
           errors: [{ text: 'Sorry, the service is unavailable' }],
         })
@@ -108,7 +108,7 @@ describe('alert management', () => {
         await displayEditAlertPage(req, res)
 
         expect(res.render).toBeCalledWith(
-          'editAlertForm.njk',
+          'alerts/editAlertForm.njk',
           expect.objectContaining({
             errors: [{ text: 'This alert has already expired' }],
           })
@@ -123,7 +123,7 @@ describe('alert management', () => {
 
       await displayEditAlertPage(req, res)
 
-      expect(res.render).toBeCalledWith('editAlertForm.njk', {
+      expect(res.render).toBeCalledWith('alerts/editAlertForm.njk', {
         alert: {
           active: false,
           alertCode: 'LFC21',
@@ -362,7 +362,7 @@ describe('alert management', () => {
 
       await displayCreateAlertPage(req, res)
 
-      expect(res.render).toBeCalledWith('createAlertForm.njk', {
+      expect(res.render).toBeCalledWith('alerts/createAlertForm.njk', {
         offenderDetails: {
           bookingId: 1234,
           name: 'Test User',
@@ -440,7 +440,7 @@ describe('alert management', () => {
         await handleCreateAlertForm(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
-          'createAlertForm.njk',
+          'alerts/createAlertForm.njk',
           expect.objectContaining({
             errors: [
               { href: '#alert-type', text: 'Select the type of alert' },
@@ -466,7 +466,7 @@ describe('alert management', () => {
 
         await handleCreateAlertForm(req, res)
         expect(res.render).toHaveBeenCalledWith(
-          'createAlertForm.njk',
+          'alerts/createAlertForm.njk',
           expect.objectContaining({
             errors: [
               { href: '#alert-type', text: 'Select the type of alert' },
