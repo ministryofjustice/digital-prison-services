@@ -15,5 +15,4 @@ export default {
   adjudications: '/offenders/:offenderNo/adjudications',
   adjudication: '/offenders/:offenderNo/adjudications/:adjudicationNo',
   prisonersUnaccountedFor: '/manage-prisoner-whereabouts/prisoners-unaccounted-for',
-  createAlert: '/offenders/:offenderNo/create-alert',
 }

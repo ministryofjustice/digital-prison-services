@@ -3,7 +3,8 @@ $(document).ready(function() {
     const disableFutureDates = Boolean($(element).data('disable-future-date'))
     const disablePastDates = Boolean($(element).data('disable-past-date'))
     const maxDate = disableFutureDates ? '0' : undefined
-    const minDate = disablePastDates ? '0' : undefined
+    const minDate = $(element).data('min-date') ? $(element).data('min-date') : disablePastDates ? '0' : undefined
+
     $(element).datepicker({
       dateFormat: 'dd/mm/yy',
       showOtherMonths: true,
