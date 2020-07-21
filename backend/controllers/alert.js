@@ -1,6 +1,6 @@
 const moment = require('moment')
 const nunjucks = require('nunjucks')
-const { formatTimestampToDate, properCaseName, formatName } = require('../utils')
+const { properCaseName, formatName } = require('../utils')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { serviceUnavailableMessage } = require('../common-messages')
@@ -67,7 +67,6 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     } = alert || {}
 
     res.render('alerts/editAlertForm.njk', {
-      title: 'Edit / close alert - Digital Prison Services',
       errors: [...req.flash('errors'), ...pageErrors],
       offenderDetails,
       formAction,
@@ -80,7 +79,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         alertTypeDescription,
         comment,
         expired,
-        dateCreated: formatTimestampToDate(dateCreated),
+        dateCreated: moment(dateCreated).format('D MMMM YYYY'),
         createdBy: formatName(addedByFirstName, addedByLastName),
       },
       ...rest,
