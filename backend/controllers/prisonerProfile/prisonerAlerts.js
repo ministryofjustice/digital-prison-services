@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { putLastNameFirst } = require('../../utils')
+const { formatName } = require('../../utils')
 
 module.exports = ({
   prisonerProfileService,
@@ -56,36 +56,34 @@ module.exports = ({
 
     const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => {
       return [
-        {
-          text: `${alert.alertTypeDescription} (${alert.alertType})`,
-          classes: 'active-alert govuk-!-font-weight-bold',
-        },
+        { text: `${alert.alertTypeDescription} (${alert.alertType})` },
         { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
         { text: alert.comment || 'None', classes: 'clip-overflow' },
-        { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY') },
-        { text: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}` },
+        { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY') },
+        { text: `${formatName(alert.addedByFirstName, alert.addedByLastName)}` },
         {
           html: canUpdateAlerts
             ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
                 alert.alertId
-              }">Edit or close</a>`
+              }">Change or close alert</a>`
             : '',
+          classes: 'govuk-table__cell--numeric',
         },
       ]
     })
     const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => {
       return [
-        { text: `${alert.alertTypeDescription} (${alert.alertType})`, classes: 'govuk-!-font-weight-bold' },
+        { text: `${alert.alertTypeDescription} (${alert.alertType})` },
         { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
         { text: alert.comment || 'None', classes: 'clip-overflow' },
         {
-          html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('DD/MM/YYYY')}<br>${moment(
+          html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}<br>${moment(
             alert.dateExpires,
             'YYYY-MM-DD'
-          ).format('DD/MM/YYYY')}`,
+          ).format('D MMMM YYYY')}`,
         },
         {
-          html: `${putLastNameFirst(alert.addedByFirstName, alert.addedByLastName)}<br>${putLastNameFirst(
+          html: `${formatName(alert.addedByFirstName, alert.addedByLastName)}<br>${formatName(
             alert.expiredByFirstName,
             alert.expiredByLastName
           )}`,

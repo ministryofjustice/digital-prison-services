@@ -156,16 +156,25 @@ const setup = ({
   router.get('/app/image/:imageId/data', imageFactory(elite2Api).image)
   router.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
-  router.get('/api/get-alert-types', controller.getAlertTypes)
   router.get('/api/get-case-note/:offenderNumber/:caseNoteId', handleErrors(controller.getCaseNote))
   router.get('/api/get-offender-events', getExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-location-events', getLocationExistingEventsController({ elite2Api, logError }))
   router.get('/api/get-recurring-end-date', endDateController)
-  router.post('/api/create-alert/:bookingId', handleErrors(controller.createAlert))
-  router.get('/edit-alert', handleErrors(alertFactory(oauthApi, elite2Api).displayEditAlertPage))
+  router.get(
+    '/edit-alert',
+    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).displayEditAlertPage)
+  )
   router.post(
     '/api/edit-alert/:bookingId/:alertId',
-    handleErrors(alertFactory(oauthApi, elite2Api).handleEditAlertForm)
+    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).handleEditAlertForm)
+  )
+  router.get(
+    '/offenders/:offenderNo/create-alert',
+    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).displayCreateAlertPage)
+  )
+  router.post(
+    '/offenders/:offenderNo/create-alert',
+    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).handleCreateAlertForm)
   )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',

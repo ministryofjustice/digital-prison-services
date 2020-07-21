@@ -83,9 +83,9 @@ context('A user can view alerts for a prisoner', () => {
       inactiveTable.typeOfAlert().contains('Security (X)')
       inactiveTable.details().contains('Risk to females (XC)')
       inactiveTable.comments().contains('has a large poster on cell wall')
-      inactiveTable.dateFromDateClosed().contains('20/08/2019')
-      inactiveTable.createdByClosedBy().contains('Smith, John')
-      cy.get('[data-test="inactive-create-alerts-link"]').should('contain.text', 'Create alert')
+      inactiveTable.dateFromDateClosed().contains('20 August 2019')
+      inactiveTable.createdByClosedBy().contains('John Smith')
+      cy.get('[data-test="inactive-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
 
     it('Users can view active alerts', () => {
@@ -98,13 +98,13 @@ context('A user can view alerts for a prisoner', () => {
       activeTable.typeOfAlert().contains('Security (X)')
       activeTable.alert().contains('Risk to females (XC)')
       activeTable.comments().contains('has a large poster on cell wall')
-      activeTable.dateFrom().contains('20/08/2019')
-      activeTable.createdBy().contains('Smith, John')
+      activeTable.dateFrom().contains('20 August 2019')
+      activeTable.createdBy().contains('John Smith')
       activeTable
         .editCreateButton()
         .find('a')
-        .contains('Edit or close')
-      cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create alert')
+        .contains('Change or close alert')
+      cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
   })
 
@@ -133,7 +133,7 @@ context('A user can view alerts for a prisoner', () => {
       cy.get('[data-test="inactive-create-alerts-link"]').should('not.be.visible')
     })
 
-    it.only('Users should not be able to see Create or Edit / close buttons for active alerts display', () => {
+    it('Users should not be able to see Create or Edit / close buttons for active alerts display', () => {
       cy.task('stubAlertsForBooking', activeAlerts)
       cy.visit('/prisoner/G3878UK/alerts')
 

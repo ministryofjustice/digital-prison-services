@@ -63,36 +63,3 @@
 .prisoner-image {
   width: 160px;
 }
-
-.alerts-link {
-  text-decoration: none;
-
-  &__active,
-  &__inactive {
-    text-decoration: underline;
-
-    &:focus {
-      text-decoration: none;
-    }
-  }
-
-  &__active {
-    padding-right: govuk-spacing(1);
-    color: govuk-colour('red');
-  }
-
-  &__inactive {
-    border-left: 2px solid #000;
-    padding-left: govuk-spacing(1);
-    color: govuk-colour('black');
-  }
-
-  &:focus {
-    @include govuk-focused-text;
-
-    .alerts-link__active,
-    .alerts-link__inactive {
-      text-decoration: none;
-    }
-  }
-}

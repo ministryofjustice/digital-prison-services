@@ -326,6 +326,21 @@ module.exports = {
       },
     })
   },
+  stubCreateAlert: () => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/bookings/[0-9].+?/alert',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: {},
+      },
+    })
+  },
   stubMovementsBetween: ({ locationId, fromDate, movements }) => {
     return stubFor({
       request: {

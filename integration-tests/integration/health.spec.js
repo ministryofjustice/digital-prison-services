@@ -17,6 +17,7 @@ context('Health page reports health correctly', () => {
         keyworker: 'UP',
         tokenverification: 'UP',
         whereabouts: 'UP',
+        offenderSearch: 'UP',
       })
     })
   })
@@ -38,6 +39,7 @@ context('Health page reports health correctly', () => {
         keyworker: 'UP',
         tokenverification: 'UP',
         whereabouts: 'UP',
+        offenderSearch: 'UP',
       })
     })
   })

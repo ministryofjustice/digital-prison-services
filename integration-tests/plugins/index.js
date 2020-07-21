@@ -13,9 +13,9 @@ const {
 const alertsResponse = require('../mockApis/responses/alertsResponse')
 const allocationManager = require('../mockApis/allocationManager')
 const community = require('../mockApis/community')
-
 const pathfinder = require('../mockApis/pathfinder')
 const soc = require('../mockApis/soc')
+const offenderSearch = require('../mockApis/offenderSearch')
 
 const { resetStubs } = require('../mockApis/wiremock')
 
@@ -41,6 +41,7 @@ module.exports = on => {
     stubCaseNotesHealth: status => Promise.all([caseNotes.stubHealth(status)]),
     stubCommunityHealth: status => Promise.all([community.stubHealth(status)]),
     stubTokenverificationHealth: status => Promise.all([tokenverification.stubHealth(status)]),
+    stubOffenderSearchHealth: status => Promise.all([offenderSearch.stubHealth(status)]),
 
     stubHealthAllHealthy: () =>
       Promise.all([
@@ -52,6 +53,7 @@ module.exports = on => {
         caseNotes.stubHealth(),
         tokenverification.stubHealth(),
         community.stubHealth(),
+        offenderSearch.stubHealth(),
       ]),
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
@@ -286,5 +288,6 @@ module.exports = on => {
       ]),
     stubAppointmentsGet: appointments => Promise.all([elite2api.stubAppointmentsGet(appointments)]),
     stubVideoLinkAppointments: appointments => Promise.all([whereabouts.stubVideoLinkAppointments(appointments)]),
+    stubCreateAlert: () => Promise.all([elite2api.stubCreateAlert()]),
   })
 }

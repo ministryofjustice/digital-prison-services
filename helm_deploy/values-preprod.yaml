@@ -42,6 +42,8 @@ env:
   REDIS_ENABLED: true
   SOC_UI_URL: ''
   SOC_ENDPOINT_API_URL: ''
+  OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
+  OFFENDER_SEARCH_API_ENABLED: false
 
 whitelist:
   office: "217.33.148.210/32"

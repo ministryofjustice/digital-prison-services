@@ -7,7 +7,9 @@
 {% from "govuk/components/label/macro.njk" import govukLabel %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
-{% extends "./partials/layout.njk" %}
+{% extends "../partials/layout.njk" %}
+
+{% set title = 'Change or close alert' %}
 
 {%  macro formDisplayValue(params) %}
   <div class="govuk-form-group">
@@ -33,7 +35,7 @@
       href: offenderDetails.profileUrl
     },
     {
-      text: "Edit / close alert"
+      text: title
     }
   ]
 })
@@ -54,7 +56,7 @@
     <form action={{formAction}} method="POST">
       {% call govukFieldset({
                 legend: {
-                  text: "Edit / close alert",
+                  text: title,
                   classes: "govuk-fieldset__legend--l",
                   isPageHeading: true
                 }
@@ -66,6 +68,15 @@
             {{ formDisplayValue({
               label: "Prisoner name",
               displayValue: offenderDetails.name
+            }) }}
+          </div>
+        </div>
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            {{ formDisplayValue({
+              label: "Prisoner number",
+              displayValue: offenderDetails.offenderNo
             }) }}
           </div>
         </div>
@@ -96,7 +107,7 @@
               value: alert.comment,
               errorMessage: errors | findError('comment'),
               label: {
-                text: "Notes",
+                text: "Comments",
                 classes: "govuk-label--s"
               }
             }) }}
@@ -134,7 +145,7 @@
               }
           },
           hint: {
-            text: "Closing this alert will change it to inactive and you cannot re-activate it"
+            text: "Closing this alert will change it to inactive and you cannot reactivate it"
           },
           errorMessage: errors | findError('alertStatus'),
           items: [

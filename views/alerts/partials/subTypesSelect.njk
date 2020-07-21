@@ -1,0 +1,11 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{{ govukSelect({
+    name: 'alertCode',
+    id: 'alert-code',
+    label: {
+        text: "Alert"
+    },
+    items: alertCodes | addDefaultSelectedVale('Select', true),
+    errorMessage: errors | findError('alert-code')
+}) }}

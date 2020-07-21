@@ -328,6 +328,7 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
       cy.get('[data-test="tabs-sentence-release"]').should('contain.text', 'Sentence and release')
       cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
+      cy.get('[data-test="view-alerts-link"]').should('contain.text', 'View alerts')
     })
   })
 
