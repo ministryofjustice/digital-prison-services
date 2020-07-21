@@ -12,7 +12,8 @@ const health = healthFactory(
   config.apis.keyworker.url,
   config.apis.caseNotes.url,
   config.apis.allocationManager.url,
-  config.apis.tokenverification.url
+  config.apis.tokenverification.url,
+  config.apis.offenderSearch.url
 )
 
 module.exports = () => {
