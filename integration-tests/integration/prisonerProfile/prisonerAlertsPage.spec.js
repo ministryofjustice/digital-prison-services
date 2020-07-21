@@ -103,7 +103,7 @@ context('A user can view alerts for a prisoner', () => {
       activeTable
         .editCreateButton()
         .find('a')
-        .contains('Change or close')
+        .contains('Change or close alert')
       cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
   })

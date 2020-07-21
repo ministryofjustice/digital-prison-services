@@ -65,7 +65,7 @@ module.exports = ({
           html: canUpdateAlerts
             ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
                 alert.alertId
-              }">Change or close</a>`
+              }">Change or close alert</a>`
             : '',
           classes: 'govuk-table__cell--numeric',
         },
@@ -73,7 +73,7 @@ module.exports = ({
     })
     const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => {
       return [
-        { text: `${alert.alertTypeDescription} (${alert.alertType})`, classes: 'govuk-!-font-weight-bold' },
+        { text: `${alert.alertTypeDescription} (${alert.alertType})` },
         { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
         { text: alert.comment || 'None', classes: 'clip-overflow' },
         {
