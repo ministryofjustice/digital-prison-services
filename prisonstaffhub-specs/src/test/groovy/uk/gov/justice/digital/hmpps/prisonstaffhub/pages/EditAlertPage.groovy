@@ -7,7 +7,7 @@ class EditAlertPage extends Page {
     static url = '/edit-alert?offenderNo=A12345&alertId=1'
 
     static at = {
-        headingText == 'Edit / close alert'
+        headingText == 'Change or close alert'
     }
 
     static content = {
