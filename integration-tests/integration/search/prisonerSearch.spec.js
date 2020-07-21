@@ -220,7 +220,6 @@ context('Prisoner search', () => {
       })
       cy.task('stubQuickLook', quickLookFullDetails)
       cy.task('stubPathFinderOffenderDetails', null)
-      // cy.task('stubSocOffenderDetails', null)
       cy.task('stubClientCredentialsRequest')
       cy.visit(searchUrl)
 

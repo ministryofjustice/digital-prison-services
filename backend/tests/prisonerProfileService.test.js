@@ -417,5 +417,67 @@ describe('prisoner profile service', () => {
         expect(profileData.canViewPathfinderLink).toBe(false)
       })
     })
+
+    describe('when a SOC prisoner exists and the current user has the correct role', () => {
+      beforeEach(() => {
+        socApi.getSocDetails = jest.fn().mockResolvedValue({ id: 1 })
+      })
+
+      it('should make client credentials call passing the username', async () => {
+        await service.getPrisonerProfileData(context, offenderNo, 'user1')
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('user1')
+      })
+
+      it('should make a call to the SOC API', async () => {
+        systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(socApi.getSocDetails).toHaveBeenCalledWith({ system: true }, offenderNo)
+        expect(profileData.canViewSocLink).toBe(false)
+      })
+
+      it('should enable SOC when the user has the ROLE_SOC_CUSTODY role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ROLE_SOC_CUSTODY' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewSocLink).toBe(true)
+        expect(profileData.socProfileUrl).toBe('http://soc-ui/nominal/1')
+      })
+
+      it('should enable SOC when the user has the ROLE_SOC_COMMUNITY role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ROLE_SOC_COMMUNITY' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewSocLink).toBe(true)
+      })
+
+      it('should enable SOC when the user has the ROLE_SOC_EXTERNAL_RO role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ROLE_SOC_EXTERNAL_RO' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewSocLink).toBe(true)
+      })
+
+      it('should enable SOC when the user has the ROLE_SOC_EXTERNAL role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ROLE_SOC_EXTERNAL' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewSocLink).toBe(true)
+      })
+
+      it('should not enable SOC link when the offender does not exists on SOC', async () => {
+        socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ROLE_SOC_CUSTODY' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.canViewSocLink).toBe(false)
+      })
+    })
   })
 })

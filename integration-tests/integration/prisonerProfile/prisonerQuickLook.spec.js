@@ -500,6 +500,45 @@ context('Prisoner quick look', () => {
       )
     })
   })
+
+  context('When a user has a SOC role and prisoner is in SOC', () => {
+    beforeEach(() => {
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'ROLE_SOC_CUSTODY' }],
+      })
+      const stub = { status: 200, body: { id: 1, status: 'ACTIVE', nomsId: offenderNo, history: [], band: '2' } }
+      cy.task('stubSocOffenderDetails', stub)
+      cy.log(JSON.stringify(stub))
+    })
+
+    it('Should show View SOC profile link', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="soc-profile-link"]').should('contain.text', 'View SOC profile')
+    })
+  })
+
+  context('When a user has a SOC role and prisoner is not in SOC', () => {
+    beforeEach(() => {
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'ROLE_SOC_CUSTODY' }],
+      })
+    })
+
+    it('Should show Refer to SOC button', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="soc-referral-button"]').should('contain.text', 'Refer to SOC')
+    })
+  })
 })
 
 module.exports = { quickLookFullDetails }
