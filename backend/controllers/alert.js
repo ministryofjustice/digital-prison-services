@@ -259,6 +259,20 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
       })
     }
 
+    if (alertDate && moment(alertDate, 'DD/MM/YYYY') > moment()) {
+      errors.push({
+        text: 'Select a date that is not in the future',
+        href: '#effective-date',
+      })
+    }
+
+    if (alertDate && moment(alertDate, 'DD/MM/YYYY') < moment().subtract(8, 'days')) {
+      errors.push({
+        text: 'Select a date that is not too far in the past',
+        href: '#effective-date',
+      })
+    }
+
     if (errors.length > 0) {
       const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
 
@@ -295,6 +309,12 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         comment: comments,
         alertDate: moment(alertDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
       })
+
+      raiseAnalyticsEvent(
+        'Alert Created',
+        `Alert type - ${alertCode}`,
+        `Alert created for ${req.session.userDetails.activeCaseLoadId}`
+      )
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/create-alert` })

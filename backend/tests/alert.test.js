@@ -1,4 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+const moment = require('moment')
+
 const elite2api = {}
 const oauthApi = {}
 const referenceCodesService = {}
@@ -371,7 +373,7 @@ describe('alert management', () => {
         homeUrl: '/prisoner/ABC123/alerts',
         alertsRootUrl: '/prisoner/ABC123/create-alert',
         bookingId: 1234,
-        formValues: { effectiveDate: '20/07/2020' },
+        formValues: { effectiveDate: moment().format('DD/MM/YYYY') },
         alertTypes: [{ value: 'P', text: 'MAPP' }],
         alertCodes: [{ value: 'PI', text: 'MAPP 1' }],
       })
@@ -478,14 +480,19 @@ describe('alert management', () => {
     })
 
     describe('when the form is filled correctly', () => {
-      it('should submit and redired', async () => {
+      it('should submit and redirect', async () => {
         const req = {
           ...mockCreateReq,
+          session: {
+            userDetails: {
+              activeCaseLoadId: 'MDI',
+            },
+          },
           params: { offenderNo },
           body: {
             alertType: 'P',
             alertCode: 'PI',
-            effectiveDate: '2020-07-20',
+            effectiveDate: moment().format('YYYY-MM-YY'),
             bookingId: 1234,
             offenderNo,
             comments: 'test',
@@ -495,6 +502,8 @@ describe('alert management', () => {
         elite2api.createAlert = jest.fn()
 
         await handleCreateAlertForm(req, res)
+
+        expect(raiseAnalyticsEvent).toBeCalledWith('Alert Created', 'Alert type - PI', 'Alert created for MDI')
 
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/alerts')
       })

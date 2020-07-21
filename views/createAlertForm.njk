@@ -5,7 +5,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/label/macro.njk" import govukLabel %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 
 {% extends "./partials/layout.njk" %}
@@ -70,20 +70,23 @@
         }) }}
       </div>
 
-      {{ govukTextarea({
+      {{ govukCharacterCount({
               name: "comments",
               id: "comments",
+              maxlength: 1000,
               value: formValues.comments,
               errorMessage: errors | findError('comments'),
               classes: 'govuk-!-width-one-half',
               label: {
-                  text: "Why are you creating this alert?"
+                  text: "Why are you creating this alert?",
+                  classes: "govuk-!-font-weight-bold"
               }
           }) }}
 
       {{ datePicker({
               id: 'effective-date',
               label: 'When do you want this alert to start?',
+              labelClasses: "govuk-!-font-weight-bold",
               name: 'effectiveDate',
               date: formValues.effectiveDate,
               errorMessage: errors | findError('effective-date'),
