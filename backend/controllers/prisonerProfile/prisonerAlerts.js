@@ -73,7 +73,7 @@ module.exports = ({
     })
     const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => {
       return [
-        { text: `${alert.alertTypeDescription} (${alert.alertType})`, classes: 'govuk-!-font-weight-bold' },
+        { text: `${alert.alertTypeDescription} (${alert.alertType})` },
         { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
         { text: alert.comment || 'None', classes: 'clip-overflow' },
         {

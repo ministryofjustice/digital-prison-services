@@ -210,7 +210,7 @@ describe('prisoner alerts', () => {
           ],
           inactiveAlerts: [
             [
-              { text: 'Security (X)', classes: 'govuk-!-font-weight-bold' },
+              { text: 'Security (X)' },
               { text: 'Risk to females (XC)' },
               { text: 'has a large poster on cell wall', classes: 'clip-overflow' },
               { html: '20 August 2019<br>21 August 2019' },
