@@ -381,6 +381,7 @@ describe('alert management', () => {
 
   describe('handleCreateAlertForm()', () => {
     beforeEach(() => {
+      raiseAnalyticsEvent.mockRestore()
       elite2api.createAlert = jest.fn()
       referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
         return {
@@ -404,14 +405,14 @@ describe('alert management', () => {
     })
 
     describe('when there are errors', () => {
-      it('should return an error when there is a problem updating the alert', async () => {
+      it('should return an error when there is a problem creating the alert', async () => {
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
           body: {
             alertType: 'P',
             alertCode: 'PI',
-            effectiveDate: '2020-07-20',
+            effectiveDate: '20/07/2020',
             bookingId: 1234,
             offenderNo,
             comments: 'test',
@@ -433,7 +434,7 @@ describe('alert management', () => {
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
-          body: { offenderNo, comments: 'test' },
+          body: { offenderNo, comments: 'test', effectiveDate: '2020-07-20' },
         }
 
         await handleCreateAlertForm(req, res)
@@ -444,7 +445,7 @@ describe('alert management', () => {
             errors: [
               { href: '#alert-type', text: 'Select the type of alert' },
               { href: '#alert-code', text: 'Select the alert' },
-              { href: '#effective-date', text: 'Select when you want this alert to start' },
+              { href: '#effective-date', text: 'Enter a date in the format DD/MM/YYYY - for example, 27/03/2020' },
             ],
           })
         )
@@ -491,7 +492,7 @@ describe('alert management', () => {
           body: {
             alertType: 'P',
             alertCode: 'PI',
-            effectiveDate: moment().format('YYYY-MM-YY'),
+            effectiveDate: moment().format('DD/MM/YYYY'),
             bookingId: 1234,
             offenderNo,
             comments: 'test',

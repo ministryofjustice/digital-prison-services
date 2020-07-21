@@ -90,7 +90,7 @@
               name: 'effectiveDate',
               date: formValues.effectiveDate,
               errorMessage: errors | findError('effective-date'),
-              attributes: {'data-disable-past-date':'false', 'data-disable-future-date':'true','data-effective-date': 'true'}
+              attributes: {'data-disable-past-date':'false', 'data-disable-future-date':'true', 'data-min-date': '-7D', 'data-effective-date': 'true'}
           }) }}
 
     {{ govukButton({ text: "Save and continue", type: "submit" }) }}

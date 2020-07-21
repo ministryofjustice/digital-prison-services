@@ -258,16 +258,24 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
       })
     }
 
+    if (alertDate && !moment(alertDate, 'DD/MM/YYYY').isValid()) {
+      errors.push({
+        text: 'Enter a date in the format DD/MM/YYYY - for example, 27/03/2020',
+        href: '#effective-date',
+      })
+    }
+
     if (alertDate && moment(alertDate, 'DD/MM/YYYY') > moment()) {
       errors.push({
-        text: 'Select a date that is not in the future',
+        text: 'Enter a date which is not in the future in the format DD/MM/YYYY - for example, 27/03/2020',
         href: '#effective-date',
       })
     }
 
     if (alertDate && moment(alertDate, 'DD/MM/YYYY') < moment().subtract(8, 'days')) {
       errors.push({
-        text: 'Select a date that is not too far in the past',
+        text:
+          'Enter a date that is not more than 8 days in the past in the format DD/MM/YYYY - for example, 27/03/2020',
         href: '#effective-date',
       })
     }
