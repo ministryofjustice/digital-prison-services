@@ -73,7 +73,6 @@ describe('alert management', () => {
         await displayEditAlertPage(req, res)
 
         expect(res.render).toBeCalledWith('editAlertForm.njk', {
-          title: 'Edit / close alert - Digital Prison Services',
           errors: [{ text: 'Sorry, the service is unavailable' }],
         })
         expect(logError).toBeCalledWith(
