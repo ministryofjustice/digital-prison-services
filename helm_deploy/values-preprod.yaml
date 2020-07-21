@@ -40,6 +40,8 @@ env:
   PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
   REDIS_ENABLED: true
+  OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
+  OFFENDER_SEARCH_API_ENABLED: false
 
 whitelist:
   office: "217.33.148.210/32"

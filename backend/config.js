@@ -84,6 +84,11 @@ module.exports = {
       ui_url: process.env.PATHFINDER_UI_URL,
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
+    offenderSearch: {
+      url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8101',
+      timeoutSeconds: process.env.OFFENDER_SEARCH_API_TIMEOUT_SECONDS || 10,
+      enabled: process.env.OFFENDER_SEARCH_API_ENABLED === 'true',
+    },
   },
   notifications: {
     enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
