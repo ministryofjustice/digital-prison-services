@@ -284,5 +284,6 @@ module.exports = on => {
       ]),
     stubAppointmentsGet: appointments => Promise.all([elite2api.stubAppointmentsGet(appointments)]),
     stubVideoLinkAppointments: appointments => Promise.all([whereabouts.stubVideoLinkAppointments(appointments)]),
+    stubCreateAlert: () => Promise.all([elite2api.stubCreateAlert()]),
   })
 }

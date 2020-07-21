@@ -24,7 +24,14 @@
     "activeFlag": "Y",
     "listSeq": 21,
     "systemDataFlag": "N",
-    "subCodes": []
+    "subCodes": [
+      {
+        "code": "F1",
+        "parentCode": "F1",
+        "activeFlag": "Y",
+        "description": "Armed Forces Veteran"
+      }
+    ]
   },
   {
     "domain": "ALERT",
