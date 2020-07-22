@@ -22,8 +22,8 @@
   <span>{{ prisonerProfileData.incentiveLevel | showDefault('Not entered') }}</span>
   {% if prisonerProfileData.userCanEdit %}
     <br>
-    <a data-qa="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
-      View details
+    <a data-test="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
+      View details <span class="govuk-visually-hidden">for Incentive Level</span>
     </a>
   {% endif %}
 {% endset %}
