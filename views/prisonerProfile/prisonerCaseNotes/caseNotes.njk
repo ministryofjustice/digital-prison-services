@@ -16,27 +16,29 @@
 {% endset %}
 
 {% macro links(caseNote) %}
-    {% if caseNote.caseNoteDetailColumn.amendLink %}
-        <p class="govuk-body">
-            <a class="govuk-link" data-test="add-more-details"
-               href={{ caseNote.caseNoteDetailColumn.amendLink }}>
-                Add more details
-            </a>
-        <p>
-    {% endif %}
+    <div class="govuk-!-margin-top-5">
+        {% if caseNote.caseNoteDetailColumn.amendLink %}
+            <p class="govuk-body">
+                <a class="govuk-link" data-test="add-more-details"
+                href={{ caseNote.caseNoteDetailColumn.amendLink }}>
+                    Add more details
+                </a>
+            <p>
+        {% endif %}
 
-    <p class="govuk-body">
-        Happened: {{ caseNote.caseNoteDetailColumn.occurrenceDateTime }}
-    </p>
-
-    {% if caseNote.caseNoteDetailColumn.printIncentiveLink %}
         <p class="govuk-body">
-            <a class="govuk-link" data-test="print-slip"
-               href={{ caseNote.caseNoteDetailColumn.printIncentiveLink }} target="_blank">
-                Print Incentive Level Slip
-            </a>
-        <p>
-    {% endif %}
+            Happened: {{ caseNote.caseNoteDetailColumn.occurrenceDateTime }}
+        </p>
+
+        {% if caseNote.caseNoteDetailColumn.printIncentiveLink %}
+            <p class="govuk-body">
+                <a class="govuk-link" data-test="print-slip"
+                href={{ caseNote.caseNoteDetailColumn.printIncentiveLink }} target="_blank">
+                    Print Incentive Level Slip
+                </a>
+            <p>
+        {% endif %}
+    </div>
 
 {% endmacro %}
 
@@ -174,7 +176,7 @@
                                 More details added:
                             </p>
                             <div class="govuk-!-padding-bottom-1">
-                                <span class="govuk-body">{{ amendment.text }} </span>
+                                <p class="govuk-body">{{ amendment.text }} </p>
                             </div>
                         </div>
 
