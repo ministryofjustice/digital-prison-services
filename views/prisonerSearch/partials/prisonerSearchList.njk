@@ -4,7 +4,7 @@
   {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
   {% set rows = (rows.push([
     { html: prisonerImage },
-    { 
+    {
       html: prisonerLink,
       attributes: {
         "data-sort-value": prisoner.name
@@ -22,32 +22,32 @@
   {{ govukTable({
     head: [
       { html: '<span class="govuk-visually-hidden">Picture</span>' },
-      { 
+      {
         text: "Name",
         attributes: {
           "aria-sort": "ascending"
         }
       },
       { text: "Prison number" },
-      { 
+      {
         text: "Location",
         attributes: {
           "aria-sort": "ascending"
         }
       },
-      { 
+      {
         text: "Incentive level",
         attributes: {
           "aria-sort": "ascending"
         }
       },
-      { 
+      {
         text: "Age",
         attributes: {
           "aria-sort": "ascending"
         }
       },
-      { text: "Relavent alerts" }
+      { text: "Relevant alerts" }
     ],
     rows: rows,
     attributes: { "data-test": "prisoner-search-results-table" }
