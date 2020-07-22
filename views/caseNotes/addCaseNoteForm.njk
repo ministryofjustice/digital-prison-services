@@ -1,0 +1,129 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+
+{% extends "../partials/layout.njk" %}
+
+{% set title = "Add a case note for " + offenderDetails.name %}
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: notmUrl
+    },
+    {
+      text: offenderDetails.name,
+      href: offenderDetails.profileUrl
+    },
+    {
+      text: "Add a case note"
+    }
+  ]
+})
+}}
+{% endblock %}
+
+{% block content %}
+  {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: errors,
+          attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+  <h1 class="govuk-heading-l">
+    {{title}}
+  </h1>
+  <p class="govuk-caption-l"><span class="govuk-!-font-weight-bold">Prison number:</span> {{offenderNo}}</p>
+
+  <input type="hidden" name="subTypeUrl" value="{{ subTypesRootUrl }}"/>
+
+  <form method="POST" novalidate="novalidate">
+    <input type="hidden" name="bookingId" value={{bookingId}} />
+    {{ govukSelect({
+          id: "type",
+          name: "type",
+          label: {
+              text: "Type"
+          },
+          items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
+          errorMessage: errors | findError('type')
+        }) }}
+
+    <div id="subTypes">
+      {{ govukSelect({
+          id: "sub-type",
+          name: "subType",
+          label: {
+              text: "Sub-type"
+          },
+          items: subTypes| addDefaultSelectedVale('Select') | setSelected(formValues.subType),
+          errorMessage: errors | findError('alert-code')
+      }) }}
+    </div>
+
+    {{ govukCharacterCount({
+            name: "text",
+            id: "text",
+            maxlength: 4000,
+            value: formValues.text,
+            errorMessage: errors | findError('text'),
+            classes: 'govuk-!-width-one-half',
+            label: {
+                text: "What happened?",
+                classes: "govuk-!-font-weight-bold"
+            }
+        }) }}
+    
+    <p class="govuk-body govuk-!-font-weight-bold">When did this happen?</p>
+
+    {{ datePicker({
+            id: 'date',
+            label: 'date',
+            name: 'date',
+            date: formValues.date,
+            errorMessage: errors | findError('date'),
+            attributes: {'data-disable-past-date':'false', 'data-disable-future-date':'true', 'data-date': 'true'}
+        }) }}
+
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" role="group" aria-describedby="case-note-time-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <p class="govuk-fieldset__heading">
+            Time
+          </p>
+        </legend>
+        <span id="case-note-time-hint" class="govuk-hint">
+          Enter in the 24 hour clock. For example 9 08 or 17 32.
+        </span>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="hours">
+            Hours
+          </label>
+          <input class="govuk-input govuk-input--width-2" id="hours" name="hours" type="text" pattern="[0-9]*" inputmode="numeric">
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="minutes">
+            Minutes
+          </label>
+          <input class="govuk-input govuk-input--width-2" id="minutes" name="minutes" type="text" pattern="[0-9]*" inputmode="numeric">
+        </div>
+      </fieldset>
+    </div>
+
+    {{ govukButton({ text: "Save", type: "submit" }) }}
+
+      {{ govukButton({
+          text: "Cancel",
+          href: homeUrl,
+          classes: "govuk-button--secondary"
+      }) }}
+  </form>
+{% endblock %}
+{% block pageScripts %}
+    <script src="/js/alerts.js"></script>
+{% endblock %}
