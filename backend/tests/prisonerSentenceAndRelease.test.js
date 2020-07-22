@@ -98,7 +98,7 @@ describe('prisoner sentence and release', () => {
         prisonerProfileData,
         releaseDates: {
           currentExpectedReleaseDates: [
-            { label: 'Approved for home detention curfew', value: '3 July 2019' },
+            { label: 'Home detention curfew eligibility', value: '3 July 2019' },
             { label: 'Approved for parole', value: '3 February 2022' },
             { label: 'Conditional release', value: '3 February 2020' },
             { label: 'Post recall release', value: '1 April 2020' },
@@ -709,7 +709,7 @@ describe('prisoner sentence and release', () => {
         prisonerProfileData,
         releaseDates: {
           currentExpectedReleaseDates: [
-            { label: 'Approved for home detention curfew', value: '3 July 2019' },
+            { label: 'Home detention curfew eligibility', value: '3 July 2019' },
             { label: 'Approved for parole', value: '3 February 2022' },
             { label: 'Conditional release', value: '1 February 2020' },
             { label: 'Post recall release', value: '3 February 2021' },

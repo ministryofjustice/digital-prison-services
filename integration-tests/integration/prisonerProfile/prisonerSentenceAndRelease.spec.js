@@ -72,7 +72,7 @@ context('Prisoner sentence and release', () => {
       .currentReleaseDates()
       .find('dt')
       .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Approved for home detention curfew\n        ')
+        expect($summaryKeys.get(0).innerText).to.eq('\n          Home detention curfew eligibility\n        ')
         expect($summaryKeys.get(1).innerText).to.eq('\n          Approved for parole\n        ')
         expect($summaryKeys.get(2).innerText).to.eq('\n          Conditional release\n        ')
         expect($summaryKeys.get(3).innerText).to.eq('\n          Post recall release\n        ')
