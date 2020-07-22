@@ -1187,7 +1187,7 @@ describe('prisoner profile quick look', () => {
       )
     })
 
-    it('should display correct defaults for offender profile data', async () => {
+    it('should pass nulls to frontend', async () => {
       prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
         ...prisonerProfileData,
         keyWorkerName: null,
@@ -1205,12 +1205,12 @@ describe('prisoner profile quick look', () => {
             activeAlertCount: 1,
             agencyName: 'Moorland Closed',
             alerts: [],
-            category: 'Not entered',
-            csra: 'Not entered',
+            category: null,
+            csra: null,
             inactiveAlertCount: 2,
             incentiveLevel: 'Standard',
-            keyWorkerLastSession: 'No previous session',
-            keyWorkerName: 'None assigned',
+            keyWorkerLastSession: null,
+            keyWorkerName: null,
             location: 'CELL-123',
             offenderName: 'Prisoner, Test',
             offenderNo: 'ABC123',
