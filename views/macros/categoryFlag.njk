@@ -8,7 +8,7 @@
     {% elif categoryCode === 'P' %}
       CAT A Prov
     {% else %}
-      {{ categoryText | showDefault }}
+      {{ categoryText | showDefault('Not entered') }}
     {% endif %}
   {% endset %}
 

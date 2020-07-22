@@ -109,13 +109,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
 
       return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
         dpsUrl,
-        prisonerProfileData: {
-          ...prisonerProfileData,
-          keyWorkerName: prisonerProfileData.keyWorkerName || 'None assigned',
-          keyWorkerLastSession: prisonerProfileData.keyWorkerLastSession || 'No previous session',
-          csra: prisonerProfileData.csra || 'Not entered',
-          category: prisonerProfileData.category || 'Not entered',
-        },
+        prisonerProfileData,
         offenceDetailsSectionError: Boolean(
           offenceDataResponse.error && prisonerDataResponse.error && sentenceDataResponse.error
         ),
