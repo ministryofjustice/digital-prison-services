@@ -2,6 +2,7 @@ const express = require('express')
 const bunyanMiddleware = require('bunyan-middleware')
 const hsts = require('hsts')
 const helmet = require('helmet')
+const noCache = require('nocache')
 const config = require('./config')
 const log = require('./log')
 const ensureHttps = require('./middleware/ensureHttps')
@@ -32,7 +33,7 @@ module.exports = () => {
   }
 
   // Don't cache dynamic resources
-  router.use(helmet.noCache())
+  router.use(noCache())
 
   return router
 }
