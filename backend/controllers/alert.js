@@ -260,7 +260,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
     if (alertDate && !moment(alertDate, 'DD/MM/YYYY').isValid()) {
       errors.push({
-        text: 'Enter a date in the format DD/MM/YYYY - for example, 27/03/2020',
+        text: 'Enter a real date in the format DD/MM/YYYY - for example, 27/03/2020',
         href: '#effective-date',
       })
     }
