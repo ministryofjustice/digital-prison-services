@@ -2,11 +2,11 @@
 {% from "../../macros/alertFlags.njk" import alertFlags %}
 {% from "../../macros/categoryFlag.njk" import categoryFlag %}
 
-{% macro headerItem(label, content) %}
+{% macro headerItem(label, content, missingValue) %}
   <li>
     <strong>{{ label }}</strong>
     <br>
-    {{ content | showDefault | safe}}
+    {{ content | showDefault(missingValue or 'Not entered') | safe}}
   </li>
 {% endmacro %}
 
@@ -19,11 +19,11 @@
 {% endset %}
 
 {% set incentiveLevelHtml %}
-  <span>{{ prisonerProfileData.incentiveLevel | showDefault }}</span>
+  <span>{{ prisonerProfileData.incentiveLevel | showDefault('Not entered') }}</span>
   {% if prisonerProfileData.userCanEdit %}
     <br>
-    <a data-qa="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
-      View details
+    <a data-test="iep-details-link" class="govuk-link" href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
+      View details <span class="govuk-visually-hidden">for Incentive Level</span>
     </a>
   {% endif %}
 {% endset %}
@@ -73,8 +73,8 @@
 
     <ul class="prisoner-header__details__information">
       {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
-      {{ headerItem('Key worker', prisonerProfileData.keyWorkerName) }}
-      {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession) }}
+      {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned') }}
+      {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session') }}
       {{ headerItem('Incentive level', incentiveLevelHtml) }}
       {{ headerItem('CSRA', prisonerProfileData.csra) }}
       {{ headerItem('Category', categoryHtml) }}
