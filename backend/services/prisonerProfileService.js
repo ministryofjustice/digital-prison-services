@@ -1,6 +1,5 @@
 const moment = require('moment')
-const path = require('path')
-const { putLastNameFirst, hasLength } = require('../utils')
+const { putLastNameFirst, hasLength, formatName } = require('../utils')
 const alertFlagValues = require('../shared/alertFlagValues')
 const {
   apis: {
@@ -137,8 +136,8 @@ module.exports = ({
       displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
-        keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('DD/MM/YYYY'),
-      keyWorkerName: keyworkerDetails && putLastNameFirst(keyworkerDetails.firstName, keyworkerDetails.lastName),
+        keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
+      keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
       inactiveAlertCount,
       location: assignedLivingUnit.description,
       notmEndpointUrl,

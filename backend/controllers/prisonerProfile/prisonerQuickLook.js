@@ -3,7 +3,7 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
-const { formatTimestampToDate, formatCurrency, capitalizeUppercaseString } = require('../../utils')
+const { formatCurrency, capitalizeUppercaseString } = require('../../utils')
 const formatAward = require('../../shared/formatAward')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
 const getValueByType = require('../../shared/getValueByType')
@@ -103,7 +103,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
 
       const prisoner = prisonerData && prisonerData[0]
       const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
-      const unableToShowDetailMessage = 'Unable to show this detail.'
+      const unableToShowDetailMessage = 'Unable to show this detail'
 
       const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 
@@ -115,7 +115,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         ),
         offenceDetails: [
           {
-            label: 'Main offence(s)',
+            label: 'Main offence',
             value: offenceDataResponse.error
               ? unableToShowDetailMessage
               : (offenceData && offenceData[0] && offenceData[0].offenceDescription) || 'Not entered',
@@ -133,7 +133,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
               : (sentenceData &&
                   sentenceData.sentenceDetail &&
                   sentenceData.sentenceDetail.releaseDate &&
-                  formatTimestampToDate(sentenceData.sentenceDetail.releaseDate)) ||
+                  moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
                 'Not entered',
           },
         ],
@@ -243,7 +243,9 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
               label: 'Next visit date',
               value:
                 (nextVisitResponse.error && unableToShowDetailMessage) ||
-                (nextVisit && nextVisit.startTime ? formatTimestampToDate(nextVisit.startTime) : 'No upcoming visits'),
+                (nextVisit && nextVisit.startTime
+                  ? moment(nextVisit.startTime).format('D MMMM YYYY')
+                  : 'No upcoming visits'),
             },
           ],
           ...(nextVisit &&

@@ -256,7 +256,7 @@ context('Prisoner quick look', () => {
         .then($summaryValues => {
           expect($summaryValues.get(0).innerText).to.eq('Have blade/article which was sharply pointed in public place')
           expect($summaryValues.get(1).innerText).to.eq('Adult Imprisonment Without Option CJA03')
-          expect($summaryValues.get(2).innerText).to.eq('13/12/2020')
+          expect($summaryValues.get(2).innerText).to.eq('13 December 2020')
         })
     })
 
@@ -290,7 +290,7 @@ context('Prisoner quick look', () => {
         .then($summaryValues => {
           expect($summaryValues.get(0).innerText).to.eq('24')
           expect($summaryValues.get(1).innerText).to.eq('4')
-          expect($summaryValues.get(2).innerText).to.eq('17/04/2020')
+          expect($summaryValues.get(2).innerText).to.eq('17 April 2020')
           expect($summaryValues.get(3).innerText).to.eq('Social Contact')
           expect($summaryValues.get(4).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
         })
@@ -311,12 +311,12 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="schedule-summary"]')
         .find('dd')
         .then($summaryValues => {
-          expect($summaryValues.get(0).innerText).to.eq('Education\n09:00 - 10:00')
+          expect($summaryValues.get(0).innerText).to.eq('Education\n09:00 to 10:00')
           expect($summaryValues.get(1).innerText).to.eq(
-            'Case - Benefits - Test Comment\n13:00 - 14:00\nGym - Sports Halls Activity - Test comment\n(cancelled)\n15:00 - 15:30'
+            'Case - Benefits - Test Comment\n13:00 to 14:00\nGym - Sports Halls Activity - Test comment\n(cancelled)\n15:00 to 15:30'
           )
           expect($summaryValues.get(2).innerText).to.eq(
-            'Gym - Football - Testing a really long comment which is o...\n20:20 - 20:35'
+            'Gym - Football - Testing a really long comment which is o...\n20:20 to 20:35'
           )
         })
     })

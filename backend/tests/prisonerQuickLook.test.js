@@ -93,7 +93,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             offenceDetails: [
               {
-                label: 'Main offence(s)',
+                label: 'Main offence',
                 value: 'Not entered',
               },
               {
@@ -129,7 +129,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             offenceDetails: [
               {
-                label: 'Main offence(s)',
+                label: 'Main offence',
                 value: 'Have blade/article which was sharply pointed in public place',
               },
               {
@@ -138,7 +138,7 @@ describe('prisoner profile quick look', () => {
               },
               {
                 label: 'Release date',
-                value: '13/12/2020',
+                value: '13 December 2020',
               },
             ],
           })
@@ -408,7 +408,7 @@ describe('prisoner profile quick look', () => {
                 details: [
                   { label: 'Remaining visits', value: 0 },
                   { label: 'Remaining privileged visits', value: 0 },
-                  { label: 'Next visit date', value: '17/04/2020' },
+                  { label: 'Next visit date', value: '17 April 2020' },
                 ],
                 nextVisitDetails: [
                   { label: 'Type of visit', value: 'Social Contact' },
@@ -616,9 +616,9 @@ describe('prisoner profile quick look', () => {
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
           offenceDetails: [
-            { label: 'Main offence(s)', value: 'Unable to show this detail.' },
+            { label: 'Main offence', value: 'Unable to show this detail' },
             { label: 'Imprisonment status', value: 'Adult Imprisonment Without Option CJA03' },
-            { label: 'Release date', value: '13/12/2020' },
+            { label: 'Release date', value: '13 December 2020' },
           ],
           offenceDetailsSectionError: false,
         })
@@ -637,9 +637,9 @@ describe('prisoner profile quick look', () => {
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
           offenceDetails: [
-            { label: 'Main offence(s)', value: 'Have blade/article which was sharply pointed in public place' },
-            { label: 'Imprisonment status', value: 'Unable to show this detail.' },
-            { label: 'Release date', value: '13/12/2020' },
+            { label: 'Main offence', value: 'Have blade/article which was sharply pointed in public place' },
+            { label: 'Imprisonment status', value: 'Unable to show this detail' },
+            { label: 'Release date', value: '13 December 2020' },
           ],
           offenceDetailsSectionError: false,
         })
@@ -662,9 +662,9 @@ describe('prisoner profile quick look', () => {
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
           offenceDetails: [
-            { label: 'Main offence(s)', value: 'Have blade/article which was sharply pointed in public place' },
+            { label: 'Main offence', value: 'Have blade/article which was sharply pointed in public place' },
             { label: 'Imprisonment status', value: 'Adult Imprisonment Without Option CJA03' },
-            { label: 'Release date', value: 'Unable to show this detail.' },
+            { label: 'Release date', value: 'Unable to show this detail' },
           ],
           offenceDetailsSectionError: false,
         })
@@ -735,7 +735,7 @@ describe('prisoner profile quick look', () => {
               ],
             },
             details: [
-              { label: 'Incentive level warnings', value: 'Unable to show this detail.' },
+              { label: 'Incentive level warnings', value: 'Unable to show this detail' },
               { label: 'Incentive encouragements', value: 10 },
               { label: 'Last incentive level review', value: '10 days ago' },
               { label: 'Proven adjudications', value: 2 },
@@ -788,7 +788,7 @@ describe('prisoner profile quick look', () => {
             },
             details: [
               { label: 'Incentive level warnings', value: 10 },
-              { label: 'Incentive encouragements', value: 'Unable to show this detail.' },
+              { label: 'Incentive encouragements', value: 'Unable to show this detail' },
               { label: 'Last incentive level review', value: '10 days ago' },
               { label: 'Proven adjudications', value: 2 },
             ],
@@ -841,7 +841,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Last incentive level review', value: 'Unable to show this detail.' },
+              { label: 'Last incentive level review', value: 'Unable to show this detail' },
               { label: 'Proven adjudications', value: 2 },
             ],
           },
@@ -867,7 +867,7 @@ describe('prisoner profile quick look', () => {
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
               { label: 'Last incentive level review', value: '10 days ago' },
-              { label: 'Proven adjudications', value: 'Unable to show this detail.' },
+              { label: 'Proven adjudications', value: 'Unable to show this detail' },
             ],
           },
         })
@@ -889,29 +889,29 @@ describe('prisoner profile quick look', () => {
             details: [
               {
                 label: 'Incentive level warnings',
-                value: 'Unable to show this detail.',
+                value: 'Unable to show this detail',
               },
               {
                 label: 'Incentive encouragements',
-                value: 'Unable to show this detail.',
+                value: 'Unable to show this detail',
               },
               {
                 label: 'Last incentive level review',
-                value: 'Unable to show this detail.',
+                value: 'Unable to show this detail',
               },
-              { label: 'Proven adjudications', value: 'Unable to show this detail.' },
+              { label: 'Proven adjudications', value: 'Unable to show this detail' },
             ],
           },
           dpsUrl: 'http://localhost:3000/',
           offenceDetails: [
             {
-              label: 'Main offence(s)',
-              value: 'Unable to show this detail.',
+              label: 'Main offence',
+              value: 'Unable to show this detail',
             },
-            { label: 'Imprisonment status', value: 'Unable to show this detail.' },
+            { label: 'Imprisonment status', value: 'Unable to show this detail' },
             {
               label: 'Release date',
-              value: 'Unable to show this detail.',
+              value: 'Unable to show this detail',
             },
           ],
         })
@@ -929,11 +929,11 @@ describe('prisoner profile quick look', () => {
           personalDetails: [
             {
               label: 'Age',
-              value: 'Unable to show this detail.',
+              value: 'Unable to show this detail',
             },
             { label: 'Nationality', value: 'British' },
-            { label: 'PNC number', value: 'Unable to show this detail.' },
-            { label: 'CRO number', value: 'Unable to show this detail.' },
+            { label: 'PNC number', value: 'Unable to show this detail' },
+            { label: 'CRO number', value: 'Unable to show this detail' },
           ],
         })
       )
@@ -955,7 +955,7 @@ describe('prisoner profile quick look', () => {
               label: 'Age',
               value: 21,
             },
-            { label: 'Nationality', value: 'Unable to show this detail.' },
+            { label: 'Nationality', value: 'Unable to show this detail' },
             { label: 'PNC number', value: '12/3456A' },
             { label: 'CRO number', value: '12345/57B' },
           ],
@@ -989,9 +989,9 @@ describe('prisoner profile quick look', () => {
           visits: {
             visitSectionError: false,
             details: [
-              { label: 'Remaining visits', value: 'Unable to show this detail.' },
-              { label: 'Remaining privileged visits', value: 'Unable to show this detail.' },
-              { label: 'Next visit date', value: '17/04/2020' },
+              { label: 'Remaining visits', value: 'Unable to show this detail' },
+              { label: 'Remaining privileged visits', value: 'Unable to show this detail' },
+              { label: 'Next visit date', value: '17 April 2020' },
             ],
             nextVisitDetails: [
               { label: 'Type of visit', value: 'room 1' },
@@ -1018,7 +1018,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Remaining visits', value: 20 },
               { label: 'Remaining privileged visits', value: 10 },
-              { label: 'Next visit date', value: 'Unable to show this detail.' },
+              { label: 'Next visit date', value: 'Unable to show this detail' },
             ],
           },
         })
@@ -1033,9 +1033,9 @@ describe('prisoner profile quick look', () => {
         expect.objectContaining({
           visits: {
             details: [
-              { label: 'Remaining visits', value: 'Unable to show this detail.' },
-              { label: 'Remaining privileged visits', value: 'Unable to show this detail.' },
-              { label: 'Next visit date', value: 'Unable to show this detail.' },
+              { label: 'Remaining visits', value: 'Unable to show this detail' },
+              { label: 'Remaining privileged visits', value: 'Unable to show this detail' },
+              { label: 'Next visit date', value: 'Unable to show this detail' },
             ],
             visitSectionError: true,
           },
@@ -1140,7 +1140,7 @@ describe('prisoner profile quick look', () => {
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
           offenceDetails: [
-            { label: 'Main offence(s)', value: 'Not entered' },
+            { label: 'Main offence', value: 'Not entered' },
             { label: 'Imprisonment status', value: 'Not entered' },
             { label: 'Release date', value: 'Not entered' },
           ],
