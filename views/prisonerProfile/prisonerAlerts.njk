@@ -66,101 +66,105 @@
     </form>
   </div> 
 
-  {% if activeAlerts.length %}
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <h2 class="govuk-heading-m" data-qa="alerts-table-title">Active alerts</h2>
-      </div>
-      {% if canUpdateAlerts %}
-        <div class="govuk-grid-column-one-half pull-right">
-          {{ govukButton({
-          href: createLink,
-          text: "Create an alert",
-          preventDoubleClick: true,
-          classes: "govuk-button--link",
-          attributes: {
-            "data-test": 'active-create-alerts-link'
-          }
-          }) }}
+  {% if activeAlerts.length or inactiveAlerts.length %}
+    {% if activeAlerts.length %}
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <h2 class="govuk-heading-m" data-qa="alerts-table-title">Active alerts</h2>
         </div>
-      {% endif %}
-    </div>
-
-    {{ mojPagination(pagination) }}
-
-      {{ govukTable({
-        head: [
-          {
-            text: "Type of alert"
-          },
-          {
-            text: "Alert"
-          },
-          {
-            text: "Comments",
-            classes: "govuk-!-width-one-quarter"
-          },
-          {
-            text: "Date from"
-          },
-          {
-            text: "Added by"
-          },
-          {
-            text: " "
-          }
-        ],
-        rows: activeAlerts,
-        attributes: { "data-qa": "active-alerts-table" },
-        classes: "fixed-table"
-      }) }}
-  {% endif %}
-
-  {% if inactiveAlerts.length %}
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <h2 class="govuk-heading-m" data-qa="alerts-table-title">Inactive alerts</h2>
+        {% if canUpdateAlerts %}
+          <div class="govuk-grid-column-one-half pull-right">
+            {{ govukButton({
+            href: createLink,
+            text: "Create an alert",
+            preventDoubleClick: true,
+            classes: "govuk-button--link",
+            attributes: {
+              "data-test": 'active-create-alerts-link'
+            }
+            }) }}
+          </div>
+        {% endif %}
       </div>
-      {% if canUpdateAlerts %}
-        <div class="govuk-grid-column-one-half pull-right">
-          {{ govukButton({
-          href: createLink,
-          text: "Create an alert",
-          preventDoubleClick: true,
-          classes: "govuk-button--link",
-          attributes: {
-            "data-test": 'inactive-create-alerts-link'
-          }
-          }) }}
+
+      {{ mojPagination(pagination) }}
+
+        {{ govukTable({
+          head: [
+            {
+              text: "Type of alert"
+            },
+            {
+              text: "Alert"
+            },
+            {
+              text: "Comments",
+              classes: "govuk-!-width-one-quarter"
+            },
+            {
+              text: "Date from"
+            },
+            {
+              text: "Added by"
+            },
+            {
+              text: " "
+            }
+          ],
+          rows: activeAlerts,
+          attributes: { "data-qa": "active-alerts-table" },
+          classes: "fixed-table"
+        }) }}
+    {% endif %}
+
+    {% if inactiveAlerts.length %}
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <h2 class="govuk-heading-m" data-qa="alerts-table-title">Inactive alerts</h2>
         </div>
-      {% endif %}
-    </div>
+        {% if canUpdateAlerts %}
+          <div class="govuk-grid-column-one-half pull-right">
+            {{ govukButton({
+            href: createLink,
+            text: "Create an alert",
+            preventDoubleClick: true,
+            classes: "govuk-button--link",
+            attributes: {
+              "data-test": 'inactive-create-alerts-link'
+            }
+            }) }}
+          </div>
+        {% endif %}
+      </div>
 
-    {{ mojPagination(pagination) }}
+      {{ mojPagination(pagination) }}
 
-      {{ govukTable({
-        head: [
-          {
-            text: "Type of alert"
-          },
-          {
-            text: "Details"
-          },
-          {
-            text: "Comments",
-            classes: "govuk-!-width-one-quarter"
-          },
-          {
-            html: "Date from /<br>date closed"
-          },
-          {
-            html: "Added by /<br>closed by"
-          }
-        ],
-        rows: inactiveAlerts,
-        attributes: { "data-qa": "inactive-alerts-table" },
-        classes: "fixed-table"
-      }) }}
+        {{ govukTable({
+          head: [
+            {
+              text: "Type of alert"
+            },
+            {
+              text: "Details"
+            },
+            {
+              text: "Comments",
+              classes: "govuk-!-width-one-quarter"
+            },
+            {
+              html: "Date from /<br>date closed"
+            },
+            {
+              html: "Added by /<br>closed by"
+            }
+          ],
+          rows: inactiveAlerts,
+          attributes: { "data-qa": "inactive-alerts-table" },
+          classes: "fixed-table"
+        }) }}
+    {% endif %}
+  {% else %}
+    <p class="govuk-body" data-test="no-alerts">There are no alerts of this type</p>
   {% endif %}
   
   {{ mojPagination(pagination) }}

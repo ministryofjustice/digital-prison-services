@@ -69,22 +69,22 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
         tableRows.size() == 5 // Including header row
 
         def columns1 = tableRows[1].find('td')
-        columns1*.text() == ['12/10/2017 - 07:53','Enhanced',
+        columns1*.text() == ['12 October 2017 - 07:53','Enhanced',
                              'Did not assault another inmate - data entry error.',
                              'Leeds',
                              'Staff Member',]
         def columns2 = tableRows[2].find('td')
-        columns2*.text() == ['12/10/2017 - 09:44','Basic',
+        columns2*.text() == ['12 October 2017 - 09:44','Basic',
                              'Assaulted another inmate.',
                              'Leeds',
                              'Staff Member',]
         def columns3 = tableRows[3].find('td')
-        columns3*.text() == ['22/08/2017 - 18:42','Standard',
+        columns3*.text() == ['22 August 2017 - 18:42','Standard',
                              'He has been a very good boy.',
                              'Leeds',
                              'Staff Member',]
         def columns4 = tableRows[4].find('td')
-        columns4*.text() == ['04/07/2017 - 12:15','Entry',
+        columns4*.text() == ['4 July 2017 - 12:15','Entry',
                              'Just came in.',
                              'Leeds',
                              'Staff Member',]
@@ -97,7 +97,7 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
         currentIepLevelData.size() == 3
         currentIepLevelData*.text() == ['Enhanced',
                                         '1 year, 207 days',
-                                        '12/10/2018']
+                                        '12 October 2018']
 
 
         assert(!($('button[data-qa="change-incentive-level"]').isDisplayed()))

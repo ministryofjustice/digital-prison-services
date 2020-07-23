@@ -52,14 +52,14 @@ const getIepDetailsFactory = elite2Api => {
       return {
         iepEstablishment: description,
         iepStaffMember: user && `${properCaseName(user.firstName)} ${properCaseName(user.lastName)}`,
-        formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY - HH:mm'),
+        formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('D MMMM YYYY - HH:mm'),
         ...details,
       }
     })
 
     const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm')
       .add(1, 'years')
-      .format('DD/MM/YYYY')
+      .format('D MMMM YYYY')
 
     const filteredResults = filterData(iepHistoryDetails, params)
 
