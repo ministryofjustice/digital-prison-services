@@ -10,7 +10,7 @@
         {% endif %}
         <div>
           {{ activity.startTime | getTime }}
-          {{ ' - ' + activity.endTime | getTime if activity.endTime }}
+          {{ ' to ' + activity.endTime | getTime if activity.endTime }}
         </div>
       </div>
     {% endfor %}

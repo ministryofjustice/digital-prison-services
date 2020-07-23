@@ -65,7 +65,7 @@ module.exports = ({
           html: canUpdateAlerts
             ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
                 alert.alertId
-              }">Change or close alert</a>`
+              }">Change or close</a>`
             : '',
           classes: 'govuk-table__cell--numeric',
         },
