@@ -13,7 +13,7 @@ module.exports = sentenceDetails => {
       ...(sentenceDetails.homeDetentionCurfewEligibilityDate
         ? [
             {
-              label: 'Approved for home detention curfew',
+              label: 'Home detention curfew eligibility',
               value: readableDateFormat(sentenceDetails.homeDetentionCurfewEligibilityDate, 'YYYY-MM-DD'),
             },
           ]
