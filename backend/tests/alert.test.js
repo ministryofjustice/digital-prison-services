@@ -33,7 +33,31 @@ describe('alert management', () => {
     get: jest.fn(),
     body: {},
   }
-  const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
+  const getDetailsResponse = {
+    bookingId: 1234,
+    firstName: 'Test',
+    lastName: 'User',
+    alerts: [
+      {
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+        alertCode: 'XC',
+        alertCodeDescription: 'Risk to females',
+        alertId: 1,
+        alertType: 'X',
+        alertTypeDescription: 'Security',
+        bookingId: 14,
+        comment: 'has a large poster on cell wall',
+        dateCreated: '2019-08-20',
+        dateExpires: null,
+        expired: false,
+        expiredByFirstName: 'John',
+        expiredByLastName: 'Smith',
+        offenderNo: 'G3878UK',
+      },
+    ],
+  }
   const alert = {
     alertId: 1,
     alertType: 'L',
@@ -368,6 +392,7 @@ describe('alert management', () => {
           offenderNo: 'ABC123',
           profileUrl: '/prisoner/ABC123',
         },
+        prisonersActiveAlertCodes: 'XC',
         offenderNo,
         homeUrl: '/prisoner/ABC123/alerts',
         alertsRootUrl: '/prisoner/ABC123/create-alert',
@@ -447,6 +472,30 @@ describe('alert management', () => {
               { href: '#alert-code', text: 'Select the alert' },
               { href: '#effective-date', text: 'Enter a date in the format DD/MM/YYYY - for example, 27/03/2020' },
             ],
+          })
+        )
+      })
+
+      it('should return an error if offender already has alert', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            offenderNo,
+            comments: 'test',
+            effectiveDate: '20/07/2020',
+            alertCode: 'XC',
+            alertType: 'X',
+            existingAlerts: 'XC',
+          },
+        }
+
+        await handleCreateAlertForm(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'alerts/createAlertForm.njk',
+          expect.objectContaining({
+            errors: [{ href: '#alert-code', text: 'Select an alert that does not already exist for this offender' }],
           })
         )
       })
