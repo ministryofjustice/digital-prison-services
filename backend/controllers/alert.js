@@ -302,6 +302,18 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         .join(',')
 
       const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
+      const alertCodes = alertType
+        ? alertTypes.alertSubTypes
+            .filter(type => type.parentValue === alertType)
+            .filter(type => type.activeFlag === 'Y')
+            .map(type => ({
+              value: type.value,
+              text: type.description,
+            }))
+        : alertTypes.alertSubTypes.filter(type => type.activeFlag === 'Y').map(type => ({
+            value: type.value,
+            text: type.description,
+          }))
 
       const offenderDetails = {
         bookingId,
@@ -319,10 +331,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         alertTypes: alertTypes.alertTypes
           .filter(type => type.activeFlag === 'Y')
           .map(type => ({ value: type.value, text: type.description })),
-        alertCodes: alertTypes.alertSubTypes.filter(type => type.activeFlag === 'Y').map(type => ({
-          value: type.value,
-          text: type.description,
-        })),
+        alertCodes,
         homeUrl: `${getOffenderUrl(offenderNo)}/alerts`,
         alertsRootUrl: `/prisoner/${offenderNo}/create-alert`,
       })

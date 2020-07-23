@@ -496,6 +496,7 @@ describe('alert management', () => {
           'alerts/createAlertForm.njk',
           expect.objectContaining({
             errors: [{ href: '#alert-code', text: 'Select an alert that does not already exist for this offender' }],
+            alertCodes: [],
           })
         )
       })
@@ -523,6 +524,7 @@ describe('alert management', () => {
               { href: '#comments', text: 'Enter why you are creating this alert using 1,000 characters or less' },
               { href: '#effective-date', text: 'Select when you want this alert to start' },
             ],
+            alertCodes: [{ text: 'MAPP 1', value: 'PI' }],
           })
         )
       })
