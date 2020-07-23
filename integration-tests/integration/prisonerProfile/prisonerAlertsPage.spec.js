@@ -103,7 +103,7 @@ context('A user can view alerts for a prisoner', () => {
       activeTable
         .editCreateButton()
         .find('a')
-        .contains('Change or close alert')
+        .contains('Change or close')
       cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
   })
@@ -145,6 +145,13 @@ context('A user can view alerts for a prisoner', () => {
         .find('a')
         .should('not.be.visible')
       cy.get('[data-test="active-create-alerts-link"]').should('not.be.visible')
+    })
+
+    it('Should show a message if there are no alerts to display', () => {
+      cy.task('stubAlertsForBooking')
+      cy.visit('/prisoner/G3878UK/alerts')
+
+      cy.get('[data-test="no-alerts"]').should('contain.text', 'There are no alerts of this type')
     })
   })
 })
