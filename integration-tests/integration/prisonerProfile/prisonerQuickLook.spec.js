@@ -511,7 +511,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
-        userRoles: [{ roleCode: 'ROLE_SOC_CUSTODY' }],
+        userRoles: [{ roleCode: 'SOC_CUSTODY' }],
       })
     })
 

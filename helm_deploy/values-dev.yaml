@@ -43,5 +43,6 @@ env:
   REDIS_ENABLED: true
   SOC_UI_URL: https://manage-soc-cases-dev.service.justice.gov.uk/
   SOC_ENDPOINT_API_URL: https://manage-soc-cases-dev.service.justice.gov.uk/api/
+  SOC_REFERRAL_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
   OFFENDER_SEARCH_API_ENABLED: false

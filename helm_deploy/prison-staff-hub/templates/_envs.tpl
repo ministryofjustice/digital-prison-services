@@ -175,5 +175,8 @@ env:
 
   - name: SOC_ENDPOINT_API_URL
     value: {{ .Values.env.SOC_ENDPOINT_API_URL | quote }}
+
+  - name: SOC_REFERRAL_ENABLED
+    value: {{ .Values.env.SOC_REFERRAL_ENABLED | quote }}
       
 {{- end -}}

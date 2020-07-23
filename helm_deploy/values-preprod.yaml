@@ -42,6 +42,7 @@ env:
   REDIS_ENABLED: true
   SOC_UI_URL: ''
   SOC_ENDPOINT_API_URL: ''
+  SOC_REFERRAL_ENABLED: false
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
   OFFENDER_SEARCH_API_ENABLED: false
 

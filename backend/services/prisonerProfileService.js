@@ -6,7 +6,7 @@ const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
     pathfinder: { ui_url: pathfinderUrl },
-    soc: { ui_url: socUrl },
+    soc: { ui_url: socUrl, enabled: socEnabled },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
   },
   app: { notmEndpointUrl, displayRetentionLink },
@@ -66,7 +66,7 @@ module.exports = ({
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
         oauthApi.userRoles(context),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
-        socApi.getSocDetails(systemContext, offenderNo),
+        socApi.getSocDetails(systemContext, offenderNo, socEnabled),
       ].map(apiCall => logErrorAndContinue(apiCall))
     )
 
@@ -109,9 +109,7 @@ module.exports = ({
     const isSocUser = Boolean(
       userRoles &&
         userRoles.some(role =>
-          ['ROLE_SOC_CUSTODY', 'ROLE_SOC_COMMUNITY', 'ROLE_SOC_EXTERNAL_RO', 'ROLE_SOC_EXTERNAL'].includes(
-            role.roleCode
-          )
+          ['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_EXTERNAL_RO', 'SOC_EXTERNAL'].includes(role.roleCode)
         )
     )
 
@@ -127,10 +125,10 @@ module.exports = ({
         pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String(pathfinderDetails.id)}`,
       showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderUser),
       pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
-      canViewSocLink,
-      socProfileUrl: socUrl && socDetails && `${socUrl}nominal/${String(socDetails.id)}`,
-      showSocReferButton: Boolean(!socDetails && isSocUser),
-      socReferUrl: socUrl && `${socUrl}refer/offender/${offenderNo}`,
+      canViewSocLink: socEnabled && canViewSocLink,
+      socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}nominal/${String(socDetails.id)}`,
+      showSocReferButton: Boolean(socEnabled && !socDetails && isSocUser),
+      socReferUrl: socEnabled && socUrl && `${socUrl}refer/offender/${offenderNo}`,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
