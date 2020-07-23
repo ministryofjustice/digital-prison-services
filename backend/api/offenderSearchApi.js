@@ -18,8 +18,8 @@ const offenderSearchApiFactory = client => {
       latestLocationId: prisonId,
       latestLocation: prisonName,
       currentlyInPrison: status && status.startsWith('ACTIVE') ? 'Y' : 'N',
-      currentWorkingFirstName: 'Working first',
-      currentWorkingLastName: 'Working last',
+      currentWorkingFirstName: firstName,
+      currentWorkingLastName: lastName,
     }))
 
   const post = (context, url, data) => client.post(context, url, data).then(processResponse(context))
@@ -27,7 +27,7 @@ const offenderSearchApiFactory = client => {
   const globalSearch = (context, params, pageSizeOverride) => {
     const { page, size } = contextProperties.getPaginationForPageRequest(context)
     const pageSize = pageSizeOverride || size
-    post(context, `/prisoner-search/global?${mapToQueryString({ page, size: pageSize })}`, params).then(
+    return post(context, `/prisoner-search/global?${mapToQueryString({ page, size: pageSize })}`, params).then(
       changeFieldNames()
     )
   }
