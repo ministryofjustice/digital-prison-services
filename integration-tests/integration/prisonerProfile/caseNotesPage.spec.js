@@ -74,7 +74,7 @@ context('A user can view prisoner case notes', () => {
       .caseNoteDetails()
       .find('h3')
       .then($element => {
-        expect($element.get(0).innerText.trim()).to.eq('Incentive Level : Incentive Level Warning')
+        expect($element.get(0).innerText.trim()).to.eq('Incentive Level: Incentive Level Warning')
       })
 
     rows
