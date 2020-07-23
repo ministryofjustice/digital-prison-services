@@ -174,9 +174,14 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
   const displayCreateAlertPage = async (req, res) => {
     const { offenderNo } = req.params
     try {
-      const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { bookingId, firstName, lastName, alerts } = await elite2Api.getDetails(res.locals, offenderNo, true)
 
       const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
+
+      const prisonersActiveAlertCodes = alerts
+        .filter(alert => !alert.expired)
+        .map(alert => alert.alertCode)
+        .join(',')
 
       const offenderDetails = {
         bookingId,
@@ -199,6 +204,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
       return res.render('alerts/createAlertForm.njk', {
         offenderDetails,
+        prisonersActiveAlertCodes,
         offenderNo,
         bookingId,
         formValues: { effectiveDate: moment().format('DD/MM/YYYY'), ...req.body },
@@ -220,7 +226,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
   const handleCreateAlertForm = async (req, res) => {
     const { offenderNo } = req.params
-    const { bookingId, alertType, alertCode, comments, effectiveDate: alertDate } = req.body
+    const { bookingId, alertType, alertCode, comments, effectiveDate: alertDate, existingAlerts } = req.body
     const errors = []
 
     if (!alertType) {
@@ -233,6 +239,13 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     if (!alertCode) {
       errors.push({
         text: 'Select the alert',
+        href: '#alert-code',
+      })
+    }
+
+    if (existingAlerts && existingAlerts.split(',').includes(alertCode)) {
+      errors.push({
+        text: 'Select an alert that does not already exist for this offender',
         href: '#alert-code',
       })
     }
@@ -281,7 +294,12 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     }
 
     if (errors.length > 0) {
-      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName, alerts } = await elite2Api.getDetails(res.locals, offenderNo, true)
+
+      const prisonersActiveAlertCodes = alerts
+        .filter(alert => !alert.expired)
+        .map(alert => alert.alertCode)
+        .join(',')
 
       const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
 
@@ -297,6 +315,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         offenderNo,
         formValues: { ...req.body },
         offenderDetails,
+        prisonersActiveAlertCodes,
         alertTypes: alertTypes.alertTypes
           .filter(type => type.activeFlag === 'Y')
           .map(type => ({ value: type.value, text: type.description })),

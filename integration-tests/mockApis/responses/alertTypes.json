@@ -130,6 +130,13 @@
     "activeFlag": "Y",
     "listSeq": 2,
     "systemDataFlag": "N",
-    "subCodes": []
+    "subCodes": [
+      {
+        "code": "XC",
+        "parentCode": "X",
+        "activeFlag": "Y",
+        "description": "Risk to females"
+      }
+    ]
   }
 ]

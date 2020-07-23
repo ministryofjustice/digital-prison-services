@@ -44,6 +44,7 @@
 
   <form method="POST" novalidate="novalidate">
       <input type="hidden" name="bookingId" value={{bookingId}} />
+      <input type="hidden" name="existingAlerts" value="{{ prisonersActiveAlertCodes }}"/>
       {{ govukSelect({
             id: "alert-type",
             name: "alertType",
