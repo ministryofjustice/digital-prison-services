@@ -10,11 +10,11 @@ module.exports = sentenceDetails => {
 
   return {
     currentExpectedReleaseDates: [
-      ...(sentenceDetails.homeDetentionCurfewEligibilityDate
+      ...(sentenceDetails.homeDetentionCurfewActualDate
         ? [
             {
-              label: 'Home detention curfew eligibility',
-              value: readableDateFormat(sentenceDetails.homeDetentionCurfewEligibilityDate, 'YYYY-MM-DD'),
+              label: 'Approved for home detention curfew',
+              value: readableDateFormat(sentenceDetails.homeDetentionCurfewActualDate, 'YYYY-MM-DD'),
             },
           ]
         : []),
@@ -76,11 +76,11 @@ module.exports = sentenceDetails => {
         : []),
     ],
     earlyAndTemporaryReleaseEligibilityDates: [
-      ...(sentenceDetails.homeDetentionCurfewActualDate
+      ...(sentenceDetails.homeDetentionCurfewEligibilityDate
         ? [
             {
               label: 'Home detention curfew',
-              value: readableDateFormat(sentenceDetails.homeDetentionCurfewActualDate, 'YYYY-MM-DD'),
+              value: readableDateFormat(sentenceDetails.homeDetentionCurfewEligibilityDate, 'YYYY-MM-DD'),
             },
           ]
         : []),
