@@ -106,6 +106,14 @@ context('A user can view alerts for a prisoner', () => {
         .contains('Change or close')
       cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
+
+    it('Users can view create alert button when none of type', () => {
+      cy.task('stubAlertsForBooking')
+      cy.visit('/prisoner/G3878UK/alerts')
+
+      cy.get('[data-test="no-alerts"]').should('contain.text', 'There are no alerts of this type')
+      cy.get('[data-test="no-alerts-link"]').should('be.visible')
+    })
   })
 
   context('When a prisoner is NOT in a users caseload', () => {
@@ -152,6 +160,7 @@ context('A user can view alerts for a prisoner', () => {
       cy.visit('/prisoner/G3878UK/alerts')
 
       cy.get('[data-test="no-alerts"]').should('contain.text', 'There are no alerts of this type')
+      cy.get('[data-test="no-alerts-link"]').should('not.be.visible')
     })
   })
 })
