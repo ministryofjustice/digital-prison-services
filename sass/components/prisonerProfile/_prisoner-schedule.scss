@@ -1,0 +1,19 @@
+.prisoner-schedule {
+  &__period {
+    @media screen {
+      padding: govuk-spacing(3);
+
+      &--morning {
+        background-color: #e9f3f9;
+      }
+
+      &--afternoon {
+        background-color: #d5e8f4;
+      }
+
+      &--evening {
+        background-color: #bedcee;
+      }
+    }
+  }
+}

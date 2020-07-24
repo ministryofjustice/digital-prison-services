@@ -1,0 +1,68 @@
+
+{% extends "../../partials/layout.njk" %}
+{% from "../macros/prisonerScheduledActivities.njk" import scheduledActivities %}
+
+{% set title = prisonerName + '`s schedule' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: '/prisoner/' + offenderNo
+      },
+      {
+        text: 'Schedule'
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% set firstDay = days | first %}
+  {% set lastDay = days | last %}
+
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{ title }}</h1>
+  <p class="govuk-body govuk-!-font-size-24">{{ firstDay.date }} to {{ lastDay.date }}</p>
+
+  {% if when === 'nextWeek' %}
+    <a class="govuk-body govuk-link" href="./schedule">View 7 days from today</a>
+  {% else %}
+    <a class="govuk-body govuk-link" href="./schedule?when=nextWeek">View 7 days from {{ nextWeekStartDate }}</a>
+  {% endif %}
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  {% for day in days %}
+    <h2 class="govuk-heading-m">{{ day.date }}</h2>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <h3 class="govuk-heading-s">Morning</h3>
+        <div class="prisoner-schedule__period prisoner-schedule__period--morning govuk-body">
+          {{ scheduledActivities(day.periods.morningActivities) }}
+        </div>
+      </div>
+
+      <div class="govuk-grid-column-one-third">
+        <h3 class="govuk-heading-s">Afternoon</h3>
+        <div class="prisoner-schedule__period prisoner-schedule__period--afternoon govuk-body">
+          {{ scheduledActivities(day.periods.afternoonActivities) }}
+        </div>
+      </div>
+
+      <div class="govuk-grid-column-one-third">
+        <h3 class="govuk-heading-s">Evening</h3>
+        <div class="prisoner-schedule__period prisoner-schedule__period--evening govuk-body">
+          {{ scheduledActivities(day.periods.eveningActivities) }}
+        </div>
+      </div>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% endfor %}
+{% endblock %}
