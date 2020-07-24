@@ -6,8 +6,7 @@ config.apis.pathfinder = {
   url: 'http://pathfinder-api/',
 }
 config.apis.soc = {
-  ui_url: 'http://soc-ui/',
-  url: 'http://soc-api/',
+  url: 'http://soc/',
   enabled: true,
 }
 
@@ -147,7 +146,7 @@ describe('prisoner profile service', () => {
         socProfileUrl: null,
         canViewSocLink: false,
         showSocReferButton: false,
-        socReferUrl: 'http://soc-ui/refer/offender/ABC123',
+        socReferUrl: 'http://soc/refer/offender/ABC123',
         alerts: [
           {
             alertCodes: ['XA'],
@@ -444,7 +443,7 @@ describe('prisoner profile service', () => {
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
         expect(profileData.canViewSocLink).toBe(true)
-        expect(profileData.socProfileUrl).toBe('http://soc-ui/nominal/1')
+        expect(profileData.socProfileUrl).toBe('http://soc/nominal/1')
       })
 
       it('should enable SOC when the user has the SOC_COMMUNITY role', async () => {

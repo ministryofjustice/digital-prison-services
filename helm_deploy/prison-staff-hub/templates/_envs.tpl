@@ -170,13 +170,10 @@ env:
   - name: PATHFINDER_ENDPOINT_API_URL
     value: {{ .Values.env.PATHFINDER_ENDPOINT_API_URL | quote }}
 
-  - name: SOC_UI_URL
-    value: {{ .Values.env.SOC_UI_URL | quote }}
+  - name: SOC_URL
+    value: {{ .Values.env.SOC_URL | quote }}
 
-  - name: SOC_ENDPOINT_API_URL
-    value: {{ .Values.env.SOC_ENDPOINT_API_URL | quote }}
-
-  - name: SOC_REFERRAL_ENABLED
-    value: {{ .Values.env.SOC_REFERRAL_ENABLED | quote }}
+  - name: SOC_API_ENABLED
+    value: {{ .Values.env.SOC_API_ENABLED | quote }}
       
 {{- end -}}

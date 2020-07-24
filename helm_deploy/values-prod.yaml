@@ -39,9 +39,8 @@ env:
   PATHFINDER_UI_URL: https://pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://api.pathfinder.service.justice.gov.uk/
   REDIS_ENABLED: true
-  SOC_UI_URL: ''
-  SOC_ENDPOINT_API_URL: ''
-  SOC_REFERRAL_ENABLED: false
+  SOC_URL: https://manage-soc-cases.service.justice.gov.uk
+  SOC_API_ENABLED: false
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
   OFFENDER_SEARCH_API_ENABLED: false
 

@@ -85,10 +85,9 @@ module.exports = {
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
     soc: {
-      url: process.env.SOC_ENDPOINT_API_URL || '',
-      ui_url: process.env.SOC_UI_URL,
+      url: process.env.SOC_URL || '',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
-      enabled: process.env.SOC_REFERRAL_ENABLED === 'true',
+      enabled: process.env.SOC_API_ENABLED === 'true',
     },
     offenderSearch: {
       url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8101',

@@ -5,12 +5,13 @@ const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
     pathfinder: { ui_url: pathfinderUrl },
-    soc: { ui_url: socUrl, enabled: socEnabled },
+    soc: { url: socUrl, enabled: socEnabled },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
   },
   app: { notmEndpointUrl, displayRetentionLink },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
+const logger = require('../log.js')
 
 module.exports = ({
   elite2Api,
@@ -22,6 +23,8 @@ module.exports = ({
   systemOauthClient,
 }) => {
   const getPrisonerProfileData = async (context, offenderNo, username) => {
+    logger.info(`SOC API enabled: ${socEnabled}, SOC URl: ${socUrl}`)
+
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       elite2Api.getDetails(context, offenderNo, true),
