@@ -25,6 +25,7 @@ const { imageFactory } = require('./controllers/images')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const { appointmentsServiceFactory } = require('./services/appointmentsService')
 const { alertFactory } = require('./controllers/alert')
+const { caseNoteFactory } = require('./controllers/caseNote')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
@@ -177,6 +178,14 @@ const setup = ({
   router.post(
     '/offenders/:offenderNo/create-alert',
     handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).handleCreateAlertForm)
+  )
+  router.get(
+    '/offenders/:offenderNo/add-case-note',
+    handleErrors(caseNoteFactory(elite2Api, caseNotesApi).displayCreateCaseNotePage)
+  )
+  router.post(
+    '/offenders/:offenderNo/add-case-note',
+    handleErrors(caseNoteFactory(elite2Api, caseNotesApi).handleCreateCaseNoteForm)
   )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',

@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% extends "../partials/layout.njk" %}
 
@@ -38,12 +39,11 @@
   <h1 class="govuk-heading-l">
     {{title}}
   </h1>
-  <p class="govuk-caption-l"><span class="govuk-!-font-weight-bold">Prison number:</span> {{offenderNo}}</p>
+  <p class="govuk-body"><span class="govuk-!-font-weight-bold">Prison number:</span> {{offenderNo}}</p>
 
   <input type="hidden" name="subTypeUrl" value="{{ subTypesRootUrl }}"/>
 
   <form method="POST" novalidate="novalidate">
-    <input type="hidden" name="bookingId" value={{bookingId}} />
     {{ govukSelect({
           id: "type",
           name: "type",
@@ -62,7 +62,7 @@
               text: "Sub-type"
           },
           items: subTypes| addDefaultSelectedVale('Select') | setSelected(formValues.subType),
-          errorMessage: errors | findError('alert-code')
+          errorMessage: errors | findError('sub-type')
       }) }}
     </div>
 
@@ -83,7 +83,7 @@
 
     {{ datePicker({
             id: 'date',
-            label: 'date',
+            label: 'Date',
             name: 'date',
             date: formValues.date,
             errorMessage: errors | findError('date'),
@@ -93,24 +93,48 @@
     <div class="govuk-form-group">
       <fieldset class="govuk-fieldset" role="group" aria-describedby="case-note-time-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-          <p class="govuk-fieldset__heading">
+          <p class="govuk-fieldset__heading govuk-!-font-weight-regular">
             Time
           </p>
         </legend>
         <span id="case-note-time-hint" class="govuk-hint">
           Enter in the 24 hour clock. For example 9 08 or 17 32.
         </span>
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="hours">
-            Hours
-          </label>
-          <input class="govuk-input govuk-input--width-2" id="hours" name="hours" type="text" pattern="[0-9]*" inputmode="numeric">
-        </div>
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="minutes">
-            Minutes
-          </label>
-          <input class="govuk-input govuk-input--width-2" id="minutes" name="minutes" type="text" pattern="[0-9]*" inputmode="numeric">
+        <div class="govuk-date-input">
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+            {{ govukInput({
+                label: {
+                  text: "Hours"
+                },
+                id: "hours",
+                name: "hours",
+                classes: "govuk-input govuk-date-input__input govuk-input--width-2",
+                attributes: {
+                  pattern: "[0-9]*",
+                  inputmode: "numeric"
+                },
+                errorMessage: errors | findError('hours')
+              }) }}
+            </div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              {{ govukInput({
+                label: {
+                  text: "Minutes"
+                },
+                id: "minutes",
+                name: "minutes",
+                classes: "govuk-input govuk-date-input__input govuk-input--width-2",
+                attributes: {
+                  pattern: "[0-9]*",
+                  inputmode: "numeric"
+                },
+                errorMessage: errors | findError('minutes')
+              }) }}
+            </div>
+          </div>
         </div>
       </fieldset>
     </div>
@@ -125,5 +149,5 @@
   </form>
 {% endblock %}
 {% block pageScripts %}
-    <script src="/js/alerts.js"></script>
+    <script src="/js/caseNotes.js"></script>
 {% endblock %}

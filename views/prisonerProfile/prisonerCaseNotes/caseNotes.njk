@@ -137,9 +137,7 @@
                 <div class="case-notes-details">
                     <h3 class="govuk-heading-s">{{ caseNote.caseNoteDetailColumn.typeDescription }}: {{ caseNote.caseNoteDetailColumn.subTypeDescription }}</h3>
 
-                    <p class="govuk-body">
-                        {{ caseNote.caseNoteDetailColumn.text }}
-                    </p>
+                    <pre class="govuk-body">{{ caseNote.caseNoteDetailColumn.text }}</pre>
 
                     {% if caseNote.caseNoteDetailColumn.amendments.length == 0 %}
                         {{ links(caseNote) }}
