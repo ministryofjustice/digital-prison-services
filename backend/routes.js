@@ -83,7 +83,10 @@ const setup = ({
   caseNotesApi,
   allocationManagerApi,
   pathfinderApi,
+  offenderSearchApi,
 }) => {
+  const globalSearchApi = config.apis.offenderSearch.enabled ? offenderSearchApi : elite2Api
+
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
@@ -91,7 +94,7 @@ const setup = ({
     houseblockListService: houseblockListFactory(elite2Api, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
     establishmentRollService: establishmentRollFactory(elite2Api),
-    globalSearchService: globalSearchFactory(elite2Api),
+    globalSearchService: globalSearchFactory(elite2Api, globalSearchApi),
     movementsService: movementsServiceFactory(elite2Api, systemOauthClient),
     offenderLoader: offenderLoaderFactory(elite2Api),
     appointmentsService: appointmentsServiceFactory(elite2Api),

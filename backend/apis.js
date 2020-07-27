@@ -10,6 +10,7 @@ const { caseNotesApiFactory } = require('./api/caseNotesApi')
 const { allocationManagerApiFactory } = require('./api/allocationManagerApi')
 const { tokenVerificationApiFactory } = require('./api/tokenVerificationApi')
 const { pathfinderApiFactory } = require('./api/pathfinderApi')
+const { offenderSearchApiFactory } = require('./api/offenderSearchApi')
 
 const elite2Api = elite2ApiFactory(
   clientFactory({
@@ -83,6 +84,13 @@ const pathfinderApi = pathfinderApiFactory(
   })
 )
 
+const offenderSearchApi = offenderSearchApiFactory(
+  clientFactory({
+    baseUrl: config.apis.offenderSearch.url,
+    timeout: config.apis.offenderSearch.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   elite2Api,
   whereaboutsApi,
@@ -94,4 +102,5 @@ module.exports = {
   tokenVerificationApi,
   allocationManagerApi,
   pathfinderApi,
+  offenderSearchApi,
 }
