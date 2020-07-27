@@ -17,8 +17,8 @@ ingress:
   path: /
 
 env:
-  API_ENDPOINT_URL: https://gateway.preprod.nomis-api.service.hmpps.dsd.io/elite2api/
-  OAUTH_ENDPOINT_URL: https://gateway.preprod.nomis-api.service.hmpps.dsd.io/auth/
+  API_ENDPOINT_URL: https://api-preprod.prison.service.justice.gov.uk/
+  OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth/
   NN_ENDPOINT_URL: https://digital-preprod.prison.service.justice.gov.uk/
   API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
   LICENCES_URL: https://licences-preprod.prison.service.justice.gov.uk/
