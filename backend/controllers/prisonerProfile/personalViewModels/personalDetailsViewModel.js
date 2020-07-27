@@ -4,7 +4,7 @@ const getValueByType = require('../../../shared/getValueByType')
 
 module.exports = ({ prisonerDetails, property }) => {
   const { age, dateOfBirth, birthPlace, profileInformation, physicalAttributes } = prisonerDetails || {}
-  const { gender, ethnicity } = physicalAttributes || {}
+  const { gender, ethnicity, raceCode } = physicalAttributes || {}
 
   const dietValue = getValueByType('DIET', profileInformation, 'resultValue')
   const domesticAbusePerpValue = capitalize(getValueByType('DOMESTIC', profileInformation, 'resultValue'))
@@ -31,7 +31,7 @@ module.exports = ({ prisonerDetails, property }) => {
       { label: 'Date of Birth', value: dateOfBirth && moment(dateOfBirth).format('DD/MM/YYYY') },
       { label: 'Place of Birth', value: birthPlace && capitalize(birthPlace) },
       { label: 'Gender', value: gender },
-      { label: 'Ethnicity', value: ethnicity },
+      { label: 'Ethnicity', value: ethnicity && raceCode && `${ethnicity} (${raceCode})` },
       { label: 'Religion or belief', value: getValueByType('RELF', profileInformation, 'resultValue') },
       { label: 'Nationality', value: getValueByType('NAT', profileInformation, 'resultValue') },
       ...(otherNationalitiesValue ? [{ label: 'Other nationalities', value: otherNationalitiesValue }] : []),

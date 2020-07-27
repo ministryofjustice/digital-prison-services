@@ -385,6 +385,7 @@ describe('prisoner personal', () => {
             physicalAttributes: {
               gender: 'Male',
               ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
+              raceCode: 'W1',
             },
             profileInformation: [{ type: 'RELF', resultValue: 'Christian' }, { type: 'NAT', resultValue: 'British' }],
           })
@@ -402,7 +403,7 @@ describe('prisoner personal', () => {
                   { label: 'Date of Birth', value: '12/10/1990' },
                   { label: 'Place of Birth', value: 'Doncaster' },
                   { label: 'Gender', value: 'Male' },
-                  { label: 'Ethnicity', value: 'White: Eng./Welsh/Scot./N.Irish/British' },
+                  { label: 'Ethnicity', value: 'White: Eng./Welsh/Scot./N.Irish/British (W1)' },
                   { label: 'Religion or belief', value: 'Christian' },
                   { label: 'Nationality', value: 'British' },
                 ],

@@ -519,6 +519,7 @@ context('Prisoner personal', () => {
             physicalAttributes: {
               gender: 'Male',
               ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
+              raceCode: 'W1',
               heightMetres: 1.91,
               weightKilograms: 86,
             },
@@ -732,7 +733,7 @@ context('Prisoner personal', () => {
                 expect($summaryValues.get(1).innerText).to.contain('12/10/1990')
                 expect($summaryValues.get(2).innerText).to.contain('Doncaster')
                 expect($summaryValues.get(3).innerText).to.contain('Male')
-                expect($summaryValues.get(4).innerText).to.contain('White: Eng./Welsh/Scot./N.Irish/British')
+                expect($summaryValues.get(4).innerText).to.contain('White: Eng./Welsh/Scot./N.Irish/British (W1)')
                 expect($summaryValues.get(5).innerText).to.contain('Christian')
                 expect($summaryValues.get(6).innerText).to.contain('British')
                 expect($summaryValues.get(7).innerText).to.contain('Hetrosexual')
