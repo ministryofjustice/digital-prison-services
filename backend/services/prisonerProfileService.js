@@ -11,7 +11,6 @@ const {
   app: { notmEndpointUrl, displayRetentionLink },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
-const logger = require('../log.js')
 
 module.exports = ({
   elite2Api,
