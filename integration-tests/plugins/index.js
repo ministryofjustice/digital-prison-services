@@ -14,6 +14,7 @@ const alertsResponse = require('../mockApis/responses/alertsResponse')
 const allocationManager = require('../mockApis/allocationManager')
 const community = require('../mockApis/community')
 const pathfinder = require('../mockApis/pathfinder')
+const socApi = require('../mockApis/soc')
 const offenderSearch = require('../mockApis/offenderSearch')
 
 const { resetStubs } = require('../mockApis/wiremock')
@@ -278,6 +279,7 @@ module.exports = on => {
     stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
     stubUserMeRoles: roles => auth.stubUserMeRoles(roles),
     stubPathFinderOffenderDetails: details => pathfinder.getOffenderDetails(details),
+    stubSocOffenderDetails: details => socApi.stubGetOffenderDetails(details),
     stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
       Promise.all([
         elite2api.stubVisitsWithVisitors(visitsWithVisitors),

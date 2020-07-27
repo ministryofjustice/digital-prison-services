@@ -502,6 +502,53 @@ context('Prisoner quick look', () => {
       )
     })
   })
+
+  context('When a user has a SOC role', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'SOC_CUSTODY' }],
+      })
+    })
+
+    context('And prisoner is not in SOC', () => {
+      beforeEach(() => {
+        cy.task('stubSocOffenderDetails', {
+          status: 404,
+          body: { message: 'Offender not found' },
+          offenderNumber: offenderNo,
+        })
+      })
+      it('Should show Refer to SOC button', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+        cy.get('[data-test="soc-referral-button"]')
+          .should('contain.text', 'Refer to SOC')
+          .and('have.attr', 'href')
+          .and('match', RegExp(`.*?/offender/${offenderNo}$`))
+      })
+    })
+
+    context('And prisoner is in SOC', () => {
+      beforeEach(() => {
+        cy.task('stubSocOffenderDetails', {
+          status: 200,
+          body: { id: 1, status: 'ACTIVE', nomsId: offenderNo, history: [], band: '2' },
+          offenderNumber: offenderNo,
+        })
+      })
+      it('Should show View SOC profile link', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+        cy.get('[data-test="soc-profile-link"]')
+          .should('contain.text', 'View SOC profile')
+          .and('have.attr', 'href')
+          .and('match', RegExp('.*?/nominal/1$'))
+      })
+    })
+  })
 })
 
 module.exports = { quickLookFullDetails }

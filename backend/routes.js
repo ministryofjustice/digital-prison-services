@@ -84,6 +84,7 @@ const setup = ({
   caseNotesApi,
   allocationManagerApi,
   pathfinderApi,
+  socApi,
   offenderSearchApi,
 }) => {
   const globalSearchApi = config.apis.offenderSearch.enabled ? offenderSearchApi : elite2Api
@@ -296,6 +297,7 @@ const setup = ({
       pathfinderApi,
       dataComplianceApi,
       logError,
+      socApi,
     })
   )
 
