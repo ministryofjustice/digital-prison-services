@@ -27,7 +27,7 @@ const offenderSearchApiFactory = client => {
   const globalSearch = (context, params, pageSizeOverride) => {
     const { page, size } = contextProperties.getPaginationForPageRequest(context)
     const pageSize = pageSizeOverride || size
-    return post(context, `/prisoner-search/global?${mapToQueryString({ page, size: pageSize })}`, params).then(
+    return post(context, `/global-search?${mapToQueryString({ page, size: pageSize })}`, params).then(
       changeFieldNames()
     )
   }
