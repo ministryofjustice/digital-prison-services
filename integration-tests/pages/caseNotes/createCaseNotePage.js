@@ -21,7 +21,7 @@ const createCaseNotePage = () =>
 export default {
   verifyOnPage: createCaseNotePage,
   goTo: offenderNo => {
-    cy.visit(`/offenders/${offenderNo}/add-case-note`)
+    cy.visit(`/prisoner/${offenderNo}/add-case-note`)
     return createCaseNotePage()
   },
 }
