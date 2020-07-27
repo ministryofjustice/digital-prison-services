@@ -3,13 +3,13 @@ const shortid = require('shortid')
 const log = require('../log')
 const { isOffenderNumber } = require('../utils')
 
-const globalSearchFactory = elite2Api => {
+const globalSearchFactory = (elite2Api, globalSearchApi) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth) =>
-    elite2Api.globalSearch(context, { offenderNo, gender, location, dateOfBirth, includeAliases: true })
+    globalSearchApi.globalSearch(context, { offenderNo, gender, location, dateOfBirth, includeAliases: true })
 
   const searchByName = (context, name, gender, location, dateOfBirth) => {
     const [lastName, firstName] = name.split(' ')
-    return elite2Api.globalSearch(context, {
+    return globalSearchApi.globalSearch(context, {
       lastName,
       firstName,
       gender,
