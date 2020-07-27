@@ -174,6 +174,27 @@ context('Prisoner search', () => {
       })
     })
 
+    it('should have the correct link to the prisoner profile', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1, inmate2],
+      })
+      cy.visit(`/prisoner-search?view=grid`)
+
+      cy.get('[data-test="prisoner-profile-link"]').then($prisonerProfileLinks => {
+        cy.get($prisonerProfileLinks)
+          .its('length')
+          .should('eq', 2)
+        cy.get($prisonerProfileLinks.get(0))
+          .should('have.attr', 'href')
+          .should('include', '/prisoner/A1234BC')
+        cy.get($prisonerProfileLinks.get(1))
+          .should('have.attr', 'href')
+          .should('include', '/prisoner/B4567CD')
+      })
+    })
+
     it('should maintain search options when sorting', () => {
       cy.task('stubInmates', {
         locationId: 'MDI',
