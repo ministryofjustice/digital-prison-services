@@ -169,5 +169,11 @@ env:
 
   - name: PATHFINDER_ENDPOINT_API_URL
     value: {{ .Values.env.PATHFINDER_ENDPOINT_API_URL | quote }}
+
+  - name: SOC_URL
+    value: {{ .Values.env.SOC_URL | quote }}
+
+  - name: SOC_API_ENABLED
+    value: {{ .Values.env.SOC_API_ENABLED | quote }}
       
 {{- end -}}

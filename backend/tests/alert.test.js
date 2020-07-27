@@ -470,7 +470,7 @@ describe('alert management', () => {
             errors: [
               { href: '#alert-type', text: 'Select the type of alert' },
               { href: '#alert-code', text: 'Select the alert' },
-              { href: '#effective-date', text: 'Enter a date in the format DD/MM/YYYY - for example, 27/03/2020' },
+              { href: '#effective-date', text: 'Enter a real date in the format DD/MM/YYYY - for example, 27/03/2020' },
             ],
           })
         )

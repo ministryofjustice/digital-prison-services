@@ -52,6 +52,11 @@
             <a class="govuk-link" data-qa="path-finder-link" href="{{ prisonerProfileData.pathfinderProfileUrl }}">View Pathfinder profile</a>
         </span>
     {% endif %}
+    {%  if prisonerProfileData.canViewSocLink %}
+        <span class="govuk-body">
+            <a class="govuk-link" data-qa="soc-link" href="{{ prisonerProfileData.socProfileUrl }}" data-test="soc-profile-link">View SOC profile</a>
+        </span>
+    {% endif %}
 </div>
 
 <div class="prisoner-header">
@@ -84,12 +89,18 @@
             </a>
         {% endif %}
 
+        {% if prisonerProfileData.showSocReferButton %}
+            <a  href="{{ prisonerProfileData.socReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank" data-test="soc-referral-button">
+                Refer to SOC
+            </a>
+        {% endif %}
+
         {% if prisonerProfileData.userCanEdit %}
             {{ govukButton({
-              text: "Add case note",
+              text: "Add a case note",
               element: "a",
               classes: "govuk-button--link govuk-!-margin-bottom-3",
-              href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
+              href: "/prisoner/" + prisonerProfileData.offenderNo + "/add-case-note"
             }) }}
 
         {% if prisonerProfileData.showAddKeyworkerSession %}
