@@ -233,6 +233,23 @@ const getNamesFromString = string => {
   )
 }
 
+const groupBy = (array, key) => {
+  return array.reduce((acc, current) => {
+    const group = current[key]
+
+    return { ...acc, [group]: [...(acc[group] || []), current] }
+  }, {})
+}
+
+const times = number => func => {
+  const iter = index => {
+    if (index === number) return
+    func(index)
+    iter(index + 1)
+  }
+  return iter(0)
+}
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -269,4 +286,6 @@ module.exports = {
   putLastNameFirst,
   hasLength,
   getNamesFromString,
+  groupBy,
+  times,
 }
