@@ -6,7 +6,7 @@ config.apis.pathfinder = {
   url: 'http://pathfinder-api/',
 }
 config.apis.soc = {
-  url: 'http://soc/',
+  url: 'http://soc',
   enabled: true,
 }
 

@@ -86,7 +86,7 @@ module.exports = {
     },
     soc: {
       url: process.env.SOC_URL || '',
-      timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
+      timeoutSeconds: 10,
       enabled: process.env.SOC_API_ENABLED === 'true',
     },
     offenderSearch: {

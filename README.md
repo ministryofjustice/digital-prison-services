@@ -119,6 +119,6 @@ now display 'run' icons for the class and each of its tests methods.
 
 ## Feature toggles
 - **SOC API:**
-This will enable/dislable to abilty to refer a prisoner to the SOC service and view their SOC profile if already referred.
+This will enable/disable to ability to refer a prisoner to the SOC service and view their SOC profile if already referred.
 To enable the feature, change the environment variable of **SOC_API_ENABLED** to **true**. Any other value will disable the feature. 
 

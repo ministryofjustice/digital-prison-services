@@ -23,8 +23,6 @@ module.exports = ({
   systemOauthClient,
 }) => {
   const getPrisonerProfileData = async (context, offenderNo, username) => {
-    logger.info(`SOC API enabled: ${socEnabled}, SOC URl: ${socUrl}`)
-
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       elite2Api.getDetails(context, offenderNo, true),
@@ -128,9 +126,9 @@ module.exports = ({
       showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderUser),
       pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
       canViewSocLink: socEnabled && canViewSocLink,
-      socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}nominal/${String(socDetails.id)}`,
+      socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}/nominal/${String(socDetails.id)}`,
       showSocReferButton: Boolean(socEnabled && !socDetails && isSocUser),
-      socReferUrl: socEnabled && socUrl && `${socUrl}refer/offender/${offenderNo}`,
+      socReferUrl: socEnabled && socUrl && `${socUrl}/refer/offender/${offenderNo}`,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
