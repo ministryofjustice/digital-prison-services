@@ -72,7 +72,7 @@ context('Prisoner sentence and release', () => {
       .currentReleaseDates()
       .find('dt')
       .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Home detention curfew eligibility\n        ')
+        expect($summaryKeys.get(0).innerText).to.eq('\n          Approved for home detention curfew\n        ')
         expect($summaryKeys.get(1).innerText).to.eq('\n          Approved for parole\n        ')
         expect($summaryKeys.get(2).innerText).to.eq('\n          Conditional release\n        ')
         expect($summaryKeys.get(3).innerText).to.eq('\n          Post recall release\n        ')
@@ -86,7 +86,7 @@ context('Prisoner sentence and release', () => {
       .currentReleaseDates()
       .find('dd')
       .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          3 July 2019\n        ')
+        expect($summaryValues.get(0).innerText).to.eq('\n          2 June 2021\n        ')
         expect($summaryValues.get(1).innerText).to.eq('\n          3 February 2022\n        ')
         expect($summaryValues.get(2).innerText).to.eq('\n          1 February 2020\n        ')
         expect($summaryValues.get(3).innerText).to.eq('\n          3 February 2021\n        ')
@@ -112,7 +112,7 @@ context('Prisoner sentence and release', () => {
       .earlyTemporaryDates()
       .find('dd')
       .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          2 June 2021\n        ')
+        expect($summaryValues.get(0).innerText).to.eq('\n          3 July 2019\n        ')
         expect($summaryValues.get(1).innerText).to.eq('\n          3 February 2025\n        ')
         expect($summaryValues.get(2).innerText).to.eq('\n          12 November 2018\n        ')
         expect($summaryValues.get(3).innerText).to.eq('\n          10 October 2017\n        ')

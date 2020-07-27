@@ -14,7 +14,7 @@ context('A user can add an appointment', () => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('resetAndStubTokenVerification')
     const offenderNo = 'A12345'
-    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+    cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
 
@@ -55,6 +55,26 @@ context('A user can add an appointment', () => {
         expect($errors.get(0).innerText).to.contain('Select the type of alert')
         expect($errors.get(1).innerText).to.contain('Select the alert')
         expect($errors.get(2).innerText).to.contain('Enter why you are creating this alert')
+      })
+  })
+
+  it('Should show correct message when offender already has this alert', () => {
+    const createAlertPage = CreateAlertPage.verifyOnPage()
+    const form = createAlertPage.form()
+    form.alertType().select('X')
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(50)
+    cy.get('#alert-code').select('XC')
+    form.comments().type('Test comment')
+    form.submitButton().click()
+
+    CreateAlertPage.verifyOnPage()
+    createAlertPage.errorSummaryTitle().contains('There is a problem')
+    createAlertPage
+      .errorSummaryList()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Select an alert that does not already exist for this offender')
       })
   })
 })

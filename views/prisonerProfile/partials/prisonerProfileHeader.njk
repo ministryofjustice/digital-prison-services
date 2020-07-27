@@ -2,8 +2,8 @@
 {% from "../../macros/alertFlags.njk" import alertFlags %}
 {% from "../../macros/categoryFlag.njk" import categoryFlag %}
 
-{% macro headerItem(label, content, missingValue) %}
-  <li>
+{% macro headerItem(label, content, missingValue, classes) %}
+  <li class="{{ classes }}">
     <strong>{{ label }}</strong>
     <br>
     {{ content | showDefault(missingValue or 'Not entered') | safe}}
@@ -68,7 +68,7 @@
 
     <ul class="prisoner-header__details__information">
       {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
-      {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned') }}
+      {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned', 'govuk-!-margin-bottom-0') }}
       {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session') }}
       {{ headerItem('Incentive level', incentiveLevelHtml) }}
       {{ headerItem('CSRA', prisonerProfileData.csra) }}

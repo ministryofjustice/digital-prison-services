@@ -98,7 +98,7 @@ describe('prisoner sentence and release', () => {
         prisonerProfileData,
         releaseDates: {
           currentExpectedReleaseDates: [
-            { label: 'Home detention curfew eligibility', value: '3 July 2019' },
+            { label: 'Approved for home detention curfew', value: '2 June 2021' },
             { label: 'Approved for parole', value: '3 February 2022' },
             { label: 'Conditional release', value: '3 February 2020' },
             { label: 'Post recall release', value: '1 April 2020' },
@@ -108,7 +108,7 @@ describe('prisoner sentence and release', () => {
             { label: 'Detention training post recall date', value: '16 October 2021' },
           ],
           earlyAndTemporaryReleaseEligibilityDates: [
-            { label: 'Home detention curfew', value: '2 June 2021' },
+            { label: 'Home detention curfew', value: '3 July 2019' },
             { label: 'Release on temporary licence', value: '3 February 2025' },
             { label: 'Early removal scheme', value: '12 November 2018' },
             { label: 'Tariff early removal scheme', value: '10 October 2017' },
@@ -709,7 +709,7 @@ describe('prisoner sentence and release', () => {
         prisonerProfileData,
         releaseDates: {
           currentExpectedReleaseDates: [
-            { label: 'Home detention curfew eligibility', value: '3 July 2019' },
+            { label: 'Approved for home detention curfew', value: '2 June 2021' },
             { label: 'Approved for parole', value: '3 February 2022' },
             { label: 'Conditional release', value: '1 February 2020' },
             { label: 'Post recall release', value: '3 February 2021' },
@@ -719,7 +719,7 @@ describe('prisoner sentence and release', () => {
             { label: 'Detention training post recall date', value: '16 October 2020' },
           ],
           earlyAndTemporaryReleaseEligibilityDates: [
-            { label: 'Home detention curfew', value: '2 June 2021' },
+            { label: 'Home detention curfew', value: '3 July 2019' },
             { label: 'Release on temporary licence', value: '3 February 2025' },
             { label: 'Early removal scheme', value: '12 November 2018' },
             { label: 'Parole', value: '3 April 2020' },
