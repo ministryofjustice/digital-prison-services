@@ -5,7 +5,16 @@ const { isOffenderNumber } = require('../utils')
 
 const globalSearchFactory = (elite2Api, globalSearchApi) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth) =>
-    globalSearchApi.globalSearch(context, { offenderNo, gender, location, dateOfBirth, includeAliases: true })
+    // offenderNo can be removed once we have fully switched to prisoner offender search instead, i.e. the env variable
+    // OFFENDER_SEARCH_API_ENABLED has been removed
+    globalSearchApi.globalSearch(context, {
+      offenderNo,
+      prisonerIdentifier: offenderNo,
+      gender,
+      location,
+      dateOfBirth,
+      includeAliases: true,
+    })
 
   const searchByName = (context, name, gender, location, dateOfBirth) => {
     const [lastName, firstName] = name.split(' ')
