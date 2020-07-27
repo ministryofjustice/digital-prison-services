@@ -180,11 +180,11 @@ const setup = ({
     handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).handleCreateAlertForm)
   )
   router.get(
-    '/offenders/:offenderNo/add-case-note',
+    '/prisoner/:offenderNo/add-case-note',
     handleErrors(caseNoteFactory(elite2Api, caseNotesApi).displayCreateCaseNotePage)
   )
   router.post(
-    '/offenders/:offenderNo/add-case-note',
+    '/prisoner/:offenderNo/add-case-note',
     handleErrors(caseNoteFactory(elite2Api, caseNotesApi).handleCreateCaseNoteForm)
   )
   router.get(
