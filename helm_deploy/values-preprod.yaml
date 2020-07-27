@@ -43,7 +43,7 @@ env:
   SOC_URL: https://manage-soc-cases-preprod.service.justice.gov.uk
   SOC_API_ENABLED: false
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
-  OFFENDER_SEARCH_API_ENABLED: false
+  OFFENDER_SEARCH_API_ENABLED: true
 
 whitelist:
   office: "217.33.148.210/32"
