@@ -1,13 +1,14 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
-const { globalSearch } = require('../controllers/globalSearch').globalSearchFactory(elite2Api)
+const globalSearchApi = {}
+const { globalSearch } = require('../controllers/globalSearch').globalSearchFactory(elite2Api, globalSearchApi)
 
 jest.mock('shortid', () => ({
   generate: () => '123',
 }))
 
 beforeEach(() => {
-  elite2Api.globalSearch = jest.fn()
+  globalSearchApi.globalSearch = jest.fn()
   elite2Api.getLastPrison = jest.fn()
 })
 
@@ -149,14 +150,14 @@ function getLastPrisonResponseCourtVisit() {
 
 describe('Global Search controller', () => {
   it('Should return no results as an empty array', async () => {
-    elite2Api.globalSearch.mockReturnValue([])
+    globalSearchApi.globalSearch.mockReturnValue([])
 
     const response = await globalSearch({}, 'text', '', '', '')
     expect(response).toEqual([])
 
-    expect(elite2Api.globalSearch).toHaveBeenCalled()
+    expect(globalSearchApi.globalSearch).toHaveBeenCalled()
 
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -171,14 +172,14 @@ describe('Global Search controller', () => {
 
   it('Should return results', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const response = await globalSearch({}, 'text')
     expect(response).toEqual(createResponseWithFormattedDate())
   })
 
   it('Should add released text', async () => {
-    elite2Api.globalSearch.mockReturnValue(createOutResponse())
+    globalSearchApi.globalSearch.mockReturnValue(createOutResponse())
     elite2Api.getLastPrison.mockReturnValue(getLastPrisonResponseReleased())
 
     const response = await globalSearch({}, 'text')
@@ -186,7 +187,7 @@ describe('Global Search controller', () => {
   })
 
   it('Should add other movement text', async () => {
-    elite2Api.globalSearch.mockReturnValue(createOutResponse())
+    globalSearchApi.globalSearch.mockReturnValue(createOutResponse())
     elite2Api.getLastPrison.mockReturnValue(getLastPrisonResponseCourtVisit())
 
     const response = await globalSearch({}, 'text')
@@ -195,11 +196,11 @@ describe('Global Search controller', () => {
 
   it('Should detect an offenderId', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const offenderNo = 'Z4444YY'
     await globalSearch({}, offenderNo, '', '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -213,11 +214,11 @@ describe('Global Search controller', () => {
 
   it('Should detect an offenderId with lowercase letters', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const offenderNo = 'z4444yy'
     await globalSearch({}, offenderNo, '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -231,10 +232,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, 'last first', '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -249,10 +250,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words and remove commas', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ',last, first,', '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -267,10 +268,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words with no space between comma', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ',last, first,', '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -285,10 +286,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words with various spaces and commas', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ', last , first other, ', '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -303,10 +304,10 @@ describe('Global Search controller', () => {
 
   it('Should propagate filter values to global search call', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ', last , first other, ', 'F', 'OUT', '2000-01-02')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '2000-01-02',
@@ -321,11 +322,11 @@ describe('Global Search controller', () => {
 
   it('Should propagate filter values to global search by offender call', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const offenderNo = 'z4444yy'
     await globalSearch({}, offenderNo, 'F', 'OUT', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -339,10 +340,10 @@ describe('Global Search controller', () => {
 
   it('Should ignore leading and trailing whitespace', async () => {
     const apiResponse = createResponse()
-    elite2Api.globalSearch.mockReturnValue(apiResponse)
+    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, '  word  ', '', '', '')
-    expect(elite2Api.globalSearch.mock.calls[0]).toEqual([
+    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
