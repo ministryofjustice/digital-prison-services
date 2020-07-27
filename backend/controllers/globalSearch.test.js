@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const elite2Api = {}
 const globalSearchApi = {}
-const { globalSearch } = require('../controllers/globalSearch').globalSearchFactory(elite2Api, globalSearchApi)
+const { globalSearch } = require('./globalSearch').globalSearchFactory(elite2Api, globalSearchApi)
 
 jest.mock('shortid', () => ({
   generate: () => '123',
@@ -207,6 +207,7 @@ describe('Global Search controller', () => {
         gender: '',
         location: '',
         offenderNo: 'Z4444YY',
+        prisonerIdentifier: 'Z4444YY',
         includeAliases: true,
       },
     ])
@@ -225,6 +226,7 @@ describe('Global Search controller', () => {
         gender: '',
         location: '',
         offenderNo: 'z4444yy',
+        prisonerIdentifier: 'z4444yy',
         includeAliases: true,
       },
     ])
@@ -333,6 +335,7 @@ describe('Global Search controller', () => {
         gender: 'F',
         location: 'OUT',
         offenderNo: 'z4444yy',
+        prisonerIdentifier: 'z4444yy',
         includeAliases: true,
       },
     ])
