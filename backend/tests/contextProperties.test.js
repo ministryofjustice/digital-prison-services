@@ -119,4 +119,31 @@ describe('Should read/write properties', () => {
       expect(contextProperties.getCustomRequestHeaders({})).to.deep.equal({})
     })
   })
+
+  describe('Should handle pagination for page requests', () => {
+    const context = {}
+
+    it('Should set the response pagination properties', () => {
+      contextProperties.setPaginationFromPageRequest(context, {
+        pageable: { pageSize: 10, offset: 1 },
+        totalElements: 100,
+      })
+      expect(contextProperties.getResponsePagination(context)).to.deep.equal({
+        'page-offset': 1,
+        'page-limit': 10,
+        'total-records': 100,
+      })
+    })
+
+    it('Should get the request header pagination properties', () => {
+      context.requestHeaders = {
+        'page-offset': 20,
+        'page-limit': 10,
+      }
+      expect(contextProperties.getPaginationForPageRequest(context)).to.deep.equal({
+        page: 2,
+        size: 10,
+      })
+    })
+  })
 })

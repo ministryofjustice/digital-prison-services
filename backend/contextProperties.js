@@ -56,6 +56,21 @@ const setResponsePagination = (context, headers) => {
   context.responseHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
+const getPaginationForPageRequest = ({ requestHeaders }) => {
+  if (!requestHeaders) return { page: 0, size: 20 }
+
+  const pageOffset = requestHeaders['page-offset']
+  const size = requestHeaders['page-limit'] || 20
+  const page = Math.floor(pageOffset / size) || 0
+
+  return { page, size }
+}
+
+const setPaginationFromPageRequest = (context, { totalElements, pageable: { pageSize, offset } }) => {
+  const c = context
+  c.responseHeaders = { 'page-offset': offset, 'page-limit': pageSize, 'total-records': totalElements }
+}
+
 const getResponsePagination = context => context.responseHeaders || {}
 
 const setCustomRequestHeaders = (context, headers) => {
@@ -76,4 +91,6 @@ module.exports = {
   getResponsePagination,
   setCustomRequestHeaders,
   getCustomRequestHeaders,
+  getPaginationForPageRequest,
+  setPaginationFromPageRequest,
 }
