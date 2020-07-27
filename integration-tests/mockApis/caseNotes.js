@@ -1,4 +1,4 @@
-const { getFor } = require('./wiremock')
+const { getFor, stubFor } = require('./wiremock')
 
 const caseNoteTypes = [
   {
@@ -10,6 +10,7 @@ const caseNoteTypes = [
       {
         code: 'test',
         description: 'Test',
+        activeFlag: 'Y',
       },
     ],
   },
@@ -36,9 +37,30 @@ module.exports = {
       body,
     })
   },
+  stubCreateCaseNote: body => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/casenotes/case-notes/.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: body,
+      },
+    })
+  },
   stubCaseNoteTypes: () => {
     return getFor({
       urlPattern: '/casenotes/case-notes/types',
+      body: caseNoteTypes,
+    })
+  },
+  stubCaseNoteTypesForUser: () => {
+    return getFor({
+      urlPattern: '/casenotes/case-notes/types-for-user',
       body: caseNoteTypes,
     })
   },

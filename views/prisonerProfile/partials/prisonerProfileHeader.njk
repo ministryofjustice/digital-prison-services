@@ -86,10 +86,10 @@
 
         {% if prisonerProfileData.userCanEdit %}
             {{ govukButton({
-              text: "Add case note",
+              text: "Add a case note",
               element: "a",
               classes: "govuk-button--link govuk-!-margin-bottom-3",
-              href: prisonerProfileData.notmEndpointUrl + "offenders/" + prisonerProfileData.offenderNo + "/add-case-note"
+              href: "/prisoner/" + prisonerProfileData.offenderNo + "/add-case-note"
             }) }}
 
         {% if prisonerProfileData.showAddKeyworkerSession %}

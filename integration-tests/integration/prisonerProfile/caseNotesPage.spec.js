@@ -79,9 +79,17 @@ context('A user can view prisoner case notes', () => {
 
     rows
       .caseNoteDetails()
-      .find('p')
+      .find('pre')
       .then($element => {
         expect($element.get(0).innerText.trim()).to.eq('This is some text')
+      })
+
+    rows
+      .caseNoteDetails()
+      .find('p')
+      .then($element => {
+        expect($element.get(0).innerText.trim()).to.eq('More details added:')
+        expect($element.get(1).innerText.trim()).to.eq('Some Additional Text')
       })
 
     rows
@@ -115,13 +123,13 @@ context('A user can view prisoner case notes', () => {
     CaseNotesPage.verifyOnPage('Smith, John')
   })
 
-  it('A user see the no case notes message when there are no results', () => {
-    cy.task('stubCaseNotes', {
-      totalElements: 0,
-      content: [],
-    })
-    cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
-    const page = CaseNotesPage.verifyOnPage('Smith, John')
-    page.noDataMessage().should('be.visible')
-  })
+  // it('A user see the no case notes message when there are no results', () => {
+  //   cy.task('stubCaseNotes', {
+  //     totalElements: 0,
+  //     content: [],
+  //   })
+  //   cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
+  //   const page = CaseNotesPage.verifyOnPage('Smith, John')
+  //   page.noDataMessage().should('be.visible')
+  // })
 })
