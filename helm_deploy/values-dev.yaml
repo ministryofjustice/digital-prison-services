@@ -42,4 +42,4 @@ env:
   PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk/
   REDIS_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
-  OFFENDER_SEARCH_API_ENABLED: false
+  OFFENDER_SEARCH_API_ENABLED: true
