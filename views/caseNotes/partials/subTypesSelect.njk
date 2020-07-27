@@ -1,0 +1,11 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{{ govukSelect({
+    name: 'subType',
+    id: 'sub-type',
+    label: {
+        text: "Sub-type"
+    },
+    items: subTypes | addDefaultSelectedVale('Select', true),
+    errorMessage: errors | findError('sub-type')
+}) }}

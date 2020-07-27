@@ -8,6 +8,7 @@ const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
 const prisonerCaseNotes = require('../controllers/prisonerProfile/prisonerCaseNotes')
 const prisonerSentenceAndRelease = require('../controllers/prisonerProfile/prisonerSentenceAndRelease')
 const prisonerVisits = require('../controllers/prisonerProfile/prisonerVisits')
+const prisonerSchedule = require('../controllers/prisonerProfile/prisonerSchedule')
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
@@ -59,6 +60,7 @@ const controller = ({
     prisonerSentenceAndRelease({ prisonerProfileService, elite2Api, systemOauthClient, logError })
   )
   router.get('/visits', prisonerVisits({ elite2Api, logError }))
+  router.get('/schedule', prisonerSchedule({ elite2Api, logError }))
 
   return router
 }

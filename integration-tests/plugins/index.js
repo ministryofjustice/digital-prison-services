@@ -286,8 +286,16 @@ module.exports = on => {
         elite2api.stubOffenderBasicDetails(offenderBasicDetails),
         elite2api.stubVisitTypes(visitTypes),
       ]),
+    stubSchedule: ({ offenderBasicDetails, thisWeeksSchedule, nextWeeksSchedule }) =>
+      Promise.all([
+        elite2api.stubOffenderBasicDetails(offenderBasicDetails),
+        elite2api.stubScheduleForThisWeek(thisWeeksSchedule),
+        elite2api.stubScheduleForNextWeek(nextWeeksSchedule),
+      ]),
     stubAppointmentsGet: appointments => Promise.all([elite2api.stubAppointmentsGet(appointments)]),
     stubVideoLinkAppointments: appointments => Promise.all([whereabouts.stubVideoLinkAppointments(appointments)]),
     stubCreateAlert: () => Promise.all([elite2api.stubCreateAlert()]),
+    stubCreateCaseNote: () => Promise.all([caseNotes.stubCreateCaseNote()]),
+    stubCaseNoteTypesForUser: () => Promise.all([caseNotes.stubCaseNoteTypesForUser()]),
   })
 }
