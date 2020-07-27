@@ -15,6 +15,7 @@ $govuk-page-width: 1170px;
 @import 'components/prisonerProfile/prisoner-personal';
 @import 'components/prisonerProfile/prisoner-alerts';
 @import 'components/prisonerProfile/prisoner-visits';
+@import 'components/prisonerProfile/prisoner-schedule';
 @import 'components/covid/dashboard';
 @import 'components/prisonerSearch/prisoner-search';
 @import 'components/prisonerSearch/prisoner-panel';
@@ -120,6 +121,14 @@ $govuk-page-width: 1170px;
     font-size: 19pt;
   }
 
+  .govuk-heading-m {
+    font-size: 16pt;
+  }
+
+  .govuk-heading-s {
+    font-size: 14pt;
+  }
+
   .govuk-body-l {
     font-size: 12pt;
   }
@@ -193,10 +202,9 @@ $govuk-page-width: 1170px;
   display: flex;
   flex-direction: row;
   margin-bottom: govuk-spacing(3);
-
 }
 .bottom-line {
-  border-bottom: 1px solid $govuk-border-colour
+  border-bottom: 1px solid $govuk-border-colour;
 }
 .case-notes-created {
   flex-basis: 20%;
