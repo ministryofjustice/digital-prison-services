@@ -24,7 +24,7 @@ describe('offender search api tests', () => {
           },
         }
         const results = [{ prisonerNumber: 'A1234BC' }]
-        mock.post('/prisoner-search/global?size=2&page=5').reply(200, { content: results, pageable: {} })
+        mock.post('/global-search?size=2&page=5').reply(200, { content: results, pageable: {} })
         const data = await offenderSearchApi.globalSearch(context, { search: 'params' })
         expect(data.length).toEqual(1)
       })
@@ -37,7 +37,7 @@ describe('offender search api tests', () => {
           },
         }
         const results = [{ prisonerNumber: 'A1234BC' }]
-        mock.post('/prisoner-search/global?size=100&page=5').reply(200, { content: results, pageable: {} })
+        mock.post('/global-search?size=100&page=5').reply(200, { content: results, pageable: {} })
         const data = await offenderSearchApi.globalSearch(context, { search: 'params' }, 100)
         expect(data.length).toEqual(1)
       })
@@ -46,7 +46,7 @@ describe('offender search api tests', () => {
         const context = {}
         const results = [{ prisonerNumber: 'A1234BC' }]
         mock
-          .post('/prisoner-search/global?size=20')
+          .post('/global-search?size=20')
           .reply(200, { content: results, pageable: { pageSize: 10, offset: 3 }, totalElements: 55 })
         await offenderSearchApi.globalSearch(context, { search: 'params' })
         expect(context.responseHeaders).toEqual({ 'page-offset': 3, 'page-limit': 10, 'total-records': 55 })
@@ -54,7 +54,7 @@ describe('offender search api tests', () => {
 
       it('Calls global search with minimal request / response', async () => {
         const results = [{ prisonerNumber: 'A1234BC' }]
-        mock.post('/prisoner-search/global?size=20').reply(200, { content: results, pageable: {} })
+        mock.post('/global-search?size=20').reply(200, { content: results, pageable: {} })
         const data = await offenderSearchApi.globalSearch({}, { search: 'params' })
         expect(data).toEqual([
           {
@@ -98,7 +98,7 @@ describe('offender search api tests', () => {
             uiId: 'Tw4PcPHG6',
           },
         ]
-        mock.post('/prisoner-search/global?size=20').reply(200, { content: results, pageable: {} })
+        mock.post('/global-search?size=20').reply(200, { content: results, pageable: {} })
         const data = await offenderSearchApi.globalSearch({}, { search: 'params' })
         expect(data).toEqual([
           {
