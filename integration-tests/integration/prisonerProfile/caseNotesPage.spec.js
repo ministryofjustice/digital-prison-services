@@ -82,6 +82,7 @@ context('A user can view prisoner case notes', () => {
       .find('pre')
       .then($element => {
         expect($element.get(0).innerText.trim()).to.eq('This is some text')
+        expect($element.get(1).innerText.trim()).to.eq('Some Additional Text')
       })
 
     rows
@@ -89,7 +90,6 @@ context('A user can view prisoner case notes', () => {
       .find('p')
       .then($element => {
         expect($element.get(0).innerText.trim()).to.eq('More details added:')
-        expect($element.get(1).innerText.trim()).to.eq('Some Additional Text')
       })
 
     rows
