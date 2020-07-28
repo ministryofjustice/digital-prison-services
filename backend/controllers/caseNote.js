@@ -116,14 +116,14 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
       })
     }
 
-    if ((hours && parseInt(hours, 10) > 23) || !hours) {
+    if ((hours && !(parseInt(hours, 10) <= 23)) || !hours) {
       errors.push({
         text: 'Enter an hour which is 23 or less',
         href: '#hours',
       })
     }
 
-    if ((minutes && parseInt(minutes, 10) > 59) || !minutes) {
+    if ((minutes && !(parseInt(minutes, 10) <= 59)) || !minutes) {
       errors.push({
         text: 'Enter the minutes using 59 or less',
         href: '#minutes',
@@ -135,6 +135,24 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
         text: 'Enter the minutes using 2 numbers',
         href: '#minutes',
       })
+    }
+
+    try {
+      const dateTime = moment(date, 'DD/MM/YYYY')
+        .hours(hours)
+        .minutes(minutes)
+        .seconds(0)
+        .format('YYYY-MM-DDTHH:mm:ss')
+
+      if (dateTime > moment().format('YYYY-MM-DDTHH:mm:ss')) {
+        errors.push({
+          text: 'Enter a time which is not in the future',
+          href: '#hours',
+        })
+      }
+    } catch {
+      // Do nothing, will only fail if the date inputs are invalid, which
+      // has been handled by the above validations
     }
 
     if (errors.length > 0) {

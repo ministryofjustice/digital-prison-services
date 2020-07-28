@@ -201,6 +201,34 @@ describe('case note management', () => {
           })
         )
       })
+
+      it('should validate time is not in the future', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            offenderNo,
+            text: 'test',
+            date: moment().format('DD/MM/YYYY'),
+            hours: moment()
+              .add(1, 'hours')
+              .format('H'),
+            minutes: moment().format('mm'),
+          },
+        }
+
+        await handleCreateCaseNoteForm(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'caseNotes/addCaseNoteForm.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#type', text: 'Select the case note type' },
+              { href: '#sub-type', text: 'Select the case note sub-type' },
+              { href: '#hours', text: 'Enter a time which is not in the future' },
+            ],
+          })
+        )
+      })
     })
 
     describe('when the form is filled correctly', () => {
@@ -212,8 +240,8 @@ describe('case note management', () => {
             type: 'OBSERVE',
             subType: 'OBS1',
             date: moment().format('DD/MM/YYYY'),
-            hours: '12',
-            minutes: '34',
+            hours: moment().format('H'),
+            minutes: moment().format('mm'),
             text: 'test',
           },
         }
