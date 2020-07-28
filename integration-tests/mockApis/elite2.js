@@ -1,4 +1,4 @@
-const { stubFor } = require('./wiremock')
+const { stubFor, postFor } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
 const assessmentsResponse = require('./responses/assessmentsResponse')
 const activity3 = require('./responses/activity3')
@@ -1247,5 +1247,22 @@ module.exports = {
         },
         jsonBody: events || [],
       },
+    }),
+  stubOffenderMovements: () =>
+    postFor({
+      urlPath: '/api/movements/offenders',
+      body: [
+        {
+          offenderNo: 'T1001AA',
+          createDateTime: '2016-05-04T09:24:46.254162',
+          fromAgency: 'LNI',
+          fromAgencyDescription: 'Low Newton (HMP)',
+          toAgency: 'OUT',
+          toAgencyDescription: 'Outside',
+          movementType: 'REL',
+          movementTypeDescription: 'Release',
+          directionCode: 'OUT',
+        },
+      ],
     }),
 }
