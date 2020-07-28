@@ -2,6 +2,9 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
 const { formatName, putLastNameFirst, groupBy, times } = require('../../utils')
+const {
+  app: { notmEndpointUrl: dpsUrl },
+} = require('../../config')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   let schedule
@@ -41,6 +44,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('prisonerProfile/prisonerSchedule/prisonerSchedule.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       days,
+      dpsUrl,
       offenderNo,
       prisonerName: formatName(firstName, lastName),
       nextWeekStartDate: oneWeekToday.format('D MMMM YYYY'),
