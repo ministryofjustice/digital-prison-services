@@ -437,7 +437,7 @@ describe('alert management', () => {
           body: {
             alertType: 'P',
             alertCode: 'PI',
-            effectiveDate: '20/07/2020',
+            effectiveDate: moment().format('DD/MM/YYYY'),
             bookingId: 1234,
             offenderNo,
             comments: 'test',
@@ -459,7 +459,7 @@ describe('alert management', () => {
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
-          body: { offenderNo, comments: 'test', effectiveDate: '2020-07-20' },
+          body: { offenderNo, comments: 'test', effectiveDate: moment().format('YYYY-MM-DD') },
         }
 
         await handleCreateAlertForm(req, res)
@@ -483,7 +483,7 @@ describe('alert management', () => {
           body: {
             offenderNo,
             comments: 'test',
-            effectiveDate: '20/07/2020',
+            effectiveDate: moment().format('DD/MM/YYYY'),
             alertCode: 'XC',
             alertType: 'X',
             existingAlerts: 'XC',
