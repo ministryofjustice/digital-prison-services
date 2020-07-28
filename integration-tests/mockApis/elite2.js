@@ -1220,11 +1220,11 @@ module.exports = {
         jsonBody: sentenceTerms || [],
       },
     }),
-  stubScheduleForThisWeek: (events, status = 200) =>
+  stubScheduledEventsForThisWeek: (events, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/appointments/thisWeek',
+        urlPattern: '/api/bookings/[0-9]+?/events/thisWeek',
       },
       response: {
         status,
@@ -1234,11 +1234,11 @@ module.exports = {
         jsonBody: events || [],
       },
     }),
-  stubScheduleForNextWeek: (events, status = 200) =>
+  stubScheduledEventsForNextWeek: (events, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/appointments/nextWeek',
+        urlPattern: '/api/bookings/[0-9]+?/events/nextWeek',
       },
       response: {
         status,

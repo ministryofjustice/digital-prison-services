@@ -24,8 +24,8 @@ describe('Prisoner schedule', () => {
     logError = jest.fn()
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
-    elite2Api.getScheduleForThisWeek = jest.fn().mockResolvedValue([])
-    elite2Api.getScheduleForNextWeek = jest.fn().mockResolvedValue([])
+    elite2Api.getScheduledEventsForThisWeek = jest.fn().mockResolvedValue([])
+    elite2Api.getScheduledEventsForNextWeek = jest.fn().mockResolvedValue([])
 
     controller = prisonerSchedule({ elite2Api, logError })
 
@@ -42,7 +42,7 @@ describe('Prisoner schedule', () => {
     it('should get the schedule for this week', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getScheduleForThisWeek).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(elite2Api.getScheduledEventsForThisWeek).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('without data', () => {
@@ -92,7 +92,7 @@ describe('Prisoner schedule', () => {
 
     describe('with data', () => {
       beforeEach(() => {
-        elite2Api.getScheduleForThisWeek.mockResolvedValue([
+        elite2Api.getScheduledEventsForThisWeek.mockResolvedValue([
           {
             bookingId: 1200961,
             eventClass: 'INT_MOV',
@@ -258,7 +258,7 @@ describe('Prisoner schedule', () => {
     it('should get the schedule for next week', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getScheduleForNextWeek).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(elite2Api.getScheduledEventsForNextWeek).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('without data', () => {
@@ -318,7 +318,7 @@ describe('Prisoner schedule', () => {
     })
 
     it('should render the error template with a link to the homepage if there is a problem retrieving schedules', async () => {
-      elite2Api.getScheduleForThisWeek.mockImplementation(() => Promise.reject(new Error('Network error')))
+      elite2Api.getScheduledEventsForThisWeek.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 

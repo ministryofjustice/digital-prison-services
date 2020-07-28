@@ -310,11 +310,11 @@ const elite2ApiFactory = client => {
       `/api/offender-sentences/booking/${bookingId}/sentenceTerms?filterBySentenceTermCodes=IMP&filterBySentenceTermCodes=LIC`
     )
 
-  const getScheduleForThisWeek = (context, bookingId) =>
-    get(context, `/api/bookings/${bookingId}/appointments/thisWeek`)
+  const getScheduledEventsForThisWeek = (context, bookingId) =>
+    get(context, `/api/bookings/${bookingId}/events/thisWeek`)
 
-  const getScheduleForNextWeek = (context, bookingId) =>
-    get(context, `/api/bookings/${bookingId}/appointments/nextWeek`)
+  const getScheduledEventsForNextWeek = (context, bookingId) =>
+    get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
   return {
     userLocations,
@@ -412,8 +412,8 @@ const elite2ApiFactory = client => {
     getCourtCases,
     getOffenceHistory,
     getSentenceTerms,
-    getScheduleForThisWeek,
-    getScheduleForNextWeek,
+    getScheduledEventsForThisWeek,
+    getScheduledEventsForNextWeek,
   }
 }
 
