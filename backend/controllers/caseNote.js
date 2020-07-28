@@ -46,9 +46,6 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
         offenderDetails,
         offenderNo,
         formValues: {
-          date: moment().format('DD/MM/YYYY'),
-          hours: moment().format('H'),
-          minutes: moment().format('mm'),
           ...req.body,
         },
         types,
@@ -116,14 +113,30 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
       })
     }
 
-    if ((hours && !(parseInt(hours, 10) <= 23)) || !hours) {
+    // eslint-disable-next-line no-restricted-globals
+    if (hours && isNaN(parseInt(hours, 10))) {
+      errors.push({
+        text: 'Enter a time using numbers only',
+        href: '#hours',
+      })
+    }
+
+    // eslint-disable-next-line no-restricted-globals
+    if (minutes && isNaN(parseInt(minutes, 10))) {
+      errors.push({
+        text: 'Enter a time using numbers only',
+        href: '#minutes',
+      })
+    }
+
+    if ((hours && parseInt(hours, 10) > 23) || !hours) {
       errors.push({
         text: 'Enter an hour which is 23 or less',
         href: '#hours',
       })
     }
 
-    if ((minutes && !(parseInt(minutes, 10) <= 59)) || !minutes) {
+    if ((minutes && parseInt(minutes, 10) > 59) || !minutes) {
       errors.push({
         text: 'Enter the minutes using 59 or less',
         href: '#minutes',
@@ -138,13 +151,17 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
     }
 
     try {
-      const dateTime = moment(date, 'DD/MM/YYYY')
-        .hours(hours)
-        .minutes(minutes)
-        .seconds(0)
-        .format('YYYY-MM-DDTHH:mm:ss')
+      const dateTime =
+        date &&
+        hours &&
+        minutes &&
+        moment(date, 'DD/MM/YYYY')
+          .hours(hours)
+          .minutes(minutes)
+          .seconds(0)
+          .format('YYYY-MM-DDTHH:mm:ss')
 
-      if (dateTime > moment().format('YYYY-MM-DDTHH:mm:ss')) {
+      if (dateTime && dateTime > moment().format('YYYY-MM-DDTHH:mm:ss')) {
         errors.push({
           text: 'Enter a time which is not in the future',
           href: '#hours',

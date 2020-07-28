@@ -109,11 +109,7 @@ describe('case note management', () => {
         offenderNo,
         homeUrl: '/prisoner/ABC123/case-notes',
         caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {
-          date: moment().format('DD/MM/YYYY'),
-          hours: moment().format('H'),
-          minutes: moment().format('mm'),
-        },
+        formValues: {},
         types: [{ value: 'OBSERVE', text: 'Observations' }, { value: 'ACHIEVEMENTS', text: 'Achievements' }],
         subTypes: [
           { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },
@@ -225,6 +221,33 @@ describe('case note management', () => {
               { href: '#type', text: 'Select the case note type' },
               { href: '#sub-type', text: 'Select the case note sub-type' },
               { href: '#hours', text: 'Enter a time which is not in the future' },
+            ],
+          })
+        )
+      })
+
+      it('should validate time is a number', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            offenderNo,
+            text: 'test',
+            date: moment().format('DD/MM/YYYY'),
+            hours: 'ff',
+            minutes: 'gg',
+          },
+        }
+
+        await handleCreateCaseNoteForm(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'caseNotes/addCaseNoteForm.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#type', text: 'Select the case note type' },
+              { href: '#sub-type', text: 'Select the case note sub-type' },
+              { href: '#hours', text: 'Enter a time using numbers only' },
+              { href: '#minutes', text: 'Enter a time using numbers only' },
             ],
           })
         )
