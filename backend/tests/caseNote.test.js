@@ -109,7 +109,11 @@ describe('case note management', () => {
         offenderNo,
         homeUrl: '/prisoner/ABC123/case-notes',
         caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {},
+        formValues: {
+          date: moment().format('DD/MM/YYYY'),
+          hours: moment().format('H'),
+          minutes: moment().format('mm'),
+        },
         types: [{ value: 'OBSERVE', text: 'Observations' }, { value: 'ACHIEVEMENTS', text: 'Achievements' }],
         subTypes: [
           { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },

@@ -45,7 +45,12 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
       return res.render('caseNotes/addCaseNoteForm.njk', {
         offenderDetails,
         offenderNo,
-        formValues: { ...req.body },
+        formValues: {
+          date: moment().format('DD/MM/YYYY'),
+          hours: moment().format('H'),
+          minutes: moment().format('mm'),
+          ...req.body,
+        },
         types,
         subTypes,
         homeUrl: `${getOffenderUrl(offenderNo)}/case-notes`,
