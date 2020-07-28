@@ -289,8 +289,8 @@ module.exports = on => {
     stubSchedule: ({ offenderBasicDetails, thisWeeksSchedule, nextWeeksSchedule }) =>
       Promise.all([
         elite2api.stubOffenderBasicDetails(offenderBasicDetails),
-        elite2api.stubScheduleForThisWeek(thisWeeksSchedule),
-        elite2api.stubScheduleForNextWeek(nextWeeksSchedule),
+        elite2api.stubScheduledEventsForThisWeek(thisWeeksSchedule),
+        elite2api.stubScheduledEventsForNextWeek(nextWeeksSchedule),
       ]),
     stubAppointmentsGet: appointments => Promise.all([elite2api.stubAppointmentsGet(appointments)]),
     stubVideoLinkAppointments: appointments => Promise.all([whereabouts.stubVideoLinkAppointments(appointments)]),

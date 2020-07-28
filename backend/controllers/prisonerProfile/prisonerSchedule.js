@@ -16,9 +16,9 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     const { bookingId, firstName, lastName } = details || {}
 
     if (when === 'nextWeek') {
-      schedule = await elite2Api.getScheduleForNextWeek(res.locals, bookingId)
+      schedule = await elite2Api.getScheduledEventsForNextWeek(res.locals, bookingId)
     } else {
-      schedule = await elite2Api.getScheduleForThisWeek(res.locals, bookingId)
+      schedule = await elite2Api.getScheduledEventsForThisWeek(res.locals, bookingId)
     }
 
     const groupedByDate = groupBy(schedule, 'eventDate')
