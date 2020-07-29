@@ -79,6 +79,60 @@ context('Prisoner personal', () => {
       contactRootOffenderId: 0,
       bookingId: 123,
     },
+    {
+      lastName: 'SMITH',
+      firstName: 'TREVOR',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'CA',
+      relationshipDescription: 'Case Administrator',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 7350143,
+      personId: 222,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+    {
+      lastName: 'JONES',
+      firstName: 'ANNE',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'OFS',
+      relationshipDescription: 'Offender Supervisor',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 7350143,
+      personId: 222,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
+    {
+      lastName: 'JONES',
+      firstName: 'ANNE',
+      contactType: 'O',
+      contactTypeDescription: 'Official',
+      relationship: 'COM',
+      relationshipDescription: 'Community Offender Manager',
+      emergencyContact: false,
+      nextOfKin: false,
+      relationshipId: 7350143,
+      personId: 222,
+      activeFlag: true,
+      approvedVisitorFlag: false,
+      canBeContactedFlag: false,
+      awareOfChargesFlag: false,
+      contactRootOffenderId: 0,
+      bookingId: 123,
+    },
   ]
 
   const visitPersonalAndExpandAccordions = () => {
@@ -403,26 +457,23 @@ context('Prisoner personal', () => {
               .then($headings => {
                 cy.get($headings)
                   .its('length')
-                  .should('eq', 1)
-                expect($headings.get(0).innerText).to.contain('Uriualche Lydyle')
+                  .should('eq', 4)
+                expect($headings.get(0).innerText).to.contain('Trevor Smith')
+                expect($headings.get(1).innerText).to.contain('Uriualche Lydyle')
+                expect($headings.get(2).innerText).to.contain('Anne Jones')
+                expect($headings.get(3).innerText).to.contain('Anne Jones')
               })
 
             cy.get($section)
-              .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 6)
-                expect($summaryLabels.get(0).innerText).to.contain('Relationship')
-              })
-
-            cy.get($section)
-              .find('dd')
+              .find('p')
               .then($summaryValues => {
                 cy.get($summaryValues)
                   .its('length')
-                  .should('eq', 6)
+                  .should('eq', 4)
                 expect($summaryValues.get(0).innerText).to.contain('Case Administrator')
+                expect($summaryValues.get(1).innerText).to.contain('Case Administrator')
+                expect($summaryValues.get(2).innerText).to.contain('Community Offender Manager')
+                expect($summaryValues.get(3).innerText).to.contain('Offender Supervisor')
               })
           })
 
@@ -1118,50 +1169,27 @@ context('Prisoner personal', () => {
               .then($headings => {
                 cy.get($headings)
                   .its('length')
-                  .should('eq', 3)
-                expect($headings.get(0).innerText).to.contain('Jane Smith')
-                expect($headings.get(1).innerText).to.contain('John doe')
-                expect($headings.get(2).innerText).to.contain('Uriualche Lydyle')
+                  .should('eq', 6)
+                expect($headings.get(0).innerText).to.contain('Trevor Smith')
+                expect($headings.get(1).innerText).to.contain('Uriualche Lydyle')
+                expect($headings.get(2).innerText).to.contain('Anne Jones')
+                expect($headings.get(3).innerText).to.contain('Anne Jones')
+                expect($headings.get(4).innerText).to.contain('Jane Smith')
+                expect($headings.get(5).innerText).to.contain('John doe')
               })
 
             cy.get($section)
-              .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 12)
-                expect($summaryLabels.get(0).innerText).to.contain('Relationship')
-                expect($summaryLabels.get(1).innerText).to.contain('Relationship')
-                expect($summaryLabels.get(2).innerText).to.contain('Relationship')
-                expect($summaryLabels.get(3).innerText).to.contain('Phone number')
-                expect($summaryLabels.get(4).innerText).to.contain('Email')
-                expect($summaryLabels.get(5).innerText).to.contain('Address')
-                expect($summaryLabels.get(6).innerText).to.contain('Town')
-                expect($summaryLabels.get(7).innerText).to.contain('County')
-                expect($summaryLabels.get(8).innerText).to.contain('Postcode')
-                expect($summaryLabels.get(9).innerText).to.contain('Country')
-                expect($summaryLabels.get(10).innerText).to.contain('Address phone')
-                expect($summaryLabels.get(11).innerText).to.contain('Address type')
-              })
-
-            cy.get($section)
-              .find('dd')
+              .find('p')
               .then($summaryValues => {
                 cy.get($summaryValues)
                   .its('length')
-                  .should('eq', 12)
-                expect($summaryValues.get(0).innerText).to.contain('Prison Offender Manager')
-                expect($summaryValues.get(1).innerText).to.contain('Co-working Prison Offender Manager')
-                expect($summaryValues.get(2).innerText).to.contain('Case Administrator')
-                expect($summaryValues.get(3).innerText).to.contain('02222222222,\n033333333333 extension number 123')
-                expect($summaryValues.get(4).innerText).to.contain('test1@email.com, test2@email.com')
-                expect($summaryValues.get(5).innerText).to.contain('Flat A, 13, High Street')
-                expect($summaryValues.get(6).innerText).to.contain('Ulverston')
-                expect($summaryValues.get(7).innerText).to.contain('West Yorkshire')
-                expect($summaryValues.get(8).innerText).to.contain('LS1 AAA')
-                expect($summaryValues.get(9).innerText).to.contain('England')
-                expect($summaryValues.get(10).innerText).to.contain('011111111111')
-                expect($summaryValues.get(11).innerText).to.contain('Home')
+                  .should('eq', 6)
+                expect($summaryValues.get(0).innerText).to.contain('Case Administrator')
+                expect($summaryValues.get(1).innerText).to.contain('Case Administrator')
+                expect($summaryValues.get(2).innerText).to.contain('Community Offender Manager')
+                expect($summaryValues.get(3).innerText).to.contain('Offender Supervisor')
+                expect($summaryValues.get(4).innerText).to.contain('Prison Offender Manager')
+                expect($summaryValues.get(5).innerText).to.contain('Co-working Prison Offender Manager')
               })
           })
         })
@@ -1241,43 +1269,6 @@ context('Prisoner personal', () => {
                 .its('length')
                 .should('eq', 1)
               expect($summaryValues.get(0).innerText).to.contain('Cousin')
-            })
-        })
-        cy.get('[data-test="professional-contacts-summary"]').then($section => {
-          cy.get($section)
-            .find('h3')
-            .then($headings => {
-              cy.get($headings)
-                .its('length')
-                .should('eq', 1)
-              expect($headings.get(0).innerText).to.contain('Uriualche Lydyle')
-            })
-
-          cy.get($section)
-            .find('p')
-            .then($text => {
-              cy.get($text)
-                .its('length')
-                .should('eq', 1)
-              expect($text.get(0).innerText).to.contain('No fixed abode')
-            })
-
-          cy.get($section)
-            .find('dt')
-            .then($summaryLabels => {
-              cy.get($summaryLabels)
-                .its('length')
-                .should('eq', 1)
-              expect($summaryLabels.get(0).innerText).to.contain('Relationship')
-            })
-
-          cy.get($section)
-            .find('dd')
-            .then($summaryValues => {
-              cy.get($summaryValues)
-                .its('length')
-                .should('eq', 1)
-              expect($summaryValues.get(0).innerText).to.contain('Case Administrator')
             })
         })
       })

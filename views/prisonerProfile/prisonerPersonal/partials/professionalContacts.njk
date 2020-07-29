@@ -1,9 +1,9 @@
 {% if professionalContacts.length %}
   {% for contact in professionalContacts %}
-  <div class="professional-contact">
-    <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ contact.firstName | capitalize }} {{contact.lastName | capitalize}}</h3>
-    <p class="govuk-body govuk-!-margin-bottom-1">{{ contact.relationshipDescription }}</p>
-  </div>
+    <div class="professional-contact">
+      <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ contact.firstName | capitalize }} {{contact.lastName | capitalize}}</h3>
+      <p class="govuk-body govuk-!-margin-bottom-1">{{ contact.relationshipDescription }}</p>
+    </div>
   {% endfor%}
 {% else %}
   <p class="govuk-body">None</p>
