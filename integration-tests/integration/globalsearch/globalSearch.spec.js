@@ -25,6 +25,8 @@ context('Global search', () => {
       .type('quimby')
     form.submitButton().click()
 
+    GlobalSearchPage.verifyOnResultsPage()
+
     cy.task('verifyGlobalSearch').should(requests => {
       expect(requests).to.have.lengthOf(1)
       expect(JSON.parse(requests[0].body)).to.deep.equal({
@@ -45,6 +47,8 @@ context('Global search', () => {
       .clear()
       .type('A1234BC')
     form.submitButton().click()
+
+    GlobalSearchPage.verifyOnResultsPage()
 
     cy.task('verifyGlobalSearch').should(requests => {
       expect(requests).to.have.lengthOf(1)
@@ -76,6 +80,8 @@ context('Global search', () => {
     form.search().clear()
     form.search().type('again')
     form.submitButton().click()
+
+    GlobalSearchPage.verifyOnResultsPage()
 
     globalSearchPage
       .form()
@@ -165,6 +171,8 @@ context('Global search', () => {
       .submitButton()
       .click()
 
+    GlobalSearchPage.verifyOnResultsPage()
+
     globalSearchPage.clearFilters().click()
     globalSearchPage.locationSelect().should('have.value', 'ALL')
     globalSearchPage.genderSelect().should('have.value', 'ALL')
@@ -176,6 +184,8 @@ context('Global search', () => {
       .showFilters()
       .click()
       .should('have.text', 'Show filters')
+
+    GlobalSearchPage.verifyOnResultsPage()
 
     cy.task('verifyGlobalSearch').should(requests => {
       expect(requests).to.have.lengthOf(2)
