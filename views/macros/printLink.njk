@@ -1,0 +1,7 @@
+{% macro printLink(linkText = 'Print this page', align = "left") %}
+<div style="text-align: {{ align }}">
+  <a href="javascript:window.print()" class="govuk-link print-link govuk-!-display-none-print">
+    {{ linkText }}
+  </a>
+</div>
+{% endmacro %}
