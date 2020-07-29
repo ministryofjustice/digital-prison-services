@@ -1,6 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
-const { getNamesFromString, sortByDateTime } = require('../../utils')
+const { getNamesFromString } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -16,6 +16,17 @@ const {
   addressesViewModel,
   careNeedsViewModel,
 } = require('./personalViewModels')
+
+const getProfessionalContact = (contacts, relationship) => {
+  return (
+    contacts &&
+    contacts.filter(contact => contact.activeFlag && contact.relationship === relationship).sort((left, right) => {
+      if (left.firstName > right.firstName) return 1
+      if (right.firstName > left.firstName) return -1
+      return 0
+    })
+  )
+}
 
 module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
   req,
@@ -69,11 +80,10 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   const { nextOfKin, otherContacts } = contacts || {}
   const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
 
-  const activeCaseAdministrator =
-    otherContacts &&
-    otherContacts
-      .sort((left, right) => sortByDateTime(right.createDateTime, left.createDateTime))
-      .find(contact => contact.activeFlag && contact.relationship === 'CA')
+  const caseAdministrators = getProfessionalContact(otherContacts, 'CA')
+  const offenderSupervisors = getProfessionalContact(otherContacts, 'OFS')
+  const communityOffenderManagers = getProfessionalContact(otherContacts, 'COM')
+  const drugWorkers = getProfessionalContact(otherContacts, 'DART')
 
   const nextOfKinsWithContact =
     activeNextOfKins &&
@@ -83,11 +93,6 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
         ...(await personService.getPersonContactDetails(res.locals, kin.personId)),
       }))
     ))
-
-  const activeCaseAdministratorWithContact = activeCaseAdministrator && {
-    ...activeCaseAdministrator,
-    ...(await personService.getPersonContactDetails(res.locals, activeCaseAdministrator.personId)),
-  }
 
   const primaryPrisonOffenderManager = () => {
     const names =
@@ -134,12 +139,15 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     ...activeContactsViewModel({
       personal: nextOfKinsWithContact,
-      professional: [
-        ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
-        ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
-        ...(activeCaseAdministratorWithContact ? [activeCaseAdministratorWithContact] : []),
-      ],
     }),
+    professionalContacts: [
+      ...(caseAdministrators || []),
+      ...(communityOffenderManagers || []),
+      ...(drugWorkers || []),
+      ...(offenderSupervisors || []),
+      ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
+      ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
+    ],
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({
       personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,
