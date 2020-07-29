@@ -147,6 +147,7 @@ describe('Prisoner search', () => {
             { checked: true, text: 'ACCT open', value: ['HA'] },
             { checked: false, text: 'ACCT post closure', value: ['HA1'] },
           ]),
+          printedValues: { alerts: ['ACCT open'] },
         })
       )
     })
@@ -164,6 +165,7 @@ describe('Prisoner search', () => {
             { checked: true, text: 'ACCT post closure', value: ['HA1'] },
             { checked: true, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
           ]),
+          printedValues: { alerts: ['ACCT post closure', 'Risk to LGBT'] },
         })
       )
     })
@@ -178,6 +180,7 @@ describe('Prisoner search', () => {
         expect.objectContaining({
           formValues: req.query,
           alertOptions: expect.arrayContaining([{ checked: true, text: 'Risk to LGBT', value: ['RTP', 'RLG'] }]),
+          printedValues: { alerts: ['Risk to LGBT'] },
         })
       )
     })
@@ -272,11 +275,12 @@ describe('Prisoner search', () => {
       )
     })
 
-    it('should render template with search url and current view type so they can be used for the toggle links', async () => {
+    it('should render template with search url containing view type and printed values', async () => {
       req.baseUrl = '/prisoner-search'
       req.query = {
         alerts: ['HA', 'HA1'],
         keywords: 'Smith',
+        location: 'MDI',
         view: 'grid',
       }
 
@@ -285,8 +289,12 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerSearch/prisonerSearch.njk',
         expect.objectContaining({
-          searchUrl: '/prisoner-search?location=&keywords=Smith&alerts=HA&alerts=HA1&pageOffsetOption=',
+          searchUrl: '/prisoner-search?location=MDI&keywords=Smith&alerts=HA&alerts=HA1&pageOffsetOption=',
           view: 'grid',
+          printedValues: {
+            alerts: ['ACCT open', 'ACCT post closure'],
+            location: { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+          },
         })
       )
     })

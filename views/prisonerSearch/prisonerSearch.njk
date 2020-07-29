@@ -1,9 +1,11 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
 {% set title = 'Prisoner search results' %}
+{% set htmlClasses = "printed-page" %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -15,7 +17,8 @@
       {
         text: title
       }
-    ]
+    ],
+    classes: 'govuk-!-display-none-print'
   })
   }}
 {% endblock %}
@@ -25,12 +28,16 @@
     {{title}}
   </h1>
 
-  {% include './partials/prisonerSearchForm.njk' %}
+  {% include './partials/prisonerSearchSummary.njk' %}
 
-  <div class="prisoner-search__results-options">
-    {% include './partials/prisonerSearchOrderForm.njk' %}
+  <div class="govuk-!-display-none-print">
+    {% include './partials/prisonerSearchForm.njk' %}
 
-    {% include './partials/prisonerSearchToggles.njk' %}
+    <div class="prisoner-search__results-options">
+      {% include './partials/prisonerSearchOrderForm.njk' %}
+
+      {% include './partials/prisonerSearchToggles.njk' %}
+    </div>
   </div>
 
   {% if results.length %}

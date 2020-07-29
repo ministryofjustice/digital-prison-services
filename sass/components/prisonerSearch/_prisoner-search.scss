@@ -65,6 +65,12 @@
     }
   }
 
+  &__summary {
+    @media screen {
+      display: none;
+    }
+  }
+
   &__results {
     &-list {
       overflow: auto;
