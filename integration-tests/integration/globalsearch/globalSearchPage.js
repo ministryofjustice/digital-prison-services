@@ -1,7 +1,7 @@
 const page = require('../../pages/page')
 
-const globalSearchPage = (results = false) =>
-  page(`Global search${results ? ' results' : ''}`, {
+const globalSearchPage = (results = false) => {
+  const globalSearch = page(`Global search${results ? ' results' : ''}`, {
     form: () => ({
       search: () => cy.get('#search-text'),
       submitButton: () => cy.get('button[type="submit"]'),
@@ -16,7 +16,11 @@ const globalSearchPage = (results = false) =>
     dobDay: () => cy.get('input[type="number"]:eq(0)'),
     dobMonth: () => cy.get('input[type="number"]:eq(1)'),
     dobYear: () => cy.get('input[type="number"]:eq(2)'),
+    spinner: () => cy.get('.spinner-component'),
   })
+  globalSearch.spinner().should('not.exist')
+  return globalSearch
+}
 
 export default {
   verifyOnPage: globalSearchPage,
