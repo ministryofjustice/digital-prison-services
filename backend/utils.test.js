@@ -16,6 +16,7 @@ import {
   chunkArray,
   putLastNameFirst,
   getNamesFromString,
+  isPrisonerIdentifier,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -353,5 +354,23 @@ describe('getNamesFromString()', () => {
 
   it('should return undefined if nothing passed', () => {
     expect(getNamesFromString()).toEqual(undefined)
+  })
+})
+
+describe('isPrisonerIdentifier()', () => {
+  it('should cope with undefined', () => {
+    expect(isPrisonerIdentifier(undefined)).toEqual(false)
+  })
+  it('should cope with null', () => {
+    expect(isPrisonerIdentifier(null)).toEqual(false)
+  })
+  it('should return true for prison no', () => {
+    expect(isPrisonerIdentifier('A1234BC')).toEqual(true)
+  })
+  it('should return true for PNC no', () => {
+    expect(isPrisonerIdentifier('14/12345F')).toEqual(true)
+  })
+  it('should return false for name', () => {
+    expect(isPrisonerIdentifier('John Smith')).toEqual(false)
   })
 })
