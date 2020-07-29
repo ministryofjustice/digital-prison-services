@@ -1,4 +1,5 @@
 {% extends "./partials/layout.njk" %}
+{% from "./macros/printLink.njk" import printLink %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
@@ -18,7 +19,7 @@
 
 {% block content %}
   <h1 class="govuk-heading-l">{{title}}</h1>
-  {% include "./partials/printLink.njk" %}
+  {{ printLink() }}
 
   <form class="horizontal-form govuk-!-display-none-print">
     {{ datePicker({
@@ -119,7 +120,7 @@
     <p class="govuk-body" data-qa="no-results-message">There are no results for the selections you have made.</p>
   {% endif %}
 
-  {% include "./partials/printLink.njk" %}
+  {{ printLink() }}
 {% endblock %}
 
 {% block bodyEnd %}

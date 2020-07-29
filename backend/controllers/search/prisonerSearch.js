@@ -78,6 +78,14 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
         locationOptions,
         notmUrl: config.app.notmEndpointUrl,
         pagination: paginationService.getPagination(totalRecords, pageOffset, pageLimit, fullUrl),
+        printedValues: {
+          location: locationOptions.find(loc => loc.value === req.query.location),
+          alerts: alertFlagValues
+            .filter(
+              ({ alertCodes }) => Boolean(selectedAlerts) && selectedAlerts.find(alert => alertCodes.includes(alert))
+            )
+            .map(({ label }) => label),
+        },
         results,
         searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, alerts, pageOffsetOption })}`,
         totalRecords,

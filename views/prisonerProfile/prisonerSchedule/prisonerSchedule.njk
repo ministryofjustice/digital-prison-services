@@ -1,5 +1,6 @@
 
 {% extends "../../partials/layout.njk" %}
+{% from "../../macros/printLink.njk" import printLink %}
 {% from "../macros/prisonerScheduledActivities.njk" import scheduledActivities %}
 
 {% set title = prisonerName + '`s schedule' %}
@@ -32,7 +33,7 @@
     <p class="govuk-body govuk-!-font-size-24" data-test="schedule-dates">{{ firstDay.date }} to {{ lastDay.date }}</p>
 
     <div>
-      {% include "../../partials/printLink.njk" %}
+      {{ printLink() }}
     </div>
 
     {% set linkText = 'View 7 days from ' + nextWeekStartDate if when === nextWeek else 'View 7 days from today'  %}
@@ -77,6 +78,6 @@
       {% endif %}
     {% endfor %}
 
-    {% include "../../partials/printLink.njk" %}
+    {{ printLink() }}
   </div>
 {% endblock %}

@@ -1,0 +1,22 @@
+<dl class="govuk-summary-list prisoner-search__summary" aria-hidden="true">
+  {% if formValues.keywords.length %}
+  <div>
+    <dt class="govuk-!-display-inline-block govuk-!-font-weight-bold">Name or prison number:</dt> 
+    <dd class="govuk-!-display-inline-block govuk-!-margin-0">{{ formValues.keywords }}</dd>
+  </div>
+  {% endif %}
+
+  {% if printedValues.location %}
+  <div>
+    <dt class="govuk-!-display-inline-block govuk-!-font-weight-bold">Selected location:</dt>
+    <dd class="govuk-!-display-inline-block govuk-!-margin-0">{{ printedValues.location.text }}</dd>
+  </div>
+  {% endif %}
+
+  {% if printedValues.alerts.length %}
+  <div>
+    <dt class="govuk-!-display-inline-block govuk-!-font-weight-bold">Selected alerts:</dt>
+    <dd class="govuk-!-display-inline-block govuk-!-margin-0">{{ printedValues.alerts | join(', ') }}</dd>
+  </div>
+  {% endif %}
+</dl>
