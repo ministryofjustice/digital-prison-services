@@ -183,11 +183,8 @@ const stripAgencyPrefix = (location, agency) => {
 const chunkArray = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size))
 
-const isOffenderNumber = string => {
-  const offenderIdPattern = /^[A-Za-z][0-9]{4}[A-Za-z]{2}$/
-
-  return offenderIdPattern.test(string)
-}
+// anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
+const isPrisonerIdentifier = string => /\d/.test(string)
 
 const isAfterToday = date => {
   const dayAfter = moment().add(1, 'day')
@@ -278,7 +275,7 @@ module.exports = {
   stripAgencyPrefix,
   chunkArray,
   capitalizeStart,
-  isOffenderNumber,
+  isPrisonerIdentifier,
   isAfterToday,
   hyphenatedStringToCamel,
   formatCurrency,

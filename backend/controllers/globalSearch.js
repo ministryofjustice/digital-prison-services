@@ -1,7 +1,7 @@
 const moment = require('moment')
 const shortid = require('shortid')
 const log = require('../log')
-const { isOffenderNumber } = require('../utils')
+const { isPrisonerIdentifier } = require('../utils')
 
 const globalSearchFactory = (elite2Api, globalSearchApi) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth) =>
@@ -37,7 +37,7 @@ const globalSearchFactory = (elite2Api, globalSearchApi) => {
       .replace(/,/g, ' ')
       .replace(/\s\s+/g, ' ')
       .trim()
-    const data = await (isOffenderNumber(text)
+    const data = await (isPrisonerIdentifier(text)
       ? searchByOffender(context, text, gender, location, dateOfBirth)
       : searchByName(context, text, gender, location, dateOfBirth))
     log.info(data.length, 'globalSearch data received')
