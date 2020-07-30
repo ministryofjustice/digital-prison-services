@@ -23,7 +23,8 @@ const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthCli
       const [user, userRoles] = await Promise.all([oauthApi.currentUser(res.locals), oauthApi.userRoles(res.locals)])
       try {
         ensureAllowedPageAccess(userRoles)
-        const systemContext = await systemOauthClient.getClientCredentialsTokens()
+        const { username } = req.session.userDetails
+        const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
         communityApi.pipeOffenderDocument(systemContext, { offenderNo, documentId, res })
 
         trackEvent(offenderNo, documentId, 'Success', user)
