@@ -87,7 +87,7 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
             .map(({ label }) => label),
         },
         results,
-        searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, alerts, pageOffsetOption })}`,
+        searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, 'alerts[]': alerts, pageOffsetOption })}`,
         totalRecords,
         view,
       })
