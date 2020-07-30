@@ -102,25 +102,29 @@ const factory = ({
 
   const getMovementsIn = asyncMiddleware(async (req, res) => {
     const { agencyId } = req.params
-    const viewModel = await movementsService.getMovementsIn(res.locals, agencyId)
+    const { username } = req.session.userDetails
+    const viewModel = await movementsService.getMovementsIn(res.locals, agencyId, username)
     res.json(viewModel)
   })
 
   const getMovementsOut = asyncMiddleware(async (req, res) => {
     const { agencyId } = req.params
-    const viewModel = await movementsService.getMovementsOut(res.locals, agencyId)
+    const { username } = req.session.userDetails
+    const viewModel = await movementsService.getMovementsOut(res.locals, agencyId, username)
     res.json(viewModel)
   })
 
   const getOffendersInReception = asyncMiddleware(async (req, res) => {
     const { agencyId } = req.params
-    const viewModel = await movementsService.getOffendersInReception(res.locals, agencyId)
+    const { username } = req.session.userDetails
+    const viewModel = await movementsService.getOffendersInReception(res.locals, agencyId, username)
     res.json(viewModel)
   })
 
   const getOffendersCurrentlyOutOfLivingUnit = asyncMiddleware(async (req, res) => {
     const { livingUnitId } = req.params
-    const viewModel = await movementsService.getOffendersCurrentlyOutOfLivingUnit(res.locals, livingUnitId)
+    const { username } = req.session.userDetails
+    const viewModel = await movementsService.getOffendersCurrentlyOutOfLivingUnit(res.locals, livingUnitId, username)
     res.json(viewModel)
   })
 

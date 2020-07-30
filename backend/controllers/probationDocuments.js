@@ -86,7 +86,8 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
       }
 
       try {
-        const systemContext = await systemOauthClient.getClientCredentialsTokens()
+        const { username } = req.session.userDetails
+        const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
         const [convictions, probationOffenderDetails, allDocuments] = await Promise.all([
           communityApi.getOffenderConvictions(systemContext, { offenderNo }),
           communityApi.getOffenderDetails(systemContext, { offenderNo }),
