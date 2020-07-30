@@ -289,7 +289,7 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerSearch/prisonerSearch.njk',
         expect.objectContaining({
-          searchUrl: '/prisoner-search?location=MDI&keywords=Smith&alerts=HA&alerts=HA1&pageOffsetOption=',
+          searchUrl: '/prisoner-search?location=MDI&keywords=Smith&alerts%5B%5D=HA&alerts%5B%5D=HA1&pageOffsetOption=',
           view: 'grid',
           printedValues: {
             alerts: ['ACCT open', 'ACCT post closure'],
