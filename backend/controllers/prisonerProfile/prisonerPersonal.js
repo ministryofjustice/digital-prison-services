@@ -17,17 +17,6 @@ const {
   careNeedsViewModel,
 } = require('./personalViewModels')
 
-const getProfessionalContact = (contacts, relationship) => {
-  return (
-    contacts &&
-    contacts.filter(contact => contact.activeFlag && contact.relationship === relationship).sort((left, right) => {
-      if (left.firstName > right.firstName) return 1
-      if (right.firstName > left.firstName) return -1
-      return 0
-    })
-  )
-}
-
 module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
   req,
   res
@@ -80,11 +69,6 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   const { nextOfKin, otherContacts } = contacts || {}
   const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
 
-  const caseAdministrators = getProfessionalContact(otherContacts, 'CA')
-  const offenderSupervisors = getProfessionalContact(otherContacts, 'OFS')
-  const communityOffenderManagers = getProfessionalContact(otherContacts, 'COM')
-  const drugWorkers = getProfessionalContact(otherContacts, 'DART')
-
   const nextOfKinsWithContact =
     activeNextOfKins &&
     (await Promise.all(
@@ -94,37 +78,49 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
       }))
     ))
 
-  const primaryPrisonOffenderManager = () => {
-    const names =
-      allocationManager &&
-      allocationManager.primary_pom &&
-      allocationManager.primary_pom.name &&
-      getNamesFromString(allocationManager.primary_pom.name)
-    return (
-      names && {
-        firstName: names[0],
-        lastName: names[1],
-        relationshipDescription: 'Prison Offender Manager',
-        noAddressRequired: true,
-      }
-    )
+  const professionalContacts = otherContacts
+    ? otherContacts.filter(contact => contact.activeFlag && contact.contactType === 'O').map(contact => ({
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        relationshipDescription: contact.relationshipDescription,
+      }))
+    : []
+
+  const prisonOffenderManager =
+    allocationManager &&
+    allocationManager.primary_pom &&
+    allocationManager.primary_pom.name &&
+    getNamesFromString(allocationManager.primary_pom.name)
+
+  if (prisonOffenderManager) {
+    professionalContacts.push({
+      firstName: prisonOffenderManager[0],
+      lastName: prisonOffenderManager[1],
+      relationshipDescription: 'Prison Offender Manager',
+    })
   }
 
-  const coworkingPrisonOffenderManager = () => {
-    const names =
-      allocationManager &&
-      allocationManager.secondary_pom &&
-      allocationManager.secondary_pom.name &&
-      getNamesFromString(allocationManager.secondary_pom.name)
-    return (
-      names && {
-        firstName: names[0],
-        lastName: names[1],
-        relationshipDescription: 'Co-working Prison Offender Manager',
-        noAddressRequired: true,
-      }
-    )
+  const coworkingPrisonOffenderManager =
+    allocationManager &&
+    allocationManager.secondary_pom &&
+    allocationManager.secondary_pom.name &&
+    getNamesFromString(allocationManager.secondary_pom.name)
+
+  if (coworkingPrisonOffenderManager) {
+    professionalContacts.push({
+      firstName: coworkingPrisonOffenderManager[0],
+      lastName: coworkingPrisonOffenderManager[1],
+      relationshipDescription: 'Prison Offender Manager Co-worker',
+    })
   }
+
+  professionalContacts.sort((left, right) => {
+    if (left.relationshipDescription > right.relationshipDescription) return 1
+    if (right.relationshipDescription > left.relationshipDescription) return -1
+    if (left.firstName > right.firstName) return 1
+    if (right.firstName > left.firstName) return -1
+    return 0
+  })
 
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
@@ -140,14 +136,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     ...activeContactsViewModel({
       personal: nextOfKinsWithContact,
     }),
-    professionalContacts: [
-      ...(caseAdministrators || []),
-      ...(communityOffenderManagers || []),
-      ...(drugWorkers || []),
-      ...(offenderSupervisors || []),
-      ...(primaryPrisonOffenderManager() ? [primaryPrisonOffenderManager()] : []),
-      ...(coworkingPrisonOffenderManager() ? [coworkingPrisonOffenderManager()] : []),
-    ],
+    professionalContacts,
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({
       personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,
