@@ -96,6 +96,7 @@ export class AdjudicationHistoryContainer extends Component {
     return (
       <OffenderPage
         title={({ firstName, lastName }) => `Adjudication history for ${firstName} ${lastName}`}
+        docTitle={`Adjudication history for ${offenderNumber}`}
         handleError={handleError}
         offenderNumber={offenderNumber}
       >
