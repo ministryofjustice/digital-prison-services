@@ -13,9 +13,8 @@ import PrintLink from './elements/PrintLink'
 
 export class Page extends Component {
   componentDidMount() {
-    const { title, applicationTitle, dispatchApplicationTitle } = this.props
-
-    this.renderTitleString(title)
+    const { title, docTitle, applicationTitle, dispatchApplicationTitle } = this.props
+    this.renderTitleString(title, docTitle)
 
     if (applicationTitle) {
       dispatchApplicationTitle(applicationTitle)
@@ -23,12 +22,12 @@ export class Page extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    this.renderTitleString(nextProps.title)
+    this.renderTitleString(nextProps.title, nextProps.docTitle)
   }
 
-  renderTitleString = title => {
+  renderTitleString = (title, docTitle) => {
     const appName = 'Digital Prison Services'
-    document.title = title ? `${title} - ${appName}` : appName
+    document.title = title ? `${docTitle || title} - ${appName}` : appName
   }
 
   render() {
@@ -65,6 +64,7 @@ Page.propTypes = {
   error: PropTypes.string.isRequired,
   loaded: PropTypes.bool.isRequired,
   title: PropTypes.string,
+  docTitle: PropTypes.string,
   children: childrenType,
   alwaysRender: PropTypes.bool,
   showBreadcrumb: PropTypes.bool,
@@ -80,6 +80,7 @@ Page.defaultProps = {
   showBreadcrumb: true,
   backLink: '',
   title: undefined,
+  docTitle: undefined,
   children: undefined,
   applicationTitle: '',
   dispatchApplicationTitle: () => {},

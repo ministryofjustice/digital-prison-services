@@ -261,9 +261,9 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         },
         scheduledActivityPeriodsSectionError: Boolean(todaysEventsResponse.error),
         scheduledActivityPeriods: [
-          { label: 'Morning (AM)', value: morningActivities },
-          { label: 'Afternoon (PM)', value: afternoonActivities },
-          { label: 'Evening (ED)', value: eveningActivities },
+          { label: 'Morning', value: morningActivities },
+          { label: 'Afternoon', value: afternoonActivities },
+          { label: 'Evening', value: eveningActivities },
         ],
       })
     } catch (error) {
