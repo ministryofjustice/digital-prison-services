@@ -302,5 +302,9 @@ module.exports = on => {
     stubOffenderImage: elite2api.stubOffenderImage,
     verifyGlobalSearch: offenderSearch.verifyGlobalSearch,
     stubOffenderMovements: elite2api.stubOffenderMovements,
+    stubGetCaseNote: caseNote => caseNotes.stubGetCaseNote(caseNote),
+    stubBookingDetails: details => elite2api.stubBookingDetails(details),
+    verifySaveAmendment: caseNotes.verifySaveAmendment,
+    stubSaveAmendment: caseNotes.stubSaveAmendment,
   })
 }

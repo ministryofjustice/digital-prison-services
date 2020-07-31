@@ -95,7 +95,7 @@ context('A user can view prisoner case notes', () => {
     rows
       .caseNoteAddMoreDetailsLink()
       .contains('Add more details')
-      .should('have.attr', 'href', 'http://localhost:20200/offenders/A12345/case-notes/12311312/amend-case-note')
+      .should('have.attr', 'href', 'http://localhost:3008/prisoner/A12345/case-notes/amend-case-note/12311312')
 
     rows
       .caseNotePrintIncentiveLevelSlipLink()

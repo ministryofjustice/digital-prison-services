@@ -98,8 +98,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
         subTypeDescription: caseNote.subTypeDescription,
         text: caseNote.text,
         amendLink:
-          canAmend &&
-          `${config.app.notmEndpointUrl}offenders/${offenderNo}/case-notes/${caseNote.caseNoteId}/amend-case-note`,
+          canAmend && `${config.app.url}prisoner/${offenderNo}/case-notes/amend-case-note/${caseNote.caseNoteId}`,
         printIncentiveLink:
           showPrintIncentiveLink &&
           `/iep-slip?offenderNo=${offenderNo}&offenderName=${encodeURIComponent(

@@ -59,6 +59,7 @@ const videolinkPrisonerSearchController = require('./controllers/videolink/searc
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
 const getLocationExistingEventsController = require('./controllers/attendance/getLocationExistingEvents')
 const endDateController = require('./controllers/appointments/endDate')
+const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
 
 const currentUser = require('./middleware/currentUser')
 
@@ -306,6 +307,16 @@ const setup = ({
   router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
 
   router.use('/prisoner-search', prisonerSearchRouter({ elite2Api, logError }))
+
+  router.use(
+    '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
+    amendCaseNNoteRouter({ elite2Api, caseNotesApi, logError })
+  )
+
+  router.get('/not-found', (req, res) => {
+    res.status(404)
+    res.send('<h1> Page not found </h1>')
+  })
 
   return router
 }
