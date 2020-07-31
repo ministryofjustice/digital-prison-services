@@ -1265,4 +1265,18 @@ module.exports = {
         },
       ],
     }),
+  stubBookingDetails: details =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/offenderNo/.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: details || {},
+      },
+    }),
 }

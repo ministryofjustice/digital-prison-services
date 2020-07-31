@@ -24,7 +24,7 @@ const getClientCredentialsTokens = async username => {
     )
     .makeTokenRequest(oauthRequest, 'PSH-client_credentials')
 
-  logger.debug(`Oauth request for grant type '${oauthRequest.grant_type}', result status: ${oauthResult.status}`)
+  logger.debug(`Oauth request for grant type 'client_credentials', result status: successful`)
   return oauthResult
 }
 

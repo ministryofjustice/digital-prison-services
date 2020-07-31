@@ -1,4 +1,4 @@
-const { getFor, stubFor } = require('./wiremock')
+const { getFor, stubFor, getMatchingRequests } = require('./wiremock')
 
 const caseNoteTypes = [
   {
@@ -64,4 +64,26 @@ module.exports = {
       body: caseNoteTypes,
     })
   },
+  stubGetCaseNote: response => {
+    return getFor({
+      urlPattern: '/casenotes/case-notes/A12345/1',
+      body: response,
+    })
+  },
+  stubSaveAmendment: () => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: '/casenotes/case-notes/A12345/1',
+      },
+      response: {
+        status: 201,
+      },
+    })
+  },
+  verifySaveAmendment: () =>
+    getMatchingRequests({
+      method: 'PUT',
+      urlPathPattern: '/casenotes/case-notes/A12345/1',
+    }).then(data => data.body.requests),
 }

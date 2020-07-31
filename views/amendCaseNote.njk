@@ -1,0 +1,84 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Add more details to case note' %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: notmUrl
+            },
+            {
+                text: prisonerName.join(''),
+                href: backToCaseNotes
+            },
+            {
+                text: "Add more details to case note"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">Add more details to {{ prisonerName[0] }}&rsquo;{{ prisonerName[1] }} case note </h1>
+
+    <div class="govuk-body">
+        <span class="govuk-!-font-weight-bold">Prison number:</span> <span
+                data-qa="prison-number">{{ prisonNumber }}</span>
+    </div>
+
+    <div class="govuk-body">
+        <span class="govuk-!-font-weight-bold" data-qa="type-subtype">{{ typeSubType }}</span>
+    </div>
+
+    <div class="govuk-!-padding-bottom-1">
+        <pre class="govuk-body">{{ caseNoteText }} </pre>
+    </div>
+
+    {% for amendment in amendments %}
+        <div class="govuk-!-margin-bottom-3">
+            <p class="govuk-body govuk-!-margin-bottom-1">
+                More details added:
+            </p>
+            <div class="govuk-!-padding-bottom-1" data-qa="amendment">
+                <pre class="govuk-body">{{ amendment.text }} </pre>
+            </div>
+        </div>
+    {% endfor %}
+
+    <form action="{{ postAmendment }}" method="post">
+        {{ govukTextarea({
+            name: "moreDetail",
+            id: "moreDetail",
+            value: formValues.moreDetail,
+            errorMessage: errors | findError('moreDetail'),
+            rows: 10,
+            classes: 'govuk-!-width-one-half',
+            label: {
+                text: "What happened?",
+                classes: "govuk-!-font-weight-bold"
+            }
+        }) }}
+
+
+        {{ govukButton({ text: "Save", type: "submit" }) }}
+
+        {{ govukButton({
+            text: "Cancel",
+            href: backToCaseNotes,
+            classes: "govuk-button--secondary"
+        }) }}
+    </form>
+
+{% endblock %}
