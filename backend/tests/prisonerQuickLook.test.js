@@ -430,9 +430,9 @@ describe('prisoner profile quick look', () => {
             'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               scheduledActivityPeriods: [
-                { label: 'Morning (AM)', value: [] },
-                { label: 'Afternoon (PM)', value: [] },
-                { label: 'Evening (ED)', value: [] },
+                { label: 'Morning', value: [] },
+                { label: 'Afternoon', value: [] },
+                { label: 'Evening', value: [] },
               ],
             })
           )
@@ -517,7 +517,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             scheduledActivityPeriods: [
               {
-                label: 'Morning (AM)',
+                label: 'Morning',
                 value: [
                   {
                     cancelled: false,
@@ -531,7 +531,7 @@ describe('prisoner profile quick look', () => {
                 ],
               },
               {
-                label: 'Afternoon (PM)',
+                label: 'Afternoon',
                 value: [
                   {
                     cancelled: false,
@@ -554,7 +554,7 @@ describe('prisoner profile quick look', () => {
                 ],
               },
               {
-                label: 'Evening (ED)',
+                label: 'Evening',
                 value: [
                   {
                     cancelled: false,

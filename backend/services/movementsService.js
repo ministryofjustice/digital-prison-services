@@ -75,10 +75,10 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
       }
     })
 
-  const addAlertsAndCategory = async (context, obj) => {
+  const addAlertsAndCategory = async (context, obj, username) => {
     if (!obj || obj.length === 0) return []
     const offenderNumbers = extractOffenderNumbers(obj)
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
     const [alerts, assessmentMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
       getAssessmentMap(context, offenderNumbers),
@@ -89,14 +89,14 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
 
   const isoDateToday = () => moment().format('YYYY-MM-DD')
 
-  const getMovementsIn = async (context, agencyId) => {
+  const getMovementsIn = async (context, agencyId, username) => {
     const movements = await elite2Api.getMovementsIn(context, agencyId, isoDateToday())
 
     if (!movements || movements.length === 0) return []
     const offenderNumbers = extractOffenderNumbers(movements)
     const bookingIds = extractBookingIds(movements)
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
     const [alerts, iepMap, assessmentMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
       getIepMap(context, bookingIds),
@@ -107,20 +107,19 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return addIepSummaries(withCategories, iepMap)
   }
 
-  const getMovementsOut = async (context, agencyId) => {
+  const getMovementsOut = async (context, agencyId, username) => {
     const movements = await elite2Api.getMovementsOut(context, agencyId, isoDateToday())
-    return addAlertsAndCategory(context, movements)
+    return addAlertsAndCategory(context, movements, username)
   }
 
-  const getOffendersInReception = async (context, agencyId) => {
+  const getOffendersInReception = async (context, agencyId, username) => {
     const offenders = await elite2Api.getOffendersInReception(context, agencyId)
-
     if (!offenders) return []
 
     const offenderNumbers = extractOffenderNumbers(offenders)
     const bookingIds = extractBookingIds(offenders)
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
     const [alerts, iepMap, recentMovementsMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
@@ -133,13 +132,13 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return addIepSummaries(withAlerts, iepMap)
   }
 
-  const addAlertsCategoryIepMovements = async (context, offenders) => {
+  const addAlertsCategoryIepMovements = async (context, offenders, username) => {
     if (!offenders || offenders.length === 0) return []
 
     const offenderNumbers = extractOffenderNumbers(offenders)
     const bookingIds = extractBookingIds(offenders)
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
     const [alerts, iepMap, assessmentMap, recentMovementsMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
@@ -153,10 +152,10 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
     return addMovements(withIep, recentMovementsMap)
   }
 
-  const getOffendersCurrentlyOutOfLivingUnit = async (context, livingUnitId) => {
+  const getOffendersCurrentlyOutOfLivingUnit = async (context, livingUnitId, username) => {
     const offenders = await elite2Api.getOffendersCurrentlyOutOfLivingUnit(context, livingUnitId)
     const [currentlyOut, location] = await Promise.all([
-      addAlertsCategoryIepMovements(context, offenders),
+      addAlertsCategoryIepMovements(context, offenders, username),
       elite2Api.getLocation(context, livingUnitId),
     ])
 
