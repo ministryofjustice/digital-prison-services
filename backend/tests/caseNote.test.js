@@ -96,6 +96,8 @@ describe('case note management', () => {
     })
 
     it('should render the add case note with the correctly formatted information', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1595607300000) // Friday, 24 July 2020 17:15:00
+
       const req = { ...mockCreateReq, params: { offenderNo } }
 
       await displayCreateCaseNotePage(req, res)
@@ -109,13 +111,19 @@ describe('case note management', () => {
         offenderNo,
         homeUrl: '/prisoner/ABC123/case-notes',
         caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {},
+        formValues: {
+          date: '24/07/2020',
+          hours: 16,
+          minutes: 15,
+        },
         types: [{ value: 'OBSERVE', text: 'Observations' }, { value: 'ACHIEVEMENTS', text: 'Achievements' }],
         subTypes: [
           { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },
           { value: 'ACH1', text: 'Achievement 1', type: 'ACHIEVEMENTS' },
         ],
       })
+
+      Date.now.mockRestore()
     })
   })
 

@@ -42,11 +42,16 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
         name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
       }
 
+      const currentDateTime = moment()
+
       return res.render('caseNotes/addCaseNoteForm.njk', {
         offenderDetails,
         offenderNo,
         formValues: {
           ...req.body,
+          date: currentDateTime.format('DD/MM/YYYY'),
+          hours: currentDateTime.hours(),
+          minutes: currentDateTime.minutes(),
         },
         types,
         subTypes,

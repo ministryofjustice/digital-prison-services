@@ -43,10 +43,6 @@ context('A user can add a case note', () => {
     cy.wait(50)
     cy.get('#sub-type').select('test')
     form.text().type('Test comment')
-    form.date().type(moment().format('DD/MM/YYYY'))
-    createCaseNotePage.activeDate().click()
-    form.hours().type(moment().format('H'))
-    form.minutes().type(moment().format('mm'))
     form.submitButton().click()
     PrisonerCaseNotePage.verifyOnPage('Smith, John')
   })
@@ -54,6 +50,10 @@ context('A user can add a case note', () => {
   it('Should show correct error messages', () => {
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
     const form = createCaseNotePage.form()
+    form.date().clear()
+    cy.get('form').click()
+    form.hours().clear()
+    form.minutes().clear()
     form.submitButton().click()
 
     CreateCaseNotePage.verifyOnPage()
