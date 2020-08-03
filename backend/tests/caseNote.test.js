@@ -85,9 +85,7 @@ describe('case note management', () => {
 
       await displayCreateCaseNotePage(req, res)
 
-      expect(res.render).toBeCalledWith('error.njk', {
-        url: '/prisoner/ABC123/case-notes',
-      })
+      expect(res.render).toBeCalledWith('error.njk', { url: '/prisoner/ABC123/case-notes' })
       expect(logError).toBeCalledWith(
         '/add-case-note/',
         new Error('There has been an error'),
@@ -123,6 +121,27 @@ describe('case note management', () => {
         ],
       })
 
+      Date.now.mockRestore()
+    })
+
+    it('should default type and subType to the values supplied via query parameters', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1595607300000) // Friday, 24 July 2020 17:15:00
+
+      const req = { ...mockCreateReq, params: { offenderNo }, query: { type: 'KS', subType: 'KS' } }
+      await displayCreateCaseNotePage(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          formValues: {
+            date: '24/07/2020',
+            hours: 16,
+            minutes: 15,
+            subType: 'KS',
+            type: 'KS',
+          },
+        })
+      )
       Date.now.mockRestore()
     })
   })

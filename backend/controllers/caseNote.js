@@ -9,6 +9,7 @@ const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 const caseNoteFactory = (elite2Api, caseNotesApi) => {
   const displayCreateCaseNotePage = async (req, res) => {
     const { offenderNo } = req.params
+    const { type, subType } = req.query || {}
     try {
       const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
 
@@ -48,6 +49,8 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
         offenderDetails,
         offenderNo,
         formValues: {
+          type,
+          subType,
           ...req.body,
           date: currentDateTime.format('DD/MM/YYYY'),
           hours: currentDateTime.hours(),
