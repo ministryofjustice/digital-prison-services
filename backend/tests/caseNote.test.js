@@ -113,7 +113,7 @@ describe('case note management', () => {
         caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
         formValues: {
           date: '24/07/2020',
-          hours: 17,
+          hours: 16,
           minutes: 15,
         },
         types: [{ value: 'OBSERVE', text: 'Observations' }, { value: 'ACHIEVEMENTS', text: 'Achievements' }],
