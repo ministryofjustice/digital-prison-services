@@ -201,7 +201,7 @@ describe('Amendment case note', () => {
       await controller.post(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
-        { href: '#moreDetail', text: 'Enter more details using 4000 characters or less' },
+        { href: '#moreDetail', text: 'Enter more details using 4,000 characters or less' },
       ])
 
       expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
@@ -227,7 +227,7 @@ describe('Amendment case note', () => {
       await controller.post(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
-        { href: '#moreDetail', text: 'Enter more details using 4000 characters or less' },
+        { href: '#moreDetail', text: 'Enter more details using 4,000 characters or less' },
       ])
 
       expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
