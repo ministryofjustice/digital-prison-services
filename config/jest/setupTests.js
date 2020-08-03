@@ -11,3 +11,4 @@ global.open = jest.fn()
 
 process.env.USE_OF_FORCE_URL = '//useOfForceUrl'
 process.env.USE_OF_FORCE_PRISONS = 'LEI'
+process.env.TZ = 'GMT'
