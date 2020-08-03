@@ -192,6 +192,7 @@
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
     ],
+    "globalSetup": "<rootDir>/config/jest/globalSetup.js",
     "setupFilesAfterEnv": [
       "<rootDir>/config/jest/setupTests.js"
     ],

@@ -96,7 +96,7 @@ describe('case note management', () => {
     })
 
     it('should render the add case note with the correctly formatted information', async () => {
-      jest.spyOn(global.Date, 'now').mockImplementationOnce(() => new Date('2020-07-24T16:15:00.135Z').valueOf())
+      jest.spyOn(Date, 'now').mockImplementation(() => 1595607300000) // Friday, 24 July 2020 17:15:00
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
