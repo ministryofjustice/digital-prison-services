@@ -313,11 +313,6 @@ const setup = ({
     amendCaseNNoteRouter({ elite2Api, caseNotesApi, logError })
   )
 
-  router.get('/not-found', (req, res) => {
-    res.status(404)
-    res.send('<h1> Page not found </h1>')
-  })
-
   return router
 }
 
