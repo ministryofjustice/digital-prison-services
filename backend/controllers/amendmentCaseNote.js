@@ -75,7 +75,7 @@ module.exports = ({ elite2Api, caseNotesApi, logError }) => {
 
     const maximumLengthValidation = {
       href: '#moreDetail',
-      text: `Enter more details using 4000 characters or less`,
+      text: `Enter more details using 4,000 characters or less`,
     }
 
     try {
