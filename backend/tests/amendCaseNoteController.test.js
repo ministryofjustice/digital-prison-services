@@ -64,7 +64,7 @@ describe('Amendment case note', () => {
 
       await controller.index(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith('/not-found')
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes')
     })
     it('should render error page on exception', async () => {
       elite2Api.getDetails.mockRejectedValue(new Error('error'))
