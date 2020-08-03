@@ -111,6 +111,7 @@ describe('Amendment case note', () => {
       expect(res.render).toHaveBeenCalledWith('amendCaseNote.njk', {
         errors: undefined,
         formValues: undefined,
+        prisonerNameForBreadcrumb: 'Bob Smith',
         backToCaseNotes: '/prisoner/A12345/case-notes',
         caseNoteId: 1,
         prisonNumber: 'A12345',
@@ -210,6 +211,26 @@ describe('Amendment case note', () => {
       await controller.post(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes')
+    })
+
+    it('should show validation message when the api returns a 400', async () => {
+      class NetworkError extends Error {
+        constructor(status) {
+          super()
+          this.response = {
+            status,
+          }
+        }
+      }
+      caseNotesApi.amendCaseNote.mockRejectedValue(new NetworkError(400))
+
+      await controller.post(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
+        { href: '#moreDetail', text: 'Enter more details using 4000 characters or less' },
+      ])
+
+      expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
     })
   })
 })
