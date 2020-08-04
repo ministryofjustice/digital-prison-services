@@ -38,6 +38,12 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       )
     )
 
+    const showCsraLink =
+      prisonerDetails.assessments &&
+      prisonerDetails.assessments.some(
+        assessment => assessment.assessmentCode === 'CSR' && assessment.assessmentComment
+      )
+
     const showNonAssociationsLink =
       nonAssociations &&
       nonAssociations.nonAssociations.some(
@@ -49,6 +55,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('cellMove/cellSearch.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       showNonAssociationsLink,
+      showCsraLink,
       alerts: alertsToShow,
       prisonerDetails,
       offenderNo,
