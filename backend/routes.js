@@ -54,6 +54,7 @@ const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
 const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
 const covidRouter = require('./routes/covidRouter')
 const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
+const cellMoveRouter = require('./routes/cellMoveRouter')
 
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
@@ -285,6 +286,8 @@ const setup = ({
     '/offenders/:offenderNo/retention-reasons',
     retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
   )
+
+  router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ elite2Api, logError }))
 
   router.use(
     '/prisoner/:offenderNo',
