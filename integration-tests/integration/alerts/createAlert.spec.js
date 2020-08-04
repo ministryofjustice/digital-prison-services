@@ -59,22 +59,31 @@ context('A user can add an appointment', () => {
   })
 
   it('Should show correct message when offender already has this alert', () => {
+    cy.server()
+
+    cy.route({
+      method: 'GET',
+      url: '/offenders/A12345/create-alert?typeCode=X',
+    }).as('getTypes')
+
     const createAlertPage = CreateAlertPage.verifyOnPage()
     const form = createAlertPage.form()
-    form.alertType().select('X')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(50)
-    cy.get('#alert-code').select('XC')
-    form.comments().type('Test comment')
-    form.submitButton().click()
 
-    CreateAlertPage.verifyOnPage()
-    createAlertPage.errorSummaryTitle().contains('There is a problem')
-    createAlertPage
-      .errorSummaryList()
-      .find('li')
-      .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select an alert that does not already exist for this offender')
-      })
+    form.alertType().select('X')
+
+    cy.wait('@getTypes').then(() => {
+      cy.get('#alert-code').select('XC')
+      form.comments().type('Test comment')
+      form.submitButton().click()
+
+      CreateAlertPage.verifyOnPage()
+      createAlertPage.errorSummaryTitle().contains('There is a problem')
+      createAlertPage
+        .errorSummaryList()
+        .find('li')
+        .then($errors => {
+          expect($errors.get(0).innerText).to.contain('Select an alert that does not already exist for this offender')
+        })
+    })
   })
 })
