@@ -1279,4 +1279,18 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
+  stubBookingNonAssociations: response =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9].+?/non-association-details',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || {},
+      },
+    }),
 }
