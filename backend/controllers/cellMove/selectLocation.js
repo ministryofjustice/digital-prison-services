@@ -10,6 +10,7 @@ const cellMoveAlertCodes = [
   'XTACT',
   'RTP',
   'RLG',
+  'RCON',
   'XHT',
   'XGANG',
   'XR',
