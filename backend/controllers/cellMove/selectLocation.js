@@ -46,13 +46,14 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
 
     const showNonAssociationsLink =
       nonAssociations &&
+      nonAssociations.nonAssociations &&
       nonAssociations.nonAssociations.some(
         nonAssociation =>
           nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
           prisonerDetails.assignedLivingUnit.agencyName.toLowerCase()
       )
 
-    return res.render('cellMove/cellSearch.njk', {
+    return res.render('cellMove/selectLocation.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       showNonAssociationsLink,
       showCsraLink,
