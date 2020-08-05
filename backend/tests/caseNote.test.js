@@ -76,6 +76,26 @@ describe('case note management', () => {
   })
 
   describe('displayCreateCaseNotePage()', () => {
+    it('should remove the leading zeros from the prepopulated minutes', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1595606800000) // Friday, 24 July 2020 16:06:00
+
+      const req = { ...mockCreateReq, params: { offenderNo } }
+
+      await displayCreateCaseNotePage(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          formValues: {
+            date: '24/07/2020',
+            hours: '16',
+            minutes: '06',
+          },
+        })
+      )
+
+      Date.now.mockRestore()
+    })
     it('should return an error when there is a problem loading the form', async () => {
       caseNotesApi.myCaseNoteTypes = jest.fn().mockImplementationOnce(() => {
         throw new Error('There has been an error')
@@ -111,8 +131,8 @@ describe('case note management', () => {
         caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
         formValues: {
           date: '24/07/2020',
-          hours: 16,
-          minutes: 15,
+          hours: '16',
+          minutes: '15',
         },
         types: [{ value: 'OBSERVE', text: 'Observations' }, { value: 'ACHIEVEMENTS', text: 'Achievements' }],
         subTypes: [
@@ -135,8 +155,8 @@ describe('case note management', () => {
         expect.objectContaining({
           formValues: {
             date: '24/07/2020',
-            hours: 16,
-            minutes: 15,
+            hours: '16',
+            minutes: '15',
             subType: 'KS',
             type: 'KS',
           },

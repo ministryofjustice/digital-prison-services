@@ -53,8 +53,9 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
           subType,
           ...req.body,
           date: currentDateTime.format('DD/MM/YYYY'),
-          hours: currentDateTime.hours(),
-          minutes: currentDateTime.minutes(),
+          hours: currentDateTime.hours().toString(),
+          minutes:
+            currentDateTime.minutes() < 10 ? `0${currentDateTime.minutes()}` : currentDateTime.minutes().toString(),
         },
         types,
         subTypes,
