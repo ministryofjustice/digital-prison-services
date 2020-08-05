@@ -57,8 +57,8 @@
 
             <div class="govuk-grid-column-one-half">
               <h3 class="govuk-summary-list-title govuk-heading-s govuk-!-padding-bottom-1">{{ contact.name }}</h3>
-              {% if contact.emergencyContact %}
-                <p class="govuk-body govuk-!-margin-bottom-1">Emergency contact</p>
+              {% if contact.jobTitle %}
+                <p class="govuk-body govuk-!-margin-bottom-1">{{ contact.jobTitle }}</p>
               {% endif %}
 
               {% if contact.noFixedAddress %}

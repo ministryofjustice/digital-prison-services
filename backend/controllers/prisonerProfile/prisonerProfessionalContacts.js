@@ -1,19 +1,20 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
-const { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime } = require('../../utils')
+const { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime, getNamesFromString } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 const { getPhone, getFormattedAddress } = require('../../shared/addressHelpers')
 
 const getContactView = contact => {
-  const { address, phones, emails } = contact
+  const { address, phones, emails, jobTitle } = contact
 
   const { noFixedAddress } = address || {}
 
   return {
     name: formatName(contact.firstName, contact.lastName),
+    jobTitle,
     noFixedAddress,
     details: [
       { label: 'Phone number', html: getPhone(phones) },
@@ -70,12 +71,28 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
           })
       )).flat()
 
+    const groupedContacts = Object.entries(groupBy(contactsForEachAddress, 'relationshipDescription')).map(
+      ([key, value]) => ({ profession: key, contacts: value.map(getContactView) })
+    )
+
+    const pomStaff = Object.entries(allocationManager)
+      .filter(([key, value]) => value.name)
+      .map(([key, value]) => ({
+        name: getNamesFromString(value.name).join(' '),
+        jobTitle: key === 'secondary_pom' && 'Co-worker',
+      }))
+
+    if (hasLength(pomStaff)) {
+      groupedContacts.push({
+        profession: 'Prison Offender Manager',
+        contacts: pomStaff,
+      })
+    }
+
     return res.render('prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       dpsUrl,
-      groupedContacts: Object.entries(groupBy(contactsForEachAddress, 'relationshipDescription'))
-        .map(([key, value]) => ({ profession: key, contacts: value.map(getContactView) }))
-        .sort((left, right) => left.profession.localeCompare(right.profession)),
+      groupedContacts: groupedContacts.sort((left, right) => left.profession.localeCompare(right.profession)),
       offenderNo,
       prisonerName: formatName(firstName, lastName),
     })
