@@ -46,6 +46,26 @@ context('A user can select a cell', () => {
   it('Shows the correct data when there is a relevant non-association and a CSR rating comment', () => {
     cy.task('stubOffenderFullDetails', {
       ...offenderFullDetails,
+      alerts: [
+        {
+          active: true,
+          addedByFirstName: 'John',
+          addedByLastName: 'Smith',
+          alertCode: 'XGANG',
+          alertCodeDescription: 'Gang member',
+          alertId: 1,
+          alertType: 'X',
+          alertTypeDescription: 'Security',
+          bookingId: 14,
+          comment: 'silly',
+          dateCreated: '2019-08-25',
+          dateExpires: '2019-09-20',
+          expired: false,
+          expiredByFirstName: 'Jane',
+          expiredByLastName: 'Smith',
+          offenderNo: 'G3878UK',
+        },
+      ],
       assessments: [
         {
           assessmentCode: 'CSR',
@@ -83,7 +103,7 @@ context('A user can select a cell', () => {
     selectLocationPage.livingUnit().contains('HMP Moorland')
     selectLocationPage.csra().contains('High')
     selectLocationPage.csraLink().contains('View details')
-    selectLocationPage.alerts().contains('None')
+    selectLocationPage.alerts().contains('Gang member')
     selectLocationPage.nonAssociationsLink().contains('View non-associations')
     selectLocationPage.nonAssociationsMessage().should('not.be.visible')
   })
