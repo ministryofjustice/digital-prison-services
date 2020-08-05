@@ -300,4 +300,24 @@ context('A user can view prisoner case notes', () => {
       })
     })
   })
+
+  it.only('should remove the view all case notes link once clicked', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesTopLink().should('exist')
+    page.viewAllCaseNotesBottomLink().should('exist')
+
+    page.viewAllCaseNotesTopLink().click()
+
+    CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesTopLink().should('not.exist')
+    page.viewAllCaseNotesBottomLink().should('not.exist')
+  })
 })

@@ -101,7 +101,7 @@
 
         {{ mojPagination(pagination) }}
 
-       {% if pagination.results.count  > 20 %}
+       {% if not showAll and pagination.results.count  > 20 %}
             <div class="govuk-body govuk-!-margin-top-0 pull-right">
                 <a data-test="view-all-case-notes-top-link" href="{{ viewAllCaseNotesUrl }}" class="govuk-link"> View all case notes</a>
             </div>
@@ -193,7 +193,7 @@
         {% endfor %}
 
         {{ mojPagination(pagination) }}
-        {% if pagination.results.count > 20 %}
+        {% if not showAll and pagination.results.count > 20 %}
             <div class="govuk-body govuk-!-margin-top-0 pull-right">
                 <a data-test="view-all-case-notes-bottom-link" href="{{ viewAllCaseNotesUrl }}" class="govuk-link"> View all case notes</a>
             </div>
