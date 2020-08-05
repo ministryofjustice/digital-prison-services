@@ -306,5 +306,6 @@ module.exports = on => {
     stubBookingDetails: details => elite2api.stubBookingDetails(details),
     verifySaveAmendment: caseNotes.verifySaveAmendment,
     stubSaveAmendment: caseNotes.stubSaveAmendment,
+    stubBookingNonAssociations: response => elite2api.stubBookingNonAssociations(response),
   })
 }

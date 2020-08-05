@@ -4,6 +4,7 @@
   "firstName": "John",
   "lastName": "Smith",
   "offenderNo": "G3878UK",
+  "csra": "High",
   "alerts": [
     {
       "active": true,
