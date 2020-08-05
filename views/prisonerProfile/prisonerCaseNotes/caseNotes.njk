@@ -101,6 +101,12 @@
 
         {{ mojPagination(pagination) }}
 
+       {% if not showAll and pagination.results.count  > 20 %}
+            <div class="govuk-body govuk-!-margin-top-0 pull-right">
+                <a data-test="view-all-case-notes-top-link" href="{{ viewAllCaseNotesUrl }}" class="govuk-link"> View all case notes</a>
+            </div>
+       {% endif %}
+
         <div class="case-note-entry">
             <div class="case-notes-created">
                 <b class="govuk-heading-s">Created</b>
@@ -187,6 +193,12 @@
         {% endfor %}
 
         {{ mojPagination(pagination) }}
+        {% if not showAll and pagination.results.count > 20 %}
+            <div class="govuk-body govuk-!-margin-top-0 pull-right">
+                <a data-test="view-all-case-notes-bottom-link" href="{{ viewAllCaseNotesUrl }}" class="govuk-link"> View all case notes</a>
+            </div>
+        {% endif %}
+
     {% else %}
         <p class="govuk-body" data-test="no-case-notes">There are no case notes of this type</p>
     {% endif %}
