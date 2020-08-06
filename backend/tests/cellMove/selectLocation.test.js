@@ -1,4 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+const moment = require('moment')
 
 const selectLocation = require('../../controllers/cellMove/selectLocation')
 const { serviceUnavailableMessage } = require('../../common-messages')
