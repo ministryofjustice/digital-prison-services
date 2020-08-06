@@ -50,7 +50,7 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
       ? otherContacts.filter(contact => contact.activeFlag && contact.contactType === 'O')
       : []
 
-    const contactsForEachAddress =
+    const contactForEachAddress =
       activeOfficialContacts.length &&
       (await Promise.all(
         activeOfficialContacts
@@ -71,9 +71,9 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
           })
       )).flat()
 
-    const contactsGroupedByProfession = hasLength(contactsForEachAddress)
-      ? Object.entries(groupBy(contactsForEachAddress, 'relationshipDescription')).map(([key, value]) => ({
-          profession: key,
+    const contactsGroupedByRelationship = hasLength(contactForEachAddress)
+      ? Object.entries(groupBy(contactForEachAddress, 'relationshipDescription')).map(([key, value]) => ({
+          relationship: key,
           contacts: value.map(getContactView),
         }))
       : []
@@ -86,8 +86,8 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
       }))
 
     if (hasLength(pomStaff)) {
-      contactsGroupedByProfession.push({
-        profession: 'Prison Offender Manager',
+      contactsGroupedByRelationship.push({
+        relationship: 'Prison Offender Manager',
         contacts: pomStaff,
       })
     }
@@ -95,8 +95,8 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
     return res.render('prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       dpsUrl,
-      contactsGroupedByProfession: contactsGroupedByProfession.sort((left, right) =>
-        left.profession.localeCompare(right.profession)
+      contactsGroupedByRelationship: contactsGroupedByRelationship.sort((left, right) =>
+        left.relationship.localeCompare(right.relationship)
       ),
       offenderNo,
       prisonerName: formatName(firstName, lastName),

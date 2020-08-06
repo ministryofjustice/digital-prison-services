@@ -54,7 +54,7 @@ describe('Prisoner schedule', () => {
         {
           breadcrumbPrisonerName: 'Smith , John',
           dpsUrl: 'http://localhost:3000/',
-          contactsGroupedByProfession: [],
+          contactsGroupedByRelationship: [],
           offenderNo: 'ABC123',
           prisonerName: 'John Smith ',
         }
@@ -213,9 +213,9 @@ describe('Prisoner schedule', () => {
           {
             breadcrumbPrisonerName: 'Smith , John',
             dpsUrl: 'http://localhost:3000/',
-            contactsGroupedByProfession: [
+            contactsGroupedByRelationship: [
               {
-                profession: 'Case Administrator',
+                relationship: 'Case Administrator',
                 contacts: [
                   {
                     details: [
@@ -356,7 +356,7 @@ describe('Prisoner schedule', () => {
                 ],
               },
               {
-                profession: 'Prison Offender Manager',
+                relationship: 'Prison Offender Manager',
                 contacts: [
                   {
                     jobTitle: false,
@@ -369,7 +369,7 @@ describe('Prisoner schedule', () => {
                 ],
               },
               {
-                profession: 'Probation Officer',
+                relationship: 'Probation Officer',
                 contacts: [
                   {
                     details: [
