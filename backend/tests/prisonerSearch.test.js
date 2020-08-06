@@ -336,6 +336,20 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/' })
     })
 
+    it('should not log connection reset API errors', async () => {
+      class ConnectionResetError extends Error {
+        constructor() {
+          super()
+          this.code = 'ECONNRESET'
+        }
+      }
+      elite2Api.getInmates.mockImplementation(() => Promise.reject(new ConnectionResetError()))
+
+      await controller.index(req, res)
+
+      expect(logError.mock.calls.length).toBe(0)
+    })
+
     it('should NOT set prisonerSearchUrl to the originalUrl if there has NOT been a search', async () => {
       await controller.index(req, res)
 

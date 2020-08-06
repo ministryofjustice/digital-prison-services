@@ -61,4 +61,19 @@ describe('House block locations', () => {
       'Error trying to retrieve groups'
     )
   })
+
+  it('should not log connection reset API errors', async () => {
+    class ConnectionResetError extends Error {
+      constructor() {
+        super()
+        this.code = 'ECONNRESET'
+      }
+    }
+
+    whereaboutsApi.searchGroups.mockRejectedValue(new ConnectionResetError())
+
+    await controller.getHouseblockLocations(req, res)
+
+    expect(logError.mock.calls.length).toBe(0)
+  })
 })
