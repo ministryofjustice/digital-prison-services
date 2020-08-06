@@ -6,10 +6,11 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{title}}</h1>
 
-  <p class="govuk-body">You must also check any local processes for non-association details. </p>
+  <p class="govuk-body" data-test="message">You must also check any local processes for non-association details.</p>
   {% for nonAssociation in nonAssociationsRows %}
     {{ govukSummaryList({
         classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-5",
+        attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
         rows: [
           {
             key: {

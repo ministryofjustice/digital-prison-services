@@ -54,7 +54,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         nonAssociation =>
           nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
             prisonerDetails.assignedLivingUnit.agencyName.toLowerCase() &&
-          (!nonAssociation.expiryDate || nonAssociation.expiryDate > moment())
+          (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:ss:mm') > moment())
       )
 
     return res.render('cellMove/selectLocation.njk', {

@@ -21,7 +21,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
           nonAssociation =>
             nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
               nonAssociations.agencyDescription.toLowerCase() &&
-            (!nonAssociation.expiryDate || nonAssociation.expiryDate > moment())
+            (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment())
         )
         .sort((left, right) => {
           if (left.effectiveDate > right.effectiveDate) return 1
@@ -35,7 +35,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       nonAssocationsInEstablishment &&
       nonAssocationsInEstablishment.map(nonAssociation => {
         return {
-          name: formatName(
+          name: putLastNameFirst(
             nonAssociation.offenderNonAssociation.firstName,
             nonAssociation.offenderNonAssociation.lastName
           ),
