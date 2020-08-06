@@ -102,6 +102,7 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
       prisonerName: formatName(firstName, lastName),
     })
   } catch (error) {
+    console.log('john error', error)
     logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: '/' })
   }
