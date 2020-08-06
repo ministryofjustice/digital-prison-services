@@ -56,7 +56,7 @@ describe('Prisoner schedule', () => {
           dpsUrl: 'http://localhost:3000/',
           contactsGroupedByRelationship: [],
           offenderNo: 'ABC123',
-          prisonerName: 'John Smith ',
+          prisonerName: ['John Smith ', 's'],
         }
       )
     })
@@ -445,7 +445,7 @@ describe('Prisoner schedule', () => {
               },
             ],
             offenderNo: 'ABC123',
-            prisonerName: 'John Smith ',
+            prisonerName: ['John Smith ', 's'],
           }
         )
       })
