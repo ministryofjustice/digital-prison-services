@@ -25,8 +25,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{ prisonerName + "'s professional contacts" }}</h1>
-
+  <h1 class="govuk-heading-l">{{ prisonerName[0] }}&rsquo;{{ prisonerName[1] }} professional contacts</h1>
   {% for group in contactsGroupedByRelationship %}
     <h2 class="govuk-heading-m" data-test="professional-contacts-relationship">{{ group.relationship }}</h2>
 
