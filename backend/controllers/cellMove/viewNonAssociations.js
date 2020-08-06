@@ -49,7 +49,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
             nonAssociation.offenderNonAssociation.lastName
           )} is`,
           otherOffenderRole: nonAssociation.offenderNonAssociation.reasonDescription,
-          comment: nonAssociation.comments,
+          comment: nonAssociation.comments || 'None entered',
           effectiveDate: moment(nonAssociation.effectiveDate).format('D MMMM YYYY'),
         }
       })
