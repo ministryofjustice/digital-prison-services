@@ -52,6 +52,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       nonAssociations.nonAssociations &&
       nonAssociations.nonAssociations.some(
         nonAssociation =>
+          nonAssociation.offenderNonAssociation &&
+          prisonerDetails.assignedLivingUnit &&
           nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
             prisonerDetails.assignedLivingUnit.agencyName.toLowerCase() &&
           (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:ss:mm') > moment())
