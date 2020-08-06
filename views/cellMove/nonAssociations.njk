@@ -3,10 +3,32 @@
 
 {% set title = "Active non-association details for " + prisonerName %}
 
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: '/prisoner/' + offenderNo
+      },
+      {
+        text: "Select a location",
+        href: '/prisoner/' + offenderNo +'/cell-move/select-location'
+      },
+      {
+        text: 'Active non-association details'
+      }
+    ]
+}) }}
+{% endblock %}
+
 {% block content %}
   <h1 class="govuk-heading-l">{{title}}</h1>
 
-  <p class="govuk-body" data-test="message">You must also check any local processes for non-association details.</p>
+  <p class="govuk-body" data-test="message">You must check any local processes for non-association details.</p>
   {% for nonAssociation in nonAssociationsRows %}
     {{ govukSummaryList({
         classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-5",
