@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 const { serviceUnavailableMessage } = require('../../common-messages')
 const alertFlagValues = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
@@ -50,8 +52,11 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       nonAssociations.nonAssociations &&
       nonAssociations.nonAssociations.some(
         nonAssociation =>
+          nonAssociation.offenderNonAssociation &&
+          prisonerDetails.assignedLivingUnit &&
           nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
-          prisonerDetails.assignedLivingUnit.agencyName.toLowerCase()
+            prisonerDetails.assignedLivingUnit.agencyName.toLowerCase() &&
+          (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:ss:mm') > moment())
       )
 
     return res.render('cellMove/selectLocation.njk', {
@@ -62,6 +67,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       prisonerDetails,
       offenderNo,
       dpsUrl,
+      nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
