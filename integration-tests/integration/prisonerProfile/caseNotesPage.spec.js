@@ -3,35 +3,38 @@ const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDeta
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
 const offenderNo = 'A12345'
-const caseNotes = [
-  {
-    caseNoteId: 12311312,
-    offenderIdentifier: 'A1234AA',
-    type: 'IEP',
-    typeDescription: 'Incentive Level',
-    subType: 'IEP_WARN',
-    subTypeDescription: 'Incentive Level Warning',
-    source: 'INST',
-    creationDateTime: '2017-10-31T01:30:00',
-    occurrenceDateTime: '2017-10-31T01:30:00',
-    authorName: 'Mouse, Mickey',
-    authorUserId: '12345',
-    text: 'This is some text',
-    locationId: 'MDI',
-    amendments: [
-      {
-        caseNoteAmendmentId: 123232,
-        sequence: 1,
-        creationDateTime: '2018-12-01T13:45:00',
-        authorUserName: 'USER1',
-        authorName: 'Mouse, Mickey',
-        additionalNoteText: 'Some Additional Text',
-        authorUserId: 12345,
-      },
-    ],
-    eventId: -23,
-  },
-]
+const caseNote = {
+  caseNoteId: 12311312,
+  offenderIdentifier: 'A1234AA',
+  type: 'IEP',
+  typeDescription: 'Incentive Level',
+  subType: 'IEP_WARN',
+  subTypeDescription: 'Incentive Level Warning',
+  source: 'INST',
+  creationDateTime: '2017-10-31T01:30:00',
+  occurrenceDateTime: '2017-10-31T01:30:00',
+  authorName: 'Mouse, Mickey',
+  authorUserId: '12345',
+  text: 'This is some text',
+  locationId: 'MDI',
+  amendments: [
+    {
+      caseNoteAmendmentId: 123232,
+      sequence: 1,
+      creationDateTime: '2018-12-01T13:45:00',
+      authorUserName: 'USER1',
+      authorName: 'Mouse, Mickey',
+      additionalNoteText: 'Some Additional Text',
+      authorUserId: 12345,
+    },
+  ],
+  eventId: -23,
+}
+
+const replicate = ({ data, times }) =>
+  Array(times)
+    .fill()
+    .map(() => data)
 
 context('A user can view prisoner case notes', () => {
   before(() => {
@@ -40,11 +43,6 @@ context('A user can view prisoner case notes', () => {
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
     cy.login()
     cy.task('stubCaseNoteTypes')
-
-    cy.task('stubCaseNotes', {
-      totalElements: 1,
-      content: caseNotes,
-    })
 
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
@@ -55,6 +53,10 @@ context('A user can view prisoner case notes', () => {
   })
 
   it('A user can view a prisoners case notes', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
     cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
     const page = CaseNotesPage.verifyOnPage('Smith, John')
     page.noDataMessage().should('not.be.visible')
@@ -95,7 +97,7 @@ context('A user can view prisoner case notes', () => {
     rows
       .caseNoteAddMoreDetailsLink()
       .contains('Add more details')
-      .should('have.attr', 'href', 'http://localhost:3008/prisoner/A12345/case-notes/amend-case-note/12311312')
+      .should('have.attr', 'href', '/prisoner/A12345/case-notes/amend-case-note/12311312')
 
     rows
       .caseNotePrintIncentiveLevelSlipLink()
@@ -123,13 +125,199 @@ context('A user can view prisoner case notes', () => {
     CaseNotesPage.verifyOnPage('Smith, John')
   })
 
-  // it('A user see the no case notes message when there are no results', () => {
-  //   cy.task('stubCaseNotes', {
-  //     totalElements: 0,
-  //     content: [],
-  //   })
-  //   cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
-  //   const page = CaseNotesPage.verifyOnPage('Smith, John')
-  //   page.noDataMessage().should('be.visible')
-  // })
+  it('should request all case notes when "View all case notes" top link has been clicked', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesTopLink().click()
+
+    cy.url().should('eq', 'http://localhost:3008/prisoner/A12345/case-notes?showAll=true')
+  })
+
+  it('should request all case notes when "View all case notes" bottom link has been clicked', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesBottomLink().click()
+
+    cy.url().should('eq', 'http://localhost:3008/prisoner/A12345/case-notes?showAll=true')
+  })
+
+  it('should not show links if the results are less than 20', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 1,
+      content: [caseNote],
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesTopLink().should('not.exist')
+    page.viewAllCaseNotesBottomLink().should('not.exist')
+  })
+
+  it('should repopulate input fields with selected filters once applied has been clicked', () => {
+    cy.server()
+    cy.route({
+      method: 'GET',
+      url: '/prisoner/A12345/case-notes?typeCode=OBSERVE',
+    }).as('getSubTypes')
+
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page
+      .filterForm()
+      .typeSelect()
+      .select('Observations')
+
+    cy.wait('@getSubTypes').then(() => {
+      page
+        .filterForm()
+        .subTypeSelect()
+        .select('Test')
+      page
+        .filterForm()
+        .fromDate()
+        .type('02/02/2020')
+      page
+        .filterForm()
+        .toDate()
+        .type('02/01/2020')
+      page
+        .filterForm()
+        .applyButton()
+        .click()
+
+      CaseNotesPage.verifyOnPage('Smith, John')
+
+      page
+        .filterForm()
+        .typeSelect()
+        .should('have.value', 'OBSERVE')
+      page
+        .filterForm()
+        .subTypeSelect()
+        .should('have.value', 'test')
+      page
+        .filterForm()
+        .fromDate()
+        .should('have.value', '02/02/2020')
+      page
+        .filterForm()
+        .toDate()
+        .should('have.value', '02/01/2020')
+    })
+  })
+
+  it('should remember filters when viewing all case notes', () => {
+    cy.server()
+    cy.route({
+      method: 'GET',
+      url: '/prisoner/A12345/case-notes?typeCode=OBSERVE',
+    }).as('getSubTypes')
+
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page
+      .filterForm()
+      .typeSelect()
+      .select('Observations')
+
+    const fillOutForm = () => {
+      page
+        .filterForm()
+        .subTypeSelect()
+        .select('Test')
+      page
+        .filterForm()
+        .fromDate()
+        .type('02/02/2020')
+      page
+        .filterForm()
+        .toDate()
+        .type('02/01/2020')
+      page
+        .filterForm()
+        .applyButton()
+        .click()
+    }
+
+    cy.wait('@getSubTypes').then(() => {
+      fillOutForm()
+
+      CaseNotesPage.verifyOnPage('Smith, John')
+
+      page.viewAllCaseNotesBottomLink().click()
+
+      CaseNotesPage.verifyOnPage('Smith, John')
+
+      cy.url().should(
+        'eq',
+        'http://localhost:3008/prisoner/A12345/case-notes?showAll=true&pageOffsetOption=0&type=OBSERVE&subType=test&fromDate=02%2F02%2F2020&toDate=02%2F01%2F2020'
+      )
+
+      cy.visit(`/prisoner/${offenderNo}/case-notes`)
+
+      CaseNotesPage.verifyOnPage('Smith, John')
+
+      page
+        .filterForm()
+        .typeSelect()
+        .select('Observations')
+
+      cy.wait('@getSubTypes').then(() => {
+        fillOutForm()
+
+        CaseNotesPage.verifyOnPage('Smith, John')
+
+        page.viewAllCaseNotesTopLink().click()
+
+        CaseNotesPage.verifyOnPage('Smith, John')
+
+        cy.url().should(
+          'eq',
+          'http://localhost:3008/prisoner/A12345/case-notes?showAll=true&pageOffsetOption=0&type=OBSERVE&subType=test&fromDate=02%2F02%2F2020&toDate=02%2F01%2F2020'
+        )
+      })
+    })
+  })
+
+  it.only('should remove the view all case notes link once clicked', () => {
+    cy.task('stubCaseNotes', {
+      totalElements: 21,
+      content: replicate({ data: caseNote, times: 21 }),
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesTopLink().should('exist')
+    page.viewAllCaseNotesBottomLink().should('exist')
+
+    page.viewAllCaseNotesTopLink().click()
+
+    CaseNotesPage.verifyOnPage('Smith, John')
+
+    page.viewAllCaseNotesTopLink().should('not.exist')
+    page.viewAllCaseNotesBottomLink().should('not.exist')
+  })
 })

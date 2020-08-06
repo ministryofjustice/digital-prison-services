@@ -90,20 +90,11 @@ describe('Case notes controller', () => {
     expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
       endDate: undefined,
       pageNumber: 0,
+      perPage: 20,
       startDate: undefined,
       subType: undefined,
       type: undefined,
     })
-  })
-
-  it('should redirect when pageOffsetOption is not supplied', async () => {
-    const req = {
-      ...reqDefault,
-      query: {},
-    }
-    await controller(req, res)
-
-    expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes?pageOffsetOption=0')
   })
 
   it('should request case notes with filters', async () => {
@@ -124,12 +115,48 @@ describe('Case notes controller', () => {
       'A12345',
       expect.objectContaining({
         endDate: '11/10/2020',
-        pageNumber: 1,
+        pageNumber: 0,
+        perPage: 20,
         startDate: '10/10/2010',
         subType: 'subType2',
         type: 'type1',
       })
     )
+  })
+
+  it('should make an initial request to pull the total results size, the another request to bring back all the case notes', async () => {
+    caseNotesApi.getCaseNotes.mockResolvedValue({
+      totalElements: 1000,
+    })
+
+    const req = {
+      ...reqDefault,
+      query: {
+        showAll: true,
+        type: 'type1',
+        subType: 'subType2',
+        fromDate: '10/10/2010',
+        toDate: '11/10/2020',
+      },
+    }
+    await controller(req, res)
+
+    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
+      endDate: '11/10/2020',
+      pageNumber: 0,
+      perPage: 1,
+      startDate: '10/10/2010',
+      subType: 'subType2',
+      type: 'type1',
+    })
+    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
+      endDate: '11/10/2020',
+      pageNumber: 0,
+      perPage: 1000,
+      startDate: '10/10/2010',
+      subType: 'subType2',
+      type: 'type1',
+    })
   })
 
   it('should handle ajax request', async () => {
@@ -173,6 +200,8 @@ describe('Case notes controller', () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCaseNotes/caseNotes.njk', {
+      viewAllCaseNotesUrl:
+        '/prisoner/A12345/case-notes?showAll=true&pageOffsetOption=0&type=type1&subType=subType2&fromDate=10%2F10%2F2010&toDate=11%2F10%2F2020',
       caseNoteViewData: [
         {
           caseNoteDetailColumn: {
@@ -209,6 +238,7 @@ describe('Case notes controller', () => {
       },
       pagination: {},
       prisonerProfileData: {},
+      showAll: undefined,
       subTypes: [
         {
           text: 'Sub type',
