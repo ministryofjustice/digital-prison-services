@@ -19,7 +19,7 @@ const getContactView = contact => {
     details: [
       { label: 'Phone number', html: getPhone(phones) },
       { label: 'Email', value: emails.map(email => email.email).join(', ') },
-      ...(!contact.noAddressRequired && !noFixedAddress ? getFormattedAddress({ address }) : []),
+      ...(!noFixedAddress ? getFormattedAddress({ address }) : []),
     ],
   }
 }
@@ -51,7 +51,7 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
       : []
 
     const contactsForEachAddress =
-      hasLength(activeOfficialContacts) &&
+      activeOfficialContacts.length &&
       (await Promise.all(
         activeOfficialContacts
           .sort((left, right) => left.firstName.localeCompare(right.firstName))
@@ -71,19 +71,22 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
           })
       )).flat()
 
-    const groupedContacts = Object.entries(groupBy(contactsForEachAddress, 'relationshipDescription')).map(
-      ([key, value]) => ({ profession: key, contacts: value.map(getContactView) })
-    )
+    const contactsGroupedByProfession = hasLength(contactsForEachAddress)
+      ? Object.entries(groupBy(contactsForEachAddress, 'relationshipDescription')).map(([key, value]) => ({
+          profession: key,
+          contacts: value.map(getContactView),
+        }))
+      : []
 
     const pomStaff = Object.entries(allocationManager)
-      .filter(([key, value]) => value.name)
+      .filter(([, value]) => value.name)
       .map(([key, value]) => ({
         name: getNamesFromString(value.name).join(' '),
         jobTitle: key === 'secondary_pom' && 'Co-worker',
       }))
 
     if (hasLength(pomStaff)) {
-      groupedContacts.push({
+      contactsGroupedByProfession.push({
         profession: 'Prison Offender Manager',
         contacts: pomStaff,
       })
@@ -92,7 +95,9 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
     return res.render('prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       dpsUrl,
-      groupedContacts: groupedContacts.sort((left, right) => left.profession.localeCompare(right.profession)),
+      contactsGroupedByProfession: contactsGroupedByProfession.sort((left, right) =>
+        left.profession.localeCompare(right.profession)
+      ),
       offenderNo,
       prisonerName: formatName(firstName, lastName),
     })

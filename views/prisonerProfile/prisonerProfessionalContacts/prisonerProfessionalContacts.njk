@@ -27,7 +27,7 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{ prisonerName + "'s professional contacts" }}</h1>
 
-  {% for group in groupedContacts %}
+  {% for group in contactsGroupedByProfession %}
     <h2 class="govuk-heading-m">{{ group.profession }}</h2>
 
     {% if group.contacts.length %}
