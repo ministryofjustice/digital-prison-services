@@ -301,7 +301,7 @@ context('A user can view prisoner case notes', () => {
     })
   })
 
-  it.only('should remove the view all case notes link once clicked', () => {
+  it('should remove the view all case notes link once clicked', () => {
     cy.task('stubCaseNotes', {
       totalElements: 21,
       content: replicate({ data: caseNote, times: 21 }),
