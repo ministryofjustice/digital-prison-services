@@ -9,6 +9,7 @@ const prisonerCaseNotes = require('../controllers/prisonerProfile/prisonerCaseNo
 const prisonerSentenceAndRelease = require('../controllers/prisonerProfile/prisonerSentenceAndRelease')
 const prisonerVisits = require('../controllers/prisonerProfile/prisonerVisits')
 const prisonerSchedule = require('../controllers/prisonerProfile/prisonerSchedule')
+const prisonerProfessionalContacts = require('../controllers/prisonerProfile/prisonerProfessionalContacts')
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
@@ -61,6 +62,10 @@ const controller = ({
   )
   router.get('/visits', prisonerVisits({ elite2Api, logError }))
   router.get('/schedule', prisonerSchedule({ elite2Api, logError }))
+  router.get(
+    '/professional-contacts',
+    prisonerProfessionalContacts({ elite2Api, personService, allocationManagerApi, logError })
+  )
 
   return router
 }
