@@ -27,7 +27,10 @@ module.exports = ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, he
         return {
           type: treatmentTypes.find(treatment => treatment.code === adjustment.treatmentCode).description,
           details: [
-            { label: 'Establishment', value: agencyDetails && agencyDetails.description },
+            {
+              label: 'Establishment',
+              value: agencyDetails && (agencyDetails.formattedDescription || agencyDetails.description),
+            },
             {
               label: 'Date provided',
               value: adjustment.startDate && moment(adjustment.startDate).format('DD MMMM YYYY'),

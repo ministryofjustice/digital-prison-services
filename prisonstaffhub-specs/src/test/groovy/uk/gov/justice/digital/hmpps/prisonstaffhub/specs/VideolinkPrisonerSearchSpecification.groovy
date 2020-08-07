@@ -92,17 +92,20 @@ class VideolinkPrisonerSearchSpecification extends BrowserReportingSpec {
         fixture.loginAsVideoLinkCourtUser(ITAG_USER)
         elite2api.stubGetAgencies([
                 [
-                        "description": "Moorland (HMP & YOI)",
+                        "description": "MOORLAND (HMP & YOI)",
+                        "formattedDescription": "Moorland (HMP & YOI)",
                         "agencyId": "MDI",
                         "agencyType": "INST",
                 ],
                 [
-                        "description": "Leeds (HMP)",
+                        "description": "LEEDS (HMP)",
+                        "formattedDescription": "Leeds (HMP)",
                         "agencyId": "LEI",
                         "agencyType": "INST",
                 ],
                 [
-                        "description": "Wandsworth (HMP)",
+                        "description": "WANDSWORTH (HMP)",
+                        "formattedFescription": "Wandsworth (HMP)",
                         "agencyId": "WWI",
                         "agencyType": "INST",
                 ]

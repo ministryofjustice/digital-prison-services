@@ -82,7 +82,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
 
     return prisons.filter(prison => videoLinkEnabledFor.includes(prison.agencyId)).map(vlp => ({
       agencyId: vlp.agencyId,
-      description: vlp.description,
+      description: vlp.formattedDescription || vlp.description,
     }))
   }
   const renderError = (req, res, error) => {
@@ -207,10 +207,11 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     })
 
     const prisons = await elite2Api.getAgencies(res.locals)
+    const matchingPrison = prisons.find(p => p.agencyId === prison)
 
     return res.render('requestBooking/selectCourt.njk', {
       prisonDetails: {
-        prison: prisons.find(p => p.agencyId === prison).description,
+        prison: matchingPrison.fromattedDescription || matchingPrison.description,
       },
       hearingDetails: {
         date: moment(date, DAY_MONTH_YEAR).format('D MMMM YYYY'),
@@ -305,6 +306,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
       } = bookingDetails
 
       const prisons = await elite2Api.getAgencies(res.locals)
+      const matchingPrison = prisons.find(p => p.agencyId === prison)
 
       const personalisation = {
         firstName,
@@ -313,7 +315,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         date: moment(date, DAY_MONTH_YEAR).format('dddd D MMMM YYYY'),
         startTime: Time(startTime),
         endTime: endTime && Time(endTime),
-        prison: prisons.find(p => p.agencyId === prison).description,
+        prison: matchingPrison.formattedDescription || matchingPrison.description,
         hearingLocation,
         comment: comments || 'None entered',
         preHearingStartAndEndTime,
