@@ -61,6 +61,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       prisonerName: formatName(firstName, lastName),
       dpsUrl,
       selectLocationLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+      offenderNo,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
