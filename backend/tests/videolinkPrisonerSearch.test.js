@@ -26,11 +26,13 @@ describe('Video link prisoner search', () => {
     elite2Api.getAgencies = jest.fn().mockReturnValue([
       {
         agencyId: 'PRISON2',
-        description: 'Prison 2',
+        description: 'PRISON 2',
+        formattedDescription: 'Prison 2',
       },
       {
         agencyId: 'PRISON1',
-        description: 'Prison 1',
+        description: 'PRiSON 1',
+        formattedDescription: 'Prison 1',
       },
     ])
     elite2Api.globalSearch = jest.fn()

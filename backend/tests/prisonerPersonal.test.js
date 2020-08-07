@@ -1760,6 +1760,7 @@ describe('prisoner personal', () => {
           {
             agencyId: 'MDI',
             description: 'MOORLAND (HMP & YOI)',
+            formattedDescription: 'Moorland (HMP & YOI)',
           },
         ])
       })
@@ -1793,7 +1794,7 @@ describe('prisoner personal', () => {
                 {
                   type: 'Flexible refreshment breaks',
                   details: [
-                    { label: 'Establishment', value: 'MOORLAND (HMP & YOI)' },
+                    { label: 'Establishment', value: 'Moorland (HMP & YOI)' },
                     { label: 'Date provided', value: '01 May 2020' },
                     { label: 'Comment', value: 'Flexible drinks comments' },
                   ],
@@ -1801,7 +1802,7 @@ describe('prisoner personal', () => {
                 {
                   type: 'Amplified telephone',
                   details: [
-                    { label: 'Establishment', value: 'MOORLAND (HMP & YOI)' },
+                    { label: 'Establishment', value: 'Moorland (HMP & YOI)' },
                     { label: 'Date provided', value: '19 May 2020' },
                     { label: 'Comment', value: 'Amped telephone comment' },
                   ],
