@@ -2,10 +2,14 @@ const getHouseblockLocationsFactory = ({ whereaboutsApi, logError }) => {
   const getHouseblockLocations = async (req, res) => {
     try {
       const response = await whereaboutsApi.searchGroups(res.locals, req.query.agencyId)
-      res.json(response)
+      return res.json(response)
     } catch (error) {
-      if (error.code === 'ECONNRESET') return
-      logError(req.originalUrl, error, 'Error trying to retrieve groups')
+      if (error.code === 'ECONNRESET') return res.end()
+      logError(req.originalUrl, error, 'getHouseblockLocations()')
+
+      const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
+      res.status(errorStatusCode)
+      return res.end()
     }
   }
 
