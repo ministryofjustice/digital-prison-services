@@ -1,4 +1,5 @@
 const { getActivityLocationsFactory } = require('../controllers/attendance/activityLocations')
+const { makeError, makeResetError } = require('./helpers')
 
 describe('Activity locations', () => {
   let getActivityLocations
@@ -14,15 +15,17 @@ describe('Activity locations', () => {
     getActivityLocations = getActivityLocationsFactory({ elite2Api, logError }).getActivityLocations
 
     res.json = jest.fn()
-  })
+    res.end = jest.fn()
+    res.status = jest.fn()
 
-  it('should make a call to get locations for activity using the correct parameters', async () => {
     req.query = {
       agencyId: 'LEI',
       timeSlot: 'AM',
       bookedOnDay: '10/12/2020',
     }
+  })
 
+  it('should make a call to get locations for activity using the correct parameters', async () => {
     await getActivityLocations(req, res)
 
     expect(elite2Api.searchActivityLocations).toHaveBeenCalledWith({}, 'LEI', '2020-12-10', 'AM')
@@ -37,15 +40,31 @@ describe('Activity locations', () => {
   })
 
   it('should not log connection reset API errors', async () => {
-    class ConnectionResetError extends Error {
-      constructor() {
-        super()
-        this.code = 'ECONNRESET'
-      }
-    }
-    elite2Api.searchActivityLocations.mockRejectedValue(new ConnectionResetError())
+    elite2Api.searchActivityLocations.mockRejectedValue(makeResetError())
     await getActivityLocations(req, res)
 
     expect(logError.mock.calls.length).toBe(0)
+    expect(res.status.mock.calls.length).toBe(0)
+    expect(res.end).toHaveBeenCalled()
+  })
+
+  it('should respond with the correct status codes', async () => {
+    elite2Api.searchActivityLocations.mockRejectedValue(makeError('status', 403))
+    await getActivityLocations(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(403)
+    expect(res.end).toHaveBeenCalled()
+
+    elite2Api.searchActivityLocations.mockRejectedValue(makeError('response', { status: 404 }))
+    await getActivityLocations(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(404)
+    expect(res.end).toHaveBeenCalled()
+
+    elite2Api.searchActivityLocations.mockRejectedValue(new Error())
+    await getActivityLocations(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(500)
+    expect(res.end).toHaveBeenCalled()
   })
 })

@@ -5,10 +5,15 @@ const getActivityLocationsFactory = ({ elite2Api, logError }) => {
     try {
       const date = switchDateFormat(req.query.bookedOnDay)
       const response = await elite2Api.searchActivityLocations(res.locals, req.query.agencyId, date, req.query.timeSlot)
-      res.json(response)
+
+      return res.json(response)
     } catch (error) {
-      if (error.code === 'ECONNRESET') return
+      if (error.code === 'ECONNRESET') return res.end()
       logError(req.originalUrl, error, 'getActivityLocations()')
+
+      const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
+      res.status(errorStatusCode)
+      return res.end()
     }
   }
 

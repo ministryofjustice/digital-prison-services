@@ -1,5 +1,7 @@
 const { getHouseblockLocationsFactory } = require('../controllers/attendance/houseblockLocations')
 
+const { makeResetError } = require('./helpers')
+
 describe('House block locations', () => {
   const whereaboutsApi = {}
   const res = { locals: {} }
@@ -63,14 +65,7 @@ describe('House block locations', () => {
   })
 
   it('should not log connection reset API errors', async () => {
-    class ConnectionResetError extends Error {
-      constructor() {
-        super()
-        this.code = 'ECONNRESET'
-      }
-    }
-
-    whereaboutsApi.searchGroups.mockRejectedValue(new ConnectionResetError())
+    whereaboutsApi.searchGroups.mockRejectedValue(makeResetError())
 
     await controller.getHouseblockLocations(req, res)
 
