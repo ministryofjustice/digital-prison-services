@@ -1,5 +1,3 @@
-import { makeError } from './helpers'
-
 const amendCaseNoteController = require('../controllers/amendmentCaseNote')
 
 describe('Amendment case note', () => {
@@ -216,7 +214,15 @@ describe('Amendment case note', () => {
     })
 
     it('should show validation message when the api returns a 400', async () => {
-      caseNotesApi.amendCaseNote.mockRejectedValue(makeError('response', { status: 400 }))
+      class NetworkError extends Error {
+        constructor(status) {
+          super()
+          this.response = {
+            status,
+          }
+        }
+      }
+      caseNotesApi.amendCaseNote.mockRejectedValue(new NetworkError(400))
 
       await controller.post(req, res)
 
