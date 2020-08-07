@@ -1,6 +1,8 @@
 const prisonerSearchController = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
 
+const { makeResetError } = require('./helpers')
+
 describe('Prisoner search', () => {
   const elite2Api = {}
   const paginationService = {}
@@ -334,6 +336,14 @@ describe('Prisoner search', () => {
 
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/' })
+    })
+
+    it('should not log connection reset API errors', async () => {
+      elite2Api.getInmates.mockImplementation(() => Promise.reject(makeResetError()))
+
+      await controller.index(req, res)
+
+      expect(logError.mock.calls.length).toBe(0)
     })
 
     it('should NOT set prisonerSearchUrl to the originalUrl if there has NOT been a search', async () => {
