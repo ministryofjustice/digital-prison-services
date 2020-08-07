@@ -307,5 +307,21 @@ module.exports = on => {
     verifySaveAmendment: caseNotes.verifySaveAmendment,
     stubSaveAmendment: caseNotes.stubSaveAmendment,
     stubBookingNonAssociations: response => elite2api.stubBookingNonAssociations(response),
+    stubProfessionalContacts: ({
+      offenderBasicDetails,
+      contacts,
+      personAddresses,
+      personEmails,
+      personPhones,
+      prisonOffenderManagers,
+    }) =>
+      Promise.all([
+        elite2api.stubOffenderBasicDetails(offenderBasicDetails),
+        elite2api.stubPrisonerContacts(contacts),
+        elite2api.stubPersonAddresses(personAddresses),
+        elite2api.stubPersonEmails(personEmails),
+        elite2api.stubPersonPhones(personPhones),
+        allocationManager.stubGetPomForOffender(prisonOffenderManagers),
+      ]),
   })
 }
