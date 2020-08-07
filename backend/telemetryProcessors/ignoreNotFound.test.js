@@ -1,4 +1,4 @@
-const ignoreNotFoundErrors = require('./ignoreNotFoundTelemetryProcessor')
+const ignoreNotFoundErrors = require('./ignoreNotFound')
 
 describe('Ignore http NotFound errors telemetry processor', () => {
   it('should return false when a base type of RemoteDependencyData and resultCode equals 404', () => {

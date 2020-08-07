@@ -1,6 +1,6 @@
 const appInsights = require('applicationinsights')
 const applicationVersion = require('./application-version')
-const ignoreNotFoundErrors = require('./ignoreNotFoundTelemetryProcessor')
+const ignoreNotFoundErrors = require('./telemetryProcessors/ignoreNotFound')
 
 const { packageData, buildNumber } = applicationVersion
 if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {

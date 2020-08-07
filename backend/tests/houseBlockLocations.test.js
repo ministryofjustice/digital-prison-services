@@ -1,5 +1,7 @@
 const { getHouseblockLocationsFactory } = require('../controllers/attendance/houseblockLocations')
 
+const { makeResetError, makeError } = require('./helpers')
+
 describe('House block locations', () => {
   const whereaboutsApi = {}
   const res = { locals: {} }
@@ -15,6 +17,8 @@ describe('House block locations', () => {
   beforeEach(() => {
     whereaboutsApi.searchGroups = jest.fn()
     res.json = jest.fn()
+    res.status = jest.fn()
+    res.end = jest.fn()
     logError = jest.fn()
 
     controller = getHouseblockLocationsFactory({ whereaboutsApi, logError })
@@ -55,10 +59,36 @@ describe('House block locations', () => {
 
     await controller.getHouseblockLocations(req, res)
 
-    expect(logError).toHaveBeenCalledWith(
-      'http://localhost',
-      new Error('Test error'),
-      'Error trying to retrieve groups'
-    )
+    expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Test error'), 'getHouseblockLocations()')
+    expect(res.end).toHaveBeenCalled()
+  })
+
+  it('should not log connection reset API errors', async () => {
+    whereaboutsApi.searchGroups.mockRejectedValue(makeResetError())
+
+    await controller.getHouseblockLocations(req, res)
+
+    expect(logError.mock.calls.length).toBe(0)
+    expect(res.end).toHaveBeenCalled()
+  })
+
+  it('should respond with the correct status codes', async () => {
+    whereaboutsApi.searchGroups.mockRejectedValue(makeError('status', 403))
+    await controller.getHouseblockLocations(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(403)
+    expect(res.end).toHaveBeenCalled()
+
+    whereaboutsApi.searchGroups.mockRejectedValue(makeError('response', { status: 404 }))
+    await controller.getHouseblockLocations(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(404)
+    expect(res.end).toHaveBeenCalled()
+
+    whereaboutsApi.searchGroups.mockRejectedValue(new Error())
+    await controller.getHouseblockLocations(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(500)
+    expect(res.end).toHaveBeenCalled()
   })
 })
