@@ -125,11 +125,7 @@ describe('Probation documents', () => {
   const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
 
   describe('Controller', () => {
-    const mockReq = {
-      flash: jest.fn().mockReturnValue([]),
-      originalUrl: '/offenders/G9542VP/probation-documents',
-      session: { userDetails: { username: 'testuser' } },
-    }
+    const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/offenders/G9542VP/probation-documents' }
     beforeEach(() => {
       elite2Api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
       elite2Api.userCaseLoads = jest.fn()

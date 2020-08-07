@@ -9,7 +9,6 @@ describe('Download probation documents', () => {
     const mockReq = {
       flash: jest.fn().mockReturnValue([]),
       originalUrl: '/offenders/G9542VP/probation-documents/123/download',
-      session: { userDetails: 'testuser' },
     }
     beforeEach(() => {
       oauthApi.userRoles = jest.fn()
