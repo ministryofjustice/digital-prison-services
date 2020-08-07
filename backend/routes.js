@@ -136,7 +136,7 @@ const setup = ({
     '/api/houseblockLocations',
     houseblockLocationsFactory({ whereaboutsApi, logError }).getHouseblockLocations
   )
-  router.use('/api/activityLocations', activityLocationsFactory({ elite2Api, logError }).getActivityLocations)
+  router.use('/api/activityLocations', activityLocationsFactory(elite2Api).getActivityLocations)
   router.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
   router.use('/api/houseblocklist', controller.getHouseblockList)
   router.use('/api/activityList', controller.getActivityList)
