@@ -38,6 +38,7 @@ describe('Amendment case note', () => {
     res.redirect = jest.fn()
     req.flash = jest.fn()
     req.session = { userDetails: { staffId: 1 } }
+    req.headers = {}
 
     req.params = {
       offenderNo: 'A12345',
@@ -66,7 +67,7 @@ describe('Amendment case note', () => {
 
       await controller.index(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes')
+      expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner/A12345/case-notes' })
     })
     it('should render error page on exception', async () => {
       elite2Api.getDetails.mockRejectedValue(new Error('error'))

@@ -1,0 +1,43 @@
+{% extends "./partials/layout.njk" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title =  "Page not found" %}
+
+ {% block beforeContent %}
+     {{ govukBreadcrumbs({
+         items: [
+             {
+                 text: "Home",
+                 href: "/"
+             },
+             {
+                 text: title
+             }
+         ]
+     }) }}
+ {% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">{{ title }}</h1>
+            <p class="govuk-body">
+                If you typed or pasted the web address, check it is correct.
+            </p>
+            <p class="govuk-body">
+                If you have clicked to go back, the details you entered have been saved to the service and you cannot return to the last page.
+            </p>
+            <p class="govuk-body">
+                You might also be trying to view a page that you do not have access to.
+            </p>
+
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Continue",
+                    href: url
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

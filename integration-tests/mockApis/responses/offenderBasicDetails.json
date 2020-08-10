@@ -1,1 +1,1 @@
-{ "bookingId": 14, "firstName": "John", "lastName": "Smith" }
+{ "bookingId": 14, "firstName": "John", "lastName": "Smith", "agencyId": "MDI" }
