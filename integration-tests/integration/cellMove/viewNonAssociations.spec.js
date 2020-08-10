@@ -31,7 +31,7 @@ context('A user can view non associations', () => {
           reasonDescription: 'Victim',
           typeCode: 'WING',
           typeDescription: 'Do Not Locate on Same Wing',
-          effectiveDate: '2020-12-01T13:34:00',
+          effectiveDate: moment().subtract(10, 'days'),
           authorisedBy: 'string',
           comments: 'Test comment 1',
           offenderNonAssociation: {
@@ -155,7 +155,11 @@ context('A user can view non associations', () => {
           expect($summaryValues.get(4).innerText).to.contain('Victim')
           expect($summaryValues.get(5).innerText).to.contain('Perpetrator')
           expect($summaryValues.get(6).innerText).to.contain('Test comment 1')
-          expect($summaryValues.get(7).innerText).to.contain('1 December 2020')
+          expect($summaryValues.get(7).innerText).to.contain(
+            moment()
+              .subtract(10, 'days')
+              .format('D MMMM YYYY')
+          )
         })
     })
   })
