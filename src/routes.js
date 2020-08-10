@@ -4,6 +4,7 @@ import OffenderBreadcrumb from './Components/OffenderBreadcrumb'
 // See: https://reacttraining.com/react-router/web/example/route-config
 export default [
   { path: '/', breadcrumb: null },
+  { path: '/content', breadcrumb: null },
   { path: '/establishment-roll/in-today', breadcrumb: 'In today' },
   { path: '/establishment-roll/out-today', breadcrumb: 'Out today' },
   { path: '/establishment-roll/in-reception', breadcrumb: 'In reception' },
