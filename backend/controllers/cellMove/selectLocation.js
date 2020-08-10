@@ -47,6 +47,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         assessment => assessment.assessmentCode === 'CSR' && assessment.assessmentComment
       )
 
+    // The link should only appear if there are active non-associations in the same establishment
+    // Active means the effective date is not in the future and the expiry date is not in the past
     const showNonAssociationsLink =
       nonAssociations &&
       nonAssociations.nonAssociations &&
@@ -56,7 +58,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
           prisonerDetails.assignedLivingUnit &&
           nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
             prisonerDetails.assignedLivingUnit.agencyName.toLowerCase() &&
-          (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:ss:mm') > moment())
+          (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
+          (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
       )
 
     return res.render('cellMove/selectLocation.njk', {
