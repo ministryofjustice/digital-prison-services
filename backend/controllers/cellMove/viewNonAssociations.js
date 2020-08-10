@@ -13,6 +13,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
     const nonAssociations = await elite2Api.getNonAssociations(res.locals, bookingId)
 
+    // Only show active non-associations in the same establishment
+    // Active means the effective date is not in the future and the expiry date is not in the past
     const nonAssocationsInEstablishment =
       nonAssociations &&
       nonAssociations.nonAssociations &&
@@ -22,7 +24,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
             nonAssociation.offenderNonAssociation &&
             nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
               nonAssociations.agencyDescription.toLowerCase() &&
-            (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment())
+            (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
+            (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
         )
         .sort((left, right) => {
           if (left.effectiveDate > right.effectiveDate) return 1
