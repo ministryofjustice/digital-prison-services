@@ -1,3 +1,4 @@
+const moment = require('moment')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SelectLocationPage = require('../../pages/cellMove/selectLocationPage')
 
@@ -76,6 +77,8 @@ context('A user can select a cell', () => {
     cy.task('stubBookingNonAssociations', {
       nonAssociations: [
         {
+          effectiveDate: moment(),
+          expiryDate: moment().add(2, 'days'),
           offenderNonAssociation: {
             agencyDescription: 'HMP Moorland',
           },

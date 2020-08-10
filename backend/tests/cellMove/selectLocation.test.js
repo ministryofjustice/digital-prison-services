@@ -1,4 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+const moment = require('moment')
 
 const selectLocation = require('../../controllers/cellMove/selectLocation')
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -140,6 +141,61 @@ describe('select location', () => {
       )
     })
 
+    it('populates the data correctly when some non-associations, but not effective yet', async () => {
+      elite2Api.getDetails = jest.fn().mockResolvedValue({
+        ...getDetailsResponse,
+        assignedLivingUnit: {
+          agencyName: 'Moorland',
+        },
+      })
+      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+        nonAssociations: [
+          {
+            effectiveDate: moment().add(1, 'days'),
+            offenderNonAssociation: {
+              agencyDescription: 'MOORLAND',
+            },
+          },
+        ],
+      })
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectLocation.njk',
+        expect.objectContaining({
+          showNonAssociationsLink: false,
+        })
+      )
+    })
+
+    it('populates the data correctly when some non-associations, but expired', async () => {
+      elite2Api.getDetails = jest.fn().mockResolvedValue({
+        ...getDetailsResponse,
+        assignedLivingUnit: {
+          agencyName: 'Moorland',
+        },
+      })
+      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+        nonAssociations: [
+          {
+            effectiveDate: moment().subtract(10, 'days'),
+            expiryDate: moment().subtract(1, 'days'),
+            offenderNonAssociation: {
+              agencyDescription: 'MOORLAND',
+            },
+          },
+        ],
+      })
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectLocation.njk',
+        expect.objectContaining({
+          showNonAssociationsLink: false,
+        })
+      )
+    })
+
     it('populates the data correctly when some non-associations in the same establishment', async () => {
       elite2Api.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
@@ -150,6 +206,7 @@ describe('select location', () => {
       elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
         nonAssociations: [
           {
+            effectiveDate: moment(),
             offenderNonAssociation: {
               agencyDescription: 'MOORLAND',
             },
