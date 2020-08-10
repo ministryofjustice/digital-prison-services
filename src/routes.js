@@ -4,7 +4,6 @@ import OffenderBreadcrumb from './Components/OffenderBreadcrumb'
 // See: https://reacttraining.com/react-router/web/example/route-config
 export default [
   { path: '/', breadcrumb: null },
-  { path: '/content', breadcrumb: null },
   { path: '/establishment-roll/in-today', breadcrumb: 'In today' },
   { path: '/establishment-roll/out-today', breadcrumb: 'Out today' },
   { path: '/establishment-roll/in-reception', breadcrumb: 'In reception' },
@@ -26,7 +25,5 @@ export default [
   { path: '/manage-prisoner-whereabouts', breadcrumb: 'Manage prisoner whereabouts' },
   { path: '/manage-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
   { path: '/manage-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
-  { path: '/add-bulk-appointments', breadcrumb: 'Add bulk appointments' },
   { path: '/manage-prisoner-whereabouts/prisoners-unaccounted-for', breadcrumb: 'Prisoners unaccounted for' },
-  { path: '/offenders/:offenderNo/create-alert', breadcrumb: 'Create an alert' },
 ]

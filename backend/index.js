@@ -41,6 +41,18 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 app.use(setupWebpackForDev())
 app.use(routes({ ...apis }))
 
+app.get('/establishment-roll*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.get('/manage-prisoner-whereabouts*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.get('/offenders/:offenderNo/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
 app.use((req, res) => {
   res.redirect(config.app.notmEndpointUrl)
 })
