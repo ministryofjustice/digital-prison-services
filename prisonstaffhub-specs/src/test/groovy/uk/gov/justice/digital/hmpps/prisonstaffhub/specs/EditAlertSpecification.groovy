@@ -26,12 +26,12 @@ class EditAlertSpecification extends BrowserReportingSpec {
         def offenderNo = "A12345"
 
         elite2api.stubOffenderDetails(false,
-                Map.of("bookingId", 1, "firstName", "john", "lastName", "doe", "offenderNo", offenderNo))
+                Map.of("bookingId", 1, "firstName", "john", "lastName", "doe", "offenderNo", offenderNo, "agencyId", "LEI"))
 
         oauthApi.stubValidOAuthTokenLogin()
         oauthApi.stubSystemUserTokenRequest()
         oauthApi.stubGetMyDetails(ITAG_USER)
-        oauthApi.stubGetMyRoles([{roleCodes: 'UPDATE_ALERT'}])
+        oauthApi.stubGetMyRoles([Map.of("roleCode", "UPDATE_ALERT")])
         elite2api.stubGetMyCaseloads([Caseload.LEI])
         elite2api.stubPutAlert(1,1 )
         elite2api.stubGetAlert(1, 1, Map.of(
