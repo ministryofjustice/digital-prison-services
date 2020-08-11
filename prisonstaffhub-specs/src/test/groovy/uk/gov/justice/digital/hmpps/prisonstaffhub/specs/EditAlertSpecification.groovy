@@ -31,7 +31,7 @@ class EditAlertSpecification extends BrowserReportingSpec {
         oauthApi.stubValidOAuthTokenLogin()
         oauthApi.stubSystemUserTokenRequest()
         oauthApi.stubGetMyDetails(ITAG_USER)
-        oauthApi.stubGetMyRoles(['ROLE_UPDATE_ALERT'])
+        oauthApi.stubGetMyRoles([{roleCodes: 'UPDATE_ALERT'}])
         elite2api.stubGetMyCaseloads([Caseload.LEI])
         elite2api.stubPutAlert(1,1 )
         elite2api.stubGetAlert(1, 1, Map.of(
