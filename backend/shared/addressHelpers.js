@@ -39,7 +39,7 @@ const getFormattedAddress = ({ address = {} }) => {
   const flat = address.flat && `Flat ${address.flat}`
   const streetWithNumber = [flat, address.street].filter(value => value).join(', ')
 
-  const formattedAddress = [address.premise, streetWithNumber, address.town, address.county]
+  const formattedAddress = [address.premise, streetWithNumber, address.locality, address.town, address.county]
     .filter(value => value)
     .join('<br>')
 

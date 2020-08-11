@@ -113,6 +113,7 @@ context('Prisoner professional contacts', () => {
     const businessPrimary = {
       addressType: 'Business',
       flat: '222',
+      locality: 'Test locality',
       premise: '999',
       street: 'Business street',
       town: 'London',
@@ -131,6 +132,7 @@ context('Prisoner professional contacts', () => {
     const businessNonPrimary = {
       addressType: 'Business',
       flat: '222',
+      locality: 'New locality',
       premise: '000',
       street: 'Business street',
       town: 'Manchester',
