@@ -66,6 +66,7 @@ describe('Prisoner schedule', () => {
     const businessPrimary = {
       addressType: 'Business',
       flat: '222',
+      locality: 'Test locality',
       premise: '999',
       street: 'Business street',
       town: 'London',
@@ -84,6 +85,7 @@ describe('Prisoner schedule', () => {
     const businessNonPrimary = {
       addressType: 'Business',
       flat: '222',
+      locality: 'New locality',
       premise: '000',
       street: 'Business street',
       town: 'Manchester',
@@ -228,7 +230,7 @@ describe('Prisoner schedule', () => {
                         value: 'test3@email.com, test4@email.com',
                       },
                       {
-                        html: '999<br>Flat 222, Business street<br>London<br>London',
+                        html: '999<br>Flat 222, Business street<br>Test locality<br>London<br>London',
                         label: 'Main address',
                       },
                       {
@@ -262,7 +264,7 @@ describe('Prisoner schedule', () => {
                         value: 'test3@email.com, test4@email.com',
                       },
                       {
-                        html: '000<br>Flat 222, Business street<br>Manchester<br>Greater Manchester',
+                        html: '000<br>Flat 222, Business street<br>New locality<br>Manchester<br>Greater Manchester',
                         label: 'Other address',
                       },
                       {
@@ -296,7 +298,7 @@ describe('Prisoner schedule', () => {
                         value: 'test3@email.com, test4@email.com',
                       },
                       {
-                        html: '999<br>Flat 222, Business street<br>London<br>London',
+                        html: '999<br>Flat 222, Business street<br>Test locality<br>London<br>London',
                         label: 'Main address',
                       },
                       {
@@ -330,7 +332,7 @@ describe('Prisoner schedule', () => {
                         value: 'test3@email.com, test4@email.com',
                       },
                       {
-                        html: '000<br>Flat 222, Business street<br>Manchester<br>Greater Manchester',
+                        html: '000<br>Flat 222, Business street<br>New locality<br>Manchester<br>Greater Manchester',
                         label: 'Other address',
                       },
                       {
@@ -382,7 +384,7 @@ describe('Prisoner schedule', () => {
                         value: 'test3@email.com, test4@email.com',
                       },
                       {
-                        html: '999<br>Flat 222, Business street<br>London<br>London',
+                        html: '999<br>Flat 222, Business street<br>Test locality<br>London<br>London',
                         label: 'Main address',
                       },
                       {
@@ -417,7 +419,7 @@ describe('Prisoner schedule', () => {
                         value: 'test3@email.com, test4@email.com',
                       },
                       {
-                        html: '000<br>Flat 222, Business street<br>Manchester<br>Greater Manchester',
+                        html: '000<br>Flat 222, Business street<br>New locality<br>Manchester<br>Greater Manchester',
                         label: 'Other address',
                       },
                       {

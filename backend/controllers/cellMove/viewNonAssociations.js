@@ -28,8 +28,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
             (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
         )
         .sort((left, right) => {
-          if (left.effectiveDate > right.effectiveDate) return 1
-          if (right.effectiveDate > left.effectiveDate) return -1
+          if (left.effectiveDate < right.effectiveDate) return 1
+          if (right.effectiveDate < left.effectiveDate) return -1
           if (left.offenderNonAssociation.lastName > right.offenderNonAssociation.lastName) return 1
           if (right.offenderNonAssociation.lastName > left.offenderNonAssociation.lastName) return -1
           return 0
