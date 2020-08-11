@@ -25,7 +25,8 @@ const getContactView = contact => {
 }
 
 const sortByPrimaryAndStartDate = (left, right) => {
-  if (right.primary) return 1
+  if (left.primary && !right.primary) return -1
+  if (!left.primary && right.primary) return 1
 
   return sortByDateTime(right.startDate, left.startDate) // Most recently added first
 }
@@ -78,12 +79,14 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
         }))
       : []
 
-    const pomStaff = Object.entries(allocationManager)
-      .filter(([, value]) => value.name)
-      .map(([key, value]) => ({
-        name: getNamesFromString(value.name).join(' '),
-        jobTitle: key === 'secondary_pom' && 'Co-worker',
-      }))
+    const pomStaff =
+      allocationManager &&
+      Object.entries(allocationManager)
+        .filter(([, value]) => value.name)
+        .map(([key, value]) => ({
+          name: getNamesFromString(value.name).join(' '),
+          jobTitle: key === 'secondary_pom' && 'Co-worker',
+        }))
 
     if (hasLength(pomStaff)) {
       contactsGroupedByRelationship.push({
