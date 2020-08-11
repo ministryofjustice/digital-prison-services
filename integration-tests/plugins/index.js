@@ -323,5 +323,6 @@ module.exports = on => {
         elite2api.stubPersonPhones(personPhones),
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
       ]),
+    stubUserCaseLoads: caseloads => elite2api.stubUserCaseloads(caseloads),
   })
 }

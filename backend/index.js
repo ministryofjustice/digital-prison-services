@@ -41,8 +41,32 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 app.use(setupWebpackForDev())
 app.use(routes({ ...apis }))
 
-app.get('*', (req, res) => {
+// These are routes defined in the react router
+// They are listed here so the express app also knows about
+// them and knows to pass them onto the react router
+// This is needed in order to implement a page not found behaviour.
+app.get('/establishment-roll*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.get('/manage-prisoner-whereabouts*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.get('/offenders/:offenderNo/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.use('/content*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.get('/global-search*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
+app.use((req, res) => {
+  res.redirect(config.app.notmEndpointUrl)
 })
 
 app.listen(config.app.port, () => {

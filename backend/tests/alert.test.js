@@ -37,6 +37,7 @@ describe('alert management', () => {
     bookingId: 1234,
     firstName: 'Test',
     lastName: 'User',
+    agencyId: 'AKI',
     alerts: [
       {
         active: true,
@@ -74,7 +75,13 @@ describe('alert management', () => {
 
   beforeEach(() => {
     res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-    mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/close-alert/', get: jest.fn(), body: {} }
+    mockReq = {
+      flash: jest.fn().mockReturnValue([]),
+      originalUrl: '/close-alert/',
+      get: jest.fn(),
+      body: {},
+      headers: {},
+    }
     elite2api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
     oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
     elite2api.userCaseLoads = jest.fn().mockReturnValue([
@@ -343,11 +350,11 @@ describe('alert management', () => {
 
   describe('displayCreateAlertPage()', () => {
     it('should return an error when there is a problem loading the form', async () => {
-      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
+      oauthApi.userRoles = jest.fn().mockImplementationOnce(() => {
         throw new Error('There has been an error')
       })
 
-      const req = { ...mockCreateReq, params: { offenderNo } }
+      const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
 
       await displayCreateAlertPage(req, res)
 
@@ -381,7 +388,8 @@ describe('alert management', () => {
           ],
         }
       })
-      const req = { ...mockCreateReq, params: { offenderNo } }
+      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
+      const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
 
       await displayCreateAlertPage(req, res)
 
