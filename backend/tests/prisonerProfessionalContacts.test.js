@@ -186,7 +186,7 @@ describe('Prisoner schedule', () => {
     describe('when all possible data is available', () => {
       beforeEach(() => {
         personService.getPersonContactDetails.mockResolvedValue({
-          addresses: [businessPrimary, businessNonPrimary],
+          addresses: [businessNonPrimary, businessPrimary],
           emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
           phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
         })
