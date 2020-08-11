@@ -48,7 +48,7 @@ jobs:
           at: ~/app
       - run:
           name: Run the node app.
-          command: npm run start-feature-no-webpack --env=feature.env
+          command: npm run start-feature --env=feature.env
           background: true
       - restore_cache:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
@@ -97,7 +97,7 @@ jobs:
           command: npx cypress install
       - run:
           name: Run the node app.
-          command: npm run start-feature-no-webpack --env=cypress.env
+          command: npm run start-feature --env=cypress.env
           background: true
       - run:
           name: integration tests
