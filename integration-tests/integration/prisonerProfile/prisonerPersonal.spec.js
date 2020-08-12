@@ -477,6 +477,17 @@ context('Prisoner personal', () => {
                 expect($summaryValues.get(3).innerText).to.contain('Offender Supervisor')
                 expect($summaryValues.get(4).innerText).to.contain('Probation Officer')
               })
+
+            cy.get($section)
+              .find('a')
+              .then($contactsUrl => {
+                cy.get($contactsUrl)
+                  .its('length')
+                  .should('eq', 1)
+                expect($contactsUrl.get(0).innerText).to.contain(
+                  'View all professional contacts and their contact details'
+                )
+              })
           })
 
           cy.get('[data-test="personal-contacts-summary"]').then($section => {
@@ -1194,6 +1205,17 @@ context('Prisoner personal', () => {
                 expect($summaryValues.get(4).innerText).to.contain('Prison Offender Manager')
                 expect($summaryValues.get(5).innerText).to.contain('Prison Offender Manager Co-worker')
                 expect($summaryValues.get(6).innerText).to.contain('Probation Officer')
+              })
+
+            cy.get($section)
+              .find('a')
+              .then($contactsUrl => {
+                cy.get($contactsUrl)
+                  .its('length')
+                  .should('eq', 1)
+                expect($contactsUrl.get(0).innerText).to.contain(
+                  'View all professional contacts and their contact details'
+                )
               })
           })
         })
