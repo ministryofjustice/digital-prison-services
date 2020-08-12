@@ -1,5 +1,7 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
+const { serviceUnavailableMessage, unableToShowDetailMessage } = require('../../common-messages')
+const captureErrorAndContinue = require('../../shared/captureErrorAndContinue')
+const extractPrisonerProfileResponse = require('../../shared/extractPrisonerProfileResponse')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -7,22 +9,6 @@ const { formatCurrency, capitalizeUppercaseString } = require('../../utils')
 const formatAward = require('../../shared/formatAward')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
 const getValueByType = require('../../shared/getValueByType')
-
-const log = require('../../log')
-
-const captureErrorAndContinue = apiCall =>
-  new Promise(resolve => {
-    apiCall.then(response => resolve({ response })).catch(error => {
-      log.error(error)
-      resolve({ error: true })
-    })
-  })
-
-const extractResponse = (complexData, key) => {
-  if (!complexData || complexData.error) return null
-
-  return key ? complexData.response[key] : complexData.response
-}
 
 module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -99,11 +85,10 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         visitBalancesResponse,
         todaysEventsResponse,
         profileInformationResponse,
-      ].map(response => extractResponse(response))
+      ].map(response => extractPrisonerProfileResponse(response))
 
       const prisoner = prisonerData && prisonerData[0]
       const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
-      const unableToShowDetailMessage = 'Unable to show this detail'
 
       const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 

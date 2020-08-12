@@ -1,5 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
-const logErrorAndContinue = require('../../shared/logErrorAndContinue')
+const captureErrorAndContinue = require('../../shared/captureErrorAndContinue')
+const extractPrisonerProfileResponse = require('../../shared/extractPrisonerProfileResponse')
 const { getNamesFromString } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -37,18 +38,18 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   const healthCodes = healthTypes && healthTypes.map(type => type.code).join()
 
   const [
-    prisonerProfileData,
-    fullPrisonerDetails,
-    identifiers,
-    aliases,
-    property,
-    contacts,
-    addresses,
-    secondaryLanguages,
-    careNeeds,
-    adjustments,
-    agencies,
-    allocationManager,
+    prisonerProfileDataResponse,
+    fullPrisonerDetailsResponse,
+    identifiersResponse,
+    aliasesResponse,
+    propertyResponse,
+    contactsResponse,
+    addressesResponse,
+    secondaryLanguagesResponse,
+    careNeedsResponse,
+    adjustmentsResponse,
+    agenciesResponse,
+    allocationManagerResponse,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -63,8 +64,36 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
       elite2Api.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
       elite2Api.getAgencies(res.locals),
       allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
-    ].map(apiCall => logErrorAndContinue(apiCall))
+    ].map(apiCall => captureErrorAndContinue(apiCall))
   )
+
+  const [
+    prisonerProfileData,
+    fullPrisonerDetails,
+    identifiers,
+    aliases,
+    property,
+    contacts,
+    addresses,
+    secondaryLanguages,
+    careNeeds,
+    adjustments,
+    agencies,
+    allocationManager,
+  ] = [
+    prisonerProfileDataResponse,
+    fullPrisonerDetailsResponse,
+    identifiersResponse,
+    aliasesResponse,
+    propertyResponse,
+    contactsResponse,
+    addressesResponse,
+    secondaryLanguagesResponse,
+    careNeedsResponse,
+    adjustmentsResponse,
+    agenciesResponse,
+    allocationManagerResponse,
+  ].map(response => extractPrisonerProfileResponse(response))
 
   const { nextOfKin, otherContacts } = contacts || {}
   const activeNextOfKins = nextOfKin && nextOfKin.filter(kin => kin.activeFlag)
@@ -130,7 +159,9 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     languages: languageViewModel({ language, writtenLanguage, interpreterRequired, secondaryLanguages }),
     aliases: aliasesViewModel({ aliases }),
     distinguishingMarks: distinguishingMarksViewModel({ physicalMarks }),
-    identifiers: identifiersViewModel({ identifiers }),
+    identifiers: identifiersResponse.error
+      ? identifiersViewModel({ identifiers, error: true })
+      : identifiersViewModel({ identifiers }),
     personalDetails: personalDetailsViewModel({ prisonerDetails: fullPrisonerDetails, property }),
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     ...activeContactsViewModel({

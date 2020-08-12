@@ -1836,7 +1836,7 @@ describe('prisoner personal', () => {
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
         expect.objectContaining({
           aliases: null,
-          identifiers: [{ label: 'PNC number', value: null }],
+          identifiers: [{ label: 'PNC number', value: 'Unable to show this detail' }],
           personalDetails: expect.objectContaining({ property: null }),
           personalContacts: undefined,
           professionalContacts: [],
