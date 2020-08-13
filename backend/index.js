@@ -65,6 +65,10 @@ app.get('/global-search*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
 })
 
+app.get('/iep-slip', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'))
 })
