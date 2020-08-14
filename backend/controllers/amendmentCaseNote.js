@@ -13,7 +13,9 @@ module.exports = ({ elite2Api, caseNotesApi, logError }) => {
 
       const { staffId } = req.session.userDetails
 
-      if (Number(caseNote.authorUserId) !== staffId) return res.redirect(`/prisoner/${offenderNo}/case-notes`)
+      if (Number(caseNote.authorUserId) !== staffId) {
+        return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })
+      }
 
       const formattedName = formatName(prisonerDetails.firstName, prisonerDetails.lastName)
 

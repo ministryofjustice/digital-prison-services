@@ -2,6 +2,7 @@ const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDeta
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const CreateAlertPage = require('../../pages/alerts/createAlertPage')
 const PrisonerAlertsPage = require('../../pages/prisonerProfile/prisonerAlertsPage')
+const NotFoundPage = require('../../pages/notFound')
 
 context('A user can add an appointment', () => {
   before(() => {
@@ -17,6 +18,8 @@ context('A user can add an appointment', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
+    cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
+    cy.task('stubUserCaseLoads')
 
     cy.visit(`/offenders/${offenderNo}/create-alert`)
   })
@@ -85,5 +88,11 @@ context('A user can add an appointment', () => {
           expect($errors.get(0).innerText).to.contain('Select an alert that does not already exist for this offender')
         })
     })
+  })
+
+  it('A user is presented with not found when they no role', () => {
+    cy.task('stubUserMeRoles', [])
+    cy.visit('/offenders/A12345/create-alert')
+    NotFoundPage.verifyOnPage()
   })
 })

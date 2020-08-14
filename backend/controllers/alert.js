@@ -91,7 +91,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
     try {
       const { offenderNo, alertId } = req.query
-      const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { bookingId, firstName, lastName, agencyId } = await elite2Api.getDetails(res.locals, offenderNo)
 
       const [alert, user, caseLoads, userRoles] = await Promise.all([
         elite2Api.getAlert(res.locals, bookingId, alertId),
@@ -99,6 +99,14 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
         elite2Api.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
+
+      const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
+      const offenderInCaseload = caseLoads && caseLoads.some(caseload => caseload.caseLoadId === agencyId)
+      const userCanEdit = (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload
+
+      if (!userRoles.some(role => role.roleCode === 'UPDATE_ALERT') || !userCanEdit) {
+        return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/alerts` })
+      }
 
       const offenderDetails = {
         bookingId,
@@ -110,7 +118,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
       if (alert && alert.expired) pageErrors.push({ text: 'This alert has already expired' })
 
-      renderTemplate(req, res, {
+      return renderTemplate(req, res, {
         alert: {
           ...alert,
           comment: req.flash('comment')[0] || alert.comment,
@@ -130,7 +138,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       pageErrors.push({ text: serviceUnavailableMessage })
-      renderTemplate(req, res, { pageErrors })
+      return renderTemplate(req, res, { pageErrors })
     }
   }
 
@@ -174,7 +182,23 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
   const displayCreateAlertPage = async (req, res) => {
     const { offenderNo } = req.params
     try {
-      const { bookingId, firstName, lastName, alerts } = await elite2Api.getDetails(res.locals, offenderNo, true)
+      const { bookingId, firstName, lastName, alerts, agencyId } = await elite2Api.getDetails(
+        res.locals,
+        offenderNo,
+        true
+      )
+      const [userRoles, caseLoads] = await Promise.all([
+        oauthApi.userRoles(res.locals),
+        elite2Api.userCaseLoads(res.locals),
+      ])
+
+      const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
+      const offenderInCaseload = caseLoads && caseLoads.some(caseload => caseload.caseLoadId === agencyId)
+      const userCanEdit = (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload
+
+      if (!userRoles.some(role => role.roleCode === 'UPDATE_ALERT') || !userCanEdit) {
+        return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/alerts` })
+      }
 
       const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
 

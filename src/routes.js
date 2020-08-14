@@ -26,7 +26,5 @@ export default [
   { path: '/manage-prisoner-whereabouts', breadcrumb: 'Manage prisoner whereabouts' },
   { path: '/manage-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
   { path: '/manage-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
-  { path: '/add-bulk-appointments', breadcrumb: 'Add bulk appointments' },
   { path: '/manage-prisoner-whereabouts/prisoners-unaccounted-for', breadcrumb: 'Prisoners unaccounted for' },
-  { path: '/offenders/:offenderNo/create-alert', breadcrumb: 'Create an alert' },
 ]
