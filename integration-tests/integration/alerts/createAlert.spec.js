@@ -37,7 +37,7 @@ context('A user can add an appointment', () => {
 
     cy.route({
       method: 'GET',
-      url: '/offenders/A12345/create-alert?typeCode=X',
+      url: '/offenders/A12345/create-alert?typeCode=F1',
     }).as('getTypes')
 
     const createAlertPage = CreateAlertPage.verifyOnPage()

@@ -41,7 +41,7 @@ context('A user can add a case note', () => {
 
     cy.route({
       method: 'GET',
-      url: '/prisoner/A12345/add-case-note?type=OBSERVE',
+      url: '/prisoner/A12345/add-case-note?typeCode=OBSERVE',
     }).as('getTypes')
 
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
