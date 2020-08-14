@@ -59,7 +59,7 @@ context('A user can view the protective isolation list', () => {
       prisoner().contains('Read, Donna')
       prisonNumber().contains('BB1234A')
       location().contains('1-2-018')
-      dateAdded().contains(dayBeforeYesterday.format('D MMM YYYY'))
+      dateAdded().contains(dayBeforeYesterday.format('D MMMM YYYY'))
       daysInUnit().contains(2)
     }
 
@@ -69,7 +69,7 @@ context('A user can view the protective isolation list', () => {
       prisoner().contains('Stewart, James')
       prisonNumber().contains('AA1234A')
       location().contains('1-2-017')
-      dateAdded().contains(moment().format('D MMM YYYY'))
+      dateAdded().contains(moment().format('D MMMM YYYY'))
       daysInUnit().contains(0)
     }
   })
