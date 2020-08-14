@@ -42,7 +42,7 @@
 
         <div id="{{ 'location-events-' + params.name }}" class="govuk-grid-column-one-half">
             {% if formValues[params.name + "Location"] %}
-                {{ scheduledEvents(locationEvents[params.name].events, 'location', locationEvents[params.name].locationName) }}
+                    {{ scheduledEvents(locationEvents[params.name].events, 'location', 'Schedule for ' + locationEvents[params.name].locationName) }}
             {% endif %}
         </div>
     </div>
@@ -179,4 +179,7 @@
     </div>
     </div>
     </div>
+{% endblock %}
+{% block pageScripts %}
+    <script src="/js/prepostAppointment.js"></script>
 {% endblock %}

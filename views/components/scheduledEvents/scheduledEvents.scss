@@ -1,17 +1,7 @@
-.scheduled-events-container {
-  @include govuk-responsive-padding(3);
-
-  &--offender {
-    background: #e9f3f8;
-  }
-
-  &--location {
-    background: #dfe0e2;
-  }
-}
 
 .scheduled-event {
   display: flex;
+  flex-direction: row;
 
   &__time {
     min-width: 140px;
